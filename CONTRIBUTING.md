@@ -10,10 +10,10 @@
 
 everything needs to go into the namespace `args` and should be in it's own general namespace within that. also use that as an indication where to put your file.
 
-i.e.: The file /math/vector.hpp uses
-`namespace args::math { ... }`
+i.e.: The file /core/math/vector.hpp uses
+`namespace args::core::math { ... }`
 
-Use the new c++17 convention for nested namespaces, namespace names may only have lower-case letters
+Use the new c++17 convention for nested namespaces, namespace names may only have snake_case letters
 
 ### Class/Struct Names
 
