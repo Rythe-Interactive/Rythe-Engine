@@ -86,3 +86,6 @@ bld/
 
 # Args engine asset folder
 !**/assets/**
+
+# Word temporary files
+~$*.*
