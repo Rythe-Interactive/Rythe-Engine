@@ -28,7 +28,7 @@ POD types that are completely compatible with the stl should all be structs, low
 
 ### Class/Struct Members
 `private` variables should start with `m_` and continued in PascalCase.<br>
-`public` variables should not have a prefix and use camelCase.
+`public` variables should not have a prefix and use camelCase, the same applies to local variables.
 
 methods of non "stl-likes" should use camelCase naming and "stl-likes" should use stl-like snake_case naming
 
@@ -49,9 +49,9 @@ using namespace args::core;
 namespace args::application // in cpp files you may use using namespace if you so desire
 {
 
-  Application::Application() : m_other_vector { 1.0f, 2.0f } // use this constructor syntax (it's faster)
+  Application::Application() : m_OtherVector { 1.0f, 2.0f } // use this constructor syntax (it's faster)
   {
-    math::vec3f some_vector = { 1.f, 2.f, 3.f };
+    math::vec3f someVector = { 1.f, 2.f, 3.f };
   }
  ...
 }
