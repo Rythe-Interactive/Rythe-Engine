@@ -8,9 +8,9 @@ This repository employs a git flow based workflow, to incoroprate your changes t
 - to merge into a develop branch, you require the approval of one peer reviewer of that team.
   - you can only merge from develop_<your_team> into develop
 - to merge into main you require the approval of a code-owner and the ci must pass (if applicable).
-  - you can only merge from develop into main
+  - you can only merge from develop into main via a release branch
 - to merge into release you require the approval of a code-owner and the ci must pass on strict latest (if applicable) and your commit must be signed!.
-  - you can only branch main into a release-branch
+  - you can only branch develop into a release branch, a release branch must be merged into main and develop directly
 - it must adhere to the code-style mentioned below.
 
 ## CODE style
