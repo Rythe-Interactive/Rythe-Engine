@@ -1,3 +1,15 @@
+## REPO managment
+### Git-Branch methodology
+This repository employs a git flow based workflow, to incoroprate your changes the following conditions must be true
+- your change lives on either feature/your_change_name or bugfix/your_change_name.
+- hotfix branches are only allowed in special cases and must be communicated with a code owner.
+- you must create a pull request.
+- if your branch is a bugfix it must mention an issue.
+- to merge into a develop branch, you require the approval of one peer reviewer of that team.
+- to merge into main you require the approval of a code-owner and the ci must pass (if applicable).
+- to merge into release you require the approval of a code-owner and the ci must pass on strict latest (if applicable).
+- it must adhere to the code-style mentioned below.
+
 ## CODE style
 
 ### File-Names
