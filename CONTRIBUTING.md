@@ -1,3 +1,20 @@
+## REPO managment
+### Git-Branch methodology
+This repository employs a git flow based workflow, to incorporate your changes the following conditions must be true:
+- your change lives on either feature/your_change_name or bugfix/your_change_name.
+- you must create a pull request.
+- if your branch is a bugfix it must mention an issue.
+- it must adhere to the code-style mentioned below.
+
+Furthermore the following rules are to be met when attempting to merge:
+- to merge into a develop branch, you require the approval of one peer reviewer of that team.
+  - you can only merge from develop_<your_team> into develop
+- to merge into main you require the approval of a code-owner and the ci must pass (if applicable).
+  - you can only merge from develop into main via a release branch
+- to merge into release you require the approval of a code-owner and the ci must pass on strict latest (if applicable) and your commit must be signed!.
+  - you can only branch develop into a release branch, a release branch must be merged into main and develop directly
+- hotfix branches are only allowed in special cases and must be communicated with a code owner.
+
 ## CODE style
 
 ### File-Names
