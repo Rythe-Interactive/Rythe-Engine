@@ -153,11 +153,15 @@
   <ItemGroup>
     <ClInclude Include="core.hpp" />
     <ClInclude Include="engine\engine.hpp" />
+    <ClInclude Include="engine\module.hpp" />
     <ClInclude Include="entry\entry_point.hpp" />
     <ClInclude Include="platform\platform.hpp" />
+    <ClInclude Include="types\primitives.hpp" />
+    <ClInclude Include="types\sfinae.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp" />
+    <ClCompile Include="engine\module.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
