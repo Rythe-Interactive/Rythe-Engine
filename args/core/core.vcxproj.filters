@@ -48,6 +48,12 @@
     <ClInclude Include="common\common.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="filesystem\resource.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\detail\resource_sfinae.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp">
@@ -56,5 +62,8 @@
     <ClCompile Include="engine\module.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="platform\cpp.hint" />
   </ItemGroup>
 </Project>
