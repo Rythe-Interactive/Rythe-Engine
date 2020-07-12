@@ -7,17 +7,18 @@
 #include "detail/resource_sfinae.hpp" //has_to_resource<T,Sig>, has_from_resource<T,Sig>
 
 
-/**
- * @file resource.hpp
- */
-
-/**
- * @addtogroup args_fs
- * @{
- */
 namespace args::core::filesystem
 {
-	
+
+class Test {
+
+};
+
+
+	/**@class basic_resource
+	 * @brief a handle for a basic resource type from which elements can serialize and deserialize from
+	 *        ideal for storing elements loaded from disk
+	 */
 	class basic_resource
 	{
 	public:
@@ -178,20 +179,20 @@ namespace args::core::filesystem
 		byte_vec m_container;
 	};
 
-
+	#ifndef DOXY_EXCLUDE
 	/**@cond INTERNAL
 	 * @{
 	 */
 	
 	template <	typename T,
-				typename = std::enable_if<detail::has_to_resource<T,void(basic_resource*,const T&)>::value>>
+				typename C1 = std::enable_if<detail::has_to_resource<T,void(basic_resource*,const T&)>::value>>
 	void to_resource(basic_resource* resource,const T& value)
 	{
 		T::to_resource(resource,value);
 	}
 
 	template <	typename T,
-				typename = std::enable_if<detail::has_to_resource<T,void(basic_resource*,const T&)>::value>>
+				typename C1 = std::enable_if<detail::has_to_resource<T,void(basic_resource*,const T&)>::value>>
 	basic_resource to_resource(const T& value)
 	{
 		basic_resource res(nullptr);
@@ -201,15 +202,15 @@ namespace args::core::filesystem
 	
 
 	template <	typename T,
-				typename = std::enable_if<detail::has_from_resource<T,void(T*,const basic_resource&)>::value>>
+				typename C1 = std::enable_if<detail::has_from_resource<T,void(T*,const basic_resource&)>::value>>
 	void from_resource(T* value, const basic_resource& resource)
 	{
 		T::from_resource(value,resource);
 	}
 	template <	typename T,
-				typename = std::enable_if<detail::has_from_resource<T,void(T*,const basic_resource&)>::value>,
-				typename = std::enable_if<std::is_default_constructible<T>::value>,
-				typename = std::enable_if<std::is_move_constructible<T>::value>>
+				typename C1 = std::enable_if<detail::has_from_resource<T,void(T*,const basic_resource&)>::value>,
+				typename C2 = std::enable_if<std::is_default_constructible<T>::value>,
+				typename C3 = std::enable_if<std::is_move_constructible<T>::value>>
 	T from_resource(const basic_resource& resource)
 	{
 		T value;
@@ -217,8 +218,8 @@ namespace args::core::filesystem
 		return std::move(value);
 	}
 		template <	typename T,
-				typename = std::enable_if<detail::has_from_resource<T,void(T*,const basic_resource&)>::value>,
-				typename = std::enable_if<std::is_move_constructible<T>::value>,
+				typename C1 = std::enable_if<detail::has_from_resource<T,void(T*,const basic_resource&)>::value>,
+				typename C2 = std::enable_if<std::is_move_constructible<T>::value>,
 				class ... Args>
 	T from_resource(const basic_resource& resource,Args&&... args)
 	{
@@ -238,12 +239,12 @@ namespace args::core::filesystem
 	void basic_resource::from(const T& v)
 	{
 		to_resource(this,v);
-	}
-}
 
-/**
- * //cond
- * @}
- * //addtogroup
- * @} 
- */
+	}
+	/**
+	 * //cond
+	 * @}
+	 */
+
+	#endif
+}
