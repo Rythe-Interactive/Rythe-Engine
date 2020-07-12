@@ -3,7 +3,7 @@
 
 namespace args::editor
 {
-	class ARGS_API Editor 
+	class ARGS_API Editor
 	{
 	};
 }
