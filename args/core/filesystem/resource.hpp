@@ -7,10 +7,6 @@
 #include "detail/resource_sfinae.hpp" //has_to_resource<T,Sig>, has_from_resource<T,Sig>
 
 
-
-
-
-
 namespace args::core::filesystem
 {
 
@@ -157,7 +153,7 @@ class Test {
 		 *
 		 * tries to convert a basic resource, for this to work T must implement a static
 		 *         method with signature T::from_resource(basic_resource&,const T&)
-		 *         and must be, A: trivially constructable or constructable via Args&&...
+		 *         and must be, A: trivially constructable or B: constructable via Args&&...
 		 *         and must be move or copy assignable
 		 *
 		 * @tparam T the class you want to convert to
@@ -252,6 +248,3 @@ class Test {
 
 	#endif
 }
-
-
-
