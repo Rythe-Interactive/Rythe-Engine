@@ -25,7 +25,7 @@ jobs:
       run: sudo python3 -m pip install --upgrade pip
 
     - name: install sphinx, breathe and exhale
-      run: hash -d pip && hash -d pip3 && python3 -m pip install sphinx breathe exhale sphinx-nameko-theme recommonmark
+      run: hash -d pip && hash -d pip3 && python3 -m pip install -U sphinx breathe exhale sphinx-nameko-theme recommonmark
 
     - name: add path
       run: export PATH=$PATH:/home/runner/.local/bin
