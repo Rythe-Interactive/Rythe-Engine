@@ -24,6 +24,15 @@
     <ClInclude Include="core.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="engine\module.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="types\primitives.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="types\sfinae.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="entry\entry_point.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -42,6 +51,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\module.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
