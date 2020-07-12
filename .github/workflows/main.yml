@@ -12,26 +12,10 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build:
+ docs:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-
-    - name: install doxygen & python3
-      run: sudo apt-get update -yqq && sudo apt-get install -yqq doxygen python3 python3-pip python3-setuptools python3-sphinx
-
-    - name: add path
-      run: export PATH=/home/runner/.local/bin:$PATH
-
-    - name: update pip
-      run: sudo python3 -m pip install --user --upgrade pip
-
-    - name: install sphinx, breathe and exhale
-      run: hash -r pip && hash -r pip3 && pip3 install -U --user sphinx breathe exhale sphinx-nameko-theme recommonmark
-
-    - name: make ci executable
-      run: chmod +x ci.sh
-    
-    - name: execute ci
-      run: ./ci.sh
+    - uses: actions/checkout@v1
+    - uses: ammaraskar/sphinx-action@master
+      with:
+        docs-folder: "docs/"
