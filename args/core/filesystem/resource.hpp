@@ -152,7 +152,7 @@ namespace args::core::filesystem
 		 *
 		 * tries to convert a basic resource, for this to work T must implement a static
 		 *         method with signature T::from_resource(basic_resource&,const T&)
-		 *         and must be, A: trivially constructable or constructable via Args&&...
+		 *         and must be, A: trivially constructable or B: constructable via Args&&...
 		 *         and must be move or copy assignable
 		 *
 		 * @tparam T the class you want to convert to
