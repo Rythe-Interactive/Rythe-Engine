@@ -21,14 +21,14 @@ jobs:
     - name: install doxygen & python3
       run: sudo apt-get update -yqq && sudo apt-get install -yqq doxygen python3 python3-pip python3-setuptools python3-sphinx
 
-    - name: update pip
-      run: sudo python3 -m pip install --upgrade pip
-
-    - name: install sphinx, breathe and exhale
-      run: hash -d pip && hash -d pip3 && python3 -m pip install -U sphinx breathe exhale sphinx-nameko-theme recommonmark
-
     - name: add path
       run: export PATH=/home/runner/.local/bin:$PATH
+
+    - name: update pip
+      run: sudo python3 -m pip install --user --upgrade pip
+
+    - name: install sphinx, breathe and exhale
+      run: hash -r pip && hash -r pip3 && pip3 install -U --user sphinx breathe exhale sphinx-nameko-theme recommonmark
 
     - name: make ci executable
       run: chmod +x ci.sh
