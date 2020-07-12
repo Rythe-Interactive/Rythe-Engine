@@ -22,7 +22,7 @@ jobs:
       run: sudo apt-get update -yqq && sudo apt-get install -yqq doxygen python3 python3-pip python3-setuptools python3-sphinx
 
     - name: install sphinx, breathe and exhale
-      run: pip3 install sphinx breathe exhale
+      run: hash -d pip && hash -d pip3 && pip3 install sphinx breathe exhale
 
     - name: make ci executable
       run: chmod +x ci.sh
