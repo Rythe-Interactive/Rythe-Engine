@@ -1,0 +1,4 @@
+recommonmark
+exhale
+breathe
+sphinx-nameko-theme
