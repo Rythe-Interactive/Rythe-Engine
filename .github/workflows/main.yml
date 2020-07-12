@@ -12,20 +12,33 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build:
+ docs:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-
-    - name: install doxygen & python3
-      run: sudo apt-get update -yqq && sudo apt-get install -yqq doxygen python3 python3-pip python3-setuptools python3-sphinx
-
-    - name: install sphinx, breathe and exhale
-      run: hash -d pip && hash -d pip3 && python3 -m pip install sphinx breathe exhale
-
-    - name: make ci executable
-      run: chmod +x ci.sh
+    - uses: actions/checkout@v1
     
-    - name: execute ci
-      run: ./ci.sh
+    - name: doxygen run
+      run: "sudo apt-get update -yqq && sudo apt-get install doxygen && cd docs && doxygen"
+    
+    - uses: Algo-ryth-mix/sphinx-action@master
+      with:
+        docs-folder: "docs/"
+
+    - name: Commit documentation changes
+      run: |
+        git clone https://github.com/Algo-ryth-mix/Args-Engine.git --branch gh-pages --single-branch gh-pages
+        cp -r docs/build/html/* gh-pages/
+        cd gh-pages
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "Update documentation" -a || true
+        # The above command will fail if no changes were present, so we ignore
+        # the return code.
+        
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        branch: gh-pages
+        directory: gh-pages
+        github_token: ${{ secrets.GITHUB_TOKEN }}
