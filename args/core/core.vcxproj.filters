@@ -36,6 +36,9 @@
     <ClInclude Include="types\types.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="common\common.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp">
