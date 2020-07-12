@@ -19,7 +19,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: install doxygen & python3
-      run: sudo apt-get update -yqq && sudo apt-get install -yqq doxygen python3 python3-pip python3-setuptools
+      run: sudo apt-get update -yqq && sudo apt-get install -yqq doxygen python3 python3-pip python3-setuptools python3-sphinx
 
     - name: update pip
       run: sudo python3 -m pip install --upgrade pip
