@@ -27,6 +27,15 @@
     <ClInclude Include="entry\entry_point.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="filesystem\filemanip.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\filesystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="types\types.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp">

@@ -154,7 +154,10 @@
     <ClInclude Include="core.hpp" />
     <ClInclude Include="engine\engine.hpp" />
     <ClInclude Include="entry\entry_point.hpp" />
+    <ClInclude Include="filesystem\filemanip.hpp" />
+    <ClInclude Include="filesystem\filesystem.hpp" />
     <ClInclude Include="platform\platform.hpp" />
+    <ClInclude Include="types\types.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp" />
