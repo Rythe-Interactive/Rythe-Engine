@@ -1,3 +1,2 @@
 #pragma once
-
-#include <editor/editor/editor.hpp>
+#include <editor/editor/editor_impl.hpp>

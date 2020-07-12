@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="delete_this.cpp" />
-    <ClCompile Include="editor\editor.cpp" />
+    <ClCompile Include="editor\editor_impl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core\core.vcxproj">
@@ -29,7 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="editor.hpp" />
-    <ClInclude Include="editor\editor.hpp" />
+    <ClInclude Include="editor\editor_impl.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
