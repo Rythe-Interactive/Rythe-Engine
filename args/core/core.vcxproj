@@ -151,26 +151,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="common\common.hpp" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="engine\engine.hpp" />
     <ClInclude Include="engine\module.hpp" />
     <ClInclude Include="entry\entry_point.hpp" />
-    <ClInclude Include="filesystem\detail\resource_sfinae.hpp" />
-    <ClInclude Include="filesystem\filemanip.hpp" />
-    <ClInclude Include="filesystem\filesystem.hpp" />
-    <ClInclude Include="filesystem\resource.hpp" />
     <ClInclude Include="platform\platform.hpp" />
-    <ClInclude Include="types\types.hpp" />
     <ClInclude Include="types\primitives.hpp" />
     <ClInclude Include="types\sfinae.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp" />
     <ClCompile Include="engine\module.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="platform\cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
