@@ -21,8 +21,11 @@ jobs:
     - name: install doxygen & python3
       run: sudo apt-get update -yqq && sudo apt-get install -yqq doxygen python3 python3-pip python3-setuptools python3-sphinx
 
+    - name: update pip
+      run: sudo python3 -m pip install --upgrade pip
+
     - name: install sphinx, breathe and exhale
-      run: hash -d pip && hash -d pip3 && python3 -m pip install sphinx breathe exhale
+      run: hash -d pip && hash -d pip3 && python3 -m pip install sphinx breathe exhale sphinx-nameko-theme recommonmark
 
     - name: make ci executable
       run: chmod +x ci.sh
