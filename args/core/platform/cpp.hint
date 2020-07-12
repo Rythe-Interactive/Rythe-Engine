@@ -1,0 +1,6 @@
+#define ARGS_CPP17V 201703L
+
+#define ARGS_WINDOWS
+#define ARGS_API __declspec(dllexport)
+#define AHASCPPATTRIB(x) __has_cpp_attribute(x)
+#define A_NODISCARD [[nodiscard]]
