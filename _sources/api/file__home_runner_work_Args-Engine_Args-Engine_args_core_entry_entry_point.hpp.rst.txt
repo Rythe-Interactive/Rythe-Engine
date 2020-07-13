@@ -1,0 +1,52 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_entry_entry_point.hpp:
+
+File entry_point.hpp
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_entry>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/entry``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/entry/entry_point.hpp``)
+------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_entry_entry_point.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/engine/engine.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp`)
+
+- ``iostream``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_entry__point_8hpp_1a7ce8e0555bec33efde98e832731cbde5`
+

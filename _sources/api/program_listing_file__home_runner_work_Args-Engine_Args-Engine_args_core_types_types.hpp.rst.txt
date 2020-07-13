@@ -1,0 +1,23 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp:
+
+Program Listing for File types.hpp
+==================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/types/types.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <cstdint> //linux std::(u)int(8-64)_t
+   #include <cstddef> //msc   std::(u)int(8-64)_t 
+   #include <vector>  //      std::vector<T>
+   
+   
+   namespace args::core
+   {
+       using byte_t = std::uint8_t;
+       using byte_vec = std::vector<byte_t>;
+   }

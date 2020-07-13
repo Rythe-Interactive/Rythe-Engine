@@ -1,0 +1,66 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.hpp:
+
+File editor_impl.hpp
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_editor_editor>` (``/home/runner/work/Args-Engine/Args-Engine/args/editor/editor``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/editor/editor/editor_impl.hpp``)
+---------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__editor`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1editor_1_1_editor`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_editor__impl_8hpp_1afef7e8994557adb3ce512dc6e64663cc`
+

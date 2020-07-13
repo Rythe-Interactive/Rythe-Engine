@@ -1,0 +1,18 @@
+
+Class Hierarchy
+---------------
+
+
+.. raw:: html
+
+   <ul class="treeView" id="class-treeView">
+     <li>
+       <ul class="collapsibleList">
+         <li>Namespace <a href="namespace_args.html#namespace-args">args</a><ul><li>Namespace <a href="namespace_args__core.html#namespace-args-core">args::core</a><ul><li>Namespace <a href="namespace_args__core__filesystem.html#namespace-args-core-filesystem">args::core::filesystem</a><ul><li>Namespace <a href="namespace_args__core__filesystem__detail.html#namespace-args-core-filesystem-detail">args::core::filesystem::detail</a><ul><li>Template Struct <a href="structargs_1_1core_1_1filesystem_1_1detail_1_1has__from__resource.html#exhale-struct-structargs-1-1core-1-1filesystem-1-1detail-1-1has-from-resource">has_from_resource</a></li><li>Template Struct <a href="structargs_1_1core_1_1filesystem_1_1detail_1_1has__from__resource_3_01_c_00_01_ret_07_args_8_8_8_08_4.html#exhale-struct-structargs-1-1core-1-1filesystem-1-1detail-1-1has-from-resource-3-01-c-00-01-ret-07-args-8-8-8-08-4">has_from_resource&lt; C, Ret(Args...)&gt;</a></li><li>Template Struct <a href="structargs_1_1core_1_1filesystem_1_1detail_1_1has__to__resource.html#exhale-struct-structargs-1-1core-1-1filesystem-1-1detail-1-1has-to-resource">has_to_resource</a></li><li class="lastChild">Template Struct <a href="structargs_1_1core_1_1filesystem_1_1detail_1_1has__to__resource_3_01_c_00_01_ret_07_args_8_8_8_08_4.html#exhale-struct-structargs-1-1core-1-1filesystem-1-1detail-1-1has-to-resource-3-01-c-00-01-ret-07-args-8-8-8-08-4">has_to_resource&lt; C, Ret(Args...)&gt;</a></li></ul></li><li>Class <a href="classargs_1_1core_1_1filesystem_1_1basic__resource.html#exhale-class-classargs-1-1core-1-1filesystem-1-1basic-resource">basic_resource</a></li><li class="lastChild">Class <a href="classargs_1_1core_1_1filesystem_1_1_test.html#exhale-class-classargs-1-1core-1-1filesystem-1-1-test">Test</a></li></ul></li><li>Class <a href="classargs_1_1core_1_1_engine.html#exhale-class-classargs-1-1core-1-1-engine">Engine</a></li><li class="lastChild">Class <a href="classargs_1_1core_1_1_module.html#exhale-class-classargs-1-1core-1-1-module">Module</a></li></ul></li><li class="lastChild">Namespace <a href="namespace_args__editor.html#namespace-args-editor">args::editor</a><ul><li class="lastChild">Class <a href="classargs_1_1editor_1_1_editor.html#exhale-class-classargs-1-1editor-1-1-editor">Editor</a></li></ul></li></ul></li><li class="lastChild">Class <a href="class_test_module.html#exhale-class-class-test-module">TestModule</a></li>
+       </ul>
+     </li><!-- only tree view element -->
+   </ul><!-- /treeView class-treeView -->
+
+.. end raw html for treeView
+
+

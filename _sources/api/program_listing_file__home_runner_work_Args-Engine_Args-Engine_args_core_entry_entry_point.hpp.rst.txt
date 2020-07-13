@@ -1,0 +1,32 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_entry_entry_point.hpp:
+
+Program Listing for File entry_point.hpp
+========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_entry_entry_point.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/entry/entry_point.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/engine/engine.hpp>
+   #include <iostream>
+   
+   extern void reportModules(args::core::Engine* engine);
+   
+   #ifdef ARGS_ENTRY
+   int main(int argc, char** argv)
+   {
+       args::core::Engine engine;
+       reportModules(&engine);
+   
+       engine.init();
+   
+   #ifdef _DEBUG
+       _getwch();
+   #endif // DEBUG
+       return 0;
+   }
+   #endif

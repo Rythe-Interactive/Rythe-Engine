@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1core_1_1filesystem_1_1detail_1_1has__from__resource:
+
+Template Struct has_from_resource
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_resource_sfinae.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::core::filesystem::detail::has_from_resource
+   :members:
+   :protected-members:
+   :undoc-members:

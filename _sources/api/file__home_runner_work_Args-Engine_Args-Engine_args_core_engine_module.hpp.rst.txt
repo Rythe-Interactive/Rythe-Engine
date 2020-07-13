@@ -1,0 +1,61 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp:
+
+File module.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_engine>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/engine``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/engine/module.hpp``)
+--------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1core_1_1_module`
+

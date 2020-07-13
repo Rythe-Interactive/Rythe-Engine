@@ -1,0 +1,20 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp:
+
+Program Listing for File core.hpp
+=================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/core.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   #include <core/platform/platform.hpp>
+   #include <core/types/primitives.hpp>
+   #include <core/types/sfinae.hpp>
+   #include <core/engine/module.hpp>
+   #include <core/engine/engine.hpp>
+   #include <core/entry/entry_point.hpp>

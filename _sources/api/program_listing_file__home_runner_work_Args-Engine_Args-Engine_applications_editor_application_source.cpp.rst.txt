@@ -1,0 +1,26 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_applications_editor_application_source.cpp:
+
+Program Listing for File source.cpp
+===================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_applications_editor_application_source.cpp>` (``/home/runner/work/Args-Engine/Args-Engine/applications/editor_application/source.cpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include <iostream>
+   #include <core/core.hpp>
+   #include <editor/editor.hpp>
+   
+   void __cdecl reportEditorModules(args::editor::Editor* editor)
+   {
+   
+   }
+   
+   void __cdecl reportModules(args::core::Engine* engine)
+   {
+       std::cout << "Hello Args!" << std::endl;
+       _getwch();
+   }

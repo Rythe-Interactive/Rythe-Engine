@@ -1,0 +1,13 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.cpp:
+
+Program Listing for File module.cpp
+===================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.cpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/engine/module.cpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include <core/engine/module.hpp>

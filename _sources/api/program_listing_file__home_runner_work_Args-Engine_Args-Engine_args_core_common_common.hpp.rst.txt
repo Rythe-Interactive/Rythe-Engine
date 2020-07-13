@@ -1,0 +1,15 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_common_common.hpp:
+
+Program Listing for File common.hpp
+===================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_common_common.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/common/common.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <cassert>
+   #define assert_msg(msg,expr) assert(((void)(msg),(expr)))

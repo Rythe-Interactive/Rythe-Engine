@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REPO managment &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ARGS API" href="api/library_root.html" />
+    <link rel="prev" title="Args-Engine" href="README.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="api/library_root.html" title="ARGS API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="README.html" title="Args-Engine"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">REPO managment</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="repo-managment">
+<h1>REPO managment<a class="headerlink" href="#repo-managment" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="git-branch-methodology">
+<h2>Git-Branch methodology<a class="headerlink" href="#git-branch-methodology" title="Permalink to this headline">¶</a></h2>
+<p>This repository employs a git flow based workflow, to incorporate your changes the following conditions must be true:</p>
+<ul class="simple">
+<li><p>your change lives on either feature/your_change_name or bugfix/your_change_name.</p></li>
+<li><p>you must create a pull request.</p></li>
+<li><p>if your branch is a bugfix it must mention an issue.</p></li>
+<li><p>it must adhere to the code-style mentioned below.</p></li>
+</ul>
+<p>Furthermore the following rules are to be met when attempting to merge:</p>
+<ul class="simple">
+<li><p>to merge into a develop branch, you require the approval of one peer reviewer of that team.</p>
+<ul>
+<li><p>you can only merge from develop_&lt;your_team&gt; into develop</p></li>
+</ul>
+</li>
+<li><p>to merge into main you require the approval of a code-owner and the ci must pass (if applicable).</p>
+<ul>
+<li><p>you can only merge from develop into main via a release branch</p></li>
+</ul>
+</li>
+<li><p>to merge into release you require the approval of a code-owner and the ci must pass on strict latest (if applicable) and your commit must be signed!.</p>
+<ul>
+<li><p>you can only branch develop into a release branch, a release branch must be merged into main and develop directly</p></li>
+</ul>
+</li>
+<li><p>hotfix branches are only allowed in special cases and must be communicated with a code owner.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="code-style">
+<h1>CODE style<a class="headerlink" href="#code-style" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="file-names">
+<h2>File-Names<a class="headerlink" href="#file-names" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>A file name cannot have any uppercase letters</p></li>
+<li><p>Headers must have the ending .hpp or .h respectively (use hpp for c++ headers)</p></li>
+<li><p>Source must have the ending .cpp or .c respectively</p></li>
+</ul>
+</div>
+<div class="section" id="namespacing">
+<h2>Namespacing<a class="headerlink" href="#namespacing" title="Permalink to this headline">¶</a></h2>
+<p>everything needs to go into the namespace <code class="docutils literal notranslate"><span class="pre">args</span></code> and should be in it’s own general namespace within that. also use that as an indication where to put your file.</p>
+<p>i.e.: The file /core/math/vector.hpp uses
+<code class="docutils literal notranslate"><span class="pre">namespace</span> <span class="pre">args::core::math</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code></p>
+<p>Use the new c++17 convention for nested namespaces, namespace names may only have snake_case letters</p>
+</div>
+<div class="section" id="class-struct-names">
+<h2>Class/Struct Names<a class="headerlink" href="#class-struct-names" title="Permalink to this headline">¶</a></h2>
+<p>types that provide a lot of functionality unlike “stl-likes” should be classes and start with an uppercase letter and continue in PascalCase<br>
+(examples: Window, LZMA2Adaptor, VK_WindowHelper)</p>
+<p>POD types that are completely compatible with the stl should all be structs, lower-case and should stay that way<br>
+(examples: mat4f, vec2f, angle&lt;float&gt;)</p>
+<p>“stl-likes” and primitive typedefs should use stl-like snake_case naming<br>
+(examples: entity_id, sparse_set, default_index_list)</p>
+</div>
+<div class="section" id="class-struct-members">
+<h2>Class/Struct Members<a class="headerlink" href="#class-struct-members" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">private</span></code> variables should start with <code class="docutils literal notranslate"><span class="pre">m_</span></code> and continued in PascalCase.<br>
+<code class="docutils literal notranslate"><span class="pre">public</span></code> variables should not have a prefix and use camelCase, the same applies to local variables.</p>
+<p>methods of non “stl-likes” should use camelCase naming and “stl-likes” should use stl-like snake_case naming</p>
+</div>
+<div class="section" id="comments">
+<h2>Comments<a class="headerlink" href="#comments" title="Permalink to this headline">¶</a></h2>
+<p>In feature branches there is no comments enforcement, however in order to get a pull request accepted to any of the main branches doxygen style comments are mandatory.</p>
+</div>
+<div class="section" id="templates">
+<h2>Templates<a class="headerlink" href="#templates" title="Permalink to this headline">¶</a></h2>
+<p>when doing template-meta-programming make sure to use <code class="docutils literal notranslate"><span class="pre">constexpr</span></code> and <code class="docutils literal notranslate"><span class="pre">using</span></code> correctly.</p>
+</div>
+<div class="section" id="a-typical-file">
+<h2>A Typical File<a class="headerlink" href="#a-typical-file" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once </span><span class="c1">// we use pragma it is supported pretty much everywhere</span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/math/vector.hpp&gt; //alway include from the root,makes the file more readable</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;application/application.hpp&gt; //even if it is your own directory</span><span class="cp"></span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">application</span> <span class="c1">// in cpp files you may use using namespace if you so desire</span>
+<span class="p">{</span>
+
+  <span class="n">Application</span><span class="o">::</span><span class="n">Application</span><span class="p">()</span> <span class="o">:</span> <span class="n">m_OtherVector</span> <span class="p">{</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">2.0f</span> <span class="p">}</span> <span class="c1">// use this constructor syntax (it&#39;s faster)</span>
+  <span class="p">{</span>
+    <span class="n">math</span><span class="o">::</span><span class="n">vec3f</span> <span class="n">someVector</span> <span class="o">=</span> <span class="p">{</span> <span class="mf">1.f</span><span class="p">,</span> <span class="mf">2.f</span><span class="p">,</span> <span class="mf">3.f</span> <span class="p">};</span>
+  <span class="p">}</span>
+ <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">REPO managment</a><ul>
+<li><a class="reference internal" href="#git-branch-methodology">Git-Branch methodology</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#code-style">CODE style</a><ul>
+<li><a class="reference internal" href="#file-names">File-Names</a></li>
+<li><a class="reference internal" href="#namespacing">Namespacing</a></li>
+<li><a class="reference internal" href="#class-struct-names">Class/Struct Names</a></li>
+<li><a class="reference internal" href="#class-struct-members">Class/Struct Members</a></li>
+<li><a class="reference internal" href="#comments">Comments</a></li>
+<li><a class="reference internal" href="#templates">Templates</a></li>
+<li><a class="reference internal" href="#a-typical-file">A Typical File</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation index</a><ul>
+      <li>Previous: <a href="README.html" title="previous chapter">Args-Engine</a></li>
+      <li>Next: <a href="api/library_root.html" title="next chapter">ARGS API</a></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/CONTRIBUTING.md.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

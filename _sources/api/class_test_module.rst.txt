@@ -1,0 +1,25 @@
+.. _exhale_class_class_test_module:
+
+Class TestModule
+================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public args::core::Module`` (:ref:`exhale_class_classargs_1_1core_1_1_module`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: TestModule
+   :members:
+   :protected-members:
+   :undoc-members:

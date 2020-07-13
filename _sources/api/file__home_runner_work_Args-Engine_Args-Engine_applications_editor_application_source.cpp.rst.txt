@@ -1,0 +1,50 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_applications_editor_application_source.cpp:
+
+File source.cpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_applications_editor_application>` (``/home/runner/work/Args-Engine/Args-Engine/applications/editor_application``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/applications/editor_application/source.cpp``)
+-----------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_applications_editor_application_source.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`)
+
+- ``editor/editor.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor.hpp`)
+
+- ``iostream``
+
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_editor__application_2source_8cpp_1a8b1e1d091cfbcc8a6898598789bab17b`
+
+- :ref:`exhale_function_editor__application_2source_8cpp_1ace9488ebb6420533e9a2825907dbbebd`
+

@@ -1,0 +1,71 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp:
+
+File engine.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_engine>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/engine``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/engine/engine.hpp``)
+--------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/engine/module.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp`)
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`)
+
+- ``core/types/sfinae.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_sfinae.hpp`)
+
+- ``map``
+
+- ``vector``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_entry_entry_point.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1core_1_1_engine`
+

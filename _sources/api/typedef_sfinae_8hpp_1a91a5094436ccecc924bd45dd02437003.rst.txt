@@ -1,0 +1,13 @@
+.. _exhale_typedef_sfinae_8hpp_1a91a5094436ccecc924bd45dd02437003:
+
+Typedef args::core::inherits_from
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_sfinae.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::inherits_from

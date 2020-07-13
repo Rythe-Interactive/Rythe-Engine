@@ -1,0 +1,24 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp:
+
+Program Listing for File module.hpp
+===================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/engine/module.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/types/primitives.hpp>
+   
+   namespace args::core
+   {
+       class Module
+       {
+       public:
+           virtual priority_type priority() = 0;
+           virtual void init() = 0;
+       };
+   }

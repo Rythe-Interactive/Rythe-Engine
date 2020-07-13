@@ -1,0 +1,57 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp:
+
+File core.hpp
+=============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core>` (``/home/runner/work/Args-Engine/Args-Engine/args/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/core.hpp``)
+-----------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/engine/engine.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp`)
+
+- ``core/engine/module.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp`)
+
+- ``core/entry/entry_point.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_entry_entry_point.hpp`)
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`)
+
+- ``core/types/sfinae.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_sfinae.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_editor_application_source.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_source.cpp`
+
+
+

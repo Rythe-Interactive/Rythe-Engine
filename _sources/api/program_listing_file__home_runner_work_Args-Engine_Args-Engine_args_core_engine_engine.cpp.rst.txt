@@ -1,0 +1,25 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.cpp:
+
+Program Listing for File engine.cpp
+===================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.cpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/engine/engine.cpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include <core/engine/engine.hpp>
+   
+   namespace args::core
+   {
+       void Engine::init()
+       {
+           for (auto priority : modules)
+               for (auto* module : priority.second)
+               {
+                   module->init();
+               }
+       }
+   }

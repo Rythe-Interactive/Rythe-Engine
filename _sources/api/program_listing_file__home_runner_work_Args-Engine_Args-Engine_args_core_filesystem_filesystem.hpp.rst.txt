@@ -1,0 +1,25 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem.hpp:
+
+Program Listing for File filesystem.hpp
+=======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/filesystem.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   #include <core/filesystem/filemanip.hpp>
+   
+   
+   //args::fs
+   namespace args::core
+   {
+       namespace fs = ::args::core::filesystem;
+   
+   }
+   
+   

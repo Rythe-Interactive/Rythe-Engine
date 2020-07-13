@@ -1,0 +1,20 @@
+.. _dir__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail:
+
+
+Directory detail
+================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/detail``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_resource_sfinae.hpp`
+
+

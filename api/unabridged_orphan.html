@@ -1,0 +1,649 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full API &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Full API</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="full-api">
+<h1>Full API<a class="headerlink" href="#full-api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="directories">
+<h2>Directories<a class="headerlink" href="#directories" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_applications.html">Directory applications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_applications.html#subdirectories">Subdirectories</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_applications_editor_application.html">Directory application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_applications_editor_application.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_applications_test_game.html">Directory game</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_applications_test_game.html#subdirectories">Subdirectories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_applications_test_game.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module.html">Directory module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args.html">Directory args</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args.html#subdirectories">Subdirectories</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_application.html">Directory application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_application.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_audio.html">Directory audio</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_audio.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core.html">Directory core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core.html#subdirectories">Subdirectories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core_common.html">Directory common</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core_common.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core_engine.html">Directory engine</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core_engine.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core_entry.html">Directory entry</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core_entry.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem.html">Directory filesystem</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem.html#subdirectories">Subdirectories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail.html">Directory detail</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core_platform.html">Directory platform</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core_platform.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core_types.html">Directory types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core_types.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_editor.html">Directory editor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_editor.html#subdirectories">Subdirectories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_editor.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_editor_editor.html">Directory editor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_editor_editor.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_networking.html">Directory networking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_networking.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_physics.html">Directory physics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_physics.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_rendering.html">Directory rendering</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_rendering.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_scripting.html">Directory scripting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_scripting.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="files">
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_common_common.hpp.html">File common.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_common_common.hpp.html#definition-home-runner-work-args-engine-args-engine-args-core-common-common-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/common/common.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_common_common.hpp.html">Program Listing for File common.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_common_common.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_common_common.hpp.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp.html">File core.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp.html#definition-home-runner-work-args-engine-args-engine-args-core-core-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/core.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp.html">Program Listing for File core.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_application_delete_this.cpp.html">File delete_this.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_application_delete_this.cpp.html#definition-home-runner-work-args-engine-args-engine-args-application-delete-this-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/application/delete_this.cpp</span></code>)</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_audio_delete_this.cpp.html">File delete_this.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_audio_delete_this.cpp.html#definition-home-runner-work-args-engine-args-engine-args-audio-delete-this-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/audio/delete_this.cpp</span></code>)</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_editor_delete_this.cpp.html">File delete_this.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_editor_delete_this.cpp.html#definition-home-runner-work-args-engine-args-engine-args-editor-delete-this-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/editor/delete_this.cpp</span></code>)</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_networking_delete_this.cpp.html">File delete_this.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_networking_delete_this.cpp.html#definition-home-runner-work-args-engine-args-engine-args-networking-delete-this-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/networking/delete_this.cpp</span></code>)</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_physics_delete_this.cpp.html">File delete_this.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_physics_delete_this.cpp.html#definition-home-runner-work-args-engine-args-engine-args-physics-delete-this-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/physics/delete_this.cpp</span></code>)</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_rendering_delete_this.cpp.html">File delete_this.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_rendering_delete_this.cpp.html#definition-home-runner-work-args-engine-args-engine-args-rendering-delete-this-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/rendering/delete_this.cpp</span></code>)</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_scripting_delete_this.cpp.html">File delete_this.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_scripting_delete_this.cpp.html#definition-home-runner-work-args-engine-args-engine-args-scripting-delete-this-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/scripting/delete_this.cpp</span></code>)</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor.hpp.html">File editor.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor.hpp.html#definition-home-runner-work-args-engine-args-engine-args-editor-editor-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/editor/editor.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor.hpp.html">Program Listing for File editor.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor.hpp.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.cpp.html">File editor_impl.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.cpp.html#definition-home-runner-work-args-engine-args-engine-args-editor-editor-editor-impl-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/editor/editor/editor_impl.cpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.cpp.html">Program Listing for File editor_impl.cpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.cpp.html#includes">Includes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.hpp.html">File editor_impl.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.hpp.html#definition-home-runner-work-args-engine-args-engine-args-editor-editor-editor-impl-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/editor/editor/editor_impl.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.hpp.html">Program Listing for File editor_impl.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.hpp.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.hpp.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.cpp.html">File engine.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.cpp.html#definition-home-runner-work-args-engine-args-engine-args-core-engine-engine-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/engine/engine.cpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.cpp.html">Program Listing for File engine.cpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.cpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.cpp.html#namespaces">Namespaces</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp.html">File engine.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp.html#definition-home-runner-work-args-engine-args-engine-args-core-engine-engine-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/engine/engine.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp.html">Program Listing for File engine.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_entry_entry_point.hpp.html">File entry_point.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_entry_entry_point.hpp.html#definition-home-runner-work-args-engine-args-engine-args-core-entry-entry-point-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/entry/entry_point.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_entry_entry_point.hpp.html">Program Listing for File entry_point.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_entry_entry_point.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_entry_entry_point.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_entry_entry_point.hpp.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp.html">File filemanip.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp.html#definition-home-runner-work-args-engine-args-engine-args-core-filesystem-filemanip-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/filemanip.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp.html">Program Listing for File filemanip.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp.html#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp.html#defines">Defines</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem.hpp.html">File filesystem.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem.hpp.html#definition-home-runner-work-args-engine-args-engine-args-core-filesystem-filesystem-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/filesystem.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem.hpp.html">Program Listing for File filesystem.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem.hpp.html#namespaces">Namespaces</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.cpp.html">File module.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.cpp.html#definition-home-runner-work-args-engine-args-engine-args-core-engine-module-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/engine/module.cpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.cpp.html">Program Listing for File module.cpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.cpp.html#includes">Includes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp.html">File module.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp.html#definition-home-runner-work-args-engine-args-engine-args-core-engine-module-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/engine/module.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp.html">Program Listing for File module.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp.html">File platform.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp.html#definition-home-runner-work-args-engine-args-engine-args-core-platform-platform-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/platform/platform.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp.html">Program Listing for File platform.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp.html#defines">Defines</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp.html">File primitives.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp.html#definition-home-runner-work-args-engine-args-engine-args-core-types-primitives-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/types/primitives.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp.html">Program Listing for File primitives.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp.html#typedefs">Typedefs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_resource.hpp.html">File resource.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_resource.hpp.html#definition-home-runner-work-args-engine-args-engine-args-core-filesystem-resource-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/resource.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_resource.hpp.html">Program Listing for File resource.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_resource.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_resource.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_resource.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_resource_sfinae.hpp.html">File resource_sfinae.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_resource_sfinae.hpp.html#definition-home-runner-work-args-engine-args-engine-args-core-filesystem-detail-resource-sfinae-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/detail/resource_sfinae.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_resource_sfinae.hpp.html">Program Listing for File resource_sfinae.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_resource_sfinae.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_resource_sfinae.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_resource_sfinae.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_resource_sfinae.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_sfinae.hpp.html">File sfinae.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_sfinae.hpp.html#definition-home-runner-work-args-engine-args-engine-args-core-types-sfinae-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/types/sfinae.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_types_sfinae.hpp.html">Program Listing for File sfinae.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_sfinae.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_sfinae.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_sfinae.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_sfinae.hpp.html#typedefs">Typedefs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_editor_application_source.cpp.html">File source.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_editor_application_source.cpp.html#definition-home-runner-work-args-engine-args-engine-applications-editor-application-source-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/applications/editor_application/source.cpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_applications_editor_application_source.cpp.html">Program Listing for File source.cpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_editor_application_source.cpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_editor_application_source.cpp.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_source.cpp.html">File source.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_source.cpp.html#definition-home-runner-work-args-engine-args-engine-applications-test-game-source-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/applications/test_game/source.cpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_source.cpp.html">Program Listing for File source.cpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_source.cpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_source.cpp.html#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_source.cpp.html#defines">Defines</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.cpp.html">File testModule.cpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.cpp.html#definition-home-runner-work-args-engine-args-engine-applications-test-game-module-testmodule-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/applications/test_game/module/testModule.cpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.cpp.html">Program Listing for File testModule.cpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.cpp.html#includes">Includes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.hpp.html">File testModule.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.hpp.html#definition-home-runner-work-args-engine-args-engine-applications-test-game-module-testmodule-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/applications/test_game/module/testModule.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.hpp.html">Program Listing for File testModule.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.hpp.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp.html">File types.hpp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp.html#definition-home-runner-work-args-engine-args-engine-args-core-types-types-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/types/types.hpp</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp.html">Program Listing for File types.hpp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp.html#namespaces">Namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp.html#typedefs">Typedefs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Full API</a><ul>
+<li><a class="reference internal" href="#directories">Directories</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#files">Files</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/unabridged_orphan.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

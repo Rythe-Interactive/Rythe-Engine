@@ -1,0 +1,193 @@
+
+Full API
+--------
+
+Namespaces
+**********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_args.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_args__core.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_args__core__filesystem.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_args__core__filesystem__detail.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_args__core__filesystem__literals.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_args__editor.rst
+
+Classes and Structs
+*******************
+
+
+.. toctree::
+   :maxdepth: 5
+
+   structargs_1_1core_1_1filesystem_1_1detail_1_1has__from__resource.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structargs_1_1core_1_1filesystem_1_1detail_1_1has__from__resource_3_01_c_00_01_ret_07_args_8_8_8_08_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structargs_1_1core_1_1filesystem_1_1detail_1_1has__to__resource.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structargs_1_1core_1_1filesystem_1_1detail_1_1has__to__resource_3_01_c_00_01_ret_07_args_8_8_8_08_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1_engine.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1filesystem_1_1basic__resource.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1filesystem_1_1_test.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1_module.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1editor_1_1_editor.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   class_test_module.rst
+
+Functions
+*********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespaceargs_1_1core_1_1filesystem_1_1literals_1acc3142f046c9c3dca88de33c8c1d6ced.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespaceargs_1_1core_1_1filesystem_1_1literals_1a5e12aaf09e12d80528fcc3636d8cfaf7.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_filemanip_8hpp_1ab37ec71e56f634b5d953917b91e395cc.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_filemanip_8hpp_1a1462e031040b5fc8416f97249269e0b7.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_editor__application_2source_8cpp_1a8b1e1d091cfbcc8a6898598789bab17b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_editor__impl_8hpp_1afef7e8994557adb3ce512dc6e64663cc.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_editor__application_2source_8cpp_1ace9488ebb6420533e9a2825907dbbebd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_test__game_2source_8cpp_1ace9488ebb6420533e9a2825907dbbebd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_entry__point_8hpp_1a7ce8e0555bec33efde98e832731cbde5.rst
+
+Defines
+*******
+
+
+.. toctree::
+   :maxdepth: 5
+
+   define_filemanip_8hpp_1af08ec37a8c99d747fb60fa15bc28678b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_platform_8hpp_1ada752916399eeeee1acb37bea4df462f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_platform_8hpp_1ae75e161cf2a70872598c0becb912bb9c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_platform_8hpp_1a1b615ef40773fc553b3a95738b5db51c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_test__game_2source_8cpp_1ab4b853af4a7cb511fe328ad918c8b0cf.rst
+
+Typedefs
+********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_types_8hpp_1a5ee2a837b5b4206516d9c25f47ce9617.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_types_8hpp_1a12e23453aaa673f201e897cd71648906.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_sfinae_8hpp_1a91a5094436ccecc924bd45dd02437003.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1aeb2a8d22b4c0b4917c38f3e2fcb9eea0.rst
