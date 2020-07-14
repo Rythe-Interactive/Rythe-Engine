@@ -1,0 +1,20 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_types_meta.hpp:
+
+Program Listing for File meta.hpp
+=================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_types_meta.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/types/meta.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <type_traits>
+   
+   namespace args::core
+   {
+       template<typename derived_type, typename base_type>
+       using inherits_from = typename std::enable_if<std::is_base_of<base_type, derived_type>::value, int>::type;
+   }

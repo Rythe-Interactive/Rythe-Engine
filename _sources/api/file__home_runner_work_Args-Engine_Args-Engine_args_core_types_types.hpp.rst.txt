@@ -29,11 +29,9 @@ Includes
 --------
 
 
-- ``cstddef``
+- ``core/types/meta.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_meta.hpp`)
 
-- ``cstdint``
-
-- ``vector``
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`)
 
 
 
@@ -46,20 +44,4 @@ Included By
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_resource.hpp`
 
 
-
-
-Namespaces
-----------
-
-
-- :ref:`namespace_args__core`
-
-
-Typedefs
---------
-
-
-- :ref:`exhale_typedef_types_8hpp_1a5ee2a837b5b4206516d9c25f47ce9617`
-
-- :ref:`exhale_typedef_types_8hpp_1a12e23453aaa673f201e897cd71648906`
 

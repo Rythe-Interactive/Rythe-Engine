@@ -3,7 +3,7 @@
 Template Struct has_from_resource< C, Ret(Args...)>
 ===================================================
 
-- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_resource_sfinae.hpp`
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_resource_meta.hpp`
 
 
 Struct Documentation
