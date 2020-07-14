@@ -23,11 +23,18 @@ Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/engine/module.
 
 
 
+Detailed Description
+--------------------
+
+TodoGlynLeine, this file needs to be reviewed 
+
 
 
 Includes
 --------
 
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
 
 - ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`)
 
@@ -56,6 +63,8 @@ Namespaces
 Classes
 -------
 
+
+- :ref:`exhale_struct_structargs_1_1core_1_1module__initializer__t`
 
 - :ref:`exhale_class_classargs_1_1core_1_1_module`
 

@@ -46,13 +46,15 @@
   <div class="section" id="file-entry-point-hpp">
 <span id="file-home-runner-work-args-engine-args-engine-args-core-entry-entry-point-hpp"></span><h1>File entry_point.hpp<a class="headerlink" href="#file-entry-point-hpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="dir__home_runner_work_Args-Engine_Args-Engine_args_core_entry.html#dir-home-runner-work-args-engine-args-engine-args-core-entry"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/entry</span></code>)</p>
+<p>when ARGS_ENTRY is defined, this file will create a function with signature main(int,char**) -&gt; int implementing the common main function of a c++ program</p>
 <div class="contents local topic" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#definition-home-runner-work-args-engine-args-engine-args-core-entry-entry-point-hpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/entry/entry_point.hpp</span></code>)</a></p></li>
-<li><p><a class="reference internal" href="#includes" id="id2">Includes</a></p></li>
-<li><p><a class="reference internal" href="#included-by" id="id3">Included By</a></p></li>
-<li><p><a class="reference internal" href="#functions" id="id4">Functions</a></p></li>
+<li><p><a class="reference internal" href="#detailed-description" id="id2">Detailed Description</a></p></li>
+<li><p><a class="reference internal" href="#includes" id="id3">Includes</a></p></li>
+<li><p><a class="reference internal" href="#included-by" id="id4">Included By</a></p></li>
+<li><p><a class="reference internal" href="#functions" id="id5">Functions</a></p></li>
 </ul>
 </div>
 <div class="section" id="definition-home-runner-work-args-engine-args-engine-args-core-entry-entry-point-hpp">
@@ -62,6 +64,12 @@
 <li class="toctree-l1"><a class="reference internal" href="program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_entry_entry_point.hpp.html">Program Listing for File entry_point.hpp</a></li>
 </ul>
 </div>
+</div>
+<div class="section" id="detailed-description">
+<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this headline">¶</a></h2>
+<p>when defining ARGS_ENTRY do no create your own CRT_STARTUP such as main()-&gt;int, main(int,char**)-&gt;int,wmain(), etc…
+when using ARGS_ENTRY you must instead implement <a class="reference internal" href="function_entry__point_8hpp_1a7ce8e0555bec33efde98e832731cbde5.html#exhale-function-entry-point-8hpp-1a7ce8e0555bec33efde98e832731cbde5"><span class="std std-ref">Function reportModules(args::core::Engine *)</span></a>
+TodoGlynLeine please review this</p>
 </div>
 <div class="section" id="includes">
 <h2>Includes<a class="headerlink" href="#includes" title="Permalink to this headline">¶</a></h2>
@@ -95,6 +103,7 @@
   <ul>
 <li><a class="reference internal" href="#">File entry_point.hpp</a><ul>
 <li><a class="reference internal" href="#definition-home-runner-work-args-engine-args-engine-args-core-entry-entry-point-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/entry/entry_point.hpp</span></code>)</a></li>
+<li><a class="reference internal" href="#detailed-description">Detailed Description</a></li>
 <li><a class="reference internal" href="#includes">Includes</a></li>
 <li><a class="reference internal" href="#included-by">Included By</a></li>
 <li><a class="reference internal" href="#functions">Functions</a></li>

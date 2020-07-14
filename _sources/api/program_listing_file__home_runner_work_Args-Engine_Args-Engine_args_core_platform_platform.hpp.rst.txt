@@ -18,8 +18,18 @@ Program Listing for File platform.hpp
     #define ARGS_WINDOWS
    #endif
    
-   #if defined(ARGS_WINDOWS)
-       #if defined(ARGS_INTERNAL)
+   #if (defined(ARGS_WINDOWS) && !defined(ARGS_WINDOWS_USE_CDECL)) || defined (DOXY_INCLUDE)
+   
+       #define ARGS_CCONV __fastcall
+   #else
+       #define ARGS_CCONV __cdecl
+   #endif
+   
+   #define NO_MANGLING extern "C"
+   
+   #if defined(ARGS_WINDOWS) || defined(DOXY_INCLUDE)
+       #if defined(ARGS_INTERNAL) || defined(DOXY_INCLUDE)
+   
            #define ARGS_API __declspec(dllexport)
        #else
            #define ARGS_API __declspec(dllimport)
@@ -28,7 +38,12 @@ Program Listing for File platform.hpp
        #error Support for this platform is not complete yet.
    #endif
    
-   #ifdef __has_cpp_attribute
+   #define ARGS_FUNC ARGS_API ARGS_CCONV
+   
+   #define ARGS_INTERFACE NO_MANGLING ARGS_API ARGS_CCONV 
+   
+   #if defined(__has_cpp_attribute)|| defined(DOXY_INCLUDE) 
+   
    #  define AHASCPPATTRIB(x) __has_cpp_attribute(x)
    #else
    #  define AHASCPPATTRIB(x) 0
@@ -36,8 +51,13 @@ Program Listing for File platform.hpp
    
    
    
-   #if __cplusplus >= ARGS_CPP17V || AHASCPPATTRIB(nodiscard)
+   #if __cplusplus >= ARGS_CPP17V || AHASCPPATTRIB(nodiscard) || defined(DOXY_INCLUDE)
+   
    #define A_NODISCARD [[nodiscard]]
    #else
    #define A_NODISCARD
    #endif
+   
+   #define ARGS_PURE =0
+   
+   #define ARGS_IMPURE {}

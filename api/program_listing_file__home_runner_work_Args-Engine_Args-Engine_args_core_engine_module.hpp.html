@@ -48,15 +48,20 @@
 <p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-engine-module-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/engine/module.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/types/primitives.hpp&gt;</span><span class="cp"></span>
-
+<span class="cp">#include</span> <span class="cpf">&lt;core/platform/platform.hpp&gt;</span><span class="cp"></span>
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span>
 <span class="p">{</span>
     <span class="k">class</span> <span class="nc">Module</span>
     <span class="p">{</span>
     <span class="k">public</span><span class="o">:</span>
-        <span class="k">virtual</span> <span class="n">priority_type</span> <span class="n">priority</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">init</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="k">virtual</span> <span class="n">priority_type</span> <span class="n">priority</span><span class="p">()</span> <span class="n">ARGS_PURE</span><span class="p">;</span>
+
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">init</span><span class="p">()</span> <span class="n">ARGS_PURE</span><span class="p">;</span>
     <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="n">module_initializer_t</span><span class="p">{};</span>
+
 <span class="p">}</span>
 </pre></div>
 </div>

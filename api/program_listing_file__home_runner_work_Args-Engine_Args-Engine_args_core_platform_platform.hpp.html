@@ -54,8 +54,18 @@
  <span class="cp">#define ARGS_WINDOWS</span>
 <span class="cp">#endif</span>
 
-<span class="cp">#if defined(ARGS_WINDOWS)</span>
-    <span class="cp">#if defined(ARGS_INTERNAL)</span>
+<span class="cp">#if (defined(ARGS_WINDOWS) &amp;&amp; !defined(ARGS_WINDOWS_USE_CDECL)) || defined (DOXY_INCLUDE)</span>
+
+    <span class="cp">#define ARGS_CCONV __fastcall</span>
+<span class="cp">#else</span>
+    <span class="cp">#define ARGS_CCONV __cdecl</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#define NO_MANGLING extern &quot;C&quot;</span>
+
+<span class="cp">#if defined(ARGS_WINDOWS) || defined(DOXY_INCLUDE)</span>
+    <span class="cp">#if defined(ARGS_INTERNAL) || defined(DOXY_INCLUDE)</span>
+
         <span class="cp">#define ARGS_API __declspec(dllexport)</span>
     <span class="cp">#else</span>
         <span class="cp">#define ARGS_API __declspec(dllimport)</span>
@@ -64,7 +74,12 @@
     <span class="cp">#error Support for this platform is not complete yet.</span>
 <span class="cp">#endif</span>
 
-<span class="cp">#ifdef __has_cpp_attribute</span>
+<span class="cp">#define ARGS_FUNC ARGS_API ARGS_CCONV</span>
+
+<span class="cp">#define ARGS_INTERFACE NO_MANGLING ARGS_API ARGS_CCONV</span>
+
+<span class="cp">#if defined(__has_cpp_attribute)|| defined(DOXY_INCLUDE)</span>
+
 <span class="cp">#  define AHASCPPATTRIB(x) __has_cpp_attribute(x)</span>
 <span class="cp">#else</span>
 <span class="cp">#  define AHASCPPATTRIB(x) 0</span>
@@ -72,11 +87,16 @@
 
 
 
-<span class="cp">#if __cplusplus &gt;= ARGS_CPP17V || AHASCPPATTRIB(nodiscard)</span>
+<span class="cp">#if __cplusplus &gt;= ARGS_CPP17V || AHASCPPATTRIB(nodiscard) || defined(DOXY_INCLUDE)</span>
+
 <span class="cp">#define A_NODISCARD [[nodiscard]]</span>
 <span class="cp">#else</span>
 <span class="cp">#define A_NODISCARD</span>
 <span class="cp">#endif</span>
+
+<span class="cp">#define ARGS_PURE =0</span>
+
+<span class="cp">#define ARGS_IMPURE {}</span>
 </pre></div>
 </div>
 </div>
