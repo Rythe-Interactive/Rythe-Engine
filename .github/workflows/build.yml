@@ -19,7 +19,7 @@ jobs:
        xargs -I"{}" sudo mv {} /usr/bin
        
     - name: generate Makefiles
-      run: premake5 gmake
+      run: cd args && premake5 gmake
 
     - name: make
-      run: make CXX=clang++-9 config=Debug64 all
+      run: cd args && make CXX=clang++-9 config=Debug64 all
