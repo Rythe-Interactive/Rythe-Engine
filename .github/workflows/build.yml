@@ -2,9 +2,9 @@ name: Build-CI
 
 on:
   push:
-    branches: [develop, develop/*]
+    branches: [main, develop, develop/*]
   pull_request:
-    branches: [ develop, develop/* ]
+    branches: [main, develop, develop/* ]
 
 jobs:
   build:
@@ -19,7 +19,7 @@ jobs:
        xargs -I"{}" sudo mv {} /usr/bin
        
     - name: generate Makefiles
-      run: cd args && premake5 gmake
+      run: premake5 --file=args/premake5.lua gmake
 
     - name: make
-      run: cd args && make CXX=clang++-9 config=Debug64 all
+      run: cd args && make CXX=clang++-9 config=debug64 all

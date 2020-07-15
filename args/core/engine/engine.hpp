@@ -42,7 +42,7 @@ namespace args::core
 		template <class ModuleType,class... Args, inherits_from<ModuleType,ModuleType> = 0>
 		void reportModule(module_initializer_t s,Args&&...args)
 		{
-			(void) sentinel;
+			(void) s;
 			Module * module = new ModuleType(std::forward<Args>(args)...);
 			const priority_type priority = module->priority();
 			modules[priority].push_back(module);
