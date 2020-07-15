@@ -1,7 +1,5 @@
 name: cppcheck-action
 on:
-  push:
-    branches: [main, develop, develop/*]
   pull_request:
     branches: [main, develop, develop/* ]
 
