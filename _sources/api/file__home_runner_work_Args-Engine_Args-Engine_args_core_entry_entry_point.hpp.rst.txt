@@ -8,6 +8,10 @@ File entry_point.hpp
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
+
+when ARGS_ENTRY is defined, this file will create a function with signature main(int,char**) -> int implementing the common main function of a c++ program 
+ 
+
 .. contents:: Contents
    :local:
    :backlinks: none
@@ -22,6 +26,13 @@ Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/entry/entry_po
    program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_entry_entry_point.hpp.rst
 
 
+
+Detailed Description
+--------------------
+
+when defining ARGS_ENTRY do no create your own CRT_STARTUP such as main()->int, main(int,char**)->int,wmain(), etc... 
+when using ARGS_ENTRY you must instead implement :ref:`exhale_function_entry__point_8hpp_1a7ce8e0555bec33efde98e832731cbde5` 
+TodoGlynLeine please review this 
 
 
 

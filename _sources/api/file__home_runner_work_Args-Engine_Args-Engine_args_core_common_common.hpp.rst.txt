@@ -8,6 +8,10 @@ File common.hpp
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
+
+collection of common utilities that don't fall into a specific category 
+ 
+
 .. contents:: Contents
    :local:
    :backlinks: none

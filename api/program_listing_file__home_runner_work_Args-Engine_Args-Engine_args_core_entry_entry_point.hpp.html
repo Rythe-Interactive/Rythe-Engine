@@ -61,7 +61,7 @@
     <span class="n">engine</span><span class="p">.</span><span class="n">init</span><span class="p">();</span>
 
 <span class="cp">#ifdef _DEBUG</span>
-    <span class="n">_getwch</span><span class="p">();</span>
+    <span class="n">_getwch</span><span class="p">();</span> <span class="c1">//todo this function is only available on windows, either add curses to the *nix deps or use std::cin.ignore().get();</span>
 <span class="cp">#endif </span><span class="c1">// DEBUG</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>

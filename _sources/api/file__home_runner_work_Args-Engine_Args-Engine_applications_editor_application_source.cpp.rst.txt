@@ -44,7 +44,7 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_editor__application_2source_8cpp_1a8b1e1d091cfbcc8a6898598789bab17b`
+- :ref:`exhale_function_editor__application_2source_8cpp_1a04bb44c36f4522f9fd14688e61b88cbb`
 
-- :ref:`exhale_function_editor__application_2source_8cpp_1ace9488ebb6420533e9a2825907dbbebd`
+- :ref:`exhale_function_editor__application_2source_8cpp_1a6c6ba51358fbc13457bf87952deb9d2c`
 

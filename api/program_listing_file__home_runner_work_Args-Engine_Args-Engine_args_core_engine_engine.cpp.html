@@ -46,13 +46,14 @@
   <div class="section" id="program-listing-for-file-engine-cpp">
 <span id="program-listing-file-home-runner-work-args-engine-args-engine-args-core-engine-engine-cpp"></span><h1>Program Listing for File engine.cpp<a class="headerlink" href="#program-listing-for-file-engine-cpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.cpp.html#file-home-runner-work-args-engine-args-engine-args-core-engine-engine-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/engine/engine.cpp</span></code>)</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;core/engine/engine.hpp&gt;</span><span class="cp"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;future&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/engine/engine.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span>
 <span class="p">{</span>
     <span class="kt">void</span> <span class="n">Engine</span><span class="o">::</span><span class="n">init</span><span class="p">()</span>
     <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">priority</span> <span class="p">:</span> <span class="n">modules</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="nl">priority</span> <span class="p">:</span> <span class="n">modules</span><span class="p">)</span>
             <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">*</span> <span class="k">module</span> <span class="o">:</span> <span class="n">priority</span><span class="p">.</span><span class="n">second</span><span class="p">)</span>
             <span class="p">{</span>
                 <span class="k">module</span><span class="o">-&gt;</span><span class="n">init</span><span class="p">();</span>

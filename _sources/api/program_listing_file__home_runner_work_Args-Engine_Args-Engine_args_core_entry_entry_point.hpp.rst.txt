@@ -25,7 +25,7 @@ Program Listing for File entry_point.hpp
        engine.init();
    
    #ifdef _DEBUG
-       _getwch();
+       _getwch(); //todo this function is only available on windows, either add curses to the *nix deps or use std::cin.ignore().get();
    #endif // DEBUG
        return 0;
    }
