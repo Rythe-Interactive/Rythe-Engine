@@ -38,7 +38,7 @@
 		#define ARGS_API __declspec(dllimport)
 	#endif
 #else
-	#error Support for this platform is not complete yet.
+	#define ARGS_API __attribute__((visibility("default")))
 #endif
 
 /**@def ARGS_FUNC
