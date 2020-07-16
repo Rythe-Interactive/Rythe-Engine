@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Function args::core::filesystem::literals::operator””_readfile" href="function_namespaceargs_1_1core_1_1filesystem_1_1literals_1acc3142f046c9c3dca88de33c8c1d6ced.html" />
-    <link rel="prev" title="Class Editor" href="classargs_1_1editor_1_1_editor.html" />
+    <link rel="prev" title="Class EditorModule" href="classargs_1_1editor_1_1_editor_module.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -39,7 +39,7 @@
           <a href="function_namespaceargs_1_1core_1_1filesystem_1_1literals_1acc3142f046c9c3dca88de33c8c1d6ced.html" title="Function args::core::filesystem::literals::operator””_readfile"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="classargs_1_1editor_1_1_editor.html" title="Class Editor"
+          <a href="classargs_1_1editor_1_1_editor_module.html" title="Class EditorModule"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
@@ -76,12 +76,23 @@
 <dl class="cpp function">
 <dt id="_CPPv4N10TestModule8priorityEv">
 <span id="_CPPv3N10TestModule8priorityEv"></span><span id="_CPPv2N10TestModule8priorityEv"></span><span id="TestModule::priority"></span><span class="target" id="class_test_module_1a6237ae5347a126057e6b1be15003e6c5"></span>args::core::<a class="reference internal" href="typedef_primitives_8hpp_1a65ef5c440ea9b6a32d70756da8a59657.html#_CPPv4N4args4core13priority_typeE" title="args::core::priority_type">priority_type</a> <code class="sig-name descname">priority</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N10TestModule8priorityEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<dd><p>determines the execution priority of this module <a class="reference internal" href="define_platform_8hpp_1aaa80584991d216fb43121552bca34b33.html#platform_8hpp_1aaa80584991d216fb43121552bca34b33"><span class="std std-ref">ARGS_IMPURE_RETURN</span></a> </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>priority_type signed int8 higher is higher priority and get called first </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>default priority of the engine is 0. </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>call order for modules with the same priority is undefined. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N10TestModule4initEv">
 <span id="_CPPv3N10TestModule4initEv"></span><span id="_CPPv2N10TestModule4initEv"></span><span id="TestModule::init"></span><span class="target" id="class_test_module_1a0f3940271019675773b24eea6fccc8c5"></span>void <code class="sig-name descname">init</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N10TestModule4initEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<dd><p>module initializer <a class="reference internal" href="define_platform_8hpp_1a1db9851589b1e9ba81b655bc10b65ee1.html#platform_8hpp_1a1db9851589b1e9ba81b655bc10b65ee1"><span class="std std-ref">ARGS_PURE</span></a> </p>
+</dd></dl>
 
 </div>
 </dd></dl>
@@ -111,7 +122,7 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">ARGS API</a><ul>
-      <li>Previous: <a href="classargs_1_1editor_1_1_editor.html" title="previous chapter">Class Editor</a></li>
+      <li>Previous: <a href="classargs_1_1editor_1_1_editor_module.html" title="previous chapter">Class EditorModule</a></li>
       <li>Next: <a href="function_namespaceargs_1_1core_1_1filesystem_1_1literals_1acc3142f046c9c3dca88de33c8c1d6ced.html" title="next chapter">Function args::core::filesystem::literals::operator””_readfile</a></li>
   </ul></li>
   </ul></li>

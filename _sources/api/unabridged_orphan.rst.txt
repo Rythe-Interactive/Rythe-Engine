@@ -140,11 +140,6 @@ Files
 .. toctree::
    :maxdepth: 5
 
-   file__home_runner_work_Args-Engine_Args-Engine_args_editor_delete_this.cpp.rst
-
-.. toctree::
-   :maxdepth: 5
-
    file__home_runner_work_Args-Engine_Args-Engine_args_networking_delete_this.cpp.rst
 
 .. toctree::
@@ -176,6 +171,16 @@ Files
    :maxdepth: 5
 
    file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editormodule.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editormodule.hpp.rst
 
 .. toctree::
    :maxdepth: 5

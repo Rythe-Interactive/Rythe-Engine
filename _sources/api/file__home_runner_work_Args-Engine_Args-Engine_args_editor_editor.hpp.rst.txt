@@ -31,6 +31,8 @@ Includes
 
 - ``editor/editor/editor_impl.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.hpp`)
 
+- ``editor/editor/editormodule.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editormodule.hpp`)
+
 
 
 Included By

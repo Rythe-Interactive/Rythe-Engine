@@ -63,6 +63,16 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   structargs_1_1core_1_1module__initializer__t.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structargs_1_1editor_1_1editor__module__initializer__t.rst
+
+.. toctree::
+   :maxdepth: 5
+
    classargs_1_1core_1_1_engine.rst
 
 .. toctree::
@@ -84,6 +94,11 @@ Classes and Structs
    :maxdepth: 5
 
    classargs_1_1editor_1_1_editor.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1editor_1_1_editor_module.rst
 
 .. toctree::
    :maxdepth: 5
@@ -117,7 +132,7 @@ Functions
 .. toctree::
    :maxdepth: 5
 
-   function_editor__application_2source_8cpp_1a8b1e1d091cfbcc8a6898598789bab17b.rst
+   function_editor__application_2source_8cpp_1a04bb44c36f4522f9fd14688e61b88cbb.rst
 
 .. toctree::
    :maxdepth: 5
@@ -127,12 +142,12 @@ Functions
 .. toctree::
    :maxdepth: 5
 
-   function_editor__application_2source_8cpp_1ace9488ebb6420533e9a2825907dbbebd.rst
+   function_editor__application_2source_8cpp_1a6c6ba51358fbc13457bf87952deb9d2c.rst
 
 .. toctree::
    :maxdepth: 5
 
-   function_test__game_2source_8cpp_1ace9488ebb6420533e9a2825907dbbebd.rst
+   function_test__game_2source_8cpp_1a6c6ba51358fbc13457bf87952deb9d2c.rst
 
 .. toctree::
    :maxdepth: 5
@@ -161,12 +176,52 @@ Defines
 .. toctree::
    :maxdepth: 5
 
+   define_platform_8hpp_1a95f48fc8959c9b037b521a5b4493b646.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_platform_8hpp_1aadd5c903c07d5262a88073ca41458fdc.rst
+
+.. toctree::
+   :maxdepth: 5
+
    define_platform_8hpp_1a1b615ef40773fc553b3a95738b5db51c.rst
 
 .. toctree::
    :maxdepth: 5
 
    define_test__game_2source_8cpp_1ab4b853af4a7cb511fe328ad918c8b0cf.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_platform_8hpp_1a1e0b40c3b72e9524a534435c3a0060d3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_platform_8hpp_1af157d7f0a908348774d426597fc5907e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_platform_8hpp_1aaa80584991d216fb43121552bca34b33.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_platform_8hpp_1a2576ef6fefc5eafdbc988841b6eb20a2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_platform_8hpp_1a1db9851589b1e9ba81b655bc10b65ee1.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_platform_8hpp_1ac8c687223be2bdac90dfd02bf6bb4a9a.rst
 
 Typedefs
 ********
