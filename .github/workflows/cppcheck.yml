@@ -28,4 +28,4 @@ jobs:
       run: cd args && /home/runner/.local/bin/intercept-build make CXX=clang++-9 config=debug64 all 
     
     - name: cppcheck
-      run: cppcheck --project=args/compile_commands.json --error-exitcode=1 
+      run: cppcheck --project=compile_commands.json --error-exitcode=1 
