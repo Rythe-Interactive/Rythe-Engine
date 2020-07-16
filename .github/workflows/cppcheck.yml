@@ -25,7 +25,7 @@ jobs:
       run: premake5 --file=args/premake5.lua gmake
 
     - name: make
-      run: cd args && intercept-build make CXX=clang++-9 config=debug64 all 
+      run: cd args && /home/runner/.local/bin/intercept-build make CXX=clang++-9 config=debug64 all 
     
     - name: cppcheck
       run: cppcheck --project=args/compile_commands.json --error-exitcode 
