@@ -28,4 +28,4 @@ jobs:
       run: cd args && /home/runner/.local/bin/intercept-build make CXX=clang++-9 config=debug64 all && /home/runner/.local/bin/analyze-build --status-bugs
     
     - name: cppcheck
-      run: cppcheck --project=args.sln--error-exitcode=1 
+      run: cd args && cppcheck --project=args.sln --error-exitcode=1 
