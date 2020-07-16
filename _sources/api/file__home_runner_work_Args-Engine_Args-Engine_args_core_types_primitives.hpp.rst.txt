@@ -25,17 +25,27 @@ Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/types/primitiv
 
 
 
+Includes
+--------
+
+
+- ``cstddef``
+
+- ``cstdint``
+
+- ``vector``
+
 
 
 Included By
 -----------
 
 
-- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`
-
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp`
 
 
 
@@ -51,5 +61,9 @@ Typedefs
 --------
 
 
-- :ref:`exhale_typedef_primitives_8hpp_1aeb2a8d22b4c0b4917c38f3e2fcb9eea0`
+- :ref:`exhale_typedef_primitives_8hpp_1a5ee2a837b5b4206516d9c25f47ce9617`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a12e23453aaa673f201e897cd71648906`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a65ef5c440ea9b6a32d70756da8a59657`
 

@@ -33,11 +33,17 @@ Includes
 
 - ``core/types/types.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp`)
 
-- ``detail/resource_sfinae.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_resource_sfinae.hpp`)
+- ``detail/resource_meta.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_resource_meta.hpp`)
 
 - ``string_view``
 
 
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem.hpp`
 
 
 

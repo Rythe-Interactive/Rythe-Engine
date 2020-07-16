@@ -140,11 +140,6 @@ Files
 .. toctree::
    :maxdepth: 5
 
-   file__home_runner_work_Args-Engine_Args-Engine_args_editor_delete_this.cpp.rst
-
-.. toctree::
-   :maxdepth: 5
-
    file__home_runner_work_Args-Engine_Args-Engine_args_networking_delete_this.cpp.rst
 
 .. toctree::
@@ -180,6 +175,16 @@ Files
 .. toctree::
    :maxdepth: 5
 
+   file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editormodule.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editormodule.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
    file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.cpp.rst
 
 .. toctree::
@@ -201,6 +206,11 @@ Files
    :maxdepth: 5
 
    file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_Args-Engine_Args-Engine_args_core_types_meta.hpp.rst
 
 .. toctree::
    :maxdepth: 5
@@ -230,12 +240,7 @@ Files
 .. toctree::
    :maxdepth: 5
 
-   file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_resource_sfinae.hpp.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   file__home_runner_work_Args-Engine_Args-Engine_args_core_types_sfinae.hpp.rst
+   file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_resource_meta.hpp.rst
 
 .. toctree::
    :maxdepth: 5

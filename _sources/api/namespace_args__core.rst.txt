@@ -24,6 +24,8 @@ Classes
 -------
 
 
+- :ref:`exhale_struct_structargs_1_1core_1_1module__initializer__t`
+
 - :ref:`exhale_class_classargs_1_1core_1_1_engine`
 
 - :ref:`exhale_class_classargs_1_1core_1_1_module`
@@ -33,10 +35,10 @@ Typedefs
 --------
 
 
-- :ref:`exhale_typedef_types_8hpp_1a5ee2a837b5b4206516d9c25f47ce9617`
+- :ref:`exhale_typedef_primitives_8hpp_1a5ee2a837b5b4206516d9c25f47ce9617`
 
-- :ref:`exhale_typedef_types_8hpp_1a12e23453aaa673f201e897cd71648906`
+- :ref:`exhale_typedef_primitives_8hpp_1a12e23453aaa673f201e897cd71648906`
 
-- :ref:`exhale_typedef_sfinae_8hpp_1a91a5094436ccecc924bd45dd02437003`
+- :ref:`exhale_typedef_meta_8hpp_1a91a5094436ccecc924bd45dd02437003`
 
-- :ref:`exhale_typedef_primitives_8hpp_1aeb2a8d22b4c0b4917c38f3e2fcb9eea0`
+- :ref:`exhale_typedef_primitives_8hpp_1a65ef5c440ea9b6a32d70756da8a59657`

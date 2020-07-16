@@ -44,7 +44,7 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_test__game_2source_8cpp_1ace9488ebb6420533e9a2825907dbbebd`
+- :ref:`exhale_function_test__game_2source_8cpp_1a6c6ba51358fbc13457bf87952deb9d2c`
 
 
 Defines

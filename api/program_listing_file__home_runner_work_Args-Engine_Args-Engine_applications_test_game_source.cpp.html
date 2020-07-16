@@ -52,7 +52,7 @@
 
 <span class="cp">#include</span> <span class="cpf">&quot;module/testModule.hpp&quot;</span><span class="cp"></span>
 
-<span class="kt">void</span> <span class="kr">__cdecl</span> <span class="nf">reportModules</span><span class="p">(</span><span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">Engine</span><span class="o">*</span> <span class="n">engine</span><span class="p">)</span>
+<span class="kt">void</span> <span class="n">ARGS_CCONV</span> <span class="nf">reportModules</span><span class="p">(</span><span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">Engine</span><span class="o">*</span> <span class="n">engine</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Hello Args!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
     <span class="n">engine</span><span class="o">-&gt;</span><span class="n">reportModule</span><span class="o">&lt;</span><span class="n">TestModule</span><span class="o">&gt;</span><span class="p">();</span>
