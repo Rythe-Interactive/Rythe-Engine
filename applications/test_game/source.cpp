@@ -4,7 +4,7 @@
 
 #include "module/testModule.hpp"
 
-void __cdecl reportModules(args::core::Engine* engine)
+void ARGS_CCONV reportModules(args::core::Engine* engine)
 {
 	std::cout << "Hello Args!" << std::endl;
 	engine->reportModule<TestModule>();
