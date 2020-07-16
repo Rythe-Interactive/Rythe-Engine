@@ -1,0 +1,36 @@
+name: analyze-action
+on:
+  pull_request:
+    branches: [main, develop, develop/* ]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: get premake5
+      run: |
+       wget -qO- https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-linux.tar.gz | \
+       tar xvz premake5 | \
+       xargs -I"{}" sudo mv {} /usr/bin
+
+    - name: get cppcheck
+      run: sudo apt-get update -yqq && sudo apt-get install -yqq cppcheck
+
+    - name: get intercept-build
+      run: pip install scan-build
+
+    - name: premake
+      run: |
+       premake5 --file=args/premake5.lua gmake && \
+       premake5 --file=args/premake5.lua vs2019
+
+    - name: intercept-build & analyze-build
+      run: |
+       cd args && \
+       /home/runner/.local/bin/intercept-build make --dry-run CXX=clang++-9 config=debug64 all && \
+       /home/runner/.local/bin/analyze-build --status-bugs
+
+    - name: cppcheck
+      run: cd args && cppcheck --project=args.sln --error-exitcode=1 
