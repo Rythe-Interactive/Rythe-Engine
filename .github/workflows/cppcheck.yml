@@ -22,10 +22,13 @@ jobs:
       run: pip install scan-build
 
     - name: generate Makefiles
-      run: premake5 --file=args/premake5.lua gmake
+      run: premake5 --file=args/premake5.lua gmake && premake5 --file=args/premake5.lua vs2019
 
     - name: make
-      run: cd args && /home/runner/.local/bin/intercept-build make CXX=clang++-9 config=debug64 all 
+      run: cd args && /home/runner/.local/bin/intercept-build make CXX=clang++-9 config=debug64 all
+    
+    - name: analyze-build
+      run: /home/runner/.local/bin/analyze-build --status-bugs
     
     - name: cppcheck
-      run: cppcheck --project=compile_commands.json --error-exitcode=1 
+      run: cppcheck --project=args.sln--error-exitcode=1 
