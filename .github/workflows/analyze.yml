@@ -1,4 +1,4 @@
-name: cppcheck-action
+name: analyze-action
 on:
   pull_request:
     branches: [main, develop, develop/* ]
