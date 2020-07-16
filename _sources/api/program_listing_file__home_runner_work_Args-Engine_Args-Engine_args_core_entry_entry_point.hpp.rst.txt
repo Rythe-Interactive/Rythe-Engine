@@ -25,7 +25,7 @@ Program Listing for File entry_point.hpp
        engine.init();
    
    #ifdef _DEBUG
-       std::cin.ignore().get();
+       _getwch();
    #endif // DEBUG
        return 0;
    }

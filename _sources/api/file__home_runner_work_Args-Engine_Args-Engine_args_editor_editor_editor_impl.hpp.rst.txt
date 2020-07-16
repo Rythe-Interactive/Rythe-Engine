@@ -31,10 +31,6 @@ Includes
 
 - ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
 
-- ``core/types/types.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp`)
-
-- ``editor/editor/editormodule.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editormodule.hpp`)
-
 
 
 Included By

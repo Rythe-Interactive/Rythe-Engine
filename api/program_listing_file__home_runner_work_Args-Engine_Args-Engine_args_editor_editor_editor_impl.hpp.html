@@ -48,22 +48,11 @@
 <p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.hpp.html#file-home-runner-work-args-engine-args-engine-args-editor-editor-editor-impl-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/editor/editor/editor_impl.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/platform/platform.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/types/types.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;editor/editor/editormodule.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">editor</span>
 <span class="p">{</span>
     <span class="k">class</span> <span class="nc">ARGS_API</span> <span class="n">Editor</span>
     <span class="p">{</span>
-        <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">ModuleType</span><span class="p">,</span> <span class="n">core</span><span class="o">::</span><span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">ModuleType</span><span class="p">,</span> <span class="n">EditorModule</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
-        <span class="kt">void</span> <span class="n">reportModule</span><span class="p">()</span>
-        <span class="p">{</span>
-        <span class="p">}</span>
-
-        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">ModuleType</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="p">,</span> <span class="n">core</span><span class="o">::</span><span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">ModuleType</span><span class="p">,</span> <span class="n">EditorModule</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
-        <span class="kt">void</span> <span class="n">reportModule</span><span class="p">(</span><span class="n">editor_module_initializer_t</span> <span class="n">s</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="n">args</span><span class="p">)</span>
-        <span class="p">{</span>
-        <span class="p">}</span>
     <span class="p">};</span>
 <span class="p">}</span>
 

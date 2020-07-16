@@ -14,7 +14,7 @@ Program Listing for File engine.hpp
    #include <core/platform/platform.hpp>
    #include <core/engine/module.hpp>
    #include <core/types/primitives.hpp>
-   #include <core/types/meta.hpp>
+   #include <core/types/sfinae.hpp>
    
    #include <map>
    #include <vector>
@@ -24,7 +24,7 @@ Program Listing for File engine.hpp
        class ARGS_API Engine
        {
        private:
-           std::map<priority_type, std::vector<Module*>, std::greater<priority_type>> modules = {};
+           std::map<priority_type, std::vector<Module*>> modules = {};
    
        public:
            Engine() {};
@@ -32,20 +32,11 @@ Program Listing for File engine.hpp
            template<class ModuleType, inherits_from<ModuleType, Module> = 0>
            void reportModule()
            {
-               Module* module = new ModuleType();
-               const priority_type priority = module->priority();
+               auto* module = new ModuleType();
+               priority_type priority = module->priority();
                modules[priority].push_back(module);
            }
    
-           template <class ModuleType, class... Args, inherits_from<ModuleType, Module> = 0>
-           void reportModule(module_initializer_t s, Args&&...args)
-           {
-               (void) s;
-               Module * module = new ModuleType(std::forward<Args>(args)...);
-               const priority_type priority = module->priority();
-               modules[priority].push_back(module);
-           }
-   
-           void init();
+           void init();        
        };
    }

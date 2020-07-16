@@ -71,30 +71,18 @@
 <dl class="cpp class">
 <dt id="_CPPv4N4args4core6ModuleE">
 <span id="_CPPv3N4args4core6ModuleE"></span><span id="_CPPv2N4args4core6ModuleE"></span><span id="args::core::Module"></span><span class="target" id="classargs_1_1core_1_1_module"></span><em class="property">class </em><code class="sig-prename descclassname">args::core<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">Module</code><a class="headerlink" href="#_CPPv4N4args4core6ModuleE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>interface for engine-modules, must be implemented <a class="reference internal" href="classargs_1_1core_1_1_engine.html#classargs_1_1core_1_1_engine_1aaf56affc2337cead73fa9bd355fd4bce"><span class="std std-ref">args::core::Engine::reportModule&lt;T,…&gt;()</span></a> </p>
-<p>Subclassed by <a class="reference internal" href="class_test_module.html#class_test_module"><span class="std std-ref">TestModule</span></a></p>
+<dd><p>Subclassed by <a class="reference internal" href="class_test_module.html#class_test_module"><span class="std std-ref">TestModule</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
-<dt>
-<span class="target" id="classargs_1_1core_1_1_module_1a1ff56fccaf8a6bd0552a327915b83bbd"></span><code class="sig-name descname">priority_type priority () ARGS_IMPURE_RETURN(0)</code></dt>
-<dd><p>determines the execution priority of this module <a class="reference internal" href="define_platform_8hpp_1aaa80584991d216fb43121552bca34b33.html#platform_8hpp_1aaa80584991d216fb43121552bca34b33"><span class="std std-ref">ARGS_IMPURE_RETURN</span></a> </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>priority_type signed int8 higher is higher priority and get called first </p>
-</dd>
-<dt><strong>Note</strong></dt><dd><p>default priority of the engine is 0. </p>
-</dd>
-<dt><strong>Note</strong></dt><dd><p>call order for modules with the same priority is undefined. </p>
-</dd>
-</dl>
-</p>
-</dd></dl>
+<dt id="_CPPv4N4args4core6Module8priorityEv">
+<span id="_CPPv3N4args4core6Module8priorityEv"></span><span id="_CPPv2N4args4core6Module8priorityEv"></span><span id="args::core::Module::priority"></span><span class="target" id="classargs_1_1core_1_1_module_1a3ba7111d08613eec3d0e55356b5ecd93"></span><a class="reference internal" href="typedef_primitives_8hpp_1aeb2a8d22b4c0b4917c38f3e2fcb9eea0.html#_CPPv4N4args4core13priority_typeE" title="args::core::priority_type">priority_type</a> <code class="sig-name descname">priority</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = 0<a class="headerlink" href="#_CPPv4N4args4core6Module8priorityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 <dl class="cpp function">
-<dt>
-<span class="target" id="classargs_1_1core_1_1_module_1a8669fb46d26dc09579d3bac062864a92"></span><code class="sig-name descname">void init () ARGS_PURE</code></dt>
-<dd><p>module initializer <a class="reference internal" href="define_platform_8hpp_1a1db9851589b1e9ba81b655bc10b65ee1.html#platform_8hpp_1a1db9851589b1e9ba81b655bc10b65ee1"><span class="std std-ref">ARGS_PURE</span></a> </p>
-</dd></dl>
+<dt id="_CPPv4N4args4core6Module4initEv">
+<span id="_CPPv3N4args4core6Module4initEv"></span><span id="_CPPv2N4args4core6Module4initEv"></span><span id="args::core::Module::init"></span><span class="target" id="classargs_1_1core_1_1_module_1a315c71ff123694a45c4d31c3a1d80c79"></span>void <code class="sig-name descname">init</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = 0<a class="headerlink" href="#_CPPv4N4args4core6Module4initEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 </div>
 </dd></dl>
