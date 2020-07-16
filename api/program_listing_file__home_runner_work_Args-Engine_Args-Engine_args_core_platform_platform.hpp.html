@@ -71,7 +71,7 @@
         <span class="cp">#define ARGS_API __declspec(dllimport)</span>
     <span class="cp">#endif</span>
 <span class="cp">#else</span>
-    <span class="cp">#error Support for this platform is not complete yet.</span>
+    <span class="cp">#define ARGS_API __attribute__((visibility(&quot;default&quot;)))</span>
 <span class="cp">#endif</span>
 
 <span class="cp">#define ARGS_FUNC ARGS_API ARGS_CCONV</span>
