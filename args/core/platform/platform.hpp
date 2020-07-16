@@ -67,7 +67,7 @@
 #if __cplusplus >= ARGS_CPP17V || AHASCPPATTRIB(nodiscard) || defined(DOXY_INCLUDE)
 
 /**@def A_NODISCARD
- * @brief marks a function as "nodiscard" meaning that result must be captured and should not be discarded
+ * @brief Marks a function as "nodiscard" meaning that result must be captured and should not be discarded.
  */
 #define A_NODISCARD [[nodiscard]]
 #else
@@ -75,11 +75,17 @@
 #endif
 
 /**@def ARGS_PURE
- * @brief marks a function as pure virtual
+ * @brief Marks a function as pure virtual.
  */
 #define ARGS_PURE =0
 
 /**@def ARGS_IMPURE
- * @brief marks a function as overridable but default implemented
+ * @brief Marks a function as overridable but default implemented.
  */
 #define ARGS_IMPURE {}
+
+/**@def ARGS_IMPURE_RETURN
+ * @brief Marks a function as overridable but default implemented with certain default return value.
+ * @param x value the function should return.
+ */
+#define ARGS_IMPURE_RETURN(x) { return x; }
