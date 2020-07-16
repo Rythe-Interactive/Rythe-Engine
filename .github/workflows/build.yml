@@ -1,4 +1,4 @@
-name: Build-CI
+name: build-action
 
 on:
   push:
@@ -23,3 +23,6 @@ jobs:
 
     - name: make
       run: cd args && make CXX=clang++-9 config=debug64 all
+
+    # TODO(algo-ryth-mix): here I need to publish artifacts. this is currently still a bit of a mystery to me
+    # should the artifacts be published as single libraries or should we gzip them together ? or both ?
