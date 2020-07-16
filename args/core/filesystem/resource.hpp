@@ -4,7 +4,7 @@
 
 #include <string_view>                // std::string_view
 
-#include "detail/resource_sfinae.hpp" //has_to_resource<T,Sig>, has_from_resource<T,Sig>
+#include "detail/resource_meta.hpp"   //has_to_resource<T,Sig>, has_from_resource<T,Sig>
 
 
 namespace args::core::filesystem
