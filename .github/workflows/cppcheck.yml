@@ -15,8 +15,11 @@ jobs:
        tar xvz premake5 | \
        xargs -I"{}" sudo mv {} /usr/bin
        
-    - name: get intercept-build & cppcheck
-      run: sudo apt update -yqq && sudo apt install cppcheck scan-build
+    - name: get cppcheck
+      run: sudo apt-get update -yqq && sudo apt-get install -yqq cppcheck
+      
+    - name: get intercept-build
+      run: pip install scan-build
 
     - name: generate Makefiles
       run: premake5 --file=args/premake5.lua gmake
