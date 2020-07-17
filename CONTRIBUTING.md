@@ -44,7 +44,7 @@ POD types that are completely compatible with the stl should all be structs, low
 (examples: entity_id, sparse_set, default_index_list)
 
 ### Class/Struct Members
-`private` variables should start with `m_` and continued in PascalCase.<br>
+`private` variables should start with `m_` and continued in camelCase.<br>
 `public` variables should not have a prefix and use camelCase, the same applies to local variables.
 
 methods of non "stl-likes" should use camelCase naming and "stl-likes" should use stl-like snake_case naming
