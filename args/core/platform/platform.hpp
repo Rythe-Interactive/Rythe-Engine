@@ -74,6 +74,11 @@
 #define A_NODISCARD
 #endif
 
+/**@def A_INLINE
+ * @brief Marks function as "inline".
+ */
+#define A_INLINE inline
+
 /**@def ARGS_PURE
  * @brief Marks a function as pure virtual.
  */

@@ -46,37 +46,37 @@ namespace args::core
 		size_type m_capacity = 0;
 
 	public:
-		A_NODISCARD iterator begin() { return m_dense.begin(); }
-		A_NODISCARD const_iterator begin() const { return m_dense.cbegin(); }
+		A_NODISCARD A_INLINE iterator begin() { return m_dense.begin(); }
+		A_NODISCARD A_INLINE const_iterator begin() const { return m_dense.cbegin(); }
 
-		A_NODISCARD iterator end() { return m_dense.begin() + m_size; }
-		A_NODISCARD const_iterator end() const { return m_dense.cbegin() + m_size; }
+		A_NODISCARD A_INLINE iterator end() { return m_dense.begin() + m_size; }
+		A_NODISCARD A_INLINE const_iterator end() const { return m_dense.cbegin() + m_size; }
 
 		/**@brief Returns the amount of items in the sparse_set.
 		 * @returns size_type Current amount of items contained in sparse_set.
 		 */
-		A_NODISCARD size_type size() const noexcept { return m_size; }
+		A_NODISCARD A_INLINE size_type size() const noexcept { return m_size; }
 
 		/**@brief Returns the capacity of items the sparse_set could at least store without invalidating the iterators.
 		 * @returns size_type Current capacity of the dense container.
 		 */
-		A_NODISCARD size_type capacity() const noexcept { return m_capacity; }
+		A_NODISCARD A_INLINE size_type capacity() const noexcept { return m_capacity; }
 
 		/**@brief Returns whether the sparse_set is empty.
 		 * @returns bool True if the sparse_set is empty, otherwise false.
 		 */
-		A_NODISCARD bool empty() const noexcept { return m_size == 0; }
+		A_NODISCARD A_INLINE bool empty() const noexcept { return m_size == 0; }
 
 		/**@brief Clears sparse_set.
 		 * @note Will not update capacity.
 		 */
-		void clear() noexcept { m_size = 0; }
+		A_INLINE void clear() noexcept { m_size = 0; }
 
 		/**@brief Reserves space in sparse_set for more items.
 		 * @param size Amount of items to reserve space for (would be the new capacity).
 		 * @note Will update capacity if resize happened.
 		 */
-		void reserve(size_type size)
+		A_INLINE void reserve(size_type size)
 		{
 			if (size > m_capacity)
 			{
@@ -93,7 +93,7 @@ namespace args::core
 		 * @note Function is only available for compatibility reasons, it is adviced to use contains instead.
 		 * @ref args::core::sparse_set::contains
 		 */
-		size_type count(const_reference val) const
+		A_NODISCARD A_INLINE size_type count(const_reference val) const
 		{
 			return contains(val);
 		}
@@ -104,7 +104,7 @@ namespace args::core
 		 * @note Function is only available for compatibility reasons, it is adviced to use contains instead.
 		 * @ref args::core::sparse_set::contains
 		 */
-		size_type count(value_type&& val) const
+		A_NODISCARD A_INLINE size_type count(value_type&& val) const
 		{
 			return contains(val);
 		}
@@ -115,7 +115,7 @@ namespace args::core
 		 * @param val Value to check for.
 		 * @returns bool True if the value was found, otherwise false.
 		 */
-		bool contains(const_reference val) const
+		A_NODISCARD A_INLINE bool contains(const_reference val) const
 		{
 			return val < m_capacity&&
 				m_sparse[val] < m_size&&
@@ -126,7 +126,7 @@ namespace args::core
 		 * @param val Value to check for.
 		 * @returns bool True if the value was found, otherwise false.
 		 */
-		bool contains(value_type&& val) const
+		A_NODISCARD A_INLINE bool contains(value_type&& val) const
 		{
 			return val < m_capacity&&
 				m_sparse[val] < m_size&&
@@ -137,7 +137,7 @@ namespace args::core
 		 * @param other Other sparse_set to check against.
 		 * @returns bool True if all items in other are also in this sparse_set, otherwise false.
 		 */
-		bool contains(const sparse_set<value_type>& other) const
+		A_NODISCARD A_INLINE bool contains(const sparse_set<value_type>& other) const
 		{
 			if (other.m_size == 0)
 				return true;
@@ -159,7 +159,7 @@ namespace args::core
 		 * @returns Iterator to the value if found, otherwise end.
 		 * @todo Replace std::find with begin + sparse[val] if the item is in the set.
 		 */
-		iterator find(const_reference val)
+		A_NODISCARD A_INLINE iterator find(const_reference val)
 		{
 			return std::find(m_dense.begin(), m_dense.end(), val);
 		}
@@ -169,7 +169,7 @@ namespace args::core
 		 * @returns Iterator to the value if found, otherwise end.
 		 * @todo Replace std::find with begin + sparse[val] if the item is in the set.
 		 */
-		const_iterator find(const_reference val) const
+		A_NODISCARD A_INLINE const_iterator find(const_reference val) const
 		{
 			return std::find(m_dense.begin(), m_dense.end(), val);
 		}
@@ -180,7 +180,7 @@ namespace args::core
 		 * @param val Value to insert.
 		 * @returns std::pair<iterator, bool> Iterator at the location of the item and true if succeeded, end and false if it didn't succeed.
 		 */
-		std::pair<iterator, bool> insert(const_reference val)
+		A_INLINE std::pair<iterator, bool> insert(const_reference val)
 		{
 			if (!contains(val))
 			{
@@ -200,7 +200,7 @@ namespace args::core
 		 * @param val Value to insert.
 		 * @returns std::pair<iterator, bool> Iterator at the location of the item and true if succeeded, end and false if it didn't succeed.
 		 */
-		std::pair<iterator, bool> insert(value_type&& val)
+		A_INLINE std::pair<iterator, bool> insert(value_type&& val)
 		{
 			if (!contains(val))
 			{
@@ -217,10 +217,44 @@ namespace args::core
 		}
 #pragma endregion
 
+#pragma region operator[]
+		/**@brief Returns item from dense container.
+		 * @param index Index of item in dense container.
+		 */
+		A_NODISCARD A_INLINE reference operator[](size_type&& index)
+		{
+			return m_dense[index];
+		}
+
+		/**@brief Returns item from dense container.
+		 * @param index Index of item in dense container.
+		 */
+		A_NODISCARD A_INLINE reference operator[](const size_type& index)
+		{
+			return m_dense[index];
+		}
+
+		/**@brief Returns item from dense container.
+		 * @param index Index of item in dense container.
+		 */
+		A_NODISCARD A_INLINE const_reference operator[](size_type&& index) const
+		{
+			return m_dense[index];
+		}
+
+		/**@brief Returns item from dense container.
+		 * @param index Index of item in dense container.
+		 */
+		A_NODISCARD A_INLINE const_reference operator[](const size_type& index) const
+		{
+			return m_dense[index];
+		}
+#pragma endregion
+
 		/**@brief Erases item from sparse_set.
 		 * @param val Value that needs to be erased.
 		 */
-		size_type erase(const_reference val)
+		A_INLINE size_type erase(const_reference val)
 		{
 			if (contains(val))
 			{
