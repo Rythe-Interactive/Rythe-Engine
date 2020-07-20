@@ -54,6 +54,18 @@
     <ClInclude Include="filesystem\detail\resource_sfinae.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="types\meta.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\detail\resource_meta.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="containers\sparse_map.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="containers\containers.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp">

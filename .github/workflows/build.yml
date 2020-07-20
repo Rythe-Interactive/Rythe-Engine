@@ -1,0 +1,28 @@
+name: build-action
+
+on:
+  push:
+    branches: [main, develop, develop/*]
+  pull_request:
+    branches: [main, develop, develop/* ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: get premake5
+      run: |
+       wget -qO- https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-linux.tar.gz | \
+       tar xvz premake5 | \
+       xargs -I"{}" sudo mv {} /usr/bin
+       
+    - name: generate Makefiles
+      run: premake5 --file=args/premake5.lua gmake
+
+    - name: make
+      run: cd args && make CXX=clang++-9 config=debug64 all
+
+    # TODO(algo-ryth-mix): here I need to publish artifacts. this is currently still a bit of a mystery to me
+    # should the artifacts be published as single libraries or should we gzip them together ? or both ?
