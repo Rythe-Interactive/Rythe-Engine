@@ -160,6 +160,7 @@
     <ClInclude Include="ecs\component_handle.hpp" />
     <ClInclude Include="ecs\ecs.hpp" />
     <ClInclude Include="ecs\ecsregistry.hpp" />
+    <ClInclude Include="ecs\entity.hpp" />
     <ClInclude Include="ecs\rw_component_buffer.hpp" />
     <ClInclude Include="engine\engine.hpp" />
     <ClInclude Include="engine\module.hpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="types\types.hpp" />
     <ClInclude Include="types\primitives.hpp" />
     <ClInclude Include="types\sfinae.hpp" />
+    <ClInclude Include="types\type_util.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp" />

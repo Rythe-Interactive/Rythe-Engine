@@ -84,6 +84,12 @@
     <ClInclude Include="ecs\ecs.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ecs\entity.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="types\type_util.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp">

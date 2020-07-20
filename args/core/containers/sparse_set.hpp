@@ -3,6 +3,7 @@
 #include <type_traits>
 #include <algorithm>
 #include <core/platform/platform.hpp>
+#include <core/types/primitives.hpp>
 
 /**
  * @file sparse_set.hpp
@@ -27,8 +28,6 @@ namespace args::core
 	{
 		static_assert(std::is_unsigned_v<value_type>, "value_type must an unsigned type.");
 	public:
-		using size_type = std::size_t;
-
 		using sparse_container = sparse_type<value_type>;
 		using dense_container = dense_type<value_type>;
 

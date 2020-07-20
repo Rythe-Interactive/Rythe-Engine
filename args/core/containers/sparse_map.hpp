@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <core/platform/platform.hpp>
+#include <core/types/primitives.hpp>
 
 /**
  * @file sparse_map.hpp
@@ -28,8 +29,6 @@ namespace args::core
 		using self_type = sparse_map<key_type, value_type, dense_type, sparse_type>;
 		using self_reference = self_type&;
 		using self_const_reference = const self_type&;
-
-		using size_type = std::size_t;
 
 		using key_reference = key_type&;
 		using key_const_reference = const key_type&;
