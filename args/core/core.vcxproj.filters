@@ -66,6 +66,9 @@
     <ClInclude Include="containers\containers.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="containers\sparse_set.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp">

@@ -158,6 +158,7 @@ namespace args::core
 		/**@brief Finds the iterator of a value using std::find.
 		 * @param val Value to find.
 		 * @returns Iterator to the value if found, otherwise end.
+		 * @todo Replace std::find with begin + sparse[val] if the item is in the map.
 		 */
 		A_NODISCARD iterator find(value_const_reference val)
 		{
@@ -167,6 +168,7 @@ namespace args::core
 		/**@brief Finds the iterator of a value using std::find.
 		 * @param val Value to find.
 		 * @returns Iterator to the value if found, otherwise end.
+		 * @todo Replace std::find with begin + sparse[val] if the item is in the map.
 		 */
 		A_NODISCARD const_iterator find(value_const_reference val) const
 		{
