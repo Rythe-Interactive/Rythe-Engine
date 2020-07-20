@@ -19,6 +19,7 @@ namespace args::core
 	using int_max = std::intmax_t;
 
 	using size_type = std::size_t;
+	using index_type = std::size_t;
 
 	using time32 = float;
 	using time64 = double;
