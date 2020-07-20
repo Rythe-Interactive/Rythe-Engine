@@ -69,6 +69,21 @@
     <ClInclude Include="containers\sparse_set.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ecs\component_container.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\component_handle.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\rw_component_buffer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\ecsregistry.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\ecs.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp">
