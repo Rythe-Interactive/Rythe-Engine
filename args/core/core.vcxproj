@@ -154,6 +154,7 @@
     <ClInclude Include="common\common.hpp" />
     <ClInclude Include="containers\containers.hpp" />
     <ClInclude Include="containers\sparse_map.hpp" />
+    <ClInclude Include="containers\sparse_set.hpp" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="engine\engine.hpp" />
     <ClInclude Include="engine\module.hpp" />
