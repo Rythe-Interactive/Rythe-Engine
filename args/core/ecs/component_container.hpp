@@ -36,6 +36,7 @@ namespace args::core::ecs
 		 * @note Thread will be halted if there are any writes until they are finished.
 		 * @note Will trigger read on this container.
 		 * @param entityId ID of the entity you wish to check for.
+		 * @ref args::core::async::readonly_rw_spinlock
 		 */
 		virtual bool has_component(id_type entityId) override
 		{
@@ -47,6 +48,7 @@ namespace args::core::ecs
 		 * @note Thread will be halted if there are any writes until they are finished.
 		 * @note Will trigger read on this container.
 		 * @param entityId ID of entity you want to get the component from.
+		 * @ref args::core::async::readonly_rw_spinlock
 		 */
 		std::atomic<component_type>* get_component(id_type entityId)
 		{
@@ -61,6 +63,7 @@ namespace args::core::ecs
 		 * @note Thread will be halted if there are any reads or writes until they are finished.
 		 * @note Will trigger write on this container.
 		 * @param entityId ID of entity you wish to add the component to.
+		 * @ref args::core::async::readonly_rw_spinlock
 		 */
 		std::atomic<component_type>* create_component(id_type entityId)
 		{
@@ -76,6 +79,7 @@ namespace args::core::ecs
 		 * @note Thread will be halted if there are any reads or writes until they are finished.
 		 * @note Will trigger write on this container.
 		 * @param entityId ID of entity you wish to remove the component from.
+		 * @ref args::core::async::readonly_rw_spinlock
 		 */
 		virtual void destroy_component(id_type entityId) override
 		{
