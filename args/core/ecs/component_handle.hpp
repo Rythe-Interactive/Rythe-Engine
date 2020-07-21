@@ -1,9 +1,9 @@
 #pragma once
 #include <atomic>
+#include <core/common/exception.hpp>
 #include <core/ecs/ecsregistry.hpp>
 #include <core/ecs/component_container.hpp>
 #include <core/ecs/entity.hpp>
-#include <core/common/common.hpp>
 
 /**
  * @file component_handle.hpp
@@ -35,7 +35,8 @@ namespace args::core::ecs
 		component_type read(std::memory_order order = std::memory_order_acquire)
 		{
 			std::atomic<component_type>* comp = registry->getFamily<component_type>()->get_component(entity);
-			assert_msg("Component no longer exists.", comp);
+			if (!comp)
+				throw args_component_destroyed_error;
 
 			return comp->load(order);
 		}
@@ -48,7 +49,8 @@ namespace args::core::ecs
 		component_type write(component_type&& value, std::memory_order order = std::memory_order_release)
 		{
 			std::atomic<component_type>* comp = registry->getFamily<component_type>()->get_component(entity);
-			assert_msg("Component no longer exists.", comp);
+			if (!comp)
+				throw args_component_destroyed_error;
 
 			comp->store(value, order);
 
@@ -68,11 +70,13 @@ namespace args::core::ecs
 			std::memory_order failureOrder = std::memory_order_relaxed)
 		{
 			std::atomic<component_type>* comp = registry->getFamily<component_type>()->get_component(entity);
-			assert_msg("Component no longer exists.", comp);
+			if (!comp)
+				throw args_component_destroyed_error;
 
 			component_type oldVal = comp->load(loadOrder);
 			component_type newVal = oldVal + value;
 
+			// CAS loop to assure our modification will happen correctly without overwriting some other change.
 			while (!comp->compare_exchange_strong(oldVal, newVal, successOrder, failureOrder))
 				newVal = oldVal + value;
 
@@ -92,11 +96,13 @@ namespace args::core::ecs
 			std::memory_order failureOrder = std::memory_order_relaxed)
 		{
 			std::atomic<component_type>* comp = registry->getFamily<component_type>()->get_component(entity);
-			assert_msg("Component no longer exists.", comp);
+			if (!comp)
+				throw args_component_destroyed_error;
 
 			component_type oldVal = comp->load(loadOrder);
 			component_type newVal = oldVal * value;
 
+			// CAS loop to assure our modification will happen correctly without overwriting some other change.
 			while (!comp->compare_exchange_strong(oldVal, newVal, successOrder, failureOrder))
 				newVal = oldVal * value;
 

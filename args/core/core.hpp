@@ -1,5 +1,6 @@
 #pragma once
 
+#include <core/common/exception.hpp>
 #include <core/platform/platform.hpp>
 #include <core/types/types.hpp>
 #include <core/containers/containers.hpp>

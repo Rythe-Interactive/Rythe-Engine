@@ -50,10 +50,15 @@ namespace args::core
 		return hash;
 	}
 
+	/**@todo find a way to make this down here compile without fucking shit up cuz redefinition.
+	*/
+#ifndef NON_TEMPLATE_NAMEHASH
+	#define NON_TEMPLATE_NAMEHASH
+
 	/**@brief Returns hash of a certain string
 	 * @param name Name you wish to hash
 	 */
-	id_type nameHash(cstring name)
+	/*id_type nameHash(cstring name)
 	{
 		id_type hash = 0;
 
@@ -67,12 +72,12 @@ namespace args::core
 		}
 
 		return hash;
-	}
+	}*/
 
 	/**@brief Returns hash of a certain string
 	 * @param name Name you wish to hash
 	 */
-	id_type nameHash(string name)
+	/*id_type nameHash(string name)
 	{
 		id_type hash = 0;
 
@@ -86,7 +91,9 @@ namespace args::core
 		}
 
 		return hash;
-	}
+	}*/
+
+#endif // !NON_TEMPLATE_NAMEHASH
 
 	/**@brief Returns hash of the type name.
 	 * @tparam T type of which you want the hash.

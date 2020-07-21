@@ -13,6 +13,19 @@
  #define ARGS_WINDOWS
 #endif
 
+#ifndef __FUNC__
+	#define __FUNC__ __func__ 
+#endif
+
+#ifndef __FULL_FUNC__
+	#if defined(ARGS_WINDOWS)
+		#define __FULL_FUNC__ __FUNCSIG__
+	#else
+		#define __FULL_FUNC__ __PRETTY_FUNCTION__
+	#endif
+#endif
+
+
 #if (defined(ARGS_WINDOWS) && !defined(ARGS_WINDOWS_USE_CDECL)) || defined (DOXY_INCLUDE)
 	/**@def ARGS_CCONV
 	 * @brief the calling convention exported functions will use in the args engine

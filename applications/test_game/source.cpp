@@ -17,6 +17,18 @@ void ARGS_CCONV reportModules(Engine* engine)
 	std::cout << "Hello Args!" << std::endl;
 	engine->reportModule<TestModule>();
 
+	try
+	{
+		throw args_component_destroyed_error;
+	}
+	catch (exception e)
+	{
+		std::cout << e.what() << std::endl;
+		std::cout << e.get_file() << std::endl;
+		std::cout << e.get_line() << std::endl;
+		std::cout << e.get_func() << std::endl;
+	}
+
 	std::cout << "_____________________________________________________" << std::endl;
 
 

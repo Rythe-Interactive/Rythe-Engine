@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="async\readonly_rw_spinlock.hpp" />
     <ClInclude Include="common\common.hpp" />
+    <ClInclude Include="common\exception.hpp" />
     <ClInclude Include="containers\containers.hpp" />
     <ClInclude Include="containers\sparse_map.hpp" />
     <ClInclude Include="containers\sparse_set.hpp" />

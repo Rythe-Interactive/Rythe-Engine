@@ -1,7 +1,11 @@
 #pragma once
+#include <core/common/exception.hpp>
 #include <core/types/types.hpp>
 #include <core/ecs/ecsregistry.hpp>
 #include <core/ecs/component_handle.hpp>
+
+/**@todo documentation.
+ */
 
 namespace args::core::ecs
 {
@@ -19,37 +23,34 @@ namespace args::core::ecs
 			return component_handle<component_type>(entityId, registry);
 		}
 
-		/**@todo throw exception instead of assert
-		 */
 		component_type read(id_type entityId, std::memory_order order = std::memory_order_acquire)
 		{
 			std::atomic<component_type>* comp = registry->getFamily<component_type>()->get_component(entityId);
-			assert_msg("Component no longer exists.", comp);
+			if (!comp)
+				throw args_component_destroyed_error;
 
 			return comp->load(order);
 		}
 
-		/**@todo throw exception instead of assert
-		 */
 		void write(id_type entityId, component_type&& value, std::memory_order order = std::memory_order_release)
 		{
 			std::atomic<component_type>* comp = registry->getFamily<component_type>()->get_component(entityId);
-			assert_msg("Component no longer exists.", comp);
+			if (!comp)
+				throw args_component_destroyed_error;
 
 			comp->store(value, order);
 
 			return value;
 		}
 
-		/**@todo throw exception instead of assert
-		 */
 		void fetch_add(id_type entityId, component_type&& value,
 			std::memory_order loadOrder = std::memory_order_acquire,
 			std::memory_order successOrder = std::memory_order_release,
 			std::memory_order failureOrder = std::memory_order_relaxed)
 		{
 			std::atomic<component_type>* comp = registry->getFamily<component_type>()->get_component(entityId);
-			assert_msg("Component no longer exists.", comp);
+			if (!comp)
+				throw args_component_destroyed_error;
 
 			component_type oldVal = comp->load(loadOrder);
 			component_type newVal = oldVal + value;
@@ -60,15 +61,14 @@ namespace args::core::ecs
 			return newVal;
 		}
 
-		/**@todo throw exception instead of assert
-		 */
 		void fetch_multiply(id_type entityId, component_type&& value,
 			std::memory_order loadOrder = std::memory_order_acquire,
 			std::memory_order successOrder = std::memory_order_release,
 			std::memory_order failureOrder = std::memory_order_relaxed)
 		{
 			std::atomic<component_type>* comp = registry->getFamily<component_type>()->get_component(entityId);
-			assert_msg("Component no longer exists.", comp);
+			if (!comp)
+				throw args_component_destroyed_error;
 
 			component_type oldVal = comp->load(loadOrder);
 			component_type newVal = oldVal * value;

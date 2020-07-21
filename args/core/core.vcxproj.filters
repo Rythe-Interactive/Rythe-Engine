@@ -93,6 +93,9 @@
     <ClInclude Include="async\readonly_rw_spinlock.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="common\exception.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp">
