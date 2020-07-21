@@ -35,7 +35,7 @@ namespace args::core
 	using priority_type = uint8;
 
 	using id_type = uint_max;
-	const id_type invalid_id = 0;
+#define invalid_id 0
 
 	using hours = time32;
 	using minutes = time32;

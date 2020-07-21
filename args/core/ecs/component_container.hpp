@@ -17,6 +17,7 @@ namespace args::core::ecs
 	{
 	public:
 		virtual bool has_component(id_type entityId) ARGS_PURE;
+		virtual void create_component(id_type entityId) ARGS_PURE;
 		virtual void destroy_component(id_type entityId) ARGS_PURE;
 	};
 
@@ -32,6 +33,8 @@ namespace args::core::ecs
 		async::readonly_rw_spinlock lock;
 
 	public:
+		component_container() : components(), lock() {}
+
 		/**@brief Checks whether entity has the component.
 		 * @note Thread will be halted if there are any writes until they are finished.
 		 * @note Will trigger read on this container.
@@ -48,6 +51,7 @@ namespace args::core::ecs
 		 * @note Thread will be halted if there are any writes until they are finished.
 		 * @note Will trigger read on this container.
 		 * @param entityId ID of entity you want to get the component from.
+		 * @returns std::atomic<component_type>* Pointer to std::atomic wrapped component.
 		 * @ref args::core::async::readonly_rw_spinlock
 		 */
 		std::atomic<component_type>* get_component(id_type entityId)
@@ -65,14 +69,11 @@ namespace args::core::ecs
 		 * @param entityId ID of entity you wish to add the component to.
 		 * @ref args::core::async::readonly_rw_spinlock
 		 */
-		std::atomic<component_type>* create_component(id_type entityId)
+		virtual void create_component(id_type entityId) override
 		{
 			async::readwrite_guard guard(lock);
 
-			auto emp = components.emplace(entityId);
-			if (emp.second)
-				return &(emp.first->second);
-			return &components.get(entityId);
+			components.emplace(entityId);
 		}
 
 		/**@brief Destroys component atomically.

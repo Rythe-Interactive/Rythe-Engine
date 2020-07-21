@@ -220,7 +220,7 @@ namespace args::core
 		/**@brief Returns item from dense container.
 		 * @param index Index of item in dense container.
 		 */
-		A_NODISCARD inline reference operator[](size_type&& index)
+		A_NODISCARD inline reference operator[](index_type&& index)
 		{
 			return m_dense[index];
 		}
@@ -228,7 +228,7 @@ namespace args::core
 		/**@brief Returns item from dense container.
 		 * @param index Index of item in dense container.
 		 */
-		A_NODISCARD inline reference operator[](const size_type& index)
+		A_NODISCARD inline reference operator[](const index_type& index)
 		{
 			return m_dense[index];
 		}
@@ -236,7 +236,7 @@ namespace args::core
 		/**@brief Returns item from dense container.
 		 * @param index Index of item in dense container.
 		 */
-		A_NODISCARD inline const_reference operator[](size_type&& index) const
+		A_NODISCARD inline const_reference operator[](index_type&& index) const
 		{
 			return m_dense[index];
 		}
@@ -244,7 +244,7 @@ namespace args::core
 		/**@brief Returns item from dense container.
 		 * @param index Index of item in dense container.
 		 */
-		A_NODISCARD inline const_reference operator[](const size_type& index) const
+		A_NODISCARD inline const_reference operator[](const index_type& index) const
 		{
 			return m_dense[index];
 		}

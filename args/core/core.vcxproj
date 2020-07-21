@@ -181,6 +181,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="async\readonly_rw_spinlock.cpp" />
+    <ClCompile Include="ecs\ecsregistry.cpp" />
+    <ClCompile Include="ecs\entity.cpp" />
     <ClCompile Include="engine\engine.cpp" />
     <ClCompile Include="engine\module.cpp" />
   </ItemGroup>
