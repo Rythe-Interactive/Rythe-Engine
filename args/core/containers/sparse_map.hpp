@@ -367,6 +367,52 @@ namespace args::core
 		}
 #pragma endregion
 
+#pragma region get
+		/**@brief Returns item from sparse_map, throws exception if it doesn't exist yet.
+		 * @param key Key value that needs to be retrieved.
+		 */
+		inline value_reference get(key_type&& key)
+		{
+			if (!contains(key))
+				throw std::out_of_range("Sparse map does not contain this key.");
+
+			return m_dense[m_sparse[key]].second;
+		}
+
+		/**@brief Returns item from sparse_map, throws exception if it doesn't exist yet.
+		 * @param key Key value that needs to be retrieved.
+		 */
+		inline value_reference get(key_const_reference key)
+		{
+			if (!contains(key))
+				throw std::out_of_range("Sparse map does not contain this key.");
+
+			return m_dense[m_sparse[key]].second;
+		}
+
+		/**@brief Returns const item from const sparse_map.
+		 * @param key Key value that needs to be retrieved.
+		 */
+		inline value_const_reference get(key_type&& key) const
+		{
+			if (!contains(key))
+				throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
+
+			return m_dense[m_sparse.at(key)].second;
+		}
+
+		/**@brief Returns const item from const sparse_map.
+		 * @param key Key value that needs to be retrieved.
+		 */
+		inline value_const_reference get(key_const_reference key) const
+		{
+			if (!contains(key))
+				throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
+
+			return m_dense[m_sparse.at(key)].second;
+		}
+#pragma endregion
+
 		/**@brief Erases item from sparse_map.
 		 * @param key Key value that needs to be erased.
 		 */
