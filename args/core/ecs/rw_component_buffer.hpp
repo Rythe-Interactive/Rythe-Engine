@@ -19,6 +19,8 @@ namespace args::core::ecs
 			return component_handle<component_type>(entityId, registry);
 		}
 
+		/**@todo throw exception instead of assert
+		 */
 		component_type read(id_type entityId, std::memory_order order = std::memory_order_acquire)
 		{
 			std::atomic<component_type>* comp = registry->getFamily<component_type>()->get_component(entityId);
@@ -27,6 +29,8 @@ namespace args::core::ecs
 			return comp->load(order);
 		}
 
+		/**@todo throw exception instead of assert
+		 */
 		void write(id_type entityId, component_type&& value, std::memory_order order = std::memory_order_release)
 		{
 			std::atomic<component_type>* comp = registry->getFamily<component_type>()->get_component(entityId);
@@ -37,6 +41,8 @@ namespace args::core::ecs
 			return value;
 		}
 
+		/**@todo throw exception instead of assert
+		 */
 		void fetch_add(id_type entityId, component_type&& value,
 			std::memory_order loadOrder = std::memory_order_acquire,
 			std::memory_order successOrder = std::memory_order_release,
@@ -54,6 +60,8 @@ namespace args::core::ecs
 			return newVal;
 		}
 
+		/**@todo throw exception instead of assert
+		 */
 		void fetch_multiply(id_type entityId, component_type&& value,
 			std::memory_order loadOrder = std::memory_order_acquire,
 			std::memory_order successOrder = std::memory_order_release,
