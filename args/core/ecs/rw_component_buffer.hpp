@@ -19,11 +19,58 @@ namespace args::core::ecs
 			return component_handle<component_type>(entityId, registry);
 		}
 
-		component_type read(id_type entityId) { return component_handle<component_type>(entityId, registry).read(); }
+		component_type read(id_type entityId, std::memory_order order = std::memory_order_acquire)
+		{
+			std::atomic<component_type>* comp = registry->getFamily<component_type>()->get_component(entityId);
+			assert_msg("Component no longer exists.", comp);
 
-		void write(id_type entityId, component_type&& value) { component_handle<component_type>(entityId, registry).write(value); }
-		void fetch_add(id_type entityId, component_type&& value) { component_handle<component_type>(entityId, registry).fetch_add(value); }
-		void fetch_multiply(id_type entityId, component_type&& value) { component_handle<component_type>(entityId, registry).fetch_multiply(value); }
-		void destroy(id_type entityId) { component_handle<component_type>(entityId, registry).destroy(); }
+			return comp->load(order);
+		}
+
+		void write(id_type entityId, component_type&& value, std::memory_order order = std::memory_order_release)
+		{
+			std::atomic<component_type>* comp = registry->getFamily<component_type>()->get_component(entityId);
+			assert_msg("Component no longer exists.", comp);
+
+			comp->store(value, order);
+
+			return value;
+		}
+
+		void fetch_add(id_type entityId, component_type&& value,
+			std::memory_order loadOrder = std::memory_order_acquire,
+			std::memory_order successOrder = std::memory_order_release,
+			std::memory_order failureOrder = std::memory_order_relaxed)
+		{
+			std::atomic<component_type>* comp = registry->getFamily<component_type>()->get_component(entityId);
+			assert_msg("Component no longer exists.", comp);
+
+			component_type oldVal = comp->load(loadOrder);
+			component_type newVal = oldVal + value;
+
+			while (!comp->compare_exchange_weak(oldVal, newVal, successOrder, failureOrder))
+				newVal = oldVal + value;
+
+			return newVal;
+		}
+
+		void fetch_multiply(id_type entityId, component_type&& value,
+			std::memory_order loadOrder = std::memory_order_acquire,
+			std::memory_order successOrder = std::memory_order_release,
+			std::memory_order failureOrder = std::memory_order_relaxed)
+		{
+			std::atomic<component_type>* comp = registry->getFamily<component_type>()->get_component(entityId);
+			assert_msg("Component no longer exists.", comp);
+
+			component_type oldVal = comp->load(loadOrder);
+			component_type newVal = oldVal * value;
+
+			while (!comp->compare_exchange_weak(oldVal, newVal, successOrder, failureOrder))
+				newVal = oldVal * value;
+
+			return newVal;
+		}
+
+		void destroy(id_type entityId) { registry->getFamily<component_type>()->destroy_component(entityId); }
 	};
 }
