@@ -1,6 +1,5 @@
 #pragma once
-#include <atomic>
-#include <mutex>
+#include <core/async/readonly_rw_spinlock.hpp>
 #include <core/platform/platform.hpp>
 #include <core/containers/sparse_map.hpp>
 #include <core/types/types.hpp>
@@ -29,11 +28,8 @@ namespace args::core::ecs
 	class component_container : public component_container_base
 	{
 	private:
-		enum read_state { idle = 0, read = 1, write = 2 };
-
 		sparse_map<id_type, std::atomic<component_type>> components;
-		std::atomic_int readState;
-		std::atomic_int readers;
+		async::readonly_rw_spinlock lock;
 
 	public:
 		/**@brief Checks whether entity has the component.
@@ -43,23 +39,8 @@ namespace args::core::ecs
 		 */
 		virtual bool has_component(id_type entityId) override
 		{
-			int state = read_state::idle;
-			readers.fetch_add(1, std::memory_order_relaxed);
-			while (!readState.compare_exchange_weak(state, read_state::read, std::memory_order_acquire, std::memory_order_relaxed))
-			{
-				if (state == read_state::write)
-					state = read_state::idle;
-				else
-					break;
-			}
-
-			bool result = components.contains(entityId);
-			readers.fetch_sub(1, std::memory_order_relaxed);
-
-			if (readers.load(std::memory_order_acquire) == 0)
-				readState.store(read_state::idle, std::memory_order_release);
-
-			return result;
+			async::readonly_guard guard(lock);
+			return components.contains(entityId);
 		}
 
 		/**@brief Fetches std::atomic wrapped component.
@@ -69,27 +50,11 @@ namespace args::core::ecs
 		 */
 		std::atomic<component_type>* get_component(id_type entityId)
 		{
-			int state = read_state::idle;
-			readers.fetch_add(1, std::memory_order_relaxed);
-			while (!readState.compare_exchange_weak(state, read_state::read, std::memory_order_acquire, std::memory_order_relaxed))
-			{
-				if (state == read_state::write)
-					state = read_state::idle;
-				else
-					break;
-			}
-
-			std::atomic<component_type>* result = nullptr;
+			async::readonly_guard guard(lock);
 
 			if (components.contains(entityId))
-				result = &components.get(entityId);
-
-			readers.fetch_sub(1, std::memory_order_relaxed);
-
-			if (readers.load(std::memory_order_acquire) == 0)
-				readState.store(read_state::idle, std::memory_order_release);
-
-			return result;
+				return &components.get(entityId);
+			return nullptr;
 		}
 
 		/**@brief Creates new std::atomic wrapped component.
@@ -99,20 +64,12 @@ namespace args::core::ecs
 		 */
 		std::atomic<component_type>* create_component(id_type entityId)
 		{
-			int state = read_state::idle;
-			while (!readState.compare_exchange_weak(state, read_state::write, std::memory_order_acquire, std::memory_order_relaxed))
-				state = read_state::idle;
+			async::readwrite_guard guard(lock);
 
-			std::atomic<component_type>* result = nullptr;
 			auto emp = components.emplace(entityId);
 			if (emp.second)
-				result = &(emp.first->second);
-			else
-				result = &components.get(entityId);
-
-			readState.store(read_state::idle, std::memory_order_release);
-
-			return &components[entityId]; 
+				return &(emp.first->second);
+			return &components.get(entityId);
 		}
 
 		/**@brief Destroys component atomically.
@@ -122,13 +79,9 @@ namespace args::core::ecs
 		 */
 		virtual void destroy_component(id_type entityId) override
 		{
-			int state = read_state::idle;
-			while (!readState.compare_exchange_weak(state, read_state::write, std::memory_order_acquire, std::memory_order_relaxed))
-				state = read_state::idle;
+			async::readwrite_guard guard(lock);
 
 			components.erase(entityId);
-
-			readState.store(read_state::idle, std::memory_order_release);
 		}
 	};
 }

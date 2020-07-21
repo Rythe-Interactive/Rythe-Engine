@@ -90,12 +90,18 @@
     <ClInclude Include="ecs\component_container.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="async\readonly_rw_spinlock.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="engine\module.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="async\readonly_rw_spinlock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

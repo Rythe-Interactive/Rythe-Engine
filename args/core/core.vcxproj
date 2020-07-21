@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="async\readonly_rw_spinlock.hpp" />
     <ClInclude Include="common\common.hpp" />
     <ClInclude Include="containers\containers.hpp" />
     <ClInclude Include="containers\sparse_map.hpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="types\type_util.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="async\readonly_rw_spinlock.cpp" />
     <ClCompile Include="engine\engine.cpp" />
     <ClCompile Include="engine\module.cpp" />
   </ItemGroup>
