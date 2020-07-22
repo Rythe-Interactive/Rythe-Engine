@@ -96,15 +96,18 @@
     <ClInclude Include="common\exception.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="containers\atomic_sparse_map.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="async\transferable_atomic.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="engine\module.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="async\readonly_rw_spinlock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ecs\ecsregistry.cpp">

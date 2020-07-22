@@ -152,8 +152,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="async\readonly_rw_spinlock.hpp" />
+    <ClInclude Include="async\transferable_atomic.hpp" />
     <ClInclude Include="common\common.hpp" />
     <ClInclude Include="common\exception.hpp" />
+    <ClInclude Include="containers\atomic_sparse_map.hpp" />
     <ClInclude Include="containers\containers.hpp" />
     <ClInclude Include="containers\sparse_map.hpp" />
     <ClInclude Include="containers\sparse_set.hpp" />
@@ -180,7 +182,6 @@
     <ClInclude Include="types\type_util.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="async\readonly_rw_spinlock.cpp" />
     <ClCompile Include="ecs\ecsregistry.cpp" />
     <ClCompile Include="ecs\entity.cpp" />
     <ClCompile Include="engine\engine.cpp" />

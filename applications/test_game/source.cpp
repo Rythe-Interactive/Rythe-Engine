@@ -9,7 +9,7 @@ using namespace args::core;
 
 struct sah
 {
-	string value;
+	int value;
 };
 
 void ARGS_CCONV reportModules(Engine* engine)
@@ -29,19 +29,26 @@ void ARGS_CCONV reportModules(Engine* engine)
 		std::cout << e.get_func() << std::endl;
 	}
 
-	sparse_map<string, sah> testMap;
+	atomic_sparse_map<string, int> testMap;
 
-	testMap["Hello"] = { "Args" };
+	testMap["Hello"]->store(45, std::memory_order_relaxed);
 
-	if(testMap.contains("Hello"))
-		std::cout << "testMap contains \"Hello\" with value: " << testMap["Hello"].value << std::endl;
+	if (testMap.contains("Hello"))
+		std::cout << "testMap contains \"Hello\" with value: " << testMap["Hello"]->load(std::memory_order_relaxed) << std::endl;
 	else
 		std::cout << "testMap does not contain \"Hello\"" << std::endl;
 
-	testMap.erase("Hello");
+	try
+	{
+		testMap.erase("Hello");
+	}
+	catch (std::exception e)
+	{
+		std::cout << e.what() << std::endl;
+	}
 
 	if (testMap.contains("Hello"))
-		std::cout << "testMap contains \"Hello\" with value: " << testMap["Hello"].value << std::endl;
+		std::cout << "testMap contains \"Hello\" with value: " << testMap["Hello"]->load(std::memory_order_relaxed) << std::endl;
 	else
 		std::cout << "testMap does not contain \"Hello\"" << std::endl;
 

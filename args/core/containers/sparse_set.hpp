@@ -17,7 +17,7 @@ namespace args::core
 	 * @note Inserting items with large value differences does explode the sparse array and thus increases memory size.
 	 *       If you need support for items with large value differences such as hashes then please use the sparse_map.
 	 * @ref args::core::sparse_map
-	 * @tparam value_type The type to be used as the value (must be unsigned).
+	 * @tparam atomic_type The type to be used as the value (must be unsigned).
 	 * @tparam dense_type Container to be used to store the values.
 	 * @tparam sparse_type Container to be used to store the index mapping into dense container.
 	 * @note With default container parameters iterators may be invalidated upon resize. See reference of std::vector.
@@ -26,7 +26,7 @@ namespace args::core
 	template <typename value_type, template<typename...> typename dense_type = std::vector, template<typename...> typename sparse_type = std::vector>
 	class sparse_set
 	{
-		static_assert(std::is_unsigned_v<value_type>, "value_type must an unsigned type.");
+		static_assert(std::is_unsigned_v<value_type>, "atomic_type must an unsigned type.");
 	public:
 		using sparse_container = sparse_type<value_type>;
 		using dense_container = dense_type<value_type>;
