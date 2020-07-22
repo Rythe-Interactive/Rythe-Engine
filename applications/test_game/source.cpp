@@ -9,7 +9,7 @@ using namespace args::core;
 
 struct sah
 {
-	int value;
+	string value;
 };
 
 void ARGS_CCONV reportModules(Engine* engine)
@@ -29,7 +29,23 @@ void ARGS_CCONV reportModules(Engine* engine)
 		std::cout << e.get_func() << std::endl;
 	}
 
-	ecs::EcsRegistry registry;
+	sparse_map<string, sah> testMap;
+
+	testMap["Hello"] = { "Args" };
+
+	if(testMap.contains("Hello"))
+		std::cout << "testMap contains \"Hello\" with value: " << testMap["Hello"].value << std::endl;
+	else
+		std::cout << "testMap does not contain \"Hello\"" << std::endl;
+
+	testMap.erase("Hello");
+
+	if (testMap.contains("Hello"))
+		std::cout << "testMap contains \"Hello\" with value: " << testMap["Hello"].value << std::endl;
+	else
+		std::cout << "testMap does not contain \"Hello\"" << std::endl;
+
+	/*ecs::EcsRegistry registry;
 
 	registry.reportComponentType<sah>();
 
@@ -47,5 +63,5 @@ void ARGS_CCONV reportModules(Engine* engine)
 	if (ent.has_component<sah>())
 		std::cout << "entity has component" << std::endl;
 	else
-		std::cout << "entity does not have component" << std::endl;
+		std::cout << "entity does not have component" << std::endl;*/
 }

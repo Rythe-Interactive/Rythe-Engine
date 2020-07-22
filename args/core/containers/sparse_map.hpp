@@ -39,13 +39,15 @@ namespace args::core
 		using value_pointer = value_type*;
 
 		using sparse_container = sparse_type<key_type, size_type>;
-		using dense_container = dense_type<std::pair<key_type, value_type>>;
+		using dense_value_container = dense_type<value_type>;
+		using dense_key_container = dense_type<key_type>;
 
-		using iterator = typename dense_container::iterator;
-		using const_iterator = typename dense_container::const_iterator;
+		using iterator = typename dense_value_container::iterator;
+		using const_iterator = typename dense_value_container::const_iterator;
 
 	private:
-		dense_container m_dense;
+		dense_value_container m_dense_value;
+		dense_key_container m_dense_key;
 		sparse_container m_sparse;
 
 		size_type m_size = 0;
@@ -53,10 +55,10 @@ namespace args::core
 
 	public:
 		A_NODISCARD inline iterator begin() { return m_dense.begin(); }
-		A_NODISCARD inline const_iterator begin() const { return m_dense.cbegin(); }
+		A_NODISCARD inline const_iterator begin() const { return m_dense_value.cbegin(); }
 
-		A_NODISCARD inline iterator end() { return m_dense.begin() + m_size; }
-		A_NODISCARD inline const_iterator end() const { return m_dense.cbegin() + m_size; }
+		A_NODISCARD inline iterator end() { return m_dense_value.begin() + m_size; }
+		A_NODISCARD inline const_iterator end() const { return m_dense_value.cbegin() + m_size; }
 
 		/**@brief Returns the amount of items in the sparse_map.
 		 * @returns size_type Current amount of items contained in sparse_map.
@@ -86,7 +88,8 @@ namespace args::core
 		{
 			if (size > m_capacity)
 			{
-				m_dense.resize(size);
+				m_dense_value.resize(size);
+				m_dense_key.resize(size);
 				m_capacity = size;
 			}
 		}
@@ -122,7 +125,7 @@ namespace args::core
 		 */
 		A_NODISCARD inline bool contains(key_const_reference key)
 		{
-			return m_sparse[key] >= 0 && m_sparse[key] < m_size && m_dense[m_sparse[key]].first == key;
+			return m_sparse[key] >= 0 && m_sparse[key] < m_size && m_dense_key[m_sparse[key]] == key;
 		}
 
 		/**@brief Checks whether a certain key is contained in the sparse_map.
@@ -131,7 +134,7 @@ namespace args::core
 		 */
 		A_NODISCARD inline bool contains(key_type&& key)
 		{
-			return m_sparse[key] >= 0 && m_sparse[key] < m_size && m_dense[m_sparse[key]].first == key;
+			return m_sparse[key] >= 0 && m_sparse[key] < m_size && m_dense_key[m_sparse[key]] == key;
 		}
 
 		/**@brief Checks whether a certain key is contained in the sparse_map.
@@ -140,7 +143,7 @@ namespace args::core
 		 */
 		A_NODISCARD inline bool contains(key_const_reference key) const
 		{
-			return m_sparse.at(key) >= 0 && m_sparse.at(key) < m_size && m_dense[m_sparse.at(key)].first == key;
+			return m_sparse.count(key) && m_sparse.at(key) >= 0 && m_sparse.at(key) < m_size && m_dense_key[m_sparse.at(key)] == key;
 		}
 
 		/**@brief Checks whether a certain key is contained in the sparse_map.
@@ -149,7 +152,7 @@ namespace args::core
 		 */
 		A_NODISCARD inline bool contains(key_type&& key) const
 		{
-			return m_sparse.at(key) >= 0 && m_sparse.at(key) < m_size && m_dense[m_sparse.at(key)].first == key;
+			return m_sparse.count(key) && m_sparse.at(key) >= 0 && m_sparse.at(key) < m_size && m_dense_key[m_sparse.at(key)] == key;
 		}
 #pragma endregion
 
@@ -157,7 +160,6 @@ namespace args::core
 		/**@brief Finds the iterator of a value using std::find.
 		 * @param val Value to find.
 		 * @returns Iterator to the value if found, otherwise end.
-		 * @todo Replace std::find with begin + sparse[val] if the item is in the map.
 		 */
 		A_NODISCARD inline iterator find(value_const_reference val)
 		{
@@ -167,7 +169,6 @@ namespace args::core
 		/**@brief Finds the iterator of a value using std::find.
 		 * @param val Value to find.
 		 * @returns Iterator to the value if found, otherwise end.
-		 * @todo Replace std::find with begin + sparse[val] if the item is in the map.
 		 */
 		A_NODISCARD inline const_iterator find(value_const_reference val) const
 		{
@@ -188,13 +189,17 @@ namespace args::core
 				if (m_size >= m_capacity)
 					reserve(m_size + 1);
 
-				auto itr = m_dense.begin() + m_size;
-				*itr = { key, val };
+				auto itr_value = m_dense_value.begin() + m_size;
+				*itr_value = std::move(val);
+
+				auto itr_key = m_dense_key.begin() + m_size;
+				*itr_key = key;
+
 				m_sparse[key] = m_size;
 				++m_size;
-				return std::make_pair(itr, true);
+				return std::make_pair(itr_value, true);
 			}
-			return std::make_pair(m_dense.end(), false);
+			return std::make_pair(end(), false);
 		}
 
 		/**@brief Inserts new item into sparse_map
@@ -209,13 +214,17 @@ namespace args::core
 				if (m_size >= m_capacity)
 					reserve(m_size + 1);
 
-				auto itr = m_dense.begin() + m_size;
-				*itr = { key, val };
+				auto itr_value = m_dense_value.begin() + m_size;
+				*itr_value = std::move(val);
+
+				auto itr_key = m_dense_key.begin() + m_size;
+				*itr_key = key;
+
 				m_sparse[key] = m_size;
 				++m_size;
-				return std::make_pair(itr, true);
+				return std::make_pair(itr_value, true);
 			}
-			return std::make_pair(m_dense.end(), false);
+			return std::make_pair(end(), false);
 		}
 
 		/**@brief Inserts new item into sparse_map
@@ -230,13 +239,17 @@ namespace args::core
 				if (m_size >= m_capacity)
 					reserve(m_size + 1);
 
-				auto itr = m_dense.begin() + m_size;
-				*itr = { key, val };
+				auto itr_value = m_dense_value.begin() + m_size;
+				*itr_value = std::move(val);
+
+				auto itr_key = m_dense_key.begin() + m_size;
+				*itr_key = key;
+
 				m_sparse[key] = m_size;
 				++m_size;
-				return std::make_pair(itr, true);
+				return std::make_pair(itr_value, true);
 			}
-			return std::make_pair(m_dense.end(), false);
+			return std::make_pair(end(), false);
 		}
 
 		/**@brief Inserts new item into sparse_map
@@ -251,13 +264,17 @@ namespace args::core
 				if (m_size >= m_capacity)
 					reserve(m_size + 1);
 
-				auto itr = m_dense.begin() + m_size;
-				*itr = { key, val };
+				auto itr_value = m_dense_value.begin() + m_size;
+				*itr_value = std::move(val);
+
+				auto itr_key = m_dense_key.begin() + m_size;
+				*itr_key = key;
+
 				m_sparse[key] = m_size;
 				++m_size;
-				return std::make_pair(itr, true);
+				return std::make_pair(itr_value, true);
 			}
-			return std::make_pair(m_dense.end(), false);
+			return std::make_pair(end(), false);
 		}
 #pragma endregion
 
@@ -274,13 +291,19 @@ namespace args::core
 				if (m_size >= m_capacity)
 					reserve(m_size + 1);
 
-				auto itr = m_dense.begin() + m_size;
-				*itr = { key, value_type(arguments...) };
+				auto itr_value = m_dense_value.begin() + m_size;
+				*itr_value = std::forward<value_type>(value_type(arguments...));
+
+				auto itr_key = m_dense_key.begin() + m_size;
+				*itr_key = key;
+
 				m_sparse[key] = m_size;
 				++m_size;
-				return std::make_pair(itr, true);
+
+				return std::make_pair(itr_value, true);
 			}
-			return std::make_pair(m_dense.end(), false);
+
+			return std::make_pair(end(), false);
 		}
 
 		/**@brief Construct item in place.
@@ -295,13 +318,19 @@ namespace args::core
 				if (m_size >= m_capacity)
 					reserve(m_size + 1);
 
-				auto itr = m_dense.begin() + m_size;
-				*itr = { key, value_type(arguments...) };
+				auto itr_value = m_dense_value.begin() + m_size;
+				*itr_value = std::forward<value_type>(value_type(arguments...));
+
+				auto itr_key = m_dense_key.begin() + m_size;
+				*itr_key = key;
+
 				m_sparse[key] = m_size;
 				++m_size;
-				return std::make_pair(itr, true);
+
+				return std::make_pair(itr_value, true);
 			}
-			return std::make_pair(m_dense.end(), false);
+
+			return std::make_pair(end(), false);
 		}
 #pragma endregion
 
@@ -316,13 +345,18 @@ namespace args::core
 				if (m_size >= m_capacity)
 					reserve(m_size + 1);
 
-				auto itr = m_dense.begin() + m_size;
-				*itr = { key, value_type() };
+				auto itr_value = m_dense_value.begin() + m_size;
+				*itr_value = std::forward<value_type>(value_type());
+
+				auto itr_key = m_dense_key.begin() + m_size;
+				*itr_key = key;
+
 				m_sparse[key] = m_size;
 				++m_size;
 			}
 
-			return m_dense[m_sparse[key]].second;
+
+			return m_dense_value[m_sparse[key]];
 		}
 
 		/**@brief Returns item from sparse_map, inserts default value if it doesn't exist yet.
@@ -335,13 +369,17 @@ namespace args::core
 				if (m_size >= m_capacity)
 					reserve(m_size + 1);
 
-				auto itr = m_dense.begin() + m_size;
-				*itr = { key, value_type() };
+				auto itr_value = m_dense_value.begin() + m_size;
+				*itr_value = std::forward<value_type>(value_type());
+
+				auto itr_key = m_dense_key.begin() + m_size;
+				*itr_key = key;
+
 				m_sparse[key] = m_size;
 				++m_size;
 			}
 
-			return m_dense[m_sparse[key]].second;
+			return m_dense_value[m_sparse[key]];
 		}
 
 		/**@brief Returns const item from const sparse_map.
@@ -352,7 +390,7 @@ namespace args::core
 			if (!contains(key))
 				throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
 
-			return m_dense[m_sparse.at(key)].second;
+			return m_dense_value[m_sparse.at(key)];
 		}
 
 		/**@brief Returns const item from const sparse_map.
@@ -363,7 +401,7 @@ namespace args::core
 			if (!contains(key))
 				throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
 
-			return m_dense[m_sparse.at(key)].second;
+			return m_dense_value[m_sparse.at(key)];
 		}
 #pragma endregion
 
@@ -376,7 +414,7 @@ namespace args::core
 			if (!contains(key))
 				throw std::out_of_range("Sparse map does not contain this key.");
 
-			return m_dense[m_sparse[key]].second;
+			return m_dense_value[m_sparse[key]];
 		}
 
 		/**@brief Returns item from sparse_map, throws exception if it doesn't exist yet.
@@ -387,7 +425,7 @@ namespace args::core
 			if (!contains(key))
 				throw std::out_of_range("Sparse map does not contain this key.");
 
-			return m_dense[m_sparse[key]].second;
+			return m_dense_value[m_sparse[key]];
 		}
 
 		/**@brief Returns const item from const sparse_map.
@@ -398,7 +436,7 @@ namespace args::core
 			if (!contains(key))
 				throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
 
-			return m_dense[m_sparse.at(key)].second;
+			return m_dense_value[m_sparse.at(key)];
 		}
 
 		/**@brief Returns const item from const sparse_map.
@@ -409,7 +447,7 @@ namespace args::core
 			if (!contains(key))
 				throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
 
-			return m_dense[m_sparse.at(key)].second;
+			return m_dense_value[m_sparse.at(key)];
 		}
 #pragma endregion
 
@@ -420,8 +458,9 @@ namespace args::core
 		{
 			if (contains(key))
 			{
-				m_dense[m_sparse[key]] = m_dense[m_size - 1];
-				m_sparse[m_dense[m_size - 1].first] = m_sparse[key];
+				m_dense_value[m_sparse[key]] = std::move(m_dense_value[m_size - 1]);
+				m_dense_key[m_sparse[key]] = m_dense_key[m_size - 1];
+				m_sparse[m_dense_key[m_size - 1]] = m_sparse[key];
 				--m_size;
 				return true;
 			}
