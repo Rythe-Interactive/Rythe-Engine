@@ -106,7 +106,7 @@ namespace args::core
 		hash = 0x811c9dc5;
 		uint32 prime = 0x1000193;
 		cstring name = typeName<T>();
-		for (int i = 0; i < strlen(name); i++)
+		for (int i = 0; i < std::strlen(name); i++)
 		{
 			byte_t value = name[i];
 			hash = hash ^ value;

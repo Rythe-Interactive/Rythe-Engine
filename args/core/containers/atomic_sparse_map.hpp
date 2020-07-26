@@ -65,7 +65,7 @@ namespace args::core
 
 	public:
 		A_NODISCARD inline iterator begin()
-		{ async::readonly_guard lock(m_container_lock); return m_dense.begin(); }
+		{ async::readonly_guard lock(m_container_lock); return m_dense_value.begin(); }
 
 		A_NODISCARD inline const_iterator begin() const
 		{ async::readonly_guard lock(m_container_lock); return m_dense_value.cbegin(); }

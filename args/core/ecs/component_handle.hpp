@@ -129,7 +129,7 @@ namespace args::core::ecs
 		/**@brief Locks component family and destroys component.
 		 * @ref args::core::ecs::component_container::destroy_component
 		 */
-		void destroy() { m_registry.getFamily<component_type>()->destroy_component(ownerId); }
+		void destroy() { m_registry.getFamily<component_type>()->destroy_component(m_ownerId); }
 
 		virtual bool valid() override
 		{

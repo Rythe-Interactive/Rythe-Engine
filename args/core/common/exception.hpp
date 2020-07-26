@@ -41,11 +41,13 @@ namespace args::core
 		cstring file;
 		uint line;
 		cstring func;
+		cstring message;
 
 	public:
-		exception(cstring file, uint line, cstring func) : std::exception(), file(file), line(line), func(func) {}
-		exception(cstring msg, cstring file, uint line, cstring func) : std::exception(msg), file(file), line(line), func(func) {}
+		exception(cstring file, uint line, cstring func) : std::exception(), file(file), line(line), func(func), message("Args generic exception occurred.") {}
+		exception(cstring msg, cstring file, uint line, cstring func) : std::exception(), file(file), line(line), func(func), message(msg) {}
 
+		virtual cstring what() const noexcept override { return message; }
 		cstring get_file() const { return file; }
 		uint get_line() const { return line; }
 		cstring get_func() const { return func; }
@@ -55,7 +57,7 @@ namespace args::core
 	class invalid_fetch_error : public exception
 	{
 	public:
-		invalid_fetch_error(cstring file, uint line, cstring func) : exception("Invalid fetch occured.", file, line, func) {}
+		invalid_fetch_error(cstring file, uint line, cstring func) : exception("Invalid fetch occurred.", file, line, func) {}
 		invalid_fetch_error(cstring msg, cstring file, uint line, cstring func) : exception(msg, file, line, func) {}
 	};
 

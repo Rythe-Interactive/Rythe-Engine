@@ -3,6 +3,7 @@
 #include <cstddef> //msc   std::(u)int(8-64)_t 
 #include <vector>  //      std::vector<T>
 #include <string>
+#include <cstring>
 
 namespace args::core
 {

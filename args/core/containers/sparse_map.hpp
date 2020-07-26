@@ -54,7 +54,7 @@ namespace args::core
 		size_type m_capacity = 0;
 
 	public:
-		A_NODISCARD inline iterator begin() { return m_dense.begin(); }
+		A_NODISCARD inline iterator begin() { return m_dense_value.begin(); }
 		A_NODISCARD inline const_iterator begin() const { return m_dense_value.cbegin(); }
 
 		A_NODISCARD inline iterator end() { return m_dense_value.begin() + m_size; }
