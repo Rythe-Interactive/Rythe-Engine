@@ -7,6 +7,7 @@
 #include <sstream>
 #include <iterator>
 #include <string>
+
 namespace args::core::common{
 
 struct isChars
@@ -115,6 +116,8 @@ std::string join_strings_with(Range const& elements) {
     std::ostringstream os;
     auto b = begin(elements), e = end(elements);
 
+	char promoter [2] = {delim};
+	
     if (b != e) {
         std::copy(b, prev(e), std::ostream_iterator<Value>(os, delim));
         b = prev(e);
@@ -130,8 +133,10 @@ std::string join_strings_with(Range const& elements,char delim) {
     std::ostringstream os;
     auto b = begin(elements), e = end(elements);
 
+	char promoter[2] = {delim};
+	
     if (b != e) {
-        std::copy(b, prev(e), std::ostream_iterator<Value>(os, delim));
+        std::copy(b, prev(e), std::ostream_iterator<Value>(os, promoter));
         b = prev(e);
     }
     if (b != e) {

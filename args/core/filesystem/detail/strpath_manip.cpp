@@ -45,7 +45,7 @@ namespace args::core::filesystem
 				recreation.push_back(token);
 			}
 		}
-		return args::core::common::join_strings_with<seperator()>(recreation);
+		return args::core::common::join_strings_with<std::vector<std::string>,std::string>(recreation,seperator());
 	}
 
 

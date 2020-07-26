@@ -24,15 +24,15 @@ namespace args::core::filesystem {
             fopen(std::string(path).c_str(),"r+b"),
             fclose // deleter is fclose
         );
-        
+
         assert_msg("could not open file",file);
 
         //get size and create container of that size
         fseek(file.get(),0L,SEEK_END);
         byte_vec container(ftell(file.get()));
         fseek(file.get(),0L,SEEK_SET);
-        
-        //read file 
+
+        //read file
         fread(container.data(),sizeof(byte_t),container.size(),file.get());
 
         return container;
@@ -89,7 +89,7 @@ void example()
     using namespace  args::core::fs::literals;
 
     auto file1 = "hello_world.cpp"_readfile;
-    auto file2 = args::core::fs::read_file("hello_world.cpp"); 
+    auto file2 = args::core::fs::read_file("hello_world.cpp");
 
     "hello_world2.cpp"_writefile(file2);
     args::core::fs::write_file("hello_world2.cpp",file1);

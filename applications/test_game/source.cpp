@@ -3,6 +3,8 @@
 #define ARGS_ENTRY
 #include <core/core.hpp>
 
+
+#include "core/common/result.hpp"
 #include "module/testModule.hpp"
 
 struct sah
@@ -80,6 +82,20 @@ void ARGS_CCONV reportModules(args::core::Engine* engine)
 	std::cout << "i: " << testMap[i].value << std::endl;
 	std::cout << "j: " << testMap[j].value << std::endl;
 	std::cout << "k: " << testMap[k].value << std::endl;
+
+	std::cout << "_____________________________________________________" << std::endl;
+
+	using namespace args::core::common;
+	
+	result_decay<result<int,int>> decay(Ok(10));
+
+	if(decay == valid_t{})
+	{
+		std::cout << "was valid!" << std::endl;
+		std::cout << static_cast<int>(decay) << std::endl;
+	}
+
+	
 
 	std::cout << "_____________________________________________________" << std::endl;
 }

@@ -152,16 +152,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="common\common.hpp" />
+    <ClInclude Include="common\inteface_traits.hpp" />
+    <ClInclude Include="common\result.hpp" />
+    <ClInclude Include="common\string_extra.hpp" />
     <ClInclude Include="containers\containers.hpp" />
     <ClInclude Include="containers\sparse_map.hpp" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="engine\engine.hpp" />
     <ClInclude Include="engine\module.hpp" />
     <ClInclude Include="entry\entry_point.hpp" />
+    <ClInclude Include="filesystem\artifact_cache.hpp" />
+    <ClInclude Include="filesystem\detail\error.hpp" />
     <ClInclude Include="filesystem\detail\resource_meta.hpp" />
     <ClInclude Include="filesystem\detail\resource_sfinae.hpp" />
+    <ClInclude Include="filesystem\detail\strpath_manip.hpp" />
+    <ClInclude Include="filesystem\detail\traits.hpp" />
     <ClInclude Include="filesystem\filemanip.hpp" />
     <ClInclude Include="filesystem\filesystem.hpp" />
+    <ClInclude Include="filesystem\filesystem_resolver.hpp" />
+    <ClInclude Include="filesystem\mem_filesystem_resolver.hpp" />
     <ClInclude Include="filesystem\resource.hpp" />
     <ClInclude Include="platform\platform.hpp" />
     <ClInclude Include="types\meta.hpp" />
@@ -172,6 +181,9 @@
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp" />
     <ClCompile Include="engine\module.cpp" />
+    <ClCompile Include="filesystem\detail\strpath_manip.cpp" />
+    <ClCompile Include="filesystem\filesystem_resolver.cpp" />
+    <ClCompile Include="filesystem\mem_filesystem_resolver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

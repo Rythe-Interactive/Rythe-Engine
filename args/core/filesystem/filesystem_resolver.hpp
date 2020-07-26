@@ -5,7 +5,11 @@
 
 #include <core/platform/platform.hpp>   // ARGS_PURE, A_NODISCARD
 #include <core/filesystem/resource.hpp> // basic_resource
+#include <core/common/inteface_traits.hpp>
+#include <core/common/result.hpp>
 
+
+#include "detail/error.hpp"
 #include "detail/traits.hpp"            // file_traits
 #include "detail/strpath_manip.hpp"     // strpath_manip::seperator
 
@@ -13,7 +17,6 @@
 /**
  * @file filesystem_resolver.hpp
  */
-
 
 namespace args::core::filesystem{
 
@@ -39,6 +42,9 @@ namespace args::core::filesystem{
          *  @return file_traits all traits of the file bunched together
          */
         A_NODISCARD file_traits resolve(const std::string& path) noexcept;
+
+
+        void set_identifier(const std::string& ident) { m_identifier = ident;}
 
 
         /** @brief sets the target path of the resolver
@@ -78,11 +84,12 @@ namespace args::core::filesystem{
         A_NODISCARD virtual std::set<std::string> ls() const noexcept ARGS_PURE;
 
         /** @brief get the contents of the file pointed at
-         *  @note when not readable this should return an empty resource (basic_resource(nullptr_t))
+         *  @note when not readable this should return an fs_error using Err()
          *  @ref set_target
-         *  @return a basic_resource filled with the contents of the file at location
+         *  @return basic_resource wrapped in Ok() or fs_error wrapped in Err()
          */
-        A_NODISCARD virtual basic_resource get()                      ARGS_PURE;
+        A_NODISCARD common::result<basic_resource,fs_error> get() const noexcept;
+        virtual common::result<basic_resource,fs_error> get(interfaces::implement_signal_t) const noexcept ARGS_PURE;
 
         /** @brief sets the contents of the file pointed at
          *  @note when not writeable should do nothing and return false
@@ -90,21 +97,43 @@ namespace args::core::filesystem{
          *  @ref set_target
          *  @return bool, false on failure
          */
-        A_NODISCARD virtual bool set(const basic_resource& res)        ARGS_PURE;
+        A_NODISCARD bool set(const basic_resource& res);
+        virtual bool set(interfaces::implement_signal_t,const basic_resource& res) ARGS_PURE;
 
         /** @brief gets the delimiter of the filesystem
          *  @return char single character for the delimiter of the filesystem (default: strpath_manip::seperator())
          */
         A_NODISCARD virtual char get_delimiter() const noexcept ARGS_IMPURE_RETURN((strpath_manip::seperator()))
 
-        protected:
-            std::string & get_target() { return m_target; }
-            filesystem_traits& get_traits() { return m_traits; }
 
-        private:
-            std::string m_target;
-            filesystem_traits m_traits;
+        /** @brief destroys the file pointed to
+         *  @note when the files does not exists (traits.valid = false) this has no effect
+         */
+        void erase() const noexcept;
+        virtual void erase(interfaces::implement_signal_t) const noexcept ARGS_PURE;
 
+        /** @brief generates a string that shows where the file would/ should live in cache
+         *  @note this is mostly useful for chaining together mem_filesystem_resolver to avoid
+         *        decompressing/inflating the same file twice
+         *
+         * @return std::string identifier that points to the cached location
+         */
+         A_NODISCARD std::string generate_artifact_identifier() const;
+
+    protected:
+        A_NODISCARD const std::string & get_target() const { return m_target; }
+        A_NODISCARD const filesystem_traits& get_traits() const { return m_traits; }
+
+        A_NODISCARD const std::string& get_identifier() const { return m_identifier; }
+
+        A_NODISCARD bool in_cache() const;
+        void load_cache(byte_vec* data) const;
+        void save_cache(const byte_vec* data) const;
+
+    private:
+        std::string m_identifier;
+        std::string m_target;
+        filesystem_traits m_traits;
+            
     };
-
 }
