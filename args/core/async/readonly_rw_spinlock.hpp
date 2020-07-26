@@ -60,9 +60,9 @@ namespace args::core::async
 		 */
 		readonly_guard(readonly_rw_spinlock& lock) : lock(lock)
 		{
-			if (lock.localStates[lock.id] != readonly_rw_spinlock::idle)
+			if (lock.localStates[lock.id] != readonly_rw_spinlock::idle) // If we're either already reading or writing then the lock doesn't need to be reacquired.
 			{
-				preacquired = true;
+				preacquired = true; // Remember that there's another active guard.
 				return;
 			}
 
@@ -83,7 +83,7 @@ namespace args::core::async
 					state = readonly_rw_spinlock::idle;
 			}
 
-			lock.localStates[lock.id] = readonly_rw_spinlock::read;
+			lock.localStates[lock.id] = readonly_rw_spinlock::read; // Set thread_local state to read.
 
 		}
 
@@ -93,7 +93,7 @@ namespace args::core::async
 		 */
 		~readonly_guard()
 		{
-			if (preacquired)
+			if (preacquired) // Another guard is still alive that will unlock the lock for this thread.
 				return;
 
 			// Mark our read as finished.
@@ -104,7 +104,7 @@ namespace args::core::async
 			if (lock.readers.load(std::memory_order_acquire) == 0)
 				lock.readState.store(readonly_rw_spinlock::idle, std::memory_order_release);
 
-			lock.localStates[lock.id] = readonly_rw_spinlock::idle;
+			lock.localStates[lock.id] = readonly_rw_spinlock::idle; // Set thread_local state to idle.
 		}
 
 		readonly_guard& operator=(readonly_guard&&) = delete;
@@ -127,7 +127,7 @@ namespace args::core::async
 		 */
 		readwrite_guard(readonly_rw_spinlock& lock) : lock(lock)
 		{
-			if (lock.localStates[lock.id] == readonly_rw_spinlock::read)
+			if (lock.localStates[lock.id] == readonly_rw_spinlock::read) // If we're currently only acquired for read we need to stop reading before requesting rw.
 			{
 				// Mark our read as finished.
 				lock.readers.fetch_sub(1, std::memory_order_relaxed);
@@ -137,9 +137,9 @@ namespace args::core::async
 				if (lock.readers.load(std::memory_order_acquire) == 0)
 					lock.readState.store(readonly_rw_spinlock::idle, std::memory_order_release);
 			}
-			else if (lock.localStates[lock.id] == readonly_rw_spinlock::write)
+			else if (lock.localStates[lock.id] == readonly_rw_spinlock::write) // If we're already writing then we don't need to reacquire the lock.
 			{
-				preacquired = true;
+				preacquired = true; // Remember that there's another active guard.
 				return;
 			}
 
@@ -154,7 +154,7 @@ namespace args::core::async
 				state = readonly_rw_spinlock::idle;
 
 
-			lock.localStates[lock.id] = readonly_rw_spinlock::write;
+			lock.localStates[lock.id] = readonly_rw_spinlock::write; // Set thread_local state to write.
 		}
 
 		readwrite_guard(const readwrite_guard&) = delete;
@@ -163,13 +163,13 @@ namespace args::core::async
 		 */
 		~readwrite_guard()
 		{
-			if (preacquired)
+			if (preacquired) // Another guard is still alive that will unlock the lock for this thread.
 				return;
 
 			// We should be the only one to have had access so we can safely write to the lock state and return it to idle.
 			lock.readState.store(readonly_rw_spinlock::idle, std::memory_order_release);
 
-			lock.localStates[lock.id] = readonly_rw_spinlock::idle;
+			lock.localStates[lock.id] = readonly_rw_spinlock::idle; // Set thread_local state to idle.
 		}
 
 		readwrite_guard& operator=(readwrite_guard&&) = delete;
