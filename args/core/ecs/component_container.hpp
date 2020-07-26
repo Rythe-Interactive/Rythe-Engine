@@ -1,7 +1,7 @@
 #pragma once
 #include <core/async/readonly_rw_spinlock.hpp>
 #include <core/platform/platform.hpp>
-#include <core/containers/sparse_map.hpp>
+#include <core/containers/atomic_sparse_map.hpp>
 #include <core/types/types.hpp>
 
 /**
@@ -29,7 +29,7 @@ namespace args::core::ecs
 	class component_container : public component_container_base
 	{
 	private:
-		sparse_map<id_type, std::atomic<component_type>> components;
+		atomic_sparse_map<id_type, component_type> components;
 		async::readonly_rw_spinlock lock;
 
 	public:

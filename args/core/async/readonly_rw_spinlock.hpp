@@ -1,6 +1,7 @@
 #pragma once
 #include <atomic>
-
+#include <unordered_map>
+#include <core/types/primitives.hpp>
 /**
  * @file readonly_rw_spinlock.hpp
  */
@@ -22,9 +23,24 @@ namespace args::core::async
 		friend class readwrite_guard;
 	private:
 		enum read_state { idle = 0, read = 1, write = 2 };
-
+		static std::atomic_uint lastId;
+		const uint id;
 		std::atomic_int readState;
 		std::atomic_int readers;
+
+		static thread_local std::unordered_map<uint, int> localStates;
+	public:
+		readonly_rw_spinlock() : id(lastId.fetch_add(1, std::memory_order_relaxed))
+		{
+			localStates[id] = read_state::idle;
+
+			readState.store(0, std::memory_order_relaxed);
+			readers.store(0, std::memory_order_relaxed);
+		}
+
+		readonly_rw_spinlock(const readonly_rw_spinlock&) = delete;
+
+		readonly_rw_spinlock& operator=(readonly_rw_spinlock&&) = delete;
 	};
 
 	/**@class readonly_guard
@@ -37,12 +53,21 @@ namespace args::core::async
 	{
 	private:
 		readonly_rw_spinlock& lock;
+		bool preacquired;
 
 	public:
 		/**@brief Creates readonly guard and locks for Read-only.
 		 */
 		readonly_guard(readonly_rw_spinlock& lock) : lock(lock)
 		{
+			if (lock.localStates[lock.id] != readonly_rw_spinlock::idle)
+			{
+				preacquired = true;
+				return;
+			}
+
+			preacquired = false;
+
 			// Expect idle as default.
 			int state = readonly_rw_spinlock::idle;
 			// Report another reader to the lock.
@@ -57,6 +82,9 @@ namespace args::core::async
 				else // If the lock was in any other state than idle or read then we need to stay in the CAS loop to prevent writes from happening during our read.
 					state = readonly_rw_spinlock::idle;
 			}
+
+			lock.localStates[lock.id] = readonly_rw_spinlock::read;
+
 		}
 
 		readonly_guard(const readonly_guard&) = delete;
@@ -65,6 +93,9 @@ namespace args::core::async
 		 */
 		~readonly_guard()
 		{
+			if (preacquired)
+				return;
+
 			// Mark our read as finished.
 			lock.readers.fetch_sub(1, std::memory_order_relaxed);
 
@@ -72,6 +103,8 @@ namespace args::core::async
 			// This allows other (non readonly)locks to acquire access.
 			if (lock.readers.load(std::memory_order_acquire) == 0)
 				lock.readState.store(readonly_rw_spinlock::idle, std::memory_order_release);
+
+			lock.localStates[lock.id] = readonly_rw_spinlock::idle;
 		}
 
 		readonly_guard& operator=(readonly_guard&&) = delete;
@@ -87,12 +120,31 @@ namespace args::core::async
 	{
 	private:
 		readonly_rw_spinlock& lock;
+		bool preacquired;
 
 	public:
 		/**@brief Creates readonly guard and locks for Read-Write.
 		 */
 		readwrite_guard(readonly_rw_spinlock& lock) : lock(lock)
 		{
+			if (lock.localStates[lock.id] == readonly_rw_spinlock::read)
+			{
+				// Mark our read as finished.
+				lock.readers.fetch_sub(1, std::memory_order_relaxed);
+
+				// If there are no more readers left then the lock state needs to be returned to idle.
+				// This allows other (non readonly)locks to acquire access.
+				if (lock.readers.load(std::memory_order_acquire) == 0)
+					lock.readState.store(readonly_rw_spinlock::idle, std::memory_order_release);
+			}
+			else if (lock.localStates[lock.id] == readonly_rw_spinlock::write)
+			{
+				preacquired = true;
+				return;
+			}
+
+			preacquired = false;
+
 			// Expect idle as default.
 			int state = readonly_rw_spinlock::idle;
 
@@ -100,6 +152,9 @@ namespace args::core::async
 			while (!lock.readState.compare_exchange_weak(state, readonly_rw_spinlock::write, std::memory_order_acquire, std::memory_order_relaxed))
 				// If lock state is any other state than idle then we cannot acquire access to write, thus we need to stay in the CAS loop.
 				state = readonly_rw_spinlock::idle;
+
+
+			lock.localStates[lock.id] = readonly_rw_spinlock::write;
 		}
 
 		readwrite_guard(const readwrite_guard&) = delete;
@@ -108,8 +163,13 @@ namespace args::core::async
 		 */
 		~readwrite_guard()
 		{
+			if (preacquired)
+				return;
+
 			// We should be the only one to have had access so we can safely write to the lock state and return it to idle.
 			lock.readState.store(readonly_rw_spinlock::idle, std::memory_order_release);
+
+			lock.localStates[lock.id] = readonly_rw_spinlock::idle;
 		}
 
 		readwrite_guard& operator=(readwrite_guard&&) = delete;

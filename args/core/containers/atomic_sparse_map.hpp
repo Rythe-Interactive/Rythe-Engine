@@ -502,6 +502,7 @@ namespace args::core
 
 		/**@brief Erases item from sparse_map.
 		 * @param key Key value that needs to be erased.
+		 * @returns size_type Number of items removed from the map.
 		 */
 		inline size_type erase(key_const_reference key)
 		{
