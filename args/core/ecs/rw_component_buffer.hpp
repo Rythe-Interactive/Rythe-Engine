@@ -5,6 +5,7 @@
 #include <core/ecs/entity.hpp>
 #include <core/ecs/component_handle.hpp>
 #include <core/ecs/component_container.hpp>
+#include <core/async/transferable_atomic.hpp>
 
 /**@todo documentation.
  */
@@ -34,11 +35,11 @@ namespace args::core::ecs
 		 */
 		component_type read(id_type entityId, std::memory_order order = std::memory_order_acquire)
 		{
-			std::atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(entityId);
+			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(entityId);
 			if (!comp)
 				throw args_component_destroyed_error;
 
-			return comp->load(order);
+			return comp->get().load(order);
 		}
 
 		/**@brief Atomic write of component.
@@ -49,11 +50,11 @@ namespace args::core::ecs
 		 */
 		void write(id_type entityId, component_type&& value, std::memory_order order = std::memory_order_release)
 		{
-			std::atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(entityId);
+			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(entityId);
 			if (!comp)
 				throw args_component_destroyed_error;
 
-			comp->store(value, order);
+			comp->get().store(value, order);
 
 			return value;
 		}
@@ -71,14 +72,14 @@ namespace args::core::ecs
 			std::memory_order successOrder = std::memory_order_release,
 			std::memory_order failureOrder = std::memory_order_relaxed)
 		{
-			std::atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(entityId);
+			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(entityId);
 			if (!comp)
 				throw args_component_destroyed_error;
 
-			component_type oldVal = comp->load(loadOrder);
+			component_type oldVal = comp->get().load(loadOrder);
 			component_type newVal = oldVal + value;
 
-			while (!comp->compare_exchange_weak(oldVal, newVal, successOrder, failureOrder))
+			while (!comp->get().compare_exchange_weak(oldVal, newVal, successOrder, failureOrder))
 				newVal = oldVal + value;
 
 			return newVal;
@@ -97,14 +98,14 @@ namespace args::core::ecs
 			std::memory_order successOrder = std::memory_order_release,
 			std::memory_order failureOrder = std::memory_order_relaxed)
 		{
-			std::atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(entityId);
+			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(entityId);
 			if (!comp)
 				throw args_component_destroyed_error;
 
-			component_type oldVal = comp->load(loadOrder);
+			component_type oldVal = comp->get().load(loadOrder);
 			component_type newVal = oldVal * value;
 
-			while (!comp->compare_exchange_weak(oldVal, newVal, successOrder, failureOrder))
+			while (!comp->get().compare_exchange_weak(oldVal, newVal, successOrder, failureOrder))
 				newVal = oldVal * value;
 
 			return newVal;

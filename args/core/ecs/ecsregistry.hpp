@@ -15,12 +15,12 @@ namespace args::core::ecs
 	template<typename component_type>
 	class component_handle;
 
-	class EcsRegistry
+	class ARGS_API EcsRegistry
 	{
 	private:
 		static id_type lastEntityId;
-		std::unordered_map<id_type, std::unique_ptr<component_container_base>> families;
-		std::unordered_map<id_type, std::unique_ptr<entity>> entities;
+		std::unordered_map<id_type, component_container_base*> families;
+		std::unordered_map<id_type, entity*> entities;
 
 	public:
 		EcsRegistry();
@@ -28,7 +28,8 @@ namespace args::core::ecs
 		template<typename component_type>
 		void reportComponentType()
 		{
-			families[typeHash<component_type>()] = std::make_unique<component_container<component_type>>();
+			if (!families[typeHash<component_type>()])
+				families[typeHash<component_type>()] = new component_container<component_type>();
 		}
 
 		template<typename component_type>
@@ -50,7 +51,7 @@ namespace args::core::ecs
 		template<typename component_type>
 		component_handle<component_type> createComponent(id_type entityId)
 		{
-			return reinterpret_cast<component_handle<component_type>>(createComponent(entityId, typeHash<component_type>()));
+			return *reinterpret_cast<component_handle<component_type>*>(&createComponent(entityId, typeHash<component_type>())); // Uhg why is working with so many templated types so sheit...
 		}
 
 		component_handle_base createComponent(id_type entityId, id_type componentTypeId);

@@ -431,6 +431,8 @@ namespace args::core
 			if (!contains(key))
 				throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
 
+			async::readonly_guard lock(m_container_lock);
+
 			return m_dense_value[m_sparse.at(key)];
 		}
 
@@ -456,6 +458,8 @@ namespace args::core
 		{
 			if (!contains(key))
 				throw std::out_of_range("Sparse map does not contain this key.");
+
+			async::readonly_guard lock(m_container_lock);
 
 			return m_dense_value[m_sparse[key]];
 		}

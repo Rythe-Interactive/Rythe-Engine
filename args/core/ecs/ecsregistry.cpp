@@ -11,7 +11,7 @@ namespace args::core::ecs
 	EcsRegistry::EcsRegistry() : families(), entities()
 	{
 		// Create world entity.
-		entities[1] = std::make_unique<entity>(1, *this);
+		entities[1] = new entity(1, *this);
 	}
 
 	inline component_container_base* EcsRegistry::getFamily(id_type componentTypeId)
@@ -19,7 +19,7 @@ namespace args::core::ecs
 		if (!families.count(componentTypeId))
 			throw args_unknown_component_error;
 
-		return families[componentTypeId].get();
+		return families[componentTypeId];
 	}
 
 	inline component_handle_base EcsRegistry::getComponent(id_type entityId, id_type componentTypeId)
@@ -33,9 +33,9 @@ namespace args::core::ecs
 	{
 		entity& entity = getEntity(entityId);
 
-		families[componentTypeId]->create_component(entityId);
+		getFamily(componentTypeId)->create_component(entityId);
 
-		entity.m_components.insert(componentTypeId);
+		entity.m_components.insert(componentTypeId, componentTypeId);
 
 		return component_handle_base(entityId, *this);
 	}
@@ -44,7 +44,7 @@ namespace args::core::ecs
 	{
 		entity& entity = getEntity(entityId);
 
-		families[componentTypeId]->destroy_component(entityId);
+		getFamily(componentTypeId)->destroy_component(entityId);
 
 		entity.m_components.erase(componentTypeId);
 	}
@@ -56,7 +56,7 @@ namespace args::core::ecs
 		if (entities.count(id))
 			throw args_entity_exists_error;
 
-		entities[id] = std::make_unique<entity>(id, *this);
+		entities[id] = new entity(id, *this);
 
 		return *entities[id];
 	}

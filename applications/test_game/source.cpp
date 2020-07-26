@@ -10,6 +10,11 @@ using namespace args::core;
 struct sah
 {
 	int value;
+
+	sah operator+(const sah& other)
+	{
+		return { value + other.value };
+	}
 };
 
 void ARGS_CCONV reportModules(Engine* engine)
@@ -52,12 +57,13 @@ void ARGS_CCONV reportModules(Engine* engine)
 	else
 		std::cout << "testMap does not contain \"Hello\"" << std::endl;
 
-	/*ecs::EcsRegistry registry;
+	ecs::EcsRegistry registry;
 
 	registry.reportComponentType<sah>();
 
 	ecs::entity& ent = registry.createEntity();
 
+	std::cout << "creating component" << std::endl;
 	registry.createComponent<sah>(ent);
 
 	if (ent.has_component<sah>())
@@ -65,10 +71,34 @@ void ARGS_CCONV reportModules(Engine* engine)
 	else
 		std::cout << "entity does not have component" << std::endl;
 
+	ecs::component_handle<sah> sahHandle = ent.get_component<sah>();
+
+	if (sahHandle)
+		std::cout << "component handle is valid" << std::endl;
+	else
+		std::cout << "component handle is invalid" << std::endl;
+
+	std::cout << "component value is: " << sahHandle.read().value << std::endl;
+
+	std::cout << "setting component value to 789" << std::endl;
+	sahHandle.write({ 789 });
+	std::cout << "component value is: " << sahHandle.read().value << std::endl;
+
+	std::cout << "performing fetch_add 1" << std::endl;
+
+	sahHandle.fetch_add({ 1 });
+	std::cout << "component value is: " << sahHandle.read().value << std::endl;
+
+	std::cout << "destroying component" << std::endl;
 	registry.destroyComponent<sah>(ent);
+
+	if (sahHandle)
+		std::cout << "component handle is valid" << std::endl;
+	else
+		std::cout << "component handle is invalid" << std::endl;
 
 	if (ent.has_component<sah>())
 		std::cout << "entity has component" << std::endl;
 	else
-		std::cout << "entity does not have component" << std::endl;*/
+		std::cout << "entity does not have component" << std::endl;
 }

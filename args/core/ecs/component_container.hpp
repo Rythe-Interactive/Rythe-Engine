@@ -1,5 +1,6 @@
 #pragma once
 #include <core/async/readonly_rw_spinlock.hpp>
+#include <core/async/transferable_atomic.hpp>
 #include <core/platform/platform.hpp>
 #include <core/containers/atomic_sparse_map.hpp>
 #include <core/types/types.hpp>
@@ -30,11 +31,8 @@ namespace args::core::ecs
 	{
 	private:
 		atomic_sparse_map<id_type, component_type> components;
-		async::readonly_rw_spinlock lock;
 
 	public:
-		component_container() : components(), lock() {}
-
 		/**@brief Checks whether entity has the component.
 		 * @note Thread will be halted if there are any writes until they are finished.
 		 * @note Will trigger read on this container.
@@ -43,7 +41,6 @@ namespace args::core::ecs
 		 */
 		virtual bool has_component(id_type entityId) override
 		{
-			async::readonly_guard guard(lock);
 			return components.contains(entityId);
 		}
 
@@ -54,14 +51,14 @@ namespace args::core::ecs
 		 * @returns std::atomic<component_type>* Pointer to std::atomic wrapped component.
 		 * @ref args::core::async::readonly_rw_spinlock
 		 */
-		std::atomic<component_type>* get_component(id_type entityId)
+		async::transferable_atomic<component_type>* get_component(id_type entityId)
 		{
-			async::readonly_guard guard(lock);
-
 			if (components.contains(entityId))
 				return &components.get(entityId);
 			return nullptr;
 		}
+
+
 
 		/**@brief Creates new std::atomic wrapped component.
 		 * @note Thread will be halted if there are any reads or writes until they are finished.
@@ -71,8 +68,6 @@ namespace args::core::ecs
 		 */
 		virtual void create_component(id_type entityId) override
 		{
-			async::readwrite_guard guard(lock);
-
 			components.emplace(entityId);
 		}
 
@@ -84,8 +79,6 @@ namespace args::core::ecs
 		 */
 		virtual void destroy_component(id_type entityId) override
 		{
-			async::readwrite_guard guard(lock);
-
 			components.erase(entityId);
 		}
 	};

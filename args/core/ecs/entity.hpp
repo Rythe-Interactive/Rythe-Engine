@@ -1,17 +1,18 @@
 #pragma once
 #include <core/types/types.hpp>
 #include <core/containers/sparse_set.hpp>
+#include <core/containers/sparse_map.hpp>
 
 namespace args::core::ecs
 {
-	class EcsRegistry;
+	class ARGS_API EcsRegistry;
 
 	class component_handle_base;
 
 	template<typename component_type>
 	class component_handle;
 
-	class entity
+	class ARGS_API entity
 	{
 		friend class EcsRegistry;
 	private:
@@ -20,7 +21,7 @@ namespace args::core::ecs
 
 		id_type m_parent;
 		sparse_set<id_type> m_children;
-		sparse_set<id_type> m_components;
+		sparse_map<id_type, id_type> m_components;
 
 	public:
 		entity(id_type id, EcsRegistry& registry) : m_id(id), m_registry(registry), m_parent(invalid_id), m_children() {}
@@ -48,12 +49,12 @@ namespace args::core::ecs
 
 		bool has_component(id_type componentTypeId);
 
+		component_handle_base get_component(id_type componentTypeId) const;
+
 		template<typename component_type>
 		component_handle<component_type> get_component() const
 		{
-			return static_cast<component_handle<component_type>>(getComponent(typeHash<component_type>()));
+			return *reinterpret_cast<component_handle<component_type>*>(&get_component(typeHash<component_type>()));
 		}
-
-		component_handle_base get_component(id_type componentTypeId) const;
 	};
 }

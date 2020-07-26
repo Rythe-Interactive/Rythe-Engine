@@ -2,6 +2,8 @@
 #include <atomic>
 #include <unordered_map>
 #include <core/types/primitives.hpp>
+#include <core/platform/platform.hpp>
+
 /**
  * @file readonly_rw_spinlock.hpp
  */
@@ -37,11 +39,15 @@ namespace args::core::async
 			readState.store(0, std::memory_order_relaxed);
 			readers.store(0, std::memory_order_relaxed);
 		}
-
 		readonly_rw_spinlock(const readonly_rw_spinlock&) = delete;
 
 		readonly_rw_spinlock& operator=(readonly_rw_spinlock&&) = delete;
 	};
+
+#if defined(ARGS_ENTRY)
+	std::atomic_uint readonly_rw_spinlock::lastId;
+	thread_local std::unordered_map<uint, int> readonly_rw_spinlock::localStates;
+#endif
 
 	/**@class readonly_guard
 	 * @brief RAII guard that uses ::async::readonly_rw_spinlock to lock for read-only.

@@ -10,7 +10,7 @@
 
 namespace args::core::ecs
 {
-	class entity;
+	class ARGS_API entity;
 
 	/**@class component_handle_base
 	 * @brief Base class of args::core::ecs::component_handle.
@@ -29,7 +29,7 @@ namespace args::core::ecs
 	public:
 		component_handle_base(id_type entityId, EcsRegistry& registry) : entity(registry.getEntity(entityId)), m_registry(registry), m_ownerId(entityId) {}
 
-		bool valid() { return m_ownerId != invalid_id; }
+		virtual bool valid() ARGS_IMPURE_RETURN(m_ownerId != invalid_id);
 		operator bool() { return valid(); }
 	};
 
@@ -51,11 +51,11 @@ namespace args::core::ecs
 		 */
 		component_type read(std::memory_order order = std::memory_order_acquire)
 		{
-			std::atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
+			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
 			if (!comp)
 				throw args_component_destroyed_error;
 
-			return comp->load(order);
+			return comp->get().load(order);
 		}
 
 		/**@brief Atomic write of component.
@@ -65,11 +65,11 @@ namespace args::core::ecs
 		 */
 		component_type write(component_type&& value, std::memory_order order = std::memory_order_release)
 		{
-			std::atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
+			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
 			if (!comp)
 				throw args_component_destroyed_error;
 
-			comp->store(value, order);
+			comp->get().store(value, order);
 
 			return value;
 		}
@@ -86,15 +86,15 @@ namespace args::core::ecs
 			std::memory_order successOrder = std::memory_order_release,
 			std::memory_order failureOrder = std::memory_order_relaxed)
 		{
-			std::atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
+			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
 			if (!comp)
 				throw args_component_destroyed_error;
 
-			component_type oldVal = comp->load(loadOrder);
+			component_type oldVal = comp->get().load(loadOrder);
 			component_type newVal = oldVal + value;
 
 			// CAS loop to assure our modification will happen correctly without overwriting some other change.
-			while (!comp->compare_exchange_strong(oldVal, newVal, successOrder, failureOrder))
+			while (!comp->get().compare_exchange_strong(oldVal, newVal, successOrder, failureOrder))
 				newVal = oldVal + value;
 
 			return newVal;
@@ -112,15 +112,15 @@ namespace args::core::ecs
 			std::memory_order successOrder = std::memory_order_release,
 			std::memory_order failureOrder = std::memory_order_relaxed)
 		{
-			std::atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
+			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
 			if (!comp)
 				throw args_component_destroyed_error;
 
-			component_type oldVal = comp->load(loadOrder);
+			component_type oldVal = comp->get().load(loadOrder);
 			component_type newVal = oldVal * value;
 
 			// CAS loop to assure our modification will happen correctly without overwriting some other change.
-			while (!comp->compare_exchange_strong(oldVal, newVal, successOrder, failureOrder))
+			while (!comp->get().compare_exchange_strong(oldVal, newVal, successOrder, failureOrder))
 				newVal = oldVal * value;
 
 			return newVal;
@@ -130,5 +130,10 @@ namespace args::core::ecs
 		 * @ref args::core::ecs::component_container::destroy_component
 		 */
 		void destroy() { m_registry.getFamily<component_type>()->destroy_component(ownerId); }
+
+		virtual bool valid() override
+		{
+			return m_ownerId != invalid_id && m_registry.getFamily<component_type>()->get_component(m_ownerId);
+		}
 	};
 }
