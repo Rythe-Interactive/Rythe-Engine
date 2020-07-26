@@ -29,7 +29,12 @@ namespace args::core::ecs
 	public:
 		component_handle_base(id_type entityId, EcsRegistry& registry) : entity(registry.getEntity(entityId)), m_registry(registry), m_ownerId(entityId) {}
 
+		/**@brief Checks if handle still points to a valid component.
+		 */
 		virtual bool valid() ARGS_IMPURE_RETURN(m_ownerId != invalid_id);
+
+		/**@brief Checks if handle still points to a valid component.
+		 */
 		operator bool() { return valid(); }
 	};
 
@@ -129,8 +134,10 @@ namespace args::core::ecs
 		/**@brief Locks component family and destroys component.
 		 * @ref args::core::ecs::component_container::destroy_component
 		 */
-		void destroy() { m_registry.getFamily<component_type>()->destroy_component(m_ownerId); }
+		void destroy() { m_registry.destroyComponent<component_type>(m_ownerId); }
 
+		/**@brief Checks if handle still points to a valid component.
+		 */
 		virtual bool valid() override
 		{
 			return m_ownerId != invalid_id && m_registry.getFamily<component_type>()->get_component(m_ownerId);

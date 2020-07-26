@@ -110,6 +110,8 @@
     <ClInclude Include="ecs\ecs.hpp" />
     <ClInclude Include="ecs\ecsregistry.hpp" />
     <ClInclude Include="ecs\entity.hpp" />
+    <ClInclude Include="ecs\entityquery.hpp" />
+    <ClInclude Include="ecs\queryregistry.hpp" />
     <ClInclude Include="ecs\rw_component_buffer.hpp" />
     <ClInclude Include="engine\engine.hpp" />
     <ClInclude Include="engine\module.hpp" />
@@ -129,8 +131,10 @@
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp" />
     <ClCompile Include="ecs\entity.cpp" />
+    <ClCompile Include="ecs\entityquery.cpp" />
     <ClCompile Include="engine\engine.cpp" />
     <ClCompile Include="engine\module.cpp" />
+    <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

@@ -115,6 +115,6 @@ namespace args::core::ecs
 		 * @param entityId ID of entity you wish to remove the component from.
 		 * @ref args::core::ecs::component_container::destroy_component
 		 */
-		void destroy(id_type entityId) { m_registry.getFamily<component_type>()->destroy_component(entityId); }
+		void destroy(id_type entityId) { m_registry.destroyComponent<component_type>(entityId); }
 	};
 }

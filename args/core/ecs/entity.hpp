@@ -37,24 +37,34 @@ namespace args::core::ecs
 		A_NODISCARD id_type get_parent() { return m_parent; }
 		void set_parent(id_type newParent);
 
-		A_NODISCARD entity& operator[] (index_type index);
-		A_NODISCARD entity& get_child(index_type index);
-		A_NODISCARD size_type child_count() { return m_children.size(); }
+		A_NODISCARD entity& operator[] (index_type index) const;
+		A_NODISCARD entity& get_child(index_type index) const;
+		A_NODISCARD size_type child_count() const { return m_children.size(); }
 
 		void add_child(id_type childId);
 		void remove_child(id_type childId);
 
 		template<typename component_type>
-		bool has_component() { return has_component(typeHash<component_type>()); }
+		A_NODISCARD bool has_component() const { return has_component(typeHash<component_type>()); }
 
-		bool has_component(id_type componentTypeId);
+		A_NODISCARD bool has_component(id_type componentTypeId) const;
 
-		component_handle_base get_component(id_type componentTypeId) const;
+		A_NODISCARD component_handle_base get_component(id_type componentTypeId) const;
 
 		template<typename component_type>
-		component_handle<component_type> get_component() const
+		A_NODISCARD component_handle<component_type> get_component() const
 		{
-			return *reinterpret_cast<component_handle<component_type>*>(&get_component(typeHash<component_type>()));
+			return force_value_cast<component_handle<component_type>>(get_component(typeHash<component_type>()));
 		}
+
+		component_handle_base add_component(id_type componentTypeId);
+
+		template<typename component_type>
+		component_handle<component_type> add_component()
+		{
+			return force_value_cast<component_handle<component_type>>(add_component(typeHash<component_type>()));
+		}
+
+		void destroy();
 	};
 }

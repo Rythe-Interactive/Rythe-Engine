@@ -101,4 +101,9 @@ void ARGS_CCONV reportModules(Engine* engine)
 		std::cout << "entity has component" << std::endl;
 	else
 		std::cout << "entity does not have component" << std::endl;
+
+	ent.destroy();
+	/**@brief fix entity handling better. move hierarchy and component composition into registry and make entity a true handle.
+	 *		  this would allow you to check if the handle was still valid and also to have entity not be a pointer or reference type.
+	 */
 }

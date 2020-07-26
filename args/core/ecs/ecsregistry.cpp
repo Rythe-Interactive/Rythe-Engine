@@ -61,6 +61,12 @@ namespace args::core::ecs
 		return *entities[id];
 	}
 
+	inline void EcsRegistry::destroyEntity(id_type entityId)
+	{
+		delete entities[entityId];
+		entities.erase(entityId);
+	}
+
 	inline entity& EcsRegistry::getEntity(id_type entityId)
 	{
 		if (!entities.count(entityId))

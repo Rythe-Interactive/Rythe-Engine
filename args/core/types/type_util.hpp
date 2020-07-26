@@ -1,6 +1,7 @@
 #pragma once
 #include <typeinfo>
 #include <core/types/primitives.hpp>
+#include <core/platform/platform.hpp>
 
 /**
  * @file type_util.hpp
@@ -8,6 +9,17 @@
 
 namespace args::core
 {
+	/**@brief Forcefully casts non pointer/reference type value from one to another.
+	*/
+	template<typename T, typename U>
+	T force_value_cast(U value)
+	{
+		static_assert(alignof(T) == alignof(U), "Illegal cast of unalligned types. Approaching undefined behaviour.");
+		static_assert(sizeof(T) == sizeof(U), "Illegal cast of non size similar types. Approaching undefined behaviour.");
+
+		return *reinterpret_cast<T*>(&value);
+	}
+
 	/**@brief Returns typeid(T).name().
 	 * @tparam T type of which you want the name.
 	 */
@@ -50,50 +62,18 @@ namespace args::core
 		return hash;
 	}
 
-	/**@todo find a way to make this down here compile without fucking shit up cuz redefinition.
+	/**@todo use ARGS_FUNC
 	*/
-#ifndef NON_TEMPLATE_NAMEHASH
-	#define NON_TEMPLATE_NAMEHASH
 
 	/**@brief Returns hash of a certain string
 	 * @param name Name you wish to hash
 	 */
-	/*id_type nameHash(cstring name)
-	{
-		id_type hash = 0;
-
-		hash = 0x811c9dc5;
-		uint32 prime = 0x1000193;
-		for (int i = 0; i < strlen(name); i++)
-		{
-			byte_t value = name[i];
-			hash = hash ^ value;
-			hash *= prime;
-		}
-
-		return hash;
-	}*/
+	id_type ARGS_FUNC nameHash(cstring name);
 
 	/**@brief Returns hash of a certain string
 	 * @param name Name you wish to hash
 	 */
-	/*id_type nameHash(string name)
-	{
-		id_type hash = 0;
-
-		hash = 0x811c9dc5;
-		uint32 prime = 0x1000193;
-		for (int i = 0; i < name.length(); i++)
-		{
-			byte_t value = name[i];
-			hash = hash ^ value;
-			hash *= prime;
-		}
-
-		return hash;
-	}*/
-
-#endif // !NON_TEMPLATE_NAMEHASH
+	id_type ARGS_FUNC nameHash(string name);
 
 	/**@brief Returns hash of the type name.
 	 * @tparam T type of which you want the hash.

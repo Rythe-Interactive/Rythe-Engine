@@ -15,12 +15,12 @@ namespace args::core::ecs
 			m_registry.getEntity(m_parent).m_children.insert(m_id);
 	}
 
-	A_NODISCARD inline entity& entity::operator[](index_type index)
+	A_NODISCARD inline entity& entity::operator[](index_type index) const
 	{
 		return get_child(index);
 	}
 
-	A_NODISCARD inline entity& entity::get_child(index_type index)
+	A_NODISCARD inline entity& entity::get_child(index_type index) const
 	{
 		return m_registry.getEntity(m_children[index]);
 	}
@@ -37,13 +37,23 @@ namespace args::core::ecs
 			m_registry.getEntity(childId).set_parent(invalid_id);
 	}
 
-	inline bool entity::has_component(id_type componentTypeId)
+	A_NODISCARD inline bool entity::has_component(id_type componentTypeId) const
 	{
 		return m_components.contains(componentTypeId);
 	}
 
-	inline component_handle_base entity::get_component(id_type componentTypeId) const
+	A_NODISCARD inline component_handle_base entity::get_component(id_type componentTypeId) const
 	{
 		return m_registry.getComponent(m_id, componentTypeId);
+	}
+
+	inline component_handle_base entity::add_component(id_type componentTypeId)
+	{
+		return m_registry.createComponent(m_id, componentTypeId);
+	}
+
+	void entity::destroy()
+	{
+		m_registry.destroyEntity(m_id);
 	}
 }

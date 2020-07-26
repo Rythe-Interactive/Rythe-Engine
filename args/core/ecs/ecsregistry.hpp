@@ -43,7 +43,7 @@ namespace args::core::ecs
 		template<typename component_type>
 		component_handle<component_type> getComponent(id_type entityId)
 		{
-			return static_cast<component_handle<component_type>>(getComponent(entityId, typeHash<component_type>()));
+			return force_value_cast<component_handle<component_type>>(getComponent(entityId, typeHash<component_type>()));
 		}
 
 		component_handle_base getComponent(id_type entityId, id_type componentTypeId);
@@ -51,7 +51,7 @@ namespace args::core::ecs
 		template<typename component_type>
 		component_handle<component_type> createComponent(id_type entityId)
 		{
-			return *reinterpret_cast<component_handle<component_type>*>(&createComponent(entityId, typeHash<component_type>())); // Uhg why is working with so many templated types so sheit...
+			return force_value_cast<component_handle<component_type>>(createComponent(entityId, typeHash<component_type>()));
 		}
 
 		component_handle_base createComponent(id_type entityId, id_type componentTypeId);
@@ -65,6 +65,7 @@ namespace args::core::ecs
 		void destroyComponent(id_type entityId, id_type componentTypeId);
 
 		entity& createEntity();
+		void destroyEntity(id_type entityId);
 		entity& getEntity(id_type entityId);
 	};
 }
