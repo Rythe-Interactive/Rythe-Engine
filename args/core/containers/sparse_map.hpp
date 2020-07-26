@@ -54,37 +54,37 @@ namespace args::core
 		size_type m_capacity = 0;
 
 	public:
-		A_NODISCARD inline iterator begin() { return m_dense_value.begin(); }
-		A_NODISCARD inline const_iterator begin() const { return m_dense_value.cbegin(); }
+		A_NODISCARD iterator begin() { return m_dense.begin(); }
+		A_NODISCARD const_iterator begin() const { return m_dense.cbegin(); }
 
-		A_NODISCARD inline iterator end() { return m_dense_value.begin() + m_size; }
-		A_NODISCARD inline const_iterator end() const { return m_dense_value.cbegin() + m_size; }
+		A_NODISCARD iterator end() { return m_dense.begin() + m_size; }
+		A_NODISCARD const_iterator end() const { return m_dense.cbegin() + m_size; }
 
 		/**@brief Returns the amount of items in the sparse_map.
 		 * @returns size_type Current amount of items contained in sparse_map.
 		 */
-		A_NODISCARD inline size_type size() const noexcept { return m_size; }
+		A_NODISCARD size_type size() const noexcept { return m_size; }
 
 		/**@brief Returns the capacity of items the sparse_map could at least store without invalidating the iterators.
 		 * @returns size_type Current capacity of the dense container.
 		 */
-		A_NODISCARD inline size_type capacity() const noexcept { return m_capacity; }
+		A_NODISCARD size_type capacity() const noexcept { return m_capacity; }
 
 		/**@brief Returns whether the sparse_map is empty.
 		 * @returns bool True if the sparse_map is empty, otherwise false.
 		 */
-		A_NODISCARD inline bool empty() const noexcept { return m_size == 0; }
+		A_NODISCARD bool empty() const noexcept { return m_size == 0; }
 
 		/**@brief Clears sparse_map.
 		 * @note Will not update capacity.
 		 */
-		inline void clear() noexcept { m_size = 0; }
+		void clear() noexcept { m_size = 0; }
 
 		/**@brief Reserves space in dense container for more items.
 		 * @param size Amount of items to reserve space for (would be the new capacity).
 		 * @note Will update capacity if resize happened.
 		 */
-		inline void reserve(size_type size)
+		void reserve(size_type size)
 		{
 			if (size > m_capacity)
 			{
@@ -101,7 +101,7 @@ namespace args::core
 		 * @note Function is only available for compatibility reasons, it is adviced to use contains instead.
 		 * @ref args::core::sparse_map::contains
 		 */
-		A_NODISCARD inline size_type count(key_const_reference key) const
+		A_NODISCARD size_type count(key_const_reference key) const
 		{
 			return contains(key);
 		}
@@ -112,7 +112,7 @@ namespace args::core
 		 * @note Function is only available for compatibility reasons, it is adviced to use contains instead.
 		 * @ref args::core::sparse_map::contains
 		 */
-		A_NODISCARD inline size_type count(key_type&& key) const
+		A_NODISCARD size_type count(key_type&& key) const
 		{
 			return contains(key);
 		}
@@ -123,7 +123,7 @@ namespace args::core
 		 * @param key Key to check for.
 		 * @returns bool true if the key was found, otherwise false.
 		 */
-		A_NODISCARD inline bool contains(key_const_reference key)
+		A_NODISCARD bool contains(key_const_reference key)
 		{
 			return m_sparse[key] >= 0 && m_sparse[key] < m_size && m_dense_key[m_sparse[key]] == key;
 		}
@@ -132,7 +132,7 @@ namespace args::core
 		 * @param key Key to check for.
 		 * @returns bool true if the key was found, otherwise false.
 		 */
-		A_NODISCARD inline bool contains(key_type&& key)
+		A_NODISCARD bool contains(key_type&& key)
 		{
 			return m_sparse[key] >= 0 && m_sparse[key] < m_size && m_dense_key[m_sparse[key]] == key;
 		}
@@ -141,7 +141,7 @@ namespace args::core
 		 * @param key Key to check for.
 		 * @returns bool true if the key was found, otherwise false.
 		 */
-		A_NODISCARD inline bool contains(key_const_reference key) const
+		A_NODISCARD bool contains(key_const_reference key) const
 		{
 			return m_sparse.count(key) && m_sparse.at(key) >= 0 && m_sparse.at(key) < m_size && m_dense_key[m_sparse.at(key)] == key;
 		}
@@ -150,7 +150,7 @@ namespace args::core
 		 * @param key Key to check for.
 		 * @returns bool true if the key was found, otherwise false.
 		 */
-		A_NODISCARD inline bool contains(key_type&& key) const
+		A_NODISCARD bool contains(key_type&& key) const
 		{
 			return m_sparse.count(key) && m_sparse.at(key) >= 0 && m_sparse.at(key) < m_size && m_dense_key[m_sparse.at(key)] == key;
 		}
@@ -161,7 +161,7 @@ namespace args::core
 		 * @param val Value to find.
 		 * @returns Iterator to the value if found, otherwise end.
 		 */
-		A_NODISCARD inline iterator find(value_const_reference val)
+		A_NODISCARD iterator find(value_const_reference val)
 		{
 			return std::find(begin(), end(), val);
 		}
@@ -170,7 +170,7 @@ namespace args::core
 		 * @param val Value to find.
 		 * @returns Iterator to the value if found, otherwise end.
 		 */
-		A_NODISCARD inline const_iterator find(value_const_reference val) const
+		A_NODISCARD const_iterator find(value_const_reference val) const
 		{
 			return std::find(begin(), end(), val);
 		}
@@ -182,7 +182,7 @@ namespace args::core
 		 * @param val Value to insert and link to the key.
 		 * @returns std::pair<iterator, bool> Iterator at the location of the key and true if succeeded, end and false if it didn't succeed.
 		 */
-		inline std::pair<iterator, bool> insert(key_const_reference key, value_const_reference val)
+		std::pair<iterator, bool> insert(key_const_reference key, value_const_reference val)
 		{
 			if (!contains(key))
 			{
@@ -207,7 +207,7 @@ namespace args::core
 		 * @param val Value to insert and link to the key.
 		 * @returns std::pair<iterator, bool> Iterator at the location of the key and true if succeeded, end and false if it didn't succeed.
 		 */
-		inline std::pair<iterator, bool> insert(key_type&& key, value_const_reference val)
+		std::pair<iterator, bool> insert(key_type&& key, value_const_reference val)
 		{
 			if (!contains(key))
 			{
@@ -232,7 +232,7 @@ namespace args::core
 		 * @param val Value to insert and link to the key.
 		 * @returns std::pair<iterator, bool> Iterator at the location of the key and true if succeeded, end and false if it didn't succeed.
 		 */
-		inline std::pair<iterator, bool> insert(key_const_reference key, value_type&& val)
+		std::pair<iterator, bool> insert(key_const_reference key, value_type&& val)
 		{
 			if (!contains(key))
 			{
@@ -257,7 +257,7 @@ namespace args::core
 		 * @param val Value to insert and link to the key.
 		 * @returns std::pair<iterator, bool> Iterator at the location of the key and true if succeeded, end and false if it didn't succeed.
 		 */
-		inline std::pair<iterator, bool> insert(key_type&& key, value_type&& val)
+		std::pair<iterator, bool> insert(key_type&& key, value_type&& val)
 		{
 			if (!contains(key))
 			{
@@ -284,7 +284,7 @@ namespace args::core
 		 * @param arguments Arguments to pass to the item constructor.
 		 */
 		template<typename... Arguments>
-		inline std::pair<iterator, bool> emplace(key_const_reference key, Arguments&&... arguments)
+		std::pair<iterator, bool> emplace(key_const_reference key, Arguments&&... arguments)
 		{
 			if (!contains(key))
 			{
@@ -311,7 +311,7 @@ namespace args::core
 		 * @param arguments Arguments to pass to the item constructor.
 		 */
 		template<typename... Arguments>
-		inline std::pair<iterator, bool> emplace(key_type&& key, Arguments&&... arguments)
+		std::pair<iterator, bool> emplace(key_type&& key, Arguments&&... arguments)
 		{
 			if (!contains(key))
 			{
@@ -338,7 +338,7 @@ namespace args::core
 		/**@brief Returns item from sparse_map, inserts default value if it doesn't exist yet.
 		 * @param key Key value that needs to be retrieved.
 		 */
-		inline value_reference operator[](key_type&& key)
+		value_reference operator[](key_type&& key)
 		{
 			if (!contains(key))
 			{
@@ -362,7 +362,7 @@ namespace args::core
 		/**@brief Returns item from sparse_map, inserts default value if it doesn't exist yet.
 		 * @param key Key value that needs to be retrieved.
 		 */
-		inline value_reference operator[](key_const_reference key)
+		value_reference operator[](key_const_reference key)
 		{
 			if (!contains(key))
 			{
@@ -385,7 +385,7 @@ namespace args::core
 		/**@brief Returns const item from const sparse_map.
 		 * @param key Key value that needs to be retrieved.
 		 */
-		inline value_const_reference operator[](key_type&& key) const
+		value_const_reference operator[](key_type&& key) const
 		{
 			if (!contains(key))
 				throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
@@ -396,7 +396,7 @@ namespace args::core
 		/**@brief Returns const item from const sparse_map.
 		 * @param key Key value that needs to be retrieved.
 		 */
-		inline value_const_reference operator[](key_const_reference key) const
+		value_const_reference operator[](key_const_reference key) const
 		{
 			if (!contains(key))
 				throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
@@ -454,7 +454,7 @@ namespace args::core
 		/**@brief Erases item from sparse_map.
 		 * @param key Key value that needs to be erased.
 		 */
-		inline size_type erase(key_const_reference key)
+		size_type erase(key_const_reference key)
 		{
 			if (contains(key))
 			{
