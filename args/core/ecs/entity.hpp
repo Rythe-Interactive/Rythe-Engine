@@ -3,6 +3,10 @@
 #include <core/containers/sparse_set.hpp>
 #include <core/containers/sparse_map.hpp>
 
+/// <summary>
+/// TODO: entity::isvalid()
+/// </summary>
+
 namespace args::core::ecs
 {
 	class ARGS_API EcsRegistry;
@@ -16,30 +20,32 @@ namespace args::core::ecs
 	{
 		friend class EcsRegistry;
 	private:
-		id_type m_id;
-		EcsRegistry& m_registry;
-
-		id_type m_parent;
-		sparse_set<id_type> m_children;
-		sparse_map<id_type, id_type> m_components;
+		mutable id_type m_id;
+		EcsRegistry* m_registry;
 
 	public:
-		entity(id_type id, EcsRegistry& registry) : m_id(id), m_registry(registry), m_parent(invalid_id), m_children() {}
+		entity(id_type id, EcsRegistry* registry) : m_id(id) { m_registry = registry; }
+		entity() : m_id(invalid_id) { m_registry = nullptr; }
+		entity(const entity& other) : m_id(other.m_id) { m_registry = other.m_registry; }
+		entity& operator=(const entity& other);
 
-		operator id_type() const { return m_id; }
+		A_NODISCARD sparse_map<id_type, id_type>& component_composition();
 
-		A_NODISCARD sparse_set<id_type>::iterator begin() { return m_children.begin(); }
-		A_NODISCARD sparse_set<id_type>::const_iterator begin() const { return m_children.begin(); }
+		operator id_type() const { return get_id(); }
+		A_NODISCARD id_type get_id() const;
 
-		A_NODISCARD sparse_set<id_type>::iterator end() { return m_children.end(); }
-		A_NODISCARD sparse_set<id_type>::const_iterator end() const { return m_children.end(); }
+		A_NODISCARD sparse_map<id_type, entity>::iterator begin();
+		A_NODISCARD sparse_map<id_type, entity>::const_iterator begin() const;
 
-		A_NODISCARD id_type get_parent() { return m_parent; }
+		A_NODISCARD sparse_map<id_type, entity>::iterator end();
+		A_NODISCARD sparse_map<id_type, entity>::const_iterator end() const;
+
+		A_NODISCARD entity get_parent() const;
 		void set_parent(id_type newParent);
 
-		A_NODISCARD entity& operator[] (index_type index) const;
-		A_NODISCARD entity& get_child(index_type index) const;
-		A_NODISCARD size_type child_count() const { return m_children.size(); }
+		A_NODISCARD entity operator[] (index_type index) const;
+		A_NODISCARD entity get_child(index_type index) const;
+		A_NODISCARD size_type child_count() const;
 
 		void add_child(id_type childId);
 		void remove_child(id_type childId);
@@ -66,5 +72,7 @@ namespace args::core::ecs
 		}
 
 		void destroy();
+
+		bool valid() const;
 	};
 }

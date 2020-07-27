@@ -3,6 +3,7 @@
 #include <core/common/exception.hpp>
 #include <core/ecs/ecsregistry.hpp>
 #include <core/ecs/component_container.hpp>
+#include <core/ecs/entity.hpp>
 
 /**
  * @file component_handle.hpp
@@ -10,8 +11,6 @@
 
 namespace args::core::ecs
 {
-	class ARGS_API entity;
-
 	/**@class component_handle_base
 	 * @brief Base class of args::core::ecs::component_handle.
 	 * @ref args::core::ecs::component_handle.
@@ -20,7 +19,7 @@ namespace args::core::ecs
 	{
 	public:
 		// Entity that owns this component.
-		const entity& entity;
+		const entity entity;
 
 	protected:
 		EcsRegistry& m_registry;

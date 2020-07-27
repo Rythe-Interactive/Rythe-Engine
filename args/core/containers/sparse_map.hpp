@@ -54,6 +54,9 @@ namespace args::core
 		size_type m_capacity = 0;
 
 	public:
+		A_NODISCARD dense_value_container& dense() { return m_dense_value; }
+		A_NODISCARD const dense_value_container& dense() const { return m_dense_value; }
+
 		A_NODISCARD iterator begin() { return m_dense_value.begin(); }
 		A_NODISCARD const_iterator begin() const { return m_dense_value.cbegin(); }
 
@@ -153,6 +156,25 @@ namespace args::core
 		A_NODISCARD bool contains(key_type&& key) const
 		{
 			return m_sparse.count(key) && m_sparse.at(key) >= 0 && m_sparse.at(key) < m_size && m_dense_key[m_sparse.at(key)] == key;
+		}
+
+		/**@brief Checks if all keys in sparse_map are inside this map as well.
+		 * @param other Other sparse_map to check against.
+		 * @returns bool True if all keys in other are also in this sparse_map, otherwise false.
+		 */
+		A_NODISCARD bool contains(self_const_reference other) const
+		{
+			if (other.m_size == 0)
+				return true;
+
+			if (m_size == 0 || m_size < other.m_size)
+				return false;
+
+			bool overlap = true;
+			for (key_const_reference item : other.m_dense_key)
+				overlap = overlap && contains(item);
+
+			return overlap;
 		}
 #pragma endregion
 

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <chrono>
 
 #define ARGS_ENTRY
 #include <core/core.hpp>
@@ -61,7 +62,14 @@ void ARGS_CCONV reportModules(Engine* engine)
 
 	registry.reportComponentType<sah>();
 
-	ecs::entity& ent = registry.createEntity();
+	std::cout << "creating entity" << std::endl;
+
+	ecs::entity ent = registry.createEntity();
+
+	if (ent)
+		std::cout << "entity handle is valid" << std::endl;
+	else
+		std::cout << "entity handle is invalid" << std::endl;
 
 	std::cout << "creating component" << std::endl;
 	registry.createComponent<sah>(ent);
@@ -102,7 +110,27 @@ void ARGS_CCONV reportModules(Engine* engine)
 	else
 		std::cout << "entity does not have component" << std::endl;
 
+	std::cout << "creating component through entity handle" << std::endl;
+	ent.add_component<sah>();
+
+	if (sahHandle)
+		std::cout << "component handle is valid" << std::endl;
+	else
+		std::cout << "component handle is invalid" << std::endl;
+
+	std::cout << "destroying entity" << std::endl;
 	ent.destroy();
+
+	if (ent)
+		std::cout << "entity handle is valid" << std::endl;
+	else
+		std::cout << "entity handle is invalid" << std::endl;
+
+	if (sahHandle)
+		std::cout << "component handle is valid" << std::endl;
+	else
+		std::cout << "component handle is invalid" << std::endl;
+
 	/**@brief fix entity handling better. move hierarchy and component composition into registry and make entity a true handle.
 	 *		  this would allow you to check if the handle was still valid and also to have entity not be a pointer or reference type.
 	 */
