@@ -54,7 +54,7 @@ namespace args::core
 		using const_iterator = typename dense_value_container::const_iterator;
 
 	private:
-		async::readonly_rw_spinlock m_container_lock;
+		mutable async::readonly_rw_spinlock m_container_lock;
 
 		dense_value_container m_dense_value;
 		dense_key_container m_dense_key;
