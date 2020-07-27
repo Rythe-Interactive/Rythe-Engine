@@ -88,7 +88,7 @@ namespace args::core
 		{
 			if (size > m_capacity)
 			{
-		m_dense_value.resize(size);
+				m_dense_value.resize(size);
 				m_dense_key.resize(size);
 				m_capacity = size;
 			}
