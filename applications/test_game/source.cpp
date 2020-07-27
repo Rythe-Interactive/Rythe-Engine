@@ -4,84 +4,100 @@
 #include <core/core.hpp>
 
 
-#include "core/common/result.hpp"
+#include <core/common/result.hpp>
+using namespace args::core;
+
 #include "module/testModule.hpp"
 
 struct sah
 {
-	std::string value;
+	int value;
+
+	sah operator+(const sah& other)
+	{
+		return { value + other.value };
+	}
 };
 
-void ARGS_CCONV reportModules(args::core::Engine* engine)
+void ARGS_CCONV reportModules(Engine* engine)
 {
 	std::cout << "Hello Args!" << std::endl;
 	engine->reportModule<TestModule>();
 
-	std::cout << "_____________________________________________________" << std::endl;
-
-
-	args::core::sparse_map<int, sah> testMap;
-	int i = 46546;
-	int j = 3415687;
-	int k = 2648;
-	testMap[i] = { "Hi" };
-	testMap[j] = { "Hello" };
-	testMap[k] = { "Nah" };
-
-	std::cout << "i: " << i << ",\t" << testMap[i].value << std::endl;
-	std::cout << "j: " << j << ",\t" << testMap[j].value << std::endl;
-	std::cout << "k: " << k << ",\t" << testMap[k].value << std::endl;
-	std::cout << std::endl;
-
-
-	for (auto val : testMap)
+	try
 	{
-		std::cout << val.first << "\t" << val.second.value << std::endl;
+		throw args_component_destroyed_error;
 	}
-	std::cout << "i: " << testMap[i].value << std::endl;
-	std::cout << "j: " << testMap[j].value << std::endl;
-	std::cout << "k: " << testMap[k].value << std::endl;
-	std::cout << std::endl;
-
-	std::cout << "erase j" << std::endl;
-	testMap.erase(j);
-
-	for (auto val : testMap)
+	catch (exception e)
 	{
-		std::cout << val.first << "\t" << val.second.value << std::endl;
+		std::cout << e.what() << std::endl;
+		std::cout << e.get_file() << std::endl;
+		std::cout << e.get_line() << std::endl;
+		std::cout << e.get_func() << std::endl;
 	}
-	std::cout << "i: " << testMap[i].value << std::endl;
-	std::cout << "j: " << testMap[j].value << std::endl;
-	std::cout << "k: " << testMap[k].value << std::endl;
 
-	std::cout << std::endl;
+	atomic_sparse_map<string, int> testMap;
 
-	std::cout << "clear" << std::endl;
-	testMap.clear();
+	testMap["Hello"]->store(45, std::memory_order_relaxed);
 
-	if (testMap.empty())
-		std::cout << "map is now empty" << std::endl;
+	if (testMap.contains("Hello"))
+		std::cout << "testMap contains \"Hello\" with value: " << testMap["Hello"]->load(std::memory_order_relaxed) << std::endl;
+	else
+		std::cout << "testMap does not contain \"Hello\"" << std::endl;
 
-	for (auto val : testMap)
+	try
 	{
-		std::cout << val.first << "\t" << val.second.value << std::endl;
+		testMap.erase("Hello");
 	}
-	std::cout << "i: " << testMap[i].value << std::endl;
-	std::cout << "j: " << testMap[j].value << std::endl;
-	std::cout << "k: " << testMap[k].value << std::endl;
-
-	std::cout << std::endl;
-
-	std::cout << "add k" << std::endl;
-	testMap[k] = { "Nah" };
-
-	for (auto val : testMap)
+	catch (std::exception e)
 	{
-		std::cout << val.first << "\t" << val.second.value << std::endl;
+		std::cout << e.what() << std::endl;
 	}
-	std::cout << "i: " << testMap[i].value << std::endl;
-	std::cout << "j: " << testMap[j].value << std::endl;
-	std::cout << "k: " << testMap[k].value << std::endl;
+
+	if (testMap.contains("Hello"))
+		std::cout << "testMap contains \"Hello\" with value: " << testMap["Hello"]->load(std::memory_order_relaxed) << std::endl;
+	else
+		std::cout << "testMap does not contain \"Hello\"" << std::endl;
+
+	ecs::EcsRegistry registry;
+
+	registry.reportComponentType<sah>();
+
+	ecs::entity& ent = registry.createEntity();
+
+	std::cout << "creating component" << std::endl;
+	registry.createComponent<sah>(ent);
+
+	if (ent.has_component<sah>())
+		std::cout << "entity has component" << std::endl;
+	else
+		std::cout << "entity does not have component" << std::endl;
+
+	ecs::component_handle<sah> sahHandle = ent.get_component<sah>();
+
+	if (sahHandle)
+		std::cout << "component handle is valid" << std::endl;
+	else
+		std::cout << "component handle is invalid" << std::endl;
+
+	std::cout << "component value is: " << sahHandle.read().value << std::endl;
+
+	std::cout << "setting component value to 789" << std::endl;
+	sahHandle.write({ 789 });
+	std::cout << "component value is: " << sahHandle.read().value << std::endl;
+
+	std::cout << "performing fetch_add 1" << std::endl;
+
+	sahHandle.fetch_add({ 1 });
+	std::cout << "component value is: " << sahHandle.read().value << std::endl;
+
+	std::cout << "destroying component" << std::endl;
+	registry.destroyComponent<sah>(ent);
+
+	if (sahHandle)
+		std::cout << "component handle is valid" << std::endl;
+	else
+		std::cout << "component handle is invalid" << std::endl;
 
 	std::cout << "_____________________________________________________" << std::endl;
 
@@ -98,4 +114,8 @@ void ARGS_CCONV reportModules(args::core::Engine* engine)
 	
 
 	std::cout << "_____________________________________________________" << std::endl;
+	if (ent.has_component<sah>())
+		std::cout << "entity has component" << std::endl;
+	else
+		std::cout << "entity does not have component" << std::endl;
 }
