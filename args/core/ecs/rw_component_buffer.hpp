@@ -2,7 +2,7 @@
 #include <core/common/exception.hpp>
 #include <core/types/types.hpp>
 #include <core/ecs/ecsregistry.hpp>
-#include <core/ecs/entity.hpp>
+#include <core/ecs/entity_handle.hpp>
 #include <core/ecs/component_handle.hpp>
 #include <core/ecs/component_container.hpp>
 #include <core/async/transferable_atomic.hpp>

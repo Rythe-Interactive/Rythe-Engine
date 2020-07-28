@@ -4,7 +4,7 @@
 #include <core/containers/sparse_map.hpp>
 
 /**
- * @file entity.hpp
+ * @file entity_handle.hpp
  */
 
 namespace args::core::ecs
@@ -16,12 +16,12 @@ namespace args::core::ecs
 	template<typename component_type>
 	class component_handle;
 
-	/**@class entity
+	/**@class entity_handle
 	 * @brief Serializable handle for executing operations on entities.
 	 *		  This class only stores a reference to the registry and the id of the entity.
 	 */
 
-	class ARGS_API entity
+	class ARGS_API entity_handle
 	{
 		friend class EcsRegistry;
 	private:
@@ -31,22 +31,22 @@ namespace args::core::ecs
 	public:
 		/**@brief Main constructor for constructing a valid entity handle.
 		 */
-		entity(id_type id, EcsRegistry* registry) : m_id(id) { m_registry = registry; }
+		entity_handle(id_type id, EcsRegistry* registry) : m_id(id) { m_registry = registry; }
 
 		/**@brief Constructor for constructing an invalid entity handle.
 		 * @note Should only be used to create temporary handles. Allows use of entity handle in containers together with copy constructor.
 		 */
-		entity() : m_id(invalid_id) { m_registry = nullptr; }
+		entity_handle() : m_id(invalid_id) { m_registry = nullptr; }
 
 		/**@brief Copy constructor (DOES NOT CREATE NEW ENTITY, both handles will reference the same entity).
 		 * @note Allows use of entity handle in containers together with default invalid entity constructor.
 		 */
-		entity(const entity& other) : m_id(other.m_id) { m_registry = other.m_registry; }
+		entity_handle(const entity_handle& other) : m_id(other.m_id) { m_registry = other.m_registry; }
 
 		/**@brief Copy assignment. Exists for the same reasons as the copy constructor.
-		 * @ref args::core::ecs::entity::entity(const args::core::ecs::entity& other)
+		 * @ref args::core::ecs::entity_handle::entity_handle(const args::core::ecs::entity& other)
 		 */
-		entity& operator=(const entity& other);
+		entity_handle& operator=(const entity_handle& other);
 
 		/**@brief Returns the type id's of the components this entity contains.
 		 * @returns sparse_map<id_type, id_type>& Sparse map with component type id as both the key as well as the value. (behaves as sparse_set with hash table)
@@ -69,32 +69,32 @@ namespace args::core::ecs
 		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
 		 * @throws args_entity_not_found_error Thrown when handle's id is invalid.
 		 */
-		A_NODISCARD sparse_map<id_type, entity>::iterator begin();
+		A_NODISCARD sparse_map<id_type, entity_handle>::iterator begin();
 
 		/**@brief Const iterator to first child entity. (dereferences to entity handle)
 		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
 		 * @throws args_entity_not_found_error Thrown when handle's id is invalid.
 		 */
-		A_NODISCARD sparse_map<id_type, entity>::const_iterator begin() const;
+		A_NODISCARD sparse_map<id_type, entity_handle>::const_iterator begin() const;
 
 		/**@brief Iterator to last child entity. (dereferences to entity handle)
 		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
 		 * @throws args_entity_not_found_error Thrown when handle's id is invalid.
 		 */
-		A_NODISCARD sparse_map<id_type, entity>::iterator end();
+		A_NODISCARD sparse_map<id_type, entity_handle>::iterator end();
 
 		/**@brief Const iterator to last child entity. (dereferences to entity handle)
 		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
 		 * @throws args_entity_not_found_error Thrown when handle's id is invalid.
 		 */
-		A_NODISCARD sparse_map<id_type, entity>::const_iterator end() const;
+		A_NODISCARD sparse_map<id_type, entity_handle>::const_iterator end() const;
 
 		/**@brief Returns entity handle to parent entity.
-		 * @returns entity Entity handle that either points to the parent entity or is invalid if the entity doesn't have a parent.
+		 * @returns entity_handle Entity handle that either points to the parent entity or is invalid if the entity doesn't have a parent.
 		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
 		 * @throws args_entity_not_found_error Thrown when handle's id is invalid.
 		 */
-		A_NODISCARD entity get_parent() const;
+		A_NODISCARD entity_handle get_parent() const;
 
 		/**@brief Set parent of entity.
 		 * @param newParent Id of the entity you wish to set as the parent. (invalid_id if you wish to remove parent)
@@ -109,14 +109,14 @@ namespace args::core::ecs
 		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
 		 * @throws args_entity_not_found_error Thrown when handle's id is invalid.
 		 */
-		A_NODISCARD entity operator[] (index_type index) const;
+		A_NODISCARD entity_handle operator[] (index_type index) const;
 
 		/**@brief Get child of the entity at a certain index.
 		 * @throws std::out_of_range Thrown when index is more than or equal to the child count.
 		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
 		 * @throws args_entity_not_found_error Thrown when handle's id is invalid.
 		 */
-		A_NODISCARD entity get_child(index_type index) const;
+		A_NODISCARD entity_handle get_child(index_type index) const;
 
 		/**@brief Get amount of children the referenced entity has.
 		 * @returns size_type

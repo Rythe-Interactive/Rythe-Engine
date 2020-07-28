@@ -3,7 +3,7 @@
 #include <core/common/exception.hpp>
 #include <core/ecs/ecsregistry.hpp>
 #include <core/ecs/component_container.hpp>
-#include <core/ecs/entity.hpp>
+#include <core/ecs/entity_handle.hpp>
 
 /**
  * @file component_handle.hpp
@@ -19,14 +19,14 @@ namespace args::core::ecs
 	{
 	public:
 		// Entity that owns this component.
-		const entity entity;
+		const entity_handle entity_handle;
 
 	protected:
 		EcsRegistry& m_registry;
 		id_type m_ownerId;
 
 	public:
-		component_handle_base(id_type entityId, EcsRegistry& registry) : entity(registry.getEntity(entityId)), m_registry(registry), m_ownerId(entityId) {}
+		component_handle_base(id_type entityId, EcsRegistry& registry) : entity_handle(registry.getEntity(entityId)), m_registry(registry), m_ownerId(entityId) {}
 
 		/**@brief Checks if handle still points to a valid component.
 		 */

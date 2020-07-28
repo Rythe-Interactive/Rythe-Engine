@@ -8,9 +8,13 @@
 #include <core/ecs/component_container.hpp>
 #include <core/ecs/queryregistry.hpp>
 
+/**
+ * @file ecsregistry.hpp
+ */
+
 namespace args::core::ecs
 {
-	class entity;
+	class entity_handle;
 
 	class component_handle_base;
 
@@ -20,7 +24,7 @@ namespace args::core::ecs
 	struct entity_data
 	{
 		id_type parent;
-		sparse_map<id_type, entity> children;
+		sparse_map<id_type, entity_handle> children;
 		sparse_map<id_type, id_type> components;
 	};
 
@@ -30,7 +34,7 @@ namespace args::core::ecs
 		static id_type m_lastEntityId;
 		sparse_map<id_type, component_container_base*> m_families;
 		sparse_map<id_type, entity_data> m_entityData;
-		sparse_map<id_type, entity> m_entities;
+		sparse_map<id_type, entity_handle> m_entities;
 		QueryRegistry m_queryRegistry;
 
 		void recursiveDestroyEntityInternal(id_type entityId);
@@ -79,15 +83,15 @@ namespace args::core::ecs
 
 		A_NODISCARD bool validateEntity(id_type entityId);
 
-		entity createEntity();
+		entity_handle createEntity();
 
 		void destroyEntity(id_type entityId, bool recurse = true);
 
-		A_NODISCARD entity getEntity(id_type entityId);
+		A_NODISCARD entity_handle getEntity(id_type entityId);
 
 		A_NODISCARD entity_data& getEntityData(id_type entityId);
 
-		A_NODISCARD sparse_map<id_type, entity>& getEntities();
+		A_NODISCARD sparse_map<id_type, entity_handle>& getEntities();
 
 		template<typename... component_types>
 		A_NODISCARD EntityQuery createQuery()

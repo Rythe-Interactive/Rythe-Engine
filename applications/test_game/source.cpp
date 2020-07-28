@@ -44,7 +44,7 @@ void ARGS_CCONV reportModules(Engine* engine)
 
 	std::cout << "creating entity" << std::endl;
 
-	ecs::entity ent = registry.createEntity();
+	ecs::entity_handle ent = registry.createEntity();
 
 	if (ent)
 		std::cout << "entity handle is valid" << std::endl;
@@ -86,15 +86,15 @@ void ARGS_CCONV reportModules(Engine* engine)
 
 	std::cout << "iterating over query" << std::endl;
 	bool found = false;
-	for (ecs::entity entity : query)
+	for (ecs::entity_handle entity_handle : query)
 	{
-		if (entity == ent)
+		if (entity_handle == ent)
 		{
 			found = true;
 			std::cout << "our entity handle was found" << std::endl;
 		}
 
-		std::cout << "found entity with id: " << entity.get_id() << std::endl;
+		std::cout << "found entity with id: " << entity_handle.get_id() << std::endl;
 	}
 
 	if(!found)
@@ -117,15 +117,15 @@ void ARGS_CCONV reportModules(Engine* engine)
 
 	std::cout << "iterating over query" << std::endl;
 	found = false;
-	for (ecs::entity entity : query)
+	for (ecs::entity_handle entity_handle : query)
 	{
-		if (entity == ent)
+		if (entity_handle == ent)
 		{
 			found = true;
 			std::cout << "our entity handle was found" << std::endl;
 		}
 
-		std::cout << "found entity with id: " << entity.get_id() << std::endl;
+		std::cout << "found entity with id: " << entity_handle.get_id() << std::endl;
 	}
 
 	if (!found)

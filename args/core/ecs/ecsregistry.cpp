@@ -1,5 +1,5 @@
 #include <core/ecs/ecsregistry.hpp>
-#include <core/ecs/entity.hpp>
+#include <core/ecs/entity_handle.hpp>
 #include <core/ecs/component_container.hpp>
 #include <core/ecs/component_handle.hpp>
 
@@ -19,7 +19,7 @@ namespace args::core::ecs
 			m_families[componentTypeId]->destroy_component(entityId);
 
 
-		for (entity child : data.children)
+		for (entity_handle child : data.children)
 			recursiveDestroyEntityInternal(child);
 
 
@@ -81,7 +81,7 @@ namespace args::core::ecs
 		return m_entities.contains(entityId);
 	}
 
-	inline entity EcsRegistry::createEntity()
+	inline entity_handle EcsRegistry::createEntity()
 	{
 		id_type id = m_lastEntityId++;
 
@@ -106,7 +106,7 @@ namespace args::core::ecs
 
 		m_entities[entityId].set_parent(invalid_id);
 
-		for (entity& child : data.children)
+		for (entity_handle& child : data.children)
 			if (recurse)
 				recursiveDestroyEntityInternal(child);
 			else
@@ -118,10 +118,10 @@ namespace args::core::ecs
 		m_queryRegistry.markEntityDestruction(entityId);
 	}
 
-	A_NODISCARD inline entity EcsRegistry::getEntity(id_type entityId)
+	A_NODISCARD inline entity_handle EcsRegistry::getEntity(id_type entityId)
 	{
 		if (!validateEntity(entityId))
-			return entity(invalid_id, this);
+			return entity_handle(invalid_id, this);
 
 		return m_entities[entityId];
 	}
@@ -139,7 +139,7 @@ namespace args::core::ecs
 		return data;
 	}
 
-	A_NODISCARD inline sparse_map<id_type, entity>& EcsRegistry::getEntities()
+	A_NODISCARD inline sparse_map<id_type, entity_handle>& EcsRegistry::getEntities()
 	{
 		return m_entities;
 	}

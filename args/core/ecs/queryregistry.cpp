@@ -1,6 +1,6 @@
 #include <core/ecs/queryregistry.hpp>
 #include <core/ecs/ecsregistry.hpp>
-#include <core/ecs/entity.hpp>
+#include <core/ecs/entity_handle.hpp>
 #include <core/ecs/entityquery.hpp>
 #include <algorithm>
 
@@ -10,12 +10,12 @@ namespace args::core::ecs
 	{
 		m_componentTypes[queryId].insert(componentTypeId, componentTypeId);
 
-		sparse_map<id_type, entity>& entities = m_registry.getEntities();
+		sparse_map<id_type, entity_handle>& entities = m_registry.getEntities();
 		for (id_type entityId : entities.keys())
 		{
-			entity& entity = entities[entityId];
-			if (entity.component_composition().contains(m_componentTypes[queryId]))
-				m_entityLists[queryId].insert(entityId, entity);
+			entity_handle& entity_handle = entities[entityId];
+			if (entity_handle.component_composition().contains(m_componentTypes[queryId]))
+				m_entityLists[queryId].insert(entityId, entity_handle);
 		}
 	}
 
@@ -52,9 +52,9 @@ namespace args::core::ecs
 			}
 			else
 			{
-				entity entity = m_registry.getEntity(entityId);
-				if (entity.component_composition().contains(m_componentTypes[i]))
-					m_entityLists[i].insert(entityId, entity);
+				entity_handle entity_handle = m_registry.getEntity(entityId);
+				if (entity_handle.component_composition().contains(m_componentTypes[i]))
+					m_entityLists[i].insert(entityId, entity_handle);
 			}
 		}
 	}
@@ -106,14 +106,14 @@ namespace args::core::ecs
 
 		m_componentTypes.insert(queryId, componentMap);
 
-		for (entity& entity : m_registry.getEntities())
-			if (entity.component_composition().contains(m_componentTypes[queryId]))
-				m_entityLists[queryId].insert(entity, entity);
+		for (entity_handle& entity_handle : m_registry.getEntities())
+			if (entity_handle.component_composition().contains(m_componentTypes[queryId]))
+				m_entityLists[queryId].insert(entity_handle, entity_handle);
 
 		return queryId;
 	}
 
-	inline sparse_map<id_type, entity>& QueryRegistry::getEntities(id_type queryId)
+	inline sparse_map<id_type, entity_handle>& QueryRegistry::getEntities(id_type queryId)
 	{
 		return m_entityLists.get(queryId);
 	}

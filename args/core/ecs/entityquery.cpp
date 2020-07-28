@@ -1,23 +1,23 @@
 #include <core/ecs/entityquery.hpp>
 #include <core/ecs/queryregistry.hpp>
 #include <core/ecs/ecsregistry.hpp>
-#include <core/ecs/entity.hpp>
+#include <core/ecs/entity_handle.hpp>
 
 namespace args::core::ecs
 {
-	sparse_map<id_type, entity>::iterator EntityQuery::begin()
+	sparse_map<id_type, entity_handle>::iterator EntityQuery::begin()
 	{
 		return m_registry.getEntities(m_id).begin();
 	}
-	sparse_map<id_type, entity>::const_iterator EntityQuery::begin() const
+	sparse_map<id_type, entity_handle>::const_iterator EntityQuery::begin() const
 	{
 		return m_registry.getEntities(m_id).begin();
 	}
-	sparse_map<id_type, entity>::iterator EntityQuery::end()
+	sparse_map<id_type, entity_handle>::iterator EntityQuery::end()
 	{
 		return m_registry.getEntities(m_id).end();
 	}
-	sparse_map<id_type, entity>::const_iterator EntityQuery::end() const
+	sparse_map<id_type, entity_handle>::const_iterator EntityQuery::end() const
 	{
 		return m_registry.getEntities(m_id).end();
 	}
@@ -59,7 +59,7 @@ namespace args::core::ecs
 			m_registry.removeComponentType(m_id, componentTypeId);
 	}
 
-	inline entity EntityQuery::operator[](size_type index)
+	inline entity_handle EntityQuery::operator[](size_type index)
 	{
 		return m_ecsRegistry.getEntity(m_registry.getEntities(m_id).dense()[index]);
 	}

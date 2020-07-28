@@ -6,14 +6,14 @@
 namespace args::core::ecs
 {
 	class ARGS_API EcsRegistry;
-	class ARGS_API entity;
+	class ARGS_API entity_handle;
 	class ARGS_API EntityQuery;
 
 	class ARGS_API QueryRegistry
 	{
 	private:
 		EcsRegistry& m_registry;
-		sparse_map<id_type, sparse_map<id_type, entity>> m_entityLists;
+		sparse_map<id_type, sparse_map<id_type, entity_handle>> m_entityLists;
 		sparse_map<id_type, size_type> m_references;
 		sparse_map<id_type, sparse_map<id_type, id_type>> m_componentTypes;
 
@@ -44,7 +44,7 @@ namespace args::core::ecs
 
 		id_type addQuery(const sparse_map<id_type, id_type>::dense_value_container& componentTypes);
 
-		sparse_map<id_type, entity>& getEntities(id_type queryId);
+		sparse_map<id_type, entity_handle>& getEntities(id_type queryId);
 
 		void addReference(id_type queryId);
 		void removeReference(id_type queryId);

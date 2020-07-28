@@ -8,7 +8,7 @@ namespace args::core::ecs
 {
 	class ARGS_API QueryRegistry;
 	class ARGS_API EcsRegistry;
-	class ARGS_API entity;
+	class ARGS_API entity_handle;
 
 	class ARGS_API EntityQuery
 	{
@@ -20,10 +20,10 @@ namespace args::core::ecs
 	public:
 		EntityQuery(id_type id, QueryRegistry& registry, EcsRegistry& ecsRegistry) : m_registry(registry), m_ecsRegistry(ecsRegistry), m_id(id) {}
 
-		sparse_map<id_type, entity>::iterator begin();
-		sparse_map<id_type, entity>::const_iterator begin() const;
-		sparse_map<id_type, entity>::iterator end();
-		sparse_map<id_type, entity>::const_iterator end() const;
+		sparse_map<id_type, entity_handle>::iterator begin();
+		sparse_map<id_type, entity_handle>::const_iterator begin() const;
+		sparse_map<id_type, entity_handle>::iterator end();
+		sparse_map<id_type, entity_handle>::const_iterator end() const;
 
 		template<typename component_type>
 		void addComponentType() { addComponentType(typeHash<component_type>()); }
@@ -35,7 +35,7 @@ namespace args::core::ecs
 
 		void removeComponentType(id_type componentTypeId);
 
-		entity operator[](size_type index);
+		entity_handle operator[](size_type index);
 
 		size_type size();
 	};
