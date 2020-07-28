@@ -5,22 +5,31 @@
 
 namespace args::core::ecs
 {
+	EntityQuery::~EntityQuery()
+	{
+		m_registry.removeReference(m_id);
+	}
+
 	sparse_map<id_type, entity_handle>::iterator EntityQuery::begin()
 	{
 		return m_registry.getEntities(m_id).begin();
 	}
+
 	sparse_map<id_type, entity_handle>::const_iterator EntityQuery::begin() const
 	{
 		return m_registry.getEntities(m_id).begin();
 	}
+
 	sparse_map<id_type, entity_handle>::iterator EntityQuery::end()
 	{
 		return m_registry.getEntities(m_id).end();
 	}
+
 	sparse_map<id_type, entity_handle>::const_iterator EntityQuery::end() const
 	{
 		return m_registry.getEntities(m_id).end();
 	}
+
 	inline void EntityQuery::addComponentType(id_type componentTypeId)
 	{
 		std::vector<id_type> componentTypes;

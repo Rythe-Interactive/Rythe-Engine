@@ -6,7 +6,7 @@
 namespace args::core::ecs
 {
 	// 2 because the world entity is 1 and 0 is invalid_id
-	id_type EcsRegistry::m_lastEntityId = 2;
+	id_type EcsRegistry::m_nextEntityId = 2;
 
 	void EcsRegistry::recursiveDestroyEntityInternal(id_type entityId)
 	{
@@ -78,12 +78,12 @@ namespace args::core::ecs
 
 	A_NODISCARD inline bool EcsRegistry::validateEntity(id_type entityId)
 	{
-		return m_entities.contains(entityId);
+		return entityId && m_entities.contains(entityId);
 	}
 
 	inline entity_handle EcsRegistry::createEntity()
 	{
-		id_type id = m_lastEntityId++;
+		id_type id = m_nextEntityId++;
 
 		if (validateEntity(id))
 			throw args_entity_exists_error;

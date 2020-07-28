@@ -19,6 +19,7 @@ namespace args::core::ecs
 
 	public:
 		EntityQuery(id_type id, QueryRegistry& registry, EcsRegistry& ecsRegistry) : m_registry(registry), m_ecsRegistry(ecsRegistry), m_id(id) {}
+		~EntityQuery();
 
 		sparse_map<id_type, entity_handle>::iterator begin();
 		sparse_map<id_type, entity_handle>::const_iterator begin() const;
