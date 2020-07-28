@@ -44,6 +44,10 @@ namespace args::core::filesystem{
         A_NODISCARD file_traits resolve(const std::string& path) noexcept;
 
 
+        /** @brief sets the identifier of the filesystem 
+         *  @note if this filesystem is nested it should be the path to the root of the fs otherwise it can be arbitrary
+         *  @param [in] ident the identifier of the filesystem 
+         */
         void set_identifier(const std::string& ident) { m_identifier = ident;}
 
 

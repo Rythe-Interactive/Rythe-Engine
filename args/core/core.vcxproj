@@ -105,6 +105,7 @@
     <ClInclude Include="common\exception.hpp" />
     <ClInclude Include="containers\atomic_sparse_map.hpp" />
     <ClInclude Include="containers\containers.hpp" />
+    <ClInclude Include="containers\data_view.hpp" />
     <ClInclude Include="containers\sparse_map.hpp" />
     <ClInclude Include="containers\sparse_set.hpp" />
     <ClInclude Include="core.hpp" />
@@ -140,6 +141,7 @@
     <ClCompile Include="ecs\entity.cpp" />
     <ClCompile Include="engine\engine.cpp" />
     <ClCompile Include="engine\module.cpp" />
+    <ClCompile Include="filesystem\artifact_cache.cpp" />
     <ClCompile Include="filesystem\detail\strpath_manip.cpp" />
     <ClCompile Include="filesystem\filesystem_resolver.cpp" />
     <ClCompile Include="filesystem\mem_filesystem_resolver.cpp" />
