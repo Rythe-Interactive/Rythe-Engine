@@ -8,6 +8,27 @@ namespace args::core::ecs
 	// 2 because the world entity is 1 and 0 is invalid_id
 	id_type EcsRegistry::m_lastEntityId = 2;
 
+	void EcsRegistry::recursiveDestroyEntityInternal(id_type entityId)
+	{
+		if (!validateEntity(entityId))
+			throw args_entity_not_found_error;
+
+		entity_data& data = m_entityData[entityId];
+
+		for (id_type componentTypeId : data.components)
+			m_families[componentTypeId]->destroy_component(entityId);
+
+
+		for (entity child : data.children)
+			recursiveDestroyEntityInternal(child);
+
+
+		m_entityData.erase(entityId);
+		m_entities.erase(entityId);
+
+		m_queryRegistry.markEntityDestruction(entityId);
+	}
+
 	EcsRegistry::EcsRegistry() : m_families(), m_entityData(), m_entities(), m_queryRegistry(*this)
 	{
 		// Create world entity.
@@ -25,9 +46,10 @@ namespace args::core::ecs
 
 	inline component_handle_base EcsRegistry::getComponent(id_type entityId, id_type componentTypeId)
 	{
-		if (getEntity(entityId).has_component(componentTypeId))
-			return component_handle_base(entityId, *this);
-		return component_handle_base(invalid_id, *this);
+		if (!validateEntity(entityId))
+			throw args_entity_not_found_error;
+
+		return component_handle_base(entityId, *this);
 	}
 
 	inline component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId)
@@ -72,13 +94,23 @@ namespace args::core::ecs
 		return m_entities[id];
 	}
 
-	inline void EcsRegistry::destroyEntity(id_type entityId)
+	inline void EcsRegistry::destroyEntity(id_type entityId, bool recurse)
 	{
 		if (!validateEntity(entityId))
 			throw args_entity_not_found_error;
 
-		for (id_type componentTypeId : m_entityData[entityId].components)
+		entity_data& data = m_entityData[entityId];
+
+		for (id_type componentTypeId : data.components)
 			m_families[componentTypeId]->destroy_component(entityId);
+
+		m_entities[entityId].set_parent(invalid_id);
+
+		for (entity& child : data.children)
+			if (recurse)
+				recursiveDestroyEntityInternal(child);
+			else
+				child.set_parent(invalid_id);
 
 		m_entityData.erase(entityId);
 		m_entities.erase(entityId);
@@ -99,11 +131,16 @@ namespace args::core::ecs
 		if (!validateEntity(entityId))
 			throw args_entity_not_found_error;
 
-		return m_entityData[entityId];
+		entity_data& data = m_entityData[entityId];
+
+		if (data.parent && !validateEntity(data.parent))
+			data.parent = invalid_id;
+
+		return data;
 	}
 
-	A_NODISCARD inline sparse_map<id_type, entity>::dense_value_container& EcsRegistry::getEntities()
+	A_NODISCARD inline sparse_map<id_type, entity>& EcsRegistry::getEntities()
 	{
-		return m_entities.dense();
+		return m_entities;
 	}
 }

@@ -27,7 +27,7 @@ void ARGS_CCONV reportModules(Engine* engine)
 	{
 		throw args_component_destroyed_error;
 	}
-	catch (exception e)
+	catch (const exception& e)
 	{
 		std::cout << e.what() << std::endl;
 		std::cout << e.get_file() << std::endl;

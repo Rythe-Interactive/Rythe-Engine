@@ -30,7 +30,7 @@ namespace args::core::ecs
 
 		/**@brief Checks if handle still points to a valid component.
 		 */
-		virtual bool valid() ARGS_IMPURE_RETURN(m_ownerId != invalid_id);
+		virtual bool valid() ARGS_IMPURE_RETURN(m_ownerId);
 
 		/**@brief Checks if handle still points to a valid component.
 		 */
@@ -55,6 +55,9 @@ namespace args::core::ecs
 		 */
 		component_type read(std::memory_order order = std::memory_order_acquire)
 		{
+			if (!valid())
+				throw args_invalid_component_error;
+
 			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
 			if (!comp)
 				throw args_component_destroyed_error;
@@ -69,6 +72,9 @@ namespace args::core::ecs
 		 */
 		component_type write(component_type&& value, std::memory_order order = std::memory_order_release)
 		{
+			if (!valid())
+				throw args_invalid_component_error;
+
 			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
 			if (!comp)
 				throw args_component_destroyed_error;
@@ -90,6 +96,9 @@ namespace args::core::ecs
 			std::memory_order successOrder = std::memory_order_release,
 			std::memory_order failureOrder = std::memory_order_relaxed)
 		{
+			if (!valid())
+				throw args_invalid_component_error;
+
 			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
 			if (!comp)
 				throw args_component_destroyed_error;
@@ -116,6 +125,9 @@ namespace args::core::ecs
 			std::memory_order successOrder = std::memory_order_release,
 			std::memory_order failureOrder = std::memory_order_relaxed)
 		{
+			if (!valid())
+				throw args_invalid_component_error;
+
 			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
 			if (!comp)
 				throw args_component_destroyed_error;
@@ -133,13 +145,19 @@ namespace args::core::ecs
 		/**@brief Locks component family and destroys component.
 		 * @ref args::core::ecs::component_container::destroy_component
 		 */
-		void destroy() { m_registry.destroyComponent<component_type>(m_ownerId); }
+		void destroy()
+		{
+			if (!valid())
+				throw args_invalid_component_error;
+
+			m_registry.destroyComponent<component_type>(m_ownerId);
+		}
 
 		/**@brief Checks if handle still points to a valid component.
 		 */
 		virtual bool valid() override
 		{
-			return m_ownerId != invalid_id && m_registry.getFamily<component_type>()->get_component(m_ownerId);
+			return m_ownerId && m_registry.getFamily<component_type>()->has_component(m_ownerId);
 		}
 	};
 }

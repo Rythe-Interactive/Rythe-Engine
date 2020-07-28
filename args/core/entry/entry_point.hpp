@@ -12,23 +12,44 @@
  */
 
 
-/**@brief Reports engine modules to the engine, must be implemented by you.
- * @param [in] engine The engine object as ptr *
- * @ref args::core::Engine::reportModule<T,...>()
- */
+ /**@brief Reports engine modules to the engine, must be implemented by you.
+  * @param [in] engine The engine object as ptr *
+  * @ref args::core::Engine::reportModule<T,...>()
+  */
 extern void reportModules(args::core::Engine* engine);
 
 #ifdef ARGS_ENTRY
 int main(int argc, char** argv)
 {
-	args::core::Engine engine;
-	reportModules(&engine);
+#ifndef _DEBUG
+	try
+	{
+#endif // DEBUG
 
-	engine.init();
+		args::core::Engine engine;
+		reportModules(&engine);
+
+		engine.init();
 
 #ifdef _DEBUG
-	std::cin.ignore().get();
+		std::cin.ignore().get();
+#else
+	}
+	catch (const args::core::exception& e)
+	{
+		std::cout << "Encountered exception:" << std::endl;
+		std::cout << "  msg:     \t" << e.what() << std::endl;
+		std::cout << "  file:    \t" << e.get_file() << std::endl;
+		std::cout << "  line:    \t" << e.get_line() << std::endl;
+		std::cout << "  function:\t" << e.get_func() << std::endl;
+		std::cin.ignore().get();
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
 #endif // DEBUG
+
 	return 0;
 }
 #endif

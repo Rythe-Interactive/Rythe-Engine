@@ -33,6 +33,8 @@ namespace args::core::ecs
 		sparse_map<id_type, entity> m_entities;
 		QueryRegistry m_queryRegistry;
 
+		void recursiveDestroyEntityInternal(id_type entityId);
+
 	public:
 		EcsRegistry();
 
@@ -79,13 +81,13 @@ namespace args::core::ecs
 
 		entity createEntity();
 
-		void destroyEntity(id_type entityId);
+		void destroyEntity(id_type entityId, bool recurse = true);
 
 		A_NODISCARD entity getEntity(id_type entityId);
 
 		A_NODISCARD entity_data& getEntityData(id_type entityId);
 
-		A_NODISCARD sparse_map<id_type, entity>::dense_value_container& getEntities();
+		A_NODISCARD sparse_map<id_type, entity>& getEntities();
 
 		template<typename... component_types>
 		A_NODISCARD EntityQuery createQuery()

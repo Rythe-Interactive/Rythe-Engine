@@ -10,11 +10,12 @@ namespace args::core::ecs
 	{
 		m_componentTypes[queryId].insert(componentTypeId, componentTypeId);
 
-		std::vector<entity>& entities = m_registry.getEntities();
-		for (int i = 0; i < entities.size(); i++)
+		sparse_map<id_type, entity>& entities = m_registry.getEntities();
+		for (id_type entityId : entities.keys())
 		{
-			if (entities[i].component_composition().contains(m_componentTypes[queryId]))
-				m_entityLists[queryId].insert(entities[i], entities[i]);
+			entity& entity = entities[entityId];
+			if (entity.component_composition().contains(m_componentTypes[queryId]))
+				m_entityLists[queryId].insert(entityId, entity);
 		}
 	}
 
@@ -105,10 +106,9 @@ namespace args::core::ecs
 
 		m_componentTypes.insert(queryId, componentMap);
 
-		auto& entities = m_registry.getEntities();
-		for (int i = 0; i < entities.size(); i++)
-			if (entities[i].component_composition().contains(m_componentTypes[queryId]))
-				m_entityLists[queryId].insert(entities[i], entities[i]);
+		for (entity& entity : m_registry.getEntities())
+			if (entity.component_composition().contains(m_componentTypes[queryId]))
+				m_entityLists[queryId].insert(entity, entity);
 
 		return queryId;
 	}

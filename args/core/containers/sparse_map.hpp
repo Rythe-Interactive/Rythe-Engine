@@ -165,7 +165,8 @@ namespace args::core
 		 * @param other Other sparse_map to check against.
 		 * @returns bool True if all keys in other are also in this sparse_map, otherwise false.
 		 */
-		A_NODISCARD bool contains(self_const_reference other) const
+		template<typename T>
+		A_NODISCARD bool contains(const sparse_map<key_type, T>& other) const
 		{
 			if (other.m_size == 0)
 				return true;
@@ -484,8 +485,8 @@ namespace args::core
 			if (contains(key))
 			{
 				m_dense_value[m_sparse[key]] = std::move(m_dense_value[m_size - 1]);
-				m_dense_key[m_sparse[key]] = m_dense_key[m_size - 1];
-				m_sparse[m_dense_key[m_size - 1]] = m_sparse[key];
+				m_dense_key[m_sparse[key]] = std::move(m_dense_key[m_size - 1]);
+				m_sparse[m_dense_key[m_size - 1]] = std::move(m_sparse[key]);
 				--m_size;
 				return true;
 			}
