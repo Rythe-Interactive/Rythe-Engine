@@ -5,6 +5,22 @@
 
 namespace args::core::ecs
 {
+	sparse_map<id_type, entity>::iterator EntityQuery::begin()
+	{
+		return m_registry.getEntities(m_id).begin();
+	}
+	sparse_map<id_type, entity>::const_iterator EntityQuery::begin() const
+	{
+		return m_registry.getEntities(m_id).begin();
+	}
+	sparse_map<id_type, entity>::iterator EntityQuery::end()
+	{
+		return m_registry.getEntities(m_id).end();
+	}
+	sparse_map<id_type, entity>::const_iterator EntityQuery::end() const
+	{
+		return m_registry.getEntities(m_id).end();
+	}
 	inline void EntityQuery::addComponentType(id_type componentTypeId)
 	{
 		std::vector<id_type> componentTypes;
@@ -45,7 +61,7 @@ namespace args::core::ecs
 
 	inline entity EntityQuery::operator[](size_type index)
 	{
-		return m_ecsRegistry.getEntity(m_registry.getEntities(m_id)[index]);
+		return m_ecsRegistry.getEntity(m_registry.getEntities(m_id).dense()[index]);
 	}
 
 	inline size_type EntityQuery::size()

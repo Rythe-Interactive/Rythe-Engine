@@ -1,6 +1,7 @@
 #include <core/ecs/queryregistry.hpp>
 #include <core/ecs/ecsregistry.hpp>
 #include <core/ecs/entity.hpp>
+#include <core/ecs/entityquery.hpp>
 #include <algorithm>
 
 namespace args::core::ecs
@@ -33,7 +34,7 @@ namespace args::core::ecs
 			m_entityLists[queryId].erase(entityId);
 	}
 
-	void QueryRegistry::evaluateEntityChange(id_type entityId, id_type componentTypeId, bool removal)
+	inline void QueryRegistry::evaluateEntityChange(id_type entityId, id_type componentTypeId, bool removal)
 	{
 		for (int i = 0; i < m_entityLists.size(); i++)
 		{
@@ -57,16 +58,16 @@ namespace args::core::ecs
 		}
 	}
 
-	void QueryRegistry::markEntityDestruction(id_type entityId)
+	inline void QueryRegistry::markEntityDestruction(id_type entityId)
 	{
 		for (int i = 0; i < m_entityLists.size(); i++)
 			if (m_entityLists[i].contains(entityId))
 				m_entityLists[i].erase(entityId);
 	}
 
-	id_type QueryRegistry::getQueryId(const sparse_map<id_type, id_type>::dense_value_container& componentTypes)
+	inline id_type QueryRegistry::getQueryId(const sparse_map<id_type, id_type>::dense_value_container& componentTypes)
 	{
-		for (int id = 0; id < m_componentTypes.size(); id++)
+		for (int id  : m_componentTypes.keys())
 		{
 			if (m_componentTypes[id].dense() == componentTypes)
 				return id;
@@ -75,7 +76,19 @@ namespace args::core::ecs
 		return invalid_id;
 	}
 
-	sparse_map<id_type, id_type> QueryRegistry::getComponentTypes(id_type queryId)
+	inline EntityQuery QueryRegistry::createQuery(const sparse_map<id_type, id_type>::dense_value_container& componentTypes)
+	{
+		id_type queryId = getQueryId(componentTypes);
+
+		if (!queryId)
+		{
+			queryId = addQuery(componentTypes);
+		}
+
+		return EntityQuery(queryId, *this, m_registry);
+	}
+
+	inline sparse_map<id_type, id_type> QueryRegistry::getComponentTypes(id_type queryId)
 	{
 		return m_componentTypes[queryId];
 	}
@@ -100,17 +113,17 @@ namespace args::core::ecs
 		return queryId;
 	}
 
-	sparse_map<id_type, entity>::dense_value_container& QueryRegistry::getEntities(id_type queryId)
+	inline sparse_map<id_type, entity>& QueryRegistry::getEntities(id_type queryId)
 	{
-		return m_entityLists.get(queryId).dense();
+		return m_entityLists.get(queryId);
 	}
 
-	void QueryRegistry::addReference(id_type queryId)
+	inline void QueryRegistry::addReference(id_type queryId)
 	{
 		m_references.get(queryId)++;
 	}
 
-	void QueryRegistry::removeReference(id_type queryId)
+	inline void QueryRegistry::removeReference(id_type queryId)
 	{
 		if (!m_references.contains(queryId))
 			return;
@@ -125,7 +138,7 @@ namespace args::core::ecs
 		}
 	}
 
-	size_type QueryRegistry::getReferenceCount(id_type queryId)
+	inline size_type QueryRegistry::getReferenceCount(id_type queryId)
 	{
 		if (m_references.contains(queryId))
 			return m_references[queryId];

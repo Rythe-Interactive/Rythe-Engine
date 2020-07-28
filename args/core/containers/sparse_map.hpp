@@ -57,6 +57,9 @@ namespace args::core
 		A_NODISCARD dense_value_container& dense() { return m_dense_value; }
 		A_NODISCARD const dense_value_container& dense() const { return m_dense_value; }
 
+		A_NODISCARD dense_key_container& keys() { return m_dense_key; }
+		A_NODISCARD const dense_key_container& keys() const { return m_dense_key; }
+
 		A_NODISCARD iterator begin() { return m_dense_value.begin(); }
 		A_NODISCARD const_iterator begin() const { return m_dense_value.cbegin(); }
 

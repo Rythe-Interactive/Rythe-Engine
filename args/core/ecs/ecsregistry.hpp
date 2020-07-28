@@ -6,6 +6,7 @@
 #include <core/types/types.hpp>
 #include <core/common/common.hpp>
 #include <core/ecs/component_container.hpp>
+#include <core/ecs/queryregistry.hpp>
 
 namespace args::core::ecs
 {
@@ -30,6 +31,7 @@ namespace args::core::ecs
 		sparse_map<id_type, component_container_base*> m_families;
 		sparse_map<id_type, entity_data> m_entityData;
 		sparse_map<id_type, entity> m_entities;
+		QueryRegistry m_queryRegistry;
 
 	public:
 		EcsRegistry();
@@ -84,5 +86,11 @@ namespace args::core::ecs
 		A_NODISCARD entity_data& getEntityData(id_type entityId);
 
 		A_NODISCARD sparse_map<id_type, entity>::dense_value_container& getEntities();
+
+		template<typename... component_types>
+		A_NODISCARD EntityQuery createQuery()
+		{
+			return m_queryRegistry.createQuery<component_types...>();
+		}
 	};
 }

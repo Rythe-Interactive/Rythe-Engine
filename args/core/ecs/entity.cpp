@@ -105,6 +105,11 @@ namespace args::core::ecs
 		return m_registry->createComponent(m_id, componentTypeId);
 	}
 
+	void entity::remove_component(id_type componentTypeId)
+	{
+		m_registry->destroyComponent(m_id, componentTypeId);
+	}
+
 	inline void entity::destroy()
 	{
 		m_registry->destroyEntity(m_id);

@@ -71,6 +71,14 @@ namespace args::core::ecs
 			return force_value_cast<component_handle<component_type>>(add_component(typeHash<component_type>()));
 		}
 
+		void remove_component(id_type componentTypeId);
+
+		template<typename component_type>
+		void remove_component()
+		{
+			remove_component(typeHash<component_type>());
+		}
+
 		void destroy();
 
 		bool valid() const;

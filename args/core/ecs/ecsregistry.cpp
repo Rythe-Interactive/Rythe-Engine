@@ -8,7 +8,7 @@ namespace args::core::ecs
 	// 2 because the world entity is 1 and 0 is invalid_id
 	id_type EcsRegistry::m_lastEntityId = 2;
 
-	EcsRegistry::EcsRegistry() : m_families(), m_entityData()
+	EcsRegistry::EcsRegistry() : m_families(), m_entityData(), m_entities(), m_queryRegistry(*this)
 	{
 		// Create world entity.
 		m_entityData.emplace(1);
@@ -38,6 +38,7 @@ namespace args::core::ecs
 		getFamily(componentTypeId)->create_component(entityId);
 
 		m_entityData[entityId].components.insert(componentTypeId, componentTypeId);
+		m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
 
 		return component_handle_base(entityId, *this);
 	}
@@ -50,6 +51,7 @@ namespace args::core::ecs
 		getFamily(componentTypeId)->destroy_component(entityId);
 
 		m_entityData[entityId].components.erase(componentTypeId);
+		m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
 	}
 
 	A_NODISCARD inline bool EcsRegistry::validateEntity(id_type entityId)
@@ -81,7 +83,7 @@ namespace args::core::ecs
 		m_entityData.erase(entityId);
 		m_entities.erase(entityId);
 
-		/// TODO update all data (queries and such)
+		m_queryRegistry.markEntityDestruction(entityId);
 	}
 
 	A_NODISCARD inline entity EcsRegistry::getEntity(id_type entityId)

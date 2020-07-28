@@ -7,6 +7,7 @@ namespace args::core::ecs
 {
 	class ARGS_API EcsRegistry;
 	class ARGS_API entity;
+	class ARGS_API EntityQuery;
 
 	class ARGS_API QueryRegistry
 	{
@@ -29,11 +30,21 @@ namespace args::core::ecs
 
 		id_type getQueryId(const sparse_map<id_type, id_type>::dense_value_container& componentTypes);
 
+		template<typename... component_types>
+		EntityQuery createQuery()
+		{
+			std::vector<id_type> componentTypeIds;
+			(componentTypeIds.push_back(typeHash<component_types>()), ...);
+			return createQuery(componentTypeIds);
+		}
+
+		EntityQuery createQuery(const sparse_map<id_type, id_type>::dense_value_container& componentTypes);
+
 		sparse_map<id_type, id_type> getComponentTypes(id_type queryId);
 
 		id_type addQuery(const sparse_map<id_type, id_type>::dense_value_container& componentTypes);
 
-		sparse_map<id_type, entity>::dense_value_container& getEntities(id_type queryId);
+		sparse_map<id_type, entity>& getEntities(id_type queryId);
 
 		void addReference(id_type queryId);
 		void removeReference(id_type queryId);
