@@ -81,17 +81,17 @@ To ensure that your doxygen comments are in line with the rest of the code base 
 - We exclusively use `@` and `/**` to document our files. for example:
   ```cpp
 
-  /** @brief example for a function
-   *  @tparam T a quick example of what the template param does
+  /** @brief Example for a function.
+   *  @tparam T A quick example of what the template param does.
    *          (not when it can be inferred by a param)
-   *  @param a_parameter a quick description of what the param does
-   *         additionally you might use [in] [out] [in/out] for
-   *         clarity
-   *  @return int a quick explanation of what to expect from 
-   *          the function
-   *  @note some additional noteworthy documentation details
-   *  @throw std::exception if your function is at risk of 
-   *         throwing an exception
+   *  @param a_parameter A quick description of what the param does.
+   *         Additionally you might use [in] [out] [in/out] for
+   *         clarity.
+   *  @return int A quick explanation of what to expect from
+   *          the function.
+   *  @note Some additional noteworthy documentation details.
+   *  @throw std::exception If your function is at risk of
+   *         throwing an exception.
    */
   template <class T>
   int a_function(int a_parameter);
@@ -100,8 +100,8 @@ To ensure that your doxygen comments are in line with the rest of the code base 
 - To keep the file small we encourage you to drop any commands, when the function is small enough to be explained by `@brief`
 alone. for example:
   ```cpp
-  /** @brief gets the size of the container
-   *  @return size_type the size of the container
+  /** @brief Gets the size of the container.
+   *  @return size_type The size of the container.
    */
   A_NODISCARD auto size() const noexcept
   {
@@ -110,7 +110,7 @@ alone. for example:
   ```
   should really be
   ```cpp
-  /** @brief gets the size of the container
+  /** @brief Gets the size of the container.
    */
   A_NODISCARD auto size() const noexcept
   {
