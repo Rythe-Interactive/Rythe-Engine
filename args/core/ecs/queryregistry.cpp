@@ -66,18 +66,18 @@ namespace args::core::ecs
 				m_entityLists[i].erase(entityId);
 	}
 
-	inline id_type QueryRegistry::getQueryId(const sparse_map<id_type, id_type>::dense_value_container& componentTypes)
+	inline id_type QueryRegistry::getQueryId(const sparse_map<id_type, id_type>& componentTypes)
 	{
-		for (int id  : m_componentTypes.keys())
+		for (int id : m_componentTypes.keys())
 		{
-			if (m_componentTypes[id].dense() == componentTypes)
+			if (m_componentTypes[id] == componentTypes)
 				return id;
 		}
 
 		return invalid_id;
 	}
 
-	inline EntityQuery QueryRegistry::createQuery(const sparse_map<id_type, id_type>::dense_value_container& componentTypes)
+	inline EntityQuery QueryRegistry::createQuery(const sparse_map<id_type, id_type>& componentTypes)
 	{
 		id_type queryId = getQueryId(componentTypes);
 
@@ -94,7 +94,7 @@ namespace args::core::ecs
 		return m_componentTypes[queryId];
 	}
 
-	id_type QueryRegistry::addQuery(const sparse_map<id_type, id_type>::dense_value_container& componentTypes)
+	id_type QueryRegistry::addQuery(const sparse_map<id_type, id_type>& componentTypes)
 	{
 		id_type queryId = m_entityLists.size();
 		m_entityLists.emplace(queryId);
@@ -125,7 +125,7 @@ namespace args::core::ecs
 
 	inline void QueryRegistry::removeReference(id_type queryId)
 	{
-		if (!m_references.contains(queryId))
+		if (queryId == invalid_id || !m_references.contains(queryId))
 			return;
 
 		size_type& referenceCount = m_references.get(queryId);

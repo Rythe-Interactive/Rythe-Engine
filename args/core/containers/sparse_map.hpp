@@ -175,12 +175,48 @@ namespace args::core
 				return false;
 
 			bool overlap = true;
-			for (key_const_reference item : other.m_dense_key)
-				overlap = overlap && contains(item);
+			for (int i = 0; i < other.m_size; i++)
+				overlap = overlap && contains(other.m_dense_key[i]);
 
 			return overlap;
 		}
 #pragma endregion
+
+		/**@brief Checks if all keys and values and relations between them are the same for both sparse_maps.
+		 * @param other Other sparse_map to check against.
+		 * @returns bool True if both maps are the same size, contain the same keys, and all keys refer to the same value, otherwise false.
+		 */
+		A_NODISCARD bool equals(self_const_reference other) const
+		{
+			if (m_size == other.m_size)
+			{
+				bool equal = true;
+				for (int i = 0; i < m_size; i++)
+					equal = equal && other.contains(m_dense_key[i]) && get(m_dense_key[i]) == other.get(m_dense_key[i]);
+
+				return equal;
+			}
+
+			return false;
+		}
+
+		/**@brief Checks if all keys and values and relations between them are the same for both sparse_maps.
+		 * @param other Other sparse_map to check against.
+		 * @returns bool True if both maps are the same size, contain the same keys, and all keys refer to the same value, otherwise false.
+		 */
+		A_NODISCARD bool operator==(self_const_reference other) const
+		{
+			if (m_size == other.m_size)
+			{
+				bool equal = true;
+				for (int i = 0; i < m_size; i++)
+					equal = equal && other.contains(m_dense_key[i]) && get(m_dense_key[i]) == other.get(m_dense_key[i]);
+
+				return equal;
+			}
+
+			return false;
+		}
 
 #pragma region find
 		/**@brief Finds the iterator of a value using std::find.

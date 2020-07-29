@@ -32,20 +32,24 @@ namespace args::core::ecs
 
 	inline void EntityQuery::addComponentType(id_type componentTypeId)
 	{
-		std::vector<id_type> componentTypes;
+		sparse_map<id_type, id_type> componentTypes;
 		if (m_id)
-			componentTypes = m_registry.getComponentTypes(m_id).dense();
+			componentTypes = m_registry.getComponentTypes(m_id);
 
-		componentTypes.push_back(componentTypeId);
+		componentTypes.insert(componentTypeId, componentTypeId);
 
 		id_type newId = m_registry.getQueryId(componentTypes);
 		if (newId)
 		{
 			m_registry.removeReference(m_id);
 			m_id = newId;
+			m_registry.addReference(m_id);
 		}
 		else if (m_id == invalid_id || m_registry.getReferenceCount(m_id) > 1)
+		{
+			m_registry.removeReference(m_id);
 			m_id = m_registry.addQuery(componentTypes);
+		}
 		else
 			m_registry.addComponentType(m_id, componentTypeId);
 	}
@@ -54,16 +58,15 @@ namespace args::core::ecs
 	{
 		sparse_map<id_type, id_type> componentMap = m_registry.getComponentTypes(m_id);
 		componentMap.erase(componentTypeId);
-		std::vector<id_type>& componentTypes = componentMap.dense();
 
-		id_type newId = m_registry.getQueryId(componentTypes);
+		id_type newId = m_registry.getQueryId(componentMap);
 		if (newId)
 		{
 			m_registry.removeReference(m_id);
 			m_id = newId;
 		}
 		else if (m_id == invalid_id || m_registry.getReferenceCount(m_id) > 1)
-			m_id = m_registry.addQuery(componentTypes);
+			m_id = m_registry.addQuery(componentMap);
 		else
 			m_registry.removeComponentType(m_id, componentTypeId);
 	}

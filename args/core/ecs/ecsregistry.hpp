@@ -202,7 +202,7 @@ namespace args::core::ecs
 		 * @returns EntityQuery Query that will query the entities with the requested components.
 		 * @note This function is quite slow and thus it's adviced to create a query once and reuse it.
 		 */
-		A_NODISCARD EntityQuery createQuery(const sparse_map<id_type, id_type>::dense_value_container& componentTypes)
+		A_NODISCARD EntityQuery createQuery(const sparse_map<id_type, id_type>& componentTypes)
 		{
 			return m_queryRegistry.createQuery(componentTypes);
 		}
