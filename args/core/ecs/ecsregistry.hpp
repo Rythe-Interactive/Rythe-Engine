@@ -1,6 +1,7 @@
 #pragma once
 #include <core/containers/sparse_map.hpp>
 #include <core/containers/sparse_set.hpp>
+#include <core/containers/hashed_sparse_set.hpp>
 #include <memory>
 #include <core/common/exception.hpp>
 #include <core/types/types.hpp>
@@ -33,7 +34,7 @@ namespace args::core::ecs
 	{
 		id_type parent;
 		sparse_map<id_type, entity_handle> children;
-		sparse_map<id_type, id_type> components;
+		hashed_sparse_set<id_type> components;
 	};
 
 	/**@class EcsRegistry
@@ -189,7 +190,7 @@ namespace args::core::ecs
 		/**@brief Get a query for your component combination.
 		 * @tparam component_types Variadic parameter types of all component types you wish to query for.
 		 * @returns EntityQuery Query that will query the entities with the requested components.
-		 * @note This function is quite slow and thus it's adviced to create a query once and reuse it.
+		 * @note This function is quite slow and thus it's advised to create a query once and reuse it.
 		 */
 		template<typename... component_types>
 		A_NODISCARD EntityQuery createQuery()
@@ -200,9 +201,9 @@ namespace args::core::ecs
 		/**@brief Get a query for your component combination.
 		 * @param componentTypes Container with type ids of all component types you wish to query for.
 		 * @returns EntityQuery Query that will query the entities with the requested components.
-		 * @note This function is quite slow and thus it's adviced to create a query once and reuse it.
+		 * @note This function is quite slow and thus it's advised to create a query once and reuse it.
 		 */
-		A_NODISCARD EntityQuery createQuery(const sparse_map<id_type, id_type>& componentTypes)
+		A_NODISCARD EntityQuery createQuery(const hashed_sparse_set<id_type>& componentTypes)
 		{
 			return m_queryRegistry.createQuery(componentTypes);
 		}

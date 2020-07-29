@@ -59,7 +59,7 @@ namespace args::core::ecs
 
 		getFamily(componentTypeId)->create_component(entityId);
 
-		m_entityData[entityId].components.insert(componentTypeId, componentTypeId);
+		m_entityData[entityId].components.insert(componentTypeId);
 		m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
 
 		return component_handle_base(entityId, *this);

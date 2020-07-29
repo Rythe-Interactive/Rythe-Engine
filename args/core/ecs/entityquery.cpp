@@ -2,6 +2,7 @@
 #include <core/ecs/queryregistry.hpp>
 #include <core/ecs/ecsregistry.hpp>
 #include <core/ecs/entity_handle.hpp>
+#include <core/containers/hashed_sparse_set.hpp>
 
 namespace args::core::ecs
 {
@@ -10,19 +11,9 @@ namespace args::core::ecs
 		m_registry.removeReference(m_id);
 	}
 
-	sparse_map<id_type, entity_handle>::iterator EntityQuery::begin()
-	{
-		return m_registry.getEntities(m_id).begin();
-	}
-
 	sparse_map<id_type, entity_handle>::const_iterator EntityQuery::begin() const
 	{
 		return m_registry.getEntities(m_id).begin();
-	}
-
-	sparse_map<id_type, entity_handle>::iterator EntityQuery::end()
-	{
-		return m_registry.getEntities(m_id).end();
 	}
 
 	sparse_map<id_type, entity_handle>::const_iterator EntityQuery::end() const
@@ -32,11 +23,11 @@ namespace args::core::ecs
 
 	inline void EntityQuery::addComponentType(id_type componentTypeId)
 	{
-		sparse_map<id_type, id_type> componentTypes;
+		hashed_sparse_set<id_type> componentTypes;
 		if (m_id)
 			componentTypes = m_registry.getComponentTypes(m_id);
 
-		componentTypes.insert(componentTypeId, componentTypeId);
+		componentTypes.insert(componentTypeId);
 
 		id_type newId = m_registry.getQueryId(componentTypes);
 		if (newId)
@@ -56,7 +47,7 @@ namespace args::core::ecs
 
 	inline void EntityQuery::removeComponentType(id_type componentTypeId)
 	{
-		sparse_map<id_type, id_type> componentMap = m_registry.getComponentTypes(m_id);
+		hashed_sparse_set<id_type> componentMap = m_registry.getComponentTypes(m_id);
 		componentMap.erase(componentTypeId);
 
 		id_type newId = m_registry.getQueryId(componentMap);

@@ -54,7 +54,7 @@ namespace args::core
 		uint32 prime = 0x1000193;
 		for (int i = 0; i < N - 1; i++)
 		{
-			byte_t value = name[i];
+			byte value = name[i];
 			hash = hash ^ value;
 			hash *= prime;
 		}
@@ -73,7 +73,7 @@ namespace args::core
 	/**@brief Returns hash of a certain string
 	 * @param name Name you wish to hash
 	 */
-	id_type ARGS_FUNC nameHash(string name);
+	id_type ARGS_FUNC nameHash(std::string name);
 
 	/**@brief Returns hash of the type name.
 	 * @tparam T type of which you want the hash.
@@ -86,11 +86,11 @@ namespace args::core
 		hash = 0x811c9dc5;
 		uint32 prime = 0x1000193;
 		cstring name = typeName<T>();
-		for (int i = 0; i < std::strlen(name); i++)
-		{
-			byte_t value = name[i];
-			hash = hash ^ value;
+		while(*name != '\0')
+		{			
+			hash = hash ^ (byte)*name;
 			hash *= prime;
+			name++;
 		}
 
 		return hash;

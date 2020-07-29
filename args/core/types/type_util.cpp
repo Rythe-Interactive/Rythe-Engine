@@ -10,7 +10,7 @@ namespace args::core
 		uint32 prime = 0x1000193;
 		for (int i = 0; i < std::strlen(name); i++)
 		{
-			byte_t value = name[i];
+			byte value = name[i];
 			hash = hash ^ value;
 			hash *= prime;
 		}
@@ -26,7 +26,7 @@ namespace args::core
 		uint32 prime = 0x1000193;
 		for (int i = 0; i < name.length(); i++)
 		{
-			byte_t value = name[i];
+			byte value = name[i];
 			hash = hash ^ value;
 			hash *= prime;
 		}

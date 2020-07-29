@@ -8,7 +8,7 @@ namespace args::core::ecs
 {
 	void QueryRegistry::addComponentType(id_type queryId, id_type componentTypeId)
 	{
-		m_componentTypes[queryId].insert(componentTypeId, componentTypeId);
+		m_componentTypes[queryId].insert(componentTypeId);
 
 		sparse_map<id_type, entity_handle>& entities = m_registry.getEntities();
 		for (id_type entityId : entities.keys())
@@ -66,7 +66,7 @@ namespace args::core::ecs
 				m_entityLists[i].erase(entityId);
 	}
 
-	inline id_type QueryRegistry::getQueryId(const sparse_map<id_type, id_type>& componentTypes)
+	inline id_type QueryRegistry::getQueryId(const hashed_sparse_set<id_type>& componentTypes)
 	{
 		for (int id : m_componentTypes.keys())
 		{
@@ -77,7 +77,7 @@ namespace args::core::ecs
 		return invalid_id;
 	}
 
-	inline EntityQuery QueryRegistry::createQuery(const sparse_map<id_type, id_type>& componentTypes)
+	inline EntityQuery QueryRegistry::createQuery(const hashed_sparse_set<id_type>& componentTypes)
 	{
 		id_type queryId = getQueryId(componentTypes);
 
@@ -89,20 +89,20 @@ namespace args::core::ecs
 		return EntityQuery(queryId, *this, m_registry);
 	}
 
-	inline sparse_map<id_type, id_type> QueryRegistry::getComponentTypes(id_type queryId)
+	inline const hashed_sparse_set<id_type>& QueryRegistry::getComponentTypes(id_type queryId)
 	{
 		return m_componentTypes[queryId];
 	}
 
-	id_type QueryRegistry::addQuery(const sparse_map<id_type, id_type>& componentTypes)
+	id_type QueryRegistry::addQuery(const hashed_sparse_set<id_type>& componentTypes)
 	{
 		id_type queryId = m_entityLists.size() + 1;
 		m_entityLists.emplace(queryId);
 		m_references.insert(queryId, 1);
 
-		sparse_map<id_type, id_type> componentMap;
+		hashed_sparse_set<id_type> componentMap;
 		for (id_type componentTypeId : componentTypes)
-			componentMap.insert(componentTypeId, componentTypeId);
+			componentMap.insert(componentTypeId);
 
 		m_componentTypes.insert(queryId, componentMap);
 
@@ -113,7 +113,7 @@ namespace args::core::ecs
 		return queryId;
 	}
 
-	inline sparse_map<id_type, entity_handle>& QueryRegistry::getEntities(id_type queryId)
+	inline const sparse_map<id_type, entity_handle>& QueryRegistry::getEntities(id_type queryId)
 	{
 		return m_entityLists.get(queryId);
 	}

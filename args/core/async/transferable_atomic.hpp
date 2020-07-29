@@ -1,6 +1,9 @@
 #pragma once
 #include <atomic>
 
+/** @file transferable_atomic.hpp
+ */
+
 namespace args::core::async
 {
 	template <typename T>

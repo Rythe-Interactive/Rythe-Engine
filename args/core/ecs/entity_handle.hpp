@@ -2,6 +2,7 @@
 #include <core/types/types.hpp>
 #include <core/containers/sparse_set.hpp>
 #include <core/containers/sparse_map.hpp>
+#include <core/containers/hashed_sparse_set.hpp>
 
 /**
  * @file entity_handle.hpp
@@ -49,11 +50,11 @@ namespace args::core::ecs
 		entity_handle& operator=(const entity_handle& other);
 
 		/**@brief Returns the type id's of the components this entity contains.
-		 * @returns sparse_map<id_type, id_type>& Sparse map with component type id as both the key as well as the value. (behaves as sparse_set with hash table)
+		 * @returns hashed_sparse_set<id_type>& Sparse map with component type id as both the key as well as the value. (behaves as sparse_set with hash table)
 		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
 		 * @throws args_entity_not_found_error Thrown when handle's id is invalid.
 		 */
-		A_NODISCARD sparse_map<id_type, id_type>& component_composition();
+		A_NODISCARD const hashed_sparse_set<id_type>& component_composition() const;
 
 		/**@brief Cast to id_type returns the id of the entity this handle references.
 		 * @returns id_type If the handle is valid it will return the entity id, otherwise invalid_id.
@@ -65,23 +66,11 @@ namespace args::core::ecs
 		 */
 		A_NODISCARD id_type get_id() const;
 
-		/**@brief Iterator to first child entity. (dereferences to entity handle)
-		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
-		 * @throws args_entity_not_found_error Thrown when handle's id is invalid.
-		 */
-		A_NODISCARD sparse_map<id_type, entity_handle>::iterator begin();
-
 		/**@brief Const iterator to first child entity. (dereferences to entity handle)
 		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
 		 * @throws args_entity_not_found_error Thrown when handle's id is invalid.
 		 */
 		A_NODISCARD sparse_map<id_type, entity_handle>::const_iterator begin() const;
-
-		/**@brief Iterator to last child entity. (dereferences to entity handle)
-		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
-		 * @throws args_entity_not_found_error Thrown when handle's id is invalid.
-		 */
-		A_NODISCARD sparse_map<id_type, entity_handle>::iterator end();
 
 		/**@brief Const iterator to last child entity. (dereferences to entity handle)
 		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
@@ -102,7 +91,7 @@ namespace args::core::ecs
 		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
 		 * @throws args_entity_not_found_error Thrown when handle's id is invalid.
 		 */
-		void set_parent(id_type newParent);
+		void set_parent(id_type newParent) const;
 
 		/**@brief Get child of the entity at a certain index.
 		 * @throws std::out_of_range Thrown when index is more than or equal to the child count.
@@ -131,7 +120,7 @@ namespace args::core::ecs
 		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
 		 * @throws args_entity_not_found_error Thrown when handle's id is invalid.
 		 */
-		void add_child(id_type childId);
+		void add_child(id_type childId) const;
 
 		/**@brief Remove child from entity.
 		 * @param childId Id of the entity you wish to remove as a child.
@@ -139,7 +128,7 @@ namespace args::core::ecs
 		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
 		 * @throws args_entity_not_found_error Thrown when handle's id is invalid.
 		 */
-		void remove_child(id_type childId);
+		void remove_child(id_type childId) const;
 
 		/**@brief Check if entity contains a certain component.
 		 * @tparam component_type Type of component to check for.
@@ -185,7 +174,7 @@ namespace args::core::ecs
 		 * @returns component_handle_base Valid component handle base for the newly created component.
 		 * @note component_handle_base needs to be force_cast to component_handle<T> in order to be usable.
 		 */
-		component_handle_base add_component(id_type componentTypeId);
+		component_handle_base add_component(id_type componentTypeId) const;
 
 		/**@brief Add component to the entity.
 		 * @tparam component_type Type of component to add.
@@ -195,7 +184,7 @@ namespace args::core::ecs
 		 * @returns component_handle<component_type> Valid component handle for the newly created component.
 		 */
 		template<typename component_type>
-		component_handle<component_type> add_component()
+		component_handle<component_type> add_component() const
 		{
 			return force_value_cast<component_handle<component_type>>(add_component(typeHash<component_type>()));
 		}
@@ -207,7 +196,7 @@ namespace args::core::ecs
 		 * @throws args_unknown_component_error Thrown when the component type is unknown.
 		 * @note Nothing will happen if the entity doesn't have this component.
 		 */
-		void remove_component(id_type componentTypeId);
+		void remove_component(id_type componentTypeId) const;
 
 		/**@brief Remove component from entity.
 		 * @tparam component_type Type of component to remove.
@@ -217,7 +206,7 @@ namespace args::core::ecs
 		 * @note Nothing will happen if the entity doesn't have this component.
 		 */
 		template<typename component_type>
-		void remove_component()
+		void remove_component() const
 		{
 			remove_component(typeHash<component_type>());
 		}
@@ -225,7 +214,7 @@ namespace args::core::ecs
 		/**@brief Destroy this entity. Destroys entity and invalidates handle. (also destroys all of it's components)
 		 * @param recurse Destroy all children and children of children as well? Default value is true.
 		 */
-		void destroy(bool recurse = true);
+		void destroy(bool recurse = true) const;
 
 		/**@brief Check whether this entity handle is valid or not.
 		 * @returns bool True if the handle is pointing to valid entity and the registry reference is also valid.

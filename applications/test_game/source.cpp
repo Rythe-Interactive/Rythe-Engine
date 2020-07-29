@@ -82,6 +82,8 @@ void ARGS_CCONV reportModules(Engine* engine)
 	std::cout << "creating entity query through registry" << std::endl;
 	ecs::EntityQuery query = registry.createQuery<sah>();
 
+	std::cout << "query id is: " << query.id() << std::endl;
+
 	std::cout << "query size is: " << query.size() << std::endl;
 
 	std::cout << "iterating over query" << std::endl;

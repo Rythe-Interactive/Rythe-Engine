@@ -11,7 +11,7 @@ namespace args::core::ecs
 		return *this;
 	}
 
-	A_NODISCARD inline sparse_map<id_type, id_type>& entity_handle::component_composition()
+	A_NODISCARD inline const hashed_sparse_set<id_type>& entity_handle::component_composition() const
 	{
 		if (!m_registry)
 			throw args_invalid_entity_error;
@@ -25,25 +25,11 @@ namespace args::core::ecs
 		return invalid_id;
 	}
 
-	A_NODISCARD sparse_map<id_type, entity_handle>::iterator entity_handle::begin()
-	{
-		if (!m_registry)
-			throw args_invalid_entity_error;
-		return m_registry->getEntityData(m_id).children.begin();
-	}
-
 	A_NODISCARD sparse_map<id_type, entity_handle>::const_iterator entity_handle::begin() const
 	{
 		if (!m_registry)
 			throw args_invalid_entity_error;
 		return m_registry->getEntityData(m_id).children.begin();
-	}
-
-	A_NODISCARD sparse_map<id_type, entity_handle>::iterator entity_handle::end()
-	{
-		if (!m_registry)
-			throw args_invalid_entity_error;
-		return m_registry->getEntityData(m_id).children.end();
 	}
 
 	A_NODISCARD sparse_map<id_type, entity_handle>::const_iterator entity_handle::end() const
@@ -60,7 +46,7 @@ namespace args::core::ecs
 		return m_registry->getEntity(m_registry->getEntityData(m_id).parent);
 	}
 
-	inline void entity_handle::set_parent(id_type newParent)
+	inline void entity_handle::set_parent(id_type newParent) const
 	{
 		if (!m_registry)
 			throw args_invalid_entity_error;
@@ -99,7 +85,7 @@ namespace args::core::ecs
 		return m_registry->getEntityData(m_id).children.size();
 	}
 
-	inline void entity_handle::add_child(id_type childId)
+	inline void entity_handle::add_child(id_type childId) const
 	{
 		if (!m_registry)
 			throw args_invalid_entity_error;
@@ -108,7 +94,7 @@ namespace args::core::ecs
 			data.children[childId].set_parent(m_id);
 	}
 
-	inline void entity_handle::remove_child(id_type childId)
+	inline void entity_handle::remove_child(id_type childId) const
 	{
 		if (!m_registry)
 			throw args_invalid_entity_error;
@@ -131,21 +117,21 @@ namespace args::core::ecs
 		return m_registry->getComponent(m_id, componentTypeId);
 	}
 
-	inline component_handle_base entity_handle::add_component(id_type componentTypeId)
+	inline component_handle_base entity_handle::add_component(id_type componentTypeId) const
 	{
 		if (!m_registry)
 			throw args_invalid_entity_error;
 		return m_registry->createComponent(m_id, componentTypeId);
 	}
 
-	void entity_handle::remove_component(id_type componentTypeId)
+	void entity_handle::remove_component(id_type componentTypeId) const
 	{
 		if (!m_registry)
 			throw args_invalid_entity_error;
 		m_registry->destroyComponent(m_id, componentTypeId);
 	}
 
-	inline void entity_handle::destroy(bool recurse)
+	inline void entity_handle::destroy(bool recurse) const
 	{
 		if (!m_registry)
 			throw args_invalid_entity_error;

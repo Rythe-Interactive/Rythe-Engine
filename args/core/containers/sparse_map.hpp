@@ -20,7 +20,7 @@ namespace args::core
 	 * @tparam dense_type Container to be used to store the values.
 	 * @tparam sparse_type Container to be used to store the keys.
 	 * @note With default container parameters iterators may be invalidated upon resize. See reference of std::vector.
-	 * @note Removing item might invalidate the itterator of the last item in the dense container.
+	 * @note Removing item might invalidate the iterator of the last item in the dense container.
 	 */
 	template <typename key_type, typename value_type, template<typename...> typename dense_type = std::vector, template<typename...> typename sparse_type = std::unordered_map>
 	class sparse_map
@@ -104,7 +104,7 @@ namespace args::core
 		/**@brief Returns the amount of items linked to a certain key.
 		 * @param key Key to look for.
 		 * @returns size_type Amount of items linked to the key (either 0 or 1).
-		 * @note Function is only available for compatibility reasons, it is adviced to use contains instead.
+		 * @note Function is only available for compatibility reasons, it is advised to use contains instead.
 		 * @ref args::core::sparse_map::contains
 		 */
 		A_NODISCARD size_type count(key_const_reference key) const
@@ -115,7 +115,7 @@ namespace args::core
 		/**@brief Returns the amount of items linked to a certain key.
 		 * @param key Key to look for.
 		 * @returns size_type Amount of items linked to the key (either 0 or 1).
-		 * @note Function is only available for compatibility reasons, it is adviced to use contains instead.
+		 * @note Function is only available for compatibility reasons, it is advised to use contains instead.
 		 * @ref args::core::sparse_map::contains
 		 */
 		A_NODISCARD size_type count(key_type&& key) const
