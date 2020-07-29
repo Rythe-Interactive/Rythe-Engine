@@ -52,11 +52,33 @@ methods of non "stl-likes" should use camelCase naming and "stl-likes" should us
 ### Comments
 In feature branches there is no comments enforcement, however in order to get a pull request accepted to any of the main branches doxygen style comments are mandatory.
 
+### On the Topic of Doxygen
+To ensure that your doxygen comments are in line with the rest of the code base we have created some basic rules you should follow:
+
+- we exclusively use @ and /\*\* to document our files, for example:
+```cpp
+
+/** @brief example for a function
+ *  @tparam T a quick example of what the template param does
+ *          (not when it can be inferred by a param)
+ *  @param a_parameter a quick description of what the param does
+ *         additionally you might use [in] [out] [in/out] for
+ *         clarity
+ *  @return int a quick explanation of what to expect from 
+ *          the function
+ *  @note some additional noteworthy documentation details
+ *  @throw std::exception if your function is at risk of 
+ *         throwing an exception
+ */
+template <class T>
+int a_function(int a_parameter);
+
+
 ### Templates
 when doing template-meta-programming make sure to use `constexpr` and `using` correctly.
 
 ### A Typical File
-```c++
+```cpp
 #pragma once // we use pragma it is supported pretty much everywhere
 #include <core/math/vector.hpp> //alway include from the root,makes the file more readable
 #include <application/application.hpp> //even if it is your own directory
