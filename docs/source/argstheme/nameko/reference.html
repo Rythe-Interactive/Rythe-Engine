@@ -1,0 +1,14 @@
+<div class="widget">
+<h1>On This Page</h1>
+<p>{{ toc }}</p>
+
+{%- if prev -%}
+<h1>Previous Topic</h1>
+<p><a href="{{ prev.link|e }}">{{ prev.title }}</a></p>
+{%- endif -%}
+
+{%- if next -%}
+<h1>Next Topic</h1>
+<p><a href="{{ next.link|e }}">{{ next.title }}</a>{{ nextchar }}</p>
+{%- endif -%}
+</div>
