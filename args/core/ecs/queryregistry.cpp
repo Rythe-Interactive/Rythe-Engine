@@ -96,7 +96,7 @@ namespace args::core::ecs
 
 	id_type QueryRegistry::addQuery(const sparse_map<id_type, id_type>& componentTypes)
 	{
-		id_type queryId = m_entityLists.size();
+		id_type queryId = m_entityLists.size() + 1;
 		m_entityLists.emplace(queryId);
 		m_references.insert(queryId, 1);
 
