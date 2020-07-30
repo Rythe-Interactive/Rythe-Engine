@@ -13,18 +13,37 @@ namespace args::core::ecs
 		if (!validateEntity(entityId))
 			throw args_entity_not_found_error;
 
-		entity_data& data = m_entityData[entityId];
+		entity_data* data = nullptr;
 
-		for (id_type componentTypeId : data.components)
-			m_families[componentTypeId]->destroy_component(entityId);
+		{
+			async::readonly_guard guard(m_entityDataLock);
+			data = &m_entityData[entityId];
+		}
 
+		{
+			async::readonly_guard guard(m_familyLock); // Possibly deadlocks? Will also lock atomic_sparse_map::m_container_lock for the family.
+			for (id_type componentTypeId : data->components)
+			{
+				m_families[componentTypeId]->destroy_component(entityId);
+			}
+		}
 
-		for (entity_handle child : data.children)
+		{
+			async::readonly_guard guard(m_entityLock);
+			m_entities[entityId].set_parent(invalid_id);
+		}
+
+		for (entity_handle& child : data->children)
 			recursiveDestroyEntityInternal(child);
 
-
-		m_entityData.erase(entityId);
-		m_entities.erase(entityId);
+		{
+			async::readwrite_guard guard(m_entityDataLock);
+			m_entityData.erase(entityId);
+		}
+		{
+			async::readwrite_guard guard(m_entityLock);
+			m_entities.erase(entityId);
+		}
 
 		m_queryRegistry.markEntityDestruction(entityId);
 	}
@@ -38,6 +57,8 @@ namespace args::core::ecs
 
 	inline component_container_base* EcsRegistry::getFamily(id_type componentTypeId)
 	{
+		async::readonly_guard guard(m_familyLock);
+
 		if (!m_families.contains(componentTypeId))
 			throw args_unknown_component_error;
 
@@ -59,7 +80,11 @@ namespace args::core::ecs
 
 		getFamily(componentTypeId)->create_component(entityId);
 
-		m_entityData[entityId].components.insert(componentTypeId);
+		{
+			async::readonly_guard guard(m_entityDataLock);
+			m_entityData[entityId].components.insert(componentTypeId);
+		}
+
 		m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
 
 		return component_handle_base(entityId, *this);
@@ -72,12 +97,17 @@ namespace args::core::ecs
 
 		getFamily(componentTypeId)->destroy_component(entityId);
 
-		m_entityData[entityId].components.erase(componentTypeId);
+		{
+			async::readonly_guard guard(m_entityDataLock);
+			m_entityData[entityId].components.erase(componentTypeId);
+		}
+
 		m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
 	}
 
 	A_NODISCARD inline bool EcsRegistry::validateEntity(id_type entityId)
 	{
+		async::readonly_guard guard(m_entityLock);
 		return entityId && m_entities.contains(entityId);
 	}
 
@@ -88,7 +118,12 @@ namespace args::core::ecs
 		if (validateEntity(id))
 			throw args_entity_exists_error;
 
-		m_entityData[id] = {};
+		{
+			async::readwrite_guard guard(m_entityDataLock);
+			m_entityData[id] = {};
+		}
+
+		async::readwrite_guard guard(m_entityLock);
 		m_entities.emplace(id, id, this);
 
 		return m_entities[id];
@@ -99,21 +134,40 @@ namespace args::core::ecs
 		if (!validateEntity(entityId))
 			throw args_entity_not_found_error;
 
-		entity_data& data = m_entityData[entityId];
+		entity_data* data = nullptr;
 
-		for (id_type componentTypeId : data.components)
-			m_families[componentTypeId]->destroy_component(entityId);
+		{
+			async::readonly_guard guard(m_entityDataLock);
+			data = &m_entityData[entityId];
+		}
 
-		m_entities[entityId].set_parent(invalid_id);
+		{
+			async::readonly_guard guard(m_familyLock); // Possibly deadlocks? Will also lock atomic_sparse_map::m_container_lock for the family.
+			for (id_type componentTypeId : data->components)
+			{
+				m_families[componentTypeId]->destroy_component(entityId);
+			}
+		}
 
-		for (entity_handle& child : data.children)
+		{
+			async::readonly_guard guard(m_entityLock);
+			m_entities[entityId].set_parent(invalid_id);
+		}
+
+		for (entity_handle& child : data->children)
 			if (recurse)
 				recursiveDestroyEntityInternal(child);
 			else
 				child.set_parent(invalid_id);
 
-		m_entityData.erase(entityId);
-		m_entities.erase(entityId);
+		{
+			async::readwrite_guard guard(m_entityDataLock);
+			m_entityData.erase(entityId);
+		}
+		{
+			async::readwrite_guard guard(m_entityLock);
+			m_entities.erase(entityId);
+		}
 
 		m_queryRegistry.markEntityDestruction(entityId);
 	}
@@ -123,6 +177,7 @@ namespace args::core::ecs
 		if (!validateEntity(entityId))
 			return entity_handle(invalid_id, this);
 
+		async::readonly_guard guard(m_entityLock);
 		return m_entities[entityId];
 	}
 
@@ -131,12 +186,17 @@ namespace args::core::ecs
 		if (!validateEntity(entityId))
 			throw args_entity_not_found_error;
 
-		entity_data& data = m_entityData[entityId];
+		entity_data* data = nullptr;
 
-		if (data.parent && !validateEntity(data.parent))
-			data.parent = invalid_id;
+		{
+			async::readonly_guard guard(m_entityDataLock);
+			data = &m_entityData[entityId];
+		}
 
-		return data;
+		if (data->parent && !validateEntity(data->parent))
+			data->parent = invalid_id;
+
+		return *data;
 	}
 
 	A_NODISCARD inline sparse_map<id_type, entity_handle>& EcsRegistry::getEntities()

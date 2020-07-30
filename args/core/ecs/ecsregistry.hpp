@@ -1,18 +1,11 @@
 #pragma once
-#include <core/containers/sparse_map.hpp>
-#include <core/containers/sparse_set.hpp>
-#include <core/containers/hashed_sparse_set.hpp>
-#include <memory>
-#include <core/common/exception.hpp>
+#include <core/containers/containers.hpp>
 #include <core/types/types.hpp>
 #include <core/common/common.hpp>
+#include <core/async/async.hpp>
 #include <core/ecs/component_container.hpp>
 #include <core/ecs/queryregistry.hpp>
 #include <core/ecs/entityquery.hpp>
-
-/**
- * @todo MAKE ECSREGISTRY THREAD SAFE!!!
- */
 
 /**
  * @file ecsregistry.hpp
@@ -44,9 +37,16 @@ namespace args::core::ecs
 	{
 	private:
 		static id_type m_nextEntityId;
+
+		mutable async::readonly_rw_spinlock m_familyLock;
 		sparse_map<id_type, component_container_base*> m_families;
+
+		mutable async::readonly_rw_spinlock m_entityDataLock;
 		sparse_map<id_type, entity_data> m_entityData;
+
+		mutable async::readonly_rw_spinlock m_entityLock;
 		sparse_map<id_type, entity_handle> m_entities;
+
 		QueryRegistry m_queryRegistry;
 
 		/**@brief Internal function for recursively destroying all children and children of children etc.
@@ -69,6 +69,7 @@ namespace args::core::ecs
 		template<typename component_type>
 		void reportComponentType()
 		{
+			async::readwrite_guard guard(m_familyLock);
 			if (!m_families.contains(typeHash<component_type>()))
 				m_families[typeHash<component_type>()] = new component_container<component_type>();
 		}
