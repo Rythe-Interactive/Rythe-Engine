@@ -55,8 +55,9 @@ namespace args::core::ecs
 
 	inline void QueryRegistry::evaluateEntityChange(id_type entityId, id_type componentTypeId, bool removal)
 	{
-		async::readwrite_guard entguard(m_entityLock);
-		async::readonly_guard compguard(m_componentLock);
+		async::read_state entitystate = async::write;
+		async::read_state compstate = async::read;
+		async::mixed_multiguard mmguard(m_entityLock, entitystate, m_componentLock, compstate);
 
 		for (int i = 0; i < m_entityLists.size(); i++)
 		{

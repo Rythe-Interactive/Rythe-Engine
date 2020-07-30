@@ -12,6 +12,8 @@
 
 namespace args::core::async
 {
+	enum read_state { idle = 0, read = 1, write = 2 };
+
 	/**@class readonly_rw_spinlock
 	 * @brief Lock used with ::async::readonly_guard and ::async::readwrite_guard.
 	 * @note Read-only operations can happen simultaneously without waiting for each other.
@@ -23,7 +25,6 @@ namespace args::core::async
 	 */
 	struct ARGS_API readonly_rw_spinlock
 	{
-		enum read_state { idle = 0, read = 1, write = 2 };
 	private:
 		static std::atomic_uint lastId;
 		const uint id;
@@ -70,7 +71,7 @@ namespace args::core::async
 		 */
 		readonly_guard(readonly_rw_spinlock& lock) : m_lock(lock)
 		{
-			m_lock.lock(readonly_rw_spinlock::read);
+			m_lock.lock(read);
 		}
 
 		readonly_guard(const readonly_guard&) = delete;
@@ -79,7 +80,7 @@ namespace args::core::async
 		 */
 		~readonly_guard()
 		{
-			m_lock.unlock(readonly_rw_spinlock::read);
+			m_lock.unlock(read);
 		}
 
 		readonly_guard& operator=(readonly_guard&&) = delete;
@@ -114,7 +115,7 @@ namespace args::core::async
 				locked = true;
 				for (uint i : unlockedLocks)
 				{
-					if (m_locks[i]->try_lock(readonly_rw_spinlock::read))
+					if (m_locks[i]->try_lock(read))
 						unlockedLocks.erase(i);
 					else
 						locked = false;
@@ -129,7 +130,7 @@ namespace args::core::async
 		~readonly_multiguard()
 		{
 			for (readonly_rw_spinlock* lock : m_locks)
-				lock->unlock(readonly_rw_spinlock::read);
+				lock->unlock(read);
 		}
 
 		readonly_multiguard& operator=(readonly_multiguard&&) = delete;
@@ -151,7 +152,7 @@ namespace args::core::async
 		 */
 		readwrite_guard(readonly_rw_spinlock& lock) : m_lock(lock)
 		{
-			m_lock.lock(readonly_rw_spinlock::write);
+			m_lock.lock(write);
 		}
 
 		readwrite_guard(const readwrite_guard&) = delete;
@@ -160,7 +161,7 @@ namespace args::core::async
 		 */
 		~readwrite_guard()
 		{
-			m_lock.unlock(readonly_rw_spinlock::write);
+			m_lock.unlock(write);
 		}
 
 		readwrite_guard& operator=(readwrite_guard&&) = delete;
@@ -196,7 +197,7 @@ namespace args::core::async
 				locked = true;
 				for (int i : unlockedLocks)
 				{
-					if (m_locks[i]->try_lock(readonly_rw_spinlock::write))
+					if (m_locks[i]->try_lock(write))
 						unlockedLocks.erase(i);
 					else
 						locked = false;
@@ -211,7 +212,7 @@ namespace args::core::async
 		~readwrite_multiguard()
 		{
 			for (readonly_rw_spinlock* lock : m_locks)
-				lock->unlock(readonly_rw_spinlock::write);
+				lock->unlock(write);
 		}
 
 		readwrite_multiguard& operator=(readwrite_multiguard&&) = delete;
@@ -228,18 +229,25 @@ namespace args::core::async
 
 	private:
 		std::vector<readonly_rw_spinlock*> m_locks;
-		std::vector<readonly_rw_spinlock::read_state*> m_states;
+		std::vector<read_state*> m_states;
 
-		template<size_type I = 0, typename... ttypes>
-		void fillVectors(std::tuple<ttypes*...>& args)
+		template<size_type I>
+		void fillVectors(std::tuple<mixed_types*...>& args)
 		{
-			if (I%2 == 0)
-				m_locks.push_back(std::get<I>(args));
-			else
-				m_states.push_back(std::get<I>(args));
+			if (I - 1 >= 1)
+			{
+				fillVectors<I - 2>(args);
 
-			if (I < sizeof...(ttypes))
-				fillVectors<I + 1>(args);
+				m_locks.push_back(std::get<I-1>(args));
+				m_states.push_back(std::get<I>(args));
+			}
+		}
+
+		template<>
+		void fillVectors<1>(std::tuple<mixed_types*...>& args)
+		{
+			m_locks.push_back(std::get<0>(args));
+			m_states.push_back(std::get<1>(args));
 		}
 
 	public:
@@ -249,19 +257,19 @@ namespace args::core::async
 		{
 			std::tuple<mixed_types*...> argsdata = std::make_tuple(&arguments...);
 
-			fillVectors(argsdata);
+			fillVectors<sizeof...(mixed_types)-1>(argsdata);
 
-			sparse_set<int> unlockedLocks;
-			for (int i = 0; i < m_locks.size(); i++)
+			sparse_set<uint> unlockedLocks;
+			for (uint i = 0; i < m_locks.size(); i++)
 				unlockedLocks.insert(i);
 
 			bool locked = true;
 			do
 			{
 				locked = true;
-				for (int i : unlockedLocks)
+				for (uint i : unlockedLocks)
 				{
-					if (lock.try_lock(readonly_rw_spinlock::write))
+					if (m_locks[i]->try_lock(*(m_states[i])))
 						unlockedLocks.erase(i);
 					else
 						locked = false;
@@ -269,14 +277,14 @@ namespace args::core::async
 			} while (!locked);
 		}
 
-		mixed_multiguard(const readwrite_multiguard<mixed_types...>&) = delete;
+		mixed_multiguard(const mixed_multiguard&) = delete;
 
 		/**@brief RAII style unlocks lock from Read-Write.
 		 */
 		~mixed_multiguard()
 		{
-			for (readonly_rw_spinlock& lock : m_locks)
-				lock.unlock(readonly_rw_spinlock::write);
+			for(int i = 0; i < m_locks.size(); i++)
+				m_locks[i]->unlock(*(m_states[i]));
 		}
 
 		mixed_multiguard& operator=(mixed_multiguard&&) = delete;

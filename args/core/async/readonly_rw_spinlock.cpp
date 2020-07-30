@@ -18,7 +18,7 @@ namespace args::core::async
 		return vals[id];
 	}
 
-	readonly_rw_spinlock::read_state& readonly_rw_spinlock::localState()
+	read_state& readonly_rw_spinlock::localState()
 	{
 		static thread_local std::unordered_map<uint, read_state> states;
 		return states[id];
@@ -237,9 +237,9 @@ namespace args::core::async
 	{
 		switch (permissionLevel)
 		{
-		case args::core::async::readonly_rw_spinlock::read:
+		case args::core::async::read_state::read:
 			return read_unlock();
-		case args::core::async::readonly_rw_spinlock::write:
+		case args::core::async::read_state::write:
 			return write_unlock();
 		default:
 			return;
