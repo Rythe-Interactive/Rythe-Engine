@@ -199,8 +199,8 @@ namespace args::core::ecs
 		return *data;
 	}
 
-	A_NODISCARD inline sparse_map<id_type, entity_handle>& EcsRegistry::getEntities()
+	A_NODISCARD inline std::pair<sparse_map<id_type, entity_handle>&, async::readonly_rw_spinlock&> EcsRegistry::getEntities()
 	{
-		return m_entities;
+		return std::pair<sparse_map<id_type, entity_handle>&, async::readonly_rw_spinlock&>(m_entities, m_entityLock);
 	}
 }

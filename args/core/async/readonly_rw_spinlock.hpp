@@ -115,6 +115,7 @@ namespace args::core::async
 	private:
 		readonly_rw_spinlock& lock;
 		bool preacquired;
+		bool returnToRead;
 
 	public:
 		/**@brief Creates readonly guard and locks for Read-Write.
@@ -123,6 +124,8 @@ namespace args::core::async
 		{
 			if (lock.localStates()[lock.id] == readonly_rw_spinlock::read) // If we're currently only acquired for read we need to stop reading before requesting rw.
 			{
+				returnToRead = true;
+
 				// Mark our read as finished.
 				lock.readers.fetch_sub(1, std::memory_order_relaxed);
 
@@ -137,6 +140,7 @@ namespace args::core::async
 				return;
 			}
 
+			returnToRead = false;
 			preacquired = false;
 
 			// Expect idle as default.
@@ -157,13 +161,24 @@ namespace args::core::async
 		 */
 		~readwrite_guard()
 		{
-			if (preacquired) // Another guard is still alive that will unlock the lock for this thread.
+			if (preacquired) // Another write guard is still alive that will unlock the lock for this thread.
 				return;
 
-			// We should be the only one to have had access so we can safely write to the lock state and return it to idle.
-			lock.readState.store(readonly_rw_spinlock::idle, std::memory_order_release);
+			if (returnToRead) // read permission was granted before write request, we should return to read instead of idle after write is finished.
+			{
+				// We should be the only one to have had access so we can safely write to the lock state and readers.
+				lock.readers.fetch_add(1, std::memory_order_relaxed);
+				lock.readState.store(readonly_rw_spinlock::read, std::memory_order_release);
 
-			lock.localStates()[lock.id] = readonly_rw_spinlock::idle; // Set thread_local state to idle.
+				lock.localStates()[lock.id] = readonly_rw_spinlock::read; // Set thread_local state back to read.
+			}
+			else
+			{
+				// We should be the only one to have had access so we can safely write to the lock state and return it to idle.
+				lock.readState.store(readonly_rw_spinlock::idle, std::memory_order_release);
+
+				lock.localStates()[lock.id] = readonly_rw_spinlock::idle; // Set thread_local state to idle.
+			}
 		}
 
 		readwrite_guard& operator=(readwrite_guard&&) = delete;

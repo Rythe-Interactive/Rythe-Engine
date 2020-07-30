@@ -1,5 +1,5 @@
 #pragma once
-#include <vector>
+#include <core/async/async.hpp>
 #include <core/containers/containers.hpp>
 #include <core/types/primitives.hpp>
 #include <core/ecs/entityquery.hpp>
@@ -20,8 +20,11 @@ namespace args::core::ecs
 	{
 	private:
 		EcsRegistry& m_registry;
+		async::readonly_rw_spinlock m_entityLock;
 		sparse_map<id_type, sparse_map<id_type, entity_handle>> m_entityLists;
+		async::readonly_rw_spinlock m_referenceLock;
 		sparse_map<id_type, size_type> m_references;
+		async::readonly_rw_spinlock m_componentLock;
 		sparse_map<id_type, hashed_sparse_set<id_type>> m_componentTypes;
 
 	public:

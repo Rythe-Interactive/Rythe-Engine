@@ -7,6 +7,8 @@
 #include <core/ecs/queryregistry.hpp>
 #include <core/ecs/entityquery.hpp>
 
+#include <utility>
+
 /**
  * @file ecsregistry.hpp
  */
@@ -186,7 +188,7 @@ namespace args::core::ecs
 		/**@brief Get a container with ALL entities.
 		 * @returns sparse_map<id_type, entity_handle>& Container that keeps both the id's and corresponding entity handles for easy use.
 		 */
-		A_NODISCARD sparse_map<id_type, entity_handle>& getEntities();
+		A_NODISCARD std::pair<sparse_map<id_type, entity_handle>&, async::readonly_rw_spinlock&>  getEntities();
 
 		/**@brief Get a query for your component combination.
 		 * @tparam component_types Variadic parameter types of all component types you wish to query for.
