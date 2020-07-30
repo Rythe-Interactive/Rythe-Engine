@@ -2,6 +2,7 @@
 #include <vector>
 #include <core/containers/containers.hpp>
 #include <core/types/primitives.hpp>
+#include <core/ecs/entityquery.hpp>
 
 /**
  * @file queryregistry.hpp
@@ -11,7 +12,6 @@ namespace args::core::ecs
 {
 	class ARGS_API EcsRegistry;
 	class ARGS_API entity_handle;
-	class ARGS_API EntityQuery;
 
 	/**@class QueryRegistry
 	 * @brief Main manager and owner of all queries and query related objects.
