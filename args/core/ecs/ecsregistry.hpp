@@ -28,7 +28,7 @@ namespace args::core::ecs
 	class component_handle;
 
 	/**@class entity_data
-	 * @brief Internal datastructure used to store hierarchy and composition data of an entity.
+	 * @brief Internal data-structure used to store hierarchy and composition data of an entity.
 	 */
 	struct entity_data
 	{
@@ -49,7 +49,7 @@ namespace args::core::ecs
 		sparse_map<id_type, entity_handle> m_entities;
 		QueryRegistry m_queryRegistry;
 
-		/**@brief Internal function for recursively destroying all children and children of children etc etc.
+		/**@brief Internal function for recursively destroying all children and children of children etc.
 		 */
 		void recursiveDestroyEntityInternal(id_type entityId);
 
@@ -58,10 +58,10 @@ namespace args::core::ecs
 		 */
 		EcsRegistry();
 
-		/**@brief Reports component type to the registry so that it can be stored managed and recognised as a component.
+		/**@brief Reports component type to the registry so that it can be stored managed and recognized as a component.
 		 * @tparam component_type Type of struct you with to add as a component.
 		 * @note For a struct to fully work as a component to all supported features of this ECS the struct needs the following requirements:
-		 *		 - It needs to be default constructable.
+		 *		 - It needs to be default constructible.
 		 *		 - It needs to be trivially copyable.
 		 *		 - The + operator needs to be defined.
 		 *		 - The * operator needs to be defined.
@@ -159,7 +159,7 @@ namespace args::core::ecs
 
 		/**@brief Create new entity.
 		 * @returns entity_handle Entity handle pointing to the newly created entity.
-		 * @throws args_entity_exists_error When the next entity id is somehow already taken. (only possible if someone else messed with my/Glyns code)
+		 * @throws args_entity_exists_error When the next entity id is somehow already taken. (only possible if someone else messed with my/Glyn's code)
 		 */
 		entity_handle createEntity();
 
@@ -183,7 +183,7 @@ namespace args::core::ecs
 		A_NODISCARD entity_data& getEntityData(id_type entityId);
 
 		/**@brief Get a container with ALL entities.
-		 * @returns sparse_map<id_type, entity_handle>& Container that keeps both the id's and corresponding enitity handles for easy use.
+		 * @returns sparse_map<id_type, entity_handle>& Container that keeps both the id's and corresponding entity handles for easy use.
 		 */
 		A_NODISCARD sparse_map<id_type, entity_handle>& getEntities();
 

@@ -30,9 +30,9 @@ void ARGS_CCONV reportModules(Engine* engine)
 	catch (const exception& e)
 	{
 		std::cout << e.what() << std::endl;
-		std::cout << e.get_file() << std::endl;
-		std::cout << e.get_line() << std::endl;
-		std::cout << e.get_func() << std::endl;
+		std::cout << e.file() << std::endl;
+		std::cout << e.line() << std::endl;
+		std::cout << e.func() << std::endl;
 	}
 
 	std::cout << std::endl;

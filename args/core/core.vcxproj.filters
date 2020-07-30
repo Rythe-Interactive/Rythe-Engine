@@ -111,6 +111,9 @@
     <ClInclude Include="containers\hashed_sparse_set.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="async\async.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp">

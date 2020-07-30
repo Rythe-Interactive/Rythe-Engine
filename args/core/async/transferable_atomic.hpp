@@ -6,6 +6,9 @@
 
 namespace args::core::async
 {
+	/**@class transferable_atomic
+	 * @brief Copyable wrapper for std::atomic.
+	 */
 	template <typename T>
 	struct transferable_atomic
 	{

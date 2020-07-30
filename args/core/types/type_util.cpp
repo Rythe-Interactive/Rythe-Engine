@@ -18,7 +18,7 @@ namespace args::core
 		return hash;
 	}
 
-	id_type ARGS_FUNC nameHash(string name)
+	id_type ARGS_FUNC nameHash(std::string name)
 	{
 		id_type hash = 0;
 
