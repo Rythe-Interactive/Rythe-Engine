@@ -137,6 +137,9 @@
     <ClCompile Include="ecs\entity_handle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="async\readonly_rw_spinlock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
