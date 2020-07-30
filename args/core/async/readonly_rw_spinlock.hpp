@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <core/types/primitives.hpp>
 #include <core/platform/platform.hpp>
+#include <core/containers/sparse_set.hpp>
 
 /**
  * @file readonly_rw_spinlock.hpp
@@ -21,21 +22,36 @@ namespace args::core::async
 	 */
 	struct ARGS_API readonly_rw_spinlock
 	{
-		friend class readonly_guard;
-		friend class readwrite_guard;
-	private:
 		enum read_state { idle = 0, read = 1, write = 2 };
+	private:
 		static std::atomic_uint lastId;
 		const uint id;
 		std::atomic_int readState;
 		std::atomic_int readers;
+		static thread_local int localWriters;
+		static thread_local int localReaders;
 
-		static std::unordered_map<uint, int>& localStates();
+		static read_state& localStates(uint id);
+
+		void read_lock();
+		bool read_try_lock();
+		void write_lock();
+		bool write_try_lock();
+
+		void read_unlock();
+		void write_unlock();
+
 	public:
 		readonly_rw_spinlock();
 		readonly_rw_spinlock(const readonly_rw_spinlock&) = delete;
 		readonly_rw_spinlock& operator=(readonly_rw_spinlock&&) = delete;
+
+		void lock(read_state permissionLevel);
+		bool try_lock(read_state permissionLevel);
+		void unlock(read_state permissionLevel);
 	};
+
+
 
 	/**@class readonly_guard
 	 * @brief RAII guard that uses ::async::readonly_rw_spinlock to lock for read-only.
@@ -46,39 +62,14 @@ namespace args::core::async
 	class readonly_guard final
 	{
 	private:
-		readonly_rw_spinlock& lock;
-		bool preacquired;
+		readonly_rw_spinlock& m_lock;
 
 	public:
 		/**@brief Creates readonly guard and locks for Read-only.
 		 */
-		readonly_guard(readonly_rw_spinlock& lock) : lock(lock)
+		readonly_guard(readonly_rw_spinlock& lock) : m_lock(lock)
 		{
-			if (lock.localStates()[lock.id] != readonly_rw_spinlock::idle) // If we're either already reading or writing then the lock doesn't need to be reacquired.
-			{
-				preacquired = true; // Remember that there's another active guard.
-				return;
-			}
-
-			preacquired = false;
-
-			// Expect idle as default.
-			int state = readonly_rw_spinlock::idle;
-			// Report another reader to the lock.
-			lock.readers.fetch_add(1, std::memory_order_relaxed);
-
-			// Try to set the lock state to read
-			while (!lock.readState.compare_exchange_weak(state, readonly_rw_spinlock::read, std::memory_order_acquire, std::memory_order_relaxed))
-			{
-				// If the lock state was already on read we can continue without issues, read-only operations are allowed to happen simultaneously.
-				if (state == readonly_rw_spinlock::read)
-					break;
-				else // If the lock was in any other state than idle or read then we need to stay in the CAS loop to prevent writes from happening during our read.
-					state = readonly_rw_spinlock::idle;
-			}
-
-			lock.localStates()[lock.id] = readonly_rw_spinlock::read; // Set thread_local state to read.
-
+			m_lock.lock(readonly_rw_spinlock::read);
 		}
 
 		readonly_guard(const readonly_guard&) = delete;
@@ -87,21 +78,60 @@ namespace args::core::async
 		 */
 		~readonly_guard()
 		{
-			if (preacquired) // Another guard is still alive that will unlock the lock for this thread.
-				return;
-
-			// Mark our read as finished.
-			lock.readers.fetch_sub(1, std::memory_order_relaxed);
-
-			// If there are no more readers left then the lock state needs to be returned to idle.
-			// This allows other (non readonly)locks to acquire access.
-			if (lock.readers.load(std::memory_order_acquire) == 0)
-				lock.readState.store(readonly_rw_spinlock::idle, std::memory_order_release);
-
-			lock.localStates()[lock.id] = readonly_rw_spinlock::idle; // Set thread_local state to idle.
+			m_lock.unlock(readonly_rw_spinlock::read);
 		}
 
 		readonly_guard& operator=(readonly_guard&&) = delete;
+	};
+
+	/**@class readonly_multiguard
+	 * @brief .
+	 * @ref args::core::async::readonly_rw_spinlock
+	 */
+	template<typename lock_type1, typename lock_type2, typename... lock_typesN>
+	class readonly_multiguard
+	{
+	private:
+		std::vector<readonly_rw_spinlock&> m_locks;
+
+	public:
+		/**@brief Creates readonly multi-guard and locks for Read-only.
+		 */
+		readonly_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN& locks...)
+		{
+			m_locks.push_back(lock1);
+			m_locks.push_back(lock2);
+			(m_locks.pushback(locks), ...);
+
+			sparse_set<int> unlockedLocks;
+			for (int i = 0; i < m_locks.size(); i++)
+				unlockedLocks.insert(i);
+
+			bool locked = true;
+			do
+			{
+				locked = true;
+				for (int i : unlockedLocks)
+				{
+					if (lock.try_lock(readonly_rw_spinlock::read))
+						unlockedLocks.erase(i);
+					else
+						locked = false;
+				}
+			} while (!locked)
+		}
+
+		readonly_multiguard(const readonly_multiguard&) = delete;
+
+		/**@brief RAII style unlocks lock from Read-only.
+		 */
+		~readonly_multiguard()
+		{
+			for (readonly_rw_spinlock& lock : m_locks)
+				lock.unlock(readonly_rw_spinlock::read);
+		}
+
+		readonly_multiguard& operator=(readonly_multiguard&&) = delete;
 	};
 
 	/**@class readwrite_guard
@@ -113,46 +143,14 @@ namespace args::core::async
 	class readwrite_guard final
 	{
 	private:
-		readonly_rw_spinlock& lock;
-		bool preacquired;
-		bool returnToRead;
+		readonly_rw_spinlock& m_lock;
 
 	public:
 		/**@brief Creates readonly guard and locks for Read-Write.
 		 */
-		readwrite_guard(readonly_rw_spinlock& lock) : lock(lock)
+		readwrite_guard(readonly_rw_spinlock& lock) : m_lock(lock)
 		{
-			if (lock.localStates()[lock.id] == readonly_rw_spinlock::read) // If we're currently only acquired for read we need to stop reading before requesting rw.
-			{
-				returnToRead = true;
-
-				// Mark our read as finished.
-				lock.readers.fetch_sub(1, std::memory_order_relaxed);
-
-				// If there are no more readers left then the lock state needs to be returned to idle.
-				// This allows other (non readonly)locks to acquire access.
-				if (lock.readers.load(std::memory_order_acquire) == 0)
-					lock.readState.store(readonly_rw_spinlock::idle, std::memory_order_release);
-			}
-			else if (lock.localStates()[lock.id] == readonly_rw_spinlock::write) // If we're already writing then we don't need to reacquire the lock.
-			{
-				preacquired = true; // Remember that there's another active guard.
-				return;
-			}
-
-			returnToRead = false;
-			preacquired = false;
-
-			// Expect idle as default.
-			int state = readonly_rw_spinlock::idle;
-
-			// Try to set the lock state to write.
-			while (!lock.readState.compare_exchange_weak(state, readonly_rw_spinlock::write, std::memory_order_acquire, std::memory_order_relaxed))
-				// If lock state is any other state than idle then we cannot acquire access to write, thus we need to stay in the CAS loop.
-				state = readonly_rw_spinlock::idle;
-
-
-			lock.localStates()[lock.id] = readonly_rw_spinlock::write; // Set thread_local state to write.
+			m_lock.lock(readonly_rw_spinlock::write);
 		}
 
 		readwrite_guard(const readwrite_guard&) = delete;
@@ -161,26 +159,60 @@ namespace args::core::async
 		 */
 		~readwrite_guard()
 		{
-			if (preacquired) // Another write guard is still alive that will unlock the lock for this thread.
-				return;
-
-			if (returnToRead) // read permission was granted before write request, we should return to read instead of idle after write is finished.
-			{
-				// We should be the only one to have had access so we can safely write to the lock state and readers.
-				lock.readers.fetch_add(1, std::memory_order_relaxed);
-				lock.readState.store(readonly_rw_spinlock::read, std::memory_order_release);
-
-				lock.localStates()[lock.id] = readonly_rw_spinlock::read; // Set thread_local state back to read.
-			}
-			else
-			{
-				// We should be the only one to have had access so we can safely write to the lock state and return it to idle.
-				lock.readState.store(readonly_rw_spinlock::idle, std::memory_order_release);
-
-				lock.localStates()[lock.id] = readonly_rw_spinlock::idle; // Set thread_local state to idle.
-			}
+			m_lock.unlock(readonly_rw_spinlock::write);
 		}
 
 		readwrite_guard& operator=(readwrite_guard&&) = delete;
+	};
+
+
+	/**@class readwrite_multiguard
+	 * @brief .
+	 * @ref args::core::async::readonly_rw_spinlock
+	 */
+	template<typename lock_type1, typename lock_type2, typename... lock_typesN>
+	class readwrite_multiguard
+	{
+	private:
+		std::vector<readonly_rw_spinlock&> m_locks;
+
+	public:
+		/**@brief Creates readonly multi-guard and locks for Read-Write.
+		 */
+		readwrite_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN& locks...)
+		{
+			m_locks.push_back(lock1);
+			m_locks.push_back(lock2);
+			(m_locks.pushback(locks), ...);
+
+			sparse_set<int> unlockedLocks;
+			for (int i = 0; i < m_locks.size(); i++)
+				unlockedLocks.insert(i);
+
+			bool locked = true;
+			do
+			{
+				locked = true;
+				for (int i : unlockedLocks)
+				{
+					if (lock.try_lock(readonly_rw_spinlock::write))
+						unlockedLocks.erase(i);
+					else
+						locked = false;
+				}
+			} while (!locked)
+		}
+
+		readwrite_multiguard(const readwrite_multiguard&) = delete;
+
+		/**@brief RAII style unlocks lock from Read-Write.
+		 */
+		~readwrite_multiguard()
+		{
+			for (readonly_rw_spinlock& lock : m_locks)
+				lock.unlock(readonly_rw_spinlock::write);
+		}
+
+		readwrite_multiguard& operator=(readwrite_multiguard&&) = delete;
 	};
 }
