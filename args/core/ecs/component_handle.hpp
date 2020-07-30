@@ -56,12 +56,13 @@ namespace args::core::ecs
 		 */
 		component_type read(std::memory_order order = std::memory_order_acquire)
 		{
-			if (!valid())
-				throw args_invalid_component_error;
-
 			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
 			if (!comp)
-				throw args_component_destroyed_error;
+				return component_type();
+
+			async::readonly_guard guard(comp->get_lock());
+			if (!valid())
+				return component_type();
 
 			return comp->get().load(order);
 		}
@@ -73,12 +74,13 @@ namespace args::core::ecs
 		 */
 		component_type write(component_type&& value, std::memory_order order = std::memory_order_release)
 		{
-			if (!valid())
-				throw args_invalid_component_error;
-
 			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
 			if (!comp)
-				throw args_component_destroyed_error;
+				return component_type();
+
+			async::readonly_guard guard(comp->get_lock());
+			if (!valid())
+				return component_type();
 
 			comp->get().store(value, order);
 
@@ -97,12 +99,13 @@ namespace args::core::ecs
 			std::memory_order successOrder = std::memory_order_release,
 			std::memory_order failureOrder = std::memory_order_relaxed)
 		{
-			if (!valid())
-				throw args_invalid_component_error;
-
 			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
 			if (!comp)
-				throw args_component_destroyed_error;
+				return component_type();
+
+			async::readonly_guard guard(comp->get_lock());
+			if (!valid())
+				return component_type();
 
 			component_type oldVal = comp->get().load(loadOrder);
 			component_type newVal = oldVal + value;
@@ -126,12 +129,13 @@ namespace args::core::ecs
 			std::memory_order successOrder = std::memory_order_release,
 			std::memory_order failureOrder = std::memory_order_relaxed)
 		{
-			if (!valid())
-				throw args_invalid_component_error;
-
 			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
 			if (!comp)
-				throw args_component_destroyed_error;
+				return component_type();
+
+			async::readonly_guard guard(comp->get_lock());
+			if (!valid())
+				return component_type();
 
 			component_type oldVal = comp->get().load(loadOrder);
 			component_type newVal = oldVal * value;
@@ -148,10 +152,13 @@ namespace args::core::ecs
 		 */
 		void destroy()
 		{
-			if (!valid())
-				throw args_invalid_component_error;
+			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
+			if (!comp)
+				return;
 
-			m_registry.destroyComponent<component_type>(m_ownerId);
+			async::readwrite_guard guard(comp->get_lock());
+			if (valid())
+				m_registry.destroyComponent<component_type>(m_ownerId);
 		}
 
 		/**@brief Checks if handle still points to a valid component.

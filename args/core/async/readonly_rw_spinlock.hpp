@@ -51,7 +51,7 @@ namespace args::core::async
 
 	/**@class readonly_guard
 	 * @brief RAII guard that uses ::async::readonly_rw_spinlock to lock for read-only.
-	 *        Read-only operations can happen simultaneously without waiting for eachother.
+	 *        Read-only operations can happen simultaneously without waiting for each other.
 	 *		  Read-only operations will only wait for Read-Write operations to be finished.
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
@@ -118,7 +118,7 @@ namespace args::core::async
 
 	/**@class readwrite_guard
 	 * @brief RAII guard that uses ::async::readonly_rw_spinlock to lock for read/write.
-	 *        Read-Write operations cannot happen simultaneously and will wait for eachother.
+	 *        Read-Write operations cannot happen simultaneously and will wait for each other.
 	 *		  Read-Write operations will also wait for any Read-only operations to be finished.
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
