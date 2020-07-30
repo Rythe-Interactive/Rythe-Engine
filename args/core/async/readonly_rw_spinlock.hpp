@@ -1,5 +1,6 @@
 #pragma once
 #include <atomic>
+#include <tuple>
 #include <unordered_map>
 #include <core/types/primitives.hpp>
 #include <core/platform/platform.hpp>
@@ -28,10 +29,10 @@ namespace args::core::async
 		const uint id;
 		std::atomic_int readState;
 		std::atomic_int readers;
-		static thread_local int localWriters;
-		static thread_local int localReaders;
 
-		static read_state& localStates(uint id);
+		int& localWriters();
+		int& localReaders();
+		read_state& localState();
 
 		void read_lock();
 		bool read_try_lock();
@@ -88,37 +89,37 @@ namespace args::core::async
 	 * @brief .
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
-	template<typename lock_type1, typename lock_type2, typename... lock_typesN>
+	template<typename lock_type1 = readonly_rw_spinlock, typename lock_type2 = readonly_rw_spinlock, typename... lock_typesN>
 	class readonly_multiguard
 	{
 	private:
-		std::vector<readonly_rw_spinlock&> m_locks;
+		std::vector<readonly_rw_spinlock*> m_locks;
 
 	public:
 		/**@brief Creates readonly multi-guard and locks for Read-only.
 		 */
-		readonly_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN& locks...)
+		readonly_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN&... locks)
 		{
-			m_locks.push_back(lock1);
-			m_locks.push_back(lock2);
-			(m_locks.pushback(locks), ...);
+			m_locks.push_back(&lock1);
+			m_locks.push_back(&lock2);
+			(m_locks.push_back(&locks), ...);
 
-			sparse_set<int> unlockedLocks;
-			for (int i = 0; i < m_locks.size(); i++)
+			sparse_set<uint> unlockedLocks;
+			for (uint i = 0; i < m_locks.size(); i++)
 				unlockedLocks.insert(i);
 
 			bool locked = true;
 			do
 			{
 				locked = true;
-				for (int i : unlockedLocks)
+				for (uint i : unlockedLocks)
 				{
-					if (lock.try_lock(readonly_rw_spinlock::read))
+					if (m_locks[i]->try_lock(readonly_rw_spinlock::read))
 						unlockedLocks.erase(i);
 					else
 						locked = false;
 				}
-			} while (!locked)
+			} while (!locked);
 		}
 
 		readonly_multiguard(const readonly_multiguard&) = delete;
@@ -127,8 +128,8 @@ namespace args::core::async
 		 */
 		~readonly_multiguard()
 		{
-			for (readonly_rw_spinlock& lock : m_locks)
-				lock.unlock(readonly_rw_spinlock::read);
+			for (readonly_rw_spinlock* lock : m_locks)
+				lock->unlock(readonly_rw_spinlock::read);
 		}
 
 		readonly_multiguard& operator=(readonly_multiguard&&) = delete;
@@ -174,16 +175,81 @@ namespace args::core::async
 	class readwrite_multiguard
 	{
 	private:
-		std::vector<readonly_rw_spinlock&> m_locks;
+		std::vector<readonly_rw_spinlock*> m_locks;
 
 	public:
 		/**@brief Creates readonly multi-guard and locks for Read-Write.
 		 */
-		readwrite_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN& locks...)
+		readwrite_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN&... locks)
 		{
-			m_locks.push_back(lock1);
-			m_locks.push_back(lock2);
-			(m_locks.pushback(locks), ...);
+			m_locks.push_back(&lock1);
+			m_locks.push_back(&lock2);
+			(m_locks.push_back(&locks), ...);
+
+			sparse_set<int> unlockedLocks;
+			for (int i = 0; i < m_locks.size(); i++)
+				unlockedLocks.insert(i);
+
+			bool locked = true;
+			do
+			{
+				locked = true;
+				for (int i : unlockedLocks)
+				{
+					if (m_locks[i]->try_lock(readonly_rw_spinlock::write))
+						unlockedLocks.erase(i);
+					else
+						locked = false;
+				}
+			} while (!locked);
+		}
+
+		readwrite_multiguard(const readwrite_multiguard&) = delete;
+
+		/**@brief RAII style unlocks lock from Read-Write.
+		 */
+		~readwrite_multiguard()
+		{
+			for (readonly_rw_spinlock* lock : m_locks)
+				lock->unlock(readonly_rw_spinlock::write);
+		}
+
+		readwrite_multiguard& operator=(readwrite_multiguard&&) = delete;
+	};
+
+	/**@class mixed_multiguard
+	 * @brief .
+	 * @ref args::core::async::readonly_rw_spinlock
+	 */
+	template<typename... mixed_types>
+	class mixed_multiguard
+	{
+		static_assert(sizeof...(mixed_types) % 2 == 0, "Argument order should be (lock, lock-state, lock, lock-state). Argument count should thus be even.");
+
+	private:
+		std::vector<readonly_rw_spinlock*> m_locks;
+		std::vector<readonly_rw_spinlock::read_state*> m_states;
+
+		template<size_type I = 0, typename... ttypes>
+		void fillVectors(std::tuple<ttypes*...>& args)
+		{
+			if (I%2 == 0)
+				m_locks.push_back(std::get<I>(args));
+			else
+				m_states.push_back(std::get<I>(args));
+
+			if (I < sizeof...(ttypes))
+				fillVectors<I + 1>(args);
+		}
+
+	public:
+		/**@brief Creates readonly multi-guard and locks for Read-Write.
+		 */
+		mixed_multiguard(mixed_types&... arguments)
+		{
+			std::tuple<mixed_types*...> argsdata = std::make_tuple(&arguments...);
+
+			fillVectors(argsdata);
 
 			sparse_set<int> unlockedLocks;
 			for (int i = 0; i < m_locks.size(); i++)
@@ -200,19 +266,20 @@ namespace args::core::async
 					else
 						locked = false;
 				}
-			} while (!locked)
+			} while (!locked);
 		}
 
-		readwrite_multiguard(const readwrite_multiguard&) = delete;
+		mixed_multiguard(const readwrite_multiguard<mixed_types...>&) = delete;
 
 		/**@brief RAII style unlocks lock from Read-Write.
 		 */
-		~readwrite_multiguard()
+		~mixed_multiguard()
 		{
 			for (readonly_rw_spinlock& lock : m_locks)
 				lock.unlock(readonly_rw_spinlock::write);
 		}
 
-		readwrite_multiguard& operator=(readwrite_multiguard&&) = delete;
+		mixed_multiguard& operator=(mixed_multiguard&&) = delete;
 	};
+
 }

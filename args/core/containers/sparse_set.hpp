@@ -27,7 +27,7 @@ namespace args::core
 	template <typename value_type, template<typename...> typename dense_type = std::vector, template<typename...> typename sparse_type = std::vector>
 	class sparse_set
 	{
-		static_assert(std::is_unsigned_v<value_type>, "atomic_type must an unsigned type.");
+		static_assert(std::is_unsigned_v<value_type>, "value_type must an unsigned type.");
 	public:
 		using sparse_container = sparse_type<value_type>;
 		using dense_container = dense_type<value_type>;

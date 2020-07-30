@@ -3,6 +3,7 @@
 #include <core/ecs/entity_handle.hpp>
 #include <core/ecs/entityquery.hpp>
 #include <algorithm>
+#include <mutex>
 
 namespace args::core::ecs
 {
@@ -15,8 +16,7 @@ namespace args::core::ecs
 
 		auto entityData = m_registry.getEntities();
 		sparse_map<id_type, entity_handle>& entities = entityData.first;
-		async::readonly_guard rguard(entityData.second); // TODO: need for async::readonly_multiguard
-		async::readonly_guard comguard(m_componentLock);
+		async::readonly_multiguard mguard(entityData.second, m_componentLock);
 
 		for (id_type entityId : entities.keys())
 		{
@@ -37,8 +37,7 @@ namespace args::core::ecs
 		std::vector<id_type> toRemove;
 
 		{
-			async::readonly_guard entguard(m_entityLock);
-			async::readonly_guard compguard(m_componentLock);
+			async::readonly_multiguard mguard(m_entityLock, m_componentLock);
 			for (int i = 0; i < m_entityLists[queryId].size(); i++)
 			{
 				id_type entityId = m_entityLists[queryId].dense()[i];
@@ -58,6 +57,7 @@ namespace args::core::ecs
 	{
 		async::readwrite_guard entguard(m_entityLock);
 		async::readonly_guard compguard(m_componentLock);
+
 		for (int i = 0; i < m_entityLists.size(); i++)
 		{
 			if (!m_componentTypes[i].contains(componentTypeId))
