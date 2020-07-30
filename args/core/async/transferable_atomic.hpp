@@ -1,6 +1,5 @@
 #pragma once
 #include <atomic>
-#include <mutex>
 #include <core/async/readonly_rw_spinlock.hpp>
 
 /** @file transferable_atomic.hpp
@@ -20,11 +19,11 @@ namespace args::core::async
 	public:
 		transferable_atomic() noexcept = default;
 
-		constexpr transferable_atomic(T val) noexcept : m_atomic(val), m_lock(), m_spinlock() {}
+		constexpr transferable_atomic(T val) noexcept : m_atomic(val), m_lock() {}
 
-		transferable_atomic(const std::atomic<T>& other) : m_atomic(other.load(std::memory_order_acquire)), m_lock(), m_spinlock() {}
+		transferable_atomic(const std::atomic<T>& other) : m_atomic(other.load(std::memory_order_acquire)), m_lock() {}
 
-		transferable_atomic(const transferable_atomic<T>& other) : m_atomic(other->load(std::memory_order_acquire)), m_lock(), m_spinlock() {}
+		transferable_atomic(const transferable_atomic<T>& other) : m_atomic(other->load(std::memory_order_acquire)), m_lock() {}
 
 		readonly_rw_spinlock& get_lock()
 		{

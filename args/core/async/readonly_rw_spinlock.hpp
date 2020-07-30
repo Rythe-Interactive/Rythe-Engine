@@ -12,9 +12,9 @@ namespace args::core::async
 {
 	/**@class readonly_rw_spinlock
 	 * @brief Lock used with ::async::readonly_guard and ::async::readwrite_guard.
-	 * @note Read-only operations can happen simultaneously without waiting for eachother.
+	 * @note Read-only operations can happen simultaneously without waiting for each other.
 	 *		 Read-only operations will only wait for Read-Write operations to be finished.
-	 * @note Read-Write operations cannot happen simultaneously and will wait for eachother.
+	 * @note Read-Write operations cannot happen simultaneously and will wait for each other.
 	 *		 Read-Write operations will also wait for any Read-only operations to be finished.
 	 * @ref args::core::async::readonly_guard
 	 * @ref args::core::async::readwrite_guard
