@@ -48,9 +48,11 @@ namespace args::core
 	public:
 		A_NODISCARD iterator begin() { return m_dense.begin(); }
 		A_NODISCARD const_iterator begin() const { return m_dense.cbegin(); }
+		A_NODISCARD const_iterator cbegin() const { return m_dense.cbegin(); }
 
 		A_NODISCARD iterator end() { return m_dense.begin() + m_size; }
 		A_NODISCARD const_iterator end() const { return m_dense.cbegin() + m_size; }
+		A_NODISCARD const_iterator cend() const { return m_dense.cbegin() + m_size; }
 
 		/**@brief Returns the amount of items in the sparse_set.
 		 * @returns size_type Current amount of items contained in sparse_set.

@@ -62,9 +62,11 @@ namespace args::core
 
 		A_NODISCARD iterator begin() { return m_dense_value.begin(); }
 		A_NODISCARD const_iterator begin() const { return m_dense_value.cbegin(); }
+		A_NODISCARD const_iterator cbegin() const { return m_dense_value.cbegin(); }
 
 		A_NODISCARD iterator end() { return m_dense_value.begin() + m_size; }
 		A_NODISCARD const_iterator end() const { return m_dense_value.cbegin() + m_size; }
+		A_NODISCARD const_iterator cend() const { return m_dense_value.cbegin() + m_size; }
 
 		/**@brief Returns the amount of items in the sparse_map.
 		 * @returns size_type Current amount of items contained in sparse_map.
