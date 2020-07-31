@@ -62,6 +62,13 @@ namespace args::core
 		 */
 		A_NODISCARD size_type capacity() const noexcept { return m_capacity; }
 
+		/**@brief Returns the maximum number of items the sparse_set could at most store without crashing.
+		 * @note This value typically reflects the theoretical limit on the size of the container, at most std::numeric_limits<difference_type>::max().
+				 At runtime, the size of the container may be limited to a value smaller than max_size() by the amount of RAM available.
+		 * @returns size_type
+		 */
+		A_NODISCARD size_type max_size() const noexcept { return m_dense.max_size(); }
+
 		/**@brief Returns whether the sparse_set is empty.
 		 * @returns bool True if the sparse_set is empty, otherwise false.
 		 */

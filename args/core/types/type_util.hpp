@@ -14,8 +14,8 @@ namespace args::core
 	template<typename T, typename U>
 	T force_value_cast(U value)
 	{
-		static_assert(alignof(T) == alignof(U), "Illegal cast of unalligned types. Approaching undefined behaviour.");
-		static_assert(sizeof(T) == sizeof(U), "Illegal cast of non size similar types. Approaching undefined behaviour.");
+		static_assert(alignof(T) == alignof(U), "Illegal cast of unaligned types. Approaching undefined behavior.");
+		static_assert(sizeof(T) == sizeof(U), "Illegal cast of non size similar types. Approaching undefined behavior.");
 
 		return *reinterpret_cast<T*>(&value);
 	}
@@ -48,9 +48,7 @@ namespace args::core
 	template<size_type N>
 	constexpr id_type nameHash(const char(&name)[N])
 	{
-		id_type hash = 0;
-
-		hash = 0x811c9dc5;
+		id_type hash = 0x811c9dc5;
 		uint32 prime = 0x1000193;
 		for (int i = 0; i < N - 1; i++)
 		{
@@ -81,13 +79,11 @@ namespace args::core
 	template<typename T>
 	constexpr id_type typeHash()
 	{
-		id_type hash = 0;
-
-		hash = 0x811c9dc5;
-		uint32 prime = 0x1000193;
-		cstring name = typeName<T>();
-		while(*name != '\0')
-		{			
+		id_type hash = 0xcbf29ce484222325;
+		uint64 prime = 0x00000100000001b3;
+		cstring name = typeid(T).name();
+		while (*name != '\0')
+		{
 			hash = hash ^ (byte)*name;
 			hash *= prime;
 			name++;
