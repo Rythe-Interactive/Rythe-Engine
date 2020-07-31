@@ -147,9 +147,10 @@ namespace args::core::ecs
 
 		{
 			auto entityData = m_registry.getEntities();
-			async::readonly_guard dataguard(entityData.second);
-			async::readwrite_guard entguard(m_entityLock);
-			async::readonly_guard compguard(m_componentLock);
+			async::read_state datastate = async::read;
+			async::read_state entitystate = async::write;
+			async::read_state compstate = async::read;
+			async::mixed_multiguard mmguard(entityData.second, datastate, m_entityLock, entitystate, m_componentLock, compstate);
 
 			for (entity_handle& entity_handle : entityData.first)
 				if (entity_handle.component_composition().contains(m_componentTypes[queryId]))
@@ -182,9 +183,7 @@ namespace args::core::ecs
 		referenceCount--;
 		if (referenceCount == 0)
 		{
-			async::readwrite_guard refWguard(m_referenceLock); // permitted to double lock, elevates permission to write.
-			async::readwrite_guard entguard(m_entityLock);
-			async::readwrite_guard compguard(m_componentLock);
+			async::readwrite_multiguard mguard(m_referenceLock, m_entityLock, m_componentLock);
 
 			m_references.erase(queryId);
 			m_entityLists.erase(queryId);

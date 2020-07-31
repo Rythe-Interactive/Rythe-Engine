@@ -187,15 +187,15 @@ namespace args::core::async
 			m_locks.push_back(&lock2);
 			(m_locks.push_back(&locks), ...);
 
-			sparse_set<int> unlockedLocks;
-			for (int i = 0; i < m_locks.size(); i++)
+			sparse_set<uint> unlockedLocks;
+			for (uint i = 0; i < m_locks.size(); i++)
 				unlockedLocks.insert(i);
 
 			bool locked = true;
 			do
 			{
 				locked = true;
-				for (int i : unlockedLocks)
+				for (uint i : unlockedLocks)
 				{
 					if (m_locks[i]->try_lock(write))
 						unlockedLocks.erase(i);
