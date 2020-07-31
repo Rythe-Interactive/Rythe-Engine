@@ -301,7 +301,7 @@ namespace args::core
 		A_NODISCARD value_reference operator[](size_type&& index)
 		{
 			if (index < 0 || index > m_size)
-				throw std::out_of_range("Index out of range.");
+				throw std::out_of_range("hashed_sparse_set subscript out of range");
 			return m_dense[index];
 		}
 
@@ -311,7 +311,7 @@ namespace args::core
 		A_NODISCARD value_reference operator[](const size_type& index)
 		{
 			if (index < 0 || index > m_size)
-				throw std::out_of_range("Index out of range.");
+				throw std::out_of_range("hashed_sparse_set subscript out of range");
 			return m_dense[index];
 		}
 
@@ -321,7 +321,7 @@ namespace args::core
 		A_NODISCARD value_const_reference operator[](size_type&& index) const
 		{
 			if (index < 0 || index > m_size)
-				throw std::out_of_range("Index out of range.");
+				throw std::out_of_range("hashed_sparse_set subscript out of range");
 			return m_dense[index];
 		}
 
@@ -331,7 +331,7 @@ namespace args::core
 		A_NODISCARD value_const_reference operator[](const size_type& index) const
 		{
 			if (index < 0 || index > m_size)
-				throw std::out_of_range("Index out of range.");
+				throw std::out_of_range("hashed_sparse_set subscript out of range");
 			return m_dense[index];
 		}
 #pragma endregion

@@ -271,7 +271,7 @@ namespace args::core
 		A_NODISCARD reference operator[](size_type&& index)
 		{
 			if (index < 0 || index > m_size)
-				throw std::out_of_range("Index out of range.");
+				throw std::out_of_range("sparse_set subscript out of range");
 			return m_dense[index];
 		}
 
@@ -280,6 +280,8 @@ namespace args::core
 		 */
 		A_NODISCARD reference operator[](const size_type& index)
 		{
+			if (index < 0 || index > m_size)
+				throw std::out_of_range("sparse_set subscript out of range");
 			return m_dense[index];
 		}
 
@@ -288,6 +290,8 @@ namespace args::core
 		 */
 		A_NODISCARD const_reference operator[](size_type&& index) const
 		{
+			if (index < 0 || index > m_size)
+				throw std::out_of_range("sparse_set subscript out of range");
 			return m_dense[index];
 		}
 
@@ -296,6 +300,8 @@ namespace args::core
 		 */
 		A_NODISCARD const_reference operator[](const size_type& index) const
 		{
+			if (index < 0 || index > m_size)
+				throw std::out_of_range("sparse_set subscript out of range");
 			return m_dense[index];
 		}
 #pragma endregion
