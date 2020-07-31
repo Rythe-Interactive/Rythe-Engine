@@ -15,4 +15,9 @@ namespace args::core
 				module->init();
 			}
 	}
+
+	void Engine::run()
+	{
+		// needs implementation.
+	}
 }

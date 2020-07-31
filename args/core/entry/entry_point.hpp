@@ -1,6 +1,7 @@
 #pragma once
 #include <core/engine/engine.hpp>
 #include <core/platform/platform.hpp>
+#include <core/types/primitives.hpp>
 #include <iostream>
 
 /**
@@ -34,19 +35,73 @@ extern void reportModules(args::core::Engine* engine);
 
 	#if defined(ARGS_HIGH_PERFORMANCE)
 		#if defined(ARGS_WINDOWS)
-			SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
+		if (!SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS))
+		{
+			DWORD error = GetLastError();
+			std::cout << "==============================================================" << std::endl;
+			std::cout << "| Failed to enter real-time performance mode, error: " << error << " |" << std::endl;
+			std::cout << "==============================================================" << std::endl;
+		}
+		else
+		{
+			std::cout << "=======================================" << std::endl;
+			std::cout << "| Entered real-time performance mode. |" << std::endl;
+			std::cout << "=======================================" << std::endl;
+		}
+
 		#elif defined(ARGS_LINUX)
-			pid_t pid = getpid();
-			setpriority(PRIO_PROCESS, pid, sched_get_priority_max(sched_getscheduler(pid)));
+		pid_t pid = getpid();
+		if (setpriority(PRIO_PROCESS, pid, sched_get_priority_max(sched_getscheduler(pid))) == -1)
+		{
+			int errornum = errno;
+			cstring error;
+
+			switch (errornum)
+			{
+			case ESRCH:
+				error = "ESRCH";
+				break;
+			case EINVAL:
+				error = "EINVAL";
+				break;
+			case EPERM:
+				error = "EPERM";
+				break;
+			case EACCES:
+				error = "EACCES";
+				break;
+			default:
+				error = std::to_string(errornum).c_str();
+				break;
+			}
+
+			std::cout << "=============================================================" << std::endl;
+			std::cout << "| Failed to enter real-time performance mode, error: " << error << " |" << std::endl;
+			std::cout << "=============================================================" << std::endl;
+		}
+		else
+		{
+			std::cout << "=======================================" << std::endl;
+			std::cout << "| Entered real-time performance mode. |" << std::endl;
+			std::cout << "=======================================" << std::endl;
+		}
 		#endif
 	#endif
 
 		try
 		{
 			args::core::Engine engine;
-			reportModules(&engine);
 
+			reportModules(&engine);
+			std::cout << "==========================" << std::endl;
+			std::cout << "| Initializing engine... |" << std::endl;
+			std::cout << "==========================" << std::endl;
 			engine.init();
+
+			std::cout << "==============================" << std::endl;
+			std::cout << "| Entering main engine loop. |" << std::endl;
+			std::cout << "==============================" << std::endl;
+			engine.run();
 
 	#if defined(ARGS_DEBUG)
 			std::cin.ignore().get();
