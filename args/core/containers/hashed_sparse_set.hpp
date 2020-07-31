@@ -52,9 +52,11 @@ namespace args::core
 
 		A_NODISCARD iterator begin() { return m_dense.begin(); }
 		A_NODISCARD const_iterator begin() const { return m_dense.cbegin(); }
+		A_NODISCARD const_iterator cbegin() const { return m_dense.cbegin(); }
 
 		A_NODISCARD iterator end() { return m_dense.begin() + m_size; }
 		A_NODISCARD const_iterator end() const { return m_dense.cbegin() + m_size; }
+		A_NODISCARD const_iterator cend() const { return m_dense.cbegin() + m_size; }
 
 		/**@brief Returns the amount of items in the sparse_map.
 		 * @returns size_type Current amount of items contained in sparse_map.
@@ -65,6 +67,13 @@ namespace args::core
 		 * @returns size_type Current capacity of the dense container.
 		 */
 		A_NODISCARD size_type capacity() const noexcept { return m_capacity; }
+
+		/**@brief Returns the maximum number of items the hashed_sparse_set could at most store without crashing.
+		 * @note This value typically reflects the theoretical limit on the size of the container, at most std::numeric_limits<difference_type>::max().
+		 *		 At runtime, the size of the container may be limited to a value smaller than max_size() by the amount of RAM available.
+		 * @returns size_type
+		 */
+		A_NODISCARD size_type max_size() const noexcept { return m_dense.max_size(); }
 
 		/**@brief Returns whether the sparse_map is empty.
 		 * @returns bool True if the sparse_map is empty, otherwise false.
@@ -162,11 +171,11 @@ namespace args::core
 			if (m_size == 0 || m_size < other.m_size)
 				return false;
 
-			bool overlap = true;
 			for (int i = 0; i < other.m_size; i++)
-				overlap = overlap && contains(other.m_dense[i]);
+				if (!contains(other.m_dense[i]))
+					return false;
 
-			return overlap;
+			return true;
 		}
 #pragma endregion
 
@@ -178,11 +187,11 @@ namespace args::core
 		{
 			if (m_size == other.m_size)
 			{
-				bool equal = true;
 				for (int i = 0; i < m_size; i++)
-					equal = equal && other.contains(m_dense[i]);
+					if (!other.contains(m_dense[i]))
+						return false;
 
-				return equal;
+				return true;
 			}
 
 			return false;
@@ -196,11 +205,11 @@ namespace args::core
 		{
 			if (m_size == other.m_size)
 			{
-				bool equal = true;
 				for (int i = 0; i < m_size; i++)
-					equal = equal && other.contains(m_dense[i]);
+					if (!other.contains(m_dense[i]))
+						return false;
 
-				return equal;
+				return true;
 			}
 
 			return false;
@@ -292,7 +301,7 @@ namespace args::core
 		A_NODISCARD value_reference operator[](size_type&& index)
 		{
 			if (index < 0 || index > m_size)
-				throw std::out_of_range("Index out of range.");
+				throw std::out_of_range("hashed_sparse_set subscript out of range");
 			return m_dense[index];
 		}
 
@@ -302,7 +311,7 @@ namespace args::core
 		A_NODISCARD value_reference operator[](const size_type& index)
 		{
 			if (index < 0 || index > m_size)
-				throw std::out_of_range("Index out of range.");
+				throw std::out_of_range("hashed_sparse_set subscript out of range");
 			return m_dense[index];
 		}
 
@@ -312,7 +321,7 @@ namespace args::core
 		A_NODISCARD value_const_reference operator[](size_type&& index) const
 		{
 			if (index < 0 || index > m_size)
-				throw std::out_of_range("Index out of range.");
+				throw std::out_of_range("hashed_sparse_set subscript out of range");
 			return m_dense[index];
 		}
 
@@ -322,7 +331,7 @@ namespace args::core
 		A_NODISCARD value_const_reference operator[](const size_type& index) const
 		{
 			if (index < 0 || index > m_size)
-				throw std::out_of_range("Index out of range.");
+				throw std::out_of_range("hashed_sparse_set subscript out of range");
 			return m_dense[index];
 		}
 #pragma endregion

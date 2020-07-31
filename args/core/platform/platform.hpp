@@ -9,7 +9,7 @@
  */
 #define ARGS_CPP17V 201703L
 
-#if defined(_DEBUG)
+#if defined(_DEBUG) || defined(DEBUG)
 	/**@def ARGS_DEBUG
 	 * @brief Defined in debug mode.
 	 */

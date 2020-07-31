@@ -62,9 +62,11 @@ namespace args::core
 
 		A_NODISCARD iterator begin() { return m_dense_value.begin(); }
 		A_NODISCARD const_iterator begin() const { return m_dense_value.cbegin(); }
+		A_NODISCARD const_iterator cbegin() const { return m_dense_value.cbegin(); }
 
 		A_NODISCARD iterator end() { return m_dense_value.begin() + m_size; }
 		A_NODISCARD const_iterator end() const { return m_dense_value.cbegin() + m_size; }
+		A_NODISCARD const_iterator cend() const { return m_dense_value.cbegin() + m_size; }
 
 		/**@brief Returns the amount of items in the sparse_map.
 		 * @returns size_type Current amount of items contained in sparse_map.
@@ -75,6 +77,13 @@ namespace args::core
 		 * @returns size_type Current capacity of the dense container.
 		 */
 		A_NODISCARD size_type capacity() const noexcept { return m_capacity; }
+
+		/**@brief Returns the maximum number of items the sparse_map could at most store without crashing.
+		 * @note This value typically reflects the theoretical limit on the size of the container, at most std::numeric_limits<difference_type>::max().
+		 *		 At runtime, the size of the container may be limited to a value smaller than max_size() by the amount of RAM available.
+		 * @returns size_type
+		 */
+		A_NODISCARD size_type max_size() const noexcept { return m_dense_value.max_size(); }
 
 		/**@brief Returns whether the sparse_map is empty.
 		 * @returns bool True if the sparse_map is empty, otherwise false.
@@ -174,11 +183,11 @@ namespace args::core
 			if (m_size == 0 || m_size < other.m_size)
 				return false;
 
-			bool overlap = true;
 			for (int i = 0; i < other.m_size; i++)
-				overlap = overlap && contains(other.m_dense_key[i]);
+				if (!contains(other.m_dense_key[i]))
+					return false;
 
-			return overlap;
+			return true;
 		}
 #pragma endregion
 
@@ -190,11 +199,11 @@ namespace args::core
 		{
 			if (m_size == other.m_size)
 			{
-				bool equal = true;
 				for (int i = 0; i < m_size; i++)
-					equal = equal && other.contains(m_dense_key[i]) && get(m_dense_key[i]) == other.get(m_dense_key[i]);
+					if (!(other.contains(m_dense_key[i]) && get(m_dense_key[i]) == other.get(m_dense_key[i])))
+						return false;
 
-				return equal;
+				return true;
 			}
 
 			return false;
@@ -208,11 +217,11 @@ namespace args::core
 		{
 			if (m_size == other.m_size)
 			{
-				bool equal = true;
 				for (int i = 0; i < m_size; i++)
-					equal = equal && other.contains(m_dense_key[i]) && get(m_dense_key[i]) == other.get(m_dense_key[i]);
+					if (!(other.contains(m_dense_key[i]) && get(m_dense_key[i]) == other.get(m_dense_key[i])))
+						return false;
 
-				return equal;
+				return true;
 			}
 
 			return false;
