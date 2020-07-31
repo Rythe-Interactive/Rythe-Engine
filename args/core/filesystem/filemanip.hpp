@@ -33,7 +33,7 @@ namespace args::core::filesystem {
         fseek(file.get(),0L,SEEK_SET);
         
         //read file 
-        fread(container.data(),sizeof(byte_t),container.size(),file.get());
+        fread(container.data(),sizeof(byte),container.size(),file.get());
 
         return container;
     }
@@ -55,7 +55,7 @@ namespace args::core::filesystem {
         assert_msg("could not open file",file);
 
         // read data
-        fwrite(container.data(),sizeof(byte_t),container.size(),file.get());
+        fwrite(container.data(),sizeof(byte),container.size(),file.get());
 
     }
 

@@ -58,8 +58,6 @@ namespace args::core::ecs
 			return nullptr;
 		}
 
-
-
 		/**@brief Creates new std::atomic wrapped component.
 		 * @note Thread will be halted if there are any reads or writes until they are finished.
 		 * @note Will trigger write on this container.

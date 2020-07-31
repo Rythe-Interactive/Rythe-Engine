@@ -1,21 +1,46 @@
 #pragma once
 #include <atomic>
+#include <core/async/readonly_rw_spinlock.hpp>
+
+/** @file transferable_atomic.hpp
+ */
 
 namespace args::core::async
 {
+	/**@class transferable_atomic
+	 * @brief Copyable wrapper for std::atomic.
+	 */
 	template <typename T>
 	struct transferable_atomic
 	{
 	private:
 		std::atomic<T> m_atomic;
+		mutable readonly_rw_spinlock m_lock;
 	public:
 		transferable_atomic() noexcept = default;
 
-		constexpr transferable_atomic(T val) noexcept : m_atomic(val) {}
+		explicit transferable_atomic(T val) noexcept : m_atomic(val), m_lock() {}
 
-		transferable_atomic(const std::atomic<T>& other) : m_atomic(other.load(std::memory_order_acquire)) {}
+		transferable_atomic(const std::atomic<T>& other) : m_atomic(other.load(std::memory_order_acquire)), m_lock() {}
 
-		transferable_atomic(const transferable_atomic<T>& other) : m_atomic(other->load(std::memory_order_acquire)) {}
+		transferable_atomic(const transferable_atomic<T>& other) : m_atomic(other->load(std::memory_order_acquire)), m_lock() {}
+
+		transferable_atomic(const std::atomic<T>&& other) : m_atomic(other.load(std::memory_order_acquire)), m_lock() 
+		{
+			other.store(T(), std::memory_order_release);
+		}
+
+		transferable_atomic(const transferable_atomic<T>&& other) : m_atomic(other->load(std::memory_order_acquire)), m_lock()
+		{
+			other->store(T(), std::memory_order_release);
+		}
+
+		~transferable_atomic() = default;
+
+		readonly_rw_spinlock& get_lock()
+		{
+			return m_lock;
+		}
 
 		transferable_atomic<T>& operator=(const transferable_atomic<T>& other)
 		{
@@ -26,6 +51,20 @@ namespace args::core::async
 		transferable_atomic<T>& operator=(const std::atomic<T>& other)
 		{
 			m_atomic.store(other.load(std::memory_order_acquire), std::memory_order_release);
+			return *this;
+		}
+
+		transferable_atomic<T>& operator=(const transferable_atomic<T>&& other)
+		{
+			m_atomic.store(other->load(std::memory_order_acquire), std::memory_order_release);
+			other->store(T(), std::memory_order_release);
+			return *this;
+		}
+
+		transferable_atomic<T>& operator=(const std::atomic<T>&& other)
+		{
+			m_atomic.store(other.load(std::memory_order_acquire), std::memory_order_release);
+			other.store(T(), std::memory_order_release);
 			return *this;
 		}
 

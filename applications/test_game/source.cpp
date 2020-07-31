@@ -1,4 +1,5 @@
 #include <iostream>
+#include <chrono>
 
 #define ARGS_ENTRY
 #include <core/core.hpp>
@@ -26,44 +27,33 @@ void ARGS_CCONV reportModules(Engine* engine)
 	{
 		throw args_component_destroyed_error;
 	}
-	catch (exception e)
+	catch (const exception& e)
 	{
 		std::cout << e.what() << std::endl;
-		std::cout << e.get_file() << std::endl;
-		std::cout << e.get_line() << std::endl;
-		std::cout << e.get_func() << std::endl;
+		std::cout << e.file() << std::endl;
+		std::cout << e.line() << std::endl;
+		std::cout << e.func() << std::endl;
 	}
 
-	atomic_sparse_map<string, int> testMap;
-
-	testMap["Hello"]->store(45, std::memory_order_relaxed);
-
-	if (testMap.contains("Hello"))
-		std::cout << "testMap contains \"Hello\" with value: " << testMap["Hello"]->load(std::memory_order_relaxed) << std::endl;
-	else
-		std::cout << "testMap does not contain \"Hello\"" << std::endl;
-
-	try
-	{
-		testMap.erase("Hello");
-	}
-	catch (std::exception e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-
-	if (testMap.contains("Hello"))
-		std::cout << "testMap contains \"Hello\" with value: " << testMap["Hello"]->load(std::memory_order_relaxed) << std::endl;
-	else
-		std::cout << "testMap does not contain \"Hello\"" << std::endl;
+	std::cout << std::endl;
 
 	ecs::EcsRegistry registry;
 
+	std::cout << "registering component type" << std::endl;
 	registry.reportComponentType<sah>();
 
-	ecs::entity& ent = registry.createEntity();
+	std::cout << "creating entity" << std::endl;
 
-	std::cout << "creating component" << std::endl;
+	ecs::entity_handle ent = registry.createEntity();
+
+	if (ent)
+		std::cout << "entity handle is valid" << std::endl;
+	else
+		std::cout << "entity handle is invalid" << std::endl;
+
+	std::cout << "entity has id: " << ent.get_id() << std::endl;
+
+	std::cout << "creating component through registry" << std::endl;
 	registry.createComponent<sah>(ent);
 
 	if (ent.has_component<sah>())
@@ -89,8 +79,31 @@ void ARGS_CCONV reportModules(Engine* engine)
 	sahHandle.fetch_add({ 1 });
 	std::cout << "component value is: " << sahHandle.read().value << std::endl;
 
+	std::cout << "creating entity query through registry" << std::endl;
+	ecs::EntityQuery query = registry.createQuery<sah>();
+
+	std::cout << "query id is: " << query.id() << std::endl;
+
+	std::cout << "query size is: " << query.size() << std::endl;
+
+	std::cout << "iterating over query" << std::endl;
+	bool found = false;
+	for (ecs::entity_handle entity_handle : query)
+	{
+		if (entity_handle == ent)
+		{
+			found = true;
+			std::cout << "our entity handle was found" << std::endl;
+		}
+
+		std::cout << "found entity with id: " << entity_handle.get_id() << std::endl;
+	}
+
+	if(!found)
+		std::cout << "our entity handle was not found" << std::endl;
+
 	std::cout << "destroying component" << std::endl;
-	registry.destroyComponent<sah>(ent);
+	ent.remove_component<sah>();
 
 	if (sahHandle)
 		std::cout << "component handle is valid" << std::endl;
@@ -101,4 +114,81 @@ void ARGS_CCONV reportModules(Engine* engine)
 		std::cout << "entity has component" << std::endl;
 	else
 		std::cout << "entity does not have component" << std::endl;
+
+	std::cout << "query size is: " << query.size() << std::endl;
+
+	std::cout << "iterating over query" << std::endl;
+	found = false;
+	for (ecs::entity_handle entity_handle : query)
+	{
+		if (entity_handle == ent)
+		{
+			found = true;
+			std::cout << "our entity handle was found" << std::endl;
+		}
+
+		std::cout << "found entity with id: " << entity_handle.get_id() << std::endl;
+	}
+
+	if (!found)
+		std::cout << "our entity handle was not found" << std::endl;
+
+	std::cout << "creating component through entity handle" << std::endl;
+	ent.add_component<sah>();
+
+	if (sahHandle)
+		std::cout << "component handle is valid" << std::endl;
+	else
+		std::cout << "component handle is invalid" << std::endl;
+
+	std::cout << "query size is: " << query.size() << std::endl;
+
+	std::cout << "iterating over query" << std::endl;
+	found = false;
+	for (int i = 0; i < query.size(); i++)
+	{
+		if (query[i] == ent)
+		{
+			found = true;
+			std::cout << "our entity handle was found" << std::endl;
+		}
+
+		std::cout << "found entity with id: " << query[i].get_id() << std::endl;
+	}
+
+	if (!found)
+		std::cout << "our entity handle was not found" << std::endl;
+
+	std::cout << "destroying entity" << std::endl;
+	ent.destroy();
+
+	if (ent)
+		std::cout << "entity handle is valid" << std::endl;
+	else
+		std::cout << "entity handle is invalid" << std::endl;
+
+	if (sahHandle)
+		std::cout << "component handle is valid" << std::endl;
+	else
+		std::cout << "component handle is invalid" << std::endl;
+
+	std::cout << "query size is: " << query.size() << std::endl;
+
+	std::cout << "iterating over query" << std::endl;
+	found = false;
+	for (int i = 0; i < query.size(); i++)
+	{
+		if (query[i] == ent)
+		{
+			found = true;
+			std::cout << "our entity handle was found" << std::endl;
+		}
+
+		std::cout << "found entity with id: " << query[i].get_id() << std::endl;
+	}
+
+	if (!found)
+		std::cout << "our entity handle was not found" << std::endl;
+
+	std::cout << std::endl;
 }

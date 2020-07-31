@@ -10,12 +10,12 @@
 #include <core/types/primitives.hpp>
 
 /**
- * @file sparse_map.hpp
+ * @file atomic_sparse_map.hpp
  */
 
 namespace args::core
 {
-	/**@class sparse_map
+	/**@class atomic_sparse_map
 	 * @brief Atomic quick lookup contiguous map.
 	 *		  A specialized version of sparse_map that uses args::core::async::transferable_atomic and args::core::async::readonly_rw_spinlock.
 	 * @tparam key_type The type to be used as the key.
@@ -23,7 +23,7 @@ namespace args::core
 	 * @tparam dense_type Container to be used to store the values.
 	 * @tparam sparse_type Container to be used to store the keys.
 	 * @note With default container parameters iterators may be invalidated upon resize. See reference of std::vector.
-	 * @note Removing item might invalidate the itterator of the last item in the dense container.
+	 * @note Removing item might invalidate the iterator of the last item in the dense container.
 	 */
 	template <typename key_type, typename value_type, template<typename...> typename dense_type = std::vector, template<typename...> typename sparse_type = std::unordered_map>
 	class atomic_sparse_map
@@ -66,13 +66,16 @@ namespace args::core
 	public:
 		A_NODISCARD inline iterator begin()
 		{ async::readonly_guard lock(m_container_lock); return m_dense_value.begin(); }
-
 		A_NODISCARD inline const_iterator begin() const
+		{ async::readonly_guard lock(m_container_lock); return m_dense_value.cbegin(); }
+		A_NODISCARD inline const_iterator cbegin() const
 		{ async::readonly_guard lock(m_container_lock); return m_dense_value.cbegin(); }
 
 		A_NODISCARD inline iterator end()
 		{ async::readonly_guard lock(m_container_lock); return m_dense_value.begin() + m_size.load(std::memory_order_acquire); }
 		A_NODISCARD inline const_iterator end() const
+		{ async::readonly_guard lock(m_container_lock); return m_dense_value.cbegin() + m_size.load(std::memory_order_acquire); }
+		A_NODISCARD inline const_iterator cend() const
 		{ async::readonly_guard lock(m_container_lock); return m_dense_value.cbegin() + m_size.load(std::memory_order_acquire); }
 
 		/**@brief Returns the amount of items in the sparse_map.
@@ -84,6 +87,13 @@ namespace args::core
 		 * @returns size_type Current capacity of the dense container.
 		 */
 		A_NODISCARD inline size_type capacity() const noexcept { return m_capacity.load(std::memory_order_acquire); }
+
+		/**@brief Returns the maximum number of items the atomic_sparse_map could at most store without crashing.
+		 * @note This value typically reflects the theoretical limit on the size of the container, at most std::numeric_limits<difference_type>::max().
+		 *		 At runtime, the size of the container may be limited to a value smaller than max_size() by the amount of RAM available.
+		 * @returns size_type
+		 */
+		A_NODISCARD size_type max_size() const noexcept { return m_dense_value.max_size(); }
 
 		/**@brief Returns whether the sparse_map is empty.
 		 * @returns bool True if the sparse_map is empty, otherwise false.
@@ -114,7 +124,7 @@ namespace args::core
 		/**@brief Returns the amount of items linked to a certain key.
 		 * @param key Key to look for.
 		 * @returns size_type Amount of items linked to the key (either 0 or 1).
-		 * @note Function is only available for compatibility reasons, it is adviced to use contains instead.
+		 * @note Function is only available for compatibility reasons, it is advised to use contains instead.
 		 * @ref args::core::sparse_map::contains
 		 */
 		A_NODISCARD inline size_type count(key_const_reference key) const
@@ -125,7 +135,7 @@ namespace args::core
 		/**@brief Returns the amount of items linked to a certain key.
 		 * @param key Key to look for.
 		 * @returns size_type Amount of items linked to the key (either 0 or 1).
-		 * @note Function is only available for compatibility reasons, it is adviced to use contains instead.
+		 * @note Function is only available for compatibility reasons, it is advised to use contains instead.
 		 * @ref args::core::sparse_map::contains
 		 */
 		A_NODISCARD inline size_type count(key_type&& key) const

@@ -12,14 +12,14 @@ namespace args::core::async
 {
 	/**@class readonly_rw_spinlock
 	 * @brief Lock used with ::async::readonly_guard and ::async::readwrite_guard.
-	 * @note Read-only operations can happen simultaneously without waiting for eachother.
+	 * @note Read-only operations can happen simultaneously without waiting for each other.
 	 *		 Read-only operations will only wait for Read-Write operations to be finished.
-	 * @note Read-Write operations cannot happen simultaneously and will wait for eachother.
+	 * @note Read-Write operations cannot happen simultaneously and will wait for each other.
 	 *		 Read-Write operations will also wait for any Read-only operations to be finished.
 	 * @ref args::core::async::readonly_guard
 	 * @ref args::core::async::readwrite_guard
 	 */
-	struct readonly_rw_spinlock
+	struct ARGS_API readonly_rw_spinlock
 	{
 		friend class readonly_guard;
 		friend class readwrite_guard;
@@ -30,28 +30,16 @@ namespace args::core::async
 		std::atomic_int readState;
 		std::atomic_int readers;
 
-		static thread_local std::unordered_map<uint, int> localStates;
+		static std::unordered_map<uint, int>& localStates();
 	public:
-		readonly_rw_spinlock() : id(lastId.fetch_add(1, std::memory_order_relaxed))
-		{
-			localStates[id] = read_state::idle;
-
-			readState.store(0, std::memory_order_relaxed);
-			readers.store(0, std::memory_order_relaxed);
-		}
+		readonly_rw_spinlock();
 		readonly_rw_spinlock(const readonly_rw_spinlock&) = delete;
-
 		readonly_rw_spinlock& operator=(readonly_rw_spinlock&&) = delete;
 	};
 
-#if defined(ARGS_ENTRY)
-	std::atomic_uint readonly_rw_spinlock::lastId;
-	thread_local std::unordered_map<uint, int> readonly_rw_spinlock::localStates;
-#endif
-
 	/**@class readonly_guard
 	 * @brief RAII guard that uses ::async::readonly_rw_spinlock to lock for read-only.
-	 *        Read-only operations can happen simultaneously without waiting for eachother.
+	 *        Read-only operations can happen simultaneously without waiting for each other.
 	 *		  Read-only operations will only wait for Read-Write operations to be finished.
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
@@ -66,7 +54,7 @@ namespace args::core::async
 		 */
 		readonly_guard(readonly_rw_spinlock& lock) : lock(lock)
 		{
-			if (lock.localStates[lock.id] != readonly_rw_spinlock::idle) // If we're either already reading or writing then the lock doesn't need to be reacquired.
+			if (lock.localStates()[lock.id] != readonly_rw_spinlock::idle) // If we're either already reading or writing then the lock doesn't need to be reacquired.
 			{
 				preacquired = true; // Remember that there's another active guard.
 				return;
@@ -89,7 +77,7 @@ namespace args::core::async
 					state = readonly_rw_spinlock::idle;
 			}
 
-			lock.localStates[lock.id] = readonly_rw_spinlock::read; // Set thread_local state to read.
+			lock.localStates()[lock.id] = readonly_rw_spinlock::read; // Set thread_local state to read.
 
 		}
 
@@ -110,7 +98,7 @@ namespace args::core::async
 			if (lock.readers.load(std::memory_order_acquire) == 0)
 				lock.readState.store(readonly_rw_spinlock::idle, std::memory_order_release);
 
-			lock.localStates[lock.id] = readonly_rw_spinlock::idle; // Set thread_local state to idle.
+			lock.localStates()[lock.id] = readonly_rw_spinlock::idle; // Set thread_local state to idle.
 		}
 
 		readonly_guard& operator=(readonly_guard&&) = delete;
@@ -118,7 +106,7 @@ namespace args::core::async
 
 	/**@class readwrite_guard
 	 * @brief RAII guard that uses ::async::readonly_rw_spinlock to lock for read/write.
-	 *        Read-Write operations cannot happen simultaneously and will wait for eachother.
+	 *        Read-Write operations cannot happen simultaneously and will wait for each other.
 	 *		  Read-Write operations will also wait for any Read-only operations to be finished.
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
@@ -127,14 +115,17 @@ namespace args::core::async
 	private:
 		readonly_rw_spinlock& lock;
 		bool preacquired;
+		bool returnToRead;
 
 	public:
 		/**@brief Creates readonly guard and locks for Read-Write.
 		 */
 		readwrite_guard(readonly_rw_spinlock& lock) : lock(lock)
 		{
-			if (lock.localStates[lock.id] == readonly_rw_spinlock::read) // If we're currently only acquired for read we need to stop reading before requesting rw.
+			if (lock.localStates()[lock.id] == readonly_rw_spinlock::read) // If we're currently only acquired for read we need to stop reading before requesting rw.
 			{
+				returnToRead = true;
+
 				// Mark our read as finished.
 				lock.readers.fetch_sub(1, std::memory_order_relaxed);
 
@@ -143,12 +134,13 @@ namespace args::core::async
 				if (lock.readers.load(std::memory_order_acquire) == 0)
 					lock.readState.store(readonly_rw_spinlock::idle, std::memory_order_release);
 			}
-			else if (lock.localStates[lock.id] == readonly_rw_spinlock::write) // If we're already writing then we don't need to reacquire the lock.
+			else if (lock.localStates()[lock.id] == readonly_rw_spinlock::write) // If we're already writing then we don't need to reacquire the lock.
 			{
 				preacquired = true; // Remember that there's another active guard.
 				return;
 			}
 
+			returnToRead = false;
 			preacquired = false;
 
 			// Expect idle as default.
@@ -160,7 +152,7 @@ namespace args::core::async
 				state = readonly_rw_spinlock::idle;
 
 
-			lock.localStates[lock.id] = readonly_rw_spinlock::write; // Set thread_local state to write.
+			lock.localStates()[lock.id] = readonly_rw_spinlock::write; // Set thread_local state to write.
 		}
 
 		readwrite_guard(const readwrite_guard&) = delete;
@@ -169,13 +161,24 @@ namespace args::core::async
 		 */
 		~readwrite_guard()
 		{
-			if (preacquired) // Another guard is still alive that will unlock the lock for this thread.
+			if (preacquired) // Another write guard is still alive that will unlock the lock for this thread.
 				return;
 
-			// We should be the only one to have had access so we can safely write to the lock state and return it to idle.
-			lock.readState.store(readonly_rw_spinlock::idle, std::memory_order_release);
+			if (returnToRead) // read permission was granted before write request, we should return to read instead of idle after write is finished.
+			{
+				// We should be the only one to have had access so we can safely write to the lock state and readers.
+				lock.readers.fetch_add(1, std::memory_order_relaxed);
+				lock.readState.store(readonly_rw_spinlock::read, std::memory_order_release);
 
-			lock.localStates[lock.id] = readonly_rw_spinlock::idle; // Set thread_local state to idle.
+				lock.localStates()[lock.id] = readonly_rw_spinlock::read; // Set thread_local state back to read.
+			}
+			else
+			{
+				// We should be the only one to have had access so we can safely write to the lock state and return it to idle.
+				lock.readState.store(readonly_rw_spinlock::idle, std::memory_order_release);
+
+				lock.localStates()[lock.id] = readonly_rw_spinlock::idle; // Set thread_local state to idle.
+			}
 		}
 
 		readwrite_guard& operator=(readwrite_guard&&) = delete;

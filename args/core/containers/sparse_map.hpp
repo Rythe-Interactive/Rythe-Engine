@@ -20,7 +20,7 @@ namespace args::core
 	 * @tparam dense_type Container to be used to store the values.
 	 * @tparam sparse_type Container to be used to store the keys.
 	 * @note With default container parameters iterators may be invalidated upon resize. See reference of std::vector.
-	 * @note Removing item might invalidate the itterator of the last item in the dense container.
+	 * @note Removing item might invalidate the iterator of the last item in the dense container.
 	 */
 	template <typename key_type, typename value_type, template<typename...> typename dense_type = std::vector, template<typename...> typename sparse_type = std::unordered_map>
 	class sparse_map
@@ -54,11 +54,19 @@ namespace args::core
 		size_type m_capacity = 0;
 
 	public:
+		A_NODISCARD dense_value_container& dense() { return m_dense_value; }
+		A_NODISCARD const dense_value_container& dense() const { return m_dense_value; }
+
+		A_NODISCARD dense_key_container& keys() { return m_dense_key; }
+		A_NODISCARD const dense_key_container& keys() const { return m_dense_key; }
+
 		A_NODISCARD iterator begin() { return m_dense_value.begin(); }
 		A_NODISCARD const_iterator begin() const { return m_dense_value.cbegin(); }
+		A_NODISCARD const_iterator cbegin() const { return m_dense_value.cbegin(); }
 
 		A_NODISCARD iterator end() { return m_dense_value.begin() + m_size; }
 		A_NODISCARD const_iterator end() const { return m_dense_value.cbegin() + m_size; }
+		A_NODISCARD const_iterator cend() const { return m_dense_value.cbegin() + m_size; }
 
 		/**@brief Returns the amount of items in the sparse_map.
 		 * @returns size_type Current amount of items contained in sparse_map.
@@ -69,6 +77,13 @@ namespace args::core
 		 * @returns size_type Current capacity of the dense container.
 		 */
 		A_NODISCARD size_type capacity() const noexcept { return m_capacity; }
+
+		/**@brief Returns the maximum number of items the sparse_map could at most store without crashing.
+		 * @note This value typically reflects the theoretical limit on the size of the container, at most std::numeric_limits<difference_type>::max().
+		 *		 At runtime, the size of the container may be limited to a value smaller than max_size() by the amount of RAM available.
+		 * @returns size_type
+		 */
+		A_NODISCARD size_type max_size() const noexcept { return m_dense_value.max_size(); }
 
 		/**@brief Returns whether the sparse_map is empty.
 		 * @returns bool True if the sparse_map is empty, otherwise false.
@@ -98,7 +113,7 @@ namespace args::core
 		/**@brief Returns the amount of items linked to a certain key.
 		 * @param key Key to look for.
 		 * @returns size_type Amount of items linked to the key (either 0 or 1).
-		 * @note Function is only available for compatibility reasons, it is adviced to use contains instead.
+		 * @note Function is only available for compatibility reasons, it is advised to use contains instead.
 		 * @ref args::core::sparse_map::contains
 		 */
 		A_NODISCARD size_type count(key_const_reference key) const
@@ -109,7 +124,7 @@ namespace args::core
 		/**@brief Returns the amount of items linked to a certain key.
 		 * @param key Key to look for.
 		 * @returns size_type Amount of items linked to the key (either 0 or 1).
-		 * @note Function is only available for compatibility reasons, it is adviced to use contains instead.
+		 * @note Function is only available for compatibility reasons, it is advised to use contains instead.
 		 * @ref args::core::sparse_map::contains
 		 */
 		A_NODISCARD size_type count(key_type&& key) const
@@ -154,7 +169,63 @@ namespace args::core
 		{
 			return m_sparse.count(key) && m_sparse.at(key) >= 0 && m_sparse.at(key) < m_size && m_dense_key[m_sparse.at(key)] == key;
 		}
+
+		/**@brief Checks if all keys in sparse_map are inside this map as well.
+		 * @param other Other sparse_map to check against.
+		 * @returns bool True if all keys in other are also in this sparse_map, otherwise false.
+		 */
+		template<typename T>
+		A_NODISCARD bool contains(const sparse_map<key_type, T>& other) const
+		{
+			if (other.m_size == 0)
+				return true;
+
+			if (m_size == 0 || m_size < other.m_size)
+				return false;
+
+			for (int i = 0; i < other.m_size; i++)
+				if (!contains(other.m_dense_key[i]))
+					return false;
+
+			return true;
+		}
 #pragma endregion
+
+		/**@brief Checks if all keys and values and relations between them are the same for both sparse_maps.
+		 * @param other Other sparse_map to check against.
+		 * @returns bool True if both maps are the same size, contain the same keys, and all keys refer to the same value, otherwise false.
+		 */
+		A_NODISCARD bool equals(self_const_reference other) const
+		{
+			if (m_size == other.m_size)
+			{
+				for (int i = 0; i < m_size; i++)
+					if (!(other.contains(m_dense_key[i]) && get(m_dense_key[i]) == other.get(m_dense_key[i])))
+						return false;
+
+				return true;
+			}
+
+			return false;
+		}
+
+		/**@brief Checks if all keys and values and relations between them are the same for both sparse_maps.
+		 * @param other Other sparse_map to check against.
+		 * @returns bool True if both maps are the same size, contain the same keys, and all keys refer to the same value, otherwise false.
+		 */
+		A_NODISCARD bool operator==(self_const_reference other) const
+		{
+			if (m_size == other.m_size)
+			{
+				for (int i = 0; i < m_size; i++)
+					if (!(other.contains(m_dense_key[i]) && get(m_dense_key[i]) == other.get(m_dense_key[i])))
+						return false;
+
+				return true;
+			}
+
+			return false;
+		}
 
 #pragma region find
 		/**@brief Finds the iterator of a value using std::find.
@@ -459,8 +530,8 @@ namespace args::core
 			if (contains(key))
 			{
 				m_dense_value[m_sparse[key]] = std::move(m_dense_value[m_size - 1]);
-				m_dense_key[m_sparse[key]] = m_dense_key[m_size - 1];
-				m_sparse[m_dense_key[m_size - 1]] = m_sparse[key];
+				m_dense_key[m_sparse[key]] = std::move(m_dense_key[m_size - 1]);
+				m_sparse[m_dense_key[m_size - 1]] = std::move(m_sparse[key]);
 				--m_size;
 				return true;
 			}

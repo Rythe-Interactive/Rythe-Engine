@@ -1,34 +1,91 @@
 #pragma once
 #include <core/engine/engine.hpp>
+#include <core/platform/platform.hpp>
 #include <iostream>
 
 /**
  * @file entry_point.hpp
  * @brief When ARGS_ENTRY is defined, this file will create a function with signature main(int,char**) -> int
  *        implementing the common main function of a c++ program.
- * @note When defining ARGS_ENTRY do no create your own CRT_STARTUP such as main()->int, main(int,char**)->int,wmain(), etc...
+ * @note When defining ARGS_ENTRY do no create your own CRT_STARTUP such as main()->int, main(int,char**)->int, wmain(), etc...
  * @note When using ARGS_ENTRY you must instead implement reportModules(args::core::Engine*).
- * @note When not using ARGS_ENTRY you must call creation and initialisation of the engine manually.
+ * @note When not using ARGS_ENTRY you must call creation and initialization of the engine manually.
  */
 
 
-/**@brief Reports engine modules to the engine, must be implemented by you.
- * @param [in] engine The engine object as ptr *
- * @ref args::core::Engine::reportModule<T,...>()
- */
+ /**@brief Reports engine modules to the engine, must be implemented by you.
+  * @param [in] engine The engine object as ptr *
+  * @ref args::core::Engine::reportModule<T,...>()
+  */
 extern void reportModules(args::core::Engine* engine);
 
-#ifdef ARGS_ENTRY
-int main(int argc, char** argv)
-{
-	args::core::Engine engine;
-	reportModules(&engine);
+#if defined(ARGS_ENTRY)
 
-	engine.init();
+	#if (defined(ARGS_HIGH_PERFORMANCE) && defined(ARGS_WINDOWS))
+		__declspec(dllexport) DWORD NvOptimusEnablement = 0x0000001;
+		__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
+	#endif
 
-#ifdef _DEBUG
-	std::cin.ignore().get();
-#endif // DEBUG
-	return 0;
-}
+	int main(int argc, char** argv)
+	{
+	#if (!defined(ARGS_DEBUG) && defined(ARGS_WINDOWS))
+		::ShowWindow(::GetConsoleWindow(), SW_HIDE);
+	#endif
+
+	#if defined(ARGS_HIGH_PERFORMANCE)
+		#if defined(ARGS_WINDOWS)
+			SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
+		#elif defined(ARGS_LINUX)
+			pid_t pid = getpid();
+			setpriority(PRIO_PROCESS, pid, sched_get_priority_max(sched_getscheduler(pid)));
+		#endif
+	#endif
+
+		try
+		{
+			args::core::Engine engine;
+			reportModules(&engine);
+
+			engine.init();
+
+	#if defined(ARGS_DEBUG)
+			std::cin.ignore().get();
+	#endif
+
+		}
+		catch (const args::core::exception& e)
+		{
+	#if defined(ARGS_WINDOWS)
+			::ShowWindow(::GetConsoleWindow(), SW_SHOW);
+	#endif
+
+			std::cout << "Encountered exception:" << std::endl;
+			std::cout << "  msg:     \t" << e.what() << std::endl;
+			std::cout << "  file:    \t" << e.file() << std::endl;
+			std::cout << "  line:    \t" << e.line() << std::endl;
+			std::cout << "  function:\t" << e.func() << std::endl;
+
+	#if defined(ARGS_DEBUG)
+			throw e;
+	#else
+			std::cin.ignore().get();
+	#endif
+		}
+		catch (const std::exception& e)
+		{
+	#if defined(ARGS_WINDOWS)
+			::ShowWindow(::GetConsoleWindow(), SW_SHOW);
+	#endif
+
+			std::cout << e.what() << std::endl;
+
+	#if defined(ARGS_DEBUG)
+			throw e;
+	#else
+			std::cin.ignore().get();
+	#endif
+		}
+
+		return 0;
+	}
 #endif

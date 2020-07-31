@@ -1,6 +1,6 @@
 #pragma once
 #include <cstdint> //linux std::(u)int(8-64)_t
-#include <cstddef> //msc   std::(u)int(8-64)_t 
+#include <cstddef> //msc   std::(u)int(8-64)_t
 #include <vector>  //      std::vector<T>
 #include <string>
 #include <cstring>
@@ -25,13 +25,12 @@ namespace args::core
 	using time32 = float;
 	using time64 = double;
 
-	using string = std::string;
 	using cstring = const char*;
 
 	using uint = uint32;
 
-	using byte_t = uint8;
-    using byte_vec = std::vector<byte_t>;
+	using byte = uint8;
+    using byte_vec = std::vector<byte>;
 
 	using priority_type = uint8;
 

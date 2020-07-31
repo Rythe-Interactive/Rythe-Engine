@@ -81,9 +81,6 @@
     <ClInclude Include="ecs\ecs.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ecs\entity.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="types\type_util.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -102,6 +99,21 @@
     <ClInclude Include="async\transferable_atomic.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ecs\entityquery.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\queryregistry.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\entity_handle.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="containers\hashed_sparse_set.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="async\async.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp">
@@ -113,7 +125,19 @@
     <ClCompile Include="ecs\ecsregistry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ecs\entity.cpp">
+    <ClCompile Include="types\type_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs\entityquery.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs\queryregistry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs\entity_handle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="async\readonly_rw_spinlock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
