@@ -55,8 +55,8 @@ namespace args::core::ecs
 
 	inline void QueryRegistry::evaluateEntityChange(id_type entityId, id_type componentTypeId, bool removal)
 	{
-		async::read_state entitystate = async::write;
-		async::read_state compstate = async::read;
+		async::lock_state entitystate = async::write;
+		async::lock_state compstate = async::read;
 		async::mixed_multiguard mmguard(m_entityLock, entitystate, m_componentLock, compstate);
 
 		for (int i = 0; i < m_entityLists.size(); i++)
@@ -147,9 +147,9 @@ namespace args::core::ecs
 
 		{
 			auto entityData = m_registry.getEntities();
-			async::read_state datastate = async::read;
-			async::read_state entitystate = async::write;
-			async::read_state compstate = async::read;
+			async::lock_state datastate = async::read;
+			async::lock_state entitystate = async::write;
+			async::lock_state compstate = async::read;
 			async::mixed_multiguard mmguard(entityData.second, datastate, m_entityLock, entitystate, m_componentLock, compstate);
 
 			for (entity_handle& entity_handle : entityData.first)

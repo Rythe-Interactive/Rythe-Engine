@@ -12,7 +12,7 @@
 
 namespace args::core::async
 {
-	enum read_state { idle = 0, read = 1, write = 2 };
+	enum lock_state { idle = 0, read = 1, write = 2 };
 
 	/**@class readonly_rw_spinlock
 	 * @brief Lock used with ::async::readonly_guard and ::async::readwrite_guard.
@@ -22,18 +22,21 @@ namespace args::core::async
 	 *		 Read-Write operations will also wait for any Read-only operations to be finished.
 	 * @ref args::core::async::readonly_guard
 	 * @ref args::core::async::readwrite_guard
+	 * @ref args::core::async::readonly_multiguard
+	 * @ref args::core::async::readwrite_multiguard
+	 * @ref args::core::async::mixed_multiguard
 	 */
 	struct ARGS_API readonly_rw_spinlock
 	{
 	private:
 		static std::atomic_uint lastId;
 		const uint id;
-		std::atomic_int readState;
+		std::atomic_int lockState;
 		std::atomic_int readers;
 
 		int& localWriters();
 		int& localReaders();
-		read_state& localState();
+		lock_state& localState();
 
 		void read_lock();
 		bool read_try_lock();
@@ -48,17 +51,36 @@ namespace args::core::async
 		readonly_rw_spinlock(const readonly_rw_spinlock&) = delete;
 		readonly_rw_spinlock& operator=(readonly_rw_spinlock&&) = delete;
 
-		void lock(read_state permissionLevel);
-		bool try_lock(read_state permissionLevel);
-		void unlock(read_state permissionLevel);
+		/**@brief Lock for a certain permission level. (locking for idle does nothing)
+		 * @note Locking stacks, locking for readonly multiple times will remain readonly.
+		 *		 Locking for write after already being locked for readonly in the same thread will attempt to elevate lock permission of this thread to write.
+		 *		 Locking for write multiple times will remain in write.
+		 * @param permissionLevel
+		 */
+		void lock(lock_state permissionLevel);
+
+		/**@brief Try to lock for a certain permission level. If it fails it will return false otherwise true. (locking for idle does nothing)
+		 * @note Locking stacks, locking for readonly multiple times will remain readonly.
+		 *		 Locking for write after already being locked for readonly in the same thread will attempt to elevate lock permission of this thread to write.
+		 *		 Locking for write multiple times will remain in write.
+		 * @param permissionLevel
+		 * @return bool True when locked.
+		 */
+		bool try_lock(lock_state permissionLevel);
+
+		/**@brief Unlock from a certain permission level.
+		 * @note If both read and write locks have been requested before and write is unlocked then the lock will return to readonly state.
+		 * @param permissionLevel
+		 */
+		void unlock(lock_state permissionLevel);
 	};
 
 
 
 	/**@class readonly_guard
 	 * @brief RAII guard that uses ::async::readonly_rw_spinlock to lock for read-only.
-	 *        Read-only operations can happen simultaneously without waiting for each other.
-	 *		  Read-only operations will only wait for Read-Write operations to be finished.
+	 * @note Read-only operations can happen simultaneously without waiting for each other.
+	 *		 Read-only operations will only wait for Read-Write operations to be finished.
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
 	class readonly_guard final
@@ -87,7 +109,9 @@ namespace args::core::async
 	};
 
 	/**@class readonly_multiguard
-	 * @brief .
+	 * @brief RAII guard that uses multiple ::async::readonly_rw_spinlocks to lock them all for read-only. (similar to std::lock)
+	 * @note Read-only operations can happen simultaneously without waiting for each other.
+	 *		 Read-only operations will only wait for Read-Write operations to be finished.
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
 	template<typename lock_type1 = readonly_rw_spinlock, typename lock_type2 = readonly_rw_spinlock, typename... lock_typesN>
@@ -137,9 +161,9 @@ namespace args::core::async
 	};
 
 	/**@class readwrite_guard
-	 * @brief RAII guard that uses ::async::readonly_rw_spinlock to lock for read/write.
-	 *        Read-Write operations cannot happen simultaneously and will wait for each other.
-	 *		  Read-Write operations will also wait for any Read-only operations to be finished.
+	 * @brief RAII guard that uses ::async::readonly_rw_spinlock to lock for read-write.
+	 * @note Read-Write operations cannot happen simultaneously and will wait for each other.
+	 *		 Read-Write operations will also wait for any Read-only operations to be finished.
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
 	class readwrite_guard final
@@ -148,7 +172,7 @@ namespace args::core::async
 		readonly_rw_spinlock& m_lock;
 
 	public:
-		/**@brief Creates readonly guard and locks for Read-Write.
+		/**@brief Creates read-write guard and locks for Read-Write.
 		 */
 		readwrite_guard(readonly_rw_spinlock& lock) : m_lock(lock)
 		{
@@ -169,7 +193,9 @@ namespace args::core::async
 
 
 	/**@class readwrite_multiguard
-	 * @brief .
+	 * @brief RAII guard that uses multiple ::async::readonly_rw_spinlocks to lock them all for read-write. (similar to std::lock)
+	 * @note Read-Write operations cannot happen simultaneously and will wait for each other.
+	 *		 Read-Write operations will also wait for any Read-only operations to be finished.
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
 	template<typename lock_type1, typename lock_type2, typename... lock_typesN>
@@ -179,7 +205,7 @@ namespace args::core::async
 		std::vector<readonly_rw_spinlock*> m_locks;
 
 	public:
-		/**@brief Creates readonly multi-guard and locks for Read-Write.
+		/**@brief Creates read-write multi-guard and locks for Read-Write.
 		 */
 		readwrite_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN&... locks)
 		{
@@ -219,7 +245,11 @@ namespace args::core::async
 	};
 
 	/**@class mixed_multiguard
-	 * @brief .
+	 * @brief RAII guard that uses multiple ::async::readonly_rw_spinlocks to lock them all for user specified permissions. (similar to std::lock)
+	 * @note Read-only operations can happen simultaneously without waiting for each other.
+	 *		 Read-only operations will only wait for Read-Write operations to be finished.
+	 * @note Read-Write operations cannot happen simultaneously and will wait for each other.
+	 *		 Read-Write operations will also wait for any Read-only operations to be finished.
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
 	template<typename... mixed_types>
@@ -229,7 +259,7 @@ namespace args::core::async
 
 	private:
 		std::vector<readonly_rw_spinlock*> m_locks;
-		std::vector<read_state*> m_states;
+		std::vector<lock_state*> m_states;
 
 		template<size_type I>
 		void fillVectors(std::tuple<mixed_types*...>& args)
@@ -251,7 +281,8 @@ namespace args::core::async
 		}
 
 	public:
-		/**@brief Creates readonly multi-guard and locks for Read-Write.
+		/**@brief Creates readonly multi-guard and locks for specified permissions.
+		 * @note Argument order should be as follows: (readonly_rw_spinlock&, lock_state&, readonly_rw_spinlock&, lock_state&, ...)
 		 */
 		mixed_multiguard(mixed_types&... arguments)
 		{
@@ -279,7 +310,7 @@ namespace args::core::async
 
 		mixed_multiguard(const mixed_multiguard&) = delete;
 
-		/**@brief RAII style unlocks lock from Read-Write.
+		/**@brief RAII style unlocks lock from specified permissions.
 		 */
 		~mixed_multiguard()
 		{
