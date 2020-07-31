@@ -14,8 +14,8 @@ namespace args::core
 	template<typename T, typename U>
 	T force_value_cast(U value)
 	{
-		static_assert(alignof(T) == alignof(U), "Illegal cast of unaligned types. Approaching undefined behavior.");
-		static_assert(sizeof(T) == sizeof(U), "Illegal cast of non size similar types. Approaching undefined behavior.");
+		static_assert(alignof(T) == alignof(U), "Illegal cast of unaligned types.");
+		static_assert(sizeof(T) == sizeof(U), "Illegal cast of non size similar types.");
 
 		return *reinterpret_cast<T*>(&value);
 	}

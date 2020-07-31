@@ -21,7 +21,7 @@ namespace args::core::ecs
 		}
 
 		{
-			async::readonly_guard guard(m_familyLock); // Possibly deadlocks? Will also lock atomic_sparse_map::m_container_lock for the family.
+			async::readonly_guard guard(m_familyLock); // TODO(GlynLeine): Possibly deadlocks? Will also lock atomic_sparse_map::m_container_lock for the family.
 			for (id_type componentTypeId : data->components)
 			{
 				m_families[componentTypeId]->destroy_component(entityId);

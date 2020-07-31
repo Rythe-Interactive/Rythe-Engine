@@ -171,11 +171,11 @@ namespace args::core
 			if (m_size == 0 || m_size < other.m_size)
 				return false;
 
-			bool overlap = true;
 			for (int i = 0; i < other.m_size; i++)
-				overlap = overlap && contains(other.m_dense[i]);
+				if (!contains(other.m_dense[i]))
+					return false;
 
-			return overlap;
+			return true;
 		}
 #pragma endregion
 
@@ -187,11 +187,11 @@ namespace args::core
 		{
 			if (m_size == other.m_size)
 			{
-				bool equal = true;
 				for (int i = 0; i < m_size; i++)
-					equal = equal && other.contains(m_dense[i]);
+					if (!other.contains(m_dense[i]))
+						return false;
 
-				return equal;
+				return true;
 			}
 
 			return false;
@@ -205,11 +205,11 @@ namespace args::core
 		{
 			if (m_size == other.m_size)
 			{
-				bool equal = true;
 				for (int i = 0; i < m_size; i++)
-					equal = equal && other.contains(m_dense[i]);
+					if (!other.contains(m_dense[i]))
+						return false;
 
-				return equal;
+				return true;
 			}
 
 			return false;
