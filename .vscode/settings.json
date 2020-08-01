@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "tuple": "cpp",
-        "iostream": "cpp"
-    },
-    "C_Cpp.errorSquiggles": "Disabled"
-}
