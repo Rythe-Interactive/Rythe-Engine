@@ -1,41 +1,9 @@
 #include "provider_registry.hpp"
 #include <algorithm>
+#include <core/containers/iterator_tricks.hpp>
 
 namespace args::core::filesystem
 {
-	template <class T>
-	struct pair_range
-	{
-		pair_range(const std::pair<T,T> r) : range(r)
-		{
-		}
-
-		[[nodiscard]] auto& begin() const
-		{
-			return range.first;
-		}
-
-		[[nodiscard]] auto& end() const
-		{
-			return range.second;
-		}
-		
-
-		std::pair<T,T> range;
-	};
-
-	template <class It>
-	bool checked_next(It& iter,It end, std::size_t diff)
-	{
-		while(diff --> 0 )
-		{
-			if(iter == end) return false;
-			++iter;
-		}
-		return true;
-	}
-
-	
 	std::unordered_set<provider_registry::domain> provider_registry::domains()
 	{
 
@@ -44,7 +12,7 @@ namespace args::core::filesystem
 
 		std::unordered_set<domain> _domains;
 
-		for(auto& [key,_] : driver.m_domain_resolver_map)
+		for(auto& key : iterator::keys_only(driver.m_domain_resolver_map))
 		{
 			//unordered_sets are unique by default no need to worry about duplicates
 			_domains.insert(key);	
@@ -79,9 +47,7 @@ namespace args::core::filesystem
 		//get range for domains
 		const auto& iterator_pair = driver.m_domain_resolver_map.equal_range(d);
 
-		//destructure kv-pairs						restructure iterator_pair
-		//|-------vvv								|----vvv
-		for(auto& [_,value] : pair_range(iterator_pair))
+		for(auto& [_,value] : iterator::pair_range(iterator_pair))
 		{
 			resolvers.emplace_back(value.get());
 		}
@@ -154,7 +120,7 @@ namespace args::core::filesystem
 
 		auto real_iterator = driver.m_domain_resolver_map.find(iterator.inspected_domain);
 
-		if(!checked_next(real_iterator,driver.m_domain_resolver_map.end(),iterator.index))
+		if(!iterators::checked_next(real_iterator,driver.m_domain_resolver_map.end(),iterator.index))
 		{
 			return nullptr;
 		}

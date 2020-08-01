@@ -5,6 +5,35 @@
 
 namespace args::core::iterator
 {
+    template <class T>
+	struct pair_range
+	{
+		pair_range(const std::pair<T,T> r) : range(r)
+		{
+		}
+
+		[[nodiscard]] auto& begin() const
+		{
+			return range.first;
+		}
+
+		[[nodiscard]] auto& end() const
+		{
+			return range.second;
+		}
+		std::pair<T,T> range;
+	};
+
+    template <class It>
+	bool checked_next(It& iter,It end, std::size_t diff)
+	{
+		while(diff --> 0 )
+		{
+			if(iter == end) return false;
+			++iter;
+		}
+		return true;
+	}
 
     template <class PairIteratorContainer>
     class key_only_iterator
