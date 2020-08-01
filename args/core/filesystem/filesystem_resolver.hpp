@@ -107,7 +107,7 @@ namespace args::core::filesystem{
         /** @brief gets the delimiter of the filesystem
          *  @return char single character for the delimiter of the filesystem (default: strpath_manip::seperator())
          */
-        A_NODISCARD virtual char get_delimiter() const noexcept ARGS_IMPURE_RETURN((strpath_manip::seperator()))
+        A_NODISCARD virtual char get_delimiter() const noexcept ARGS_IMPURE_RETURN(strpath_manip::seperator())
 
 
         /** @brief destroys the file pointed to
@@ -116,23 +116,12 @@ namespace args::core::filesystem{
         void erase() const noexcept;
         virtual void erase(interfaces::implement_signal_t) const noexcept ARGS_PURE;
 
-        /** @brief generates a string that shows where the file would/ should live in cache
-         *  @note this is mostly useful for chaining together mem_filesystem_resolver to avoid
-         *        decompressing/inflating the same file twice
-         *
-         * @return std::string identifier that points to the cached location
-         */
-         A_NODISCARD std::string generate_artifact_identifier() const;
 
     protected:
         A_NODISCARD const std::string & get_target() const { return m_target; }
         A_NODISCARD const filesystem_traits& get_traits() const { return m_traits; }
 
         A_NODISCARD const std::string& get_identifier() const { return m_identifier; }
-
-        A_NODISCARD bool in_cache() const;
-        void load_cache(byte_vec* data) const;
-        void save_cache(const byte_vec* data) const;
 
     private:
         std::string m_identifier;

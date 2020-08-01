@@ -25,12 +25,12 @@ namespace args::core::async
 		friend class readwrite_guard;
 	private:
 		enum read_state { idle = 0, read = 1, write = 2 };
-		static std::atomic_uint lastId;
+		inline static std::atomic_uint lastId;
 		const uint id;
 		std::atomic_int readState;
 		std::atomic_int readers;
 
-		static thread_local std::unordered_map<uint, int> localStates;
+		inline static thread_local std::unordered_map<uint, int> localStates;
 	public:
 		readonly_rw_spinlock() : id(lastId.fetch_add(1, std::memory_order_relaxed))
 		{
@@ -44,10 +44,10 @@ namespace args::core::async
 		readonly_rw_spinlock& operator=(readonly_rw_spinlock&&) = delete;
 	};
 
-#if defined(ARGS_ENTRY)
-	std::atomic_uint readonly_rw_spinlock::lastId;
-	thread_local std::unordered_map<uint, int> readonly_rw_spinlock::localStates;
-#endif
+
+	//std::atomic_uint readonly_rw_spinlock::lastId;
+	//inline thread_local std::unordered_map<uint, int> readonly_rw_spinlock::localStates;
+
 
 	/**@class readonly_guard
 	 * @brief RAII guard that uses ::async::readonly_rw_spinlock to lock for read-only.

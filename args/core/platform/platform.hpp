@@ -101,4 +101,4 @@
  * @brief Marks a function as overridable but default implemented with certain default return value.
  * @param x value the function should return.
  */
-#define ARGS_IMPURE_RETURN(x) { return x; }
+#define ARGS_IMPURE_RETURN(x) { return (x); }

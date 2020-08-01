@@ -1,69 +1,80 @@
 #include "artifact_cache.hpp"
-
+#include <algorithm>
+#include <core/containers/iterator_tricks.hpp>
 
 namespace args::core::filesystem {
-    
-    using locations_t = std::map<std::string_view,std::tuple<
-        artifact_cache::range_begin_t,
-        artifact_cache::range_end_t,
-        artifact_cache::score_t
-        >
-    >;
-    using data_t = std::vector<byte_t>;
+    std::shared_ptr<byte_vec> artifact_cache::get_cache(std::string_view identifier, std::size_t size_hint)
+    {
+        std::shared_ptr<byte_vec> result;
 
-    using cdata_t = const data_t;
+        static auto& driver = get_driver();
+        {
+            async::readonly_guard guard(driver.m_big_gc_lock);
+            auto& [ptr,score] =  driver.get_caches()[identifier];
+            if(!ptr)
+            {
+                if(size_hint)
+                    ptr = std::make_shared<byte_vec>(size_hint);
+                else
+                    ptr = std::make_shared<byte_vec>();
+            }
+            result = ptr;
+        }
 
+        if(driver.decrease_gci() == 0) driver.gc();
+        return result;
+    }
 
     artifact_cache& artifact_cache::get_driver() {
         static artifact_cache cache{};
         return cache;
     }
 
-    bool artifact_cache::is_cached(std::string_view identifier)
+    void artifact_cache::gc()
     {
-        static artifact_cache& driver = get_driver();
-     
-        //for checking if something is in cache we only need a read context
-        return driver.critical_read_section(
-            [&identifier] (cdata_t& data, locations_t&clocs)
+        m_gc_countdown = gc_interval;
+
+        //nothing to gc, still below threshold
+        if(m_caches.size() < (gc_keep + gc_hist)) return;
+
+        //create heap for finding the highest N
+        std::vector<std::int32_t> score_heap;
+
+        //avoid writing two basically self similar loops
+        auto composer = [this](auto&& action)
+        {
+            //iterate over all elements in the cache
+            for(auto&[ptr,score] : iterator::values_only(m_caches))
             {
-                //we don't care about data, we just need to know if the element exists in the map
-                (void)data;
+                //check if element should be skipped because it is to new or still used somewhere
+                if(ptr.use_count() > 1 || ptr->empty()) continue;
 
-                //check if the key exists and if its score is bigger than 0
-                if(const auto it = clocs.find(identifier);it != clocs.end())
-                {
-                    const auto& [begin,end,score] = it->second;
-                    return score > 0;
-                }
-                return false;
+                //invoke custom action
+                std::invoke(action,ptr,score);
             }
-        );
+        };
+
+        //we abuse this read-write lock a bit here to avoid creation of new
+        //elements while gc is running, such that we do not insert and remove simultaneously
+        async::readwrite_guard guard(m_big_gc_lock);
+
+        composer([&score_heap](auto& p,auto score)
+        {
+            //push all scores into a heap for sorting
+            score_heap.emplace_back(score);
+            std::push_heap(score_heap.begin(),score_heap.end());
+        });
+
+        //sort scores
+        std::sort_heap(score_heap.begin(),score_heap.end());
+
+        //find lowest element that should not be removed
+        const auto low_element = *(score_heap.end()-gc_keep);
+
+        composer([low_element](auto& ptr,auto score){
+            //delete element if it is below threshold
+            if(score - low_element < 0)
+                ptr.reset();
+        });
     }
-
-    data_view<const byte_t> artifact_cache::get_data(std::string_view identifier)
-    {
-        static artifact_cache& driver = get_driver();
-        
-        return driver.critical_read_section(
-            [&identifier](cdata_t& data,locations_t& clocs)
-            {
-                if(const auto it = clocs.find(identifier); it != clocs.end())
-                {
-                    const auto& [begin,end,score] = it->second;
-
-                    const auto* ptr = data.data();
-
-                    it->second = std::make_tuple(begin,end,score+1);
-
-                    return data_view<const byte_t>(ptr,end-begin,begin,false);
-                }
-                else
-                {
-                    return data_view<const byte_t>(nullptr,0);
-                }
-            }
-        );
-    }
-
 }

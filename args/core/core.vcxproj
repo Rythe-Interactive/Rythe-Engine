@@ -106,8 +106,10 @@
     <ClInclude Include="containers\atomic_sparse_map.hpp" />
     <ClInclude Include="containers\containers.hpp" />
     <ClInclude Include="containers\data_view.hpp" />
+    <ClInclude Include="containers\iterator_tricks.hpp" />
     <ClInclude Include="containers\sparse_map.hpp" />
     <ClInclude Include="containers\sparse_set.hpp" />
+    <ClInclude Include="containers\vector_view.hpp" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="ecs\component_container.hpp" />
     <ClInclude Include="ecs\component_handle.hpp" />
@@ -127,6 +129,7 @@
     <ClInclude Include="filesystem\filemanip.hpp" />
     <ClInclude Include="filesystem\filesystem.hpp" />
     <ClInclude Include="filesystem\filesystem_resolver.hpp" />
+    <ClInclude Include="filesystem\navigator.hpp" />
     <ClInclude Include="filesystem\mem_filesystem_resolver.hpp" />
     <ClInclude Include="filesystem\resource.hpp" />
     <ClInclude Include="platform\platform.hpp" />
@@ -145,6 +148,7 @@
     <ClCompile Include="filesystem\detail\strpath_manip.cpp" />
     <ClCompile Include="filesystem\filesystem_resolver.cpp" />
     <ClCompile Include="filesystem\mem_filesystem_resolver.cpp" />
+    <ClCompile Include="filesystem\navigator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

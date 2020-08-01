@@ -9,6 +9,7 @@
     <ClCompile Include="filesystem\filesystem_resolver.cpp" />
     <ClCompile Include="filesystem\mem_filesystem_resolver.cpp" />
     <ClCompile Include="filesystem\artifact_cache.cpp" />
+    <ClCompile Include="filesystem\navigator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\readonly_rw_spinlock.hpp" />
@@ -50,6 +51,9 @@
     <ClInclude Include="types\sfinae.hpp" />
     <ClInclude Include="types\type_util.hpp" />
     <ClInclude Include="containers\data_view.hpp" />
+    <ClInclude Include="containers\vector_view.hpp" />
+    <ClInclude Include="containers\iterator_tricks.hpp" />
+    <ClInclude Include="filesystem\navigator.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

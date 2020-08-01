@@ -1,37 +1,43 @@
 #include "mem_filesystem_resolver.hpp"
 
+#include <utility>
+
 #include "artifact_cache.hpp"
 
 namespace args::core::filesystem
 {
- 
-    bool mem_filesystem_resolver::seek_data()
+    mem_filesystem_resolver::mem_filesystem_resolver(std::shared_ptr<const byte_vec> target_data)
+        : m_targetData(std::move(target_data))
     {
-        if(has_data_ready())
-        {
-            artifact_cache::get_data(get_identifier(),&m_data);
-            return true;
-        }
-        else return false;
-    }
-    bool mem_filesystem_resolver::has_data_ready() const
-    {
-        artifact_cache::is_cached(get_identifier());
     }
 
-    void mem_filesystem_resolver::set_data(const byte_vec& d)
+    bool mem_filesystem_resolver::prewarm() const
     {
-        m_data = d;
-        artifact_cache::set_data(get_identifier(),&m_data);
+        //check if data is already available
+        if(!m_data)
+            m_data = artifact_cache::get_cache(get_identifier(),size_hint(m_targetData));
+
+        //check if data was already built
+        if(m_data->empty())
+        {
+            //check if building information is available
+            if(!m_targetData) return false;
+
+            //build faster representation
+            build_memory_representation(m_targetData,m_data);
+        }
+        return true;
     }
 
     const byte_vec& mem_filesystem_resolver::get_data() const
     {
-        return m_data;
+        if(!prewarm()) throw fs_error("attempting to access data via a purely cached object, which was not cached");
+        return *m_data;
     }
 
     byte_vec& mem_filesystem_resolver::get_data()
     {
-        return  m_data;
+        if(!prewarm()) throw fs_error("attempting to access data via a purely cached object, which was not cached");
+        return *m_data;
     }
 }
