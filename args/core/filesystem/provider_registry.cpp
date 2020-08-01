@@ -47,7 +47,7 @@ namespace args::core::filesystem
 		//get range for domains
 		const auto& iterator_pair = driver.m_domain_resolver_map.equal_range(d);
 
-		for(auto& [_,value] : iterator::pair_range(iterator_pair))
+		for(auto& value : iterator::values_only(iterator::pair_range(iterator_pair)))
 		{
 			resolvers.emplace_back(value.get());
 		}

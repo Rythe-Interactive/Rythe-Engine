@@ -8,6 +8,7 @@ namespace args::core::iterator
     template <class T>
 	struct pair_range
 	{
+        using iterator = T;
 		pair_range(const std::pair<T,T> r) : range(r)
 		{
 		}
