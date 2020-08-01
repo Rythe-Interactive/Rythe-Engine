@@ -26,7 +26,7 @@ class Test {
 		/**@brief constructor that keeps the container empty
 		 * @param [in] 1 must be nullptr, used to signal that the resource should be kept empty
 		 */
-		explicit basic_resource(nullptr_t) : m_container{}{}
+		explicit basic_resource(std::nullptr_t) : m_container{}{}
 
 		/**@brief constructs a basic resource from a args::core::byte_vec
 		 * @param [in] v the resource from which the resource is created (copy operation/move)

@@ -39,7 +39,7 @@ namespace args::core::filesystem{
             std::size_t index;
             static constexpr std::size_t sentinel_value = std::numeric_limits<std::size_t>::max();
 
-            resolver_sentinel(nullptr_t) : index{sentinel_value}{}
+            resolver_sentinel(std::nullptr_t) : index{sentinel_value}{}
             resolver_sentinel(size_t index, domain d) : inspected_domain(d), index(index){}
             
         public:

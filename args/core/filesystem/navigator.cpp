@@ -11,7 +11,7 @@ namespace args::core::filesystem {
         std::string root_domain;
         std::string to_process;
 
-        if(!opt_root_domain)
+        if(!opt_root_domain.empty())
         {
             root_domain = opt_root_domain;
             to_process = m_path;
@@ -31,9 +31,9 @@ namespace args::core::filesystem {
             const auto pIndex = m_path.find_first_not_of("/\\",rdIndex+1);
             if(pIndex == std::string::npos) return Err(fs_error("invalid sytax for path string, last domain delimiter not found"));
             
-            m_process = m_path.substr(pIndex,std::string::npos); 
+            to_process = m_path.substr(pIndex,std::string::npos); 
 
-            m_process = strpath_manip::sanitize(m_process);
+            to_process = strpath_manip::sanitize(to_process);
         }
 
         if(root_domain.empty() || to_process.empty()) return Err(fs_error("invalid syntax for path string, one or more properties empty"));
@@ -80,7 +80,7 @@ namespace args::core::filesystem {
                 //the file itself is still part of the old resolver
                 //i.e.: /sandbox/assets/archive.pp.xz -> directory_in_archive/file.png
 				//where the new domain is ".pp.xz"
-                path_for_resolver += token
+                path_for_resolver += token;
             }
             else 
             {

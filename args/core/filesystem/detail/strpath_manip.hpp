@@ -2,6 +2,16 @@
 
 #include <string>
 
+
+#define SEP_WINDOWS 1
+#define SEP_NIX 2
+
+#ifdef _WIN32
+#define OSSEP SEP_WINDOWS
+#else
+#define OSSEP SEP_NIX
+#endif
+
 namespace args::core::filesystem
 {
 	class strpath_manip
@@ -52,8 +62,22 @@ namespace args::core::filesystem
 
 
 		/** @brief gets the path seperator that is "native" to the operating system */
-		constexpr static char seperator();
+		constexpr static char seperator()
+		{
+			if constexpr (OSSEP == SEP_WINDOWS)
+				return '\\';
+			else return '/';
+		}
 	private:
-		constexpr static char anti_seperator();
+		constexpr static char anti_seperator()
+		{
+			if constexpr (OSSEP == SEP_NIX)
+				return '\\';
+			else return '/';
+		}
 	};
 }
+
+#undef OSSEP
+#undef SEP_NIX
+#undef SEP_WINDOWS

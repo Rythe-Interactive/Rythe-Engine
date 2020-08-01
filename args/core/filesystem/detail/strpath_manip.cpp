@@ -2,14 +2,6 @@
 
 #include <core/common/string_extra.hpp>
 
-#define SEP_WINDOWS 1
-#define SEP_NIX 2
-
-#ifdef _WIN32
-#define OSSEP SEP_WINDOWS
-#else
-#define OSSEP SEP_NIX
-#endif
 
 
 namespace args::core::filesystem
@@ -63,22 +55,5 @@ namespace args::core::filesystem
 		return p;
 	}
 
-	constexpr char strpath_manip::seperator()
-	{
-		if constexpr (OSSEP == SEP_WINDOWS)
-			return '\\';
-		else return '/';
-	}
-
-
-	constexpr char strpath_manip::anti_seperator()
-	{
-		if constexpr (OSSEP == SEP_NIX)
-			return '\\';
-		else return '/';
-	}
 }
 
-#undef OSSEP
-#undef SEP_NIX
-#undef SEP_WINDOWS

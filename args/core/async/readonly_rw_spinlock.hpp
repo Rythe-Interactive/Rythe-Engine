@@ -25,7 +25,7 @@ namespace args::core::async
 		friend class readwrite_guard;
 	private:
 		enum read_state { idle = 0, read = 1, write = 2 };
-		inline static std::atomic_uint lastId;
+		static std::atomic_uint lastId;
 		const uint id;
 		std::atomic_int readState;
 		std::atomic_int readers;

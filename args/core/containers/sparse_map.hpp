@@ -54,13 +54,6 @@ namespace args::core
 		size_type m_capacity = 0;
 
 	public:
-<<<<<<< HEAD
-		A_NODISCARD iterator begin() { return m_dense_value.begin(); }
-		A_NODISCARD const_iterator begin() const { return m_dense_value.cbegin(); }
-
-		A_NODISCARD iterator end() { return m_dense_value.begin() + m_size; }
-		A_NODISCARD const_iterator end() const { return m_dense_value.cbegin() + m_size; }
-=======
 		A_NODISCARD dense_value_container& dense() { return m_dense_value; }
 		A_NODISCARD const dense_value_container& dense() const { return m_dense_value; }
 
@@ -74,7 +67,6 @@ namespace args::core
 		A_NODISCARD iterator end() { return m_dense_value.begin() + m_size; }
 		A_NODISCARD const_iterator end() const { return m_dense_value.cbegin() + m_size; }
 		A_NODISCARD const_iterator cend() const { return m_dense_value.cbegin() + m_size; }
->>>>>>> develop/core
 
 		/**@brief Returns the amount of items in the sparse_map.
 		 * @returns size_type Current amount of items contained in sparse_map.
