@@ -1,0 +1,26 @@
+{
+    "version":"2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "premake make build file for args",
+            "command": "premake5",
+            "args": ["--file=${workspaceFolder}/args/premake5.lua","gmake"],
+            "options": {"cwd": "/usr/bin"},
+            "problemMatcher":"$gcc",
+        },
+        {
+            "dependsOn": ["premake make build file for args"],
+            "type": "shell",
+            "label": "make Makefile",
+            "command":"make",
+            "args": ["CXX=clang++-10","config=debug64", "all"],
+            "options": {"cwd": "${workspaceFolder}/args"},
+            "problemMatcher":"$gcc",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

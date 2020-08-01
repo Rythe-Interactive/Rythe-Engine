@@ -8,7 +8,7 @@
 #include <core/common/inteface_traits.hpp>
 #include <core/common/result.hpp>
 
-
+#include "detail/meta.hpp"
 #include "detail/error.hpp"
 #include "detail/traits.hpp"            // file_traits
 #include "detail/strpath_manip.hpp"     // strpath_manip::seperator
@@ -24,7 +24,7 @@ namespace args::core::filesystem{
      * @brief abstract class that should represent and implement all functions of your
      *        filesystem, note in particular the pure virtual functions
      */
-    class filesystem_resolver {
+    class filesystem_resolver : public filesystem_resolver_common_base {
     public:
         filesystem_resolver() = default;
 
