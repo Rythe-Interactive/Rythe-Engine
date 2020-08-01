@@ -113,11 +113,13 @@ namespace args::core::filesystem
 
 	provider_registry::resolver_ptr provider_registry::domain_get_resolver_at(const resolver_sentinel& iterator)
 	{
+		//check against sentinel value
 		if(iterator == resolver_sentinel{nullptr}) return nullptr;
 		
 		//get map driver
 		static auto& driver = get_driver();
 
+		//get range of domains
 		auto real_iterator = driver.m_domain_resolver_map.find(iterator.inspected_domain);
 
 		if(!iterator::checked_next(real_iterator,driver.m_domain_resolver_map.end(),iterator.index))
@@ -141,5 +143,10 @@ namespace args::core::filesystem
 		if (lhs.index == provider_registry::resolver_sentinel::sentinel_value || rhs.index == provider_registry::
 			resolver_sentinel::sentinel_value) return false;
 		return lhs.index == rhs.index && rhs.inspected_domain == lhs.inspected_domain;
+	}
+
+	bool operator!=(const provider_registry::resolver_sentinel& lhs, const provider_registry::resolver_sentinel& rhs)
+	{
+		return !(lhs==rhs);
 	}
 }

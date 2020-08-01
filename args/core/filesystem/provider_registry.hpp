@@ -1,5 +1,6 @@
 #include <memory>
 
+#include <string_view>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -23,8 +24,8 @@ namespace args::core::filesystem{
         static void domain_add_resolver(domain, resolver_ptr);
 
         template <typename Resolver,
-                typename ... Args,
-                typename = typename std::enable_if<std::is_base_of<filesystem_resolver_common_base,Resolver>::value>::type>
+                  typename ... Args,
+                  typename = typename std::enable_if<std::is_base_of<filesystem_resolver_common_base,Resolver>::value>::type>
         static void domain_create_resolver(domain d,Args&&... args)
         {
             return domain_add_resolver(d,new Resolver(std::forward<Args>(args)...));
