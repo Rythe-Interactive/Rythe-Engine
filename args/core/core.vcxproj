@@ -96,6 +96,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="async\async.hpp" />
     <ClInclude Include="async\readonly_rw_spinlock.hpp" />
     <ClInclude Include="async\transferable_atomic.hpp" />
     <ClInclude Include="common\common.hpp" />
@@ -105,8 +106,12 @@
     <ClInclude Include="common\exception.hpp" />
     <ClInclude Include="containers\atomic_sparse_map.hpp" />
     <ClInclude Include="containers\containers.hpp" />
+<<<<<<< HEAD
     <ClInclude Include="containers\data_view.hpp" />
     <ClInclude Include="containers\iterator_tricks.hpp" />
+=======
+    <ClInclude Include="containers\hashed_sparse_set.hpp" />
+>>>>>>> develop/core
     <ClInclude Include="containers\sparse_map.hpp" />
     <ClInclude Include="containers\sparse_set.hpp" />
     <ClInclude Include="containers\vector_view.hpp" />
@@ -115,7 +120,9 @@
     <ClInclude Include="ecs\component_handle.hpp" />
     <ClInclude Include="ecs\ecs.hpp" />
     <ClInclude Include="ecs\ecsregistry.hpp" />
-    <ClInclude Include="ecs\entity.hpp" />
+    <ClInclude Include="ecs\entity_handle.hpp" />
+    <ClInclude Include="ecs\entityquery.hpp" />
+    <ClInclude Include="ecs\queryregistry.hpp" />
     <ClInclude Include="ecs\rw_component_buffer.hpp" />
     <ClInclude Include="engine\engine.hpp" />
     <ClInclude Include="engine\module.hpp" />
@@ -140,8 +147,11 @@
     <ClInclude Include="types\type_util.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="async\readonly_rw_spinlock.cpp" />
     <ClCompile Include="ecs\ecsregistry.cpp" />
-    <ClCompile Include="ecs\entity.cpp" />
+    <ClCompile Include="ecs\entity_handle.cpp" />
+    <ClCompile Include="ecs\entityquery.cpp" />
+    <ClCompile Include="ecs\queryregistry.cpp" />
     <ClCompile Include="engine\engine.cpp" />
     <ClCompile Include="engine\module.cpp" />
     <ClCompile Include="filesystem\artifact_cache.cpp" />
@@ -149,6 +159,7 @@
     <ClCompile Include="filesystem\filesystem_resolver.cpp" />
     <ClCompile Include="filesystem\mem_filesystem_resolver.cpp" />
     <ClCompile Include="filesystem\navigator.cpp" />
+    <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

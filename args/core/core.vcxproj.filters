@@ -12,48 +12,131 @@
     <ClCompile Include="filesystem\navigator.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="async\readonly_rw_spinlock.hpp" />
-    <ClInclude Include="async\transferable_atomic.hpp" />
-    <ClInclude Include="common\common.hpp" />
-    <ClInclude Include="common\inteface_traits.hpp" />
-    <ClInclude Include="common\result.hpp" />
-    <ClInclude Include="common\string_extra.hpp" />
-    <ClInclude Include="common\exception.hpp" />
-    <ClInclude Include="containers\atomic_sparse_map.hpp" />
-    <ClInclude Include="containers\containers.hpp" />
-    <ClInclude Include="containers\sparse_map.hpp" />
-    <ClInclude Include="containers\sparse_set.hpp" />
-    <ClInclude Include="core.hpp" />
-    <ClInclude Include="ecs\component_container.hpp" />
-    <ClInclude Include="ecs\component_handle.hpp" />
-    <ClInclude Include="ecs\ecs.hpp" />
-    <ClInclude Include="ecs\ecsregistry.hpp" />
-    <ClInclude Include="ecs\entity.hpp" />
-    <ClInclude Include="ecs\rw_component_buffer.hpp" />
-    <ClInclude Include="engine\engine.hpp" />
-    <ClInclude Include="engine\module.hpp" />
-    <ClInclude Include="entry\entry_point.hpp" />
-    <ClInclude Include="filesystem\artifact_cache.hpp" />
-    <ClInclude Include="filesystem\detail\error.hpp" />
-    <ClInclude Include="filesystem\detail\resource_meta.hpp" />
-    <ClInclude Include="filesystem\detail\resource_sfinae.hpp" />
-    <ClInclude Include="filesystem\detail\strpath_manip.hpp" />
-    <ClInclude Include="filesystem\detail\traits.hpp" />
-    <ClInclude Include="filesystem\filemanip.hpp" />
-    <ClInclude Include="filesystem\filesystem.hpp" />
-    <ClInclude Include="filesystem\filesystem_resolver.hpp" />
-    <ClInclude Include="filesystem\mem_filesystem_resolver.hpp" />
-    <ClInclude Include="filesystem\resource.hpp" />
-    <ClInclude Include="platform\platform.hpp" />
-    <ClInclude Include="types\meta.hpp" />
-    <ClInclude Include="types\types.hpp" />
-    <ClInclude Include="types\primitives.hpp" />
-    <ClInclude Include="types\sfinae.hpp" />
-    <ClInclude Include="types\type_util.hpp" />
-    <ClInclude Include="containers\data_view.hpp" />
-    <ClInclude Include="containers\vector_view.hpp" />
-    <ClInclude Include="containers\iterator_tricks.hpp" />
-    <ClInclude Include="filesystem\navigator.hpp" />
+    <ClInclude Include="platform\platform.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\engine.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\module.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="types\primitives.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="types\sfinae.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="entry\entry_point.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\filemanip.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\filesystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="types\types.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="common\common.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\resource.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\detail\resource_sfinae.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="types\meta.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem\detail\resource_meta.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="containers\sparse_map.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="containers\containers.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="containers\sparse_set.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\component_handle.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\rw_component_buffer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\ecsregistry.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\ecs.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="types\type_util.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\component_container.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="async\readonly_rw_spinlock.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="common\exception.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="containers\atomic_sparse_map.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="async\transferable_atomic.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\entityquery.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\queryregistry.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\entity_handle.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="containers\hashed_sparse_set.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="async\async.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="engine\engine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\module.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs\ecsregistry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\type_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs\entityquery.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs\queryregistry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs\entity_handle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="async\readonly_rw_spinlock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

@@ -3,6 +3,8 @@
 #include <core/common/exception.hpp>
 #include <core/ecs/ecsregistry.hpp>
 #include <core/ecs/component_container.hpp>
+#include <core/ecs/entity_handle.hpp>
+#include <core/platform/platform.hpp>
 
 /**
  * @file component_handle.hpp
@@ -10,8 +12,6 @@
 
 namespace args::core::ecs
 {
-	class ARGS_API entity;
-
 	/**@class component_handle_base
 	 * @brief Base class of args::core::ecs::component_handle.
 	 * @ref args::core::ecs::component_handle.
@@ -20,16 +20,21 @@ namespace args::core::ecs
 	{
 	public:
 		// Entity that owns this component.
-		const entity& entity;
+		const entity_handle entity_handle;
 
 	protected:
 		EcsRegistry& m_registry;
 		id_type m_ownerId;
 
 	public:
-		component_handle_base(id_type entityId, EcsRegistry& registry) : entity(registry.getEntity(entityId)), m_registry(registry), m_ownerId(entityId) {}
+		component_handle_base(id_type entityId, EcsRegistry& registry) : entity_handle(registry.getEntity(entityId)), m_registry(registry), m_ownerId(entityId) {}
 
-		virtual bool valid() ARGS_IMPURE_RETURN(m_ownerId != invalid_id);
+		/**@brief Checks if handle still points to a valid component.
+		 */
+		virtual bool valid() ARGS_IMPURE_RETURN(m_ownerId);
+
+		/**@brief Checks if handle still points to a valid component.
+		 */
 		operator bool() { return valid(); }
 	};
 
@@ -53,7 +58,11 @@ namespace args::core::ecs
 		{
 			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
 			if (!comp)
-				throw args_component_destroyed_error;
+				return component_type();
+
+			async::readonly_guard guard(comp->get_lock());
+			if (!valid())
+				return component_type();
 
 			return comp->get().load(order);
 		}
@@ -67,7 +76,11 @@ namespace args::core::ecs
 		{
 			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
 			if (!comp)
-				throw args_component_destroyed_error;
+				return component_type();
+
+			async::readonly_guard guard(comp->get_lock());
+			if (!valid())
+				return component_type();
 
 			comp->get().store(value, order);
 
@@ -88,7 +101,11 @@ namespace args::core::ecs
 		{
 			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
 			if (!comp)
-				throw args_component_destroyed_error;
+				return component_type();
+
+			async::readonly_guard guard(comp->get_lock());
+			if (!valid())
+				return component_type();
 
 			component_type oldVal = comp->get().load(loadOrder);
 			component_type newVal = oldVal + value;
@@ -114,7 +131,11 @@ namespace args::core::ecs
 		{
 			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
 			if (!comp)
-				throw args_component_destroyed_error;
+				return component_type();
+
+			async::readonly_guard guard(comp->get_lock());
+			if (!valid())
+				return component_type();
 
 			component_type oldVal = comp->get().load(loadOrder);
 			component_type newVal = oldVal * value;
@@ -129,11 +150,22 @@ namespace args::core::ecs
 		/**@brief Locks component family and destroys component.
 		 * @ref args::core::ecs::component_container::destroy_component
 		 */
-		void destroy() { m_registry.getFamily<component_type>()->destroy_component(m_ownerId); }
+		void destroy()
+		{
+			async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(m_ownerId);
+			if (!comp)
+				return;
 
+			async::readwrite_guard guard(comp->get_lock());
+			if (valid())
+				m_registry.destroyComponent<component_type>(m_ownerId);
+		}
+
+		/**@brief Checks if handle still points to a valid component.
+		 */
 		virtual bool valid() override
 		{
-			return m_ownerId != invalid_id && m_registry.getFamily<component_type>()->get_component(m_ownerId);
+			return m_ownerId && m_registry.getFamily<component_type>()->has_component(m_ownerId);
 		}
 	};
 }

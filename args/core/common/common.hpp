@@ -13,3 +13,5 @@
  * @param expr the expression to be asserted
  */
 #define assert_msg(msg,expr) assert(((void)(msg),(expr)))
+
+#include <core/common/exception.hpp>

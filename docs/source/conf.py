@@ -73,21 +73,18 @@ exclude_patterns = []
 
 # -- Options for HTML output -------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
+# we are using a local theme, to not confuse
+# python we need to insert ./ into python path
+import os,sys
 
-# html_theme = 'sphinx_theme_pd'
+here = os.path.abspath(os.path.dirname(__file__))
+sys.path.insert(0,here)
 
-# import sphinx_theme_pd
-# html_theme_path = [sphinx_theme_pd.get_html_theme_path()]
-
-#html_theme = 'karma_sphinx_theme'
+# our custom theme is basically just nameko with different colours
+# we basically just need to change the template path
 html_theme = 'nameko'
-import sphinx_nameko_theme
 
-html_theme_path = [sphinx_nameko_theme.get_html_theme_path()]
+# now we can import our custom theme
+import argstheme
 
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
+html_theme_path = [argstheme.get_html_theme_path()]
