@@ -1,0 +1,26 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.cpp:
+
+Program Listing for File testModule.cpp
+=======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.cpp>` (``/home/runner/work/Args-Engine/Args-Engine/applications/test_game/module/testModule.cpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include "testModule.hpp"
+   #include <iostream>
+   
+   using namespace args::core;
+   
+   priority_type TestModule::priority()
+   {
+       return 0;
+   }
+   
+   void TestModule::init()
+   {
+       std::cout << "this is a test module." << std::endl;
+   }

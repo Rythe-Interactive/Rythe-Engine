@@ -1,0 +1,13 @@
+.. _exhale_define_platform_8hpp_1ada752916399eeeee1acb37bea4df462f:
+
+Define A_NODISCARD
+==================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: A_NODISCARD
