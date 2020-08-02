@@ -1,0 +1,13 @@
+.. _exhale_function_namespaceargs_1_1core_1_1filesystem_1_1literals_1acc3142f046c9c3dca88de33c8c1d6ced:
+
+Function args::core::filesystem::literals::operator""_readfile
+==============================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::filesystem::literals::operator""_readfile(const char *, std::size_t)

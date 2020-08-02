@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1editor_1_1_editor:
+
+Class Editor
+============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_editor_editor_editor_impl.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::editor::Editor
+   :members:
+   :protected-members:
+   :undoc-members:

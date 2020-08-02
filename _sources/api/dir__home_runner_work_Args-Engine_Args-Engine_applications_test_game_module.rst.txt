@@ -1,0 +1,21 @@
+.. _dir__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module:
+
+
+Directory module
+================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_applications_test_game>` (``/home/runner/work/Args-Engine/Args-Engine/applications/test_game``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Args-Engine/Args-Engine/applications/test_game/module``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.cpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.hpp`
+
+

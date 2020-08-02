@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1aeb2a8d22b4c0b4917c38f3e2fcb9eea0:
+
+Typedef args::core::priority_type
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::priority_type

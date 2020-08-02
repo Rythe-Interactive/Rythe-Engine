@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1core_1_1_engine:
+
+Class Engine
+============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::Engine
+   :members:
+   :protected-members:
+   :undoc-members:
