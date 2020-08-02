@@ -1,8 +1,11 @@
 #include <iostream>
+#define ARGS_ENTRY
 #include <core/core.hpp>
 
-void __cdecl reportModules(args::core::Engine* engine)
+#include "module/testModule.hpp"
+
+void ARGS_CCONV reportModules(args::core::Engine* engine)
 {
 	std::cout << "Hello Args!" << std::endl;
-	_getwch();
+	engine->reportModule<TestModule>();
 }
