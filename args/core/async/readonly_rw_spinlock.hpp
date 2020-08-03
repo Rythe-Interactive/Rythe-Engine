@@ -324,35 +324,38 @@ namespace args::core::async
 	 *		 Read-only operations will only wait for Read-Write operations to be finished.
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
+	template<size_type S>
 	class readonly_multiguard
 	{
 	private:
-		std::vector<readonly_rw_spinlock*> m_locks;
+		std::array<readonly_rw_spinlock*, S> m_locks;
 
 	public:
 		/**@brief Creates readonly multi-guard and locks for Read-only.
 		 */
 		template<typename lock_type1 = readonly_rw_spinlock, typename lock_type2 = readonly_rw_spinlock, typename... lock_typesN>
-		readonly_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN&... locks)
+		readonly_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN&... locks) : m_locks{ {&lock1, &lock2, &locks...} }
 		{
-			m_locks.push_back(&lock1);
-			m_locks.push_back(&lock2);
-			(m_locks.push_back(&locks), ...);
-
-			sparse_set<uint> unlockedLocks;
-			for (uint i = 0; i < m_locks.size(); i++)
-				unlockedLocks.insert(i);
+			uint lastLocked = 0;
 
 			bool locked = true;
 			do
 			{
+				for (uint i = 0; i < lastLocked; i++)
+					m_locks[i]->unlock(read);
+
 				locked = true;
-				for (uint i : unlockedLocks)
+				for (uint i = 0; i < m_locks.size(); i++)
 				{
 					if (m_locks[i]->try_lock(read))
-						unlockedLocks.erase(i);
+					{
+						lastLocked = i;
+					}
 					else
+					{
 						locked = false;
+						break;
+					}
 				}
 			} while (!locked);
 		}
@@ -369,6 +372,9 @@ namespace args::core::async
 
 		readonly_multiguard& operator=(readonly_multiguard&&) = delete;
 	};
+
+	template<typename... types>
+	readonly_multiguard(types...)->readonly_multiguard<sizeof...(types)>;
 
 	/**@class readwrite_guard
 	 * @brief RAII guard that uses ::async::readonly_rw_spinlock to lock for read-write.
@@ -408,35 +414,38 @@ namespace args::core::async
 	 *		 Read-Write operations will also wait for any Read-only operations to be finished.
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
+	template<size_type S>
 	class readwrite_multiguard
 	{
 	private:
-		std::vector<readonly_rw_spinlock*> m_locks;
+		std::array<readonly_rw_spinlock*, S> m_locks;
 
 	public:
 		/**@brief Creates read-write multi-guard and locks for Read-Write.
 		 */
 		template<typename lock_type1, typename lock_type2, typename... lock_typesN>
-		readwrite_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN&... locks)
+		readwrite_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN&... locks) : m_locks{ {&lock1, &lock2, &locks...} }
 		{
-			m_locks.push_back(&lock1);
-			m_locks.push_back(&lock2);
-			(m_locks.push_back(&locks), ...);
-
-			sparse_set<uint> unlockedLocks;
-			for (uint i = 0; i < m_locks.size(); i++)
-				unlockedLocks.insert(i);
+			uint lastLocked = 0;
 
 			bool locked = true;
 			do
 			{
+				for (uint i = 0; i < lastLocked; i++)
+					m_locks[i]->unlock(write);
+
 				locked = true;
-				for (uint i : unlockedLocks)
+				for (uint i = 0; i < m_locks.size(); i++)
 				{
 					if (m_locks[i]->try_lock(write))
-						unlockedLocks.erase(i);
+					{
+						lastLocked = i;
+					}
 					else
+					{
 						locked = false;
+						break;
+					}
 				}
 			} while (!locked);
 		}
@@ -453,6 +462,9 @@ namespace args::core::async
 
 		readwrite_multiguard& operator=(readwrite_multiguard&&) = delete;
 	};
+
+	template<typename... types>
+	readwrite_multiguard(types...)->readwrite_multiguard<sizeof...(types)>;
 
 	/**@class mixed_multiguard
 	 * @brief RAII guard that uses multiple ::async::readonly_rw_spinlocks to lock them all for user specified permissions. (similar to std::lock)
@@ -492,20 +504,26 @@ namespace args::core::async
 
 			fill<sizeof...(types)>(arguments...);
 
-			sparse_set<uint> unlockedLocks;
-			for (uint i = 0; i < m_locks.size(); i++)
-				unlockedLocks.insert(i);
+			uint lastLocked = 0;
 
 			bool locked = true;
 			do
 			{
+				for (uint i = 0; i < lastLocked; i++)
+					m_locks[i]->unlock(m_states[i]);
+
 				locked = true;
-				for (uint i : unlockedLocks)
+				for (uint i = 0; i < m_locks.size(); i++)
 				{
 					if (m_locks[i]->try_lock(m_states[i]))
-						unlockedLocks.erase(i);
+					{
+						lastLocked = i;
+					}
 					else
+					{
 						locked = false;
+						break;
+					}
 				}
 			} while (!locked);
 		}

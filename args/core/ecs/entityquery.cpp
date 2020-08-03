@@ -25,7 +25,7 @@ namespace args::core::ecs
 	{
 		hashed_sparse_set<id_type> componentTypes;
 		if (m_id)
-			componentTypes = m_registry.getComponentTypes(m_id);
+			componentTypes = m_registry.getComponentTypes(m_id); /// comment this glyn.
 
 		componentTypes.insert(componentTypeId);
 
