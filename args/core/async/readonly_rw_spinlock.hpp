@@ -330,25 +330,12 @@ namespace args::core::async
 	private:
 		std::array<readonly_rw_spinlock*, S> m_locks;
 
-		template<size_type I, typename... types>
-		void fill(readonly_rw_spinlock& lock, types&&... args)
-		{
-			if constexpr (I > 1)
-			{
-				fill<I - 1>(args...);
-			}
-
-			m_locks[I - 1] = &lock;
-		}
-
 	public:
 		/**@brief Creates readonly multi-guard and locks for Read-only.
 		 */
 		template<typename lock_type1 = readonly_rw_spinlock, typename lock_type2 = readonly_rw_spinlock, typename... lock_typesN>
-		readonly_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN&... locks)
+		readonly_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN&... locks) : m_locks{ {&lock1, &lock2, &locks...} }
 		{
-			fill<sizeof...(locks) + 2>(lock1, lock2, locks...);
-
 			uint lastLocked = 0;
 
 			bool locked = true;
@@ -433,25 +420,12 @@ namespace args::core::async
 	private:
 		std::array<readonly_rw_spinlock*, S> m_locks;
 
-		template<size_type I, typename... types>
-		void fill(readonly_rw_spinlock& lock, types&&... args)
-		{
-			if constexpr (I > 1)
-			{
-				fill<I - 1>(args...);
-			}
-
-			m_locks[I - 1] = &lock;
-		}
-
 	public:
 		/**@brief Creates read-write multi-guard and locks for Read-Write.
 		 */
 		template<typename lock_type1, typename lock_type2, typename... lock_typesN>
-		readwrite_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN&... locks)
+		readwrite_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN&... locks) : m_locks{ {&lock1, &lock2, &locks...} }
 		{
-			fill<sizeof...(locks) + 2>(lock1, lock2, locks...);
-
 			uint lastLocked = 0;
 
 			bool locked = true;

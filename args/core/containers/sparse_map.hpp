@@ -420,9 +420,9 @@ namespace args::core
 				auto itr_value = m_dense_value.begin() + m_size;
 				*itr_value = std::forward<value_type>(value_type());
 
-				auto itr_key = m_dense_key.begin() + m_size;
-				*itr_key = std::move(key);
-				k = *itr_key;
+				auto itr_key = m_dense_key.begin() + m_size; // Find iterator location at which to store the key.
+				*itr_key = std::move(key); // Move the key into the location.
+				k = *itr_key; // Fetch a copy of the key for reuse in the rest of the function.
 				m_sparse[k] = m_size;
 				++m_size;
 			}

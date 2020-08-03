@@ -56,7 +56,7 @@ namespace args::core::ecs
 		if (!m_families.contains(componentTypeId))
 			throw args_unknown_component_error;
 
-		return m_families[componentTypeId];
+		return m_families[componentTypeId].get();
 	}
 
 	inline component_handle_base EcsRegistry::getComponent(id_type entityId, id_type componentTypeId)

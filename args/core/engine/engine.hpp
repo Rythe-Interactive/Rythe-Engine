@@ -67,5 +67,14 @@ namespace args::core
 		/**@brief Runs engine loop.
 		 */
 		void run();
+
+		~Engine()
+		{
+			for (const auto& priority : modules)
+				for (auto* module : priority.second)
+				{
+					delete module;
+				}
+		}
 	};
 }
