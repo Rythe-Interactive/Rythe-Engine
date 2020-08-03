@@ -25,41 +25,61 @@ namespace args::core::ecs
 	{
 		hashed_sparse_set<id_type> componentTypes;
 		if (m_id)
-			componentTypes = m_registry.getComponentTypes(m_id); /// comment this glyn.
+			componentTypes = m_registry.getComponentTypes(m_id); // If this query is a valid query fetch a copy of the component types we're already querying.
 
-		componentTypes.insert(componentTypeId);
+		if (componentTypes.contains(componentTypeId)) // If we're already querying this component type then we don't need to do anything.
+			return;
 
-		id_type newId = m_registry.getQueryId(componentTypes);
-		if (newId)
+		componentTypes.insert(componentTypeId); // Add new type to query for.
+
+		id_type newId = m_registry.getQueryId(componentTypes); // Check registry for an existing query with the desired component combination.
+		if (newId) // If an existing query was found move this handle to that query instead.
 		{
 			m_registry.removeReference(m_id);
 			m_id = newId;
 			m_registry.addReference(m_id);
 		}
-		else if (m_id == invalid_id || m_registry.getReferenceCount(m_id) > 1)
+		else if (m_id != invalid_id && m_registry.getReferenceCount(m_id) == 1) // If the query is valid and there are no other handles then we can safely add another component type to this query.
+		{
+			m_registry.addComponentType(m_id, componentTypeId);
+		}
+		else // If we cannot add a component type, and there is no existing query for us, then we should just create a new query with the desired component types.
 		{
 			m_registry.removeReference(m_id);
 			m_id = m_registry.addQuery(componentTypes);
 		}
-		else
-			m_registry.addComponentType(m_id, componentTypeId);
+
 	}
 
 	inline void EntityQuery::removeComponentType(id_type componentTypeId)
 	{
-		hashed_sparse_set<id_type> componentMap = m_registry.getComponentTypes(m_id);
-		componentMap.erase(componentTypeId);
+		if (!m_id) // We're not pointing to a valid query, there's nothing to remove from.
+			return;
 
-		id_type newId = m_registry.getQueryId(componentMap);
-		if (newId)
+		hashed_sparse_set<id_type> componentMap = m_registry.getComponentTypes(m_id); // Fetch the list of components we're querying.
+
+		if (!componentMap.contains(componentTypeId)) // If we're not querying the component we wish to stop querying then we don't need to do anything.
+			return;
+
+		componentMap.erase(componentTypeId); // Remove component type from the list.
+
+		id_type newId = m_registry.getQueryId(componentMap); // Check registry for an existing query with the desired component combination.
+		if (newId) // If an existing query was found move this handle to that query instead.
 		{
 			m_registry.removeReference(m_id);
 			m_id = newId;
+			m_registry.addReference(m_id);
 		}
-		else if (m_id == invalid_id || m_registry.getReferenceCount(m_id) > 1)
-			m_id = m_registry.addQuery(componentMap);
-		else
+		else if (m_id != invalid_id && m_registry.getReferenceCount(m_id) == 1) // If the query is valid and there are no other handles then we can safely remove the component type from this query.
+		{
 			m_registry.removeComponentType(m_id, componentTypeId);
+		}
+		else // If we cannot remove a component type, and there is no existing query for us, then we should just create a new query with the desired component types.
+		{
+			m_registry.removeReference(m_id);
+			m_id = m_registry.addQuery(componentMap);
+		}
+
 	}
 
 	inline entity_handle EntityQuery::operator[](size_type index)

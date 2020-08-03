@@ -168,9 +168,12 @@ namespace args::core::ecs
 
 	inline void QueryRegistry::removeReference(id_type queryId)
 	{
+		if (queryId == invalid_id)
+			return;
+
 		async::readonly_guard refguard(m_referenceLock);
 
-		if (queryId == invalid_id || !m_references.contains(queryId))
+		if (!m_references.contains(queryId))
 			return;
 
 		size_type& referenceCount = m_references.get(queryId);
