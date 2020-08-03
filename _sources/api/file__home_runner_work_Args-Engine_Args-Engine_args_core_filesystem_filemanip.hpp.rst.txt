@@ -1,0 +1,82 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp:
+
+File filemanip.hpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/filemanip.hpp``)
+---------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/common/common.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_common.hpp`)
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
+
+- ``core/types/types.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp`)
+
+- ``cstdio``
+
+- ``memory``
+
+- ``string_view``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__filesystem`
+
+- :ref:`namespace_args__core__filesystem__literals`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1filesystem_1_1literals_1acc3142f046c9c3dca88de33c8c1d6ced`
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1filesystem_1_1literals_1a5e12aaf09e12d80528fcc3636d8cfaf7`
+
+- :ref:`exhale_function_filemanip_8hpp_1ab37ec71e56f634b5d953917b91e395cc`
+
+- :ref:`exhale_function_filemanip_8hpp_1a1462e031040b5fc8416f97249269e0b7`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_filemanip_8hpp_1af08ec37a8c99d747fb60fa15bc28678b`
+

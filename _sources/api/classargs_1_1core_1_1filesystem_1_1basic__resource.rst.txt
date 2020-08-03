@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1core_1_1filesystem_1_1basic__resource:
+
+Class basic_resource
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_resource.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::filesystem::basic_resource
+   :members:
+   :protected-members:
+   :undoc-members:

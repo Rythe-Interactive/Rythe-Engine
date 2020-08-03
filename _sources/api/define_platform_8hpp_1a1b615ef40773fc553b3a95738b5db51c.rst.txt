@@ -1,0 +1,13 @@
+.. _exhale_define_platform_8hpp_1a1b615ef40773fc553b3a95738b5db51c:
+
+Define ARGS_CPP17V
+==================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: ARGS_CPP17V

@@ -1,0 +1,30 @@
+.. _dir__home_runner_work_Args-Engine_Args-Engine_args_core:
+
+
+Directory core
+==============
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args>` (``/home/runner/work/Args-Engine/Args-Engine/args``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Args-Engine/Args-Engine/args/core``
+
+Subdirectories
+--------------
+
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_common`
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_engine`
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_entry`
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem`
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_platform`
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_types`
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`
+
+

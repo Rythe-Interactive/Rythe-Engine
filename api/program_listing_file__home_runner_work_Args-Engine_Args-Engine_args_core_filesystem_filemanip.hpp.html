@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File filemanip.hpp &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File filemanip.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-filemanip-hpp">
+<span id="program-listing-file-home-runner-work-args-engine-args-engine-args-core-filesystem-filemanip-hpp"></span><h1>Program Listing for File filemanip.hpp<a class="headerlink" href="#program-listing-for-file-filemanip-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-filesystem-filemanip-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/filemanip.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#define _CRT_SECURE_NO_WARNINGS       </span><span class="c1">// fopen vs fopen_s</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;core/platform/platform.hpp&gt; // A_NODISCARD</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/types/types.hpp&gt;       // byte, byte_vec</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/common/common.hpp&gt;     // assert_msg</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;string_view&gt;                // std::string_view</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;memory&gt;                     // std::unique_ptr</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstdio&gt;                     // fopen, fclose, fseek, ftell, fread, fwrite</span><span class="cp"></span>
+
+
+<span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">filesystem</span> <span class="p">{</span>
+    <span class="n">A_NODISCARD</span> <span class="kr">inline</span>  <span class="n">byte_vec</span> <span class="n">read_file</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">path</span><span class="p">)</span>
+    <span class="p">{</span>
+
+        <span class="c1">//create managed FILE ptr</span>
+        <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">FILE</span><span class="p">,</span><span class="k">decltype</span><span class="p">(</span><span class="o">&amp;</span><span class="n">fclose</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">file</span><span class="p">(</span>
+            <span class="n">fopen</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">path</span><span class="p">).</span><span class="n">c_str</span><span class="p">(),</span><span class="s">&quot;r+b&quot;</span><span class="p">),</span>
+            <span class="n">fclose</span> <span class="c1">// deleter is fclose</span>
+        <span class="p">);</span>
+
+        <span class="n">assert_msg</span><span class="p">(</span><span class="s">&quot;could not open file&quot;</span><span class="p">,</span><span class="n">file</span><span class="p">);</span>
+
+        <span class="c1">//get size and create container of that size</span>
+        <span class="n">fseek</span><span class="p">(</span><span class="n">file</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="mi">0L</span><span class="p">,</span><span class="n">SEEK_END</span><span class="p">);</span>
+        <span class="n">byte_vec</span> <span class="nf">container</span><span class="p">(</span><span class="n">ftell</span><span class="p">(</span><span class="n">file</span><span class="p">.</span><span class="n">get</span><span class="p">()));</span>
+        <span class="n">fseek</span><span class="p">(</span><span class="n">file</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="mi">0L</span><span class="p">,</span><span class="n">SEEK_SET</span><span class="p">);</span>
+
+        <span class="c1">//read file</span>
+        <span class="n">fread</span><span class="p">(</span><span class="n">container</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="k">sizeof</span><span class="p">(</span><span class="n">byte_t</span><span class="p">),</span><span class="n">container</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="n">file</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+
+        <span class="k">return</span> <span class="n">container</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">write_file</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">path</span><span class="p">,</span><span class="k">const</span> <span class="n">byte_vec</span><span class="o">&amp;</span> <span class="n">container</span><span class="p">)</span>
+    <span class="p">{</span>
+
+        <span class="c1">//create managed FILE ptr</span>
+        <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">FILE</span><span class="p">,</span><span class="k">decltype</span><span class="p">(</span><span class="o">&amp;</span><span class="n">fclose</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">file</span><span class="p">(</span>
+            <span class="n">fopen</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">path</span><span class="p">).</span><span class="n">c_str</span><span class="p">(),</span><span class="s">&quot;wb&quot;</span><span class="p">),</span>
+            <span class="n">fclose</span>
+        <span class="p">);</span>
+
+        <span class="n">assert_msg</span><span class="p">(</span><span class="s">&quot;could not open file&quot;</span><span class="p">,</span><span class="n">file</span><span class="p">);</span>
+
+        <span class="c1">// read data</span>
+        <span class="n">fwrite</span><span class="p">(</span><span class="n">container</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="k">sizeof</span><span class="p">(</span><span class="n">byte_t</span><span class="p">),</span><span class="n">container</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="n">file</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+
+    <span class="p">}</span>
+
+
+    <span class="k">namespace</span> <span class="n">literals</span>
+    <span class="p">{</span>
+        <span class="n">byte_vec</span> <span class="k">operator</span><span class="s">&quot;&quot;</span><span class="n">_readfile</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">str</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="o">::</span><span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">read_file</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">len</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="k">auto</span> <span class="k">operator</span><span class="s">&quot;&quot;</span><span class="n">_writefile</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">str</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">path</span><span class="o">=</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">len</span><span class="p">)](</span><span class="k">const</span> <span class="n">byte_vec</span><span class="o">&amp;</span> <span class="n">container</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">write_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="n">container</span><span class="p">);</span>
+            <span class="p">};</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cp">#undef _CRT_SECURE_NO_WARNINGS</span>
+
+ <span class="c1">//code example</span>
+<span class="cm">/*</span>
+<span class="cm">void example()</span>
+<span class="cm">{</span>
+<span class="cm">    using namespace  args::core::fs::literals;</span>
+
+<span class="cm">    auto file1 = &quot;hello_world.cpp&quot;_readfile;</span>
+<span class="cm">    auto file2 = args::core::fs::read_file(&quot;hello_world.cpp&quot;);</span>
+
+<span class="cm">    &quot;hello_world2.cpp&quot;_writefile(file2);</span>
+<span class="cm">    args::core::fs::write_file(&quot;hello_world2.cpp&quot;,file1);</span>
+<span class="cm">}</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

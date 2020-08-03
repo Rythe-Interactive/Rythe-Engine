@@ -1,0 +1,24 @@
+
+.. _namespace_args__editor:
+
+Namespace args::editor
+======================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1editor_1_1editor__module__initializer__t`
+
+- :ref:`exhale_class_classargs_1_1editor_1_1_editor`
+
+- :ref:`exhale_class_classargs_1_1editor_1_1_editor_module`

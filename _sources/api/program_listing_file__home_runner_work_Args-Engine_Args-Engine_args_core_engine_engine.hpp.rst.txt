@@ -1,0 +1,51 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp:
+
+Program Listing for File engine.hpp
+===================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/engine/engine.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/platform/platform.hpp>
+   #include <core/engine/module.hpp>
+   #include <core/types/primitives.hpp>
+   #include <core/types/meta.hpp>
+   
+   #include <map>
+   #include <vector>
+   
+   namespace args::core
+   {
+       class ARGS_API Engine
+       {
+       private:
+           std::map<priority_type, std::vector<Module*>, std::greater<priority_type>> modules = {};
+   
+       public:
+           Engine() {};
+   
+           template<class ModuleType, inherits_from<ModuleType, Module> = 0>
+           void reportModule()
+           {
+               Module* module = new ModuleType();
+               const priority_type priority = module->priority();
+               modules[priority].push_back(module);
+           }
+   
+           template <class ModuleType, class... Args, inherits_from<ModuleType, Module> = 0>
+           void reportModule(module_initializer_t s, Args&&...args)
+           {
+               (void) s;
+               Module * module = new ModuleType(std::forward<Args>(args)...);
+               const priority_type priority = module->priority();
+               modules[priority].push_back(module);
+           }
+   
+           void init();
+       };
+   }

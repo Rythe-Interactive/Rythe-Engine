@@ -1,0 +1,40 @@
+
+.. _namespace_args__core__filesystem:
+
+Namespace args::core::filesystem
+================================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__filesystem__detail`
+
+- :ref:`namespace_args__core__filesystem__literals`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1core_1_1filesystem_1_1basic__resource`
+
+- :ref:`exhale_class_classargs_1_1core_1_1filesystem_1_1_test`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_filemanip_8hpp_1ab37ec71e56f634b5d953917b91e395cc`
+
+- :ref:`exhale_function_filemanip_8hpp_1a1462e031040b5fc8416f97249269e0b7`

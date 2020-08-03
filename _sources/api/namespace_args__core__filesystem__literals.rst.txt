@@ -1,0 +1,26 @@
+
+.. _namespace_args__core__filesystem__literals:
+
+Namespace args::core::filesystem::literals
+==========================================
+
+
+work the same as the above, but the path parameter is replaced by the string literal 
+ 
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1filesystem_1_1literals_1acc3142f046c9c3dca88de33c8c1d6ced`
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1filesystem_1_1literals_1a5e12aaf09e12d80528fcc3636d8cfaf7`

@@ -1,0 +1,13 @@
+.. _exhale_function_filemanip_8hpp_1ab37ec71e56f634b5d953917b91e395cc:
+
+Function args::core::filesystem::read_file
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::filesystem::read_file(std::string_view)

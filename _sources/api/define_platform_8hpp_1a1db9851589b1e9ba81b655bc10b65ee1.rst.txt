@@ -1,0 +1,13 @@
+.. _exhale_define_platform_8hpp_1a1db9851589b1e9ba81b655bc10b65ee1:
+
+Define ARGS_PURE
+================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: ARGS_PURE

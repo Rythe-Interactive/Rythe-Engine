@@ -1,0 +1,20 @@
+.. _dir__home_runner_work_Args-Engine_Args-Engine_args_audio:
+
+
+Directory audio
+===============
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args>` (``/home/runner/work/Args-Engine/Args-Engine/args``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Args-Engine/Args-Engine/args/audio``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_delete_this.cpp`
+
+

@@ -1,0 +1,22 @@
+
+.. _namespace_args:
+
+Namespace args
+==============
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core`
+
+- :ref:`namespace_args__editor`

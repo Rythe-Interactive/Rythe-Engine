@@ -1,0 +1,13 @@
+.. _exhale_function_editor__application_2source_8cpp_1a8b1e1d091cfbcc8a6898598789bab17b:
+
+Function reportEditorModules(args::editor::Editor \*)
+=====================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_editor_application_source.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: reportEditorModules(args::editor::Editor *)

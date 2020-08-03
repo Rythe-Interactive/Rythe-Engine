@@ -1,0 +1,13 @@
+.. _exhale_define_platform_8hpp_1ac8c687223be2bdac90dfd02bf6bb4a9a:
+
+Define NO_MANGLING
+==================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: NO_MANGLING
