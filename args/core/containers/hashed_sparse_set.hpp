@@ -252,7 +252,7 @@ namespace args::core
 					reserve(m_size + 1);
 
 				auto itr = m_dense.begin() + m_size;
-				*itr = std::move(val);
+				*itr = val;
 
 				m_sparse[val] = m_size;
 				++m_size;
@@ -275,7 +275,7 @@ namespace args::core
 				auto itr = m_dense.begin() + m_size;
 				*itr = std::move(val);
 
-				m_sparse[val] = m_size;
+				m_sparse[*itr] = m_size;
 				++m_size;
 				return std::make_pair(itr, true);
 			}

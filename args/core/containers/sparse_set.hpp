@@ -255,8 +255,8 @@ namespace args::core
 					reserve(val + 1);
 
 				auto itr = m_dense.begin() + m_size;
-				*itr = val;
-				m_sparse[val] = (value_type)m_size;
+				*itr = std::move(val);
+				m_sparse[*itr] = (value_type)m_size;
 				++m_size;
 				return std::make_pair(itr, true);
 			}
