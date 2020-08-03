@@ -48,6 +48,7 @@
 
 	#include <sys/resource.h>
 	#include <sched.h>
+	#include <errno.h>
 #endif
 
 #ifndef __FUNC__

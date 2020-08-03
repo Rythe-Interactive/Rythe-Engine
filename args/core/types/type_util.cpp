@@ -4,10 +4,8 @@ namespace args::core
 {
 	id_type ARGS_FUNC nameHash(cstring name)
 	{
-		id_type hash = 0;
-
-		hash = 0x811c9dc5;
-		uint32 prime = 0x1000193;
+		id_type hash = 0xcbf29ce484222325;
+		uint64 prime = 0x00000100000001b3;
 		for (int i = 0; i < std::strlen(name); i++)
 		{
 			byte value = name[i];
@@ -20,10 +18,8 @@ namespace args::core
 
 	id_type ARGS_FUNC nameHash(std::string name)
 	{
-		id_type hash = 0;
-
-		hash = 0x811c9dc5;
-		uint32 prime = 0x1000193;
+		id_type hash = 0xcbf29ce484222325;
+		uint64 prime = 0x00000100000001b3;
 		for (int i = 0; i < name.length(); i++)
 		{
 			byte value = name[i];

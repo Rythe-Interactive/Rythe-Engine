@@ -15,8 +15,7 @@ namespace args::core::ecs
 
 		auto entityData = m_registry.getEntities();
 		sparse_map<id_type, entity_handle>& entities = entityData.first;
-		async::readonly_guard rguard(entityData.second); // TODO: need for async::readonly_multiguard
-		async::readonly_guard comguard(m_componentLock);
+		async::readonly_multiguard mguard(entityData.second, m_componentLock);
 
 		for (id_type entityId : entities.keys())
 		{
@@ -37,8 +36,7 @@ namespace args::core::ecs
 		std::vector<id_type> toRemove;
 
 		{
-			async::readonly_guard entguard(m_entityLock);
-			async::readonly_guard compguard(m_componentLock);
+			async::readonly_multiguard mguard(m_entityLock, m_componentLock);
 			for (int i = 0; i < m_entityLists[queryId].size(); i++)
 			{
 				id_type entityId = m_entityLists[queryId].dense()[i];
@@ -56,8 +54,10 @@ namespace args::core::ecs
 
 	inline void QueryRegistry::evaluateEntityChange(id_type entityId, id_type componentTypeId, bool removal)
 	{
-		async::readwrite_guard entguard(m_entityLock);
-		async::readonly_guard compguard(m_componentLock);
+		async::lock_state entitystate = async::write;
+		async::lock_state compstate = async::read;
+		async::mixed_multiguard mmguard(m_entityLock, entitystate, m_componentLock, compstate);
+
 		for (int i = 0; i < m_entityLists.size(); i++)
 		{
 			if (!m_componentTypes[i].contains(componentTypeId))
@@ -146,9 +146,10 @@ namespace args::core::ecs
 
 		{
 			auto entityData = m_registry.getEntities();
-			async::readonly_guard dataguard(entityData.second);
-			async::readwrite_guard entguard(m_entityLock);
-			async::readonly_guard compguard(m_componentLock);
+			async::lock_state datastate = async::read;
+			async::lock_state entitystate = async::write;
+			async::lock_state compstate = async::read;
+			async::mixed_multiguard mmguard(entityData.second, datastate, m_entityLock, entitystate, m_componentLock, compstate);
 
 			for (entity_handle& entity_handle : entityData.first)
 				if (entity_handle.component_composition().contains(m_componentTypes[queryId]))
@@ -181,9 +182,7 @@ namespace args::core::ecs
 		referenceCount--;
 		if (referenceCount == 0)
 		{
-			async::readwrite_guard refWguard(m_referenceLock); // permitted to double lock, elevates permission to write.
-			async::readwrite_guard entguard(m_entityLock);
-			async::readwrite_guard compguard(m_componentLock);
+			async::readwrite_multiguard mguard(m_referenceLock, m_entityLock, m_componentLock);
 
 			m_references.erase(queryId);
 			m_entityLists.erase(queryId);
