@@ -8,6 +8,7 @@
 #include <core/ecs/entityquery.hpp>
 
 #include <utility>
+#include <memory>
 
 /**
  * @file ecsregistry.hpp
@@ -41,7 +42,7 @@ namespace args::core::ecs
 		static id_type m_nextEntityId;
 
 		mutable async::readonly_rw_spinlock m_familyLock;
-		sparse_map<id_type, component_container_base*> m_families;
+		sparse_map<id_type, std::unique_ptr<component_container_base>> m_families;
 
 		mutable async::readonly_rw_spinlock m_entityDataLock;
 		sparse_map<id_type, entity_data> m_entityData;
@@ -73,7 +74,7 @@ namespace args::core::ecs
 		{
 			async::readwrite_guard guard(m_familyLock);
 			if (!m_families.contains(typeHash<component_type>()))
-				m_families[typeHash<component_type>()] = new component_container<component_type>();
+				m_families[typeHash<component_type>()] = std::make_unique<component_container<component_type>>();
 		}
 
 		/**@brief Get component storage of a certain type.

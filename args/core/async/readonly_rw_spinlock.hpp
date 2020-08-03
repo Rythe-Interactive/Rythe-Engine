@@ -2,6 +2,7 @@
 #include <atomic>
 #include <tuple>
 #include <unordered_map>
+#include <array>
 #include <core/types/primitives.hpp>
 #include <core/platform/platform.hpp>
 #include <core/containers/sparse_set.hpp>
@@ -223,6 +224,8 @@ namespace args::core::async
 		}
 
 		readonly_rw_spinlock(const readonly_rw_spinlock&) = delete;
+		readonly_rw_spinlock(readonly_rw_spinlock&) = delete;
+		readonly_rw_spinlock& operator=(const readonly_rw_spinlock&) = delete;
 		readonly_rw_spinlock& operator=(readonly_rw_spinlock&&) = delete;
 
 		/**@brief Lock for a certain permission level. (locking for idle does nothing)
@@ -321,35 +324,38 @@ namespace args::core::async
 	 *		 Read-only operations will only wait for Read-Write operations to be finished.
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
-	template<typename lock_type1 = readonly_rw_spinlock, typename lock_type2 = readonly_rw_spinlock, typename... lock_typesN>
+	template<size_type S>
 	class readonly_multiguard
 	{
 	private:
-		std::vector<readonly_rw_spinlock*> m_locks;
+		std::array<readonly_rw_spinlock*, S> m_locks;
 
 	public:
 		/**@brief Creates readonly multi-guard and locks for Read-only.
 		 */
-		readonly_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN&... locks)
+		template<typename lock_type1 = readonly_rw_spinlock, typename lock_type2 = readonly_rw_spinlock, typename... lock_typesN>
+		readonly_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN&... locks) : m_locks{ {&lock1, &lock2, &locks...} }
 		{
-			m_locks.push_back(&lock1);
-			m_locks.push_back(&lock2);
-			(m_locks.push_back(&locks), ...);
-
-			sparse_set<uint> unlockedLocks;
-			for (uint i = 0; i < m_locks.size(); i++)
-				unlockedLocks.insert(i);
+			uint lastLocked = 0;
 
 			bool locked = true;
 			do
 			{
+				for (uint i = 0; i < lastLocked; i++)
+					m_locks[i]->unlock(read);
+
 				locked = true;
-				for (uint i : unlockedLocks)
+				for (uint i = 0; i < m_locks.size(); i++)
 				{
 					if (m_locks[i]->try_lock(read))
-						unlockedLocks.erase(i);
+					{
+						lastLocked = i;
+					}
 					else
+					{
 						locked = false;
+						break;
+					}
 				}
 			} while (!locked);
 		}
@@ -366,6 +372,9 @@ namespace args::core::async
 
 		readonly_multiguard& operator=(readonly_multiguard&&) = delete;
 	};
+
+	template<typename... types>
+	readonly_multiguard(types...)->readonly_multiguard<sizeof...(types)>;
 
 	/**@class readwrite_guard
 	 * @brief RAII guard that uses ::async::readonly_rw_spinlock to lock for read-write.
@@ -405,35 +414,38 @@ namespace args::core::async
 	 *		 Read-Write operations will also wait for any Read-only operations to be finished.
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
-	template<typename lock_type1, typename lock_type2, typename... lock_typesN>
+	template<size_type S>
 	class readwrite_multiguard
 	{
 	private:
-		std::vector<readonly_rw_spinlock*> m_locks;
+		std::array<readonly_rw_spinlock*, S> m_locks;
 
 	public:
 		/**@brief Creates read-write multi-guard and locks for Read-Write.
 		 */
-		readwrite_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN&... locks)
+		template<typename lock_type1, typename lock_type2, typename... lock_typesN>
+		readwrite_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN&... locks) : m_locks{ {&lock1, &lock2, &locks...} }
 		{
-			m_locks.push_back(&lock1);
-			m_locks.push_back(&lock2);
-			(m_locks.push_back(&locks), ...);
-
-			sparse_set<uint> unlockedLocks;
-			for (uint i = 0; i < m_locks.size(); i++)
-				unlockedLocks.insert(i);
+			uint lastLocked = 0;
 
 			bool locked = true;
 			do
 			{
+				for (uint i = 0; i < lastLocked; i++)
+					m_locks[i]->unlock(write);
+
 				locked = true;
-				for (uint i : unlockedLocks)
+				for (uint i = 0; i < m_locks.size(); i++)
 				{
 					if (m_locks[i]->try_lock(write))
-						unlockedLocks.erase(i);
+					{
+						lastLocked = i;
+					}
 					else
+					{
 						locked = false;
+						break;
+					}
 				}
 			} while (!locked);
 		}
@@ -451,6 +463,9 @@ namespace args::core::async
 		readwrite_multiguard& operator=(readwrite_multiguard&&) = delete;
 	};
 
+	template<typename... types>
+	readwrite_multiguard(types...)->readwrite_multiguard<sizeof...(types)>;
+
 	/**@class mixed_multiguard
 	 * @brief RAII guard that uses multiple ::async::readonly_rw_spinlocks to lock them all for user specified permissions. (similar to std::lock)
 	 * @note Read-only operations can happen simultaneously without waiting for each other.
@@ -459,73 +474,76 @@ namespace args::core::async
 	 *		 Read-Write operations will also wait for any Read-only operations to be finished.
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
-	template<typename... mixed_types>
+	template<size_type S>
 	class mixed_multiguard
 	{
-		static_assert(sizeof...(mixed_types) % 2 == 0, "Argument order should be (lock, lock-state, lock, lock-state). Argument count should thus be even.");
-
 	private:
-		std::vector<readonly_rw_spinlock*> m_locks;
-		std::vector<lock_state*> m_states;
+		std::array<readonly_rw_spinlock*, S / 2> m_locks;
+		std::array<lock_state, S / 2> m_states;
 
-		template<size_type I>
-		void fillVectors(std::tuple<mixed_types*...>& args)
+		template<size_type I, typename... types>
+		void fill(readonly_rw_spinlock& lock, lock_state state, types&&... args)
 		{
-			if (I - 1 >= 1)
+			if constexpr (I > 2)
 			{
-				fillVectors<I - 2>(args);
-
-				m_locks.push_back(std::get<I-1>(args));
-				m_states.push_back(std::get<I>(args));
+				fill<I - 2>(args...);
 			}
-		}
 
-		template<>
-		void fillVectors<1>(std::tuple<mixed_types*...>& args)
-		{
-			m_locks.push_back(std::get<0>(args));
-			m_states.push_back(std::get<1>(args));
+			m_locks[(I / 2) - 1] = &lock;
+			m_states[(I / 2) - 1] = state;
 		}
 
 	public:
 		/**@brief Creates readonly multi-guard and locks for specified permissions.
-		 * @note Argument order should be as follows: (readonly_rw_spinlock&, lock_state&, readonly_rw_spinlock&, lock_state&, ...)
+		 * @note Argument order should be as follows: (readonly_rw_spinlock&, lock_state, readonly_rw_spinlock&, lock_state, ...)
 		 */
-		mixed_multiguard(mixed_types&... arguments)
+		template<typename... types>
+		explicit mixed_multiguard(types&&... arguments)
 		{
-			std::tuple<mixed_types*...> argsdata = std::make_tuple(&arguments...);
+			static_assert(sizeof...(types) % 2 == 0, "Argument order should be (lock, lock-state, lock, lock-state). Argument count should thus be even.");
 
-			fillVectors<sizeof...(mixed_types)-1>(argsdata);
+			fill<sizeof...(types)>(arguments...);
 
-			sparse_set<uint> unlockedLocks;
-			for (uint i = 0; i < m_locks.size(); i++)
-				unlockedLocks.insert(i);
+			uint lastLocked = 0;
 
 			bool locked = true;
 			do
 			{
+				for (uint i = 0; i < lastLocked; i++)
+					m_locks[i]->unlock(m_states[i]);
+
 				locked = true;
-				for (uint i : unlockedLocks)
+				for (uint i = 0; i < m_locks.size(); i++)
 				{
-					if (m_locks[i]->try_lock(*(m_states[i])))
-						unlockedLocks.erase(i);
+					if (m_locks[i]->try_lock(m_states[i]))
+					{
+						lastLocked = i;
+					}
 					else
+					{
 						locked = false;
+						break;
+					}
 				}
 			} while (!locked);
 		}
 
 		mixed_multiguard(const mixed_multiguard&) = delete;
+		mixed_multiguard(mixed_multiguard&&) = delete;
 
 		/**@brief RAII style unlocks lock from specified permissions.
 		 */
 		~mixed_multiguard()
 		{
-			for(int i = 0; i < m_locks.size(); i++)
-				m_locks[i]->unlock(*(m_states[i]));
+			for (int i = 0; i < m_locks.size(); i++)
+				m_locks[i]->unlock(m_states[i]);
 		}
 
 		mixed_multiguard& operator=(mixed_multiguard&&) = delete;
+		mixed_multiguard& operator=(const mixed_multiguard&) = delete;
 	};
+
+	template<typename... types>
+	mixed_multiguard(types...)->mixed_multiguard<sizeof...(types)>;
 
 }

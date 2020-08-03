@@ -65,18 +65,30 @@ namespace args::core
 
 	public:
 		A_NODISCARD inline iterator begin()
-		{ async::readonly_guard lock(m_container_lock); return m_dense_value.begin(); }
+		{
+			async::readonly_guard lock(m_container_lock); return m_dense_value.begin();
+		}
 		A_NODISCARD inline const_iterator begin() const
-		{ async::readonly_guard lock(m_container_lock); return m_dense_value.cbegin(); }
+		{
+			async::readonly_guard lock(m_container_lock); return m_dense_value.cbegin();
+		}
 		A_NODISCARD inline const_iterator cbegin() const
-		{ async::readonly_guard lock(m_container_lock); return m_dense_value.cbegin(); }
+		{
+			async::readonly_guard lock(m_container_lock); return m_dense_value.cbegin();
+		}
 
 		A_NODISCARD inline iterator end()
-		{ async::readonly_guard lock(m_container_lock); return m_dense_value.begin() + m_size.load(std::memory_order_acquire); }
+		{
+			async::readonly_guard lock(m_container_lock); return m_dense_value.begin() + m_size.load(std::memory_order_acquire);
+		}
 		A_NODISCARD inline const_iterator end() const
-		{ async::readonly_guard lock(m_container_lock); return m_dense_value.cbegin() + m_size.load(std::memory_order_acquire); }
+		{
+			async::readonly_guard lock(m_container_lock); return m_dense_value.cbegin() + m_size.load(std::memory_order_acquire);
+		}
 		A_NODISCARD inline const_iterator cend() const
-		{ async::readonly_guard lock(m_container_lock); return m_dense_value.cbegin() + m_size.load(std::memory_order_acquire); }
+		{
+			async::readonly_guard lock(m_container_lock); return m_dense_value.cbegin() + m_size.load(std::memory_order_acquire);
+		}
 
 		/**@brief Returns the amount of items in the sparse_map.
 		 * @returns size_type Current amount of items contained in sparse_map.
@@ -254,9 +266,9 @@ namespace args::core
 				itr_value->store(val, std::memory_order_release);
 
 				auto itr_key = m_dense_key.begin() + m_size;
-				*itr_key = key;
+				*itr_key = std::move(key);
 
-				m_sparse[key] = m_size;
+				m_sparse[*itr_key] = m_size;
 				++m_size;
 				return std::make_pair(itr_value, true);
 			}
@@ -278,7 +290,7 @@ namespace args::core
 				async::readwrite_guard lock(m_container_lock);
 
 				auto itr_value = m_dense_value.begin() + m_size;
-				itr_value->store(val, std::memory_order_release);
+				itr_value->store(std::move(val), std::memory_order_release);
 
 				auto itr_key = m_dense_key.begin() + m_size;
 				*itr_key = key;
@@ -384,6 +396,7 @@ namespace args::core
 		 */
 		inline atomic_reference operator[](key_type&& key)
 		{
+			key_type k;
 			if (!contains(key))
 			{
 				if (m_size >= m_capacity)
@@ -394,16 +407,18 @@ namespace args::core
 				auto itr_value = m_dense_value.begin() + m_size;
 				itr_value->get().store(std::forward<value_type>(value_type()), std::memory_order_release);
 
-				auto itr_key = m_dense_key.begin() + m_size;
-				*itr_key = key;
-
-				m_sparse[key] = m_size;
+				auto itr_key = m_dense_key.begin() + m_size; // Find iterator location at which to store the key.
+				*itr_key = std::move(key); // Move the key into the location.
+				k = *itr_key; // Fetch a copy of the key for reuse in the rest of the function.
+				m_sparse[k] = m_size;
 				++m_size;
 			}
+			else
+				k = key;
 
 			async::readonly_guard readonlyLock(m_container_lock);
 
-			return m_dense_value[m_sparse[key]];
+			return m_dense_value[m_sparse[k]];
 		}
 
 		/**@brief Returns item from sparse_map, inserts default value if it doesn't exist yet.

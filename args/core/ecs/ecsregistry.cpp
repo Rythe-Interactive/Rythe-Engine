@@ -13,37 +13,31 @@ namespace args::core::ecs
 		if (!validateEntity(entityId))
 			throw args_entity_not_found_error;
 
-		entity_data* data = nullptr;
+		// If you wonder why we don't remove our parent, our parent is the one calling this function so it'll be destroyed anyways.
 
 		{
-			async::readonly_guard guard(m_entityDataLock);
-			data = &m_entityData[entityId];
+			async::readwrite_guard guard(m_entityLock); // Request read-write permission for the entity list.
+			m_entities.erase(entityId); // Erase the entity from the entity list first, invalidating the entity and stopping any other function from being called on this entity.
+		}
+
+		entity_data data = {};
+
+		{
+			async::readwrite_guard guard(m_entityDataLock); // Request read-write permission for the entity data list.
+			data = std::move(m_entityData[entityId]); // Fetch data of entity to destroy.
+			m_entityData.erase(entityId); // We can also safely erase the data since the entity has already been invalidated.
 		}
 
 		{
-			async::readonly_guard guard(m_familyLock); // TODO(GlynLeine): Possibly deadlocks? Will also lock atomic_sparse_map::m_container_lock for the family.
-			for (id_type componentTypeId : data->components)
+			async::readonly_guard guard(m_familyLock); // Technically possibly deadlocks. However the only write op on families happen when creating the family. Will also lock atomic_sparse_map::m_container_lock for the family.
+			for (id_type componentTypeId : data.components) // Destroy all components attached to this entity.
 			{
 				m_families[componentTypeId]->destroy_component(entityId);
 			}
 		}
 
-		{
-			async::readonly_guard guard(m_entityLock);
-			m_entities[entityId].set_parent(invalid_id);
-		}
-
-		for (entity_handle& child : data->children)
+		for (entity_handle& child : data.children)	//
 			recursiveDestroyEntityInternal(child);
-
-		{
-			async::readwrite_guard guard(m_entityDataLock);
-			m_entityData.erase(entityId);
-		}
-		{
-			async::readwrite_guard guard(m_entityLock);
-			m_entities.erase(entityId);
-		}
 
 		m_queryRegistry.markEntityDestruction(entityId);
 	}
@@ -62,7 +56,7 @@ namespace args::core::ecs
 		if (!m_families.contains(componentTypeId))
 			throw args_unknown_component_error;
 
-		return m_families[componentTypeId];
+		return m_families[componentTypeId].get();
 	}
 
 	inline component_handle_base EcsRegistry::getComponent(id_type entityId, id_type componentTypeId)
@@ -142,7 +136,7 @@ namespace args::core::ecs
 		}
 
 		{
-			async::readonly_guard guard(m_familyLock); // Possibly deadlocks? Will also lock atomic_sparse_map::m_container_lock for the family.
+			async::readonly_guard guard(m_familyLock); // Technically possibly deadlocks. However the only write op on families happen when creating the family. Will also lock atomic_sparse_map::m_container_lock for the family.
 			for (id_type componentTypeId : data->components)
 			{
 				m_families[componentTypeId]->destroy_component(entityId);

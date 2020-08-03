@@ -32,7 +32,7 @@ namespace args::core::ecs
 			m_componentTypes[queryId].erase(componentTypeId);
 		}
 
-		
+
 		std::vector<id_type> toRemove;
 
 		{
@@ -54,9 +54,7 @@ namespace args::core::ecs
 
 	inline void QueryRegistry::evaluateEntityChange(id_type entityId, id_type componentTypeId, bool removal)
 	{
-		async::lock_state entitystate = async::write;
-		async::lock_state compstate = async::read;
-		async::mixed_multiguard mmguard(m_entityLock, entitystate, m_componentLock, compstate);
+		async::mixed_multiguard mmguard(m_entityLock, async::write, m_componentLock, async::read);
 
 		for (int i = 0; i < m_entityLists.size(); i++)
 		{
@@ -146,10 +144,7 @@ namespace args::core::ecs
 
 		{
 			auto entityData = m_registry.getEntities();
-			async::lock_state datastate = async::read;
-			async::lock_state entitystate = async::write;
-			async::lock_state compstate = async::read;
-			async::mixed_multiguard mmguard(entityData.second, datastate, m_entityLock, entitystate, m_componentLock, compstate);
+			async::mixed_multiguard mmguard(entityData.second, async::read, m_entityLock, async::write, m_componentLock, async::read);
 
 			for (entity_handle& entity_handle : entityData.first)
 				if (entity_handle.component_composition().contains(m_componentTypes[queryId]))
