@@ -2,6 +2,7 @@
 #include <atomic>
 #include <tuple>
 #include <unordered_map>
+#include <array>
 #include <core/types/primitives.hpp>
 #include <core/platform/platform.hpp>
 #include <core/containers/sparse_set.hpp>
@@ -461,22 +462,23 @@ namespace args::core::async
 	 *		 Read-Write operations will also wait for any Read-only operations to be finished.
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
+	template<size_type S>
 	class mixed_multiguard
 	{
 	private:
-		std::vector<readonly_rw_spinlock*> m_locks;
-		std::vector<lock_state> m_states;
+		std::array<readonly_rw_spinlock*, S / 2> m_locks;
+		std::array<lock_state, S / 2> m_states;
 
 		template<size_type I, typename... types>
 		void fill(readonly_rw_spinlock& lock, lock_state state, types&&... args)
 		{
-			if constexpr (I > 1)
+			if constexpr (I > 2)
 			{
 				fill<I - 2>(args...);
 			}
 
-			m_locks.push_back(&lock);
-			m_states.push_back(state);
+			m_locks[(I / 2) - 1] = &lock;
+			m_states[(I / 2) - 1] = state;
 		}
 
 	public:
@@ -488,7 +490,7 @@ namespace args::core::async
 		{
 			static_assert(sizeof...(types) % 2 == 0, "Argument order should be (lock, lock-state, lock, lock-state). Argument count should thus be even.");
 
-			fill<sizeof...(types) - 1>(arguments...);
+			fill<sizeof...(types)>(arguments...);
 
 			sparse_set<uint> unlockedLocks;
 			for (uint i = 0; i < m_locks.size(); i++)
@@ -522,5 +524,8 @@ namespace args::core::async
 		mixed_multiguard& operator=(mixed_multiguard&&) = delete;
 		mixed_multiguard& operator=(const mixed_multiguard&) = delete;
 	};
+
+	template<typename... types>
+	mixed_multiguard(types...)->mixed_multiguard<sizeof...(types)>;
 
 }
