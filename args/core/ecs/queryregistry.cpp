@@ -9,19 +9,43 @@ namespace args::core::ecs
 	void QueryRegistry::addComponentType(id_type queryId, id_type componentTypeId)
 	{
 		{
-			async::readwrite_guard guard(m_componentLock);
-			m_componentTypes[queryId].insert(componentTypeId);
+			async::readwrite_guard guard(m_componentLock); // In this case the lock handles both the sparse_map and the contained hashed_sparse_sets
+			m_componentTypes[queryId].insert(componentTypeId); // We insert the new component type we wish to track.
 		}
 
-		auto entityData = m_registry.getEntities();
-		sparse_map<id_type, entity_handle>& entities = entityData.first;
-		async::readonly_multiguard mguard(entityData.second, m_componentLock);
+		// First we need to erase all the entities that no longer apply to the new query.
+		std::vector<id_type> toRemove;
 
-		for (id_type entityId : entities.keys())
 		{
-			entity_handle& entity_handle = entities[entityId];
-			if (entity_handle.component_composition().contains(m_componentTypes[queryId]))
-				m_entityLists[queryId].insert(entityId, entity_handle);
+			async::readonly_multiguard mguard(m_entityLock, m_componentLock);
+			for (int i = 0; i < m_entityLists[queryId].size(); i++) // Iterate over all tracked entities.
+			{
+				id_type entityId = m_entityLists[queryId].keys()[i]; // Get the id from the keys of the map.
+				if (!m_registry.getEntityData(entityId).components.contains(m_componentTypes[queryId])) // Check component composition
+					toRemove.push_back(entityId); // Mark for erasure if the component composition doesn't overlap with the query.
+			}
+		}
+
+		if(toRemove.size() > 0)
+		{
+			async::readwrite_guard guard(m_entityLock);
+			for (id_type entityId : toRemove)
+				m_entityLists[queryId].erase(entityId); // Erase all entities marked for erasure.
+		}
+
+		// Next we need to filter through all the entities to get all the new ones that apply to the new query.
+
+		auto entityData = m_registry.getEntities(); // getEntities returns a pair of both the container as well as the lock that should be locked by you when operating on it.
+		sparse_map<id_type, entity_handle>& entities = entityData.first; // Extract container.
+		async::mixed_multiguard mguard(entityData.second, async::read, m_componentLock, async::read, m_entityLock, async::write); // Lock locks.
+
+		for (id_type entityId : entities.keys()) // Iterate over all entities.
+		{
+			if (m_entityLists[queryId].contains(entityId)) // If the entity is already tracked, continue to the next entity.
+				continue;
+
+			if (m_registry.getEntityData(entityId).components.contains(m_componentTypes[queryId])) // Check if the queried components completely overlaps the components in the entity.
+				m_entityLists[queryId].insert(entityId, entities[entityId]); // Insert entity into tracking list.
 		}
 	}
 
@@ -39,7 +63,7 @@ namespace args::core::ecs
 			async::readonly_multiguard mguard(m_entityLock, m_componentLock);
 			for (int i = 0; i < m_entityLists[queryId].size(); i++)
 			{
-				id_type entityId = m_entityLists[queryId].dense()[i];
+				id_type entityId = m_entityLists[queryId].keys()[i];
 				if (!m_registry.getEntity(entityId).component_composition().contains(m_componentTypes[queryId]))
 					toRemove.push_back(entityId);
 			}
