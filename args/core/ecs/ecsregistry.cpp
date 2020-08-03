@@ -75,7 +75,7 @@ namespace args::core::ecs
 
 		{
 			async::readonly_guard guard(m_entityDataLock);
-			m_entityData[entityId].components.insert(componentTypeId);
+			m_entityData[entityId].components.insert(componentTypeId); // Is fine because the lock only locks order changes in the container, not the values themselves.
 		}
 
 		m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
@@ -92,7 +92,7 @@ namespace args::core::ecs
 
 		{
 			async::readonly_guard guard(m_entityDataLock);
-			m_entityData[entityId].components.erase(componentTypeId);
+			m_entityData[entityId].components.erase(componentTypeId); // Is fine because the lock only locks order changes in the container, not the values themselves.
 		}
 
 		m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
@@ -112,11 +112,11 @@ namespace args::core::ecs
 			throw args_entity_exists_error;
 
 		{
-			async::readwrite_guard guard(m_entityDataLock);
+			async::readwrite_guard guard(m_entityDataLock);  // We need write permission now because we hope to insert a new item.
 			m_entityData[id] = {};
 		}
 
-		async::readwrite_guard guard(m_entityLock);
+		async::readwrite_guard guard(m_entityLock); // No scope needed because we also need read permission in the return line.
 		m_entities.emplace(id, id, this);
 
 		return m_entities[id];
@@ -176,10 +176,10 @@ namespace args::core::ecs
 
 		{
 			async::readonly_guard guard(m_entityDataLock);
-			data = &m_entityData[entityId];
+			data = &m_entityData[entityId]; // Is fine because the lock only locks order changes in the container, not the values themselves.
 		}
 
-		if (data->parent && !validateEntity(data->parent))
+		if (!validateEntity(data->parent)) // Re-validate parent.
 			data->parent = invalid_id;
 
 		return *data;
