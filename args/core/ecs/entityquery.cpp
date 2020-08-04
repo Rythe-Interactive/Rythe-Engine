@@ -6,6 +6,16 @@
 
 namespace args::core::ecs
 {
+	EntityQuery::EntityQuery(id_type id, QueryRegistry& registry, EcsRegistry& ecsRegistry) : m_registry(registry), m_ecsRegistry(ecsRegistry), m_id(id)
+	{
+		m_registry.addReference(m_id);
+	}
+
+	EntityQuery::~EntityQuery()
+	{
+		m_registry.removeReference(m_id);
+	}
+
 	sparse_map<id_type, entity_handle>::const_iterator EntityQuery::begin() const
 	{
 		return m_registry.getEntities(m_id).begin();
