@@ -23,14 +23,12 @@ namespace args::core
 	 * @ref args::core::scenes::SceneManager
 	 * @ref args::core::scheduling::Scheduler
 	 */
-	class ARGS_API Engine
+	class Engine
 	{
 	private:
 		std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<priority_type>> modules;
 
 	public:
-		//Engine() {};
-
 		/**@brief reports an engine module
 		 * @tparam ModuleType the module you want to report
 		 * @note ModuleType must be default constructible
@@ -63,19 +61,20 @@ namespace args::core
 		 * @note Needs to be called manually if ARGS_ENTRY was not used.
 		 * @ref args::core::Module
 		 */
-		void init();
+		void init()
+		{
+			for (const auto& [priority, moduleList] : modules)
+				for (auto& module : moduleList)
+				{
+					module->init();
+				}
+		}
 
 		/**@brief Runs engine loop.
 		 */
-		void run();
-
-		//~Engine()
-		//{
-		//	for (const auto& [priority, moduleList] : modules)
-		//		for (auto* module : moduleList)
-		//		{
-		//			delete module;
-		//		}
-		//}
+		void run()
+		{
+			// needs implementation.
+		}
 	};
 }

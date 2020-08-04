@@ -1,8 +1,10 @@
 #include <iostream>
-#include <chrono>
 
 #define ARGS_ENTRY
 #include <core/core.hpp>
+
+#include <chrono>
+#include <thread>
 
 using namespace args;
 
@@ -27,6 +29,24 @@ void ARGS_CCONV reportModules(Engine* engine)
 {
 	std::cout << "Hello Args!" << std::endl;
 	engine->reportModule<TestModule>();
+
+	time::time_span ts = 0;
+	time::clock clock;
+	clock.Start();
+	std::this_thread::sleep_for(time::time_span(0.12).duration);
+	ts = clock.End();
+	std::cout << ts.seconds() << std::endl;
+	ts += 10;
+	std::cout << ts.seconds() << std::endl;
+	ts = 4 + time::time_span(9);
+	std::cout << ts.seconds() << std::endl;
+
+	std::cout << "hours " << ts.hours() << std::endl;
+	std::cout << "minutes " << ts.minutes() << std::endl;
+	std::cout << "seconds " << ts.seconds() << std::endl;
+	std::cout << "milliseconds " << ts.milliseconds() << std::endl;
+	std::cout << "microseconds " << ts.microseconds() << std::endl;
+	std::cout << "nanoseconds " << ts.nanoseconds() << std::endl;
 
 	try
 	{
@@ -104,7 +124,7 @@ void ARGS_CCONV reportModules(Engine* engine)
 		std::cout << "found entity with id: " << entity_handle.get_id() << std::endl;
 	}
 
-	if(!found)
+	if (!found)
 		std::cout << "our entity handle was not found" << std::endl;
 
 	std::cout << "destroying component" << std::endl;

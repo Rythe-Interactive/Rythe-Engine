@@ -36,7 +36,7 @@ namespace args::core
 		{
 			invocation_element() = default;
 			invocation_element(void* this_ptr, stub_type aStub) : object(this_ptr), stub(aStub) {}
-			invocation_element(const invocation_element& source) = default;
+			invocation_element(const invocation_element&) = default;
 			invocation_element(invocation_element&& source)
 			{
 				object = source.object;
@@ -46,7 +46,7 @@ namespace args::core
 			}
 
 			invocation_element& operator=(const invocation_element&) = default;
-			invocation_element& operator=(invocation_element&&)
+			invocation_element& operator=(invocation_element&& source)
 			{
 				object = source.object;
 				stub = source.stub;
