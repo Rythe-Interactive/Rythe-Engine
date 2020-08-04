@@ -70,8 +70,8 @@ namespace args::core
 
 		~Engine()
 		{
-			for (const auto& priority : modules)
-				for (auto* module : priority.second)
+			for (const auto& [priority, moduleList] : modules)
+				for (auto* module : moduleList)
 				{
 					delete module;
 				}

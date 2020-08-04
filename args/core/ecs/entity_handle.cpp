@@ -52,13 +52,17 @@ namespace args::core::ecs
 			throw args_invalid_entity_error;
 		entity_data& data = m_registry->getEntityData(m_id);
 
-		if (data.parent != invalid_id)
+		if (m_registry->validateEntity(data.parent))
 			m_registry->getEntityData(data.parent).children.erase(m_id);
 
-		data.parent = newParent;
+		if (m_registry->validateEntity(newParent))
+		{
+			data.parent = newParent;
 
-		if (data.parent != invalid_id)
 			m_registry->getEntityData(data.parent).children.insert(m_id, *this);
+		}
+		else
+			data.parent = invalid_id;
 	}
 
 	A_NODISCARD inline entity_handle entity_handle::operator[](index_type index) const

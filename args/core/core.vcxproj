@@ -124,6 +124,9 @@
     <ClInclude Include="filesystem\filesystem.hpp" />
     <ClInclude Include="filesystem\resource.hpp" />
     <ClInclude Include="platform\platform.hpp" />
+    <ClInclude Include="time\clock.hpp" />
+    <ClInclude Include="time\time.hpp" />
+    <ClInclude Include="time\time_span.hpp" />
     <ClInclude Include="types\meta.hpp" />
     <ClInclude Include="types\types.hpp" />
     <ClInclude Include="types\primitives.hpp" />

@@ -4,7 +4,7 @@
 #define ARGS_ENTRY
 #include <core/core.hpp>
 
-using namespace args::core;
+using namespace args;
 
 #include "module/testModule.hpp"
 
@@ -15,6 +15,11 @@ struct sah
 	sah operator+(const sah& other)
 	{
 		return { value + other.value };
+	}
+
+	sah operator*(const sah& other)
+	{
+		return { value * other.value };
 	}
 };
 

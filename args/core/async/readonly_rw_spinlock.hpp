@@ -325,7 +325,7 @@ namespace args::core::async
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
 	template<size_type S>
-	class readonly_multiguard
+	class readonly_multiguard final
 	{
 	private:
 		std::array<readonly_rw_spinlock*, S> m_locks;
@@ -415,7 +415,7 @@ namespace args::core::async
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
 	template<size_type S>
-	class readwrite_multiguard
+	class readwrite_multiguard final
 	{
 	private:
 		std::array<readonly_rw_spinlock*, S> m_locks;
@@ -475,7 +475,7 @@ namespace args::core::async
 	 * @ref args::core::async::readonly_rw_spinlock
 	 */
 	template<size_type S>
-	class mixed_multiguard
+	class mixed_multiguard final
 	{
 	private:
 		std::array<readonly_rw_spinlock*, S / 2> m_locks;

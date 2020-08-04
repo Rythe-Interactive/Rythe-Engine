@@ -27,6 +27,8 @@ namespace args::core
 		 * @ref ARGS_PURE
 		 */
 		virtual void init() ARGS_PURE;
+
+		virtual ~Module() ARGS_IMPURE;
 	};
 
 	struct module_initializer_t{};

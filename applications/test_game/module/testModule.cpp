@@ -1,7 +1,7 @@
 #include "testModule.hpp"
 #include <iostream>
 
-using namespace args::core;
+using namespace args;
 
 priority_type TestModule::priority()
 {
