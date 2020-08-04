@@ -103,6 +103,7 @@
     <ClInclude Include="common\exception.hpp" />
     <ClInclude Include="containers\atomic_sparse_map.hpp" />
     <ClInclude Include="containers\containers.hpp" />
+    <ClInclude Include="containers\delegate.hpp" />
     <ClInclude Include="containers\hashed_sparse_set.hpp" />
     <ClInclude Include="containers\sparse_map.hpp" />
     <ClInclude Include="containers\sparse_set.hpp" />
@@ -124,6 +125,10 @@
     <ClInclude Include="filesystem\filesystem.hpp" />
     <ClInclude Include="filesystem\resource.hpp" />
     <ClInclude Include="platform\platform.hpp" />
+    <ClInclude Include="scheduling\process.hpp" />
+    <ClInclude Include="scheduling\processchain.hpp" />
+    <ClInclude Include="scheduling\scheduler.hpp" />
+    <ClInclude Include="scheduling\scheduling.hpp" />
     <ClInclude Include="types\meta.hpp" />
     <ClInclude Include="types\types.hpp" />
     <ClInclude Include="types\primitives.hpp" />
@@ -137,6 +142,7 @@
     <ClCompile Include="ecs\queryregistry.cpp" />
     <ClCompile Include="engine\engine.cpp" />
     <ClCompile Include="engine\module.cpp" />
+    <ClCompile Include="scheduling\process.cpp" />
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -114,6 +114,21 @@
     <ClInclude Include="async\async.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="scheduling\scheduling.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scheduling\scheduler.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scheduling\processchain.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scheduling\process.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="containers\delegate.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp">
@@ -135,6 +150,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ecs\entity_handle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scheduling\process.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
