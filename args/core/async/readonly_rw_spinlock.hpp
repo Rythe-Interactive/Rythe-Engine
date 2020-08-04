@@ -79,7 +79,7 @@ namespace args::core::async
 			int state = lock_state::idle;
 
 			// Try to set the lock state to read
-			if (!lockState.compare_exchange_weak(state, lock_state::read, std::memory_order_acquire, std::memory_order_relaxed))
+			if (!lockState.compare_exchange_strong(state, lock_state::read, std::memory_order_acquire, std::memory_order_relaxed))
 			{
 				// If the lock state was already on read we can continue without issues, read-only operations are allowed to happen simultaneously.
 				if (state != lock_state::read)
@@ -145,7 +145,7 @@ namespace args::core::async
 			int state = lock_state::idle;
 
 			// Try to set the lock state to write.
-			if (!lockState.compare_exchange_weak(state, lock_state::write, std::memory_order_acquire, std::memory_order_relaxed))
+			if (!lockState.compare_exchange_strong(state, lock_state::write, std::memory_order_acquire, std::memory_order_relaxed))
 			{
 				if (localReaders[id] > 0)
 				{
