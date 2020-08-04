@@ -8,7 +8,7 @@
 namespace args::core
 {
 	/**@class Module
-	 * @brief interface for engine-modules, must be implemented 
+	 * @brief interface for engine-modules, must be implemented
 	 * @ref args::core::Engine::reportModule<T,...>()
 	 */
 	class Module
@@ -28,9 +28,9 @@ namespace args::core
 		 */
 		virtual void init() ARGS_PURE;
 
-		virtual ~Module() ARGS_IMPURE;
+		virtual ~Module() = default;
 	};
 
-	struct module_initializer_t{};
-	
+	struct module_initializer_t {};
+
 }
