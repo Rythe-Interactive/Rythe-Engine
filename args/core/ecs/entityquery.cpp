@@ -6,11 +6,6 @@
 
 namespace args::core::ecs
 {
-	EntityQuery::~EntityQuery()
-	{
-		m_registry.removeReference(m_id);
-	}
-
 	sparse_map<id_type, entity_handle>::const_iterator EntityQuery::begin() const
 	{
 		return m_registry.getEntities(m_id).begin();
@@ -47,6 +42,7 @@ namespace args::core::ecs
 		{
 			m_registry.removeReference(m_id);
 			m_id = m_registry.addQuery(componentTypes);
+			m_registry.addReference(m_id);
 		}
 
 	}
@@ -78,6 +74,7 @@ namespace args::core::ecs
 		{
 			m_registry.removeReference(m_id);
 			m_id = m_registry.addQuery(componentMap);
+			m_registry.addReference(m_id);
 		}
 
 	}

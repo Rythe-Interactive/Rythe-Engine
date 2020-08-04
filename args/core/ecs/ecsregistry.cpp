@@ -187,6 +187,6 @@ namespace args::core::ecs
 
 	A_NODISCARD inline std::pair<sparse_map<id_type, entity_handle>&, async::readonly_rw_spinlock&> EcsRegistry::getEntities()
 	{
-		return std::pair<sparse_map<id_type, entity_handle>&, async::readonly_rw_spinlock&>(m_entities, m_entityLock);
+		return { m_entities, m_entityLock };
 	}
 }

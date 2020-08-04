@@ -25,8 +25,8 @@ namespace args::core::ecs
 		id_type m_id;
 
 	public:
-		EntityQuery(id_type id, QueryRegistry& registry, EcsRegistry& ecsRegistry) : m_registry(registry), m_ecsRegistry(ecsRegistry), m_id(id) {}
-		~EntityQuery();
+		EntityQuery(id_type id, QueryRegistry& registry, EcsRegistry& ecsRegistry) : m_registry(registry), m_ecsRegistry(ecsRegistry), m_id(id) { m_registry.addReference(m_id); }
+		~EntityQuery() { m_registry.removeReference(m_id); }
 
 		/**@brief Get begin iterator for entity handles to the queried entities.
 		 */

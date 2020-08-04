@@ -16,6 +16,11 @@ struct sah
 	{
 		return { value + other.value };
 	}
+
+	sah operator*(const sah& other)
+	{
+		return { value * other.value };
+	}
 };
 
 void ARGS_CCONV reportModules(Engine* engine)
