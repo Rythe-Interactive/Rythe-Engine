@@ -48,8 +48,8 @@ namespace args::core
 	template<size_type N>
 	constexpr id_type nameHash(const char(&name)[N])
 	{
-		id_type hash = 0x811c9dc5;
-		uint32 prime = 0x1000193;
+		id_type hash = 0xcbf29ce484222325;
+		uint64 prime = 0x00000100000001b3;
 		for (int i = 0; i < N - 1; i++)
 		{
 			byte value = name[i];

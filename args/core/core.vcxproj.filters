@@ -111,6 +111,15 @@
     <ClInclude Include="async\async.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="time\time.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="time\time_span.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="time\clock.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp">
@@ -132,9 +141,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ecs\entity_handle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="async\readonly_rw_spinlock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

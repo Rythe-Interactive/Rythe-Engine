@@ -261,7 +261,7 @@ namespace args::core
 					reserve(m_size + 1);
 
 				auto itr_value = m_dense_value.begin() + m_size;
-				*itr_value = std::move(val);
+				*itr_value = val;
 
 				auto itr_key = m_dense_key.begin() + m_size;
 				*itr_key = key;
@@ -286,12 +286,12 @@ namespace args::core
 					reserve(m_size + 1);
 
 				auto itr_value = m_dense_value.begin() + m_size;
-				*itr_value = std::move(val);
+				*itr_value = val;
 
 				auto itr_key = m_dense_key.begin() + m_size;
-				*itr_key = key;
+				*itr_key = std::move(key);
 
-				m_sparse[key] = m_size;
+				m_sparse[*itr_key] = m_size;
 				++m_size;
 				return std::make_pair(itr_value, true);
 			}
@@ -339,9 +339,9 @@ namespace args::core
 				*itr_value = std::move(val);
 
 				auto itr_key = m_dense_key.begin() + m_size;
-				*itr_key = key;
+				*itr_key = std::move(key);
 
-				m_sparse[key] = m_size;
+				m_sparse[*itr_key] = m_size;
 				++m_size;
 				return std::make_pair(itr_value, true);
 			}
@@ -393,9 +393,9 @@ namespace args::core
 				*itr_value = std::forward<value_type>(value_type(arguments...));
 
 				auto itr_key = m_dense_key.begin() + m_size;
-				*itr_key = key;
+				*itr_key = std::move(key);
 
-				m_sparse[key] = m_size;
+				m_sparse[*itr_key] = m_size;
 				++m_size;
 
 				return std::make_pair(itr_value, true);
@@ -411,6 +411,7 @@ namespace args::core
 		 */
 		value_reference operator[](key_type&& key)
 		{
+			key_type k;
 			if (!contains(key))
 			{
 				if (m_size >= m_capacity)
@@ -419,15 +420,16 @@ namespace args::core
 				auto itr_value = m_dense_value.begin() + m_size;
 				*itr_value = std::forward<value_type>(value_type());
 
-				auto itr_key = m_dense_key.begin() + m_size;
-				*itr_key = key;
-
-				m_sparse[key] = m_size;
+				auto itr_key = m_dense_key.begin() + m_size; // Find iterator location at which to store the key.
+				*itr_key = std::move(key); // Move the key into the location.
+				k = *itr_key; // Fetch a copy of the key for reuse in the rest of the function.
+				m_sparse[k] = m_size;
 				++m_size;
 			}
+			else
+				k = key;
 
-
-			return m_dense_value[m_sparse[key]];
+			return m_dense_value[m_sparse[k]];
 		}
 
 		/**@brief Returns item from sparse_map, inserts default value if it doesn't exist yet.

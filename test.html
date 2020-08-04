@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Just a Test &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Just a Test</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="just-a-test">
+<h1>Just a Test<a class="headerlink" href="#just-a-test" title="Permalink to this headline">¶</a></h1>
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core10filesystemE">
+<span id="_CPPv3N4args4core10filesystemE"></span><span id="_CPPv2N4args4core10filesystemE"></span><span id="args::core::filesystem"></span><span class="target" id="namespaceargs_1_1core_1_1filesystem"></span><em class="property">namespace </em><code class="sig-prename descclassname">args::core<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">filesystem</code><a class="headerlink" href="#_CPPv4N4args4core10filesystemE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><dl class="cpp class">
+<dt id="_CPPv4N4args4core10filesystem14basic_resourceE">
+<span id="_CPPv3N4args4core10filesystem14basic_resourceE"></span><span id="_CPPv2N4args4core10filesystem14basic_resourceE"></span><span id="args::core::filesystem::basic_resource"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource"></span><em class="property">class </em><code class="sig-name descname">basic_resource</code><br /></dt>
+<dd><em>#include &lt;resource.hpp&gt;</em><p>a handle for a basic resource type from which elements can serialize and deserialize from ideal for storing elements loaded from disk </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10filesystem14basic_resource14basic_resourceE9nullptr_t">
+<span id="_CPPv3N4args4core10filesystem14basic_resource14basic_resourceE9nullptr_t"></span><span id="_CPPv2N4args4core10filesystem14basic_resource14basic_resourceE9nullptr_t"></span><span id="args::core::filesystem::basic_resource::basic_resource__nullptr_t"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1a53ecc149bb078d902f57fca6ab28cbd8"></span><code class="sig-name descname">basic_resource</code><span class="sig-paren">(</span>nullptr_t<span class="sig-paren">)</span><br /></dt>
+<dd><p>constructor that keeps the container empty </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">1</span></code>: must be nullptr, used to signal that the resource should be kept empty </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10filesystem14basic_resource14basic_resourceE8byte_vec">
+<span id="_CPPv3N4args4core10filesystem14basic_resource14basic_resourceE8byte_vec"></span><span id="_CPPv2N4args4core10filesystem14basic_resource14basic_resourceE8byte_vec"></span><span id="args::core::filesystem::basic_resource::basic_resource__byte_vec"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1a17a419930b9778f7af7eec99fc974d0a"></span><code class="sig-name descname">basic_resource</code><span class="sig-paren">(</span><a class="reference internal" href="api/typedef_primitives_8hpp_1a12e23453aaa673f201e897cd71648906.html#_CPPv4N4args4core8byte_vecE" title="args::core::byte_vec">byte_vec</a> <em>v</em><span class="sig-paren">)</span><br /></dt>
+<dd><p>constructs a basic resource from a args::core::byte_vec </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">v</span></code>: the resource from which the resource is created (copy operation/move) </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10filesystem14basic_resource14basic_resourceERKNSt11string_viewE">
+<span id="_CPPv3N4args4core10filesystem14basic_resource14basic_resourceERKNSt11string_viewE"></span><span id="_CPPv2N4args4core10filesystem14basic_resource14basic_resourceERKNSt11string_viewE"></span><span id="args::core::filesystem::basic_resource::basic_resource__std::string_viewCR"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1a0f64b55219b27457d972b2627dc31a57"></span><code class="sig-name descname">basic_resource</code><span class="sig-paren">(</span><em class="property">const</em> std::string_view &amp;<em>v</em><span class="sig-paren">)</span><br /></dt>
+<dd><p>constructs a basic resource from a std::string </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">v</span></code>: the resource from which the resource is created (copy-assign operation) </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10filesystem14basic_resource14basic_resourceERK14basic_resource">
+<span id="_CPPv3N4args4core10filesystem14basic_resource14basic_resourceERK14basic_resource"></span><span id="_CPPv2N4args4core10filesystem14basic_resource14basic_resourceERK14basic_resource"></span><span id="args::core::filesystem::basic_resource::basic_resource__basic_resourceCR"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1ac3ffda754a76409569bcde1c5147bfc4"></span><code class="sig-name descname">basic_resource</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="api/classargs_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4N4args4core10filesystem14basic_resource14basic_resourceERK14basic_resource" title="args::core::filesystem::basic_resource::basic_resource">basic_resource</a> &amp;<em>other</em><span class="sig-paren">)</span> = default<br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10filesystem14basic_resource14basic_resourceERR14basic_resource">
+<span id="_CPPv3N4args4core10filesystem14basic_resource14basic_resourceERR14basic_resource"></span><span id="_CPPv2N4args4core10filesystem14basic_resource14basic_resourceERR14basic_resource"></span><span id="args::core::filesystem::basic_resource::basic_resource__basic_resourceRR"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1aa1f7c9b42f160d1ec5a7f4b349705b43"></span><code class="sig-name descname">basic_resource</code><span class="sig-paren">(</span><a class="reference internal" href="api/classargs_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4N4args4core10filesystem14basic_resource14basic_resourceERR14basic_resource" title="args::core::filesystem::basic_resource::basic_resource">basic_resource</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span> <em class="property">noexcept</em> = default<br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10filesystem14basic_resourceaSERK14basic_resource">
+<span id="_CPPv3N4args4core10filesystem14basic_resourceaSERK14basic_resource"></span><span id="_CPPv2N4args4core10filesystem14basic_resourceaSERK14basic_resource"></span><span id="args::core::filesystem::basic_resource::assign-operator__basic_resourceCR"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1ab61c36d70219013ae256bd8b9777bc39"></span><a class="reference internal" href="api/classargs_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4N4args4core10filesystem14basic_resourceE" title="args::core::filesystem::basic_resource">basic_resource</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="api/classargs_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4N4args4core10filesystem14basic_resourceE" title="args::core::filesystem::basic_resource">basic_resource</a> &amp;<em>other</em><span class="sig-paren">)</span> = default<br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10filesystem14basic_resourceaSERR14basic_resource">
+<span id="_CPPv3N4args4core10filesystem14basic_resourceaSERR14basic_resource"></span><span id="_CPPv2N4args4core10filesystem14basic_resourceaSERR14basic_resource"></span><span id="args::core::filesystem::basic_resource::assign-operator__basic_resourceRR"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1aae854538f4632507953696386e52a5b1"></span><a class="reference internal" href="api/classargs_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4N4args4core10filesystem14basic_resourceE" title="args::core::filesystem::basic_resource">basic_resource</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="api/classargs_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4N4args4core10filesystem14basic_resourceE" title="args::core::filesystem::basic_resource">basic_resource</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span> <em class="property">noexcept</em> = default<br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10filesystem14basic_resource5beginEv">
+<span id="_CPPv3N4args4core10filesystem14basic_resource5beginEv"></span><span id="_CPPv2N4args4core10filesystem14basic_resource5beginEv"></span><span id="args::core::filesystem::basic_resource::begin"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1a64fca37bbb03fe651111e1794e7f0030"></span>auto <code class="sig-name descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">noexcept</em><br /></dt>
+<dd><p>gets an iterator to the first element of the container </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>iterator to first element </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core10filesystem14basic_resource5beginEv">
+<span id="_CPPv3NK4args4core10filesystem14basic_resource5beginEv"></span><span id="_CPPv2NK4args4core10filesystem14basic_resource5beginEv"></span><span id="args::core::filesystem::basic_resource::beginC"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1a189177d481b9f4e0419058bf448433a1"></span>auto <code class="sig-name descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><br /></dt>
+<dd><p>gets an iterator to the first element of the container </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>iterator to first element </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10filesystem14basic_resource3endEv">
+<span id="_CPPv3N4args4core10filesystem14basic_resource3endEv"></span><span id="_CPPv2N4args4core10filesystem14basic_resource3endEv"></span><span id="args::core::filesystem::basic_resource::end"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1a45322a9cde8531dff389e84c962eec02"></span>auto <code class="sig-name descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">noexcept</em><br /></dt>
+<dd><p>gets an iterator to the last element + 1 of the container </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>iterator to first element </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core10filesystem14basic_resource3endEv">
+<span id="_CPPv3NK4args4core10filesystem14basic_resource3endEv"></span><span id="_CPPv2NK4args4core10filesystem14basic_resource3endEv"></span><span id="args::core::filesystem::basic_resource::endC"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1aea1bfe3cbe4d581d999992a77dadc52b"></span>auto <code class="sig-name descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><br /></dt>
+<dd><p>gets an iterator to the last element + 1 of the container </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>iterator to first element </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10filesystem14basic_resource4dataEv">
+<span id="_CPPv3N4args4core10filesystem14basic_resource4dataEv"></span><span id="_CPPv2N4args4core10filesystem14basic_resource4dataEv"></span><span id="args::core::filesystem::basic_resource::data"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1aed57bc0a5482480cffe33147feb1ec29"></span>auto <code class="sig-name descname">data</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">noexcept</em><br /></dt>
+<dd><p>gets a pointer to the data of the container </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>byte* to raw data </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core10filesystem14basic_resource4dataEv">
+<span id="_CPPv3NK4args4core10filesystem14basic_resource4dataEv"></span><span id="_CPPv2NK4args4core10filesystem14basic_resource4dataEv"></span><span id="args::core::filesystem::basic_resource::dataC"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1a2333efa40a1ae432810890afd7b3b1ab"></span>auto <code class="sig-name descname">data</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><br /></dt>
+<dd><p>gets a pointer to the data of the container </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>byte* to raw data </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core10filesystem14basic_resource4sizeEv">
+<span id="_CPPv3NK4args4core10filesystem14basic_resource4sizeEv"></span><span id="_CPPv2NK4args4core10filesystem14basic_resource4sizeEv"></span><span id="args::core::filesystem::basic_resource::sizeC"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1a4e3e43e70062ffaead4770ff4b39bcc6"></span>auto <code class="sig-name descname">size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><br /></dt>
+<dd><p>gets the size of the container </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>size_t to the size of container </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core10filesystem14basic_resource5emptyEv">
+<span id="_CPPv3NK4args4core10filesystem14basic_resource5emptyEv"></span><span id="_CPPv2NK4args4core10filesystem14basic_resource5emptyEv"></span><span id="args::core::filesystem::basic_resource::emptyC"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1a10ab242991a4ed0942f055743f8fd7d0"></span>auto <code class="sig-name descname">empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><br /></dt>
+<dd><p>checks if the container is empty </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool, true when empty </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10filesystem14basic_resource3getEv">
+<span id="_CPPv3N4args4core10filesystem14basic_resource3getEv"></span><span id="_CPPv2N4args4core10filesystem14basic_resource3getEv"></span><span id="args::core::filesystem::basic_resource::get"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1aaff4c3358101f5c3f537f9aa234b7a82"></span><a class="reference internal" href="api/typedef_primitives_8hpp_1a12e23453aaa673f201e897cd71648906.html#_CPPv4N4args4core8byte_vecE" title="args::core::byte_vec">byte_vec</a> &amp;<code class="sig-name descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">noexcept</em><br /></dt>
+<dd><p>gets the container element </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>args::core::byte_vec </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core10filesystem14basic_resource3getEv">
+<span id="_CPPv3NK4args4core10filesystem14basic_resource3getEv"></span><span id="_CPPv2NK4args4core10filesystem14basic_resource3getEv"></span><span id="args::core::filesystem::basic_resource::getC"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1a2a69bd453adbb22811924a59fd76a3f8"></span><em class="property">const</em> <a class="reference internal" href="api/typedef_primitives_8hpp_1a12e23453aaa673f201e897cd71648906.html#_CPPv4N4args4core8byte_vecE" title="args::core::byte_vec">byte_vec</a> &amp;<code class="sig-name descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><br /></dt>
+<dd><p>gets the container element </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>args::core::byte_vec </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10filesystem14basic_resourceaSERKNSt11string_viewE">
+<span id="_CPPv3N4args4core10filesystem14basic_resourceaSERKNSt11string_viewE"></span><span id="_CPPv2N4args4core10filesystem14basic_resourceaSERKNSt11string_viewE"></span><span id="args::core::filesystem::basic_resource::assign-operator__std::string_viewCR"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1a6605ada5f0ff50b3e874a347ce06b788"></span><a class="reference internal" href="api/classargs_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4N4args4core10filesystem14basic_resourceE" title="args::core::filesystem::basic_resource">basic_resource</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> std::string_view &amp;<em>value</em><span class="sig-paren">)</span><br /></dt>
+<dd><p>string assignment operator </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="#classargs_1_1core_1_1filesystem_1_1basic__resource"><span class="std std-ref">basic_resource</span></a>&amp; *this </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: the string you want to assign to the byte_vec </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core10filesystem14basic_resource9to_stringEv">
+<span id="_CPPv3NK4args4core10filesystem14basic_resource9to_stringEv"></span><span id="_CPPv2NK4args4core10filesystem14basic_resource9to_stringEv"></span><span id="args::core::filesystem::basic_resource::to_stringC"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1a3061ee14f7dea80ab774853b25ba128f"></span>std::string <code class="sig-name descname">to_string</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><br /></dt>
+<dd><p>string conversion </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>std::string, the container converted to const char * </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0DpEN4args4core10filesystem14basic_resource2toE1TDpRR4Args">
+<span id="_CPPv3I0DpEN4args4core10filesystem14basic_resource2toEDpRR4Args"></span><span id="_CPPv2I0DpEN4args4core10filesystem14basic_resource2toEDpRR4Args"></span>template&lt;class <code class="sig-name descname">T</code>, class ...<code class="sig-name descname">Args</code>&gt;<br /><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1a2ec2dfb5d348aededb53bccd732de29a"></span><a class="reference internal" href="api/classargs_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4I0DpEN4args4core10filesystem14basic_resource2toE1TDpRR4Args" title="args::core::filesystem::basic_resource::to::T">T</a> <code class="sig-name descname">to</code><span class="sig-paren">(</span><a class="reference internal" href="api/classargs_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4I0DpEN4args4core10filesystem14basic_resource2toE1TDpRR4Args" title="args::core::filesystem::basic_resource::to::Args">Args</a>&amp;&amp;... <em>args</em><span class="sig-paren">)</span><br /></dt>
+<dd><p>generic conversion to T </p>
+<p>tries to convert a basic resource, for this to work T must implement a static method with signature T::from_resource(basic_resource&amp;,const T&amp;) and must be, A: trivially constructable or B: constructable via Args&amp;&amp;… and must be move or copy assignable</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>T created from this resources data </p>
+</dd>
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">T</span></code>: the class you want to convert to </p></li>
+</ul>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">args</span></code>: additional construction parameters required to create T</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN4args4core10filesystem14basic_resource4fromEvRK1T">
+<span id="_CPPv3I0EN4args4core10filesystem14basic_resource4fromERK1T"></span><span id="_CPPv2I0EN4args4core10filesystem14basic_resource4fromERK1T"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1ad9b85a372f47146d1c8326f104c38dbf"></span>void <code class="sig-name descname">from</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="api/classargs_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4I0EN4args4core10filesystem14basic_resource4fromEvRK1T" title="args::core::filesystem::basic_resource::from::T">T</a> &amp;<em>v</em><span class="sig-paren">)</span><br /></dt>
+<dd><p>generic conversion from T </p>
+<p>tries to convert T to a basic resource, for this to work T must implement a static method with signature T::to_resource(basic_resource*)</p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">v</span></code>: the T you want to convert into a <a class="reference internal" href="#classargs_1_1core_1_1filesystem_1_1basic__resource"><span class="std std-ref">basic_resource</span></a> </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Private Members</p>
+<dl class="cpp var">
+<dt id="_CPPv4N4args4core10filesystem14basic_resource11m_containerE">
+<span id="_CPPv3N4args4core10filesystem14basic_resource11m_containerE"></span><span id="_CPPv2N4args4core10filesystem14basic_resource11m_containerE"></span><span id="args::core::filesystem::basic_resource::m_container__byte_vec"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1basic__resource_1adf5e2606f61d774a173f11f35757a411"></span><a class="reference internal" href="api/typedef_primitives_8hpp_1a12e23453aaa673f201e897cd71648906.html#_CPPv4N4args4core8byte_vecE" title="args::core::byte_vec">byte_vec</a> <code class="sig-name descname">m_container</code><a class="headerlink" href="#_CPPv4N4args4core10filesystem14basic_resource11m_containerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp class">
+<dt id="_CPPv4N4args4core10filesystem4TestE">
+<span id="_CPPv3N4args4core10filesystem4TestE"></span><span id="_CPPv2N4args4core10filesystem4TestE"></span><span id="args::core::filesystem::Test"></span><span class="target" id="classargs_1_1core_1_1filesystem_1_1_test"></span><em class="property">class </em><code class="sig-name descname">Test</code><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/test.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

@@ -1,0 +1,13 @@
+.. _exhale_define_platform_8hpp_1aaa80584991d216fb43121552bca34b33:
+
+Define ARGS_IMPURE_RETURN
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: ARGS_IMPURE_RETURN

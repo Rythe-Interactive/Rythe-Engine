@@ -63,5 +63,18 @@ namespace args::core
 		 * @ref args::core::Module
 		 */
 		void init();
+
+		/**@brief Runs engine loop.
+		 */
+		void run();
+
+		~Engine()
+		{
+			for (const auto& [priority, moduleList] : modules)
+				for (auto* module : moduleList)
+				{
+					delete module;
+				}
+		}
 	};
 }

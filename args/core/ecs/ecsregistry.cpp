@@ -13,39 +13,32 @@ namespace args::core::ecs
 		if (!validateEntity(entityId))
 			throw args_entity_not_found_error;
 
-		entity_data* data = nullptr;
+		m_queryRegistry.markEntityDestruction(entityId); // Remove entity from any queries.
 
 		{
-			async::readonly_guard guard(m_entityDataLock);
-			data = &m_entityData[entityId];
+			async::readwrite_guard guard(m_entityLock); // Request read-write permission for the entity list.
+			// If you wonder why we don't remove our parent, our parent is the one calling this function so it'll be destroyed anyways.
+			m_entities.erase(entityId); // Erase the entity from the entity list first, invalidating the entity and stopping any other function from being called on this entity.
+		}
+
+		entity_data data = {};
+
+		{
+			async::readwrite_guard guard(m_entityDataLock); // Request read-write permission for the entity data list.
+			data = std::move(m_entityData[entityId]); // Fetch data of entity to destroy.
+			m_entityData.erase(entityId); // We can also safely erase the data since the entity has already been invalidated.
 		}
 
 		{
-			async::readonly_guard guard(m_familyLock); // TODO(GlynLeine): Possibly deadlocks? Will also lock atomic_sparse_map::m_container_lock for the family.
-			for (id_type componentTypeId : data->components)
+			async::readonly_guard guard(m_familyLock); // Technically possibly deadlocks. However the only write op on families happen when creating the family. Will also lock atomic_sparse_map::m_container_lock for the family.
+			for (id_type componentTypeId : data.components) // Destroy all components attached to this entity.
 			{
 				m_families[componentTypeId]->destroy_component(entityId);
 			}
 		}
 
-		{
-			async::readonly_guard guard(m_entityLock);
-			m_entities[entityId].set_parent(invalid_id);
-		}
-
-		for (entity_handle& child : data->children)
+		for (entity_handle& child : data.children)	// Destroy all children.
 			recursiveDestroyEntityInternal(child);
-
-		{
-			async::readwrite_guard guard(m_entityDataLock);
-			m_entityData.erase(entityId);
-		}
-		{
-			async::readwrite_guard guard(m_entityLock);
-			m_entities.erase(entityId);
-		}
-
-		m_queryRegistry.markEntityDestruction(entityId);
 	}
 
 	EcsRegistry::EcsRegistry() : m_families(), m_entityData(), m_entities(), m_queryRegistry(*this)
@@ -62,7 +55,7 @@ namespace args::core::ecs
 		if (!m_families.contains(componentTypeId))
 			throw args_unknown_component_error;
 
-		return m_families[componentTypeId];
+		return m_families[componentTypeId].get();
 	}
 
 	inline component_handle_base EcsRegistry::getComponent(id_type entityId, id_type componentTypeId)
@@ -82,7 +75,7 @@ namespace args::core::ecs
 
 		{
 			async::readonly_guard guard(m_entityDataLock);
-			m_entityData[entityId].components.insert(componentTypeId);
+			m_entityData[entityId].components.insert(componentTypeId); // Is fine because the lock only locks order changes in the container, not the values themselves.
 		}
 
 		m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
@@ -99,7 +92,7 @@ namespace args::core::ecs
 
 		{
 			async::readonly_guard guard(m_entityDataLock);
-			m_entityData[entityId].components.erase(componentTypeId);
+			m_entityData[entityId].components.erase(componentTypeId); // Is fine because the lock only locks order changes in the container, not the values themselves.
 		}
 
 		m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
@@ -119,11 +112,11 @@ namespace args::core::ecs
 			throw args_entity_exists_error;
 
 		{
-			async::readwrite_guard guard(m_entityDataLock);
+			async::readwrite_guard guard(m_entityDataLock);  // We need write permission now because we hope to insert a new item.
 			m_entityData[id] = {};
 		}
 
-		async::readwrite_guard guard(m_entityLock);
+		async::readwrite_guard guard(m_entityLock); // No scope needed because we also need read permission in the return line.
 		m_entities.emplace(id, id, this);
 
 		return m_entities[id];
@@ -134,42 +127,35 @@ namespace args::core::ecs
 		if (!validateEntity(entityId))
 			throw args_entity_not_found_error;
 
-		entity_data* data = nullptr;
+		m_queryRegistry.markEntityDestruction(entityId); // Remove entity from any queries.
 
 		{
-			async::readonly_guard guard(m_entityDataLock);
-			data = &m_entityData[entityId];
+			async::readwrite_guard guard(m_entityLock); // Request read-write permission for the entity list.
+			m_entities[entityId].set_parent(invalid_id); // Remove ourselves as child from parent.
+			m_entities.erase(entityId); // Erase the entity from the entity list first, invalidating the entity and stopping any other function from being called on this entity.
+		}
+
+		entity_data data = {};
+
+		{
+			async::readwrite_guard guard(m_entityDataLock); // Request read-write permission for the entity data list.
+			data = std::move(m_entityData[entityId]); // Fetch data of entity to destroy.
+			m_entityData.erase(entityId); // We can also safely erase the data since the entity has already been invalidated.
 		}
 
 		{
-			async::readonly_guard guard(m_familyLock); // Possibly deadlocks? Will also lock atomic_sparse_map::m_container_lock for the family.
-			for (id_type componentTypeId : data->components)
+			async::readonly_guard guard(m_familyLock); // Technically possibly deadlocks. However the only write op on families happen when creating the family. Will also lock atomic_sparse_map::m_container_lock for the family.
+			for (id_type componentTypeId : data.components) // Destroy all components attached to this entity.
 			{
 				m_families[componentTypeId]->destroy_component(entityId);
 			}
 		}
 
-		{
-			async::readonly_guard guard(m_entityLock);
-			m_entities[entityId].set_parent(invalid_id);
-		}
-
-		for (entity_handle& child : data->children)
+		for (entity_handle& child : data.children)
 			if (recurse)
-				recursiveDestroyEntityInternal(child);
+				recursiveDestroyEntityInternal(child); // Recursively destroy all children
 			else
-				child.set_parent(invalid_id);
-
-		{
-			async::readwrite_guard guard(m_entityDataLock);
-			m_entityData.erase(entityId);
-		}
-		{
-			async::readwrite_guard guard(m_entityLock);
-			m_entities.erase(entityId);
-		}
-
-		m_queryRegistry.markEntityDestruction(entityId);
+				child.set_parent(invalid_id); // Remove parent from children.
 	}
 
 	A_NODISCARD inline entity_handle EcsRegistry::getEntity(id_type entityId)
@@ -190,10 +176,10 @@ namespace args::core::ecs
 
 		{
 			async::readonly_guard guard(m_entityDataLock);
-			data = &m_entityData[entityId];
+			data = &m_entityData[entityId]; // Is fine because the lock only locks order changes in the container, not the values themselves.
 		}
 
-		if (data->parent && !validateEntity(data->parent))
+		if (!validateEntity(data->parent)) // Re-validate parent.
 			data->parent = invalid_id;
 
 		return *data;
@@ -201,6 +187,6 @@ namespace args::core::ecs
 
 	A_NODISCARD inline std::pair<sparse_map<id_type, entity_handle>&, async::readonly_rw_spinlock&> EcsRegistry::getEntities()
 	{
-		return std::pair<sparse_map<id_type, entity_handle>&, async::readonly_rw_spinlock&>(m_entities, m_entityLock);
+		return { m_entities, m_entityLock };
 	}
 }

@@ -1,0 +1,22 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.hpp:
+
+Program Listing for File testModule.hpp
+=======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/applications/test_game/module/testModule.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/core.hpp>
+   
+   class TestModule : public args::core::Module
+   {
+   public:
+       virtual args::core::priority_type priority() override;
+       virtual void init() override;
+   };
+   

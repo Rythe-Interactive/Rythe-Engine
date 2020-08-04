@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1core_1_1module__initializer__t:
+
+Struct module_initializer_t
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::core::module_initializer_t
+   :members:
+   :protected-members:
+   :undoc-members:

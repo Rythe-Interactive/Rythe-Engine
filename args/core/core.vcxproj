@@ -137,6 +137,9 @@
     <ClInclude Include="filesystem\mem_filesystem_resolver.hpp" />
     <ClInclude Include="filesystem\resource.hpp" />
     <ClInclude Include="platform\platform.hpp" />
+    <ClInclude Include="time\clock.hpp" />
+    <ClInclude Include="time\time.hpp" />
+    <ClInclude Include="time\time_span.hpp" />
     <ClInclude Include="types\meta.hpp" />
     <ClInclude Include="types\types.hpp" />
     <ClInclude Include="types\primitives.hpp" />
@@ -144,7 +147,6 @@
     <ClInclude Include="types\type_util.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="async\readonly_rw_spinlock.cpp" />
     <ClCompile Include="ecs\ecsregistry.cpp" />
     <ClCompile Include="ecs\entity_handle.cpp" />
     <ClCompile Include="ecs\entityquery.cpp" />
