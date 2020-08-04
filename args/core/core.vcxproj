@@ -129,6 +129,9 @@
     <ClInclude Include="scheduling\processchain.hpp" />
     <ClInclude Include="scheduling\scheduler.hpp" />
     <ClInclude Include="scheduling\scheduling.hpp" />
+    <ClInclude Include="time\clock.hpp" />
+    <ClInclude Include="time\time.hpp" />
+    <ClInclude Include="time\time_span.hpp" />
     <ClInclude Include="types\meta.hpp" />
     <ClInclude Include="types\types.hpp" />
     <ClInclude Include="types\primitives.hpp" />

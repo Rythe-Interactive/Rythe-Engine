@@ -129,6 +129,15 @@
     <ClInclude Include="containers\delegate.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="time\time.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="time\time_span.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="time\clock.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp">
