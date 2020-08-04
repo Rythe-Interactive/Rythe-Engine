@@ -9,6 +9,8 @@ namespace args::core::time
 	{
 		std::chrono::duration<time_type> duration;
 
+        time_span() = default;
+
 		template<typename other_time>
 		constexpr time_span(const std::chrono::duration<other_time>& other) noexcept : duration(other) {}
 		template<typename other_time>
@@ -118,7 +120,7 @@ namespace args::core::time
         A_NODISCARD static constexpr time_span zero() noexcept
         {
             // get zero value
-            return time_span(std::chrono::duration_values<time_type>::zero());
+            return time_span(0);
         }
 
         A_NODISCARD static constexpr time_span(min)() noexcept

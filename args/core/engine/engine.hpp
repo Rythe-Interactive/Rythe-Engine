@@ -26,7 +26,7 @@ namespace args::core
 	class Engine
 	{
 	private:
-		std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<priority_type>> modules;
+		std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<>> modules;
 
 	public:
 		/**@brief reports an engine module
