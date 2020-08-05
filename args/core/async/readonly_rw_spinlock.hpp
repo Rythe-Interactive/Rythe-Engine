@@ -217,8 +217,6 @@ namespace args::core::async
 	public:
 		readonly_rw_spinlock() : id(lastId.fetch_add(1, std::memory_order_relaxed))
 		{
-			localState[id] = lock_state::idle;
-
 			lockState.store(lock_state::idle, std::memory_order_relaxed);
 			readers.store(0, std::memory_order_relaxed);
 		}

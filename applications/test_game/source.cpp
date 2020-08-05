@@ -32,9 +32,9 @@ void ARGS_CCONV reportModules(Engine* engine)
 
 	time::time_span ts = 0;
 	time::clock clock;
-	clock.Start();
+	clock.start();
 	std::this_thread::sleep_for(time::time_span(0.12).duration);
-	ts = clock.End();
+	ts = clock.end();
 	std::cout << ts.seconds() << std::endl;
 	ts += 10;
 	std::cout << ts.seconds() << std::endl;
