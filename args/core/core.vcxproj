@@ -113,6 +113,7 @@
     <ClInclude Include="containers\sparse_set.hpp" />
     <ClInclude Include="containers\vector_view.hpp" />
     <ClInclude Include="core.hpp" />
+    <ClInclude Include="detail\internals.hpp" />
     <ClInclude Include="ecs\component_container.hpp" />
     <ClInclude Include="ecs\component_handle.hpp" />
     <ClInclude Include="ecs\ecs.hpp" />
@@ -125,7 +126,7 @@
     <ClInclude Include="engine\module.hpp" />
     <ClInclude Include="entry\entry_point.hpp" />
     <ClInclude Include="filesystem\artifact_cache.hpp" />
-    <ClInclude Include="filesystem\detail\error.hpp" />
+    <ClInclude Include="filesystem\detail\meta.hpp" />
     <ClInclude Include="filesystem\detail\resource_meta.hpp" />
     <ClInclude Include="filesystem\detail\resource_sfinae.hpp" />
     <ClInclude Include="filesystem\detail\strpath_manip.hpp" />
@@ -135,7 +136,9 @@
     <ClInclude Include="filesystem\filesystem_resolver.hpp" />
     <ClInclude Include="filesystem\navigator.hpp" />
     <ClInclude Include="filesystem\mem_filesystem_resolver.hpp" />
+    <ClInclude Include="filesystem\provider_registry.hpp" />
     <ClInclude Include="filesystem\resource.hpp" />
+    <ClInclude Include="filesystem\view.hpp" />
     <ClInclude Include="platform\platform.hpp" />
     <ClInclude Include="time\clock.hpp" />
     <ClInclude Include="time\time.hpp" />
@@ -158,6 +161,8 @@
     <ClCompile Include="filesystem\filesystem_resolver.cpp" />
     <ClCompile Include="filesystem\mem_filesystem_resolver.cpp" />
     <ClCompile Include="filesystem\navigator.cpp" />
+    <ClCompile Include="filesystem\provider_registry.cpp" />
+    <ClCompile Include="filesystem\view.cpp" />
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
   <ItemGroup>

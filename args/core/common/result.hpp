@@ -22,6 +22,8 @@
 #include <stdexcept>
 #include <utility>
 
+#include "core/platform/platform.hpp"
+
 namespace args::core::common {
     	
     class ok_ident{};
@@ -230,7 +232,7 @@ namespace args::core::common {
             return get();
         }
 
-        bool valid() const noexcept
+        A_NODISCARD bool valid() const noexcept
         {
             return m_ok != nullptr;
         }
@@ -239,12 +241,12 @@ namespace args::core::common {
             return m_err != nullptr  && m_ok == nullptr;
         }
 
-        [[nodiscard]] const typename try_static_cast_result<err_result_t ,err_type>::type& get_error() const
+        A_NODISCARD const typename try_static_cast_result<err_result_t ,err_type>::type& get_error() const
         {
             if(m_err) return try_static_cast<err_result_t>(*m_err);
             throw std::runtime_error("this result would have been valid!");
         }
-        [[noreturn]] void rethrow()
+        A_NODISCARD void rethrow()
         {
             throw try_static_cast<err_result_t>(*m_err);
         }
@@ -319,11 +321,26 @@ namespace args::core::common {
         {
 	        return m_r.get();
         }
+        operator Result ()
+        {
+            return m_r;
+        }
+
+        err_type get_error()
+        {
+            return m_r.get_error();
+        }
+
 
 	private:
         Result m_r;
 		
 	};
 
+    /**@brief convenience wrapper around result_decay that does not need the
+     *        common::result<...>
+     **/
+    template <class...Args>
+    using result_decay_more = result_decay<result<Args...>>;
 	
 }

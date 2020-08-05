@@ -33,6 +33,8 @@ namespace args::core::filesystem
 
 		/** @brief sanitizes a path
 		 *  @param [in] p the path to sanitize
+		 *  @param [in] fail_on_fs_leave when true the operation will return an
+		 *              empty string when the filesystem terminates with ..
 		 *  @return std::string the sanitized path
 		 *  @note what does this do ?
 		 * 		  this will reduce surplus .. and . from the path, for example:
@@ -40,7 +42,7 @@ namespace args::core::filesystem
 		 * 		  becomes
 		 *        ../cool_directory/hello_world
 		 */
-		static std::string sanitize(const std::string& p);
+		static std::string sanitize(const std::string& p, bool fail_on_fs_leave = false);
 
 		/** @brief makes a path "native" to the operating system
 		 *  @param [in] p the path you want to translate
@@ -61,15 +63,15 @@ namespace args::core::filesystem
 		static std::string& inline_localize(std::string& p);
 
 
-		/** @brief gets the path seperator that is "native" to the operating system */
-		constexpr static char seperator()
+		/** @brief gets the path separator that is "native" to the operating system */
+		constexpr static char separator()
 		{
 			if constexpr (OSSEP == SEP_WINDOWS)
 				return '\\';
 			else return '/';
 		}
 	private:
-		constexpr static char anti_seperator()
+		constexpr static char anti_separator()
 		{
 			if constexpr (OSSEP == SEP_NIX)
 				return '\\';

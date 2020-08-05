@@ -3,7 +3,7 @@
 
 #include <core/platform/platform.hpp> // A_NODISCARD
 #include <core/types/types.hpp>       // byte, byte_vec
-#include <core/common/common.hpp>     // assert_msg
+#include <core/detail/internals.hpp>  // assert_msg
 
 #include <string_view>                // std::string_view
 #include <memory>                     // std::unique_ptr
@@ -11,6 +11,23 @@
 
 
 namespace args::core::filesystem {
+
+
+    /**@brief Check if file exists
+     * @param [in] path the path of the file to check
+     */
+    A_NODISCARD inline bool exists(std::string_view path)
+    {
+        FILE* f = fopen(std::string(path).c_str(),"r+b");
+
+        if(f)
+        {
+            fclose(f);
+            return true;
+        }
+        return false;
+    }
+
     /**@brief Open File in binary mode and write to buffer
      *
      * @param [in] path the path of the file to open
@@ -74,8 +91,13 @@ namespace args::core::filesystem {
         {
             return [path=std::string_view(str,len)](const byte_vec& container)
             {
-                write_file(path,container);
+                ::args::core::filesystem::write_file(path,container);
             };
+        }
+
+        bool operator""_exists(const char* str,std::size_t len)
+        {
+            return ::args::core::filesystem::exists(std::string_view(str,len));
         }
     }
 }

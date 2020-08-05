@@ -17,19 +17,36 @@ namespace args::core::filesystem
 		return p + seperator() + sub;
 	}
 
-	std::string strpath_manip::sanitize(const std::string& p)
+	std::string strpath_manip::sanitize(const std::string& p, bool fail_on_fs_leave)
 	{
 
 		std::vector<std::string> recreation;
 		auto tokens = args::core::common::split_string_at<'\\','/'>(p);
+
+        std::string filesystem;
 		for(const auto& token : tokens)
 		{
+            if(token.find(':') != std::string::npos)
+            {
+                filesystem = token + seperator() + seperator();
+                continue;
+            }
+            if(token.empty())
+            {
+                continue;
+            }
+
 			if(common::rtrim_copy(token) == "..")
 			{
 				if(!recreation.empty() && recreation.back() != "..")
 				{
 					recreation.pop_back();
 				}
+                else if(fail_on_fs_leave)
+                {
+                    //someone is trying something fishy! terminate parsing
+                    return "";   
+                }
 				else recreation.emplace_back("..");
 			}
 			else if(common::rtrim_copy(token) != ".")
@@ -37,7 +54,7 @@ namespace args::core::filesystem
 				recreation.push_back(token);
 			}
 		}
-		return args::core::common::join_strings_with<std::vector<std::string>,std::string>(recreation,seperator());
+		return filesystem + args::core::common::join_strings_with<std::vector<std::string>,std::string>(recreation,seperator());
 	}
 
 

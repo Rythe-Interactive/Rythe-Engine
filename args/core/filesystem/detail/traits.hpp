@@ -13,6 +13,8 @@ namespace args::core::filesystem {
         bool exists{};
     };
 
+    constexpr static  file_traits invalid_file_t{false,false,false,false,false,false,false};
+
     struct filesystem_traits {
         bool is_readonly {};
     };
