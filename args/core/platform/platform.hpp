@@ -9,9 +9,62 @@
  */
 #define ARGS_CPP17V 201703L
 
-#if defined(_MSC_VER)
- #define ARGS_WINDOWS
+#if defined(_DEBUG) || defined(DEBUG)
+	/**@def ARGS_DEBUG
+	 * @brief Defined in debug mode.
+	 */
+	#define ARGS_DEBUG
+#else
+	/**@def ARGS_RELEASE
+	 * @brief Defined in release mode.
+	 */
+	#define ARGS_RELEASE
 #endif
+
+#if (!defined(ARGS_LOW_POWER) && !defined(ARGS_HIGH_PERFORMANCE))
+	/**@def ARGS_HIGH_PERFORMANCE
+	 * @brief Automatically defined if ARGS_LOW_POWER was not defined. It makes Args ask the hardware's full attention to run as fast as possible.
+	 * @note Define ARGS_LOW_POWER to run Args with minimal resources instead.
+	 */
+	#define ARGS_HIGH_PERFORMANCE
+#endif
+
+
+#if defined(_MSC_VER)
+	/**@def ARGS_WINDOWS
+	 * @brief Defined when compiling for Windows.
+	 */
+	#define ARGS_WINDOWS
+
+	#define WIN32_LEAN_AND_MEAN
+	#define VC_EXTRALEAN
+	#define NOMINMAX
+	#include <Windows.h>
+#elif defined(__linux__)
+	/**@def ARGS_LINUX
+	 * @brief Defined when compiling for Linux.
+	 */
+	#define ARGS_LINUX
+
+	#include <sys/resource.h>
+	#include <sched.h>
+	#include <errno.h>
+#endif
+
+#ifndef __FUNC__
+	#define __FUNC__ __func__ 
+#endif
+
+#ifndef __FULL_FUNC__
+	#if defined(ARGS_WINDOWS)
+		#define __FULL_FUNC__ __FUNCSIG__
+	#elif defined(__linux__)
+		#define __FULL_FUNC__ __PRETTY_FUNCTION__
+	#else
+		#define __FULL_FUNC__ __func__
+	#endif
+#endif
+
 
 #if (defined(ARGS_WINDOWS) && !defined(ARGS_WINDOWS_USE_CDECL)) || defined (DOXY_INCLUDE)
 	/**@def ARGS_CCONV

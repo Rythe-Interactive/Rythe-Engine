@@ -14,9 +14,10 @@ CONTENTS
 --------
 .. toctree::
     :maxdepth: 2
-    
+
     README.MD
     CONTRIBUTING.MD
     api/library_root.rst
+    feedback.rst
     AUTHORS.MD
     LICENSE.MD

@@ -89,3 +89,4 @@ bld/
 
 # Word temporary files
 ~$*.*
+**/Thumbs.db
