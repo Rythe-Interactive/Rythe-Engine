@@ -29,7 +29,7 @@ namespace args::core::scheduling
 		async::readonly_rw_spinlock m_requestLock;
 		bool m_requestSync;
 		async::readonly_rw_spinlock m_waitLock;
-		std::vector<std::thread::id> m_waitingThreads;
+		hashed_sparse_set<std::thread::id> m_waitingThreads;
 
 		static async::readonly_rw_spinlock m_threadsLock;
 		static sparse_map<std::thread::id, std::thread> m_threads;

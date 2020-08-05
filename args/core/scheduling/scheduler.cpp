@@ -47,7 +47,7 @@ namespace args::core::scheduling
 
 			{
 				async::readonly_guard guard(m_requestLock);
-				sync = m_requestSync;				
+				sync = m_requestSync;
 			}
 
 			if (sync)
@@ -59,7 +59,18 @@ namespace args::core::scheduling
 					if (m_waitingThreads.size() == m_processChains.size())
 						waiting = false;
 				}
-				/// Needs rethinking, if we relock the sync-lock before a process was able to advance they'll be stuck. we need to keep track of which lock iteration the block is part of.
+
+				m_syncLock.unlock(async::write);
+
+				waiting = true;
+				while (waiting)
+				{
+					async::readonly_guard guard(m_waitLock);
+					if (m_waitingThreads.size() == 0)
+						waiting = false;
+				}
+
+				m_syncLock.lock(async::write);
 			}
 		}
 	}
@@ -73,9 +84,14 @@ namespace args::core::scheduling
 
 		{
 			async::readwrite_guard guard(m_waitLock);
-			m_waitingThreads.push_back(std::this_thread::get_id());
+			m_waitingThreads.insert(std::this_thread::get_id());
 		}
 
 		async::readwrite_guard syncGuard(m_syncLock);
+
+		{
+			async::readwrite_guard guard(m_waitLock);
+			m_waitingThreads.erase(std::this_thread::get_id());
+		}
 	}
 }
