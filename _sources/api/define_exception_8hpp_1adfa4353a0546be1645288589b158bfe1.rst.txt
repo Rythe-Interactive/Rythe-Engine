@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1adfa4353a0546be1645288589b158bfe1:
+
+Define args_exception_msg
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: args_exception_msg

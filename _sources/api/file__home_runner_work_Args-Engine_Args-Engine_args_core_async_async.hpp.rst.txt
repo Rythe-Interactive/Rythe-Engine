@@ -1,0 +1,53 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_async_async.hpp:
+
+File async.hpp
+==============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_async>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/async``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Single include header for multi-threading related headers. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/async/async.hpp``)
+------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_async_async.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/async/readonly_rw_spinlock.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_readonly_rw_spinlock.hpp`)
+
+- ``core/async/transferable_atomic.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_transferable_atomic.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecsregistry.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_queryregistry.hpp`
+
+
+

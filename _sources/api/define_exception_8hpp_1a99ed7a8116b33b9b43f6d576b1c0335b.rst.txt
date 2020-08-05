@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1a99ed7a8116b33b9b43f6d576b1c0335b:
+
+Define args_entity_not_found_error
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: args_entity_not_found_error

@@ -23,7 +23,7 @@
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
   </head><body>
   
@@ -57,29 +57,29 @@
 <h2>Git-Branch methodology<a class="headerlink" href="#git-branch-methodology" title="Permalink to this headline">¶</a></h2>
 <p>This repository employs a git flow based workflow, to incorporate your changes the following conditions must be true:</p>
 <ul class="simple">
-<li><p>your change lives on either feature/your_change_name or bugfix/your_change_name.</p></li>
-<li><p>you must create a pull request.</p></li>
-<li><p>if your branch is a bugfix it must mention an issue.</p></li>
-<li><p>it must adhere to the code-style mentioned below.</p></li>
+<li><p>Your change lives on either feature/your_change_name or bugfix/your_change_name.</p></li>
+<li><p>You must create a pull request.</p></li>
+<li><p>If your branch is a bugfix it must mention an issue.</p></li>
+<li><p>It must adhere to the code-style mentioned below.</p></li>
 </ul>
 <p>Furthermore the following rules are to be met when attempting to merge:</p>
 <ul class="simple">
-<li><p>to merge into a develop branch, you require the approval of one peer reviewer of that team.</p>
+<li><p>To merge into a develop branch, you require the approval of one peer reviewer of that team.</p>
 <ul>
-<li><p>you can only merge from develop_&lt;your_team&gt; into develop</p></li>
+<li><p>You can only merge from develop_&lt;your_team&gt; into develop.</p></li>
 </ul>
 </li>
-<li><p>to merge into main you require the approval of a code-owner and the ci must pass (if applicable).</p>
+<li><p>To merge into main you require the approval of a code-owner and the ci must pass (if applicable).</p>
 <ul>
-<li><p>you can only merge from develop into main via a release branch</p></li>
+<li><p>You can only merge from develop into main via a release branch.</p></li>
 </ul>
 </li>
-<li><p>to merge into release you require the approval of a code-owner and the ci must pass on strict latest (if applicable) and your commit must be signed!.</p>
+<li><p>To merge into release you require the approval of a code-owner and the ci must pass on strict latest (if applicable) and your commit must be signed!.</p>
 <ul>
-<li><p>you can only branch develop into a release branch, a release branch must be merged into main and develop directly</p></li>
+<li><p>You can only branch develop into a release branch, a release branch must be merged into main and develop directly.</p></li>
 </ul>
 </li>
-<li><p>hotfix branches are only allowed in special cases and must be communicated with a code owner.</p></li>
+<li><p>Hotfix branches are only allowed in special cases and must be communicated with a code owner.</p></li>
 </ul>
 </div>
 </div>
@@ -89,43 +89,43 @@
 <h2>File-Names<a class="headerlink" href="#file-names" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>A file name cannot have any uppercase letters</p></li>
-<li><p>Headers must have the ending .hpp or .h respectively (use hpp for c++ headers)</p></li>
-<li><p>Source must have the ending .cpp or .c respectively</p></li>
+<li><p>Headers must have the ending .hpp or .h respectively. (use hpp for c++ headers)</p></li>
+<li><p>Source must have the ending .cpp or .c respectively.</p></li>
 </ul>
 </div>
 <div class="section" id="namespacing">
 <h2>Namespacing<a class="headerlink" href="#namespacing" title="Permalink to this headline">¶</a></h2>
-<p>everything needs to go into the namespace <code class="docutils literal notranslate"><span class="pre">args</span></code> and should be in it’s own general namespace within that. also use that as an indication where to put your file.</p>
+<p>Everything needs to go into the namespace <code class="docutils literal notranslate"><span class="pre">args</span></code> and should be in it’s own general namespace within that. Also use that as an indication where to put your file.</p>
 <p>i.e.: The file /core/math/vector.hpp uses
 <code class="docutils literal notranslate"><span class="pre">namespace</span> <span class="pre">args::core::math</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code></p>
-<p>Use the new c++17 convention for nested namespaces, namespace names may only have snake_case letters</p>
+<p>Use the new c++17 convention for nested namespaces, namespace names may only have snake_case letters.</p>
 </div>
 <div class="section" id="class-struct-names">
 <h2>Class/Struct Names<a class="headerlink" href="#class-struct-names" title="Permalink to this headline">¶</a></h2>
-<p>types that provide a lot of functionality unlike “stl-likes” should be classes and start with an uppercase letter and continue in PascalCase<br>
+<p>Types that provide a lot of functionality unlike “stl-likes” should be classes and start with an uppercase letter and continue in PascalCase.<br>
 (examples: Window, LZMA2Adaptor, VK_WindowHelper)</p>
-<p>POD types that are completely compatible with the stl should all be structs, lower-case and should stay that way<br>
+<p>POD types that are completely compatible with the stl should all be structs, lower-case and should stay that way.<br>
 (examples: mat4f, vec2f, angle&lt;float&gt;)</p>
-<p>“stl-likes” and primitive typedefs should use stl-like snake_case naming<br>
+<p>“stl-likes” and primitive typedefs should use stl-like snake_case naming.<br>
 (examples: entity_id, sparse_set, default_index_list)</p>
 </div>
 <div class="section" id="class-struct-members">
 <h2>Class/Struct Members<a class="headerlink" href="#class-struct-members" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">private</span></code> variables should start with <code class="docutils literal notranslate"><span class="pre">m_</span></code> and continued in camelCase.<br>
 <code class="docutils literal notranslate"><span class="pre">public</span></code> variables should not have a prefix and use camelCase, the same applies to local variables.</p>
-<p>methods of non “stl-likes” should use camelCase naming and “stl-likes” should use stl-like snake_case naming</p>
+<p>Methods of non “stl-likes” should use camelCase naming and “stl-likes” should use stl-like snake_case naming.</p>
 </div>
 <div class="section" id="comments">
 <h2>Comments<a class="headerlink" href="#comments" title="Permalink to this headline">¶</a></h2>
-<p>In feature branches there is no comments enforcement, however in order to get a pull request accepted to any of the main branches doxygen style comments are mandatory.</p>
+<p>In feature branches there is no comments enforcement, however in order to get a pull request accepted to any of the main branches doxygen style comments are mandatory. Check The Chapter “On the Topic of Doxygen” at the end of this document.</p>
 </div>
 <div class="section" id="templates">
 <h2>Templates<a class="headerlink" href="#templates" title="Permalink to this headline">¶</a></h2>
-<p>when doing template-meta-programming make sure to use <code class="docutils literal notranslate"><span class="pre">constexpr</span></code> and <code class="docutils literal notranslate"><span class="pre">using</span></code> correctly.</p>
+<p>When doing template-meta-programming make sure to use <code class="docutils literal notranslate"><span class="pre">constexpr</span></code> and <code class="docutils literal notranslate"><span class="pre">using</span></code> correctly.</p>
 </div>
 <div class="section" id="a-typical-file">
 <h2>A Typical File<a class="headerlink" href="#a-typical-file" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once </span><span class="c1">// we use pragma it is supported pretty much everywhere</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once </span><span class="c1">// we use pragma it is supported pretty much everywhere</span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/math/vector.hpp&gt; //alway include from the root,makes the file more readable</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;application/application.hpp&gt; //even if it is your own directory</span><span class="cp"></span>
 
@@ -142,6 +142,54 @@
 <span class="p">}</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="on-the-topic-of-doxygen">
+<h2>On the Topic of Doxygen<a class="headerlink" href="#on-the-topic-of-doxygen" title="Permalink to this headline">¶</a></h2>
+<p>To ensure that your doxygen comments are in line with the rest of the code base we have created some basic rules you should follow:</p>
+<ul>
+<li><p>We exclusively use <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> and <code class="docutils literal notranslate"><span class="pre">/**</span></code> to document our files. for example:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/** @brief Example for a function.</span>
+<span class="cm"> *  @tparam T A quick example of what the template param does.</span>
+<span class="cm"> *          (not when it can be inferred by a param)</span>
+<span class="cm"> *  @param a_parameter A quick description of what the param does.</span>
+<span class="cm"> *         Additionally you might use [in] [out] [in/out] for</span>
+<span class="cm"> *         clarity.</span>
+<span class="cm"> *  @return int A quick explanation of what to expect from</span>
+<span class="cm"> *          the function.</span>
+<span class="cm"> *  @note Some additional noteworthy documentation details.</span>
+<span class="cm"> *  @throw std::exception If your function is at risk of</span>
+<span class="cm"> *         throwing an exception.</span>
+<span class="cm"> */</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">int</span> <span class="n">a_function</span><span class="p">(</span><span class="kt">int</span> <span class="n">a_parameter</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p>To keep the file small we encourage you to drop any commands, when the function is small enough to be explained by <code class="docutils literal notranslate"><span class="pre">&#64;brief</span></code>
+alone. for example:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/** @brief Gets the size of the container.</span>
+<span class="cm"> *  @return size_type The size of the container.</span>
+<span class="cm"> */</span>
+<span class="n">A_NODISCARD</span> <span class="k">auto</span> <span class="nf">size</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
+<span class="p">{</span>
+  <span class="k">return</span> <span class="n">m_container</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>should really be</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/** @brief Gets the size of the container.</span>
+<span class="cm"> */</span>
+<span class="n">A_NODISCARD</span> <span class="k">auto</span> <span class="nf">size</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
+<span class="p">{</span>
+  <span class="k">return</span> <span class="n">m_container</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To decide if a type is simple enough to drop info about extra commands, thing about how much text you would repeat &amp; how complicated the types are you are taking or returning.</p>
+</li>
+<li><p>Try to adhere to proper English. While this is not a super critical condition. we do appreciate good punctuation and spelling (we also make these mistakes at times). A good spell-check plugin for your favorite editor helps tremendously.</p></li>
+<li><p>Default Constructors &amp; Destructors should not be documented, unless it does something very unexpected. In which case you should ask yourself if a constructor is the right place for your custom behavior</p></li>
+</ul>
 </div>
 </div>
 
@@ -166,6 +214,7 @@
 <li><a class="reference internal" href="#comments">Comments</a></li>
 <li><a class="reference internal" href="#templates">Templates</a></li>
 <li><a class="reference internal" href="#a-typical-file">A Typical File</a></li>
+<li><a class="reference internal" href="#on-the-topic-of-doxygen">On the Topic of Doxygen</a></li>
 </ul>
 </li>
 </ul>

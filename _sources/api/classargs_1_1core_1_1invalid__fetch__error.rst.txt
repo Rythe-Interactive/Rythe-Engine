@@ -1,0 +1,32 @@
+.. _exhale_class_classargs_1_1core_1_1invalid__fetch__error:
+
+Class invalid_fetch_error
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public args::core::exception`` (:ref:`exhale_class_classargs_1_1core_1_1exception`)
+
+
+Derived Types
+*************
+
+- ``public args::core::invalid_component_error`` (:ref:`exhale_class_classargs_1_1core_1_1invalid__component__error`)
+- ``public args::core::invalid_entity_error`` (:ref:`exhale_class_classargs_1_1core_1_1invalid__entity__error`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::invalid_fetch_error
+   :members:
+   :protected-members:
+   :undoc-members:

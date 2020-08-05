@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1a0501886f6a032eb2337c27d14e472874:
+
+Typedef args::core::uint
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::uint

@@ -1,0 +1,22 @@
+.. _dir__home_runner_work_Args-Engine_Args-Engine_args_core_async:
+
+
+Directory async
+===============
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core>` (``/home/runner/work/Args-Engine/Args-Engine/args/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Args-Engine/Args-Engine/args/core/async``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_async.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_readonly_rw_spinlock.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_transferable_atomic.hpp`
+
+

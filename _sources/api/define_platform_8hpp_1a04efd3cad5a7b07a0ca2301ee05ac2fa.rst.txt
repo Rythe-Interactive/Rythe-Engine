@@ -1,0 +1,13 @@
+.. _exhale_define_platform_8hpp_1a04efd3cad5a7b07a0ca2301ee05ac2fa:
+
+Define ARGS_HIGH_PERFORMANCE
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: ARGS_HIGH_PERFORMANCE

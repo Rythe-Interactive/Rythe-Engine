@@ -1,0 +1,44 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_types_type_util.cpp:
+
+Program Listing for File type_util.cpp
+======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_types_type_util.cpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/types/type_util.cpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include <core/types/type_util.hpp>
+   
+   namespace args::core
+   {
+       id_type ARGS_FUNC nameHash(cstring name)
+       {
+           id_type hash = 0xcbf29ce484222325;
+           uint64 prime = 0x00000100000001b3;
+           for (int i = 0; i < std::strlen(name); i++)
+           {
+               byte value = name[i];
+               hash = hash ^ value;
+               hash *= prime;
+           }
+   
+           return hash;
+       }
+   
+       id_type ARGS_FUNC nameHash(std::string name)
+       {
+           id_type hash = 0xcbf29ce484222325;
+           uint64 prime = 0x00000100000001b3;
+           for (int i = 0; i < name.length(); i++)
+           {
+               byte value = name[i];
+               hash = hash ^ value;
+               hash *= prime;
+           }
+   
+           return hash;
+       }
+   }

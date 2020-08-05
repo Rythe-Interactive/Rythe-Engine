@@ -21,7 +21,7 @@
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
   </head><body>
   
@@ -83,6 +83,17 @@
         <span class="p">}</span>
 
         <span class="kt">void</span> <span class="n">init</span><span class="p">();</span>
+
+        <span class="kt">void</span> <span class="nf">run</span><span class="p">();</span>
+
+        <span class="o">~</span><span class="n">Engine</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">priority</span><span class="p">,</span> <span class="n">moduleList</span><span class="p">]</span> <span class="o">:</span> <span class="n">modules</span><span class="p">)</span>
+                <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">*</span> <span class="k">module</span> <span class="o">:</span> <span class="n">moduleList</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">delete</span> <span class="k">module</span><span class="p">;</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
     <span class="p">};</span>
 <span class="p">}</span>
 </pre></div>

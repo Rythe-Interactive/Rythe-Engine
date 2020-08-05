@@ -30,9 +30,9 @@ Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/entry/entry_po
 Detailed Description
 --------------------
 
-When defining ARGS_ENTRY do no create your own CRT_STARTUP such as main()->int, main(int,char**)->int,wmain(), etc... 
+When defining ARGS_ENTRY do no create your own CRT_STARTUP such as main()->int, main(int,char**)->int, wmain(), etc... 
 When using ARGS_ENTRY you must instead implement :ref:`exhale_function_entry__point_8hpp_1a7ce8e0555bec33efde98e832731cbde5`. 
-When not using ARGS_ENTRY you must call creation and initialisation of the engine manually. 
+When not using ARGS_ENTRY you must call creation and initialization of the engine manually. 
 
 
 
@@ -42,6 +42,10 @@ Includes
 
 
 - ``core/engine/engine.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp`)
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`)
 
 - ``iostream``
 

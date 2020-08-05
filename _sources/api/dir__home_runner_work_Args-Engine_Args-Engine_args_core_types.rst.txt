@@ -17,6 +17,8 @@ Files
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_meta.hpp`
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_type_util.cpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_type_util.hpp`
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp`
 
 

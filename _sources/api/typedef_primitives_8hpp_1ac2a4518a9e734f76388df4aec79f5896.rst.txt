@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1ac2a4518a9e734f76388df4aec79f5896:
+
+Typedef args::core::int_max
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::int_max

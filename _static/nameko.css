@@ -18,16 +18,17 @@
 /* -- page layout --------------------------------------------------------- */
 
 body {
-    font-family: "Lato","proxima-nova","Helvetica Neue",Arial,sans-serif;
+    font-family: 'Roboto',sans-serif;
     margin: 0;
     padding: 0;
-    background-color: rgb(252, 252, 252);
+    background-color: rgb(8, 8, 8);
+    font-size: 1.2em;
 }
 
 h1, h2, h3, h4 {
     color: #2a2730;
     font-weight: 700;
-    font-family: "Lora","Times",serif;
+    /* font-family: "Lora","Times",serif; */
     clear: both;
 }
 
@@ -46,8 +47,8 @@ div.bodywrapper {
 }
 
 div.body {
-    background-color: rgb(252, 252, 252);
-    color: #3e4349;
+    background-color: rgba(10, 10, 10, 1);
+    color: #6f6f6f;
     padding: 0 30px 30px 30px;
 }
 
@@ -65,6 +66,7 @@ div.footer a {
 }
 
 div.related {
+    background-color: black;
     padding: 10px 10px;
     width: auto;
 }
@@ -85,7 +87,7 @@ div.sphinxsidebarwrapper {
 
 div.sphinxsidebar h3,
 div.sphinxsidebar h4 {
-    color: #333;
+    color: #52a1e4;
     font-size: 24px;
     font-weight: normal;
     margin: 0 0 5px 0;
@@ -94,10 +96,6 @@ div.sphinxsidebar h4 {
 
 div.sphinxsidebar h4 {
     font-size: 1.1em;
-}
-
-div.sphinxsidebar h3 a {
-    color: #333;
 }
 
 div.sphinxsidebar p {
@@ -109,38 +107,39 @@ div.sphinxsidebar p.searchtip {
 }
 
 div.sphinxsidebar ul {
-    color: #000;
+    color: #6f6f6f;
     margin: 10px 0 20px;
     padding: 0;
 }
 
-div.sphinxsidebar a {
-    color: #444;
-}
-
 div.sphinxsidebar a:hover {
-    color: #d00;
+    color: #8fcbff;
 }
 
 div.sphinxsidebar input {
-    border: 1px solid #ccc;
-    font-family: sans-serif;
+    border: 1px solid rgba(0,0,0,0);
+    border-right-color: #c3c3c3;
     font-size: 1em;
+    background-color: #171717;
+    color: #c3c3c3;
 }
 
+div.sphinxsidebar input:nth-child(2) {
+    border-color: #c3c3c3
+}
 /* -- body styles --------------------------------------------------------- */
 
 a {
-    color: #900;
+    color: #52a1e4;
     text-decoration: none;
 }
 
 a:visited {
-    color: #700;
+    color: #3e74a2;
 }
 
 a:hover {
-    color: #d00;
+    color: #8fcbff;
     text-decoration: underline;
 }
 
@@ -158,7 +157,7 @@ div.body h6 { font-weight: normal; }
 div.body h1,
 div.body h2,
 div.body h3,
-div.body h4 { color: #212224; }
+div.body h4 {color: #52a1e4;}
 div.body h5 { color: #000; }
 div.body h6 { color: #777; }
 
@@ -189,21 +188,26 @@ div.body h5 { font-size: 105%; }
 div.body h6 { font-size: 100%; }
 
 a.headerlink {
-    color: #c60f0f;
+    color: rgba(0,0,0,0);
     font-size: 0.8em;
     padding: 0 4px 0 4px;
     text-decoration: none;
 }
 
 a.headerlink:hover {
-    background-color: #c60f0f;
-    color: #fff;
+    background-color: rgba(0,0,0,0);
+    color: rgba(0,0,0,0);
 }
 
 div.body ul {
     list-style: disc;
     margin: 1em 0;
     padding-left: 1.3em;
+}
+
+dt:target, span.highlighted {
+    color: #c3c3c3;
+    background-color: #3c3c3c;
 }
 
 div.body ul ul, div.body ol ul {
@@ -253,9 +257,10 @@ div.body li {
     line-height: 1.4em;
 }
 
+
 div.sidebar, div.topic {
-    background-color: #f6f7f9;
-    border: 1px solid #cdcdd1;
+    background-color: #0a0a0a;
+    border: 1px solid #131313;
     padding: 0;
     margin: 0 0 1em 1.5em;
 }
@@ -265,7 +270,7 @@ div.topic {
 }
 
 div.sidebar p.sidebar-title, div.topic p.topic-title {
-    background-color: #cdcdd1;
+    background-color: #131313;
     padding: 8px;
 }
 
@@ -275,10 +280,11 @@ div.sidebar p, div.topic p {
 }
 
 div.admonition {
-    background-color: #f6f7f9;
-    border: 1px solid #cdcdd1;
+    background-color: rgb(23, 23, 23);
+    /* border: 1px solid #cdcdd1; */
     padding: 0px 12px 12px 12px;
     font-size: 0.9em;
+    font-weight: bolder;
 }
 
 p.admonition-title {
@@ -303,15 +309,11 @@ div.seealso p.admonition-title {
     background-color: #fbe091;
 }
 
-div.danger, div.error, div.warning {
-    border: 1px solid #FEA1A2;
-    background-color: #FEE4E4;
-}
-
 div.danger p.admonition-title,
 div.error p.admonition-title,
 div.warning p.admonition-title {
-    background-color: #FEA1A2;
+    background-color: #bf2e2f;
+    color: #c3c3c3;
 }
 
 div.note, div.important, div.hint, div.tip {
@@ -346,8 +348,9 @@ pre, tt, code {
 
 tt, code, code.xref {
     padding: 2px;
-    background-color: #fff;
-    border: 1px solid #daebea;
+    background-color: #1f1f1f;
+    /* border: 1px solid #daebea; */
+    color: #577996;
     font-size: 0.75em;
 }
 
@@ -369,7 +372,8 @@ dl.classmethod > dt,
 dl.method > dt,
 dl.class > dt,
 dl.exception > dt {
-    background-color: #f5f5f5;
+    background-color: #131313;
+    color: #c3c3c3;
     margin: 25px 0 10px 0;
     padding: 1px 10px;
 }
@@ -452,8 +456,13 @@ dl em {
     font-size: 0.9em;
 }
 
+dl:property
+{
+    color: #52a1e4;
+}
+
 .viewcode-back {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 div.viewcode-block:target {

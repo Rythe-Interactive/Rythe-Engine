@@ -1,0 +1,13 @@
+.. _exhale_enum_readonly__rw__spinlock_8hpp_1a8a92b7284527cbc4fa7de3ec628f025b:
+
+Enum lock_state
+===============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_readonly_rw_spinlock.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: args::core::async::lock_state

@@ -1,0 +1,95 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_rw_component_buffer.hpp:
+
+Program Listing for File rw_component_buffer.hpp
+================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_rw_component_buffer.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/ecs/rw_component_buffer.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/common/exception.hpp>
+   #include <core/types/types.hpp>
+   #include <core/ecs/ecsregistry.hpp>
+   #include <core/ecs/entity_handle.hpp>
+   #include <core/ecs/component_handle.hpp>
+   #include <core/ecs/component_container.hpp>
+   #include <core/async/transferable_atomic.hpp>
+   
+   namespace args::core::ecs
+   {
+       template<typename component_type>
+       class rw_component_buffer
+       {
+       private:
+           EcsRegistry& m_registry;
+   
+       public:
+           rw_component_buffer(EcsRegistry& registry) : m_registry(registry) {}
+   
+           //component_handle<component_type> operator[](id_type entityId)
+           //{
+           //}
+   
+           component_type read(id_type entityId, std::memory_order order = std::memory_order_acquire)
+           {
+               async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(entityId);
+               if (!comp)
+                   throw args_component_destroyed_error;
+   
+               return comp->get().load(order);
+           }
+   
+           void write(id_type entityId, component_type&& value, std::memory_order order = std::memory_order_release)
+           {
+               async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(entityId);
+               if (!comp)
+                   throw args_component_destroyed_error;
+   
+               comp->get().store(value, order);
+   
+               return value;
+           }
+   
+           void fetch_add(id_type entityId, component_type&& value,
+               std::memory_order loadOrder = std::memory_order_acquire,
+               std::memory_order successOrder = std::memory_order_release,
+               std::memory_order failureOrder = std::memory_order_relaxed)
+           {
+               async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(entityId);
+               if (!comp)
+                   throw args_component_destroyed_error;
+   
+               component_type oldVal = comp->get().load(loadOrder);
+               component_type newVal = oldVal + value;
+   
+               while (!comp->get().compare_exchange_weak(oldVal, newVal, successOrder, failureOrder))
+                   newVal = oldVal + value;
+   
+               return newVal;
+           }
+   
+           void fetch_multiply(id_type entityId, component_type&& value,
+               std::memory_order loadOrder = std::memory_order_acquire,
+               std::memory_order successOrder = std::memory_order_release,
+               std::memory_order failureOrder = std::memory_order_relaxed)
+           {
+               async::transferable_atomic<component_type>* comp = m_registry.getFamily<component_type>()->get_component(entityId);
+               if (!comp)
+                   throw args_component_destroyed_error;
+   
+               component_type oldVal = comp->get().load(loadOrder);
+               component_type newVal = oldVal * value;
+   
+               while (!comp->get().compare_exchange_weak(oldVal, newVal, successOrder, failureOrder))
+                   newVal = oldVal * value;
+   
+               return newVal;
+           }
+   
+           void destroy(id_type entityId) { m_registry.destroyComponent<component_type>(entityId); }
+       };
+   }

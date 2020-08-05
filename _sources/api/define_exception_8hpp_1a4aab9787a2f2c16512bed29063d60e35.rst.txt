@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1a4aab9787a2f2c16512bed29063d60e35:
+
+Define args_unknown_system_msg
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: args_unknown_system_msg

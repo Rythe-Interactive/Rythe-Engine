@@ -1,0 +1,56 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entityquery.hpp:
+
+Program Listing for File entityquery.hpp
+========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entityquery.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/ecs/entityquery.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/types/primitives.hpp>
+   #include <core/types/type_util.hpp>
+   #include <core/platform/platform.hpp>
+   #include <core/containers/sparse_map.hpp>
+   
+   namespace args::core::ecs
+   {
+       class ARGS_API QueryRegistry;
+       class ARGS_API EcsRegistry;
+       class ARGS_API entity_handle;
+   
+       class ARGS_API EntityQuery
+       {
+       private:
+           QueryRegistry& m_registry;
+           EcsRegistry& m_ecsRegistry;
+           id_type m_id;
+   
+       public:
+           EntityQuery(id_type id, QueryRegistry& registry, EcsRegistry& ecsRegistry);
+           ~EntityQuery();
+   
+           sparse_map<id_type, entity_handle>::const_iterator begin() const;
+   
+           sparse_map<id_type, entity_handle>::const_iterator end() const;
+   
+           A_NODISCARD id_type id() { return m_id; }
+   
+           template<typename component_type>
+           void addComponentType() { addComponentType(typeHash<component_type>()); }
+   
+           void addComponentType(id_type componentTypeId);
+   
+           template<typename component_type>
+           void removeComponentType() { removeComponentType(typeHash<component_type>()); }
+   
+           void removeComponentType(id_type componentTypeId);
+   
+           entity_handle operator[](size_type index);
+   
+           size_type size();
+       };
+   }

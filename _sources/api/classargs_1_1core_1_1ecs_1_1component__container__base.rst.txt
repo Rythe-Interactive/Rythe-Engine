@@ -1,0 +1,25 @@
+.. _exhale_class_classargs_1_1core_1_1ecs_1_1component__container__base:
+
+Class component_container_base
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_component_container.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Type
+************
+
+- ``public args::core::ecs::component_container< component_type >`` (:ref:`exhale_class_classargs_1_1core_1_1ecs_1_1component__container`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::ecs::component_container_base
+   :members:
+   :protected-members:
+   :undoc-members:

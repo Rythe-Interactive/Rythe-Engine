@@ -1,0 +1,103 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_async_readonly_rw_spinlock.hpp:
+
+File readonly_rw_spinlock.hpp
+=============================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_async>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/async``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/async/readonly_rw_spinlock.hpp``)
+---------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_async_readonly_rw_spinlock.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``array``
+
+- ``atomic`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_atomic_sparse_map.hpp`)
+
+- ``core/containers/sparse_set.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_sparse_set.hpp`)
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`)
+
+- ``tuple``
+
+- ``unordered_map``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_async.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_transferable_atomic.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_atomic_sparse_map.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_component_container.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__async`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1core_1_1async_1_1mixed__multiguard`
+
+- :ref:`exhale_class_classargs_1_1core_1_1async_1_1readonly__guard`
+
+- :ref:`exhale_class_classargs_1_1core_1_1async_1_1readonly__multiguard`
+
+- :ref:`exhale_class_structargs_1_1core_1_1async_1_1readonly__rw__spinlock`
+
+- :ref:`exhale_class_classargs_1_1core_1_1async_1_1readwrite__guard`
+
+- :ref:`exhale_class_classargs_1_1core_1_1async_1_1readwrite__multiguard`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_readonly__rw__spinlock_8hpp_1a8a92b7284527cbc4fa7de3ec628f025b`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_readonly__rw__spinlock_8hpp_1a16318197043589d16101d4f5d6966a05`
+
+- :ref:`exhale_function_readonly__rw__spinlock_8hpp_1a3228900989b9c52a50d4b24fefbdb112`
+
+- :ref:`exhale_function_readonly__rw__spinlock_8hpp_1ada9b38708b0f1d5f40cbf4b98777bba1`
+

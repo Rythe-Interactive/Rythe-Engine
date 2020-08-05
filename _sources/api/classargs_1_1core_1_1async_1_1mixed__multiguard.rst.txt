@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1core_1_1async_1_1mixed__multiguard:
+
+Template Class mixed_multiguard
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_readonly_rw_spinlock.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::async::mixed_multiguard
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1ae7f7ba549b9d985b4b5e692171598dc9:
+
+Define args_entity_exists_error
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: args_entity_exists_error

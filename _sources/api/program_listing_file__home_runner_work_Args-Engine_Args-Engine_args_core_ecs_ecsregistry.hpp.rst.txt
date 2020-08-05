@@ -1,0 +1,125 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecsregistry.hpp:
+
+Program Listing for File ecsregistry.hpp
+========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecsregistry.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/ecs/ecsregistry.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/containers/containers.hpp>
+   #include <core/types/types.hpp>
+   #include <core/common/common.hpp>
+   #include <core/async/async.hpp>
+   #include <core/ecs/component_container.hpp>
+   #include <core/ecs/queryregistry.hpp>
+   #include <core/ecs/entityquery.hpp>
+   
+   #include <utility>
+   #include <memory>
+   
+   namespace args::core::ecs
+   {
+       class entity_handle;
+   
+       class component_handle_base;
+   
+       template<typename component_type>
+       class component_handle;
+   
+       struct entity_data
+       {
+           id_type parent;
+           sparse_map<id_type, entity_handle> children;
+           hashed_sparse_set<id_type> components;
+       };
+   
+       class ARGS_API EcsRegistry
+       {
+       private:
+           static id_type m_nextEntityId;
+   
+           mutable async::readonly_rw_spinlock m_familyLock;
+           sparse_map<id_type, std::unique_ptr<component_container_base>> m_families;
+   
+           mutable async::readonly_rw_spinlock m_entityDataLock;
+           sparse_map<id_type, entity_data> m_entityData;
+   
+           mutable async::readonly_rw_spinlock m_entityLock;
+           sparse_map<id_type, entity_handle> m_entities;
+   
+           QueryRegistry m_queryRegistry;
+   
+           void recursiveDestroyEntityInternal(id_type entityId);
+   
+       public:
+           EcsRegistry();
+   
+           template<typename component_type>
+           void reportComponentType()
+           {
+               async::readwrite_guard guard(m_familyLock);
+               if (!m_families.contains(typeHash<component_type>()))
+                   m_families[typeHash<component_type>()] = std::make_unique<component_container<component_type>>();
+           }
+   
+           template<typename component_type>
+           component_container<component_type>* getFamily()
+           {
+               return static_cast<component_container<component_type>*>(getFamily(typeHash<component_type>()));
+           }
+   
+           component_container_base* getFamily(id_type componentTypeId);
+   
+           template<typename component_type>
+           component_handle<component_type> getComponent(id_type entityId)
+           {
+               return force_value_cast<component_handle<component_type>>(getComponent(entityId, typeHash<component_type>()));
+           }
+   
+           component_handle_base getComponent(id_type entityId, id_type componentTypeId);
+   
+           template<typename component_type>
+           component_handle<component_type> createComponent(id_type entityId)
+           {
+               return force_value_cast<component_handle<component_type>>(createComponent(entityId, typeHash<component_type>()));
+           }
+   
+           component_handle_base createComponent(id_type entityId, id_type componentTypeId);
+   
+           template<typename component_type>
+           void destroyComponent(id_type entityId)
+           {
+               destroyComponent(entityId, typeHash<component_type>());
+           }
+   
+           void destroyComponent(id_type entityId, id_type componentTypeId);
+   
+           A_NODISCARD bool validateEntity(id_type entityId);
+   
+           entity_handle createEntity();
+   
+           void destroyEntity(id_type entityId, bool recurse = true);
+   
+           A_NODISCARD entity_handle getEntity(id_type entityId);
+   
+           A_NODISCARD entity_data& getEntityData(id_type entityId);
+   
+           A_NODISCARD std::pair<sparse_map<id_type, entity_handle>&, async::readonly_rw_spinlock&>  getEntities();
+   
+           template<typename... component_types>
+           A_NODISCARD EntityQuery createQuery()
+           {
+               return m_queryRegistry.createQuery<component_types...>();
+           }
+   
+           A_NODISCARD EntityQuery createQuery(const hashed_sparse_set<id_type>& componentTypes)
+           {
+               return m_queryRegistry.createQuery(componentTypes);
+           }
+       };
+   }

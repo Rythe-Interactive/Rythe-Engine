@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1af29faba20a717f181dea5316b5e573bd:
+
+Typedef args::core::micro_seconds
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::micro_seconds

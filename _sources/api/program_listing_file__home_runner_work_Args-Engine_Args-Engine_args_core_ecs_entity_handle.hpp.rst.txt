@@ -1,0 +1,101 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entity_handle.hpp:
+
+Program Listing for File entity_handle.hpp
+==========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entity_handle.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/ecs/entity_handle.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/types/types.hpp>
+   #include <core/containers/sparse_set.hpp>
+   #include <core/containers/sparse_map.hpp>
+   #include <core/containers/hashed_sparse_set.hpp>
+   
+   namespace args::core::ecs
+   {
+       class ARGS_API EcsRegistry;
+   
+       class component_handle_base;
+   
+       template<typename component_type>
+       class component_handle;
+   
+       class ARGS_API entity_handle
+       {
+           friend class EcsRegistry;
+       private:
+           id_type m_id;
+           EcsRegistry* m_registry;
+   
+       public:
+           entity_handle(id_type id, EcsRegistry* registry) : m_id(id) { m_registry = registry; }
+   
+           entity_handle() : m_id(invalid_id) { m_registry = nullptr; }
+   
+           entity_handle(const entity_handle& other) : m_id(other.m_id) { m_registry = other.m_registry; }
+   
+           entity_handle& operator=(const entity_handle& other);
+   
+           A_NODISCARD const hashed_sparse_set<id_type>& component_composition() const;
+   
+           operator id_type() const { return get_id(); }
+   
+           A_NODISCARD id_type get_id() const;
+   
+           A_NODISCARD sparse_map<id_type, entity_handle>::const_iterator begin() const;
+   
+           A_NODISCARD sparse_map<id_type, entity_handle>::const_iterator end() const;
+   
+           A_NODISCARD entity_handle get_parent() const;
+   
+           void set_parent(id_type newParent) const;
+   
+           A_NODISCARD entity_handle operator[] (index_type index) const;
+   
+           A_NODISCARD entity_handle get_child(index_type index) const;
+   
+           A_NODISCARD size_type child_count() const;
+   
+           void add_child(id_type childId) const;
+   
+           void remove_child(id_type childId) const;
+   
+           template<typename component_type>
+           A_NODISCARD bool has_component() const { return has_component(typeHash<component_type>()); }
+   
+           A_NODISCARD bool has_component(id_type componentTypeId) const;
+   
+           A_NODISCARD component_handle_base get_component(id_type componentTypeId) const;
+   
+           template<typename component_type>
+           A_NODISCARD component_handle<component_type> get_component() const
+           {
+               return force_value_cast<component_handle<component_type>>(get_component(typeHash<component_type>()));
+           }
+   
+           component_handle_base add_component(id_type componentTypeId) const;
+   
+           template<typename component_type>
+           component_handle<component_type> add_component() const
+           {
+               return force_value_cast<component_handle<component_type>>(add_component(typeHash<component_type>()));
+           }
+   
+           void remove_component(id_type componentTypeId) const;
+   
+           template<typename component_type>
+           void remove_component() const
+           {
+               remove_component(typeHash<component_type>());
+           }
+   
+           void destroy(bool recurse = true) const;
+   
+           bool valid() const;
+       };
+   }

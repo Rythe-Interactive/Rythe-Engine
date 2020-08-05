@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1af3e62306bf4fbd670393a6174b4dcf4d:
+
+Typedef args::core::int32
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::int32

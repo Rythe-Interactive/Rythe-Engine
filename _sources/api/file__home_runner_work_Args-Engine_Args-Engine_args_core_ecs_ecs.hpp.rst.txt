@@ -1,0 +1,59 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecs.hpp:
+
+File ecs.hpp
+============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_ecs>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/ecs``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+Single include header for all ECS related headers. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/ecs/ecs.hpp``)
+--------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecs.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/ecs/component_container.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_component_container.hpp`)
+
+- ``core/ecs/component_handle.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_component_handle.hpp`)
+
+- ``core/ecs/ecsregistry.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecsregistry.hpp`)
+
+- ``core/ecs/entity_handle.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entity_handle.hpp`)
+
+- ``core/ecs/entityquery.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entityquery.hpp`)
+
+- ``core/ecs/queryregistry.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_queryregistry.hpp`)
+
+- ``core/ecs/rw_component_buffer.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_rw_component_buffer.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`
+
+
+

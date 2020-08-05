@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1a971227bd505340c1fb73ac555d4854ff:
+
+Typedef args::core::cstring
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::cstring

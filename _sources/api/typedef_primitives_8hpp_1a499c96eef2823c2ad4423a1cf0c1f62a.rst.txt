@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1a499c96eef2823c2ad4423a1cf0c1f62a:
+
+Typedef args::core::byte_vec
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::byte_vec

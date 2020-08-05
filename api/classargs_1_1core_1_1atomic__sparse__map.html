@@ -1,0 +1,664 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Class atomic_sparse_map &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class component_destroyed_error" href="classargs_1_1core_1_1component__destroyed__error.html" />
+    <link rel="prev" title="Template Class transferable_atomic" href="class_structargs_1_1core_1_1async_1_1transferable__atomic.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classargs_1_1core_1_1component__destroyed__error.html" title="Class component_destroyed_error"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="class_structargs_1_1core_1_1async_1_1transferable__atomic.html" title="Template Class transferable_atomic"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Template Class atomic_sparse_map</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="template-class-atomic-sparse-map">
+<span id="exhale-class-classargs-1-1core-1-1atomic-sparse-map"></span><h1>Template Class atomic_sparse_map<a class="headerlink" href="#template-class-atomic-sparse-map" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_atomic_sparse_map.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-containers-atomic-sparse-map-hpp"><span class="std std-ref">File atomic_sparse_map.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE">
+<span id="_CPPv3I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE"></span><span id="_CPPv2I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE"></span>template&lt;typename <code class="sig-name descname">key_type</code>, typename <code class="sig-name descname">value_type</code>, template&lt;typename...&gt; typename <code class="sig-name descname">dense_type</code> = std::vector, template&lt;typename...&gt; typename <code class="sig-name descname">sparse_type</code> = std::unordered_map&gt;<br /><span class="target" id="classargs_1_1core_1_1atomic__sparse__map"></span><em class="property">class </em><code class="sig-prename descclassname">args::core<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">atomic_sparse_map</code><a class="headerlink" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Atomic quick lookup contiguous map. A specialized version of <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a> that uses <a class="reference internal" href="class_structargs_1_1core_1_1async_1_1transferable__atomic.html#structargs_1_1core_1_1async_1_1transferable__atomic"><span class="std std-ref">args::core::async::transferable_atomic</span></a> and <a class="reference internal" href="class_structargs_1_1core_1_1async_1_1readonly__rw__spinlock.html#structargs_1_1core_1_1async_1_1readonly__rw__spinlock"><span class="std std-ref">args::core::async::readonly_rw_spinlock</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>With default container parameters iterators may be invalidated upon resize. See reference of std::vector. </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>Removing item might invalidate the iterator of the last item in the dense container. </p>
+</dd>
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key_type</span></code>: The type to be used as the key. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value_type</span></code>: The type to be used as the value. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dense_type</span></code>: Container to be used to store the values. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sparse_type</span></code>: Container to be used to store the keys. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17atomic_sparse_map9self_typeE">
+<span id="_CPPv3N4args4core17atomic_sparse_map9self_typeE"></span><span id="_CPPv2N4args4core17atomic_sparse_map9self_typeE"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a13283fdd4a61da349d0fa539f6a14965"></span><em class="property">using </em><code class="sig-name descname">self_type</code> = <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map">atomic_sparse_map</a>&lt;<a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::key_type">key_type</a>, <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::value_type">value_type</a>, <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::dense_type">dense_type</a>, <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::sparse_type">sparse_type</a>&gt;<a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map9self_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17atomic_sparse_map14self_referenceE">
+<span id="_CPPv3N4args4core17atomic_sparse_map14self_referenceE"></span><span id="_CPPv2N4args4core17atomic_sparse_map14self_referenceE"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1acb1488a11c2d841ca144cd5ae01df56f"></span><em class="property">using </em><code class="sig-name descname">self_reference</code> = <a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map9self_typeE" title="args::core::atomic_sparse_map::self_type">self_type</a>&amp;<a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map14self_referenceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17atomic_sparse_map20self_const_referenceE">
+<span id="_CPPv3N4args4core17atomic_sparse_map20self_const_referenceE"></span><span id="_CPPv2N4args4core17atomic_sparse_map20self_const_referenceE"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a61461126305e0e2ccc60ce6898f69ef1"></span><em class="property">using </em><code class="sig-name descname">self_const_reference</code> = <em class="property">const</em> <a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map9self_typeE" title="args::core::atomic_sparse_map::self_type">self_type</a>&amp;<a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map20self_const_referenceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17atomic_sparse_map13key_referenceE">
+<span id="_CPPv3N4args4core17atomic_sparse_map13key_referenceE"></span><span id="_CPPv2N4args4core17atomic_sparse_map13key_referenceE"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a7d4c50191d80198d8394493b55b78989"></span><em class="property">using </em><code class="sig-name descname">key_reference</code> = <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::key_type">key_type</a>&amp;<a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map13key_referenceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17atomic_sparse_map19key_const_referenceE">
+<span id="_CPPv3N4args4core17atomic_sparse_map19key_const_referenceE"></span><span id="_CPPv2N4args4core17atomic_sparse_map19key_const_referenceE"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a102f2c076dbfa82e977812055ee627f6"></span><em class="property">using </em><code class="sig-name descname">key_const_reference</code> = <em class="property">const</em> <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::key_type">key_type</a>&amp;<a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map19key_const_referenceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17atomic_sparse_map11key_pointerE">
+<span id="_CPPv3N4args4core17atomic_sparse_map11key_pointerE"></span><span id="_CPPv2N4args4core17atomic_sparse_map11key_pointerE"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a711331102def6b3f53c57cceea047dfc"></span><em class="property">using </em><code class="sig-name descname">key_pointer</code> = <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::key_type">key_type</a>*<a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map11key_pointerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17atomic_sparse_map11atomic_typeE">
+<span id="_CPPv3N4args4core17atomic_sparse_map11atomic_typeE"></span><span id="_CPPv2N4args4core17atomic_sparse_map11atomic_typeE"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a4ecb59d9a1cf1d5862af919c5c61c9bc"></span><em class="property">using </em><code class="sig-name descname">atomic_type</code> = async::<a class="reference internal" href="class_structargs_1_1core_1_1async_1_1transferable__atomic.html#_CPPv4I0EN4args4core5async19transferable_atomicE" title="args::core::async::transferable_atomic">transferable_atomic</a>&lt;<a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::value_type">value_type</a>&gt;<a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map11atomic_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17atomic_sparse_map16atomic_referenceE">
+<span id="_CPPv3N4args4core17atomic_sparse_map16atomic_referenceE"></span><span id="_CPPv2N4args4core17atomic_sparse_map16atomic_referenceE"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1ab5b4eddad81dca98f5b8ed09620aff17"></span><em class="property">using </em><code class="sig-name descname">atomic_reference</code> = <a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map11atomic_typeE" title="args::core::atomic_sparse_map::atomic_type">atomic_type</a>&amp;<a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map16atomic_referenceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17atomic_sparse_map22atomic_const_referenceE">
+<span id="_CPPv3N4args4core17atomic_sparse_map22atomic_const_referenceE"></span><span id="_CPPv2N4args4core17atomic_sparse_map22atomic_const_referenceE"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a30b187115ae2b27f0e0f8dee62298d8f"></span><em class="property">using </em><code class="sig-name descname">atomic_const_reference</code> = <em class="property">const</em> <a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map11atomic_typeE" title="args::core::atomic_sparse_map::atomic_type">atomic_type</a>&amp;<a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map22atomic_const_referenceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17atomic_sparse_map14atomic_pointerE">
+<span id="_CPPv3N4args4core17atomic_sparse_map14atomic_pointerE"></span><span id="_CPPv2N4args4core17atomic_sparse_map14atomic_pointerE"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a1982f26e7abf7c34a96cab998d2616d8"></span><em class="property">using </em><code class="sig-name descname">atomic_pointer</code> = <a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map11atomic_typeE" title="args::core::atomic_sparse_map::atomic_type">atomic_type</a>*<a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map14atomic_pointerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17atomic_sparse_map15value_referenceE">
+<span id="_CPPv3N4args4core17atomic_sparse_map15value_referenceE"></span><span id="_CPPv2N4args4core17atomic_sparse_map15value_referenceE"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a1e3b59de424bc63f8973e85fd7aad1fb"></span><em class="property">using </em><code class="sig-name descname">value_reference</code> = <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::value_type">value_type</a>&amp;<a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map15value_referenceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17atomic_sparse_map21value_const_referenceE">
+<span id="_CPPv3N4args4core17atomic_sparse_map21value_const_referenceE"></span><span id="_CPPv2N4args4core17atomic_sparse_map21value_const_referenceE"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1ace4d355bee835c4a95b795a543f38fe7"></span><em class="property">using </em><code class="sig-name descname">value_const_reference</code> = <em class="property">const</em> <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::value_type">value_type</a>&amp;<a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map21value_const_referenceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17atomic_sparse_map13value_pointerE">
+<span id="_CPPv3N4args4core17atomic_sparse_map13value_pointerE"></span><span id="_CPPv2N4args4core17atomic_sparse_map13value_pointerE"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a620869dab0647816dba1634754136474"></span><em class="property">using </em><code class="sig-name descname">value_pointer</code> = <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::value_type">value_type</a>*<a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map13value_pointerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17atomic_sparse_map16sparse_containerE">
+<span id="_CPPv3N4args4core17atomic_sparse_map16sparse_containerE"></span><span id="_CPPv2N4args4core17atomic_sparse_map16sparse_containerE"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1aee313c9beb16686b96bc878b400bef67"></span><em class="property">using </em><code class="sig-name descname">sparse_container</code> = <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::sparse_type">sparse_type</a>&lt;<a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::key_type">key_type</a>, <a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a>&gt;<a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map16sparse_containerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17atomic_sparse_map21dense_value_containerE">
+<span id="_CPPv3N4args4core17atomic_sparse_map21dense_value_containerE"></span><span id="_CPPv2N4args4core17atomic_sparse_map21dense_value_containerE"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a0dfcee794fff575b315004dc07c86806"></span><em class="property">using </em><code class="sig-name descname">dense_value_container</code> = <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::dense_type">dense_type</a>&lt;<a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map11atomic_typeE" title="args::core::atomic_sparse_map::atomic_type">atomic_type</a>&gt;<a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map21dense_value_containerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17atomic_sparse_map19dense_key_containerE">
+<span id="_CPPv3N4args4core17atomic_sparse_map19dense_key_containerE"></span><span id="_CPPv2N4args4core17atomic_sparse_map19dense_key_containerE"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a82c95a12b6b49d5bea7f0438e0b06b9a"></span><em class="property">using </em><code class="sig-name descname">dense_key_container</code> = <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::dense_type">dense_type</a>&lt;<a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::key_type">key_type</a>&gt;<a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map19dense_key_containerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17atomic_sparse_map8iteratorE">
+<span id="_CPPv3N4args4core17atomic_sparse_map8iteratorE"></span><span id="_CPPv2N4args4core17atomic_sparse_map8iteratorE"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1ab6e177da3873576bdb451a422e3757e8"></span><em class="property">using </em><code class="sig-name descname">iterator</code> = <em class="property">typename</em> <a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map21dense_value_containerE" title="args::core::atomic_sparse_map::dense_value_container">dense_value_container</a>::iterator<a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map8iteratorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17atomic_sparse_map14const_iteratorE">
+<span id="_CPPv3N4args4core17atomic_sparse_map14const_iteratorE"></span><span id="_CPPv2N4args4core17atomic_sparse_map14const_iteratorE"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a722563c39b39dfe377893e7579d6d92e"></span><em class="property">using </em><code class="sig-name descname">const_iterator</code> = <em class="property">typename</em> <a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map21dense_value_containerE" title="args::core::atomic_sparse_map::dense_value_container">dense_value_container</a>::const_iterator<a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map14const_iteratorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17atomic_sparse_map5beginEv">
+<span id="_CPPv3N4args4core17atomic_sparse_map5beginEv"></span><span id="_CPPv2N4args4core17atomic_sparse_map5beginEv"></span><span id="args::core::atomic_sparse_map::begin"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a4c10ccaca10346caaf6066ae3e580839"></span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map8iteratorE" title="args::core::atomic_sparse_map::iterator">iterator</a> <code class="sig-name descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map5beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17atomic_sparse_map5beginEv">
+<span id="_CPPv3NK4args4core17atomic_sparse_map5beginEv"></span><span id="_CPPv2NK4args4core17atomic_sparse_map5beginEv"></span><span id="args::core::atomic_sparse_map::beginC"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a4ddd2f7a6d03fc52805d829112b066a7"></span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map14const_iteratorE" title="args::core::atomic_sparse_map::const_iterator">const_iterator</a> <code class="sig-name descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17atomic_sparse_map5beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17atomic_sparse_map6cbeginEv">
+<span id="_CPPv3NK4args4core17atomic_sparse_map6cbeginEv"></span><span id="_CPPv2NK4args4core17atomic_sparse_map6cbeginEv"></span><span id="args::core::atomic_sparse_map::cbeginC"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a8de1ec418f4605d530fb0715dfde1f07"></span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map14const_iteratorE" title="args::core::atomic_sparse_map::const_iterator">const_iterator</a> <code class="sig-name descname">cbegin</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17atomic_sparse_map6cbeginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17atomic_sparse_map3endEv">
+<span id="_CPPv3N4args4core17atomic_sparse_map3endEv"></span><span id="_CPPv2N4args4core17atomic_sparse_map3endEv"></span><span id="args::core::atomic_sparse_map::end"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a54568da293b8d10600160de27fb4c54e"></span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map8iteratorE" title="args::core::atomic_sparse_map::iterator">iterator</a> <code class="sig-name descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map3endEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17atomic_sparse_map3endEv">
+<span id="_CPPv3NK4args4core17atomic_sparse_map3endEv"></span><span id="_CPPv2NK4args4core17atomic_sparse_map3endEv"></span><span id="args::core::atomic_sparse_map::endC"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a451c224c7c8d61657e95c5c3086acf6e"></span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map14const_iteratorE" title="args::core::atomic_sparse_map::const_iterator">const_iterator</a> <code class="sig-name descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17atomic_sparse_map3endEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17atomic_sparse_map4cendEv">
+<span id="_CPPv3NK4args4core17atomic_sparse_map4cendEv"></span><span id="_CPPv2NK4args4core17atomic_sparse_map4cendEv"></span><span id="args::core::atomic_sparse_map::cendC"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1abebedff247752603fdc2eb1a2bcaf2fb"></span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map14const_iteratorE" title="args::core::atomic_sparse_map::const_iterator">const_iterator</a> <code class="sig-name descname">cend</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17atomic_sparse_map4cendEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17atomic_sparse_map4sizeEv">
+<span id="_CPPv3NK4args4core17atomic_sparse_map4sizeEv"></span><span id="_CPPv2NK4args4core17atomic_sparse_map4sizeEv"></span><span id="args::core::atomic_sparse_map::sizeC"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a54fb190045ce4c7c99b6b3c76f68e708"></span><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <code class="sig-name descname">size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK4args4core17atomic_sparse_map4sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the amount of items in the <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>size_type Current amount of items contained in <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17atomic_sparse_map8capacityEv">
+<span id="_CPPv3NK4args4core17atomic_sparse_map8capacityEv"></span><span id="_CPPv2NK4args4core17atomic_sparse_map8capacityEv"></span><span id="args::core::atomic_sparse_map::capacityC"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a45a0402cfc4bad38d0b91cb1fcec5d3c"></span><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <code class="sig-name descname">capacity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK4args4core17atomic_sparse_map8capacityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the capacity of items the <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a> could at least store without invalidating the iterators. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>size_type Current capacity of the dense container. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17atomic_sparse_map8max_sizeEv">
+<span id="_CPPv3NK4args4core17atomic_sparse_map8max_sizeEv"></span><span id="_CPPv2NK4args4core17atomic_sparse_map8max_sizeEv"></span><span id="args::core::atomic_sparse_map::max_sizeC"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1ae567712d51ebfe701c991b67fe8abb32"></span><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <code class="sig-name descname">max_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK4args4core17atomic_sparse_map8max_sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the maximum number of items the <a class="reference internal" href="#classargs_1_1core_1_1atomic__sparse__map"><span class="std std-ref">atomic_sparse_map</span></a> could at most store without crashing. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>This value typically reflects the theoretical limit on the size of the container, at most std::numeric_limits&lt;difference_type&gt;::max(). At runtime, the size of the container may be limited to a value smaller than <a class="reference internal" href="#classargs_1_1core_1_1atomic__sparse__map_1ae567712d51ebfe701c991b67fe8abb32"><span class="std std-ref">max_size()</span></a> by the amount of RAM available. </p>
+</dd>
+<dt><strong>Return</strong></dt><dd><p>size_type </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17atomic_sparse_map5emptyEv">
+<span id="_CPPv3NK4args4core17atomic_sparse_map5emptyEv"></span><span id="_CPPv2NK4args4core17atomic_sparse_map5emptyEv"></span><span id="args::core::atomic_sparse_map::emptyC"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1aef4173529b2f813d14dc9b1254ff5030"></span>bool <code class="sig-name descname">empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK4args4core17atomic_sparse_map5emptyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns whether the <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a> is empty. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if the <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a> is empty, otherwise false. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17atomic_sparse_map5clearEv">
+<span id="_CPPv3N4args4core17atomic_sparse_map5clearEv"></span><span id="_CPPv2N4args4core17atomic_sparse_map5clearEv"></span><span id="args::core::atomic_sparse_map::clear"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a0dd9f1003bb35ab78d67ed118a769db3"></span>void <code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map5clearEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Clears <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Will not update capacity. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17atomic_sparse_map7reserveE9size_type">
+<span id="_CPPv3N4args4core17atomic_sparse_map7reserveE9size_type"></span><span id="_CPPv2N4args4core17atomic_sparse_map7reserveE9size_type"></span><span id="args::core::atomic_sparse_map::reserve__size_type"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a8d8cd0f30162825852a98a51c4f0ab95"></span>void <code class="sig-name descname">reserve</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <em>size</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map7reserveE9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reserves space in dense container for more items. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Will update capacity if resize happened. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">size</span></code>: Amount of items to reserve space for (would be the new capacity). </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17atomic_sparse_map5countE19key_const_reference">
+<span id="_CPPv3NK4args4core17atomic_sparse_map5countE19key_const_reference"></span><span id="_CPPv2NK4args4core17atomic_sparse_map5countE19key_const_reference"></span><span id="args::core::atomic_sparse_map::count__key_const_referenceC"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1ae1f8e6862c6953584e181f725e130554"></span><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <code class="sig-name descname">count</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map19key_const_referenceE" title="args::core::atomic_sparse_map::key_const_reference">key_const_reference</a> <em>key</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17atomic_sparse_map5countE19key_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the amount of items linked to a certain key. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>size_type Amount of items linked to the key (either 0 or 1). </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>Function is only available for compatibility reasons, it is advised to use contains instead. <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map_1aa6185a658cadd9f11e66a7c31ddf5883"><span class="std std-ref">args::core::sparse_map::contains</span></a> </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key to look for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17atomic_sparse_map5countERR8key_type">
+<span id="_CPPv3NK4args4core17atomic_sparse_map5countERR8key_type"></span><span id="_CPPv2NK4args4core17atomic_sparse_map5countERR8key_type"></span><span id="args::core::atomic_sparse_map::count__key_typeRRC"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a4cf5c779f890a167f6ea4352f0e9ec40"></span><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <code class="sig-name descname">count</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::key_type">key_type</a> &amp;&amp;<em>key</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17atomic_sparse_map5countERR8key_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the amount of items linked to a certain key. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>size_type Amount of items linked to the key (either 0 or 1). </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>Function is only available for compatibility reasons, it is advised to use contains instead. <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map_1aa6185a658cadd9f11e66a7c31ddf5883"><span class="std std-ref">args::core::sparse_map::contains</span></a> </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key to look for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17atomic_sparse_map8containsE19key_const_reference">
+<span id="_CPPv3N4args4core17atomic_sparse_map8containsE19key_const_reference"></span><span id="_CPPv2N4args4core17atomic_sparse_map8containsE19key_const_reference"></span><span id="args::core::atomic_sparse_map::contains__key_const_reference"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a8c084f2bcc1098b9becd13889326e565"></span>bool <code class="sig-name descname">contains</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map19key_const_referenceE" title="args::core::atomic_sparse_map::key_const_reference">key_const_reference</a> <em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map8containsE19key_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks whether a certain key is contained in the <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool true if the key was found, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key to check for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17atomic_sparse_map8containsERR8key_type">
+<span id="_CPPv3N4args4core17atomic_sparse_map8containsERR8key_type"></span><span id="_CPPv2N4args4core17atomic_sparse_map8containsERR8key_type"></span><span id="args::core::atomic_sparse_map::contains__key_typeRR"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a764dcbe28a6087afc9ede7c82d85d9b2"></span>bool <code class="sig-name descname">contains</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::key_type">key_type</a> &amp;&amp;<em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map8containsERR8key_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks whether a certain key is contained in the <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool true if the key was found, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key to check for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17atomic_sparse_map8containsE19key_const_reference">
+<span id="_CPPv3NK4args4core17atomic_sparse_map8containsE19key_const_reference"></span><span id="_CPPv2NK4args4core17atomic_sparse_map8containsE19key_const_reference"></span><span id="args::core::atomic_sparse_map::contains__key_const_referenceC"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1ae41dd62d0ab4369e996b912131239ea4"></span>bool <code class="sig-name descname">contains</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map19key_const_referenceE" title="args::core::atomic_sparse_map::key_const_reference">key_const_reference</a> <em>key</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17atomic_sparse_map8containsE19key_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks whether a certain key is contained in the <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool true if the key was found, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key to check for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17atomic_sparse_map8containsERR8key_type">
+<span id="_CPPv3NK4args4core17atomic_sparse_map8containsERR8key_type"></span><span id="_CPPv2NK4args4core17atomic_sparse_map8containsERR8key_type"></span><span id="args::core::atomic_sparse_map::contains__key_typeRRC"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a1e9c2ef961723471c2548039a58878b4"></span>bool <code class="sig-name descname">contains</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::key_type">key_type</a> &amp;&amp;<em>key</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17atomic_sparse_map8containsERR8key_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks whether a certain key is contained in the <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool true if the key was found, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key to check for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17atomic_sparse_map4findE22atomic_const_reference">
+<span id="_CPPv3N4args4core17atomic_sparse_map4findE22atomic_const_reference"></span><span id="_CPPv2N4args4core17atomic_sparse_map4findE22atomic_const_reference"></span><span id="args::core::atomic_sparse_map::find__atomic_const_reference"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a307c316837cca966f3a80f122b1dc19b"></span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map8iteratorE" title="args::core::atomic_sparse_map::iterator">iterator</a> <code class="sig-name descname">find</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map22atomic_const_referenceE" title="args::core::atomic_sparse_map::atomic_const_reference">atomic_const_reference</a> <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map4findE22atomic_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Finds the iterator of a value using std::find. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>Iterator to the value if found, otherwise end. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to find. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17atomic_sparse_map4findE22atomic_const_reference">
+<span id="_CPPv3NK4args4core17atomic_sparse_map4findE22atomic_const_reference"></span><span id="_CPPv2NK4args4core17atomic_sparse_map4findE22atomic_const_reference"></span><span id="args::core::atomic_sparse_map::find__atomic_const_referenceC"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1abc519868e010cc7788fe4e9a57fd7110"></span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map14const_iteratorE" title="args::core::atomic_sparse_map::const_iterator">const_iterator</a> <code class="sig-name descname">find</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map22atomic_const_referenceE" title="args::core::atomic_sparse_map::atomic_const_reference">atomic_const_reference</a> <em>val</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17atomic_sparse_map4findE22atomic_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Finds the iterator of a value using std::find. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>Iterator to the value if found, otherwise end. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to find. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17atomic_sparse_map6insertE19key_const_reference21value_const_reference">
+<span id="_CPPv3N4args4core17atomic_sparse_map6insertE19key_const_reference21value_const_reference"></span><span id="_CPPv2N4args4core17atomic_sparse_map6insertE19key_const_reference21value_const_reference"></span><span id="args::core::atomic_sparse_map::insert__key_const_reference.value_const_reference"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a93545a72b7c014bf231850574a2a15f5"></span>std::pair&lt;<a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map8iteratorE" title="args::core::atomic_sparse_map::iterator">iterator</a>, bool&gt; <code class="sig-name descname">insert</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map19key_const_referenceE" title="args::core::atomic_sparse_map::key_const_reference">key_const_reference</a> <em>key</em>, <a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map21value_const_referenceE" title="args::core::atomic_sparse_map::value_const_reference">value_const_reference</a> <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map6insertE19key_const_reference21value_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Inserts new item into <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>std::pair&lt;iterator, bool&gt; Iterator at the location of the key and true if succeeded, end and false if it didn’t succeed. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key to insert the new item to. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to insert and link to the key. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17atomic_sparse_map6insertERR8key_type21value_const_reference">
+<span id="_CPPv3N4args4core17atomic_sparse_map6insertERR8key_type21value_const_reference"></span><span id="_CPPv2N4args4core17atomic_sparse_map6insertERR8key_type21value_const_reference"></span><span id="args::core::atomic_sparse_map::insert__key_typeRR.value_const_reference"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1ae6cbd7be5da60fbd5ed6811c3ddf78d7"></span>std::pair&lt;<a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map8iteratorE" title="args::core::atomic_sparse_map::iterator">iterator</a>, bool&gt; <code class="sig-name descname">insert</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::key_type">key_type</a> &amp;&amp;<em>key</em>, <a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map21value_const_referenceE" title="args::core::atomic_sparse_map::value_const_reference">value_const_reference</a> <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map6insertERR8key_type21value_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Inserts new item into <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>std::pair&lt;iterator, bool&gt; Iterator at the location of the key and true if succeeded, end and false if it didn’t succeed. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key to insert the new item to. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to insert and link to the key. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17atomic_sparse_map6insertE19key_const_referenceRR10value_type">
+<span id="_CPPv3N4args4core17atomic_sparse_map6insertE19key_const_referenceRR10value_type"></span><span id="_CPPv2N4args4core17atomic_sparse_map6insertE19key_const_referenceRR10value_type"></span><span id="args::core::atomic_sparse_map::insert__key_const_reference.value_typeRR"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a505d64e1b379e4322d66a4a76f80a200"></span>std::pair&lt;<a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map8iteratorE" title="args::core::atomic_sparse_map::iterator">iterator</a>, bool&gt; <code class="sig-name descname">insert</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map19key_const_referenceE" title="args::core::atomic_sparse_map::key_const_reference">key_const_reference</a> <em>key</em>, <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::value_type">value_type</a> &amp;&amp;<em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map6insertE19key_const_referenceRR10value_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Inserts new item into <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>std::pair&lt;iterator, bool&gt; Iterator at the location of the key and true if succeeded, end and false if it didn’t succeed. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key to insert the new item to. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to insert and link to the key. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17atomic_sparse_map6insertERR8key_typeRR10value_type">
+<span id="_CPPv3N4args4core17atomic_sparse_map6insertERR8key_typeRR10value_type"></span><span id="_CPPv2N4args4core17atomic_sparse_map6insertERR8key_typeRR10value_type"></span><span id="args::core::atomic_sparse_map::insert__key_typeRR.value_typeRR"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1aaa2432bc916b9256a8544e3f8fc55596"></span>std::pair&lt;<a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map8iteratorE" title="args::core::atomic_sparse_map::iterator">iterator</a>, bool&gt; <code class="sig-name descname">insert</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::key_type">key_type</a> &amp;&amp;<em>key</em>, <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::value_type">value_type</a> &amp;&amp;<em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map6insertERR8key_typeRR10value_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Inserts new item into <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>std::pair&lt;iterator, bool&gt; Iterator at the location of the key and true if succeeded, end and false if it didn’t succeed. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key to insert the new item to. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to insert and link to the key. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4IDpEN4args4core17atomic_sparse_map7emplaceENSt4pairI8iteratorbEE19key_const_referenceDpRR9Arguments">
+<span id="_CPPv3IDpEN4args4core17atomic_sparse_map7emplaceE19key_const_referenceDpRR9Arguments"></span><span id="_CPPv2IDpEN4args4core17atomic_sparse_map7emplaceE19key_const_referenceDpRR9Arguments"></span>template&lt;typename ...<code class="sig-name descname">Arguments</code>&gt;<br /><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a1315ef5970f5ba1f7d4f45f9ed11f22d"></span>std::pair&lt;<a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map8iteratorE" title="args::core::atomic_sparse_map::iterator">iterator</a>, bool&gt; <code class="sig-name descname">emplace</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map19key_const_referenceE" title="args::core::atomic_sparse_map::key_const_reference">key_const_reference</a> <em>key</em>, <a class="reference internal" href="#_CPPv4IDpEN4args4core17atomic_sparse_map7emplaceENSt4pairI8iteratorbEE19key_const_referenceDpRR9Arguments" title="args::core::atomic_sparse_map::emplace::Arguments">Arguments</a>&amp;&amp;... <em>arguments</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN4args4core17atomic_sparse_map7emplaceENSt4pairI8iteratorbEE19key_const_referenceDpRR9Arguments" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct item in place. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key to which the item should be created. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">arguments</span></code>: Arguments to pass to the item constructor. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4IDpEN4args4core17atomic_sparse_map7emplaceENSt4pairI8iteratorbEERR8key_typeDpRR9Arguments">
+<span id="_CPPv3IDpEN4args4core17atomic_sparse_map7emplaceERR8key_typeDpRR9Arguments"></span><span id="_CPPv2IDpEN4args4core17atomic_sparse_map7emplaceERR8key_typeDpRR9Arguments"></span>template&lt;typename ...<code class="sig-name descname">Arguments</code>&gt;<br /><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1ae9a07e76ad23c0dd6f97fbe7e5a4624d"></span>std::pair&lt;<a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map8iteratorE" title="args::core::atomic_sparse_map::iterator">iterator</a>, bool&gt; <code class="sig-name descname">emplace</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::key_type">key_type</a> &amp;&amp;<em>key</em>, <a class="reference internal" href="#_CPPv4IDpEN4args4core17atomic_sparse_map7emplaceENSt4pairI8iteratorbEERR8key_typeDpRR9Arguments" title="args::core::atomic_sparse_map::emplace::Arguments">Arguments</a>&amp;&amp;... <em>arguments</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN4args4core17atomic_sparse_map7emplaceENSt4pairI8iteratorbEERR8key_typeDpRR9Arguments" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct item in place. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key to which the item should be created. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">arguments</span></code>: Arguments to pass to the item constructor. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17atomic_sparse_mapixERR8key_type">
+<span id="_CPPv3N4args4core17atomic_sparse_mapixERR8key_type"></span><span id="_CPPv2N4args4core17atomic_sparse_mapixERR8key_type"></span><span id="args::core::atomic_sparse_map::subscript-operator__key_typeRR"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a38a632c4f593ebeb1991891cfb72aa83"></span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map16atomic_referenceE" title="args::core::atomic_sparse_map::atomic_reference">atomic_reference</a> <code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::key_type">key_type</a> &amp;&amp;<em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_mapixERR8key_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns item from <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>, inserts default value if it doesn’t exist yet. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key value that needs to be retrieved. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17atomic_sparse_mapixE19key_const_reference">
+<span id="_CPPv3N4args4core17atomic_sparse_mapixE19key_const_reference"></span><span id="_CPPv2N4args4core17atomic_sparse_mapixE19key_const_reference"></span><span id="args::core::atomic_sparse_map::subscript-operator__key_const_reference"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a508042f6a965ec711cb7861e0a18ea04"></span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map16atomic_referenceE" title="args::core::atomic_sparse_map::atomic_reference">atomic_reference</a> <code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map19key_const_referenceE" title="args::core::atomic_sparse_map::key_const_reference">key_const_reference</a> <em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_mapixE19key_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns item from <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>, inserts default value if it doesn’t exist yet. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key value that needs to be retrieved. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17atomic_sparse_mapixERR8key_type">
+<span id="_CPPv3NK4args4core17atomic_sparse_mapixERR8key_type"></span><span id="_CPPv2NK4args4core17atomic_sparse_mapixERR8key_type"></span><span id="args::core::atomic_sparse_map::subscript-operator__key_typeRRC"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a7f94a0a125faeca12dcb24370e94a538"></span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map22atomic_const_referenceE" title="args::core::atomic_sparse_map::atomic_const_reference">atomic_const_reference</a> <code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::key_type">key_type</a> &amp;&amp;<em>key</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17atomic_sparse_mapixERR8key_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns const item from const <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key value that needs to be retrieved. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17atomic_sparse_mapixE19key_const_reference">
+<span id="_CPPv3NK4args4core17atomic_sparse_mapixE19key_const_reference"></span><span id="_CPPv2NK4args4core17atomic_sparse_mapixE19key_const_reference"></span><span id="args::core::atomic_sparse_map::subscript-operator__key_const_referenceC"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1aa1c59624eaafe9f90d4b33099c8ba852"></span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map22atomic_const_referenceE" title="args::core::atomic_sparse_map::atomic_const_reference">atomic_const_reference</a> <code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map19key_const_referenceE" title="args::core::atomic_sparse_map::key_const_reference">key_const_reference</a> <em>key</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17atomic_sparse_mapixE19key_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns const item from const <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key value that needs to be retrieved. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17atomic_sparse_map3getERR8key_type">
+<span id="_CPPv3N4args4core17atomic_sparse_map3getERR8key_type"></span><span id="_CPPv2N4args4core17atomic_sparse_map3getERR8key_type"></span><span id="args::core::atomic_sparse_map::get__key_typeRR"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a24786c0b96594cfb7fd321b41f566479"></span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map16atomic_referenceE" title="args::core::atomic_sparse_map::atomic_reference">atomic_reference</a> <code class="sig-name descname">get</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::key_type">key_type</a> &amp;&amp;<em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map3getERR8key_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns item from <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>, throws exception if it doesn’t exist yet. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key value that needs to be retrieved. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17atomic_sparse_map3getE19key_const_reference">
+<span id="_CPPv3N4args4core17atomic_sparse_map3getE19key_const_reference"></span><span id="_CPPv2N4args4core17atomic_sparse_map3getE19key_const_reference"></span><span id="args::core::atomic_sparse_map::get__key_const_reference"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a714ba44011066cab60fbe96136e057d9"></span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map16atomic_referenceE" title="args::core::atomic_sparse_map::atomic_reference">atomic_reference</a> <code class="sig-name descname">get</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map19key_const_referenceE" title="args::core::atomic_sparse_map::key_const_reference">key_const_reference</a> <em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map3getE19key_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns item from <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>, throws exception if it doesn’t exist yet. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key value that needs to be retrieved. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17atomic_sparse_map3getERR8key_type">
+<span id="_CPPv3NK4args4core17atomic_sparse_map3getERR8key_type"></span><span id="_CPPv2NK4args4core17atomic_sparse_map3getERR8key_type"></span><span id="args::core::atomic_sparse_map::get__key_typeRRC"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1adbac7c36c8d79e11c9af24c4609986bf"></span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map22atomic_const_referenceE" title="args::core::atomic_sparse_map::atomic_const_reference">atomic_const_reference</a> <code class="sig-name descname">get</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN4args4core17atomic_sparse_mapE" title="args::core::atomic_sparse_map::key_type">key_type</a> &amp;&amp;<em>key</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17atomic_sparse_map3getERR8key_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns const item from const <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key value that needs to be retrieved. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17atomic_sparse_map3getE19key_const_reference">
+<span id="_CPPv3NK4args4core17atomic_sparse_map3getE19key_const_reference"></span><span id="_CPPv2NK4args4core17atomic_sparse_map3getE19key_const_reference"></span><span id="args::core::atomic_sparse_map::get__key_const_referenceC"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a62383631345c5029ca5aa89d1d3cdf8d"></span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map22atomic_const_referenceE" title="args::core::atomic_sparse_map::atomic_const_reference">atomic_const_reference</a> <code class="sig-name descname">get</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map19key_const_referenceE" title="args::core::atomic_sparse_map::key_const_reference">key_const_reference</a> <em>key</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17atomic_sparse_map3getE19key_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns const item from const <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key value that needs to be retrieved. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17atomic_sparse_map5eraseE19key_const_reference">
+<span id="_CPPv3N4args4core17atomic_sparse_map5eraseE19key_const_reference"></span><span id="_CPPv2N4args4core17atomic_sparse_map5eraseE19key_const_reference"></span><span id="args::core::atomic_sparse_map::erase__key_const_reference"></span><span class="target" id="classargs_1_1core_1_1atomic__sparse__map_1a9a11028ffe5b0accdf930afd8aad7ce8"></span><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <code class="sig-name descname">erase</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17atomic_sparse_map19key_const_referenceE" title="args::core::atomic_sparse_map::key_const_reference">key_const_reference</a> <em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17atomic_sparse_map5eraseE19key_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Erases item from <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>size_type Number of items removed from the map. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: Key value that needs to be erased. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Template Class atomic_sparse_map</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">ARGS API</a><ul>
+      <li>Previous: <a href="class_structargs_1_1core_1_1async_1_1transferable__atomic.html" title="previous chapter">Template Class transferable_atomic</a></li>
+      <li>Next: <a href="classargs_1_1core_1_1component__destroyed__error.html" title="next chapter">Class component_destroyed_error</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classargs_1_1core_1_1atomic__sparse__map.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

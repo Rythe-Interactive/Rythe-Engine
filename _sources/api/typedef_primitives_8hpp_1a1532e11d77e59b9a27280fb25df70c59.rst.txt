@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1a1532e11d77e59b9a27280fb25df70c59:
+
+Typedef args::core::time32
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::time32

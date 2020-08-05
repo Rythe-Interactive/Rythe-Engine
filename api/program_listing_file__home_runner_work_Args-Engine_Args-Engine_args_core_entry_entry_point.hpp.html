@@ -21,7 +21,7 @@
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
   </head><body>
   
@@ -48,23 +48,135 @@
 <p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_entry_entry_point.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-entry-entry-point-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/entry/entry_point.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/engine/engine.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/platform/platform.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/types/primitives.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
 <span class="k">extern</span> <span class="kt">void</span> <span class="nf">reportModules</span><span class="p">(</span><span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">Engine</span><span class="o">*</span> <span class="n">engine</span><span class="p">);</span>
 
-<span class="cp">#ifdef ARGS_ENTRY</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">Engine</span> <span class="n">engine</span><span class="p">;</span>
-    <span class="n">reportModules</span><span class="p">(</span><span class="o">&amp;</span><span class="n">engine</span><span class="p">);</span>
+<span class="cp">#if defined(ARGS_ENTRY)</span>
 
-    <span class="n">engine</span><span class="p">.</span><span class="n">init</span><span class="p">();</span>
+    <span class="cp">#if (defined(ARGS_HIGH_PERFORMANCE) &amp;&amp; defined(ARGS_WINDOWS))</span>
+        <span class="kr">__declspec</span><span class="p">(</span><span class="n">dllexport</span><span class="p">)</span> <span class="n">DWORD</span> <span class="n">NvOptimusEnablement</span> <span class="o">=</span> <span class="mh">0x0000001</span><span class="p">;</span>
+        <span class="kr">__declspec</span><span class="p">(</span><span class="n">dllexport</span><span class="p">)</span> <span class="kt">int</span> <span class="n">AmdPowerXpressRequestHighPerformance</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="cp">#endif</span>
 
-<span class="cp">#ifdef _DEBUG</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">ignore</span><span class="p">().</span><span class="n">get</span><span class="p">();</span>
-<span class="cp">#endif </span><span class="c1">// DEBUG</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+    <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="cp">#if (!defined(ARGS_DEBUG) &amp;&amp; defined(ARGS_WINDOWS))</span>
+        <span class="o">::</span><span class="n">ShowWindow</span><span class="p">(</span><span class="o">::</span><span class="n">GetConsoleWindow</span><span class="p">(),</span> <span class="n">SW_HIDE</span><span class="p">);</span>
+    <span class="cp">#endif</span>
+
+    <span class="cp">#if defined(ARGS_HIGH_PERFORMANCE)</span>
+        <span class="cp">#if defined(ARGS_WINDOWS)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">SetPriorityClass</span><span class="p">(</span><span class="n">GetCurrentProcess</span><span class="p">(),</span> <span class="n">REALTIME_PRIORITY_CLASS</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">DWORD</span> <span class="n">error</span> <span class="o">=</span> <span class="n">GetLastError</span><span class="p">();</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;==============================================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;| Failed to enter real-time performance mode, error: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">error</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; |&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;==============================================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;=======================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;| Entered real-time performance mode. |&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;=======================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="cp">#elif defined(ARGS_LINUX)</span>
+        <span class="kt">pid_t</span> <span class="n">pid</span> <span class="o">=</span> <span class="n">getpid</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">setpriority</span><span class="p">(</span><span class="n">PRIO_PROCESS</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">sched_get_priority_max</span><span class="p">(</span><span class="n">sched_getscheduler</span><span class="p">(</span><span class="n">pid</span><span class="p">)))</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">errornum</span> <span class="o">=</span> <span class="n">errno</span><span class="p">;</span>
+            <span class="n">cstring</span> <span class="n">error</span><span class="p">;</span>
+
+            <span class="k">switch</span> <span class="p">(</span><span class="n">errornum</span><span class="p">)</span>
+            <span class="p">{</span>
+            <span class="k">case</span> <span class="nl">ESRCH</span><span class="p">:</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="s">&quot;ESRCH&quot;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">EINVAL</span><span class="p">:</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="s">&quot;EINVAL&quot;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">EPERM</span><span class="p">:</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="s">&quot;EPERM&quot;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">EACCES</span><span class="p">:</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="s">&quot;EACCES&quot;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="o">:</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">errornum</span><span class="p">).</span><span class="n">c_str</span><span class="p">();</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;=============================================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;| Failed to enter real-time performance mode, error: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">error</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; |&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;=============================================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;=======================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;| Entered real-time performance mode. |&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;=======================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="cp">#endif</span>
+    <span class="cp">#endif</span>
+
+        <span class="k">try</span>
+        <span class="p">{</span>
+            <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">Engine</span> <span class="n">engine</span><span class="p">;</span>
+
+            <span class="n">reportModules</span><span class="p">(</span><span class="o">&amp;</span><span class="n">engine</span><span class="p">);</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;==========================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;| Initializing engine... |&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;==========================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">engine</span><span class="p">.</span><span class="n">init</span><span class="p">();</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;==============================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;| Entering main engine loop. |&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;==============================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">engine</span><span class="p">.</span><span class="n">run</span><span class="p">();</span>
+
+    <span class="cp">#if defined(ARGS_DEBUG)</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">ignore</span><span class="p">().</span><span class="n">get</span><span class="p">();</span>
+    <span class="cp">#endif</span>
+
+        <span class="p">}</span>
+        <span class="k">catch</span> <span class="p">(</span><span class="k">const</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span>
+        <span class="p">{</span>
+    <span class="cp">#if defined(ARGS_WINDOWS)</span>
+            <span class="o">::</span><span class="n">ShowWindow</span><span class="p">(</span><span class="o">::</span><span class="n">GetConsoleWindow</span><span class="p">(),</span> <span class="n">SW_SHOW</span><span class="p">);</span>
+    <span class="cp">#endif</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Encountered exception:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;  msg:     </span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;  file:    </span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">e</span><span class="p">.</span><span class="n">file</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;  line:    </span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">e</span><span class="p">.</span><span class="n">line</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;  function:</span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">e</span><span class="p">.</span><span class="n">func</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+    <span class="cp">#if defined(ARGS_DEBUG)</span>
+            <span class="k">throw</span> <span class="n">e</span><span class="p">;</span>
+    <span class="cp">#else</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">ignore</span><span class="p">().</span><span class="n">get</span><span class="p">();</span>
+    <span class="cp">#endif</span>
+        <span class="p">}</span>
+        <span class="k">catch</span> <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span>
+        <span class="p">{</span>
+    <span class="cp">#if defined(ARGS_WINDOWS)</span>
+            <span class="o">::</span><span class="n">ShowWindow</span><span class="p">(</span><span class="o">::</span><span class="n">GetConsoleWindow</span><span class="p">(),</span> <span class="n">SW_SHOW</span><span class="p">);</span>
+    <span class="cp">#endif</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+    <span class="cp">#if defined(ARGS_DEBUG)</span>
+            <span class="k">throw</span> <span class="n">e</span><span class="p">;</span>
+    <span class="cp">#else</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">ignore</span><span class="p">().</span><span class="n">get</span><span class="p">();</span>
+    <span class="cp">#endif</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
 <span class="cp">#endif</span>
 </pre></div>
 </div>

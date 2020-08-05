@@ -1,0 +1,265 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_hashed_sparse_set.hpp:
+
+Program Listing for File hashed_sparse_set.hpp
+==============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_hashed_sparse_set.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/containers/hashed_sparse_set.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <vector>
+   #include <unordered_map>
+   #include <type_traits>
+   #include <algorithm>
+   #include <stdexcept>
+   #include <core/platform/platform.hpp>
+   #include <core/types/primitives.hpp>
+   
+   namespace args::core
+   {
+       template <typename value_type, template<typename...> typename dense_type = std::vector, template<typename...> typename sparse_type = std::unordered_map>
+       class hashed_sparse_set
+       {
+       public:
+           using self_type = hashed_sparse_set<value_type, dense_type, sparse_type>;
+           using self_reference = self_type&;
+           using self_const_reference = const self_type&;
+   
+           using value_reference = value_type&;
+           using value_const_reference = const value_type&;
+           using value_pointer = value_type*;
+   
+           using sparse_container = sparse_type<value_type, size_type>;
+           using dense_container = dense_type<value_type>;
+   
+           using iterator = typename dense_container::iterator;
+           using const_iterator = typename dense_container::const_iterator;
+   
+       private:
+           dense_container m_dense;
+           sparse_container m_sparse;
+   
+           size_type m_size = 0;
+           size_type m_capacity = 0;
+   
+       public:
+           A_NODISCARD dense_container& dense() { return m_dense; }
+           A_NODISCARD const dense_container& dense() const { return m_dense; }
+   
+           A_NODISCARD iterator begin() { return m_dense.begin(); }
+           A_NODISCARD const_iterator begin() const { return m_dense.cbegin(); }
+           A_NODISCARD const_iterator cbegin() const { return m_dense.cbegin(); }
+   
+           A_NODISCARD iterator end() { return m_dense.begin() + m_size; }
+           A_NODISCARD const_iterator end() const { return m_dense.cbegin() + m_size; }
+           A_NODISCARD const_iterator cend() const { return m_dense.cbegin() + m_size; }
+   
+           A_NODISCARD size_type size() const noexcept { return m_size; }
+   
+           A_NODISCARD size_type capacity() const noexcept { return m_capacity; }
+   
+           A_NODISCARD size_type max_size() const noexcept { return m_dense.max_size(); }
+   
+           A_NODISCARD bool empty() const noexcept { return m_size == 0; }
+   
+           void clear() noexcept { m_size = 0; }
+   
+           void reserve(size_type size)
+           {
+               if (size > m_capacity)
+               {
+                   m_dense.resize(size);
+                   m_capacity = size;
+               }
+           }
+   
+   #pragma region count
+   
+           A_NODISCARD size_type count(value_const_reference val) const
+           {
+               return contains(val);
+           }
+   
+           A_NODISCARD size_type count(value_type&& val) const
+           {
+               return contains(val);
+           }
+   #pragma endregion
+   
+   #pragma region contains
+   
+           A_NODISCARD bool contains(value_const_reference val)
+           {
+               return m_sparse[val] >= 0 && m_sparse[val] < m_size && m_dense[m_sparse[val]] == val;
+           }
+   
+           A_NODISCARD bool contains(value_type&& val)
+           {
+               return m_sparse[val] >= 0 && m_sparse[val] < m_size && m_dense[m_sparse[val]] == val;
+           }
+   
+           A_NODISCARD bool contains(value_const_reference val) const
+           {
+               return m_sparse.count(val) && m_sparse.at(val) >= 0 && m_sparse.at(val) < m_size && m_dense[m_sparse.at(val)] == val;
+           }
+   
+           A_NODISCARD bool contains(value_type&& val) const
+           {
+               return m_sparse.count(val) && m_sparse.at(val) >= 0 && m_sparse.at(val) < m_size && m_dense[m_sparse.at(val)] == val;
+           }
+   
+           A_NODISCARD bool contains(const hashed_sparse_set<value_type>& other) const
+           {
+               if (other.m_size == 0)
+                   return true;
+   
+               if (m_size == 0 || m_size < other.m_size)
+                   return false;
+   
+               for (int i = 0; i < other.m_size; i++)
+                   if (!contains(other.m_dense[i]))
+                       return false;
+   
+               return true;
+           }
+   #pragma endregion
+   
+           A_NODISCARD bool equals(self_const_reference other) const
+           {
+               if (m_size == other.m_size)
+               {
+                   for (int i = 0; i < m_size; i++)
+                       if (!other.contains(m_dense[i]))
+                           return false;
+   
+                   return true;
+               }
+   
+               return false;
+           }
+   
+           A_NODISCARD bool operator==(self_const_reference other) const
+           {
+               if (m_size == other.m_size)
+               {
+                   for (int i = 0; i < m_size; i++)
+                       if (!other.contains(m_dense[i]))
+                           return false;
+   
+                   return true;
+               }
+   
+               return false;
+           }
+   
+   #pragma region find
+   
+           A_NODISCARD iterator find(value_const_reference val)
+           {
+               if (contains(val))
+                   return begin() + m_sparse[val];
+               return end();
+           }
+   
+           A_NODISCARD const_iterator find(value_const_reference val) const
+           {
+               if (contains(val))
+                   return begin() + m_sparse[val];
+               return end();
+           }
+   #pragma endregion
+   
+   #pragma region insert
+   
+           std::pair<iterator, bool> insert(value_const_reference val)
+           {
+               if (!contains(val))
+               {
+                   if (m_size >= m_capacity)
+                       reserve(m_size + 1);
+   
+                   auto itr = m_dense.begin() + m_size;
+                   *itr = val;
+   
+                   m_sparse[val] = m_size;
+                   ++m_size;
+                   return std::make_pair(itr, true);
+               }
+               return std::make_pair(end(), false);
+           }
+   
+           std::pair<iterator, bool> insert(value_type&& val)
+           {
+               if (!contains(val))
+               {
+                   if (m_size >= m_capacity)
+                       reserve(m_size + 1);
+   
+                   auto itr = m_dense.begin() + m_size;
+                   *itr = std::move(val);
+   
+                   m_sparse[*itr] = m_size;
+                   ++m_size;
+                   return std::make_pair(itr, true);
+               }
+               return std::make_pair(end(), false);
+           }
+   #pragma endregion
+   
+   #pragma region emplace
+   
+           template<typename... Arguments>
+           std::pair<iterator, bool> emplace(Arguments&&... arguments)
+           {
+               return insert(std::forward<value_type>(value_type(arguments...)));
+           }
+   #pragma endregion
+   
+   #pragma region operator[]
+   
+           A_NODISCARD value_reference operator[](size_type&& index)
+           {
+               if (index < 0 || index > m_size)
+                   throw std::out_of_range("hashed_sparse_set subscript out of range");
+               return m_dense[index];
+           }
+   
+           A_NODISCARD value_reference operator[](const size_type& index)
+           {
+               if (index < 0 || index > m_size)
+                   throw std::out_of_range("hashed_sparse_set subscript out of range");
+               return m_dense[index];
+           }
+   
+           A_NODISCARD value_const_reference operator[](size_type&& index) const
+           {
+               if (index < 0 || index > m_size)
+                   throw std::out_of_range("hashed_sparse_set subscript out of range");
+               return m_dense[index];
+           }
+   
+           A_NODISCARD value_const_reference operator[](const size_type& index) const
+           {
+               if (index < 0 || index > m_size)
+                   throw std::out_of_range("hashed_sparse_set subscript out of range");
+               return m_dense[index];
+           }
+   #pragma endregion
+   
+           size_type erase(value_const_reference val)
+           {
+               if (contains(val))
+               {
+                   m_dense[m_sparse[val]] = std::move(m_dense[m_size - 1]);
+                   m_sparse[m_dense[m_size - 1]] = std::move(m_sparse[val]);
+                   --m_size;
+                   return true;
+               }
+               return false;
+           }
+       };
+   }

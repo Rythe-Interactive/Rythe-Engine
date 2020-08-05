@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1afa6a1cb7c41c24553e53a346f080857e:
+
+Typedef args::core::fast_minutes
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::fast_minutes

@@ -1,0 +1,575 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Class hashed_sparse_set &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class invalid_component_error" href="classargs_1_1core_1_1invalid__component__error.html" />
+    <link rel="prev" title="Class Test" href="classargs_1_1core_1_1filesystem_1_1_test.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classargs_1_1core_1_1invalid__component__error.html" title="Class invalid_component_error"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classargs_1_1core_1_1filesystem_1_1_test.html" title="Class Test"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Template Class hashed_sparse_set</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="template-class-hashed-sparse-set">
+<span id="exhale-class-classargs-1-1core-1-1hashed-sparse-set"></span><h1>Template Class hashed_sparse_set<a class="headerlink" href="#template-class-hashed-sparse-set" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_hashed_sparse_set.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-containers-hashed-sparse-set-hpp"><span class="std std-ref">File hashed_sparse_set.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE">
+<span id="_CPPv3I0IDpE0IDpE0EN4args4core17hashed_sparse_setE"></span><span id="_CPPv2I0IDpE0IDpE0EN4args4core17hashed_sparse_setE"></span>template&lt;typename <code class="sig-name descname">value_type</code>, template&lt;typename...&gt; typename <code class="sig-name descname">dense_type</code> = std::vector, template&lt;typename...&gt; typename <code class="sig-name descname">sparse_type</code> = std::unordered_map&gt;<br /><span class="target" id="classargs_1_1core_1_1hashed__sparse__set"></span><em class="property">class </em><code class="sig-prename descclassname">args::core<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">hashed_sparse_set</code><a class="headerlink" href="#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Quick lookup contiguous map. The map is based on the concept of a sparse set and thus inherits it’s lookup complexity and contiguous nature. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>With default container parameters iterators may be invalidated upon resize. See reference of std::vector. </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>Removing item might invalidate the iterator of the last item in the dense container. </p>
+</dd>
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value_type</span></code>: The type to be used as the value. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dense_type</span></code>: Container to be used to store the values. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sparse_type</span></code>: Container to be used to store the keys. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17hashed_sparse_set9self_typeE">
+<span id="_CPPv3N4args4core17hashed_sparse_set9self_typeE"></span><span id="_CPPv2N4args4core17hashed_sparse_set9self_typeE"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1aea0628b4237544e9081f4bde734734d0"></span><em class="property">using </em><code class="sig-name descname">self_type</code> = <a class="reference internal" href="#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set">hashed_sparse_set</a>&lt;<a class="reference internal" href="#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set::value_type">value_type</a>, <a class="reference internal" href="#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set::dense_type">dense_type</a>, <a class="reference internal" href="#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set::sparse_type">sparse_type</a>&gt;<a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set9self_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17hashed_sparse_set14self_referenceE">
+<span id="_CPPv3N4args4core17hashed_sparse_set14self_referenceE"></span><span id="_CPPv2N4args4core17hashed_sparse_set14self_referenceE"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a8dead7403b39383df7163f8b4d3aded1"></span><em class="property">using </em><code class="sig-name descname">self_reference</code> = <a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set9self_typeE" title="args::core::hashed_sparse_set::self_type">self_type</a>&amp;<a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set14self_referenceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17hashed_sparse_set20self_const_referenceE">
+<span id="_CPPv3N4args4core17hashed_sparse_set20self_const_referenceE"></span><span id="_CPPv2N4args4core17hashed_sparse_set20self_const_referenceE"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a122b2b205905123994bff092d57b96d1"></span><em class="property">using </em><code class="sig-name descname">self_const_reference</code> = <em class="property">const</em> <a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set9self_typeE" title="args::core::hashed_sparse_set::self_type">self_type</a>&amp;<a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set20self_const_referenceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17hashed_sparse_set15value_referenceE">
+<span id="_CPPv3N4args4core17hashed_sparse_set15value_referenceE"></span><span id="_CPPv2N4args4core17hashed_sparse_set15value_referenceE"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a7c9c6366c7281e6503507ca72297a4f6"></span><em class="property">using </em><code class="sig-name descname">value_reference</code> = <a class="reference internal" href="#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set::value_type">value_type</a>&amp;<a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set15value_referenceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17hashed_sparse_set21value_const_referenceE">
+<span id="_CPPv3N4args4core17hashed_sparse_set21value_const_referenceE"></span><span id="_CPPv2N4args4core17hashed_sparse_set21value_const_referenceE"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a3892a53a74cc769cc1f9a2cc76eecc94"></span><em class="property">using </em><code class="sig-name descname">value_const_reference</code> = <em class="property">const</em> <a class="reference internal" href="#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set::value_type">value_type</a>&amp;<a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set21value_const_referenceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17hashed_sparse_set13value_pointerE">
+<span id="_CPPv3N4args4core17hashed_sparse_set13value_pointerE"></span><span id="_CPPv2N4args4core17hashed_sparse_set13value_pointerE"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1af7d1c480ccd3d89ad665ea621da4f262"></span><em class="property">using </em><code class="sig-name descname">value_pointer</code> = <a class="reference internal" href="#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set::value_type">value_type</a>*<a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set13value_pointerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17hashed_sparse_set16sparse_containerE">
+<span id="_CPPv3N4args4core17hashed_sparse_set16sparse_containerE"></span><span id="_CPPv2N4args4core17hashed_sparse_set16sparse_containerE"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a16423d95cf0b9ea19c915a67a132da53"></span><em class="property">using </em><code class="sig-name descname">sparse_container</code> = <a class="reference internal" href="#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set::sparse_type">sparse_type</a>&lt;<a class="reference internal" href="#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set::value_type">value_type</a>, <a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a>&gt;<a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set16sparse_containerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17hashed_sparse_set15dense_containerE">
+<span id="_CPPv3N4args4core17hashed_sparse_set15dense_containerE"></span><span id="_CPPv2N4args4core17hashed_sparse_set15dense_containerE"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a904e744952765d28ea170ffe775f011d"></span><em class="property">using </em><code class="sig-name descname">dense_container</code> = <a class="reference internal" href="#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set::dense_type">dense_type</a>&lt;<a class="reference internal" href="#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set::value_type">value_type</a>&gt;<a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set15dense_containerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17hashed_sparse_set8iteratorE">
+<span id="_CPPv3N4args4core17hashed_sparse_set8iteratorE"></span><span id="_CPPv2N4args4core17hashed_sparse_set8iteratorE"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a32364afff9a4b0d990fca8e65a230c20"></span><em class="property">using </em><code class="sig-name descname">iterator</code> = <em class="property">typename</em> <a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set15dense_containerE" title="args::core::hashed_sparse_set::dense_container">dense_container</a>::iterator<a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set8iteratorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core17hashed_sparse_set14const_iteratorE">
+<span id="_CPPv3N4args4core17hashed_sparse_set14const_iteratorE"></span><span id="_CPPv2N4args4core17hashed_sparse_set14const_iteratorE"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1afc9f0e8cfe6d5e8617ab636f79dadb0f"></span><em class="property">using </em><code class="sig-name descname">const_iterator</code> = <em class="property">typename</em> <a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set15dense_containerE" title="args::core::hashed_sparse_set::dense_container">dense_container</a>::const_iterator<a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set14const_iteratorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17hashed_sparse_set5denseEv">
+<span id="_CPPv3N4args4core17hashed_sparse_set5denseEv"></span><span id="_CPPv2N4args4core17hashed_sparse_set5denseEv"></span><span id="args::core::hashed_sparse_set::dense"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a9f7297b99a40e8408b178a96ebfe02b3"></span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set15dense_containerE" title="args::core::hashed_sparse_set::dense_container">dense_container</a> &amp;<code class="sig-name descname">dense</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set5denseEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_set5denseEv">
+<span id="_CPPv3NK4args4core17hashed_sparse_set5denseEv"></span><span id="_CPPv2NK4args4core17hashed_sparse_set5denseEv"></span><span id="args::core::hashed_sparse_set::denseC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1aa034cb9c988976cc074d6c866e048e87"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set15dense_containerE" title="args::core::hashed_sparse_set::dense_container">dense_container</a> &amp;<code class="sig-name descname">dense</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_set5denseEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17hashed_sparse_set5beginEv">
+<span id="_CPPv3N4args4core17hashed_sparse_set5beginEv"></span><span id="_CPPv2N4args4core17hashed_sparse_set5beginEv"></span><span id="args::core::hashed_sparse_set::begin"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1ab7329c88f0ef82481797df45483bbc0a"></span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set8iteratorE" title="args::core::hashed_sparse_set::iterator">iterator</a> <code class="sig-name descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set5beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_set5beginEv">
+<span id="_CPPv3NK4args4core17hashed_sparse_set5beginEv"></span><span id="_CPPv2NK4args4core17hashed_sparse_set5beginEv"></span><span id="args::core::hashed_sparse_set::beginC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1ab002b10aebcfd5dc9b35a4e2b5b32bb0"></span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set14const_iteratorE" title="args::core::hashed_sparse_set::const_iterator">const_iterator</a> <code class="sig-name descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_set5beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_set6cbeginEv">
+<span id="_CPPv3NK4args4core17hashed_sparse_set6cbeginEv"></span><span id="_CPPv2NK4args4core17hashed_sparse_set6cbeginEv"></span><span id="args::core::hashed_sparse_set::cbeginC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1ab16680f5e11068ad1d09c5a3c53c8158"></span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set14const_iteratorE" title="args::core::hashed_sparse_set::const_iterator">const_iterator</a> <code class="sig-name descname">cbegin</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_set6cbeginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17hashed_sparse_set3endEv">
+<span id="_CPPv3N4args4core17hashed_sparse_set3endEv"></span><span id="_CPPv2N4args4core17hashed_sparse_set3endEv"></span><span id="args::core::hashed_sparse_set::end"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1ab03b5f2801cea8fecf81b1b7b2a2d524"></span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set8iteratorE" title="args::core::hashed_sparse_set::iterator">iterator</a> <code class="sig-name descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set3endEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_set3endEv">
+<span id="_CPPv3NK4args4core17hashed_sparse_set3endEv"></span><span id="_CPPv2NK4args4core17hashed_sparse_set3endEv"></span><span id="args::core::hashed_sparse_set::endC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1ac6d2b29f0a9d5e257c5226fe075a5310"></span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set14const_iteratorE" title="args::core::hashed_sparse_set::const_iterator">const_iterator</a> <code class="sig-name descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_set3endEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_set4cendEv">
+<span id="_CPPv3NK4args4core17hashed_sparse_set4cendEv"></span><span id="_CPPv2NK4args4core17hashed_sparse_set4cendEv"></span><span id="args::core::hashed_sparse_set::cendC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1aac5047b880605237eca875c1f498c986"></span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set14const_iteratorE" title="args::core::hashed_sparse_set::const_iterator">const_iterator</a> <code class="sig-name descname">cend</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_set4cendEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_set4sizeEv">
+<span id="_CPPv3NK4args4core17hashed_sparse_set4sizeEv"></span><span id="_CPPv2NK4args4core17hashed_sparse_set4sizeEv"></span><span id="args::core::hashed_sparse_set::sizeC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a3e8167926e15fc93b22fb0d816fc2249"></span><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <code class="sig-name descname">size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_set4sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the amount of items in the <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>size_type Current amount of items contained in <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_set8capacityEv">
+<span id="_CPPv3NK4args4core17hashed_sparse_set8capacityEv"></span><span id="_CPPv2NK4args4core17hashed_sparse_set8capacityEv"></span><span id="args::core::hashed_sparse_set::capacityC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1aa4326545138aae1b9962d94b943c9b37"></span><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <code class="sig-name descname">capacity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_set8capacityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the capacity of items the <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a> could at least store without invalidating the iterators. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>size_type Current capacity of the dense container. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_set8max_sizeEv">
+<span id="_CPPv3NK4args4core17hashed_sparse_set8max_sizeEv"></span><span id="_CPPv2NK4args4core17hashed_sparse_set8max_sizeEv"></span><span id="args::core::hashed_sparse_set::max_sizeC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a082edc7706577629bd7e61a378b30b30"></span><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <code class="sig-name descname">max_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_set8max_sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the maximum number of items the <a class="reference internal" href="#classargs_1_1core_1_1hashed__sparse__set"><span class="std std-ref">hashed_sparse_set</span></a> could at most store without crashing. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>This value typically reflects the theoretical limit on the size of the container, at most std::numeric_limits&lt;difference_type&gt;::max(). At runtime, the size of the container may be limited to a value smaller than <a class="reference internal" href="#classargs_1_1core_1_1hashed__sparse__set_1a082edc7706577629bd7e61a378b30b30"><span class="std std-ref">max_size()</span></a> by the amount of RAM available. </p>
+</dd>
+<dt><strong>Return</strong></dt><dd><p>size_type </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_set5emptyEv">
+<span id="_CPPv3NK4args4core17hashed_sparse_set5emptyEv"></span><span id="_CPPv2NK4args4core17hashed_sparse_set5emptyEv"></span><span id="args::core::hashed_sparse_set::emptyC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a7dace87518195bf610e9e471238f4207"></span>bool <code class="sig-name descname">empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_set5emptyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns whether the <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a> is empty. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if the <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a> is empty, otherwise false. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17hashed_sparse_set5clearEv">
+<span id="_CPPv3N4args4core17hashed_sparse_set5clearEv"></span><span id="_CPPv2N4args4core17hashed_sparse_set5clearEv"></span><span id="args::core::hashed_sparse_set::clear"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a9600f5973a508412e2e9a6353ef9f81d"></span>void <code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set5clearEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Clears <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Will not update capacity. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17hashed_sparse_set7reserveE9size_type">
+<span id="_CPPv3N4args4core17hashed_sparse_set7reserveE9size_type"></span><span id="_CPPv2N4args4core17hashed_sparse_set7reserveE9size_type"></span><span id="args::core::hashed_sparse_set::reserve__size_type"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a93d9a25bd45e08113ff0d7241799d47f"></span>void <code class="sig-name descname">reserve</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <em>size</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set7reserveE9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reserves space in dense container for more items. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Will update capacity if resize happened. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">size</span></code>: Amount of items to reserve space for (would be the new capacity). </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_set5countE21value_const_reference">
+<span id="_CPPv3NK4args4core17hashed_sparse_set5countE21value_const_reference"></span><span id="_CPPv2NK4args4core17hashed_sparse_set5countE21value_const_reference"></span><span id="args::core::hashed_sparse_set::count__value_const_referenceC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a35d7995b40dcae6c46351671cf56ff89"></span><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <code class="sig-name descname">count</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set21value_const_referenceE" title="args::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <em>val</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_set5countE21value_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the amount of items of a certain value. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>size_type Amount of items of the same value (either 0 or 1). </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>Function is only available for compatibility reasons, it is advised to use contains instead. <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map_1aa6185a658cadd9f11e66a7c31ddf5883"><span class="std std-ref">args::core::sparse_map::contains</span></a> </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to look for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_set5countERR10value_type">
+<span id="_CPPv3NK4args4core17hashed_sparse_set5countERR10value_type"></span><span id="_CPPv2NK4args4core17hashed_sparse_set5countERR10value_type"></span><span id="args::core::hashed_sparse_set::count__value_typeRRC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a7d4db3010418422962990154a5814dbc"></span><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <code class="sig-name descname">count</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set::value_type">value_type</a> &amp;&amp;<em>val</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_set5countERR10value_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the amount of items of a certain value. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>size_type Amount of items of the same value (either 0 or 1). </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>Function is only available for compatibility reasons, it is advised to use contains instead. <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map_1aa6185a658cadd9f11e66a7c31ddf5883"><span class="std std-ref">args::core::sparse_map::contains</span></a> </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to look for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17hashed_sparse_set8containsE21value_const_reference">
+<span id="_CPPv3N4args4core17hashed_sparse_set8containsE21value_const_reference"></span><span id="_CPPv2N4args4core17hashed_sparse_set8containsE21value_const_reference"></span><span id="args::core::hashed_sparse_set::contains__value_const_reference"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a0b57cb74b3dcc1204ab5403bb460d583"></span>bool <code class="sig-name descname">contains</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set21value_const_referenceE" title="args::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set8containsE21value_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks whether a certain value is contained in the <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if the value was found, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to check for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17hashed_sparse_set8containsERR10value_type">
+<span id="_CPPv3N4args4core17hashed_sparse_set8containsERR10value_type"></span><span id="_CPPv2N4args4core17hashed_sparse_set8containsERR10value_type"></span><span id="args::core::hashed_sparse_set::contains__value_typeRR"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1af8b44912b0c5d4b7441fcc0c52d1d64c"></span>bool <code class="sig-name descname">contains</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set::value_type">value_type</a> &amp;&amp;<em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set8containsERR10value_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks whether a certain value is contained in the <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if the value was found, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to check for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_set8containsE21value_const_reference">
+<span id="_CPPv3NK4args4core17hashed_sparse_set8containsE21value_const_reference"></span><span id="_CPPv2NK4args4core17hashed_sparse_set8containsE21value_const_reference"></span><span id="args::core::hashed_sparse_set::contains__value_const_referenceC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1abecd3641bafc535b324ae4a84dc2c25c"></span>bool <code class="sig-name descname">contains</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set21value_const_referenceE" title="args::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <em>val</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_set8containsE21value_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks whether a certain value is contained in the <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if the value was found, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to check for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_set8containsERR10value_type">
+<span id="_CPPv3NK4args4core17hashed_sparse_set8containsERR10value_type"></span><span id="_CPPv2NK4args4core17hashed_sparse_set8containsERR10value_type"></span><span id="args::core::hashed_sparse_set::contains__value_typeRRC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a829ae6c5068c7e110429213f8f326339"></span>bool <code class="sig-name descname">contains</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set::value_type">value_type</a> &amp;&amp;<em>val</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_set8containsERR10value_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks whether a certain value is contained in the <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if the value was found, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to check for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_set8containsERK17hashed_sparse_setI10value_typeE">
+<span id="_CPPv3NK4args4core17hashed_sparse_set8containsERK17hashed_sparse_setI10value_typeE"></span><span id="_CPPv2NK4args4core17hashed_sparse_set8containsERK17hashed_sparse_setI10value_typeE"></span><span id="args::core::hashed_sparse_set::contains__hashed_sparse_set:value_type:CRC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a12ecfac9a06ca109dc0bd9aca932f330"></span>bool <code class="sig-name descname">contains</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set">hashed_sparse_set</a>&lt;<a class="reference internal" href="#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set::value_type">value_type</a>&gt; &amp;<em>other</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_set8containsERK17hashed_sparse_setI10value_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks if all items in <a class="reference internal" href="#classargs_1_1core_1_1hashed__sparse__set"><span class="std std-ref">hashed_sparse_set</span></a> are inside this set as well. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if all items in other are also in this <a class="reference internal" href="#classargs_1_1core_1_1hashed__sparse__set"><span class="std std-ref">hashed_sparse_set</span></a>, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">other</span></code>: Other <a class="reference internal" href="#classargs_1_1core_1_1hashed__sparse__set"><span class="std std-ref">hashed_sparse_set</span></a> to check against. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_set6equalsE20self_const_reference">
+<span id="_CPPv3NK4args4core17hashed_sparse_set6equalsE20self_const_reference"></span><span id="_CPPv2NK4args4core17hashed_sparse_set6equalsE20self_const_reference"></span><span id="args::core::hashed_sparse_set::equals__self_const_referenceC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1aa83d2e9a7820e8e28d184d9328434d0e"></span>bool <code class="sig-name descname">equals</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set20self_const_referenceE" title="args::core::hashed_sparse_set::self_const_reference">self_const_reference</a> <em>other</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_set6equalsE20self_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks if all items are the same for both hashed_sparse_sets. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if both sets are the same size and contain the same items, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">other</span></code>: Other <a class="reference internal" href="#classargs_1_1core_1_1hashed__sparse__set"><span class="std std-ref">hashed_sparse_set</span></a> to check against. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_seteqE20self_const_reference">
+<span id="_CPPv3NK4args4core17hashed_sparse_seteqE20self_const_reference"></span><span id="_CPPv2NK4args4core17hashed_sparse_seteqE20self_const_reference"></span><span id="args::core::hashed_sparse_set::eq-operator__self_const_referenceC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a77e49a7b4ca8d1c117a8ab81fef38acf"></span>bool <code class="sig-name descname">operator==</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set20self_const_referenceE" title="args::core::hashed_sparse_set::self_const_reference">self_const_reference</a> <em>other</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_seteqE20self_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks if all items are the same for both hashed_sparse_sets. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if both sets are the same size and contain the same items, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">other</span></code>: Other <a class="reference internal" href="#classargs_1_1core_1_1hashed__sparse__set"><span class="std std-ref">hashed_sparse_set</span></a> to check against. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17hashed_sparse_set4findE21value_const_reference">
+<span id="_CPPv3N4args4core17hashed_sparse_set4findE21value_const_reference"></span><span id="_CPPv2N4args4core17hashed_sparse_set4findE21value_const_reference"></span><span id="args::core::hashed_sparse_set::find__value_const_reference"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1ac605e42f653653383620dd4d8e0ecf7b"></span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set8iteratorE" title="args::core::hashed_sparse_set::iterator">iterator</a> <code class="sig-name descname">find</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set21value_const_referenceE" title="args::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set4findE21value_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Finds the iterator of a value using std::find. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>Iterator to the value if found, otherwise end. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to find. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_set4findE21value_const_reference">
+<span id="_CPPv3NK4args4core17hashed_sparse_set4findE21value_const_reference"></span><span id="_CPPv2NK4args4core17hashed_sparse_set4findE21value_const_reference"></span><span id="args::core::hashed_sparse_set::find__value_const_referenceC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1adfc00bc1ada23d285e6dce917cfdb302"></span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set14const_iteratorE" title="args::core::hashed_sparse_set::const_iterator">const_iterator</a> <code class="sig-name descname">find</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set21value_const_referenceE" title="args::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <em>val</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_set4findE21value_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Finds the iterator of a value using std::find. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>Iterator to the value if found, otherwise end. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to find. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17hashed_sparse_set6insertE21value_const_reference">
+<span id="_CPPv3N4args4core17hashed_sparse_set6insertE21value_const_reference"></span><span id="_CPPv2N4args4core17hashed_sparse_set6insertE21value_const_reference"></span><span id="args::core::hashed_sparse_set::insert__value_const_reference"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1aee1b6c0781210ae7be268c3e8d3034ba"></span>std::pair&lt;<a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set8iteratorE" title="args::core::hashed_sparse_set::iterator">iterator</a>, bool&gt; <code class="sig-name descname">insert</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set21value_const_referenceE" title="args::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set6insertE21value_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Inserts new item into <a class="reference internal" href="#classargs_1_1core_1_1hashed__sparse__set"><span class="std std-ref">hashed_sparse_set</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>std::pair&lt;iterator, bool&gt; Iterator at the location of the val and true if succeeded, end and false if it didn’t succeed. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to insert. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17hashed_sparse_set6insertERR10value_type">
+<span id="_CPPv3N4args4core17hashed_sparse_set6insertERR10value_type"></span><span id="_CPPv2N4args4core17hashed_sparse_set6insertERR10value_type"></span><span id="args::core::hashed_sparse_set::insert__value_typeRR"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a7dc629e02dfc6492cfc557bbb394468a"></span>std::pair&lt;<a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set8iteratorE" title="args::core::hashed_sparse_set::iterator">iterator</a>, bool&gt; <code class="sig-name descname">insert</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set::value_type">value_type</a> &amp;&amp;<em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set6insertERR10value_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Inserts new item into <a class="reference internal" href="#classargs_1_1core_1_1hashed__sparse__set"><span class="std std-ref">hashed_sparse_set</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>std::pair&lt;iterator, bool&gt; Iterator at the location of the val and true if succeeded, end and false if it didn’t succeed. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to insert. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4IDpEN4args4core17hashed_sparse_set7emplaceENSt4pairI8iteratorbEEDpRR9Arguments">
+<span id="_CPPv3IDpEN4args4core17hashed_sparse_set7emplaceEDpRR9Arguments"></span><span id="_CPPv2IDpEN4args4core17hashed_sparse_set7emplaceEDpRR9Arguments"></span>template&lt;typename ...<code class="sig-name descname">Arguments</code>&gt;<br /><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a04b6676aa8d38c2fd7326b6b59d220a9"></span>std::pair&lt;<a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set8iteratorE" title="args::core::hashed_sparse_set::iterator">iterator</a>, bool&gt; <code class="sig-name descname">emplace</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4IDpEN4args4core17hashed_sparse_set7emplaceENSt4pairI8iteratorbEEDpRR9Arguments" title="args::core::hashed_sparse_set::emplace::Arguments">Arguments</a>&amp;&amp;... <em>arguments</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN4args4core17hashed_sparse_set7emplaceENSt4pairI8iteratorbEEDpRR9Arguments" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct item in place. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">arguments</span></code>: Arguments to pass to the item constructor. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17hashed_sparse_setixERR9size_type">
+<span id="_CPPv3N4args4core17hashed_sparse_setixERR9size_type"></span><span id="_CPPv2N4args4core17hashed_sparse_setixERR9size_type"></span><span id="args::core::hashed_sparse_set::subscript-operator__size_typeRR"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1acbdf1d7571fd709be2e459bc26bf964a"></span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set15value_referenceE" title="args::core::hashed_sparse_set::value_reference">value_reference</a> <code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> &amp;&amp;<em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_setixERR9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns item from dense container. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: Index of item in dense container. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17hashed_sparse_setixERK9size_type">
+<span id="_CPPv3N4args4core17hashed_sparse_setixERK9size_type"></span><span id="_CPPv2N4args4core17hashed_sparse_setixERK9size_type"></span><span id="args::core::hashed_sparse_set::subscript-operator__size_typeCR"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a613b903ca8565db7e71e99a831d98571"></span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set15value_referenceE" title="args::core::hashed_sparse_set::value_reference">value_reference</a> <code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> &amp;<em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_setixERK9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns item from dense container. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: Index of item in dense container. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_setixERR9size_type">
+<span id="_CPPv3NK4args4core17hashed_sparse_setixERR9size_type"></span><span id="_CPPv2NK4args4core17hashed_sparse_setixERR9size_type"></span><span id="args::core::hashed_sparse_set::subscript-operator__size_typeRRC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a9662e25853e31850a80c87e961c561ba"></span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set21value_const_referenceE" title="args::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> &amp;&amp;<em>index</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_setixERR9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns item from dense container. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: Index of item in dense container. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core17hashed_sparse_setixERK9size_type">
+<span id="_CPPv3NK4args4core17hashed_sparse_setixERK9size_type"></span><span id="_CPPv2NK4args4core17hashed_sparse_setixERK9size_type"></span><span id="args::core::hashed_sparse_set::subscript-operator__size_typeCRC"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1ade6fda6c4689da9195721547d04e709e"></span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set21value_const_referenceE" title="args::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> &amp;<em>index</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core17hashed_sparse_setixERK9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns item from dense container. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: Index of item in dense container. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core17hashed_sparse_set5eraseE21value_const_reference">
+<span id="_CPPv3N4args4core17hashed_sparse_set5eraseE21value_const_reference"></span><span id="_CPPv2N4args4core17hashed_sparse_set5eraseE21value_const_reference"></span><span id="args::core::hashed_sparse_set::erase__value_const_reference"></span><span class="target" id="classargs_1_1core_1_1hashed__sparse__set_1a346a66c566d9cf15768fb53cceeb41a7"></span><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <code class="sig-name descname">erase</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core17hashed_sparse_set21value_const_referenceE" title="args::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core17hashed_sparse_set5eraseE21value_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Erases item from <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#classargs_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value that needs to be erased. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Template Class hashed_sparse_set</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">ARGS API</a><ul>
+      <li>Previous: <a href="classargs_1_1core_1_1filesystem_1_1_test.html" title="previous chapter">Class Test</a></li>
+      <li>Next: <a href="classargs_1_1core_1_1invalid__component__error.html" title="next chapter">Class invalid_component_error</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classargs_1_1core_1_1hashed__sparse__set.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

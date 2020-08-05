@@ -1,0 +1,16 @@
+.. _exhale_class_structargs_1_1core_1_1async_1_1readonly__rw__spinlock:
+
+Class readonly_rw_spinlock
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_readonly_rw_spinlock.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::async::readonly_rw_spinlock
+   :members:
+   :protected-members:
+   :undoc-members:

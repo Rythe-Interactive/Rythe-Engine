@@ -1,0 +1,48 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_time_clock.hpp:
+
+Program Listing for File clock.hpp
+==================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_time_clock.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/time/clock.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <chrono>
+   #include <core/time/time_span.hpp>
+   #include <core/types/primitives.hpp>
+   
+   namespace args::core::time
+   {
+       template<typename time_type = time64>
+       class clock
+       {
+       private:
+           std::chrono::time_point<std::chrono::high_resolution_clock> start;
+       public:
+           void Start() {
+               start = std::chrono::high_resolution_clock::now();
+           }
+   
+           time_span<time_type> GetElapsedTime()
+           {
+               return time_span<time_type>(std::chrono::high_resolution_clock::now() - start);
+           }
+   
+           time_span<time_type> End()
+           {
+               return time_span<time_type>(std::chrono::high_resolution_clock::now() - start);
+           }
+   
+           time_span<time_type> Restart()
+           {
+               auto startTime = std::chrono::high_resolution_clock::now();
+               time_span<time_type> time(startTime - start);
+               start = startTime;
+               return time;
+           }
+       };
+   }

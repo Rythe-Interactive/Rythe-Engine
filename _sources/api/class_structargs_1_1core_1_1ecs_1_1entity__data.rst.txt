@@ -1,0 +1,16 @@
+.. _exhale_class_structargs_1_1core_1_1ecs_1_1entity__data:
+
+Class entity_data
+=================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecsregistry.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::ecs::entity_data
+   :members:
+   :protected-members:
+   :undoc-members:

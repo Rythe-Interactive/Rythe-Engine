@@ -1,0 +1,56 @@
+
+.. _namespace_args__core__ecs:
+
+Namespace args::core::ecs
+=========================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+Detailed Description
+--------------------
+
+Tododocumentation. 
+ 
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1component__container`
+
+- :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1component__container__base`
+
+- :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1component__handle`
+
+- :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1component__handle__base`
+
+- :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1_ecs_registry`
+
+- :ref:`exhale_class_structargs_1_1core_1_1ecs_1_1entity__data`
+
+- :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1entity__handle`
+
+- :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1_entity_query`
+
+- :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1_query_registry`
+
+- :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1rw__component__buffer`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_namespaceargs_1_1core_1_1ecs_1ad125b4fe2ab031b4a43b9ab5e54fbeb9`
+
+- :ref:`exhale_variable_namespaceargs_1_1core_1_1ecs_1a55d81d7290c164ff4dbb4ddff1af3b62`
+
+- :ref:`exhale_variable_namespaceargs_1_1core_1_1ecs_1aa908909eb9338c3b0f3749e7d4cd0c1c`

@@ -21,7 +21,7 @@
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
   </head><body>
   
@@ -58,6 +58,8 @@
         <span class="k">virtual</span> <span class="n">priority_type</span> <span class="n">priority</span><span class="p">()</span> <span class="n">ARGS_IMPURE_RETURN</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
         <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">init</span><span class="p">()</span> <span class="n">ARGS_PURE</span><span class="p">;</span>
+
+        <span class="k">virtual</span> <span class="o">~</span><span class="n">Module</span><span class="p">()</span> <span class="n">ARGS_IMPURE</span><span class="p">;</span>
     <span class="p">};</span>
 
     <span class="k">struct</span> <span class="n">module_initializer_t</span><span class="p">{};</span>

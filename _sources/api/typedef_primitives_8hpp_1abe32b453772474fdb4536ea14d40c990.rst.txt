@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990:
+
+Typedef args::core::id_type
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::id_type

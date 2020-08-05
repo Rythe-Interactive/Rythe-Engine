@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1core_1_1hashed__sparse__set:
+
+Template Class hashed_sparse_set
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_hashed_sparse_set.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::hashed_sparse_set
+   :members:
+   :protected-members:
+   :undoc-members:

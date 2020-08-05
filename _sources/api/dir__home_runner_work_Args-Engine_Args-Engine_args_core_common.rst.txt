@@ -16,5 +16,6 @@ Files
 -----
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_common.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp`
 
 

@@ -1,0 +1,16 @@
+.. _exhale_class_structargs_1_1core_1_1async_1_1transferable__atomic:
+
+Template Class transferable_atomic
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_transferable_atomic.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::async::transferable_atomic
+   :members:
+   :protected-members:
+   :undoc-members:

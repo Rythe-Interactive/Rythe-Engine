@@ -21,7 +21,7 @@
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
   </head><body>
   
@@ -50,12 +50,60 @@
 <span class="cp">#include</span> <span class="cpf">&lt;cstdint&gt; //linux std::(u)int(8-64)_t</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;cstddef&gt; //msc   std::(u)int(8-64)_t</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;vector&gt;  //      std::vector&lt;T&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span>
 <span class="p">{</span>
-    <span class="k">using</span> <span class="n">priority_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">int8_t</span><span class="p">;</span>
-    <span class="k">using</span> <span class="n">byte_t</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="p">;</span>
-    <span class="k">using</span> <span class="n">byte_vec</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">byte_t</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">uint8</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">uint16</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint16_t</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">uint32</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">uint64</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">uint_max</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">uintmax_t</span><span class="p">;</span>
+
+    <span class="k">using</span> <span class="n">int8</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">int8_t</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">int16</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">int16_t</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">int32</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">int32_t</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">int64</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">int_max</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">intmax_t</span><span class="p">;</span>
+
+    <span class="k">using</span> <span class="n">size_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">index_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="p">;</span>
+
+    <span class="k">using</span> <span class="n">time32</span> <span class="o">=</span> <span class="kt">float</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">time64</span> <span class="o">=</span> <span class="kt">double</span><span class="p">;</span>
+
+    <span class="k">using</span> <span class="n">cstring</span> <span class="o">=</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span><span class="p">;</span>
+
+    <span class="k">using</span> <span class="n">uint</span> <span class="o">=</span> <span class="n">uint32</span><span class="p">;</span>
+
+    <span class="k">using</span> <span class="n">byte</span> <span class="o">=</span> <span class="n">uint8</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">byte_vec</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">byte</span><span class="o">&gt;</span><span class="p">;</span>
+
+    <span class="k">using</span> <span class="n">priority_type</span> <span class="o">=</span> <span class="n">uint8</span><span class="p">;</span>
+
+    <span class="k">using</span> <span class="n">id_type</span> <span class="o">=</span> <span class="n">uint_max</span><span class="p">;</span>
+<span class="cp">#define invalid_id 0</span>
+
+    <span class="k">using</span> <span class="n">hours</span> <span class="o">=</span> <span class="n">time32</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">minutes</span> <span class="o">=</span> <span class="n">time32</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">seconds</span> <span class="o">=</span> <span class="n">time32</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">milli_seconds</span> <span class="o">=</span> <span class="n">time32</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">micro_seconds</span> <span class="o">=</span> <span class="n">time32</span><span class="p">;</span>
+
+    <span class="k">using</span> <span class="n">fast_time</span> <span class="o">=</span> <span class="n">time32</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">fast_hours</span> <span class="o">=</span> <span class="n">fast_time</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">fast_minutes</span> <span class="o">=</span> <span class="n">fast_time</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">fast_seconds</span> <span class="o">=</span> <span class="n">fast_time</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">fast_milli_seconds</span> <span class="o">=</span> <span class="n">fast_time</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">fast_micro_seconds</span> <span class="o">=</span> <span class="n">fast_time</span><span class="p">;</span>
+
+    <span class="k">using</span> <span class="n">precise_time</span> <span class="o">=</span> <span class="n">time64</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">precise_hours</span> <span class="o">=</span> <span class="n">precise_time</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">precise_minutes</span> <span class="o">=</span> <span class="n">precise_time</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">precise_seconds</span> <span class="o">=</span> <span class="n">precise_time</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">precise_milli_seconds</span> <span class="o">=</span> <span class="n">precise_time</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">precise_micro_seconds</span> <span class="o">=</span> <span class="n">precise_time</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>

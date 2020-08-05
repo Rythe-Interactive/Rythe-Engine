@@ -8,6 +8,10 @@ File types.hpp
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
+
+Single include header for all type defines related headers. 
+ 
+
 .. contents:: Contents
    :local:
    :backlinks: none
@@ -33,6 +37,8 @@ Includes
 
 - ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`)
 
+- ``core/types/type_util.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_type_util.hpp`)
+
 
 
 Included By
@@ -40,6 +46,14 @@ Included By
 
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_component_container.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecsregistry.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entity_handle.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_rw_component_buffer.hpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp`
 

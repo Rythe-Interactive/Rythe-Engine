@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1ab58d823602f81347c5f8f7c918dfa30f:
+
+Define args_unknown_component_error
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: args_unknown_component_error

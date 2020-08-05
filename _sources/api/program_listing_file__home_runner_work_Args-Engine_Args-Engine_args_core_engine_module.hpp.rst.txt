@@ -22,6 +22,8 @@ Program Listing for File module.hpp
            virtual priority_type priority() ARGS_IMPURE_RETURN(0);
    
            virtual void init() ARGS_PURE;
+   
+           virtual ~Module() ARGS_IMPURE;
        };
    
        struct module_initializer_t{};

@@ -1,0 +1,71 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_queryregistry.hpp:
+
+Program Listing for File queryregistry.hpp
+==========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_queryregistry.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/ecs/queryregistry.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/async/async.hpp>
+   #include <core/containers/containers.hpp>
+   #include <core/types/primitives.hpp>
+   #include <core/ecs/entityquery.hpp>
+   
+   namespace args::core::ecs
+   {
+       class ARGS_API EcsRegistry;
+       class ARGS_API entity_handle;
+   
+       class ARGS_API QueryRegistry
+       {
+       private:
+           EcsRegistry& m_registry;
+           async::readonly_rw_spinlock m_entityLock;
+           sparse_map<id_type, sparse_map<id_type, entity_handle>> m_entityLists;
+           async::readonly_rw_spinlock m_referenceLock;
+           sparse_map<id_type, size_type> m_references;
+           async::readonly_rw_spinlock m_componentLock;
+           sparse_map<id_type, hashed_sparse_set<id_type>> m_componentTypes;
+   
+       public:
+           QueryRegistry(EcsRegistry& registry) : m_registry(registry), m_entityLists(), m_componentTypes() {}
+   
+           void addComponentType(id_type queryId, id_type componentTypeId);
+   
+           void removeComponentType(id_type queryId, id_type componentTypeId);
+   
+           void evaluateEntityChange(id_type entityId, id_type componentTypeId, bool removal);
+   
+           void markEntityDestruction(id_type entityId);
+   
+           id_type getQueryId(const hashed_sparse_set<id_type>& componentTypes);
+   
+           template<typename... component_types>
+           EntityQuery createQuery()
+           {
+               hashed_sparse_set<id_type> componentTypeIds;
+               (componentTypeIds.insert(typeHash<component_types>()), ...);
+               return createQuery(componentTypeIds);
+           }
+           
+           EntityQuery createQuery(const hashed_sparse_set<id_type>& componentTypes);
+   
+           const hashed_sparse_set<id_type>& getComponentTypes(id_type queryId);
+   
+           id_type addQuery(const hashed_sparse_set<id_type>& componentTypes);
+   
+           const sparse_map<id_type, entity_handle>& getEntities(id_type queryId);
+   
+           void addReference(id_type queryId);
+   
+           void removeReference(id_type queryId);
+   
+           size_type getReferenceCount(id_type queryId);
+       };
+   
+   }

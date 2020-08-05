@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1a213e14e493fe49b666a493b09a203c03:
+
+Define args_invalid_creation_error
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: args_invalid_creation_error

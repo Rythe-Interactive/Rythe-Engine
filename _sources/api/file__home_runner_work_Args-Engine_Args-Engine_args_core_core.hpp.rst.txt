@@ -8,6 +8,10 @@ File core.hpp
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
+
+Single include header for Args-Core. 
+ 
+
 .. contents:: Contents
    :local:
    :backlinks: none
@@ -29,13 +33,21 @@ Includes
 --------
 
 
-- ``core/engine/engine.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp`)
+- ``core/async/async.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_async.hpp`)
 
-- ``core/engine/module.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp`)
+- ``core/common/common.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_common.hpp`)
+
+- ``core/containers/containers.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_containers.hpp`)
+
+- ``core/ecs/ecs.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecs.hpp`)
+
+- ``core/engine/engine.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp`)
 
 - ``core/entry/entry_point.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_entry_entry_point.hpp`)
 
 - ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
+
+- ``core/time/time.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_time_time.hpp`)
 
 - ``core/types/types.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp`)
 
@@ -52,4 +64,11 @@ Included By
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_source.cpp`
 
 
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args`
 

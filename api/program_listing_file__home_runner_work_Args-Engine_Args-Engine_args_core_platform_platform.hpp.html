@@ -21,7 +21,7 @@
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
   </head><body>
   
@@ -50,9 +50,51 @@
 
 <span class="cp">#define ARGS_CPP17V 201703L</span>
 
-<span class="cp">#if defined(_MSC_VER)</span>
- <span class="cp">#define ARGS_WINDOWS</span>
+<span class="cp">#if defined(_DEBUG) || defined(DEBUG)</span>
+
+    <span class="cp">#define ARGS_DEBUG</span>
+<span class="cp">#else</span>
+
+    <span class="cp">#define ARGS_RELEASE</span>
 <span class="cp">#endif</span>
+
+<span class="cp">#if (!defined(ARGS_LOW_POWER) &amp;&amp; !defined(ARGS_HIGH_PERFORMANCE))</span>
+
+    <span class="cp">#define ARGS_HIGH_PERFORMANCE</span>
+<span class="cp">#endif</span>
+
+
+<span class="cp">#if defined(_MSC_VER)</span>
+
+    <span class="cp">#define ARGS_WINDOWS</span>
+
+    <span class="cp">#define WIN32_LEAN_AND_MEAN</span>
+    <span class="cp">#define VC_EXTRALEAN</span>
+    <span class="cp">#define NOMINMAX</span>
+    <span class="cp">#include</span> <span class="cpf">&lt;Windows.h&gt;</span><span class="cp"></span>
+<span class="cp">#elif defined(__linux__)</span>
+
+    <span class="cp">#define ARGS_LINUX</span>
+
+    <span class="cp">#include</span> <span class="cpf">&lt;sys/resource.h&gt;</span><span class="cp"></span>
+    <span class="cp">#include</span> <span class="cpf">&lt;sched.h&gt;</span><span class="cp"></span>
+    <span class="cp">#include</span> <span class="cpf">&lt;errno.h&gt;</span><span class="cp"></span>
+<span class="cp">#endif</span>
+
+<span class="cp">#ifndef __FUNC__</span>
+    <span class="cp">#define __FUNC__ __func__</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#ifndef __FULL_FUNC__</span>
+    <span class="cp">#if defined(ARGS_WINDOWS)</span>
+        <span class="cp">#define __FULL_FUNC__ __FUNCSIG__</span>
+    <span class="cp">#elif defined(__linux__)</span>
+        <span class="cp">#define __FULL_FUNC__ __PRETTY_FUNCTION__</span>
+    <span class="cp">#else</span>
+        <span class="cp">#define __FULL_FUNC__ __func__</span>
+    <span class="cp">#endif</span>
+<span class="cp">#endif</span>
+
 
 <span class="cp">#if (defined(ARGS_WINDOWS) &amp;&amp; !defined(ARGS_WINDOWS_USE_CDECL)) || defined (DOXY_INCLUDE)</span>
 

@@ -1,0 +1,84 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entity_handle.hpp:
+
+File entity_handle.hpp
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_ecs>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/ecs``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/ecs/entity_handle.hpp``)
+------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entity_handle.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/containers/hashed_sparse_set.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_hashed_sparse_set.hpp`)
+
+- ``core/containers/sparse_map.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_sparse_map.hpp`)
+
+- ``core/containers/sparse_set.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_sparse_set.hpp`)
+
+- ``core/types/types.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_component_handle.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecs.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecsregistry.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entity_handle.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entityquery.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_queryregistry.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_rw_component_buffer.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__ecs`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1component__handle`
+
+- :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1entity__handle`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_namespaceargs_1_1core_1_1ecs_1ad125b4fe2ab031b4a43b9ab5e54fbeb9`
+

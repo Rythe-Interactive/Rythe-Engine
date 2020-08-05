@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1core_1_1time_1_1clock:
+
+Template Class clock
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_time_clock.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::time::clock
+   :members:
+   :protected-members:
+   :undoc-members:

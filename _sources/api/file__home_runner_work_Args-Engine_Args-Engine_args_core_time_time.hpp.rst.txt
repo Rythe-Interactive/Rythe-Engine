@@ -1,0 +1,43 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_time_time.hpp:
+
+File time.hpp
+=============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_time>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/time``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/time/time.hpp``)
+----------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_time_time.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/time/time_span.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_time_time_span.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`
+
+
+

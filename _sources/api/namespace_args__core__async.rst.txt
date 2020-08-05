@@ -1,0 +1,50 @@
+
+.. _namespace_args__core__async:
+
+Namespace args::core::async
+===========================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1core_1_1async_1_1mixed__multiguard`
+
+- :ref:`exhale_class_classargs_1_1core_1_1async_1_1readonly__guard`
+
+- :ref:`exhale_class_classargs_1_1core_1_1async_1_1readonly__multiguard`
+
+- :ref:`exhale_class_structargs_1_1core_1_1async_1_1readonly__rw__spinlock`
+
+- :ref:`exhale_class_classargs_1_1core_1_1async_1_1readwrite__guard`
+
+- :ref:`exhale_class_classargs_1_1core_1_1async_1_1readwrite__multiguard`
+
+- :ref:`exhale_class_structargs_1_1core_1_1async_1_1transferable__atomic`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_readonly__rw__spinlock_8hpp_1a8a92b7284527cbc4fa7de3ec628f025b`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_readonly__rw__spinlock_8hpp_1a16318197043589d16101d4f5d6966a05`
+
+- :ref:`exhale_function_readonly__rw__spinlock_8hpp_1a3228900989b9c52a50d4b24fefbdb112`
+
+- :ref:`exhale_function_readonly__rw__spinlock_8hpp_1ada9b38708b0f1d5f40cbf4b98777bba1`

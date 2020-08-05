@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1ac1048044786cee86a2a19ccf8c349374:
+
+Define args_invalid_type_error
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: args_invalid_type_error

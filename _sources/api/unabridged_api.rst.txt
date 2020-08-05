@@ -19,6 +19,16 @@ Namespaces
 .. toctree::
    :maxdepth: 5
 
+   namespace_args__core__async.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_args__core__ecs.rst
+
+.. toctree::
+   :maxdepth: 5
+
    namespace_args__core__filesystem.rst
 
 .. toctree::
@@ -30,6 +40,11 @@ Namespaces
    :maxdepth: 5
 
    namespace_args__core__filesystem__literals.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_args__core__time.rst
 
 .. toctree::
    :maxdepth: 5
@@ -73,7 +88,127 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   structsah.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1async_1_1mixed__multiguard.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1async_1_1readonly__guard.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1async_1_1readonly__multiguard.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   class_structargs_1_1core_1_1async_1_1readonly__rw__spinlock.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1async_1_1readwrite__guard.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1async_1_1readwrite__multiguard.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   class_structargs_1_1core_1_1async_1_1transferable__atomic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1atomic__sparse__map.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1component__destroyed__error.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1component__exists__error.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1ecs_1_1component__container.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1ecs_1_1component__container__base.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1ecs_1_1component__handle.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1ecs_1_1component__handle__base.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1ecs_1_1_ecs_registry.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   class_structargs_1_1core_1_1ecs_1_1entity__data.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1ecs_1_1entity__handle.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1ecs_1_1_entity_query.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1ecs_1_1_query_registry.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1ecs_1_1rw__component__buffer.rst
+
+.. toctree::
+   :maxdepth: 5
+
    classargs_1_1core_1_1_engine.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1entity__exists__error.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1entity__not__found__error.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1exception.rst
 
 .. toctree::
    :maxdepth: 5
@@ -88,7 +223,67 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   classargs_1_1core_1_1hashed__sparse__set.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1invalid__component__error.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1invalid__creation__error.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1invalid__entity__error.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1invalid__fetch__error.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1invalid__type__error.rst
+
+.. toctree::
+   :maxdepth: 5
+
    classargs_1_1core_1_1_module.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1sparse__map.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1sparse__set.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1time_1_1clock.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1time_1_1time__span.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1unknown__component__error.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1unknown__system__error.rst
 
 .. toctree::
    :maxdepth: 5
@@ -105,9 +300,33 @@ Classes and Structs
 
    class_test_module.rst
 
+Enums
+*****
+
+
+.. toctree::
+   :maxdepth: 5
+
+   enum_readonly__rw__spinlock_8hpp_1a8a92b7284527cbc4fa7de3ec628f025b.rst
+
 Functions
 *********
 
+
+.. toctree::
+   :maxdepth: 5
+
+   function_readonly__rw__spinlock_8hpp_1a16318197043589d16101d4f5d6966a05.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_readonly__rw__spinlock_8hpp_1a3228900989b9c52a50d4b24fefbdb112.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_readonly__rw__spinlock_8hpp_1ada9b38708b0f1d5f40cbf4b98777bba1.rst
 
 .. toctree::
    :maxdepth: 5
@@ -132,6 +351,46 @@ Functions
 .. toctree::
    :maxdepth: 5
 
+   function_type__util_8hpp_1aef7996e5e7a874b93744d7f2b583ac7b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_type__util_8cpp_1a1fddf5a1042b1af111b6612d5d4f4212.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_type__util_8cpp_1a39b444e3272640c9234774551a99f73c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_type__util_8hpp_1a94f51b351b18c1a001e896051db58df0.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_type__util_8hpp_1ac6c3c3b37be719660aa73b807138ed6e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_type__util_8hpp_1a2fb26749a4216416b95b3c4c2728e8af.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_type__util_8hpp_1ad7362bf35fb316b385b1ac036b5bb0c7.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_type__util_8hpp_1a3475a4b696d8b0cd4c6c8e362e589182.rst
+
+.. toctree::
+   :maxdepth: 5
+
    function_editor__application_2source_8cpp_1a04bb44c36f4522f9fd14688e61b88cbb.rst
 
 .. toctree::
@@ -147,16 +406,45 @@ Functions
 .. toctree::
    :maxdepth: 5
 
-   function_test__game_2source_8cpp_1a6c6ba51358fbc13457bf87952deb9d2c.rst
+   function_test__game_2source_8cpp_1a874b533d3542430762e35db3a4ce130c.rst
 
 .. toctree::
    :maxdepth: 5
 
    function_entry__point_8hpp_1a7ce8e0555bec33efde98e832731cbde5.rst
 
+Variables
+*********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_namespaceargs_1_1core_1_1ecs_1ad125b4fe2ab031b4a43b9ab5e54fbeb9.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_namespaceargs_1_1core_1_1ecs_1a55d81d7290c164ff4dbb4ddff1af3b62.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_namespaceargs_1_1core_1_1ecs_1aa908909eb9338c3b0f3749e7d4cd0c1c.rst
+
 Defines
 *******
 
+
+.. toctree::
+   :maxdepth: 5
+
+   define_platform_8hpp_1a143f9211b91cb551daf5cfb28e321016.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_platform_8hpp_1a4e14578a41d311e647f3aee2b628d3dd.rst
 
 .. toctree::
    :maxdepth: 5
@@ -186,7 +474,47 @@ Defines
 .. toctree::
    :maxdepth: 5
 
+   define_exception_8hpp_1a0758287c088e52fc9eefe5857e87329d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1a0d4b4d6cf4ece68dbdbd79c3a3aeba7f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1ab5da40982cd82d75942a7c594fd35534.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1ae549c8d41325304e736a2006c43d978c.rst
+
+.. toctree::
+   :maxdepth: 5
+
    define_platform_8hpp_1a1b615ef40773fc553b3a95738b5db51c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1ae7f7ba549b9d985b4b5e692171598dc9.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1a30069b1678f469fab6611c82a908a025.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1a99ed7a8116b33b9b43f6d576b1c0335b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1aa18eb0c89bcab1f8472a9d33acbbfea1.rst
 
 .. toctree::
    :maxdepth: 5
@@ -196,7 +524,22 @@ Defines
 .. toctree::
    :maxdepth: 5
 
+   define_exception_8hpp_1a4753bc327f2fff096c75c71683f90a45.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1adfa4353a0546be1645288589b158bfe1.rst
+
+.. toctree::
+   :maxdepth: 5
+
    define_platform_8hpp_1a1e0b40c3b72e9524a534435c3a0060d3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_platform_8hpp_1a04efd3cad5a7b07a0ca2301ee05ac2fa.rst
 
 .. toctree::
    :maxdepth: 5
@@ -216,7 +559,92 @@ Defines
 .. toctree::
    :maxdepth: 5
 
+   define_exception_8hpp_1a7b9dc62a7135dee15051bdc21a0e2f6e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1a4c5af09e576a83d1bced28025b4be3f5.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1a213e14e493fe49b666a493b09a203c03.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1af441d28df0919263a53b9825b468ff8f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1ab45c8cf61124fdcd929062f17e76be40.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1a98cbf3841bb71acdce376a3993003e43.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1a67c3eebc296b56469a11d351ed2eb993.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1ad97c47a3dfd90cd787941044cd674bbe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1ac1048044786cee86a2a19ccf8c349374.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1a45092663abfa0940732561b7f9d3595e.rst
+
+.. toctree::
+   :maxdepth: 5
+
    define_platform_8hpp_1a1db9851589b1e9ba81b655bc10b65ee1.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_platform_8hpp_1a8c9ad10a246e4631453782d9de1a9712.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1ab58d823602f81347c5f8f7c918dfa30f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1a067afcc975328f2c5cbbc17607e02e9d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1a47bdf9df4043bab578ae49c8b738e9d7.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_exception_8hpp_1a4aab9787a2f2c16512bed29063d60e35.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_common_8hpp_1ac6f96dc5c866e957c959c68549a9c140.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_primitives_8hpp_1a8989d6cd4cbbb9a9e0b1e241736281b7.rst
 
 .. toctree::
    :maxdepth: 5
@@ -230,12 +658,62 @@ Typedefs
 .. toctree::
    :maxdepth: 5
 
-   typedef_primitives_8hpp_1a5ee2a837b5b4206516d9c25f47ce9617.rst
+   typedef_primitives_8hpp_1ad35a77c7c53f7774b26618ecb37281f2.rst
 
 .. toctree::
    :maxdepth: 5
 
-   typedef_primitives_8hpp_1a12e23453aaa673f201e897cd71648906.rst
+   typedef_primitives_8hpp_1a499c96eef2823c2ad4423a1cf0c1f62a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a971227bd505340c1fb73ac555d4854ff.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a243ed343aba7cf939aa40e91fcae73c3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a0891ce448359efbafc56e7e8aa2f1d0e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1ae133bffacf9f39b4ada2d27fd5e73955.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1afa6a1cb7c41c24553e53a346f080857e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1af93cf6299626a96a04256ed2c957f3be.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1ac2938f14768cce2c0f6f3fe356c836cd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a489be0bfbc3e5e214e9cd33f48b9bb2a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1aefda0de29329a08c620282a1120def17.rst
 
 .. toctree::
    :maxdepth: 5
@@ -245,4 +723,124 @@ Typedefs
 .. toctree::
    :maxdepth: 5
 
-   typedef_primitives_8hpp_1a65ef5c440ea9b6a32d70756da8a59657.rst
+   typedef_primitives_8hpp_1aea9f904738454c177b9802d43907294d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1af3e62306bf4fbd670393a6174b4dcf4d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a015152265883d8cc9abe8394457c239a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1ac353ce22487ad444d8405f29319087cc.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1ac2a4518a9e734f76388df4aec79f5896.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1af29faba20a717f181dea5316b5e573bd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a7e7989158e3f5551487d4564de3442e1.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a018b5226200ec32520c7d731ca7f362c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1ab3cd2fb0f5d09f53a6bcefc9fc5985ad.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1aa05d65fd9c5dcbbeede0ec6bef907af9.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a4651816dc71267039cb03fe17c6a9a2b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a6152e57c9af8e83b4b382c10585df50c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1acc970cef6932b9619eff7fedf66e2c14.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1ac6e55aeb6d87dd00fe5952867365482c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1adf8bc508be564617f950b6fca775448b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a244950b14caebb4494908187f772f387.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a1532e11d77e59b9a27280fb25df70c59.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1abd017e294de864865eb447d4dd203100.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a0501886f6a032eb2337c27d14e472874.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a226f62138abe024425ef58633a5bad70.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a9d8d8bc0747bdede18c3858c4afa7d03.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a9a7bcdd323a70fdcc94e4dbeb4f5120a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a9ebc6f98af0ff2e5d9b15902525adffe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a39809ad7e5d007ca9eb005dd9d42c747.rst

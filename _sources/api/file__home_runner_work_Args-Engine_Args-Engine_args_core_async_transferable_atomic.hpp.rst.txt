@@ -1,0 +1,65 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_async_transferable_atomic.hpp:
+
+File transferable_atomic.hpp
+============================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_async>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/async``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/async/transferable_atomic.hpp``)
+--------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_async_transferable_atomic.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``atomic`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_atomic_sparse_map.hpp`)
+
+- ``core/async/readonly_rw_spinlock.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_readonly_rw_spinlock.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_async.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_atomic_sparse_map.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_component_container.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_rw_component_buffer.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__async`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_structargs_1_1core_1_1async_1_1transferable__atomic`
+

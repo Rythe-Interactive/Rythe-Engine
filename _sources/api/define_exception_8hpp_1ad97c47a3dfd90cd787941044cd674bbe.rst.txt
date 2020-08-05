@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1ad97c47a3dfd90cd787941044cd674bbe:
+
+Define args_invalid_fetch_msg
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: args_invalid_fetch_msg

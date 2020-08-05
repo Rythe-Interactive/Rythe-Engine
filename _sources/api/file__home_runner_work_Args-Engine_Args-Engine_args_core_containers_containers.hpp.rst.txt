@@ -1,0 +1,53 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_containers.hpp:
+
+File containers.hpp
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_containers>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/containers``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/containers/containers.hpp``)
+----------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_containers.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/containers/atomic_sparse_map.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_atomic_sparse_map.hpp`)
+
+- ``core/containers/hashed_sparse_set.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_hashed_sparse_set.hpp`)
+
+- ``core/containers/sparse_map.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_sparse_map.hpp`)
+
+- ``core/containers/sparse_set.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_sparse_set.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecsregistry.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_queryregistry.hpp`
+
+
+

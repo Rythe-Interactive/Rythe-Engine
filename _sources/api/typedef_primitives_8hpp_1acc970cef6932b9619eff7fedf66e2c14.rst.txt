@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1acc970cef6932b9619eff7fedf66e2c14:
+
+Typedef args::core::precise_seconds
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::precise_seconds

@@ -1,0 +1,13 @@
+.. _exhale_function_readonly__rw__spinlock_8hpp_1a3228900989b9c52a50d4b24fefbdb112:
+
+Template Function args::core::async::readonly_multiguard
+========================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_readonly_rw_spinlock.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::async::readonly_multiguard(types...)

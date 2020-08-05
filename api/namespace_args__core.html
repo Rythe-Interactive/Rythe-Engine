@@ -18,12 +18,12 @@
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Namespace args::core::filesystem" href="namespace_args__core__filesystem.html" />
+    <link rel="next" title="Namespace args::core::async" href="namespace_args__core__async.html" />
     <link rel="prev" title="Namespace args" href="namespace_args.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
   </head><body>
   
@@ -36,7 +36,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="namespace_args__core__filesystem.html" title="Namespace args::core::filesystem"
+          <a href="namespace_args__core__async.html" title="Namespace args::core::async"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="namespace_args.html" title="Namespace args"
@@ -59,30 +59,97 @@
 <ul class="simple">
 <li><p><a class="reference internal" href="#namespaces" id="id2">Namespaces</a></p></li>
 <li><p><a class="reference internal" href="#classes" id="id3">Classes</a></p></li>
-<li><p><a class="reference internal" href="#typedefs" id="id4">Typedefs</a></p></li>
+<li><p><a class="reference internal" href="#functions" id="id4">Functions</a></p></li>
+<li><p><a class="reference internal" href="#typedefs" id="id5">Typedefs</a></p></li>
 </ul>
 </div>
 <div class="section" id="namespaces">
 <h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
+<li><p><a class="reference internal" href="namespace_args__core__async.html#namespace-args-core-async"><span class="std std-ref">Namespace args::core::async</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_args__core__ecs.html#namespace-args-core-ecs"><span class="std std-ref">Namespace args::core::ecs</span></a></p></li>
 <li><p><a class="reference internal" href="namespace_args__core__filesystem.html#namespace-args-core-filesystem"><span class="std std-ref">Namespace args::core::filesystem</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_args__core__time.html#namespace-args-core-time"><span class="std std-ref">Namespace args::core::time</span></a></p></li>
 </ul>
 </div>
 <div class="section" id="classes">
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="structargs_1_1core_1_1module__initializer__t.html#exhale-struct-structargs-1-1core-1-1module-initializer-t"><span class="std std-ref">Struct module_initializer_t</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1core_1_1atomic__sparse__map.html#exhale-class-classargs-1-1core-1-1atomic-sparse-map"><span class="std std-ref">Template Class atomic_sparse_map</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1core_1_1component__destroyed__error.html#exhale-class-classargs-1-1core-1-1component-destroyed-error"><span class="std std-ref">Class component_destroyed_error</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1core_1_1component__exists__error.html#exhale-class-classargs-1-1core-1-1component-exists-error"><span class="std std-ref">Class component_exists_error</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1core_1_1_engine.html#exhale-class-classargs-1-1core-1-1-engine"><span class="std std-ref">Class Engine</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1core_1_1entity__exists__error.html#exhale-class-classargs-1-1core-1-1entity-exists-error"><span class="std std-ref">Class entity_exists_error</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1core_1_1entity__not__found__error.html#exhale-class-classargs-1-1core-1-1entity-not-found-error"><span class="std std-ref">Class entity_not_found_error</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1core_1_1exception.html#exhale-class-classargs-1-1core-1-1exception"><span class="std std-ref">Class exception</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1core_1_1hashed__sparse__set.html#exhale-class-classargs-1-1core-1-1hashed-sparse-set"><span class="std std-ref">Template Class hashed_sparse_set</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1core_1_1invalid__component__error.html#exhale-class-classargs-1-1core-1-1invalid-component-error"><span class="std std-ref">Class invalid_component_error</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1core_1_1invalid__creation__error.html#exhale-class-classargs-1-1core-1-1invalid-creation-error"><span class="std std-ref">Class invalid_creation_error</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1core_1_1invalid__entity__error.html#exhale-class-classargs-1-1core-1-1invalid-entity-error"><span class="std std-ref">Class invalid_entity_error</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1core_1_1invalid__fetch__error.html#exhale-class-classargs-1-1core-1-1invalid-fetch-error"><span class="std std-ref">Class invalid_fetch_error</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1core_1_1invalid__type__error.html#exhale-class-classargs-1-1core-1-1invalid-type-error"><span class="std std-ref">Class invalid_type_error</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1core_1_1_module.html#exhale-class-classargs-1-1core-1-1-module"><span class="std std-ref">Class Module</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#exhale-class-classargs-1-1core-1-1sparse-map"><span class="std std-ref">Template Class sparse_map</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1core_1_1sparse__set.html#exhale-class-classargs-1-1core-1-1sparse-set"><span class="std std-ref">Template Class sparse_set</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1core_1_1unknown__component__error.html#exhale-class-classargs-1-1core-1-1unknown-component-error"><span class="std std-ref">Class unknown_component_error</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1core_1_1unknown__system__error.html#exhale-class-classargs-1-1core-1-1unknown-system-error"><span class="std std-ref">Class unknown_system_error</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="function_type__util_8hpp_1aef7996e5e7a874b93744d7f2b583ac7b.html#exhale-function-type-util-8hpp-1aef7996e5e7a874b93744d7f2b583ac7b"><span class="std std-ref">Template Function args::core::force_value_cast</span></a></p></li>
+<li><p><a class="reference internal" href="function_type__util_8cpp_1a39b444e3272640c9234774551a99f73c.html#exhale-function-type-util-8cpp-1a39b444e3272640c9234774551a99f73c"><span class="std std-ref">Function args::core::nameHash(std::string)</span></a></p></li>
+<li><p><a class="reference internal" href="function_type__util_8hpp_1a94f51b351b18c1a001e896051db58df0.html#exhale-function-type-util-8hpp-1a94f51b351b18c1a001e896051db58df0"><span class="std std-ref">Template Function args::core::nameHash(const char(&amp;))</span></a></p></li>
+<li><p><a class="reference internal" href="function_type__util_8cpp_1a1fddf5a1042b1af111b6612d5d4f4212.html#exhale-function-type-util-8cpp-1a1fddf5a1042b1af111b6612d5d4f4212"><span class="std std-ref">Function args::core::nameHash(cstring)</span></a></p></li>
+<li><p><a class="reference internal" href="function_type__util_8hpp_1ac6c3c3b37be719660aa73b807138ed6e.html#exhale-function-type-util-8hpp-1ac6c3c3b37be719660aa73b807138ed6e"><span class="std std-ref">Template Function args::core::typeHash()</span></a></p></li>
+<li><p><a class="reference internal" href="function_type__util_8hpp_1a2fb26749a4216416b95b3c4c2728e8af.html#exhale-function-type-util-8hpp-1a2fb26749a4216416b95b3c4c2728e8af"><span class="std std-ref">Template Function args::core::typeHash(T)</span></a></p></li>
+<li><p><a class="reference internal" href="function_type__util_8hpp_1a3475a4b696d8b0cd4c6c8e362e589182.html#exhale-function-type-util-8hpp-1a3475a4b696d8b0cd4c6c8e362e589182"><span class="std std-ref">Template Function args::core::typeName(T)</span></a></p></li>
+<li><p><a class="reference internal" href="function_type__util_8hpp_1ad7362bf35fb316b385b1ac036b5bb0c7.html#exhale-function-type-util-8hpp-1ad7362bf35fb316b385b1ac036b5bb0c7"><span class="std std-ref">Template Function args::core::typeName()</span></a></p></li>
 </ul>
 </div>
 <div class="section" id="typedefs">
 <h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a5ee2a837b5b4206516d9c25f47ce9617.html#exhale-typedef-primitives-8hpp-1a5ee2a837b5b4206516d9c25f47ce9617"><span class="std std-ref">Typedef args::core::byte_t</span></a></p></li>
-<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a12e23453aaa673f201e897cd71648906.html#exhale-typedef-primitives-8hpp-1a12e23453aaa673f201e897cd71648906"><span class="std std-ref">Typedef args::core::byte_vec</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1ad35a77c7c53f7774b26618ecb37281f2.html#exhale-typedef-primitives-8hpp-1ad35a77c7c53f7774b26618ecb37281f2"><span class="std std-ref">Typedef args::core::byte</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a499c96eef2823c2ad4423a1cf0c1f62a.html#exhale-typedef-primitives-8hpp-1a499c96eef2823c2ad4423a1cf0c1f62a"><span class="std std-ref">Typedef args::core::byte_vec</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a971227bd505340c1fb73ac555d4854ff.html#exhale-typedef-primitives-8hpp-1a971227bd505340c1fb73ac555d4854ff"><span class="std std-ref">Typedef args::core::cstring</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a243ed343aba7cf939aa40e91fcae73c3.html#exhale-typedef-primitives-8hpp-1a243ed343aba7cf939aa40e91fcae73c3"><span class="std std-ref">Typedef args::core::fast_hours</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a0891ce448359efbafc56e7e8aa2f1d0e.html#exhale-typedef-primitives-8hpp-1a0891ce448359efbafc56e7e8aa2f1d0e"><span class="std std-ref">Typedef args::core::fast_micro_seconds</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1ae133bffacf9f39b4ada2d27fd5e73955.html#exhale-typedef-primitives-8hpp-1ae133bffacf9f39b4ada2d27fd5e73955"><span class="std std-ref">Typedef args::core::fast_milli_seconds</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1afa6a1cb7c41c24553e53a346f080857e.html#exhale-typedef-primitives-8hpp-1afa6a1cb7c41c24553e53a346f080857e"><span class="std std-ref">Typedef args::core::fast_minutes</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1af93cf6299626a96a04256ed2c957f3be.html#exhale-typedef-primitives-8hpp-1af93cf6299626a96a04256ed2c957f3be"><span class="std std-ref">Typedef args::core::fast_seconds</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1ac2938f14768cce2c0f6f3fe356c836cd.html#exhale-typedef-primitives-8hpp-1ac2938f14768cce2c0f6f3fe356c836cd"><span class="std std-ref">Typedef args::core::fast_time</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a489be0bfbc3e5e214e9cd33f48b9bb2a.html#exhale-typedef-primitives-8hpp-1a489be0bfbc3e5e214e9cd33f48b9bb2a"><span class="std std-ref">Typedef args::core::hours</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#exhale-typedef-primitives-8hpp-1abe32b453772474fdb4536ea14d40c990"><span class="std std-ref">Typedef args::core::id_type</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1aefda0de29329a08c620282a1120def17.html#exhale-typedef-primitives-8hpp-1aefda0de29329a08c620282a1120def17"><span class="std std-ref">Typedef args::core::index_type</span></a></p></li>
 <li><p><a class="reference internal" href="typedef_meta_8hpp_1a91a5094436ccecc924bd45dd02437003.html#exhale-typedef-meta-8hpp-1a91a5094436ccecc924bd45dd02437003"><span class="std std-ref">Typedef args::core::inherits_from</span></a></p></li>
-<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a65ef5c440ea9b6a32d70756da8a59657.html#exhale-typedef-primitives-8hpp-1a65ef5c440ea9b6a32d70756da8a59657"><span class="std std-ref">Typedef args::core::priority_type</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1aea9f904738454c177b9802d43907294d.html#exhale-typedef-primitives-8hpp-1aea9f904738454c177b9802d43907294d"><span class="std std-ref">Typedef args::core::int16</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1af3e62306bf4fbd670393a6174b4dcf4d.html#exhale-typedef-primitives-8hpp-1af3e62306bf4fbd670393a6174b4dcf4d"><span class="std std-ref">Typedef args::core::int32</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a015152265883d8cc9abe8394457c239a.html#exhale-typedef-primitives-8hpp-1a015152265883d8cc9abe8394457c239a"><span class="std std-ref">Typedef args::core::int64</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1ac353ce22487ad444d8405f29319087cc.html#exhale-typedef-primitives-8hpp-1ac353ce22487ad444d8405f29319087cc"><span class="std std-ref">Typedef args::core::int8</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1ac2a4518a9e734f76388df4aec79f5896.html#exhale-typedef-primitives-8hpp-1ac2a4518a9e734f76388df4aec79f5896"><span class="std std-ref">Typedef args::core::int_max</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1af29faba20a717f181dea5316b5e573bd.html#exhale-typedef-primitives-8hpp-1af29faba20a717f181dea5316b5e573bd"><span class="std std-ref">Typedef args::core::micro_seconds</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a7e7989158e3f5551487d4564de3442e1.html#exhale-typedef-primitives-8hpp-1a7e7989158e3f5551487d4564de3442e1"><span class="std std-ref">Typedef args::core::milli_seconds</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a018b5226200ec32520c7d731ca7f362c.html#exhale-typedef-primitives-8hpp-1a018b5226200ec32520c7d731ca7f362c"><span class="std std-ref">Typedef args::core::minutes</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1ab3cd2fb0f5d09f53a6bcefc9fc5985ad.html#exhale-typedef-primitives-8hpp-1ab3cd2fb0f5d09f53a6bcefc9fc5985ad"><span class="std std-ref">Typedef args::core::precise_hours</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1aa05d65fd9c5dcbbeede0ec6bef907af9.html#exhale-typedef-primitives-8hpp-1aa05d65fd9c5dcbbeede0ec6bef907af9"><span class="std std-ref">Typedef args::core::precise_micro_seconds</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a4651816dc71267039cb03fe17c6a9a2b.html#exhale-typedef-primitives-8hpp-1a4651816dc71267039cb03fe17c6a9a2b"><span class="std std-ref">Typedef args::core::precise_milli_seconds</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a6152e57c9af8e83b4b382c10585df50c.html#exhale-typedef-primitives-8hpp-1a6152e57c9af8e83b4b382c10585df50c"><span class="std std-ref">Typedef args::core::precise_minutes</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1acc970cef6932b9619eff7fedf66e2c14.html#exhale-typedef-primitives-8hpp-1acc970cef6932b9619eff7fedf66e2c14"><span class="std std-ref">Typedef args::core::precise_seconds</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1ac6e55aeb6d87dd00fe5952867365482c.html#exhale-typedef-primitives-8hpp-1ac6e55aeb6d87dd00fe5952867365482c"><span class="std std-ref">Typedef args::core::precise_time</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1adf8bc508be564617f950b6fca775448b.html#exhale-typedef-primitives-8hpp-1adf8bc508be564617f950b6fca775448b"><span class="std std-ref">Typedef args::core::priority_type</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a244950b14caebb4494908187f772f387.html#exhale-typedef-primitives-8hpp-1a244950b14caebb4494908187f772f387"><span class="std std-ref">Typedef args::core::seconds</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#exhale-typedef-primitives-8hpp-1a8cf827f509094ee682c30662176bd3b3"><span class="std std-ref">Typedef args::core::size_type</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a1532e11d77e59b9a27280fb25df70c59.html#exhale-typedef-primitives-8hpp-1a1532e11d77e59b9a27280fb25df70c59"><span class="std std-ref">Typedef args::core::time32</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1abd017e294de864865eb447d4dd203100.html#exhale-typedef-primitives-8hpp-1abd017e294de864865eb447d4dd203100"><span class="std std-ref">Typedef args::core::time64</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a0501886f6a032eb2337c27d14e472874.html#exhale-typedef-primitives-8hpp-1a0501886f6a032eb2337c27d14e472874"><span class="std std-ref">Typedef args::core::uint</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a226f62138abe024425ef58633a5bad70.html#exhale-typedef-primitives-8hpp-1a226f62138abe024425ef58633a5bad70"><span class="std std-ref">Typedef args::core::uint16</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a9d8d8bc0747bdede18c3858c4afa7d03.html#exhale-typedef-primitives-8hpp-1a9d8d8bc0747bdede18c3858c4afa7d03"><span class="std std-ref">Typedef args::core::uint32</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a9a7bcdd323a70fdcc94e4dbeb4f5120a.html#exhale-typedef-primitives-8hpp-1a9a7bcdd323a70fdcc94e4dbeb4f5120a"><span class="std std-ref">Typedef args::core::uint64</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a9ebc6f98af0ff2e5d9b15902525adffe.html#exhale-typedef-primitives-8hpp-1a9ebc6f98af0ff2e5d9b15902525adffe"><span class="std std-ref">Typedef args::core::uint8</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_primitives_8hpp_1a39809ad7e5d007ca9eb005dd9d42c747.html#exhale-typedef-primitives-8hpp-1a39809ad7e5d007ca9eb005dd9d42c747"><span class="std std-ref">Typedef args::core::uint_max</span></a></p></li>
 </ul>
 </div>
 </div>
@@ -99,6 +166,7 @@
 <li><a class="reference internal" href="#">Namespace args::core</a><ul>
 <li><a class="reference internal" href="#namespaces">Namespaces</a></li>
 <li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
 <li><a class="reference internal" href="#typedefs">Typedefs</a></li>
 </ul>
 </li>
@@ -108,7 +176,7 @@
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">ARGS API</a><ul>
       <li>Previous: <a href="namespace_args.html" title="previous chapter">Namespace args</a></li>
-      <li>Next: <a href="namespace_args__core__filesystem.html" title="next chapter">Namespace args::core::filesystem</a></li>
+      <li>Next: <a href="namespace_args__core__async.html" title="next chapter">Namespace args::core::async</a></li>
   </ul></li>
   </ul></li>
 </ul>

@@ -1,0 +1,530 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class entity_handle &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class EntityQuery" href="classargs_1_1core_1_1ecs_1_1_entity_query.html" />
+    <link rel="prev" title="Class entity_data" href="class_structargs_1_1core_1_1ecs_1_1entity__data.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classargs_1_1core_1_1ecs_1_1_entity_query.html" title="Class EntityQuery"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="class_structargs_1_1core_1_1ecs_1_1entity__data.html" title="Class entity_data"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class entity_handle</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-entity-handle">
+<span id="exhale-class-classargs-1-1core-1-1ecs-1-1entity-handle"></span><h1>Class entity_handle<a class="headerlink" href="#class-entity-handle" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entity_handle.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-ecs-entity-handle-hpp"><span class="std std-ref">File entity_handle.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N4args4core3ecs13entity_handleE">
+<span id="_CPPv3N4args4core3ecs13entity_handleE"></span><span id="_CPPv2N4args4core3ecs13entity_handleE"></span><span id="args::core::ecs::entity_handle"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle"></span><em class="property">class </em><code class="sig-prename descclassname">args::core::ecs<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">entity_handle</code><a class="headerlink" href="#_CPPv4N4args4core3ecs13entity_handleE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Serializable handle for executing operations on entities. This class only stores a reference to the registry and the id of the entity. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core3ecs13entity_handle13entity_handleE7id_typeP11EcsRegistry">
+<span id="_CPPv3N4args4core3ecs13entity_handle13entity_handleE7id_typeP11EcsRegistry"></span><span id="_CPPv2N4args4core3ecs13entity_handle13entity_handleE7id_typeP11EcsRegistry"></span><span id="args::core::ecs::entity_handle::entity_handle__id_type.EcsRegistryP"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1aaec62512c9c30f9d6a13d08d33dc30ad"></span><code class="sig-name descname">entity_handle</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a> <em>id</em>, <a class="reference internal" href="classargs_1_1core_1_1ecs_1_1_ecs_registry.html#_CPPv4N4args4core3ecs11EcsRegistryE" title="args::core::ecs::EcsRegistry">EcsRegistry</a> *<em>registry</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs13entity_handle13entity_handleE7id_typeP11EcsRegistry" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Main constructor for constructing a valid entity handle. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core3ecs13entity_handle13entity_handleEv">
+<span id="_CPPv3N4args4core3ecs13entity_handle13entity_handleEv"></span><span id="_CPPv2N4args4core3ecs13entity_handle13entity_handleEv"></span><span id="args::core::ecs::entity_handle::entity_handle"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1a62f60cb586f772caa267299433596c3c"></span><code class="sig-name descname">entity_handle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs13entity_handle13entity_handleEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor for constructing an invalid entity handle. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Should only be used to create temporary handles. Allows use of entity handle in containers together with copy constructor. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core3ecs13entity_handle13entity_handleERK13entity_handle">
+<span id="_CPPv3N4args4core3ecs13entity_handle13entity_handleERK13entity_handle"></span><span id="_CPPv2N4args4core3ecs13entity_handle13entity_handleERK13entity_handle"></span><span id="args::core::ecs::entity_handle::entity_handle__entity_handleCR"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1a828d05875d98e4d0f10b411e8be4760c"></span><code class="sig-name descname">entity_handle</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N4args4core3ecs13entity_handle13entity_handleERK13entity_handle" title="args::core::ecs::entity_handle::entity_handle">entity_handle</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs13entity_handle13entity_handleERK13entity_handle" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Copy constructor (DOES NOT CREATE NEW ENTITY, both handles will reference the same entity). </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Allows use of entity handle in containers together with default invalid entity constructor. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core3ecs13entity_handleaSERK13entity_handle">
+<span id="_CPPv3N4args4core3ecs13entity_handleaSERK13entity_handle"></span><span id="_CPPv2N4args4core3ecs13entity_handleaSERK13entity_handle"></span><span id="args::core::ecs::entity_handle::assign-operator__entity_handleCR"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1aef4b1d42aa6a8c123017d4c3abbc5489"></span><a class="reference internal" href="#_CPPv4N4args4core3ecs13entity_handleE" title="args::core::ecs::entity_handle">entity_handle</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N4args4core3ecs13entity_handleE" title="args::core::ecs::entity_handle">entity_handle</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs13entity_handleaSERK13entity_handle" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Copy assignment. Exists for the same reasons as the copy constructor. args::core::ecs::entity_handle::entity_handle(const args::core::ecs::entity&amp; other) </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core3ecs13entity_handle21component_compositionEv">
+<span id="_CPPv3NK4args4core3ecs13entity_handle21component_compositionEv"></span><span id="_CPPv2NK4args4core3ecs13entity_handle21component_compositionEv"></span><span id="args::core::ecs::entity_handle::component_compositionC"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1a4a901bd9fe7e5dce5e3ae849531ed050"></span><em class="property">const</em> <a class="reference internal" href="classargs_1_1core_1_1hashed__sparse__set.html#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set">hashed_sparse_set</a>&lt;<a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a>&gt; &amp;<code class="sig-name descname">component_composition</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core3ecs13entity_handle21component_compositionEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the type id’s of the components this entity contains. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="classargs_1_1core_1_1hashed__sparse__set.html#classargs_1_1core_1_1hashed__sparse__set"><span class="std std-ref">hashed_sparse_set&lt;id_type&gt;</span></a>&amp; Sparse map with component type id as both the key as well as the value. (behaves as <a class="reference internal" href="classargs_1_1core_1_1sparse__set.html#classargs_1_1core_1_1sparse__set"><span class="std std-ref">sparse_set</span></a> with hash table) </p>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">args_invalid_entity_error</span></code>: Thrown when handle’s registry reference is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_entity_not_found_error</span></code>: Thrown when handle’s id is invalid. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core3ecs13entity_handlecv7id_typeEv">
+<span id="_CPPv3NK4args4core3ecs13entity_handlecv7id_typeEv"></span><span id="_CPPv2NK4args4core3ecs13entity_handlecv7id_typeEv"></span><span id="args::core::ecs::entity_handle::castto-id_type-operatorC"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1a21f30409e59b65f63135b5727ffa4414"></span><code class="sig-name descname">operator id_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core3ecs13entity_handlecv7id_typeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Cast to id_type returns the id of the entity this handle references. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>id_type If the handle is valid it will return the entity id, otherwise invalid_id. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core3ecs13entity_handle6get_idEv">
+<span id="_CPPv3NK4args4core3ecs13entity_handle6get_idEv"></span><span id="_CPPv2NK4args4core3ecs13entity_handle6get_idEv"></span><span id="args::core::ecs::entity_handle::get_idC"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1abf5b3b45ac95a9dc6dffba68071388d6"></span><a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a> <code class="sig-name descname">get_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core3ecs13entity_handle6get_idEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the id of the entity this handle references. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>id_type If the handle is valid it will return the entity id, otherwise invalid_id. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core3ecs13entity_handle5beginEv">
+<span id="_CPPv3NK4args4core3ecs13entity_handle5beginEv"></span><span id="_CPPv2NK4args4core3ecs13entity_handle5beginEv"></span><span id="args::core::ecs::entity_handle::beginC"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1acefde2c90ed7e24356f3aa1ca99efb68"></span><a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#_CPPv4I00IDpE0IDpE0EN4args4core10sparse_mapE" title="args::core::sparse_map">sparse_map</a>&lt;<a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a>, <a class="reference internal" href="#_CPPv4N4args4core3ecs13entity_handleE" title="args::core::ecs::entity_handle">entity_handle</a>&gt;::const_iterator <code class="sig-name descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core3ecs13entity_handle5beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Const iterator to first child entity. (dereferences to entity handle) </p>
+<p><dl class="simple">
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">args_invalid_entity_error</span></code>: Thrown when handle’s registry reference is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_entity_not_found_error</span></code>: Thrown when handle’s id is invalid. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core3ecs13entity_handle3endEv">
+<span id="_CPPv3NK4args4core3ecs13entity_handle3endEv"></span><span id="_CPPv2NK4args4core3ecs13entity_handle3endEv"></span><span id="args::core::ecs::entity_handle::endC"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1aee69673c7c066d60525623183eb4c6c7"></span><a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#_CPPv4I00IDpE0IDpE0EN4args4core10sparse_mapE" title="args::core::sparse_map">sparse_map</a>&lt;<a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a>, <a class="reference internal" href="#_CPPv4N4args4core3ecs13entity_handleE" title="args::core::ecs::entity_handle">entity_handle</a>&gt;::const_iterator <code class="sig-name descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core3ecs13entity_handle3endEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Const iterator to last child entity. (dereferences to entity handle) </p>
+<p><dl class="simple">
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">args_invalid_entity_error</span></code>: Thrown when handle’s registry reference is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_entity_not_found_error</span></code>: Thrown when handle’s id is invalid. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core3ecs13entity_handle10get_parentEv">
+<span id="_CPPv3NK4args4core3ecs13entity_handle10get_parentEv"></span><span id="_CPPv2NK4args4core3ecs13entity_handle10get_parentEv"></span><span id="args::core::ecs::entity_handle::get_parentC"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1af650c92d770869d212900002af32fe7a"></span><a class="reference internal" href="#_CPPv4N4args4core3ecs13entity_handleE" title="args::core::ecs::entity_handle">entity_handle</a> <code class="sig-name descname">get_parent</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core3ecs13entity_handle10get_parentEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns entity handle to parent entity. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="#classargs_1_1core_1_1ecs_1_1entity__handle"><span class="std std-ref">entity_handle</span></a> Entity handle that either points to the parent entity or is invalid if the entity doesn’t have a parent. </p>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">args_invalid_entity_error</span></code>: Thrown when handle’s registry reference is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_entity_not_found_error</span></code>: Thrown when handle’s id is invalid. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core3ecs13entity_handle10set_parentE7id_type">
+<span id="_CPPv3NK4args4core3ecs13entity_handle10set_parentE7id_type"></span><span id="_CPPv2NK4args4core3ecs13entity_handle10set_parentE7id_type"></span><span id="args::core::ecs::entity_handle::set_parent__id_typeC"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1a474b82550090e33e8bd7d4903d9a1ca7"></span>void <code class="sig-name descname">set_parent</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a> <em>newParent</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core3ecs13entity_handle10set_parentE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set parent of entity. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Will remove as child from parent. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">newParent</span></code>: Id of the entity you wish to set as the parent. (invalid_id if you wish to remove parent) </p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">args_invalid_entity_error</span></code>: Thrown when handle’s registry reference is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_entity_not_found_error</span></code>: Thrown when handle’s id is invalid. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core3ecs13entity_handleixE10index_type">
+<span id="_CPPv3NK4args4core3ecs13entity_handleixE10index_type"></span><span id="_CPPv2NK4args4core3ecs13entity_handleixE10index_type"></span><span id="args::core::ecs::entity_handle::subscript-operator__index_typeC"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1ac2038da41749b27d7adb5f113918b32e"></span><a class="reference internal" href="#_CPPv4N4args4core3ecs13entity_handleE" title="args::core::ecs::entity_handle">entity_handle</a> <code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1aefda0de29329a08c620282a1120def17.html#_CPPv4N4args4core10index_typeE" title="args::core::index_type">index_type</a> <em>index</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core3ecs13entity_handleixE10index_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get child of the entity at a certain index. </p>
+<p><dl class="simple">
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::out_of_range</span></code>: Thrown when index is more than or equal to the child count. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_invalid_entity_error</span></code>: Thrown when handle’s registry reference is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_entity_not_found_error</span></code>: Thrown when handle’s id is invalid. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core3ecs13entity_handle9get_childE10index_type">
+<span id="_CPPv3NK4args4core3ecs13entity_handle9get_childE10index_type"></span><span id="_CPPv2NK4args4core3ecs13entity_handle9get_childE10index_type"></span><span id="args::core::ecs::entity_handle::get_child__index_typeC"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1a8d6a69933d35c21cd8b1c4ea8f1fc5d3"></span><a class="reference internal" href="#_CPPv4N4args4core3ecs13entity_handleE" title="args::core::ecs::entity_handle">entity_handle</a> <code class="sig-name descname">get_child</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1aefda0de29329a08c620282a1120def17.html#_CPPv4N4args4core10index_typeE" title="args::core::index_type">index_type</a> <em>index</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core3ecs13entity_handle9get_childE10index_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get child of the entity at a certain index. </p>
+<p><dl class="simple">
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">std::out_of_range</span></code>: Thrown when index is more than or equal to the child count. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_invalid_entity_error</span></code>: Thrown when handle’s registry reference is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_entity_not_found_error</span></code>: Thrown when handle’s id is invalid. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core3ecs13entity_handle11child_countEv">
+<span id="_CPPv3NK4args4core3ecs13entity_handle11child_countEv"></span><span id="_CPPv2NK4args4core3ecs13entity_handle11child_countEv"></span><span id="args::core::ecs::entity_handle::child_countC"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1a4dade3961ab50aef52e1566bcc7aba11"></span><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <code class="sig-name descname">child_count</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core3ecs13entity_handle11child_countEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get amount of children the referenced entity has. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>size_type </p>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">args_invalid_entity_error</span></code>: Thrown when handle’s registry reference is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_entity_not_found_error</span></code>: Thrown when handle’s id is invalid. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core3ecs13entity_handle9add_childE7id_type">
+<span id="_CPPv3NK4args4core3ecs13entity_handle9add_childE7id_type"></span><span id="_CPPv2NK4args4core3ecs13entity_handle9add_childE7id_type"></span><span id="args::core::ecs::entity_handle::add_child__id_typeC"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1a152cdbd63e0ddd6923cb51bcbefd3010"></span>void <code class="sig-name descname">add_child</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a> <em>childId</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core3ecs13entity_handle9add_childE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add child to entity. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Will change parent of the entity to add as child. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">childId</span></code>: Id of the entity you wish to add as a child. </p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">args_invalid_entity_error</span></code>: Thrown when handle’s registry reference is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_entity_not_found_error</span></code>: Thrown when handle’s id is invalid. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core3ecs13entity_handle12remove_childE7id_type">
+<span id="_CPPv3NK4args4core3ecs13entity_handle12remove_childE7id_type"></span><span id="_CPPv2NK4args4core3ecs13entity_handle12remove_childE7id_type"></span><span id="args::core::ecs::entity_handle::remove_child__id_typeC"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1ad2f1fdd8ed4fb9b30003c83f14df9c29"></span>void <code class="sig-name descname">remove_child</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a> <em>childId</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core3ecs13entity_handle12remove_childE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Remove child from entity. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Will remove parent of the entity to remove as child. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">childId</span></code>: Id of the entity you wish to remove as a child. </p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">args_invalid_entity_error</span></code>: Thrown when handle’s registry reference is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_entity_not_found_error</span></code>: Thrown when handle’s id is invalid. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0ENK4args4core3ecs13entity_handle13has_componentEbv">
+<span id="_CPPv3I0ENK4args4core3ecs13entity_handle13has_componentEv"></span><span id="_CPPv2I0ENK4args4core3ecs13entity_handle13has_componentEv"></span>template&lt;typename <code class="sig-name descname">component_type</code>&gt;<br /><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1a4056bc6ad208d66db9f599f593d5769f"></span>bool <code class="sig-name descname">has_component</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK4args4core3ecs13entity_handle13has_componentEbv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if entity contains a certain component. </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">component_type</span></code>: Type of component to check for. </p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">args_invalid_entity_error</span></code>: Thrown when handle’s registry reference is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_entity_not_found_error</span></code>: Thrown when handle’s id is invalid. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core3ecs13entity_handle13has_componentE7id_type">
+<span id="_CPPv3NK4args4core3ecs13entity_handle13has_componentE7id_type"></span><span id="_CPPv2NK4args4core3ecs13entity_handle13has_componentE7id_type"></span><span id="args::core::ecs::entity_handle::has_component__id_typeC"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1a893ee48e092736051c150e066d077113"></span>bool <code class="sig-name descname">has_component</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a> <em>componentTypeId</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core3ecs13entity_handle13has_componentE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if entity contains a certain component. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">componentTypeId</span></code>: Type id of component to check for. </p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">args_invalid_entity_error</span></code>: Thrown when handle’s registry reference is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_entity_not_found_error</span></code>: Thrown when handle’s id is invalid. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core3ecs13entity_handle13get_componentE7id_type">
+<span id="_CPPv3NK4args4core3ecs13entity_handle13get_componentE7id_type"></span><span id="_CPPv2NK4args4core3ecs13entity_handle13get_componentE7id_type"></span><span id="args::core::ecs::entity_handle::get_component__id_typeC"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1a6eddaf1290936e2bb62ee73d513b82db"></span><a class="reference internal" href="classargs_1_1core_1_1ecs_1_1component__handle__base.html#_CPPv4N4args4core3ecs21component_handle_baseE" title="args::core::ecs::component_handle_base">component_handle_base</a> <code class="sig-name descname">get_component</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a> <em>componentTypeId</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core3ecs13entity_handle13get_componentE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get component handle of a certain component. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="classargs_1_1core_1_1ecs_1_1component__handle__base.html#classargs_1_1core_1_1ecs_1_1component__handle__base"><span class="std std-ref">component_handle_base</span></a> Valid component handle if the entity has the component, invalid handle if the entity doesn’t have the component. </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p><a class="reference internal" href="classargs_1_1core_1_1ecs_1_1component__handle__base.html#classargs_1_1core_1_1ecs_1_1component__handle__base"><span class="std std-ref">component_handle_base</span></a> needs to be force_cast to component_handle&lt;T&gt; in order to be usable. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">componentTypeId</span></code>: Type id of component to fetch. </p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">args_invalid_entity_error</span></code>: Thrown when handle’s registry reference is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_entity_not_found_error</span></code>: Thrown when handle’s id is invalid. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0ENK4args4core3ecs13entity_handle13get_componentE16component_handleI14component_typeEv">
+<span id="_CPPv3I0ENK4args4core3ecs13entity_handle13get_componentEv"></span><span id="_CPPv2I0ENK4args4core3ecs13entity_handle13get_componentEv"></span>template&lt;typename <code class="sig-name descname">component_type</code>&gt;<br /><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1a64757107e07989379ac51a197f2bc9ce"></span><a class="reference internal" href="classargs_1_1core_1_1ecs_1_1component__handle.html#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle">component_handle</a>&lt;<a class="reference internal" href="#_CPPv4I0ENK4args4core3ecs13entity_handle13get_componentE16component_handleI14component_typeEv" title="args::core::ecs::entity_handle::get_component::component_type">component_type</a>&gt; <code class="sig-name descname">get_component</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK4args4core3ecs13entity_handle13get_componentE16component_handleI14component_typeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get component handle of a certain component. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>component_handle&lt;component_type&gt; Valid component handle if the entity has the component, invalid handle if the entity doesn’t have the component. </p>
+</dd>
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">component_type</span></code>: Type of component to fetch. </p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">args_invalid_entity_error</span></code>: Thrown when handle’s registry reference is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_entity_not_found_error</span></code>: Thrown when handle’s id is invalid. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core3ecs13entity_handle13add_componentE7id_type">
+<span id="_CPPv3NK4args4core3ecs13entity_handle13add_componentE7id_type"></span><span id="_CPPv2NK4args4core3ecs13entity_handle13add_componentE7id_type"></span><span id="args::core::ecs::entity_handle::add_component__id_typeC"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1acc0509ca426404d08bfd533d0b3eafb1"></span><a class="reference internal" href="classargs_1_1core_1_1ecs_1_1component__handle__base.html#_CPPv4N4args4core3ecs21component_handle_baseE" title="args::core::ecs::component_handle_base">component_handle_base</a> <code class="sig-name descname">add_component</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a> <em>componentTypeId</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core3ecs13entity_handle13add_componentE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add component to the entity. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="classargs_1_1core_1_1ecs_1_1component__handle__base.html#classargs_1_1core_1_1ecs_1_1component__handle__base"><span class="std std-ref">component_handle_base</span></a> Valid component handle base for the newly created component. </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p><a class="reference internal" href="classargs_1_1core_1_1ecs_1_1component__handle__base.html#classargs_1_1core_1_1ecs_1_1component__handle__base"><span class="std std-ref">component_handle_base</span></a> needs to be force_cast to component_handle&lt;T&gt; in order to be usable. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">componentTypeId</span></code>: Type id of component to add. </p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">args_invalid_entity_error</span></code>: Thrown when handle’s registry reference is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_entity_not_found_error</span></code>: Thrown when handle’s id is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_unknown_component_error</span></code>: Thrown when the component type is unknown. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0ENK4args4core3ecs13entity_handle13add_componentE16component_handleI14component_typeEv">
+<span id="_CPPv3I0ENK4args4core3ecs13entity_handle13add_componentEv"></span><span id="_CPPv2I0ENK4args4core3ecs13entity_handle13add_componentEv"></span>template&lt;typename <code class="sig-name descname">component_type</code>&gt;<br /><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1ac0f53fd32224eaea46061295b764d0a6"></span><a class="reference internal" href="classargs_1_1core_1_1ecs_1_1component__handle.html#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle">component_handle</a>&lt;<a class="reference internal" href="#_CPPv4I0ENK4args4core3ecs13entity_handle13add_componentE16component_handleI14component_typeEv" title="args::core::ecs::entity_handle::add_component::component_type">component_type</a>&gt; <code class="sig-name descname">add_component</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK4args4core3ecs13entity_handle13add_componentE16component_handleI14component_typeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add component to the entity. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>component_handle&lt;component_type&gt; Valid component handle for the newly created component. </p>
+</dd>
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">component_type</span></code>: Type of component to add. </p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">args_invalid_entity_error</span></code>: Thrown when handle’s registry reference is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_entity_not_found_error</span></code>: Thrown when handle’s id is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_unknown_component_error</span></code>: Thrown when the component type is unknown. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core3ecs13entity_handle16remove_componentE7id_type">
+<span id="_CPPv3NK4args4core3ecs13entity_handle16remove_componentE7id_type"></span><span id="_CPPv2NK4args4core3ecs13entity_handle16remove_componentE7id_type"></span><span id="args::core::ecs::entity_handle::remove_component__id_typeC"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1a3f17b818b343f43ada93a93ac16c6ef8"></span>void <code class="sig-name descname">remove_component</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a> <em>componentTypeId</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core3ecs13entity_handle16remove_componentE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Remove component from entity. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Nothing will happen if the entity doesn’t have this component. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">componentTypeId</span></code>: Type id of component to remove. </p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">args_invalid_entity_error</span></code>: Thrown when handle’s registry reference is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_entity_not_found_error</span></code>: Thrown when handle’s id is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_unknown_component_error</span></code>: Thrown when the component type is unknown. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0ENK4args4core3ecs13entity_handle16remove_componentEvv">
+<span id="_CPPv3I0ENK4args4core3ecs13entity_handle16remove_componentEv"></span><span id="_CPPv2I0ENK4args4core3ecs13entity_handle16remove_componentEv"></span>template&lt;typename <code class="sig-name descname">component_type</code>&gt;<br /><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1ae223bc9c425fe24d3ef42b9b0099793e"></span>void <code class="sig-name descname">remove_component</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK4args4core3ecs13entity_handle16remove_componentEvv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Remove component from entity. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Nothing will happen if the entity doesn’t have this component. </p>
+</dd>
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">component_type</span></code>: Type of component to remove. </p></li>
+</ul>
+</dd>
+<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">args_invalid_entity_error</span></code>: Thrown when handle’s registry reference is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_entity_not_found_error</span></code>: Thrown when handle’s id is invalid. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args_unknown_component_error</span></code>: Thrown when the component type is unknown. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core3ecs13entity_handle7destroyEb">
+<span id="_CPPv3NK4args4core3ecs13entity_handle7destroyEb"></span><span id="_CPPv2NK4args4core3ecs13entity_handle7destroyEb"></span><span id="args::core::ecs::entity_handle::destroy__bC"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1a6dcfeb38eb3f622d62a3baa4291d1300"></span>void <code class="sig-name descname">destroy</code><span class="sig-paren">(</span>bool <em>recurse</em> = true<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core3ecs13entity_handle7destroyEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Destroy this entity. Destroys entity and invalidates handle. (also destroys all of it’s components) </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">recurse</span></code>: Destroy all children and children of children as well? Default value is true. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core3ecs13entity_handle5validEv">
+<span id="_CPPv3NK4args4core3ecs13entity_handle5validEv"></span><span id="_CPPv2NK4args4core3ecs13entity_handle5validEv"></span><span id="args::core::ecs::entity_handle::validC"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1entity__handle_1ac5043ac65bb3078d1eb68c21448a6c6f"></span>bool <code class="sig-name descname">valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core3ecs13entity_handle5validEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check whether this entity handle is valid or not. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if the handle is pointing to valid entity and the registry reference is also valid. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class entity_handle</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">ARGS API</a><ul>
+      <li>Previous: <a href="class_structargs_1_1core_1_1ecs_1_1entity__data.html" title="previous chapter">Class entity_data</a></li>
+      <li>Next: <a href="classargs_1_1core_1_1ecs_1_1_entity_query.html" title="next chapter">Class EntityQuery</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classargs_1_1core_1_1ecs_1_1entity__handle.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

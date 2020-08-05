@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1core_1_1async_1_1readwrite__guard:
+
+Class readwrite_guard
+=====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_readonly_rw_spinlock.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::async::readwrite_guard
+   :members:
+   :protected-members:
+   :undoc-members:

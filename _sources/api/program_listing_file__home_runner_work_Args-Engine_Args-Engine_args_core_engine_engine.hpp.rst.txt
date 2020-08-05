@@ -47,5 +47,16 @@ Program Listing for File engine.hpp
            }
    
            void init();
+   
+           void run();
+   
+           ~Engine()
+           {
+               for (const auto& [priority, moduleList] : modules)
+                   for (auto* module : moduleList)
+                   {
+                       delete module;
+                   }
+           }
        };
    }

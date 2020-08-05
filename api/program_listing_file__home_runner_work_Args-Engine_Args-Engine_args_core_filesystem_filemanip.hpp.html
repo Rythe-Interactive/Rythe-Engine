@@ -21,7 +21,7 @@
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
   </head><body>
   
@@ -76,7 +76,7 @@
         <span class="n">fseek</span><span class="p">(</span><span class="n">file</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="mi">0L</span><span class="p">,</span><span class="n">SEEK_SET</span><span class="p">);</span>
 
         <span class="c1">//read file</span>
-        <span class="n">fread</span><span class="p">(</span><span class="n">container</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="k">sizeof</span><span class="p">(</span><span class="n">byte_t</span><span class="p">),</span><span class="n">container</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="n">file</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+        <span class="n">fread</span><span class="p">(</span><span class="n">container</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="k">sizeof</span><span class="p">(</span><span class="n">byte</span><span class="p">),</span><span class="n">container</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="n">file</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
 
         <span class="k">return</span> <span class="n">container</span><span class="p">;</span>
     <span class="p">}</span>
@@ -93,7 +93,7 @@
         <span class="n">assert_msg</span><span class="p">(</span><span class="s">&quot;could not open file&quot;</span><span class="p">,</span><span class="n">file</span><span class="p">);</span>
 
         <span class="c1">// read data</span>
-        <span class="n">fwrite</span><span class="p">(</span><span class="n">container</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="k">sizeof</span><span class="p">(</span><span class="n">byte_t</span><span class="p">),</span><span class="n">container</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="n">file</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+        <span class="n">fwrite</span><span class="p">(</span><span class="n">container</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="k">sizeof</span><span class="p">(</span><span class="n">byte</span><span class="p">),</span><span class="n">container</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="n">file</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
 
     <span class="p">}</span>
 

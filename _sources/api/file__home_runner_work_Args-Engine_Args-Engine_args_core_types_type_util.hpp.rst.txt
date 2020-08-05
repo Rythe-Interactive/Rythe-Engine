@@ -1,0 +1,75 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_types_type_util.hpp:
+
+File type_util.hpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_types>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/types``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/types/type_util.hpp``)
+----------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_types_type_util.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`)
+
+- ``typeinfo``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entityquery.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_type_util.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_type__util_8hpp_1aef7996e5e7a874b93744d7f2b583ac7b`
+
+- :ref:`exhale_function_type__util_8hpp_1a94f51b351b18c1a001e896051db58df0`
+
+- :ref:`exhale_function_type__util_8hpp_1ac6c3c3b37be719660aa73b807138ed6e`
+
+- :ref:`exhale_function_type__util_8hpp_1a2fb26749a4216416b95b3c4c2728e8af`
+
+- :ref:`exhale_function_type__util_8hpp_1a3475a4b696d8b0cd4c6c8e362e589182`
+
+- :ref:`exhale_function_type__util_8hpp_1ad7362bf35fb316b385b1ac036b5bb0c7`
+

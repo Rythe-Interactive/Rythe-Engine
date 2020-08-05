@@ -1,0 +1,80 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entityquery.hpp:
+
+File entityquery.hpp
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_ecs>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/ecs``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/ecs/entityquery.hpp``)
+----------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entityquery.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/containers/sparse_map.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_sparse_map.hpp`)
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`)
+
+- ``core/types/type_util.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_type_util.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecs.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecsregistry.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entityquery.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_queryregistry.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_queryregistry.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__ecs`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1_entity_query`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_namespaceargs_1_1core_1_1ecs_1a55d81d7290c164ff4dbb4ddff1af3b62`
+
+- :ref:`exhale_variable_namespaceargs_1_1core_1_1ecs_1aa908909eb9338c3b0f3749e7d4cd0c1c`
+

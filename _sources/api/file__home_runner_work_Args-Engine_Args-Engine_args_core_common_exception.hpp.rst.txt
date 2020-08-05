@@ -1,0 +1,140 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp:
+
+File exception.hpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_common>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/common``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/common/exception.hpp``)
+-----------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`)
+
+- ``exception`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_common.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_component_handle.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_rw_component_buffer.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1core_1_1component__destroyed__error`
+
+- :ref:`exhale_class_classargs_1_1core_1_1component__exists__error`
+
+- :ref:`exhale_class_classargs_1_1core_1_1entity__exists__error`
+
+- :ref:`exhale_class_classargs_1_1core_1_1entity__not__found__error`
+
+- :ref:`exhale_class_classargs_1_1core_1_1exception`
+
+- :ref:`exhale_class_classargs_1_1core_1_1invalid__component__error`
+
+- :ref:`exhale_class_classargs_1_1core_1_1invalid__creation__error`
+
+- :ref:`exhale_class_classargs_1_1core_1_1invalid__entity__error`
+
+- :ref:`exhale_class_classargs_1_1core_1_1invalid__fetch__error`
+
+- :ref:`exhale_class_classargs_1_1core_1_1invalid__type__error`
+
+- :ref:`exhale_class_classargs_1_1core_1_1unknown__component__error`
+
+- :ref:`exhale_class_classargs_1_1core_1_1unknown__system__error`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_exception_8hpp_1a0758287c088e52fc9eefe5857e87329d`
+
+- :ref:`exhale_define_exception_8hpp_1a0d4b4d6cf4ece68dbdbd79c3a3aeba7f`
+
+- :ref:`exhale_define_exception_8hpp_1ab5da40982cd82d75942a7c594fd35534`
+
+- :ref:`exhale_define_exception_8hpp_1ae549c8d41325304e736a2006c43d978c`
+
+- :ref:`exhale_define_exception_8hpp_1ae7f7ba549b9d985b4b5e692171598dc9`
+
+- :ref:`exhale_define_exception_8hpp_1a30069b1678f469fab6611c82a908a025`
+
+- :ref:`exhale_define_exception_8hpp_1a99ed7a8116b33b9b43f6d576b1c0335b`
+
+- :ref:`exhale_define_exception_8hpp_1aa18eb0c89bcab1f8472a9d33acbbfea1`
+
+- :ref:`exhale_define_exception_8hpp_1a4753bc327f2fff096c75c71683f90a45`
+
+- :ref:`exhale_define_exception_8hpp_1adfa4353a0546be1645288589b158bfe1`
+
+- :ref:`exhale_define_exception_8hpp_1a7b9dc62a7135dee15051bdc21a0e2f6e`
+
+- :ref:`exhale_define_exception_8hpp_1a4c5af09e576a83d1bced28025b4be3f5`
+
+- :ref:`exhale_define_exception_8hpp_1a213e14e493fe49b666a493b09a203c03`
+
+- :ref:`exhale_define_exception_8hpp_1af441d28df0919263a53b9825b468ff8f`
+
+- :ref:`exhale_define_exception_8hpp_1ab45c8cf61124fdcd929062f17e76be40`
+
+- :ref:`exhale_define_exception_8hpp_1a98cbf3841bb71acdce376a3993003e43`
+
+- :ref:`exhale_define_exception_8hpp_1a67c3eebc296b56469a11d351ed2eb993`
+
+- :ref:`exhale_define_exception_8hpp_1ad97c47a3dfd90cd787941044cd674bbe`
+
+- :ref:`exhale_define_exception_8hpp_1ac1048044786cee86a2a19ccf8c349374`
+
+- :ref:`exhale_define_exception_8hpp_1a45092663abfa0940732561b7f9d3595e`
+
+- :ref:`exhale_define_exception_8hpp_1ab58d823602f81347c5f8f7c918dfa30f`
+
+- :ref:`exhale_define_exception_8hpp_1a067afcc975328f2c5cbbc17607e02e9d`
+
+- :ref:`exhale_define_exception_8hpp_1a47bdf9df4043bab578ae49c8b738e9d7`
+
+- :ref:`exhale_define_exception_8hpp_1a4aab9787a2f2c16512bed29063d60e35`
+

@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1ab5da40982cd82d75942a7c594fd35534:
+
+Define args_component_exists_error
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: args_component_exists_error
