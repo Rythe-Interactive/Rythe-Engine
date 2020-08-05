@@ -14,8 +14,6 @@ namespace args::core::scheduling
 
 	void Scheduler::run()
 	{
-		m_syncLock.lock(async::write);
-
 		for (ProcessChain& chain : m_processChains)
 			chain.run();
 
@@ -43,55 +41,25 @@ namespace args::core::scheduling
 				m_localChain.runInCurrentThread();
 			}
 
-			bool sync;
-
+			if (m_syncLock.waiterCount() == m_processChains.size())
 			{
-				async::readonly_guard guard(m_requestLock);
-				sync = m_requestSync;
-			}
-
-			if (sync)
-			{
-				bool waiting = true;
-				while (waiting)
-				{
-					async::readonly_guard guard(m_waitLock);
-					if (m_waitingThreads.size() == m_processChains.size())
-						waiting = false;
-				}
-
-				m_syncLock.unlock(async::write);
-
-				waiting = true;
-				while (waiting)
-				{
-					async::readonly_guard guard(m_waitLock);
-					if (m_waitingThreads.size() == 0)
-						waiting = false;
-				}
-
-				m_syncLock.lock(async::write);
+				m_syncLock.sync();
+				m_requestSync.store(false, std::memory_order_release);
 			}
 		}
 	}
 
 	void Scheduler::waitForProcessSync()
 	{
+		if (std::this_thread::get_id() != m_syncLock.ownerThread())
 		{
-			async::readwrite_guard guard(m_requestLock);
-			m_requestSync = true;
+			m_requestSync.store(true, std::memory_order_relaxed);
+			m_syncLock.sync();
 		}
-
+		else
 		{
-			async::readwrite_guard guard(m_waitLock);
-			m_waitingThreads.insert(std::this_thread::get_id());
-		}
-
-		async::readwrite_guard syncGuard(m_syncLock);
-
-		{
-			async::readwrite_guard guard(m_waitLock);
-			m_waitingThreads.erase(std::this_thread::get_id());
+			while (m_syncLock.waiterCount() == m_processChains.size())
+				;
 		}
 	}
 }

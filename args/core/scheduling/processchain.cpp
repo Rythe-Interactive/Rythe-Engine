@@ -13,6 +13,8 @@ namespace args::core::scheduling
 			while (!chain->m_exit->load(std::memory_order_acquire)) // check for exit flag
 			{
 				chain->runInCurrentThread();
+				if (chain->m_scheduler->syncRequested())
+					chain->m_scheduler->waitForProcessSync();
 			}
 		}
 		catch (const args::core::exception& e)

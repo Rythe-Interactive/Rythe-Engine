@@ -3,7 +3,7 @@
 #include <core/types/types.hpp>
 #include <core/containers/containers.hpp>
 #include <core/scheduling/processchain.hpp>
-#include <core/async/readonly_rw_spinlock.hpp>
+#include <core/async/async.hpp>
 #include <core/common/exception.hpp>
 
 #include <thread>
@@ -25,11 +25,8 @@ namespace args::core::scheduling
 		async::readonly_rw_spinlock m_errorsLock;
 		std::vector<thread_error> m_errors;
 
-		async::readonly_rw_spinlock m_syncLock;
-		async::readonly_rw_spinlock m_requestLock;
-		bool m_requestSync;
-		async::readonly_rw_spinlock m_waitLock;
-		hashed_sparse_set<std::thread::id> m_waitingThreads;
+		std::atomic_bool m_requestSync;
+		async::ring_sync_lock m_syncLock;
 
 		static async::readonly_rw_spinlock m_threadsLock;
 		static sparse_map<std::thread::id, std::thread> m_threads;
@@ -90,6 +87,8 @@ namespace args::core::scheduling
 
 		void waitForProcessSync();
 
+		bool syncRequested() { return m_requestSync.load(std::memory_order_acquire); }
+
 		template<size_type charc>
 		ProcessChain* getChain(const char(&name)[charc])
 		{
@@ -109,7 +108,7 @@ namespace args::core::scheduling
 			}
 
 			id_type id = nameHash<charc>(name);
-			return &m_processChains.emplace(id, name, this);
+			return &(*m_processChains.emplace(id, name, this).first);
 		}
 
 		template<size_type charc>

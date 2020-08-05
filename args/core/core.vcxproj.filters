@@ -138,6 +138,9 @@
     <ClInclude Include="time\clock.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="async\ring_sync_lock.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\module.cpp">
