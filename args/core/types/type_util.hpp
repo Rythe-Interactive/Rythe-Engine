@@ -40,9 +40,9 @@ namespace args::core
 		{
 			std::string typeName = typeid(T).name();
 			size_type token;
-			if (token = typeName.find("struct ") != std::string::npos)
+			if ((token = typeName.find("struct ")) != std::string::npos)
 				typeName = typeName.substr(token + 6);
-			else if (token = typeName.find("class ") != std::string::npos)
+			else if ((token = typeName.find("class ")) != std::string::npos)
 				typeName = typeName.substr(token + 5);
 
 			name = (char*) malloc(typeName.size());
