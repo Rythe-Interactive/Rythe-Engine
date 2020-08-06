@@ -20,7 +20,7 @@ namespace args::core::filesystem {
             //find root domain
             // the syntax for inline root-domains has to be <root-domain>:[/\\]+<rest-of-the-path>
             const auto rdIndex = m_path.find_first_of(':');
-            if(rdIndex == std::string::npos) return Err(fs_error("invalid syntax for path string, no domain delimiter"));
+            if(rdIndex == std::string::npos) return Err(args_fs_error("invalid syntax for path string, no domain delimiter"));
 
             root_domain = m_path.substr(0,rdIndex);
 
@@ -29,16 +29,16 @@ namespace args::core::filesystem {
 			//
 			//if he/she does, congrats you found a ... "feature"
             const auto pIndex = m_path.find_first_not_of("/\\",rdIndex+1);
-            if(pIndex == std::string::npos) return Err(fs_error("invalid sytax for path string, last domain delimiter not found"));
+            if(pIndex == std::string::npos) return Err(args_fs_error("invalid sytax for path string, last domain delimiter not found"));
             
             to_process = m_path.substr(pIndex,std::string::npos); 
 
             to_process = strpath_manip::sanitize(to_process);
         }
 
-        if(root_domain.empty() || to_process.empty()) return Err(fs_error("invalid syntax for path string, one or more properties empty"));
+        if(root_domain.empty() || to_process.empty()) return Err(args_fs_error("invalid syntax for path string, one or more properties empty"));
 
-        if(!provider_registry::has_domain(root_domain)) return Err(fs_error("no start! no such domain: " + root_domain));
+        if(!provider_registry::has_domain(root_domain)) return Err(args_fs_error(("no start! no such domain: " + root_domain).c_str()));
 
         solution steps{};
 
@@ -60,14 +60,14 @@ namespace args::core::filesystem {
             {
                 previous_domain = domain;
 
-                if(!provider_registry::has_domain(domain)) return Err(fs_error("stop! no such domain: " + domain));
+                if(!provider_registry::has_domain(domain)) return Err(args_fs_error(("stop! no such domain: " + domain).c_str()));
 
                 //add resolver step
                 steps.emplace_back(resolver,strpath_manip::sanitize(path_for_resolver));
 
                 //get new resolver
                 resolver = *provider_registry::domain_get_first_resolver(domain);
-                if(!dynamic_cast<memory_resolver_common_base*>(resolver)) return Err(fs_error("sub domain resolver was not a mem resolver, illegal access"));
+                if(!dynamic_cast<memory_resolver_common_base*>(resolver)) return Err(args_fs_error("sub domain resolver was not a mem resolver, illegal access"));
 
             }
 

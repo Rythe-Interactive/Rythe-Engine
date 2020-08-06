@@ -25,7 +25,13 @@
 #include "core/platform/platform.hpp"
 
 namespace args::core::common {
-    	
+
+
+    class result_ident{};
+
+    template <class... T>
+    class result;
+
     class ok_ident{};
     class err_ident{};
     struct tuple_create_helper{};
@@ -114,10 +120,23 @@ namespace args::core::common {
     {
         return ok_proxy<void>{};
     }
-    template <class T,class...Any>
+    template <class T,class...Any,
+        typename = std::enable_if_t<!(std::is_base_of_v<result_ident,T> && sizeof...(Any) == 0)>>
     inline ok_proxy<T,Any...> Ok(T  t,Any ... any)
     {
         return ok_proxy<T,Any...>(std::move(t),std::move(any)...);
+    }
+
+    template<class... Args>
+    inline ok_proxy<Args...> Ok(std::tuple<Args...> args)
+    {
+        return std::apply(Ok,args);
+    }
+
+    template <class... Args>
+    inline typename result<Args...>::ok_type Ok(const result<Args...>& res)
+    {
+        return Err(res.get());
     }
     /********************************************************************************/
 
@@ -186,16 +205,32 @@ namespace args::core::common {
     {
         return err_proxy<void>{};
     }
-    template <class T,class...Any>
+
+ 
+
+    template <class T,class...Any,
+        typename = std::enable_if_t<!(std::is_base_of_v<result_ident,T> && sizeof...(Any) == 0)>>
     inline err_proxy<T,Any...> Err(T t,Any ... any)
     {
         return err_proxy<T,Any...>(std::move(t),std::move(any)...);
     }
+
+    template<class... Args>
+    inline err_proxy<Args...> Err(std::tuple<Args...> args)
+    {
+        return std::apply(Err,args);
+    }
+
+    template <class... Args>
+    inline typename result<Args...>::err_type Err(const result<Args...>& res)
+    {
+        return Err(res.get_error());
+    }
+
     /********************************************************************************/
 
 
-    template <class... T>
-    class result;
+
 
     template<class... Lots>
     class result_impl;
@@ -262,7 +297,8 @@ namespace args::core::common {
 
     template <class... OkArgs,class... ErrArgs>
     class result<many_t<OkArgs...>,many_t<ErrArgs...>> :
-            public result_impl<ok_proxy<OkArgs...>,err_proxy<ErrArgs...>,std::tuple<OkArgs...>,std::tuple<ErrArgs...>>{
+            public result_impl<ok_proxy<OkArgs...>,err_proxy<ErrArgs...>,std::tuple<OkArgs...>,std::tuple<ErrArgs...>>,
+            public result_ident{
     public:
         using rimpl = result_impl<ok_proxy<OkArgs...>,err_proxy<ErrArgs...>,std::tuple<OkArgs...>,std::tuple<ErrArgs...>>;
     	result(ok_proxy<OkArgs...>  ok) : rimpl((std::make_unique<ok_proxy<OkArgs...>>(std::move(ok))),nullptr){};
@@ -271,7 +307,8 @@ namespace args::core::common {
     };
     template <class ErrType,class... Args>
     class result<many_t<Args...>,ErrType> :
-            public result_impl<ok_proxy<Args...>,err_proxy<ErrType>,std::tuple<Args...>,ErrType>{
+            public result_impl<ok_proxy<Args...>,err_proxy<ErrType>,std::tuple<Args...>,ErrType>,
+            public result_ident{
     public:
         using rimpl = result_impl<ok_proxy<Args...>,err_proxy<ErrType>,std::tuple<Args...>,ErrType>;
     	result(ok_proxy<Args...>  ok) : rimpl((std::make_unique<ok_proxy<Args...>>(std::move(ok))),nullptr){};
@@ -280,7 +317,8 @@ namespace args::core::common {
     };
     template <class OkType,class... Args>
     class result<OkType,many_t<Args...>> :
-            public result_impl<ok_proxy<OkType>,err_proxy<Args...>,OkType,std::tuple<Args...>>{
+            public result_impl<ok_proxy<OkType>,err_proxy<Args...>,OkType,std::tuple<Args...>>,
+            public result_ident{
     public:
     	using rimpl = result_impl<ok_proxy<OkType>,err_proxy<Args...>,OkType,std::tuple<Args...>>;
         result(ok_proxy<OkType>  ok) : rimpl((std::make_unique<ok_proxy<OkType>>(std::move(ok))),nullptr){};
@@ -289,7 +327,8 @@ namespace args::core::common {
     };
     template <class OkType,class ErrType>
     class result<OkType,ErrType> :
-            public result_impl<ok_proxy<OkType>,err_proxy<ErrType>,OkType,ErrType>{
+            public result_impl<ok_proxy<OkType>,err_proxy<ErrType>,OkType,ErrType>,
+            public result_ident{
     public:
         using rimpl = result_impl<ok_proxy<OkType>,err_proxy<ErrType>,OkType,ErrType>;   	
         result(ok_proxy<OkType>  ok) : rimpl((std::make_unique<ok_proxy<OkType>>(std::move(ok))),nullptr){};

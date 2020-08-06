@@ -14,7 +14,7 @@ namespace args::core::filesystem
 
 	std::string strpath_manip::subdir(const std::string& p, const std::string& sub)
 	{
-		return p + seperator() + sub;
+		return p + separator() + sub;
 	}
 
 	std::string strpath_manip::sanitize(const std::string& p, bool fail_on_fs_leave)
@@ -28,7 +28,7 @@ namespace args::core::filesystem
 		{
             if(token.find(':') != std::string::npos)
             {
-                filesystem = token + seperator() + seperator();
+                filesystem = token + separator() + separator();
                 continue;
             }
             if(token.empty())
@@ -54,21 +54,21 @@ namespace args::core::filesystem
 				recreation.push_back(token);
 			}
 		}
-		return filesystem + args::core::common::join_strings_with<std::vector<std::string>,std::string>(recreation,seperator());
+		return filesystem + args::core::common::join_strings_with<std::vector<std::string>,std::string>(recreation,separator());
 	}
 
 
 	std::string strpath_manip::localize(const std::string& p)
 	{
 		std::string scopy = p;
-		std::replace(begin(scopy),end(scopy),anti_seperator(),seperator());
+		std::replace(begin(scopy),end(scopy),anti_separator(),separator());
 		return scopy;
 	}
 
 
 	std::string& strpath_manip::inline_localize(std::string& p)
 	{
-		std::replace(begin(p),end(p),anti_seperator(),seperator());
+		std::replace(begin(p),end(p),anti_separator(),separator());
 		return p;
 	}
 

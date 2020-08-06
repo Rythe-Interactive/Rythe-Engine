@@ -7,11 +7,11 @@
 #include <core/filesystem/resource.hpp> // basic_resource
 #include <core/common/inteface_traits.hpp>
 #include <core/common/result.hpp>
+#include <core/common/exception.hpp>
 
 #include "detail/meta.hpp"
-#include "detail/error.hpp"
 #include "detail/traits.hpp"            // file_traits
-#include "detail/strpath_manip.hpp"     // strpath_manip::seperator
+#include "detail/strpath_manip.hpp"     // strpath_manip::separator
 
 
 /**
@@ -42,6 +42,12 @@ namespace args::core::filesystem{
          *  @return file_traits all traits of the file bunched together
          */
         A_NODISCARD file_traits resolve(const std::string& path) noexcept;
+
+        /** @brief gets all traits of a particular file
+         *  @note same as getting all the individual traits manually
+         *  @return file_traits all traits of the file bunched together
+         */
+        A_NODISCARD file_traits get_traits() noexcept;
 
 
         /** @brief sets the identifier of the filesystem 
@@ -105,9 +111,9 @@ namespace args::core::filesystem{
         virtual bool set(interfaces::implement_signal_t,const basic_resource& res) ARGS_PURE;
 
         /** @brief gets the delimiter of the filesystem
-         *  @return char single character for the delimiter of the filesystem (default: strpath_manip::seperator())
+         *  @return char single character for the delimiter of the filesystem (default: strpath_manip::separator())
          */
-        A_NODISCARD virtual char get_delimiter() const noexcept ARGS_IMPURE_RETURN(strpath_manip::seperator())
+        A_NODISCARD virtual char get_delimiter() const noexcept ARGS_IMPURE_RETURN(strpath_manip::separator())
 
 
         /** @brief destroys the file pointed to
@@ -116,11 +122,16 @@ namespace args::core::filesystem{
         void erase() const noexcept;
         virtual void erase(interfaces::implement_signal_t) const noexcept ARGS_PURE;
 
+        A_NODISCARD const filesystem_traits& get_fs_traits() const { return m_traits; }
+
+
+        /** @brief required to create new instances of the provider, similar to a surrogate constructor
+         *         if required arguments must be copied over
+         */
+         A_NODISCARD virtual filesystem_resolver* make() ARGS_PURE; 
 
     protected:
         A_NODISCARD const std::string & get_target() const { return m_target; }
-        A_NODISCARD const filesystem_traits& get_traits() const { return m_traits; }
-
         A_NODISCARD const std::string& get_identifier() const { return m_identifier; }
 
     private:

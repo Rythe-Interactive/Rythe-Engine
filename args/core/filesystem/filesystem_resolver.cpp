@@ -7,6 +7,11 @@ namespace args::core::filesystem {
     A_NODISCARD file_traits filesystem_resolver::resolve(const std::string& path) noexcept
     {
         set_target(path);
+        return get_traits();
+    }
+
+    file_traits filesystem_resolver::get_traits() noexcept
+    {
         file_traits traits;
 
         traits.is_file = is_file();
@@ -17,7 +22,7 @@ namespace args::core::filesystem {
         traits.can_be_created = creatable();
         traits.exists = exists();
 
-        inherit_traits(get_traits(), traits);
+        inherit_traits(get_fs_traits(), traits);
         sanitize_traits(traits);
 
         return traits;

@@ -4,6 +4,8 @@
 #define ARGS_ENTRY
 #include <core/core.hpp>
 
+#include "core/common/result.hpp"
+
 using namespace args;
 
 #include "module/testModule.hpp"

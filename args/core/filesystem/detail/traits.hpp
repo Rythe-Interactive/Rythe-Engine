@@ -17,16 +17,24 @@ namespace args::core::filesystem {
 
     struct filesystem_traits {
         bool is_readonly {};
+        bool is_valid {};
     };
 
     inline void inherit_traits(const filesystem_traits& fstraits, file_traits& ftraits) noexcept
     {
+        if(!fstraits.is_valid) 
+        {
+            ftraits = invalid_file_t;
+            return;
+        }
         if(fstraits.is_readonly)
         {
             ftraits.can_be_written = false;
             ftraits.can_be_created = false;
         }
     }
+
+    constexpr static filesystem_traits invalid_filesystem_t{false,false};
 
     inline void sanitize_traits(file_traits& traits) noexcept
     {

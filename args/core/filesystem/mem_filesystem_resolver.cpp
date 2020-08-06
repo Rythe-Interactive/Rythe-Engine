@@ -31,13 +31,13 @@ namespace args::core::filesystem
 
     const byte_vec& mem_filesystem_resolver::get_data() const
     {
-        if(!prewarm()) throw fs_error("attempting to access data via a purely cached object, which was not cached");
+        if(!prewarm()) throw args_fs_error("attempting to access data via a purely cached object, which was not cached");
         return *m_data;
     }
 
     byte_vec& mem_filesystem_resolver::get_data()
     {
-        if(!prewarm()) throw fs_error("attempting to access data via a purely cached object, which was not cached");
+        if(!prewarm()) throw args_fs_error("attempting to access data via a purely cached object, which was not cached");
         return *m_data;
     }
 }
