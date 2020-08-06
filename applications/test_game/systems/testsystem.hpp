@@ -65,7 +65,9 @@ public:
 
 		if (accumulated > 10.f)
 		{
-			throw args_exception_msg("hehehe fuck you >:D");
+			std::cout << "raising exit event" << std::endl;
+			raiseEvent<events::exit>();
+			//throw args_exception_msg("hehehe fuck you >:D");
 		}
 	}
 };

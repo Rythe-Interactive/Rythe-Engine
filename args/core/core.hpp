@@ -14,6 +14,7 @@
 #include <core/ecs/ecs.hpp>
 #include <core/scheduling/scheduling.hpp>
 #include <core/engine/engine.hpp>
+#include <core/events/events.hpp>
 #include <core/entry/entry_point.hpp>
 
 namespace args

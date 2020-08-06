@@ -5,6 +5,7 @@
 #include <core/types/meta.hpp>
 #include <core/ecs/ecsregistry.hpp>
 #include <core/scheduling/scheduler.hpp>
+#include <core/events/eventbus.hpp>
 
 #include <map>
 #include <vector>
@@ -31,9 +32,12 @@ namespace args::core
 		std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<>> modules;
 
 		ecs::EcsRegistry m_ecs;
+		events::EventBus m_eventbus;
 		scheduling::Scheduler m_scheduler;
 
 	public:
+		Engine() : modules(), m_ecs(), m_eventbus(), m_scheduler(&m_eventbus) {}
+
 		/**@brief reports an engine module
 		 * @tparam ModuleType the module you want to report
 		 * @param s a signal that you want to pass arguments to the constructor of the Module
@@ -46,6 +50,7 @@ namespace args::core
 			std::unique_ptr<Module> module = std::make_unique<ModuleType>(std::forward<Args>(args)...);
 			module->m_ecs = &m_ecs;
 			module->m_scheduler = &m_scheduler;
+			module->m_eventBus = &m_eventbus;
 
 			const priority_type priority = module->priority();
 			modules[priority].emplace_back(std::move(module));

@@ -4,6 +4,7 @@
 #include <core/types/type_util.hpp>
 #include <core/ecs/ecsregistry.hpp>
 #include <core/scheduling/scheduler.hpp>
+#include <core/events/eventbus.hpp>
 #include <memory>
 
 namespace args::core
@@ -14,6 +15,7 @@ namespace args::core
 	protected:
 		ecs::EcsRegistry* m_ecs;
 		scheduling::Scheduler* m_scheduler;
+		events::EventBus* m_eventBus;
 
 		sparse_map<id_type, std::unique_ptr<scheduling::Process>> m_processes;
 
@@ -55,6 +57,60 @@ namespace args::core
 			m_processes.insert(id, std::move(process));
 
 			m_scheduler->hookProcess(chainName, m_processes[id].get());
+		}
+
+		template<typename event_type, typename... Args, inherits_from<event_type, events::event<event_type>> = 0>
+		void raiseEvent(Args... arguments)
+		{
+			m_eventBus->raiseEvent<event_type>(arguments...);
+		}
+
+		template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
+		bool checkEvent() const
+		{
+			return m_eventBus->checkEvent<event_type>();
+		}
+
+		template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
+		size_type getEventCount() const
+		{
+			return m_eventBus->getEventCount<event_type>();
+		}
+
+		template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
+		const event_type& getEvent(index_type index = 0) const
+		{
+			return m_eventBus->getEvent<event_type>(index);
+		}
+
+		template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
+		const event_type& getLastEvent() const
+		{
+			return m_eventBus->getLastEvent<event_type>();
+		}
+
+		template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
+		void clearEvent(index_type index = 0)
+		{
+			m_eventBus->clearEvent<event_type>(index);
+		}
+
+		template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
+		void clearLastEvent()
+		{
+			m_eventBus->clearLastEvent<event_type>();
+		}
+
+		template <void(SelfType::* func_type)(events::EventBus*), typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
+		void createProcess()
+		{
+			m_eventBus->bindToEvent<event_type>(delegate<void(events::EventBus*)>::create<SelfType, func_type>((SelfType*)this));
+		}
+
+		template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
+		void bindToEvent(delegate<void(events::EventBus*)> callback)
+		{
+			m_eventBus->bindToEvent<event_type>(callback);
 		}
 
 	public:

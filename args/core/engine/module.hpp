@@ -5,6 +5,7 @@
 #include <core/containers/sparse_map.hpp>
 #include <core/ecs/ecsregistry.hpp>
 #include <core/scheduling/scheduler.hpp>
+#include <core/events/eventbus.hpp>
 #include <memory>
 
 /**
@@ -23,6 +24,7 @@ namespace args::core
 	private:
 		ecs::EcsRegistry* m_ecs;
 		scheduling::Scheduler* m_scheduler;
+		events::EventBus* m_eventBus;
 
 		sparse_map<id_type, std::unique_ptr<SystemBase>> m_systems;
 
@@ -45,6 +47,7 @@ namespace args::core
 			std::unique_ptr<SystemBase> system = std::make_unique<SystemType>(std::forward<Args>(args)...);
 			system->m_ecs = m_ecs;
 			system->m_scheduler = m_scheduler;
+			system->m_eventBus = m_eventBus;
 
 			m_systems.insert(typeHash<SystemType>(), std::move(system));
 		}

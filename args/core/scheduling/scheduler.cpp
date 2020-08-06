@@ -8,7 +8,7 @@ namespace args::core::scheduling
 	async::readonly_rw_spinlock Scheduler::m_availabilityLock;
 	uint Scheduler::m_availableThreads = m_maxThreadCount - 2; // subtract OS and this_thread.
 
-	Scheduler::Scheduler()
+	Scheduler::Scheduler(events::EventBus* eventBus) : m_eventBus(eventBus)
 	{
 		addChain("Update");
 	}
@@ -31,7 +31,7 @@ namespace args::core::scheduling
 				chain.run();
 		}
 
-		while (true) //TODO(glyn leine): Check for engine exit flag, needs engine event system/event bus.
+		while (!m_eventBus->checkEvent<events::exit>()) // Check for engine exit flag.
 		{
 			{
 				async::readwrite_guard guard(m_exitsLock); // Check for any intentionally exited threads and clean them up.
@@ -70,7 +70,7 @@ namespace args::core::scheduling
 				{
 					async::readonly_multiguard rmguard(m_processChainsLock, m_threadsLock);
 					for (auto& chain : m_processChains)
-						if (!m_threads.contains(chain.threadId()))
+						if (chain.threadId() != std::thread::id() && !m_threads.contains(chain.threadId()))
 							toRemove.push_back(chain.id());
 				}
 
@@ -85,6 +85,32 @@ namespace args::core::scheduling
 			if (syncRequested()) // If a major engine sync was requested halt thread until all threads have reached a sync point and let them all continue.
 				waitForProcessSync();
 		}
+
+		for (auto& processChain : m_processChains)
+			processChain.exit();
+
+		size_type exits;
+		size_type chains;
+
+		{
+			async::readonly_multiguard rmguard(m_exitsLock, m_processChainsLock);
+			exits = m_exits.size();
+			chains = m_processChains.size();
+		}
+
+		while (exits < chains)
+		{
+			async::readonly_multiguard rmguard(m_exitsLock, m_processChainsLock);
+			exits = m_exits.size();
+			chains = m_processChains.size();
+		}
+
+		for (auto& id : m_exits)
+		{
+			destroyThread(id);
+		}
+
+		m_exits.clear();
 	}
 
 	void Scheduler::destroyThread(std::thread::id id)
