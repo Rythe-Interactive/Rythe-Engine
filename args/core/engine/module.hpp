@@ -24,11 +24,11 @@ namespace args::core
 		ecs::EcsRegistry* m_ecs;
 		scheduling::Scheduler* m_scheduler;
 
-		sparse_map<id_type, SystemBase*> m_systems;
+		sparse_map<id_type, std::unique_ptr<SystemBase>> m_systems;
 
 		void init()
 		{
-			for (auto* system : m_systems)
+			for (auto& system : m_systems)
 				system->setup();
 		};
 
@@ -42,11 +42,11 @@ namespace args::core
 		template<typename SystemType, typename... Args, inherits_from<SystemType, System<SystemType>> = 0>
 		void reportSystem(Args&&... args)
 		{
-			SystemBase* system =  new SystemType(std::forward<Args>(args)...);
+			std::unique_ptr<SystemBase> system = std::make_unique<SystemType>(std::forward<Args>(args)...);
 			system->m_ecs = m_ecs;
 			system->m_scheduler = m_scheduler;
 
-			m_systems.insert(typeHash<SystemType>(), system);
+			m_systems.insert(typeHash<SystemType>(), std::move(system));
 		}
 
 	public:
@@ -60,10 +60,6 @@ namespace args::core
 		 */
 		virtual priority_type priority() ARGS_IMPURE_RETURN(default_priority);
 
-		virtual ~Module()
-		{
-			for (auto* system : m_systems)
-				delete system;
-		}
+		virtual ~Module() = default;
 	};
 }

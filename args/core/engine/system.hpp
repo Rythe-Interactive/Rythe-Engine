@@ -4,6 +4,7 @@
 #include <core/types/type_util.hpp>
 #include <core/ecs/ecsregistry.hpp>
 #include <core/scheduling/scheduler.hpp>
+#include <memory>
 
 namespace args::core
 {
@@ -14,7 +15,7 @@ namespace args::core
 		ecs::EcsRegistry* m_ecs;
 		scheduling::Scheduler* m_scheduler;
 
-		sparse_map<id_type, scheduling::Process*> m_processes;
+		sparse_map<id_type, std::unique_ptr<scheduling::Process>> m_processes;
 
 	public:
 		const id_type id;
@@ -37,11 +38,11 @@ namespace args::core
 			std::string name = std::string(chainName) + undecoratedTypeName<SelfType>() + std::to_string(interval);
 			id_type id = nameHash(name);
 
-			scheduling::Process* process = new scheduling::Process(name, id, interval);
+			std::unique_ptr<scheduling::Process> process = std::make_unique<scheduling::Process>(name, id, interval);
 			process->setOperation(delegate<void(time::time_span<fast_time>)>::create<SelfType, func_type>((SelfType*)this));
-			m_processes.insert(id, process);
+			m_processes.insert(id, std::move(process));
 
-			m_scheduler->hookProcess<charc>(chainName, m_processes[id]);
+			m_scheduler->hookProcess<charc>(chainName, m_processes[id].get());
 		}
 
 		void createProcess(cstring chainName, delegate<void(time::time_span<fast_time>)>&& operation, time::time_span<fast_time> interval = 0)
@@ -49,19 +50,15 @@ namespace args::core
 			std::string name = std::string(chainName) + undecoratedTypeName<SelfType>() + std::to_string(interval);
 			id_type id = nameHash(name);
 
-			scheduling::Process* process = new scheduling::Process(name, id, interval);
+			std::unique_ptr<scheduling::Process> process = std::make_unique<scheduling::Process>(name, id, interval);
 			process->setOperation(operation);
-			m_processes.insert(id, process);
+			m_processes.insert(id, std::move(process));
 
-			m_scheduler->hookProcess(chainName, m_processes[id]);
+			m_scheduler->hookProcess(chainName, m_processes[id].get());
 		}
 
 	public:
 		System() : SystemBase(typeHash<SelfType>(), undecoratedTypeName<SelfType>()) {}
-		virtual ~System()
-		{
-			for (auto* process : m_processes)
-				delete process;
-		}
+		virtual ~System() = default;
 	};
 }

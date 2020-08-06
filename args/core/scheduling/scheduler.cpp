@@ -4,7 +4,7 @@
 namespace args::core::scheduling
 {
 	async::readonly_rw_spinlock Scheduler::m_threadsLock;
-	sparse_map<std::thread::id, std::thread*> Scheduler::m_threads;
+	sparse_map<std::thread::id, std::unique_ptr<std::thread>> Scheduler::m_threads;
 	async::readonly_rw_spinlock Scheduler::m_availabilityLock;	
 
 	void Scheduler::run()
