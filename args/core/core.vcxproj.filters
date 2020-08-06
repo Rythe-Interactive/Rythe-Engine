@@ -123,6 +123,9 @@
     <ClInclude Include="time\clock.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="events\eventbus.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp">

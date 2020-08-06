@@ -118,6 +118,7 @@
     <ClInclude Include="engine\engine.hpp" />
     <ClInclude Include="engine\module.hpp" />
     <ClInclude Include="entry\entry_point.hpp" />
+    <ClInclude Include="events\eventbus.hpp" />
     <ClInclude Include="filesystem\detail\resource_meta.hpp" />
     <ClInclude Include="filesystem\detail\resource_sfinae.hpp" />
     <ClInclude Include="filesystem\filemanip.hpp" />
