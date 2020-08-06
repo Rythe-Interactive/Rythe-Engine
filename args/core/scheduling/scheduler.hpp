@@ -29,7 +29,7 @@ namespace args::core::scheduling
 		async::ring_sync_lock m_syncLock;
 
 		static async::readonly_rw_spinlock m_threadsLock;
-		static sparse_map<std::thread::id, std::thread> m_threads;
+		static sparse_map<std::thread::id, std::thread*> m_threads;
 		inline static const uint m_maxThreadCount = std::thread::hardware_concurrency() == 0 ? UINT_MAX : std::thread::hardware_concurrency();
 		static async::readonly_rw_spinlock m_availabilityLock;
 		inline static uint m_availableThreads = m_maxThreadCount - 2; // subtract OS and this.
@@ -45,12 +45,13 @@ namespace args::core::scheduling
 			for (auto& processChain : m_processChains)
 				processChain.exit();
 
-			for (auto& thread : m_threads)
-				while (thread.joinable())
-					;
-
-			for (auto& thread : m_threads)
-				thread.join();
+			for (auto* thread : m_threads)
+			{
+				if (thread->joinable())
+					thread->join();
+				
+				delete thread;
+			}
 		}
 
 		void run();
@@ -63,8 +64,8 @@ namespace args::core::scheduling
 			if (m_availableThreads)
 			{
 				m_availableThreads--;
-				std::thread newThread(function, args...);
-				m_threads.insert(newThread.get_id(), std::move(newThread));
+				std::thread* newThread = new std::thread(function, args...);
+				m_threads.insert(newThread->get_id(), newThread);
 				return true;
 			}
 
@@ -78,7 +79,8 @@ namespace args::core::scheduling
 			if (m_threads.contains(id))
 			{
 				m_availableThreads++;
-				m_threads[id].join();
+				if (m_threads[id]->joinable())
+					m_threads[id]->join();
 				m_threads.erase(id);
 			}
 
