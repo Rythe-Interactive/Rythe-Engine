@@ -32,6 +32,8 @@ namespace args::core::filesystem
             return countdown-1;
         }
 
+        std::atomic<int32_t> current_mean;
+
         std::unordered_map<std::string_view,std::pair<std::shared_ptr<byte_vec>,int32_t>> m_caches;
         std::atomic<std::size_t> m_gc_countdown = gc_interval;
         mutable async::readonly_rw_spinlock m_big_gc_lock;

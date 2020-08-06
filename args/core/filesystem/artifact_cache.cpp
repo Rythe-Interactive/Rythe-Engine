@@ -13,11 +13,17 @@ namespace args::core::filesystem {
             auto& [ptr,score] =  driver.get_caches()[identifier];
             if(!ptr)
             {
+                score = driver.current_mean.load();
                 if(size_hint)
                     ptr = std::make_shared<byte_vec>(size_hint);
                 else
                     ptr = std::make_shared<byte_vec>();
             }
+            else
+            {
+                score++;
+            }
+
             result = ptr;
         }
 
@@ -70,6 +76,7 @@ namespace args::core::filesystem {
 
         //find lowest element that should not be removed
         const auto low_element = *(score_heap.end()-gc_keep);
+        current_mean = low_element;
 
         composer([low_element](auto& ptr,auto score){
             //delete element if it is below threshold
