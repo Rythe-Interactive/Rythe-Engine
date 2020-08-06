@@ -47,7 +47,7 @@ namespace args::core::scheduling
 
 		inline static async::readonly_rw_spinlock m_threadsLock;
 		inline static sparse_map<std::thread::id, std::unique_ptr<std::thread>> m_threads;
-		inline static const uint m_maxThreadCount = std::thread::hardware_concurrency() == 0 ? UINT_MAX : std::thread::hardware_concurrency();
+		inline static const uint m_maxThreadCount = std::thread::hardware_concurrency() == 0 ? std::numeric_limits<uint>::max() : std::thread::hardware_concurrency();
 		inline static async::readonly_rw_spinlock m_availabilityLock;
 		inline static uint m_availableThreads = m_maxThreadCount - 2; // subtract OS and this_thread.
 
