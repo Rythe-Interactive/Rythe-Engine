@@ -11,6 +11,7 @@
 #include <atomic>
 #include <iostream>
 #include <sstream>
+#include <limits>
 
 /**@file scheduler.hpp
  */

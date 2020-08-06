@@ -1,6 +1,7 @@
 #pragma once
 #include <core/platform/platform.hpp>
 #include <core/types/primitives.hpp>
+#include <core/types/type_util.hpp>
 #include <core/containers/containers.hpp>
 #include <core/async/transferable_atomic.hpp>
 
