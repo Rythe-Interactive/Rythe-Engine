@@ -49,7 +49,7 @@ namespace args::core::scheduling
 		{
 			for (auto process : m_processes)
 				if (!finishedProcesses.contains(process->id()))
-					if (process->execute(1.f)) ///TODO(glyn leine): get time scale from engine somewhere
+					if (process->execute(m_scheduler->getTimeScale()))
 						finishedProcesses.insert(process->id());
 		} while (finishedProcesses.size() != m_processes.size());
 	}

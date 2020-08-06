@@ -83,9 +83,6 @@ namespace args::core
 		return hash;
 	}
 
-	/**@todo use ARGS_FUNC
-	*/
-
 	/**@brief Returns hash of a certain string
 	 * @param name Name you wish to hash
 	 */

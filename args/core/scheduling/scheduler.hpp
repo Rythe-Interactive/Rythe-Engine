@@ -42,6 +42,8 @@ namespace args::core::scheduling
 		std::atomic_bool m_requestSync;
 		async::ring_sync_lock m_syncLock;
 
+		std::atomic<float> m_timeScale = 1.f;
+
 		inline static async::readonly_rw_spinlock m_threadsLock;
 		inline static sparse_map<std::thread::id, std::unique_ptr<std::thread>> m_threads;
 		inline static const uint m_maxThreadCount = std::thread::hardware_concurrency() == 0 ? UINT_MAX : std::thread::hardware_concurrency();
@@ -64,6 +66,20 @@ namespace args::core::scheduling
 					thread->join();
 		}
 
+		/**@brief Set global time scale.
+		 */
+		void setTimeScale(float scale)
+		{
+			m_timeScale.store(scale, std::memory_order_relaxed);
+		}
+
+		/**@brief Get the global time scale.
+		 */
+		float getTimeScale()
+		{
+			return m_timeScale.load(std::memory_order_relaxed);
+		}
+
 		/**@brief Run main program loop, also starts all process-chains in their own threads.
 		 */
 		void run()
@@ -74,7 +90,7 @@ namespace args::core::scheduling
 					chain.run();
 			}
 
-			while (true) // check for engine exit flag
+			while (true) //TODO(glyn leine): Check for engine exit flag, needs engine event system/event bus.
 			{
 				{
 					async::readwrite_guard guard(m_exitsLock);
