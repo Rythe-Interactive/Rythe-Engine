@@ -33,6 +33,7 @@ namespace args::core
     using byte_vec = std::vector<byte>;
 
 	using priority_type = uint8;
+#define default_priority 0
 
 	using id_type = uint_max;
 #define invalid_id 0
@@ -49,6 +50,7 @@ namespace args::core
 	using fast_seconds = fast_time;
 	using fast_milli_seconds = fast_time;
 	using fast_micro_seconds = fast_time;
+	using fast_nano_seconds = fast_time;
 
 	using precise_time = time64;
 	using precise_hours = precise_time;
@@ -56,4 +58,5 @@ namespace args::core
 	using precise_seconds = precise_time;
 	using precise_milli_seconds = precise_time;
 	using precise_micro_seconds = precise_time;
+	using precise_nano_seconds = precise_time;
 }
