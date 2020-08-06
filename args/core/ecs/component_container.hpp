@@ -20,6 +20,7 @@ namespace args::core::ecs
 		virtual bool has_component(id_type entityId) ARGS_PURE;
 		virtual void create_component(id_type entityId) ARGS_PURE;
 		virtual void destroy_component(id_type entityId) ARGS_PURE;
+		virtual ~component_container_base() = default;
 	};
 
 	/**@class component_container
