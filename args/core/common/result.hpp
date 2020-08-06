@@ -281,7 +281,7 @@ namespace args::core::common {
             if(m_err) return try_static_cast<err_result_t>(*m_err);
             throw std::runtime_error("this result would have been valid!");
         }
-        A_NODISCARD void rethrow()
+        A_NORETURN void rethrow() 
         {
             throw try_static_cast<err_result_t>(*m_err);
         }

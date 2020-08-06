@@ -3,7 +3,10 @@
 
 #include <iostream>
 
-namespace fs = args::core::filesystem;
+inline namespace {
+
+using namespace ::args::core;
+namespace fs = ::args::core::filesystem;
 
 class mock_resolver : public fs::filesystem_resolver
 {
@@ -31,20 +34,20 @@ public:
     }
     [[nodiscard]] std::set<std::string> ls() const noexcept override { return {"test.txt"}; }
 
-    args::core::common::result<args::core::filesystem::basic_resource, args::core::fs_error>
-    get(args::core::interfaces::implement_signal_t) const noexcept override
+    common::result<filesystem::basic_resource, fs_error>
+    get(interfaces::implement_signal_t) const noexcept override
     {
-        using args::core::common::Err, args::core::common::Ok;
-        if(get_target() == "test.txt") return Ok(args::core::filesystem::basic_resource("Hello Filesystem World!"));
+        using common::Err, common::Ok;
+        if(get_target() == "test.txt") return Ok(fs::basic_resource("Hello Filesystem World!"));
         return Err(args_fs_error("this mock interface does not support file access"));
     }
 
-    bool set(args::core::interfaces::implement_signal_t, const args::core::filesystem::basic_resource& res) override
+    bool set(interfaces::implement_signal_t, const filesystem::basic_resource& res) override
     {
         (void) res;
         return false;
     }
-    void erase(args::core::interfaces::implement_signal_t) const noexcept override
+    void erase(interfaces::implement_signal_t) const noexcept override
     {
     }
 
@@ -57,7 +60,7 @@ public:
     }
 };
 
-
+}
 inline void test_filesystem()
 {
 
