@@ -11,29 +11,30 @@ namespace args::core::scheduling
 		try
 		{
 			chain->m_threadId = std::this_thread::get_id();
-			while (!chain->m_exit->load(std::memory_order_acquire)) // check for exit flag
+			while (!chain->m_exit->load(std::memory_order_acquire)) // Check for exit flag.
 			{
-				chain->runInCurrentThread();
-				if (chain->m_scheduler->syncRequested())
+				chain->runInCurrentThread(); // Execute all processes.
+
+				if (chain->m_scheduler->syncRequested()) // Sync if requested.
 					chain->m_scheduler->waitForProcessSync();
 			}
 
-			chain->m_scheduler->reportExit(chain->m_threadId);
+			chain->m_scheduler->reportExit(chain->m_threadId); // Mark Exit.
 		}
 		catch (const args::core::exception& e)
 		{
-			chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e);
+			chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e); // Mark error.
 		}
 		catch (const std::exception& e)
 		{
-			chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e);
+			chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e); // Mark error.
 		}
 	}
 
 	inline bool ProcessChain::run()
 	{
 		m_exit->store(false, std::memory_order_release);
-		return m_scheduler->createThread(threadedRun, this);
+		return m_scheduler->createThread(threadedRun, this); // Create thread and run.
 	}
 
 	inline void ProcessChain::exit()
@@ -44,13 +45,14 @@ namespace args::core::scheduling
 	inline void ProcessChain::runInCurrentThread()
 	{
 		hashed_sparse_set<id_type> finishedProcesses;
-		async::readonly_guard guard(m_processesLock);
+		async::readonly_guard guard(m_processesLock); // Hooking more processes whilst executing isn't allowed.
 		do
 		{
 			for (auto process : m_processes)
 				if (!finishedProcesses.contains(process->id()))
-					if (process->execute(m_scheduler->getTimeScale()))
+					if (process->execute(m_scheduler->getTimeScale())) // If the process wasn't finished then execute it and check if it's finished now.
 						finishedProcesses.insert(process->id());
+
 		} while (finishedProcesses.size() != m_processes.size());
 	}
 

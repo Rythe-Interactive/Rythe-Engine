@@ -22,7 +22,7 @@ namespace args::core::scheduling
 	 * @brief Major engine part that handles the creation and destruction of threads and process chains. Also takes charge of the main program loop.
 	 * @note Also handle synchronization.
 	 */
-	class Scheduler
+	class ARGS_API Scheduler
 	{
 	private:
 		struct thread_error
@@ -45,27 +45,16 @@ namespace args::core::scheduling
 
 		std::atomic<float> m_timeScale = 1.f;
 
-		inline static async::readonly_rw_spinlock m_threadsLock;
-		inline static sparse_map<std::thread::id, std::unique_ptr<std::thread>> m_threads;
-		inline static const uint m_maxThreadCount = std::thread::hardware_concurrency() == 0 ? std::numeric_limits<uint>::max() : std::thread::hardware_concurrency();
-		inline static async::readonly_rw_spinlock m_availabilityLock;
-		inline static uint m_availableThreads = m_maxThreadCount - 2; // subtract OS and this_thread.
+		static async::readonly_rw_spinlock m_threadsLock;
+		static sparse_map<std::thread::id, std::unique_ptr<std::thread>> m_threads;
+		static const uint m_maxThreadCount;
+		static async::readonly_rw_spinlock m_availabilityLock;
+		static uint m_availableThreads;
 
 	public:
-		Scheduler()
-		{
-			addChain("Update");
-		}
+		Scheduler();		
 
-		~Scheduler()
-		{
-			for (auto& processChain : m_processChains)
-				processChain.exit();
-
-			for (auto& thread : m_threads)
-				if (thread->joinable())
-					thread->join();
-		}
+		~Scheduler();
 
 		/**@brief Set global time scale.
 		 */
@@ -83,69 +72,7 @@ namespace args::core::scheduling
 
 		/**@brief Run main program loop, also starts all process-chains in their own threads.
 		 */
-		void run()
-		{
-			{
-				async::readonly_guard guard(m_processChainsLock);
-				for (ProcessChain& chain : m_processChains)
-					chain.run();
-			}
-
-			while (true) //TODO(glyn leine): Check for engine exit flag, needs engine event system/event bus.
-			{
-				{
-					async::readwrite_guard guard(m_exitsLock);
-
-					if (m_exits.size())
-					{
-						for (auto& id : m_exits)
-						{
-							destroyThread(id);
-						}
-
-						m_exits.clear();
-					}
-				}
-
-				{
-					async::readwrite_guard guard(m_errorsLock);
-
-					if (m_errors.size())
-					{
-						for (thread_error& error : m_errors)
-						{
-							std::cout << error.message << std::endl;
-							destroyThread(error.threadId);
-						}
-
-						m_errors.clear();
-
-						throw std::logic_error("");
-					}
-				}
-
-				{
-					std::vector<id_type> toRemove;
-					
-					{
-						async::readonly_multiguard rmguard(m_processChainsLock, m_threadsLock);
-						for (auto& chain : m_processChains)
-							if (!m_threads.contains(chain.threadId()))
-								toRemove.push_back(chain.id());
-					}
-
-					async::readwrite_guard wguard(m_processChainsLock);
-					for (id_type& id : toRemove)
-						m_processChains.erase(id);
-				}
-
-				if (m_localChain.id())
-					m_localChain.runInCurrentThread();
-
-				if (syncRequested())
-					waitForProcessSync();
-			}
-		}
+		void run();
 
 		/**@brief Create a new thread.
 		 * @param function Function to run on the thread.
@@ -157,10 +84,10 @@ namespace args::core::scheduling
 		{
 			async::readwrite_multiguard guard(m_availabilityLock, m_threadsLock);
 
-			if (m_availableThreads)
+			if (m_availableThreads) // Check if there are available threads.
 			{
 				m_availableThreads--;
-				std::unique_ptr<std::thread> newThread = std::make_unique<std::thread>(function, args...);
+				std::unique_ptr<std::thread> newThread = std::make_unique<std::thread>(function, args...); // Create a new thread and run it.
 				m_threads.insert(newThread->get_id(), std::move(newThread));
 				return true;
 			}
@@ -171,114 +98,31 @@ namespace args::core::scheduling
 		/**@brief Destroy a thread.
 		 * @warning DON'T USE UNLESS YOU KNOW WHAT YOU ARE DOING.
 		 */
-		void destroyThread(std::thread::id id)
-		{
-			async::readwrite_multiguard guard(m_availabilityLock, m_threadsLock);
-
-			if (m_threads.contains(id))
-			{
-				m_availableThreads++;
-				if (m_threads[id]->joinable())
-					m_threads[id]->join();
-				m_threads.erase(id);
-			}
-
-		}
+		void destroyThread(std::thread::id id);
 
 		/**@brief Report an intentional exit from a thread.
 		 */
-		void reportExit(const std::thread::id& id)
-		{
-			async::readwrite_guard guard(m_exitsLock);
-			m_exits.push_back(id);
-		}
+		void reportExit(const std::thread::id& id);
 
 		/**@brief Report an unintentional exit from a thread.
 		 */
-		void reportExitWithError(const std::string& name, const std::thread::id& id, const args::core::exception& exc)
-		{
-			async::readwrite_guard guard(m_errorsLock);
-			std::stringstream ss;
-
-			ss << "Encountered cross thread exception:"
-				<< "\n  thread id:\t" << id
-				<< "\n  thread name:\t" << name
-				<< "\n  message: \t" << exc.what()
-				<< "\n  file:    \t" << exc.file()
-				<< "\n  line:    \t" << exc.line()
-				<< "\n  function:\t" << exc.func() << '\n';
-
-			m_errors.push_back({ ss.str(), id });
-		}
+		void reportExitWithError(const std::string& name, const std::thread::id& id, const args::core::exception& exc);
 
 		/**@brief Report an unintentional exit from a thread.
 		 */
-		void reportExitWithError(const std::thread::id& id, const args::core::exception& exc)
-		{
-			async::readwrite_guard guard(m_errorsLock);
-			std::stringstream ss;
-
-			ss << "Encountered cross thread exception:"
-				<< "\n  thread id:\t" << id
-				<< "\n  message: \t" << exc.what()
-				<< "\n  file:    \t" << exc.file()
-				<< "\n  line:    \t" << exc.line()
-				<< "\n  function:\t" << exc.func() << '\n';
-
-			m_errors.push_back({ ss.str(), id });
-		}
+		void reportExitWithError(const std::thread::id& id, const args::core::exception& exc);
 
 		/**@brief Report an unintentional exit from a thread.
 		 */
-		void reportExitWithError(const std::string& name, const std::thread::id& id, const std::exception& exc)
-		{
-			async::readwrite_guard guard(m_errorsLock);
-			std::stringstream ss;
-
-			ss << "Encountered cross thread exception:"
-				<< "\n  thread id:\t" << id
-				<< "\n  thread name:\t" << name
-				<< "\n  message: \t" << exc.what() << '\n';
-
-			m_errors.push_back({ ss.str(), id });
-		}
+		void reportExitWithError(const std::string& name, const std::thread::id& id, const std::exception& exc);
 
 		/**@brief Report an unintentional exit from a thread.
 		 */
-		void reportExitWithError(const std::thread::id& id, const std::exception& exc)
-		{
-			async::readwrite_guard guard(m_errorsLock);
-			std::stringstream ss;
-
-			ss << "Encountered cross thread exception:"
-				<< "\n  thread id:\t" << id
-				<< "\n  message: \t" << exc.what() << '\n';
-
-			m_errors.push_back({ ss.str(), id });
-		}
+		void reportExitWithError(const std::thread::id& id, const std::exception& exc);		
 
 		/**@brief Request thread synchronization and wait for that synchronization moment.
 		 */
-		void waitForProcessSync()
-		{
-			std::cout << "synchronizing thread: " << std::this_thread::get_id() << std::endl;
-			if (std::this_thread::get_id() != m_syncLock.ownerThread())
-			{
-				m_requestSync.store(true, std::memory_order_relaxed);
-				m_syncLock.sync();
-			}
-			else
-			{
-				{
-					async::readonly_guard guard(m_processChainsLock);
-					while (m_syncLock.waiterCount() != m_processChains.size())
-						;
-				}
-
-				m_syncLock.sync();
-				m_requestSync.store(false, std::memory_order_release);
-			}
-		}
+		void waitForProcessSync();
 
 		/**@brief Check if a synchronization has been requested.
 		 */
@@ -303,7 +147,7 @@ namespace args::core::scheduling
 		{
 			if (!m_localChain.id())
 			{
-				m_localChain = std::move(ProcessChain(name, this));
+				m_localChain = ProcessChain(name, this);
 				return &m_localChain;
 			}
 
@@ -338,23 +182,8 @@ namespace args::core::scheduling
 		/**@brief Hook a process to a certain chain.
 		 * @return bool True if succeeded, false if the chain doesn't exist.
 		 */
-		bool hookProcess(cstring chainName, Process* process)
-		{
-			id_type chainId = nameHash(chainName);
-			async::readonly_guard guard(m_processChainsLock);
-			if (m_processChains.contains(chainId))
-			{
-				m_processChains[chainId].addProcess(process);
-				return true;
-			}
-			else if (m_localChain.id() == chainId)
-			{
-				m_localChain.addProcess(process);
-				return true;
-			}
-
-			return false;
-		}
+		bool hookProcess(cstring chainName, Process* process);
+		
 
 		/**@brief Unhook a process from a certain chain.
 		 * @return bool True if succeeded, false if the chain doesn't exist.
@@ -371,7 +200,7 @@ namespace args::core::scheduling
 			}
 			else if (m_localChain.id() == chainId)
 			{
-				m_localChain.addProcess(process);
+				m_localChain.removeProcess(process);
 				return true;
 			}
 
@@ -381,22 +210,7 @@ namespace args::core::scheduling
 		/**@brief Unhook a process from a certain chain.
 		 * @return bool True if succeeded, false if the chain doesn't exist.
 		 */
-		bool unhookProcess(cstring chainName, Process* process)
-		{
-			id_type chainId = nameHash(chainName);
-			async::readonly_guard guard(m_processChainsLock);
-			if (m_processChains.contains(chainId))
-			{
-				m_processChains[chainId].removeProcess(process);
-				return true;
-			}
-			else if (m_localChain.id() == chainId)
-			{
-				m_localChain.addProcess(process);
-				return true;
-			}
-
-			return false;
-		}
+		bool unhookProcess(cstring chainName, Process* process);
+		
 	};
 }

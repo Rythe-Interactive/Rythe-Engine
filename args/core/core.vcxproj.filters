@@ -164,6 +164,9 @@
     <ClCompile Include="scheduling\processchain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scheduling\scheduler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
