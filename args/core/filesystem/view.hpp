@@ -10,7 +10,7 @@
 
 namespace args::core::filesystem
 {
-    class view
+    class ARGS_API view
     {
     public:
 
@@ -21,7 +21,7 @@ namespace args::core::filesystem
         view& operator=(view&& other) noexcept = default;
         virtual ~view() = default;
 
-        view(std::string_view path) : m_path(path) {}
+        view(std::string_view path) : m_path(strpath_manip::localize(std::string(path))) {}
 
         A_NODISCARD operator bool();
         A_NODISCARD bool is_valid( bool deep_check = false);
@@ -71,6 +71,8 @@ namespace args::core::filesystem
         navigator::solution m_foundSolution{};
     };
 
+#if 0 //not ready yet
+
     template <std::size_t S>
     class combined_view
     {
@@ -93,5 +95,6 @@ namespace args::core::filesystem
     view combined_view<S>::find(std::string_view identifier)
     {
     }
+#endif
 }
 

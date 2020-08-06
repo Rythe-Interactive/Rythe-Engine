@@ -4,6 +4,29 @@
 
 namespace args::core::filesystem
 {
+    struct provider_registry::driver {
+        std::unordered_multimap<domain,std::unique_ptr<resolver>>* m_domain_resolver_map;
+        driver()
+        {
+            //pointer to pointer to implementation ?
+            m_domain_resolver_map = new std::unordered_multimap<domain, std::unique_ptr<resolver>>;
+        }
+
+        ~driver()
+        {
+            delete m_domain_resolver_map;
+        }
+    };
+
+    provider_registry::driver& provider_registry::get_driver()
+    {
+      	static provider_registry::driver registry;
+       
+		return registry;
+    }
+
+
+
 	std::unordered_set<provider_registry::domain> provider_registry::domains()
 	{
 
@@ -12,7 +35,7 @@ namespace args::core::filesystem
 
 		std::unordered_set<domain> _domains;
 
-		for(auto& key : iterator::keys_only(driver.m_domain_resolver_map))
+		for(auto& key : iterator::keys_only(*driver.m_domain_resolver_map))
 		{
 			//unordered_sets are unique by default no need to worry about duplicates
 			_domains.insert(key);	
@@ -25,7 +48,7 @@ namespace args::core::filesystem
 		//get map driver
 		static auto& driver = get_driver();
 
-		return driver.m_domain_resolver_map.find(d) != driver.m_domain_resolver_map.end();
+		return driver.m_domain_resolver_map->find(d) != driver.m_domain_resolver_map->end();
 		
 	}
 
@@ -35,7 +58,7 @@ namespace args::core::filesystem
 		static auto& driver = get_driver();
 
 		//insert a resolver
-		driver.m_domain_resolver_map.emplace(d,std::unique_ptr<resolver>(r));
+		driver.m_domain_resolver_map->emplace(strpath_manip::localize(d),std::unique_ptr<resolver>(r));
 	}
 
 	std::vector<provider_registry::resolver_ptr> provider_registry::domain_get_resolvers(domain d)
@@ -45,7 +68,7 @@ namespace args::core::filesystem
 		std::vector<resolver_ptr> resolvers;
 
 		//get range for domains
-		const auto& iterator_pair = driver.m_domain_resolver_map.equal_range(d);
+		const auto& iterator_pair = driver.m_domain_resolver_map->equal_range(d);
 
 		for(auto& [_,value] : iterator::pair_range(iterator_pair))
 		{
@@ -99,7 +122,7 @@ namespace args::core::filesystem
 		//get map driver
 		static auto& driver = get_driver();
 		
-		if(iterator.index >= driver.m_domain_resolver_map.count(iterator.inspected_domain)){
+		if(iterator.index >= driver.m_domain_resolver_map->count(iterator.inspected_domain)){
 			return resolver_sentinel{nullptr};
 		} else {
 			return resolver_sentinel{iterator.index+1,iterator.inspected_domain};
@@ -120,9 +143,9 @@ namespace args::core::filesystem
 		static auto& driver = get_driver();
 
 		//get range of domains
-		auto real_iterator = driver.m_domain_resolver_map.find(iterator.inspected_domain);
+		auto real_iterator = driver.m_domain_resolver_map->find(iterator.inspected_domain);
 
-		if(!iterator::checked_next(real_iterator,driver.m_domain_resolver_map.end(),iterator.index))
+		if(!iterator::checked_next(real_iterator,driver.m_domain_resolver_map->end(),iterator.index))
 		{
 			return nullptr;
 		}
@@ -130,13 +153,10 @@ namespace args::core::filesystem
 		return real_iterator->second.get();
 	}
 
-	provider_registry& provider_registry::get_driver()
-	{
-		static provider_registry registry;
-		return registry;
-	}
 
-	bool operator==(const provider_registry::resolver_sentinel& lhs, const provider_registry::resolver_sentinel& rhs)
+
+
+    bool operator==(const provider_registry::resolver_sentinel& lhs, const provider_registry::resolver_sentinel& rhs)
 	{
 		if (lhs.index == provider_registry::resolver_sentinel::sentinel_value && rhs.index == provider_registry::
 			resolver_sentinel::sentinel_value) return true;

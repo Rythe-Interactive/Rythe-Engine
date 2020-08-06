@@ -9,6 +9,7 @@
 using namespace args;
 
 #include "module/testModule.hpp"
+#include "test_filesystem.hpp"
 
 struct sah
 {
@@ -28,6 +29,10 @@ struct sah
 void ARGS_CCONV reportModules(Engine* engine)
 {
 	std::cout << "Hello Args!" << std::endl;
+
+    test_filesystem();
+
+
 	engine->reportModule<TestModule>();
 
 	try
@@ -213,4 +218,6 @@ void ARGS_CCONV reportModules(Engine* engine)
 		std::cout << "our entity handle was not found" << std::endl;
 
 	std::cout << std::endl;
+
+    
 }

@@ -26,5 +26,8 @@
     <ClInclude Include="module\testModule.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="test_filesystem.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

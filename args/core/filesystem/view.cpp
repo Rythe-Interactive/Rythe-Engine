@@ -1,8 +1,5 @@
 #include <algorithm>
 #include <core/filesystem/view.hpp>
-
-
-
 #include "navigator.hpp"
 #include "provider_registry.hpp"
 #include "detail/strpath_manip.hpp"
@@ -152,10 +149,12 @@ namespace args::core::filesystem
         //second check if we even need to to resolution
         if (m_foundSolution.size() == 1)
         {
-            auto& [resolver, path] = m_foundSolution.front();
+            auto& [r, path] = m_foundSolution.front();
+
+            auto resolver = std::shared_ptr<filesystem_resolver>(r->make());
             resolver->set_target(path);
 
-            return std::shared_ptr<filesystem_resolver>(resolver);
+            return resolver;
         }
 
         //translate the solution into a resolution chain

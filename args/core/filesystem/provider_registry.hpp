@@ -11,10 +11,10 @@
 #include "mem_filesystem_resolver.hpp"
 
 namespace args::core::filesystem{
-    class provider_registry
+    class ARGS_API provider_registry
     {
     public:
-        using domain = std::string_view;
+        using domain = std::string;
         using resolver = filesystem_resolver;
         using resolver_ptr = resolver*;
         
@@ -64,10 +64,9 @@ namespace args::core::filesystem{
 
     private:
 
+        struct driver;
+
         provider_registry() = default;
-        static provider_registry& get_driver();
-        
-        std::unordered_multimap<domain,std::unique_ptr<resolver>> m_domain_resolver_map;
-        
+        static driver& get_driver();        
     };
 }

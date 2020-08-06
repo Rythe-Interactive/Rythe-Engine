@@ -15,6 +15,25 @@ namespace args::core::filesystem {
 
     constexpr static  file_traits invalid_file_t{false,false,false,false,false,false,false};
 
+    inline bool operator == (const file_traits& rhs, const file_traits& lhs)
+    {
+        if(&rhs == &lhs) return true;
+
+        return rhs.is_file == lhs.is_file &&
+               rhs.is_directory == lhs.is_directory &&
+               rhs.is_valid == lhs.is_valid &&
+               rhs.can_be_written == lhs.can_be_written &&
+               rhs.can_be_read == lhs.can_be_read &&
+               rhs.can_be_created == lhs.can_be_created &&
+               rhs.exists == lhs.exists;
+    }
+
+    inline bool operator != (const file_traits& rhs, const file_traits& lhs)
+    {
+        return !(rhs == lhs);
+    }
+
+
     struct filesystem_traits {
         bool is_readonly {};
         bool is_valid {};

@@ -37,7 +37,7 @@ namespace args::core::filesystem {
         }
 
         if(root_domain.empty() || to_process.empty()) return Err(args_fs_error("invalid syntax for path string, one or more properties empty"));
-
+        root_domain += std::string(":") + strpath_manip::separator() + strpath_manip::separator();
         if(!provider_registry::has_domain(root_domain)) return Err(args_fs_error(("no start! no such domain: " + root_domain).c_str()));
 
         solution steps{};
@@ -87,6 +87,10 @@ namespace args::core::filesystem {
                 path_for_resolver += token + resolver->get_delimiter();
             }
         }
+
+        //add final step
+        steps.emplace_back(resolver,strpath_manip::sanitize(path_for_resolver));
+
         return Ok(steps);
     }
 }

@@ -137,7 +137,7 @@ namespace args::core::filesystem{
     private:
         std::string m_identifier;
         std::string m_target;
-        filesystem_traits m_traits;
+        filesystem_traits m_traits{false,true};
             
     };
 }
