@@ -33,6 +33,7 @@ namespace args::core
     using byte_vec = std::vector<byte>;
 
 	using priority_type = uint8;
+#define default_priority 0
 
 	using id_type = uint_max;
 #define invalid_id 0

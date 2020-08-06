@@ -9,7 +9,7 @@ namespace args::core::time
 	class clock
 	{
 	private:
-		std::chrono::time_point<std::chrono::high_resolution_clock> m_start;
+		std::chrono::time_point<std::chrono::high_resolution_clock> m_start = std::chrono::high_resolution_clock::now();
 	public:
 		void start() {
 			m_start = std::chrono::high_resolution_clock::now();

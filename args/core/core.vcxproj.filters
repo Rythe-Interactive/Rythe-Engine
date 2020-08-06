@@ -141,11 +141,11 @@
     <ClInclude Include="async\ring_sync_lock.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="engine\system.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="engine\module.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ecs\ecsregistry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

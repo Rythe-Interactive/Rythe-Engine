@@ -35,7 +35,23 @@ namespace args::core::scheduling
 		inline static uint m_availableThreads = m_maxThreadCount - 2; // subtract OS and this.
 
 	public:
-		void init();
+		Scheduler()
+		{
+			addChain("Update");
+		}
+
+		~Scheduler()
+		{
+			for (auto& processChain : m_processChains)
+				processChain.exit();
+
+			for (auto& thread : m_threads)
+				while (thread.joinable())
+					;
+
+			for (auto& thread : m_threads)
+				thread.join();
+		}
 
 		void run();
 
@@ -114,24 +130,70 @@ namespace args::core::scheduling
 		template<size_type charc>
 		bool hookProcess(const char(&chainName)[charc], Process* process)
 		{
+			id_type chainId = nameHash<charc>(chainName);
+			if (m_processChains.contains(chainId))
+			{
+				m_processChains[chainId].addProcess(process);
+				return true;
+			}
+			else if (m_localChain.id() == chainId)
+			{
+				m_localChain.addProcess(process);
+				return true;
+			}
+
+			return false;
+		}
+
+		bool hookProcess(cstring chainName, Process* process)
+		{
 			id_type chainId = nameHash(chainName);
 			if (m_processChains.contains(chainId))
 			{
-				m_processChain[chainId].addProcess(process);
+				m_processChains[chainId].addProcess(process);
 				return true;
 			}
+			else if (m_localChain.id() == chainId)
+			{
+				m_localChain.addProcess(process);
+				return true;
+			}
+
 			return false;
 		}
 
 		template<size_type charc>
 		bool unhookProcess(const char(&chainName)[charc], Process* process)
 		{
+			id_type chainId = nameHash<charc>(chainName);
+			if (m_processChains.contains(chainId))
+			{
+				m_processChains[chainId].removeProcess(process);
+				return true;
+			}
+			else if (m_localChain.id() == chainId)
+			{
+				m_localChain.addProcess(process);
+				return true;
+			}
+
+			return false;
+		}
+
+		bool unhookProcess(cstring chainName, Process* process)
+		{
 			id_type chainId = nameHash(chainName);
 			if (m_processChains.contains(chainId))
 			{
-				m_processChain[chainId].removeProcess(process);
+				m_processChains[chainId].removeProcess(process);
 				return true;
 			}
+			else if (m_localChain.id() == chainId)
+			{
+				m_localChain.addProcess(process);
+				return true;
+			}
+
 			return false;
 		}
 	};

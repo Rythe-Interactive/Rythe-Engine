@@ -7,7 +7,7 @@ namespace args::core::time
 	template<typename time_type = fast_time>
 	struct time_span
 	{
-		std::chrono::duration<time_type> duration;
+		std::chrono::duration<time_type> duration = std::chrono::duration<time_type>::zero();
 
         time_span() = default;
 

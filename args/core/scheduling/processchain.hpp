@@ -13,7 +13,7 @@ namespace args::core::scheduling
 	{
 	private:
 		std::string m_name;
-		id_type m_nameHash;
+		id_type m_nameHash = invalid_id;
 		Scheduler* m_scheduler;
 		sparse_map<id_type, Process*> m_processes;
 		async::transferable_atomic<bool> m_exit;

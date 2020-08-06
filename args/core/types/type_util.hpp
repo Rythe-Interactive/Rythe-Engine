@@ -24,9 +24,32 @@ namespace args::core
 	 * @tparam T type of which you want the name.
 	 */
 	template<typename T>
-	constexpr cstring typeName()
+	cstring typeName()
 	{
-		return typeid(T).name();
+		static cstring name = nullptr;
+		if (!name)
+			name = typeid(T).name();
+		return name;
+	}
+
+	template<typename T>
+	cstring undecoratedTypeName()
+	{
+		static char* name = nullptr;
+		if (!name)
+		{
+			std::string typeName = typeid(T).name();
+			size_type token;
+			if (token = typeName.find("struct ") != std::string::npos)
+				typeName = typeName.substr(token + 6);
+			else if (token = typeName.find("class ") != std::string::npos)
+				typeName = typeName.substr(token + 5);
+
+			name = (char*) malloc(typeName.size());
+			typeName.copy(name, std::string::npos);
+			name[typeName.size()] = '\0';
+		}
+		return name;
 	}
 
 	/**@brief Returns typeid(T).name().
@@ -34,9 +57,9 @@ namespace args::core
 	 * @param expr Variable of which you wish to auto deduct type.
 	 */
 	template<typename T>
-	constexpr cstring typeName(T expr)
+	cstring typeName(T expr)
 	{
-		return typeid(T).name();
+		return typeName<T>();
 	}
 
 	/**@brief Returns hash of a certain string
@@ -71,22 +94,27 @@ namespace args::core
 	/**@brief Returns hash of a certain string
 	 * @param name Name you wish to hash
 	 */
-	id_type ARGS_FUNC nameHash(std::string name);
+	id_type ARGS_FUNC nameHash(const std::string& name);
 
 	/**@brief Returns hash of the type name.
 	 * @tparam T type of which you want the hash.
 	 */
 	template<typename T>
-	constexpr id_type typeHash()
+	id_type typeHash()
 	{
-		id_type hash = 0xcbf29ce484222325;
-		uint64 prime = 0x00000100000001b3;
-		cstring name = typeid(T).name();
-		while (*name != '\0')
+		static id_type hash = 0;
+
+		if (hash == 0)
 		{
-			hash = hash ^ (byte)*name;
-			hash *= prime;
-			name++;
+			hash = 0xcbf29ce484222325;
+			uint64 prime = 0x00000100000001b3;
+			cstring name = undecoratedTypeName<T>();
+			while (*name != '\0')
+			{
+				hash = hash ^ (byte)*name;
+				hash *= prime;
+				name++;
+			}
 		}
 
 		return hash;

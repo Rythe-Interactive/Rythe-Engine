@@ -10,8 +10,8 @@ namespace args::core::scheduling
 	{
 		friend class ProcessChain;
 	private:
-		const std::string m_name;
-		const id_type m_nameHash;
+		std::string m_name;
+		id_type m_nameHash;
 		hashed_sparse_set<id_type> m_hooks;
 
 		delegate<void(time::time_span<fast_time>)> m_operation;
@@ -23,6 +23,12 @@ namespace args::core::scheduling
 
 		template<size_type charc>
 		Process(const char(&name)[charc], time::time_span<fast_time> interval = 0) : m_name(name), m_nameHash(nameHash<charc>(name)) { setInterval(interval); }
+
+		Process(const std::string& name, id_type nameHash, time::time_span<fast_time> interval = 0) : m_name(name), m_nameHash(nameHash) { setInterval(interval); }
+
+		Process() = default;
+		Process(Process&&) = default;
+		Process& operator=(Process&&) = default;
 
 		id_type id() const { return m_nameHash; }
 

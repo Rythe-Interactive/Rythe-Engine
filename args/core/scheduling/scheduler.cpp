@@ -5,12 +5,7 @@ namespace args::core::scheduling
 {
 	async::readonly_rw_spinlock Scheduler::m_threadsLock;
 	sparse_map<std::thread::id, std::thread> Scheduler::m_threads;
-	async::readonly_rw_spinlock Scheduler::m_availabilityLock;
-
-	void Scheduler::init()
-	{
-		addChain("Update");
-	}
+	async::readonly_rw_spinlock Scheduler::m_availabilityLock;	
 
 	void Scheduler::run()
 	{
@@ -37,9 +32,7 @@ namespace args::core::scheduling
 			}
 
 			if (m_localChain.id())
-			{
 				m_localChain.runInCurrentThread();
-			}
 
 			if (m_syncLock.waiterCount() == m_processChains.size())
 			{
@@ -57,9 +50,7 @@ namespace args::core::scheduling
 			m_syncLock.sync();
 		}
 		else
-		{
 			while (m_syncLock.waiterCount() == m_processChains.size())
 				;
-		}
 	}
 }

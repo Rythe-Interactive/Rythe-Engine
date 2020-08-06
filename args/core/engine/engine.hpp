@@ -3,6 +3,8 @@
 #include <core/engine/module.hpp>
 #include <core/types/primitives.hpp>
 #include <core/types/meta.hpp>
+#include <core/ecs/ecsregistry.hpp>
+#include <core/scheduling/scheduler.hpp>
 
 #include <map>
 #include <vector>
@@ -28,20 +30,10 @@ namespace args::core
 	private:
 		std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<>> modules;
 
-	public:
-		/**@brief reports an engine module
-		 * @tparam ModuleType the module you want to report
-		 * @note ModuleType must be default constructible
-		 * @ref args::core::Module
-		 */
-		template<class ModuleType, inherits_from<ModuleType, Module> = 0>
-		void reportModule()
-		{
-			std::unique_ptr<Module> module = std::make_unique<ModuleType>();
-			const priority_type priority = module->priority();
-			modules[priority].emplace_back(std::move(module));
-		}
+		ecs::EcsRegistry m_ecs;
+		scheduling::Scheduler m_scheduler;
 
+	public:
 		/**@brief reports an engine module
 		 * @tparam ModuleType the module you want to report
 		 * @param s a signal that you want to pass arguments to the constructor of the Module
@@ -49,10 +41,12 @@ namespace args::core
 		 * @ref args::core::Module
 		 */
 		template <class ModuleType, class... Args, inherits_from<ModuleType, Module> = 0>
-		void reportModule(module_initializer_t s, Args&&...args)
+		void reportModule(Args&&...args)
 		{
-			(void) s;
 			std::unique_ptr<Module> module = std::make_unique<ModuleType>(std::forward<Args>(args)...);
+			module->m_ecs = &m_ecs;
+			module->m_scheduler = &m_scheduler;
+
 			const priority_type priority = module->priority();
 			modules[priority].emplace_back(std::move(module));
 		}
@@ -65,16 +59,18 @@ namespace args::core
 		{
 			for (const auto& [priority, moduleList] : modules)
 				for (auto& module : moduleList)
-				{
+					module->setup();
+
+			for (const auto& [priority, moduleList] : modules)
+				for (auto& module : moduleList)
 					module->init();
-				}
 		}
 
 		/**@brief Runs engine loop.
 		 */
 		void run()
 		{
-			// needs implementation.
+			m_scheduler.run();
 		}
 	};
 }

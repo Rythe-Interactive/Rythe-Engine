@@ -1,4 +1,5 @@
 #include <core/scheduling/process.hpp>
+#include <iostream>
 
 namespace args::core::scheduling
 {
@@ -17,6 +18,9 @@ namespace args::core::scheduling
 	bool Process::execute(float timeScale)
 	{
 		time::time_span<fast_time> deltaTime = m_clock.restart();
+
+		if (deltaTime < 0)
+			deltaTime = 0;
 
 		if (!m_fixedTimeStep)
 		{
