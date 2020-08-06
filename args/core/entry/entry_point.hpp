@@ -29,7 +29,7 @@ extern void reportModules(args::core::Engine* engine);
 
 	int main(int argc, char** argv)
 	{
-	#if (!defined(ARGS_DEBUG) && defined(ARGS_WINDOWS))
+	#if (!defined(ARGS_DEBUG) && defined(ARGS_WINDOWS) && !defined(ARGS_KEEP_CONSOLE))
 		::ShowWindow(::GetConsoleWindow(), SW_HIDE);
 	#endif
 
@@ -110,7 +110,7 @@ extern void reportModules(args::core::Engine* engine);
 		}
 		catch (const args::core::exception& e)
 		{
-	#if defined(ARGS_WINDOWS)
+	#if (defined(ARGS_WINDOWS) && !defined(ARGS_KEEP_CONSOLE))
 			::ShowWindow(::GetConsoleWindow(), SW_SHOW);
 	#endif
 
@@ -128,7 +128,7 @@ extern void reportModules(args::core::Engine* engine);
 		}
 		catch (const std::exception& e)
 		{
-	#if defined(ARGS_WINDOWS)
+	#if (defined(ARGS_WINDOWS) && !defined(ARGS_KEEP_CONSOLE))
 			::ShowWindow(::GetConsoleWindow(), SW_SHOW);
 	#endif
 

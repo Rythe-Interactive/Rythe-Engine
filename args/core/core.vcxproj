@@ -97,12 +97,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
+    <ClInclude Include="async\ring_sync_lock.hpp" />
     <ClInclude Include="async\readonly_rw_spinlock.hpp" />
     <ClInclude Include="async\transferable_atomic.hpp" />
     <ClInclude Include="common\common.hpp" />
     <ClInclude Include="common\exception.hpp" />
     <ClInclude Include="containers\atomic_sparse_map.hpp" />
     <ClInclude Include="containers\containers.hpp" />
+    <ClInclude Include="containers\delegate.hpp" />
     <ClInclude Include="containers\hashed_sparse_set.hpp" />
     <ClInclude Include="containers\sparse_map.hpp" />
     <ClInclude Include="containers\sparse_set.hpp" />
@@ -117,6 +119,7 @@
     <ClInclude Include="ecs\rw_component_buffer.hpp" />
     <ClInclude Include="engine\engine.hpp" />
     <ClInclude Include="engine\module.hpp" />
+    <ClInclude Include="engine\system.hpp" />
     <ClInclude Include="entry\entry_point.hpp" />
     <ClInclude Include="events\eventbus.hpp" />
     <ClInclude Include="filesystem\detail\resource_meta.hpp" />
@@ -125,6 +128,10 @@
     <ClInclude Include="filesystem\filesystem.hpp" />
     <ClInclude Include="filesystem\resource.hpp" />
     <ClInclude Include="platform\platform.hpp" />
+    <ClInclude Include="scheduling\process.hpp" />
+    <ClInclude Include="scheduling\processchain.hpp" />
+    <ClInclude Include="scheduling\scheduler.hpp" />
+    <ClInclude Include="scheduling\scheduling.hpp" />
     <ClInclude Include="time\clock.hpp" />
     <ClInclude Include="time\time.hpp" />
     <ClInclude Include="time\time_span.hpp" />
@@ -139,8 +146,8 @@
     <ClCompile Include="ecs\entity_handle.cpp" />
     <ClCompile Include="ecs\entityquery.cpp" />
     <ClCompile Include="ecs\queryregistry.cpp" />
-    <ClCompile Include="engine\engine.cpp" />
-    <ClCompile Include="engine\module.cpp" />
+    <ClCompile Include="scheduling\processchain.cpp" />
+    <ClCompile Include="scheduling\scheduler.cpp" />
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
   <ItemGroup>
