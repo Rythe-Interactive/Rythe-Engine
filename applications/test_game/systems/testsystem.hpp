@@ -62,5 +62,10 @@ public:
 			buffer -= 1.f;
 			std::cout << "This is a different thread!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
 		}
+
+		if (accumulated > 10.f)
+		{
+			throw args_exception_msg("hehehe fuck you >:D");
+		}
 	}
 };

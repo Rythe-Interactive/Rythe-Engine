@@ -10,20 +10,23 @@ namespace args::core::scheduling
 	{
 		try
 		{
+			chain->m_threadId = std::this_thread::get_id();
 			while (!chain->m_exit->load(std::memory_order_acquire)) // check for exit flag
 			{
 				chain->runInCurrentThread();
 				if (chain->m_scheduler->syncRequested())
 					chain->m_scheduler->waitForProcessSync();
 			}
+
+			chain->m_scheduler->reportExit(chain->m_threadId);
 		}
 		catch (const args::core::exception& e)
 		{
-			chain->m_scheduler->reportExitWithError(std::this_thread::get_id(), e);
+			chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e);
 		}
 		catch (const std::exception& e)
 		{
-			chain->m_scheduler->reportExitWithError(std::this_thread::get_id(), e);
+			chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e);
 		}
 	}
 
@@ -41,6 +44,7 @@ namespace args::core::scheduling
 	inline void ProcessChain::runInCurrentThread()
 	{
 		hashed_sparse_set<id_type> finishedProcesses;
+		async::readonly_guard guard(m_processesLock);
 		do
 		{
 			for (auto process : m_processes)
@@ -52,12 +56,14 @@ namespace args::core::scheduling
 
 	inline void ProcessChain::addProcess(Process* process)
 	{
+		async::readwrite_guard guard(m_processesLock);
 		if (m_processes.insert(process->id(), process).second)
 			process->m_hooks.insert(m_nameHash);
 	}
 
 	inline void ProcessChain::removeProcess(Process* process)
 	{
+		async::readwrite_guard guard(m_processesLock);
 		if (m_processes.erase(process->id()))
 			process->m_hooks.erase(m_nameHash);
 	}

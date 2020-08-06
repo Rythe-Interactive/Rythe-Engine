@@ -4,8 +4,14 @@
 #include <core/containers/containers.hpp>
 #include <core/time/time.hpp>
 
+/**@file process.hpp
+ */
+
 namespace args::core::scheduling
 {
+	/**@class Process
+	 * @brief Operation encapsulating object that keeps track of intervals and hooks into process-chains.
+	 */
 	class Process
 	{
 		friend class ProcessChain;
@@ -30,13 +36,19 @@ namespace args::core::scheduling
 		Process(Process&&) = default;
 		Process& operator=(Process&&) = default;
 
+		/**@brief Returns the hash of the name of the process.
+		 */
 		id_type id() const { return m_nameHash; }
 
+		/**@brief Set the operation for the process to execute at the set interval.
+		 */
 		void setOperation(delegate<void(time::time_span<fast_time>)>&& operation)
 		{
 			m_operation = operation;
 		}
 
+		/**@brief Set the interval at which to execute the set operation.
+		 */
 		void setInterval(time::time_span<fast_time> interval)
 		{
 			m_fixedTimeStep = interval != time::time_span<fast_time>::zero();
@@ -44,9 +56,15 @@ namespace args::core::scheduling
 			m_interval = interval;
 		}
 
+		/**@brief Update the process' internal time measurements and execute the operation if necessary.
+		 * @param timeScale Scalar to scale deltaTime with.
+		 * @return bool True if the operation was executed and has completed the amount of executions in order to sate the interval, otherwise false.
+		 */
 		bool execute(float timeScale)
 		{
 			time::time_span<fast_time> deltaTime = m_clock.restart();
+
+			deltaTime *= timeScale;
 
 			if (deltaTime < 0)
 				deltaTime = 0;
@@ -56,21 +74,17 @@ namespace args::core::scheduling
 				m_operation.invoke(deltaTime);
 				return true;
 			}
-			else
+
+			m_timeBuffer += deltaTime;
+
+			if (m_timeBuffer >= m_interval)
 			{
-				m_timeBuffer += deltaTime;
+				m_timeBuffer -= m_interval;
 
-				if (m_timeBuffer >= m_interval)
-				{
-					m_timeBuffer -= m_interval;
-
-					m_operation.invoke(m_interval);
-				}
-
-				return m_timeBuffer < m_interval;
+				m_operation.invoke(m_interval);
 			}
 
-			return false;
+			return m_timeBuffer < m_interval;
 		}
 	};
 }

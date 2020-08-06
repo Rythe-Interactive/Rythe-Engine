@@ -30,8 +30,8 @@ namespace args::core::async
 	struct readonly_rw_spinlock
 	{
 	private:
-		inline static std::atomic_uint m_lastId = 0;
-		const uint m_id;
+		inline static std::atomic_uint m_lastId = 1;
+		uint m_id;
 		std::atomic_int m_lockState;
 		std::atomic_int m_readers;
 
@@ -221,10 +221,26 @@ namespace args::core::async
 			m_readers.store(0, std::memory_order_relaxed);
 		}
 
+		readonly_rw_spinlock(readonly_rw_spinlock&& source) : m_id(source.m_id)
+		{
+			m_lockState.store(source.m_lockState.load(std::memory_order_acquire), std::memory_order_release);
+			m_readers.store(source.m_readers.load(std::memory_order_acquire), std::memory_order_release);
+		}
+
+		readonly_rw_spinlock& operator=(readonly_rw_spinlock&& source)
+		{
+			m_id = source.m_id;
+			source.m_id = invalid_id;
+			m_lockState.store(source.m_lockState.load(std::memory_order_acquire), std::memory_order_release);
+			m_readers.store(source.m_readers.load(std::memory_order_acquire), std::memory_order_release);
+			return *this;
+		}
+
+
 		readonly_rw_spinlock(const readonly_rw_spinlock&) = delete;
-		readonly_rw_spinlock(readonly_rw_spinlock&) = delete;
 		readonly_rw_spinlock& operator=(const readonly_rw_spinlock&) = delete;
-		readonly_rw_spinlock& operator=(readonly_rw_spinlock&&) = delete;
+
+
 
 		/**@brief Lock for a certain permission level. (locking for idle does nothing)
 		 * @note Locking stacks, locking for readonly multiple times will remain readonly.

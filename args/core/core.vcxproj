@@ -145,9 +145,7 @@
     <ClCompile Include="ecs\entity_handle.cpp" />
     <ClCompile Include="ecs\entityquery.cpp" />
     <ClCompile Include="ecs\queryregistry.cpp" />
-    <ClCompile Include="scheduling\process.cpp" />
     <ClCompile Include="scheduling\processchain.cpp" />
-    <ClCompile Include="scheduling\scheduler.cpp" />
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
   <ItemGroup>
