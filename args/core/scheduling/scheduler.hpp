@@ -9,10 +9,11 @@
 #include <memory>
 #include <thread>
 #include <atomic>
+#include <iostream>
 
 namespace args::core::scheduling
 {
-	class ARGS_API Scheduler
+	class Scheduler
 	{
 	private:
 		struct thread_error
@@ -29,11 +30,11 @@ namespace args::core::scheduling
 		std::atomic_bool m_requestSync;
 		async::ring_sync_lock m_syncLock;
 
-		static async::readonly_rw_spinlock m_threadsLock;
-		static sparse_map<std::thread::id, std::unique_ptr<std::thread>> m_threads;
+		inline static async::readonly_rw_spinlock m_threadsLock;
+		inline static sparse_map<std::thread::id, std::unique_ptr<std::thread>> m_threads;
 		inline static const uint m_maxThreadCount = std::thread::hardware_concurrency() == 0 ? UINT_MAX : std::thread::hardware_concurrency();
-		static async::readonly_rw_spinlock m_availabilityLock;
-		inline static uint m_availableThreads = m_maxThreadCount - 2; // subtract OS and this.
+		inline static async::readonly_rw_spinlock m_availabilityLock;
+		inline static uint m_availableThreads = m_maxThreadCount - 2; // subtract OS and this_thread.
 
 	public:
 		Scheduler()
@@ -51,7 +52,40 @@ namespace args::core::scheduling
 					thread->join();
 		}
 
-		void run();
+		void run()
+		{
+			for (ProcessChain& chain : m_processChains)
+				chain.run();
+
+			while (true) // check for engine exit flag
+			{
+				{
+					async::readwrite_guard guard(m_errorsLock);
+
+					if (m_errors.size())
+					{
+						for (thread_error& error : m_errors)
+						{
+							std::cout << error.message << std::endl;
+							destroyThread(error.threadId);
+						}
+
+						m_errors.clear();
+
+						throw args_exception_msg("An exception occurred in a different thread.");
+					}
+				}
+
+				if (m_localChain.id())
+					m_localChain.runInCurrentThread();
+
+				if (m_syncLock.waiterCount() == m_processChains.size())
+				{
+					m_syncLock.sync();
+					m_requestSync.store(false, std::memory_order_release);
+				}
+			}
+		}
 
 		template<typename Function, typename... Args >
 		bool createThread(Function&& function, Args&&... args)
@@ -100,7 +134,17 @@ namespace args::core::scheduling
 			m_errors.push_back({ std::string("Encountered exception:\n  msg:     \t") + exc.what(), id });
 		}
 
-		void waitForProcessSync();
+		void waitForProcessSync()
+		{
+			if (std::this_thread::get_id() != m_syncLock.ownerThread())
+			{
+				m_requestSync.store(true, std::memory_order_relaxed);
+				m_syncLock.sync();
+			}
+			else
+				while (m_syncLock.waiterCount() == m_processChains.size())
+					;
+		}
 
 		bool syncRequested() { return m_requestSync.load(std::memory_order_acquire); }
 

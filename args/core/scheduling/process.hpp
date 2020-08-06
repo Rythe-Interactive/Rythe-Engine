@@ -6,7 +6,7 @@
 
 namespace args::core::scheduling
 {
-	class ARGS_API Process
+	class Process
 	{
 		friend class ProcessChain;
 	private:
@@ -32,10 +32,45 @@ namespace args::core::scheduling
 
 		id_type id() const { return m_nameHash; }
 
-		void setOperation(delegate<void(time::time_span<fast_time>)>&& operation);
+		void setOperation(delegate<void(time::time_span<fast_time>)>&& operation)
+		{
+			m_operation = operation;
+		}
 
-		void setInterval(time::time_span<fast_time> interval);
+		void setInterval(time::time_span<fast_time> interval)
+		{
+			m_fixedTimeStep = interval != time::time_span<fast_time>::zero();
 
-		bool execute(float timeScale);
+			m_interval = interval;
+		}
+
+		bool execute(float timeScale)
+		{
+			time::time_span<fast_time> deltaTime = m_clock.restart();
+
+			if (deltaTime < 0)
+				deltaTime = 0;
+
+			if (!m_fixedTimeStep)
+			{
+				m_operation.invoke(deltaTime);
+				return true;
+			}
+			else
+			{
+				m_timeBuffer += deltaTime;
+
+				if (m_timeBuffer >= m_interval)
+				{
+					m_timeBuffer -= m_interval;
+
+					m_operation.invoke(m_interval);
+				}
+
+				return m_timeBuffer < m_interval;
+			}
+
+			return false;
+		}
 	};
 }
