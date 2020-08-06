@@ -106,7 +106,7 @@ namespace args::core::events
 		template<typename event_type, inherits_from<event_type, event<event_type>> = 0>
 		void bindToEvent(delegate<void(EventBus*)> callback)
 		{
-			m_eventCallbacks[typeid(event_type)] += callback;
+			m_eventCallbacks[event_type::id] += callback;
 		}
 	};
 }
