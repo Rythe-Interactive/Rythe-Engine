@@ -6,6 +6,8 @@
 
 namespace args::core::ecs
 {
+	hashed_sparse_set<QueryRegistry*> QueryRegistry::m_validRegistries;
+
 	void QueryRegistry::addComponentType(id_type queryId, id_type componentTypeId)
 	{
 		{

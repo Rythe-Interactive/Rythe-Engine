@@ -27,8 +27,17 @@ namespace args::core::ecs
 		async::readonly_rw_spinlock m_componentLock;
 		sparse_map<id_type, hashed_sparse_set<id_type>> m_componentTypes;
 
+		static hashed_sparse_set<QueryRegistry*> m_validRegistries;
+
 	public:
-		QueryRegistry(EcsRegistry& registry) : m_registry(registry), m_entityLists(), m_componentTypes() {}
+		static bool isValid(QueryRegistry* reg) { return m_validRegistries.contains(reg); }
+
+		QueryRegistry(EcsRegistry& registry) : m_registry(registry), m_entityLists(), m_componentTypes() { m_validRegistries.insert(this); }
+
+		~QueryRegistry()
+		{
+			m_validRegistries.erase(this);
+		}
 
 		/**@brief Add a certain component type to a query.
 		 * @warning Changing the components for this query id will also change it for any other references that may not want the same change.
@@ -80,7 +89,7 @@ namespace args::core::ecs
 			(componentTypeIds.insert(typeHash<component_types>()), ...);
 			return createQuery(componentTypeIds);
 		}
-		
+
 		/**@brief Creates an entity query for a certain component combination.
 		 * @note Will not always create a new query id. If another query exists with the same component type the query handle will get the same id as that one.
 		 * @param componentTypes Sparse map with type ids of components that need to be queried by the new query.

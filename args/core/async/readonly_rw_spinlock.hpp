@@ -32,8 +32,8 @@ namespace args::core::async
 	private:
 		inline static std::atomic_uint m_lastId = 1;
 		uint m_id;
-		std::atomic_int m_lockState;
-		std::atomic_int m_readers;
+		std::atomic_int m_lockState = 0;
+		std::atomic_int m_readers = 0;
 
 		inline static thread_local std::unordered_map<uint, int> m_localWriters;
 		inline static thread_local std::unordered_map<uint, int> m_localReaders;

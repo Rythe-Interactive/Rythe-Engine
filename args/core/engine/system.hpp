@@ -59,6 +59,12 @@ namespace args::core
 			m_scheduler->hookProcess(chainName, m_processes[id].get());
 		}
 
+		template<typename... component_types>
+		A_NODISCARD ecs::EntityQuery createQuery()
+		{
+			return m_ecs->createQuery<component_types...>();
+		}
+
 		template<typename event_type, typename... Args, inherits_from<event_type, events::event<event_type>> = 0>
 		void raiseEvent(Args... arguments)
 		{
@@ -66,25 +72,25 @@ namespace args::core
 		}
 
 		template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-		bool checkEvent() const
+		A_NODISCARD bool checkEvent() const
 		{
 			return m_eventBus->checkEvent<event_type>();
 		}
 
 		template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-		size_type getEventCount() const
+		A_NODISCARD size_type getEventCount() const
 		{
 			return m_eventBus->getEventCount<event_type>();
 		}
 
 		template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-		const event_type& getEvent(index_type index = 0) const
+		A_NODISCARD const event_type& getEvent(index_type index = 0) const
 		{
 			return m_eventBus->getEvent<event_type>(index);
 		}
 
 		template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-		const event_type& getLastEvent() const
+		A_NODISCARD const event_type& getLastEvent() const
 		{
 			return m_eventBus->getLastEvent<event_type>();
 		}

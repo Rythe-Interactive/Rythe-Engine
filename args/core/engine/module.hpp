@@ -52,6 +52,12 @@ namespace args::core
 			m_systems.insert(typeHash<SystemType>(), std::move(system));
 		}
 
+		template<typename component_type>
+		void reportComponentType()
+		{
+			m_ecs->reportComponentType<component_type>();
+		}
+
 	public:
 		virtual void setup() ARGS_PURE;
 
