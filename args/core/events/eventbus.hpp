@@ -36,7 +36,7 @@ namespace args::core::events
 		 * @tparam event_type Event type to raise.
 		 * @param arguments Arguments to pass to the constructor of the event.
 		 */
-		template<typename event_type, typename... Args, inherits_from<event_type, event<event_type>> = 0>
+		template<typename event_type, typename... Args, typename = inherits_from<event_type, event<event_type>>>
 		void raiseEvent(Args&&... arguments)
 		{
 			event_type* event = new event_type(arguments...); // Create new event.
