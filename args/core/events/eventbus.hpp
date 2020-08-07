@@ -12,6 +12,9 @@
 
 namespace args::core::events
 {
+	/**@class EventBus
+	 * @brief Central communication channel for events and messages.
+	 */
 	class EventBus
 	{
 		sparse_map<id_type, hashed_sparse_set<event_base*>> m_events;
@@ -20,7 +23,7 @@ namespace args::core::events
 	public:
 		~EventBus()
 		{
-			for(auto& events : m_events)
+			for (auto& events : m_events)
 			{
 				for (auto* event : events)
 					delete event;
@@ -29,31 +32,45 @@ namespace args::core::events
 			}
 		}
 
+		/**@brief Insert event into bus and notify all subscribers.
+		 * @tparam event_type Event type to raise.
+		 * @param arguments Arguments to pass to the constructor of the event.
+		 */
 		template<typename event_type, typename... Args, inherits_from<event_type, event<event_type>> = 0>
-		void raiseEvent(Args... arguments)
+		void raiseEvent(Args&&... arguments)
 		{
-			if (!m_events.contains(event_type::id))
-				m_events.emplace(event_type::id);
+			event_type* event = new event_type(arguments...); // Create new event.
 
-			m_events[event_type::id].insert(new event_type(arguments...));
-
-			m_eventCallbacks[event_type::id].invoke(this);
-
-			if (!m_events[event_type::id][0]->persistent())
+			if (event->unique() && m_events[event_type::id].size()) // Check if it's unique and if another one already exists.
 			{
-				for (auto* event : m_events[event_type::id])
-					delete event;
+				m_eventCallbacks[event_type::id].invoke(this); // Notify and delete.
+				delete event;
+				return;
+			}
 
-				m_events[event_type::id].clear();
+			m_events[event_type::id].insert(event); // Keep the event stored. (Or at least keep it somewhere fetch able.)
+
+			m_eventCallbacks[event_type::id].invoke(this); // Notify.
+
+			if (!event->persistent()) // If the event isn't persistent then delete it again.
+			{
+				m_events[event_type::id].erase(event);
+				delete event;
 			}
 		}
 
+		/**@brief Check if an event is active.
+		 * @tparam event_type Event type to check for.
+		 */
 		template<typename event_type, inherits_from<event_type, event<event_type>> = 0>
 		bool checkEvent() const
 		{
 			return m_events.contains(event_type::id) && m_events[event_type::id].size();
 		}
 
+		/**@brief Get the amount of events/messages that are currently in the bus.
+		 * @tparam event_type Event type to get the amount of.
+		 */
 		template<typename event_type, inherits_from<event_type, event<event_type>> = 0>
 		size_type getEventCount() const
 		{
@@ -62,6 +79,9 @@ namespace args::core::events
 			return 0;
 		}
 
+		/**@brief Get a reference to an event/message of a certain index.
+		 * @tparam event_type Event type to fetch.
+		 */
 		template<typename event_type, inherits_from<event_type, event<event_type>> = 0>
 		const event_type& getEvent(index_type index = 0) const
 		{
@@ -70,6 +90,9 @@ namespace args::core::events
 			return nullptr;
 		}
 
+		/**@brief Get a reference to the most recently raised event of this type.
+		 * @tparam event_type Event type to fetch.
+		 */
 		template<typename event_type, inherits_from<event_type, event<event_type>> = 0>
 		const event_type& getLastEvent() const
 		{
@@ -81,6 +104,9 @@ namespace args::core::events
 			return nullptr;
 		}
 
+		/**@brief Removes a certain event from the bus.
+		 * @tparam event_type Event type to clear.
+		 */
 		template<typename event_type, inherits_from<event_type, event<event_type>> = 0>
 		void clearEvent(index_type index = 0)
 		{
@@ -92,6 +118,9 @@ namespace args::core::events
 			}
 		}
 
+		/**@brief Removes a the most recent event from the bus.
+		 * @tparam event_type Event type to clear.
+		 */
 		template<typename event_type, inherits_from<event_type, event<event_type>> = 0>
 		void clearLastEvent()
 		{
@@ -103,6 +132,9 @@ namespace args::core::events
 			}
 		}
 
+		/**@brief Link a callback to an event type in order to get notified whenever one gets raised.
+		 * @tparam event_type Event type to subscribe to.
+		 */
 		template<typename event_type, inherits_from<event_type, event<event_type>> = 0>
 		void bindToEvent(delegate<void(EventBus*)> callback)
 		{
