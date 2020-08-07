@@ -40,13 +40,6 @@ public:
 		static int frameCount;
 		static time::time_span<fast_time> accumulated;
 
-		for (auto entity : query)
-		{
-			auto comp = entity.get_component<sah>();
-			comp.write({ frameCount });
-			std::cout << comp.read().value << std::endl;
-		}
-
 		buffer += deltaTime;
 		accumulated += deltaTime;
 		frameCount++;
@@ -54,6 +47,14 @@ public:
 		if (buffer > 1.f)
 		{
 			buffer -= 1.f;
+
+			for (auto entity : query)
+			{
+				auto comp = entity.get_component<sah>();
+				comp.write({ frameCount });
+				std::cout << "component value: " << comp.read().value << std::endl;
+			}
+
 			std::cout << "Hi! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
 		}
 	}
@@ -77,6 +78,8 @@ public:
 
 	void differentThread(time::time_span<fast_time> deltaTime)
 	{
+		static auto query = createQuery<sah>();
+
 		static time::time_span<fast_time> buffer;
 		static int frameCount;
 		static time::time_span<fast_time> accumulated;
@@ -88,6 +91,13 @@ public:
 		if (buffer > 1.f)
 		{
 			buffer -= 1.f;
+
+			for (auto entity : query)
+			{
+				auto comp = entity.get_component<sah>();				
+				std::cout << "component value on different thread: " << comp.read().value << std::endl;
+			}
+
 			std::cout << "This is a different thread!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
 		}
 
