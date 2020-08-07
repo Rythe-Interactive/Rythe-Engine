@@ -5,6 +5,7 @@
 #include <core/types/meta.hpp>
 #include <core/ecs/ecsregistry.hpp>
 #include <core/scheduling/scheduler.hpp>
+#include <core/events/eventbus.hpp>
 
 #include <map>
 #include <vector>
@@ -28,12 +29,20 @@ namespace args::core
 	class Engine
 	{
 	private:
-		std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<>> modules;
+		std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<>> m_modules;
 
 		ecs::EcsRegistry m_ecs;
+		events::EventBus m_eventbus;
 		scheduling::Scheduler m_scheduler;
 
 	public:
+		Engine() : m_modules(), m_ecs(), m_eventbus(), m_scheduler(&m_eventbus) {}
+
+		~Engine()
+		{
+			m_modules.clear();
+		}
+
 		/**@brief reports an engine module
 		 * @tparam ModuleType the module you want to report
 		 * @param s a signal that you want to pass arguments to the constructor of the Module
@@ -46,9 +55,10 @@ namespace args::core
 			std::unique_ptr<Module> module = std::make_unique<ModuleType>(std::forward<Args>(args)...);
 			module->m_ecs = &m_ecs;
 			module->m_scheduler = &m_scheduler;
+			module->m_eventBus = &m_eventbus;
 
 			const priority_type priority = module->priority();
-			modules[priority].emplace_back(std::move(module));
+			m_modules[priority].emplace_back(std::move(module));
 		}
 
 		/**@brief Calls init on all reported modules and thus engine internals.
@@ -57,11 +67,11 @@ namespace args::core
 		 */
 		void init()
 		{
-			for (const auto& [priority, moduleList] : modules)
+			for (const auto& [priority, moduleList] : m_modules)
 				for (auto& module : moduleList)
 					module->setup();
 
-			for (const auto& [priority, moduleList] : modules)
+			for (const auto& [priority, moduleList] : m_modules)
 				for (auto& module : moduleList)
 					module->init();
 		}

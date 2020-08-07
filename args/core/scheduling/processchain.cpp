@@ -10,7 +10,6 @@ namespace args::core::scheduling
 	{
 		try
 		{
-			chain->m_threadId = std::this_thread::get_id();
 			while (!chain->m_exit->load(std::memory_order_acquire)) // Check for exit flag.
 			{
 				chain->runInCurrentThread(); // Execute all processes.
@@ -34,7 +33,13 @@ namespace args::core::scheduling
 	inline bool ProcessChain::run()
 	{
 		m_exit->store(false, std::memory_order_release);
-		return m_scheduler->createThread(threadedRun, this); // Create thread and run.
+		std::thread::id threadId = m_scheduler->createThread(threadedRun, this); // Create thread and run.
+		if (threadId != std::thread::id())
+		{
+			m_threadId = threadId;
+			return true;
+		}
+		return false;
 	}
 
 	inline void ProcessChain::exit()

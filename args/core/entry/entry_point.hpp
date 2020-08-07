@@ -104,7 +104,8 @@ extern void reportModules(args::core::Engine* engine);
 			engine.run();
 
 	#if defined(ARGS_DEBUG)
-			std::cin.ignore().get();
+			std::cout << "Press any key to exit." << std::endl;
+			std::cin.ignore();
 	#endif
 
 		}
@@ -123,7 +124,8 @@ extern void reportModules(args::core::Engine* engine);
 	#if defined(ARGS_DEBUG)
 			throw e;
 	#else
-			std::cin.ignore().get();
+			std::cout << "Press any key to exit." << std::endl;
+			std::cin.ignore();
 	#endif
 		}
 		catch (const std::exception& e)
@@ -137,7 +139,8 @@ extern void reportModules(args::core::Engine* engine);
 	#if defined(ARGS_DEBUG)
 			throw e;
 	#else
-			std::cin.ignore().get();
+			std::cout << "Press any key to exit." << std::endl;
+			std::cin.ignore();
 	#endif
 		}
 

@@ -11,6 +11,7 @@ public:
 	{
 		addChain("TestChain");
 
+		reportComponentType<sah>();
 		reportSystem<TestSystem>();
 	}
 

@@ -5,6 +5,7 @@
 #include <core/scheduling/processchain.hpp>
 #include <core/async/async.hpp>
 #include <core/common/exception.hpp>
+#include <core/events/events.hpp>
 
 #include <memory>
 #include <thread>
@@ -45,6 +46,8 @@ namespace args::core::scheduling
 
 		std::atomic<float> m_timeScale = 1.f;
 
+		events::EventBus* m_eventBus;
+
 		static async::readonly_rw_spinlock m_threadsLock;
 		static sparse_map<std::thread::id, std::unique_ptr<std::thread>> m_threads;
 		static const uint m_maxThreadCount;
@@ -52,7 +55,7 @@ namespace args::core::scheduling
 		static uint m_availableThreads;
 
 	public:
-		Scheduler();		
+		Scheduler(events::EventBus* eventBus);		
 
 		~Scheduler();
 
@@ -77,10 +80,10 @@ namespace args::core::scheduling
 		/**@brief Create a new thread.
 		 * @param function Function to run on the thread.
 		 * @param ...args Arguments to pass to the function.
-		 * @return bool True if thread was created, false if there are no available threads.
+		 * @return std::thread::id Id of new thread if thread was created, 0 id if there are no available threads.
 		 */
 		template<typename Function, typename... Args >
-		bool createThread(Function&& function, Args&&... args)
+		std::thread::id createThread(Function&& function, Args&&... args)
 		{
 			async::readwrite_multiguard guard(m_availabilityLock, m_threadsLock);
 
@@ -88,11 +91,12 @@ namespace args::core::scheduling
 			{
 				m_availableThreads--;
 				std::unique_ptr<std::thread> newThread = std::make_unique<std::thread>(function, args...); // Create a new thread and run it.
-				m_threads.insert(newThread->get_id(), std::move(newThread));
-				return true;
+				std::thread::id id = newThread->get_id();
+				m_threads.insert(id, std::move(newThread));
+				return id;
 			}
 
-			return false;
+			return std::thread::id();
 		}
 
 		/**@brief Destroy a thread.

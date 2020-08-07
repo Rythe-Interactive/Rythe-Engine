@@ -224,9 +224,6 @@ namespace args::core
 		multicast_delegate() = default;
 		~multicast_delegate()
 		{
-			for (auto& element : m_invocationList)
-				delete element;
-
 			m_invocationList.clear();
 		}
 
@@ -247,7 +244,11 @@ namespace args::core
 		size_t size() const { return m_invocationList.size(); }
 
 		multicast_delegate& operator =(const multicast_delegate&) = delete;
+		multicast_delegate& operator =(multicast_delegate&&) = default;
+
 		multicast_delegate(const multicast_delegate&) = delete;
+		multicast_delegate(multicast_delegate&&) = default;
+
 
 		bool operator ==(const multicast_delegate& other) const
 		{
@@ -307,13 +308,13 @@ namespace args::core
 		void operator()(parameter_types... arguments) const
 		{
 			for (auto& item : m_invocationList)
-				(*(item->stub))(item.object, arguments...);
+				(*(item.stub))(item.object, arguments...);
 		}
 
 		void invoke(parameter_types... arguments) const
 		{
 			for (auto& item : m_invocationList)
-				(*(item->stub))(item.object, arguments...);
+				(*(item.stub))(item.object, arguments...);
 		}
 
 		template<typename return_handler>
