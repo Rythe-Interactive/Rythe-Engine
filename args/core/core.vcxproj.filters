@@ -69,6 +69,7 @@
     <ClInclude Include="filesystem\detail\meta.hpp" />
     <ClInclude Include="filesystem\view.hpp" />
     <ClInclude Include="detail\internals.hpp" />
+    <ClInclude Include="filesystem\basic_resolver.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\engine.cpp">

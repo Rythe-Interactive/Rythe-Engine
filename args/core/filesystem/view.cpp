@@ -89,8 +89,7 @@ namespace args::core::filesystem
         const auto traits = resolver->get_traits();
         if (traits.is_valid && ((traits.can_be_written && !traits.is_directory) || traits.can_be_created))
         {
-            if (!resolver->set(resource)) return Err(args_fs_error("unable to write, internal filesystem error"));
-            return Ok();
+            return resolver->set(resource);
         }
         return Err(args_fs_error("invalid file traits: (not valid) or (not writeable or directory) or (not creatable)"));
     }
@@ -200,6 +199,8 @@ namespace args::core::filesystem
             std::string identifier = create_identifier((iter + 1).base());
             auto& [resolver, resolver_path] = *iter;
 
+            
+
             //we expect the first element to be valid no matter what if it isn't we have a deeper problem
             if (iter != m_foundSolution.rend() - 1)
             {
@@ -210,7 +211,7 @@ namespace args::core::filesystem
                 if (memory_resolver == nullptr) return nullptr;
                 auto shared_memory_resolver = std::shared_ptr<mem_filesystem_resolver>(memory_resolver->make_higher());
                 shared_memory_resolver->set_target(resolver_path);
-
+                shared_memory_resolver->set_identifier(identifier);
                 std::shared_ptr<create_chain> previous = nullptr;
 
                 //finish setting up previous link
@@ -244,6 +245,7 @@ namespace args::core::filesystem
             {
                 //all caches missed
                 chain->provider = std::shared_ptr<filesystem_resolver>(resolver->make());
+                chain->provider->set_identifier(resolver->get_identifier());
                 chain->provider->set_target(resolver_path);
             }
         }

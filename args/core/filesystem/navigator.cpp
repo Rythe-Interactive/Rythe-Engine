@@ -69,6 +69,7 @@ namespace args::core::filesystem {
                 resolver = *provider_registry::domain_get_first_resolver(domain);
                 if(!dynamic_cast<memory_resolver_common_base*>(resolver)) return Err(args_fs_error("sub domain resolver was not a mem resolver, illegal access"));
 
+                path_for_resolver = "";
             }
 
             //we sanitized the string prior checking this

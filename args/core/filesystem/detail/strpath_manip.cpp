@@ -14,7 +14,7 @@ namespace args::core::filesystem
 
 	std::string strpath_manip::subdir(const std::string& p, const std::string& sub)
 	{
-		return p + separator() + sub;
+        return common::rtrim_copy(p,[](char c){ return c == separator() || c == anti_separator(); }) + separator() + sub;
 	}
 
 	std::string strpath_manip::sanitize(const std::string& p, bool fail_on_fs_leave)

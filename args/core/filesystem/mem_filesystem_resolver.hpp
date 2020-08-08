@@ -5,7 +5,7 @@
 
 namespace args::core::filesystem
 {
-    class mem_filesystem_resolver : public filesystem_resolver, public memory_resolver_common_base
+    class ARGS_API mem_filesystem_resolver : public filesystem_resolver, public memory_resolver_common_base
     {
     public:
         /** requires the raw data to be passed for internal building
@@ -19,7 +19,7 @@ namespace args::core::filesystem
 
         void set_disk_data(const byte_vec& target_data)
         {
-            m_targetData = std::make_shared<const byte_vec>(target_data.begin(),target_data.end());
+            m_targetData = std::make_shared<const byte_vec>(target_data.begin(), target_data.end());
         }
         void set_disk_data(byte_vec&& target_data)
         {
@@ -32,7 +32,12 @@ namespace args::core::filesystem
             m_targetData = target_data;
         }
 
-        A_NODISCARD filesystem_resolver* make() override { return make_higher(); }
+        A_NODISCARD filesystem_resolver* make() override
+        {
+            mem_filesystem_resolver* x = make_higher();
+            x->set_disk_data(m_targetData);
+            return x;
+        }
 
         A_NODISCARD virtual mem_filesystem_resolver* make_higher() ARGS_PURE;
 

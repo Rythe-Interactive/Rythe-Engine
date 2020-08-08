@@ -34,7 +34,7 @@ namespace args::core::filesystem {
         return get(interfaces::implement_signal_t{});
     }
 
-    bool filesystem_resolver::set(const basic_resource& res)
+    common::result<void, fs_error> filesystem_resolver::set(const basic_resource& res)
     {
 
         //TODO(algo-ryth-mix): create strategy to bulk-flush data instead of flushing every time!

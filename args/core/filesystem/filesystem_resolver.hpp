@@ -18,7 +18,7 @@
  * @file filesystem_resolver.hpp
  */
 
-namespace args::core::filesystem{
+namespace args::core::filesystem {
 
     /**@class filesystem_resolver
      * @brief abstract class that should represent and implement all functions of your
@@ -50,11 +50,11 @@ namespace args::core::filesystem{
         A_NODISCARD file_traits get_traits() noexcept;
 
 
-        /** @brief sets the identifier of the filesystem 
+        /** @brief sets the identifier of the filesystem
          *  @note if this filesystem is nested it should be the path to the root of the fs otherwise it can be arbitrary
-         *  @param [in] ident the identifier of the filesystem 
+         *  @param [in] ident the identifier of the filesystem
          */
-        void set_identifier(const std::string& ident) { m_identifier = ident;}
+        void set_identifier(const std::string& ident) { m_identifier = ident; }
 
 
         /** @brief sets the target path of the resolver
@@ -71,7 +71,7 @@ namespace args::core::filesystem{
          *        - if exists and is file can be read
          */
 
-        /** @brief checks if target points to a file */
+         /** @brief checks if target points to a file */
         A_NODISCARD virtual bool is_file()      const noexcept ARGS_PURE;
         /** @brief checks if target points to a directory */
         A_NODISCARD virtual bool is_directory() const noexcept ARGS_PURE;
@@ -79,11 +79,11 @@ namespace args::core::filesystem{
         A_NODISCARD virtual bool is_valid()     const noexcept ARGS_PURE;
         /** @brief checks if the target location can be written to*/
         A_NODISCARD virtual bool writeable()    const noexcept ARGS_PURE;
-         /** @brief checks if the target location can be read from*/
+        /** @brief checks if the target location can be read from*/
         A_NODISCARD virtual bool readable()     const noexcept ARGS_PURE;
-         /** @brief checks if the target location can be created*/
+        /** @brief checks if the target location can be created*/
         A_NODISCARD virtual bool creatable()    const noexcept ARGS_PURE;
-         /** @brief checks if the target location exists*/
+        /** @brief checks if the target location exists*/
         A_NODISCARD virtual bool exists()       const noexcept ARGS_PURE;
 
         /** @brief gets all entries in a directory or similar concept (assume -a)
@@ -98,17 +98,18 @@ namespace args::core::filesystem{
          *  @ref set_target
          *  @return basic_resource wrapped in Ok() or fs_error wrapped in Err()
          */
-        A_NODISCARD common::result<basic_resource,fs_error> get() const noexcept;
-        virtual common::result<basic_resource,fs_error> get(interfaces::implement_signal_t) const noexcept ARGS_PURE;
+        A_NODISCARD common::result<basic_resource, fs_error> get() const noexcept;
+        virtual common::result<basic_resource, fs_error> get(interfaces::implement_signal_t) const noexcept ARGS_PURE;
 
         /** @brief sets the contents of the file pointed at
          *  @note when not writeable should do nothing and return false
+         *  @note when attempting to create a directory res must be empty
          *  @param [in] res the resource you want to set at location
          *  @ref set_target
-         *  @return bool, false on failure
+         *  @return result<void,fs_error>, has_error == true when the file could not be read
          */
-        A_NODISCARD bool set(const basic_resource& res);
-        virtual bool set(interfaces::implement_signal_t,const basic_resource& res) ARGS_PURE;
+        A_NODISCARD common::result<void, fs_error> set(const basic_resource& res);
+        virtual common::result<void, fs_error> set(interfaces::implement_signal_t, const basic_resource& res) ARGS_PURE;
 
         /** @brief gets the delimiter of the filesystem
          *  @return char single character for the delimiter of the filesystem (default: strpath_manip::separator())
@@ -128,16 +129,19 @@ namespace args::core::filesystem{
         /** @brief required to create new instances of the provider, similar to a surrogate constructor
          *         if required arguments must be copied over
          */
-         A_NODISCARD virtual filesystem_resolver* make() ARGS_PURE; 
+        A_NODISCARD virtual filesystem_resolver* make() ARGS_PURE;
+
+        A_NODISCARD const std::string& get_identifier() const { return m_identifier; }
+
+        A_NODISCARD const std::string& get_target() const { return m_target; }
 
     protected:
-        A_NODISCARD const std::string & get_target() const { return m_target; }
-        A_NODISCARD const std::string& get_identifier() const { return m_identifier; }
+
 
     private:
         std::string m_identifier;
         std::string m_target;
-        filesystem_traits m_traits{false,true};
-            
+        filesystem_traits m_traits{ false,true };
+
     };
 }

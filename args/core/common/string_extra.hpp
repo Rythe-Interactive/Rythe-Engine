@@ -263,17 +263,40 @@ static inline void ltrim(std::string &s) {
     }));
 }
 
+template <class Trimmer>
+static inline void ltrim(std::string&s,Trimmer&& t)
+{
+    s.erase(std::find_if(s.begin(), s.end(), [&t](int ch) {
+        return !t(ch);
+    }), s.end());
+}
+
 // trim from end (in place)
 static inline void rtrim(std::string &s) {
     s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
         return !std::isspace(ch);
     }).base(), s.end());
 }
+template <class Trimmer>
+static inline void rtrim(std::string&s,Trimmer&& t)
+{
+    s.erase(std::find_if(s.rbegin(), s.rend(), [&t](int ch) {
+        return !t(ch);
+    }).base(), s.end());
+}
+
 
 // trim from both ends (in place)
 static inline void trim(std::string &s) {
     ltrim(s);
     rtrim(s);
+}
+
+template <class Trimmer>
+static inline void trim(std::string&s,Trimmer&& t)
+{
+    ltrim(s,t);
+    rtrim(s,t);
 }
 
 // trim from start (copying)
@@ -291,6 +314,24 @@ static inline std::string rtrim_copy(std::string s) {
 // trim from both ends (copying)
 static inline std::string trim_copy(std::string s) {
     trim(s);
+    return s;
+}
+template<class Trimmer>
+// trim from start (copying)
+static inline std::string ltrim_copy(std::string s,Trimmer&& t) {
+    ltrim(s,t);
+    return s;
+}
+template<class Trimmer>
+// trim from end (copying)
+static inline std::string rtrim_copy(std::string s,Trimmer&& t) {
+    rtrim(s,t);
+    return s;
+}
+template<class Trimmer>
+// trim from both ends (copying)
+static inline std::string trim_copy(std::string s,Trimmer&& t) {
+    trim(s,t);
     return s;
 }
 

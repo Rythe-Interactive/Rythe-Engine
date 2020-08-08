@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-
+#include <core/platform/platform.hpp>
 
 #define SEP_WINDOWS 1
 #define SEP_NIX 2
@@ -14,7 +14,7 @@
 
 namespace args::core::filesystem
 {
-	class strpath_manip
+	class ARGS_API strpath_manip
 	{
 	public:
 		

@@ -126,6 +126,7 @@
     <ClInclude Include="engine\module.hpp" />
     <ClInclude Include="entry\entry_point.hpp" />
     <ClInclude Include="filesystem\artifact_cache.hpp" />
+    <ClInclude Include="filesystem\basic_resolver.hpp" />
     <ClInclude Include="filesystem\detail\meta.hpp" />
     <ClInclude Include="filesystem\detail\resource_meta.hpp" />
     <ClInclude Include="filesystem\detail\resource_sfinae.hpp" />

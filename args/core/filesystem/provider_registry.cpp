@@ -58,7 +58,8 @@ namespace args::core::filesystem
 		static auto& driver = get_driver();
 
 		//insert a resolver
-		driver.m_domain_resolver_map->emplace(strpath_manip::localize(d),std::unique_ptr<resolver>(r));
+		auto itr = driver.m_domain_resolver_map->emplace(strpath_manip::localize(d),std::unique_ptr<resolver>(r));
+        itr->second->set_identifier(d);
 	}
 
 	std::vector<provider_registry::resolver_ptr> provider_registry::domain_get_resolvers(domain d)
