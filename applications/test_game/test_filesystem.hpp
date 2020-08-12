@@ -89,7 +89,7 @@ std::ostream& operator<<(std::ostream& lhs, filesystem::basic_resource rhs)
 
 inline void test_filesystem()
 {
-    std::string  x = "Always Has been!";
+    std::string  x = "always has been!";
 
     auto vector = std::make_shared<byte_vec>(x.begin(),x.end());
 
@@ -101,10 +101,10 @@ inline void test_filesystem()
 
 
     auto nested_contents = fs::view("basic://config/test.args-test/test.txt").get();
-    if(nested_contents == common::valid_t{})
+    if(nested_contents == common::valid)
     {
         std::cout << "[arm-fs] -> found file !" << std::endl;
-        std::cout << nested_contents << std::endl;
+        std::cout << "[arm-fs] -> " << nested_contents << std::endl;
     }
     else
     {
@@ -115,17 +115,16 @@ inline void test_filesystem()
     auto traits = fs::view("only_test_valid://test.txt").file_info();
     if(traits != fs::invalid_file_t)
     {
-        std::cout << "[arm-fs] -> mock provider was successfully queried" << std::endl;
         std::cout << "[arm-fs] -> " << fs::view("only_test_valid://test.txt").get() << std::endl;
     }
     else __debugbreak();
 
     auto contents = fs::view("basic://config/test.txt").get();
 
-    if(contents == common::valid_t{})
+    if(contents == common::valid)
     {
         std::cout << "[arm-fs] -> found file !" << std::endl;
-        std::cout << contents << std::endl;
+        std::cout <<"[arm-fs] -> " << contents << std::endl;
     }
     else
     {

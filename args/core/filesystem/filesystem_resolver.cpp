@@ -12,6 +12,9 @@ namespace args::core::filesystem {
 
     file_traits filesystem_resolver::get_traits() noexcept
     {
+        //get all traits via the specific functions
+        //TODO: this could possibly be optimized by calling inherit_traits
+
         file_traits traits;
 
         traits.is_file = is_file();
@@ -31,18 +34,23 @@ namespace args::core::filesystem {
 
     common::result<basic_resource, fs_error> filesystem_resolver::get() const noexcept
     {
+        //this interface might change on a library basis
+        //to avoid breaking the code the user has to implement a different method
         return get(interfaces::implement_signal_t{});
     }
 
     common::result<void, fs_error> filesystem_resolver::set(const basic_resource& res)
     {
-
+        //this interface might change on a library basis
+        //to avoid breaking the code the user has to implement a different method
         //TODO(algo-ryth-mix): create strategy to bulk-flush data instead of flushing every time!
         return set(interfaces::implement_signal_t{},res);
     }
 
     void filesystem_resolver::erase() const noexcept
     {
+        //this interface might change on a library basis
+        //to avoid breaking the code the user has to implement a different method
         erase(interfaces::implement_signal_t{});
     }
 

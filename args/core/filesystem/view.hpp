@@ -1,4 +1,5 @@
 #pragma once
+
 #include <core/common/result.hpp>
 #include <core/filesystem/resource.hpp>
 
@@ -10,6 +11,11 @@
 
 namespace args::core::filesystem
 {
+    /**@class view
+     * @brief Generates a view onto the virtual filesystem,
+     *        can be used to do all kinds of fun stuff with,
+     *        the underlying drivers.
+     */
     class ARGS_API view
     {
     public:
@@ -23,24 +29,57 @@ namespace args::core::filesystem
 
         view(std::string_view path) : m_path(strpath_manip::localize(std::string(path))) {}
 
-        A_NODISCARD operator bool();
-        A_NODISCARD bool is_valid( bool deep_check = false);
+        /** @brief Checks the view for validity.
+         *  @note No deep check!
+         */
+        A_NODISCARD operator bool() const;
 
+        /** @brief Checks the view for validity
+         *  @param deep_check Also checks if the provided path can be resolved
+         *         instead of doing just a basic sanity check.
+         */
+        A_NODISCARD bool is_valid( bool deep_check = false) const;
+
+        /** @brief Gets the traits of the file pointed to.
+         */
         A_NODISCARD file_traits file_info();
+
+        /** @brief Gets the traits of the top most filesystem pointed to.
+         */
         A_NODISCARD filesystem_traits filesystem_info();
+
+        /** @brief Gets the root domain.
+         */
         A_NODISCARD std::string get_domain() const;
 
+        /** @brief Gets the contents of the resource pointed to.
+         *  @note You can use args::common::valid to check for validity.
+         */
         A_NODISCARD common::result_decay_more<basic_resource,fs_error> get();
 
+
+        /** @brief Sets the contents of the resource pointed to.
+         *  @note When setting was not possible has_err() will be true and get_err().what() will contain information on what went wrong.
+         */
         A_NODISCARD common::result<void,fs_error> set(const basic_resource& resource);
 
+        /** @brief Gets the parent folder of the file/folder and creates a new view from it.
+         */
         A_NODISCARD view parent() const;
+
+        /** @brief Creates a new view from a sub path (by first joining them together and then sanitizing the input)
+         **/
         A_NODISCARD virtual view find(std::string_view identifier) const;
 
+
+        /** @brief alternative syntax for find
+         */
         A_NODISCARD view operator[](std::string_view identifier) const;
 
 #if  !defined( ARGS_DISABLE_POTENTIALLY_WEIRD_SYNTAX )
 
+        /** @brief alternative syntax for find
+         */
         A_NODISCARD view operator/(std::string_view identifier) const
         {
             return operator[](identifier);
@@ -63,6 +102,7 @@ namespace args::core::filesystem
             std::shared_ptr<create_chain> next; //next in chain
         };
 
+        void make_inheritance();
         std::shared_ptr<create_chain> translate_solution();
 
 
@@ -70,6 +110,18 @@ namespace args::core::filesystem
 
         navigator::solution m_foundSolution{};
     };
+
+
+    namespace literals
+    {
+        /**@brief. creates a view from a string literal
+         */
+       inline view operator""_view(const char* str,std::size_t len)
+       {
+           return view(std::string_view(str,len));
+       }
+    }
+
 
 #if 0 //not ready yet
 

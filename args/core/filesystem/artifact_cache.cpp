@@ -10,9 +10,12 @@ namespace args::core::filesystem {
         static auto& driver = get_driver();
         {
             async::readonly_guard guard(driver.m_big_gc_lock);
+
+            //query provider
             auto& [ptr,score] =  driver.get_caches()[identifier];
             if(!ptr)
             {
+                //prepare new provider
                 score = driver.current_mean.load();
                 if(size_hint)
                     ptr = std::make_shared<byte_vec>(size_hint);
@@ -21,13 +24,15 @@ namespace args::core::filesystem {
             }
             else
             {
+                //bump existing provider
                 score++;
             }
 
             result = ptr;
         }
 
-        if(driver.decrease_gci() == 0) driver.gc();
+        //run gc from time to time
+        if(driver.decrease_gcc() == 0) driver.gc();
         return result;
     }
 

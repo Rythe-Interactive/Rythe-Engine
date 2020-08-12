@@ -11,13 +11,32 @@ namespace args::core::filesystem
 	constexpr std::size_t gc_interval = 5;
     constexpr std::size_t gc_keep = 35;
     constexpr std::size_t gc_hist = 10;
+
+
+    /**@class artifact_cache
+     * @brief Manages caches for `mem_filesystem_provider`.
+     * @note  This class is not exported! This should only be used by library components.
+     */
 	class artifact_cache
 	{
 	public:
-		static std::shared_ptr<byte_vec> get_cache(std::string_view identifier,std::size_t size_hint = 0);
-        static artifact_cache& get_driver();
-        void gc();
 
+        /**@brief Queries a cache for a `mem_filesystem_provider`.
+         * 
+         * @param identifier Provider identifier.
+         * @param size_hint  A hint to how big the cache is going to be. 
+         * @return shared_ptr to a byte_vec Which should be used as the cache.
+         * @ref mem_filesystem_provider::build_memory_representation
+         */
+		static std::shared_ptr<byte_vec> get_cache(std::string_view identifier,std::size_t size_hint = 0);
+
+        /**@brief Gets the singleton driver for the artifact_cache.
+         */
+        static artifact_cache& get_driver();
+
+        /**@brief Manually calls garbage collection.
+         */
+        void gc();
 
 	private:
         artifact_cache() = default;
@@ -26,7 +45,7 @@ namespace args::core::filesystem
         {
             return m_caches;
         }
-        size_t decrease_gci()
+        size_t decrease_gcc()
         {
             const size_t countdown = m_gc_countdown.fetch_sub(1);
             return countdown-1;

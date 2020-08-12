@@ -21,21 +21,27 @@ namespace args::core::filesystem
 	{
 
 		std::vector<std::string> recreation;
+
+        //tokenize
 		auto tokens = args::core::common::split_string_at<'\\','/'>(p);
 
         std::string filesystem;
 		for(const auto& token : tokens)
 		{
+            //skip filesystem decl
             if(token.find(':') != std::string::npos)
             {
                 filesystem = token + separator() + separator();
                 continue;
             }
+
+            //skip empty
             if(token.empty())
             {
                 continue;
             }
 
+            //handle upwards
 			if(common::rtrim_copy(token) == "..")
 			{
 				if(!recreation.empty() && recreation.back() != "..")
@@ -49,11 +55,15 @@ namespace args::core::filesystem
                 }
 				else recreation.emplace_back("..");
 			}
+
+            //handle normal tokens and .
 			else if(common::rtrim_copy(token) != ".")
 			{
 				recreation.push_back(token);
 			}
 		}
+
+        //reassemble string
 		return filesystem + args::core::common::join_strings_with<std::vector<std::string>,std::string>(recreation,separator());
 	}
 

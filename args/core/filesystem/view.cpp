@@ -7,32 +7,41 @@
 
 namespace args::core::filesystem
 {
-    view::operator bool()
+    view::operator bool() const
     {
         return is_valid();
     }
 
-    bool view::is_valid(bool deep_check)
+    bool view::is_valid(bool deep_check) const
     {
+        //check if path is non empty & if 
         if (m_path.empty()) return false;
         if (!provider_registry::has_domain(get_domain())) return false;
 
-        const navigator n(m_path);
-        if (n.find_solution().has_err()) return false;
-
+        //if deep checking also check if the path meets the requirements of the
+        //navigator system
+        if(deep_check)
+        {
+            const navigator n(m_path);
+            if (n.find_solution().has_err()) return false;
+        }
 
         return true;
     }
 
     file_traits view::file_info()
     {
+        //get solution
         auto result = make_solution();
 
         if (result.has_err()) return invalid_file_t;
         else
         {
+            //get resolver
             auto resolver = build();
             if (resolver == nullptr) return invalid_file_t;
+
+            //get traits
             return resolver->get_traits();
         }
 
@@ -40,19 +49,24 @@ namespace args::core::filesystem
 
     filesystem_traits view::filesystem_info()
     {
+        //get solution
         auto result = make_solution();
 
         if (result.has_err()) return invalid_filesystem_t;
         else
         {
+            //get resolver
             const auto resolver = build();
             if (resolver == nullptr) return invalid_filesystem_t;
+
+            //get traits
             return resolver->get_fs_traits();
         }
     }
 
     std::string view::get_domain() const
     {
+        //string magic to find the first : & substr
         const auto idx = m_path.find_first_of(':');
         return m_path.substr(0, idx + 1) + strpath_manip::separator() + strpath_manip::separator();
     }
@@ -60,17 +74,23 @@ namespace args::core::filesystem
     common::result_decay_more<basic_resource, fs_error> view::get()
     {
         using common::Err, common::Ok;
+
+        //decay overloads the operator of ok_type and operator== for valid_t
         using decay = common::result_decay_more<basic_resource, fs_error>;
 
+        //get solution
         auto result = make_solution();
         if (result.has_err()) Err(result.get_error());
 
+        //get resolver of solution
         auto resolver = build();
         if (resolver == nullptr) return decay(Err(args_fs_error("unable to get required filesystem to get resource!")));
 
+        //get & check traits
         const auto traits = resolver->get_traits();
         if (traits.is_valid && traits.exists && traits.can_be_read)
         {
+            //wrap get in decay
             return decay(resolver->get());
         }
         return decay(Err(args_fs_error("invalid file traits: (not valid) or (does not exist) or (cannot be read)")));
@@ -80,15 +100,19 @@ namespace args::core::filesystem
     {
         using common::Ok, common::Err;
 
+        //get solution
         auto result = make_solution();
-        if (result.has_err()) return Err(result);
+        if (result.has_err()) return Err_of(result);
 
+        //get resolver of solution
         auto resolver = build();
         if (resolver == nullptr) return Err(args_fs_error("unable to get required filesystem to set resource!"));
 
+        //get & check traits
         const auto traits = resolver->get_traits();
         if (traits.is_valid && ((traits.can_be_written && !traits.is_directory) || traits.can_be_created))
         {
+            //set
             return resolver->set(resource);
         }
         return Err(args_fs_error("invalid file traits: (not valid) or (not writeable or directory) or (not creatable)"));
@@ -96,17 +120,21 @@ namespace args::core::filesystem
 
     view view::parent() const
     {
+        //get parent path
         const auto p_path = strpath_manip::parent(m_path);
         return view(p_path);
     }
 
     view view::find(std::string_view identifier) const
     {
+        //probably not necessarily necessary
         std::string sanitized = strpath_manip::sanitize(std::string(identifier));
 
+        //basic bails
         if (sanitized == "..") return parent();
         if (sanitized == ".")  return *this;
 
+        //subdirectorize and then sanitize
         sanitized = strpath_manip::subdir(m_path, sanitized);
         sanitized = strpath_manip::sanitize(sanitized, true);
 
@@ -120,18 +148,13 @@ namespace args::core::filesystem
 
     std::string view::create_identifier(const navigator::solution::iterator& e)
     {
+        //iterate through path and create the ident for the provider
         std::string result;
         for (auto iter = m_foundSolution.begin(); iter != e; ++iter)
         {
             result += iter->second;
         }
         return result;
-    }
-
-
-    auto helper_invalid_pair()
-    {
-        return std::make_pair<std::shared_ptr<filesystem_resolver>, std::string>(nullptr,"");
     }
 
     //TODO(algo-ryth-mix): the navigator should probably return a more efficient
@@ -159,14 +182,14 @@ namespace args::core::filesystem
         //translate the solution into a resolution chain
         auto chain = translate_solution();
 
-        if(!chain) return nullptr;
+        if (!chain) return nullptr;
 
         //traverse resolution chain
-        for(;chain->next != nullptr;chain = chain->next)
+        for (; chain->next != nullptr; chain = chain->next)
         {
-            
+
             auto data = chain->provider->get();
-            if(data.has_err()) return nullptr;
+            if (data.has_err()) return nullptr;
 
             //convert result -> resource -> data
             //and set as disk dat for subject
@@ -177,7 +200,7 @@ namespace args::core::filesystem
         //do it one last time for the last subject
 
         auto data = chain->provider->get();
-        if(data.has_err()) return nullptr;
+        if (data.has_err()) return nullptr;
 
         //convert result -> resource -> data
         //and set as disk dat for subject
@@ -188,18 +211,30 @@ namespace args::core::filesystem
     }
 
 
+    void view::make_inheritance()
+    {
+
+        //make all higher level fs inherit the traits from the lower level
+        for (std::size_t i = 0; i < m_foundSolution.size() - 1; ++i)
+        {
+            m_foundSolution.at(i + 1).first->inherit(*m_foundSolution.at(i).first);
+        }
+    }
+
     std::shared_ptr<view::create_chain> view::translate_solution()
     {
         //this is a more approachable representation
-       //of the solution
+         //of the solution
         std::shared_ptr<create_chain> chain = nullptr;
+
+        make_inheritance();
 
         for (auto iter = m_foundSolution.rbegin(); iter != m_foundSolution.rend(); ++iter)
         {
             std::string identifier = create_identifier((iter + 1).base());
             auto& [resolver, resolver_path] = *iter;
 
-            
+
 
             //we expect the first element to be valid no matter what if it isn't we have a deeper problem
             if (iter != m_foundSolution.rend() - 1)
@@ -254,19 +289,22 @@ namespace args::core::filesystem
 
     common::result<void, fs_error> view::make_solution()
     {
-        using common::Ok, common::Err;
+        using common::Ok;
 
+        //check if a solution already exists
         if (m_foundSolution.empty())
         {
+
+            //create solution using navigator
             const navigator n(m_path);
             auto solution = n.find_solution();
 
             if (solution.has_err())
-                return Err(solution);
+                return Err_of(solution);
 
             m_foundSolution = solution.get();
         }
-
+        //return empty ok
         return Ok();
     }
 }

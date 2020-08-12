@@ -13,8 +13,8 @@
 namespace args::core::filesystem {
 
 
-    /**@brief Check if file exists
-     * @param [in] path the path of the file to check
+    /**@brief Check if file exists.
+     * @param [in] path The path of the file to check.
      */
     A_NODISCARD inline bool exists(std::string_view path)
     {
@@ -28,10 +28,10 @@ namespace args::core::filesystem {
         return false;
     }
 
-    /**@brief Open File in binary mode and write to buffer
+    /**@brief Open File in binary mode and write to buffer.
      *
-     * @param [in] path the path of the file to open
-     * @return a vector of bytes with the contents of the file at path
+     * @param [in] path The path of the file to open.
+     * @return A vector of bytes with the contents of the file at path.
      */
     A_NODISCARD inline  byte_vec read_file(std::string_view path)
     {
@@ -55,10 +55,10 @@ namespace args::core::filesystem {
         return container;
     }
 
-    /**@brief Open file in binary mode to write the buffer to it
+    /**@brief Open file in binary mode to write the buffer to it.
      *
-     * @param [in] path the path of the file you want to write to
-     * @param [in] container the buffer you want to write to the file
+     * @param [in] path The path of the file you want to write to.
+     * @param [in] container The buffer you want to write to the file.
      */
     inline void write_file(std::string_view path,const byte_vec& container)
     {
@@ -77,8 +77,8 @@ namespace args::core::filesystem {
     }
 
 
-    /**@brief work the same as the above, but the path
-     *  parameter is replaced by the string literal
+    /**@brief Work the same as the above, but the path
+     *  parameter is replaced by the string literal.
      */
     namespace literals
     {

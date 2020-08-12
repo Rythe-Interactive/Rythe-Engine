@@ -15,7 +15,7 @@ namespace args::core::filesystem {
 
     constexpr static  file_traits invalid_file_t{false,false,false,false,false,false,false};
 
-    inline bool operator == (const file_traits& rhs, const file_traits& lhs)
+    inline bool operator == (const file_traits& rhs, const file_traits& lhs) noexcept
     {
         if(&rhs == &lhs) return true;
 
@@ -28,7 +28,7 @@ namespace args::core::filesystem {
                rhs.exists == lhs.exists;
     }
 
-    inline bool operator != (const file_traits& rhs, const file_traits& lhs)
+    inline bool operator != (const file_traits& rhs, const file_traits& lhs) noexcept
     {
         return !(rhs == lhs);
     }
@@ -52,6 +52,13 @@ namespace args::core::filesystem {
             ftraits.can_be_created = false;
         }
     }
+
+    inline void inherit_traits(const filesystem_traits& outer, filesystem_traits& inner) noexcept
+    {
+        if(!outer.is_valid) inner.is_valid = false;
+        if(outer.is_readonly) inner.is_readonly = true;
+    }
+
 
     constexpr static filesystem_traits invalid_filesystem_t{false,false};
 
