@@ -72,12 +72,6 @@
     <ClInclude Include="filesystem\basic_resolver.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="engine\engine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\module.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ecs\ecsregistry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

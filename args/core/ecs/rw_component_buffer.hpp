@@ -7,9 +7,6 @@
 #include <core/ecs/component_container.hpp>
 #include <core/async/transferable_atomic.hpp>
 
-/**@todo documentation.
- */
-
 namespace args::core::ecs
 {
 	template<typename component_type>
@@ -23,7 +20,7 @@ namespace args::core::ecs
 		 */
 		rw_component_buffer(EcsRegistry& registry) : m_registry(registry) {}
 
-		/// Makes more sense to implement with index_type in combination with entity_query
+		// Makes more sense to implement with index_type in combination with entity_query
 		//component_handle<component_type> operator[](id_type entityId)
 		//{
 		//}

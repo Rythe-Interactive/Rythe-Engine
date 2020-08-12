@@ -1,30 +1,23 @@
 #include <iostream>
-#include <chrono>
 
 #define ARGS_ENTRY
-#include <core/core.hpp>
+#define ARGS_KEEP_CONSOLE
 
+#include <chrono>
+#include <thread>
+
+#include <core/core.hpp>
 #include "core/common/result.hpp"
 
-using namespace args;
 
 #include "module/testModule.hpp"
+
+#include "module/testmodule.hpp"
+#include "systems/testsystem.hpp"
+
 #include "test_filesystem.hpp"
 
-struct sah
-{
-	int value;
-
-	sah operator+(const sah& other)
-	{
-		return { value + other.value };
-	}
-
-	sah operator*(const sah& other)
-	{
-		return { value * other.value };
-	}
-};
+using namespace args;
 
 void ARGS_CCONV reportModules(Engine* engine)
 {

@@ -10,5 +10,4 @@ void ARGS_CCONV reportEditorModules(args::editor::Editor* editor)
 void ARGS_CCONV reportModules(args::core::Engine* engine)
 {
 	std::cout << "Hello Args!" << std::endl;
-	_getwch();
 }
