@@ -156,7 +156,13 @@
     <ClInclude Include="events\defaultevents.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="math\math_consts.hpp">
+    <ClInclude Include="math\trigonometry.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="math\constants.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="math\precision.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -22,6 +22,12 @@ namespace args::core
 	using size_type = std::size_t;
 	using index_type = std::size_t;
 
+	using f32 = float;
+	using f64 = double;
+
+	using f80 = long double;
+
+	
 	using time32 = float;
 	using time64 = double;
 
