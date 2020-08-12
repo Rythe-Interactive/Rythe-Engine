@@ -375,11 +375,11 @@ namespace args::core::common {
         {
             return m_r.has_err();
         }
-        bool operator==(nullptr_t)
+        bool operator==(std::nullptr_t)
         {
             return m_r.has_err();
         }
-        bool operator!=(nullptr_t)
+        bool operator!=(std::nullptr_t)
         {
             return m_r.valid();
         }
