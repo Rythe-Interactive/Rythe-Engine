@@ -1,5 +1,4 @@
 #pragma once
-#include "common.hpp"
 #include <algorithm>
 #include <cctype>
 #include <locale>
@@ -7,6 +6,7 @@
 #include <sstream>
 #include <iterator>
 #include <string>
+#include <cstring>
 
 namespace args::core::common{
 
