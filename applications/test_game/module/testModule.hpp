@@ -1,10 +1,23 @@
 #pragma once
 #include <core/core.hpp>
+#include "../systems/testsystem.hpp"
 
-class TestModule : public args::Module
+using namespace args;
+
+class TestModule : public Module
 {
 public:
-	virtual args::priority_type priority() override;
-	virtual void init() override;
+	virtual void setup() override
+	{
+		addChain("TestChain");
+
+		reportComponentType<sah>();
+		reportSystem<TestSystem>();
+	}
+
+	virtual priority_type priority() override
+	{
+		return default_priority;
+	}
 };
 

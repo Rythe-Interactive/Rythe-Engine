@@ -95,3 +95,6 @@ bld/
 
 # linux Makefiles
 **/Makefile
+
+# Windows Preview files
+**/Thumbs.db

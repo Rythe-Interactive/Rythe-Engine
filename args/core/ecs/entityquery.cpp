@@ -13,7 +13,8 @@ namespace args::core::ecs
 
 	EntityQuery::~EntityQuery()
 	{
-		m_registry.removeReference(m_id);
+		if (QueryRegistry::isValid(&m_registry))
+			m_registry.removeReference(m_id);
 	}
 
 	sparse_map<id_type, entity_handle>::const_iterator EntityQuery::begin() const

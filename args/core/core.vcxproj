@@ -97,6 +97,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
+    <ClInclude Include="async\ring_sync_lock.hpp" />
     <ClInclude Include="async\readonly_rw_spinlock.hpp" />
     <ClInclude Include="async\transferable_atomic.hpp" />
     <ClInclude Include="common\common.hpp" />
@@ -108,6 +109,7 @@
     <ClInclude Include="containers\containers.hpp" />
     <ClInclude Include="containers\data_view.hpp" />
     <ClInclude Include="containers\iterator_tricks.hpp" />
+    <ClInclude Include="containers\delegate.hpp" />
     <ClInclude Include="containers\hashed_sparse_set.hpp" />
     <ClInclude Include="containers\sparse_map.hpp" />
     <ClInclude Include="containers\sparse_set.hpp" />
@@ -124,10 +126,15 @@
     <ClInclude Include="ecs\rw_component_buffer.hpp" />
     <ClInclude Include="engine\engine.hpp" />
     <ClInclude Include="engine\module.hpp" />
+    <ClInclude Include="engine\system.hpp" />
     <ClInclude Include="entry\entry_point.hpp" />
     <ClInclude Include="filesystem\artifact_cache.hpp" />
     <ClInclude Include="filesystem\basic_resolver.hpp" />
     <ClInclude Include="filesystem\detail\meta.hpp" />
+    <ClInclude Include="events\defaultevents.hpp" />
+    <ClInclude Include="events\event.hpp" />
+    <ClInclude Include="events\eventbus.hpp" />
+    <ClInclude Include="events\events.hpp" />
     <ClInclude Include="filesystem\detail\resource_meta.hpp" />
     <ClInclude Include="filesystem\detail\resource_sfinae.hpp" />
     <ClInclude Include="filesystem\detail\strpath_manip.hpp" />
@@ -141,6 +148,10 @@
     <ClInclude Include="filesystem\resource.hpp" />
     <ClInclude Include="filesystem\view.hpp" />
     <ClInclude Include="platform\platform.hpp" />
+    <ClInclude Include="scheduling\process.hpp" />
+    <ClInclude Include="scheduling\processchain.hpp" />
+    <ClInclude Include="scheduling\scheduler.hpp" />
+    <ClInclude Include="scheduling\scheduling.hpp" />
     <ClInclude Include="time\clock.hpp" />
     <ClInclude Include="time\time.hpp" />
     <ClInclude Include="time\time_span.hpp" />
@@ -164,6 +175,8 @@
     <ClCompile Include="filesystem\navigator.cpp" />
     <ClCompile Include="filesystem\provider_registry.cpp" />
     <ClCompile Include="filesystem\view.cpp" />
+    <ClCompile Include="scheduling\processchain.cpp" />
+    <ClCompile Include="scheduling\scheduler.cpp" />
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
   <ItemGroup>

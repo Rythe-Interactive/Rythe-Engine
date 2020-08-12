@@ -30,22 +30,22 @@ namespace args::core::async
 	struct readonly_rw_spinlock
 	{
 	private:
-		inline static std::atomic_uint lastId = 0;
-		const uint id;
-		std::atomic_int lockState;
-		std::atomic_int readers;
+		inline static std::atomic_uint m_lastId = 1;
+		uint m_id;
+		std::atomic_int m_lockState = 0;
+		std::atomic_int m_readers = 0;
 
-		inline static thread_local std::unordered_map<uint, int> localWriters;
-		inline static thread_local std::unordered_map<uint, int> localReaders;
-		inline static thread_local std::unordered_map<uint, lock_state> localState;
+		inline static thread_local std::unordered_map<uint, int> m_localWriters;
+		inline static thread_local std::unordered_map<uint, int> m_localReaders;
+		inline static thread_local std::unordered_map<uint, lock_state> m_localState;
 
 		void read_lock()
 		{
 			// Report another reader to the lock.
-			readers.fetch_add(1, std::memory_order_relaxed);
-			localReaders[id]++;
+			m_readers.fetch_add(1, std::memory_order_relaxed);
+			m_localReaders[m_id]++;
 
-			if (localState[id] != lock_state::idle) // If we're either already reading or writing then the lock doesn't need to be reacquired.
+			if (m_localState[m_id] != lock_state::idle) // If we're either already reading or writing then the lock doesn't need to be reacquired.
 			{
 				return;
 			}
@@ -54,7 +54,7 @@ namespace args::core::async
 			int state = lock_state::idle;
 
 			// Try to set the lock state to read
-			while (!lockState.compare_exchange_weak(state, lock_state::read, std::memory_order_acquire, std::memory_order_relaxed))
+			while (!m_lockState.compare_exchange_weak(state, lock_state::read, std::memory_order_acquire, std::memory_order_relaxed))
 			{
 				// If the lock state was already on read we can continue without issues, read-only operations are allowed to happen simultaneously.
 				if (state == lock_state::read)
@@ -63,15 +63,15 @@ namespace args::core::async
 					state = lock_state::idle;
 			}
 
-			localState[id] = lock_state::read; // Set thread_local state to read.
+			m_localState[m_id] = lock_state::read; // Set thread_local state to read.
 		}
 
 		bool read_try_lock()
 		{
-			if (localState[id] != lock_state::idle) // If we're either already reading or writing then the lock doesn't need to be reacquired.
+			if (m_localState[m_id] != lock_state::idle) // If we're either already reading or writing then the lock doesn't need to be reacquired.
 			{
-				readers.fetch_add(1, std::memory_order_relaxed);
-				localReaders[id]++;
+				m_readers.fetch_add(1, std::memory_order_relaxed);
+				m_localReaders[m_id]++;
 				return true;
 			}
 
@@ -79,34 +79,34 @@ namespace args::core::async
 			int state = lock_state::idle;
 
 			// Try to set the lock state to read
-			if (!lockState.compare_exchange_weak(state, lock_state::read, std::memory_order_acquire, std::memory_order_relaxed))
+			if (!m_lockState.compare_exchange_strong(state, lock_state::read, std::memory_order_acquire, std::memory_order_relaxed))
 			{
 				// If the lock state was already on read we can continue without issues, read-only operations are allowed to happen simultaneously.
 				if (state != lock_state::read)
 					return false;
 			}
 
-			readers.fetch_add(1, std::memory_order_relaxed);
-			localReaders[id]++;
-			localState[id] = lock_state::read; // Set thread_local state to read.
+			m_readers.fetch_add(1, std::memory_order_relaxed);
+			m_localReaders[m_id]++;
+			m_localState[m_id] = lock_state::read; // Set thread_local state to read.
 			return true;
 		}
 
 		void write_lock()
 		{
-			localWriters[id]++;
+			m_localWriters[m_id]++;
 
-			if (localState[id] == lock_state::read) // If we're currently only acquired for read we need to stop reading before requesting rw.
+			if (m_localState[m_id] == lock_state::read) // If we're currently only acquired for read we need to stop reading before requesting rw.
 			{
 				// Mark our read as finished.
-				readers.fetch_sub(1, std::memory_order_relaxed);
+				m_readers.fetch_sub(1, std::memory_order_relaxed);
 
 				// If there are no more readers left then the lock state needs to be returned to idle.
 				// This allows other (non readonly)locks to acquire access.
-				if (readers.load(std::memory_order_acquire) == 0)
-					lockState.store(lock_state::idle, std::memory_order_release);
+				if (m_readers.load(std::memory_order_acquire) == 0)
+					m_lockState.store(lock_state::idle, std::memory_order_release);
 			}
-			else if (localState[id] == lock_state::write) // If we're already writing then we don't need to reacquire the lock.
+			else if (m_localState[m_id] == lock_state::write) // If we're already writing then we don't need to reacquire the lock.
 			{
 				return;
 			}
@@ -115,29 +115,29 @@ namespace args::core::async
 			int state = lock_state::idle;
 
 			// Try to set the lock state to write.
-			while (!lockState.compare_exchange_weak(state, lock_state::write, std::memory_order_acquire, std::memory_order_relaxed))
+			while (!m_lockState.compare_exchange_weak(state, lock_state::write, std::memory_order_acquire, std::memory_order_relaxed))
 				// If lock state is any other state than idle then we cannot acquire access to write, thus we need to stay in the CAS loop.
 				state = lock_state::idle;
 
 
-			localState[id] = lock_state::write; // Set thread_local state to write.
+			m_localState[m_id] = lock_state::write; // Set thread_local state to write.
 		}
 
 		bool write_try_lock()
 		{
-			if (localState[id] == lock_state::read) // If we're currently only acquired for read we need to stop reading before requesting rw.
+			if (m_localState[m_id] == lock_state::read) // If we're currently only acquired for read we need to stop reading before requesting rw.
 			{
 				// Mark our read as finished.
-				readers.fetch_sub(1, std::memory_order_relaxed);
+				m_readers.fetch_sub(1, std::memory_order_relaxed);
 
 				// If there are no more readers left then the lock state needs to be returned to idle.
 				// This allows other (non readonly)locks to acquire access.
-				if (readers.load(std::memory_order_acquire) == 0)
-					lockState.store(lock_state::idle, std::memory_order_release);
+				if (m_readers.load(std::memory_order_acquire) == 0)
+					m_lockState.store(lock_state::idle, std::memory_order_release);
 			}
-			else if (localState[id] == lock_state::write) // If we're already writing then we don't need to reacquire the lock.
+			else if (m_localState[m_id] == lock_state::write) // If we're already writing then we don't need to reacquire the lock.
 			{
-				localWriters[id]++;
+				m_localWriters[m_id]++;
 				return true;
 			}
 
@@ -145,14 +145,14 @@ namespace args::core::async
 			int state = lock_state::idle;
 
 			// Try to set the lock state to write.
-			if (!lockState.compare_exchange_weak(state, lock_state::write, std::memory_order_acquire, std::memory_order_relaxed))
+			if (!m_lockState.compare_exchange_strong(state, lock_state::write, std::memory_order_acquire, std::memory_order_relaxed))
 			{
-				if (localReaders[id] > 0)
+				if (m_localReaders[m_id] > 0)
 				{
-					readers.fetch_add(1, std::memory_order_relaxed);
+					m_readers.fetch_add(1, std::memory_order_relaxed);
 					state = lock_state::idle;
 					// Try to set the lock state to read
-					while (!lockState.compare_exchange_weak(state, lock_state::read, std::memory_order_acquire, std::memory_order_relaxed))
+					while (!m_lockState.compare_exchange_weak(state, lock_state::read, std::memory_order_acquire, std::memory_order_relaxed))
 					{
 						// If the lock state was already on read we can continue without issues, read-only operations are allowed to happen simultaneously.
 						if (state == lock_state::read)
@@ -161,72 +161,86 @@ namespace args::core::async
 							state = lock_state::idle;
 					}
 
-					localState[id] = lock_state::read;
+					m_localState[m_id] = lock_state::read;
 				}
 				return false;
 			}
 
-			localWriters[id]++;
-			localState[id] = lock_state::write; // Set thread_local state to write.
+			m_localWriters[m_id]++;
+			m_localState[m_id] = lock_state::write; // Set thread_local state to write.
 			return true;
 		}
 
 		void read_unlock()
 		{
-			localReaders[id]--;
+			m_localReaders[m_id]--;
 			// Mark our read as finished.
-			readers.fetch_sub(1, std::memory_order_relaxed);
+			m_readers.fetch_sub(1, std::memory_order_relaxed);
 
-			if (localReaders[id] > 0 || localWriters[id] > 0) // Another local guard is still alive that will unlock the lock for this thread.
+			if (m_localReaders[m_id] > 0 || m_localWriters[m_id] > 0) // Another local guard is still alive that will unlock the lock for this thread.
 			{
 				return;
 			}
 
 			// If there are no more readers left then the lock state needs to be returned to idle.
 			// This allows other (non readonly)locks to acquire access.
-			if (readers.load(std::memory_order_acquire) == 0)
-				lockState.store(lock_state::idle, std::memory_order_release);
+			if (m_readers.load(std::memory_order_acquire) == 0)
+				m_lockState.store(lock_state::idle, std::memory_order_release);
 
-			localState[id] = lock_state::idle; // Set thread_local state to idle.
+			m_localState[m_id] = lock_state::idle; // Set thread_local state to idle.
 		}
 
 		void write_unlock()
 		{
-			localWriters[id]--;
-			if (localWriters[id] > 0) // Another write guard is still alive that will unlock the lock for this thread.
+			m_localWriters[m_id]--;
+			if (m_localWriters[m_id] > 0) // Another write guard is still alive that will unlock the lock for this thread.
 			{
 				return;
 			}
-			else if (localReaders[id] > 0) // read permission was granted before write request, we should return to read instead of idle after write is finished.
+			else if (m_localReaders[m_id] > 0) // read permission was granted before write request, we should return to read instead of idle after write is finished.
 			{
 				// We should be the only one to have had access so we can safely write to the lock state and readers.
-				readers.fetch_add(1, std::memory_order_relaxed);
-				lockState.store(lock_state::read, std::memory_order_release);
+				m_readers.fetch_add(1, std::memory_order_relaxed);
+				m_lockState.store(lock_state::read, std::memory_order_release);
 
-				localState[id] = lock_state::read; // Set thread_local state back to read.
+				m_localState[m_id] = lock_state::read; // Set thread_local state back to read.
 			}
 			else
 			{
 				// We should be the only one to have had access so we can safely write to the lock state and return it to idle.
-				lockState.store(lock_state::idle, std::memory_order_release);
+				m_lockState.store(lock_state::idle, std::memory_order_release);
 
-				localState[id] = lock_state::idle; // Set thread_local state to idle.
+				m_localState[m_id] = lock_state::idle; // Set thread_local state to idle.
 			}
 		}
 
 	public:
-		readonly_rw_spinlock() : id(lastId.fetch_add(1, std::memory_order_relaxed))
+		readonly_rw_spinlock() : m_id(m_lastId.fetch_add(1, std::memory_order_relaxed))
 		{
-			localState[id] = lock_state::idle;
-
-			lockState.store(lock_state::idle, std::memory_order_relaxed);
-			readers.store(0, std::memory_order_relaxed);
+			m_lockState.store(lock_state::idle, std::memory_order_relaxed);
+			m_readers.store(0, std::memory_order_relaxed);
 		}
 
+		readonly_rw_spinlock(readonly_rw_spinlock&& source) : m_id(source.m_id)
+		{
+			m_lockState.store(source.m_lockState.load(std::memory_order_acquire), std::memory_order_release);
+			m_readers.store(source.m_readers.load(std::memory_order_acquire), std::memory_order_release);
+		}
+
+		readonly_rw_spinlock& operator=(readonly_rw_spinlock&& source)
+		{
+			m_id = source.m_id;
+			source.m_id = invalid_id;
+			m_lockState.store(source.m_lockState.load(std::memory_order_acquire), std::memory_order_release);
+			m_readers.store(source.m_readers.load(std::memory_order_acquire), std::memory_order_release);
+			return *this;
+		}
+
+
 		readonly_rw_spinlock(const readonly_rw_spinlock&) = delete;
-		readonly_rw_spinlock(readonly_rw_spinlock&) = delete;
 		readonly_rw_spinlock& operator=(const readonly_rw_spinlock&) = delete;
-		readonly_rw_spinlock& operator=(readonly_rw_spinlock&&) = delete;
+
+
 
 		/**@brief Lock for a certain permission level. (locking for idle does nothing)
 		 * @note Locking stacks, locking for readonly multiple times will remain readonly.
