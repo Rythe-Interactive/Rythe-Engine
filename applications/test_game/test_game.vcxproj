@@ -116,8 +116,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="module\testModule.hpp" />
-    <ClInclude Include="test_filesystem.hpp" />
+	  <ClInclude Include="test_filesystem.hpp" />
     <ClInclude Include="module\testmodule.hpp" />
     <ClInclude Include="systems\testsystem.hpp" />
   </ItemGroup>
