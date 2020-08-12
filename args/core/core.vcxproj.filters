@@ -156,6 +156,9 @@
     <ClInclude Include="events\defaultevents.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="math\math_consts.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">
