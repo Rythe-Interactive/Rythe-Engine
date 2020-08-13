@@ -556,8 +556,7 @@ namespace args::core::async
 		mixed_multiguard& operator=(mixed_multiguard&&) = delete;
 		mixed_multiguard& operator=(const mixed_multiguard&) = delete;
 	};
-
+	
 	template<typename... types>
 	mixed_multiguard(types...)->mixed_multiguard<sizeof...(types)>;
-
 }
