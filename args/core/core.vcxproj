@@ -83,6 +83,7 @@
       <PreprocessorDefinitions>ARGS_INTERNAL;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,6 +131,9 @@
     <ClInclude Include="filesystem\filemanip.hpp" />
     <ClInclude Include="filesystem\filesystem.hpp" />
     <ClInclude Include="filesystem\resource.hpp" />
+    <ClInclude Include="math\constants.hpp" />
+    <ClInclude Include="math\precision.hpp" />
+    <ClInclude Include="math\trigonometry.hpp" />
     <ClInclude Include="platform\platform.hpp" />
     <ClInclude Include="scheduling\process.hpp" />
     <ClInclude Include="scheduling\processchain.hpp" />

@@ -2,6 +2,8 @@
 #include <core/core.hpp>
 #include "../systems/testsystem.hpp"
 
+#include <core/math/math.hpp>
+
 using namespace args;
 
 class TestModule : public Module
