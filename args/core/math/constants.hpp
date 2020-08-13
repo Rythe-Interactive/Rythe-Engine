@@ -1,6 +1,6 @@
 #pragma once
 
-namespace args::core::maths {
+namespace args::core::math {
     namespace detail {
 
         //note that this is in fact way more digits than even long double can usually handle

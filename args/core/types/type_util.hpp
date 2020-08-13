@@ -2,6 +2,7 @@
 #include <typeinfo>
 #include <core/types/primitives.hpp>
 #include <core/platform/platform.hpp>
+#include <string>
 
 /**
  * @file type_util.hpp

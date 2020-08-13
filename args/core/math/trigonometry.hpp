@@ -5,7 +5,7 @@
 #include <core/math/constants.hpp>
 #include <cmath>
 
-namespace args::core::maths
+namespace args::core::math
 {
 #pragma region primitive
 	template<class T>
@@ -61,11 +61,11 @@ namespace args::core::maths
 
 		/** @brief Converts an angle to degrees.
 		 */
-		A_NODISCARD constexpr storage_type to_degrees() const;
+		A_NODISCARD constexpr storage_type as_degrees() const;
 		
 		/**@brief Converts an angle to radians
 		 */
-		A_NODISCARD constexpr storage_type to_radians() const;
+		A_NODISCARD constexpr storage_type as_radians() const;
 
 		/** @brief Applies the trigonometric sinus function on the angle
 		 *		   and returns it's value.
@@ -127,13 +127,13 @@ namespace args::core::maths
 	template <precision p>
 	typename angle<p>::storage_type angle<p>::sin()
 	{
-		return ::std::sin(m_angle_value);
+		return std::sin(m_angle_value);
 	}
 
 	template <precision p>
 	typename angle<p>::storage_type angle<p>::cos()
 	{
-		return ::std::cos(m_angle_value);
+		return std::cos(m_angle_value);
 	}
 
 	template <precision p>
@@ -145,25 +145,25 @@ namespace args::core::maths
 	template <precision p>
 	angle<p> angle<p>::arcsin(storage_type v)
 	{
-		return angle<p>::rad(::std::asin(v));
+		return angle<p>::rad(std::asin(v));
 	}
 
 	template <precision p>
 	angle<p> angle<p>::arccos(storage_type v)
 	{
-		return angle<p>::rad(::std::acos(v));
+		return angle<p>::rad(std::acos(v));
 	}
 
 	template <precision p>
 	angle<p> angle<p>::arctan(storage_type v)
 	{
-		return angle<p>::rad(::std::atan(v));
+		return angle<p>::rad(std::atan(v));
 	}
 
 	template <precision p>
 	angle<p> angle<p>::arctan2(storage_type y, storage_type x)
 	{
-		return angle<p>::rad(::std::atan2(y, x));
+		return angle<p>::rad(std::atan2(y, x));
 	}
 
 
@@ -180,14 +180,19 @@ namespace args::core::maths
 	}
 
 	template <precision p>
-	constexpr typename angle<p>::storage_type angle<p>::to_degrees() const
+	constexpr typename angle<p>::storage_type angle<p>::as_degrees() const
 	{
 		return rad2deg(m_angle_value);
 	}
 
 	template <precision p>
-	constexpr typename angle<p>::storage_type angle<p>::to_radians() const
+	constexpr typename angle<p>::storage_type angle<p>::as_radians() const
 	{
 		return m_angle_value;
 	}
+
+	using anglef = angle<>;
+	using angled = angle<precision::bit64>;
+	using angleld = angle<precision::lots>;
+	
 }
