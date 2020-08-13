@@ -4,12 +4,12 @@
 #ifndef GLM_ENABLE_EXPERIMENTAL
 #define GLM_ENABLE_EXPERIMENTAL
 #endif
-#include <glm/gtx/dual_quaternion.hpp>
-#include <glm/gtc/vec1.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/ext/scalar_int_sized.hpp>
-#include <glm/ext/scalar_uint_sized.hpp>
-#include <glm/glm.hpp>
+#include <args/core/math/glm/gtx/dual_quaternion.hpp>
+#include <args/core/math/glm/gtc/vec1.hpp>
+#include <args/core/math/glm/gtc/quaternion.hpp>
+#include <args/core/math/glm/ext/scalar_int_sized.hpp>
+#include <args/core/math/glm/ext/scalar_uint_sized.hpp>
+#include <args/core/math/glm/glm.hpp>
 
 namespace glm
 {
