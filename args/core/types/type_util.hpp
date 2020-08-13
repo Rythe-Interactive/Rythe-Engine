@@ -3,6 +3,7 @@
 #include <core/types/primitives.hpp>
 #include <core/platform/platform.hpp>
 #include <string>
+#include <cstring>
 
 /**
  * @file type_util.hpp
