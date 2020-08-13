@@ -127,6 +127,15 @@
 #define A_NODISCARD
 #endif
 
+#if __cplusplus > ARGS_CPP17V || AHASCPPATTRIB(noreturn) || defined(DOXY_INCLUDE)
+/**@def A_NORETURN
+ * @brief Marks a function as "noreturn" meaning that the function will never finish, or terminate the application
+ */
+#define A_NORETURN [[noreturn]]
+#else
+#define A_NORETURN
+#endif
+
 /**@def ARGS_PURE
  * @brief Marks a function as pure virtual.
  */
@@ -141,4 +150,4 @@
  * @brief Marks a function as overridable but default implemented with certain default return value.
  * @param x value the function should return.
  */
-#define ARGS_IMPURE_RETURN(x) { return x; }
+#define ARGS_IMPURE_RETURN(x) { return (x); }

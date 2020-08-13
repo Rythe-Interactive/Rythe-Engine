@@ -91,7 +91,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source.cpp" />
-    <ClCompile Include="module\testModule.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\args\application\application.vcxproj">
@@ -117,7 +116,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="module\testModule.hpp" />
+	  <ClInclude Include="test_filesystem.hpp" />
+    <ClInclude Include="module\testmodule.hpp" />
+    <ClInclude Include="systems\testsystem.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

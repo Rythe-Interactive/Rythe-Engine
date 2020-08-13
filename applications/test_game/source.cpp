@@ -1,31 +1,31 @@
 #include <iostream>
-#include <chrono>
 
 #define ARGS_ENTRY
-#include <core/core.hpp>
+#define ARGS_KEEP_CONSOLE
 
-using namespace args;
+#include <chrono>
+#include <thread>
+
+#include <core/core.hpp>
+#include "core/common/result.hpp"
+
 
 #include "module/testModule.hpp"
 
-struct sah
-{
-	int value;
+#include "module/testmodule.hpp"
+#include "systems/testsystem.hpp"
 
-	sah operator+(const sah& other)
-	{
-		return { value + other.value };
-	}
+#include "test_filesystem.hpp"
 
-	sah operator*(const sah& other)
-	{
-		return { value * other.value };
-	}
-};
+using namespace args;
 
 void ARGS_CCONV reportModules(Engine* engine)
 {
 	std::cout << "Hello Args!" << std::endl;
+
+    test_filesystem();
+
+
 	engine->reportModule<TestModule>();
 
 	try
@@ -115,6 +115,21 @@ void ARGS_CCONV reportModules(Engine* engine)
 	else
 		std::cout << "component handle is invalid" << std::endl;
 
+	std::cout << "_____________________________________________________" << std::endl;
+
+	using namespace args::core::common;
+	
+	result_decay<result<int,int>> decay(Ok(10));
+
+	if(decay == valid_t{})
+	{
+		std::cout << "was valid!" << std::endl;
+		std::cout << static_cast<int>(decay) << std::endl;
+	}
+
+	
+
+	std::cout << "_____________________________________________________" << std::endl;
 	if (ent.has_component<sah>())
 		std::cout << "entity has component" << std::endl;
 	else
@@ -196,4 +211,6 @@ void ARGS_CCONV reportModules(Engine* engine)
 		std::cout << "our entity handle was not found" << std::endl;
 
 	std::cout << std::endl;
+
+    
 }
