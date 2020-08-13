@@ -33,4 +33,4 @@ jobs:
        /home/runner/.local/bin/analyze-build --status-bugs
 
     - name: cppcheck
-      run: cd args && cppcheck --project=args.sln --error-exitcode=1 
+      run: cd args && cppcheck --project=args.sln --xml --error-exitcode=1 2>&1 | python3 ../tools/cppcheck2github.py
