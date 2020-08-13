@@ -21,10 +21,13 @@ class github_log:
         self.message = ''
 
     def generate(self):
-        if(self.type != ''):
+        if self.type != '':
             print(f'::{self.type} file={self.file},line={self.line},col={self.col}::{self.message}')
-            global return_code
+            return 1
+        else:
+            return 0
 
+return_code = 0
 
 report = ET.fromstring(output)
 for error in report[1]:
@@ -46,4 +49,8 @@ for error in report[1]:
             log.line = '0'
             log.file = '[internal]'
 
-        log.generate()
+        code = log.generate()
+        if return_code == 0:
+            return_code = code
+
+sys.exit(return_code)
