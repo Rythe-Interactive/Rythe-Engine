@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1core_1_1filesystem_1_1filesystem__traits:
+
+Struct filesystem_traits
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_traits.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::core::filesystem::filesystem_traits
+   :members:
+   :protected-members:
+   :undoc-members:

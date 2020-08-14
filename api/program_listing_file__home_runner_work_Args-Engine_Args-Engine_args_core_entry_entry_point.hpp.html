@@ -63,7 +63,7 @@
 
     <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
     <span class="p">{</span>
-    <span class="cp">#if (!defined(ARGS_DEBUG) &amp;&amp; defined(ARGS_WINDOWS))</span>
+    <span class="cp">#if (!defined(ARGS_DEBUG) &amp;&amp; defined(ARGS_WINDOWS) &amp;&amp; !defined(ARGS_KEEP_CONSOLE))</span>
         <span class="o">::</span><span class="n">ShowWindow</span><span class="p">(</span><span class="o">::</span><span class="n">GetConsoleWindow</span><span class="p">(),</span> <span class="n">SW_HIDE</span><span class="p">);</span>
     <span class="cp">#endif</span>
 
@@ -138,13 +138,14 @@
             <span class="n">engine</span><span class="p">.</span><span class="n">run</span><span class="p">();</span>
 
     <span class="cp">#if defined(ARGS_DEBUG)</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">ignore</span><span class="p">().</span><span class="n">get</span><span class="p">();</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Press any key to exit.&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">ignore</span><span class="p">();</span>
     <span class="cp">#endif</span>
 
         <span class="p">}</span>
         <span class="k">catch</span> <span class="p">(</span><span class="k">const</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span>
         <span class="p">{</span>
-    <span class="cp">#if defined(ARGS_WINDOWS)</span>
+    <span class="cp">#if (defined(ARGS_WINDOWS) &amp;&amp; !defined(ARGS_KEEP_CONSOLE))</span>
             <span class="o">::</span><span class="n">ShowWindow</span><span class="p">(</span><span class="o">::</span><span class="n">GetConsoleWindow</span><span class="p">(),</span> <span class="n">SW_SHOW</span><span class="p">);</span>
     <span class="cp">#endif</span>
 
@@ -157,12 +158,13 @@
     <span class="cp">#if defined(ARGS_DEBUG)</span>
             <span class="k">throw</span> <span class="n">e</span><span class="p">;</span>
     <span class="cp">#else</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">ignore</span><span class="p">().</span><span class="n">get</span><span class="p">();</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Press any key to exit.&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">ignore</span><span class="p">();</span>
     <span class="cp">#endif</span>
         <span class="p">}</span>
         <span class="k">catch</span> <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span>
         <span class="p">{</span>
-    <span class="cp">#if defined(ARGS_WINDOWS)</span>
+    <span class="cp">#if (defined(ARGS_WINDOWS) &amp;&amp; !defined(ARGS_KEEP_CONSOLE))</span>
             <span class="o">::</span><span class="n">ShowWindow</span><span class="p">(</span><span class="o">::</span><span class="n">GetConsoleWindow</span><span class="p">(),</span> <span class="n">SW_SHOW</span><span class="p">);</span>
     <span class="cp">#endif</span>
 
@@ -171,7 +173,8 @@
     <span class="cp">#if defined(ARGS_DEBUG)</span>
             <span class="k">throw</span> <span class="n">e</span><span class="p">;</span>
     <span class="cp">#else</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">ignore</span><span class="p">().</span><span class="n">get</span><span class="p">();</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Press any key to exit.&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">ignore</span><span class="p">();</span>
     <span class="cp">#endif</span>
         <span class="p">}</span>
 

@@ -1,0 +1,13 @@
+.. _exhale_function_namespaceargs_1_1core_1_1common_1aeae352974001b280179dbea000bc458c:
+
+Function args::core::common::locate_and_delete_at
+=================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_string_extra.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::common::locate_and_delete_at(std::string&, const std::string&, size_t)

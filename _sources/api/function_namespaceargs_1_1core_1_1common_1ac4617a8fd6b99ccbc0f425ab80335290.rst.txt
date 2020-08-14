@@ -1,0 +1,13 @@
+.. _exhale_function_namespaceargs_1_1core_1_1common_1ac4617a8fd6b99ccbc0f425ab80335290:
+
+Template Function args::core::common::nearest_of_any_at
+=======================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_string_extra.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::common::nearest_of_any_at(std::string, size_t)

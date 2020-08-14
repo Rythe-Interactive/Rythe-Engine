@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1ab4c7e97f65af929cfe806d43bcb9b2a3:
+
+Typedef args::core::fast_nano_seconds
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::fast_nano_seconds

@@ -1,0 +1,13 @@
+.. _exhale_function_namespaceargs_1_1core_1_1common_1a4d69cb49f87794b99abbbfcca11f02ef:
+
+Function args::core::common::ltrim(std::string&)
+================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_string_extra.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::common::ltrim(std::string&)

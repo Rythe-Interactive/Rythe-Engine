@@ -1,0 +1,13 @@
+.. _exhale_function_constants_8hpp_1a24742dbb0dd1d03c2d90493f9f7732d9:
+
+Template Function args::core::math::sqrt2
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_constants.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::math::sqrt2()

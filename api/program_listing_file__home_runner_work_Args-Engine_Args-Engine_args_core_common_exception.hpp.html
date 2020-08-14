@@ -115,7 +115,11 @@
 <span class="cp">#define args_unknown_system_error args::core::unknown_system_error(__FILE__, __LINE__, __FUNC__)</span>
 
 <span class="cp">#define args_unknown_system_msg(msg) args::core::unknown_system_error(msg, __FILE__, __LINE__, __FUNC__)</span>
+
+<span class="cp">#define args_fs_error(msg) args::core::fs_error(msg,__FILE__,__LINE__,__FUNC__)</span>
 <span class="cp">#pragma endregion</span>
+
+
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span>
 <span class="p">{</span>
@@ -222,6 +226,16 @@
         <span class="n">unknown_system_error</span><span class="p">(</span><span class="n">cstring</span> <span class="n">msg</span><span class="p">,</span> <span class="n">cstring</span> <span class="n">file</span><span class="p">,</span> <span class="n">uint</span> <span class="n">line</span><span class="p">,</span> <span class="n">cstring</span> <span class="n">func</span><span class="p">)</span> <span class="o">:</span> <span class="n">invalid_type_error</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span> <span class="p">{}</span>
     <span class="p">};</span>
 <span class="cp">#pragma endregion</span>
+
+<span class="cp">#pragma region filesystem</span>
+    <span class="k">class</span> <span class="nc">fs_error</span> <span class="o">:</span> <span class="k">public</span> <span class="n">exception</span>
+    <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">fs_error</span><span class="p">(</span><span class="n">cstring</span> <span class="n">file</span><span class="p">,</span><span class="n">uint</span> <span class="n">line</span><span class="p">,</span><span class="n">cstring</span> <span class="n">func</span><span class="p">)</span> <span class="o">:</span> <span class="n">exception</span><span class="p">(</span><span class="s">&quot;Filesystem Adapter failed&quot;</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span><span class="n">line</span><span class="p">,</span><span class="n">func</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">fs_error</span><span class="p">(</span><span class="n">cstring</span> <span class="n">msg</span><span class="p">,</span><span class="n">cstring</span> <span class="n">file</span><span class="p">,</span><span class="n">uint</span> <span class="n">line</span><span class="p">,</span><span class="n">cstring</span> <span class="n">func</span><span class="p">)</span> <span class="o">:</span> <span class="n">exception</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span><span class="n">file</span><span class="p">,</span><span class="n">line</span><span class="p">,</span><span class="n">func</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="p">};</span>
+<span class="cp">#pragma endregion</span>
+
 
 <span class="p">}</span>
 </pre></div>

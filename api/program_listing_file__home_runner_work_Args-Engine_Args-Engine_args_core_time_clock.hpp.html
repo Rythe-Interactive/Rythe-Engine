@@ -57,27 +57,32 @@
     <span class="k">class</span> <span class="nc">clock</span>
     <span class="p">{</span>
     <span class="k">private</span><span class="o">:</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">time_point</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">&gt;</span> <span class="n">start</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">time_point</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">&gt;</span> <span class="n">m_start</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
     <span class="k">public</span><span class="o">:</span>
-        <span class="kt">void</span> <span class="n">Start</span><span class="p">()</span> <span class="p">{</span>
-            <span class="n">start</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+        <span class="kt">void</span> <span class="n">start</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">m_start</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
         <span class="p">}</span>
 
-        <span class="n">time_span</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;</span> <span class="n">GetElapsedTime</span><span class="p">()</span>
+        <span class="n">time_span</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;</span> <span class="n">startPoint</span><span class="p">()</span>
         <span class="p">{</span>
-            <span class="k">return</span> <span class="n">time_span</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">m_start</span><span class="p">.</span><span class="n">time_since_epoch</span><span class="p">();</span>
         <span class="p">}</span>
 
-        <span class="n">time_span</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;</span> <span class="n">End</span><span class="p">()</span>
+        <span class="n">time_span</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;</span> <span class="n">elapsedTime</span><span class="p">()</span>
         <span class="p">{</span>
-            <span class="k">return</span> <span class="n">time_span</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">time_span</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">m_start</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="n">time_span</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;</span> <span class="n">Restart</span><span class="p">()</span>
+        <span class="n">time_span</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;</span> <span class="n">end</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">time_span</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">m_start</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">time_span</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;</span> <span class="n">restart</span><span class="p">()</span>
         <span class="p">{</span>
             <span class="k">auto</span> <span class="n">startTime</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
-            <span class="n">time_span</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;</span> <span class="n">time</span><span class="p">(</span><span class="n">startTime</span> <span class="o">-</span> <span class="n">start</span><span class="p">);</span>
-            <span class="n">start</span> <span class="o">=</span> <span class="n">startTime</span><span class="p">;</span>
+            <span class="n">time_span</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;</span> <span class="n">time</span><span class="p">(</span><span class="n">startTime</span> <span class="o">-</span> <span class="n">m_start</span><span class="p">);</span>
+            <span class="n">m_start</span> <span class="o">=</span> <span class="n">startTime</span><span class="p">;</span>
             <span class="k">return</span> <span class="n">time</span><span class="p">;</span>
         <span class="p">}</span>
     <span class="p">};</span>

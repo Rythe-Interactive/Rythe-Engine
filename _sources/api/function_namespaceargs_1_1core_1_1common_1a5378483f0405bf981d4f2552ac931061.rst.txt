@@ -1,0 +1,13 @@
+.. _exhale_function_namespaceargs_1_1core_1_1common_1a5378483f0405bf981d4f2552ac931061:
+
+Template Function args::core::common::count_delimiter
+=====================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_string_extra.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::common::count_delimiter(const char *)

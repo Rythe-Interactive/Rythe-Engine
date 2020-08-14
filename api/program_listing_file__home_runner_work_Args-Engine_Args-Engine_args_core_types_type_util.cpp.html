@@ -47,6 +47,7 @@
 <span id="program-listing-file-home-runner-work-args-engine-args-engine-args-core-types-type-util-cpp"></span><h1>Program Listing for File type_util.cpp<a class="headerlink" href="#program-listing-for-file-type-util-cpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_type_util.cpp.html#file-home-runner-work-args-engine-args-engine-args-core-types-type-util-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/types/type_util.cpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;core/types/type_util.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;functional&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span>
 <span class="p">{</span>
@@ -64,18 +65,10 @@
         <span class="k">return</span> <span class="n">hash</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="n">id_type</span> <span class="n">ARGS_FUNC</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">id_type</span> <span class="n">ARGS_FUNC</span> <span class="n">nameHash</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">id_type</span> <span class="n">hash</span> <span class="o">=</span> <span class="mh">0xcbf29ce484222325</span><span class="p">;</span>
-        <span class="n">uint64</span> <span class="n">prime</span> <span class="o">=</span> <span class="mh">0x00000100000001b3</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">name</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">byte</span> <span class="n">value</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-            <span class="n">hash</span> <span class="o">=</span> <span class="n">hash</span> <span class="o">^</span> <span class="n">value</span><span class="p">;</span>
-            <span class="n">hash</span> <span class="o">*=</span> <span class="n">prime</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">return</span> <span class="n">hash</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">hash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">hasher</span><span class="p">{};</span>
+        <span class="k">return</span> <span class="nf">hasher</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>

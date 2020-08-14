@@ -55,5 +55,5 @@ Typedefs
 --------
 
 
-- :ref:`exhale_typedef_meta_8hpp_1a91a5094436ccecc924bd45dd02437003`
+- :ref:`exhale_typedef_types_2meta_8hpp_1a91a5094436ccecc924bd45dd02437003`
 

@@ -1,0 +1,13 @@
+.. _exhale_define_platform_8hpp_1ac35b7446de14165173f63145ea3c5a30:
+
+Define A_NORETURN
+=================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: A_NORETURN

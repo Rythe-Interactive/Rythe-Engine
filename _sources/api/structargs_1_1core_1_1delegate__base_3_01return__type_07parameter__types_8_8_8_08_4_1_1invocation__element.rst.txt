@@ -1,0 +1,22 @@
+.. _exhale_struct_structargs_1_1core_1_1delegate__base_3_01return__type_07parameter__types_8_8_8_08_4_1_1invocation__element:
+
+Template Struct delegate_base< return_type(parameter_types...)>::delegate_base< return_type(parameter_types...)>
+================================================================================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_delegate.hpp`
+
+
+Nested Relationships
+--------------------
+
+This struct is a nested type of :ref:`exhale_class_classargs_1_1core_1_1delegate__base_3_01return__type_07parameter__types_8_8_8_08_4`.
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::core::delegate_base< return_type(parameter_types...)>::invocation_element
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1core_1_1vector__view:
+
+Template Class vector_view
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_vector_view.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::vector_view
+   :members:
+   :protected-members:
+   :undoc-members:

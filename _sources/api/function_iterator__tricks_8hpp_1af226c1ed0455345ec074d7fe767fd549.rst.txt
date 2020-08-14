@@ -1,0 +1,13 @@
+.. _exhale_function_iterator__tricks_8hpp_1af226c1ed0455345ec074d7fe767fd549:
+
+Template Function args::core::iterator::checked_next
+====================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_iterator_tricks.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::iterator::checked_next(It&, It, std::size_t)

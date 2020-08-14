@@ -1,0 +1,79 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_traits.hpp:
+
+File traits.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/detail``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/detail/traits.hpp``)
+-------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_traits.hpp.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem_resolver.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_view.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__filesystem`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1core_1_1filesystem_1_1file__traits`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1filesystem_1_1filesystem__traits`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_traits_8hpp_1af3b59ca2b22e0ea46dc8fe6d526f32e6`
+
+- :ref:`exhale_function_traits_8hpp_1a9de9de2ab449a056bf835fa925c2efaf`
+
+- :ref:`exhale_function_traits_8hpp_1a9136ea2b89d6f7f3744e623ad0dcf4bb`
+
+- :ref:`exhale_function_traits_8hpp_1a7e5a851d993d82e8e8f2bf90cb20fdd1`
+
+- :ref:`exhale_function_traits_8hpp_1a95123fb126ebb5301eb88cd412bb402a`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_traits_8hpp_1af233aa4b46704eae221b7dc3492f6fbc`
+
+- :ref:`exhale_variable_traits_8hpp_1a2ae5eac5def6f5cbab32318d65c257f7`
+

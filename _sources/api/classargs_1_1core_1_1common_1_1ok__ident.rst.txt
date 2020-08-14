@@ -1,0 +1,28 @@
+.. _exhale_class_classargs_1_1core_1_1common_1_1ok__ident:
+
+Class ok_ident
+==============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_result.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public args::core::common::ok_proxy< T >`` (:ref:`exhale_class_classargs_1_1core_1_1common_1_1ok__proxy_3_01_t_01_4`)
+- ``public args::core::common::ok_proxy< T, Any... >`` (:ref:`exhale_class_classargs_1_1core_1_1common_1_1ok__proxy_3_01_t_00_01_any_8_8_8_01_4`)
+- ``public args::core::common::ok_proxy< void >`` (:ref:`exhale_class_classargs_1_1core_1_1common_1_1ok__proxy_3_01void_01_4`)
+- ``public args::core::common::ok_proxy<>`` (:ref:`exhale_class_classargs_1_1core_1_1common_1_1ok__proxy_3_4`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::common::ok_ident
+   :members:
+   :protected-members:
+   :undoc-members:

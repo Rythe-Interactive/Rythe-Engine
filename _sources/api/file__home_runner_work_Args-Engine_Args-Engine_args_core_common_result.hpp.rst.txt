@@ -1,0 +1,166 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_common_result.hpp:
+
+File result.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_common>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/common``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/common/result.hpp``)
+--------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_common_result.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
+
+- ``memory``
+
+- ``stdexcept``
+
+- ``tuple``
+
+- ``type_traits``
+
+- ``utility``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem_resolver.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_navigator.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_view.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_source.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__common`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1core_1_1common_1_1many__t`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1common_1_1try__static__cast__result`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1common_1_1try__static__cast__result_3_01void_00_01_original_01_4`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1common_1_1tuple__create__helper`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1err__ident`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1err__proxy`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1err__proxy_3_01_t_01_4`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1err__proxy_3_01_t_00_01_any_8_8_8_01_4`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1err__proxy_3_01void_01_4`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1err__proxy_3_4`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1ok__ident`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1ok__proxy`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1ok__proxy_3_01_t_01_4`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1ok__proxy_3_01_t_00_01_any_8_8_8_01_4`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1ok__proxy_3_01void_01_4`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1ok__proxy_3_4`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1result`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1result_3_01many__t_3_01_args_8_8_8_01_4_00_01_err_type_01_4`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1result_3_01many__t_3_01_ok_args_8_8_8_01_4_00_01many__t_3_01_err_args_8_8_8_01_4_01_4`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1result_3_01_ok_type_00_01_err_type_01_4`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1result_3_01_ok_type_00_01many__t_3_01_args_8_8_8_01_4_01_4`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1result__decay`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1result__ident`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1result__impl`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4`
+
+- :ref:`exhale_class_classargs_1_1core_1_1common_1_1valid__t`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1adf3637700bd50bd6e29ba167430b1679`
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a8f780bb8070c4459cd65a2a73d5811ed`
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1ace8c091ec78b5a64d02a54852c05645e`
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a11c9f352e26fe38febbf5b83f1f216c2`
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1abe886086bba9312565979731d7a488ff`
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a430bec3f350ef13c8122235f2b195241`
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a06129ef7627c4b13a2c3529ba4a0bc91`
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a6a1fd9fd94e68d3f00f9ba2e31d8d9ce`
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1afbbd11ae6b6b475e39ca5e74870d2b27`
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a4a4d827e2b5e95eb1bef9af3f00cd3cf`
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a42b51038bbbf7a6e2782c097979ee8d8`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_namespaceargs_1_1core_1_1common_1a24a4bcd902fe1fec5d5bd15f4a4e3da0`
+
+- :ref:`exhale_typedef_namespaceargs_1_1core_1_1common_1aa76fc97c0d1b3ee70aef55001840ab70`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_namespaceargs_1_1core_1_1common_1adf4610eb1a43c8c6ecf77ef30ca0ba86`
+

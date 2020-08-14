@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1core_1_1iterator_1_1value__only__iterator:
+
+Template Class value_only_iterator
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_iterator_tricks.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::iterator::value_only_iterator
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -74,7 +74,7 @@ Variables
 ---------
 
 
-- :ref:`exhale_variable_namespaceargs_1_1core_1_1ecs_1a55d81d7290c164ff4dbb4ddff1af3b62`
+- :ref:`exhale_variable_entityquery_8hpp_1a55d81d7290c164ff4dbb4ddff1af3b62`
 
-- :ref:`exhale_variable_namespaceargs_1_1core_1_1ecs_1aa908909eb9338c3b0f3749e7d4cd0c1c`
+- :ref:`exhale_variable_entityquery_8hpp_1aa908909eb9338c3b0f3749e7d4cd0c1c`
 

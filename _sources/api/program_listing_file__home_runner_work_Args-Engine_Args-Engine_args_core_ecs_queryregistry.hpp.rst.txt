@@ -32,8 +32,17 @@ Program Listing for File queryregistry.hpp
            async::readonly_rw_spinlock m_componentLock;
            sparse_map<id_type, hashed_sparse_set<id_type>> m_componentTypes;
    
+           static hashed_sparse_set<QueryRegistry*> m_validRegistries;
+   
        public:
-           QueryRegistry(EcsRegistry& registry) : m_registry(registry), m_entityLists(), m_componentTypes() {}
+           static bool isValid(QueryRegistry* reg) { return m_validRegistries.contains(reg); }
+   
+           QueryRegistry(EcsRegistry& registry) : m_registry(registry), m_entityLists(), m_componentTypes() { m_validRegistries.insert(this); }
+   
+           ~QueryRegistry()
+           {
+               m_validRegistries.erase(this);
+           }
    
            void addComponentType(id_type queryId, id_type componentTypeId);
    
@@ -52,7 +61,7 @@ Program Listing for File queryregistry.hpp
                (componentTypeIds.insert(typeHash<component_types>()), ...);
                return createQuery(componentTypeIds);
            }
-           
+   
            EntityQuery createQuery(const hashed_sparse_set<id_type>& componentTypes);
    
            const hashed_sparse_set<id_type>& getComponentTypes(id_type queryId);

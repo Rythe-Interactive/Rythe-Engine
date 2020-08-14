@@ -41,7 +41,7 @@ Includes
 
 - ``unordered_map``
 
-- ``vector``
+- ``vector`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_vector_view.hpp`)
 
 
 
@@ -54,6 +54,8 @@ Included By
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entity_handle.hpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entityquery.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_eventbus.hpp`
 
 
 

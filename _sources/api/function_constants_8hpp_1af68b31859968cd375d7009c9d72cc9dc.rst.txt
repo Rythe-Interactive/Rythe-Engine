@@ -1,0 +1,13 @@
+.. _exhale_function_constants_8hpp_1af68b31859968cd375d7009c9d72cc9dc:
+
+Template Function args::core::math::pi
+======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_constants.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::math::pi()

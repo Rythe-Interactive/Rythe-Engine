@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File view.hpp &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File view.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-view-hpp">
+<span id="program-listing-file-home-runner-work-args-engine-args-engine-args-core-filesystem-view-hpp"></span><h1>Program Listing for File view.hpp<a class="headerlink" href="#program-listing-for-file-view-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_view.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-filesystem-view-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/view.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;core/common/result.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/resource.hpp&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;core/common/exception.hpp&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&quot;mem_filesystem_resolver.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;navigator.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;detail/traits.hpp&quot;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">filesystem</span>
+<span class="p">{</span>
+    <span class="k">class</span> <span class="nc">ARGS_API</span> <span class="n">view</span>
+    <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+
+        <span class="c1">//behold the noise that is copy and move operations</span>
+        <span class="n">view</span><span class="p">(</span><span class="k">const</span> <span class="n">view</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">view</span><span class="p">(</span><span class="n">view</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">view</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">view</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">view</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">view</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="k">virtual</span> <span class="o">~</span><span class="n">view</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
+        <span class="n">view</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">path</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_path</span><span class="p">(</span><span class="n">strpath_manip</span><span class="o">::</span><span class="n">localize</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">path</span><span class="p">)))</span> <span class="p">{}</span>
+
+        <span class="n">A_NODISCARD</span> <span class="k">operator</span> <span class="kt">bool</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+        <span class="n">A_NODISCARD</span> <span class="kt">bool</span> <span class="nf">is_valid</span><span class="p">(</span> <span class="kt">bool</span> <span class="n">deep_check</span> <span class="o">=</span> <span class="nb">false</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+        <span class="n">A_NODISCARD</span> <span class="n">file_traits</span> <span class="nf">file_info</span><span class="p">();</span>
+
+        <span class="n">A_NODISCARD</span> <span class="n">filesystem_traits</span> <span class="nf">filesystem_info</span><span class="p">();</span>
+
+        <span class="n">A_NODISCARD</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">get_domain</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+        <span class="n">A_NODISCARD</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">basic_resource</span><span class="p">,</span><span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">get</span><span class="p">();</span>
+
+
+        <span class="n">A_NODISCARD</span> <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span><span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">set</span><span class="p">(</span><span class="k">const</span> <span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">resource</span><span class="p">);</span>
+
+        <span class="n">A_NODISCARD</span> <span class="n">view</span> <span class="nf">parent</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+        <span class="n">A_NODISCARD</span> <span class="k">virtual</span> <span class="n">view</span> <span class="nf">find</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">identifier</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+
+        <span class="n">A_NODISCARD</span> <span class="n">view</span> <span class="k">operator</span><span class="p">[](</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">identifier</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+<span class="cp">#if  !defined( ARGS_DISABLE_POTENTIALLY_WEIRD_SYNTAX )</span>
+
+        <span class="n">A_NODISCARD</span> <span class="n">view</span> <span class="k">operator</span><span class="o">/</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">identifier</span><span class="p">)</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="k">operator</span><span class="p">[](</span><span class="n">identifier</span><span class="p">);</span>
+        <span class="p">}</span>
+
+<span class="cp">#endif</span>
+
+    <span class="k">protected</span><span class="o">:</span>
+        <span class="n">view</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">m_path</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">create_identifier</span><span class="p">(</span><span class="k">const</span> <span class="n">navigator</span><span class="o">::</span><span class="n">solution</span><span class="o">::</span><span class="n">iterator</span><span class="o">&amp;</span><span class="p">);</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">filesystem_resolver</span><span class="o">&gt;</span> <span class="n">build</span><span class="p">();</span>
+
+        <span class="k">struct</span> <span class="n">create_chain</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">mem_filesystem_resolver</span><span class="o">&gt;</span> <span class="n">subject</span><span class="p">;</span> <span class="c1">// subject to be resolved</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">filesystem_resolver</span><span class="o">&gt;</span> <span class="n">provider</span><span class="p">;</span>    <span class="c1">// resolver to be used to resolve</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">create_chain</span><span class="o">&gt;</span> <span class="n">next</span><span class="p">;</span> <span class="c1">//next in chain</span>
+        <span class="p">};</span>
+
+        <span class="kt">void</span> <span class="nf">make_inheritance</span><span class="p">();</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">create_chain</span><span class="o">&gt;</span> <span class="n">translate_solution</span><span class="p">();</span>
+
+
+        <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span><span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">make_solution</span><span class="p">();</span>
+
+        <span class="n">navigator</span><span class="o">::</span><span class="n">solution</span> <span class="n">m_foundSolution</span><span class="p">{};</span>
+    <span class="p">};</span>
+
+
+    <span class="k">namespace</span> <span class="n">literals</span>
+    <span class="p">{</span>
+       <span class="kr">inline</span> <span class="n">view</span> <span class="k">operator</span><span class="s">&quot;&quot;</span><span class="n">_view</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span>
+       <span class="p">{</span>
+           <span class="k">return</span> <span class="n">view</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">len</span><span class="p">));</span>
+       <span class="p">}</span>
+    <span class="p">}</span>
+
+
+<span class="cp">#if 0</span><span class="c"> //not ready yet</span>
+
+<span class="c">    template &lt;std::size_t S&gt;</span>
+<span class="c">    class combined_view</span>
+<span class="c">    {</span>
+<span class="c">    public:</span>
+
+<span class="c">        template &lt;class... Views,</span>
+<span class="c">                  typename = std::enable_if_t&lt;(std::is_base_of_v&lt;view,std::remove_reference&lt;Views&gt;&gt; &amp;&amp;...)&gt;&gt;</span>
+<span class="c">        combined_view(Views&amp;&amp;...v) : m_views({std::forward&lt;Views&gt;(v)...}) {}</span>
+
+<span class="c">        view find(std::string_view identifier);</span>
+
+<span class="c">    private:</span>
+<span class="c">        std::array&lt;view&amp;,S&gt; m_views;</span>
+<span class="c">    };</span>
+
+<span class="c">    template&lt;class... Views&gt;</span>
+<span class="c">    combined_view(Views...) -&gt; combined_view&lt;sizeof...(Views)&gt;;</span>
+
+<span class="c">    template &lt;std::size_t S&gt;</span>
+<span class="c">    view combined_view&lt;S&gt;::find(std::string_view identifier)</span>
+<span class="c">    {</span>
+<span class="c">    }</span>
+<span class="cp">#endif</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_view.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

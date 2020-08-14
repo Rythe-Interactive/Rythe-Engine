@@ -47,33 +47,33 @@
 <span id="program-listing-file-home-runner-work-args-engine-args-engine-applications-test-game-source-cpp"></span><h1>Program Listing for File source.cpp<a class="headerlink" href="#program-listing-for-file-source-cpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_source.cpp.html#file-home-runner-work-args-engine-args-engine-applications-test-game-source-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/applications/test_game/source.cpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;chrono&gt;</span><span class="cp"></span>
 
 <span class="cp">#define ARGS_ENTRY</span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#define ARGS_KEEP_CONSOLE</span>
 
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">args</span><span class="p">;</span>
+<span class="cp">#include</span> <span class="cpf">&lt;chrono&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;thread&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;core/common/result.hpp&quot;</span><span class="cp"></span>
+
 
 <span class="cp">#include</span> <span class="cpf">&quot;module/testModule.hpp&quot;</span><span class="cp"></span>
 
-<span class="k">struct</span> <span class="n">sah</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">value</span><span class="p">;</span>
+<span class="cp">#include</span> <span class="cpf">&quot;module/testmodule.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;systems/testsystem.hpp&quot;</span><span class="cp"></span>
 
-    <span class="n">sah</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">sah</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="p">{</span> <span class="n">value</span> <span class="o">+</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span> <span class="p">};</span>
-    <span class="p">}</span>
+<span class="cp">#include</span> <span class="cpf">&quot;test_filesystem.hpp&quot;</span><span class="cp"></span>
 
-    <span class="n">sah</span> <span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="n">sah</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="p">{</span> <span class="n">value</span> <span class="o">*</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span> <span class="p">};</span>
-    <span class="p">}</span>
-<span class="p">};</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">args</span><span class="p">;</span>
 
 <span class="kt">void</span> <span class="n">ARGS_CCONV</span> <span class="nf">reportModules</span><span class="p">(</span><span class="n">Engine</span><span class="o">*</span> <span class="n">engine</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Hello Args!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">test_filesystem</span><span class="p">();</span>
+
+
     <span class="n">engine</span><span class="o">-&gt;</span><span class="n">reportModule</span><span class="o">&lt;</span><span class="n">TestModule</span><span class="o">&gt;</span><span class="p">();</span>
 
     <span class="k">try</span>
@@ -163,6 +163,21 @@
     <span class="k">else</span>
         <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;component handle is invalid&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;_____________________________________________________&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">common</span><span class="p">;</span>
+
+    <span class="n">result_decay</span><span class="o">&lt;</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">decay</span><span class="p">(</span><span class="n">Ok</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">decay</span> <span class="o">==</span> <span class="n">valid_t</span><span class="p">{})</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;was valid!&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">decay</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;_____________________________________________________&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">ent</span><span class="p">.</span><span class="n">has_component</span><span class="o">&lt;</span><span class="n">sah</span><span class="o">&gt;</span><span class="p">())</span>
         <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;entity has component&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
     <span class="k">else</span>
@@ -244,6 +259,8 @@
         <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;our entity handle was not found&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 
     <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+
 <span class="p">}</span>
 </pre></div>
 </div>

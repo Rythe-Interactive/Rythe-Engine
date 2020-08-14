@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1core_1_1filesystem_1_1artifact__cache:
+
+Class artifact_cache
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_artifact_cache.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::filesystem::artifact_cache
+   :members:
+   :protected-members:
+   :undoc-members:

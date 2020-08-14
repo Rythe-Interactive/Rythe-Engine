@@ -1,0 +1,94 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem_resolver.hpp:
+
+Program Listing for File filesystem_resolver.hpp
+================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem_resolver.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/filesystem_resolver.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   #include <string>                       // std::string
+   #include <set>                          // set::set
+   
+   #include <core/platform/platform.hpp>   // ARGS_PURE, A_NODISCARD
+   #include <core/filesystem/resource.hpp> // basic_resource
+   #include <core/common/inteface_traits.hpp>
+   #include <core/common/result.hpp>
+   #include <core/common/exception.hpp>
+   
+   #include "detail/meta.hpp"
+   #include "detail/traits.hpp"            // file_traits
+   #include "detail/strpath_manip.hpp"     // strpath_manip::separator
+   
+   
+   namespace args::core::filesystem {
+   
+       class filesystem_resolver : public filesystem_resolver_common_base {
+       public:
+           filesystem_resolver() = default;
+   
+           filesystem_resolver(const filesystem_resolver&) = default;
+           filesystem_resolver(filesystem_resolver&&) noexcept = default;
+   
+           filesystem_resolver& operator=(const filesystem_resolver&) = default;
+           filesystem_resolver& operator=(filesystem_resolver&&) = default;
+   
+           virtual ~filesystem_resolver() = default;
+   
+           A_NODISCARD file_traits resolve(const std::string& path) noexcept;
+   
+           A_NODISCARD file_traits get_traits() noexcept;
+   
+           
+           void set_identifier(const std::string& ident) { m_identifier = ident; }
+   
+   
+           void set_target(const std::string& target) { m_target = target; }
+   
+           A_NODISCARD virtual bool is_file()      const noexcept ARGS_PURE;
+           A_NODISCARD virtual bool is_directory() const noexcept ARGS_PURE;
+           A_NODISCARD virtual bool is_valid()     const noexcept ARGS_PURE;
+           A_NODISCARD virtual bool writeable()    const noexcept ARGS_PURE;
+           A_NODISCARD virtual bool readable()     const noexcept ARGS_PURE;
+           A_NODISCARD virtual bool creatable()    const noexcept ARGS_PURE;
+           A_NODISCARD virtual bool exists()       const noexcept ARGS_PURE;
+   
+           A_NODISCARD virtual std::set<std::string> ls() const noexcept ARGS_PURE;
+   
+           A_NODISCARD common::result<basic_resource, fs_error> get() const noexcept;
+           virtual common::result<basic_resource, fs_error> get(interfaces::implement_signal_t) const noexcept ARGS_PURE;
+   
+           A_NODISCARD common::result<void, fs_error> set(const basic_resource& res);
+           virtual common::result<void, fs_error> set(interfaces::implement_signal_t, const basic_resource& res) ARGS_PURE;
+   
+           A_NODISCARD virtual char get_delimiter() const noexcept ARGS_IMPURE_RETURN(strpath_manip::separator())
+   
+   
+           
+           void erase() const noexcept;
+           virtual void erase(interfaces::implement_signal_t) const noexcept ARGS_PURE;
+   
+           A_NODISCARD const filesystem_traits& get_fs_traits() const { return m_traits; }
+           void inherit(filesystem_resolver& outer)
+           {
+               inherit_traits(outer.m_traits,m_traits);    
+           }
+   
+           A_NODISCARD virtual filesystem_resolver* make() ARGS_PURE;
+   
+           A_NODISCARD const std::string& get_identifier() const { return m_identifier; }
+   
+           A_NODISCARD const std::string& get_target() const { return m_target; }
+   
+       private:
+           std::string m_identifier;
+           std::string m_target;
+           filesystem_traits m_traits{ false,true };
+   
+       };
+   }

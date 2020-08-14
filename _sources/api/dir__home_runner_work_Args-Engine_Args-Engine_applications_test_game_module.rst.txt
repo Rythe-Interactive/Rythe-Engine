@@ -15,7 +15,6 @@ Directory module
 Files
 -----
 
-- :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.cpp`
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.hpp`
 
 

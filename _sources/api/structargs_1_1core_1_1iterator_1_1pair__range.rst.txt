@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1core_1_1iterator_1_1pair__range:
+
+Template Struct pair_range
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_iterator_tricks.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::core::iterator::pair_range
+   :members:
+   :protected-members:
+   :undoc-members:

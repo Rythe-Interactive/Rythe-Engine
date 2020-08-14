@@ -1,0 +1,27 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_events_defaultevents.hpp:
+
+Program Listing for File defaultevents.hpp
+==========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_events_defaultevents.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/events/defaultevents.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/events/event.hpp>
+   
+   namespace args::core::events
+   {
+       struct exit final : public event<exit>
+       {
+           const int exitcode;
+   
+           exit(int exitcode = 0) : exitcode(exitcode) {}
+   
+           virtual bool persistent() { return true; }
+   
+       };
+   }

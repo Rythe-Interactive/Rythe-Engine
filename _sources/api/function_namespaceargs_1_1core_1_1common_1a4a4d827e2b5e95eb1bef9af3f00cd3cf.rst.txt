@@ -1,0 +1,13 @@
+.. _exhale_function_namespaceargs_1_1core_1_1common_1a4a4d827e2b5e95eb1bef9af3f00cd3cf:
+
+Template Function args::core::common::Ok_of
+===========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_result.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::common::Ok_of(result<Args...>&)

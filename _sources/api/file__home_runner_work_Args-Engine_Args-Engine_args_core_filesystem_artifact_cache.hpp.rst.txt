@@ -1,0 +1,80 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_artifact_cache.hpp:
+
+File artifact_cache.hpp
+=======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/artifact_cache.hpp``)
+--------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_artifact_cache.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``atomic`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_atomic_sparse_map.hpp`)
+
+- ``core/async/readonly_rw_spinlock.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_readonly_rw_spinlock.hpp`)
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`)
+
+- ``memory``
+
+- ``unordered_map``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_artifact_cache.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem_resolver.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_mem_filesystem_resolver.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__filesystem`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1core_1_1filesystem_1_1artifact__cache`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_artifact__cache_8hpp_1a38d7ec52aeb333df75178bcc02752d4c`
+
+- :ref:`exhale_variable_artifact__cache_8hpp_1a47b540098bed0606f129113adcb618c2`
+
+- :ref:`exhale_variable_artifact__cache_8hpp_1ab8c0cf48ad0c0d00b4c893df5013628e`
+

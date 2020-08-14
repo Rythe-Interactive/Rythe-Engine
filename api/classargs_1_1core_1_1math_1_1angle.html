@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Class angle &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class Module" href="classargs_1_1core_1_1_module.html" />
+    <link rel="prev" title="Template Class values_only" href="classargs_1_1core_1_1iterator_1_1values__only.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classargs_1_1core_1_1_module.html" title="Class Module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classargs_1_1core_1_1iterator_1_1values__only.html" title="Template Class values_only"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Template Class angle</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="template-class-angle">
+<span id="exhale-class-classargs-1-1core-1-1math-1-1angle"></span><h1>Template Class angle<a class="headerlink" href="#template-class-angle" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_math_trigonometry.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-math-trigonometry-hpp"><span class="std std-ref">File trigonometry.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4I_9precisionEN4args4core4math5angleE">
+<span id="_CPPv3I_9precisionEN4args4core4math5angleE"></span><span id="_CPPv2I_9precisionEN4args4core4math5angleE"></span>template&lt;<a class="reference internal" href="enum_precision_8hpp_1a91a59bb574b478728cb97aee74fe5a83.html#_CPPv4N4args4core4math9precisionE" title="args::core::math::precision">precision</a> <code class="sig-name descname">p</code> = <a class="reference internal" href="enum_precision_8hpp_1a91a59bb574b478728cb97aee74fe5a83.html#_CPPv4N4args4core4math9precisionE" title="args::core::math::precision">precision</a>::<a class="reference internal" href="enum_precision_8hpp_1a91a59bb574b478728cb97aee74fe5a83.html#_CPPv4N4args4core4math9precision5bit32E" title="args::core::math::precision::bit32">bit32</a>&gt;<br /><span class="target" id="classargs_1_1core_1_1math_1_1angle"></span><em class="property">class </em><code class="sig-prename descclassname">args::core::math<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">angle</code><a class="headerlink" href="#_CPPv4I_9precisionEN4args4core4math5angleE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Represents an angle does the rad/deg conversion internally so that the user does not have to worry about it. </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">p</span></code>: The precision of the angle class (typically bit32). </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core4math5angle12storage_typeE">
+<span id="_CPPv3N4args4core4math5angle12storage_typeE"></span><span id="_CPPv2N4args4core4math5angle12storage_typeE"></span><span class="target" id="classargs_1_1core_1_1math_1_1angle_1ae053414d62bf4c3ea095d9c6a68ccfb4"></span><em class="property">using </em><code class="sig-name descname">storage_type</code> = <a class="reference internal" href="typedef_precision_8hpp_1a2645b9d85edabb45a23546e9a91aea7f.html#_CPPv4N4args4core4math19precision_chooser_tE" title="args::core::math::precision_chooser_t">precision_chooser_t</a>&lt;<a class="reference internal" href="#_CPPv4I_9precisionEN4args4core4math5angleE" title="args::core::math::angle::p">p</a>&gt;<a class="headerlink" href="#_CPPv4N4args4core4math5angle12storage_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core4math5angle5angleERK5angle">
+<span id="_CPPv3N4args4core4math5angle5angleERK5angle"></span><span id="_CPPv2N4args4core4math5angle5angleERK5angle"></span><span id="args::core::math::angle::angle__angleCR"></span><span class="target" id="classargs_1_1core_1_1math_1_1angle_1a624476a5fa18246a2b8fdbff50d2baa0"></span><code class="sig-name descname">angle</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N4args4core4math5angle5angleERK5angle" title="args::core::math::angle::angle">angle</a> &amp;<em>other</em><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N4args4core4math5angle5angleERK5angle" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core4math5angle5angleERR5angle">
+<span id="_CPPv3N4args4core4math5angle5angleERR5angle"></span><span id="_CPPv2N4args4core4math5angle5angleERR5angle"></span><span id="args::core::math::angle::angle__angleRR"></span><span class="target" id="classargs_1_1core_1_1math_1_1angle_1ab859ee5fa73b25d21dc22939edf5d45b"></span><code class="sig-name descname">angle</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core4math5angle5angleERR5angle" title="args::core::math::angle::angle">angle</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span> <em class="property">noexcept</em> = default<a class="headerlink" href="#_CPPv4N4args4core4math5angle5angleERR5angle" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core4math5angleaSERK5angle">
+<span id="_CPPv3N4args4core4math5angleaSERK5angle"></span><span id="_CPPv2N4args4core4math5angleaSERK5angle"></span><span id="args::core::math::angle::assign-operator__angleCR"></span><span class="target" id="classargs_1_1core_1_1math_1_1angle_1af763d598e486c64b12bc4c205628b431"></span><a class="reference internal" href="#_CPPv4I_9precisionEN4args4core4math5angleE" title="args::core::math::angle">angle</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I_9precisionEN4args4core4math5angleE" title="args::core::math::angle">angle</a> &amp;<em>other</em><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N4args4core4math5angleaSERK5angle" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core4math5angleaSERR5angle">
+<span id="_CPPv3N4args4core4math5angleaSERR5angle"></span><span id="_CPPv2N4args4core4math5angleaSERR5angle"></span><span id="args::core::math::angle::assign-operator__angleRR"></span><span class="target" id="classargs_1_1core_1_1math_1_1angle_1a65eaa44fbc4bf6df395eac6b314843a4"></span><a class="reference internal" href="#_CPPv4I_9precisionEN4args4core4math5angleE" title="args::core::math::angle">angle</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I_9precisionEN4args4core4math5angleE" title="args::core::math::angle">angle</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span> <em class="property">noexcept</em> = default<a class="headerlink" href="#_CPPv4N4args4core4math5angleaSERR5angle" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core4math5angleD0Ev">
+<span id="_CPPv3N4args4core4math5angleD0Ev"></span><span id="_CPPv2N4args4core4math5angleD0Ev"></span><span id="args::core::math::angle::~angle"></span><span class="target" id="classargs_1_1core_1_1math_1_1angle_1a7257b54233e05e18d3c42c5c1b874f0d"></span><code class="sig-name descname">~angle</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N4args4core4math5angleD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core4math5angle10as_degreesEv">
+<span id="_CPPv3NK4args4core4math5angle10as_degreesEv"></span><span id="_CPPv2NK4args4core4math5angle10as_degreesEv"></span><span id="args::core::math::angle::as_degreesCCE"></span><span class="target" id="classargs_1_1core_1_1math_1_1angle_1ac92b1d9b1029c52f9d169f45712c2634"></span><em class="property">constexpr</em> <a class="reference internal" href="#_CPPv4N4args4core4math5angle12storage_typeE" title="args::core::math::angle::storage_type">storage_type</a> <code class="sig-name descname">as_degrees</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core4math5angle10as_degreesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Converts an angle to degrees. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core4math5angle10as_radiansEv">
+<span id="_CPPv3NK4args4core4math5angle10as_radiansEv"></span><span id="_CPPv2NK4args4core4math5angle10as_radiansEv"></span><span id="args::core::math::angle::as_radiansCCE"></span><span class="target" id="classargs_1_1core_1_1math_1_1angle_1a848f969a7f86ea3a378432b842a790b7"></span><em class="property">constexpr</em> <a class="reference internal" href="#_CPPv4N4args4core4math5angle12storage_typeE" title="args::core::math::angle::storage_type">storage_type</a> <code class="sig-name descname">as_radians</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core4math5angle10as_radiansEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Converts an angle to radians. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core4math5angle3sinEv">
+<span id="_CPPv3N4args4core4math5angle3sinEv"></span><span id="_CPPv2N4args4core4math5angle3sinEv"></span><span id="args::core::math::angle::sin"></span><span class="target" id="classargs_1_1core_1_1math_1_1angle_1a14f2565da183e698899e6277976a6551"></span><a class="reference internal" href="#_CPPv4N4args4core4math5angle12storage_typeE" title="args::core::math::angle::storage_type">storage_type</a> <code class="sig-name descname">sin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core4math5angle3sinEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Applies the trigonometric sinus function on the angle and returns it’s value. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>The sinus-value of an angle is the ratio between the opposite and the hypotenuse </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core4math5angle3cosEv">
+<span id="_CPPv3N4args4core4math5angle3cosEv"></span><span id="_CPPv2N4args4core4math5angle3cosEv"></span><span id="args::core::math::angle::cos"></span><span class="target" id="classargs_1_1core_1_1math_1_1angle_1ae7273305ee46ece197fbf7d05f36b10e"></span><a class="reference internal" href="#_CPPv4N4args4core4math5angle12storage_typeE" title="args::core::math::angle::storage_type">storage_type</a> <code class="sig-name descname">cos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core4math5angle3cosEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Applies the trigonometric co-sinus function on the angle and returns it’s value. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>The co-sinus-value of an angle is the ratio between the adjacent and the hypotenuse </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core4math5angle3tanEv">
+<span id="_CPPv3N4args4core4math5angle3tanEv"></span><span id="_CPPv2N4args4core4math5angle3tanEv"></span><span id="args::core::math::angle::tan"></span><span class="target" id="classargs_1_1core_1_1math_1_1angle_1a974e1e9ed83768f7f2b464c9c09232ef"></span><a class="reference internal" href="#_CPPv4N4args4core4math5angle12storage_typeE" title="args::core::math::angle::storage_type">storage_type</a> <code class="sig-name descname">tan</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core4math5angle3tanEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Applies the trigonometric tangent function on the angle and returns it’s value. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>The tangent-value of an angle is the ratio between the adjacent and the opposite </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core4math5angle3degE12storage_type">
+<span id="_CPPv3N4args4core4math5angle3degE12storage_type"></span><span id="_CPPv2N4args4core4math5angle3degE12storage_type"></span><span id="args::core::math::angle::deg__storage_typeCE"></span><span class="target" id="classargs_1_1core_1_1math_1_1angle_1a6c358850b0336bea818791361591b221"></span><em class="property">constexpr</em> <a class="reference internal" href="#_CPPv4I_9precisionEN4args4core4math5angleE" title="args::core::math::angle">angle</a> <code class="sig-name descname">deg</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core4math5angle12storage_typeE" title="args::core::math::angle::storage_type">storage_type</a> <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core4math5angle3degE12storage_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructs an angle from a degree value. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core4math5angle3radE12storage_type">
+<span id="_CPPv3N4args4core4math5angle3radE12storage_type"></span><span id="_CPPv2N4args4core4math5angle3radE12storage_type"></span><span id="args::core::math::angle::rad__storage_typeCE"></span><span class="target" id="classargs_1_1core_1_1math_1_1angle_1a2c0f4fb429c7708c82760d73f9d6afce"></span><em class="property">constexpr</em> <a class="reference internal" href="#_CPPv4I_9precisionEN4args4core4math5angleE" title="args::core::math::angle">angle</a> <code class="sig-name descname">rad</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core4math5angle12storage_typeE" title="args::core::math::angle::storage_type">storage_type</a> <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core4math5angle3radE12storage_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructs an angle from a radians value. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core4math5angle6arcsinE12storage_type">
+<span id="_CPPv3N4args4core4math5angle6arcsinE12storage_type"></span><span id="_CPPv2N4args4core4math5angle6arcsinE12storage_type"></span><span id="args::core::math::angle::arcsin__storage_type"></span><span class="target" id="classargs_1_1core_1_1math_1_1angle_1a9b81ae9a08f528c75aa705df89552c94"></span><a class="reference internal" href="#_CPPv4I_9precisionEN4args4core4math5angleE" title="args::core::math::angle">angle</a> <code class="sig-name descname">arcsin</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core4math5angle12storage_typeE" title="args::core::math::angle::storage_type">storage_type</a> <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core4math5angle6arcsinE12storage_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Applies the arcsin function to a sin value and constructs and angle from it. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>The arcsin is the counterpart to the sinus function and reverses it’s effects. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core4math5angle6arccosE12storage_type">
+<span id="_CPPv3N4args4core4math5angle6arccosE12storage_type"></span><span id="_CPPv2N4args4core4math5angle6arccosE12storage_type"></span><span id="args::core::math::angle::arccos__storage_type"></span><span class="target" id="classargs_1_1core_1_1math_1_1angle_1a60d0d74d8d2e22576274510bf2b9e5ad"></span><a class="reference internal" href="#_CPPv4I_9precisionEN4args4core4math5angleE" title="args::core::math::angle">angle</a> <code class="sig-name descname">arccos</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core4math5angle12storage_typeE" title="args::core::math::angle::storage_type">storage_type</a> <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core4math5angle6arccosE12storage_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Applies the arccos function to a cos value and constructs and angle from it. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>The arccos is the counterpart to the co-sinus function and reverses it’s effects. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core4math5angle6arctanE12storage_type">
+<span id="_CPPv3N4args4core4math5angle6arctanE12storage_type"></span><span id="_CPPv2N4args4core4math5angle6arctanE12storage_type"></span><span id="args::core::math::angle::arctan__storage_type"></span><span class="target" id="classargs_1_1core_1_1math_1_1angle_1ab302d10f6be06f3a05535b3bad0a6954"></span><a class="reference internal" href="#_CPPv4I_9precisionEN4args4core4math5angleE" title="args::core::math::angle">angle</a> <code class="sig-name descname">arctan</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core4math5angle12storage_typeE" title="args::core::math::angle::storage_type">storage_type</a> <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core4math5angle6arctanE12storage_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Applies the arctan function to a tan value and constructs and angle from it. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>The arctan is the counterpart to the tangent function and reverses it’s effects. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core4math5angle7arctan2E12storage_type12storage_type">
+<span id="_CPPv3N4args4core4math5angle7arctan2E12storage_type12storage_type"></span><span id="_CPPv2N4args4core4math5angle7arctan2E12storage_type12storage_type"></span><span id="args::core::math::angle::arctan2__storage_type.storage_type"></span><span class="target" id="classargs_1_1core_1_1math_1_1angle_1ac627728781e5410fdb2ba6ec992c5e28"></span><a class="reference internal" href="#_CPPv4I_9precisionEN4args4core4math5angleE" title="args::core::math::angle">angle</a> <code class="sig-name descname">arctan2</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core4math5angle12storage_typeE" title="args::core::math::angle::storage_type">storage_type</a> <em>y</em>, <a class="reference internal" href="#_CPPv4N4args4core4math5angle12storage_typeE" title="args::core::math::angle::storage_type">storage_type</a> <em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core4math5angle7arctan2E12storage_type12storage_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Applies the arctan2 function to a pair of cartesian coordinates, and returns the polar-angle of those coordinates in respect to the origin (0,0) </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>The arctan is the counterpart to the tangent function and reverses it’s effects. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Template Class angle</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">ARGS API</a><ul>
+      <li>Previous: <a href="classargs_1_1core_1_1iterator_1_1values__only.html" title="previous chapter">Template Class values_only</a></li>
+      <li>Next: <a href="classargs_1_1core_1_1_module.html" title="next chapter">Class Module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classargs_1_1core_1_1math_1_1angle.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

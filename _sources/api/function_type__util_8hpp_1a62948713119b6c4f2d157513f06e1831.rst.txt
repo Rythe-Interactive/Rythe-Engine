@@ -1,0 +1,13 @@
+.. _exhale_function_type__util_8hpp_1a62948713119b6c4f2d157513f06e1831:
+
+Template Function args::core::undecoratedTypeName
+=================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_type_util.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::undecoratedTypeName()

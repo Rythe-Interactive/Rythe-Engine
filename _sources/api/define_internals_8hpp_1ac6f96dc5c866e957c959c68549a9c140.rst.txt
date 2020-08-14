@@ -1,0 +1,13 @@
+.. _exhale_define_internals_8hpp_1ac6f96dc5c866e957c959c68549a9c140:
+
+Define assert_msg
+=================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_detail_internals.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: assert_msg

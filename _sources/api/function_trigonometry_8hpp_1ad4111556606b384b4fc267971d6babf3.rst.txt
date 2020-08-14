@@ -1,0 +1,13 @@
+.. _exhale_function_trigonometry_8hpp_1ad4111556606b384b4fc267971d6babf3:
+
+Template Function args::core::math::deg2rad
+===========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_trigonometry.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::math::deg2rad(T)

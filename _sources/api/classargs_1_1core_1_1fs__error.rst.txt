@@ -1,0 +1,25 @@
+.. _exhale_class_classargs_1_1core_1_1fs__error:
+
+Class fs_error
+==============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public args::core::exception`` (:ref:`exhale_class_classargs_1_1core_1_1exception`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::fs_error
+   :members:
+   :protected-members:
+   :undoc-members:

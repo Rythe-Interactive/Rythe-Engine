@@ -1,0 +1,13 @@
+.. _exhale_function_namespaceargs_1_1core_1_1common_1a5a84141ac83e3bddbd5ba1533d0b4027:
+
+Function args::core::common::data_from_string_< std::vector< std::string > >
+============================================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_string_extra.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::common::data_from_string_< std::vector< std::string > >(std::string)

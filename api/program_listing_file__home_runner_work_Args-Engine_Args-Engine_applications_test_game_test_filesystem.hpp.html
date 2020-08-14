@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File test_filesystem.hpp &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File test_filesystem.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-test-filesystem-hpp">
+<span id="program-listing-file-home-runner-work-args-engine-args-engine-applications-test-game-test-filesystem-hpp"></span><h1>Program Listing for File test_filesystem.hpp<a class="headerlink" href="#program-listing-for-file-test-filesystem-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_test_filesystem.hpp.html#file-home-runner-work-args-engine-args-engine-applications-test-game-test-filesystem-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/applications/test_game/test_filesystem.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/filesystem.hpp&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&quot;core/filesystem/basic_resolver.hpp&quot;</span><span class="cp"></span>
+
+<span class="kr">inline</span> <span class="k">namespace</span> <span class="p">{</span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="o">::</span><span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="p">;</span>
+<span class="k">namespace</span> <span class="n">fs</span> <span class="o">=</span> <span class="o">::</span><span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">filesystem</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">mock_resolver</span> <span class="k">final</span> <span class="o">:</span> <span class="k">public</span> <span class="n">fs</span><span class="o">::</span><span class="n">mem_filesystem_resolver</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">mock_resolver</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">byte_vec</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">)</span> <span class="o">:</span> <span class="n">mem_filesystem_resolver</span><span class="p">(</span><span class="n">v</span><span class="p">){}</span>
+    <span class="n">mock_resolver</span><span class="p">(</span><span class="k">const</span> <span class="n">mock_resolver</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+    <span class="n">mock_resolver</span><span class="p">(</span><span class="n">mock_resolver</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+    <span class="n">mock_resolver</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">mock_resolver</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+    <span class="n">mock_resolver</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">mock_resolver</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+    <span class="o">~</span><span class="n">mock_resolver</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
+
+    <span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span> <span class="kt">bool</span> <span class="n">is_file</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="k">override</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">get_target</span><span class="p">()</span> <span class="o">==</span> <span class="s">&quot;test.txt&quot;</span><span class="p">)</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span> <span class="kt">bool</span> <span class="n">is_directory</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span> <span class="kt">bool</span> <span class="n">is_valid</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="k">override</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">get_target</span><span class="p">()</span> <span class="o">==</span> <span class="s">&quot;test.txt&quot;</span><span class="p">)</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span> <span class="kt">bool</span> <span class="n">writeable</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span> <span class="kt">bool</span> <span class="n">readable</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="k">override</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">get_target</span><span class="p">()</span> <span class="o">==</span> <span class="s">&quot;test.txt&quot;</span><span class="p">)</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span> <span class="kt">bool</span> <span class="n">creatable</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span> <span class="kt">bool</span> <span class="n">exists</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="k">override</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">get_target</span><span class="p">()</span> <span class="o">==</span> <span class="s">&quot;test.txt&quot;</span><span class="p">)</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span> <span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ls</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="p">{</span><span class="s">&quot;test.txt&quot;</span><span class="p">};</span> <span class="p">}</span>
+
+    <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="n">filesystem</span><span class="o">::</span><span class="n">basic_resource</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span>
+    <span class="n">get</span><span class="p">(</span><span class="n">interfaces</span><span class="o">::</span><span class="n">implement_signal_t</span><span class="p">)</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="k">override</span>
+    <span class="p">{</span>
+
+        <span class="k">using</span> <span class="n">common</span><span class="o">::</span><span class="n">Err</span><span class="p">,</span> <span class="n">common</span><span class="o">::</span><span class="n">Ok</span><span class="p">;</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">prewarm</span><span class="p">())</span> <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="n">args_fs_error</span><span class="p">(</span><span class="s">&quot;was unable to cook the data!&quot;</span><span class="p">));</span>
+
+        <span class="k">const</span> <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="n">get_data</span><span class="p">();</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">get_target</span><span class="p">()</span> <span class="o">==</span> <span class="s">&quot;test.txt&quot;</span><span class="p">)</span> <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="n">filesystem</span><span class="o">::</span><span class="n">basic_resource</span><span class="p">(</span><span class="n">result</span><span class="p">));</span>
+        <span class="k">return</span> <span class="nf">Err</span><span class="p">(</span><span class="n">args_fs_error</span><span class="p">(</span><span class="s">&quot;this mock interface does not support file access&quot;</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span><span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">set</span><span class="p">(</span><span class="n">interfaces</span><span class="o">::</span><span class="n">implement_signal_t</span><span class="p">,</span> <span class="k">const</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">res</span><span class="p">)</span> <span class="k">override</span>
+    <span class="p">{</span>
+        <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="n">res</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">common</span><span class="o">::</span><span class="n">Err</span><span class="p">(</span><span class="n">args_fs_error</span><span class="p">(</span><span class="s">&quot;not implemented for the mock interface&quot;</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">erase</span><span class="p">(</span><span class="n">interfaces</span><span class="o">::</span><span class="n">implement_signal_t</span><span class="p">)</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="k">override</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+
+    <span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span> <span class="n">mem_filesystem_resolver</span><span class="o">*</span> <span class="n">make_higher</span><span class="p">()</span> <span class="k">override</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">mock_resolver</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="k">protected</span><span class="o">:</span>
+    <span class="kt">void</span> <span class="n">build_memory_representation</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">byte_vec</span><span class="o">&gt;</span> <span class="n">in</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">byte_vec</span><span class="o">&gt;</span> <span class="n">out</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span>
+    <span class="p">{</span>
+        <span class="n">out</span><span class="o">-&gt;</span><span class="n">assign</span><span class="p">(</span><span class="n">in</span><span class="o">-&gt;</span><span class="n">begin</span><span class="p">(),</span><span class="n">in</span><span class="o">-&gt;</span><span class="n">end</span><span class="p">());</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">basic_resource</span> <span class="n">rhs</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">lhs</span> <span class="o">&lt;&lt;</span> <span class="n">rhs</span><span class="p">.</span><span class="n">to_string</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">lhs</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kr">inline</span> <span class="kt">void</span> <span class="n">test_filesystem</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span>  <span class="n">x</span> <span class="o">=</span> <span class="s">&quot;always has been!&quot;</span><span class="p">;</span>
+
+    <span class="k">auto</span> <span class="n">vector</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">byte_vec</span><span class="o">&gt;</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="n">x</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+
+
+    <span class="n">fs</span><span class="o">::</span><span class="n">provider_registry</span><span class="o">::</span><span class="n">domain_create_resolver</span><span class="o">&lt;</span><span class="n">fs</span><span class="o">::</span><span class="n">basic_resolver</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;basic://&quot;</span><span class="p">,</span><span class="s">&quot;./assets&quot;</span><span class="p">);</span>
+    <span class="n">fs</span><span class="o">::</span><span class="n">provider_registry</span><span class="o">::</span><span class="n">domain_create_resolver</span><span class="o">&lt;</span><span class="n">mock_resolver</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;only_test_valid://&quot;</span><span class="p">,</span><span class="n">vector</span><span class="p">);</span>
+    <span class="n">fs</span><span class="o">::</span><span class="n">provider_registry</span><span class="o">::</span><span class="n">domain_create_resolver</span><span class="o">&lt;</span><span class="n">mock_resolver</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;.args-test&quot;</span><span class="p">,</span><span class="k">nullptr</span><span class="p">);</span>
+
+
+
+    <span class="k">auto</span> <span class="n">nested_contents</span> <span class="o">=</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="p">(</span><span class="s">&quot;basic://config/test.args-test/test.txt&quot;</span><span class="p">).</span><span class="n">get</span><span class="p">();</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">nested_contents</span> <span class="o">==</span> <span class="n">common</span><span class="o">::</span><span class="n">valid</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;[arm-fs] -&gt; found file !&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;[arm-fs] -&gt; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">nested_contents</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;[arm-fs] -&gt; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">nested_contents</span><span class="p">.</span><span class="n">get_error</span><span class="p">().</span><span class="n">what</span><span class="p">();</span>
+        <span class="n">__debugbreak</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">auto</span> <span class="n">traits</span> <span class="o">=</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="p">(</span><span class="s">&quot;only_test_valid://test.txt&quot;</span><span class="p">).</span><span class="n">file_info</span><span class="p">();</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">traits</span> <span class="o">!=</span> <span class="n">fs</span><span class="o">::</span><span class="n">invalid_file_t</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;[arm-fs] -&gt; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="p">(</span><span class="s">&quot;only_test_valid://test.txt&quot;</span><span class="p">).</span><span class="n">get</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="n">__debugbreak</span><span class="p">();</span>
+
+    <span class="k">auto</span> <span class="n">contents</span> <span class="o">=</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="p">(</span><span class="s">&quot;basic://config/test.txt&quot;</span><span class="p">).</span><span class="n">get</span><span class="p">();</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">contents</span> <span class="o">==</span> <span class="n">common</span><span class="o">::</span><span class="n">valid</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;[arm-fs] -&gt; found file !&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span><span class="s">&quot;[arm-fs] -&gt; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">contents</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;[arm-fs] -&gt; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">contents</span><span class="p">.</span><span class="n">get_error</span><span class="p">().</span><span class="n">what</span><span class="p">();</span>
+        <span class="n">__debugbreak</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="p">(</span><span class="s">&quot;basic://config/test2.txt&quot;</span><span class="p">).</span><span class="n">set</span><span class="p">(</span><span class="n">contents</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">has_err</span><span class="p">())</span> <span class="n">__debugbreak</span><span class="p">();</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_test_filesystem.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

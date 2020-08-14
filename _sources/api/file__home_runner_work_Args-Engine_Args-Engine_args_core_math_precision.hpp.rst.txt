@@ -1,0 +1,71 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_math_precision.hpp:
+
+File precision.hpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_math>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/math``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/math/precision.hpp``)
+---------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_math_precision.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_trigonometry.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__math`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1core_1_1math_1_1precision__chooser`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_precision_8hpp_1a91a59bb574b478728cb97aee74fe5a83`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_precision_8hpp_1a2645b9d85edabb45a23546e9a91aea7f`
+

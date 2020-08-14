@@ -1,0 +1,26 @@
+.. _exhale_class_classargs_1_1core_1_1scheduling_1_1_scheduler:
+
+Class Scheduler
+===============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_scheduler.hpp`
+
+
+Nested Relationships
+--------------------
+
+
+Nested Types
+************
+
+- :ref:`exhale_struct_structargs_1_1core_1_1scheduling_1_1_scheduler_1_1thread__error`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::scheduling::Scheduler
+   :members:
+   :protected-members:
+   :undoc-members:

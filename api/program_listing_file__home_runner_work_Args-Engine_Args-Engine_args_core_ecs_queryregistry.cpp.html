@@ -54,6 +54,8 @@
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">ecs</span>
 <span class="p">{</span>
+    <span class="n">hashed_sparse_set</span><span class="o">&lt;</span><span class="n">QueryRegistry</span><span class="o">*&gt;</span> <span class="n">QueryRegistry</span><span class="o">::</span><span class="n">m_validRegistries</span><span class="p">;</span>
+
     <span class="kt">void</span> <span class="n">QueryRegistry</span><span class="o">::</span><span class="n">addComponentType</span><span class="p">(</span><span class="n">id_type</span> <span class="n">queryId</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="p">{</span>

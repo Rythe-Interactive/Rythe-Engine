@@ -1,0 +1,13 @@
+.. _exhale_typedef_trigonometry_8hpp_1a29711f4b45baf5e391347946ef57f9ae:
+
+Typedef args::core::math::angleld
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_trigonometry.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::math::angleld

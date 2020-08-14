@@ -62,22 +62,22 @@
     <span class="k">struct</span> <span class="n">readonly_rw_spinlock</span>
     <span class="p">{</span>
     <span class="k">private</span><span class="o">:</span>
-        <span class="kr">inline</span> <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">atomic_uint</span> <span class="n">lastId</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">const</span> <span class="n">uint</span> <span class="n">id</span><span class="p">;</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">atomic_int</span> <span class="n">lockState</span><span class="p">;</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">atomic_int</span> <span class="n">readers</span><span class="p">;</span>
+        <span class="kr">inline</span> <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">atomic_uint</span> <span class="n">m_lastId</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">uint</span> <span class="n">m_id</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">atomic_int</span> <span class="n">m_lockState</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">atomic_int</span> <span class="n">m_readers</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-        <span class="kr">inline</span> <span class="k">static</span> <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">localWriters</span><span class="p">;</span>
-        <span class="kr">inline</span> <span class="k">static</span> <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">localReaders</span><span class="p">;</span>
-        <span class="kr">inline</span> <span class="k">static</span> <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="n">lock_state</span><span class="o">&gt;</span> <span class="n">localState</span><span class="p">;</span>
+        <span class="kr">inline</span> <span class="k">static</span> <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">m_localWriters</span><span class="p">;</span>
+        <span class="kr">inline</span> <span class="k">static</span> <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">m_localReaders</span><span class="p">;</span>
+        <span class="kr">inline</span> <span class="k">static</span> <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="n">lock_state</span><span class="o">&gt;</span> <span class="n">m_localState</span><span class="p">;</span>
 
         <span class="kt">void</span> <span class="nf">read_lock</span><span class="p">()</span>
         <span class="p">{</span>
             <span class="c1">// Report another reader to the lock.</span>
-            <span class="n">readers</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
-            <span class="n">localReaders</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">m_readers</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+            <span class="n">m_localReaders</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
 
-            <span class="k">if</span> <span class="p">(</span><span class="n">localState</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">!=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">)</span> <span class="c1">// If we&#39;re either already reading or writing then the lock doesn&#39;t need to be reacquired.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_localState</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">!=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">)</span> <span class="c1">// If we&#39;re either already reading or writing then the lock doesn&#39;t need to be reacquired.</span>
             <span class="p">{</span>
                 <span class="k">return</span><span class="p">;</span>
             <span class="p">}</span>
@@ -86,7 +86,7 @@
             <span class="kt">int</span> <span class="n">state</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">;</span>
 
             <span class="c1">// Try to set the lock state to read</span>
-            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">lockState</span><span class="p">.</span><span class="n">compare_exchange_weak</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span>
+            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">m_lockState</span><span class="p">.</span><span class="n">compare_exchange_weak</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span>
             <span class="p">{</span>
                 <span class="c1">// If the lock state was already on read we can continue without issues, read-only operations are allowed to happen simultaneously.</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">state</span> <span class="o">==</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">)</span>
@@ -95,15 +95,15 @@
                     <span class="n">state</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">;</span>
             <span class="p">}</span>
 
-            <span class="n">localState</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">;</span> <span class="c1">// Set thread_local state to read.</span>
+            <span class="n">m_localState</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">;</span> <span class="c1">// Set thread_local state to read.</span>
         <span class="p">}</span>
 
         <span class="kt">bool</span> <span class="nf">read_try_lock</span><span class="p">()</span>
         <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">localState</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">!=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">)</span> <span class="c1">// If we&#39;re either already reading or writing then the lock doesn&#39;t need to be reacquired.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_localState</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">!=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">)</span> <span class="c1">// If we&#39;re either already reading or writing then the lock doesn&#39;t need to be reacquired.</span>
             <span class="p">{</span>
-                <span class="n">readers</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
-                <span class="n">localReaders</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+                <span class="n">m_readers</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+                <span class="n">m_localReaders</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
                 <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
             <span class="p">}</span>
 
@@ -111,34 +111,34 @@
             <span class="kt">int</span> <span class="n">state</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">;</span>
 
             <span class="c1">// Try to set the lock state to read</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">lockState</span><span class="p">.</span><span class="n">compare_exchange_weak</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_lockState</span><span class="p">.</span><span class="n">compare_exchange_strong</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span>
             <span class="p">{</span>
                 <span class="c1">// If the lock state was already on read we can continue without issues, read-only operations are allowed to happen simultaneously.</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">state</span> <span class="o">!=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">)</span>
                     <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
             <span class="p">}</span>
 
-            <span class="n">readers</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
-            <span class="n">localReaders</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
-            <span class="n">localState</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">;</span> <span class="c1">// Set thread_local state to read.</span>
+            <span class="n">m_readers</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+            <span class="n">m_localReaders</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">m_localState</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">;</span> <span class="c1">// Set thread_local state to read.</span>
             <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="kt">void</span> <span class="nf">write_lock</span><span class="p">()</span>
         <span class="p">{</span>
-            <span class="n">localWriters</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">m_localWriters</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
 
-            <span class="k">if</span> <span class="p">(</span><span class="n">localState</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">==</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">)</span> <span class="c1">// If we&#39;re currently only acquired for read we need to stop reading before requesting rw.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_localState</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">==</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">)</span> <span class="c1">// If we&#39;re currently only acquired for read we need to stop reading before requesting rw.</span>
             <span class="p">{</span>
                 <span class="c1">// Mark our read as finished.</span>
-                <span class="n">readers</span><span class="p">.</span><span class="n">fetch_sub</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+                <span class="n">m_readers</span><span class="p">.</span><span class="n">fetch_sub</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
 
                 <span class="c1">// If there are no more readers left then the lock state needs to be returned to idle.</span>
                 <span class="c1">// This allows other (non readonly)locks to acquire access.</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">readers</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-                    <span class="n">lockState</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">m_readers</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="n">m_lockState</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
             <span class="p">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">localState</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">==</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">)</span> <span class="c1">// If we&#39;re already writing then we don&#39;t need to reacquire the lock.</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">m_localState</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">==</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">)</span> <span class="c1">// If we&#39;re already writing then we don&#39;t need to reacquire the lock.</span>
             <span class="p">{</span>
                 <span class="k">return</span><span class="p">;</span>
             <span class="p">}</span>
@@ -147,29 +147,29 @@
             <span class="kt">int</span> <span class="n">state</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">;</span>
 
             <span class="c1">// Try to set the lock state to write.</span>
-            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">lockState</span><span class="p">.</span><span class="n">compare_exchange_weak</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span>
+            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">m_lockState</span><span class="p">.</span><span class="n">compare_exchange_weak</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span>
                 <span class="c1">// If lock state is any other state than idle then we cannot acquire access to write, thus we need to stay in the CAS loop.</span>
                 <span class="n">state</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">;</span>
 
 
-            <span class="n">localState</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">;</span> <span class="c1">// Set thread_local state to write.</span>
+            <span class="n">m_localState</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">;</span> <span class="c1">// Set thread_local state to write.</span>
         <span class="p">}</span>
 
         <span class="kt">bool</span> <span class="nf">write_try_lock</span><span class="p">()</span>
         <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">localState</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">==</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">)</span> <span class="c1">// If we&#39;re currently only acquired for read we need to stop reading before requesting rw.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_localState</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">==</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">)</span> <span class="c1">// If we&#39;re currently only acquired for read we need to stop reading before requesting rw.</span>
             <span class="p">{</span>
                 <span class="c1">// Mark our read as finished.</span>
-                <span class="n">readers</span><span class="p">.</span><span class="n">fetch_sub</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+                <span class="n">m_readers</span><span class="p">.</span><span class="n">fetch_sub</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
 
                 <span class="c1">// If there are no more readers left then the lock state needs to be returned to idle.</span>
                 <span class="c1">// This allows other (non readonly)locks to acquire access.</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">readers</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-                    <span class="n">lockState</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">m_readers</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="n">m_lockState</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
             <span class="p">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">localState</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">==</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">)</span> <span class="c1">// If we&#39;re already writing then we don&#39;t need to reacquire the lock.</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">m_localState</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">==</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">)</span> <span class="c1">// If we&#39;re already writing then we don&#39;t need to reacquire the lock.</span>
             <span class="p">{</span>
-                <span class="n">localWriters</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+                <span class="n">m_localWriters</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
                 <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
             <span class="p">}</span>
 
@@ -177,14 +177,14 @@
             <span class="kt">int</span> <span class="n">state</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">;</span>
 
             <span class="c1">// Try to set the lock state to write.</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">lockState</span><span class="p">.</span><span class="n">compare_exchange_weak</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_lockState</span><span class="p">.</span><span class="n">compare_exchange_strong</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span>
             <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">localReaders</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">m_localReaders</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
                 <span class="p">{</span>
-                    <span class="n">readers</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+                    <span class="n">m_readers</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
                     <span class="n">state</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">;</span>
                     <span class="c1">// Try to set the lock state to read</span>
-                    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">lockState</span><span class="p">.</span><span class="n">compare_exchange_weak</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span>
+                    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">m_lockState</span><span class="p">.</span><span class="n">compare_exchange_weak</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span>
                     <span class="p">{</span>
                         <span class="c1">// If the lock state was already on read we can continue without issues, read-only operations are allowed to happen simultaneously.</span>
                         <span class="k">if</span> <span class="p">(</span><span class="n">state</span> <span class="o">==</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">)</span>
@@ -193,72 +193,86 @@
                             <span class="n">state</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">;</span>
                     <span class="p">}</span>
 
-                    <span class="n">localState</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">;</span>
+                    <span class="n">m_localState</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">;</span>
                 <span class="p">}</span>
                 <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
             <span class="p">}</span>
 
-            <span class="n">localWriters</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
-            <span class="n">localState</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">;</span> <span class="c1">// Set thread_local state to write.</span>
+            <span class="n">m_localWriters</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">m_localState</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">;</span> <span class="c1">// Set thread_local state to write.</span>
             <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="kt">void</span> <span class="nf">read_unlock</span><span class="p">()</span>
         <span class="p">{</span>
-            <span class="n">localReaders</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
+            <span class="n">m_localReaders</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
             <span class="c1">// Mark our read as finished.</span>
-            <span class="n">readers</span><span class="p">.</span><span class="n">fetch_sub</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+            <span class="n">m_readers</span><span class="p">.</span><span class="n">fetch_sub</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
 
-            <span class="k">if</span> <span class="p">(</span><span class="n">localReaders</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">localWriters</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">// Another local guard is still alive that will unlock the lock for this thread.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_localReaders</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">m_localWriters</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">// Another local guard is still alive that will unlock the lock for this thread.</span>
             <span class="p">{</span>
                 <span class="k">return</span><span class="p">;</span>
             <span class="p">}</span>
 
             <span class="c1">// If there are no more readers left then the lock state needs to be returned to idle.</span>
             <span class="c1">// This allows other (non readonly)locks to acquire access.</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">readers</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-                <span class="n">lockState</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_readers</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">m_lockState</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
 
-            <span class="n">localState</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">;</span> <span class="c1">// Set thread_local state to idle.</span>
+            <span class="n">m_localState</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">;</span> <span class="c1">// Set thread_local state to idle.</span>
         <span class="p">}</span>
 
         <span class="kt">void</span> <span class="nf">write_unlock</span><span class="p">()</span>
         <span class="p">{</span>
-            <span class="n">localWriters</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">localWriters</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">// Another write guard is still alive that will unlock the lock for this thread.</span>
+            <span class="n">m_localWriters</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_localWriters</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">// Another write guard is still alive that will unlock the lock for this thread.</span>
             <span class="p">{</span>
                 <span class="k">return</span><span class="p">;</span>
             <span class="p">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">localReaders</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">// read permission was granted before write request, we should return to read instead of idle after write is finished.</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">m_localReaders</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">// read permission was granted before write request, we should return to read instead of idle after write is finished.</span>
             <span class="p">{</span>
                 <span class="c1">// We should be the only one to have had access so we can safely write to the lock state and readers.</span>
-                <span class="n">readers</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
-                <span class="n">lockState</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+                <span class="n">m_readers</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+                <span class="n">m_lockState</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
 
-                <span class="n">localState</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">;</span> <span class="c1">// Set thread_local state back to read.</span>
+                <span class="n">m_localState</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">;</span> <span class="c1">// Set thread_local state back to read.</span>
             <span class="p">}</span>
             <span class="k">else</span>
             <span class="p">{</span>
                 <span class="c1">// We should be the only one to have had access so we can safely write to the lock state and return it to idle.</span>
-                <span class="n">lockState</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+                <span class="n">m_lockState</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
 
-                <span class="n">localState</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">;</span> <span class="c1">// Set thread_local state to idle.</span>
+                <span class="n">m_localState</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">;</span> <span class="c1">// Set thread_local state to idle.</span>
             <span class="p">}</span>
         <span class="p">}</span>
 
     <span class="k">public</span><span class="o">:</span>
-        <span class="n">readonly_rw_spinlock</span><span class="p">()</span> <span class="o">:</span> <span class="n">id</span><span class="p">(</span><span class="n">lastId</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span>
+        <span class="n">readonly_rw_spinlock</span><span class="p">()</span> <span class="o">:</span> <span class="n">m_id</span><span class="p">(</span><span class="n">m_lastId</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span>
         <span class="p">{</span>
-            <span class="n">localState</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">;</span>
-
-            <span class="n">lockState</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
-            <span class="n">readers</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+            <span class="n">m_lockState</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+            <span class="n">m_readers</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
         <span class="p">}</span>
 
+        <span class="n">readonly_rw_spinlock</span><span class="p">(</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;&amp;</span> <span class="n">source</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_id</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_id</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_lockState</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_lockState</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+            <span class="n">m_readers</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_readers</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;&amp;</span> <span class="n">source</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_id</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">m_id</span><span class="p">;</span>
+            <span class="n">source</span><span class="p">.</span><span class="n">m_id</span> <span class="o">=</span> <span class="n">invalid_id</span><span class="p">;</span>
+            <span class="n">m_lockState</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_lockState</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+            <span class="n">m_readers</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_readers</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+
+
         <span class="n">readonly_rw_spinlock</span><span class="p">(</span><span class="k">const</span> <span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
-        <span class="n">readonly_rw_spinlock</span><span class="p">(</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
         <span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
-        <span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+
+
 
         <span class="kt">void</span> <span class="nf">lock</span><span class="p">(</span><span class="n">lock_state</span> <span class="n">permissionLevel</span><span class="p">)</span>
         <span class="p">{</span>
@@ -507,7 +521,6 @@
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span> <span class="n">types</span><span class="o">&gt;</span>
     <span class="n">mixed_multiguard</span><span class="p">(</span><span class="n">types</span><span class="p">...)</span><span class="o">-&gt;</span><span class="n">mixed_multiguard</span><span class="o">&lt;</span><span class="k">sizeof</span><span class="p">...(</span><span class="n">types</span><span class="p">)</span><span class="o">&gt;</span><span class="p">;</span>
-
 <span class="p">}</span>
 </pre></div>
 </div>

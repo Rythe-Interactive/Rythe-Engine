@@ -1,0 +1,13 @@
+.. _exhale_function_constants_8hpp_1a4fcb0bca7c3ab4f393f26924b572dcb7:
+
+Template Function args::core::math::log2e
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_constants.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::math::log2e()

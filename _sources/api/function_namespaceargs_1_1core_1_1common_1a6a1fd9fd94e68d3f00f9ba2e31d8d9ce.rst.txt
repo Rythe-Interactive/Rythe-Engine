@@ -1,0 +1,13 @@
+.. _exhale_function_namespaceargs_1_1core_1_1common_1a6a1fd9fd94e68d3f00f9ba2e31d8d9ce:
+
+Template Function args::core::common::Ok(T&, Any&&...)
+======================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_result.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::common::Ok(T&, Any&&...)

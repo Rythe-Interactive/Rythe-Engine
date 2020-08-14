@@ -1,0 +1,13 @@
+.. _exhale_variable_constants_8hpp_1ad6bea522b141089096953e4b4abdf80e:
+
+Variable args::core::math::detail::very_precise_sqrt2
+=====================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_constants.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::core::math::detail::very_precise_sqrt2

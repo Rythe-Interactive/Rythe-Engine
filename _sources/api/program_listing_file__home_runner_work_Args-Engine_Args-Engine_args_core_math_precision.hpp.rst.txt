@@ -1,0 +1,41 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_math_precision.hpp:
+
+Program Listing for File precision.hpp
+======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_math_precision.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/math/precision.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/types/primitives.hpp>
+   
+   
+   namespace args::core::math
+   {
+       enum class precision
+       {
+           bit32,
+           bit64,
+           lots,
+           whole_only
+       };
+   
+   
+       template <precision p>
+       struct precision_chooser
+       {
+           using type = 
+           /*if*/      std::conditional_t<p == precision::bit32,f32,
+           /*elseif*/  std::conditional_t<p == precision::bit64,f64,
+           /*elseif*/  std::conditional_t<p == precision::lots, f80,
+                       int32>>>;
+       };
+   
+       template <precision p>
+       using precision_chooser_t = typename precision_chooser<p>::type;
+           
+   }

@@ -1,0 +1,16 @@
+.. _exhale_class_structargs_1_1core_1_1async_1_1ring__sync__lock:
+
+Class ring_sync_lock
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_ring_sync_lock.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::async::ring_sync_lock
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,25 @@
+.. _exhale_class_class_test_system:
+
+Class TestSystem
+================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_systems_testsystem.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public System< TestSystem >``
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: TestSystem
+   :members:
+   :protected-members:
+   :undoc-members:

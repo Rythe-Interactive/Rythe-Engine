@@ -1,0 +1,19 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_math_math.hpp:
+
+Program Listing for File math.hpp
+=================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_math_math.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/math/math.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include "glm/glm.hpp"
+   #include <core/math/constants.hpp>
+   #include <core/math/trigonometry.hpp>
+   namespace args::core::math
+   {
+       using namespace glm;
+   }

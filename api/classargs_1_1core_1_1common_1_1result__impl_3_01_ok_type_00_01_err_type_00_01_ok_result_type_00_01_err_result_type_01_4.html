@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Class result_impl&lt; OkType, ErrType, OkResultType, ErrResultType &gt; &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class valid_t" href="classargs_1_1core_1_1common_1_1valid__t.html" />
+    <link rel="prev" title="Template Class result_impl" href="classargs_1_1core_1_1common_1_1result__impl.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classargs_1_1core_1_1common_1_1valid__t.html" title="Class valid_t"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classargs_1_1core_1_1common_1_1result__impl.html" title="Template Class result_impl"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Template Class result_impl&lt; OkType, ErrType, OkResultType, ErrResultType &gt;</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="template-class-result-impl-oktype-errtype-okresulttype-errresulttype">
+<span id="exhale-class-classargs-1-1core-1-1common-1-1result-impl-3-01-ok-type-00-01-err-type-00-01-ok-result-type-00-01-err-result-type-01-4"></span><h1>Template Class result_impl&lt; OkType, ErrType, OkResultType, ErrResultType &gt;<a class="headerlink" href="#template-class-result-impl-oktype-errtype-okresulttype-errresulttype" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_common_result.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-common-result-hpp"><span class="std std-ref">File result.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4I0000EN4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEE">
+<span id="_CPPv3I0000EN4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEE"></span><span id="_CPPv2I0000EN4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEE"></span>template&lt;class <code class="sig-name descname">OkType</code>, class <code class="sig-name descname">ErrType</code>, class <code class="sig-name descname">OkResultType</code>, class <code class="sig-name descname">ErrResultType</code>&gt;<br /><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4"></span><em class="property">class </em><code class="sig-prename descclassname">args::core::common<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">result_impl</code>&lt;<a class="reference internal" href="#_CPPv4I0000EN4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::OkType">OkType</a>, <a class="reference internal" href="#_CPPv4I0000EN4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::ErrType">ErrType</a>, <a class="reference internal" href="#_CPPv4I0000EN4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::OkResultType">OkResultType</a>, <a class="reference internal" href="#_CPPv4I0000EN4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::ErrResultType">ErrResultType</a>&gt;<a class="headerlink" href="#_CPPv4I0000EN4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE8err_typeE">
+<span id="_CPPv3N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE8err_typeE"></span><span id="_CPPv2N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE8err_typeE"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1ae52898b76693a25ad8b45225944cf140"></span><em class="property">using </em><code class="sig-name descname">err_type</code> = <a class="reference internal" href="#_CPPv4I0000EN4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::ErrType">ErrType</a><a class="headerlink" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE8err_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE7ok_typeE">
+<span id="_CPPv3N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE7ok_typeE"></span><span id="_CPPv2N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE7ok_typeE"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1aaf959bcb18291660e68ef6cc641bd5f1"></span><em class="property">using </em><code class="sig-name descname">ok_type</code> = <a class="reference internal" href="#_CPPv4I0000EN4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::OkType">OkType</a><a class="headerlink" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE7ok_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE12err_result_tE">
+<span id="_CPPv3N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE12err_result_tE"></span><span id="_CPPv2N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE12err_result_tE"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1a3bac8c27a17487087bfb1e80d6e5f2b3"></span><em class="property">using </em><code class="sig-name descname">err_result_t</code> = <a class="reference internal" href="#_CPPv4I0000EN4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::ErrResultType">ErrResultType</a><a class="headerlink" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE12err_result_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11ok_result_tE">
+<span id="_CPPv3N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11ok_result_tE"></span><span id="_CPPv2N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11ok_result_tE"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1a448ca9acf36f3f0835b2331f9decd616"></span><em class="property">using </em><code class="sig-name descname">ok_result_t</code> = <a class="reference internal" href="#_CPPv4I0000EN4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::OkResultType">OkResultType</a><a class="headerlink" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11ok_result_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11result_implENSt10unique_ptrI7ok_typeEENSt10unique_ptrI8err_typeEE">
+<span id="_CPPv3N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11result_implENSt10unique_ptrI7ok_typeEENSt10unique_ptrI8err_typeEE"></span><span id="_CPPv2N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11result_implENSt10unique_ptrI7ok_typeEENSt10unique_ptrI8err_typeEE"></span><span id="args::core::common::result_impl:OkType.ErrType.OkResultType.ErrResultType:::result_impl__std::unique_ptr:ok_type:.std::unique_ptr:err_type:"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1ae183a8d9130cce607d9f4e4cbc68d7e9"></span><code class="sig-name descname">result_impl</code><span class="sig-paren">(</span>std::unique_ptr&lt;<a class="reference internal" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE7ok_typeE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::ok_type">ok_type</a>&gt; <em>ok</em>, std::unique_ptr&lt;<a class="reference internal" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE8err_typeE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::err_type">err_type</a>&gt; <em>err</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11result_implENSt10unique_ptrI7ok_typeEENSt10unique_ptrI8err_typeEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11result_implERK11result_impl">
+<span id="_CPPv3N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11result_implERK11result_impl"></span><span id="_CPPv2N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11result_implERK11result_impl"></span><span id="args::core::common::result_impl:OkType.ErrType.OkResultType.ErrResultType:::result_impl__result_implCR"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1a08b532e475e6ad4b180d1bf860bb422f"></span><code class="sig-name descname">result_impl</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11result_implERK11result_impl" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::result_impl">result_impl</a>&amp;<span class="sig-paren">)</span> = delete<a class="headerlink" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11result_implERK11result_impl" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11result_implERR11result_impl">
+<span id="_CPPv3N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11result_implERR11result_impl"></span><span id="_CPPv2N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11result_implERR11result_impl"></span><span id="args::core::common::result_impl:OkType.ErrType.OkResultType.ErrResultType:::result_impl__result_implRR"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1a4c90c889f511e767a1c2c5e95820bc41"></span><code class="sig-name descname">result_impl</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11result_implERR11result_impl" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::result_impl">result_impl</a>&amp;&amp;<span class="sig-paren">)</span> <em class="property">noexcept</em> = default<a class="headerlink" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11result_implERR11result_impl" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEaSERK11result_impl">
+<span id="_CPPv3N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEaSERK11result_impl"></span><span id="_CPPv2N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEaSERK11result_impl"></span><span id="args::core::common::result_impl:OkType.ErrType.OkResultType.ErrResultType:::assign-operator__result_implCR"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1a32e9e419c5458a6ab57d84bf059bf882"></span><a class="reference internal" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11result_implENSt10unique_ptrI7ok_typeEENSt10unique_ptrI8err_typeEE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::result_impl">result_impl</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11result_implENSt10unique_ptrI7ok_typeEENSt10unique_ptrI8err_typeEE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::result_impl">result_impl</a>&amp;<span class="sig-paren">)</span> = delete<a class="headerlink" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEaSERK11result_impl" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEaSERR11result_impl">
+<span id="_CPPv3N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEaSERR11result_impl"></span><span id="_CPPv2N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEaSERR11result_impl"></span><span id="args::core::common::result_impl:OkType.ErrType.OkResultType.ErrResultType:::assign-operator__result_implRR"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1a586aac2b056c192e8630014086fcc6dc"></span><a class="reference internal" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11result_implENSt10unique_ptrI7ok_typeEENSt10unique_ptrI8err_typeEE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::result_impl">result_impl</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11result_implENSt10unique_ptrI7ok_typeEENSt10unique_ptrI8err_typeEE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::result_impl">result_impl</a>&amp;&amp;<span class="sig-paren">)</span> <em class="property">noexcept</em> = default<a class="headerlink" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEaSERR11result_impl" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeED0Ev">
+<span id="_CPPv3N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeED0Ev"></span><span id="_CPPv2N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeED0Ev"></span><span id="args::core::common::result_impl:OkType.ErrType.OkResultType.ErrResultType:::~result_impl"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1ad1a1f815dc88fd4b5a5ca55ba18888c8"></span><code class="sig-name descname">~result_impl</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeED0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE3getEv">
+<span id="_CPPv3N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE3getEv"></span><span id="_CPPv2N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE3getEv"></span><span id="args::core::common::result_impl:OkType.ErrType.OkResultType.ErrResultType:::get"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1ae49c160fb12b169fb2ebdc7eda9fc4c6"></span><a class="reference internal" href="structargs_1_1core_1_1common_1_1try__static__cast__result.html#_CPPv4I00EN4args4core6common22try_static_cast_resultE" title="args::core::common::try_static_cast_result">try_static_cast_result</a>&lt;<a class="reference internal" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE11ok_result_tE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::ok_result_t">ok_result_t</a>, <a class="reference internal" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE7ok_typeE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::ok_type">ok_type</a>&gt;::type <code class="sig-name descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE3getEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEcvN22try_static_cast_resultI11ok_result_t7ok_typeE4typeEEv">
+<span id="_CPPv3N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEcvN22try_static_cast_resultI11ok_result_t7ok_typeE4typeEEv"></span><span id="_CPPv2N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEcvN22try_static_cast_resultI11ok_result_t7ok_typeE4typeEEv"></span><span id="args::core::common::result_impl:OkType.ErrType.OkResultType.ErrResultType:::castto-try_static_cast_result:ok_result_t.ok_type:::type-operator"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1a4916822c4977800d2b897e1835668a7b"></span><code class="sig-name descname">operator typename try_static_cast_result&lt;ok_result_t, ok_type&gt;::type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEcvN22try_static_cast_resultI11ok_result_t7ok_typeE4typeEEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEcvN22try_static_cast_resultI11ok_result_t7ok_typeE4typeEEv">
+<span id="_CPPv3NK4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEcvN22try_static_cast_resultI11ok_result_t7ok_typeE4typeEEv"></span><span id="_CPPv2NK4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEcvN22try_static_cast_resultI11ok_result_t7ok_typeE4typeEEv"></span><span id="args::core::common::result_impl:OkType.ErrType.OkResultType.ErrResultType:::castto-try_static_cast_result:ok_result_t.ok_type:::type-operatorC"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1abd067668ad632f36bb46978b6c9e6d4e"></span><code class="sig-name descname">operator typename try_static_cast_result&lt;ok_result_t, ok_type&gt;::type</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeEcvN22try_static_cast_resultI11ok_result_t7ok_typeE4typeEEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE5validEv">
+<span id="_CPPv3NK4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE5validEv"></span><span id="_CPPv2NK4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE5validEv"></span><span id="args::core::common::result_impl:OkType.ErrType.OkResultType.ErrResultType:::validC"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1a5a64d3fd9e18e25aa786ac88aa0b989a"></span>bool <code class="sig-name descname">valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE5validEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE7has_errEv">
+<span id="_CPPv3N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE7has_errEv"></span><span id="_CPPv2N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE7has_errEv"></span><span id="args::core::common::result_impl:OkType.ErrType.OkResultType.ErrResultType:::has_err"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1ad1664bd66f6e370cff4f6d094a7f4ae3"></span>bool <code class="sig-name descname">has_err</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE7has_errEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE9get_errorEv">
+<span id="_CPPv3NK4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE9get_errorEv"></span><span id="_CPPv2NK4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE9get_errorEv"></span><span id="args::core::common::result_impl:OkType.ErrType.OkResultType.ErrResultType:::get_errorC"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1a636c56a17abcd012e2cc4c7a7125e56a"></span><em class="property">const</em> <a class="reference internal" href="structargs_1_1core_1_1common_1_1try__static__cast__result.html#_CPPv4I00EN4args4core6common22try_static_cast_resultE" title="args::core::common::try_static_cast_result">try_static_cast_result</a>&lt;<a class="reference internal" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE12err_result_tE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::err_result_t">err_result_t</a>, <a class="reference internal" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE8err_typeE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::err_type">err_type</a>&gt;::type &amp;<code class="sig-name descname">get_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE9get_errorEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE9get_errorEv">
+<span id="_CPPv3N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE9get_errorEv"></span><span id="_CPPv2N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE9get_errorEv"></span><span id="args::core::common::result_impl:OkType.ErrType.OkResultType.ErrResultType:::get_error"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1a601d4185c933cb3389c48c4c9d37af2c"></span><a class="reference internal" href="structargs_1_1core_1_1common_1_1try__static__cast__result.html#_CPPv4I00EN4args4core6common22try_static_cast_resultE" title="args::core::common::try_static_cast_result">try_static_cast_result</a>&lt;<a class="reference internal" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE12err_result_tE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::err_result_t">err_result_t</a>, <a class="reference internal" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE8err_typeE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::err_type">err_type</a>&gt;::type <code class="sig-name descname">get_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE9get_errorEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt>
+<span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1af020f130aafa1a693c38ebef47db9ffe"></span><code class="sig-name descname">A_NORETURN void rethrow ()</code></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE13maybe_rethrowEv">
+<span id="_CPPv3N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE13maybe_rethrowEv"></span><span id="_CPPv2N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE13maybe_rethrowEv"></span><span id="args::core::common::result_impl:OkType.ErrType.OkResultType.ErrResultType:::maybe_rethrow"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1a9e035f3f20f2323f3d50fcd5ed84f9c6"></span>void <code class="sig-name descname">maybe_rethrow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE13maybe_rethrowEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Protected Attributes</p>
+<dl class="cpp var">
+<dt id="_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE5m_errE">
+<span id="_CPPv3N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE5m_errE"></span><span id="_CPPv2N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE5m_errE"></span><span id="args::core::common::result_impl:OkType.ErrType.OkResultType.ErrResultType:::m_err__std::unique_ptr:err_type:"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1ab07870f87ed33acc91ef32b9c8bd94f8"></span>std::unique_ptr&lt;<a class="reference internal" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE8err_typeE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::err_type">err_type</a>&gt; <code class="sig-name descname">m_err</code><a class="headerlink" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE5m_errE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE4m_okE">
+<span id="_CPPv3N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE4m_okE"></span><span id="_CPPv2N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE4m_okE"></span><span id="args::core::common::result_impl:OkType.ErrType.OkResultType.ErrResultType:::m_ok__std::unique_ptr:ok_type:"></span><span class="target" id="classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4_1a09604f0a17c28bd7f32430a8ab199ae6"></span>std::unique_ptr&lt;<a class="reference internal" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE7ok_typeE" title="args::core::common::result_impl&lt;OkType, ErrType, OkResultType, ErrResultType&gt;::ok_type">ok_type</a>&gt; <code class="sig-name descname">m_ok</code><a class="headerlink" href="#_CPPv4N4args4core6common11result_implI6OkType7ErrType12OkResultType13ErrResultTypeE4m_okE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Template Class result_impl&lt; OkType, ErrType, OkResultType, ErrResultType &gt;</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">ARGS API</a><ul>
+      <li>Previous: <a href="classargs_1_1core_1_1common_1_1result__impl.html" title="previous chapter">Template Class result_impl</a></li>
+      <li>Next: <a href="classargs_1_1core_1_1common_1_1valid__t.html" title="next chapter">Class valid_t</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classargs_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

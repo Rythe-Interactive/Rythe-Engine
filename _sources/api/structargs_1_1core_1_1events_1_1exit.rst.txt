@@ -1,0 +1,25 @@
+.. _exhale_struct_structargs_1_1core_1_1events_1_1exit:
+
+Struct exit
+===========
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_defaultevents.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public args::core::events::event< exit >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::core::events::exit
+   :members:
+   :protected-members:
+   :undoc-members:

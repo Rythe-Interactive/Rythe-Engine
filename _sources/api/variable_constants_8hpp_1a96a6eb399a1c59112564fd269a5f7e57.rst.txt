@@ -1,0 +1,13 @@
+.. _exhale_variable_constants_8hpp_1a96a6eb399a1c59112564fd269a5f7e57:
+
+Variable args::core::math::detail::very_precise_log2e
+=====================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_constants.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::core::math::detail::very_precise_log2e

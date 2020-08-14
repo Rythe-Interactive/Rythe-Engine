@@ -22,5 +22,4 @@ Program Listing for File source.cpp
    void ARGS_CCONV reportModules(args::core::Engine* engine)
    {
        std::cout << "Hello Args!" << std::endl;
-       _getwch();
    }

@@ -1,0 +1,13 @@
+.. _exhale_variable_constants_8hpp_1a9fb89ca27e17724f02282f2f051e375a:
+
+Variable args::core::math::detail::vp_feigenbaum
+================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_constants.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::core::math::detail::vp_feigenbaum

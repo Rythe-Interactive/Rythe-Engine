@@ -67,7 +67,7 @@ class Test {
     {
     public:
 
-        explicit basic_resource(nullptr_t) : m_container{}{}
+        explicit basic_resource(std::nullptr_t placeholder) : m_container{}{}
 
         explicit basic_resource(byte_vec v) : m_container(std::move(v)) {}
 

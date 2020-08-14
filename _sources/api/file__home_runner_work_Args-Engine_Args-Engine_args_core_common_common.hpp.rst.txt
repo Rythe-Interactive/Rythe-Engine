@@ -8,10 +8,6 @@ File common.hpp
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
-
-collection of common utilities that don't fall into a specific category 
- 
-
 .. contents:: Contents
    :local:
    :backlinks: none
@@ -29,14 +25,6 @@ Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/common/common.
 
 
 
-Includes
---------
-
-
-- ``cassert``
-
-- ``core/common/exception.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp`)
-
 
 
 Included By
@@ -47,14 +35,5 @@ Included By
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecsregistry.hpp`
 
-- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp`
 
-
-
-
-Defines
--------
-
-
-- :ref:`exhale_define_common_8hpp_1ac6f96dc5c866e957c959c68549a9c140`
 

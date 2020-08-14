@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1core_1_1multicast__delegate:
+
+Template Class multicast_delegate
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_delegate.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::multicast_delegate
+   :members:
+   :protected-members:
+   :undoc-members:

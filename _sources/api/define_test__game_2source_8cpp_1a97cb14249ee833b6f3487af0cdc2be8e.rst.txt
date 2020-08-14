@@ -1,0 +1,13 @@
+.. _exhale_define_test__game_2source_8cpp_1a97cb14249ee833b6f3487af0cdc2be8e:
+
+Define ARGS_KEEP_CONSOLE
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_source.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: ARGS_KEEP_CONSOLE

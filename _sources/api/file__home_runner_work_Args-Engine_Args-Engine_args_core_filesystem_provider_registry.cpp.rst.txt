@@ -1,0 +1,64 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_provider_registry.cpp:
+
+File provider_registry.cpp
+==========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/provider_registry.cpp``)
+-----------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_provider_registry.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``algorithm``
+
+- ``core/containers/iterator_tricks.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_iterator_tricks.hpp`)
+
+- ``provider_registry.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_provider_registry.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__filesystem`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1core_1_1filesystem_1_1provider__registry_1_1driver`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_provider__registry_8cpp_1aab1bece45ad229aa7bd3850eb8d8174e`
+
+- :ref:`exhale_function_provider__registry_8cpp_1a83f9ca69d4a2aa2dbf4ecd20fdb47bdb`
+

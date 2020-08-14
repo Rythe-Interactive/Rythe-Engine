@@ -30,6 +30,7 @@ Program Listing for File rw_component_buffer.hpp
        public:
            rw_component_buffer(EcsRegistry& registry) : m_registry(registry) {}
    
+           // Makes more sense to implement with index_type in combination with entity_query
            //component_handle<component_type> operator[](id_type entityId)
            //{
            //}

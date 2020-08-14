@@ -1,0 +1,58 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_math_math.hpp:
+
+File math.hpp
+=============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_math>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/math``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/math/math.hpp``)
+----------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_math_math.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/math/constants.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_constants.hpp`)
+
+- ``core/math/trigonometry.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_trigonometry.hpp`)
+
+- ``glm/glm.hpp``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_systems_testsystem.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__math`
+
+- :ref:`namespace_glm`
+

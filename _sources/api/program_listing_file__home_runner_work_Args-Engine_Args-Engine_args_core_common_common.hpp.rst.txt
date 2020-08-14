@@ -11,8 +11,3 @@ Program Listing for File common.hpp
 .. code-block:: cpp
 
    #pragma once
-   #include <cassert>
-   
-   #define assert_msg(msg,expr) assert(((void)(msg),(expr)))
-   
-   #include <core/common/exception.hpp>

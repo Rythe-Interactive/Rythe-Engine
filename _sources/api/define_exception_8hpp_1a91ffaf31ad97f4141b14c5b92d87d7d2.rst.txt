@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1a91ffaf31ad97f4141b14c5b92d87d7d2:
+
+Define args_fs_error
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: args_fs_error

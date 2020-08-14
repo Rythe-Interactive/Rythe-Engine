@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1core_1_1math_1_1angle:
+
+Template Class angle
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_trigonometry.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::math::angle
+   :members:
+   :protected-members:
+   :undoc-members:

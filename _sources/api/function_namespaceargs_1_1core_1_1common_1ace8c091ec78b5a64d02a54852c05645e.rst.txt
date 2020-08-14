@@ -1,0 +1,13 @@
+.. _exhale_function_namespaceargs_1_1core_1_1common_1ace8c091ec78b5a64d02a54852c05645e:
+
+Template Function args::core::common::Err(T&&, Any&&...)
+========================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_result.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::common::Err(T&&, Any&&...)

@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1core_1_1filesystem_1_1strpath__manip:
+
+Class strpath_manip
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_strpath_manip.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::filesystem::strpath_manip
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -29,9 +29,15 @@ Includes
 --------
 
 
+- ``core/ecs/ecsregistry.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecsregistry.hpp`)
+
 - ``core/engine/module.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp`)
 
+- ``core/events/eventbus.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_eventbus.hpp`)
+
 - ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
+
+- ``core/scheduling/scheduler.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_scheduler.hpp`)
 
 - ``core/types/meta.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_meta.hpp`)
 
@@ -39,7 +45,9 @@ Includes
 
 - ``map`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_atomic_sparse_map.hpp`)
 
-- ``vector``
+- ``memory``
+
+- ``vector`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_vector_view.hpp`)
 
 
 
@@ -48,8 +56,6 @@ Included By
 
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`
-
-- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.cpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_entry_entry_point.hpp`
 

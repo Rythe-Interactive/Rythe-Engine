@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespaceargs_1_1core_1_1common_1aa76fc97c0d1b3ee70aef55001840ab70:
+
+Typedef args::core::common::result_decay_more
+=============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_result.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::common::result_decay_more

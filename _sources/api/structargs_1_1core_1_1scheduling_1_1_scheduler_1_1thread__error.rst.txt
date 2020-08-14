@@ -1,0 +1,22 @@
+.. _exhale_struct_structargs_1_1core_1_1scheduling_1_1_scheduler_1_1thread__error:
+
+Struct Scheduler::thread_error
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_scheduler.hpp`
+
+
+Nested Relationships
+--------------------
+
+This struct is a nested type of :ref:`exhale_class_classargs_1_1core_1_1scheduling_1_1_scheduler`.
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::core::scheduling::Scheduler::thread_error
+   :members:
+   :protected-members:
+   :undoc-members:

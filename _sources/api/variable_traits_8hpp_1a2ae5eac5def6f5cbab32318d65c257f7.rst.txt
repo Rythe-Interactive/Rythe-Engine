@@ -1,0 +1,13 @@
+.. _exhale_variable_traits_8hpp_1a2ae5eac5def6f5cbab32318d65c257f7:
+
+Variable args::core::filesystem::invalid_filesystem_t
+=====================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_traits.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::core::filesystem::invalid_filesystem_t

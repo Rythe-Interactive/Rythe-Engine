@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1core_1_1common_1_1result:
+
+Template Class result
+=====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_result.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::common::result
+   :members:
+   :protected-members:
+   :undoc-members:

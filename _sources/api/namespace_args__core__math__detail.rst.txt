@@ -1,0 +1,36 @@
+
+.. _namespace_args__core__math__detail:
+
+Namespace args::core::math::detail
+==================================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_constants_8hpp_1ab22db392d760b0c8cfb019c4ec219e94`
+
+- :ref:`exhale_variable_constants_8hpp_1ab60593907cd89a1dedcc55759ae8babf`
+
+- :ref:`exhale_variable_constants_8hpp_1a379ac01ee2891a88ece77a399771b5dd`
+
+- :ref:`exhale_variable_constants_8hpp_1a96a6eb399a1c59112564fd269a5f7e57`
+
+- :ref:`exhale_variable_constants_8hpp_1a2e4a572f5062419066cb54a9ff596297`
+
+- :ref:`exhale_variable_constants_8hpp_1a72671f97a35ef9f890a4a1175fac22cd`
+
+- :ref:`exhale_variable_constants_8hpp_1ad6bea522b141089096953e4b4abdf80e`
+
+- :ref:`exhale_variable_constants_8hpp_1a629e0dc55a03d0039e6164c2539020ad`
+
+- :ref:`exhale_variable_constants_8hpp_1a9fb89ca27e17724f02282f2f051e375a`

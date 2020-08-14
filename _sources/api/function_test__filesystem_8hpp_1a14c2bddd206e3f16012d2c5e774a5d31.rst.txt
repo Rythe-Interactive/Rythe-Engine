@@ -1,0 +1,13 @@
+.. _exhale_function_test__filesystem_8hpp_1a14c2bddd206e3f16012d2c5e774a5d31:
+
+Function operator<<
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_test_filesystem.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: operator<<(std::ostream&, filesystem::basic_resource)

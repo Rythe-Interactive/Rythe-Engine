@@ -33,6 +33,10 @@ Includes
 
 - ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`)
 
+- ``cstring``
+
+- ``string`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_string_extra.hpp`)
+
 - ``typeinfo``
 
 
@@ -42,6 +46,12 @@ Included By
 
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entityquery.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_system.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_event.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_processchain.hpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_type_util.cpp`
 
@@ -65,11 +75,13 @@ Functions
 
 - :ref:`exhale_function_type__util_8hpp_1a94f51b351b18c1a001e896051db58df0`
 
-- :ref:`exhale_function_type__util_8hpp_1ac6c3c3b37be719660aa73b807138ed6e`
+- :ref:`exhale_function_type__util_8hpp_1a544d59e5fbfe271021385720ad13dbc6`
 
 - :ref:`exhale_function_type__util_8hpp_1a2fb26749a4216416b95b3c4c2728e8af`
 
-- :ref:`exhale_function_type__util_8hpp_1a3475a4b696d8b0cd4c6c8e362e589182`
+- :ref:`exhale_function_type__util_8hpp_1a411f45df69ab476f24027197bd72c878`
 
-- :ref:`exhale_function_type__util_8hpp_1ad7362bf35fb316b385b1ac036b5bb0c7`
+- :ref:`exhale_function_type__util_8hpp_1a4035cf7b740ef4518234c4b0b5ecb3d3`
+
+- :ref:`exhale_function_type__util_8hpp_1a62948713119b6c4f2d157513f06e1831`
 

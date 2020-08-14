@@ -15,7 +15,7 @@ Program Listing for File filemanip.hpp
    
    #include <core/platform/platform.hpp> // A_NODISCARD
    #include <core/types/types.hpp>       // byte, byte_vec
-   #include <core/common/common.hpp>     // assert_msg
+   #include <core/detail/internals.hpp>  // assert_msg
    
    #include <string_view>                // std::string_view
    #include <memory>                     // std::unique_ptr
@@ -23,6 +23,20 @@ Program Listing for File filemanip.hpp
    
    
    namespace args::core::filesystem {
+   
+   
+       A_NODISCARD inline bool exists(std::string_view path)
+       {
+           FILE* f = fopen(std::string(path).c_str(),"r+b");
+   
+           if(f)
+           {
+               fclose(f);
+               return true;
+           }
+           return false;
+       }
+   
        A_NODISCARD inline  byte_vec read_file(std::string_view path)
        {
    
@@ -31,7 +45,7 @@ Program Listing for File filemanip.hpp
                fopen(std::string(path).c_str(),"r+b"),
                fclose // deleter is fclose
            );
-           
+   
            assert_msg("could not open file",file);
    
            //get size and create container of that size
@@ -73,8 +87,13 @@ Program Listing for File filemanip.hpp
            {
                return [path=std::string_view(str,len)](const byte_vec& container)
                {
-                   write_file(path,container);
+                   ::args::core::filesystem::write_file(path,container);
                };
+           }
+   
+           bool operator""_exists(const char* str,std::size_t len)
+           {
+               return ::args::core::filesystem::exists(std::string_view(str,len));
            }
        }
    }
@@ -88,7 +107,7 @@ Program Listing for File filemanip.hpp
        using namespace  args::core::fs::literals;
    
        auto file1 = "hello_world.cpp"_readfile;
-       auto file2 = args::core::fs::read_file("hello_world.cpp"); 
+       auto file2 = args::core::fs::read_file("hello_world.cpp");
    
        "hello_world2.cpp"_writefile(file2);
        args::core::fs::write_file("hello_world2.cpp",file1);

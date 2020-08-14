@@ -1,0 +1,13 @@
+.. _exhale_variable_artifact__cache_8hpp_1a38d7ec52aeb333df75178bcc02752d4c:
+
+Variable args::core::filesystem::gc_hist
+========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_artifact_cache.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::core::filesystem::gc_hist

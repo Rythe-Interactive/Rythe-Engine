@@ -21,27 +21,32 @@ Program Listing for File clock.hpp
        class clock
        {
        private:
-           std::chrono::time_point<std::chrono::high_resolution_clock> start;
+           std::chrono::time_point<std::chrono::high_resolution_clock> m_start = std::chrono::high_resolution_clock::now();
        public:
-           void Start() {
-               start = std::chrono::high_resolution_clock::now();
+           void start() {
+               m_start = std::chrono::high_resolution_clock::now();
            }
    
-           time_span<time_type> GetElapsedTime()
+           time_span<time_type> startPoint()
            {
-               return time_span<time_type>(std::chrono::high_resolution_clock::now() - start);
+               return m_start.time_since_epoch();
            }
    
-           time_span<time_type> End()
+           time_span<time_type> elapsedTime()
            {
-               return time_span<time_type>(std::chrono::high_resolution_clock::now() - start);
+               return time_span<time_type>(std::chrono::high_resolution_clock::now() - m_start);
            }
    
-           time_span<time_type> Restart()
+           time_span<time_type> end()
+           {
+               return time_span<time_type>(std::chrono::high_resolution_clock::now() - m_start);
+           }
+   
+           time_span<time_type> restart()
            {
                auto startTime = std::chrono::high_resolution_clock::now();
-               time_span<time_type> time(startTime - start);
-               start = startTime;
+               time_span<time_type> time(startTime - m_start);
+               m_start = startTime;
                return time;
            }
        };

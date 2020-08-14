@@ -45,7 +45,11 @@ Includes
 
 - ``core/entry/entry_point.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_entry_entry_point.hpp`)
 
+- ``core/events/events.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_events.hpp`)
+
 - ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
+
+- ``core/scheduling/scheduling.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_scheduling.hpp`)
 
 - ``core/time/time.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_time_time.hpp`)
 
@@ -60,6 +64,8 @@ Included By
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_editor_application_source.cpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_systems_testsystem.hpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_source.cpp`
 

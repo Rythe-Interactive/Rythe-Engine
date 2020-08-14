@@ -61,7 +61,8 @@
 
     <span class="n">EntityQuery</span><span class="o">::~</span><span class="n">EntityQuery</span><span class="p">()</span>
     <span class="p">{</span>
-        <span class="n">m_registry</span><span class="p">.</span><span class="n">removeReference</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">QueryRegistry</span><span class="o">::</span><span class="n">isValid</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_registry</span><span class="p">))</span>
+            <span class="n">m_registry</span><span class="p">.</span><span class="n">removeReference</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">entity_handle</span><span class="o">&gt;::</span><span class="n">const_iterator</span> <span class="n">EntityQuery</span><span class="o">::</span><span class="n">begin</span><span class="p">()</span> <span class="k">const</span>

@@ -1,0 +1,13 @@
+.. _exhale_define_primitives_8hpp_1aec79566d72dfc3fc0a287cb81fa39ac8:
+
+Define default_priority
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: default_priority

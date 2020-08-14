@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespaceargs_1_1core_1_1common_1a24a4bcd902fe1fec5d5bd15f4a4e3da0:
+
+Typedef args::core::common::empty_t
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_result.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::common::empty_t

@@ -1,0 +1,67 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_processchain.hpp:
+
+Program Listing for File processchain.hpp
+=========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_processchain.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/scheduling/processchain.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/platform/platform.hpp>
+   #include <core/types/primitives.hpp>
+   #include <core/types/type_util.hpp>
+   #include <core/containers/containers.hpp>
+   #include <core/async/transferable_atomic.hpp>
+   
+   #include <thread>
+   
+   namespace args::core::scheduling
+   {
+       class ARGS_API Scheduler;
+       class ARGS_API Process;
+   
+       class ARGS_API ProcessChain
+       {
+       private:
+           std::string m_name;
+           id_type m_nameHash = invalid_id;
+           std::thread::id m_threadId;
+           Scheduler* m_scheduler;
+           async::readonly_rw_spinlock m_processesLock;
+           sparse_map<id_type, Process*> m_processes;
+           async::transferable_atomic<bool> m_exit;
+   
+           static void threadedRun(ProcessChain* chain);
+       public:
+           ProcessChain() = default;
+           ProcessChain(ProcessChain&&) = default;
+           ProcessChain& operator=(ProcessChain&&) = default;
+   
+           template<size_type charc>
+           ProcessChain(const char(&name)[charc], Scheduler* scheduler) : m_name(name), m_nameHash(nameHash<charc>(name)), m_scheduler(scheduler) { }
+   
+           bool run();
+   
+           id_type id() { return m_nameHash; }
+   
+   
+           std::thread::id threadId() 
+           {
+               if (m_threadId == std::thread::id())
+                   return std::this_thread::get_id();
+               return m_threadId; 
+           }
+   
+           void exit();
+   
+           void runInCurrentThread();
+   
+           void addProcess(Process* process);
+   
+           void removeProcess(Process* process);
+       };
+   }

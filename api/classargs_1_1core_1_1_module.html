@@ -18,8 +18,8 @@
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Template Class sparse_map" href="classargs_1_1core_1_1sparse__map.html" />
-    <link rel="prev" title="Class invalid_type_error" href="classargs_1_1core_1_1invalid__type__error.html" />
+    <link rel="next" title="Template Class multicast_delegate" href="classargs_1_1core_1_1multicast__delegate.html" />
+    <link rel="prev" title="Template Class angle" href="classargs_1_1core_1_1math_1_1angle.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -36,10 +36,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="classargs_1_1core_1_1sparse__map.html" title="Template Class sparse_map"
+          <a href="classargs_1_1core_1_1multicast__delegate.html" title="Template Class multicast_delegate"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="classargs_1_1core_1_1invalid__type__error.html" title="Class invalid_type_error"
+          <a href="classargs_1_1core_1_1math_1_1angle.html" title="Template Class angle"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
@@ -57,27 +57,22 @@
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-engine-module-hpp"><span class="std std-ref">File module.hpp</span></a></p></li>
 </ul>
-<div class="section" id="inheritance-relationships">
-<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="derived-type">
-<h3>Derived Type<a class="headerlink" href="#derived-type" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">TestModule</span></code> (<a class="reference internal" href="class_test_module.html#exhale-class-class-test-module"><span class="std std-ref">Class TestModule</span></a>)</p></li>
-</ul>
-</div>
-</div>
 <div class="section" id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="cpp class">
 <dt id="_CPPv4N4args4core6ModuleE">
 <span id="_CPPv3N4args4core6ModuleE"></span><span id="_CPPv2N4args4core6ModuleE"></span><span id="args::core::Module"></span><span class="target" id="classargs_1_1core_1_1_module"></span><em class="property">class </em><code class="sig-prename descclassname">args::core<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">Module</code><a class="headerlink" href="#_CPPv4N4args4core6ModuleE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>interface for engine-modules, must be implemented <a class="reference internal" href="classargs_1_1core_1_1_engine.html#classargs_1_1core_1_1_engine_1aaf56affc2337cead73fa9bd355fd4bce"><span class="std std-ref">args::core::Engine::reportModule&lt;T,…&gt;()</span></a> </p>
-<p>Subclassed by <a class="reference internal" href="class_test_module.html#class_test_module"><span class="std std-ref">TestModule</span></a></p>
+<dd><p>interface for engine-modules, must be implemented <a class="reference internal" href="classargs_1_1core_1_1_engine.html#classargs_1_1core_1_1_engine_1ae11734e97be4105531ba8bd2e4162073"><span class="std std-ref">args::core::Engine::reportModule&lt;T,…&gt;()</span></a> </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
 <dt>
-<span class="target" id="classargs_1_1core_1_1_module_1a1ff56fccaf8a6bd0552a327915b83bbd"></span><code class="sig-name descname">priority_type priority () ARGS_IMPURE_RETURN(0)</code></dt>
+<span class="target" id="classargs_1_1core_1_1_module_1a7421d33282c9ab8fb3db443add7586c9"></span><code class="sig-name descname">void setup () ARGS_PURE</code></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt>
+<span class="target" id="classargs_1_1core_1_1_module_1a46f7b11b5845acf83905fad3c95b6ccc"></span><code class="sig-name descname">priority_type priority () ARGS_IMPURE_RETURN(default_priority)</code></dt>
 <dd><p>determines the execution priority of this module <a class="reference internal" href="define_platform_8hpp_1aaa80584991d216fb43121552bca34b33.html#platform_8hpp_1aaa80584991d216fb43121552bca34b33"><span class="std std-ref">ARGS_IMPURE_RETURN</span></a> </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>priority_type signed int8 higher is higher priority and get called first </p>
@@ -91,14 +86,26 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt>
-<span class="target" id="classargs_1_1core_1_1_module_1a8669fb46d26dc09579d3bac062864a92"></span><code class="sig-name descname">void init () ARGS_PURE</code></dt>
-<dd><p>module initializer <a class="reference internal" href="define_platform_8hpp_1a1db9851589b1e9ba81b655bc10b65ee1.html#platform_8hpp_1a1db9851589b1e9ba81b655bc10b65ee1"><span class="std std-ref">ARGS_PURE</span></a> </p>
-</dd></dl>
+<dt id="_CPPv4N4args4core6ModuleD0Ev">
+<span id="_CPPv3N4args4core6ModuleD0Ev"></span><span id="_CPPv2N4args4core6ModuleD0Ev"></span><span id="args::core::Module::~Module"></span><span class="target" id="classargs_1_1core_1_1_module_1a17f4ef82cc06c75c6b30672b779d1e3b"></span><code class="sig-name descname">~Module</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N4args4core6ModuleD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Protected Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4I_9size_typeEN4args4core6Module8addChainEvRA5charc_Kc">
+<span id="_CPPv3I_9size_typeEN4args4core6Module8addChainERA5charc_Kc"></span><span id="_CPPv2I_9size_typeEN4args4core6Module8addChainERAcharc_Kc"></span>template&lt;<a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <code class="sig-name descname">charc</code>&gt;<br /><span class="target" id="classargs_1_1core_1_1_module_1a730c35e830038eeb0617204d48ffd03a"></span>void <code class="sig-name descname">addChain</code><span class="sig-paren">(</span><em class="property">const</em> char (&amp;<em>name</em>)[charc]<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_9size_typeEN4args4core6Module8addChainEvRA5charc_Kc" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 <dl class="cpp function">
-<dt>
-<span class="target" id="classargs_1_1core_1_1_module_1a817f881aa5d1634c3455d59ce998ea4a"></span><code class="sig-name descname">~Module () ARGS_IMPURE</code></dt>
+<dt id="_CPPv4I0Dp_13inherits_fromI10SystemType6SystemI10SystemTypeEEEN4args4core6Module12reportSystemEvDpRR4Args">
+<span id="_CPPv3I0Dp_13inherits_fromI10SystemType6SystemI10SystemTypeEEEN4args4core6Module12reportSystemEDpRR4Args"></span><span id="_CPPv2I0Dp_13inherits_fromI10SystemType6SystemI10SystemTypeEEEN4args4core6Module12reportSystemEDpRR4Args"></span>template&lt;typename <code class="sig-name descname">SystemType</code>, typename ...<code class="sig-name descname">Args</code>, <a class="reference internal" href="typedef_types_2meta_8hpp_1a91a5094436ccecc924bd45dd02437003.html#_CPPv4N4args4core13inherits_fromE" title="args::core::inherits_from">inherits_from</a>&lt;<a class="reference internal" href="#_CPPv4I0Dp_13inherits_fromI10SystemType6SystemI10SystemTypeEEEN4args4core6Module12reportSystemEvDpRR4Args" title="args::core::Module::reportSystem::SystemType">SystemType</a>, <a class="reference internal" href="classargs_1_1core_1_1_system.html#_CPPv4I0EN4args4core6SystemE" title="args::core::System">System</a>&lt;<a class="reference internal" href="#_CPPv4I0Dp_13inherits_fromI10SystemType6SystemI10SystemTypeEEEN4args4core6Module12reportSystemEvDpRR4Args" title="args::core::Module::reportSystem::SystemType">SystemType</a>&gt;&gt; = 0&gt;<br /><span class="target" id="classargs_1_1core_1_1_module_1af79e6c19974c7f82338a69f2f710ce27"></span>void <code class="sig-name descname">reportSystem</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0Dp_13inherits_fromI10SystemType6SystemI10SystemTypeEEEN4args4core6Module12reportSystemEvDpRR4Args" title="args::core::Module::reportSystem::Args">Args</a>&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0Dp_13inherits_fromI10SystemType6SystemI10SystemTypeEEEN4args4core6Module12reportSystemEvDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN4args4core6Module19reportComponentTypeEvv">
+<span id="_CPPv3I0EN4args4core6Module19reportComponentTypeEv"></span><span id="_CPPv2I0EN4args4core6Module19reportComponentTypeEv"></span>template&lt;typename <code class="sig-name descname">component_type</code>&gt;<br /><span class="target" id="classargs_1_1core_1_1_module_1ad6e51602867ef3d6538357fa3f4f6b00"></span>void <code class="sig-name descname">reportComponentType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN4args4core6Module19reportComponentTypeEvv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>
@@ -117,10 +124,6 @@
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Class Module</a><ul>
-<li><a class="reference internal" href="#inheritance-relationships">Inheritance Relationships</a><ul>
-<li><a class="reference internal" href="#derived-type">Derived Type</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
 </ul>
 </li>
@@ -129,8 +132,8 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">ARGS API</a><ul>
-      <li>Previous: <a href="classargs_1_1core_1_1invalid__type__error.html" title="previous chapter">Class invalid_type_error</a></li>
-      <li>Next: <a href="classargs_1_1core_1_1sparse__map.html" title="next chapter">Template Class sparse_map</a></li>
+      <li>Previous: <a href="classargs_1_1core_1_1math_1_1angle.html" title="previous chapter">Template Class angle</a></li>
+      <li>Next: <a href="classargs_1_1core_1_1multicast__delegate.html" title="next chapter">Template Class multicast_delegate</a></li>
   </ul></li>
   </ul></li>
 </ul>

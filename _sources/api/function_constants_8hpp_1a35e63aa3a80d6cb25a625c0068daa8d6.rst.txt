@@ -1,0 +1,13 @@
+.. _exhale_function_constants_8hpp_1a35e63aa3a80d6cb25a625c0068daa8d6:
+
+Template Function args::core::math::euler
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_constants.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::math::euler()

@@ -1,0 +1,13 @@
+.. _exhale_function_namespaceargs_1_1core_1_1common_1ab2f898c9dd449bd03c07cd0905a82d93:
+
+Function args::core::common::find_and_remove_at
+===============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_string_extra.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::common::find_and_remove_at(std::string&, const std::string&, size_t)

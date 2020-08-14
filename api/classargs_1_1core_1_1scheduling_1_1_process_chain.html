@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class ProcessChain &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class Scheduler" href="classargs_1_1core_1_1scheduling_1_1_scheduler.html" />
+    <link rel="prev" title="Class Process" href="classargs_1_1core_1_1scheduling_1_1_process.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classargs_1_1core_1_1scheduling_1_1_scheduler.html" title="Class Scheduler"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classargs_1_1core_1_1scheduling_1_1_process.html" title="Class Process"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class ProcessChain</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-processchain">
+<span id="exhale-class-classargs-1-1core-1-1scheduling-1-1-process-chain"></span><h1>Class ProcessChain<a class="headerlink" href="#class-processchain" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_processchain.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-scheduling-processchain-hpp"><span class="std std-ref">File processchain.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N4args4core10scheduling12ProcessChainE">
+<span id="_CPPv3N4args4core10scheduling12ProcessChainE"></span><span id="_CPPv2N4args4core10scheduling12ProcessChainE"></span><span id="args::core::scheduling::ProcessChain"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_chain"></span><em class="property">class </em><code class="sig-prename descclassname">args::core::scheduling<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">ProcessChain</code><a class="headerlink" href="#_CPPv4N4args4core10scheduling12ProcessChainE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Chain of processes that either run in a separate thread or on the main thread. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>If chain is to run on a separate thread, then the chain has it’s own program loop. <a class="reference internal" href="#classargs_1_1core_1_1scheduling_1_1_process_chain_1a74138e5ba95af32b40eeed0b3e763c18"><span class="std std-ref">ProcessChain::exit()</span></a> needs to be called in order to end the thread. </p>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling12ProcessChain12ProcessChainEv">
+<span id="_CPPv3N4args4core10scheduling12ProcessChain12ProcessChainEv"></span><span id="_CPPv2N4args4core10scheduling12ProcessChain12ProcessChainEv"></span><span id="args::core::scheduling::ProcessChain::ProcessChain"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_chain_1aba99793d2be9ded4b44e238487fdfcb6"></span><code class="sig-name descname">ProcessChain</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N4args4core10scheduling12ProcessChain12ProcessChainEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling12ProcessChain12ProcessChainERR12ProcessChain">
+<span id="_CPPv3N4args4core10scheduling12ProcessChain12ProcessChainERR12ProcessChain"></span><span id="_CPPv2N4args4core10scheduling12ProcessChain12ProcessChainERR12ProcessChain"></span><span id="args::core::scheduling::ProcessChain::ProcessChain__ProcessChainRR"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_chain_1a30d21cd199895c968a09c81008e0a8d4"></span><code class="sig-name descname">ProcessChain</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core10scheduling12ProcessChain12ProcessChainERR12ProcessChain" title="args::core::scheduling::ProcessChain::ProcessChain">ProcessChain</a>&amp;&amp;<span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N4args4core10scheduling12ProcessChain12ProcessChainERR12ProcessChain" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling12ProcessChainaSERR12ProcessChain">
+<span id="_CPPv3N4args4core10scheduling12ProcessChainaSERR12ProcessChain"></span><span id="_CPPv2N4args4core10scheduling12ProcessChainaSERR12ProcessChain"></span><span id="args::core::scheduling::ProcessChain::assign-operator__ProcessChainRR"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_chain_1a725bcef5d604c7c58d5dabcbfb417213"></span><a class="reference internal" href="#_CPPv4N4args4core10scheduling12ProcessChainE" title="args::core::scheduling::ProcessChain">ProcessChain</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core10scheduling12ProcessChainE" title="args::core::scheduling::ProcessChain">ProcessChain</a>&amp;&amp;<span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N4args4core10scheduling12ProcessChainaSERR12ProcessChain" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I_9size_typeEN4args4core10scheduling12ProcessChain12ProcessChainERA5charc_KcP9Scheduler">
+<span id="_CPPv3I_9size_typeEN4args4core10scheduling12ProcessChain12ProcessChainERA5charc_KcP9Scheduler"></span><span id="_CPPv2I_9size_typeEN4args4core10scheduling12ProcessChain12ProcessChainERAcharc_KcP9Scheduler"></span>template&lt;<a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <code class="sig-name descname">charc</code>&gt;<br /><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_chain_1a7c3e3c1c7d79b1cfecea9504849d4ade"></span><code class="sig-name descname">ProcessChain</code><span class="sig-paren">(</span><em class="property">const</em> char (&amp;<em>name</em>)[charc], <a class="reference internal" href="classargs_1_1core_1_1scheduling_1_1_scheduler.html#_CPPv4N4args4core10scheduling9SchedulerE" title="args::core::scheduling::Scheduler">Scheduler</a> *<em>scheduler</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_9size_typeEN4args4core10scheduling12ProcessChain12ProcessChainERA5charc_KcP9Scheduler" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling12ProcessChain3runEv">
+<span id="_CPPv3N4args4core10scheduling12ProcessChain3runEv"></span><span id="_CPPv2N4args4core10scheduling12ProcessChain3runEv"></span><span id="args::core::scheduling::ProcessChain::run"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_chain_1ab1b07a390e9d2f9bf56b4ae63f584c82"></span>bool <code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling12ProcessChain3runEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates a new thread and runs it’s own program loop in it. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool <a class="reference internal" href="classargs_1_1core_1_1scheduling_1_1_scheduler.html#classargs_1_1core_1_1scheduling_1_1_scheduler_1a00dee0f120ea292074896ae949c65942"><span class="std std-ref">Scheduler::createThread()</span></a> <a class="reference internal" href="classargs_1_1core_1_1scheduling_1_1_scheduler.html#classargs_1_1core_1_1scheduling_1_1_scheduler_1a00dee0f120ea292074896ae949c65942"><span class="std std-ref">Scheduler::createThread()</span></a> </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling12ProcessChain2idEv">
+<span id="_CPPv3N4args4core10scheduling12ProcessChain2idEv"></span><span id="_CPPv2N4args4core10scheduling12ProcessChain2idEv"></span><span id="args::core::scheduling::ProcessChain::id"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_chain_1a5253a9eeb2150e1570227debe0307ffe"></span><a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a> <code class="sig-name descname">id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling12ProcessChain2idEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the hash of the name of the process-chain. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling12ProcessChain8threadIdEv">
+<span id="_CPPv3N4args4core10scheduling12ProcessChain8threadIdEv"></span><span id="_CPPv2N4args4core10scheduling12ProcessChain8threadIdEv"></span><span id="args::core::scheduling::ProcessChain::threadId"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_chain_1a162bb34aa5dddf5214e4858572723e66"></span>std::thread::id <code class="sig-name descname">threadId</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling12ProcessChain8threadIdEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get id of the thread the chain runs on. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling12ProcessChain4exitEv">
+<span id="_CPPv3N4args4core10scheduling12ProcessChain4exitEv"></span><span id="_CPPv2N4args4core10scheduling12ProcessChain4exitEv"></span><span id="args::core::scheduling::ProcessChain::exit"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_chain_1a74138e5ba95af32b40eeed0b3e763c18"></span>void <code class="sig-name descname">exit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling12ProcessChain4exitEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Raises exit flag for this process-chain and will request the process thread to exit. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling12ProcessChain18runInCurrentThreadEv">
+<span id="_CPPv3N4args4core10scheduling12ProcessChain18runInCurrentThreadEv"></span><span id="_CPPv2N4args4core10scheduling12ProcessChain18runInCurrentThreadEv"></span><span id="args::core::scheduling::ProcessChain::runInCurrentThread"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_chain_1a08c6a371f6ed4d8a1793684820638dfa"></span>void <code class="sig-name descname">runInCurrentThread</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling12ProcessChain18runInCurrentThreadEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Runs one iteration of the process-chains program loop without creating a new thread. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Loops through all hooked processes and executes them until they are all finished. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling12ProcessChain10addProcessEP7Process">
+<span id="_CPPv3N4args4core10scheduling12ProcessChain10addProcessEP7Process"></span><span id="_CPPv2N4args4core10scheduling12ProcessChain10addProcessEP7Process"></span><span id="args::core::scheduling::ProcessChain::addProcess__ProcessP"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_chain_1a79ac85f7bcc14d6a00147d522257e697"></span>void <code class="sig-name descname">addProcess</code><span class="sig-paren">(</span><a class="reference internal" href="classargs_1_1core_1_1scheduling_1_1_process.html#_CPPv4N4args4core10scheduling7ProcessE" title="args::core::scheduling::Process">Process</a> *<em>process</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling12ProcessChain10addProcessEP7Process" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Hook a process for execution with this chain. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling12ProcessChain13removeProcessEP7Process">
+<span id="_CPPv3N4args4core10scheduling12ProcessChain13removeProcessEP7Process"></span><span id="_CPPv2N4args4core10scheduling12ProcessChain13removeProcessEP7Process"></span><span id="args::core::scheduling::ProcessChain::removeProcess__ProcessP"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_chain_1a09d814eecd930dbdfab29529ded1759f"></span>void <code class="sig-name descname">removeProcess</code><span class="sig-paren">(</span><a class="reference internal" href="classargs_1_1core_1_1scheduling_1_1_process.html#_CPPv4N4args4core10scheduling7ProcessE" title="args::core::scheduling::Process">Process</a> *<em>process</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling12ProcessChain13removeProcessEP7Process" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Unhook a process from execution with this chain. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class ProcessChain</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">ARGS API</a><ul>
+      <li>Previous: <a href="classargs_1_1core_1_1scheduling_1_1_process.html" title="previous chapter">Class Process</a></li>
+      <li>Next: <a href="classargs_1_1core_1_1scheduling_1_1_scheduler.html" title="next chapter">Class Scheduler</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classargs_1_1core_1_1scheduling_1_1_process_chain.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

@@ -1,0 +1,22 @@
+.. _exhale_struct_structargs_1_1core_1_1filesystem_1_1view_1_1create__chain:
+
+Struct view::create_chain
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_view.hpp`
+
+
+Nested Relationships
+--------------------
+
+This struct is a nested type of :ref:`exhale_class_classargs_1_1core_1_1filesystem_1_1view`.
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::core::filesystem::view::create_chain
+   :members:
+   :protected-members:
+   :undoc-members:

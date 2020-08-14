@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1core_1_1delegate__base:
+
+Template Class delegate_base
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_delegate.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::delegate_base
+   :members:
+   :protected-members:
+   :undoc-members:

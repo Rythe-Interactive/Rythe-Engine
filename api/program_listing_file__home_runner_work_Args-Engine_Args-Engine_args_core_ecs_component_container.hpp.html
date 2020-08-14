@@ -61,6 +61,7 @@
         <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">has_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="n">ARGS_PURE</span><span class="p">;</span>
         <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">create_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="n">ARGS_PURE</span><span class="p">;</span>
         <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">destroy_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="n">ARGS_PURE</span><span class="p">;</span>
+        <span class="k">virtual</span> <span class="o">~</span><span class="n">component_container_base</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
     <span class="p">};</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>

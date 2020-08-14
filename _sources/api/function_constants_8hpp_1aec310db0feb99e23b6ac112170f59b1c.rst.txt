@@ -1,0 +1,13 @@
+.. _exhale_function_constants_8hpp_1aec310db0feb99e23b6ac112170f59b1c:
+
+Template Function args::core::math::inv_sqrt3
+=============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_constants.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::math::inv_sqrt3()

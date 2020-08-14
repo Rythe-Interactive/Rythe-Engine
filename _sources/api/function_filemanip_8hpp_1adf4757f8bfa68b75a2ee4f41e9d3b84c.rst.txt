@@ -1,0 +1,13 @@
+.. _exhale_function_filemanip_8hpp_1adf4757f8bfa68b75a2ee4f41e9d3b84c:
+
+Function args::core::filesystem::exists
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::filesystem::exists(std::string_view)

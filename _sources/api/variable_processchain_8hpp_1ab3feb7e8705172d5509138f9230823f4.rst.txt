@@ -1,0 +1,13 @@
+.. _exhale_variable_processchain_8hpp_1ab3feb7e8705172d5509138f9230823f4:
+
+Variable args::core::scheduling::Scheduler
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_processchain.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::core::scheduling::Scheduler

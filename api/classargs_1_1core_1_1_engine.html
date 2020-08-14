@@ -62,7 +62,7 @@
 <dl class="cpp class">
 <dt id="_CPPv4N4args4core6EngineE">
 <span id="_CPPv3N4args4core6EngineE"></span><span id="_CPPv2N4args4core6EngineE"></span><span id="args::core::Engine"></span><span class="target" id="classargs_1_1core_1_1_engine"></span><em class="property">class </em><code class="sig-prename descclassname">args::core<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">Engine</code><a class="headerlink" href="#_CPPv4N4args4core6EngineE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Main top level engine abstraction. This class allows you to setup the engine with all the necessary modules and settings. This class also contains all the sub managers of the core systems. <a class="reference internal" href="classargs_1_1core_1_1_module.html#classargs_1_1core_1_1_module"><span class="std std-ref">args::core::Module</span></a> <a class="reference internal" href="classargs_1_1core_1_1ecs_1_1_ecs_registry.html#classargs_1_1core_1_1ecs_1_1_ecs_registry"><span class="std std-ref">args::core::ecs::EcsRegistry</span></a> args::core::scenes::SceneManager args::core::scheduling::Scheduler. </p>
+<dd><p>Main top level engine abstraction. This class allows you to setup the engine with all the necessary modules and settings. This class also contains all the sub managers of the core systems. <a class="reference internal" href="classargs_1_1core_1_1_module.html#classargs_1_1core_1_1_module"><span class="std std-ref">args::core::Module</span></a> <a class="reference internal" href="classargs_1_1core_1_1ecs_1_1_ecs_registry.html#classargs_1_1core_1_1ecs_1_1_ecs_registry"><span class="std std-ref">args::core::ecs::EcsRegistry</span></a> args::core::scenes::SceneManager <a class="reference internal" href="classargs_1_1core_1_1scheduling_1_1_scheduler.html#classargs_1_1core_1_1scheduling_1_1_scheduler"><span class="std std-ref">args::core::scheduling::Scheduler</span></a>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
@@ -71,23 +71,13 @@
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4I0_13inherits_fromI10ModuleType6ModuleEEN4args4core6Engine12reportModuleEvv">
-<span id="_CPPv3I0_13inherits_fromI10ModuleType6ModuleEEN4args4core6Engine12reportModuleEv"></span><span id="_CPPv2I0_13inherits_fromI10ModuleType6ModuleEEN4args4core6Engine12reportModuleEv"></span>template&lt;class <code class="sig-name descname">ModuleType</code>, <a class="reference internal" href="typedef_meta_8hpp_1a91a5094436ccecc924bd45dd02437003.html#_CPPv4N4args4core13inherits_fromE" title="args::core::inherits_from">inherits_from</a>&lt;<a class="reference internal" href="#_CPPv4I0_13inherits_fromI10ModuleType6ModuleEEN4args4core6Engine12reportModuleEvv" title="args::core::Engine::reportModule::ModuleType">ModuleType</a>, <a class="reference internal" href="classargs_1_1core_1_1_module.html#_CPPv4N4args4core6ModuleE" title="args::core::Module">Module</a>&gt; = 0&gt;<br /><span class="target" id="classargs_1_1core_1_1_engine_1aaf56affc2337cead73fa9bd355fd4bce"></span>void <code class="sig-name descname">reportModule</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0_13inherits_fromI10ModuleType6ModuleEEN4args4core6Engine12reportModuleEvv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>reports an engine module </p>
-<p><dl class="simple">
-<dt><strong>Note</strong></dt><dd><p>ModuleType must be default constructable <a class="reference internal" href="classargs_1_1core_1_1_module.html#classargs_1_1core_1_1_module"><span class="std std-ref">args::core::Module</span></a> </p>
-</dd>
-<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">ModuleType</span></code>: the module you want to report </p></li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
+<dt id="_CPPv4N4args4core6EngineD0Ev">
+<span id="_CPPv3N4args4core6EngineD0Ev"></span><span id="_CPPv2N4args4core6EngineD0Ev"></span><span id="args::core::Engine::~Engine"></span><span class="target" id="classargs_1_1core_1_1_engine_1ac99871f55cdc1e4bac9e38815870bd73"></span><code class="sig-name descname">~Engine</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core6EngineD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4I0Dp_13inherits_fromI10ModuleType6ModuleEEN4args4core6Engine12reportModuleEv20module_initializer_tDpRR4Args">
-<span id="_CPPv3I0Dp_13inherits_fromI10ModuleType6ModuleEEN4args4core6Engine12reportModuleE20module_initializer_tDpRR4Args"></span><span id="_CPPv2I0Dp_13inherits_fromI10ModuleType6ModuleEEN4args4core6Engine12reportModuleE20module_initializer_tDpRR4Args"></span>template&lt;class <code class="sig-name descname">ModuleType</code>, class ...<code class="sig-name descname">Args</code>, <a class="reference internal" href="typedef_meta_8hpp_1a91a5094436ccecc924bd45dd02437003.html#_CPPv4N4args4core13inherits_fromE" title="args::core::inherits_from">inherits_from</a>&lt;<a class="reference internal" href="#_CPPv4I0Dp_13inherits_fromI10ModuleType6ModuleEEN4args4core6Engine12reportModuleEv20module_initializer_tDpRR4Args" title="args::core::Engine::reportModule::ModuleType">ModuleType</a>, <a class="reference internal" href="classargs_1_1core_1_1_module.html#_CPPv4N4args4core6ModuleE" title="args::core::Module">Module</a>&gt; = 0&gt;<br /><span class="target" id="classargs_1_1core_1_1_engine_1ac2c3557bcd8394cd39689a31cd591dba"></span>void <code class="sig-name descname">reportModule</code><span class="sig-paren">(</span><a class="reference internal" href="structargs_1_1core_1_1module__initializer__t.html#_CPPv4N4args4core20module_initializer_tE" title="args::core::module_initializer_t">module_initializer_t</a> <em>s</em>, <a class="reference internal" href="#_CPPv4I0Dp_13inherits_fromI10ModuleType6ModuleEEN4args4core6Engine12reportModuleEv20module_initializer_tDpRR4Args" title="args::core::Engine::reportModule::Args">Args</a>&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0Dp_13inherits_fromI10ModuleType6ModuleEEN4args4core6Engine12reportModuleEv20module_initializer_tDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0Dp_13inherits_fromI10ModuleType6ModuleEEN4args4core6Engine12reportModuleEvDpRR4Args">
+<span id="_CPPv3I0Dp_13inherits_fromI10ModuleType6ModuleEEN4args4core6Engine12reportModuleEDpRR4Args"></span><span id="_CPPv2I0Dp_13inherits_fromI10ModuleType6ModuleEEN4args4core6Engine12reportModuleEDpRR4Args"></span>template&lt;class <code class="sig-name descname">ModuleType</code>, class ...<code class="sig-name descname">Args</code>, <a class="reference internal" href="typedef_types_2meta_8hpp_1a91a5094436ccecc924bd45dd02437003.html#_CPPv4N4args4core13inherits_fromE" title="args::core::inherits_from">inherits_from</a>&lt;<a class="reference internal" href="#_CPPv4I0Dp_13inherits_fromI10ModuleType6ModuleEEN4args4core6Engine12reportModuleEvDpRR4Args" title="args::core::Engine::reportModule::ModuleType">ModuleType</a>, <a class="reference internal" href="classargs_1_1core_1_1_module.html#_CPPv4N4args4core6ModuleE" title="args::core::Module">Module</a>&gt; = 0&gt;<br /><span class="target" id="classargs_1_1core_1_1_engine_1ae11734e97be4105531ba8bd2e4162073"></span>void <code class="sig-name descname">reportModule</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0Dp_13inherits_fromI10ModuleType6ModuleEEN4args4core6Engine12reportModuleEvDpRR4Args" title="args::core::Engine::reportModule::Args">Args</a>&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0Dp_13inherits_fromI10ModuleType6ModuleEEN4args4core6Engine12reportModuleEvDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>reports an engine module </p>
 <p><dl class="simple">
 <dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
@@ -119,11 +109,6 @@
 <span id="_CPPv3N4args4core6Engine3runEv"></span><span id="_CPPv2N4args4core6Engine3runEv"></span><span id="args::core::Engine::run"></span><span class="target" id="classargs_1_1core_1_1_engine_1aed64b3a0d8ae774e78856afabebefd55"></span>void <code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core6Engine3runEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Runs engine loop. </p>
 </dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4N4args4core6EngineD0Ev">
-<span id="_CPPv3N4args4core6EngineD0Ev"></span><span id="_CPPv2N4args4core6EngineD0Ev"></span><span id="args::core::Engine::~Engine"></span><span class="target" id="classargs_1_1core_1_1_engine_1ac99871f55cdc1e4bac9e38815870bd73"></span><code class="sig-name descname">~Engine</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core6EngineD0Ev" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
 
 </div>
 </dd></dl>

@@ -1,0 +1,110 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_math_constants.hpp:
+
+File constants.hpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_math>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/math``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/math/constants.hpp``)
+---------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_math_constants.hpp.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_math.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_trigonometry.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__math`
+
+- :ref:`namespace_args__core__math__detail`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_constants_8hpp_1a5df03cfcc26da4a61f215744bdd93274`
+
+- :ref:`exhale_function_constants_8hpp_1a35e63aa3a80d6cb25a625c0068daa8d6`
+
+- :ref:`exhale_function_constants_8hpp_1a684518586449666379c6229980253a2a`
+
+- :ref:`exhale_function_constants_8hpp_1a8d7bbc432a63087476c17b62381a559d`
+
+- :ref:`exhale_function_constants_8hpp_1a96208e0d9f3008120613167cfa629840`
+
+- :ref:`exhale_function_constants_8hpp_1a076f557da9bf47f19721f81143f04c2a`
+
+- :ref:`exhale_function_constants_8hpp_1ac0236997bcc3a9c6457194e82c746979`
+
+- :ref:`exhale_function_constants_8hpp_1aec310db0feb99e23b6ac112170f59b1c`
+
+- :ref:`exhale_function_constants_8hpp_1a49fb6a585cea759603f23cb6c5776c29`
+
+- :ref:`exhale_function_constants_8hpp_1a4fcb0bca7c3ab4f393f26924b572dcb7`
+
+- :ref:`exhale_function_constants_8hpp_1aef0ff2a7b6d23e32135049e17946592c`
+
+- :ref:`exhale_function_constants_8hpp_1aa302e802e28dcc978297b0bc046b90ea`
+
+- :ref:`exhale_function_constants_8hpp_1af68b31859968cd375d7009c9d72cc9dc`
+
+- :ref:`exhale_function_constants_8hpp_1ae0cb047635bd10e7c60902edaa58aa6b`
+
+- :ref:`exhale_function_constants_8hpp_1a24742dbb0dd1d03c2d90493f9f7732d9`
+
+- :ref:`exhale_function_constants_8hpp_1a8b0cae7ad05f502568836cf412591538`
+
+- :ref:`exhale_function_constants_8hpp_1a172940a4b7b8fcd760faec3579afa7f6`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_constants_8hpp_1ab22db392d760b0c8cfb019c4ec219e94`
+
+- :ref:`exhale_variable_constants_8hpp_1ab60593907cd89a1dedcc55759ae8babf`
+
+- :ref:`exhale_variable_constants_8hpp_1a379ac01ee2891a88ece77a399771b5dd`
+
+- :ref:`exhale_variable_constants_8hpp_1a96a6eb399a1c59112564fd269a5f7e57`
+
+- :ref:`exhale_variable_constants_8hpp_1a2e4a572f5062419066cb54a9ff596297`
+
+- :ref:`exhale_variable_constants_8hpp_1a72671f97a35ef9f890a4a1175fac22cd`
+
+- :ref:`exhale_variable_constants_8hpp_1ad6bea522b141089096953e4b4abdf80e`
+
+- :ref:`exhale_variable_constants_8hpp_1a629e0dc55a03d0039e6164c2539020ad`
+
+- :ref:`exhale_variable_constants_8hpp_1a9fb89ca27e17724f02282f2f051e375a`
+

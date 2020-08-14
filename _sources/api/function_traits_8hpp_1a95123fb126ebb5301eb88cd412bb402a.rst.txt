@@ -1,0 +1,13 @@
+.. _exhale_function_traits_8hpp_1a95123fb126ebb5301eb88cd412bb402a:
+
+Function args::core::filesystem::sanitize_traits
+================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_traits.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::filesystem::sanitize_traits(file_traits&)

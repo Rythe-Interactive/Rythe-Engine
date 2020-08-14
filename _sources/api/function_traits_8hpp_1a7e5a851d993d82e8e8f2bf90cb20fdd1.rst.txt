@@ -1,0 +1,13 @@
+.. _exhale_function_traits_8hpp_1a7e5a851d993d82e8e8f2bf90cb20fdd1:
+
+Function args::core::filesystem::operator==(const file_traits&, const file_traits&)
+===================================================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_traits.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::filesystem::operator==(const file_traits&, const file_traits&)

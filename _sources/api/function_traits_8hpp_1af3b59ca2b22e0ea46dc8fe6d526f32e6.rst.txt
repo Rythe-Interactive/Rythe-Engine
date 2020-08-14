@@ -1,0 +1,13 @@
+.. _exhale_function_traits_8hpp_1af3b59ca2b22e0ea46dc8fe6d526f32e6:
+
+Function args::core::filesystem::inherit_traits(const filesystem_traits&, file_traits&)
+=======================================================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_traits.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::filesystem::inherit_traits(const filesystem_traits&, file_traits&)

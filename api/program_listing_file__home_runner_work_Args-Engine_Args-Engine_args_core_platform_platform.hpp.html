@@ -136,11 +136,18 @@
 <span class="cp">#define A_NODISCARD</span>
 <span class="cp">#endif</span>
 
+<span class="cp">#if __cplusplus &gt; ARGS_CPP17V || AHASCPPATTRIB(noreturn) || defined(DOXY_INCLUDE)</span>
+
+<span class="cp">#define A_NORETURN [[noreturn]]</span>
+<span class="cp">#else</span>
+<span class="cp">#define A_NORETURN</span>
+<span class="cp">#endif</span>
+
 <span class="cp">#define ARGS_PURE =0</span>
 
 <span class="cp">#define ARGS_IMPURE {}</span>
 
-<span class="cp">#define ARGS_IMPURE_RETURN(x) { return x; }</span>
+<span class="cp">#define ARGS_IMPURE_RETURN(x) { return (x); }</span>
 </pre></div>
 </div>
 </div>

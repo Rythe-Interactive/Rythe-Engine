@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1core_1_1common_1_1is_chars:
+
+Struct isChars
+==============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_string_extra.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::core::common::isChars
+   :members:
+   :protected-members:
+   :undoc-members:

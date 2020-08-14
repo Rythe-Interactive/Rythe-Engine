@@ -1,0 +1,13 @@
+.. _exhale_function_constants_8hpp_1a684518586449666379c6229980253a2a:
+
+Template Function args::core::math::feigenbaum
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_constants.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::math::feigenbaum()

@@ -1,0 +1,67 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_events_event.hpp:
+
+File event.hpp
+==============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_events>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/events``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/events/event.hpp``)
+-------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_events_event.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`)
+
+- ``core/types/type_util.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_type_util.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_defaultevents.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_eventbus.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_events.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__events`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_structargs_1_1core_1_1events_1_1event`
+
+- :ref:`exhale_class_structargs_1_1core_1_1events_1_1event__base`
+

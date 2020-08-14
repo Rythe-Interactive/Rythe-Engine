@@ -1,0 +1,13 @@
+.. _exhale_function_namespaceargs_1_1core_1_1common_1a8262961f81d5d66cac48532fe9fe7c71:
+
+Template Function args::core::common::ltrim_copy(std::string, Trimmer&&)
+========================================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_string_extra.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::common::ltrim_copy(std::string, Trimmer&&)

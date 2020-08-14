@@ -35,6 +35,8 @@ Includes
 
 - ``core/async/readonly_rw_spinlock.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_readonly_rw_spinlock.hpp`)
 
+- ``core/async/ring_sync_lock.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_ring_sync_lock.hpp`)
+
 - ``core/async/transferable_atomic.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_transferable_atomic.hpp`)
 
 
@@ -48,6 +50,8 @@ Included By
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecsregistry.hpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_queryregistry.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_scheduler.hpp`
 
 
 

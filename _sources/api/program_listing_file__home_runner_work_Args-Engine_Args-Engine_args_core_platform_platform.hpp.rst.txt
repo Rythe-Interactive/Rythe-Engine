@@ -100,8 +100,15 @@ Program Listing for File platform.hpp
    #define A_NODISCARD
    #endif
    
+   #if __cplusplus > ARGS_CPP17V || AHASCPPATTRIB(noreturn) || defined(DOXY_INCLUDE)
+   
+   #define A_NORETURN [[noreturn]]
+   #else
+   #define A_NORETURN
+   #endif
+   
    #define ARGS_PURE =0
    
    #define ARGS_IMPURE {}
    
-   #define ARGS_IMPURE_RETURN(x) { return x; }
+   #define ARGS_IMPURE_RETURN(x) { return (x); }

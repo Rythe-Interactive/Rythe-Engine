@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Process &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class ProcessChain" href="classargs_1_1core_1_1scheduling_1_1_process_chain.html" />
+    <link rel="prev" title="Template Class multicast_delegate&lt; return_type(parameter_types…)&gt;" href="classargs_1_1core_1_1multicast__delegate_3_01return__type_07parameter__types_8_8_8_08_4.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classargs_1_1core_1_1scheduling_1_1_process_chain.html" title="Class ProcessChain"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classargs_1_1core_1_1multicast__delegate_3_01return__type_07parameter__types_8_8_8_08_4.html" title="Template Class multicast_delegate&lt; return_type(parameter_types…)&gt;"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class Process</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-process">
+<span id="exhale-class-classargs-1-1core-1-1scheduling-1-1-process"></span><h1>Class Process<a class="headerlink" href="#class-process" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_process.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-scheduling-process-hpp"><span class="std std-ref">File process.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N4args4core10scheduling7ProcessE">
+<span id="_CPPv3N4args4core10scheduling7ProcessE"></span><span id="_CPPv2N4args4core10scheduling7ProcessE"></span><span id="args::core::scheduling::Process"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process"></span><em class="property">class </em><code class="sig-prename descclassname">args::core::scheduling<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">Process</code><a class="headerlink" href="#_CPPv4N4args4core10scheduling7ProcessE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Operation encapsulating object that keeps track of intervals and hooks into process-chains. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4I_9size_typeEN4args4core10scheduling7Process7ProcessERA5charc_KcN4time9time_spanI9fast_timeEE">
+<span id="_CPPv3I_9size_typeEN4args4core10scheduling7Process7ProcessERA5charc_KcN4time9time_spanI9fast_timeEE"></span><span id="_CPPv2I_9size_typeEN4args4core10scheduling7Process7ProcessERAcharc_KcN4time9time_spanI9fast_timeEE"></span>template&lt;<a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <code class="sig-name descname">charc</code>&gt;<br /><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_1a84addf07aee96297a0f3a269618f2304"></span><code class="sig-name descname">Process</code><span class="sig-paren">(</span><em class="property">const</em> char (&amp;<em>name</em>)[charc], time::<a class="reference internal" href="structargs_1_1core_1_1time_1_1time__span.html#_CPPv4I0EN4args4core4time9time_spanE" title="args::core::time::time_span">time_span</a>&lt;<a class="reference internal" href="typedef_primitives_8hpp_1ac2938f14768cce2c0f6f3fe356c836cd.html#_CPPv4N4args4core9fast_timeE" title="args::core::fast_time">fast_time</a>&gt; <em>interval</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_9size_typeEN4args4core10scheduling7Process7ProcessERA5charc_KcN4time9time_spanI9fast_timeEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling7Process7ProcessERKNSt6stringE7id_typeN4time9time_spanI9fast_timeEE">
+<span id="_CPPv3N4args4core10scheduling7Process7ProcessERKNSt6stringE7id_typeN4time9time_spanI9fast_timeEE"></span><span id="_CPPv2N4args4core10scheduling7Process7ProcessERKNSt6stringE7id_typeN4time9time_spanI9fast_timeEE"></span><span id="args::core::scheduling::Process::Process__ssCR.id_type.time::time_span:fast_time:"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_1af1cce5e0fac1ad06e4334911cea0e640"></span><code class="sig-name descname">Process</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em>, <a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a> <em>nameHash</em>, time::<a class="reference internal" href="structargs_1_1core_1_1time_1_1time__span.html#_CPPv4I0EN4args4core4time9time_spanE" title="args::core::time::time_span">time_span</a>&lt;<a class="reference internal" href="typedef_primitives_8hpp_1ac2938f14768cce2c0f6f3fe356c836cd.html#_CPPv4N4args4core9fast_timeE" title="args::core::fast_time">fast_time</a>&gt; <em>interval</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling7Process7ProcessERKNSt6stringE7id_typeN4time9time_spanI9fast_timeEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling7Process7ProcessEv">
+<span id="_CPPv3N4args4core10scheduling7Process7ProcessEv"></span><span id="_CPPv2N4args4core10scheduling7Process7ProcessEv"></span><span id="args::core::scheduling::Process::Process"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_1a7fb7b6d0d0e51e87b4ad0db1634ee456"></span><code class="sig-name descname">Process</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N4args4core10scheduling7Process7ProcessEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling7Process7ProcessERR7Process">
+<span id="_CPPv3N4args4core10scheduling7Process7ProcessERR7Process"></span><span id="_CPPv2N4args4core10scheduling7Process7ProcessERR7Process"></span><span id="args::core::scheduling::Process::Process__ProcessRR"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_1a712f41d6898a6fb56cedc06d2d272f58"></span><code class="sig-name descname">Process</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core10scheduling7Process7ProcessERR7Process" title="args::core::scheduling::Process::Process">Process</a>&amp;&amp;<span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N4args4core10scheduling7Process7ProcessERR7Process" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling7ProcessaSERR7Process">
+<span id="_CPPv3N4args4core10scheduling7ProcessaSERR7Process"></span><span id="_CPPv2N4args4core10scheduling7ProcessaSERR7Process"></span><span id="args::core::scheduling::Process::assign-operator__ProcessRR"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_1af84dc49b0fed3218106985858abf5f0c"></span><a class="reference internal" href="#_CPPv4N4args4core10scheduling7ProcessE" title="args::core::scheduling::Process">Process</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core10scheduling7ProcessE" title="args::core::scheduling::Process">Process</a>&amp;&amp;<span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N4args4core10scheduling7ProcessaSERR7Process" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core10scheduling7Process2idEv">
+<span id="_CPPv3NK4args4core10scheduling7Process2idEv"></span><span id="_CPPv2NK4args4core10scheduling7Process2idEv"></span><span id="args::core::scheduling::Process::idC"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_1a3087a8fc2a475e8d97e5856b085e88b6"></span><a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a> <code class="sig-name descname">id</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core10scheduling7Process2idEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the hash of the name of the process. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling7Process12setOperationERR8delegateIFvN4time9time_spanI9fast_timeEEEE">
+<span id="_CPPv3N4args4core10scheduling7Process12setOperationERR8delegateIFvN4time9time_spanI9fast_timeEEEE"></span><span id="_CPPv2N4args4core10scheduling7Process12setOperationERR8delegateIFvN4time9time_spanI9fast_timeEEEE"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_1a877d83c21e72b7d05aab92198e51ff42"></span>void <code class="sig-name descname">setOperation</code><span class="sig-paren">(</span><a class="reference internal" href="classargs_1_1core_1_1delegate.html#_CPPv4I0EN4args4core8delegateE" title="args::core::delegate">delegate</a>&lt;void<span class="sig-paren">(</span>time::<a class="reference internal" href="structargs_1_1core_1_1time_1_1time__span.html#_CPPv4I0EN4args4core4time9time_spanE" title="args::core::time::time_span">time_span</a>&lt;<a class="reference internal" href="typedef_primitives_8hpp_1ac2938f14768cce2c0f6f3fe356c836cd.html#_CPPv4N4args4core9fast_timeE" title="args::core::fast_time">fast_time</a>&gt;<span class="sig-paren">)</span>&gt; &amp;&amp;<em>operation</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling7Process12setOperationERR8delegateIFvN4time9time_spanI9fast_timeEEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the operation for the process to execute at the set interval. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling7Process11setIntervalEN4time9time_spanI9fast_timeEE">
+<span id="_CPPv3N4args4core10scheduling7Process11setIntervalEN4time9time_spanI9fast_timeEE"></span><span id="_CPPv2N4args4core10scheduling7Process11setIntervalEN4time9time_spanI9fast_timeEE"></span><span id="args::core::scheduling::Process::setInterval__time::time_span:fast_time:"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_1abfa1ccee02c3d663322afe807f1a9461"></span>void <code class="sig-name descname">setInterval</code><span class="sig-paren">(</span>time::<a class="reference internal" href="structargs_1_1core_1_1time_1_1time__span.html#_CPPv4I0EN4args4core4time9time_spanE" title="args::core::time::time_span">time_span</a>&lt;<a class="reference internal" href="typedef_primitives_8hpp_1ac2938f14768cce2c0f6f3fe356c836cd.html#_CPPv4N4args4core9fast_timeE" title="args::core::fast_time">fast_time</a>&gt; <em>interval</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling7Process11setIntervalEN4time9time_spanI9fast_timeEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the interval at which to execute the set operation. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling7Process7executeEf">
+<span id="_CPPv3N4args4core10scheduling7Process7executeEf"></span><span id="_CPPv2N4args4core10scheduling7Process7executeEf"></span><span id="args::core::scheduling::Process::execute__float"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_process_1aac09daa4f29b655072a02f6ce8507e74"></span>bool <code class="sig-name descname">execute</code><span class="sig-paren">(</span>float <em>timeScale</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling7Process7executeEf" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Update the process’ internal time measurements and execute the operation if necessary. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if the operation was executed and has completed the amount of executions in order to sate the interval, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">timeScale</span></code>: Scalar to scale deltaTime with. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class Process</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">ARGS API</a><ul>
+      <li>Previous: <a href="classargs_1_1core_1_1multicast__delegate_3_01return__type_07parameter__types_8_8_8_08_4.html" title="previous chapter">Template Class multicast_delegate&lt; return_type(parameter_types…)&gt;</a></li>
+      <li>Next: <a href="classargs_1_1core_1_1scheduling_1_1_process_chain.html" title="next chapter">Class ProcessChain</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classargs_1_1core_1_1scheduling_1_1_process.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

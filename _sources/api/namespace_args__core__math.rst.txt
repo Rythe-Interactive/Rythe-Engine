@@ -1,0 +1,96 @@
+
+.. _namespace_args__core__math:
+
+Namespace args::core::math
+==========================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__math__detail`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1core_1_1math_1_1precision__chooser`
+
+- :ref:`exhale_class_classargs_1_1core_1_1math_1_1angle`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_precision_8hpp_1a91a59bb574b478728cb97aee74fe5a83`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_trigonometry_8hpp_1ad4111556606b384b4fc267971d6babf3`
+
+- :ref:`exhale_function_trigonometry_8hpp_1ad65fd93b86530376aca3af8a0780b4ad`
+
+- :ref:`exhale_function_constants_8hpp_1a5df03cfcc26da4a61f215744bdd93274`
+
+- :ref:`exhale_function_constants_8hpp_1a35e63aa3a80d6cb25a625c0068daa8d6`
+
+- :ref:`exhale_function_constants_8hpp_1a684518586449666379c6229980253a2a`
+
+- :ref:`exhale_function_constants_8hpp_1a8d7bbc432a63087476c17b62381a559d`
+
+- :ref:`exhale_function_constants_8hpp_1a96208e0d9f3008120613167cfa629840`
+
+- :ref:`exhale_function_constants_8hpp_1a076f557da9bf47f19721f81143f04c2a`
+
+- :ref:`exhale_function_constants_8hpp_1ac0236997bcc3a9c6457194e82c746979`
+
+- :ref:`exhale_function_constants_8hpp_1aec310db0feb99e23b6ac112170f59b1c`
+
+- :ref:`exhale_function_constants_8hpp_1a49fb6a585cea759603f23cb6c5776c29`
+
+- :ref:`exhale_function_constants_8hpp_1a4fcb0bca7c3ab4f393f26924b572dcb7`
+
+- :ref:`exhale_function_constants_8hpp_1aef0ff2a7b6d23e32135049e17946592c`
+
+- :ref:`exhale_function_constants_8hpp_1aa302e802e28dcc978297b0bc046b90ea`
+
+- :ref:`exhale_function_constants_8hpp_1af68b31859968cd375d7009c9d72cc9dc`
+
+- :ref:`exhale_function_constants_8hpp_1ae0cb047635bd10e7c60902edaa58aa6b`
+
+- :ref:`exhale_function_trigonometry_8hpp_1a5f34016cf547a6557067cc2a901f5577`
+
+- :ref:`exhale_function_trigonometry_8hpp_1ab31747f5a36ce162405206e4228a143c`
+
+- :ref:`exhale_function_constants_8hpp_1a24742dbb0dd1d03c2d90493f9f7732d9`
+
+- :ref:`exhale_function_constants_8hpp_1a8b0cae7ad05f502568836cf412591538`
+
+- :ref:`exhale_function_constants_8hpp_1a172940a4b7b8fcd760faec3579afa7f6`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_trigonometry_8hpp_1aafd82901bcd7d81efa600c9f83987efe`
+
+- :ref:`exhale_typedef_trigonometry_8hpp_1a03bd2d94f05614276b086cdea624e3cd`
+
+- :ref:`exhale_typedef_trigonometry_8hpp_1a29711f4b45baf5e391347946ef57f9ae`
+
+- :ref:`exhale_typedef_precision_8hpp_1a2645b9d85edabb45a23546e9a91aea7f`

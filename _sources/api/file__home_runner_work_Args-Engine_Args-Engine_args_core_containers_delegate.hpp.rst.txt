@@ -1,0 +1,73 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_delegate.hpp:
+
+File delegate.hpp
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_containers>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/containers``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/containers/delegate.hpp``)
+--------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_delegate.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``functional``
+
+- ``vector`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_vector_view.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_containers.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_eventbus.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1core_1_1delegate__base_3_01return__type_07parameter__types_8_8_8_08_4_1_1invocation__element`
+
+- :ref:`exhale_class_classargs_1_1core_1_1delegate`
+
+- :ref:`exhale_class_classargs_1_1core_1_1delegate_3_01return__type_07parameter__types_8_8_8_08_4`
+
+- :ref:`exhale_class_classargs_1_1core_1_1delegate__base`
+
+- :ref:`exhale_class_classargs_1_1core_1_1delegate__base_3_01return__type_07parameter__types_8_8_8_08_4`
+
+- :ref:`exhale_class_classargs_1_1core_1_1multicast__delegate`
+
+- :ref:`exhale_class_classargs_1_1core_1_1multicast__delegate_3_01return__type_07parameter__types_8_8_8_08_4`
+

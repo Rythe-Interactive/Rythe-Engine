@@ -1,0 +1,87 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_math_trigonometry.hpp:
+
+File trigonometry.hpp
+=====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_math>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/math``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/math/trigonometry.hpp``)
+------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_math_trigonometry.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cmath``
+
+- ``core/math/constants.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_constants.hpp`)
+
+- ``core/math/precision.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_precision.hpp`)
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_math.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__math`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1core_1_1math_1_1angle`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_trigonometry_8hpp_1ad4111556606b384b4fc267971d6babf3`
+
+- :ref:`exhale_function_trigonometry_8hpp_1ad65fd93b86530376aca3af8a0780b4ad`
+
+- :ref:`exhale_function_trigonometry_8hpp_1a5f34016cf547a6557067cc2a901f5577`
+
+- :ref:`exhale_function_trigonometry_8hpp_1ab31747f5a36ce162405206e4228a143c`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_trigonometry_8hpp_1aafd82901bcd7d81efa600c9f83987efe`
+
+- :ref:`exhale_typedef_trigonometry_8hpp_1a03bd2d94f05614276b086cdea624e3cd`
+
+- :ref:`exhale_typedef_trigonometry_8hpp_1a29711f4b45baf5e391347946ef57f9ae`
+

@@ -1,0 +1,13 @@
+.. _exhale_typedef_precision_8hpp_1a2645b9d85edabb45a23546e9a91aea7f:
+
+Typedef args::core::math::precision_chooser_t
+=============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_precision.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::math::precision_chooser_t

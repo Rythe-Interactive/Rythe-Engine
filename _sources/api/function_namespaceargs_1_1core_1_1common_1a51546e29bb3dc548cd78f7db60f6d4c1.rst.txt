@@ -1,0 +1,13 @@
+.. _exhale_function_namespaceargs_1_1core_1_1common_1a51546e29bb3dc548cd78f7db60f6d4c1:
+
+Template Function args::core::common::trim(std::string&, Trimmer&&)
+===================================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_string_extra.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::common::trim(std::string&, Trimmer&&)

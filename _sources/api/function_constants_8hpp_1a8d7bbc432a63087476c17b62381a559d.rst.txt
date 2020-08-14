@@ -1,0 +1,13 @@
+.. _exhale_function_constants_8hpp_1a8d7bbc432a63087476c17b62381a559d:
+
+Template Function args::core::math::half_pi
+===========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_constants.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::math::half_pi()

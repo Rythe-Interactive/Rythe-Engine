@@ -6,15 +6,6 @@ Class Module
 - Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp`
 
 
-Inheritance Relationships
--------------------------
-
-Derived Type
-************
-
-- ``public TestModule`` (:ref:`exhale_class_class_test_module`)
-
-
 Class Documentation
 -------------------
 

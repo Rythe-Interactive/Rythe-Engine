@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1core_1_1time_1_1time__span:
+
+Template Struct time_span
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_time_time_span.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::core::time::time_span
+   :members:
+   :protected-members:
+   :undoc-members:

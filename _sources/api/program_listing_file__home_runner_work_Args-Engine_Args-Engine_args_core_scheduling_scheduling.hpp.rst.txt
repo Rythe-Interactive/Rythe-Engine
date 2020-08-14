@@ -1,0 +1,23 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_scheduling.hpp:
+
+Program Listing for File scheduling.hpp
+=======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_scheduling.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/scheduling/scheduling.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   #include <core/scheduling/scheduler.hpp>
+   #include <core/scheduling/process.hpp>
+   #include <core/scheduling/processchain.hpp>
+   
+   // args::core::schd
+   namespace args::core
+   {
+       namespace schd = ::args::core::scheduling;
+   }

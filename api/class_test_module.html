@@ -18,7 +18,7 @@
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Enum lock_state" href="enum_readonly__rw__spinlock_8hpp_1a8a92b7284527cbc4fa7de3ec628f025b.html" />
+    <link rel="next" title="Class TestSystem" href="class_test_system.html" />
     <link rel="prev" title="Class EditorModule" href="classargs_1_1editor_1_1_editor_module.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -36,7 +36,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="enum_readonly__rw__spinlock_8hpp_1a8a92b7284527cbc4fa7de3ec628f025b.html" title="Enum lock_state"
+          <a href="class_test_system.html" title="Class TestSystem"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="classargs_1_1editor_1_1_editor_module.html" title="Class EditorModule"
@@ -62,7 +62,7 @@
 <div class="section" id="base-type">
 <h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">args::core::Module</span></code> (<a class="reference internal" href="classargs_1_1core_1_1_module.html#exhale-class-classargs-1-1core-1-1-module"><span class="std std-ref">Class Module</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Module</span></code></p></li>
 </ul>
 </div>
 </div>
@@ -70,29 +70,18 @@
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="cpp class">
 <dt id="_CPPv410TestModule">
-<span id="_CPPv310TestModule"></span><span id="_CPPv210TestModule"></span><span id="TestModule"></span><span class="target" id="class_test_module"></span><em class="property">class </em><code class="sig-name descname">TestModule</code> : <em class="property">public</em> args::core::<a class="reference internal" href="classargs_1_1core_1_1_module.html#_CPPv4N4args4core6ModuleE" title="args::core::Module">Module</a><a class="headerlink" href="#_CPPv410TestModule" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv310TestModule"></span><span id="_CPPv210TestModule"></span><span id="TestModule"></span><span class="target" id="class_test_module"></span><em class="property">class </em><code class="sig-name descname">TestModule</code> : <em class="property">public</em> Module<a class="headerlink" href="#_CPPv410TestModule" title="Permalink to this definition">¶</a><br /></dt>
 <dd><div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
-<dt id="_CPPv4N10TestModule8priorityEv">
-<span id="_CPPv3N10TestModule8priorityEv"></span><span id="_CPPv2N10TestModule8priorityEv"></span><span id="TestModule::priority"></span><span class="target" id="class_test_module_1a6237ae5347a126057e6b1be15003e6c5"></span>args::priority_type <code class="sig-name descname">priority</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N10TestModule8priorityEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>determines the execution priority of this module <a class="reference internal" href="define_platform_8hpp_1aaa80584991d216fb43121552bca34b33.html#platform_8hpp_1aaa80584991d216fb43121552bca34b33"><span class="std std-ref">ARGS_IMPURE_RETURN</span></a> </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>priority_type signed int8 higher is higher priority and get called first </p>
-</dd>
-<dt><strong>Note</strong></dt><dd><p>default priority of the engine is 0. </p>
-</dd>
-<dt><strong>Note</strong></dt><dd><p>call order for modules with the same priority is undefined. </p>
-</dd>
-</dl>
-</p>
-</dd></dl>
+<dt id="_CPPv4N10TestModule5setupEv">
+<span id="_CPPv3N10TestModule5setupEv"></span><span id="_CPPv2N10TestModule5setupEv"></span><span id="TestModule::setup"></span><span class="target" id="class_test_module_1acd738779419f3a5b4319d189720bb024"></span>void <code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N10TestModule5setupEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N10TestModule4initEv">
-<span id="_CPPv3N10TestModule4initEv"></span><span id="_CPPv2N10TestModule4initEv"></span><span id="TestModule::init"></span><span class="target" id="class_test_module_1a0f3940271019675773b24eea6fccc8c5"></span>void <code class="sig-name descname">init</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N10TestModule4initEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>module initializer <a class="reference internal" href="define_platform_8hpp_1a1db9851589b1e9ba81b655bc10b65ee1.html#platform_8hpp_1a1db9851589b1e9ba81b655bc10b65ee1"><span class="std std-ref">ARGS_PURE</span></a> </p>
-</dd></dl>
+<dt id="_CPPv4N10TestModule8priorityEv">
+<span id="_CPPv3N10TestModule8priorityEv"></span><span id="_CPPv2N10TestModule8priorityEv"></span><span id="TestModule::priority"></span><span class="target" id="class_test_module_1a19fa51787c139a4c0207a7dc4e8da84e"></span>priority_type <code class="sig-name descname">priority</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N10TestModule8priorityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 </div>
 </dd></dl>
@@ -123,7 +112,7 @@
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">ARGS API</a><ul>
       <li>Previous: <a href="classargs_1_1editor_1_1_editor_module.html" title="previous chapter">Class EditorModule</a></li>
-      <li>Next: <a href="enum_readonly__rw__spinlock_8hpp_1a8a92b7284527cbc4fa7de3ec628f025b.html" title="next chapter">Enum lock_state</a></li>
+      <li>Next: <a href="class_test_system.html" title="next chapter">Class TestSystem</a></li>
   </ul></li>
   </ul></li>
 </ul>

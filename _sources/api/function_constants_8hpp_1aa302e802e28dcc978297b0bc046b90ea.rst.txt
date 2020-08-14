@@ -1,0 +1,13 @@
+.. _exhale_function_constants_8hpp_1aa302e802e28dcc978297b0bc046b90ea:
+
+Template Function args::core::math::phi
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_constants.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::math::phi()

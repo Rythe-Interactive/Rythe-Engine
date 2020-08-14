@@ -1,0 +1,63 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_mem_filesystem_resolver.hpp:
+
+File mem_filesystem_resolver.hpp
+================================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/mem_filesystem_resolver.hpp``)
+-----------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_mem_filesystem_resolver.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``filesystem_resolver.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem_resolver.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_mem_filesystem_resolver.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_provider_registry.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_view.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__filesystem`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1core_1_1filesystem_1_1mem__filesystem__resolver`
+

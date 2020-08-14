@@ -1,0 +1,26 @@
+.. _exhale_class_classargs_1_1core_1_1filesystem_1_1view:
+
+Class view
+==========
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_view.hpp`
+
+
+Nested Relationships
+--------------------
+
+
+Nested Types
+************
+
+- :ref:`exhale_struct_structargs_1_1core_1_1filesystem_1_1view_1_1create__chain`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::filesystem::view
+   :members:
+   :protected-members:
+   :undoc-members:

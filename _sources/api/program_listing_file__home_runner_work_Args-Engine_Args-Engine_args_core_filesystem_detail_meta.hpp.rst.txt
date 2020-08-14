@@ -1,0 +1,19 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_meta.hpp:
+
+Program Listing for File meta.hpp
+=================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_meta.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/detail/meta.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   namespace args::core::filesystem
+   {
+       class filesystem_resolver_common_base {};
+       class memory_resolver_common_base{};
+   }

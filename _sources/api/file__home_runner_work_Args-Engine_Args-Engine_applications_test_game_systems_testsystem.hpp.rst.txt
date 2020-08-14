@@ -1,0 +1,56 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_systems_testsystem.hpp:
+
+File testsystem.hpp
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_applications_test_game_systems>` (``/home/runner/work/Args-Engine/Args-Engine/applications/test_game/systems``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/applications/test_game/systems/testsystem.hpp``)
+--------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_systems_testsystem.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`)
+
+- ``core/math/math.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_math.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_source.cpp`
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structsah`
+
+- :ref:`exhale_class_class_test_system`
+

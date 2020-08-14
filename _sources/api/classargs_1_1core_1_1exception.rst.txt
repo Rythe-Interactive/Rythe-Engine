@@ -18,6 +18,7 @@ Base Type
 Derived Types
 *************
 
+- ``public args::core::fs_error`` (:ref:`exhale_class_classargs_1_1core_1_1fs__error`)
 - ``public args::core::invalid_creation_error`` (:ref:`exhale_class_classargs_1_1core_1_1invalid__creation__error`)
 - ``public args::core::invalid_fetch_error`` (:ref:`exhale_class_classargs_1_1core_1_1invalid__fetch__error`)
 - ``public args::core::invalid_type_error`` (:ref:`exhale_class_classargs_1_1core_1_1invalid__type__error`)

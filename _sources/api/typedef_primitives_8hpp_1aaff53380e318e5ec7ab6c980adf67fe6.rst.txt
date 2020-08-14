@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1aaff53380e318e5ec7ab6c980adf67fe6:
+
+Typedef args::core::f64
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::f64

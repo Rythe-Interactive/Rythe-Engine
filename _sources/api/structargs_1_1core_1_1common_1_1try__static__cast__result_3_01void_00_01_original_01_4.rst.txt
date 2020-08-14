@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1core_1_1common_1_1try__static__cast__result_3_01void_00_01_original_01_4:
+
+Template Struct try_static_cast_result< void, Original >
+========================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_result.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::core::common::try_static_cast_result< void, Original >
+   :members:
+   :protected-members:
+   :undoc-members:

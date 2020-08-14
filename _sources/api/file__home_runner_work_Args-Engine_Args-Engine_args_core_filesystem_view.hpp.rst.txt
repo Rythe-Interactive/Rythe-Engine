@@ -1,0 +1,80 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_view.hpp:
+
+File view.hpp
+=============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/view.hpp``)
+----------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_view.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/common/exception.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp`)
+
+- ``core/common/result.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_result.hpp`)
+
+- ``core/filesystem/resource.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_resource.hpp`)
+
+- ``detail/traits.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_traits.hpp`)
+
+- ``mem_filesystem_resolver.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_mem_filesystem_resolver.hpp`)
+
+- ``navigator.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_navigator.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_view.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__filesystem`
+
+- :ref:`namespace_args__core__filesystem__literals`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1core_1_1filesystem_1_1view_1_1create__chain`
+
+- :ref:`exhale_class_classargs_1_1core_1_1filesystem_1_1view`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1filesystem_1_1literals_1ab666090b1f7cb7abb31de56dff64c3db`
+

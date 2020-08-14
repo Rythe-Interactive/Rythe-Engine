@@ -1,0 +1,25 @@
+.. _exhale_class_classargs_1_1core_1_1_system_base:
+
+Class SystemBase
+================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_system.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Type
+************
+
+- ``public args::core::System< SelfType >`` (:ref:`exhale_class_classargs_1_1core_1_1_system`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::SystemBase
+   :members:
+   :protected-members:
+   :undoc-members:

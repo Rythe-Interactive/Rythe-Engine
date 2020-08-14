@@ -5,7 +5,7 @@ Namespace args::core::filesystem::literals
 ==========================================
 
 
-work the same as the above, but the path parameter is replaced by the string literal 
+Work the same as the above, but the path parameter is replaced by the string literal. 
  
 
 
@@ -21,6 +21,10 @@ Functions
 ---------
 
 
+- :ref:`exhale_function_namespaceargs_1_1core_1_1filesystem_1_1literals_1a0f311ec9646ea3caf5ce189ebae826a6`
+
 - :ref:`exhale_function_namespaceargs_1_1core_1_1filesystem_1_1literals_1acc3142f046c9c3dca88de33c8c1d6ced`
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1filesystem_1_1literals_1ab666090b1f7cb7abb31de56dff64c3db`
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1filesystem_1_1literals_1a5e12aaf09e12d80528fcc3636d8cfaf7`

@@ -50,6 +50,8 @@
 <span class="cp">#include</span> <span class="cpf">&lt;typeinfo&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/types/primitives.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/platform/platform.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span>
 <span class="p">{</span>
@@ -63,15 +65,38 @@
     <span class="p">}</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-    <span class="k">constexpr</span> <span class="n">cstring</span> <span class="n">typeName</span><span class="p">()</span>
+    <span class="n">cstring</span> <span class="n">typeName</span><span class="p">()</span>
     <span class="p">{</span>
-        <span class="k">return</span> <span class="k">typeid</span><span class="p">(</span><span class="n">T</span><span class="p">).</span><span class="n">name</span><span class="p">();</span>
+        <span class="k">static</span> <span class="n">cstring</span> <span class="n">name</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="k">typeid</span><span class="p">(</span><span class="n">T</span><span class="p">).</span><span class="n">name</span><span class="p">();</span>
+        <span class="k">return</span> <span class="n">name</span><span class="p">;</span>
     <span class="p">}</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-    <span class="k">constexpr</span> <span class="n">cstring</span> <span class="n">typeName</span><span class="p">(</span><span class="n">T</span> <span class="n">expr</span><span class="p">)</span>
+    <span class="n">cstring</span> <span class="n">undecoratedTypeName</span><span class="p">()</span>
     <span class="p">{</span>
-        <span class="k">return</span> <span class="k">typeid</span><span class="p">(</span><span class="n">T</span><span class="p">).</span><span class="n">name</span><span class="p">();</span>
+        <span class="k">static</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">name</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">typeName</span> <span class="o">=</span> <span class="k">typeid</span><span class="p">(</span><span class="n">T</span><span class="p">).</span><span class="n">name</span><span class="p">();</span>
+            <span class="n">size_type</span> <span class="n">token</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">((</span><span class="n">token</span> <span class="o">=</span> <span class="n">typeName</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;struct &quot;</span><span class="p">))</span> <span class="o">!=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span>
+                <span class="n">typeName</span> <span class="o">=</span> <span class="n">typeName</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">token</span> <span class="o">+</span> <span class="mi">6</span><span class="p">);</span>
+            <span class="k">else</span> <span class="nf">if</span> <span class="p">((</span><span class="n">token</span> <span class="o">=</span> <span class="n">typeName</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;class &quot;</span><span class="p">))</span> <span class="o">!=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span>
+                <span class="n">typeName</span> <span class="o">=</span> <span class="n">typeName</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">token</span> <span class="o">+</span> <span class="mi">5</span><span class="p">);</span>
+
+            <span class="n">name</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">typeName</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+            <span class="n">typeName</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">);</span>
+            <span class="n">name</span><span class="p">[</span><span class="n">typeName</span><span class="p">.</span><span class="n">size</span><span class="p">()]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">name</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="n">cstring</span> <span class="n">typeName</span><span class="p">(</span><span class="n">T</span> <span class="n">expr</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">typeName</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>
     <span class="p">}</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="n">size_type</span> <span class="n">N</span><span class="o">&gt;</span>
@@ -91,19 +116,24 @@
 
     <span class="n">id_type</span> <span class="n">ARGS_FUNC</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">cstring</span> <span class="n">name</span><span class="p">);</span>
 
-    <span class="n">id_type</span> <span class="n">ARGS_FUNC</span> <span class="nf">nameHash</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">);</span>
+    <span class="n">id_type</span> <span class="n">ARGS_FUNC</span> <span class="nf">nameHash</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-    <span class="k">constexpr</span> <span class="n">id_type</span> <span class="n">typeHash</span><span class="p">()</span>
+    <span class="n">id_type</span> <span class="n">typeHash</span><span class="p">()</span>
     <span class="p">{</span>
-        <span class="n">id_type</span> <span class="n">hash</span> <span class="o">=</span> <span class="mh">0xcbf29ce484222325</span><span class="p">;</span>
-        <span class="n">uint64</span> <span class="n">prime</span> <span class="o">=</span> <span class="mh">0x00000100000001b3</span><span class="p">;</span>
-        <span class="n">cstring</span> <span class="n">name</span> <span class="o">=</span> <span class="k">typeid</span><span class="p">(</span><span class="n">T</span><span class="p">).</span><span class="n">name</span><span class="p">();</span>
-        <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">name</span> <span class="o">!=</span> <span class="sc">&#39;\0&#39;</span><span class="p">)</span>
+        <span class="k">static</span> <span class="n">id_type</span> <span class="n">hash</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">hash</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">hash</span> <span class="o">=</span> <span class="n">hash</span> <span class="o">^</span> <span class="p">(</span><span class="n">byte</span><span class="p">)</span><span class="o">*</span><span class="n">name</span><span class="p">;</span>
-            <span class="n">hash</span> <span class="o">*=</span> <span class="n">prime</span><span class="p">;</span>
-            <span class="n">name</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">hash</span> <span class="o">=</span> <span class="mh">0xcbf29ce484222325</span><span class="p">;</span>
+            <span class="n">uint64</span> <span class="n">prime</span> <span class="o">=</span> <span class="mh">0x00000100000001b3</span><span class="p">;</span>
+            <span class="n">cstring</span> <span class="n">name</span> <span class="o">=</span> <span class="n">undecoratedTypeName</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">name</span> <span class="o">!=</span> <span class="sc">&#39;\0&#39;</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">hash</span> <span class="o">=</span> <span class="n">hash</span> <span class="o">^</span> <span class="p">(</span><span class="n">byte</span><span class="p">)</span><span class="o">*</span><span class="n">name</span><span class="p">;</span>
+                <span class="n">hash</span> <span class="o">*=</span> <span class="n">prime</span><span class="p">;</span>
+                <span class="n">name</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="n">hash</span><span class="p">;</span>

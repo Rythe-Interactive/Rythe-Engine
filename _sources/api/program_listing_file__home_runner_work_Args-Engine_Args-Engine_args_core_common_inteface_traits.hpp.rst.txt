@@ -1,0 +1,20 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_common_inteface_traits.hpp:
+
+Program Listing for File inteface_traits.hpp
+============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_common_inteface_traits.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/common/inteface_traits.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   namespace args::core::interfaces
+   {
+   
+       struct implement_signal_t {};
+   
+   
+   }

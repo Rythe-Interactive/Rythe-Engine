@@ -1,0 +1,13 @@
+.. _exhale_define_strpath__manip_8hpp_1a08472b59f926df83d9f69fbea1b5c82d:
+
+Define OSSEP
+============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_strpath_manip.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: OSSEP

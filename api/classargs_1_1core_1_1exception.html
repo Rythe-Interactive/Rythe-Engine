@@ -18,8 +18,8 @@
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class basic_resource" href="classargs_1_1core_1_1filesystem_1_1basic__resource.html" />
-    <link rel="prev" title="Class entity_not_found_error" href="classargs_1_1core_1_1entity__not__found__error.html" />
+    <link rel="next" title="Class artifact_cache" href="classargs_1_1core_1_1filesystem_1_1artifact__cache.html" />
+    <link rel="prev" title="Class EventBus" href="classargs_1_1core_1_1events_1_1_event_bus.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -36,10 +36,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="classargs_1_1core_1_1filesystem_1_1basic__resource.html" title="Class basic_resource"
+          <a href="classargs_1_1core_1_1filesystem_1_1artifact__cache.html" title="Class artifact_cache"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="classargs_1_1core_1_1entity__not__found__error.html" title="Class entity_not_found_error"
+          <a href="classargs_1_1core_1_1events_1_1_event_bus.html" title="Class EventBus"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
@@ -68,6 +68,7 @@
 <div class="section" id="derived-types">
 <h3>Derived Types<a class="headerlink" href="#derived-types" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">args::core::fs_error</span></code> (<a class="reference internal" href="classargs_1_1core_1_1fs__error.html#exhale-class-classargs-1-1core-1-1fs-error"><span class="std std-ref">Class fs_error</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">args::core::invalid_creation_error</span></code> (<a class="reference internal" href="classargs_1_1core_1_1invalid__creation__error.html#exhale-class-classargs-1-1core-1-1invalid-creation-error"><span class="std std-ref">Class invalid_creation_error</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">args::core::invalid_fetch_error</span></code> (<a class="reference internal" href="classargs_1_1core_1_1invalid__fetch__error.html#exhale-class-classargs-1-1core-1-1invalid-fetch-error"><span class="std std-ref">Class invalid_fetch_error</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">args::core::invalid_type_error</span></code> (<a class="reference internal" href="classargs_1_1core_1_1invalid__type__error.html#exhale-class-classargs-1-1core-1-1invalid-type-error"><span class="std std-ref">Class invalid_type_error</span></a>)</p></li>
@@ -80,7 +81,7 @@
 <dt id="_CPPv4N4args4core9exceptionE">
 <span id="_CPPv3N4args4core9exceptionE"></span><span id="_CPPv2N4args4core9exceptionE"></span><span id="args::core::exception"></span><span class="target" id="classargs_1_1core_1_1exception"></span><em class="property">class </em><code class="sig-prename descclassname">args::core<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">exception</code> : <em class="property">public</em> <a class="reference internal" href="#_CPPv4N4args4core9exceptionE" title="args::core::exception">exception</a><a class="headerlink" href="#_CPPv4N4args4core9exceptionE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Args generic exception with file name, line number, and function name. </p>
-<p>Subclassed by <a class="reference internal" href="classargs_1_1core_1_1invalid__creation__error.html#classargs_1_1core_1_1invalid__creation__error"><span class="std std-ref">args::core::invalid_creation_error</span></a>, <a class="reference internal" href="classargs_1_1core_1_1invalid__fetch__error.html#classargs_1_1core_1_1invalid__fetch__error"><span class="std std-ref">args::core::invalid_fetch_error</span></a>, <a class="reference internal" href="classargs_1_1core_1_1invalid__type__error.html#classargs_1_1core_1_1invalid__type__error"><span class="std std-ref">args::core::invalid_type_error</span></a></p>
+<p>Subclassed by <a class="reference internal" href="classargs_1_1core_1_1fs__error.html#classargs_1_1core_1_1fs__error"><span class="std std-ref">args::core::fs_error</span></a>, <a class="reference internal" href="classargs_1_1core_1_1invalid__creation__error.html#classargs_1_1core_1_1invalid__creation__error"><span class="std std-ref">args::core::invalid_creation_error</span></a>, <a class="reference internal" href="classargs_1_1core_1_1invalid__fetch__error.html#classargs_1_1core_1_1invalid__fetch__error"><span class="std std-ref">args::core::invalid_fetch_error</span></a>, <a class="reference internal" href="classargs_1_1core_1_1invalid__type__error.html#classargs_1_1core_1_1invalid__type__error"><span class="std std-ref">args::core::invalid_type_error</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
@@ -142,8 +143,8 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">ARGS API</a><ul>
-      <li>Previous: <a href="classargs_1_1core_1_1entity__not__found__error.html" title="previous chapter">Class entity_not_found_error</a></li>
-      <li>Next: <a href="classargs_1_1core_1_1filesystem_1_1basic__resource.html" title="next chapter">Class basic_resource</a></li>
+      <li>Previous: <a href="classargs_1_1core_1_1events_1_1_event_bus.html" title="previous chapter">Class EventBus</a></li>
+      <li>Next: <a href="classargs_1_1core_1_1filesystem_1_1artifact__cache.html" title="next chapter">Class artifact_cache</a></li>
   </ul></li>
   </ul></li>
 </ul>

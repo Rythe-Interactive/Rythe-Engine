@@ -68,8 +68,17 @@
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_componentLock</span><span class="p">;</span>
         <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">hashed_sparse_set</span><span class="o">&lt;</span><span class="n">id_type</span><span class="o">&gt;&gt;</span> <span class="n">m_componentTypes</span><span class="p">;</span>
 
+        <span class="k">static</span> <span class="n">hashed_sparse_set</span><span class="o">&lt;</span><span class="n">QueryRegistry</span><span class="o">*&gt;</span> <span class="n">m_validRegistries</span><span class="p">;</span>
+
     <span class="k">public</span><span class="o">:</span>
-        <span class="n">QueryRegistry</span><span class="p">(</span><span class="n">EcsRegistry</span><span class="o">&amp;</span> <span class="n">registry</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_registry</span><span class="p">(</span><span class="n">registry</span><span class="p">),</span> <span class="n">m_entityLists</span><span class="p">(),</span> <span class="n">m_componentTypes</span><span class="p">()</span> <span class="p">{}</span>
+        <span class="k">static</span> <span class="kt">bool</span> <span class="n">isValid</span><span class="p">(</span><span class="n">QueryRegistry</span><span class="o">*</span> <span class="n">reg</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_validRegistries</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">reg</span><span class="p">);</span> <span class="p">}</span>
+
+        <span class="n">QueryRegistry</span><span class="p">(</span><span class="n">EcsRegistry</span><span class="o">&amp;</span> <span class="n">registry</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_registry</span><span class="p">(</span><span class="n">registry</span><span class="p">),</span> <span class="n">m_entityLists</span><span class="p">(),</span> <span class="n">m_componentTypes</span><span class="p">()</span> <span class="p">{</span> <span class="n">m_validRegistries</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="k">this</span><span class="p">);</span> <span class="p">}</span>
+
+        <span class="o">~</span><span class="n">QueryRegistry</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">m_validRegistries</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+        <span class="p">}</span>
 
         <span class="kt">void</span> <span class="n">addComponentType</span><span class="p">(</span><span class="n">id_type</span> <span class="n">queryId</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">);</span>
 

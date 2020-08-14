@@ -1,0 +1,13 @@
+.. _exhale_variable_entityquery_8hpp_1aa908909eb9338c3b0f3749e7d4cd0c1c:
+
+Variable args::core::ecs::QueryRegistry
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entityquery.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::core::ecs::QueryRegistry

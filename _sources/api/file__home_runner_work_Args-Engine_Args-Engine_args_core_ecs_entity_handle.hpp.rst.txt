@@ -80,5 +80,5 @@ Variables
 ---------
 
 
-- :ref:`exhale_variable_namespaceargs_1_1core_1_1ecs_1ad125b4fe2ab031b4a43b9ab5e54fbeb9`
+- :ref:`exhale_variable_entity__handle_8hpp_1ad125b4fe2ab031b4a43b9ab5e54fbeb9`
 

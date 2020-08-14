@@ -1,0 +1,13 @@
+.. _exhale_define_strpath__manip_8hpp_1ab8393f5398ca677b43c6f8e570e5cd96:
+
+Define SEP_NIX
+==============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_strpath_manip.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: SEP_NIX
