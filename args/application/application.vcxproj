@@ -12,9 +12,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="window\window.cpp" />
+    <ClCompile Include="window\windowsystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application.hpp" />
+    <ClInclude Include="module\applicationmodule.hpp" />
     <ClInclude Include="window\window.hpp" />
     <ClInclude Include="window\windowsystem.hpp" />
   </ItemGroup>

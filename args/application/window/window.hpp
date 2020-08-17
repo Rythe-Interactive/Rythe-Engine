@@ -12,11 +12,18 @@ namespace args::application
 {
     struct ARGS_API window
     {
+        window() = default;
+        window(const window&) = default;
+        window(window&&) = default;
+        ~window() = default;
+
+        window& operator=(const window&) = default;
+        window& operator=(window&&) = default;
+
         GLFWwindow* handle;
 
         void create(int width, int height, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
-
-        ~window();
+        void close();
 
         operator GLFWwindow* () const { return handle; }
 
@@ -35,5 +42,15 @@ namespace args::application
         void setWindowCloseCallback(GLFWwindowclosefun callback);
 
         void setJoystickCallback(GLFWjoystickfun callback);
+
+        window operator+(const window& other)
+        {
+            return *this;
+        }
+
+        window operator*(const window& other)
+        {
+            return *this;
+        }
     };
 }

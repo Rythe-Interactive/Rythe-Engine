@@ -5,21 +5,15 @@ namespace args::application
 {
     void window::create(int width, int height, const char* title, GLFWmonitor* monitor, GLFWwindow* share)
     {
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-        glfwInit();
-
         if (!(handle = glfwCreateWindow(width, height, title, monitor, share)))
             std::cout << "Could not create window" << std::endl;
     }
 
-    window::~window()
+    void window::close()
     {
         glfwSetWindowShouldClose(handle, GLFW_TRUE);
         glfwDestroyWindow(handle);
+        handle = nullptr;
     }
 
     math::ivec2 window::getFramebufferSize()
