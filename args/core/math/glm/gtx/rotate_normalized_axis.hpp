@@ -27,7 +27,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_rotate_normalized_axis
 	/// @{
@@ -63,6 +63,6 @@ namespace glm
 		vec<3, T, Q> const& axis);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "rotate_normalized_axis.inl"

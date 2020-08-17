@@ -1,6 +1,6 @@
 /// @ref gtc_matrix_access
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType row
@@ -59,4 +59,4 @@ namespace glm
 
 		return m[index];
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

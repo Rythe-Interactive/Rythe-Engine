@@ -4,7 +4,7 @@
 #pragma once
 #include "../detail/type_mat3x3.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup core_matrix
 	/// @{
@@ -20,4 +20,4 @@ namespace glm
 	typedef mat<3, 3, double, defaultp>		dmat3;
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm

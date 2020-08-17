@@ -24,7 +24,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_raw_data
 	/// @{
@@ -46,6 +46,6 @@ namespace glm
 	typedef detail::uint64		qword;
 
 	/// @}
-}// namespace glm
+}// namespace args::core::math::detail::glm
 
 #include "raw_data.inl"

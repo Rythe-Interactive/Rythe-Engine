@@ -10,7 +10,7 @@
 #include <cstring>
 #include <limits>
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	GLM_FUNC_QUALIFIER glm::uint16 float2half(glm::uint32 f)
@@ -934,5 +934,5 @@ namespace detail
 		memcpy(&Unpack, &p, sizeof(Unpack));
 		return Unpack;
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 

@@ -1,6 +1,6 @@
 #include <limits>
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	// isfinite
 	template<typename genType>
@@ -59,4 +59,4 @@ namespace glm
 			isfinite(x.w));
 	}
 
-}//namespace glm
+}//namespace args::core::math::detail::glm

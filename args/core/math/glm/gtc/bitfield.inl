@@ -2,7 +2,7 @@
 
 #include "../simd/integer.h"
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template<typename PARAM, typename RET>
@@ -623,4 +623,4 @@ namespace detail
 	{
 		return detail::bitfieldInterleave<uint16, uint64>(v.x, v.y, v.z, v.w);
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

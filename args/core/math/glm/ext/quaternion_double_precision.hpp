@@ -17,7 +17,7 @@
 #	pragma message("GLM: GLM_EXT_quaternion_double_precision extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_quaternion_double_precision
 	/// @{
@@ -38,5 +38,5 @@ namespace glm
 	typedef qua<double, highp>		highp_dquat;
 
 	/// @}
-} //namespace glm
+} //namespace args::core::math::detail::glm
 

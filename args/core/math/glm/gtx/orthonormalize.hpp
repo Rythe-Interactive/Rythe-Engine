@@ -26,7 +26,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_orthonormalize
 	/// @{
@@ -44,6 +44,6 @@ namespace glm
 	GLM_FUNC_DECL vec<3, T, Q> orthonormalize(vec<3, T, Q> const& x, vec<3, T, Q> const& y);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "orthonormalize.inl"

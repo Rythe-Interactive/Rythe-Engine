@@ -4,7 +4,7 @@
 #include "../common.hpp"
 #include "type_half.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	GLM_FUNC_QUALIFIER uint packUnorm2x16(vec2 const& v)
 	{
@@ -181,7 +181,7 @@ namespace glm
 			detail::toFloat32(u.out[0]),
 			detail::toFloat32(u.out[1]));
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #if GLM_CONFIG_SIMD == GLM_ENABLE
 #	include "func_packing_simd.inl"

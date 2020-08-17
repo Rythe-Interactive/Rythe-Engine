@@ -17,7 +17,7 @@
 #	pragma message("GLM: GLM_EXT_scalar_constants extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_scalar_constants
 	/// @{
@@ -35,6 +35,6 @@ namespace glm
 	GLM_FUNC_DECL GLM_CONSTEXPR genType cos_one_over_two();
 
 	/// @}
-} //namespace glm
+} //namespace args::core::math::detail::glm
 
 #include "scalar_constants.inl"

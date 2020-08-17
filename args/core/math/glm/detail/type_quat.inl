@@ -3,7 +3,7 @@
 #include "../ext/quaternion_geometric.hpp"
 #include <limits>
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template <typename T>
@@ -400,7 +400,7 @@ namespace detail
 	{
 		return q1.x != q2.x || q1.y != q2.y || q1.z != q2.z || q1.w != q2.w;
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #if GLM_CONFIG_SIMD == GLM_ENABLE
 #	include "type_quat_simd.inl"

@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template<length_t L, typename T, qualifier Q>
@@ -151,4 +151,4 @@ namespace detail
 		return isNormalized(v0, epsilon) && isNormalized(v1, epsilon) && (abs(dot(v0, v1)) <= epsilon);
 	}
 
-}//namespace glm
+}//namespace args::core::math::detail::glm

@@ -1,4 +1,4 @@
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename T>
 	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> ortho(T left, T right, T bottom, T top)
@@ -552,4 +552,4 @@ namespace glm
 	{
 		return tweakedInfinitePerspective(fovy, aspect, zNear, epsilon<T>());
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

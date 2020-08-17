@@ -1,6 +1,6 @@
 /// @ref gtx_wrap
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 
-}//namespace glm
+}//namespace args::core::math::detail::glm

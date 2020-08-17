@@ -93,30 +93,7 @@
     <ClCompile Include="source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\args\application\application.vcxproj">
-      <Project>{ab3d3a2d-6510-4345-9d34-0222e46110e6}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\args\audio\audio.vcxproj">
-      <Project>{749c658f-0217-4a86-a205-fd8a35c121b8}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\args\core\core.vcxproj">
-      <Project>{63d0d607-e99e-40b0-9b27-6e2430b57f7e}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\args\networking\networking.vcxproj">
-      <Project>{b9735e41-a917-4bff-85f2-2e3beeb6e0e9}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\args\physics\physics.vcxproj">
-      <Project>{07b99c45-60d0-4605-9a33-4bfee86d588a}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\args\rendering\rendering.vcxproj">
-      <Project>{fc6211bb-9e48-496a-8a77-5ff83caf046d}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\args\scripting\scripting.vcxproj">
-      <Project>{3a68df04-0e1f-462c-a171-3713f0253c41}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-	  <ClInclude Include="test_filesystem.hpp" />
+    <ClInclude Include="test_filesystem.hpp" />
     <ClInclude Include="module\testmodule.hpp" />
     <ClInclude Include="systems\testsystem.hpp" />
   </ItemGroup>

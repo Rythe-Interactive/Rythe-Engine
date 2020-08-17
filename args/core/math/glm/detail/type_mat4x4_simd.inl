@@ -1,6 +1,6 @@
 /// @ref core
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 
-}//namespace glm
+}//namespace args::core::math::detail::glm

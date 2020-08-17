@@ -10,7 +10,7 @@
 #include "_vectorize.hpp"
 #include <limits>
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	// min
 	template<typename genType>
@@ -63,9 +63,9 @@ namespace glm
 		}
 #	endif
 
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template<length_t L, typename T, qualifier Q, bool Aligned>
@@ -785,7 +785,7 @@ namespace detail
 			Result[l] = std::ldexp(v[l], exp[l]);
 		return Result;
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #if GLM_CONFIG_SIMD == GLM_ENABLE
 #	include "func_common_simd.inl"

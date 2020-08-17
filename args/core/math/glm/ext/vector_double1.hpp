@@ -19,7 +19,7 @@
 #	pragma message("GLM: GLM_EXT_vector_double1 extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_vector_double1
 	/// @{
@@ -28,4 +28,4 @@ namespace glm
 	typedef vec<1, double, defaultp>		dvec1;
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm

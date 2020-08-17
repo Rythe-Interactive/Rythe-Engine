@@ -1,6 +1,6 @@
 #include "../integer.hpp"
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template<length_t L, typename T, qualifier Q, bool compute = false>
@@ -240,4 +240,4 @@ namespace detail
 
 		return static_cast<int>(bitPos);
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

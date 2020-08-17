@@ -18,7 +18,7 @@
 #	pragma message("GLM: GLM_EXT_vector_double1_precision extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_vector_double1_precision
 	/// @{
@@ -33,4 +33,4 @@ namespace glm
 	typedef vec<1, double, lowp>		lowp_dvec1;
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm

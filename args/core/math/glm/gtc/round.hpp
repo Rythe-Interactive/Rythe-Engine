@@ -25,7 +25,7 @@
 #	pragma message("GLM: GLM_GTC_round extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtc_round
 	/// @{
@@ -155,6 +155,6 @@ namespace glm
 	GLM_FUNC_DECL vec<L, T, Q> roundMultiple(vec<L, T, Q> const& v, vec<L, T, Q> const& Multiple);
 
 	/// @}
-} //namespace glm
+} //namespace args::core::math::detail::glm
 
 #include "round.inl"

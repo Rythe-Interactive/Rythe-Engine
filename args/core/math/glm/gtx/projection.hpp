@@ -23,7 +23,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_projection
 	/// @{
@@ -38,6 +38,6 @@ namespace glm
 	GLM_FUNC_DECL genType proj(genType const& x, genType const& Normal);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "projection.inl"

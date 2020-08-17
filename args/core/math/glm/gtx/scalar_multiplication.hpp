@@ -30,7 +30,7 @@
 #include "../mat2x2.hpp"
 #include <type_traits>
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename T, typename Vec>
 	using return_type_scalar_multiplication = typename std::enable_if<
@@ -72,4 +72,4 @@ GLM_IMPLEMENT_SCAL_MULT(mat4x3)
 GLM_IMPLEMENT_SCAL_MULT(mat4)
 
 #undef GLM_IMPLEMENT_SCAL_MULT
-} // namespace glm
+} // namespace args::core::math::detail::glm

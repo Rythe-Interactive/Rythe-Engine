@@ -2,7 +2,7 @@
 
 #include "setup.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// Qualify GLM types in term of alignment (packed, aligned) and precision in term of ULPs (lowp, mediump, highp)
 	enum qualifier
@@ -227,4 +227,4 @@ namespace detail
 		}
 	};
 }//namespace detail
-}//namespace glm
+}//namespace args::core::math::detail::glm

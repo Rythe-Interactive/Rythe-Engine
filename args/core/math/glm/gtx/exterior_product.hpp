@@ -25,7 +25,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_exterior_product
 	/// @{
@@ -40,6 +40,6 @@ namespace glm
 	GLM_FUNC_DECL T cross(vec<2, T, Q> const& v, vec<2, T, Q> const& u);
 
 	/// @}
-} //namespace glm
+} //namespace args::core::math::detail::glm
 
 #include "exterior_product.inl"

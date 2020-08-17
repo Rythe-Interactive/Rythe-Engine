@@ -3,7 +3,7 @@
 #include "../geometric.hpp"
 #include <limits>
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	// -- Component accesses --
 
@@ -349,4 +349,4 @@ namespace glm
 		dual.w = -static_cast<T>(0.5) * ( x[0].w * real.x + x[1].w * real.y + x[2].w * real.z);
 		return tdualquat<T, Q>(real, dual);
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

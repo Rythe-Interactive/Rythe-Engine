@@ -35,7 +35,7 @@
 #	pragma message("GLM: GLM_GTC_quaternion extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtc_quaternion
 	/// @{
@@ -168,6 +168,6 @@ namespace glm
 		vec<3, T, Q> const& direction,
 		vec<3, T, Q> const& up);
 	/// @}
-} //namespace glm
+} //namespace args::core::math::detail::glm
 
 #include "quaternion.inl"

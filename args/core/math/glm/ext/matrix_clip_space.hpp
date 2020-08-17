@@ -28,7 +28,7 @@
 #	pragma message("GLM: GLM_EXT_matrix_clip_space extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_matrix_clip_space
 	/// @{
@@ -517,6 +517,6 @@ namespace glm
 		T fovy, T aspect, T near, T ep);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "matrix_clip_space.inl"

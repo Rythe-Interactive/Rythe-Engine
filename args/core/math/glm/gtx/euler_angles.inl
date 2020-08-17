@@ -2,7 +2,7 @@
 
 #include "compatibility.hpp" // glm::atan2
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename T>
 	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> eulerAngleX
@@ -896,4 +896,4 @@ namespace glm
 		t2 = T2;
 		t3 = T3;
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

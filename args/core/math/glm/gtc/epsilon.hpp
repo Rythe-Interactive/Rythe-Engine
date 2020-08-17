@@ -21,7 +21,7 @@
 #	pragma message("GLM: GLM_GTC_epsilon extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtc_epsilon
 	/// @{
@@ -55,6 +55,6 @@ namespace glm
 	GLM_FUNC_DECL bool epsilonNotEqual(genType const& x, genType const& y, genType const& epsilon);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "epsilon.inl"

@@ -1,6 +1,6 @@
 /// @ref gtx_texture
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template <length_t L, typename T, qualifier Q>
 	inline T levels(vec<L, T, Q> const& Extent)
@@ -13,5 +13,5 @@ namespace glm
 	{
 		return vec<1, T, defaultp>(Extent).x;
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 

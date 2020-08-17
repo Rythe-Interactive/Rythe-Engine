@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-namespace glm{
+namespace args::core::math::detail::glm{
 
 	template <typename genType>
 	GLM_FUNC_QUALIFIER genType linearInterpolation(genType const& a)
@@ -433,4 +433,4 @@ namespace glm{
 		}
 	}
 
-}//namespace glm
+}//namespace args::core::math::detail::glm

@@ -1,6 +1,6 @@
 #include "../detail/_vectorize.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<L, T, Q> min(vec<L, T, Q> const& x, vec<L, T, Q> const& y, vec<L, T, Q> const& z)
@@ -126,4 +126,4 @@ namespace glm
 		vec<L, T, Q> const Mirror = Clamp + Rest;
 		return mix(Rest, vec<L, T, Q>(1) - Rest, glm::greaterThanEqual(Mirror, vec<L, T, Q>(1)));
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

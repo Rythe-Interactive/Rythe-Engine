@@ -81,7 +81,7 @@
 #define NO_MANGLING extern "C"
 
 #if defined(ARGS_WINDOWS) || defined(DOXY_INCLUDE)
-	#if defined(ARGS_INTERNAL) || defined(DOXY_INCLUDE)
+	#if (defined(ARGS_INTERNAL) && !defined(ARGS_IMPORT)) || defined(DOXY_INCLUDE)
 
 		/**@def ARGS_API
 		 * @brief sets the export setting for shared libraries
@@ -92,6 +92,10 @@
 	#endif
 #else
 	#define ARGS_API __attribute__((visibility("default")))
+#endif
+
+#if defined(ARGS_IMPORT)
+#define ARGS_LIBRARY 
 #endif
 
 /**@def ARGS_FUNC

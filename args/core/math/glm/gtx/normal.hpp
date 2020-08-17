@@ -24,7 +24,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_normal
 	/// @{
@@ -36,6 +36,6 @@ namespace glm
 	GLM_FUNC_DECL vec<3, T, Q> triangleNormal(vec<3, T, Q> const& p1, vec<3, T, Q> const& p2, vec<3, T, Q> const& p3);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "normal.inl"

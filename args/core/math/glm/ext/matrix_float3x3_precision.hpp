@@ -4,7 +4,7 @@
 #pragma once
 #include "../detail/type_mat3x3.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup core_matrix_precision
 	/// @{
@@ -46,4 +46,4 @@ namespace glm
 	typedef mat<3, 3, float, highp>		highp_mat3x3;
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm

@@ -14,7 +14,7 @@
 
 #include "detail/type_vec3.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup core_func_geometric
 	/// @{
@@ -111,6 +111,6 @@ namespace glm
 		T eta);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "detail/func_geometric.inl"

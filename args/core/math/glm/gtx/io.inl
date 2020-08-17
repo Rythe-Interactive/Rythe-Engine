@@ -6,7 +6,7 @@
 #include "../gtc/matrix_access.hpp" // glm::col, glm::row
 #include "../gtx/type_trait.hpp"    // glm::type<>
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace io
 {
 	template<typename CTy>
@@ -437,4 +437,4 @@ namespace detail
 	{
 		return detail::print_matrix_pair_on(os, a);
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

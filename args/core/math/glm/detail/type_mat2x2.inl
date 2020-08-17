@@ -1,6 +1,6 @@
 #include "../matrix.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	// -- Constructors --
 
@@ -533,4 +533,4 @@ namespace glm
 	{
 		return (m1[0] != m2[0]) || (m1[1] != m2[1]);
 	}
-} //namespace glm
+} //namespace args::core::math::detail::glm

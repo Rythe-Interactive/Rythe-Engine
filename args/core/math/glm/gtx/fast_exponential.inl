@@ -1,6 +1,6 @@
 /// @ref gtx_fast_exponential
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	// fastPow:
 	template<typename genType>
@@ -133,4 +133,4 @@ namespace glm
 	{
 		return detail::functor1<vec, L, T, T, Q>::call(fastLog2, x);
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

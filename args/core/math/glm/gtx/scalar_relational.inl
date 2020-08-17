@@ -1,6 +1,6 @@
 /// @ref gtx_scalar_relational
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename T>
 	GLM_FUNC_QUALIFIER bool lessThan
@@ -85,4 +85,4 @@ namespace glm
 	{
 		return !x;
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm
