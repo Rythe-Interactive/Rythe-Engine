@@ -1,9 +1,10 @@
 #pragma once
+#ifndef _MSC_VER
 #include <cstdint> //linux std::(u)int(8-64)_t
+#else
 #include <cstddef> //msc   std::(u)int(8-64)_t
+#endif
 #include <vector>  //      std::vector<T>
-#include <string>
-#include <cstring>
 
 namespace args::core
 {
@@ -22,6 +23,12 @@ namespace args::core
 	using size_type = std::size_t;
 	using index_type = std::size_t;
 
+	using f32 = float;
+	using f64 = double;
+
+	using f80 = long double;
+
+	
 	using time32 = float;
 	using time64 = double;
 

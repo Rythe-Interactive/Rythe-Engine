@@ -1,6 +1,6 @@
 #pragma once
 #include <core/core.hpp>
-
+#include <core/math/math.hpp>
 using namespace args;
 
 struct sah
@@ -34,6 +34,9 @@ public:
 
 	void update(time::time_span<fast_time> deltaTime)
 	{
+
+
+		
 		static auto query = createQuery<sah>();
 
 		static time::time_span<fast_time> buffer;
@@ -68,6 +71,10 @@ public:
 		buffer += deltaTime;
 		accumulated += deltaTime;
 		frameCount++;
+
+		math::vec2 v;
+		v.x = 10;
+		v.y = 20;
 
 		if (buffer > 1.f)
 		{
