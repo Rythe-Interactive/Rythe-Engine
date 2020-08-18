@@ -5,21 +5,21 @@ namespace args::application
 {
     void window::create(int width, int height, const char* title, GLFWmonitor* monitor, GLFWwindow* share)
     {
-        if (!(handle = glfwCreateWindow(width, height, title, monitor, share)))
+        if (!(handle = ContextHelper::createWindow(width, height, title, monitor, share)))
             std::cout << "Could not create window" << std::endl;
     }
 
     void window::close()
     {
-        glfwSetWindowShouldClose(handle, GLFW_TRUE);
-        glfwDestroyWindow(handle);
+        ContextHelper::setWindowShouldClose(handle, GLFW_TRUE);
+        ContextHelper::destroyWindow(handle);
         handle = nullptr;
     }
 
     math::ivec2 window::getFramebufferSize()
     {
         int width, height;
-        glfwGetFramebufferSize(handle, &width, &height);
+        ContextHelper::getFramebufferSize(handle, &width, &height);
         return math::ivec2(width, height);
     }
 
@@ -31,32 +31,32 @@ namespace args::application
 
     void window::display()
     {
-        glfwSwapBuffers(handle);
+        ContextHelper::swapBuffers(handle);
     }
 
     void window::setSwapInterval(int interval)
     {
-        glfwSwapInterval(interval);
+        ContextHelper::swapInterval(interval);
     }
 
     void window::makeCurrent()
     {
-        glfwMakeContextCurrent(handle);
+        ContextHelper::makeContextCurrent(handle);
     }
 
     void window::setKeyCallback(GLFWkeyfun callback)
     {
-        glfwSetKeyCallback(handle, callback);
+        ContextHelper::setKeyCallback(handle, callback);
     }
 
     void window::setWindowCloseCallback(GLFWwindowclosefun callback)
     {
-        glfwSetWindowCloseCallback(handle, callback);
+        ContextHelper::setWindowCloseCallback(handle, callback);
     }
 
     void window::setJoystickCallback(GLFWjoystickfun callback)
     {
-        glfwSetJoystickCallback(callback);
+        ContextHelper::setJoystickCallback(callback);
     }
 
 }

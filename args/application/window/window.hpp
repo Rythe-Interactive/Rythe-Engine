@@ -1,9 +1,5 @@
 #pragma once
-#include <glfw/glfw3.h>
-
-#define ARGS_IMPORT
-#include <core/core.hpp>
-#include <core/platform/args_library.hpp>
+#include <application/context/contexthelper.hpp>
 
 /**@file window.hpp
  */
@@ -42,15 +38,5 @@ namespace args::application
         void setWindowCloseCallback(GLFWwindowclosefun callback);
 
         void setJoystickCallback(GLFWjoystickfun callback);
-
-        window operator+(const window& other)
-        {
-            return *this;
-        }
-
-        window operator*(const window& other)
-        {
-            return *this;
-        }
     };
 }

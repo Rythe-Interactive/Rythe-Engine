@@ -18,7 +18,7 @@
     <ClCompile Include="window\window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="window\windowsystem.cpp">
+    <ClCompile Include="context\contexthelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -33,6 +33,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="module\applicationmodule.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="context\contexthelper.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

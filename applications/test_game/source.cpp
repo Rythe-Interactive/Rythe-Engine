@@ -20,20 +20,20 @@ using namespace args;
 
 void ARGS_CCONV reportModules(Engine* engine)
 {
-    app::window win;
-    win.create(200, 200, "test window");
-    win.makeCurrent();
-    win.display();
-    math::ivec2 size = win.getFramebufferSize();
+    //app::window win;
+    //win.create(200, 200, "test window");
+    //win.makeCurrent();
+    //win.display();
+    //math::ivec2 size = win.getFramebufferSize();
 
-    std::cout << size.x << ", " << size.y << std::endl;
+    //std::cout << size.x << ", " << size.y << std::endl;
 
 	std::cout << "Hello Args!" << std::endl;
 
     test_filesystem();
 
 	engine->reportModule<TestModule>();
-
+    engine->reportModule<app::ApplicationModule>();
 	try
 	{
 		throw args_component_destroyed_error;

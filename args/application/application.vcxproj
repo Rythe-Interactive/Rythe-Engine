@@ -11,11 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="context\contexthelper.cpp" />
     <ClCompile Include="window\window.cpp" />
-    <ClCompile Include="window\windowsystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application.hpp" />
+    <ClInclude Include="context\contexthelper.hpp" />
     <ClInclude Include="module\applicationmodule.hpp" />
     <ClInclude Include="window\window.hpp" />
     <ClInclude Include="window\windowsystem.hpp" />
