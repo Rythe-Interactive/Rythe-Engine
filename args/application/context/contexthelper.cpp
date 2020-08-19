@@ -4,12 +4,28 @@ namespace args::application
 {
     bool ContextHelper::init()
     {
+        glfwSetErrorCallback([](int code, cstring desc) { std::cout << "GLFW ERROR " << code << ": " << desc << std::endl; });
         return glfwInit();
     }
 
     int ContextHelper::getError(cstring* desc)
     {
         return glfwGetError(desc);
+    }
+
+    GLFWmonitor* ContextHelper::getPrimaryMonitor()
+    {
+        return glfwGetPrimaryMonitor();
+    }
+
+    const GLFWvidmode* ContextHelper::getPrimaryVideoMode()
+    {
+        return glfwGetVideoMode(glfwGetPrimaryMonitor());
+    }
+
+    const GLFWvidmode* ContextHelper::getVideoMode(GLFWmonitor* monitor)
+    {
+        return glfwGetVideoMode(monitor);
     }
 
     void ContextHelper::windowHint(int hint, int value)
@@ -32,14 +48,38 @@ namespace args::application
         glfwSetWindowShouldClose(window, value);
     }
 
+    void ContextHelper::setWindowAttrib(GLFWwindow* window, int attrib, int value)
+    {
+        glfwSetWindowAttrib(window, attrib, value);
+    }
+
+    void ContextHelper::setWindowPos(GLFWwindow* window, int x, int y)
+    {
+        glfwSetWindowPos(window, x, y);
+    }
+
+    void ContextHelper::setWindowPos(GLFWwindow* window, math::ivec2 pos)
+    {
+        glfwSetWindowPos(window, pos.x, pos.y);
+    }
+
+    math::ivec2 ContextHelper::getWindowPos(GLFWwindow* window)
+    {
+        math::ivec2 pos;
+        glfwGetWindowPos(window, &pos.x, &pos.y);
+        return pos;
+    }
+
     void ContextHelper::destroyWindow(GLFWwindow* window)
     {
         glfwDestroyWindow(window);
     }
 
-    void ContextHelper::getFramebufferSize(GLFWwindow* window, int* width, int* height)
+    math::ivec2 ContextHelper::getFramebufferSize(GLFWwindow* window)
     {
-        glfwGetFramebufferSize(window, width, height);
+        math::ivec2 size;
+        glfwGetFramebufferSize(window, &size.x, &size.y);
+        return size;
     }
 
     void ContextHelper::swapBuffers(GLFWwindow* window)
@@ -62,6 +102,11 @@ namespace args::application
         glfwMakeContextCurrent(window);
     }
 
+    GLFWwindow* ContextHelper::getCurrentContext()
+    {
+        return glfwGetCurrentContext();
+    }
+
     GLFWkeyfun ContextHelper::setKeyCallback(GLFWwindow* window, GLFWkeyfun callback)
     {
         return glfwSetKeyCallback(window, callback);
@@ -70,6 +115,11 @@ namespace args::application
     GLFWwindowclosefun ContextHelper::setWindowCloseCallback(GLFWwindow* window, GLFWwindowclosefun callback)
     {
         return glfwSetWindowCloseCallback(window, callback);
+    }
+
+    GLFWwindowposfun ContextHelper::setWindowPosCallback(GLFWwindow* window, GLFWwindowposfun callback)
+    {
+        return glfwSetWindowPosCallback(window, callback);
     }
 
     GLFWjoystickfun ContextHelper::setJoystickCallback(GLFWjoystickfun callback)

@@ -27,7 +27,11 @@ public:
 		auto ent = m_ecs->createEntity();
 		ent.add_component<sah>();
         auto handle = ent.add_component<app::window_request>();
-        handle.write({{600, 300}, "This is a test window!"});
+        handle.write({{600, 300}, "This is a test window!", nullptr, nullptr, 1, true, nullptr});
+
+        auto ent2 = m_ecs->createEntity();
+        auto handle2 = ent2.add_component<app::window_request>();
+        handle2.write({ {600, 300}, "This is a test window2!" });
 
 		createProcess<&TestSystem::update>("Update");
 		createProcess<&TestSystem::differentThread>("TestChain");
@@ -107,11 +111,11 @@ public:
 			std::cout << "This is a different thread!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
 		}
 
-		if (accumulated > 10.f)
-		{
-			std::cout << "raising exit event" << std::endl;
-			raiseEvent<events::exit>();
-			//throw args_exception_msg("hehehe fuck you >:D");
-		}
+		//if (accumulated > 10.f)
+		//{
+		//	std::cout << "raising exit event" << std::endl;
+		//	raiseEvent<events::exit>();
+		//	//throw args_exception_msg("hehehe fuck you >:D");
+		//}
 	}
 };

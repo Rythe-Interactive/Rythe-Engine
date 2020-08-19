@@ -51,6 +51,7 @@ namespace args::core::ecs
     template<typename component_type>
     class component_handle : public component_handle_base
     {
+        friend class std::hash<component_handle<component_type>>;
     public:
         component_handle() : component_handle_base() {}
         component_handle(const component_handle& other) : component_handle_base(other.m_ownerId, other.m_registry) {};
@@ -62,6 +63,8 @@ namespace args::core::ecs
 
         component_handle& operator=(const component_handle& other) { m_registry = other.m_registry; m_ownerId = other.m_ownerId; return *this; }
         component_handle& operator=(component_handle&& other) { m_registry = other.m_registry; m_ownerId = other.m_ownerId; return *this; }
+
+        bool operator==(const component_handle<component_type>& other) const { return m_registry == other.m_registry && m_ownerId == other.m_ownerId; }
 
         /**@brief Atomic read of component.
          * @param order Memory order at which to load the component.
@@ -259,6 +262,19 @@ namespace args::core::ecs
         virtual bool valid() override
         {
             return m_ownerId && m_registry && m_registry->getFamily<component_type>()->has_component(m_ownerId);
+        }
+    };
+}
+
+namespace std
+{
+    template<typename component_type> struct hash<args::core::ecs::component_handle<component_type>>
+    {
+        std::size_t operator()(args::core::ecs::component_handle<component_type> const& handle) const noexcept
+        {
+            std::size_t h1 = std::hash<intptr_t>{}(handle.m_ownerId);
+            std::size_t h2 = std::hash<args::id_type>{}(handle.m_ownerId);
+            return h1 ^ (h2 << 1);
         }
     };
 }

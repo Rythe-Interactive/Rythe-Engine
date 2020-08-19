@@ -15,6 +15,8 @@ namespace args::application
         cstring name;
         GLFWmonitor* monitor;
         GLFWwindow* share;
+        int swapInterval;
+        bool makeCurrent;
         std::vector<std::pair<int, int>>* hints;
     };
 
@@ -23,7 +25,11 @@ namespace args::application
         window(GLFWwindow* ptr) : handle(ptr) {}
         window() = default;
 
+        GLFWwindow* parent;
+        hashed_sparse_set<ecs::component_handle<window>>* children;
+        math::ivec2 offset;
         GLFWwindow* handle;
+        
         operator GLFWwindow* () const { return handle; }
         window& operator=(GLFWwindow* ptr) { handle = ptr; return *this; }
     };

@@ -16,22 +16,54 @@ namespace args::application
         {
             ContextHelper::destroyWindow(win);
             auto handle = m_windowComponents[win];
+
             if (handle.valid())
             {
+                window comp = handle.read(std::memory_order_relaxed);
+
+                if (comp.parent)
+                    m_windowComponents[comp.parent].read().children->erase(handle);
+
+                for (auto& childHandle : *comp.children)
+                    closeWindow(childHandle.read());
+
+                delete comp.children;
                 handle.write(nullptr, std::memory_order_relaxed);
                 handle.destroy();
                 m_windowComponents.erase(win);
             }
         }
 
+        static void onWindowMoved(GLFWwindow* win, int x, int y)
+        {
+            auto handle = m_windowComponents[win];
+            for (auto& childHandle : *handle.read().children)
+            {
+                auto child = childHandle.read();
+                ContextHelper::setWindowPos(child, x + child.offset.x, y + child.offset.y);
+            }
+        }
+
+        void dockWindow(ecs::component_handle<window> child, ecs::component_handle<window> parent)
+        {
+            window par = parent.read();
+            par.children->insert(child);
+            parent.write(par);
+
+            window chi = child.read();
+            chi.parent = par;
+            child.write(chi);
+            ContextHelper::setWindowAttrib(chi, GLFW_FLOATING, GLFW_TRUE);
+            ContextHelper::setWindowPos(chi, ContextHelper::getWindowPos(par) + chi.offset);
+        }
+
     public:
         virtual void setup()
         {
             ContextHelper::init();
-            ContextHelper::swapInterval(1);
 
             auto handle = m_ecs->world.add_component<window_request>();
-
+            handle.write({ {0,0}, nullptr, nullptr, nullptr, 1, true, nullptr }, std::memory_order_relaxed);
             createProcess<&WindowSystem::updateWindows>("Rendering");
         }
 
@@ -58,6 +90,18 @@ namespace args::application
                     ContextHelper::windowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
                     ContextHelper::windowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
                     ContextHelper::windowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+                    GLFWmonitor* moniter = request.monitor;
+
+                    if (!request.monitor)
+                        moniter = ContextHelper::getPrimaryMonitor();
+
+                    const GLFWvidmode* mode = ContextHelper::getVideoMode(moniter);
+
+                    ContextHelper::windowHint(GLFW_RED_BITS, mode->redBits);
+                    ContextHelper::windowHint(GLFW_GREEN_BITS, mode->greenBits);
+                    ContextHelper::windowHint(GLFW_BLUE_BITS, mode->blueBits);
+                    ContextHelper::windowHint(GLFW_REFRESH_RATE, mode->refreshRate);
                 }
 
                 if (request.size == math::ivec2(0, 0))
@@ -67,18 +111,26 @@ namespace args::application
                     request.name = "<Args> Engine";
 
                 window win = ContextHelper::createWindow(request.size, request.name, request.monitor, request.share);
-                if (!win)
-                {
-                    const char* description;
-                    int code = ContextHelper::getError(&description);
-
-                    if (description)
-                        std::cout << "GLFW ERROR " << code << ": " << description << std::endl;
-                }
-                ContextHelper::setWindowCloseCallback(win, &WindowSystem::closeWindow);
-
+                win.children = new hashed_sparse_set<ecs::component_handle<window>>();
+                win.offset = { 0, 35 };
+                win.parent = nullptr;
                 handle.write(win, std::memory_order_relaxed);
                 m_windowComponents.insert(win, handle);
+
+                window context = ContextHelper::getCurrentContext();
+                if (context)
+                {
+                    dockWindow(handle, m_windowComponents[context]);
+                }
+
+                ContextHelper::makeContextCurrent(win);
+                ContextHelper::swapInterval(request.swapInterval);
+                if (!request.makeCurrent)
+                    ContextHelper::makeContextCurrent(context);
+
+                ContextHelper::setWindowCloseCallback(win, &WindowSystem::closeWindow);
+                ContextHelper::setWindowPosCallback(win, &WindowSystem::onWindowMoved);
+
             }
         }
 
@@ -90,7 +142,7 @@ namespace args::application
 
             for (auto entity : query)
             {
-                window win = entity.get_component<window>().read();
+                window win = entity.get_component<window>().read(std::memory_order_relaxed);
                 ContextHelper::swapBuffers(win);
             }
 
@@ -98,6 +150,11 @@ namespace args::application
 
             if (!m_ecs->world.has_component<window>())
             {
+                for (auto entity : query)
+                {
+                    closeWindow(entity.get_component<window>().read(std::memory_order_relaxed));
+                }
+
                 m_eventBus->raiseEvent<events::exit>();
             }
         }
