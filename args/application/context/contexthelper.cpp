@@ -4,12 +4,12 @@ namespace args::application
 {
     bool ContextHelper::init()
     {
-        windowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        windowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-        windowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-        windowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
         return glfwInit();
+    }
+
+    int ContextHelper::getError(cstring* desc)
+    {
+        return glfwGetError(desc);
     }
 
     void ContextHelper::windowHint(int hint, int value)
@@ -50,6 +50,11 @@ namespace args::application
     void ContextHelper::swapInterval(int interval)
     {
         glfwSwapInterval(interval);
+    }
+
+    void ContextHelper::pollEvents()
+    {
+        glfwPollEvents();
     }
 
     void ContextHelper::makeContextCurrent(GLFWwindow* window)

@@ -6,6 +6,7 @@
 #include <core/ecs/component_container.hpp>
 #include <core/ecs/queryregistry.hpp>
 #include <core/ecs/entityquery.hpp>
+#include <core/ecs/entity_handle.hpp>
 
 #include <utility>
 #include <memory>
@@ -16,8 +17,6 @@
 
 namespace args::core::ecs
 {
-	class entity_handle;
-
 	class component_handle_base;
 
 	template<typename component_type>
@@ -57,6 +56,8 @@ namespace args::core::ecs
 		void recursiveDestroyEntityInternal(id_type entityId);
 
 	public:
+        entity_handle world;
+
 		/**@brief Constructor initializes everything for the ECS and creates world entity.
 		 */
 		EcsRegistry();

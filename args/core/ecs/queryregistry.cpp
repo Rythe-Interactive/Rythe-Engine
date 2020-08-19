@@ -81,7 +81,7 @@ namespace args::core::ecs
 	{
 		async::mixed_multiguard mmguard(m_entityLock, async::write, m_componentLock, async::read); // We lock now so that we don't need to reacquire the locks every iteration.
 
-		for (int i = 0; i < m_entityLists.size(); i++)
+		for (int i = 1; i <= m_entityLists.size(); i++)
 		{
 			if (!m_componentTypes[i].contains(componentTypeId)) // This query doesn't care about this component type.
 				continue;

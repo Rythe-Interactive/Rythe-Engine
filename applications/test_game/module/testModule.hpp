@@ -11,7 +11,7 @@ class TestModule : public Module
 public:
 	virtual void setup() override
 	{
-		addChain("TestChain");
+		addProcessChain("TestChain");
 
 		reportComponentType<sah>();
 		reportSystem<TestSystem>();

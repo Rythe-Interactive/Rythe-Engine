@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="context\contexthelper.cpp" />
-    <ClCompile Include="window\window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application.hpp" />

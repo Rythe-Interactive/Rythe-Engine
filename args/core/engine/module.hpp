@@ -36,9 +36,9 @@ namespace args::core
 
 	protected:
 		template<size_type charc>
-		void addChain(const char(&name)[charc])
+		void addProcessChain(const char(&name)[charc])
 		{
-			m_scheduler->addChain<charc>(name);
+			m_scheduler->addProcessChain<charc>(name);
 		}
 
 		template<typename SystemType, typename... Args, inherits_from<SystemType, System<SystemType>> = 0>

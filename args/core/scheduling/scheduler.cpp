@@ -10,7 +10,7 @@ namespace args::core::scheduling
 
 	Scheduler::Scheduler(events::EventBus* eventBus) : m_eventBus(eventBus)
 	{
-		addChain("Update");
+		addProcessChain("Update");
 	}
 
 	Scheduler::~Scheduler()

@@ -26,6 +26,8 @@ public:
 	{
 		auto ent = m_ecs->createEntity();
 		ent.add_component<sah>();
+        auto handle = ent.add_component<app::window_request>();
+        handle.write({{600, 300}, "This is a test window!"});
 
 		createProcess<&TestSystem::update>("Update");
 		createProcess<&TestSystem::differentThread>("TestChain");
@@ -33,10 +35,7 @@ public:
 	}
 
 	void update(time::time_span<fast_time> deltaTime)
-	{
-
-
-		
+	{		
 		static auto query = createQuery<sah>();
 
 		static time::time_span<fast_time> buffer;

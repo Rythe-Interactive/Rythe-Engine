@@ -46,6 +46,7 @@ namespace args::core::ecs
 		// Create world entity.
 		m_entityData.emplace(1);
 		m_entities.emplace(1, 1, this);
+        world = entity_handle(1, this);
 	}
 
 	inline component_container_base* EcsRegistry::getFamily(id_type componentTypeId)
@@ -63,7 +64,7 @@ namespace args::core::ecs
 		if (!validateEntity(entityId))
 			throw args_entity_not_found_error;
 
-		return component_handle_base(entityId, *this);
+		return component_handle_base(entityId, this);
 	}
 
 	inline component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId)
@@ -80,7 +81,7 @@ namespace args::core::ecs
 
 		m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
 
-		return component_handle_base(entityId, *this);
+		return component_handle_base(entityId, this);
 	}
 
 	inline void EcsRegistry::destroyComponent(id_type entityId, id_type componentTypeId)

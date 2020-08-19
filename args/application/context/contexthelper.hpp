@@ -14,6 +14,7 @@ namespace args::application
         ~ContextHelper() = delete;
 
         static bool init();
+        static int getError(cstring* desc);
         static void windowHint(int hint, int value);
         static GLFWwindow* createWindow(math::ivec2 dim, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
         static GLFWwindow* createWindow(int width, int height, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
@@ -22,6 +23,7 @@ namespace args::application
         static void getFramebufferSize(GLFWwindow* window, int* width, int* height);
         static void swapBuffers(GLFWwindow* window);
         static void swapInterval(int interval);
+        static void pollEvents();
         static void makeContextCurrent(GLFWwindow* window);
         static GLFWkeyfun setKeyCallback(GLFWwindow* window, GLFWkeyfun callback);
         static GLFWwindowclosefun setWindowCloseCallback(GLFWwindow* window, GLFWwindowclosefun callback);

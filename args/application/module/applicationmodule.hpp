@@ -10,10 +10,8 @@ namespace args::application
     public:
         virtual void setup() override
         {
-            ContextHelper::init();
-            window win;
-            win.create(200, 200, "test");
-            win.close();
+            addProcessChain("Rendering");
+            reportComponentType<window_request>();
             reportComponentType<window>();
             reportSystem<WindowSystem>();
         }
