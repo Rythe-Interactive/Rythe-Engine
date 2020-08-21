@@ -9,10 +9,14 @@ namespace args::application
 {
     class ARGS_API ContextHelper
     {
+    private:
+        static std::atomic_bool m_initialized;
+
     public:
         ContextHelper() = delete;
         ~ContextHelper() = delete;
 
+        static bool initialized();
         static bool init();
         static int getError(cstring* desc);
         static GLFWmonitor* getPrimaryMonitor();

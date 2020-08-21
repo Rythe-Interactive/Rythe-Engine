@@ -11,6 +11,7 @@ namespace args::application
         virtual void setup() override
         {
             addProcessChain("Rendering");
+            addProcessChain("Input");
             reportComponentType<window_request>();
             reportComponentType<window>();
             reportSystem<WindowSystem>();

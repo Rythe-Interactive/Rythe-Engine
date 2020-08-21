@@ -2,10 +2,19 @@
 
 namespace args::application
 {
+    std::atomic_bool ContextHelper::m_initialized;
+
+    bool ContextHelper::initialized()
+    {
+        return m_initialized.load(std::memory_order_acquire);
+    }
     bool ContextHelper::init()
     {
         glfwSetErrorCallback([](int code, cstring desc) { std::cout << "GLFW ERROR " << code << ": " << desc << std::endl; });
-        return glfwInit();
+        bool success = glfwInit();
+        if (success)
+            m_initialized.store(true, std::memory_order_release);
+        return success;
     }
 
     int ContextHelper::getError(cstring* desc)

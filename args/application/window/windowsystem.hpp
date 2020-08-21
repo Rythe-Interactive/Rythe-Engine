@@ -12,6 +12,8 @@ namespace args::application
     private:
         inline static sparse_map<GLFWwindow*, ecs::component_handle<window>> m_windowComponents;
 
+        async::readonly_rw_spinlock creationLock;
+
         static void closeWindow(GLFWwindow* win)
         {
             ContextHelper::destroyWindow(win);
@@ -20,6 +22,8 @@ namespace args::application
             if (handle.valid())
             {
                 window comp = handle.read(std::memory_order_relaxed);
+                handle.write(window(), std::memory_order_relaxed);
+                handle.destroy();
 
                 if (comp.parent)
                     m_windowComponents[comp.parent].read().children->erase(handle);
@@ -28,8 +32,6 @@ namespace args::application
                     closeWindow(childHandle.read());
 
                 delete comp.children;
-                handle.write(nullptr, std::memory_order_relaxed);
-                handle.destroy();
                 m_windowComponents.erase(win);
             }
         }
@@ -60,11 +62,11 @@ namespace args::application
     public:
         virtual void setup()
         {
-            ContextHelper::init();
-
             auto handle = m_ecs->world.add_component<window_request>();
             handle.write({ {0,0}, nullptr, nullptr, nullptr, 1, true, nullptr }, std::memory_order_relaxed);
-            createProcess<&WindowSystem::updateWindows>("Rendering");
+
+            createProcess<&WindowSystem::refreshWindows>("Rendering");
+            createProcess<&WindowSystem::handleWindowEvents>("Input");
         }
 
         void createWindows()
@@ -75,7 +77,6 @@ namespace args::application
             {
                 window_request request = entity.get_component<window_request>().read();
                 entity.remove_component<window_request>();
-                auto handle = entity.add_component<window>();
 
                 if (request.hints)
                 {
@@ -114,14 +115,22 @@ namespace args::application
                 win.children = new hashed_sparse_set<ecs::component_handle<window>>();
                 win.offset = { 0, 35 };
                 win.parent = nullptr;
-                handle.write(win, std::memory_order_relaxed);
+
+                ecs::component_handle<window> handle;
+
+                {
+                    async::readwrite_guard guard(creationLock);
+                    handle = entity.add_component<window>();
+                    handle.write(win, std::memory_order_relaxed);
+                }
+
                 m_windowComponents.insert(win, handle);
 
                 window context = ContextHelper::getCurrentContext();
-                if (context)
+                /*if (context)
                 {
                     dockWindow(handle, m_windowComponents[context]);
-                }
+                }*/
 
                 ContextHelper::makeContextCurrent(win);
                 ContextHelper::swapInterval(request.swapInterval);
@@ -134,25 +143,41 @@ namespace args::application
             }
         }
 
-        void updateWindows(time::time_span<fast_time> deltaTime)
+        void refreshWindows(time::time_span<fast_time> deltaTime)
         {
-            createWindows();
+            if (!ContextHelper::initialized())
+                return;
 
             static auto query = createQuery<window>();
 
+            async::readonly_guard guard(creationLock);
             for (auto entity : query)
             {
                 window win = entity.get_component<window>().read(std::memory_order_relaxed);
                 ContextHelper::swapBuffers(win);
             }
+        }
+
+        void handleWindowEvents(time::time_span<fast_time> deltaTime)
+        {
+            if (!ContextHelper::initialized())
+                ContextHelper::init();
+
+            createWindows();
 
             ContextHelper::pollEvents();
 
             if (!m_ecs->world.has_component<window>())
             {
-                for (auto entity : query)
+                static auto query = createQuery<window>();
+
                 {
-                    closeWindow(entity.get_component<window>().read(std::memory_order_relaxed));
+                    async::readwrite_guard guard(creationLock);
+
+                    for (auto entity : query)
+                    {
+                        closeWindow(entity.get_component<window>().read(std::memory_order_relaxed));
+                    }
                 }
 
                 m_eventBus->raiseEvent<events::exit>();
