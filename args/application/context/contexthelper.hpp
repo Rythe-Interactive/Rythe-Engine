@@ -18,6 +18,7 @@ namespace args::application
 
         static bool initialized();
         static bool init();
+        static void terminate();
         static int getError(cstring* desc);
         static GLFWmonitor* getPrimaryMonitor();
         static const GLFWvidmode* getPrimaryVideoMode();

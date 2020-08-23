@@ -3,6 +3,7 @@
 #include <core/ecs/entity_handle.hpp>
 #include <core/ecs/entityquery.hpp>
 #include <algorithm>
+#include <iostream>
 
 namespace args::core::ecs
 {
@@ -20,9 +21,9 @@ namespace args::core::ecs
 
 		{
 			async::readonly_multiguard mguard(m_entityLock, m_componentLock);
-			for (int i = 0; i < m_entityLists[queryId].size(); i++) // Iterate over all tracked entities.
+			for (int i = 0; i < m_entityLists[queryId]->size(); i++) // Iterate over all tracked entities.
 			{
-				id_type entityId = m_entityLists[queryId].keys()[i]; // Get the id from the keys of the map.
+				id_type entityId = m_entityLists[queryId]->keys()[i]; // Get the id from the keys of the map.
 				if (!m_registry.getEntityData(entityId).components.contains(m_componentTypes[queryId])) // Check component composition
 					toRemove.push_back(entityId); // Mark for erasure if the component composition doesn't overlap with the query.
 			}
@@ -32,7 +33,7 @@ namespace args::core::ecs
 		{
 			async::readwrite_guard guard(m_entityLock);
 			for (id_type entityId : toRemove)
-				m_entityLists[queryId].erase(entityId); // Erase all entities marked for erasure.
+				m_entityLists[queryId]->erase(entityId); // Erase all entities marked for erasure.
 		}
 
 		// Next we need to filter through all the entities to get all the new ones that apply to the new query.
@@ -42,11 +43,11 @@ namespace args::core::ecs
 
 		for (id_type entityId : entities.keys()) // Iterate over all entities.
 		{
-			if (m_entityLists[queryId].contains(entityId)) // If the entity is already tracked, continue to the next entity.
+			if (m_entityLists[queryId]->contains(entityId)) // If the entity is already tracked, continue to the next entity.
 				continue;
 
 			if (m_registry.getEntityData(entityId).components.contains(m_componentTypes[queryId])) // Check if the queried components completely overlaps the components in the entity.
-				m_entityLists[queryId].insert(entityId, entities[entityId]); // Insert entity into tracking list.
+				m_entityLists[queryId]->insert(entityId, entities[entityId]); // Insert entity into tracking list.
 		}
 	}
 
@@ -62,9 +63,9 @@ namespace args::core::ecs
 
 		{
 			async::readonly_multiguard mguard(m_entityLock, m_componentLock);
-			for (int i = 0; i < m_entityLists[queryId].size(); i++) // Iterate over all tracked entities.
+			for (int i = 0; i < m_entityLists[queryId]->size(); i++) // Iterate over all tracked entities.
 			{
-				id_type entityId = m_entityLists[queryId].keys()[i]; // Get the id from the keys of the map.
+				id_type entityId = m_entityLists[queryId]->keys()[i]; // Get the id from the keys of the map.
 				if (!m_registry.getEntity(entityId).component_composition().contains(m_componentTypes[queryId])) // Check component composition
 					toRemove.push_back(entityId); // Mark for erasure if the component composition doesn't overlap with the query.
 			}
@@ -73,7 +74,7 @@ namespace args::core::ecs
 		{
 			async::readwrite_guard guard(m_entityLock);
 			for (id_type entityId : toRemove)
-				m_entityLists[queryId].erase(entityId); // Erase all entities marked for erasure.
+				m_entityLists[queryId]->erase(entityId); // Erase all entities marked for erasure.
 		}
 	}
 
@@ -86,17 +87,17 @@ namespace args::core::ecs
 			if (!m_componentTypes[i].contains(componentTypeId)) // This query doesn't care about this component type.
 				continue;
 
-			if (m_entityLists[i].contains(entityId))
+			if (m_entityLists[i]->contains(entityId))
 			{
 				if (removal)
 				{
-					m_entityLists[i].erase(entityId); // Erase the entity from the query's tracking list if the component was removed from the entity.
+					m_entityLists[i]->erase(entityId); // Erase the entity from the query's tracking list if the component was removed from the entity.
 					continue;
 				}
 			}
 			else if (m_registry.getEntityData(entityId).components.contains(m_componentTypes[i]))
 			{
-				m_entityLists[i].insert(entityId, m_registry.getEntity(entityId)); // If the entity also contains all the other required components for this query, then add this entity to the tracking list.
+				m_entityLists[i]->insert(entityId, m_registry.getEntity(entityId)); // If the entity also contains all the other required components for this query, then add this entity to the tracking list.
 			}
 		}
 	}
@@ -105,8 +106,8 @@ namespace args::core::ecs
 	{
 		async::readwrite_guard guard(m_entityLock);
 		for (int i = 0; i < m_entityLists.size(); i++) // Iterate over all query tracking lists.
-			if (m_entityLists[i].contains(entityId))
-				m_entityLists[i].erase(entityId); // Erase entity from tracking list if it's present.
+			if (m_entityLists[i]->contains(entityId))
+				m_entityLists[i]->erase(entityId); // Erase entity from tracking list if it's present.
 	}
 
 	inline id_type QueryRegistry::getQueryId(const hashed_sparse_set<id_type>& componentTypes)
@@ -124,6 +125,8 @@ namespace args::core::ecs
 
 	inline EntityQuery QueryRegistry::createQuery(const hashed_sparse_set<id_type>& componentTypes)
 	{
+        std::cout << "creating query " << std::this_thread::get_id() << std::endl;
+
 		id_type queryId = getQueryId(componentTypes); // Check if a query already exists with the requested component types. 
 
 		if (!queryId)
@@ -145,19 +148,13 @@ namespace args::core::ecs
 		id_type queryId;
 
 		{ // Write permitted critical section for m_entityLists
-			async::readwrite_guard entguard(m_entityLock);
+            async::readwrite_multiguard mguard(m_referenceLock, m_entityLock, m_componentLock);
 
-			queryId = m_entityLists.size() + 1;
-			m_entityLists.emplace(queryId); // Create a new entity tracking list.
-		}
+			queryId = m_lastQueryId++;
+			m_entityLists.insert(queryId, new sparse_map<id_type, entity_handle>()); // Create a new entity tracking list.
 
-		{
-			async::readwrite_guard refguard(m_referenceLock);
 			m_references.emplace(queryId); // Create a new reference count.
-		}
 
-		{
-			async::readwrite_guard compguard(m_componentLock);
 			m_componentTypes.insert(queryId, componentTypes); // Insert component type list for query.
 		}
 
@@ -167,7 +164,7 @@ namespace args::core::ecs
 
 			for (id_type entityId : entities.keys()) // Iterate over all entities.
 				if (m_registry.getEntityData(entityId).components.contains(m_componentTypes[queryId])) // Check if the queried components completely overlaps the components in the entity.
-					m_entityLists[queryId].insert(entityId, entities[entityId]); // Insert entity into tracking list.
+					m_entityLists[queryId]->insert(entityId, entities[entityId]); // Insert entity into tracking list.
 		}
 
 		return queryId;
@@ -176,7 +173,7 @@ namespace args::core::ecs
 	inline const sparse_map<id_type, entity_handle>& QueryRegistry::getEntities(id_type queryId)
 	{
 		async::readonly_guard entguard(m_entityLock);
-		return m_entityLists.get(queryId);
+		return *m_entityLists.get(queryId);
 	}
 
 	inline void QueryRegistry::addReference(id_type queryId)
@@ -203,6 +200,7 @@ namespace args::core::ecs
 			async::readwrite_multiguard mguard(m_referenceLock, m_entityLock, m_componentLock);
 
 			m_references.erase(queryId);
+            delete m_entityLists[queryId];
 			m_entityLists.erase(queryId);
 			m_componentTypes.erase(queryId);
 		}

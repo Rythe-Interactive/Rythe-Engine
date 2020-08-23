@@ -17,6 +17,12 @@ namespace args::application
         return success;
     }
 
+    void ContextHelper::terminate()
+    {
+        glfwTerminate();
+        m_initialized.store(false, std::memory_order_release);
+    }
+
     int ContextHelper::getError(cstring* desc)
     {
         return glfwGetError(desc);

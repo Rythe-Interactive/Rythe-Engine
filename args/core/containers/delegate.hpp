@@ -222,6 +222,20 @@ namespace args::core
 	public:
 
 		multicast_delegate() = default;
+        multicast_delegate(multicast_delegate&&) = default;
+        multicast_delegate& operator=(multicast_delegate&&) = default;
+        multicast_delegate(const multicast_delegate& other) = default;
+
+        multicast_delegate& operator =(const multicast_delegate& other)
+        {
+            m_invocationList.clear();
+
+            for (auto& invocation : other.m_invocationList)
+                m_invocationList.emplace_back(invocation);
+
+            return *this;
+        }
+
 		~multicast_delegate()
 		{
 			m_invocationList.clear();
@@ -242,13 +256,6 @@ namespace args::core
 		}
 
 		size_t size() const { return m_invocationList.size(); }
-
-		multicast_delegate& operator =(const multicast_delegate&) = delete;
-		multicast_delegate& operator =(multicast_delegate&&) = default;
-
-		multicast_delegate(const multicast_delegate&) = delete;
-		multicast_delegate(multicast_delegate&&) = default;
-
 
 		bool operator ==(const multicast_delegate& other) const
 		{

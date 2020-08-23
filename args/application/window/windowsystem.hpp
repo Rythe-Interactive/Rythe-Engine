@@ -67,6 +67,10 @@ namespace args::application
 
             createProcess<&WindowSystem::refreshWindows>("Rendering");
             createProcess<&WindowSystem::handleWindowEvents>("Input");
+            m_eventBus->bindToEvent<events::exit>([](events::exit* event)
+                {
+                    ContextHelper::terminate();
+                });
         }
 
         void createWindows()

@@ -18,7 +18,7 @@ namespace args::core::events
 	class EventBus
 	{
 		sparse_map<id_type, hashed_sparse_set<event_base*>> m_events;
-		sparse_map<id_type, multicast_delegate<void(EventBus*)>> m_eventCallbacks;
+		sparse_map<id_type, multicast_delegate<void(event_base*)>> m_eventCallbacks;
 
 	public:
 		~EventBus()
@@ -41,20 +41,14 @@ namespace args::core::events
 		{
 			event_type* event = new event_type(arguments...); // Create new event.
 
-			if (event->unique() && m_events[event_type::id].size()) // Check if it's unique and if another one already exists.
-			{
-				m_eventCallbacks[event_type::id].invoke(this); // Notify and delete.
-				delete event;
-				return;
-			}
+			force_value_cast<multicast_delegate<void(event_type*)>>(m_eventCallbacks[event_type::id]).invoke(event); // Notify.
 
-			m_events[event_type::id].insert(event); // Keep the event stored. (Or at least keep it somewhere fetch able.)
-
-			m_eventCallbacks[event_type::id].invoke(this); // Notify.
-
-			if (!event->persistent()) // If the event isn't persistent then delete it again.
-			{
-				m_events[event_type::id].erase(event);
+            if (event->persistent() && !(event->unique() && m_events[event_type::id].size()))
+            {
+                m_events[event_type::id].insert(event); // If it's persistent keep the event stored. (Or at least keep it somewhere fetch able.)
+            }
+            else // If the event isn't persistent or unique whilst another one exists then delete it.
+            {
 				delete event;
 			}
 		}
@@ -136,9 +130,9 @@ namespace args::core::events
 		 * @tparam event_type Event type to subscribe to.
 		 */
 		template<typename event_type, inherits_from<event_type, event<event_type>> = 0>
-		void bindToEvent(delegate<void(EventBus*)> callback)
+		void bindToEvent(delegate<void(event_type*)> callback)
 		{
-			m_eventCallbacks[event_type::id] += callback;
+			m_eventCallbacks[event_type::id] += force_value_cast<delegate<void(event_base*)>>(callback);
 		}
 	};
 }
