@@ -17,6 +17,8 @@
 
 namespace args::core::ecs
 {
+#define world_entity_id 1
+
 	class component_handle_base;
 
 	template<typename component_type>

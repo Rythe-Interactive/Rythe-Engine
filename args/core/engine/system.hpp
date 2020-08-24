@@ -115,20 +115,19 @@ namespace args::core
             m_eventBus->clearLastEvent<event_type>();
         }
 
-        template <void(SelfType::* func_type)(events::EventBus*), typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
+        template <typename event_type, void(SelfType::* func_type)(event_type*), inherits_from<event_type, events::event<event_type>> = 0>
         void bindToEvent()
         {
-            m_eventBus->bindToEvent<event_type>(delegate<void(events::EventBus*)>::create<SelfType, func_type>((SelfType*)this));
+            m_eventBus->bindToEvent<event_type>(delegate<void(event_type*)>::create<SelfType, func_type>((SelfType*)this));
         }
 
         template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-        void bindToEvent(delegate<void(events::EventBus*)> callback)
+        void bindToEvent(delegate<void(event_type*)> callback)
         {
             m_eventBus->bindToEvent<event_type>(callback);
         }
 
     public:
         System() : SystemBase(typeHash<SelfType>(), undecoratedTypeName<SelfType>()) {}
-        virtual ~System() = default;
     };
 }

@@ -132,6 +132,16 @@ namespace args::application
         return glfwSetKeyCallback(window, callback);
     }
 
+    GLFWcharfun ContextHelper::setCharCallback(GLFWwindow* window, GLFWcharfun callback)
+    {
+        return glfwSetCharCallback(window, callback);
+    }
+
+    GLFWcursorposfun ContextHelper::setCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callback)
+    {
+        return glfwSetCursorPosCallback(window, callback);
+    }
+
     GLFWwindowclosefun ContextHelper::setWindowCloseCallback(GLFWwindow* window, GLFWwindowclosefun callback)
     {
         return glfwSetWindowCloseCallback(window, callback);

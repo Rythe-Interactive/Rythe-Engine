@@ -16,6 +16,7 @@
   <ItemGroup>
     <ClInclude Include="application.hpp" />
     <ClInclude Include="context\contexthelper.hpp" />
+    <ClInclude Include="events\inputevents.hpp" />
     <ClInclude Include="events\windowevents.hpp" />
     <ClInclude Include="module\applicationmodule.hpp" />
     <ClInclude Include="window\window.hpp" />

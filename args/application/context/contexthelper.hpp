@@ -40,6 +40,8 @@ namespace args::application
         static void makeContextCurrent(GLFWwindow* window);
         static GLFWwindow* getCurrentContext();
         static GLFWkeyfun setKeyCallback(GLFWwindow* window, GLFWkeyfun callback);
+        static GLFWcharfun setCharCallback(GLFWwindow* window, GLFWcharfun callback);
+        static GLFWcursorposfun setCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callback);
         static GLFWwindowclosefun setWindowCloseCallback(GLFWwindow* window, GLFWwindowclosefun callback);
         static GLFWwindowposfun setWindowPosCallback(GLFWwindow* window, GLFWwindowposfun callback);
         static GLFWwindowsizefun setWindowSizeCallback(GLFWwindow* window, GLFWwindowsizefun callback);

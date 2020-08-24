@@ -8,6 +8,7 @@ namespace args::application
     {
         ecs::component_handle<window> windowHandle;
 
+        window_close() = default;
         window_close(ecs::component_handle<window> windowHandle) : windowHandle(windowHandle) {}
 
         virtual bool persistent() { return false; }
@@ -19,6 +20,7 @@ namespace args::application
         ecs::component_handle<window> windowHandle;
         math::ivec2 position;
 
+        window_move() = default;
         window_move(ecs::component_handle<window> windowHandle, math::ivec2 position) : windowHandle(windowHandle), position(position) {}
 
         virtual bool persistent() { return false; }
@@ -30,6 +32,7 @@ namespace args::application
         ecs::component_handle<window> windowHandle;
         math::ivec2 size;
 
+        window_resize() = default;
         window_resize(ecs::component_handle<window> windowHandle, math::ivec2 size) : windowHandle(windowHandle), size(size) {}
 
         virtual bool persistent() { return false; }
@@ -40,6 +43,7 @@ namespace args::application
     {
         ecs::component_handle<window> windowHandle;
 
+        window_refresh() = default;
         window_refresh(ecs::component_handle<window> windowHandle) : windowHandle(windowHandle) {}
 
         virtual bool persistent() { return false; }
@@ -51,6 +55,7 @@ namespace args::application
         ecs::component_handle<window> windowHandle;
         int focused;
 
+        window_focus() = default;
         window_focus(ecs::component_handle<window> windowHandle, int focused) : windowHandle(windowHandle), focused(focused) {}
 
         virtual bool persistent() { return false; }
@@ -62,6 +67,7 @@ namespace args::application
         ecs::component_handle<window> windowHandle;
         int iconified;
 
+        window_iconified() = default;
         window_iconified(ecs::component_handle<window> windowHandle, int iconified) : windowHandle(windowHandle), iconified(iconified) {}
 
         virtual bool persistent() { return false; }
@@ -73,6 +79,7 @@ namespace args::application
         ecs::component_handle<window> windowHandle;
         int maximized;
 
+        window_maximized() = default;
         window_maximized(ecs::component_handle<window> windowHandle, int maximized) : windowHandle(windowHandle), maximized(maximized) {}
 
         virtual bool persistent() { return false; }
@@ -84,6 +91,7 @@ namespace args::application
         ecs::component_handle<window> windowHandle;
         math::ivec2 size;
 
+        window_framebuffer_resize() = default;
         window_framebuffer_resize(ecs::component_handle<window> windowHandle, math::ivec2 size) : windowHandle(windowHandle), size(size) {}
 
         virtual bool persistent() { return false; }
@@ -95,6 +103,7 @@ namespace args::application
         ecs::component_handle<window> windowHandle;
         math::vec2 scale;
 
+        window_content_rescale() = default;
         window_content_rescale(ecs::component_handle<window> windowHandle, math::vec2 scale) : windowHandle(windowHandle), scale(scale) {}
 
         virtual bool persistent() { return false; }

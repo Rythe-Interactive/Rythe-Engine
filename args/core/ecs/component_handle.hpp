@@ -20,7 +20,7 @@ namespace args::core::ecs
     {
     public:
         // Entity that owns this component.
-        const entity_handle entity_handle;
+        const entity_handle entity;
 
     protected:
         EcsRegistry* m_registry;
@@ -30,7 +30,7 @@ namespace args::core::ecs
         component_handle_base() : m_registry(nullptr), m_ownerId(invalid_id) {};
         component_handle_base(const component_handle_base& other) : m_registry(other.m_registry), m_ownerId(other.m_ownerId) {};
         component_handle_base(component_handle_base&& other) : m_registry(other.m_registry), m_ownerId(other.m_ownerId) {};
-        component_handle_base(id_type entityId, EcsRegistry* registry) : entity_handle(registry->getEntity(entityId)), m_registry(registry), m_ownerId(entityId) {}
+        component_handle_base(id_type entityId, EcsRegistry* registry) : entity(registry->getEntity(entityId)), m_registry(registry), m_ownerId(entityId) {}
 
         component_handle_base& operator=(const component_handle_base& other) { m_registry = other.m_registry; m_ownerId = other.m_ownerId; return *this; }
         component_handle_base& operator=(component_handle_base&& other) { m_registry = other.m_registry; m_ownerId = other.m_ownerId; return *this; }

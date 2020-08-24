@@ -39,18 +39,18 @@ namespace args::core::events
 		template<typename event_type, typename... Args, typename = inherits_from<event_type, event<event_type>>>
 		void raiseEvent(Args&&... arguments)
 		{
-			event_type* event = new event_type(arguments...); // Create new event.
+            event_type* eventptr;
 
-			force_value_cast<multicast_delegate<void(event_type*)>>(m_eventCallbacks[event_type::id]).invoke(event); // Notify.
-
-            if (event->persistent() && !(event->unique() && m_events[event_type::id].size()))
+			event_type event(arguments...); // Create new event.
+            if (event.persistent() && !(event.unique() && m_events[event_type::id].size()))
             {
-                m_events[event_type::id].insert(event); // If it's persistent keep the event stored. (Or at least keep it somewhere fetch able.)
+                eventptr = new event_type(std::move(event));
+                m_events[event_type::id].insert(eventptr); // If it's persistent keep the event stored. (Or at least keep it somewhere fetch able.)
             }
-            else // If the event isn't persistent or unique whilst another one exists then delete it.
-            {
-				delete event;
-			}
+            else
+                eventptr = &event;
+
+			force_value_cast<multicast_delegate<void(event_type*)>>(m_eventCallbacks[event_type::id]).invoke(eventptr); // Notify.            
 		}
 
 		/**@brief Check if an event is active.

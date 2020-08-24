@@ -132,7 +132,7 @@ namespace args::core::ecs
 			queryId = addQuery(componentTypes); // Create a new query if one doesn't exist yet.
 		}
 
-		return EntityQuery(queryId, *this, m_registry);
+		return EntityQuery(queryId, this, &m_registry);
 	}
 
 	inline const hashed_sparse_set<id_type>& QueryRegistry::getComponentTypes(id_type queryId)
@@ -144,8 +144,8 @@ namespace args::core::ecs
 	id_type QueryRegistry::addQuery(const hashed_sparse_set<id_type>& componentTypes)
 	{
 		id_type queryId;
-        std::cout << "\ncreating new query...\n";
-		{ // Write permitted critical section for m_entityLists
+
+        { // Write permitted critical section for m_entityLists
             async::readwrite_multiguard mguard(m_referenceLock, m_entityLock, m_componentLock);
 
 			queryId = m_lastQueryId++;
@@ -164,19 +164,21 @@ namespace args::core::ecs
 				if (m_registry.getEntityData(entityId).components.contains(m_componentTypes[queryId])) // Check if the queried components completely overlaps the components in the entity.
 					m_entityLists[queryId]->insert(entityId, entities[entityId]); // Insert entity into tracking list.
 		}
-        std::cout << "\ncreated new query\n\n";
-		return queryId;
+
+        return queryId;
 	}
 
 	inline const sparse_map<id_type, entity_handle>& QueryRegistry::getEntities(id_type queryId)
 	{
 		async::readonly_guard entguard(m_entityLock);
+
 		return *m_entityLists.get(queryId);
 	}
 
 	inline void QueryRegistry::addReference(id_type queryId)
 	{
 		async::readonly_guard refguard(m_referenceLock);
+
 		m_references.get(queryId)++;
 	}
 

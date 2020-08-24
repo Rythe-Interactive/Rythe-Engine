@@ -101,6 +101,7 @@ namespace args::core::scheduling
 		while (exits < chains)
 		{
 			async::readonly_multiguard rmguard(m_exitsLock, m_processChainsLock);
+            std::cout << "waiting for threads to end. " << (chains - exits) << " threads left\n";
 			exits = m_exits.size();
 			chains = m_processChains.size();
 		}

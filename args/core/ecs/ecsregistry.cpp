@@ -44,9 +44,9 @@ namespace args::core::ecs
 	EcsRegistry::EcsRegistry() : m_families(), m_entityData(), m_entities(), m_queryRegistry(*this)
 	{
 		// Create world entity.
-		m_entityData.emplace(1);
-		m_entities.emplace(1, 1, this);
-        world = entity_handle(1, this);
+		m_entityData.emplace(world_entity_id);
+		m_entities.emplace(world_entity_id, world_entity_id, this);
+        world = entity_handle(world_entity_id, this);
 	}
 
 	inline component_container_base* EcsRegistry::getFamily(id_type componentTypeId)

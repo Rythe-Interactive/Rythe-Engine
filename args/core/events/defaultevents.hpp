@@ -3,13 +3,13 @@
 
 namespace args::core::events
 {
-	struct exit final : public event<exit>
-	{
-		const int exitcode;
+    struct exit final : public event<exit>
+    {
+        const int exitcode;
 
-		exit(int exitcode = 0) : exitcode(exitcode) {}
+        exit(int exitcode = 0) : exitcode(exitcode) {}
 
-		virtual bool persistent() { return true; }
+        virtual bool persistent() { return true; }
 
-	};
+    };
 }
