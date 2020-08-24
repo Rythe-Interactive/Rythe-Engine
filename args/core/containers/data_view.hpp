@@ -4,6 +4,8 @@
 #include <atomic>
 #include <stdexcept>
 
+#include "core/platform/platform.hpp"
+
 /**
  * @file data_view.hpp
  */
@@ -109,68 +111,69 @@ namespace args::core
             }
         }
 
-        /**@brief gets the value at index idx
+        /** @brief gets the value at index idx
 	     *  checks if the index is valid before returning and throws and std::out_of_range exception if it is not
 	     *  @param idx the index to query
 	     *  @returns the value at idx
 	     */
-        value_type at(size_type idx) const
+        A_NODISCARD value_type at(size_type idx) const
         {
             if(idx > m_targetSize) throw std::out_of_range("data_view subscript out of range");
             return this->operator[](idx);
         }
 
-        /**@brief gets the value at index idx
-	     * @param idx the index to query
-	     * @returns the value at idx
-	     * @see at() for a guarded version
+        /** @brief gets the value at index idx
+	     *  @param idx the index to query
+	     *  @returns the value at idx
 	     */	
         value_type& operator[](size_type idx)
         {
+            if(idx > m_targetSize) throw std::out_of_range("data_view subscript out of range");
             return *(m_targetArray + m_targetOffset + static_cast<ptrdiff_t>(idx));
         }
 
         /**@brief const version of above
 	     * @see value_type& operator[](size_type)
 	     */
-        value_type operator[](size_type idx) const
+        A_NODISCARD value_type operator[](size_type idx) const
         {
+            if(idx > m_targetSize) throw std::out_of_range("data_view subscript out of range");
             return *(m_targetArray + m_targetOffset + static_cast<ptrdiff_t>(idx));
         }
 
-        iterator begin()
+        A_NODISCARD iterator begin()
         {
             return m_targetArray + m_targetOffset;
         }
 
-        iterator end()
+        A_NODISCARD iterator end()
         {
             return begin() + m_targetSize;
         }
 
-        ptr_type data()
+        A_NODISCARD ptr_type data()
         {
             return begin();
         }
 
-        const_iterator begin() const
+        A_NODISCARD const_iterator begin() const
         {
             return m_targetArray + m_targetOffset;
         }
 
-        const_iterator end() const
+        A_NODISCARD const_iterator end() const
         {
             return begin() + m_targetSize;
         }
 
-        const_ptr_type data() const
+        A_NODISCARD const_ptr_type data() const
         {
             return begin();
         }
 
         /**@brief gets the size of the target array-view
 	     */
-        size_type size() const noexcept
+        A_NODISCARD size_type size() const noexcept
         {
             return m_targetSize;
         }
@@ -178,7 +181,7 @@ namespace args::core
         /**@brief gets the max size this container could grow to.
 	     * since the container is non resizable same as size()
 	     */
-        size_type max_size() const noexcept
+        A_NODISCARD size_type max_size() const noexcept
         {
             return m_targetSize;
         }
