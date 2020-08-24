@@ -79,7 +79,7 @@ namespace args::core::ecs
 			m_entityData[entityId].components.insert(componentTypeId); // Is fine because the lock only locks order changes in the container, not the values themselves.
 		}
 
-		m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
+		m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, false);
 
 		return component_handle_base(entityId, this);
 	}

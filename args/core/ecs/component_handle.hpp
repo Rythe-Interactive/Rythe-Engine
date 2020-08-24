@@ -37,7 +37,7 @@ namespace args::core::ecs
 
         /**@brief Checks if handle still points to a valid component.
          */
-        virtual bool valid() ARGS_IMPURE_RETURN(m_ownerId);
+        A_NODISCARD virtual bool valid() ARGS_IMPURE_RETURN(m_ownerId);
 
         /**@brief Checks if handle still points to a valid component.
          */
@@ -70,7 +70,7 @@ namespace args::core::ecs
          * @param order Memory order at which to load the component.
          * @returns component_type Current value of component.
          */
-        component_type read(std::memory_order order = std::memory_order_acquire)
+        A_NODISCARD component_type read(std::memory_order order = std::memory_order_acquire)
         {
             async::transferable_atomic<component_type>* comp = m_registry->getFamily<component_type>()->get_component(m_ownerId);
             if (!comp)

@@ -63,6 +63,11 @@ namespace args::application
         glfwSetWindowShouldClose(window, value);
     }
 
+    int ContextHelper::windowShouldClose(GLFWwindow* window)
+    {
+        return glfwWindowShouldClose(window);
+    }
+
     void ContextHelper::setWindowAttrib(GLFWwindow* window, int attrib, int value)
     {
         glfwSetWindowAttrib(window, attrib, value);
@@ -135,6 +140,41 @@ namespace args::application
     GLFWwindowposfun ContextHelper::setWindowPosCallback(GLFWwindow* window, GLFWwindowposfun callback)
     {
         return glfwSetWindowPosCallback(window, callback);
+    }
+
+    GLFWwindowsizefun ContextHelper::setWindowSizeCallback(GLFWwindow* window, GLFWwindowsizefun callback)
+    {
+        return glfwSetWindowSizeCallback(window, callback);
+    }
+
+    GLFWwindowrefreshfun ContextHelper::setWindowRefreshCallback(GLFWwindow* window, GLFWwindowrefreshfun callback)
+    {
+        return glfwSetWindowRefreshCallback(window, callback);
+    }
+
+    GLFWwindowfocusfun ContextHelper::setWindowFocusCallback(GLFWwindow* window, GLFWwindowfocusfun callback)
+    {
+        return glfwSetWindowFocusCallback(window, callback);
+    }
+
+    GLFWwindowiconifyfun ContextHelper::setWindowIconifyCallback(GLFWwindow* window, GLFWwindowiconifyfun callback)
+    {
+        return glfwSetWindowIconifyCallback(window, callback);
+    }
+
+    GLFWwindowmaximizefun ContextHelper::setWindowMaximizeCallback(GLFWwindow* window, GLFWwindowmaximizefun callback)
+    {
+        return glfwSetWindowMaximizeCallback(window, callback);
+    }
+
+    GLFWframebuffersizefun ContextHelper::setFramebufferSizeCallback(GLFWwindow* window, GLFWframebuffersizefun callback)
+    {
+        return glfwSetFramebufferSizeCallback(window, callback);
+    }
+
+    GLFWwindowcontentscalefun ContextHelper::setWindowContentScaleCallback(GLFWwindow* window, GLFWwindowcontentscalefun callback)
+    {
+        return glfwSetWindowContentScaleCallback(window, callback);
     }
 
     GLFWjoystickfun ContextHelper::setJoystickCallback(GLFWjoystickfun callback)

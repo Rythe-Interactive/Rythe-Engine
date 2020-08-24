@@ -25,9 +25,6 @@ namespace args::application
         window(GLFWwindow* ptr) : handle(ptr) {}
         window() = default;
 
-        GLFWwindow* parent;
-        hashed_sparse_set<ecs::component_handle<window>>* children;
-        math::ivec2 offset;
         GLFWwindow* handle;
         
         operator GLFWwindow* () const { return handle; }

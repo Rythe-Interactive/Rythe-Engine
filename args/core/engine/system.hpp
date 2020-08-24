@@ -37,9 +37,8 @@ namespace args::core
         template <void(SelfType::* func_type)(time::time_span<fast_time>), size_type charc>
         void createProcess(const char(&processChainName)[charc], time::time_span<fast_time> interval = 0)
         {
-            std::string name = std::string(processChainName) + undecoratedTypeName<SelfType>() + std::to_string(interval);
+            std::string name = std::string(processChainName) + undecoratedTypeName<SelfType>() + std::to_string(interval) + std::to_string(force_value_cast<intptr_t>(func_type) % 10000000);
             id_type id = nameHash(name);
-
             std::unique_ptr<scheduling::Process> process = std::make_unique<scheduling::Process>(name, id, interval);
             process->setOperation(delegate<void(time::time_span<fast_time>)>::create<SelfType, func_type>((SelfType*)this));
             m_processes.insert(id, std::move(process));

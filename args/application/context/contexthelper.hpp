@@ -27,6 +27,7 @@ namespace args::application
         static GLFWwindow* createWindow(math::ivec2 dim, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
         static GLFWwindow* createWindow(int width, int height, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
         static void setWindowShouldClose(GLFWwindow* window, int value);
+        static int windowShouldClose(GLFWwindow* window);
         static void setWindowAttrib(GLFWwindow* window, int attrib, int value);
         static void setWindowPos(GLFWwindow* window, int x, int y);
         static void setWindowPos(GLFWwindow* window, math::ivec2 pos);
@@ -41,6 +42,13 @@ namespace args::application
         static GLFWkeyfun setKeyCallback(GLFWwindow* window, GLFWkeyfun callback);
         static GLFWwindowclosefun setWindowCloseCallback(GLFWwindow* window, GLFWwindowclosefun callback);
         static GLFWwindowposfun setWindowPosCallback(GLFWwindow* window, GLFWwindowposfun callback);
+        static GLFWwindowsizefun setWindowSizeCallback(GLFWwindow* window, GLFWwindowsizefun callback);
+        static GLFWwindowrefreshfun setWindowRefreshCallback(GLFWwindow* window, GLFWwindowrefreshfun callback);
+        static GLFWwindowfocusfun setWindowFocusCallback(GLFWwindow* window, GLFWwindowfocusfun callback);
+        static GLFWwindowiconifyfun setWindowIconifyCallback(GLFWwindow* window, GLFWwindowiconifyfun callback);
+        static GLFWwindowmaximizefun setWindowMaximizeCallback(GLFWwindow* window, GLFWwindowmaximizefun callback);
+        static GLFWframebuffersizefun setFramebufferSizeCallback(GLFWwindow* window, GLFWframebuffersizefun callback);
+        static GLFWwindowcontentscalefun setWindowContentScaleCallback(GLFWwindow* window, GLFWwindowcontentscalefun callback);
         static GLFWjoystickfun setJoystickCallback(GLFWjoystickfun callback);
     };
 }

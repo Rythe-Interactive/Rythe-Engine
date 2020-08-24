@@ -1,6 +1,7 @@
 #pragma once
 #include <application/window/window.hpp>
 #include <application/context/contexthelper.hpp>
+#include <application/events/windowevents.hpp>
 
 /**@file windowsystem.hpp
 */
@@ -11,52 +12,67 @@ namespace args::application
     {
     private:
         inline static sparse_map<GLFWwindow*, ecs::component_handle<window>> m_windowComponents;
-
-        async::readonly_rw_spinlock creationLock;
+        inline static sparse_map<GLFWwindow*, events::EventBus*> m_windowEventBus;
+        inline static async::readonly_rw_spinlock creationLock;
 
         static void closeWindow(GLFWwindow* win)
         {
-            ContextHelper::destroyWindow(win);
+            async::readwrite_guard guard(creationLock);
+
             auto handle = m_windowComponents[win];
 
             if (handle.valid())
             {
-                window comp = handle.read(std::memory_order_relaxed);
-                handle.write(window(), std::memory_order_relaxed);
+                m_windowEventBus[win]->raiseEvent<window_close>(m_windowComponents[win]);
+
+                if (!ContextHelper::windowShouldClose(win))
+                    return;
+
                 handle.destroy();
-
-                if (comp.parent)
-                    m_windowComponents[comp.parent].read().children->erase(handle);
-
-                for (auto& childHandle : *comp.children)
-                    closeWindow(childHandle.read());
-
-                delete comp.children;
                 m_windowComponents.erase(win);
             }
+
+            ContextHelper::destroyWindow(win);
         }
 
         static void onWindowMoved(GLFWwindow* win, int x, int y)
         {
-            auto handle = m_windowComponents[win];
-            for (auto& childHandle : *handle.read().children)
-            {
-                auto child = childHandle.read();
-                ContextHelper::setWindowPos(child, x + child.offset.x, y + child.offset.y);
-            }
+            m_windowEventBus[win]->raiseEvent<window_move>(m_windowComponents[win], math::ivec2(x, y));
         }
 
-        void dockWindow(ecs::component_handle<window> child, ecs::component_handle<window> parent)
+        static void onWindowResize(GLFWwindow* win, int width, int height)
         {
-            window par = parent.read();
-            par.children->insert(child);
-            parent.write(par);
+            m_windowEventBus[win]->raiseEvent<window_resize>(m_windowComponents[win], math::ivec2(width, height));
+        }
 
-            window chi = child.read();
-            chi.parent = par;
-            child.write(chi);
-            ContextHelper::setWindowAttrib(chi, GLFW_FLOATING, GLFW_TRUE);
-            ContextHelper::setWindowPos(chi, ContextHelper::getWindowPos(par) + chi.offset);
+        static void onWindowRefresh(GLFWwindow* win)
+        {
+            m_windowEventBus[win]->raiseEvent<window_refresh>(m_windowComponents[win]);
+        }
+
+        static void onWindowFocus(GLFWwindow* win, int focused)
+        {
+            m_windowEventBus[win]->raiseEvent<window_focus>(m_windowComponents[win], focused);
+        }
+
+        static void onWindowIconify(GLFWwindow* win, int iconified)
+        {
+            m_windowEventBus[win]->raiseEvent<window_iconified>(m_windowComponents[win], iconified);
+        }
+
+        static void onWindowMaximize(GLFWwindow* win, int maximized)
+        {
+            m_windowEventBus[win]->raiseEvent<window_maximized>(m_windowComponents[win], maximized);
+        }
+
+        static void onWindowFrameBufferResize(GLFWwindow* win, int width, int height)
+        {
+            m_windowEventBus[win]->raiseEvent<window_framebuffer_resize>(m_windowComponents[win], math::ivec2(width, height));
+        }
+
+        static void onWindowContentRescale(GLFWwindow* win, float xscale, float yscale)
+        {
+            m_windowEventBus[win]->raiseEvent<window_content_rescale>(m_windowComponents[win], math::vec2(xscale, xscale));
         }
 
     public:
@@ -67,6 +83,7 @@ namespace args::application
 
             createProcess<&WindowSystem::refreshWindows>("Rendering");
             createProcess<&WindowSystem::handleWindowEvents>("Input");
+
             m_eventBus->bindToEvent<events::exit>([](events::exit* event)
                 {
                     ContextHelper::terminate();
@@ -76,6 +93,8 @@ namespace args::application
         void createWindows()
         {
             static auto query = createQuery<window_request>();
+            if (query.size())
+                std::cout << query.size() << " window requests" << std::endl;
 
             for (auto entity : query)
             {
@@ -116,14 +135,12 @@ namespace args::application
                     request.name = "<Args> Engine";
 
                 window win = ContextHelper::createWindow(request.size, request.name, request.monitor, request.share);
-                win.children = new hashed_sparse_set<ecs::component_handle<window>>();
-                win.offset = { 0, 35 };
-                win.parent = nullptr;
 
                 ecs::component_handle<window> handle;
 
                 {
                     async::readwrite_guard guard(creationLock);
+                    std::cout << "creating a window" << std::endl;
                     handle = entity.add_component<window>();
                     handle.write(win, std::memory_order_relaxed);
                 }
@@ -131,19 +148,21 @@ namespace args::application
                 m_windowComponents.insert(win, handle);
 
                 window context = ContextHelper::getCurrentContext();
-                /*if (context)
-                {
-                    dockWindow(handle, m_windowComponents[context]);
-                }*/
 
                 ContextHelper::makeContextCurrent(win);
                 ContextHelper::swapInterval(request.swapInterval);
                 if (!request.makeCurrent)
-                    ContextHelper::makeContextCurrent(context);
+                    ContextHelper::makeContextCurrent(context);//should be moved to rendering thread.
 
                 ContextHelper::setWindowCloseCallback(win, &WindowSystem::closeWindow);
                 ContextHelper::setWindowPosCallback(win, &WindowSystem::onWindowMoved);
-
+                ContextHelper::setWindowSizeCallback(win, &WindowSystem::onWindowResize);
+                ContextHelper::setWindowRefreshCallback(win, &WindowSystem::onWindowRefresh);
+                ContextHelper::setWindowFocusCallback(win, &WindowSystem::onWindowFocus);
+                ContextHelper::setWindowIconifyCallback(win, &WindowSystem::onWindowIconify);
+                ContextHelper::setWindowMaximizeCallback(win, &WindowSystem::onWindowMaximize);
+                ContextHelper::setFramebufferSizeCallback(win, &WindowSystem::onWindowFrameBufferResize);
+                ContextHelper::setWindowContentScaleCallback(win, &WindowSystem::onWindowContentRescale);
             }
         }
 
@@ -155,6 +174,7 @@ namespace args::application
             static auto query = createQuery<window>();
 
             async::readonly_guard guard(creationLock);
+
             for (auto entity : query)
             {
                 window win = entity.get_component<window>().read(std::memory_order_relaxed);
@@ -171,10 +191,10 @@ namespace args::application
 
             ContextHelper::pollEvents();
 
+            static auto query = createQuery<window>();
+
             if (!m_ecs->world.has_component<window>())
             {
-                static auto query = createQuery<window>();
-
                 {
                     async::readwrite_guard guard(creationLock);
 

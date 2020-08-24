@@ -35,5 +35,8 @@
     <ClInclude Include="context\contexthelper.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="events\windowevents.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
