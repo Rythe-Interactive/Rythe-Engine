@@ -17,6 +17,7 @@ namespace args::application
         inline static async::readonly_rw_spinlock creationLock;
         
         ecs::EntityQuery windowQuery;
+        bool exit = false;
 
         template<typename event_type, typename... Args>
         static void raiseWindowEvent(GLFWwindow* win, Args&&... args)
@@ -27,30 +28,35 @@ namespace args::application
 
         static void closeWindow(GLFWwindow* win)
         {
-            async::readwrite_guard guard(creationLock);
+            if (!ContextHelper::initialized())
+                return;
 
-            auto handle = m_windowComponents[win];
-
-            if (handle.valid())
             {
-                raiseWindowEvent<window_close>(win, m_windowComponents[win]);
+                async::readwrite_guard guard(creationLock);
 
-                if (!ContextHelper::windowShouldClose(win))
-                    return;
+                auto handle = m_windowComponents[win];
 
-                handle.write(window());
-
-                id_type ownerId = handle.entity;
-
-                handle.destroy();
-                m_windowComponents.erase(win);
-
-                if (ownerId == world_entity_id)
+                if (handle.valid())
                 {
-                    raiseWindowEvent<events::exit>(win);
-                }
+                    raiseWindowEvent<window_close>(win, m_windowComponents[win]);
 
-                m_windowEventBus.erase(win);
+                    if (!ContextHelper::windowShouldClose(win))
+                        return;
+
+                    handle.write(window());
+
+                    id_type ownerId = handle.entity;
+
+                    handle.destroy();
+                    m_windowComponents.erase(win);
+
+                    if (ownerId == world_entity_id)
+                    {
+                        raiseWindowEvent<events::exit>(win);
+                    }
+
+                    m_windowEventBus.erase(win);
+                }
             }
 
             ContextHelper::destroyWindow(win);
@@ -149,6 +155,7 @@ namespace args::application
                 closeWindow(entity.get_component<window>().read(std::memory_order_relaxed));
             }
 
+            exit = true;
             ContextHelper::terminate();
         }
 
@@ -261,8 +268,9 @@ namespace args::application
 
         void handleWindowEvents(time::time_span<fast_time> deltaTime)
         {
-            if (!ContextHelper::initialized())
-                ContextHelper::init();
+            if (!ContextHelper::initialized() && !exit)
+                if (!ContextHelper::init())
+                    return;
 
             createWindows();
 

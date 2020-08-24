@@ -10,7 +10,10 @@ namespace args::application
     }
     bool ContextHelper::init()
     {
-        glfwSetErrorCallback([](int code, cstring desc) { std::cout << "GLFW ERROR " << code << ": " << desc << std::endl; });
+        glfwSetErrorCallback([](int code, cstring desc)
+            { 
+                std::cout << "GLFW ERROR " << code << ": " << desc << std::endl;
+            });
         bool success = glfwInit();
         if (success)
             m_initialized.store(true, std::memory_order_release);
@@ -19,8 +22,8 @@ namespace args::application
 
     void ContextHelper::terminate()
     {
-        glfwTerminate();
         m_initialized.store(false, std::memory_order_release);
+        glfwTerminate();
     }
 
     int ContextHelper::getError(cstring* desc)
