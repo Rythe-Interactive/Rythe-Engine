@@ -56,7 +56,7 @@ namespace args::core::events
         /**@brief Check if an event is active.
          * @tparam event_type Event type to check for.
          */
-        template<typename event_type, inherits_from<event_type, event<event_type>> = 0>
+        template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
         bool checkEvent() const
         {
             return m_events.contains(event_type::id) && m_events[event_type::id].size();
@@ -65,7 +65,7 @@ namespace args::core::events
         /**@brief Get the amount of events/messages that are currently in the bus.
          * @tparam event_type Event type to get the amount of.
          */
-        template<typename event_type, inherits_from<event_type, event<event_type>> = 0>
+        template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
         size_type getEventCount() const
         {
             if (m_events.contains(event_type::id))
@@ -76,7 +76,7 @@ namespace args::core::events
         /**@brief Get a reference to an event/message of a certain index.
          * @tparam event_type Event type to fetch.
          */
-        template<typename event_type, inherits_from<event_type, event<event_type>> = 0>
+        template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
         const event_type& getEvent(index_type index = 0) const
         {
             if (checkEvent<event_type>())
@@ -87,7 +87,7 @@ namespace args::core::events
         /**@brief Get a reference to the most recently raised event of this type.
          * @tparam event_type Event type to fetch.
          */
-        template<typename event_type, inherits_from<event_type, event<event_type>> = 0>
+        template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
         const event_type& getLastEvent() const
         {
             if (checkEvent<event_type>())
@@ -101,7 +101,7 @@ namespace args::core::events
         /**@brief Removes a certain event from the bus.
          * @tparam event_type Event type to clear.
          */
-        template<typename event_type, inherits_from<event_type, event<event_type>> = 0>
+        template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
         void clearEvent(index_type index = 0)
         {
             if (checkEvent<event_type>())
@@ -115,7 +115,7 @@ namespace args::core::events
         /**@brief Removes a the most recent event from the bus.
          * @tparam event_type Event type to clear.
          */
-        template<typename event_type, inherits_from<event_type, event<event_type>> = 0>
+        template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
         void clearLastEvent()
         {
             if (checkEvent<event_type>())
@@ -129,7 +129,7 @@ namespace args::core::events
         /**@brief Link a callback to an event type in order to get notified whenever one gets raised.
          * @tparam event_type Event type to subscribe to.
          */
-        template<typename event_type, inherits_from<event_type, event<event_type>> = 0>
+        template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
         void bindToEvent(delegate<void(event_type*)> callback)
         {
             m_eventCallbacks[event_type::id] += force_value_cast<delegate<void(event_base*)>>(callback);
