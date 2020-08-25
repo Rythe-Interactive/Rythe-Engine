@@ -147,6 +147,26 @@ namespace args::application
         return glfwSetCursorPosCallback(window, callback);
     }
 
+    GLFWmousebuttonfun ContextHelper::setMouseButtonCallback(GLFWwindow* window, GLFWmousebuttonfun callback)
+    {
+        return glfwSetMouseButtonCallback(window, callback);
+    }
+
+    GLFWscrollfun ContextHelper::setScrollCallback(GLFWwindow* window, GLFWscrollfun callback)
+    {
+        return glfwSetScrollCallback(window, callback);
+    }
+
+    GLFWdropfun ContextHelper::setDropCallback(GLFWwindow* window, GLFWdropfun callback)
+    {
+        return glfwSetDropCallback(window, callback);
+    }
+
+    GLFWcursorenterfun ContextHelper::setCursorEnterCallback(GLFWwindow* window, GLFWcursorenterfun callback)
+    {
+        return glfwSetCursorEnterCallback(window, callback);
+    }
+
     GLFWwindowclosefun ContextHelper::setWindowCloseCallback(GLFWwindow* window, GLFWwindowclosefun callback)
     {
         return glfwSetWindowCloseCallback(window, callback);

@@ -42,6 +42,10 @@ namespace args::application
         static GLFWkeyfun setKeyCallback(GLFWwindow* window, GLFWkeyfun callback);
         static GLFWcharfun setCharCallback(GLFWwindow* window, GLFWcharfun callback);
         static GLFWcursorposfun setCursorPosCallback(GLFWwindow* window, GLFWcursorposfun callback);
+        static GLFWmousebuttonfun setMouseButtonCallback(GLFWwindow* window, GLFWmousebuttonfun callback);
+        static GLFWscrollfun setScrollCallback(GLFWwindow* window, GLFWscrollfun callback);
+        static GLFWdropfun setDropCallback(GLFWwindow* window, GLFWdropfun callback);
+        static GLFWcursorenterfun setCursorEnterCallback(GLFWwindow* window, GLFWcursorenterfun callback);
         static GLFWwindowclosefun setWindowCloseCallback(GLFWwindow* window, GLFWwindowclosefun callback);
         static GLFWwindowposfun setWindowPosCallback(GLFWwindow* window, GLFWwindowposfun callback);
         static GLFWwindowsizefun setWindowSizeCallback(GLFWwindow* window, GLFWwindowsizefun callback);

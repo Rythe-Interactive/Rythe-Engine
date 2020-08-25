@@ -255,9 +255,13 @@ namespace args::application
                 ContextHelper::setWindowMaximizeCallback(win, &WindowSystem::onWindowMaximize);
                 ContextHelper::setFramebufferSizeCallback(win, &WindowSystem::onWindowFrameBufferResize);
                 ContextHelper::setWindowContentScaleCallback(win, &WindowSystem::onWindowContentRescale);
+                ContextHelper::setDropCallback(win, &WindowSystem::onItemDroppedInWindow);
+                ContextHelper::setCursorEnterCallback(win, &WindowSystem::onMouseEnterWindow);
                 ContextHelper::setKeyCallback(win, &WindowSystem::onKeyInput);
                 ContextHelper::setCharCallback(win, &WindowSystem::onCharInput);
                 ContextHelper::setCursorPosCallback(win, &WindowSystem::onMouseMoved);
+                ContextHelper::setMouseButtonCallback(win, &WindowSystem::onMouseButton);
+                ContextHelper::setScrollCallback(win, &WindowSystem::onMouseScroll);
             }
 
             m_requests.clear();
