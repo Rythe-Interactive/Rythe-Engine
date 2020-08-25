@@ -31,12 +31,12 @@ namespace args::core
 	private:
 		std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<>> m_modules;
 
-		ecs::EcsRegistry m_ecs;
 		events::EventBus m_eventbus;
+        ecs::EcsRegistry m_ecs;
 		scheduling::Scheduler m_scheduler;
 
 	public:
-		Engine() : m_modules(), m_ecs(), m_eventbus(), m_scheduler(&m_eventbus) {}
+		Engine() : m_modules(), m_eventbus(), m_ecs(&m_eventbus), m_scheduler(&m_eventbus) {}
 
 		~Engine()
 		{

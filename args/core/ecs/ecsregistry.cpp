@@ -3,6 +3,8 @@
 #include <core/ecs/component_container.hpp>
 #include <core/ecs/component_handle.hpp>
 
+#include <core/events/eventbus.hpp>
+
 namespace args::core::ecs
 {
 	// 2 because the world entity is 1 and 0 is invalid_id
@@ -41,7 +43,7 @@ namespace args::core::ecs
 			recursiveDestroyEntityInternal(child);
 	}
 
-	EcsRegistry::EcsRegistry() : m_families(), m_entityData(), m_entities(), m_queryRegistry(*this)
+	EcsRegistry::EcsRegistry(events::EventBus* eventBus) : m_families(), m_entityData(), m_entities(), m_queryRegistry(*this), m_eventBus(eventBus)
 	{
 		// Create world entity.
 		m_entityData.emplace(world_entity_id);

@@ -19,6 +19,7 @@
 
 #include <vector>
 #include <functional>
+#include <core/types/primitives.hpp>
 
 namespace args::core
 {
@@ -246,6 +247,11 @@ namespace args::core
 			return m_invocationList.size() < 1;
 		}
 
+        size_type size() const
+        {
+            return m_invocationList.size();
+        }
+
 		bool operator ==(void* ptr) const
 		{
 			return (ptr == nullptr) && isNull();
@@ -254,8 +260,6 @@ namespace args::core
 		{
 			return (ptr != nullptr) || (!isNull());
 		}
-
-		size_t size() const { return m_invocationList.size(); }
 
 		bool operator ==(const multicast_delegate& other) const
 		{

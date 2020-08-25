@@ -9,17 +9,6 @@
 
 namespace args::application
 {
-    struct window_request
-    {
-        math::ivec2 size;
-        cstring name;
-        GLFWmonitor* monitor;
-        GLFWwindow* share;
-        int swapInterval;
-        bool makeCurrent;
-        std::vector<std::pair<int, int>>* hints;
-    };
-
     struct window
     {
         window(GLFWwindow* ptr) : handle(ptr) {}

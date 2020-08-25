@@ -12,9 +12,14 @@ namespace args::application
         {
             addProcessChain("Rendering");
             addProcessChain("Input");
-            reportComponentType<window_request>();
             reportComponentType<window>();
             reportSystem<WindowSystem>();
         }
+
+        virtual priority_type priority() override
+        {
+            return 10;
+        }
+
     };
 }

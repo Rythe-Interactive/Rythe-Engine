@@ -14,182 +14,194 @@ namespace args::application
     private:
         inline static sparse_map<GLFWwindow*, ecs::component_handle<window>> m_windowComponents;
         inline static sparse_map<GLFWwindow*, events::EventBus*> m_windowEventBus;
-        inline static async::readonly_rw_spinlock creationLock;
-        
-        ecs::EntityQuery windowQuery;
-        bool exit = false;
+        inline static async::readonly_rw_spinlock m_creationLock;
+
+        ecs::EntityQuery m_windowQuery;
+        bool m_exit = false;
+
+        async::readonly_rw_spinlock m_requestLock;
+        std::vector<window_request> m_requests;
 
         template<typename event_type, typename... Args>
-        static void raiseWindowEvent(GLFWwindow* win, Args&&... args)
+        static void raiseWindowEvent(GLFWwindow* window, Args&&... args)
         {
-            if (m_windowEventBus.contains(win))
-                m_windowEventBus[win]->raiseEvent<event_type>(args...);
+            if (m_windowEventBus.contains(window))
+                m_windowEventBus[window]->raiseEvent<event_type>(args...);
         }
 
-        static void closeWindow(GLFWwindow* win)
+        static void closeWindow(GLFWwindow* window)
         {
             if (!ContextHelper::initialized())
                 return;
 
             {
-                async::readwrite_guard guard(creationLock);
+                async::readwrite_guard guard(m_creationLock);
 
-                auto handle = m_windowComponents[win];
+                auto handle = m_windowComponents[window];
 
                 if (handle.valid())
                 {
-                    raiseWindowEvent<window_close>(win, m_windowComponents[win]);
+                    raiseWindowEvent<window_close>(window, m_windowComponents[window]);
 
-                    if (!ContextHelper::windowShouldClose(win))
+                    if (!ContextHelper::windowShouldClose(window))
                         return;
 
-                    handle.write(window());
+                    handle.write(application::window());
 
                     id_type ownerId = handle.entity;
 
                     handle.destroy();
-                    m_windowComponents.erase(win);
+                    m_windowComponents.erase(window);
 
                     if (ownerId == world_entity_id)
                     {
-                        raiseWindowEvent<events::exit>(win);
+                        raiseWindowEvent<events::exit>(window);
                     }
 
-                    m_windowEventBus.erase(win);
+                    m_windowEventBus.erase(window);
                 }
             }
 
-            ContextHelper::destroyWindow(win);
+            ContextHelper::destroyWindow(window);
         }
 
-        static void onWindowMoved(GLFWwindow* win, int x, int y)
+        static void onWindowMoved(GLFWwindow* window, int x, int y)
         {
-            if (m_windowComponents.contains(win))
-                raiseWindowEvent<window_move>(win, m_windowComponents[win], math::ivec2(x, y));
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<window_move>(window, m_windowComponents[window], math::ivec2(x, y));
         }
 
-        static void onWindowResize(GLFWwindow* win, int width, int height)
+        static void onWindowResize(GLFWwindow* window, int width, int height)
         {
-            if (m_windowComponents.contains(win))
-                raiseWindowEvent<window_resize>(win, m_windowComponents[win], math::ivec2(width, height));
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<window_resize>(window, m_windowComponents[window], math::ivec2(width, height));
         }
 
-        static void onWindowRefresh(GLFWwindow* win)
+        static void onWindowRefresh(GLFWwindow* window)
         {
-            if (m_windowComponents.contains(win))
-                raiseWindowEvent<window_refresh>(win, m_windowComponents[win]);
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<window_refresh>(window, m_windowComponents[window]);
         }
 
-        static void onWindowFocus(GLFWwindow* win, int focused)
+        static void onWindowFocus(GLFWwindow* window, int focused)
         {
-            if (m_windowComponents.contains(win))
-                raiseWindowEvent<window_focus>(win, m_windowComponents[win], focused);
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<window_focus>(window, m_windowComponents[window], focused);
         }
 
-        static void onWindowIconify(GLFWwindow* win, int iconified)
+        static void onWindowIconify(GLFWwindow* window, int iconified)
         {
-            if (m_windowComponents.contains(win))
-                raiseWindowEvent<window_iconified>(win, m_windowComponents[win], iconified);
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<window_iconified>(window, m_windowComponents[window], iconified);
         }
 
-        static void onWindowMaximize(GLFWwindow* win, int maximized)
+        static void onWindowMaximize(GLFWwindow* window, int maximized)
         {
-            if (m_windowComponents.contains(win))
-                raiseWindowEvent<window_maximized>(win, m_windowComponents[win], maximized);
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<window_maximized>(window, m_windowComponents[window], maximized);
         }
 
-        static void onWindowFrameBufferResize(GLFWwindow* win, int width, int height)
+        static void onWindowFrameBufferResize(GLFWwindow* window, int width, int height)
         {
-            if (m_windowComponents.contains(win))
-                raiseWindowEvent<window_framebuffer_resize>(win, m_windowComponents[win], math::ivec2(width, height));
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<window_framebuffer_resize>(window, m_windowComponents[window], math::ivec2(width, height));
         }
 
-        static void onWindowContentRescale(GLFWwindow* win, float xscale, float yscale)
+        static void onWindowContentRescale(GLFWwindow* window, float xscale, float yscale)
         {
-            if (m_windowComponents.contains(win))
-                raiseWindowEvent<window_content_rescale>(win, m_windowComponents[win], math::vec2(xscale, xscale));
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<window_content_rescale>(window, m_windowComponents[window], math::fvec2(xscale, xscale));
         }
 
-        static void onKeyInput(GLFWwindow* win, int key, int scancode, int action, int mods)
+        static void onItemDroppedInWindow(GLFWwindow* window, int count, const char** paths)
         {
-            if (m_windowComponents.contains(win))
-                raiseWindowEvent<key_input>(win, m_windowComponents[win], key, scancode, action, mods);
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<window_item_dropped>(window, m_windowComponents[window], count, paths);
         }
 
-        static void onCharInput(GLFWwindow* win, uint codepoint)
+        static void onMouseEnterWindow(GLFWwindow* window, int entered)
         {
-            if (m_windowComponents.contains(win))
-                raiseWindowEvent<char_input>(win, m_windowComponents[win], codepoint);
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<mouse_enter_window>(window, m_windowComponents[window], entered);
         }
 
-        static void onMouseMoved(GLFWwindow* win, double xpos, double ypos)
+        static void onKeyInput(GLFWwindow* window, int key, int scancode, int action, int mods)
         {
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<key_input>(window, m_windowComponents[window], key, scancode, action, mods);
+        }
 
+        static void onCharInput(GLFWwindow* window, uint codepoint)
+        {
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<char_input>(window, m_windowComponents[window], codepoint);
+        }
+
+        static void onMouseMoved(GLFWwindow* window, double xpos, double ypos)
+        {
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<mouse_moved>(window, m_windowComponents[window], math::dvec2(xpos, ypos));
         }
 
         static void onMouseButton(GLFWwindow* window, int button, int action, int mods)
         {
-
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<mouse_button>(window, m_windowComponents[window], button, action, mods);
         }
 
         static void onMouseScroll(GLFWwindow* window, double xoffset, double yoffset)
         {
-
-        }
-
-        static void onMouseEnter(GLFWwindow* window, int entered)
-        {
-
-        }
-
-        static void onItemDropped(GLFWwindow* window, int count, const char** paths)
-        {
-
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<mouse_scrolled>(window, m_windowComponents[window], math::dvec2(xoffset, yoffset));
         }
 
         void onExit(events::exit* event)
         {
-            async::readwrite_guard guard(creationLock);
-            for (auto entity : windowQuery)
+            async::readwrite_guard guard(m_creationLock);
+            for (auto entity : m_windowQuery)
             {
                 closeWindow(entity.get_component<window>().read(std::memory_order_relaxed));
             }
 
-            exit = true;
+            m_exit = true;
             ContextHelper::terminate();
+        }
+
+        void onWindowRequest(window_request* windowRequest)
+        {
+            if (windowRequest->entityId)
+            {
+                async::readwrite_guard guard(m_requestLock);
+                m_requests.push_back(*windowRequest);
+            }
         }
 
     public:
         virtual void setup()
         {
-            windowQuery = createQuery<window>();
+            m_windowQuery = createQuery<window>();
+            bindToEvent<events::exit, &WindowSystem::onExit>();
+            bindToEvent<window_request, &WindowSystem::onWindowRequest>();
 
-            auto handle = m_ecs->world.add_component<window_request>();
-            handle.write({ {0,0}, nullptr, nullptr, nullptr, 1, true, nullptr }, std::memory_order_relaxed);
+            raiseEvent<window_request>(world_entity_id);
 
             createProcess<&WindowSystem::refreshWindows>("Rendering");
             createProcess<&WindowSystem::handleWindowEvents>("Input");
-
-            bindToEvent<events::exit, &WindowSystem::onExit>();
         }
 
         void createWindows()
         {
-            static auto query = createQuery<window_request>();
-            if (query.size())
-                std::cout << query.size() << " window requests" << std::endl;
+            if (!ContextHelper::initialized() && !m_exit)
+                if (!ContextHelper::init())
+                    return;
 
-            for (auto entity : query)
+            async::readwrite_guard guard(m_requestLock);
+            for (auto& request : m_requests)
             {
-                window_request request = entity.get_component<window_request>().read();
-                entity.remove_component<window_request>();
-
-                if (request.hints)
+                if (request.hints.size())
                 {
-                    for (auto& [hint, value] : *request.hints)
+                    for (auto& [hint, value] : request.hints)
                         ContextHelper::windowHint(hint, value);
-
-                    delete request.hints;
                 }
                 else
                 {
@@ -222,21 +234,17 @@ namespace args::application
                 ecs::component_handle<window> handle;
 
                 {
-                    async::readwrite_guard guard(creationLock);
+                    async::readwrite_guard guard(m_creationLock);
                     std::cout << "creating a window" << std::endl;
-                    handle = entity.add_component<window>();
+                    handle = m_ecs->createComponent<window>(request.entityId);
                     handle.write(win, std::memory_order_relaxed);
                 }
 
                 m_windowComponents.insert(win, handle);
                 m_windowEventBus.insert(win, m_eventBus);
 
-                window context = ContextHelper::getCurrentContext();
-
                 ContextHelper::makeContextCurrent(win);
                 ContextHelper::swapInterval(request.swapInterval);
-                if (!request.makeCurrent)
-                    ContextHelper::makeContextCurrent(context);//should be moved to rendering thread.
 
                 ContextHelper::setWindowCloseCallback(win, &WindowSystem::closeWindow);
                 ContextHelper::setWindowPosCallback(win, &WindowSystem::onWindowMoved);
@@ -249,7 +257,10 @@ namespace args::application
                 ContextHelper::setWindowContentScaleCallback(win, &WindowSystem::onWindowContentRescale);
                 ContextHelper::setKeyCallback(win, &WindowSystem::onKeyInput);
                 ContextHelper::setCharCallback(win, &WindowSystem::onCharInput);
+                ContextHelper::setCursorPosCallback(win, &WindowSystem::onMouseMoved);
             }
+
+            m_requests.clear();
         }
 
         void refreshWindows(time::time_span<fast_time> deltaTime)
@@ -257,9 +268,9 @@ namespace args::application
             if (!ContextHelper::initialized())
                 return;
 
-            async::readonly_guard guard(creationLock);
+            async::readonly_guard guard(m_creationLock);
 
-            for (auto entity : windowQuery)
+            for (auto entity : m_windowQuery)
             {
                 window win = entity.get_component<window>().read(std::memory_order_relaxed);
                 ContextHelper::swapBuffers(win);
@@ -268,11 +279,10 @@ namespace args::application
 
         void handleWindowEvents(time::time_span<fast_time> deltaTime)
         {
-            if (!ContextHelper::initialized() && !exit)
-                if (!ContextHelper::init())
-                    return;
-
             createWindows();
+
+            if (!ContextHelper::initialized())
+                return;
 
             ContextHelper::pollEvents();
         }

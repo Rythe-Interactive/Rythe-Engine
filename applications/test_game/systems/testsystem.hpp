@@ -1,5 +1,6 @@
 #pragma once
 #include <core/core.hpp>
+#include <application/application.hpp>
 #include <core/math/math.hpp>
 using namespace args;
 
@@ -26,12 +27,10 @@ public:
 	{
 		auto ent = m_ecs->createEntity();
 		ent.add_component<sah>();
-        auto handle = ent.add_component<app::window_request>();
-        handle.write({{600, 300}, "This is a test window!", nullptr, nullptr, 1, true, nullptr});
+        raiseEvent<application::window_request>(ent, math::ivec2(600, 300), "This is a test window!");
 
         auto ent2 = m_ecs->createEntity();
-        auto handle2 = ent2.add_component<app::window_request>();
-        handle2.write({ {600, 300}, "This is a test window2!" });
+        raiseEvent<application::window_request>(ent2, math::ivec2(600, 300), "This is a test window2!");
 
 		createProcess<&TestSystem::update>("Update");
 		createProcess<&TestSystem::differentThread>("TestChain");

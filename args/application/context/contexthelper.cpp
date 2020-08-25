@@ -11,7 +11,7 @@ namespace args::application
     bool ContextHelper::init()
     {
         glfwSetErrorCallback([](int code, cstring desc)
-            { 
+            {
                 std::cout << "GLFW ERROR " << code << ": " << desc << std::endl;
             });
         bool success = glfwInit();
@@ -95,7 +95,8 @@ namespace args::application
 
     void ContextHelper::destroyWindow(GLFWwindow* window)
     {
-        glfwDestroyWindow(window);
+        if (initialized())
+            glfwDestroyWindow(window);
     }
 
     math::ivec2 ContextHelper::getFramebufferSize(GLFWwindow* window)
@@ -107,7 +108,8 @@ namespace args::application
 
     void ContextHelper::swapBuffers(GLFWwindow* window)
     {
-        glfwSwapBuffers(window);
+        if (initialized())
+            glfwSwapBuffers(window);
     }
 
     void ContextHelper::swapInterval(int interval)
