@@ -1,5 +1,5 @@
 #include <utility>
-
+#include <core/platform/platform.hpp>
 
 #pragma once
 
@@ -13,12 +13,12 @@ namespace args::core::iterator
 		{
 		}
 
-		[[nodiscard]] auto& begin() const
+		A_NODISCARD auto& begin() const
 		{
 			return range.first;
 		}
 
-		[[nodiscard]] auto& end() const
+		A_NODISCARD auto& end() const
 		{
 			return range.second;
 		}

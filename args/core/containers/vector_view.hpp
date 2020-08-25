@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <core/platform/platform.hpp>
 
 /**
  * @file vector_view.hpp
