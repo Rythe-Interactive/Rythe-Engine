@@ -3,6 +3,7 @@
 namespace args::application
 {
     std::atomic_bool ContextHelper::m_initialized;
+    atomic_sparse_map<GLFWwindow*, bool> ContextHelper::m_windowInitialized;
 
     bool ContextHelper::initialized()
     {
@@ -14,9 +15,11 @@ namespace args::application
             {
                 std::cout << "GLFW ERROR " << code << ": " << desc << std::endl;
             });
+
         bool success = glfwInit();
         if (success)
             m_initialized.store(true, std::memory_order_release);
+
         return success;
     }
 
@@ -53,12 +56,42 @@ namespace args::application
 
     GLFWwindow* ContextHelper::createWindow(math::ivec2 dim, const char* title, GLFWmonitor* monitor, GLFWwindow* share)
     {
-        return glfwCreateWindow(dim.x, dim.y, title, monitor, share);
+        GLFWwindow* window = glfwCreateWindow(dim.x, dim.y, title, monitor, share);
+
+        auto* context = glfwGetCurrentContext();
+
+        glfwMakeContextCurrent(window);
+
+        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+        {
+            std::cout << "Failed to load OpenGL" << std::endl;
+        }
+
+        std::cout << "loaded OpenGL version: " << GLVersion.major << '.' << GLVersion.minor << std::endl;
+
+        glfwMakeContextCurrent(context);
+
+        return window;
     }
 
     GLFWwindow* ContextHelper::createWindow(int width, int height, const char* title, GLFWmonitor* monitor, GLFWwindow* share)
     {
-        return glfwCreateWindow(width, height, title, monitor, share);
+        GLFWwindow* window = glfwCreateWindow(width, height, title, monitor, share);
+
+        auto* context = glfwGetCurrentContext();
+
+        glfwMakeContextCurrent(window);
+
+        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+        {
+            std::cout << "Failed to load OpenGL" << std::endl;
+        }
+
+        std::cout << "loaded OpenGL version: " << GLVersion.major << '.' << GLVersion.minor << std::endl;
+
+        glfwMakeContextCurrent(context);
+
+        return window;
     }
 
     void ContextHelper::setWindowShouldClose(GLFWwindow* window, int value)

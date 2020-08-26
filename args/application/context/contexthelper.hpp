@@ -3,6 +3,7 @@
 #include <core/core.hpp>
 #include <core/platform/args_library.hpp>
 
+#include <application/context/detail/glad/glad.h>
 #include <glfw/glfw3.h>
 
 namespace args::application
@@ -11,6 +12,8 @@ namespace args::application
     {
     private:
         static std::atomic_bool m_initialized;
+
+        static atomic_sparse_map<GLFWwindow*, bool> m_windowInitialized;
 
     public:
         ContextHelper() = delete;

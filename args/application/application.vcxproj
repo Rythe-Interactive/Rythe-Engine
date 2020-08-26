@@ -12,10 +12,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="context\contexthelper.cpp" />
+    <ClCompile Include="context\detail\glad\glad.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="application.hpp" />
     <ClInclude Include="context\contexthelper.hpp" />
+    <ClInclude Include="context\detail\glad\glad.h" />
+    <ClInclude Include="context\detail\KHR\khrplatform.h" />
     <ClInclude Include="events\inputevents.hpp" />
     <ClInclude Include="events\windowevents.hpp" />
     <ClInclude Include="module\applicationmodule.hpp" />
