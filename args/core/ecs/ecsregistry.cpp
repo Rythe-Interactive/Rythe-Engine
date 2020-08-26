@@ -3,6 +3,8 @@
 #include <core/ecs/component_container.hpp>
 #include <core/ecs/component_handle.hpp>
 
+#include <core/events/eventbus.hpp>
+
 namespace args::core::ecs
 {
 	// 2 because the world entity is 1 and 0 is invalid_id
@@ -41,11 +43,12 @@ namespace args::core::ecs
 			recursiveDestroyEntityInternal(child);
 	}
 
-	EcsRegistry::EcsRegistry() : m_families(), m_entityData(), m_entities(), m_queryRegistry(*this)
+	EcsRegistry::EcsRegistry(events::EventBus* eventBus) : m_families(), m_entityData(), m_entities(), m_queryRegistry(*this), m_eventBus(eventBus)
 	{
 		// Create world entity.
-		m_entityData.emplace(1);
-		m_entities.emplace(1, 1, this);
+		m_entityData.emplace(world_entity_id);
+		m_entities.emplace(world_entity_id, world_entity_id, this);
+        world = entity_handle(world_entity_id, this);
 	}
 
 	inline component_container_base* EcsRegistry::getFamily(id_type componentTypeId)
@@ -63,7 +66,7 @@ namespace args::core::ecs
 		if (!validateEntity(entityId))
 			throw args_entity_not_found_error;
 
-		return component_handle_base(entityId, *this);
+		return component_handle_base(entityId, this);
 	}
 
 	inline component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId)
@@ -78,9 +81,9 @@ namespace args::core::ecs
 			m_entityData[entityId].components.insert(componentTypeId); // Is fine because the lock only locks order changes in the container, not the values themselves.
 		}
 
-		m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
+		m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, false);
 
-		return component_handle_base(entityId, *this);
+		return component_handle_base(entityId, this);
 	}
 
 	inline void EcsRegistry::destroyComponent(id_type entityId, id_type componentTypeId)

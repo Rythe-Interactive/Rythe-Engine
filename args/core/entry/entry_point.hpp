@@ -29,7 +29,7 @@ extern void reportModules(args::core::Engine* engine);
 
 	int main(int argc, char** argv)
 	{
-	#if (!defined(ARGS_DEBUG) && defined(ARGS_WINDOWS))
+	#if (!defined(ARGS_DEBUG) && defined(ARGS_WINDOWS) && !defined(ARGS_KEEP_CONSOLE))
 		::ShowWindow(::GetConsoleWindow(), SW_HIDE);
 	#endif
 
@@ -103,14 +103,15 @@ extern void reportModules(args::core::Engine* engine);
 			std::cout << "==============================" << std::endl;
 			engine.run();
 
-	#if defined(ARGS_DEBUG)
-			std::cin.ignore().get();
+	#if defined(ARGS_DEBUG) || defined(ARGS_KEEP_CONSOLE)
+			std::cout << "Press any key to exit." << std::endl;
+			std::cin.ignore();
 	#endif
 
 		}
 		catch (const args::core::exception& e)
 		{
-	#if defined(ARGS_WINDOWS)
+	#if (defined(ARGS_WINDOWS) && !defined(ARGS_KEEP_CONSOLE))
 			::ShowWindow(::GetConsoleWindow(), SW_SHOW);
 	#endif
 
@@ -123,12 +124,13 @@ extern void reportModules(args::core::Engine* engine);
 	#if defined(ARGS_DEBUG)
 			throw e;
 	#else
-			std::cin.ignore().get();
+			std::cout << "Press any key to exit." << std::endl;
+			std::cin.ignore();
 	#endif
 		}
 		catch (const std::exception& e)
 		{
-	#if defined(ARGS_WINDOWS)
+	#if (defined(ARGS_WINDOWS) && !defined(ARGS_KEEP_CONSOLE))
 			::ShowWindow(::GetConsoleWindow(), SW_SHOW);
 	#endif
 
@@ -137,7 +139,8 @@ extern void reportModules(args::core::Engine* engine);
 	#if defined(ARGS_DEBUG)
 			throw e;
 	#else
-			std::cin.ignore().get();
+			std::cout << "Press any key to exit." << std::endl;
+			std::cin.ignore();
 	#endif
 		}
 

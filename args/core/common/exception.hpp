@@ -140,7 +140,16 @@
  * @brief Args invalid system type exception with message, file name, line number, and function name.
  */
 #define args_unknown_system_msg(msg) args::core::unknown_system_error(msg, __FILE__, __LINE__, __FUNC__)
+
+/**@def args_fs_error
+ * @brief Args filesystem Error with message, signifies something went wrong with
+ *        requesting a resource from the virtual filesystem
+ * @note catch args::core::fs_error if you need to filter for this exception
+ */
+#define args_fs_error(msg) args::core::fs_error(msg,__FILE__,__LINE__,__FUNC__)
 #pragma endregion
+
+
 
 namespace args::core
 {
@@ -256,5 +265,15 @@ namespace args::core
 		unknown_system_error(cstring msg, cstring file, uint line, cstring func) : invalid_type_error(msg, file, line, func) {}
 	};
 #pragma endregion
+
+#pragma region filesystem
+    class fs_error : public exception
+    {
+    public:
+        fs_error(cstring file,uint line,cstring func) : exception("Filesystem Adapter failed", file,line,func) {}
+        fs_error(cstring msg,cstring file,uint line,cstring func) : exception(msg,file,line,func) {}
+    };
+#pragma endregion 
+
 
 }
