@@ -77,7 +77,8 @@ namespace detail
 #		ifdef GLM_FORCE_QUAT_DATA_WXYZ
 			return (&w)[i];
 #		else
-			return (&x)[i];
+			return data.data[i];
+			//return (&x)[i];
 #		endif
 	}
 
@@ -88,7 +89,8 @@ namespace detail
 #		ifdef GLM_FORCE_QUAT_DATA_WXYZ
 			return (&w)[i];
 #		else
-			return (&x)[i];
+			return data.data[i];
+			//return (&x)[i];
 #		endif
 	}
 
