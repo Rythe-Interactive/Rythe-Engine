@@ -52,7 +52,7 @@ namespace args::core
             id_type id = nameHash(name);
 
             std::unique_ptr<scheduling::Process> process = std::make_unique<scheduling::Process>(name, id, interval);
-            process->setOperation(operation);
+            process->setOperation(std::forward<delegate<void(time::time_span<fast_time>)>>(operation));
             m_processes.insert(id, std::move(process));
 
             m_scheduler->hookProcess(processChainName, m_processes[id].get());
@@ -118,7 +118,7 @@ namespace args::core
         template <typename event_type, void(SelfType::* func_type)(event_type*), inherits_from<event_type, events::event<event_type>> = 0>
         void bindToEvent()
         {
-            m_eventBus->bindToEvent<event_type>(delegate<void(event_type*)>::create<SelfType, func_type>((SelfType*)this));
+            m_eventBus->bindToEvent<event_type>(delegate<void(event_type*)>::template create<SelfType, func_type>(static_cast<SelfType*>(this)));
         }
 
         template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
