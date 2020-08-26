@@ -12,6 +12,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: get gl
+      run : sudo apt-get install -yqq libgl1-mesa-dev
+
     - name: get premake5
       run: |
        wget -qO- https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-linux.tar.gz | \
