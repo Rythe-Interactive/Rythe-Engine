@@ -130,6 +130,7 @@
     <ClInclude Include="engine\system.hpp" />
     <ClInclude Include="entry\entry_point.hpp" />
     <ClInclude Include="filesystem\artifact_cache.hpp" />
+    <ClInclude Include="filesystem\assetimporter.hpp" />
     <ClInclude Include="filesystem\basic_resolver.hpp" />
     <ClInclude Include="filesystem\detail\meta.hpp" />
     <ClInclude Include="events\defaultevents.hpp" />

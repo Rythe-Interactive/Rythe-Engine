@@ -43,6 +43,7 @@ namespace args::core
 #define default_priority 0
 
 	using id_type = uint_max;
+
 #define invalid_id 0
 
 	using hours = time32;

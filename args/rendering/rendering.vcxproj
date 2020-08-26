@@ -11,7 +11,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="delete_this.cpp" />
+    <ClCompile Include="data\importers\mesh_importers.cpp" />
+    <ClCompile Include="data\mesh.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="data\detail\tiny_obj_loader.h" />
+    <ClInclude Include="data\importers\mesh_importers.hpp" />
+    <ClInclude Include="data\mesh.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

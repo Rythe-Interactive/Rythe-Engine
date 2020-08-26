@@ -8,6 +8,9 @@
 
 namespace args::application
 {
+    using gl_id = GLuint;
+    using gl_location = GLint;
+
     class ARGS_API ContextHelper
     {
     private:

@@ -369,6 +369,7 @@
     <ClInclude Include="math\glm\vec4.hpp" />
     <ClInclude Include="math\glm\vector_relational.hpp" />
     <ClInclude Include="platform\args_library.hpp" />
+    <ClInclude Include="filesystem\assetimporter.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">
