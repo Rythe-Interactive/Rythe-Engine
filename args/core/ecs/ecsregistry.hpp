@@ -6,6 +6,7 @@
 #include <core/ecs/component_container.hpp>
 #include <core/ecs/queryregistry.hpp>
 #include <core/ecs/entityquery.hpp>
+#include <core/ecs/entity_handle.hpp>
 
 #include <utility>
 #include <memory>
@@ -16,7 +17,7 @@
 
 namespace args::core::ecs
 {
-	class entity_handle;
+#define world_entity_id 1
 
 	class component_handle_base;
 
@@ -51,15 +52,18 @@ namespace args::core::ecs
 		sparse_map<id_type, entity_handle> m_entities;
 
 		QueryRegistry m_queryRegistry;
+        events::EventBus* m_eventBus;
 
 		/**@brief Internal function for recursively destroying all children and children of children etc.
 		 */
 		void recursiveDestroyEntityInternal(id_type entityId);
 
 	public:
+        entity_handle world;
+
 		/**@brief Constructor initializes everything for the ECS and creates world entity.
 		 */
-		EcsRegistry();
+		EcsRegistry(events::EventBus* eventBus);
 
 		/**@brief Reports component type to the registry so that it can be stored managed and recognized as a component.
 		 * @tparam component_type Type of struct you with to add as a component.
@@ -74,7 +78,7 @@ namespace args::core::ecs
 		{
 			async::readwrite_guard guard(m_familyLock);
 			if (!m_families.contains(typeHash<component_type>()))
-				m_families[typeHash<component_type>()] = std::make_unique<component_container<component_type>>();
+				m_families[typeHash<component_type>()] = std::make_unique<component_container<component_type>>(this, m_eventBus);
 		}
 
 		/**@brief Get component storage of a certain type.
@@ -125,7 +129,7 @@ namespace args::core::ecs
 		template<typename component_type>
 		component_handle<component_type> createComponent(id_type entityId)
 		{
-			return force_value_cast<component_handle<component_type>>(createComponent(entityId, typeHash<component_type>()));
+            return force_value_cast<component_handle<component_type>>(createComponent(entityId, typeHash<component_type>()));
 		}
 
 		/**@brief Create component of a certain type attached to a certain entity.

@@ -16,25 +16,25 @@ class Test {
 
 
 	/**@class basic_resource
-	 * @brief a handle for a basic resource type from which elements can serialize and deserialize from
-	 *        ideal for storing elements loaded from disk
+	 * @brief A handle for a basic resource type from which elements can serialize and deserialize from
+	 *        ideal for storing elements loaded from disk.
 	 */
 	class basic_resource
 	{
 	public:
 
-		/**@brief constructor that keeps the container empty
-		 * @param [in] 1 must be nullptr, used to signal that the resource should be kept empty
+		/**@brief Constructor that keeps the container empty.
+		 * @param [in] placeholder Must be nullptr, used to signal that the resource should be kept empty.
 		 */
-		explicit basic_resource(nullptr_t) : m_container{}{}
+		explicit basic_resource(std::nullptr_t placeholder) : m_container{}{}
 
-		/**@brief constructs a basic resource from a args::core::byte_vec
-		 * @param [in] v the resource from which the resource is created (copy operation/move)
+		/**@brief Constructs a basic resource from a args::core::byte_vec.
+		 * @param [in] v The resource from which the resource is created (copy operation/move).
 		 */
 		explicit basic_resource(byte_vec v) : m_container(std::move(v)) {}
 
-		/**@brief constructs a basic resource from a std::string
-		 * @param [in] v the resource from which the resource is created (copy-assign operation)
+		/**@brief Constructs a basic resource from a std::string
+		 * @param [in] v The resource from which the resource is created (copy-assign operation)
 		 */
 		explicit basic_resource(const std::string_view& v) : basic_resource(nullptr)
 		{
@@ -49,7 +49,7 @@ class Test {
 
 		//stl operators
 
-		/**@brief gets an iterator to the first element of the container
+		/**@brief Gets an iterator to the first element of the container.
 		 * @return iterator to first element
 		 */
 		A_NODISCARD auto begin() noexcept
@@ -57,7 +57,7 @@ class Test {
 			return m_container.begin();
 		}
 		
-		/**@brief gets an iterator to the first element of the container
+		/**@brief Gets an iterator to the first element of the container.
 		 * @return iterator to first element
 		 */
 		A_NODISCARD auto begin() const noexcept
@@ -65,7 +65,7 @@ class Test {
 			return m_container.begin();
 		}
 
-		/**@brief gets an iterator to the last element + 1 of the container
+		/**@brief Gets an iterator to the last element + 1 of the container.
 		 * @return iterator to first element
 		 */
 		A_NODISCARD auto end() noexcept
@@ -73,7 +73,7 @@ class Test {
 			return m_container.end();
 		}
 
-		/**@brief gets an iterator to the last element + 1 of the container
+		/**@brief Gets an iterator to the last element + 1 of the container.
 		 * @return iterator to first element
 		 */
 		A_NODISCARD auto end() const noexcept
@@ -81,7 +81,7 @@ class Test {
 			return m_container.end();
 		}
 
-		/**@brief gets a pointer to the data of the container
+		/**@brief Gets a pointer to the data of the container.
 		 * @return byte* to raw data
 		 */
 		A_NODISCARD auto data() noexcept
@@ -89,7 +89,7 @@ class Test {
 			return m_container.data();
 		}
 
-		/**@brief gets a pointer to the data of the container
+		/**@brief Gets a pointer to the data of the container.
 		 * @return byte* to raw data
 		 */
 		A_NODISCARD auto data() const noexcept
@@ -97,7 +97,7 @@ class Test {
 			return m_container.data();
 		}
 
-		/**@brief gets the size of the container
+		/**@brief Gets the size of the container.
 		 * @return size_t to the size of container
 		 */
 		A_NODISCARD auto size() const noexcept
@@ -105,7 +105,7 @@ class Test {
 			return m_container.size();
 		}
 
-		/**@brief checks if the container is empty
+		/**@brief Checks if the container is empty.
 		 * @return bool, true when empty
 		 */
 		A_NODISCARD auto empty() const noexcept
@@ -113,7 +113,7 @@ class Test {
 			return m_container.empty();
 		}
 
-		/**@brief gets the container element
+		/**@brief Gets the container element
 		 * @return args::core::byte_vec 
 		 */
 		A_NODISCARD byte_vec& get() noexcept
@@ -121,7 +121,7 @@ class Test {
 			return m_container;
 		}
 		
-		/**@brief gets the container element
+		/**@brief Gets the container element.
 		 * @return args::core::byte_vec 
 		 */
 		A_NODISCARD const byte_vec& get() const noexcept
@@ -129,8 +129,8 @@ class Test {
 			return m_container;
 		}
 
-		/**@brief string assignment operator
-		 * @param value the string you want to assign to the byte_vec
+		/**@brief String assignment operator.
+		 * @param value The string you want to assign to the byte_vec.
 		 * @return basic_resource& *this
 		 */
 		basic_resource& operator=(const std::string_view& value)
@@ -139,8 +139,8 @@ class Test {
 			return *this;
 		}
 		
-		/**@brief string conversion
-		 * @return std::string, the container converted to const char *
+		/**@brief String conversion.
+		 * @return std::string, The container converted to const char *.
 		 */
 		A_NODISCARD std::string to_string() const
 		{
@@ -149,28 +149,28 @@ class Test {
 		}
 
 
-		/**@brief generic conversion to T
+		/**@brief Generic conversion to T
 		 *
-		 * tries to convert a basic resource, for this to work T must implement a static
+		 * @note   Tries to convert a basic resource, for this to work T must implement a static
 		 *         method with signature T::from_resource(basic_resource&,const T&)
 		 *         and must be, A: trivially constructable or B: constructable via Args&&...
-		 *         and must be move or copy assignable
+		 *         and must be move or copy assignable.
 		 *
-		 * @tparam T the class you want to convert to
-		 * @param args additional construction parameters required to create T
+		 * @tparam T The class you want to convert to.
+		 * @param args Additional construction parameters required to create T.
 		 * 
 		 *         
-		 * @return T created from this resources data
+		 * @return T Created from this resources data.
 		 */
 		template <class T,class... Args>
 		A_NODISCARD T to(Args&&...args);
 
-		/**@brief generic conversion from T
+		/**@brief Generic conversion from T.
 		 *
-		 * tries to convert T to a basic resource, for this to work T must implement a static
-		 *        method with signature T::to_resource(basic_resource*)
+		 * @note  Tries to convert T to a basic resource, for this to work T must implement a static
+		 *        method with signature T::to_resource(basic_resource*).
 		 *
-		 * @param v the T you want to convert into a basic_resource
+		 * @param v The T you want to convert into a basic_resource.
 		 */
 		template <class T>
 		void from(const T& v);

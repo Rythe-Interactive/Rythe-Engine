@@ -20,13 +20,20 @@ namespace args::core::ecs
 	class ARGS_API EntityQuery
 	{
 	private:
-		QueryRegistry& m_registry;
-		EcsRegistry& m_ecsRegistry;
+		QueryRegistry* m_registry;
+		EcsRegistry* m_ecsRegistry;
 		id_type m_id;
 
 	public:
-		EntityQuery(id_type id, QueryRegistry& registry, EcsRegistry& ecsRegistry);
+		EntityQuery(id_type id, QueryRegistry* registry, EcsRegistry* ecsRegistry);
+        EntityQuery() = default;
 		~EntityQuery();
+
+        EntityQuery(EntityQuery&& other);
+        EntityQuery(const EntityQuery& other);
+
+        EntityQuery operator=(EntityQuery&& other);
+        EntityQuery operator=(const EntityQuery& other);
 
 		/**@brief Get begin iterator for entity handles to the queried entities.
 		 */
