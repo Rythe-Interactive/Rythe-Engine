@@ -70,7 +70,7 @@ Program Listing for File platform.hpp
    #define NO_MANGLING extern "C"
    
    #if defined(ARGS_WINDOWS) || defined(DOXY_INCLUDE)
-       #if defined(ARGS_INTERNAL) || defined(DOXY_INCLUDE)
+       #if (defined(ARGS_INTERNAL) && !defined(ARGS_IMPORT)) || defined(DOXY_INCLUDE)
    
            #define ARGS_API __declspec(dllexport)
        #else
@@ -78,6 +78,10 @@ Program Listing for File platform.hpp
        #endif
    #else
        #define ARGS_API __attribute__((visibility("default")))
+   #endif
+   
+   #if defined(ARGS_IMPORT)
+   #define ARGS_LIBRARY 
    #endif
    
    #define ARGS_FUNC ARGS_API ARGS_CCONV

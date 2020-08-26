@@ -1,0 +1,22 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_application_application.hpp:
+
+Program Listing for File application.hpp
+========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_application_application.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/application/application.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <application/context/contexthelper.hpp>
+   #include <application/window/window.hpp>
+   #include <application/window/windowsystem.hpp>
+   #include <application/module/applicationmodule.hpp>
+   
+   namespace args
+   {
+       namespace app = ::args::application;
+   }

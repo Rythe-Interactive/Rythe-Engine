@@ -54,13 +54,14 @@
 <span class="cp">#include</span> <span class="cpf">&lt;core/ecs/component_container.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/ecs/queryregistry.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/ecs/entityquery.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/ecs/entity_handle.hpp&gt;</span><span class="cp"></span>
 
 <span class="cp">#include</span> <span class="cpf">&lt;utility&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">ecs</span>
 <span class="p">{</span>
-    <span class="k">class</span> <span class="nc">entity_handle</span><span class="p">;</span>
+<span class="cp">#define world_entity_id 1</span>
 
     <span class="k">class</span> <span class="nc">component_handle_base</span><span class="p">;</span>
 
@@ -89,18 +90,21 @@
         <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">entity_handle</span><span class="o">&gt;</span> <span class="n">m_entities</span><span class="p">;</span>
 
         <span class="n">QueryRegistry</span> <span class="n">m_queryRegistry</span><span class="p">;</span>
+        <span class="n">events</span><span class="o">::</span><span class="n">EventBus</span><span class="o">*</span> <span class="n">m_eventBus</span><span class="p">;</span>
 
         <span class="kt">void</span> <span class="nf">recursiveDestroyEntityInternal</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">);</span>
 
     <span class="k">public</span><span class="o">:</span>
-        <span class="n">EcsRegistry</span><span class="p">();</span>
+        <span class="n">entity_handle</span> <span class="n">world</span><span class="p">;</span>
+
+        <span class="n">EcsRegistry</span><span class="p">(</span><span class="n">events</span><span class="o">::</span><span class="n">EventBus</span><span class="o">*</span> <span class="n">eventBus</span><span class="p">);</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
         <span class="kt">void</span> <span class="n">reportComponentType</span><span class="p">()</span>
         <span class="p">{</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_familyLock</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_families</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()))</span>
-                <span class="n">m_families</span><span class="p">[</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">();</span>
+                <span class="n">m_families</span><span class="p">[</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">m_eventBus</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>

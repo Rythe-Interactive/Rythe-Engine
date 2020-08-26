@@ -16,9 +16,13 @@ Program Listing for File component_container.hpp
    #include <core/platform/platform.hpp>
    #include <core/containers/atomic_sparse_map.hpp>
    #include <core/types/types.hpp>
+   #include <core/events/eventbus.hpp>
+   #include <core/events/events.hpp>
    
    namespace args::core::ecs
    {
+       class ARGS_API EcsRegistry;
+   
        class component_container_base
        {
        public:
@@ -34,7 +38,13 @@ Program Listing for File component_container.hpp
        private:
            atomic_sparse_map<id_type, component_type> components;
    
+           events::EventBus* m_eventBus;
+           EcsRegistry* m_registry;
+   
        public:
+           component_container() = default;
+           component_container(EcsRegistry* registry, events::EventBus* eventBus) : m_registry(registry), m_eventBus(eventBus) {}
+   
            virtual bool has_component(id_type entityId) override
            {
                return components.contains(entityId);
@@ -50,10 +60,12 @@ Program Listing for File component_container.hpp
            virtual void create_component(id_type entityId) override
            {
                components.emplace(entityId);
+               m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId, m_registry));
            }
    
            virtual void destroy_component(id_type entityId) override
            {
+               m_eventBus->raiseEvent<events::component_destruction<component_type>>(entity_handle(entityId, m_registry));
                components.erase(entityId);
            }
        };

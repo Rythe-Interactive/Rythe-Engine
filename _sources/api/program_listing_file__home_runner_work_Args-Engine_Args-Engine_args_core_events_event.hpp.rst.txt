@@ -25,7 +25,7 @@ Program Listing for File event.hpp
    
            virtual ~event_base() = default;
    
-           virtual id_type getId() ARGS_PURE;
+           virtual id_type get_id() ARGS_PURE;
        };
    
        template<typename Self>
@@ -37,7 +37,7 @@ Program Listing for File event.hpp
    
            virtual ~event() = default;
        private:
-           virtual id_type getId()
+           virtual id_type get_id()
            {
                return id;
            }

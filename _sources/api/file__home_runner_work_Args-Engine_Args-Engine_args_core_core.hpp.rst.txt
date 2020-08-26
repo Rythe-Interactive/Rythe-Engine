@@ -47,6 +47,8 @@ Includes
 
 - ``core/events/events.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_events.hpp`)
 
+- ``core/math/math.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_math.hpp`)
+
 - ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
 
 - ``core/scheduling/scheduling.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_scheduling.hpp`)
@@ -60,6 +62,8 @@ Includes
 Included By
 -----------
 
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_contexthelper.hpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_editor_application_source.cpp`
 

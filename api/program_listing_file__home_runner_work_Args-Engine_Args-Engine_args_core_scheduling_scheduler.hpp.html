@@ -156,7 +156,7 @@
         <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="n">size_type</span> <span class="n">charc</span><span class="o">&gt;</span>
-        <span class="n">ProcessChain</span><span class="o">*</span> <span class="n">addChain</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="p">(</span><span class="o">&amp;</span><span class="n">name</span><span class="p">)[</span><span class="n">charc</span><span class="p">])</span>
+        <span class="n">ProcessChain</span><span class="o">*</span> <span class="n">addProcessChain</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="p">(</span><span class="o">&amp;</span><span class="n">name</span><span class="p">)[</span><span class="n">charc</span><span class="p">])</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_localChain</span><span class="p">.</span><span class="n">id</span><span class="p">())</span>
             <span class="p">{</span>
@@ -171,9 +171,9 @@
 
 
         <span class="k">template</span><span class="o">&lt;</span><span class="n">size_type</span> <span class="n">charc</span><span class="o">&gt;</span>
-        <span class="kt">bool</span> <span class="n">hookProcess</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="p">(</span><span class="o">&amp;</span><span class="n">chainName</span><span class="p">)[</span><span class="n">charc</span><span class="p">],</span> <span class="n">Process</span><span class="o">*</span> <span class="n">process</span><span class="p">)</span>
+        <span class="kt">bool</span> <span class="n">hookProcess</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="p">(</span><span class="o">&amp;</span><span class="n">processChainName</span><span class="p">)[</span><span class="n">charc</span><span class="p">],</span> <span class="n">Process</span><span class="o">*</span> <span class="n">process</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">id_type</span> <span class="n">chainId</span> <span class="o">=</span> <span class="n">nameHash</span><span class="o">&lt;</span><span class="n">charc</span><span class="o">&gt;</span><span class="p">(</span><span class="n">chainName</span><span class="p">);</span>
+            <span class="n">id_type</span> <span class="n">chainId</span> <span class="o">=</span> <span class="n">nameHash</span><span class="o">&lt;</span><span class="n">charc</span><span class="o">&gt;</span><span class="p">(</span><span class="n">processChainName</span><span class="p">);</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_processChainsLock</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">m_processChains</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">chainId</span><span class="p">))</span>
             <span class="p">{</span>

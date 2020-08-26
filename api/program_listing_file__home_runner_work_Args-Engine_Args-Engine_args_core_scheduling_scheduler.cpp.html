@@ -58,7 +58,7 @@
 
     <span class="n">Scheduler</span><span class="o">::</span><span class="n">Scheduler</span><span class="p">(</span><span class="n">events</span><span class="o">::</span><span class="n">EventBus</span><span class="o">*</span> <span class="n">eventBus</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_eventBus</span><span class="p">(</span><span class="n">eventBus</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">addChain</span><span class="p">(</span><span class="s">&quot;Update&quot;</span><span class="p">);</span>
+        <span class="n">addProcessChain</span><span class="p">(</span><span class="s">&quot;Update&quot;</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="n">Scheduler</span><span class="o">::~</span><span class="n">Scheduler</span><span class="p">()</span>
@@ -146,9 +146,20 @@
             <span class="n">chains</span> <span class="o">=</span> <span class="n">m_processChains</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
         <span class="p">}</span>
 
+        <span class="n">size_type</span> <span class="n">prevExits</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">size_type</span> <span class="n">prevChains</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
         <span class="k">while</span> <span class="p">(</span><span class="n">exits</span> <span class="o">&lt;</span> <span class="n">chains</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readonly_multiguard</span> <span class="n">rmguard</span><span class="p">(</span><span class="n">m_exitsLock</span><span class="p">,</span> <span class="n">m_processChainsLock</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">prevExits</span> <span class="o">!=</span> <span class="n">exits</span> <span class="o">||</span> <span class="n">prevChains</span> <span class="o">!=</span> <span class="n">chains</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">prevExits</span> <span class="o">=</span> <span class="n">exits</span><span class="p">;</span>
+                <span class="n">prevChains</span> <span class="o">=</span> <span class="n">chains</span><span class="p">;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;waiting for threads to end. &quot;</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">chains</span> <span class="o">-</span> <span class="n">exits</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; threads left</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+            <span class="p">}</span>
+
             <span class="n">exits</span> <span class="o">=</span> <span class="n">m_exits</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
             <span class="n">chains</span> <span class="o">=</span> <span class="n">m_processChains</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
         <span class="p">}</span>

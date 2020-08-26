@@ -56,7 +56,7 @@
     <span class="k">struct</span> <span class="n">transferable_atomic</span>
     <span class="p">{</span>
     <span class="k">private</span><span class="o">:</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">m_atomic</span><span class="p">;</span>
+        <span class="k">mutable</span> <span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">m_atomic</span><span class="p">;</span>
         <span class="k">mutable</span> <span class="n">readonly_rw_spinlock</span> <span class="n">m_lock</span><span class="p">;</span>
     <span class="k">public</span><span class="o">:</span>
         <span class="n">transferable_atomic</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>

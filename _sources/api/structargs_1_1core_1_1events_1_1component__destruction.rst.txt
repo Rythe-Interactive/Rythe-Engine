@@ -1,0 +1,25 @@
+.. _exhale_struct_structargs_1_1core_1_1events_1_1component__destruction:
+
+Template Struct component_destruction
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_defaultevents.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public args::core::events::event< component_destruction< component_type > >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::core::events::component_destruction
+   :members:
+   :protected-members:
+   :undoc-members:

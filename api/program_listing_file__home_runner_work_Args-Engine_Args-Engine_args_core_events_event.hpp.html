@@ -61,7 +61,7 @@
 
         <span class="k">virtual</span> <span class="o">~</span><span class="n">event_base</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
 
-        <span class="k">virtual</span> <span class="n">id_type</span> <span class="nf">getId</span><span class="p">()</span> <span class="n">ARGS_PURE</span><span class="p">;</span>
+        <span class="k">virtual</span> <span class="n">id_type</span> <span class="nf">get_id</span><span class="p">()</span> <span class="n">ARGS_PURE</span><span class="p">;</span>
     <span class="p">};</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Self</span><span class="o">&gt;</span>
@@ -73,7 +73,7 @@
 
         <span class="k">virtual</span> <span class="o">~</span><span class="n">event</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
     <span class="k">private</span><span class="o">:</span>
-        <span class="k">virtual</span> <span class="n">id_type</span> <span class="n">getId</span><span class="p">()</span>
+        <span class="k">virtual</span> <span class="n">id_type</span> <span class="n">get_id</span><span class="p">()</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">id</span><span class="p">;</span>
         <span class="p">}</span>

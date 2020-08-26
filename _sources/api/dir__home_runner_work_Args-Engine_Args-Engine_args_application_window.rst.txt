@@ -1,0 +1,21 @@
+.. _dir__home_runner_work_Args-Engine_Args-Engine_args_application_window:
+
+
+Directory window
+================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_application>` (``/home/runner/work/Args-Engine/Args-Engine/args/application``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Args-Engine/Args-Engine/args/application/window``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_window_window.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_window_windowsystem.hpp`
+
+

@@ -1,0 +1,60 @@
+
+.. _namespace_args__application:
+
+Namespace args::application
+===========================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1application_1_1char__input`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1key__input`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1mouse__button`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1mouse__enter__window`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1mouse__moved`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1mouse__scrolled`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__close`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__content__rescale`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__focus`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__framebuffer__resize`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__iconified`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__item__dropped`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__maximized`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__move`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__refresh`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__request`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__resize`
+
+- :ref:`exhale_class_classargs_1_1application_1_1_application_module`
+
+- :ref:`exhale_class_classargs_1_1application_1_1_context_helper`
+
+- :ref:`exhale_class_classargs_1_1application_1_1_window_system`

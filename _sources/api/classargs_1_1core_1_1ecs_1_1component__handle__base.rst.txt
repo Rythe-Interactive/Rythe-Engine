@@ -9,10 +9,11 @@ Class component_handle_base
 Inheritance Relationships
 -------------------------
 
-Derived Type
-************
+Derived Types
+*************
 
 - ``public args::core::ecs::component_handle< component_type >`` (:ref:`exhale_class_classargs_1_1core_1_1ecs_1_1component__handle`)
+- ``public args::core::ecs::component_handle< args::application::window >`` (:ref:`exhale_class_classargs_1_1core_1_1ecs_1_1component__handle`)
 
 
 Class Documentation

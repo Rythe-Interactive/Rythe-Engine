@@ -1,0 +1,25 @@
+.. _exhale_struct_structargs_1_1application_1_1mouse__button:
+
+Struct mouse_button
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_events_inputevents.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public args::core::events::event< mouse_button >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::application::mouse_button
+   :members:
+   :protected-members:
+   :undoc-members:

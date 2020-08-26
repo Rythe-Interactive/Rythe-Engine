@@ -200,25 +200,6 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N4args4core3ecs13QueryRegistry8addQueryERK17hashed_sparse_setI7id_typeE">
-<span id="_CPPv3N4args4core3ecs13QueryRegistry8addQueryERK17hashed_sparse_setI7id_typeE"></span><span id="_CPPv2N4args4core3ecs13QueryRegistry8addQueryERK17hashed_sparse_setI7id_typeE"></span><span id="args::core::ecs::QueryRegistry::addQuery__hashed_sparse_set:id_type:CR"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1_query_registry_1a1292e4fe7177d712fda1adfc500a8a54"></span><a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a> <code class="sig-name descname">addQuery</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="classargs_1_1core_1_1hashed__sparse__set.html#_CPPv4I0IDpE0IDpE0EN4args4core17hashed_sparse_setE" title="args::core::hashed_sparse_set">hashed_sparse_set</a>&lt;<a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a>&gt; &amp;<em>componentTypes</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs13QueryRegistry8addQueryERK17hashed_sparse_setI7id_typeE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Add a new combination of components to query for. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>Query id of the newly added query. </p>
-</dd>
-<dt><strong>Note</strong></dt><dd><p>A query for your combination of components might already exist. Please use <a class="reference internal" href="#classargs_1_1core_1_1ecs_1_1_query_registry_1a042139cf6427bb9f5124438794f9c7c9"><span class="std std-ref">createQuery()</span></a> to prevent duplicates. </p>
-</dd>
-<dt><strong>Note</strong></dt><dd><p>Already adds 1 to the reference count of the returned id. </p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">componentTypes</span></code>: Type ids of all components to query for. </p></li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="cpp function">
 <dt id="_CPPv4N4args4core3ecs13QueryRegistry11getEntitiesE7id_type">
 <span id="_CPPv3N4args4core3ecs13QueryRegistry11getEntitiesE7id_type"></span><span id="_CPPv2N4args4core3ecs13QueryRegistry11getEntitiesE7id_type"></span><span id="args::core::ecs::QueryRegistry::getEntities__id_type"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1_query_registry_1a4ba19ae536495b9cc0d2748036e90f55"></span><em class="property">const</em> <a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#_CPPv4I00IDpE0IDpE0EN4args4core10sparse_mapE" title="args::core::sparse_map">sparse_map</a>&lt;<a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a>, <a class="reference internal" href="classargs_1_1core_1_1ecs_1_1entity__handle.html#_CPPv4N4args4core3ecs13entity_handleE" title="args::core::ecs::entity_handle">entity_handle</a>&gt; &amp;<code class="sig-name descname">getEntities</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a> <em>queryId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs13QueryRegistry11getEntitiesE7id_type" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the ids and handles of all entities that have all components of the query. </p>

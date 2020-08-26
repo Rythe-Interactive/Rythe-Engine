@@ -29,6 +29,8 @@ Includes
 --------
 
 
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
+
 - ``vector`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_vector_view.hpp`)
 
 

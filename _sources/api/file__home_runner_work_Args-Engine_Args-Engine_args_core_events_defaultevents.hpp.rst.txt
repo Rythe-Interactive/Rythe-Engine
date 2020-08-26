@@ -29,6 +29,8 @@ Includes
 --------
 
 
+- ``core/ecs/entity_handle.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entity_handle.hpp`)
+
 - ``core/events/event.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_event.hpp`)
 
 
@@ -52,6 +54,10 @@ Namespaces
 Classes
 -------
 
+
+- :ref:`exhale_struct_structargs_1_1core_1_1events_1_1component__creation`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1events_1_1component__destruction`
 
 - :ref:`exhale_struct_structargs_1_1core_1_1events_1_1exit`
 

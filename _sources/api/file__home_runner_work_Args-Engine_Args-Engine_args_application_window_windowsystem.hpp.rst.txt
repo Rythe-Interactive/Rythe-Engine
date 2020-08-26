@@ -1,0 +1,65 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_application_window_windowsystem.hpp:
+
+File windowsystem.hpp
+=====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_application_window>` (``/home/runner/work/Args-Engine/Args-Engine/args/application/window``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/application/window/windowsystem.hpp``)
+---------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_application_window_windowsystem.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``application/context/contexthelper.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_contexthelper.hpp`)
+
+- ``application/events/inputevents.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_events_inputevents.hpp`)
+
+- ``application/events/windowevents.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_events_windowevents.hpp`)
+
+- ``application/window/window.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_window_window.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_application.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_module_applicationmodule.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__application`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1application_1_1_window_system`
+

@@ -1,0 +1,76 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_application_context_contexthelper.hpp:
+
+File contexthelper.hpp
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_application_context>` (``/home/runner/work/Args-Engine/Args-Engine/args/application/context``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/application/context/contexthelper.hpp``)
+-----------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_application_context_contexthelper.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`)
+
+- ``core/platform/args_library.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_args_library.hpp`)
+
+- ``glfw/glfw3.h``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_application.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_contexthelper.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_module_applicationmodule.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_window_window.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_window_windowsystem.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__application`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1application_1_1_context_helper`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_contexthelper_8hpp_1a1320e24345820f51b729f849939578a5`
+

@@ -1,0 +1,21 @@
+.. _dir__home_runner_work_Args-Engine_Args-Engine_args_application_context:
+
+
+Directory context
+=================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_application>` (``/home/runner/work/Args-Engine/Args-Engine/args/application``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Args-Engine/Args-Engine/args/application/context``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_contexthelper.cpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_contexthelper.hpp`
+
+

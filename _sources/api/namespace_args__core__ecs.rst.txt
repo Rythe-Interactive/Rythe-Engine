@@ -42,7 +42,7 @@ Variables
 ---------
 
 
-- :ref:`exhale_variable_entity__handle_8hpp_1ad125b4fe2ab031b4a43b9ab5e54fbeb9`
+- :ref:`exhale_variable_component__container_8hpp_1ad125b4fe2ab031b4a43b9ab5e54fbeb9`
 
 - :ref:`exhale_variable_entityquery_8hpp_1a55d81d7290c164ff4dbb4ddff1af3b62`
 

@@ -22,7 +22,7 @@ Program Listing for File scheduler.cpp
    
        Scheduler::Scheduler(events::EventBus* eventBus) : m_eventBus(eventBus)
        {
-           addChain("Update");
+           addProcessChain("Update");
        }
    
        Scheduler::~Scheduler()
@@ -110,9 +110,20 @@ Program Listing for File scheduler.cpp
                chains = m_processChains.size();
            }
    
+           size_type prevExits = 0;
+           size_type prevChains = 0;
+   
            while (exits < chains)
            {
                async::readonly_multiguard rmguard(m_exitsLock, m_processChainsLock);
+   
+               if (prevExits != exits || prevChains != chains)
+               {
+                   prevExits = exits;
+                   prevChains = chains;
+                   std::cout << "waiting for threads to end. " << (chains - exits) << " threads left\n";
+               }
+   
                exits = m_exits.size();
                chains = m_processChains.size();
            }

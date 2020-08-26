@@ -80,7 +80,7 @@
 
 
 <span class="k">template</span> <span class="o">&lt;</span><span class="kt">char</span> <span class="n">token</span><span class="p">,</span><span class="kt">char</span><span class="p">...</span> <span class="n">tokens</span><span class="o">&gt;</span>
-<span class="kt">bool</span>  <span class="n">str_tokens_helper</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ctype</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;::</span><span class="n">mask</span> <span class="o">*</span> <span class="n">rc</span><span class="p">)</span>
+<span class="kt">bool</span> <span class="n">str_tokens_helper</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ctype</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;::</span><span class="n">mask</span> <span class="o">*</span> <span class="n">rc</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">rc</span><span class="p">[</span><span class="n">token</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">ctype</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;::</span><span class="n">space</span><span class="p">;</span>
     <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="k">sizeof</span><span class="p">...(</span><span class="n">tokens</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">str_tokens_helper</span><span class="o">&lt;</span><span class="n">tokens</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="n">rc</span><span class="p">);</span>
@@ -110,7 +110,7 @@
 
 <span class="c1">//split string at any given char via variadic template and insert into vector</span>
 <span class="k">template</span> <span class="o">&lt;</span><span class="kt">char</span> <span class="n">token_1</span><span class="p">,</span> <span class="kt">char</span><span class="p">...</span> <span class="n">token</span><span class="o">&gt;</span>
-<span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">split_string_at</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">string</span><span class="p">)</span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">split_string_at</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">string</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="c1">//copy string into stringstream</span>
     <span class="n">std</span><span class="o">::</span><span class="n">stringstream</span> <span class="n">ss</span><span class="p">(</span><span class="n">string</span><span class="p">);</span>

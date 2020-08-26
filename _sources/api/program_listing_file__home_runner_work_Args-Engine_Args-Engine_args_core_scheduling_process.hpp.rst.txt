@@ -44,6 +44,8 @@ Program Listing for File process.hpp
    
            id_type id() const { return m_nameHash; }
    
+           bool inUse() const { return m_hooks.size(); }
+   
            void setOperation(delegate<void(time::time_span<fast_time>)>&& operation)
            {
                m_operation = operation;

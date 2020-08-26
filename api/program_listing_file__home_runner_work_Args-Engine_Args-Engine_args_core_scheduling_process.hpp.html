@@ -80,6 +80,8 @@
 
         <span class="n">id_type</span> <span class="nf">id</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_nameHash</span><span class="p">;</span> <span class="p">}</span>
 
+        <span class="kt">bool</span> <span class="nf">inUse</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_hooks</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="p">}</span>
+
         <span class="kt">void</span> <span class="nf">setOperation</span><span class="p">(</span><span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">time</span><span class="o">::</span><span class="n">time_span</span><span class="o">&lt;</span><span class="n">fast_time</span><span class="o">&gt;</span><span class="p">)</span><span class="o">&gt;&amp;&amp;</span> <span class="n">operation</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">m_operation</span> <span class="o">=</span> <span class="n">operation</span><span class="p">;</span>

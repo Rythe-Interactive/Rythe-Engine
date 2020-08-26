@@ -1,0 +1,83 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_application_events_windowevents.hpp:
+
+File windowevents.hpp
+=====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_application_events>` (``/home/runner/work/Args-Engine/Args-Engine/args/application/events``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/application/events/windowevents.hpp``)
+---------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_application_events_windowevents.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``application/window/window.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_window_window.hpp`)
+
+- ``core/events/event.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_event.hpp`)
+
+- ``vector`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_vector_view.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_window_windowsystem.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__application`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1application_1_1mouse__enter__window`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__close`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__content__rescale`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__focus`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__framebuffer__resize`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__iconified`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__item__dropped`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__maximized`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__move`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__refresh`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__request`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__resize`
+

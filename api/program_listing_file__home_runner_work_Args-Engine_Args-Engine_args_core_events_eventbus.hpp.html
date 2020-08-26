@@ -60,7 +60,7 @@
     <span class="k">class</span> <span class="nc">EventBus</span>
     <span class="p">{</span>
         <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">hashed_sparse_set</span><span class="o">&lt;</span><span class="n">event_base</span><span class="o">*&gt;&gt;</span> <span class="n">m_events</span><span class="p">;</span>
-        <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">multicast_delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">EventBus</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;&gt;</span> <span class="n">m_eventCallbacks</span><span class="p">;</span>
+        <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">multicast_delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">event_base</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;&gt;</span> <span class="n">m_eventCallbacks</span><span class="p">;</span>
 
     <span class="k">public</span><span class="o">:</span>
         <span class="o">~</span><span class="n">EventBus</span><span class="p">()</span>
@@ -77,33 +77,27 @@
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Args</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;&gt;</span>
         <span class="kt">void</span> <span class="n">raiseEvent</span><span class="p">(</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">arguments</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">event_type</span><span class="o">*</span> <span class="n">event</span> <span class="o">=</span> <span class="k">new</span> <span class="n">event_type</span><span class="p">(</span><span class="n">arguments</span><span class="p">...);</span> <span class="c1">// Create new event.</span>
+            <span class="n">event_type</span><span class="o">*</span> <span class="n">eventptr</span><span class="p">;</span>
 
-            <span class="k">if</span> <span class="p">(</span><span class="n">event</span><span class="o">-&gt;</span><span class="n">unique</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">m_events</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">].</span><span class="n">size</span><span class="p">())</span> <span class="c1">// Check if it&#39;s unique and if another one already exists.</span>
+            <span class="n">event_type</span> <span class="nf">event</span><span class="p">(</span><span class="n">arguments</span><span class="p">...);</span> <span class="c1">// Create new event.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="n">persistent</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="n">unique</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">m_events</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">].</span><span class="n">size</span><span class="p">()))</span>
             <span class="p">{</span>
-                <span class="n">m_eventCallbacks</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">].</span><span class="n">invoke</span><span class="p">(</span><span class="k">this</span><span class="p">);</span> <span class="c1">// Notify and delete.</span>
-                <span class="k">delete</span> <span class="n">event</span><span class="p">;</span>
-                <span class="k">return</span><span class="p">;</span>
+                <span class="n">eventptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">event_type</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">event</span><span class="p">));</span>
+                <span class="n">m_events</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">].</span><span class="n">insert</span><span class="p">(</span><span class="n">eventptr</span><span class="p">);</span> <span class="c1">// If it&#39;s persistent keep the event stored. (Or at least keep it somewhere fetch able.)</span>
             <span class="p">}</span>
+            <span class="k">else</span>
+                <span class="n">eventptr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">event</span><span class="p">;</span>
 
-            <span class="n">m_events</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">].</span><span class="n">insert</span><span class="p">(</span><span class="n">event</span><span class="p">);</span> <span class="c1">// Keep the event stored. (Or at least keep it somewhere fetch able.)</span>
-
-            <span class="n">m_eventCallbacks</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">].</span><span class="n">invoke</span><span class="p">(</span><span class="k">this</span><span class="p">);</span> <span class="c1">// Notify.</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">event</span><span class="o">-&gt;</span><span class="n">persistent</span><span class="p">())</span> <span class="c1">// If the event isn&#39;t persistent then delete it again.</span>
-            <span class="p">{</span>
-                <span class="n">m_events</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">].</span><span class="n">erase</span><span class="p">(</span><span class="n">event</span><span class="p">);</span>
-                <span class="k">delete</span> <span class="n">event</span><span class="p">;</span>
-            <span class="p">}</span>
+            <span class="n">force_value_cast</span><span class="o">&lt;</span><span class="n">multicast_delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">event_type</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">m_eventCallbacks</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">]).</span><span class="n">invoke</span><span class="p">(</span><span class="n">eventptr</span><span class="p">);</span> <span class="c1">// Notify.</span>
         <span class="p">}</span>
 
-        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;&gt;</span>
         <span class="kt">bool</span> <span class="n">checkEvent</span><span class="p">()</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">m_events</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">m_events</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
         <span class="p">}</span>
 
-        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;&gt;</span>
         <span class="n">size_type</span> <span class="n">getEventCount</span><span class="p">()</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">m_events</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">))</span>
@@ -111,7 +105,7 @@
             <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;&gt;</span>
         <span class="k">const</span> <span class="n">event_type</span><span class="o">&amp;</span> <span class="n">getEvent</span><span class="p">(</span><span class="n">index_type</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">checkEvent</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">())</span>
@@ -119,7 +113,7 @@
             <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;&gt;</span>
         <span class="k">const</span> <span class="n">event_type</span><span class="o">&amp;</span> <span class="n">getLastEvent</span><span class="p">()</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">checkEvent</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">())</span>
@@ -130,7 +124,7 @@
             <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;&gt;</span>
         <span class="kt">void</span> <span class="n">clearEvent</span><span class="p">(</span><span class="n">index_type</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">checkEvent</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">())</span>
@@ -141,7 +135,7 @@
             <span class="p">}</span>
         <span class="p">}</span>
 
-        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;&gt;</span>
         <span class="kt">void</span> <span class="n">clearLastEvent</span><span class="p">()</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">checkEvent</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">())</span>
@@ -152,10 +146,10 @@
             <span class="p">}</span>
         <span class="p">}</span>
 
-        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
-        <span class="kt">void</span> <span class="n">bindToEvent</span><span class="p">(</span><span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">EventBus</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">callback</span><span class="p">)</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;&gt;</span>
+        <span class="kt">void</span> <span class="n">bindToEvent</span><span class="p">(</span><span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">event_type</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">callback</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">m_eventCallbacks</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">]</span> <span class="o">+=</span> <span class="n">callback</span><span class="p">;</span>
+            <span class="n">m_eventCallbacks</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">]</span> <span class="o">+=</span> <span class="n">force_value_cast</span><span class="o">&lt;</span><span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">event_base</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">callback</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">};</span>
 <span class="p">}</span>

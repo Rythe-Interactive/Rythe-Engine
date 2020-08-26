@@ -49,6 +49,8 @@ Included By
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecsregistry.cpp`
 
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecsregistry.hpp`
+
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entity_handle.cpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entityquery.cpp`
@@ -56,6 +58,8 @@ Included By
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_queryregistry.cpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_rw_component_buffer.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_defaultevents.hpp`
 
 
 
@@ -74,11 +78,4 @@ Classes
 - :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1component__handle`
 
 - :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1entity__handle`
-
-
-Variables
----------
-
-
-- :ref:`exhale_variable_entity__handle_8hpp_1ad125b4fe2ab031b4a43b9ab5e54fbeb9`
 

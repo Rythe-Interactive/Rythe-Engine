@@ -9,10 +9,11 @@ Class SystemBase
 Inheritance Relationships
 -------------------------
 
-Derived Type
-************
+Derived Types
+*************
 
 - ``public args::core::System< SelfType >`` (:ref:`exhale_class_classargs_1_1core_1_1_system`)
+- ``public args::core::System< WindowSystem >`` (:ref:`exhale_class_classargs_1_1core_1_1_system`)
 
 
 Class Documentation

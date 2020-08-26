@@ -23,7 +23,7 @@ Program Listing for File testModule.hpp
    public:
        virtual void setup() override
        {
-           addChain("TestChain");
+           addProcessChain("TestChain");
    
            reportComponentType<sah>();
            reportSystem<TestSystem>();

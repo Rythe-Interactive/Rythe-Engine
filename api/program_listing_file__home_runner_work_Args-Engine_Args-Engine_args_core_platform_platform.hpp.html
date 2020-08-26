@@ -106,7 +106,7 @@
 <span class="cp">#define NO_MANGLING extern &quot;C&quot;</span>
 
 <span class="cp">#if defined(ARGS_WINDOWS) || defined(DOXY_INCLUDE)</span>
-    <span class="cp">#if defined(ARGS_INTERNAL) || defined(DOXY_INCLUDE)</span>
+    <span class="cp">#if (defined(ARGS_INTERNAL) &amp;&amp; !defined(ARGS_IMPORT)) || defined(DOXY_INCLUDE)</span>
 
         <span class="cp">#define ARGS_API __declspec(dllexport)</span>
     <span class="cp">#else</span>
@@ -114,6 +114,10 @@
     <span class="cp">#endif</span>
 <span class="cp">#else</span>
     <span class="cp">#define ARGS_API __attribute__((visibility(&quot;default&quot;)))</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#if defined(ARGS_IMPORT)</span>
+<span class="cp">#define ARGS_LIBRARY</span>
 <span class="cp">#endif</span>
 
 <span class="cp">#define ARGS_FUNC ARGS_API ARGS_CCONV</span>

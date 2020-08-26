@@ -47,7 +47,7 @@
 <span id="program-listing-file-home-runner-work-args-engine-args-engine-args-core-containers-iterator-tricks-hpp"></span><h1>Program Listing for File iterator_tricks.hpp<a class="headerlink" href="#program-listing-for-file-iterator-tricks-hpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_iterator_tricks.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-containers-iterator-tricks-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/containers/iterator_tricks.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;utility&gt;</span><span class="cp"></span>
-
+<span class="cp">#include</span> <span class="cpf">&lt;core/platform/platform.hpp&gt;</span><span class="cp"></span>
 
 <span class="cp">#pragma once</span>
 
@@ -61,12 +61,12 @@
         <span class="p">{</span>
         <span class="p">}</span>
 
-        <span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">begin</span><span class="p">()</span> <span class="k">const</span>
+        <span class="n">A_NODISCARD</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">begin</span><span class="p">()</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">range</span><span class="p">.</span><span class="n">first</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">end</span><span class="p">()</span> <span class="k">const</span>
+        <span class="n">A_NODISCARD</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">end</span><span class="p">()</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">range</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
         <span class="p">}</span>

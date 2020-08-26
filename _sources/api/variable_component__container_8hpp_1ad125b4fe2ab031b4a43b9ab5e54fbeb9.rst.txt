@@ -1,0 +1,13 @@
+.. _exhale_variable_component__container_8hpp_1ad125b4fe2ab031b4a43b9ab5e54fbeb9:
+
+Variable args::core::ecs::EcsRegistry
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_component_container.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::core::ecs::EcsRegistry

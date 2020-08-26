@@ -46,6 +46,26 @@ Directories
 .. toctree::
    :maxdepth: 5
 
+   dir__home_runner_work_Args-Engine_Args-Engine_args_application_context.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_Args-Engine_Args-Engine_args_application_events.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_Args-Engine_Args-Engine_args_application_module.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_Args-Engine_Args-Engine_args_application_window.rst
+
+.. toctree::
+   :maxdepth: 5
+
    dir__home_runner_work_Args-Engine_Args-Engine_args_audio.rst
 
 .. toctree::
@@ -165,6 +185,21 @@ Files
 .. toctree::
    :maxdepth: 5
 
+   file__home_runner_work_Args-Engine_Args-Engine_args_application_application.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_Args-Engine_Args-Engine_args_application_module_applicationmodule.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_args_library.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
    file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_artifact_cache.cpp.rst
 
 .. toctree::
@@ -220,6 +255,16 @@ Files
 .. toctree::
    :maxdepth: 5
 
+   file__home_runner_work_Args-Engine_Args-Engine_args_application_context_contexthelper.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_Args-Engine_Args-Engine_args_application_context_contexthelper.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
    file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp.rst
 
 .. toctree::
@@ -236,11 +281,6 @@ Files
    :maxdepth: 5
 
    file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_delegate.hpp.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   file__home_runner_work_Args-Engine_Args-Engine_args_application_delete_this.cpp.rst
 
 .. toctree::
    :maxdepth: 5
@@ -381,6 +421,11 @@ Files
    :maxdepth: 5
 
    file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_hashed_sparse_set.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_Args-Engine_Args-Engine_args_application_events_inputevents.hpp.rst
 
 .. toctree::
    :maxdepth: 5
@@ -641,3 +686,18 @@ Files
    :maxdepth: 5
 
    file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_view.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_Args-Engine_Args-Engine_args_application_window_window.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_Args-Engine_Args-Engine_args_application_events_windowevents.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_Args-Engine_Args-Engine_args_application_window_windowsystem.hpp.rst

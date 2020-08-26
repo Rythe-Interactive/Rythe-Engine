@@ -47,6 +47,8 @@ Included By
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_atomic_sparse_map.hpp`
 
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_delegate.hpp`
+
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_hashed_sparse_set.hpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_sparse_map.hpp`

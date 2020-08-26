@@ -1,0 +1,41 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_args_library.hpp:
+
+File args_library.hpp
+=====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_platform>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/platform``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+This file should be included after all the args headers if the project you're building is a library. ARGS_IMPORT needs to be defined before all args headers. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/platform/args_library.hpp``)
+----------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_args_library.hpp.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_contexthelper.hpp`
+
+
+

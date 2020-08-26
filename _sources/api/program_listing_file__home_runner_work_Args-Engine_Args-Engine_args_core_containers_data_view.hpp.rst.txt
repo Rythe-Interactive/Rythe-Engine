@@ -16,6 +16,8 @@ Program Listing for File data_view.hpp
    #include <atomic>
    #include <stdexcept>
    
+   #include "core/platform/platform.hpp"
+   
    namespace args::core
    {
        template <class DataType>
@@ -111,7 +113,7 @@ Program Listing for File data_view.hpp
                }
            }
    
-           value_type at(size_type idx) const
+           A_NODISCARD value_type at(size_type idx) const
            {
                if(idx > m_targetSize) throw std::out_of_range("data_view subscript out of range");
                return this->operator[](idx);
@@ -119,50 +121,52 @@ Program Listing for File data_view.hpp
    
            value_type& operator[](size_type idx)
            {
+               if(idx > m_targetSize) throw std::out_of_range("data_view subscript out of range");
                return *(m_targetArray + m_targetOffset + static_cast<ptrdiff_t>(idx));
            }
    
-           value_type operator[](size_type idx) const
+           A_NODISCARD value_type operator[](size_type idx) const
            {
+               if(idx > m_targetSize) throw std::out_of_range("data_view subscript out of range");
                return *(m_targetArray + m_targetOffset + static_cast<ptrdiff_t>(idx));
            }
    
-           iterator begin()
+           A_NODISCARD iterator begin()
            {
                return m_targetArray + m_targetOffset;
            }
    
-           iterator end()
+           A_NODISCARD iterator end()
            {
                return begin() + m_targetSize;
            }
    
-           ptr_type data()
+           A_NODISCARD ptr_type data()
            {
                return begin();
            }
    
-           const_iterator begin() const
+           A_NODISCARD const_iterator begin() const
            {
                return m_targetArray + m_targetOffset;
            }
    
-           const_iterator end() const
+           A_NODISCARD const_iterator end() const
            {
                return begin() + m_targetSize;
            }
    
-           const_ptr_type data() const
+           A_NODISCARD const_ptr_type data() const
            {
                return begin();
            }
    
-           size_type size() const noexcept
+           A_NODISCARD size_type size() const noexcept
            {
                return m_targetSize;
            }
    
-           size_type max_size() const noexcept
+           A_NODISCARD size_type max_size() const noexcept
            {
                return m_targetSize;
            }

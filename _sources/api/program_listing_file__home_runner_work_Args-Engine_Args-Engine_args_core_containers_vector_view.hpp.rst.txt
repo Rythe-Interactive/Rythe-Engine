@@ -13,6 +13,7 @@ Program Listing for File vector_view.hpp
    #pragma once
    
    #include <vector>
+   #include <core/platform/platform.hpp>
    
    namespace args::core
    {

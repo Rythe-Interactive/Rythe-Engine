@@ -1,0 +1,25 @@
+.. _exhale_struct_structargs_1_1application_1_1window__resize:
+
+Struct window_resize
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_events_windowevents.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public args::core::events::event< window_resize >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::application::window_resize
+   :members:
+   :protected-members:
+   :undoc-members:

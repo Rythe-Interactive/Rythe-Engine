@@ -17,6 +17,8 @@ Namespaces
 ----------
 
 
+- :ref:`namespace_args__application`
+
 - :ref:`namespace_args__core`
 
 - :ref:`namespace_args__editor`

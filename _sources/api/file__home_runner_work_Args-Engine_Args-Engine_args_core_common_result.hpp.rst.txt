@@ -126,13 +126,13 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1adf3637700bd50bd6e29ba167430b1679`
-
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a8f780bb8070c4459cd65a2a73d5811ed`
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1ace8c091ec78b5a64d02a54852c05645e`
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a11c9f352e26fe38febbf5b83f1f216c2`
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1adf3637700bd50bd6e29ba167430b1679`
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1abe886086bba9312565979731d7a488ff`
 

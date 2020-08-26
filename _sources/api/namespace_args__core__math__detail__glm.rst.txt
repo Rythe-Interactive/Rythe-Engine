@@ -1,0 +1,13 @@
+
+.. _namespace_args__core__math__detail__glm:
+
+Namespace args::core::math::detail::glm
+=======================================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+

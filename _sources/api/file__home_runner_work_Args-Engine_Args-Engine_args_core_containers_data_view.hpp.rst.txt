@@ -31,6 +31,8 @@ Includes
 
 - ``atomic`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_atomic_sparse_map.hpp`)
 
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
+
 - ``cstddef``
 
 - ``cstdint``

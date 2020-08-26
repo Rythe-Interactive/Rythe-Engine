@@ -51,6 +51,7 @@
 <span class="cp">#include</span> <span class="cpf">&lt;core/ecs/entity_handle.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/ecs/entityquery.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">ecs</span>
 <span class="p">{</span>
@@ -68,9 +69,9 @@
 
         <span class="p">{</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readonly_multiguard</span> <span class="n">mguard</span><span class="p">(</span><span class="n">m_entityLock</span><span class="p">,</span> <span class="n">m_componentLock</span><span class="p">);</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">].</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="c1">// Iterate over all tracked entities.</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="c1">// Iterate over all tracked entities.</span>
             <span class="p">{</span>
-                <span class="n">id_type</span> <span class="n">entityId</span> <span class="o">=</span> <span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">].</span><span class="n">keys</span><span class="p">()[</span><span class="n">i</span><span class="p">];</span> <span class="c1">// Get the id from the keys of the map.</span>
+                <span class="n">id_type</span> <span class="n">entityId</span> <span class="o">=</span> <span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">keys</span><span class="p">()[</span><span class="n">i</span><span class="p">];</span> <span class="c1">// Get the id from the keys of the map.</span>
                 <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_registry</span><span class="p">.</span><span class="n">getEntityData</span><span class="p">(</span><span class="n">entityId</span><span class="p">).</span><span class="n">components</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">m_componentTypes</span><span class="p">[</span><span class="n">queryId</span><span class="p">]))</span> <span class="c1">// Check component composition</span>
                     <span class="n">toRemove</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span> <span class="c1">// Mark for erasure if the component composition doesn&#39;t overlap with the query.</span>
             <span class="p">}</span>
@@ -80,7 +81,7 @@
         <span class="p">{</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_entityLock</span><span class="p">);</span>
             <span class="k">for</span> <span class="p">(</span><span class="n">id_type</span> <span class="nl">entityId</span> <span class="p">:</span> <span class="n">toRemove</span><span class="p">)</span>
-                <span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">].</span><span class="n">erase</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span> <span class="c1">// Erase all entities marked for erasure.</span>
+                <span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">erase</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span> <span class="c1">// Erase all entities marked for erasure.</span>
         <span class="p">}</span>
 
         <span class="c1">// Next we need to filter through all the entities to get all the new ones that apply to the new query.</span>
@@ -90,11 +91,11 @@
 
         <span class="k">for</span> <span class="p">(</span><span class="n">id_type</span> <span class="nl">entityId</span> <span class="p">:</span> <span class="n">entities</span><span class="p">.</span><span class="n">keys</span><span class="p">())</span> <span class="c1">// Iterate over all entities.</span>
         <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">].</span><span class="n">contains</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span> <span class="c1">// If the entity is already tracked, continue to the next entity.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">contains</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span> <span class="c1">// If the entity is already tracked, continue to the next entity.</span>
                 <span class="k">continue</span><span class="p">;</span>
 
             <span class="k">if</span> <span class="p">(</span><span class="n">m_registry</span><span class="p">.</span><span class="n">getEntityData</span><span class="p">(</span><span class="n">entityId</span><span class="p">).</span><span class="n">components</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">m_componentTypes</span><span class="p">[</span><span class="n">queryId</span><span class="p">]))</span> <span class="c1">// Check if the queried components completely overlaps the components in the entity.</span>
-                <span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">].</span><span class="n">insert</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">entities</span><span class="p">[</span><span class="n">entityId</span><span class="p">]);</span> <span class="c1">// Insert entity into tracking list.</span>
+                <span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">insert</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">entities</span><span class="p">[</span><span class="n">entityId</span><span class="p">]);</span> <span class="c1">// Insert entity into tracking list.</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
@@ -110,9 +111,9 @@
 
         <span class="p">{</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readonly_multiguard</span> <span class="n">mguard</span><span class="p">(</span><span class="n">m_entityLock</span><span class="p">,</span> <span class="n">m_componentLock</span><span class="p">);</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">].</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="c1">// Iterate over all tracked entities.</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="c1">// Iterate over all tracked entities.</span>
             <span class="p">{</span>
-                <span class="n">id_type</span> <span class="n">entityId</span> <span class="o">=</span> <span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">].</span><span class="n">keys</span><span class="p">()[</span><span class="n">i</span><span class="p">];</span> <span class="c1">// Get the id from the keys of the map.</span>
+                <span class="n">id_type</span> <span class="n">entityId</span> <span class="o">=</span> <span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">keys</span><span class="p">()[</span><span class="n">i</span><span class="p">];</span> <span class="c1">// Get the id from the keys of the map.</span>
                 <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_registry</span><span class="p">.</span><span class="n">getEntity</span><span class="p">(</span><span class="n">entityId</span><span class="p">).</span><span class="n">component_composition</span><span class="p">().</span><span class="n">contains</span><span class="p">(</span><span class="n">m_componentTypes</span><span class="p">[</span><span class="n">queryId</span><span class="p">]))</span> <span class="c1">// Check component composition</span>
                     <span class="n">toRemove</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span> <span class="c1">// Mark for erasure if the component composition doesn&#39;t overlap with the query.</span>
             <span class="p">}</span>
@@ -121,7 +122,7 @@
         <span class="p">{</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_entityLock</span><span class="p">);</span>
             <span class="k">for</span> <span class="p">(</span><span class="n">id_type</span> <span class="nl">entityId</span> <span class="p">:</span> <span class="n">toRemove</span><span class="p">)</span>
-                <span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">].</span><span class="n">erase</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span> <span class="c1">// Erase all entities marked for erasure.</span>
+                <span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">erase</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span> <span class="c1">// Erase all entities marked for erasure.</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
@@ -129,22 +130,22 @@
     <span class="p">{</span>
         <span class="n">async</span><span class="o">::</span><span class="n">mixed_multiguard</span> <span class="n">mmguard</span><span class="p">(</span><span class="n">m_entityLock</span><span class="p">,</span> <span class="n">async</span><span class="o">::</span><span class="n">write</span><span class="p">,</span> <span class="n">m_componentLock</span><span class="p">,</span> <span class="n">async</span><span class="o">::</span><span class="n">read</span><span class="p">);</span> <span class="c1">// We lock now so that we don&#39;t need to reacquire the locks every iteration.</span>
 
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_entityLists</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m_entityLists</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_componentTypes</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">contains</span><span class="p">(</span><span class="n">componentTypeId</span><span class="p">))</span> <span class="c1">// This query doesn&#39;t care about this component type.</span>
                 <span class="k">continue</span><span class="p">;</span>
 
-            <span class="k">if</span> <span class="p">(</span><span class="n">m_entityLists</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">contains</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_entityLists</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">contains</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
             <span class="p">{</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">removal</span><span class="p">)</span>
                 <span class="p">{</span>
-                    <span class="n">m_entityLists</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">erase</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span> <span class="c1">// Erase the entity from the query&#39;s tracking list if the component was removed from the entity.</span>
+                    <span class="n">m_entityLists</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">erase</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span> <span class="c1">// Erase the entity from the query&#39;s tracking list if the component was removed from the entity.</span>
                     <span class="k">continue</span><span class="p">;</span>
                 <span class="p">}</span>
             <span class="p">}</span>
             <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">m_registry</span><span class="p">.</span><span class="n">getEntityData</span><span class="p">(</span><span class="n">entityId</span><span class="p">).</span><span class="n">components</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">m_componentTypes</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
             <span class="p">{</span>
-                <span class="n">m_entityLists</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">insert</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">m_registry</span><span class="p">.</span><span class="n">getEntity</span><span class="p">(</span><span class="n">entityId</span><span class="p">));</span> <span class="c1">// If the entity also contains all the other required components for this query, then add this entity to the tracking list.</span>
+                <span class="n">m_entityLists</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">insert</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">m_registry</span><span class="p">.</span><span class="n">getEntity</span><span class="p">(</span><span class="n">entityId</span><span class="p">));</span> <span class="c1">// If the entity also contains all the other required components for this query, then add this entity to the tracking list.</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -153,8 +154,8 @@
     <span class="p">{</span>
         <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_entityLock</span><span class="p">);</span>
         <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_entityLists</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="c1">// Iterate over all query tracking lists.</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">m_entityLists</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">contains</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
-                <span class="n">m_entityLists</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">erase</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span> <span class="c1">// Erase entity from tracking list if it&#39;s present.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_entityLists</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">contains</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
+                <span class="n">m_entityLists</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">erase</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span> <span class="c1">// Erase entity from tracking list if it&#39;s present.</span>
     <span class="p">}</span>
 
     <span class="kr">inline</span> <span class="n">id_type</span> <span class="n">QueryRegistry</span><span class="o">::</span><span class="n">getQueryId</span><span class="p">(</span><span class="k">const</span> <span class="n">hashed_sparse_set</span><span class="o">&lt;</span><span class="n">id_type</span><span class="o">&gt;&amp;</span> <span class="n">componentTypes</span><span class="p">)</span>
@@ -179,7 +180,7 @@
             <span class="n">queryId</span> <span class="o">=</span> <span class="n">addQuery</span><span class="p">(</span><span class="n">componentTypes</span><span class="p">);</span> <span class="c1">// Create a new query if one doesn&#39;t exist yet.</span>
         <span class="p">}</span>
 
-        <span class="k">return</span> <span class="n">EntityQuery</span><span class="p">(</span><span class="n">queryId</span><span class="p">,</span> <span class="o">*</span><span class="k">this</span><span class="p">,</span> <span class="n">m_registry</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">EntityQuery</span><span class="p">(</span><span class="n">queryId</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m_registry</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="kr">inline</span> <span class="k">const</span> <span class="n">hashed_sparse_set</span><span class="o">&lt;</span><span class="n">id_type</span><span class="o">&gt;&amp;</span> <span class="n">QueryRegistry</span><span class="o">::</span><span class="n">getComponentTypes</span><span class="p">(</span><span class="n">id_type</span> <span class="n">queryId</span><span class="p">)</span>
@@ -193,19 +194,13 @@
         <span class="n">id_type</span> <span class="n">queryId</span><span class="p">;</span>
 
         <span class="p">{</span> <span class="c1">// Write permitted critical section for m_entityLists</span>
-            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">entguard</span><span class="p">(</span><span class="n">m_entityLock</span><span class="p">);</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_multiguard</span> <span class="n">mguard</span><span class="p">(</span><span class="n">m_referenceLock</span><span class="p">,</span> <span class="n">m_entityLock</span><span class="p">,</span> <span class="n">m_componentLock</span><span class="p">);</span>
 
-            <span class="n">queryId</span> <span class="o">=</span> <span class="n">m_entityLists</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="n">m_entityLists</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">queryId</span><span class="p">);</span> <span class="c1">// Create a new entity tracking list.</span>
-        <span class="p">}</span>
+            <span class="n">queryId</span> <span class="o">=</span> <span class="n">m_lastQueryId</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">m_entityLists</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">queryId</span><span class="p">,</span> <span class="k">new</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">entity_handle</span><span class="o">&gt;</span><span class="p">());</span> <span class="c1">// Create a new entity tracking list.</span>
 
-        <span class="p">{</span>
-            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">refguard</span><span class="p">(</span><span class="n">m_referenceLock</span><span class="p">);</span>
             <span class="n">m_references</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">queryId</span><span class="p">);</span> <span class="c1">// Create a new reference count.</span>
-        <span class="p">}</span>
 
-        <span class="p">{</span>
-            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">compguard</span><span class="p">(</span><span class="n">m_componentLock</span><span class="p">);</span>
             <span class="n">m_componentTypes</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">queryId</span><span class="p">,</span> <span class="n">componentTypes</span><span class="p">);</span> <span class="c1">// Insert component type list for query.</span>
         <span class="p">}</span>
 
@@ -215,7 +210,7 @@
 
             <span class="k">for</span> <span class="p">(</span><span class="n">id_type</span> <span class="nl">entityId</span> <span class="p">:</span> <span class="n">entities</span><span class="p">.</span><span class="n">keys</span><span class="p">())</span> <span class="c1">// Iterate over all entities.</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">m_registry</span><span class="p">.</span><span class="n">getEntityData</span><span class="p">(</span><span class="n">entityId</span><span class="p">).</span><span class="n">components</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">m_componentTypes</span><span class="p">[</span><span class="n">queryId</span><span class="p">]))</span> <span class="c1">// Check if the queried components completely overlaps the components in the entity.</span>
-                    <span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">].</span><span class="n">insert</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">entities</span><span class="p">[</span><span class="n">entityId</span><span class="p">]);</span> <span class="c1">// Insert entity into tracking list.</span>
+                    <span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">insert</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">entities</span><span class="p">[</span><span class="n">entityId</span><span class="p">]);</span> <span class="c1">// Insert entity into tracking list.</span>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="n">queryId</span><span class="p">;</span>
@@ -224,12 +219,14 @@
     <span class="kr">inline</span> <span class="k">const</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">entity_handle</span><span class="o">&gt;&amp;</span> <span class="n">QueryRegistry</span><span class="o">::</span><span class="n">getEntities</span><span class="p">(</span><span class="n">id_type</span> <span class="n">queryId</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">entguard</span><span class="p">(</span><span class="n">m_entityLock</span><span class="p">);</span>
-        <span class="k">return</span> <span class="n">m_entityLists</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">queryId</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="o">*</span><span class="n">m_entityLists</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">queryId</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="kr">inline</span> <span class="kt">void</span> <span class="n">QueryRegistry</span><span class="o">::</span><span class="n">addReference</span><span class="p">(</span><span class="n">id_type</span> <span class="n">queryId</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">refguard</span><span class="p">(</span><span class="n">m_referenceLock</span><span class="p">);</span>
+
         <span class="n">m_references</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">queryId</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
     <span class="p">}</span>
 
@@ -251,6 +248,7 @@
             <span class="n">async</span><span class="o">::</span><span class="n">readwrite_multiguard</span> <span class="n">mguard</span><span class="p">(</span><span class="n">m_referenceLock</span><span class="p">,</span> <span class="n">m_entityLock</span><span class="p">,</span> <span class="n">m_componentLock</span><span class="p">);</span>
 
             <span class="n">m_references</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">queryId</span><span class="p">);</span>
+            <span class="k">delete</span> <span class="n">m_entityLists</span><span class="p">[</span><span class="n">queryId</span><span class="p">];</span>
             <span class="n">m_entityLists</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">queryId</span><span class="p">);</span>
             <span class="n">m_componentTypes</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">queryId</span><span class="p">);</span>
         <span class="p">}</span>

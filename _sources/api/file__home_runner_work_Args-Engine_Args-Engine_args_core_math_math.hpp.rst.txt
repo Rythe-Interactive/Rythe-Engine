@@ -41,6 +41,8 @@ Included By
 -----------
 
 
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`
+
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_systems_testsystem.hpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.hpp`
@@ -54,5 +56,5 @@ Namespaces
 
 - :ref:`namespace_args__core__math`
 
-- :ref:`namespace_glm`
+- :ref:`namespace_args__core__math__detail__glm`
 

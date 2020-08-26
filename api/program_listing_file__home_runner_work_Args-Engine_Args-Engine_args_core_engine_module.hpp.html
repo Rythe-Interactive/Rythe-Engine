@@ -76,9 +76,9 @@
 
     <span class="k">protected</span><span class="o">:</span>
         <span class="k">template</span><span class="o">&lt;</span><span class="n">size_type</span> <span class="n">charc</span><span class="o">&gt;</span>
-        <span class="kt">void</span> <span class="n">addChain</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="p">(</span><span class="o">&amp;</span><span class="n">name</span><span class="p">)[</span><span class="n">charc</span><span class="p">])</span>
+        <span class="kt">void</span> <span class="n">addProcessChain</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="p">(</span><span class="o">&amp;</span><span class="n">name</span><span class="p">)[</span><span class="n">charc</span><span class="p">])</span>
         <span class="p">{</span>
-            <span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">addChain</span><span class="o">&lt;</span><span class="n">charc</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+            <span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">addProcessChain</span><span class="o">&lt;</span><span class="n">charc</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">SystemType</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Args</span><span class="p">,</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">SystemType</span><span class="p">,</span> <span class="n">System</span><span class="o">&lt;</span><span class="n">SystemType</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>

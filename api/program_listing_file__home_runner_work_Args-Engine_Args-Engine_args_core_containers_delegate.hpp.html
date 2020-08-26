@@ -67,6 +67,7 @@
 
 <span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;functional&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/types/primitives.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span>
 <span class="p">{</span>
@@ -270,6 +271,20 @@
     <span class="k">public</span><span class="o">:</span>
 
         <span class="n">multicast_delegate</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">multicast_delegate</span><span class="p">(</span><span class="n">multicast_delegate</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">multicast_delegate</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">multicast_delegate</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">multicast_delegate</span><span class="p">(</span><span class="k">const</span> <span class="n">multicast_delegate</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
+        <span class="n">multicast_delegate</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">multicast_delegate</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_invocationList</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">invocation</span> <span class="p">:</span> <span class="n">other</span><span class="p">.</span><span class="n">m_invocationList</span><span class="p">)</span>
+                <span class="n">m_invocationList</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">invocation</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+
         <span class="o">~</span><span class="n">multicast_delegate</span><span class="p">()</span>
         <span class="p">{</span>
             <span class="n">m_invocationList</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
@@ -280,6 +295,11 @@
             <span class="k">return</span> <span class="n">m_invocationList</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">;</span>
         <span class="p">}</span>
 
+        <span class="n">size_type</span> <span class="n">size</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_invocationList</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="p">}</span>
+
         <span class="kt">bool</span> <span class="k">operator</span> <span class="o">==</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">ptr</span><span class="p">)</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="p">(</span><span class="n">ptr</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">isNull</span><span class="p">();</span>
@@ -288,15 +308,6 @@
         <span class="p">{</span>
             <span class="k">return</span> <span class="p">(</span><span class="n">ptr</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="o">!</span><span class="n">isNull</span><span class="p">());</span>
         <span class="p">}</span>
-
-        <span class="kt">size_t</span> <span class="n">size</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_invocationList</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="p">}</span>
-
-        <span class="n">multicast_delegate</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">multicast_delegate</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
-        <span class="n">multicast_delegate</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">=</span><span class="p">(</span><span class="n">multicast_delegate</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
-
-        <span class="n">multicast_delegate</span><span class="p">(</span><span class="k">const</span> <span class="n">multicast_delegate</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
-        <span class="n">multicast_delegate</span><span class="p">(</span><span class="n">multicast_delegate</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
-
 
         <span class="kt">bool</span> <span class="k">operator</span> <span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">multicast_delegate</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span>
         <span class="p">{</span>

@@ -39,6 +39,8 @@ Includes
 
 - ``core/ecs/queryregistry.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_queryregistry.hpp`)
 
+- ``iostream``
+
 
 
 

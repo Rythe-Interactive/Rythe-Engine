@@ -12,8 +12,10 @@ Program Listing for File core.hpp
 
    #pragma once
    
-   #include <core/common/common.hpp>
    #include <core/platform/platform.hpp>
+   
+   #include <core/math/math.hpp>
+   #include <core/common/common.hpp>
    #include <core/types/types.hpp>
    #include <core/time/time.hpp>
    #include <core/async/async.hpp>

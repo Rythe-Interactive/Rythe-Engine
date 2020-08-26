@@ -17,6 +17,10 @@ Classes
 -------
 
 
+- :ref:`exhale_struct_structargs_1_1core_1_1events_1_1component__creation`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1events_1_1component__destruction`
+
 - :ref:`exhale_struct_structargs_1_1core_1_1events_1_1exit`
 
 - :ref:`exhale_class_structargs_1_1core_1_1events_1_1event`

@@ -66,12 +66,12 @@
     <span class="k">private</span><span class="o">:</span>
         <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">priority_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">greater</span><span class="o">&lt;&gt;&gt;</span> <span class="n">m_modules</span><span class="p">;</span>
 
-        <span class="n">ecs</span><span class="o">::</span><span class="n">EcsRegistry</span> <span class="n">m_ecs</span><span class="p">;</span>
         <span class="n">events</span><span class="o">::</span><span class="n">EventBus</span> <span class="n">m_eventbus</span><span class="p">;</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">EcsRegistry</span> <span class="n">m_ecs</span><span class="p">;</span>
         <span class="n">scheduling</span><span class="o">::</span><span class="n">Scheduler</span> <span class="n">m_scheduler</span><span class="p">;</span>
 
     <span class="k">public</span><span class="o">:</span>
-        <span class="n">Engine</span><span class="p">()</span> <span class="o">:</span> <span class="n">m_modules</span><span class="p">(),</span> <span class="n">m_ecs</span><span class="p">(),</span> <span class="n">m_eventbus</span><span class="p">(),</span> <span class="n">m_scheduler</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_eventbus</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">Engine</span><span class="p">()</span> <span class="o">:</span> <span class="n">m_modules</span><span class="p">(),</span> <span class="n">m_eventbus</span><span class="p">(),</span> <span class="n">m_ecs</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_eventbus</span><span class="p">),</span> <span class="n">m_scheduler</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_eventbus</span><span class="p">)</span> <span class="p">{}</span>
 
         <span class="o">~</span><span class="n">Engine</span><span class="p">()</span>
         <span class="p">{</span>

@@ -15,6 +15,7 @@ Program Listing for File queryregistry.hpp
    #include <core/containers/containers.hpp>
    #include <core/types/primitives.hpp>
    #include <core/ecs/entityquery.hpp>
+   #include <iostream>
    
    namespace args::core::ecs
    {
@@ -23,16 +24,21 @@ Program Listing for File queryregistry.hpp
    
        class ARGS_API QueryRegistry
        {
+           friend class EntityQuery;
        private:
            EcsRegistry& m_registry;
            async::readonly_rw_spinlock m_entityLock;
-           sparse_map<id_type, sparse_map<id_type, entity_handle>> m_entityLists;
+           sparse_map<id_type, sparse_map<id_type, entity_handle>*> m_entityLists;
            async::readonly_rw_spinlock m_referenceLock;
            sparse_map<id_type, size_type> m_references;
            async::readonly_rw_spinlock m_componentLock;
            sparse_map<id_type, hashed_sparse_set<id_type>> m_componentTypes;
    
+           id_type m_lastQueryId = 1;
+   
            static hashed_sparse_set<QueryRegistry*> m_validRegistries;
+   
+           id_type addQuery(const hashed_sparse_set<id_type>& componentTypes);
    
        public:
            static bool isValid(QueryRegistry* reg) { return m_validRegistries.contains(reg); }
@@ -41,6 +47,9 @@ Program Listing for File queryregistry.hpp
    
            ~QueryRegistry()
            {
+               for (auto* entityList : m_entityLists)
+                   delete entityList;
+   
                m_validRegistries.erase(this);
            }
    
@@ -65,8 +74,6 @@ Program Listing for File queryregistry.hpp
            EntityQuery createQuery(const hashed_sparse_set<id_type>& componentTypes);
    
            const hashed_sparse_set<id_type>& getComponentTypes(id_type queryId);
-   
-           id_type addQuery(const hashed_sparse_set<id_type>& componentTypes);
    
            const sparse_map<id_type, entity_handle>& getEntities(id_type queryId);
    
