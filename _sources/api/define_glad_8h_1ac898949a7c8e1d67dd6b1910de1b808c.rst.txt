@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ac898949a7c8e1d67dd6b1910de1b808c:
+
+Define GL_TEXTURE_BINDING_3D
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TEXTURE_BINDING_3D

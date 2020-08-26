@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a41dcdaccc82fb7153a2c9b1f92c323dc:
+
+Define GL_RGB16I
+================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_RGB16I

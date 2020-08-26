@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1abad28984d102b363838d03d71dfe7f7d:
+
+Define GL_STENCIL_PASS_DEPTH_FAIL
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_STENCIL_PASS_DEPTH_FAIL

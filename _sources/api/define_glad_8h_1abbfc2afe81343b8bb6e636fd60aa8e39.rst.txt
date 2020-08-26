@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1abbfc2afe81343b8bb6e636fd60aa8e39:
+
+Define GL_LINE
+==============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_LINE

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a22ff7b3139174894503fbae4110d5c03:
+
+Define glVertexAttrib1s
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glVertexAttrib1s

@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a0ab304b7eaeef075b5b9fac632e54e14:
+
+Typedef PFNGLGETVERTEXARRAYINDEXED64IVPROC
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETVERTEXARRAYINDEXED64IVPROC

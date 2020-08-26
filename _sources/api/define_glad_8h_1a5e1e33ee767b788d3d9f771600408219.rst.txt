@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a5e1e33ee767b788d3d9f771600408219:
+
+Define GL_GEOMETRY_SUBROUTINE
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_GEOMETRY_SUBROUTINE

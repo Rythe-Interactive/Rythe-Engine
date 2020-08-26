@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a6981e5a4c8105e43ff6327537ad720d7:
+
+Variable glad_glUseProgramStages
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glUseProgramStages

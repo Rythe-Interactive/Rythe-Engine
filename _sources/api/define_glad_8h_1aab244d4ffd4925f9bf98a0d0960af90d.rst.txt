@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aab244d4ffd4925f9bf98a0d0960af90d:
+
+Define GL_SHADER_STORAGE_BLOCK
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_SHADER_STORAGE_BLOCK

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1af72f88ba83f2223c9bf9554af4b11a59:
+
+Define glGetFloati_v
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetFloati_v

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1adc236d6ac7cd94c240c5d65e8a1b4ab6:
+
+Define glGenQueries
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGenQueries

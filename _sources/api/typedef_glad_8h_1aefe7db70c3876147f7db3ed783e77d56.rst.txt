@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1aefe7db70c3876147f7db3ed783e77d56:
+
+Typedef PFNGLGETQUERYBUFFEROBJECTUI64VPROC
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETQUERYBUFFEROBJECTUI64VPROC

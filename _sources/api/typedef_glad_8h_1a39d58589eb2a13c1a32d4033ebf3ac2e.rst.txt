@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a39d58589eb2a13c1a32d4033ebf3ac2e:
+
+Typedef PFNGLPROVOKINGVERTEXPROC
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLPROVOKINGVERTEXPROC

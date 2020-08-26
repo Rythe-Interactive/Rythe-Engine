@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1aecb3235e5a1a83a3a1d134da269dcb48:
+
+Variable glad_glGetTexParameteriv
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetTexParameteriv

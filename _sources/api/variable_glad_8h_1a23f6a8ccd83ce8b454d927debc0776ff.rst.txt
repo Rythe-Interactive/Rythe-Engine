@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a23f6a8ccd83ce8b454d927debc0776ff:
+
+Variable glad_glTexImage3DMultisample
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glTexImage3DMultisample

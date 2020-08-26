@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a089a3736e5280b9c7cc50129e2659974:
+
+Define GL_NONE
+==============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_NONE

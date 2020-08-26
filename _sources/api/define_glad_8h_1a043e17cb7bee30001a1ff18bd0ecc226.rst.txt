@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a043e17cb7bee30001a1ff18bd0ecc226:
+
+Define GL_NUM_PROGRAM_BINARY_FORMATS
+====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_NUM_PROGRAM_BINARY_FORMATS

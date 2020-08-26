@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a62bbf207991c04e9c4afcd3367368e28:
+
+Variable glad_glGetVertexArrayIndexediv
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetVertexArrayIndexediv

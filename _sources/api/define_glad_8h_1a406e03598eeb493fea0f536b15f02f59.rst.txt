@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a406e03598eeb493fea0f536b15f02f59:
+
+Define GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME
+============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME

@@ -1,0 +1,13 @@
+.. _exhale_define_khrplatform_8h_1a5d0e04fe11e69b75470eb0a2a2546af3:
+
+Define KHRONOS_APICALL
+======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_KHR_khrplatform.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: KHRONOS_APICALL

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aa3d4d84d7e1458e03145d5db96bde045:
+
+Define GL_HALF_FLOAT
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_HALF_FLOAT

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aacccd0878b538ea6c008b3b812bc8f2b:
+
+Define glGetSynciv
+==================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetSynciv

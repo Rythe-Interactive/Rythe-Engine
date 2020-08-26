@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aec59cfaf908995d8bcd679c7133d4a92:
+
+Define glVertexArrayAttribLFormat
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glVertexArrayAttribLFormat

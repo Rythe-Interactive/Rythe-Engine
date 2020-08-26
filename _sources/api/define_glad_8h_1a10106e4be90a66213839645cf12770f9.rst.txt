@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a10106e4be90a66213839645cf12770f9:
+
+Define glGetUniformLocation
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetUniformLocation

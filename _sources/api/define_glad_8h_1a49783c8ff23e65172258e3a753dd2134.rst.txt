@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a49783c8ff23e65172258e3a753dd2134:
+
+Define GL_MAX_DEBUG_MESSAGE_LENGTH
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_DEBUG_MESSAGE_LENGTH

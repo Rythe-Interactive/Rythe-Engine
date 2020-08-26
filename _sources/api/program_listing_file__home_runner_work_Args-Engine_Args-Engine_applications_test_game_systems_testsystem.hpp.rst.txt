@@ -31,7 +31,6 @@ Program Listing for File testsystem.hpp
        }
    };
    
-   
    class TestSystem final : public System<TestSystem>
    {
    public:
@@ -50,7 +49,7 @@ Program Listing for File testsystem.hpp
        }
    
        void update(time::time_span<fast_time> deltaTime)
-       {       
+       {
            static auto query = createQuery<sah>();
    
            static time::time_span<fast_time> buffer;
@@ -115,7 +114,7 @@ Program Listing for File testsystem.hpp
    
                for (auto entity : query)
                {
-                   auto comp = entity.get_component<sah>();                
+                   auto comp = entity.get_component<sah>();
                    std::cout << "component value on different thread: " << comp.read().value << std::endl;
                }
    

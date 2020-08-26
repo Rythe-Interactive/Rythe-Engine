@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a7b003f1f4b728a45baa74c8bda1240b4:
+
+Define GL_MAX_COMPUTE_WORK_GROUP_SIZE
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_COMPUTE_WORK_GROUP_SIZE

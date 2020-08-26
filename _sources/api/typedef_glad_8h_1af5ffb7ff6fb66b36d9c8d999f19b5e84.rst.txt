@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1af5ffb7ff6fb66b36d9c8d999f19b5e84:
+
+Typedef GLbyte
+==============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: GLbyte

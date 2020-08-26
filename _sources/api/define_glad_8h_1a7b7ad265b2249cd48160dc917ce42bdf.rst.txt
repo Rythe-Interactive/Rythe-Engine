@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a7b7ad265b2249cd48160dc917ce42bdf:
+
+Define GL_DYNAMIC_STORAGE_BIT
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_DYNAMIC_STORAGE_BIT

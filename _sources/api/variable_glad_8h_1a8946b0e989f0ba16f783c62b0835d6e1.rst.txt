@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a8946b0e989f0ba16f783c62b0835d6e1:
+
+Variable glad_glGetnConvolutionFilter
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetnConvolutionFilter

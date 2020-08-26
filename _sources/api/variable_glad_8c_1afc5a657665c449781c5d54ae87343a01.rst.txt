@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1afc5a657665c449781c5d54ae87343a01:
+
+Variable glad_glGetVertexAttribiv
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetVertexAttribiv

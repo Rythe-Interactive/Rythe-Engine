@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a8afd2d52d8a440f4b8b05d6284308710:
+
+Define GL_FRAGMENT_SHADER_DERIVATIVE_HINT
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_FRAGMENT_SHADER_DERIVATIVE_HINT

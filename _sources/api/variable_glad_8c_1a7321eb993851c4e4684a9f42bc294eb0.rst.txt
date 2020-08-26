@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a7321eb993851c4e4684a9f42bc294eb0:
+
+Variable glad_glDrawElementsInstancedBaseVertexBaseInstance
+===========================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glDrawElementsInstancedBaseVertexBaseInstance

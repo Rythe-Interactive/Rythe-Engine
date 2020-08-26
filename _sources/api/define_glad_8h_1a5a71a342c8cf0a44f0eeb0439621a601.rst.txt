@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a5a71a342c8cf0a44f0eeb0439621a601:
+
+Define GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS

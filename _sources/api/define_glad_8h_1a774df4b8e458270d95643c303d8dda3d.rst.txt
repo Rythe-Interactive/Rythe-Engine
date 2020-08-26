@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a774df4b8e458270d95643c303d8dda3d:
+
+Define GL_SAMPLER_1D_ARRAY
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_SAMPLER_1D_ARRAY

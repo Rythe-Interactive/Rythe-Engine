@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a2567a5f7bf0601de09f811f5cca921c3:
+
+Typedef PFNGLGETNAMEDBUFFERPARAMETERI64VPROC
+============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETNAMEDBUFFERPARAMETERI64VPROC

@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a415bbb3c7faeb57fe9ecdcb10c83d765:
+
+Typedef PFNGLFLUSHMAPPEDBUFFERRANGEPROC
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLFLUSHMAPPEDBUFFERRANGEPROC

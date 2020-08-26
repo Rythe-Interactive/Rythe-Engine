@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a171280aefe62b464f768cbdf9a0aecd3:
+
+Variable glad_glDispatchCompute
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glDispatchCompute

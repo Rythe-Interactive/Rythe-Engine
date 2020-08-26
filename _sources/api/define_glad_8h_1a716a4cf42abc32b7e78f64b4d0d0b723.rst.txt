@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a716a4cf42abc32b7e78f64b4d0d0b723:
+
+Define GL_MAX_COLOR_ATTACHMENTS
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_COLOR_ATTACHMENTS

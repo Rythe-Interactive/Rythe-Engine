@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a70c0eb4340551bd1dece7e7655ea55b8:
+
+Define GL_BLUE_INTEGER
+======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_BLUE_INTEGER

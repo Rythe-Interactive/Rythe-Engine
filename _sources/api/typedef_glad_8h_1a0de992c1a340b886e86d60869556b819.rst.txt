@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a0de992c1a340b886e86d60869556b819:
+
+Typedef PFNGLGETVERTEXARRAYINDEXEDIVPROC
+========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETVERTEXARRAYINDEXEDIVPROC

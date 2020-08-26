@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a731517de0bb6a5211b2191843b61e58f:
+
+Define GL_COMPUTE_SUBROUTINE_UNIFORM
+====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_COMPUTE_SUBROUTINE_UNIFORM

@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a78ac87ef55af9d7c8544d1349e952531:
+
+Typedef PFNGLTRANSFORMFEEDBACKVARYINGSPROC
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLTRANSFORMFEEDBACKVARYINGSPROC

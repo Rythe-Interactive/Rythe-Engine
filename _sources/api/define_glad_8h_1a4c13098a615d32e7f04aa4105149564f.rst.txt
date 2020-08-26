@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a4c13098a615d32e7f04aa4105149564f:
+
+Define glBindVertexArray
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glBindVertexArray

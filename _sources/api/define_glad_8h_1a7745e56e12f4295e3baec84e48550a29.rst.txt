@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a7745e56e12f4295e3baec84e48550a29:
+
+Define glGetUniformSubroutineuiv
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetUniformSubroutineuiv

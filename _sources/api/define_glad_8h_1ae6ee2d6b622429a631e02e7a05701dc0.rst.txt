@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ae6ee2d6b622429a631e02e7a05701dc0:
+
+Define GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a426ec64d6fd6f3fae8318052952eb49d:
+
+Define GL_MAX_TESS_CONTROL_TOTAL_OUTPUT_COMPONENTS
+==================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_TESS_CONTROL_TOTAL_OUTPUT_COMPONENTS

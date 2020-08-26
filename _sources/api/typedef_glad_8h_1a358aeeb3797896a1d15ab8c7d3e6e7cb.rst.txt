@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a358aeeb3797896a1d15ab8c7d3e6e7cb:
+
+Typedef PFNGLGETINTEGER64I_VPROC
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETINTEGER64I_VPROC

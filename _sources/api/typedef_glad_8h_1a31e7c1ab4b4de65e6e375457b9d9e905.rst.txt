@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a31e7c1ab4b4de65e6e375457b9d9e905:
+
+Typedef GLhalfNV
+================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: GLhalfNV

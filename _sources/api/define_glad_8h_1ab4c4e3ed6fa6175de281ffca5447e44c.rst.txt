@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ab4c4e3ed6fa6175de281ffca5447e44c:
+
+Define GL_DRAW_BUFFER8
+======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_DRAW_BUFFER8

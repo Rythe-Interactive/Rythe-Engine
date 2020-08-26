@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a2252c3e8ced8d89e46047fc15e7b267f:
+
+Typedef PFNGLCREATESHADERPROC
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLCREATESHADERPROC

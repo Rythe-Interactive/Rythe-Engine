@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a835ba55e6022d86fe3f04b116bf969aa:
+
+Define glSamplerParameteriv
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glSamplerParameteriv

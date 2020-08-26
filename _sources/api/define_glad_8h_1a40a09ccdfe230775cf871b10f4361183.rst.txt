@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a40a09ccdfe230775cf871b10f4361183:
+
+Define GL_BOOL_VEC2
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_BOOL_VEC2

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a6fa25836c11c3da4d5f2cc64a440d4b2:
+
+Define GL_INTERNALFORMAT_STENCIL_TYPE
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_INTERNALFORMAT_STENCIL_TYPE

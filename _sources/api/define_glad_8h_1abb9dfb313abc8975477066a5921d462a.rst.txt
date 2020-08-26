@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1abb9dfb313abc8975477066a5921d462a:
+
+Define glNamedBufferSubData
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glNamedBufferSubData

@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1aedb1b98577ced03409f9a1f959346617:
+
+Typedef PFNGLPROGRAMUNIFORMMATRIX3X4DVPROC
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLPROGRAMUNIFORMMATRIX3X4DVPROC

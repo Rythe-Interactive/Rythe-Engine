@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a53541c94aeb32acc6b398c0d7a3148bb:
+
+Define GL_SAMPLE_MASK
+=====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_SAMPLE_MASK

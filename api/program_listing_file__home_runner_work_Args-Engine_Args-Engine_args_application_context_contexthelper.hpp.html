@@ -51,6 +51,7 @@
 <span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/platform/args_library.hpp&gt;</span><span class="cp"></span>
 
+<span class="cp">#include</span> <span class="cpf">&lt;application/context/detail/glad/glad.h&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;glfw/glfw3.h&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">application</span>
@@ -59,6 +60,8 @@
     <span class="p">{</span>
     <span class="k">private</span><span class="o">:</span>
         <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">atomic_bool</span> <span class="n">m_initialized</span><span class="p">;</span>
+
+        <span class="k">static</span> <span class="n">atomic_sparse_map</span><span class="o">&lt;</span><span class="n">GLFWwindow</span><span class="o">*</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">m_windowInitialized</span><span class="p">;</span>
 
     <span class="k">public</span><span class="o">:</span>
         <span class="n">ContextHelper</span><span class="p">()</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>

@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a64ccaa2f252c2ca5cb0b9e0b62b6cae0:
+
+Typedef PFNGLBLITFRAMEBUFFERPROC
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLBLITFRAMEBUFFERPROC

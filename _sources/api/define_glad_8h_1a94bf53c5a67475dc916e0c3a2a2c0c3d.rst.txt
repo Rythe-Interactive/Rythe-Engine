@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a94bf53c5a67475dc916e0c3a2a2c0c3d:
+
+Define GL_TEXTURE_COMPRESSED_BLOCK_HEIGHT
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TEXTURE_COMPRESSED_BLOCK_HEIGHT

@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1ade923f633d459f4483c9ae45bc019cb3:
+
+Variable glad_glInvalidateBufferSubData
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glInvalidateBufferSubData

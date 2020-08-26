@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a779fc757febaab6779701ef8ad52f08c:
+
+Variable glad_glBlendFunci
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glBlendFunci

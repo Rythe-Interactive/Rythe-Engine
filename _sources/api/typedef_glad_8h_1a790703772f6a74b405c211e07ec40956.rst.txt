@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a790703772f6a74b405c211e07ec40956:
+
+Typedef PFNGLBINDFRAGDATALOCATIONPROC
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLBINDFRAGDATALOCATIONPROC

@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1aa57f41b452705a5470375e4f0cc36dd1:
+
+Variable glad_glGenFramebuffers
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGenFramebuffers

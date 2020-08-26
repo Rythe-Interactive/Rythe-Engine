@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1abb7290253b7743271ba6614e8c099bd2:
+
+Typedef PFNGLREADBUFFERPROC
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLREADBUFFERPROC

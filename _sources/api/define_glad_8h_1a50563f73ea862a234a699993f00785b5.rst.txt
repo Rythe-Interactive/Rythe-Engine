@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a50563f73ea862a234a699993f00785b5:
+
+Define glEndQuery
+=================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glEndQuery

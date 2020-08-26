@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ac5b716009b1e939f29f44d3840c45ec9:
+
+Define GL_FRAGMENT_SHADER_INVOCATIONS
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_FRAGMENT_SHADER_INVOCATIONS

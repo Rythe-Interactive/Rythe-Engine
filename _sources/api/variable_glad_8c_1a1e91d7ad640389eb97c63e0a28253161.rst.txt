@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a1e91d7ad640389eb97c63e0a28253161:
+
+Variable glad_glUniformSubroutinesuiv
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glUniformSubroutinesuiv

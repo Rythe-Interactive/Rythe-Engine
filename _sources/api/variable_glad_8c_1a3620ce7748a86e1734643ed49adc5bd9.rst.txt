@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a3620ce7748a86e1734643ed49adc5bd9:
+
+Variable glad_glGetProgramPipelineiv
+====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetProgramPipelineiv

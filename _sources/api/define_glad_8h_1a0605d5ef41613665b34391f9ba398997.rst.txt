@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a0605d5ef41613665b34391f9ba398997:
+
+Define GL_TEXTURE_CUBE_MAP_POSITIVE_Y
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TEXTURE_CUBE_MAP_POSITIVE_Y

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a2cf708093c599b49cc8be1b393a7985d:
+
+Define GL_MAX_COMPUTE_SHARED_MEMORY_SIZE
+========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_COMPUTE_SHARED_MEMORY_SIZE

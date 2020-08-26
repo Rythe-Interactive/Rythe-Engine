@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1adb00133bd8755da072d5af25a006d3b7:
+
+Define glClearBufferfv
+======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glClearBufferfv

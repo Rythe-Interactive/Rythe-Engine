@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1ae35a8e4fc48e80630d2fa4476e226a9e:
+
+Typedef PFNGLGETNCONVOLUTIONFILTERPROC
+======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETNCONVOLUTIONFILTERPROC

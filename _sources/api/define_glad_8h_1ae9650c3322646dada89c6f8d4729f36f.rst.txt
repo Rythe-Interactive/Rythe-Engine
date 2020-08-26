@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ae9650c3322646dada89c6f8d4729f36f:
+
+Define glVertexAttribI1ui
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glVertexAttribI1ui

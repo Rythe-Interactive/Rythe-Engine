@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1abc1ea1d7777f46209526c9f38dc640a3:
+
+Define GL_DEBUG_SEVERITY_HIGH
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_DEBUG_SEVERITY_HIGH

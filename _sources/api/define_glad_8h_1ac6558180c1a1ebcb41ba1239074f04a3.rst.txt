@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ac6558180c1a1ebcb41ba1239074f04a3:
+
+Define glGetCompressedTextureSubImage
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetCompressedTextureSubImage

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ad99897d0a5770ce6486ed423c8b69390:
+
+Define glClearNamedFramebufferuiv
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glClearNamedFramebufferuiv

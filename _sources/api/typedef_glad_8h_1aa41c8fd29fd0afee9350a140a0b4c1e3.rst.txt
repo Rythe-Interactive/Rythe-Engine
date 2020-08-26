@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1aa41c8fd29fd0afee9350a140a0b4c1e3:
+
+Typedef PFNGLFRAMEBUFFERRENDERBUFFERPROC
+========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLFRAMEBUFFERRENDERBUFFERPROC

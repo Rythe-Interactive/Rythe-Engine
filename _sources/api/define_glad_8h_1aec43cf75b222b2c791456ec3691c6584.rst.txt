@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aec43cf75b222b2c791456ec3691c6584:
+
+Define GL_BUFFER_VARIABLE
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_BUFFER_VARIABLE

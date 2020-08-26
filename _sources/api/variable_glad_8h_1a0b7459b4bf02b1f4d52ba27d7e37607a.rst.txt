@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a0b7459b4bf02b1f4d52ba27d7e37607a:
+
+Variable glad_glTextureBuffer
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glTextureBuffer

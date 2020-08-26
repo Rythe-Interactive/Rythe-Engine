@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ad427acb6bbfb5e4f18990bc1d8842920:
+
+Define GL_ATOMIC_COUNTER_BUFFER_INDEX
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_ATOMIC_COUNTER_BUFFER_INDEX

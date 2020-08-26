@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1ac493d5eca9c8a9666586bab8bd9c0a66:
+
+Variable glad_glGetVertexArrayiv
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetVertexArrayiv

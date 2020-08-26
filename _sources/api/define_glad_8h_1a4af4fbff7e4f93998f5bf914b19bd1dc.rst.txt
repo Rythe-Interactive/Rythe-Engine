@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a4af4fbff7e4f93998f5bf914b19bd1dc:
+
+Define GL_ONE_MINUS_DST_COLOR
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_ONE_MINUS_DST_COLOR

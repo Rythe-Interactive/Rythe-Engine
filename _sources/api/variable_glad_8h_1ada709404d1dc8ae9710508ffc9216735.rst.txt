@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1ada709404d1dc8ae9710508ffc9216735:
+
+Variable glad_glGetSubroutineIndex
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetSubroutineIndex

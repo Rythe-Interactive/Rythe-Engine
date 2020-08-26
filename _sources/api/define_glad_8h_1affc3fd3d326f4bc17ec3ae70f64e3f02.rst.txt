@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1affc3fd3d326f4bc17ec3ae70f64e3f02:
+
+Define GL_QUERY_COUNTER_BITS
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_QUERY_COUNTER_BITS

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a7a28e4c732415129acb357af17c469f6:
+
+Define glColorMask
+==================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glColorMask

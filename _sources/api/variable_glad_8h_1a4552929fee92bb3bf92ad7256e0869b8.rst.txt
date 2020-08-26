@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a4552929fee92bb3bf92ad7256e0869b8:
+
+Variable glad_glIsBuffer
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glIsBuffer

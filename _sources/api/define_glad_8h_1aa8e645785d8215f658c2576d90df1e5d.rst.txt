@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aa8e645785d8215f658c2576d90df1e5d:
+
+Define GL_CONSTANT_ALPHA
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_CONSTANT_ALPHA

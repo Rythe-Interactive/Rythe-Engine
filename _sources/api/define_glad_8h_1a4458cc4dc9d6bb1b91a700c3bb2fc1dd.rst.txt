@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a4458cc4dc9d6bb1b91a700c3bb2fc1dd:
+
+Define GL_PROVOKING_VERTEX
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_PROVOKING_VERTEX

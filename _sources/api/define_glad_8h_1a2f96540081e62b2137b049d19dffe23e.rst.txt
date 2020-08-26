@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a2f96540081e62b2137b049d19dffe23e:
+
+Define GL_BUFFER_ACCESS
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_BUFFER_ACCESS

@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1afa3b0553785019d2eea12cd361fd02f5:
+
+Typedef PFNGLMEMORYBARRIERBYREGIONPROC
+======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLMEMORYBARRIERBYREGIONPROC

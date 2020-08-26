@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a8e99b21483dc72ca31c431e8822e55f8:
+
+Typedef PFNGLFRONTFACEPROC
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLFRONTFACEPROC

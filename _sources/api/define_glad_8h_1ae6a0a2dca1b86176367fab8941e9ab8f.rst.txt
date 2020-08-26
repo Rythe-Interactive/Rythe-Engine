@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ae6a0a2dca1b86176367fab8941e9ab8f:
+
+Define glUnmapBuffer
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glUnmapBuffer

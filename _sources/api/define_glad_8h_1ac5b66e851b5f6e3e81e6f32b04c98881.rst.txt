@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ac5b66e851b5f6e3e81e6f32b04c98881:
+
+Define GL_DISPATCH_INDIRECT_BUFFER
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_DISPATCH_INDIRECT_BUFFER

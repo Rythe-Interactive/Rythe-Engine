@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a9e626474ad3066f31b46293d535b009f:
+
+Define GL_FRAMEBUFFER
+=====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_FRAMEBUFFER

@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a435e78b63a7c42883318ed0b0314e052:
+
+Variable glad_glCopyNamedBufferSubData
+======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glCopyNamedBufferSubData

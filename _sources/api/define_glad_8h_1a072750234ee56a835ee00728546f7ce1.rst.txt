@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a072750234ee56a835ee00728546f7ce1:
+
+Define GL_BUFFER_STORAGE_FLAGS
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_BUFFER_STORAGE_FLAGS

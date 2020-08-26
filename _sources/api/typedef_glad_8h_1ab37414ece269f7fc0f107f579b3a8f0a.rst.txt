@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1ab37414ece269f7fc0f107f579b3a8f0a:
+
+Typedef PFNGLGETINTERNALFORMATI64VPROC
+======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETINTERNALFORMATI64VPROC

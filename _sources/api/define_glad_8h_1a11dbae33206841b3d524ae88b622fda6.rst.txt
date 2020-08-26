@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a11dbae33206841b3d524ae88b622fda6:
+
+Define GL_COMPRESSED_RGB8_ETC2
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_COMPRESSED_RGB8_ETC2

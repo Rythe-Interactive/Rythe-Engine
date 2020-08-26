@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1aa697361806825e54b64c7e6e2744d171:
+
+Typedef PFNGLGETMULTISAMPLEFVPROC
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETMULTISAMPLEFVPROC

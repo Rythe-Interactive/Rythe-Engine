@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a57467faf11372901b47e357f970144dd:
+
+Typedef PFNGLDISPATCHCOMPUTEINDIRECTPROC
+========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLDISPATCHCOMPUTEINDIRECTPROC

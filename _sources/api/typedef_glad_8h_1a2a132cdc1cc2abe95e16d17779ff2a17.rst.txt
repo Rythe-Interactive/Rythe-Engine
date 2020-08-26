@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a2a132cdc1cc2abe95e16d17779ff2a17:
+
+Typedef PFNGLGETSUBROUTINEINDEXPROC
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETSUBROUTINEINDEXPROC

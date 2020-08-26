@@ -1,0 +1,13 @@
+.. _exhale_function_glad_8c_1a137453294a2756a898902ef399b3d437:
+
+Function gladLoadGL(void)
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: gladLoadGL(void)

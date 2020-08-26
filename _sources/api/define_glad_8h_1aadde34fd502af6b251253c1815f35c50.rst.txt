@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aadde34fd502af6b251253c1815f35c50:
+
+Define GL_INVALID_FRAMEBUFFER_OPERATION
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_INVALID_FRAMEBUFFER_OPERATION

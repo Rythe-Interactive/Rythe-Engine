@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a27968cbc72faeb68452b17c9785a8463:
+
+Define GL_TEXTURE_STENCIL_SIZE
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TEXTURE_STENCIL_SIZE

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a3f7fa0df22505dd09a24a4e1e74eca09:
+
+Define glEnable
+===============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glEnable

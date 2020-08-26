@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a9a23e8e4206765b26b5c1186833bacb5:
+
+Typedef PFNGLCOMPRESSEDTEXIMAGE1DPROC
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLCOMPRESSEDTEXIMAGE1DPROC

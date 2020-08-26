@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1af360d68a4eae929cdbd2c4de7c50a630:
+
+Define GL_CONTEXT_LOST
+======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_CONTEXT_LOST

@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a32a86fd43bac6b2790f71ac0313bb914:
+
+Typedef PFNGLBINDBUFFERBASEPROC
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLBINDBUFFERBASEPROC

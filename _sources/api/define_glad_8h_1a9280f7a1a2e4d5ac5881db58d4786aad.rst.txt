@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a9280f7a1a2e4d5ac5881db58d4786aad:
+
+Define GL_PACK_SKIP_ROWS
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_PACK_SKIP_ROWS

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1af29ecace2d02fefe2ef423c8f0b6fadd:
+
+Define GL_STACK_UNDERFLOW
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_STACK_UNDERFLOW

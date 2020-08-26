@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ab8d3e774b06f45f43c3a45cf6f6f594d:
+
+Define GL_CLIPPING_INPUT_PRIMITIVES
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_CLIPPING_INPUT_PRIMITIVES

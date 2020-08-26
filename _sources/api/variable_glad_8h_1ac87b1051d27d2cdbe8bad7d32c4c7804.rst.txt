@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1ac87b1051d27d2cdbe8bad7d32c4c7804:
+
+Variable glad_glBindTexture
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glBindTexture

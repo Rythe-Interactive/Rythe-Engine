@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ae8b5c2980cf1e2a2ff8d940b57cdcd1a:
+
+Define GL_LOWER_LEFT
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_LOWER_LEFT

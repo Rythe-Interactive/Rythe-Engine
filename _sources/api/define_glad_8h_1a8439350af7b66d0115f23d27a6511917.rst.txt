@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a8439350af7b66d0115f23d27a6511917:
+
+Define GL_FUNC_REVERSE_SUBTRACT
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_FUNC_REVERSE_SUBTRACT

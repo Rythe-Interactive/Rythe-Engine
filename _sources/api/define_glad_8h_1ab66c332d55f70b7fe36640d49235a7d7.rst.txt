@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ab66c332d55f70b7fe36640d49235a7d7:
+
+Define GL_FLOAT_MAT2
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_FLOAT_MAT2

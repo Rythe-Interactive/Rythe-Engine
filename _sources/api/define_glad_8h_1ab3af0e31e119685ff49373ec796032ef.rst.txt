@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ab3af0e31e119685ff49373ec796032ef:
+
+Define GL_FIRST_VERTEX_CONVENTION
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_FIRST_VERTEX_CONVENTION

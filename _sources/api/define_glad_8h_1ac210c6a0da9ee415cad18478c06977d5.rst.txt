@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ac210c6a0da9ee415cad18478c06977d5:
+
+Define GL_QUADS_FOLLOW_PROVOKING_VERTEX_CONVENTION
+==================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_QUADS_FOLLOW_PROVOKING_VERTEX_CONVENTION

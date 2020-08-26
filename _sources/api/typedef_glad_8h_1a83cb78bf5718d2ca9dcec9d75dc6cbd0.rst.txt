@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a83cb78bf5718d2ca9dcec9d75dc6cbd0:
+
+Typedef PFNGLCOPYIMAGESUBDATAPROC
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLCOPYIMAGESUBDATAPROC

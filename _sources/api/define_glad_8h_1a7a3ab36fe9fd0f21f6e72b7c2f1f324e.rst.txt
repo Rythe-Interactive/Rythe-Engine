@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a7a3ab36fe9fd0f21f6e72b7c2f1f324e:
+
+Define GL_SRC1_COLOR
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_SRC1_COLOR

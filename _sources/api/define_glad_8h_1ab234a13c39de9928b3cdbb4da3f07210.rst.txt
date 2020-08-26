@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ab234a13c39de9928b3cdbb4da3f07210:
+
+Define GL_TRANSFORM_FEEDBACK_BINDING
+====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TRANSFORM_FEEDBACK_BINDING

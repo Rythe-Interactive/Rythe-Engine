@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a05d88cc9fc5b5200e8cb970a06b8577f:
+
+Typedef PFNGLTEXPARAMETERIVPROC
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLTEXPARAMETERIVPROC

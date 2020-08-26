@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a1b4eefac9c4dd4cb4a9513de7d78bb77:
+
+Define GL_DEPTH_STENCIL_TEXTURE_MODE
+====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_DEPTH_STENCIL_TEXTURE_MODE

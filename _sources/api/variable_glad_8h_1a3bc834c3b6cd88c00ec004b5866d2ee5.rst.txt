@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a3bc834c3b6cd88c00ec004b5866d2ee5:
+
+Variable glad_glCompressedTexImage1D
+====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glCompressedTexImage1D

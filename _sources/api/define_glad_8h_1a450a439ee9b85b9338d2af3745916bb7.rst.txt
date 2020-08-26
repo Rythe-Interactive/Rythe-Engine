@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a450a439ee9b85b9338d2af3745916bb7:
+
+Define glTexBuffer
+==================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glTexBuffer

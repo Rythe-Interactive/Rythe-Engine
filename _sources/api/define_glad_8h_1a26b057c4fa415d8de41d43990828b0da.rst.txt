@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a26b057c4fa415d8de41d43990828b0da:
+
+Define GL_DEPTH_COMPONENT16
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_DEPTH_COMPONENT16

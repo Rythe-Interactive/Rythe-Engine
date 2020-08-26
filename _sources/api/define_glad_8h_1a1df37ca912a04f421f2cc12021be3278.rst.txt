@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a1df37ca912a04f421f2cc12021be3278:
+
+Define glGetUniformIndices
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetUniformIndices

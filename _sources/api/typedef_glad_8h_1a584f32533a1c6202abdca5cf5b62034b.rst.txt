@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a584f32533a1c6202abdca5cf5b62034b:
+
+Typedef PFNGLMULTIDRAWARRAYSINDIRECTPROC
+========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLMULTIDRAWARRAYSINDIRECTPROC

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ace6e2f67f6e8191642fb3a33c5657bfc:
+
+Define GL_MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS

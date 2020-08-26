@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a4e121429d7dc9fec49dd3ff267cd3c45:
+
+Typedef PFNGLGETNAMEDFRAMEBUFFERPARAMETERIVPROC
+===============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETNAMEDFRAMEBUFFERPARAMETERIVPROC

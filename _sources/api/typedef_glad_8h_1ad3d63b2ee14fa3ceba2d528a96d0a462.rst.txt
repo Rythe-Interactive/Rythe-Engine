@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1ad3d63b2ee14fa3ceba2d528a96d0a462:
+
+Typedef PFNGLPATCHPARAMETERIPROC
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLPATCHPARAMETERIPROC

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aa3b4655feeeed8b7e7e981c994af1731:
+
+Define GL_QUERY_RESULT_AVAILABLE
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_QUERY_RESULT_AVAILABLE

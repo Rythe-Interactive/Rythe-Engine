@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1ac5cafce241e025ce0ba88756626ce9c3:
+
+Typedef GLDEBUGPROCAMD
+======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: GLDEBUGPROCAMD

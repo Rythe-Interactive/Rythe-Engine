@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a475b1c2e4841b57fbb2201c7fa7d5c06:
+
+Define GL_UNIFORM_BLOCK_REFERENCED_BY_COMPUTE_SHADER
+====================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_UNIFORM_BLOCK_REFERENCED_BY_COMPUTE_SHADER

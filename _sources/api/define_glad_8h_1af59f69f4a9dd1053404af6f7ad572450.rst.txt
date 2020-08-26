@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1af59f69f4a9dd1053404af6f7ad572450:
+
+Define GL_CONTEXT_RELEASE_BEHAVIOR
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_CONTEXT_RELEASE_BEHAVIOR

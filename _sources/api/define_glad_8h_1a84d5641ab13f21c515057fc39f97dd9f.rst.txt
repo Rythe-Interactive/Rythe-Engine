@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a84d5641ab13f21c515057fc39f97dd9f:
+
+Define GL_ATOMIC_COUNTER_BARRIER_BIT
+====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_ATOMIC_COUNTER_BARRIER_BIT

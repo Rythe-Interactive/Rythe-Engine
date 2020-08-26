@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a8604142d18a2f0c93506365b3de4c8fe:
+
+Define glCompressedTexSubImage1D
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glCompressedTexSubImage1D

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a1811471a752347ea31708231959ad1ae:
+
+Define GL_RGB_INTEGER
+=====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_RGB_INTEGER

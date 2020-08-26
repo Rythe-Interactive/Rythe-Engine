@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1ac517c1003260cf0d1ce956e8d9a4be8e:
+
+Variable glad_glDrawTransformFeedbackStream
+===========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glDrawTransformFeedbackStream

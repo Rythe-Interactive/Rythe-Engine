@@ -1,0 +1,377 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File khrplatform.h &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File khrplatform.h</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-khrplatform-h">
+<span id="program-listing-file-home-runner-work-args-engine-args-engine-args-application-context-detail-khr-khrplatform-h"></span><h1>Program Listing for File khrplatform.h<a class="headerlink" href="#program-listing-for-file-khrplatform-h" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_KHR_khrplatform.h.html#file-home-runner-work-args-engine-args-engine-args-application-context-detail-khr-khrplatform-h"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/application/context/detail/KHR/khrplatform.h</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifndef __khrplatform_h_</span>
+<span class="cp">#define __khrplatform_h_</span>
+
+<span class="cm">/*</span>
+<span class="cm">** Copyright (c) 2008-2018 The Khronos Group Inc.</span>
+<span class="cm">**</span>
+<span class="cm">** Permission is hereby granted, free of charge, to any person obtaining a</span>
+<span class="cm">** copy of this software and/or associated documentation files (the</span>
+<span class="cm">** &quot;Materials&quot;), to deal in the Materials without restriction, including</span>
+<span class="cm">** without limitation the rights to use, copy, modify, merge, publish,</span>
+<span class="cm">** distribute, sublicense, and/or sell copies of the Materials, and to</span>
+<span class="cm">** permit persons to whom the Materials are furnished to do so, subject to</span>
+<span class="cm">** the following conditions:</span>
+<span class="cm">**</span>
+<span class="cm">** The above copyright notice and this permission notice shall be included</span>
+<span class="cm">** in all copies or substantial portions of the Materials.</span>
+<span class="cm">**</span>
+<span class="cm">** THE MATERIALS ARE PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND,</span>
+<span class="cm">** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF</span>
+<span class="cm">** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.</span>
+<span class="cm">** IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY</span>
+<span class="cm">** CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,</span>
+<span class="cm">** TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE</span>
+<span class="cm">** MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.</span>
+<span class="cm">*/</span>
+
+<span class="cm">/* Khronos platform-specific types and definitions.</span>
+<span class="cm"> *</span>
+<span class="cm"> * The master copy of khrplatform.h is maintained in the Khronos EGL</span>
+<span class="cm"> * Registry repository at https://github.com/KhronosGroup/EGL-Registry</span>
+<span class="cm"> * The last semantic modification to khrplatform.h was at commit ID:</span>
+<span class="cm"> *      67a3e0864c2d75ea5287b9f3d2eb74a745936692</span>
+<span class="cm"> *</span>
+<span class="cm"> * Adopters may modify this file to suit their platform. Adopters are</span>
+<span class="cm"> * encouraged to submit platform specific modifications to the Khronos</span>
+<span class="cm"> * group so that they can be included in future versions of this file.</span>
+<span class="cm"> * Please submit changes by filing pull requests or issues on</span>
+<span class="cm"> * the EGL Registry repository linked above.</span>
+<span class="cm"> *</span>
+<span class="cm"> *</span>
+<span class="cm"> * See the Implementer&#39;s Guidelines for information about where this file</span>
+<span class="cm"> * should be located on your system and for more details of its use:</span>
+<span class="cm"> *    http://www.khronos.org/registry/implementers_guide.pdf</span>
+<span class="cm"> *</span>
+<span class="cm"> * This file should be included as</span>
+<span class="cm"> *        #include &lt;KHR/khrplatform.h&gt;</span>
+<span class="cm"> * by Khronos client API header files that use its types and defines.</span>
+<span class="cm"> *</span>
+<span class="cm"> * The types in khrplatform.h should only be used to define API-specific types.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Types defined in khrplatform.h:</span>
+<span class="cm"> *    khronos_int8_t              signed   8  bit</span>
+<span class="cm"> *    khronos_uint8_t             unsigned 8  bit</span>
+<span class="cm"> *    khronos_int16_t             signed   16 bit</span>
+<span class="cm"> *    khronos_uint16_t            unsigned 16 bit</span>
+<span class="cm"> *    khronos_int32_t             signed   32 bit</span>
+<span class="cm"> *    khronos_uint32_t            unsigned 32 bit</span>
+<span class="cm"> *    khronos_int64_t             signed   64 bit</span>
+<span class="cm"> *    khronos_uint64_t            unsigned 64 bit</span>
+<span class="cm"> *    khronos_intptr_t            signed   same number of bits as a pointer</span>
+<span class="cm"> *    khronos_uintptr_t           unsigned same number of bits as a pointer</span>
+<span class="cm"> *    khronos_ssize_t             signed   size</span>
+<span class="cm"> *    khronos_usize_t             unsigned size</span>
+<span class="cm"> *    khronos_float_t             signed   32 bit floating point</span>
+<span class="cm"> *    khronos_time_ns_t           unsigned 64 bit time in nanoseconds</span>
+<span class="cm"> *    khronos_utime_nanoseconds_t unsigned time interval or absolute time in</span>
+<span class="cm"> *                                         nanoseconds</span>
+<span class="cm"> *    khronos_stime_nanoseconds_t signed time interval in nanoseconds</span>
+<span class="cm"> *    khronos_boolean_enum_t      enumerated boolean type. This should</span>
+<span class="cm"> *      only be used as a base type when a client API&#39;s boolean type is</span>
+<span class="cm"> *      an enum. Client APIs which use an integer or other type for</span>
+<span class="cm"> *      booleans cannot use this as the base type for their boolean.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Tokens defined in khrplatform.h:</span>
+<span class="cm"> *</span>
+<span class="cm"> *    KHRONOS_FALSE, KHRONOS_TRUE Enumerated boolean false/true values.</span>
+<span class="cm"> *</span>
+<span class="cm"> *    KHRONOS_SUPPORT_INT64 is 1 if 64 bit integers are supported; otherwise 0.</span>
+<span class="cm"> *    KHRONOS_SUPPORT_FLOAT is 1 if floats are supported; otherwise 0.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Calling convention macros defined in this file:</span>
+<span class="cm"> *    KHRONOS_APICALL</span>
+<span class="cm"> *    KHRONOS_APIENTRY</span>
+<span class="cm"> *    KHRONOS_APIATTRIBUTES</span>
+<span class="cm"> *</span>
+<span class="cm"> * These may be used in function prototypes as:</span>
+<span class="cm"> *</span>
+<span class="cm"> *      KHRONOS_APICALL void KHRONOS_APIENTRY funcname(</span>
+<span class="cm"> *                                  int arg1,</span>
+<span class="cm"> *                                  int arg2) KHRONOS_APIATTRIBUTES;</span>
+<span class="cm"> */</span>
+
+<span class="cp">#if defined(__SCITECH_SNAP__) &amp;&amp; !defined(KHRONOS_STATIC)</span>
+<span class="cp">#   define KHRONOS_STATIC 1</span>
+<span class="cp">#endif</span>
+
+<span class="cm">/*-------------------------------------------------------------------------</span>
+<span class="cm"> * Definition of KHRONOS_APICALL</span>
+<span class="cm"> *-------------------------------------------------------------------------</span>
+<span class="cm"> * This precedes the return type of the function in the function prototype.</span>
+<span class="cm"> */</span>
+<span class="cp">#if defined(KHRONOS_STATIC)</span>
+    <span class="cm">/* If the preprocessor constant KHRONOS_STATIC is defined, make the</span>
+<span class="cm">     * header compatible with static linking. */</span>
+<span class="cp">#   define KHRONOS_APICALL</span>
+<span class="cp">#elif defined(_WIN32)</span>
+<span class="cp">#   define KHRONOS_APICALL __declspec(dllimport)</span>
+<span class="cp">#elif defined (__SYMBIAN32__)</span>
+<span class="cp">#   define KHRONOS_APICALL IMPORT_C</span>
+<span class="cp">#elif defined(__ANDROID__)</span>
+<span class="cp">#   define KHRONOS_APICALL __attribute__((visibility(&quot;default&quot;)))</span>
+<span class="cp">#else</span>
+<span class="cp">#   define KHRONOS_APICALL</span>
+<span class="cp">#endif</span>
+
+<span class="cm">/*-------------------------------------------------------------------------</span>
+<span class="cm"> * Definition of KHRONOS_APIENTRY</span>
+<span class="cm"> *-------------------------------------------------------------------------</span>
+<span class="cm"> * This follows the return type of the function  and precedes the function</span>
+<span class="cm"> * name in the function prototype.</span>
+<span class="cm"> */</span>
+<span class="cp">#if defined(_WIN32) &amp;&amp; !defined(_WIN32_WCE) &amp;&amp; !defined(__SCITECH_SNAP__)</span>
+    <span class="cm">/* Win32 but not WinCE */</span>
+<span class="cp">#   define KHRONOS_APIENTRY __stdcall</span>
+<span class="cp">#else</span>
+<span class="cp">#   define KHRONOS_APIENTRY</span>
+<span class="cp">#endif</span>
+
+<span class="cm">/*-------------------------------------------------------------------------</span>
+<span class="cm"> * Definition of KHRONOS_APIATTRIBUTES</span>
+<span class="cm"> *-------------------------------------------------------------------------</span>
+<span class="cm"> * This follows the closing parenthesis of the function prototype arguments.</span>
+<span class="cm"> */</span>
+<span class="cp">#if defined (__ARMCC_2__)</span>
+<span class="cp">#define KHRONOS_APIATTRIBUTES __softfp</span>
+<span class="cp">#else</span>
+<span class="cp">#define KHRONOS_APIATTRIBUTES</span>
+<span class="cp">#endif</span>
+
+<span class="cm">/*-------------------------------------------------------------------------</span>
+<span class="cm"> * basic type definitions</span>
+<span class="cm"> *-----------------------------------------------------------------------*/</span>
+<span class="cp">#if (defined(__STDC_VERSION__) &amp;&amp; __STDC_VERSION__ &gt;= 199901L) || defined(__GNUC__) || defined(__SCO__) || defined(__USLC__)</span>
+
+
+<span class="cm">/*</span>
+<span class="cm"> * Using &lt;stdint.h&gt;</span>
+<span class="cm"> */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdint.h&gt;</span><span class="cp"></span>
+<span class="k">typedef</span> <span class="kt">int32_t</span>                 <span class="n">khronos_int32_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">uint32_t</span>                <span class="n">khronos_uint32_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">int64_t</span>                 <span class="n">khronos_int64_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">uint64_t</span>                <span class="n">khronos_uint64_t</span><span class="p">;</span>
+<span class="cp">#define KHRONOS_SUPPORT_INT64   1</span>
+<span class="cp">#define KHRONOS_SUPPORT_FLOAT   1</span>
+
+<span class="cp">#elif defined(__VMS ) || defined(__sgi)</span>
+
+<span class="cm">/*</span>
+<span class="cm"> * Using &lt;inttypes.h&gt;</span>
+<span class="cm"> */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;inttypes.h&gt;</span><span class="cp"></span>
+<span class="k">typedef</span> <span class="kt">int32_t</span>                 <span class="n">khronos_int32_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">uint32_t</span>                <span class="n">khronos_uint32_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">int64_t</span>                 <span class="n">khronos_int64_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">uint64_t</span>                <span class="n">khronos_uint64_t</span><span class="p">;</span>
+<span class="cp">#define KHRONOS_SUPPORT_INT64   1</span>
+<span class="cp">#define KHRONOS_SUPPORT_FLOAT   1</span>
+
+<span class="cp">#elif defined(_WIN32) &amp;&amp; !defined(__SCITECH_SNAP__)</span>
+
+<span class="cm">/*</span>
+<span class="cm"> * Win32</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span> <span class="kr">__int32</span>                 <span class="n">khronos_int32_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kr">__int32</span>        <span class="n">khronos_uint32_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kr">__int64</span>                 <span class="n">khronos_int64_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kr">__int64</span>        <span class="n">khronos_uint64_t</span><span class="p">;</span>
+<span class="cp">#define KHRONOS_SUPPORT_INT64   1</span>
+<span class="cp">#define KHRONOS_SUPPORT_FLOAT   1</span>
+
+<span class="cp">#elif defined(__sun__) || defined(__digital__)</span>
+
+<span class="cm">/*</span>
+<span class="cm"> * Sun or Digital</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span> <span class="kt">int</span>                     <span class="n">khronos_int32_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">int</span>            <span class="n">khronos_uint32_t</span><span class="p">;</span>
+<span class="cp">#if defined(__arch64__) || defined(_LP64)</span>
+<span class="k">typedef</span> <span class="kt">long</span> <span class="kt">int</span>                <span class="n">khronos_int64_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">int</span>       <span class="n">khronos_uint64_t</span><span class="p">;</span>
+<span class="cp">#else</span>
+<span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span>           <span class="n">khronos_int64_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span>  <span class="n">khronos_uint64_t</span><span class="p">;</span>
+<span class="cp">#endif </span><span class="cm">/* __arch64__ */</span><span class="cp"></span>
+<span class="cp">#define KHRONOS_SUPPORT_INT64   1</span>
+<span class="cp">#define KHRONOS_SUPPORT_FLOAT   1</span>
+
+<span class="cp">#elif 0</span>
+
+<span class="cm">/*</span>
+<span class="cm"> * Hypothetical platform with no float or int64 support</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span> <span class="kt">int</span>                     <span class="n">khronos_int32_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">int</span>            <span class="n">khronos_uint32_t</span><span class="p">;</span>
+<span class="cp">#define KHRONOS_SUPPORT_INT64   0</span>
+<span class="cp">#define KHRONOS_SUPPORT_FLOAT   0</span>
+
+<span class="cp">#else</span>
+
+<span class="cm">/*</span>
+<span class="cm"> * Generic fallback</span>
+<span class="cm"> */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdint.h&gt;</span><span class="cp"></span>
+<span class="k">typedef</span> <span class="kt">int32_t</span>                 <span class="n">khronos_int32_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">uint32_t</span>                <span class="n">khronos_uint32_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">int64_t</span>                 <span class="n">khronos_int64_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">uint64_t</span>                <span class="n">khronos_uint64_t</span><span class="p">;</span>
+<span class="cp">#define KHRONOS_SUPPORT_INT64   1</span>
+<span class="cp">#define KHRONOS_SUPPORT_FLOAT   1</span>
+
+<span class="cp">#endif</span>
+
+
+<span class="cm">/*</span>
+<span class="cm"> * Types that are (so far) the same on all platforms</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span> <span class="kt">signed</span>   <span class="kt">char</span>          <span class="n">khronos_int8_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">char</span>          <span class="n">khronos_uint8_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">signed</span>   <span class="kt">short</span> <span class="kt">int</span>     <span class="n">khronos_int16_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">short</span> <span class="kt">int</span>     <span class="n">khronos_uint16_t</span><span class="p">;</span>
+
+<span class="cm">/*</span>
+<span class="cm"> * Types that differ between LLP64 and LP64 architectures - in LLP64,</span>
+<span class="cm"> * pointers are 64 bits, but &#39;long&#39; is still 32 bits. Win64 appears</span>
+<span class="cm"> * to be the only LLP64 architecture in current use.</span>
+<span class="cm"> */</span>
+<span class="cp">#ifdef _WIN64</span>
+<span class="k">typedef</span> <span class="kt">signed</span>   <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">khronos_intptr_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">khronos_uintptr_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">signed</span>   <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">khronos_ssize_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="kt">int</span> <span class="n">khronos_usize_t</span><span class="p">;</span>
+<span class="cp">#else</span>
+<span class="k">typedef</span> <span class="kt">signed</span>   <span class="kt">long</span>  <span class="kt">int</span>     <span class="n">khronos_intptr_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">long</span>  <span class="kt">int</span>     <span class="n">khronos_uintptr_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">signed</span>   <span class="kt">long</span>  <span class="kt">int</span>     <span class="n">khronos_ssize_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">long</span>  <span class="kt">int</span>     <span class="n">khronos_usize_t</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#if KHRONOS_SUPPORT_FLOAT</span>
+<span class="cm">/*</span>
+<span class="cm"> * Float type</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span>          <span class="kt">float</span>         <span class="n">khronos_float_t</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#if KHRONOS_SUPPORT_INT64</span>
+<span class="cm">/* Time types</span>
+<span class="cm"> *</span>
+<span class="cm"> * These types can be used to represent a time interval in nanoseconds or</span>
+<span class="cm"> * an absolute Unadjusted System Time.  Unadjusted System Time is the number</span>
+<span class="cm"> * of nanoseconds since some arbitrary system event (e.g. since the last</span>
+<span class="cm"> * time the system booted).  The Unadjusted System Time is an unsigned</span>
+<span class="cm"> * 64 bit value that wraps back to 0 every 584 years.  Time intervals</span>
+<span class="cm"> * may be either signed or unsigned.</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span> <span class="n">khronos_uint64_t</span>       <span class="n">khronos_utime_nanoseconds_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="n">khronos_int64_t</span>        <span class="n">khronos_stime_nanoseconds_t</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+<span class="cm">/*</span>
+<span class="cm"> * Dummy value used to pad enum types to 32 bits.</span>
+<span class="cm"> */</span>
+<span class="cp">#ifndef KHRONOS_MAX_ENUM</span>
+<span class="cp">#define KHRONOS_MAX_ENUM 0x7FFFFFFF</span>
+<span class="cp">#endif</span>
+
+<span class="cm">/*</span>
+<span class="cm"> * Enumerated boolean type</span>
+<span class="cm"> *</span>
+<span class="cm"> * Values other than zero should be considered to be true.  Therefore</span>
+<span class="cm"> * comparisons should not be made against KHRONOS_TRUE.</span>
+<span class="cm"> */</span>
+<span class="k">typedef</span> <span class="k">enum</span> <span class="p">{</span>
+    <span class="n">KHRONOS_FALSE</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">KHRONOS_TRUE</span>  <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">KHRONOS_BOOLEAN_ENUM_FORCE_SIZE</span> <span class="o">=</span> <span class="n">KHRONOS_MAX_ENUM</span>
+<span class="p">}</span> <span class="n">khronos_boolean_enum_t</span><span class="p">;</span>
+
+<span class="cp">#endif </span><span class="cm">/* __khrplatform_h_ */</span><span class="cp"></span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_KHR_khrplatform.h.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

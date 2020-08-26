@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a54e18f775168950f9d0b661cc50ab0e3:
+
+Variable glad_glGetTextureLevelParameteriv
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetTextureLevelParameteriv

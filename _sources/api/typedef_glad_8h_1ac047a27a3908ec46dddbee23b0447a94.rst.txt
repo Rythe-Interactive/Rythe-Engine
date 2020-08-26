@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1ac047a27a3908ec46dddbee23b0447a94:
+
+Typedef PFNGLMULTITEXCOORDP4UIVPROC
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLMULTITEXCOORDP4UIVPROC

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a801e94a085e7630a798b5fc4c186f5c2:
+
+Define GL_UNPACK_COMPRESSED_BLOCK_SIZE
+======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_UNPACK_COMPRESSED_BLOCK_SIZE

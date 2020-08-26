@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ae394492c09563af8f82764c864d77864:
+
+Define GL_DECR_WRAP
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_DECR_WRAP

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a44d2e03b12358e1be95adeb9b2a0f086:
+
+Define GL_POLYGON_SMOOTH
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_POLYGON_SMOOTH

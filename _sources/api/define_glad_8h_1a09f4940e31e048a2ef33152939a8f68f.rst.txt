@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a09f4940e31e048a2ef33152939a8f68f:
+
+Define GL_TEXTURE_WIDTH
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TEXTURE_WIDTH

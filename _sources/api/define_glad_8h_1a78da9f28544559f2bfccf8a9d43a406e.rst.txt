@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a78da9f28544559f2bfccf8a9d43a406e:
+
+Define GL_TEXTURE30
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TEXTURE30

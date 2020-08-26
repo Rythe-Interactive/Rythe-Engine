@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1ae584c74ce05e7bc2e1729ba789cff8b3:
+
+Variable glad_glTexBuffer
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glTexBuffer

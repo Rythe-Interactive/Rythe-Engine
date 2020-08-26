@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a76f2ad89e538143c2295c44d1721944f:
+
+Typedef PFNGLBUFFERSTORAGEPROC
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLBUFFERSTORAGEPROC

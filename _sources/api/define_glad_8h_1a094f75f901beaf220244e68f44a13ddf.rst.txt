@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a094f75f901beaf220244e68f44a13ddf:
+
+Define glGetIntegeri_v
+======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetIntegeri_v

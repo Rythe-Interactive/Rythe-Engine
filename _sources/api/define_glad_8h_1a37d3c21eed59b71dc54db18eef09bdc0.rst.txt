@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a37d3c21eed59b71dc54db18eef09bdc0:
+
+Define glPauseTransformFeedback
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glPauseTransformFeedback

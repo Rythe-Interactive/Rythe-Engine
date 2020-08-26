@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1aa5e5d348ac701ae188ef82bb90a80813:
+
+Variable glad_glVertexArrayAttribBinding
+========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glVertexArrayAttribBinding

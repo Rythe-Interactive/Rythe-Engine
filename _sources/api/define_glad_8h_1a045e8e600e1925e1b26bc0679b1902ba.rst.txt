@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a045e8e600e1925e1b26bc0679b1902ba:
+
+Define glCopyTexImage2D
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glCopyTexImage2D

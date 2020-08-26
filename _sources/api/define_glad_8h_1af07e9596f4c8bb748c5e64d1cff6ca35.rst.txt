@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1af07e9596f4c8bb748c5e64d1cff6ca35:
+
+Define glBlendEquationSeparate
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glBlendEquationSeparate

@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a07de7d3e8ab99e2f0283a028215daa82:
+
+Variable glad_glSecondaryColorP3ui
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glSecondaryColorP3ui

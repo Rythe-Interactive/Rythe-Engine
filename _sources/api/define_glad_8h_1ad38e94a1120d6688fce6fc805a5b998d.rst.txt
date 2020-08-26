@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ad38e94a1120d6688fce6fc805a5b998d:
+
+Define GL_TRIANGLE_STRIP
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TRIANGLE_STRIP

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a4de3164fe62feb30e5485671fb5f7481:
+
+Define glProgramUniform4i
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glProgramUniform4i

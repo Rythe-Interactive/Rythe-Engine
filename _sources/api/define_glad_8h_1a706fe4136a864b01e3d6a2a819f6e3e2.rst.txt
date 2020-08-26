@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a706fe4136a864b01e3d6a2a819f6e3e2:
+
+Define glCreateTextures
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glCreateTextures

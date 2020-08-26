@@ -1,0 +1,13 @@
+.. _exhale_typedef_khrplatform_8h_1a1591fab40b33ac5df09dfe668d4c62fe:
+
+Typedef khronos_float_t
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_KHR_khrplatform.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: khronos_float_t

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aa7144c4eb2cd93f39b341c185e6abf87:
+
+Define GL_GEOMETRY_OUTPUT_TYPE
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_GEOMETRY_OUTPUT_TYPE

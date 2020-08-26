@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a96ca8e40be941db5c27b052ac2e5bc80:
+
+Variable glad_glProgramUniformMatrix3x4dv
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glProgramUniformMatrix3x4dv

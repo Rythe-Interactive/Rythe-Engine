@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1af04e6b3f0475a5406d04fe1facfd3734:
+
+Variable glad_glGetVertexArrayIndexed64iv
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetVertexArrayIndexed64iv

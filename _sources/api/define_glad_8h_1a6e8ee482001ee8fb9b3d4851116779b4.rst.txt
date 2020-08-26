@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a6e8ee482001ee8fb9b3d4851116779b4:
+
+Define glEnableVertexAttribArray
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glEnableVertexAttribArray

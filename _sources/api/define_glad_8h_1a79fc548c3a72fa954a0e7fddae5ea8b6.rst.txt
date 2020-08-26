@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a79fc548c3a72fa954a0e7fddae5ea8b6:
+
+Define GL_RESET_NOTIFICATION_STRATEGY
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_RESET_NOTIFICATION_STRATEGY

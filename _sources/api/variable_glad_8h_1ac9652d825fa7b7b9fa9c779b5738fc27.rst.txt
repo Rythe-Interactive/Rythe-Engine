@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1ac9652d825fa7b7b9fa9c779b5738fc27:
+
+Variable glad_glVertexAttrib4Nub
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glVertexAttrib4Nub

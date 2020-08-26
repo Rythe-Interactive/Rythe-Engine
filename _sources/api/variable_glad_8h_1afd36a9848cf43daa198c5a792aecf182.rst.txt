@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1afd36a9848cf43daa198c5a792aecf182:
+
+Variable glad_glTexImage2D
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glTexImage2D

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a60e78a18e1a320aa17894d20f7da2adb:
+
+Define GL_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER
+===================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER

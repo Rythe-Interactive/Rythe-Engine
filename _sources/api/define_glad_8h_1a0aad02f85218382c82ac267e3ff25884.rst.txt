@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a0aad02f85218382c82ac267e3ff25884:
+
+Define GL_TEXTURE_BUFFER_OFFSET_ALIGNMENT
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TEXTURE_BUFFER_OFFSET_ALIGNMENT

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1abd4454b1c03c23a6c4459a0d4fb027b8:
+
+Define GL_STENCIL_INDEX4
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_STENCIL_INDEX4

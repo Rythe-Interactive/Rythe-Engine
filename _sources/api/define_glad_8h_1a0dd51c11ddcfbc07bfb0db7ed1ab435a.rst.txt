@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a0dd51c11ddcfbc07bfb0db7ed1ab435a:
+
+Define GL_MAX_TESS_EVALUATION_ATOMIC_COUNTER_BUFFERS
+====================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_TESS_EVALUATION_ATOMIC_COUNTER_BUFFERS

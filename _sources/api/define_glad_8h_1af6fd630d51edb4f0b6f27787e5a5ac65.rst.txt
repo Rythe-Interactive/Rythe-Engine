@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1af6fd630d51edb4f0b6f27787e5a5ac65:
+
+Define GL_SRGB8
+===============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_SRGB8

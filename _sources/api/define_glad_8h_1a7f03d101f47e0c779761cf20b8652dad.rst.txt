@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a7f03d101f47e0c779761cf20b8652dad:
+
+Define GL_STENCIL_BACK_VALUE_MASK
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_STENCIL_BACK_VALUE_MASK

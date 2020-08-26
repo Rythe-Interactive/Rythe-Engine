@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1aee743512ccc8b920fee7a0a4ccb297b1:
+
+Typedef PFNGLGETSTRINGIPROC
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETSTRINGIPROC

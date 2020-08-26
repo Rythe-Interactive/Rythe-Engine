@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aea354ca4a5a59df5fe5b0a8a4890f63d:
+
+Define glClearNamedFramebufferfi
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glClearNamedFramebufferfi

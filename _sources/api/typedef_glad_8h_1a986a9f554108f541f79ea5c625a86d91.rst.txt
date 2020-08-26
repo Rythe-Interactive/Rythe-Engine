@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a986a9f554108f541f79ea5c625a86d91:
+
+Typedef PFNGLGETNAMEDRENDERBUFFERPARAMETERIVPROC
+================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETNAMEDRENDERBUFFERPARAMETERIVPROC

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1af477e4fa3e741406c0c3532cc5062758:
+
+Define GL_FUNC_ADD
+==================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_FUNC_ADD

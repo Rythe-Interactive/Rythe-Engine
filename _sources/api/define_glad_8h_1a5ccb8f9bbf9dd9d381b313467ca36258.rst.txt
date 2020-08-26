@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a5ccb8f9bbf9dd9d381b313467ca36258:
+
+Define glGetProgramInterfaceiv
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetProgramInterfaceiv

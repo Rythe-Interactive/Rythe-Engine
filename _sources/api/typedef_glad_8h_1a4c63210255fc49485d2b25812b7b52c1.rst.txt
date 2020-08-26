@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a4c63210255fc49485d2b25812b7b52c1:
+
+Typedef PFNGLBLENDFUNCSEPARATEIPROC
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLBLENDFUNCSEPARATEIPROC

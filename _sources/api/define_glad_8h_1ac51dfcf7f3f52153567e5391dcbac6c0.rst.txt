@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ac51dfcf7f3f52153567e5391dcbac6c0:
+
+Define GL_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS
+============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS

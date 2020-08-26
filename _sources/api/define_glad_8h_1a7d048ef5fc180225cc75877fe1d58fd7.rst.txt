@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a7d048ef5fc180225cc75877fe1d58fd7:
+
+Define glIsBuffer
+=================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glIsBuffer

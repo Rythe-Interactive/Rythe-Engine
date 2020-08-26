@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aaf5c676d6310526bd8b372ead70237c7:
+
+Define glClearStencil
+=====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glClearStencil

@@ -29,6 +29,8 @@ Includes
 --------
 
 
+- ``application/context/detail/glad/glad.h`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`)
+
 - ``core/core.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`)
 
 - ``core/platform/args_library.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_args_library.hpp`)

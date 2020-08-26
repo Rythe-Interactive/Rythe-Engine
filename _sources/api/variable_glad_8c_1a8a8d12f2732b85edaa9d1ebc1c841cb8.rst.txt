@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a8a8d12f2732b85edaa9d1ebc1c841cb8:
+
+Variable glad_glDepthFunc
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glDepthFunc

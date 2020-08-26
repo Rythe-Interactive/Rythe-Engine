@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a16a698e17d576161b4d8bf1b259f86d9:
+
+Define GL_MAX_TESS_EVALUATION_UNIFORM_COMPONENTS
+================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_TESS_EVALUATION_UNIFORM_COMPONENTS

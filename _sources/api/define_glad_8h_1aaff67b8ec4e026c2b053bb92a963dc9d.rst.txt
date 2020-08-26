@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aaff67b8ec4e026c2b053bb92a963dc9d:
+
+Define GL_VIEWPORT_BOUNDS_RANGE
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_VIEWPORT_BOUNDS_RANGE

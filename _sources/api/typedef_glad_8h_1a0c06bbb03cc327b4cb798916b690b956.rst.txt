@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a0c06bbb03cc327b4cb798916b690b956:
+
+Typedef PFNGLGETTEXLEVELPARAMETERIVPROC
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETTEXLEVELPARAMETERIVPROC

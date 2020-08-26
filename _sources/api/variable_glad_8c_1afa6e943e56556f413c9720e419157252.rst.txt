@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1afa6e943e56556f413c9720e419157252:
+
+Variable num_exts_i
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: num_exts_i

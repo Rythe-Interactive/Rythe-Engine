@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a0a30368407fba9b3cacdb4e802ba1e9e:
+
+Define glGetTexParameterIiv
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetTexParameterIiv

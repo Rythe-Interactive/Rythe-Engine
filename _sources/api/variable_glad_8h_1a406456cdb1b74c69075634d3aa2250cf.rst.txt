@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a406456cdb1b74c69075634d3aa2250cf:
+
+Variable glad_glClearNamedBufferSubData
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glClearNamedBufferSubData

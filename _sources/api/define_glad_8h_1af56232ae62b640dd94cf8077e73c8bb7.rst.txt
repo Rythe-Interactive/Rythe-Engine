@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1af56232ae62b640dd94cf8077e73c8bb7:
+
+Define glTextureSubImage2D
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glTextureSubImage2D

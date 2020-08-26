@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ad1c418e56ab98e908d315fb30fd57e5d:
+
+Define glPolygonMode
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glPolygonMode

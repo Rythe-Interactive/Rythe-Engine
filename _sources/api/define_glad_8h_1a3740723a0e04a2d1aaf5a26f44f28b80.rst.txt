@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a3740723a0e04a2d1aaf5a26f44f28b80:
+
+Define glMinSampleShading
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glMinSampleShading

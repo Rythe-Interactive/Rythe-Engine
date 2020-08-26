@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1aceeeec8b9849026ed42368b2a157a316:
+
+Typedef PFNGLGETBOOLEANVPROC
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETBOOLEANVPROC

@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1af9c6d865252077b9320b0942ff71c110:
+
+Variable glad_glGetnSeparableFilter
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetnSeparableFilter

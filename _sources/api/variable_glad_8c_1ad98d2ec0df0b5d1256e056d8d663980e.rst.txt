@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1ad98d2ec0df0b5d1256e056d8d663980e:
+
+Variable max_loaded_minor
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: max_loaded_minor

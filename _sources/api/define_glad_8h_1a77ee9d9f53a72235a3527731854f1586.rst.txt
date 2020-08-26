@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a77ee9d9f53a72235a3527731854f1586:
+
+Define glUniform3dv
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glUniform3dv

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a62b40fd04bd777f8ef84496e80b30416:
+
+Define GL_DEBUG_SEVERITY_MEDIUM
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_DEBUG_SEVERITY_MEDIUM

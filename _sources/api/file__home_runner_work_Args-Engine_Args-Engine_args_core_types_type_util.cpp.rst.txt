@@ -49,7 +49,7 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_type__util_8cpp_1a403570424ba5abb682d7fe4046a317d0`
-
 - :ref:`exhale_function_type__util_8cpp_1a1fddf5a1042b1af111b6612d5d4f4212`
+
+- :ref:`exhale_function_type__util_8cpp_1a403570424ba5abb682d7fe4046a317d0`
 

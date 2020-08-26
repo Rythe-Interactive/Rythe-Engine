@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a9a525608290d7a0cf3f9cd085a4cc3e8:
+
+Typedef PFNGLGENTRANSFORMFEEDBACKSPROC
+======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGENTRANSFORMFEEDBACKSPROC

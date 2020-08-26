@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1af9d6330ed1a6e3dee52baa677ae5816f:
+
+Define glGetProgramResourceLocation
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetProgramResourceLocation

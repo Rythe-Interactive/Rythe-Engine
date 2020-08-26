@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a90ba958166d331ebc616410e80a22187:
+
+Define GL_TESS_EVALUATION_SUBROUTINE
+====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TESS_EVALUATION_SUBROUTINE

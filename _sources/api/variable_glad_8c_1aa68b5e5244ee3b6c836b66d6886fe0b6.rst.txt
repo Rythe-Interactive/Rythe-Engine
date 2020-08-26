@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1aa68b5e5244ee3b6c836b66d6886fe0b6:
+
+Variable glad_glNormalP3uiv
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glNormalP3uiv

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1acd5fc46c59e53fdab78011888f7b1d8f:
+
+Define glStencilMask
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glStencilMask

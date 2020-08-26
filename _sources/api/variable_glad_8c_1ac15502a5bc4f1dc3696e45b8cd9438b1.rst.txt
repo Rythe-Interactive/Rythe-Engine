@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1ac15502a5bc4f1dc3696e45b8cd9438b1:
+
+Variable glad_glBindVertexBuffers
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glBindVertexBuffers

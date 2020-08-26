@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a85db0104824569445afd2ab275ba8df7:
+
+Define GL_IMAGE_COMPATIBILITY_CLASS
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_IMAGE_COMPATIBILITY_CLASS

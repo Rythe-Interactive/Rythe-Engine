@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a5425e064da431e4a9b3074cb8a68b699:
+
+Define GL_AND_INVERTED
+======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_AND_INVERTED

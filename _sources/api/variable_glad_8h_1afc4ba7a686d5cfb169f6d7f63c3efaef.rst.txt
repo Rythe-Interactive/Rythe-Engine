@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1afc4ba7a686d5cfb169f6d7f63c3efaef:
+
+Variable glad_glCompileShader
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glCompileShader

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a0aff1e93326e05c2f1eedf1249240472:
+
+Define GL_VIEW_CLASS_96_BITS
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_VIEW_CLASS_96_BITS

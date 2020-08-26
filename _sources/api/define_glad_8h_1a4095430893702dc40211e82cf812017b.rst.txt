@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a4095430893702dc40211e82cf812017b:
+
+Define GL_DEPTH_CLEAR_VALUE
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_DEPTH_CLEAR_VALUE

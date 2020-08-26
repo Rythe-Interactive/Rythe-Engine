@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a26c194f42c2b3ff546217b8e55c1b4b9:
+
+Typedef PFNGLMULTIDRAWELEMENTSINDIRECTCOUNTPROC
+===============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLMULTIDRAWELEMENTSINDIRECTCOUNTPROC

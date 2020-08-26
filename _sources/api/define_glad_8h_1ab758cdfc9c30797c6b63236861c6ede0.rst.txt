@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ab758cdfc9c30797c6b63236861c6ede0:
+
+Define GL_PARAMETER_BUFFER
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_PARAMETER_BUFFER

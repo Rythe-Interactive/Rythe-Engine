@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1ac41c5a96a8f98e2a7545bf9b6abfc418:
+
+Typedef PFNGLVERTEXATTRIB4SPROC
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLVERTEXATTRIB4SPROC

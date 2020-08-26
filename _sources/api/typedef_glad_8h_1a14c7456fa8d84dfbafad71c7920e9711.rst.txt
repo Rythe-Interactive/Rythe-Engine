@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a14c7456fa8d84dfbafad71c7920e9711:
+
+Typedef PFNGLBINDIMAGETEXTUREPROC
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLBINDIMAGETEXTUREPROC

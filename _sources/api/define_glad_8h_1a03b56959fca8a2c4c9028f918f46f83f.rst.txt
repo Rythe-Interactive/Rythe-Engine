@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a03b56959fca8a2c4c9028f918f46f83f:
+
+Define GL_VERTEX_ATTRIB_ARRAY_LONG
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_VERTEX_ATTRIB_ARRAY_LONG

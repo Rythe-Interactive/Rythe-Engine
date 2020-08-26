@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a632205c45b852b87d03ee4a97e159198:
+
+Typedef PFNGLCLEARDEPTHPROC
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLCLEARDEPTHPROC

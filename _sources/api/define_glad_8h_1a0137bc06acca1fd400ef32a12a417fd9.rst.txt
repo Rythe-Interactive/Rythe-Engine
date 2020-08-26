@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a0137bc06acca1fd400ef32a12a417fd9:
+
+Define GL_QUERY_BY_REGION_WAIT
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_QUERY_BY_REGION_WAIT

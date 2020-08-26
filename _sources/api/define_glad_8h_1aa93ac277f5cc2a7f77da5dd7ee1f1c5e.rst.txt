@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aa93ac277f5cc2a7f77da5dd7ee1f1c5e:
+
+Define GL_TEXTURE_COMPRESSED_BLOCK_SIZE
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TEXTURE_COMPRESSED_BLOCK_SIZE

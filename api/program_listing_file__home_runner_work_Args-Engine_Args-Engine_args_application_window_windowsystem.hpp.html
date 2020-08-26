@@ -289,6 +289,7 @@
                 <span class="n">m_windowEventBus</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="n">m_eventBus</span><span class="p">);</span>
 
                 <span class="n">ContextHelper</span><span class="o">::</span><span class="n">makeContextCurrent</span><span class="p">(</span><span class="n">win</span><span class="p">);</span>
+
                 <span class="n">ContextHelper</span><span class="o">::</span><span class="n">swapInterval</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">swapInterval</span><span class="p">);</span>
 
                 <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setWindowCloseCallback</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">closeWindow</span><span class="p">);</span>

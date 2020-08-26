@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1ab702fff6a855965262bb7be14238eda9:
+
+Typedef PFNGLDRAWELEMENTSPROC
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLDRAWELEMENTSPROC

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a0254cd8972d5100a87fe0b677fb4c75d:
+
+Define GL_DEBUG_TYPE_MARKER
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_DEBUG_TYPE_MARKER

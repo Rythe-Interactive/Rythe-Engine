@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a7e4217ab64d5e162daae60b5d7941a3b:
+
+Variable glad_glDrawArraysIndirect
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glDrawArraysIndirect

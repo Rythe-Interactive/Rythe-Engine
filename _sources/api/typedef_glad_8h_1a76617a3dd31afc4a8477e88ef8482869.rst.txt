@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a76617a3dd31afc4a8477e88ef8482869:
+
+Typedef PFNGLGETSUBROUTINEUNIFORMLOCATIONPROC
+=============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETSUBROUTINEUNIFORMLOCATIONPROC

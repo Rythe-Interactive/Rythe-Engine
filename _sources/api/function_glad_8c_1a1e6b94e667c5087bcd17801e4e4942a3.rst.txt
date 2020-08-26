@@ -1,0 +1,13 @@
+.. _exhale_function_glad_8c_1a1e6b94e667c5087bcd17801e4e4942a3:
+
+Function find_coreGL
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: find_coreGL(void)

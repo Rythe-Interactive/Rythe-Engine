@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aa7c5c636d1f609455e73ceee2eed8ba1:
+
+Define glDeleteFramebuffers
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glDeleteFramebuffers

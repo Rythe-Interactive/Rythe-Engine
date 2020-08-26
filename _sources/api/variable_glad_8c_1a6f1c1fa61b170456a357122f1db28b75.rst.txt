@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a6f1c1fa61b170456a357122f1db28b75:
+
+Variable glad_glGetNamedFramebufferAttachmentParameteriv
+========================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetNamedFramebufferAttachmentParameteriv

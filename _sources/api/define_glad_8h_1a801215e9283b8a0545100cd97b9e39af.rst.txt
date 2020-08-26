@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a801215e9283b8a0545100cd97b9e39af:
+
+Define GL_MAX_SAMPLE_MASK_WORDS
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_SAMPLE_MASK_WORDS

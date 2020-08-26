@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a76cdf44da5ae6fc549cc2250d247d6f3:
+
+Define GL_MAX_COMBINED_SHADER_OUTPUT_RESOURCES
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_COMBINED_SHADER_OUTPUT_RESOURCES

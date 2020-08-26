@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1ae5a5588758d454f405b1291d1e1a79b2:
+
+Typedef PFNGLSTENCILMASKPROC
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLSTENCILMASKPROC

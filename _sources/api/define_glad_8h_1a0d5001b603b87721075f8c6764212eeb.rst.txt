@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a0d5001b603b87721075f8c6764212eeb:
+
+Define GL_CLIP_DISTANCE7
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_CLIP_DISTANCE7

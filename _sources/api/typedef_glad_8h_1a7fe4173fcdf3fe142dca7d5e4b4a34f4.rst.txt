@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a7fe4173fcdf3fe142dca7d5e4b4a34f4:
+
+Typedef PFNGLMAPNAMEDBUFFERRANGEPROC
+====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLMAPNAMEDBUFFERRANGEPROC

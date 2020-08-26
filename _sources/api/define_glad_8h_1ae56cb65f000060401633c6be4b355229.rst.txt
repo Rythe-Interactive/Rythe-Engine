@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ae56cb65f000060401633c6be4b355229:
+
+Define GL_PROXY_TEXTURE_1D
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_PROXY_TEXTURE_1D

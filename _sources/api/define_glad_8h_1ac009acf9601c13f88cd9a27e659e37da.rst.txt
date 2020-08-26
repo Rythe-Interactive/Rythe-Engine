@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ac009acf9601c13f88cd9a27e659e37da:
+
+Define glGetVertexAttribIiv
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetVertexAttribIiv

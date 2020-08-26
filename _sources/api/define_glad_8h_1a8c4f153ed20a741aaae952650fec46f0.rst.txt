@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a8c4f153ed20a741aaae952650fec46f0:
+
+Define GL_CULL_FACE
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_CULL_FACE

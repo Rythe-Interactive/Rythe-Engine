@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1af669e850dc2f564c97e603e6412eedd0:
+
+Define GL_QUERY_WAIT
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_QUERY_WAIT

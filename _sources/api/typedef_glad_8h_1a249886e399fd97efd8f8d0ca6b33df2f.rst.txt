@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a249886e399fd97efd8f8d0ca6b33df2f:
+
+Typedef PFNGLGENERATETEXTUREMIPMAPPROC
+======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGENERATETEXTUREMIPMAPPROC

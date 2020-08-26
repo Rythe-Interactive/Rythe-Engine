@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a4be381a50df40d4b0862bf09a657b7da:
+
+Typedef PFNGLISSAMPLERPROC
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLISSAMPLERPROC

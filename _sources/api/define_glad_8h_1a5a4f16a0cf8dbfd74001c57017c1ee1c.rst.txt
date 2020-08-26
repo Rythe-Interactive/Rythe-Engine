@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a5a4f16a0cf8dbfd74001c57017c1ee1c:
+
+Define GL_TRIANGLE_STRIP_ADJACENCY
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TRIANGLE_STRIP_ADJACENCY

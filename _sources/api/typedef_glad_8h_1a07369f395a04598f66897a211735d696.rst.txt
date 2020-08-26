@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a07369f395a04598f66897a211735d696:
+
+Typedef PFNGLBLENDEQUATIONIPROC
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLBLENDEQUATIONIPROC

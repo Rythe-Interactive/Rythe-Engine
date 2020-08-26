@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1abf9380e68d38f458f86a54870846026e:
+
+Define glUniform1i
+==================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glUniform1i

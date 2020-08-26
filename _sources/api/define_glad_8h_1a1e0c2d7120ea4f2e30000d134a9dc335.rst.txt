@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a1e0c2d7120ea4f2e30000d134a9dc335:
+
+Define GL_GEOMETRY_SHADER
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_GEOMETRY_SHADER

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ab0a78f353b144caf070439eb77b4eb48:
+
+Define GL_VIEW_CLASS_BPTC_UNORM
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_VIEW_CLASS_BPTC_UNORM

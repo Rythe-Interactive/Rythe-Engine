@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a69f871a597afd1f853c86f16d1c68367:
+
+Typedef PFNGLGETTEXTUREIMAGEPROC
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETTEXTUREIMAGEPROC

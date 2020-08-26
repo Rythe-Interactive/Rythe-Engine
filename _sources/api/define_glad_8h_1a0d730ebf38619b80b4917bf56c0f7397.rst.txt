@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a0d730ebf38619b80b4917bf56c0f7397:
+
+Define GL_MAX_GEOMETRY_INPUT_COMPONENTS
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_GEOMETRY_INPUT_COMPONENTS

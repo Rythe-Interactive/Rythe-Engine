@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a80c4883b3682216223bbfab16a1a8ca9:
+
+Variable glad_glClearBufferfi
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glClearBufferfi

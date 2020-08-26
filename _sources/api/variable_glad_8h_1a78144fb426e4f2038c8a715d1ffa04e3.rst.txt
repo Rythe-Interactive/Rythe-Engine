@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a78144fb426e4f2038c8a715d1ffa04e3:
+
+Variable glad_glClearNamedFramebufferiv
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glClearNamedFramebufferiv

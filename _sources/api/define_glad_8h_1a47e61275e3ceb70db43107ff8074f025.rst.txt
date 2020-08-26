@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a47e61275e3ceb70db43107ff8074f025:
+
+Define GL_RGB5
+==============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_RGB5

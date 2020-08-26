@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a7adb4d6a0e287aed9523c73499016f11:
+
+Variable glad_glInvalidateSubFramebuffer
+========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glInvalidateSubFramebuffer

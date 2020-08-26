@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ad57d095154f5964429dc149add582257:
+
+Define GL_UNSIGNED_BYTE_3_3_2
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_UNSIGNED_BYTE_3_3_2

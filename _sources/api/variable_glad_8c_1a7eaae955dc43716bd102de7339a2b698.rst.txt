@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a7eaae955dc43716bd102de7339a2b698:
+
+Variable glad_glFramebufferTexture2D
+====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glFramebufferTexture2D

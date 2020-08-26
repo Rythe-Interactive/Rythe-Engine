@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a4850d514d22e4bcfc5c70c2aae415a3c:
+
+Variable glad_glSecondaryColorP3uiv
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glSecondaryColorP3uiv

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a28521a0c7005cfc7ada652c82cba801d:
+
+Define GL_SAMPLE_COVERAGE
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_SAMPLE_COVERAGE

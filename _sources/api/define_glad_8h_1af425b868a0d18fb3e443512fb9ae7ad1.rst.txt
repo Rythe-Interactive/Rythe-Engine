@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1af425b868a0d18fb3e443512fb9ae7ad1:
+
+Define GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE
+=============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE

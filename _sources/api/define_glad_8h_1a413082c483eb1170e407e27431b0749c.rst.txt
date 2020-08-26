@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a413082c483eb1170e407e27431b0749c:
+
+Define glVertexAttrib4Nbv
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glVertexAttrib4Nbv

@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1abebe3d6eb31dc377f36bc92892ab283d:
+
+Typedef PFNGLSECONDARYCOLORP3UIVPROC
+====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLSECONDARYCOLORP3UIVPROC

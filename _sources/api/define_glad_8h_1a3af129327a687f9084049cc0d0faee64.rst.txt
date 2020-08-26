@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a3af129327a687f9084049cc0d0faee64:
+
+Define glBindTransformFeedback
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glBindTransformFeedback

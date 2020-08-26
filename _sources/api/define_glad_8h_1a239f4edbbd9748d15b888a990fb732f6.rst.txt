@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a239f4edbbd9748d15b888a990fb732f6:
+
+Define glIsTexture
+==================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glIsTexture

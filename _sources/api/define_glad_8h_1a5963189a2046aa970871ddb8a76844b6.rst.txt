@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a5963189a2046aa970871ddb8a76844b6:
+
+Define glGetBooleani_v
+======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetBooleani_v

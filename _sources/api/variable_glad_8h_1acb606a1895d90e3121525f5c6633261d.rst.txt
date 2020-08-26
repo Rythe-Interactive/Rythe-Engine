@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1acb606a1895d90e3121525f5c6633261d:
+
+Variable glad_glUnmapBuffer
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glUnmapBuffer

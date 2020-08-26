@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a08a6f1c942f730070d254a5a9ea015e9:
+
+Variable glad_glGetQueryIndexediv
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetQueryIndexediv

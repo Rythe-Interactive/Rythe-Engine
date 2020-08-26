@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ac57c21a30240228e2729540ff360d9b9:
+
+Define glSampleMaski
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glSampleMaski

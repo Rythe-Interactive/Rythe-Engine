@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1ae28d5688bd5b9aff8b904cb086e7cb7c:
+
+Variable glad_glColorMask
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glColorMask

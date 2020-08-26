@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1aaf844233492b1ec05dcd738ed245399d:
+
+Typedef PFNGLVERTEXATTRIBI2UIVPROC
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLVERTEXATTRIBI2UIVPROC

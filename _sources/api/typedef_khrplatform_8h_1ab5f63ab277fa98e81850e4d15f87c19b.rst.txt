@@ -1,0 +1,13 @@
+.. _exhale_typedef_khrplatform_8h_1ab5f63ab277fa98e81850e4d15f87c19b:
+
+Typedef khronos_uintptr_t
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_KHR_khrplatform.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: khronos_uintptr_t

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1acd0a0c13e5aeaf3003a89cfbbda5c6e7:
+
+Define GL_UNSIGNED_NORMALIZED
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_UNSIGNED_NORMALIZED

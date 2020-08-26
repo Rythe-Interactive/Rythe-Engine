@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ae32c545990d8412e8a8246632df99824:
+
+Define GL_FLOAT_VEC2
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_FLOAT_VEC2

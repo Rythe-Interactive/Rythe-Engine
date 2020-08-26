@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a2d29ae66c897d44f3da8b8384a097d04:
+
+Define GL_SAMPLER_1D
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_SAMPLER_1D

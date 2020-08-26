@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a0ee425654561b597c13b9514e14a21ef:
+
+Typedef PFNGLUNIFORMMATRIX3X2FVPROC
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLUNIFORMMATRIX3X2FVPROC

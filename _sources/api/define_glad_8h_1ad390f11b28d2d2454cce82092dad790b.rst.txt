@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ad390f11b28d2d2454cce82092dad790b:
+
+Define glIsFramebuffer
+======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glIsFramebuffer

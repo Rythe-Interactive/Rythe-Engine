@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a5f5284f2e73193cb4d0c1834f6dbb360:
+
+Define GL_COMPARE_REF_TO_TEXTURE
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_COMPARE_REF_TO_TEXTURE

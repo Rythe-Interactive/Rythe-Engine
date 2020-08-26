@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ad339202fa82bc67ac98dbb43dd2d32b5:
+
+Define GL_OUT_OF_MEMORY
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_OUT_OF_MEMORY

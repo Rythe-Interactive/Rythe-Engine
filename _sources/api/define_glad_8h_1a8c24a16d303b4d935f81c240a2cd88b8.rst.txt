@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a8c24a16d303b4d935f81c240a2cd88b8:
+
+Define GL_POINTS
+================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_POINTS

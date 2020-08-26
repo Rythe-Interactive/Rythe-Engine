@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a8b27cb663557e6f79e020adb6f8e5a6a:
+
+Define glClearNamedBufferData
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glClearNamedBufferData

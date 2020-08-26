@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1aa28a8b257ce06dec3a73d284958bfe41:
+
+Variable glad_glDrawArraysInstancedBaseInstance
+===============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glDrawArraysInstancedBaseInstance

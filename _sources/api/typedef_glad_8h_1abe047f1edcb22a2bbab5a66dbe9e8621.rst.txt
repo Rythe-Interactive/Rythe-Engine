@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1abe047f1edcb22a2bbab5a66dbe9e8621:
+
+Typedef PFNGLGETNUNIFORMFVPROC
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETNUNIFORMFVPROC

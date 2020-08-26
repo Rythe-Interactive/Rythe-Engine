@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a050f32c3c00a72f1d5f6a47eed21c180:
+
+Define GL_UNSIGNED_INT_SAMPLER_2D
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_UNSIGNED_INT_SAMPLER_2D

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1abb57ca966971ce620481e9d161114ca8:
+
+Define GL_INTERNALFORMAT_ALPHA_SIZE
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_INTERNALFORMAT_ALPHA_SIZE

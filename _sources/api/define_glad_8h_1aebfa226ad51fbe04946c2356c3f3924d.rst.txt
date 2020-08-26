@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aebfa226ad51fbe04946c2356c3f3924d:
+
+Define GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS
+====================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS

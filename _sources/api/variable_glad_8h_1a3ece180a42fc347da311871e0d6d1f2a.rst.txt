@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a3ece180a42fc347da311871e0d6d1f2a:
+
+Variable glad_glGetCompressedTextureSubImage
+============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetCompressedTextureSubImage

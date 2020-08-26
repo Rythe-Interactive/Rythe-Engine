@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a5acdcc67068466071c1df5e58572b91e:
+
+Define glCreateVertexArrays
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glCreateVertexArrays

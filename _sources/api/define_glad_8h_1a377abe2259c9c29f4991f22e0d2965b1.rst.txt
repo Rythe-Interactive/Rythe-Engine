@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a377abe2259c9c29f4991f22e0d2965b1:
+
+Define glClientWaitSync
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glClientWaitSync

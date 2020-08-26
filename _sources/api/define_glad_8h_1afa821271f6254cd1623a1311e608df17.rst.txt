@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1afa821271f6254cd1623a1311e608df17:
+
+Define GL_FLOAT_MAT4x3
+======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_FLOAT_MAT4x3

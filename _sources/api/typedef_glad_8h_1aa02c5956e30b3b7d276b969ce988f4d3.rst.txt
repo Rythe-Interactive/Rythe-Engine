@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1aa02c5956e30b3b7d276b969ce988f4d3:
+
+Typedef PFNGLCLIENTWAITSYNCPROC
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLCLIENTWAITSYNCPROC

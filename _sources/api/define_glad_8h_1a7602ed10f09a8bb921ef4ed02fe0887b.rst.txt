@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a7602ed10f09a8bb921ef4ed02fe0887b:
+
+Define GL_UNIFORM_BUFFER_START
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_UNIFORM_BUFFER_START

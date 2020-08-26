@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1ada3cdd2f1aade0df4f310f44e31d57dd:
+
+Variable glad_glTransformFeedbackBufferRange
+============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glTransformFeedbackBufferRange

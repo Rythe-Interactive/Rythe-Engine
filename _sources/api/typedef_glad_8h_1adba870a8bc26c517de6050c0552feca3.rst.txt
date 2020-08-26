@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1adba870a8bc26c517de6050c0552feca3:
+
+Typedef GLvdpauSurfaceNV
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: GLvdpauSurfaceNV

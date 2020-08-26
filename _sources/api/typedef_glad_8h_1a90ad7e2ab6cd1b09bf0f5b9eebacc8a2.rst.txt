@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a90ad7e2ab6cd1b09bf0f5b9eebacc8a2:
+
+Typedef GLADloadproc
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: GLADloadproc

@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a1c45bbf37eede8e73e478a0db21ab1ef:
+
+Typedef PFNGLDELETERENDERBUFFERSPROC
+====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLDELETERENDERBUFFERSPROC

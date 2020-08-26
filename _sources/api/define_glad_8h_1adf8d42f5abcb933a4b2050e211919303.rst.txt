@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1adf8d42f5abcb933a4b2050e211919303:
+
+Define glCopyTextureSubImage2D
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glCopyTextureSubImage2D

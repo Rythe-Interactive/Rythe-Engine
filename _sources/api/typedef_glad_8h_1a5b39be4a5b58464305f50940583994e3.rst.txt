@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a5b39be4a5b58464305f50940583994e3:
+
+Typedef PFNGLGETCOMPRESSEDTEXTURESUBIMAGEPROC
+=============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETCOMPRESSEDTEXTURESUBIMAGEPROC

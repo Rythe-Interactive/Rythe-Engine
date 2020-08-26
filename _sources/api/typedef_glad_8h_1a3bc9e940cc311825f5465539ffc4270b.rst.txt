@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a3bc9e940cc311825f5465539ffc4270b:
+
+Typedef PFNGLGETOBJECTLABELPROC
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETOBJECTLABELPROC

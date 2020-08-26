@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ab3b08dfcb4ccaacdbdede1699fca4f25:
+
+Define GL_IMAGE_CLASS_4_X_16
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_IMAGE_CLASS_4_X_16

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a91cb9c5dc26bb2dabd3df6e67dd45a54:
+
+Define glBeginQuery
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glBeginQuery

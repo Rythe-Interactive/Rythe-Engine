@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ac164b28463958d495e51702198e6d1cf:
+
+Define GL_UNSIGNED_INT_8_8_8_8
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_UNSIGNED_INT_8_8_8_8

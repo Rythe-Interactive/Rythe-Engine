@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a3395e88970e0b934b826ad7d238d3ea6:
+
+Define GL_SAMPLE_SHADING
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_SAMPLE_SHADING

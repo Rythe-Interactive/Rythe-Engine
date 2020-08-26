@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ae6189230f04aca85d4b6cc6bf7e37eaf:
+
+Define glVertexP4uiv
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glVertexP4uiv

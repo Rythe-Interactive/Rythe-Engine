@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a974140fe2957b70f6d7996c617152e20:
+
+Variable glad_glGetString
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetString

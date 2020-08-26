@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a46da4e118f6228b2ccfb32f7b20fc9a0:
+
+Define GL_SHADER_STORAGE_BUFFER_SIZE
+====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_SHADER_STORAGE_BUFFER_SIZE

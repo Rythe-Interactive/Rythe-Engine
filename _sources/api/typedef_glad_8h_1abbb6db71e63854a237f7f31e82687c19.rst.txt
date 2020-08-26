@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1abbb6db71e63854a237f7f31e82687c19:
+
+Typedef PFNGLVERTEXATTRIBBINDINGPROC
+====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLVERTEXATTRIBBINDINGPROC

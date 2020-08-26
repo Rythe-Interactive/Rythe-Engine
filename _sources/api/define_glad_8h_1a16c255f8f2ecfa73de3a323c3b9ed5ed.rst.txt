@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a16c255f8f2ecfa73de3a323c3b9ed5ed:
+
+Define GL_FRAGMENT_SHADER_BIT
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_FRAGMENT_SHADER_BIT

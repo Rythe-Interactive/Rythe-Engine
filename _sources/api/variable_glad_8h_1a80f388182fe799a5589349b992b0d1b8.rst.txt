@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a80f388182fe799a5589349b992b0d1b8:
+
+Variable glad_glIsTransformFeedback
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glIsTransformFeedback

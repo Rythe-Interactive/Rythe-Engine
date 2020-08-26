@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a527871b26421f90df7fcf22a4003a95e:
+
+Define GL_DEBUG_SOURCE_APPLICATION
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_DEBUG_SOURCE_APPLICATION

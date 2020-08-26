@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a1361a60bd7671ff1b541da9160480792:
+
+Define GL_QUERY_RESULT_NO_WAIT
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_QUERY_RESULT_NO_WAIT

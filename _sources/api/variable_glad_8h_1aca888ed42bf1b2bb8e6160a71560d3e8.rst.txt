@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1aca888ed42bf1b2bb8e6160a71560d3e8:
+
+Variable glad_glDeleteProgramPipelines
+======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glDeleteProgramPipelines

@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a3f9c7586b735c74fc4f4e019eed987e5:
+
+Variable glad_glTexStorage3DMultisample
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glTexStorage3DMultisample

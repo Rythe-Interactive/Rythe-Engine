@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1acc2a08722bd7467d64faa254599657d8:
+
+Variable glad_glGetTexImage
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetTexImage

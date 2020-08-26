@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ae41a95ad5a27c61fb413ec178089a803:
+
+Define GL_RGB32F
+================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_RGB32F

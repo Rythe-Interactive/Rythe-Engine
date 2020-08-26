@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a2f6fb657c9aeab61bddfb51563b31c4a:
+
+Variable glad_glScissorIndexedv
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glScissorIndexedv

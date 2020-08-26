@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a087a5358fea49ff2e393d8be2d8e7552:
+
+Variable glad_glBindSamplers
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glBindSamplers

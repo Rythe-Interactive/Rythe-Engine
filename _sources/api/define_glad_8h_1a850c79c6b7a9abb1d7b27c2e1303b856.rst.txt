@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a850c79c6b7a9abb1d7b27c2e1303b856:
+
+Define glUniform3d
+==================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glUniform3d

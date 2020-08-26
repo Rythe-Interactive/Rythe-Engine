@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a58dfbbf52d05479fe4df04bd655ae546:
+
+Define GL_MAX_VERTEX_ATTRIB_STRIDE
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_VERTEX_ATTRIB_STRIDE

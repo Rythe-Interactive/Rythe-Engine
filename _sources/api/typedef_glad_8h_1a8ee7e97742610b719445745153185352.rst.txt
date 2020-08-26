@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a8ee7e97742610b719445745153185352:
+
+Typedef PFNGLMULTIDRAWARRAYSPROC
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLMULTIDRAWARRAYSPROC

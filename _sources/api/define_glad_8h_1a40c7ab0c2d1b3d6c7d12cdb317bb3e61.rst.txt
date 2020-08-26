@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a40c7ab0c2d1b3d6c7d12cdb317bb3e61:
+
+Define GL_TEXTURE_LOD_BIAS
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TEXTURE_LOD_BIAS

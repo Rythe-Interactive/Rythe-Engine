@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a0a1b24f27df61b571afe40df5afad5e4:
+
+Define GL_INT_IMAGE_2D_MULTISAMPLE_ARRAY
+========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_INT_IMAGE_2D_MULTISAMPLE_ARRAY

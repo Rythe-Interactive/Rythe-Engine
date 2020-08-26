@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a50c4b9253f10142026cd6ee1b5b63c3c:
+
+Define GL_TEXTURE_GATHER
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TEXTURE_GATHER

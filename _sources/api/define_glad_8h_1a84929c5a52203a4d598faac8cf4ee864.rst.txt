@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a84929c5a52203a4d598faac8cf4ee864:
+
+Define glPointParameterf
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glPointParameterf

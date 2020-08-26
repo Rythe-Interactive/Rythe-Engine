@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a6d2bd0b2b2cf8c13c9c42d3beb3abca1:
+
+Define glUniformMatrix4x2dv
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glUniformMatrix4x2dv

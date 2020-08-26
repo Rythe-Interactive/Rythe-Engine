@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a448e464e24a53228266581c6cc150722:
+
+Variable glad_glColorP4uiv
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glColorP4uiv

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1afa41b5c2f8d5d28f4e008abb8a63291a:
+
+Define GL_NAND
+==============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_NAND

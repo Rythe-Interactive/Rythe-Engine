@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a5eab77593722fe6cefb81a571a42fc05:
+
+Define GL_SHADER_IMAGE_STORE
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_SHADER_IMAGE_STORE

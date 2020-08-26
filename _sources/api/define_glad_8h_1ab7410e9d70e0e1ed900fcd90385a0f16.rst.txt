@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ab7410e9d70e0e1ed900fcd90385a0f16:
+
+Define GL_MAX_VIEWPORT_DIMS
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_VIEWPORT_DIMS

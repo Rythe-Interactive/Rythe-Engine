@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1afd756c6892a991177f4e5b6ee013108f:
+
+Define GL_VERSION_4_2
+=====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_VERSION_4_2

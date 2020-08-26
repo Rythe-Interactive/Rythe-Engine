@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ad9d72969a26069958dea3598cfecb687:
+
+Define glRenderbufferStorage
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glRenderbufferStorage

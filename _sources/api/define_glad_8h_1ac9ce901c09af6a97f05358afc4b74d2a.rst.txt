@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ac9ce901c09af6a97f05358afc4b74d2a:
+
+Define glColorP4uiv
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glColorP4uiv

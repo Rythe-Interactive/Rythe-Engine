@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aa754f0e308e65fa69488432b42a9e533:
+
+Define GL_FRACTIONAL_EVEN
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_FRACTIONAL_EVEN

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a381d1be1daed73c6234d105ae05b5e7a:
+
+Define glGetActiveAtomicCounterBufferiv
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetActiveAtomicCounterBufferiv

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a9c46768b1633df11829d1590991db1c2:
+
+Define GL_COMPRESSED_RG11_EAC
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_COMPRESSED_RG11_EAC

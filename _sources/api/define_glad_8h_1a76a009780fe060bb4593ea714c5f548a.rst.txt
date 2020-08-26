@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a76a009780fe060bb4593ea714c5f548a:
+
+Define GL_TEXTURE_BUFFER_DATA_STORE_BINDING
+===========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TEXTURE_BUFFER_DATA_STORE_BINDING

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a80c17e1e2dcb64af7530da37ba812218:
+
+Define glVertexAttribI4sv
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glVertexAttribI4sv

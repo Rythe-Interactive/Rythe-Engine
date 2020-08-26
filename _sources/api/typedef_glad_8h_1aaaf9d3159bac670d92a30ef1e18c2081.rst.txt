@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1aaaf9d3159bac670d92a30ef1e18c2081:
+
+Typedef PFNGLPROGRAMUNIFORM4IVPROC
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLPROGRAMUNIFORM4IVPROC

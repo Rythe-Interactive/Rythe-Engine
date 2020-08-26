@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aac404c36f417f47b9938be96ed491472:
+
+Define glGetActiveUniformBlockName
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetActiveUniformBlockName

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a17e4a02a7e9d4c1e7c7f6f63623ec9b5:
+
+Define GL_MAX_COMPUTE_UNIFORM_BLOCKS
+====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_COMPUTE_UNIFORM_BLOCKS

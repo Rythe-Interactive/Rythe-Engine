@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a086e0bcc01ed71bbbb1c57d99d48ff55:
+
+Typedef PFNGLGENQUERIESPROC
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGENQUERIESPROC

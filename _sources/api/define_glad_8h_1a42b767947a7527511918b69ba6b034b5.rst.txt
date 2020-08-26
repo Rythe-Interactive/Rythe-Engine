@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a42b767947a7527511918b69ba6b034b5:
+
+Define glIsQuery
+================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glIsQuery

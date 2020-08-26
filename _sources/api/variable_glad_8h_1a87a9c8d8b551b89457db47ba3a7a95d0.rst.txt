@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a87a9c8d8b551b89457db47ba3a7a95d0:
+
+Variable glad_glCopyTextureSubImage3D
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glCopyTextureSubImage3D

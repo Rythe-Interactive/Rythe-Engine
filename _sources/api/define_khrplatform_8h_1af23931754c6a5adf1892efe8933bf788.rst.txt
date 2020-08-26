@@ -1,0 +1,13 @@
+.. _exhale_define_khrplatform_8h_1af23931754c6a5adf1892efe8933bf788:
+
+Define KHRONOS_MAX_ENUM
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_KHR_khrplatform.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: KHRONOS_MAX_ENUM

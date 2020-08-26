@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ae5f83719e57e90d475798239edc1acc1:
+
+Define GL_DEPTH_CLAMP
+=====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_DEPTH_CLAMP

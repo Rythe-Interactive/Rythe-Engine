@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a1d73a15f742707dc239a59309fd55b58:
+
+Variable glad_glGetDoublei_v
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetDoublei_v

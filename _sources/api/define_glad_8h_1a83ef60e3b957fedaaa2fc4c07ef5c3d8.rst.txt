@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a83ef60e3b957fedaaa2fc4c07ef5c3d8:
+
+Define glBeginConditionalRender
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glBeginConditionalRender

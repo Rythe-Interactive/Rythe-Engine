@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1aa0099ece4106280b74ca6306a50ab3a0:
+
+Variable glad_glGetTexLevelParameterfv
+======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetTexLevelParameterfv

@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1ad60a2b2b8de3920c5b4015565c405d38:
+
+Variable glad_glClientWaitSync
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glClientWaitSync

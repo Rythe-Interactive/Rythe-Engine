@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a1dde71e060e88ab71e7a592f26006b71:
+
+Define GL_INT_SAMPLER_2D_RECT
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_INT_SAMPLER_2D_RECT

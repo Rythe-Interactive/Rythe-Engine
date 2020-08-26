@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a631725ba0a8ce9e4f6bd697edef1741d:
+
+Define GL_RG8UI
+===============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_RG8UI

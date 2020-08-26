@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1addff85de1d9e0e3868ec4e3924594f05:
+
+Typedef PFNGLBINDVERTEXBUFFERPROC
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLBINDVERTEXBUFFERPROC

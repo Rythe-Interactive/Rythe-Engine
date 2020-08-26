@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a61d7cfd739f3269524153f24fadf9636:
+
+Typedef PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC
+===============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC

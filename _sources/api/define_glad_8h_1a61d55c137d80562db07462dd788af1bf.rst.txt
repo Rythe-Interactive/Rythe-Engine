@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a61d55c137d80562db07462dd788af1bf:
+
+Define GL_HIGH_FLOAT
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_HIGH_FLOAT

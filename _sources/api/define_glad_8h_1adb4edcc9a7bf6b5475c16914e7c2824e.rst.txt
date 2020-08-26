@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1adb4edcc9a7bf6b5475c16914e7c2824e:
+
+Define GL_FRAMEBUFFER_DEFAULT_WIDTH
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_FRAMEBUFFER_DEFAULT_WIDTH

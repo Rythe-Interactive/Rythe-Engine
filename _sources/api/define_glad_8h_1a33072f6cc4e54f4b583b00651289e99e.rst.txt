@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a33072f6cc4e54f4b583b00651289e99e:
+
+Define glGetNamedBufferPointerv
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetNamedBufferPointerv

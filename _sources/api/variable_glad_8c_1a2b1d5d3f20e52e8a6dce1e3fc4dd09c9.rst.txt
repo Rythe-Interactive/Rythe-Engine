@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a2b1d5d3f20e52e8a6dce1e3fc4dd09c9:
+
+Variable glad_glTextureParameterIiv
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glTextureParameterIiv

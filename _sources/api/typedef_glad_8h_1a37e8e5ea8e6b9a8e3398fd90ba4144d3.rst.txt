@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a37e8e5ea8e6b9a8e3398fd90ba4144d3:
+
+Typedef PFNGLENABLEPROC
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLENABLEPROC

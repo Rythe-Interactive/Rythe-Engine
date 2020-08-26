@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a365736d809f6e718b10d8dae171e6111:
+
+Variable glad_glViewport
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glViewport

@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a291298c2418159a88c8a6ad4219ca7da:
+
+Typedef PFNGLNAMEDFRAMEBUFFERTEXTUREPROC
+========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLNAMEDFRAMEBUFFERTEXTUREPROC

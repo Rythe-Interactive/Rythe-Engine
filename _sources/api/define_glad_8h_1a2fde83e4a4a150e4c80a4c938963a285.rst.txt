@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a2fde83e4a4a150e4c80a4c938963a285:
+
+Define GL_TRANSFORM_FEEDBACK_VARYINGS
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TRANSFORM_FEEDBACK_VARYINGS

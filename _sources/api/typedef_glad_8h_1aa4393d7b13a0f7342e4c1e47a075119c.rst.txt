@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1aa4393d7b13a0f7342e4c1e47a075119c:
+
+Typedef PFNGLBUFFERDATAPROC
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLBUFFERDATAPROC

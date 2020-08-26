@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a238d4286fc81be5a0c28df4336f7501d:
+
+Typedef PFNGLBINDRENDERBUFFERPROC
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLBINDRENDERBUFFERPROC

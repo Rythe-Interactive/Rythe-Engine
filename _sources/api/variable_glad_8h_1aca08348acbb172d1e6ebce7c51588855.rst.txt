@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1aca08348acbb172d1e6ebce7c51588855:
+
+Variable glad_glMultiTexCoordP2ui
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glMultiTexCoordP2ui

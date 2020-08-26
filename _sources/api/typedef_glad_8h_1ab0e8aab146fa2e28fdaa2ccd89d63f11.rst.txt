@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1ab0e8aab146fa2e28fdaa2ccd89d63f11:
+
+Typedef PFNGLGETNCOLORTABLEPROC
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETNCOLORTABLEPROC

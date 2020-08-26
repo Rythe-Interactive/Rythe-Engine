@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a9565b8e425b1c3485d23ed59def4259c:
+
+Typedef PFNGLENDQUERYPROC
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLENDQUERYPROC

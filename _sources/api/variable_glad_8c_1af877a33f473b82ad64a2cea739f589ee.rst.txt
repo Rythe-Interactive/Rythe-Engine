@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1af877a33f473b82ad64a2cea739f589ee:
+
+Variable glad_glGetnHistogram
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetnHistogram

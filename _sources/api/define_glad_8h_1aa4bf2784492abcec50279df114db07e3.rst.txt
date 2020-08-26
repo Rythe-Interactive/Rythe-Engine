@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aa4bf2784492abcec50279df114db07e3:
+
+Define GL_QUERY_BY_REGION_WAIT_INVERTED
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_QUERY_BY_REGION_WAIT_INVERTED

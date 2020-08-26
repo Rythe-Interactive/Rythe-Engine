@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1ab01c1b75210af0c9c8af50c2a92b4bbf:
+
+Typedef PFNGLUSEPROGRAMPROC
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLUSEPROGRAMPROC

@@ -1,0 +1,13 @@
+.. _exhale_define_khrplatform_8h_1a5000aa7e3c9ca9d348b1d17326a35635:
+
+Define KHRONOS_SUPPORT_INT64
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_KHR_khrplatform.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: KHRONOS_SUPPORT_INT64

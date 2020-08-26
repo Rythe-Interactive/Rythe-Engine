@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a71b2323f36b02e99442ef7ae2f73e2f0:
+
+Define glUniform2uiv
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glUniform2uiv

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a493a344af6533267a8be2b58a23130fa:
+
+Define GL_SAMPLE_COVERAGE_INVERT
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_SAMPLE_COVERAGE_INVERT

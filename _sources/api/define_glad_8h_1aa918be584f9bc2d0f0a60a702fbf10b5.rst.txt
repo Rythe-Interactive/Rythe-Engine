@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aa918be584f9bc2d0f0a60a702fbf10b5:
+
+Define GL_UNIFORM_BLOCK_REFERENCED_BY_TESS_CONTROL_SHADER
+=========================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_UNIFORM_BLOCK_REFERENCED_BY_TESS_CONTROL_SHADER

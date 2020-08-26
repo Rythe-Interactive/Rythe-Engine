@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1adb1eb1e5dd30df28b608a7805600b987:
+
+Variable glad_glGetProgramBinary
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetProgramBinary

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a982191fdf59e5a967d6a5eb6a65f93ff:
+
+Define glGetInteger64i_v
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetInteger64i_v

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a7edb54a2882c3aa4329d14b39c5080fb:
+
+Define glGetQueryObjectiv
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetQueryObjectiv

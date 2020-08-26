@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a080bc895f36dfa5dd61d43fa752933e6:
+
+Typedef PFNGLGETPROGRAMRESOURCEIVPROC
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETPROGRAMRESOURCEIVPROC

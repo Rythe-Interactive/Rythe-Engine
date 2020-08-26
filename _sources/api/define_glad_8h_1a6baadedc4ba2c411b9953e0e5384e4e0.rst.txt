@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a6baadedc4ba2c411b9953e0e5384e4e0:
+
+Define GL_MAX_COMPUTE_IMAGE_UNIFORMS
+====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_COMPUTE_IMAGE_UNIFORMS

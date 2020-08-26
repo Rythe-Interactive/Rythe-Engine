@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1af420b8c4b319a8b8f09348568ecb0ccf:
+
+Define GL_SAMPLER_BUFFER
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_SAMPLER_BUFFER

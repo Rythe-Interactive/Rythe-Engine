@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a3ff064dc1afa8aa700d5d4b060ccbb87:
+
+Variable glad_glBindBufferRange
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glBindBufferRange

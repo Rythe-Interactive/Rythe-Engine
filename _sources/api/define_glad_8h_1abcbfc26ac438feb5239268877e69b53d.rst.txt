@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1abcbfc26ac438feb5239268877e69b53d:
+
+Define GL_DEBUG_OUTPUT_SYNCHRONOUS
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_DEBUG_OUTPUT_SYNCHRONOUS

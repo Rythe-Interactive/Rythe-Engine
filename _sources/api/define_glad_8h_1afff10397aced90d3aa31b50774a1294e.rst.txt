@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1afff10397aced90d3aa31b50774a1294e:
+
+Define GL_COLOR_CLEAR_VALUE
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_COLOR_CLEAR_VALUE

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a5522e8d753519d4eebaec633bd8d3f1f:
+
+Define glCopyTexSubImage3D
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glCopyTexSubImage3D

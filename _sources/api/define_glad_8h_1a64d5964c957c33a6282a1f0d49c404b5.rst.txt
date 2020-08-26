@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a64d5964c957c33a6282a1f0d49c404b5:
+
+Define GL_MAX_COMBINED_IMAGE_UNITS_AND_FRAGMENT_OUTPUTS
+=======================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_COMBINED_IMAGE_UNITS_AND_FRAGMENT_OUTPUTS

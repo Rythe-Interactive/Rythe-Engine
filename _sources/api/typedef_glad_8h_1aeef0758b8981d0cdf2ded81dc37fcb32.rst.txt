@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1aeef0758b8981d0cdf2ded81dc37fcb32:
+
+Typedef PFNGLDRAWBUFFERPROC
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLDRAWBUFFERPROC

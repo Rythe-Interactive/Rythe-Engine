@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a4dc14569390e5d3b76cf09e281dcc2ed:
+
+Define glPatchParameteri
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glPatchParameteri

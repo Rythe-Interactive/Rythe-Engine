@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1af13fed7c70c0853154f06ace0c06ff7e:
+
+Define GL_INTERNALFORMAT_STENCIL_SIZE
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_INTERNALFORMAT_STENCIL_SIZE

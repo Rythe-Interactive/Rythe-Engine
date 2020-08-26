@@ -1,0 +1,13 @@
+.. _exhale_function_glad_8h_1a1107d1b0963bbf31a58eaeda5db39ffd:
+
+Function gladLoadGLLoader(GLADloadproc)
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: gladLoadGLLoader(GLADloadproc)

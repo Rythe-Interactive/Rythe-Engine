@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a0470f65219f93d7a821f2d8451e4ecce:
+
+Define GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS
+================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS

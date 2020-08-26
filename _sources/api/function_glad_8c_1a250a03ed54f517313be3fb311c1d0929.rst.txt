@@ -1,0 +1,13 @@
+.. _exhale_function_glad_8c_1a250a03ed54f517313be3fb311c1d0929:
+
+Function free_exts
+==================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: free_exts(void)

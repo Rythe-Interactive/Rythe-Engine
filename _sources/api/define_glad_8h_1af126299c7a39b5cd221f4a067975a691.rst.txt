@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1af126299c7a39b5cd221f4a067975a691:
+
+Define GL_MAX_FRAGMENT_SHADER_STORAGE_BLOCKS
+============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_FRAGMENT_SHADER_STORAGE_BLOCKS

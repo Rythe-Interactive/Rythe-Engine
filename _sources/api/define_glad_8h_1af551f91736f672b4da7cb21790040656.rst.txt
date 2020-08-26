@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1af551f91736f672b4da7cb21790040656:
+
+Define GL_BUFFER_MAPPED
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_BUFFER_MAPPED

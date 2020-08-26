@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a867f639df5e2b9c87b8da6a496c37f59:
+
+Typedef PFNGLCOPYNAMEDBUFFERSUBDATAPROC
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLCOPYNAMEDBUFFERSUBDATAPROC

@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a360abc562a0c93a3977ee4cb4f0cd8a5:
+
+Typedef PFNGLTEXTUREBUFFERPROC
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLTEXTUREBUFFERPROC

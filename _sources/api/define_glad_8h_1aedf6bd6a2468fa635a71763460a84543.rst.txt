@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aedf6bd6a2468fa635a71763460a84543:
+
+Define glCreateSamplers
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glCreateSamplers

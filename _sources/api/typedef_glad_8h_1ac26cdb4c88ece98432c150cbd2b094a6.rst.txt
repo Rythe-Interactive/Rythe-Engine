@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1ac26cdb4c88ece98432c150cbd2b094a6:
+
+Typedef PFNGLSAMPLERPARAMETERIIVPROC
+====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLSAMPLERPARAMETERIIVPROC

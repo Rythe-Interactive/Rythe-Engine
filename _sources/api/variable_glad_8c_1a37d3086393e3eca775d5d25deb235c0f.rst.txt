@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a37d3086393e3eca775d5d25deb235c0f:
+
+Variable glad_glDetachShader
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glDetachShader

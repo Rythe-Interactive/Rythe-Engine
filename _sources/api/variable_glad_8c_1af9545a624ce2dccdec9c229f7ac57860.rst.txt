@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1af9545a624ce2dccdec9c229f7ac57860:
+
+Variable glad_glGetIntegeri_v
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetIntegeri_v

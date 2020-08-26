@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8c_1ae528ddc840eec0ab9ddbec708f178516:
+
+Define _GLAD_IS_SOME_NEW_VERSION
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: _GLAD_IS_SOME_NEW_VERSION

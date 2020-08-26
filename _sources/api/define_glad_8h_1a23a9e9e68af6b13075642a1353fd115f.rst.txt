@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a23a9e9e68af6b13075642a1353fd115f:
+
+Define GL_VERTEX_ATTRIB_ARRAY_SIZE
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_VERTEX_ATTRIB_ARRAY_SIZE

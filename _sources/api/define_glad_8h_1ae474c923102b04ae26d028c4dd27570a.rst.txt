@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ae474c923102b04ae26d028c4dd27570a:
+
+Define glGetTextureParameterIiv
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetTextureParameterIiv

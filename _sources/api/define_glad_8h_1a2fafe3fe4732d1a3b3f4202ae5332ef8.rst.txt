@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a2fafe3fe4732d1a3b3f4202ae5332ef8:
+
+Define glPixelStorei
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glPixelStorei

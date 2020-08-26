@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a36b428225d54dd9cf2e564e5ada3ad3d:
+
+Define GL_QUADS
+===============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_QUADS

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ad55a40d7e7b31a2b716d80122e3d00ad:
+
+Define glIsSync
+===============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glIsSync

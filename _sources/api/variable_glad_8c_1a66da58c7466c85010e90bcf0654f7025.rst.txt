@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a66da58c7466c85010e90bcf0654f7025:
+
+Variable glad_glVertexArrayElementBuffer
+========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glVertexArrayElementBuffer

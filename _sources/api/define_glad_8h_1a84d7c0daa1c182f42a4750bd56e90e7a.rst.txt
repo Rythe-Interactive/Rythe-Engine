@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a84d7c0daa1c182f42a4750bd56e90e7a:
+
+Define GL_TRANSFORM_FEEDBACK_BUFFER_PAUSED
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TRANSFORM_FEEDBACK_BUFFER_PAUSED

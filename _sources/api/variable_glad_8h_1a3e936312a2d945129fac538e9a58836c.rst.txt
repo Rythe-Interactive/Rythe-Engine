@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a3e936312a2d945129fac538e9a58836c:
+
+Variable glad_glProgramUniform2fv
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glProgramUniform2fv

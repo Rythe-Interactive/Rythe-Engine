@@ -1,0 +1,13 @@
+.. _exhale_enum_khrplatform_8h_1a0b823cfbc138820708978d43a5f26c64:
+
+Enum khronos_boolean_enum_t
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_KHR_khrplatform.h`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: khronos_boolean_enum_t

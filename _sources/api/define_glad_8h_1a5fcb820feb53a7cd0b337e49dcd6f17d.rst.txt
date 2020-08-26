@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a5fcb820feb53a7cd0b337e49dcd6f17d:
+
+Define GL_TESS_CONTROL_OUTPUT_VERTICES
+======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TESS_CONTROL_OUTPUT_VERTICES

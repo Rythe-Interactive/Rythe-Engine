@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1ab0eed304248dc57ea1767c56478bc920:
+
+Variable glad_glTexStorage2D
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glTexStorage2D

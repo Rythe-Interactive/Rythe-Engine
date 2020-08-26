@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a51e6c75d54b3a9fb93fbc880463c212c:
+
+Define GL_SRC_ALPHA
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_SRC_ALPHA

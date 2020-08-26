@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a4f0fd22afde7215e4412dafa5e522097:
+
+Define GL_STENCIL_TEST
+======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_STENCIL_TEST

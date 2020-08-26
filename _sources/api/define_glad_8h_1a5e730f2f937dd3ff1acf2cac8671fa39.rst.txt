@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a5e730f2f937dd3ff1acf2cac8671fa39:
+
+Define glClearDepth
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glClearDepth

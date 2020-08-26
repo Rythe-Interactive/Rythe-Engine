@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a246306f96b8254e04efb2b5ddfb96557:
+
+Define glTexCoordP4ui
+=====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glTexCoordP4ui

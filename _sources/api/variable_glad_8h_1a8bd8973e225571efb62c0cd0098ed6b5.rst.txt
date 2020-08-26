@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a8bd8973e225571efb62c0cd0098ed6b5:
+
+Variable glad_glGetActiveSubroutineUniformiv
+============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetActiveSubroutineUniformiv

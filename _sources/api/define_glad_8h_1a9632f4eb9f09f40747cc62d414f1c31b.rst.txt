@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a9632f4eb9f09f40747cc62d414f1c31b:
+
+Define GL_NUM_SHADING_LANGUAGE_VERSIONS
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_NUM_SHADING_LANGUAGE_VERSIONS

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a90520731d99d69c72294c595d47385f2:
+
+Define glTexSubImage2D
+======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glTexSubImage2D

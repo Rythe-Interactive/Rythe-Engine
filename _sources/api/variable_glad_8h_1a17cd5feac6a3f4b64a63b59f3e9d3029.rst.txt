@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a17cd5feac6a3f4b64a63b59f3e9d3029:
+
+Variable glad_glReadPixels
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glReadPixels

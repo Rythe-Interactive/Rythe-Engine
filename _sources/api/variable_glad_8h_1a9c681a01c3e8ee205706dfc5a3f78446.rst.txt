@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a9c681a01c3e8ee205706dfc5a3f78446:
+
+Variable glad_glSampleCoverage
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glSampleCoverage

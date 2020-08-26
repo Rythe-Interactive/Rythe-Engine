@@ -1,0 +1,13 @@
+.. _exhale_function_glad_8c_1a64db1ca3b160134bd85d5121be77ab1c:
+
+Function load_GL_VERSION_1_3
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: load_GL_VERSION_1_3(GLADloadproc)

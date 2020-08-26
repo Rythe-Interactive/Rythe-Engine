@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1acb19eb709ea3fb46b02468a62e6265d0:
+
+Variable glad_glVertexAttribI3uiv
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glVertexAttribI3uiv

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1acbaa4cb66c23bf0b20fad5e9aefafb37:
+
+Define GL_COLOR_ATTACHMENT28
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_COLOR_ATTACHMENT28

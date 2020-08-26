@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a654599021b9e26bd6feb4c7cd001ef7f:
+
+Define GL_UNSIGNED_SHORT_5_5_5_1
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_UNSIGNED_SHORT_5_5_5_1

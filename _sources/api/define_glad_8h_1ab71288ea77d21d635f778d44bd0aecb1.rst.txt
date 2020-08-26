@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ab71288ea77d21d635f778d44bd0aecb1:
+
+Define glProgramUniformMatrix4x3fv
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glProgramUniformMatrix4x3fv

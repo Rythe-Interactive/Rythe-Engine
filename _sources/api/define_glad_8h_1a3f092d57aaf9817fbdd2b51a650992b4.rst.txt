@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a3f092d57aaf9817fbdd2b51a650992b4:
+
+Define GL_COLOR_LOGIC_OP
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_COLOR_LOGIC_OP

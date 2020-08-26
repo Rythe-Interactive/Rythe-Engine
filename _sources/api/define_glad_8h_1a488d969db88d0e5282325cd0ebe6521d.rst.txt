@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a488d969db88d0e5282325cd0ebe6521d:
+
+Define GL_MAX_CLIP_DISTANCES
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_CLIP_DISTANCES

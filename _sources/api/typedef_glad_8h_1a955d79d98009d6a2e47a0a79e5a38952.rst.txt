@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a955d79d98009d6a2e47a0a79e5a38952:
+
+Typedef PFNGLISSHADERPROC
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLISSHADERPROC

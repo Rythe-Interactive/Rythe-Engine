@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a2d9d0c6b8ea5a9b16dd320ccf91b20da:
+
+Variable glad_glBufferStorage
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glBufferStorage

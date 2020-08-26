@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a00a4cb3667d844ccdd572844e216e3dc:
+
+Define GL_DOUBLE_MAT2x3
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_DOUBLE_MAT2x3

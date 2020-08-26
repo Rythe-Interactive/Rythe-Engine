@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1aa2370174458fe48ea2178367fa5e407c:
+
+Typedef PFNGLSTENCILFUNCPROC
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLSTENCILFUNCPROC

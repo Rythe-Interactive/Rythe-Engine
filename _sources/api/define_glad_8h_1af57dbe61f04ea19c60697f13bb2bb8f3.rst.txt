@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1af57dbe61f04ea19c60697f13bb2bb8f3:
+
+Define GL_DRAW_INDIRECT_BUFFER
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_DRAW_INDIRECT_BUFFER

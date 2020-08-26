@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a8e1daf227b007111f351af3b461338b3:
+
+Variable glad_glBeginQuery
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glBeginQuery

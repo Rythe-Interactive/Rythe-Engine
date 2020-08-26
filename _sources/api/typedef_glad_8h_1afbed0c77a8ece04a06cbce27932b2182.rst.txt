@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1afbed0c77a8ece04a06cbce27932b2182:
+
+Typedef PFNGLVERTEXP4UIPROC
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLVERTEXP4UIPROC

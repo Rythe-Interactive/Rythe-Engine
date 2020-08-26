@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a5064a43748e290123b6c1ca6ebc1539d:
+
+Typedef PFNGLCLAMPCOLORPROC
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLCLAMPCOLORPROC

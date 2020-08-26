@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1ab0c06cd0b90b306911d4f6e9c68a9bd7:
+
+Typedef PFNGLUSEPROGRAMSTAGESPROC
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLUSEPROGRAMSTAGESPROC

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a7b16972f94aae201d5f61e83114f62db:
+
+Define GL_MAX_INTEGER_SAMPLES
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_INTEGER_SAMPLES

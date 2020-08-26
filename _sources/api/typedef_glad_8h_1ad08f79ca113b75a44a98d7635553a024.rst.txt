@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1ad08f79ca113b75a44a98d7635553a024:
+
+Typedef PFNGLGETNMAPFVPROC
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETNMAPFVPROC

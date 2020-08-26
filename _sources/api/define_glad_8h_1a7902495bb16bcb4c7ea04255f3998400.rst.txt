@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a7902495bb16bcb4c7ea04255f3998400:
+
+Define GL_COMPUTE_SHADER
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_COMPUTE_SHADER

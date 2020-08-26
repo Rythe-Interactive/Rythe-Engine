@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aafd4a263d9dffb7c9d0d602918c72861:
+
+Define GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_VERTEX_SHADER
+===========================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_VERTEX_SHADER

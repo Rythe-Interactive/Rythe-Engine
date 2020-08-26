@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a6c2a3c3fc5eed469a8fd498073e5a78e:
+
+Variable glad_glGetInteger64v
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetInteger64v

@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a54e62a2ab43e427c8a2c20db246f004a:
+
+Typedef PFNGLCLEARNAMEDFRAMEBUFFERFVPROC
+========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLCLEARNAMEDFRAMEBUFFERFVPROC

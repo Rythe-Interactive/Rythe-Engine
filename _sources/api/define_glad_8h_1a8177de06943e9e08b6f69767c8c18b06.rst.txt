@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a8177de06943e9e08b6f69767c8c18b06:
+
+Define GL_TEXTURE_DEPTH
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TEXTURE_DEPTH

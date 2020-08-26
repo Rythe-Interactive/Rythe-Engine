@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aea16c79d68e4e6382f4c129d779142cd:
+
+Define GL_CONTEXT_FLAG_DEBUG_BIT
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_CONTEXT_FLAG_DEBUG_BIT

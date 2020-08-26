@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1acc91fe7775d71453eaba5a76f6ae2b92:
+
+Variable glad_glGetNamedBufferParameteri64v
+===========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetNamedBufferParameteri64v

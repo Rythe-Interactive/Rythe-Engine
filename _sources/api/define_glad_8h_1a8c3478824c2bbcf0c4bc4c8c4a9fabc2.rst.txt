@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a8c3478824c2bbcf0c4bc4c8c4a9fabc2:
+
+Define GL_UNSIGNED_INT_IMAGE_2D_MULTISAMPLE
+===========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_UNSIGNED_INT_IMAGE_2D_MULTISAMPLE

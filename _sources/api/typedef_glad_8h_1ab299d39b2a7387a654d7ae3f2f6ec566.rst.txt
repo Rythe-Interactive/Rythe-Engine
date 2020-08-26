@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1ab299d39b2a7387a654d7ae3f2f6ec566:
+
+Typedef PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC
+================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC

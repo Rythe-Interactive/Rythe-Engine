@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a8871ec64aa386201d6f1d054c763d064:
+
+Define glStencilFunc
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glStencilFunc

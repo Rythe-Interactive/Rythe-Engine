@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a1b8f94ac5398baf9abc74b31d72f15be:
+
+Define GL_MAX_GEOMETRY_ATOMIC_COUNTERS
+======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_GEOMETRY_ATOMIC_COUNTERS

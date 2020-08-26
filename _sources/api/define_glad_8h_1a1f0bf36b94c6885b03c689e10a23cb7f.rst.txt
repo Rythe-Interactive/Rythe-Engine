@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a1f0bf36b94c6885b03c689e10a23cb7f:
+
+Define GL_INT_SAMPLER_2D_MULTISAMPLE
+====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_INT_SAMPLER_2D_MULTISAMPLE

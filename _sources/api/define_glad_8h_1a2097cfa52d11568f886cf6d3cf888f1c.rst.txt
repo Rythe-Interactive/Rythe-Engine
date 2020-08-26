@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a2097cfa52d11568f886cf6d3cf888f1c:
+
+Define glCheckFramebufferStatus
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glCheckFramebufferStatus

@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a2f0e2ffaf3ec6974cd2cfe99abda526b:
+
+Typedef PFNGLTEXTURESTORAGE3DPROC
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLTEXTURESTORAGE3DPROC

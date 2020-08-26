@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a3b28c651ede861e326664b86e24fa3e9:
+
+Typedef PFNGLPRIMITIVERESTARTINDEXPROC
+======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLPRIMITIVERESTARTINDEXPROC

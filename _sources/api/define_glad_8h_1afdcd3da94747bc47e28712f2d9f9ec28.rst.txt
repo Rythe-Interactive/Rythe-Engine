@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1afdcd3da94747bc47e28712f2d9f9ec28:
+
+Define GL_TEXTURE_BINDING_2D_MULTISAMPLE_ARRAY
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TEXTURE_BINDING_2D_MULTISAMPLE_ARRAY

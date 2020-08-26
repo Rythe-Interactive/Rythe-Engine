@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a9e07ed07dfb1b247552ec0aeb2eea337:
+
+Define GL_REFERENCED_BY_TESS_EVALUATION_SHADER
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_REFERENCED_BY_TESS_EVALUATION_SHADER

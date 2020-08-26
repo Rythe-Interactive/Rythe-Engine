@@ -1,0 +1,13 @@
+.. _exhale_define_khrplatform_8h_1a2005a9aed8272da688b4f4ea414531bc:
+
+Define KHRONOS_SUPPORT_FLOAT
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_KHR_khrplatform.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: KHRONOS_SUPPORT_FLOAT

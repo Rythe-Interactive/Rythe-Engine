@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a29d9fffb2e480e37d7e0b70877b332f7:
+
+Define GL_COMPRESSED_RED_RGTC1
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_COMPRESSED_RED_RGTC1

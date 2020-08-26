@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a65903b749a041659dcc536450c5eb79b:
+
+Define glGetQueryObjectui64v
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glGetQueryObjectui64v

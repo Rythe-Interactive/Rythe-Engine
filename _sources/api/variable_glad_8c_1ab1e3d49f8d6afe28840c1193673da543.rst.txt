@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1ab1e3d49f8d6afe28840c1193673da543:
+
+Variable glad_glDeleteSync
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glDeleteSync

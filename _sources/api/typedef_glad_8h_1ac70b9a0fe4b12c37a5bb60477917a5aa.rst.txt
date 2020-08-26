@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1ac70b9a0fe4b12c37a5bb60477917a5aa:
+
+Typedef PFNGLVERTEXATTRIB4NUBVPROC
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLVERTEXATTRIB4NUBVPROC

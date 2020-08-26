@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a8e29737be2e7e4f8a26be07613f1c094:
+
+Variable glad_glTexParameterIiv
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glTexParameterIiv

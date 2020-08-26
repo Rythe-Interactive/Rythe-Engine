@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1ac6ee6036ad498edc5a7c39be1cc1a16d:
+
+Typedef PFNGLDEPTHRANGEINDEXEDPROC
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLDEPTHRANGEINDEXEDPROC

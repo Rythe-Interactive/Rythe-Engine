@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a26e2364953e73d8b63f0def96ede5397:
+
+Define GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS
+=================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS

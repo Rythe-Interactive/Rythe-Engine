@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a26f9ead0291fe1f416f5cbf4b476810f:
+
+Define GL_UNSIGNED_INT_10F_11F_11F_REV
+======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_UNSIGNED_INT_10F_11F_11F_REV

@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a68b68c3e9d16dbc0888749273960c96f:
+
+Typedef PFNGLCLEARBUFFERFIPROC
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLCLEARBUFFERFIPROC

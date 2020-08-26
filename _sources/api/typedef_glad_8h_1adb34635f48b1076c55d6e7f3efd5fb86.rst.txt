@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1adb34635f48b1076c55d6e7f3efd5fb86:
+
+Typedef PFNGLUNIFORM3IPROC
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLUNIFORM3IPROC

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a0ddf170c51b285ae3b71eaa7f9404388:
+
+Define GL_SYNC_FENCE
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_SYNC_FENCE

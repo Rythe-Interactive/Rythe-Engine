@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1ac969fc40047bd8b1c8831bbb2d866024:
+
+Typedef GLint64
+===============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: GLint64

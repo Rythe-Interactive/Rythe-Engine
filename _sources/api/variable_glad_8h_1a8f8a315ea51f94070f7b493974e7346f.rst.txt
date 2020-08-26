@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a8f8a315ea51f94070f7b493974e7346f:
+
+Variable glad_glCreateProgram
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glCreateProgram

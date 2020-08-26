@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a161e22e2fe94fb38ae144754fa74b736:
+
+Define GL_IMAGE_CLASS_1_X_8
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_IMAGE_CLASS_1_X_8

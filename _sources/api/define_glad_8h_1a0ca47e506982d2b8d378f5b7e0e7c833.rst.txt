@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a0ca47e506982d2b8d378f5b7e0e7c833:
+
+Define GL_FASTEST
+=================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_FASTEST

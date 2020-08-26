@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a5909cbcd7e61de3804a40d7d47e72cf9:
+
+Define GL_FLOAT_32_UNSIGNED_INT_24_8_REV
+========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_FLOAT_32_UNSIGNED_INT_24_8_REV

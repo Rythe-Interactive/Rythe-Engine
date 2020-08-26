@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a1bfeac4d5407b11bcc3afc425314db46:
+
+Typedef GLeglClientBufferEXT
+============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: GLeglClientBufferEXT

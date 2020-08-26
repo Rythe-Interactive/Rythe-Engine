@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a180ce96110df320f609b02054d84448c:
+
+Define glInvalidateTexImage
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glInvalidateTexImage

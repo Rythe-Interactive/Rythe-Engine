@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a97c3f50440fbe7eb098cfeede90d1686:
+
+Define GL_BUFFER_SIZE
+=====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_BUFFER_SIZE

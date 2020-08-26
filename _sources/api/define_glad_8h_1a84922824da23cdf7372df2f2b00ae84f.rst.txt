@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a84922824da23cdf7372df2f2b00ae84f:
+
+Define GL_NOOP
+==============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_NOOP

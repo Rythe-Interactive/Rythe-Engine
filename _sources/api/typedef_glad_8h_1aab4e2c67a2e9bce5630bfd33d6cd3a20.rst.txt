@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1aab4e2c67a2e9bce5630bfd33d6cd3a20:
+
+Typedef PFNGLGETSYNCIVPROC
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLGETSYNCIVPROC

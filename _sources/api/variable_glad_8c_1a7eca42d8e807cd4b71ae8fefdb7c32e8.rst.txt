@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8c_1a7eca42d8e807cd4b71ae8fefdb7c32e8:
+
+Variable glad_glBlendEquationSeparatei
+======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.c`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glBlendEquationSeparatei

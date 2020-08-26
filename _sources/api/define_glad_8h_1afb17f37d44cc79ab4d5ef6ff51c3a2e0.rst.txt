@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1afb17f37d44cc79ab4d5ef6ff51c3a2e0:
+
+Define GL_RGBA4
+===============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_RGBA4

@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1a89eb99ba829a6a018bd77f294c05ffe6:
+
+Variable glad_glGetQueryBufferObjectui64v
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glGetQueryBufferObjectui64v

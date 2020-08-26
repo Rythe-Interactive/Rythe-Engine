@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ad70b42f24717cb3f3c3c494a7e45d488:
+
+Define GL_TEXTURE_COMPRESSED_IMAGE_SIZE
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TEXTURE_COMPRESSED_IMAGE_SIZE

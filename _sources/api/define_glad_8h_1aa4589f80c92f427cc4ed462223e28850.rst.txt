@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1aa4589f80c92f427cc4ed462223e28850:
+
+Define GL_SHADER_TYPE
+=====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_SHADER_TYPE

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1ade2542eead220225359999d640e0c226:
+
+Define GL_TEXTURE_RED_TYPE
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_TEXTURE_RED_TYPE

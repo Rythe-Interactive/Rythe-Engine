@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a164aabe4148686b2914b5b1954343e35:
+
+Define glTexStorage3DMultisample
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glTexStorage3DMultisample

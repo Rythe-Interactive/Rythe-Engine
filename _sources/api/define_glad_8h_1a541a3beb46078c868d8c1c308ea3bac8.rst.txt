@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a541a3beb46078c868d8c1c308ea3bac8:
+
+Define glMultiDrawArrays
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glMultiDrawArrays

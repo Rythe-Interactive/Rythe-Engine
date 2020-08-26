@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a2019006be0b1b8e718b6a1534f0345d2:
+
+Define glUseProgramStages
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glUseProgramStages

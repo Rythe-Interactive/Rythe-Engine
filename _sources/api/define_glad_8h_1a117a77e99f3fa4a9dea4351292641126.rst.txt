@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a117a77e99f3fa4a9dea4351292641126:
+
+Define GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE
+===========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE

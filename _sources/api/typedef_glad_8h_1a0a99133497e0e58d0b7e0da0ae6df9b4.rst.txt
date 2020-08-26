@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1a0a99133497e0e58d0b7e0da0ae6df9b4:
+
+Typedef PFNGLVIEWPORTARRAYVPROC
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLVIEWPORTARRAYVPROC

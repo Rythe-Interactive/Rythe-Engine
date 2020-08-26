@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1adfa37198916f2415e6aba6b67d554aa7:
+
+Variable glad_glTextureSubImage1D
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glTextureSubImage1D

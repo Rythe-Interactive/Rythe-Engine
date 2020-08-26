@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a3b3a3f8200f094b781e9f61e2f19fc50:
+
+Define glBindBuffer
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glBindBuffer

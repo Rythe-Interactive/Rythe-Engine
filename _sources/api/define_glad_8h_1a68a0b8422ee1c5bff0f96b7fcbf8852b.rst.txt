@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a68a0b8422ee1c5bff0f96b7fcbf8852b:
+
+Define GL_STACK_OVERFLOW
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_STACK_OVERFLOW

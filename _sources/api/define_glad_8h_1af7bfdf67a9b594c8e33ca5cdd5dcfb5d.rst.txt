@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1af7bfdf67a9b594c8e33ca5cdd5dcfb5d:
+
+Define GL_POINT_SPRITE_COORD_ORIGIN
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_POINT_SPRITE_COORD_ORIGIN

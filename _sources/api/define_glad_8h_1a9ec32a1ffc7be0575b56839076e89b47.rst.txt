@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a9ec32a1ffc7be0575b56839076e89b47:
+
+Define glDeleteSamplers
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glDeleteSamplers

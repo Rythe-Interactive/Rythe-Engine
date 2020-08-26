@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a60e8076f94e887855748fb2a889cb775:
+
+Define GL_SAMPLER_2D_RECT_SHADOW
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_SAMPLER_2D_RECT_SHADOW

@@ -77,6 +77,8 @@
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Args</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;&gt;</span>
         <span class="kt">void</span> <span class="n">raiseEvent</span><span class="p">(</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">arguments</span><span class="p">)</span>
         <span class="p">{</span>
+            <span class="c1">//std::cout &lt;&lt; &quot;\n\n&quot; &lt;&lt; typeid(event_type).name() &lt;&lt; &quot;\n\n&quot;;</span>
+
             <span class="n">event_type</span><span class="o">*</span> <span class="n">eventptr</span><span class="p">;</span>
 
             <span class="n">event_type</span> <span class="nf">event</span><span class="p">(</span><span class="n">arguments</span><span class="p">...);</span> <span class="c1">// Create new event.</span>

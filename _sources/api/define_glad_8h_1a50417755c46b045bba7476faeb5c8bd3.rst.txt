@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a50417755c46b045bba7476faeb5c8bd3:
+
+Define glTextureStorage2D
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: glTextureStorage2D

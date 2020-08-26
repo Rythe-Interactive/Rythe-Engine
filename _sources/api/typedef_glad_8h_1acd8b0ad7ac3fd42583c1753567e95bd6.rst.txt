@@ -1,0 +1,13 @@
+.. _exhale_typedef_glad_8h_1acd8b0ad7ac3fd42583c1753567e95bd6:
+
+Typedef PFNGLQUERYCOUNTERPROC
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: PFNGLQUERYCOUNTERPROC

@@ -1,0 +1,13 @@
+.. _exhale_variable_glad_8h_1afb094920075c5d4fc6a34ca3a7609182:
+
+Variable glad_glBeginQueryIndexed
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: glad_glBeginQueryIndexed

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1af58c4c38ef01497de9207d91ba9ed2db:
+
+Define GL_GREEN
+===============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_GREEN

@@ -1,0 +1,13 @@
+.. _exhale_define_glad_8h_1a7336c31f6031c462e26018f95b2318cf:
+
+Define GL_MAX_FRAGMENT_INTERPOLATION_OFFSET
+===========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GL_MAX_FRAGMENT_INTERPOLATION_OFFSET
