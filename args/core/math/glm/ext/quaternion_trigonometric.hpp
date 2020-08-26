@@ -28,7 +28,7 @@
 #	pragma message("GLM: GLM_EXT_quaternion_trigonometric extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_quaternion_trigonometric
 	/// @{
@@ -58,6 +58,6 @@ namespace glm
 	GLM_FUNC_DECL qua<T, Q> angleAxis(T const& angle, vec<3, T, Q> const& axis);
 
 	/// @}
-} //namespace glm
+} //namespace args::core::math::detail::glm
 
 #include "quaternion_trigonometric.inl"

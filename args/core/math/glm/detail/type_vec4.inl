@@ -2,7 +2,7 @@
 
 #include "compute_vector_relational.hpp"
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template<typename T, qualifier Q, bool Aligned>
@@ -1133,7 +1133,7 @@ namespace detail
 	{
 		return vec<4, bool, Q>(v1.x || v2.x, v1.y || v2.y, v1.z || v2.z, v1.w || v2.w);
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #if GLM_CONFIG_SIMD == GLM_ENABLE
 #	include "type_vec4_simd.inl"

@@ -2,7 +2,7 @@
 
 #include <limits>
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template<length_t L, typename T, typename floatType, qualifier Q, bool isInteger, bool signedType>
@@ -124,4 +124,4 @@ namespace detail
 			Result = max(Result, v[i]);
 		return Result;
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

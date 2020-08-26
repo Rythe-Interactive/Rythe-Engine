@@ -27,7 +27,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_norm
 	/// @{
@@ -83,6 +83,6 @@ namespace glm
 	GLM_FUNC_DECL T lMaxNorm(vec<3, T, Q> const& x);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "norm.inl"

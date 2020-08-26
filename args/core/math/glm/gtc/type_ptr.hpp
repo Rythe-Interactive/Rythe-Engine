@@ -54,7 +54,7 @@
 #	pragma message("GLM: GLM_GTC_type_ptr extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtc_type_ptr
 	/// @{
@@ -225,6 +225,6 @@ namespace glm
 	GLM_FUNC_DECL qua<T, defaultp> make_quat(T const * const ptr);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "type_ptr.inl"

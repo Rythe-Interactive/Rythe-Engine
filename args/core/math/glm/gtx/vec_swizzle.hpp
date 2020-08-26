@@ -22,7 +22,7 @@
 #	endif
 #endif
 
-namespace glm {
+namespace args::core::math::detail::glm {
 	// xx
 	template<typename T, qualifier Q>
 	GLM_INLINE glm::vec<2, T, Q> xx(const glm::vec<1, T, Q> &v) {

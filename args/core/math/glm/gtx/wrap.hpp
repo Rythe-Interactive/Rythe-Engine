@@ -26,12 +26,12 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_wrap
 	/// @{
 
 	/// @}
-}// namespace glm
+}// namespace args::core::math::detail::glm
 
 #include "wrap.inl"

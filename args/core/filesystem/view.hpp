@@ -89,7 +89,7 @@ namespace args::core::filesystem
 
     protected:
         view() = default;
-        const std::string m_path;
+        std::string m_path;
 
         std::string create_identifier(const navigator::solution::iterator&);
         std::shared_ptr<filesystem_resolver> build();

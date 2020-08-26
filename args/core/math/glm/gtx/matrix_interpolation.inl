@@ -2,7 +2,7 @@
 
 #include "../gtc/constants.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER void axisAngle(mat<4, 4, T, Q> const& m, vec<3, T, Q> & axis, T& angle)
@@ -126,4 +126,4 @@ namespace glm
 		out[3][2] = m1[3][2] + delta * (m2[3][2] - m1[3][2]);
 		return out;
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

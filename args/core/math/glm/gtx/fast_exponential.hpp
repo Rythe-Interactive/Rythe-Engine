@@ -24,7 +24,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_fast_exponential
 	/// @{
@@ -90,6 +90,6 @@ namespace glm
 	GLM_FUNC_DECL vec<L, T, Q> fastLog2(vec<L, T, Q> const& x);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "fast_exponential.inl"

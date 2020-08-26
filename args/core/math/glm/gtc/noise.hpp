@@ -31,7 +31,7 @@
 #	pragma message("GLM: GLM_GTC_noise extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtc_noise
 	/// @{
@@ -56,6 +56,6 @@ namespace glm
 		vec<L, T, Q> const& p);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "noise.inl"

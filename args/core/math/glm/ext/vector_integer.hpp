@@ -23,7 +23,7 @@
 #	pragma message("GLM: GLM_EXT_vector_integer extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_vector_integer
 	/// @{
@@ -144,6 +144,6 @@ namespace glm
 	GLM_FUNC_DECL vec<L, int, Q> findNSB(vec<L, T, Q> const& Source, vec<L, int, Q> SignificantBitCount);
 
 	/// @}
-} //namespace glm
+} //namespace args::core::math::detail::glm
 
 #include "vector_integer.inl"

@@ -3,7 +3,7 @@
 #include "../geometric.hpp"
 #include <limits>
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	// -- Component accesses --
 
@@ -11,14 +11,14 @@ namespace glm
 	GLM_FUNC_QUALIFIER typename tdualquat<T, Q>::part_type & tdualquat<T, Q>::operator[](typename tdualquat<T, Q>::length_type i)
 	{
 		assert(i >= 0 && i < this->length());
-		return (&real)[i];
+		return *((&real) + i);
 	}
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER typename tdualquat<T, Q>::part_type const& tdualquat<T, Q>::operator[](typename tdualquat<T, Q>::length_type i) const
 	{
 		assert(i >= 0 && i < this->length());
-		return (&real)[i];
+		return *((&real) + i);
 	}
 
 	// -- Implicit basic constructors --
@@ -349,4 +349,4 @@ namespace glm
 		dual.w = -static_cast<T>(0.5) * ( x[0].w * real.x + x[1].w * real.y + x[2].w * real.z);
 		return tdualquat<T, Q>(real, dual);
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

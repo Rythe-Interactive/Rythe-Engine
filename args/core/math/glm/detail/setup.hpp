@@ -538,9 +538,9 @@
 #include <CL/sycl.hpp>
 #include <limits>
 
-namespace glm {
+namespace args::core::math::detail::glm {
 namespace std {
-	// Import SYCL's functions into the namespace glm::std to force their usages.
+	// Import SYCL's functions into the namespace args::core::math::detail::glm::std to force their usages.
 	// It's important to use the math built-in function (sin, exp, ...)
 	// of SYCL instead the std ones.
 	using namespace cl::sycl;
@@ -566,7 +566,7 @@ namespace std {
 	using ::std::make_unsigned;
 	///////////////////////////////////////////////////////////////////////////////
 } //namespace std
-} //namespace glm
+} //namespace args::core::math::detail::glm
 
 #endif
 
@@ -586,7 +586,7 @@ namespace std {
 #	define GLM_CONFIG_LENGTH_TYPE		GLM_LENGTH_INT
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	using std::size_t;
 #	if GLM_CONFIG_LENGTH_TYPE == GLM_LENGTH_SIZE_T
@@ -594,7 +594,7 @@ namespace glm
 #	else
 		typedef int length_t;
 #	endif
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 ///////////////////////////////////////////////////////////////////////////////////
 // constexpr
@@ -602,14 +602,14 @@ namespace glm
 #if GLM_HAS_CONSTEXPR
 #	define GLM_CONFIG_CONSTEXP GLM_ENABLE
 
-	namespace glm
+	namespace args::core::math::detail::glm
 	{
 		template<typename T, std::size_t N>
 		constexpr std::size_t countof(T const (&)[N])
 		{
 			return N;
 		}
-	}//namespace glm
+	}//namespace args::core::math::detail::glm
 #	define GLM_COUNTOF(arr) glm::countof(arr)
 #elif defined(_MSC_VER)
 #	define GLM_CONFIG_CONSTEXP GLM_DISABLE
@@ -624,7 +624,7 @@ namespace glm
 ///////////////////////////////////////////////////////////////////////////////////
 // uint
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template<typename T>
@@ -647,7 +647,7 @@ namespace detail
 }//namespace detail
 
 	typedef unsigned int	uint;
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 ///////////////////////////////////////////////////////////////////////////////////
 // 64-bit int
@@ -656,7 +656,7 @@ namespace detail
 #	include <cstdint>
 #endif
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 #	if GLM_HAS_EXTENDED_INTEGER_TYPE
@@ -681,7 +681,7 @@ namespace detail
 		typedef signed long long					int64;
 #	endif
 }//namespace detail
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 ///////////////////////////////////////////////////////////////////////////////////
 // make_unsigned
@@ -689,16 +689,16 @@ namespace detail
 #if GLM_HAS_MAKE_SIGNED
 #	include <type_traits>
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	using std::make_unsigned;
 }//namespace detail
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #else
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template<typename genType>
@@ -771,7 +771,7 @@ namespace detail
 		typedef uint64 type;
 	};
 }//namespace detail
-}//namespace glm
+}//namespace args::core::math::detail::glm
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////////

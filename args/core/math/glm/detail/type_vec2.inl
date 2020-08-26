@@ -2,7 +2,7 @@
 
 #include "./compute_vector_relational.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	// -- Implicit basic constructors --
 
@@ -910,4 +910,4 @@ namespace glm
 	{
 		return vec<2, bool, Q>(v1.x || v2.x, v1.y || v2.y);
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

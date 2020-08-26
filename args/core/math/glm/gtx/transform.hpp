@@ -27,7 +27,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_transform
 	/// @{
@@ -55,6 +55,6 @@ namespace glm
 		vec<3, T, Q> const& v);
 
 	/// @}
-}// namespace glm
+}// namespace args::core::math::detail::glm
 
 #include "transform.inl"

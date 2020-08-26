@@ -2,7 +2,7 @@
 
 #if GLM_ARCH & GLM_ARCH_SSE2_BIT
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template<qualifier Q>
@@ -60,6 +60,6 @@ namespace detail
 #	endif//GLM_MODEL
 #	endif//GLM_ARCH
 
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #endif//GLM_ARCH & GLM_ARCH_SSE2_BIT

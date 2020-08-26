@@ -32,7 +32,7 @@ T data_from_string_(std::string str);
 
 
 template <char token,char... tokens>
-bool  str_tokens_helper(std::ctype<char>::mask * rc)
+bool str_tokens_helper(std::ctype<char>::mask * rc)
 {
 	rc[token] = std::ctype<char>::space;
 	if constexpr (sizeof...(tokens) != 0) str_tokens_helper<tokens...>(rc);
@@ -62,7 +62,7 @@ struct str_tokens : std::ctype<char>
 
 //split string at any given char via variadic template and insert into vector
 template <char token_1, char... token>
-inline std::vector<std::string> split_string_at(const std::string& string)
+std::vector<std::string> split_string_at(const std::string& string)
 {
 	//copy string into stringstream
 	std::stringstream ss(string);

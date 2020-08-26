@@ -23,7 +23,7 @@
 #	endif
 #endif
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace gtx
 {
 	/// @addtogroup gtx_optimum_pow
@@ -49,6 +49,6 @@ namespace gtx
 
 	/// @}
 }//namespace gtx
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "optimum_pow.inl"

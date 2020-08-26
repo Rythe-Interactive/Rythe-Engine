@@ -103,7 +103,7 @@ extern void reportModules(args::core::Engine* engine);
 			std::cout << "==============================" << std::endl;
 			engine.run();
 
-	#if defined(ARGS_DEBUG)
+	#if defined(ARGS_DEBUG) || defined(ARGS_KEEP_CONSOLE)
 			std::cout << "Press any key to exit." << std::endl;
 			std::cin.ignore();
 	#endif

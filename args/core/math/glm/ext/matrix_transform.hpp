@@ -29,7 +29,7 @@
 #	pragma message("GLM: GLM_EXT_matrix_transform extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_matrix_transform
 	/// @{
@@ -139,6 +139,6 @@ namespace glm
 		vec<3, T, Q> const& eye, vec<3, T, Q> const& center, vec<3, T, Q> const& up);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "matrix_transform.inl"

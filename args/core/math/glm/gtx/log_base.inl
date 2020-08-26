@@ -1,6 +1,6 @@
 /// @ref gtx_log_base
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType log(genType const& x, genType const& base)
@@ -13,4 +13,4 @@ namespace glm
 	{
 		return glm::log(x) / glm::log(base);
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

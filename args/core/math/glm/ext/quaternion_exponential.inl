@@ -1,6 +1,6 @@
 #include "scalar_constants.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER qua<T, Q> exp(qua<T, Q> const& q)
@@ -80,6 +80,6 @@ namespace glm
 	{
 		return pow(x, static_cast<T>(0.5));
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 

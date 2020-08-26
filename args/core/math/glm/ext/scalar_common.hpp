@@ -20,7 +20,7 @@
 #	pragma message("GLM: GLM_EXT_scalar_common extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_scalar_common
 	/// @{
@@ -152,6 +152,6 @@ namespace glm
 	GLM_FUNC_DECL genType mirrorRepeat(genType const& Texcoord);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "scalar_common.inl"

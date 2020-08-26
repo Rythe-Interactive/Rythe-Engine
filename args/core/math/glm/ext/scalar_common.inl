@@ -1,4 +1,4 @@
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename T>
 	GLM_FUNC_QUALIFIER T min(T a, T b, T c)
@@ -149,4 +149,4 @@ namespace glm
 		genType const Mirror = Clamp + Rest;
 		return mix(Rest, static_cast<genType>(1) - Rest, Mirror >= static_cast<genType>(1));
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

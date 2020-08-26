@@ -3,7 +3,7 @@
 #include "../gtc/constants.hpp"
 #include "../gtc/epsilon.hpp"
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	/// Make a linear combination of two vectors and return the result.
@@ -183,4 +183,4 @@ namespace detail
 
 		return true;
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

@@ -26,7 +26,7 @@
 #	pragma message("GLM: GLM_EXT_quaternion_float extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_quaternion_float
 	/// @{
@@ -35,5 +35,5 @@ namespace glm
 	typedef qua<float, defaultp>		quat;
 
 	/// @}
-} //namespace glm
+} //namespace args::core::math::detail::glm
 

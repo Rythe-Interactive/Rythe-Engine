@@ -1,5 +1,6 @@
 #pragma once
 #include <core/core.hpp>
+#include <application/application.hpp>
 #include <core/math/math.hpp>
 using namespace args;
 
@@ -26,6 +27,10 @@ public:
 	{
 		auto ent = m_ecs->createEntity();
 		ent.add_component<sah>();
+        raiseEvent<application::window_request>(ent, math::ivec2(600, 300), "This is a test window!");
+
+        auto ent2 = m_ecs->createEntity();
+        raiseEvent<application::window_request>(ent2, math::ivec2(600, 300), "This is a test window2!");
 
 		createProcess<&TestSystem::update>("Update");
 		createProcess<&TestSystem::differentThread>("TestChain");
@@ -33,10 +38,7 @@ public:
 	}
 
 	void update(time::time_span<fast_time> deltaTime)
-	{
-
-
-		
+	{		
 		static auto query = createQuery<sah>();
 
 		static time::time_span<fast_time> buffer;
@@ -108,11 +110,11 @@ public:
 			std::cout << "This is a different thread!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
 		}
 
-		if (accumulated > 10.f)
-		{
-			std::cout << "raising exit event" << std::endl;
-			raiseEvent<events::exit>();
-			//throw args_exception_msg("hehehe fuck you >:D");
-		}
+		//if (accumulated > 10.f)
+		//{
+		//	std::cout << "raising exit event" << std::endl;
+		//	raiseEvent<events::exit>();
+		//	//throw args_exception_msg("hehehe fuck you >:D");
+		//}
 	}
 };

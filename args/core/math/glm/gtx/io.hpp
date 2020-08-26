@@ -35,7 +35,7 @@
 #include <locale>  // std::locale, std::locale::facet, std::locale::id
 #include <utility> // std::pair<>
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_io
 	/// @{
@@ -196,6 +196,6 @@ namespace glm
                                                          std::pair<mat<4, 4, T, Q> const, mat<4, 4, T, Q> const> const&);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "io.inl"

@@ -34,7 +34,7 @@
 #include "../vec3.hpp"
 #include "../vec4.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtc_type_aligned
 	/// @{
@@ -1312,4 +1312,4 @@ namespace glm
 #endif//GLM_PRECISION
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm

@@ -1,6 +1,6 @@
 /// @ref gtx_gradient_paint
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER T radialGradient
@@ -33,4 +33,4 @@ namespace glm
 		vec<2, T, Q> Dist = Point1 - Point0;
 		return (Dist.x * (Position.x - Point0.x) + Dist.y * (Position.y - Point0.y)) / glm::dot(Dist, Dist);
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

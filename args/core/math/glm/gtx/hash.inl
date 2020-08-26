@@ -9,7 +9,7 @@
 ///
 /// <glm/gtx/hash.inl> need to be included to use the features of this extension.
 
-namespace glm {
+namespace args::core::math::detail::glm {
 namespace detail
 {
 	GLM_INLINE void hash_combine(size_t &seed, size_t hash)

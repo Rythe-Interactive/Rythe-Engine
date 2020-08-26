@@ -21,7 +21,7 @@
 #include "detail/setup.hpp"
 #include "detail/qualifier.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup core_func_trigonometric
 	/// @{
@@ -205,6 +205,6 @@ namespace glm
 	GLM_FUNC_DECL vec<L, T, Q> atanh(vec<L, T, Q> const& x);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "detail/func_trigonometric.inl"

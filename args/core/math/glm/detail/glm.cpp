@@ -11,7 +11,7 @@
 #include <core/math/glm/ext/scalar_uint_sized.hpp>
 #include <core/math/glm/glm.hpp>
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 // tvec1 type explicit instantiation
 template struct vec<1, uint8, lowp>;
@@ -259,5 +259,5 @@ template struct tdualquat<float64, mediump>;
 template struct tdualquat<float32, highp>;
 template struct tdualquat<float64, highp>;
 
-}//namespace glm
+}//namespace args::core::math::detail::glm
 

@@ -27,7 +27,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_rotate_vector
 	/// @{
@@ -118,6 +118,6 @@ namespace glm
 		vec<3, T, Q> const& Up);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "rotate_vector.inl"

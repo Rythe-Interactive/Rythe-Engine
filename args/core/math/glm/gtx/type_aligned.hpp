@@ -25,7 +25,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	///////////////////////////
 	// Signed int vector types
@@ -977,6 +977,6 @@ namespace glm
 #	endif//GLM_FORCE_SINGLE_ONLY
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "type_aligned.inl"

@@ -25,7 +25,7 @@
 #include "../gtc/quaternion.hpp"
 #include "../gtx/dual_quaternion.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_type_trait
 	/// @{
@@ -80,6 +80,6 @@ namespace glm
 	};
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "type_trait.inl"

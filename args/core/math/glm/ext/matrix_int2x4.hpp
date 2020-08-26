@@ -19,7 +19,7 @@
 #	pragma message("GLM: GLM_EXT_matrix_int2x4 extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_matrix_int2x4
 	/// @{
@@ -30,4 +30,4 @@ namespace glm
 	typedef mat<2, 4, int, defaultp>	imat2x4;
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm

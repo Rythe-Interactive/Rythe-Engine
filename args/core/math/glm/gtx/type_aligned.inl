@@ -1,6 +1,6 @@
 /// @ref gtc_type_aligned
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 
 }

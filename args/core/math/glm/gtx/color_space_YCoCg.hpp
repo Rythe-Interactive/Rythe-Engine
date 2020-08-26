@@ -23,7 +23,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_color_space_YCoCg
 	/// @{
@@ -55,6 +55,6 @@ namespace glm
 		vec<3, T, Q> const& YCoCgColor);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "color_space_YCoCg.inl"

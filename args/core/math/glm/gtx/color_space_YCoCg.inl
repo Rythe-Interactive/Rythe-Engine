@@ -1,6 +1,6 @@
 /// @ref gtx_color_space_YCoCg
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER vec<3, T, Q> rgb2YCoCg
@@ -104,4 +104,4 @@ namespace glm
 	{
 		return compute_YCoCgR<T, Q, std::numeric_limits<T>::is_integer>::YCoCgR2rgb(YCoCgRColor);
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

@@ -26,7 +26,7 @@
 #include "../gtc/type_ptr.hpp"
 #include "../gtc/vec1.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_range
 	/// @{
@@ -95,4 +95,4 @@ namespace glm
 #	endif
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
