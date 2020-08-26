@@ -75,10 +75,9 @@ namespace detail
 	{
 		assert(i >= 0 && i < this->length());
 #		ifdef GLM_FORCE_QUAT_DATA_WXYZ
-			return (&w)[i];
+			return *((&w) + i);
 #		else
-			return data.data[i];
-			//return (&x)[i];
+			return *((&x) + i);
 #		endif
 	}
 
@@ -87,10 +86,9 @@ namespace detail
 	{
 		assert(i >= 0 && i < this->length());
 #		ifdef GLM_FORCE_QUAT_DATA_WXYZ
-			return (&w)[i];
+			return *((&w) + i);
 #		else
-			return data.data[i];
-			//return (&x)[i];
+			return *((&x) + i);
 #		endif
 	}
 

@@ -11,14 +11,14 @@ namespace args::core::math::detail::glm
 	GLM_FUNC_QUALIFIER typename tdualquat<T, Q>::part_type & tdualquat<T, Q>::operator[](typename tdualquat<T, Q>::length_type i)
 	{
 		assert(i >= 0 && i < this->length());
-		return &real + i;
+		return *((&real) + i);
 	}
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER typename tdualquat<T, Q>::part_type const& tdualquat<T, Q>::operator[](typename tdualquat<T, Q>::length_type i) const
 	{
 		assert(i >= 0 && i < this->length());
-		return &real +i;
+		return *((&real) + i);
 	}
 
 	// -- Implicit basic constructors --
