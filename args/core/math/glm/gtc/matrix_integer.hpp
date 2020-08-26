@@ -27,7 +27,7 @@
 #	pragma message("GLM: GLM_GTC_matrix_integer extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtc_matrix_integer
 	/// @{
@@ -430,4 +430,4 @@ namespace glm
 	typedef mat<4, 4, uint, defaultp>				umat4x4;
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm

@@ -26,7 +26,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_common
 	/// @{
@@ -71,6 +71,6 @@ namespace glm
 	GLM_FUNC_DECL vec<L, bool, Q> closeBounded(vec<L, T, Q> const& Value, vec<L, T, Q> const& Min, vec<L, T, Q> const& Max);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "common.inl"

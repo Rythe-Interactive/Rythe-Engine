@@ -1,6 +1,6 @@
 /// @ref gtx_intersect
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename genType>
 	GLM_FUNC_QUALIFIER bool intersectRayPlane
@@ -197,4 +197,4 @@ namespace glm
 		intersectionNormal2 = (intersectionPoint2 - sphereCenter) / sphereRadius;
 		return true;
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

@@ -27,7 +27,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_fast_square_root
 	/// @{
@@ -87,6 +87,6 @@ namespace glm
 	GLM_FUNC_DECL genType fastNormalize(genType const& x);
 
 	/// @}
-}// namespace glm
+}// namespace args::core::math::detail::glm
 
 #include "fast_square_root.inl"

@@ -26,7 +26,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_euler_angles
 	/// @{
@@ -330,6 +330,6 @@ namespace glm
 											T & t3);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "euler_angles.inl"

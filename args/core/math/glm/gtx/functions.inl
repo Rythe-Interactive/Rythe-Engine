@@ -2,7 +2,7 @@
 
 #include "../exponential.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename T>
 	GLM_FUNC_QUALIFIER T gauss
@@ -26,5 +26,5 @@ namespace glm
 		vec<2, T, Q> const Squared = ((Coord - ExpectedValue) * (Coord - ExpectedValue)) / (static_cast<T>(2) * StandardDeviation * StandardDeviation);
 		return exp(-(Squared.x + Squared.y));
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 

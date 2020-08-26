@@ -23,7 +23,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_mixed_product
 	/// @{
@@ -36,6 +36,6 @@ namespace glm
 		vec<3, T, Q> const& v3);
 
 	/// @}
-}// namespace glm
+}// namespace args::core::math::detail::glm
 
 #include "mixed_product.inl"

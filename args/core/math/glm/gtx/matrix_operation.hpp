@@ -23,7 +23,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_matrix_operation
 	/// @{
@@ -98,6 +98,6 @@ namespace glm
 	GLM_FUNC_DECL mat<4, 4, T, Q> adjugate(mat<4, 4, T, Q> const& m);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "matrix_operation.inl"

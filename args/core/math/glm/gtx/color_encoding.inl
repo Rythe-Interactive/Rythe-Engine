@@ -1,6 +1,6 @@
 /// @ref gtx_color_encoding
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER vec<3, T, Q> convertLinearSRGBToD65XYZ(vec<3, T, Q> const& ColorLinearSRGB)
@@ -42,4 +42,4 @@ namespace glm
 		return M * ColorD65XYZ + N * ColorD65XYZ + O * ColorD65XYZ;
 	}
 
-}//namespace glm
+}//namespace args::core::math::detail::glm

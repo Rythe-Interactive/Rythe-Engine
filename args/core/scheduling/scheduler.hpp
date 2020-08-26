@@ -147,7 +147,7 @@ namespace args::core::scheduling
 		/**@brief Create a new process-chain.
 		 */
 		template<size_type charc>
-		ProcessChain* addChain(const char(&name)[charc])
+		ProcessChain* addProcessChain(const char(&name)[charc])
 		{
 			if (!m_localChain.id())
 			{
@@ -165,9 +165,9 @@ namespace args::core::scheduling
 		 * @return bool True if succeeded, false if the chain doesn't exist.
 		 */
 		template<size_type charc>
-		bool hookProcess(const char(&chainName)[charc], Process* process)
+		bool hookProcess(const char(&processChainName)[charc], Process* process)
 		{
-			id_type chainId = nameHash<charc>(chainName);
+			id_type chainId = nameHash<charc>(processChainName);
 			async::readonly_guard guard(m_processChainsLock);
 			if (m_processChains.contains(chainId))
 			{

@@ -14,7 +14,7 @@ namespace args::core::async
 	struct transferable_atomic
 	{
 	private:
-		std::atomic<T> m_atomic;
+		mutable std::atomic<T> m_atomic;
 		mutable readonly_rw_spinlock m_lock;
 	public:
 		transferable_atomic() = default;

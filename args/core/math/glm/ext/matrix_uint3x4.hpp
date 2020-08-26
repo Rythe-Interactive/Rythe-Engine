@@ -19,7 +19,7 @@
 #	pragma message("GLM: GLM_EXT_matrix_uint3x4 extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_matrix_uint3x4
 	/// @{
@@ -30,4 +30,4 @@ namespace glm
 	typedef mat<3, 4, uint, defaultp>	umat3x4;
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm

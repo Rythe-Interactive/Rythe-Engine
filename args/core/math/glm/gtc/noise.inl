@@ -5,7 +5,7 @@
 // Following Stefan Gustavson's paper "Simplex noise demystified":
 // http://www.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace gtc
 {
 	template<typename T, qualifier Q>
@@ -804,4 +804,4 @@ namespace gtc
 			(dot(m0 * m0, vec<3, T, Q>(dot(p0, x0), dot(p1, x1), dot(p2, x2))) +
 			dot(m1 * m1, vec<2, T, Q>(dot(p3, x3), dot(p4, x4))));
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

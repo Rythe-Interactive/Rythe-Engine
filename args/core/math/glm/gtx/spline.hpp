@@ -24,7 +24,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_spline
 	/// @{
@@ -60,6 +60,6 @@ namespace glm
 		typename genType::value_type const& s);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "spline.inl"

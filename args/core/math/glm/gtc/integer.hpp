@@ -25,7 +25,7 @@
 #	pragma message("GLM: GLM_GTC_integer extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtc_integer
 	/// @{
@@ -60,6 +60,6 @@ namespace glm
 	GLM_FUNC_DECL vec<L, uint, Q> uround(vec<L, T, Q> const& x);
 
 	/// @}
-} //namespace glm
+} //namespace args::core::math::detail::glm
 
 #include "integer.inl"

@@ -4,7 +4,7 @@
 #pragma once
 #include "../detail/type_vec2.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup core_vector
 	/// @{
@@ -15,4 +15,4 @@ namespace glm
 	typedef vec<2, int, defaultp>		ivec2;
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm

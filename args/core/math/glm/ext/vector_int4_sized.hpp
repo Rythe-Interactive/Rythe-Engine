@@ -20,7 +20,7 @@
 #	pragma message("GLM: GLM_EXT_vector_int4_sized extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_vector_int4_sized
 	/// @{
@@ -46,4 +46,4 @@ namespace glm
 	typedef vec<4, int64, defaultp>		i64vec4;
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm

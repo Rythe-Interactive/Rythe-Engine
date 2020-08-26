@@ -3,7 +3,7 @@
 #include <limits>
 #include "../gtc/constants.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR qua<T, Q> quat_identity()
@@ -156,4 +156,4 @@ namespace glm
 			rotationAxis.y * invs,
 			rotationAxis.z * invs);
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

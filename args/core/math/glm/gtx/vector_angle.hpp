@@ -28,7 +28,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_vector_angle
 	/// @{
@@ -52,6 +52,6 @@ namespace glm
 	GLM_FUNC_DECL T orientedAngle(vec<3, T, Q> const& x, vec<3, T, Q> const& y, vec<3, T, Q> const& ref);
 
 	/// @}
-}// namespace glm
+}// namespace args::core::math::detail::glm
 
 #include "vector_angle.inl"

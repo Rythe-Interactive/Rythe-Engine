@@ -3,7 +3,7 @@
 #include "../trigonometric.hpp"
 #include <limits>
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	// sec
 	template<typename genType>
@@ -188,4 +188,4 @@ namespace glm
 		GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559, "'acoth' only accept floating-point inputs");
 		return detail::functor1<vec, L, T, T, Q>::call(acoth, x);
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

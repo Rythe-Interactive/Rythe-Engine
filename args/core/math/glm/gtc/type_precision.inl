@@ -1,6 +1,6 @@
 /// @ref gtc_precision
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 
 }

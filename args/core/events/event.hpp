@@ -27,7 +27,7 @@ namespace args::core::events
 
 		/**@brief Get's the type id of an event. (only available in event_base)
 		 */
-		virtual id_type getId() ARGS_PURE;
+		virtual id_type get_id() ARGS_PURE;
 	};
 
 	/**@class event
@@ -42,7 +42,7 @@ namespace args::core::events
 
 		virtual ~event() = default;
 	private:
-		virtual id_type getId()
+		virtual id_type get_id()
 		{
 			return id;
 		}

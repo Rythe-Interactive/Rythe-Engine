@@ -4,7 +4,7 @@
 #pragma once
 #include "../detail/type_vec4.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup core_vector
 	/// @{
@@ -15,4 +15,4 @@ namespace glm
 	typedef vec<4, float, defaultp>		vec4;
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm

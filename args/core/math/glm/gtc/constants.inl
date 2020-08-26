@@ -1,6 +1,6 @@
 /// @ref gtc_constants
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename genType>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType zero()
@@ -164,4 +164,4 @@ namespace glm
 		return genType(1.61803398874989484820458683436563811);
 	}
 
-} //namespace glm
+} //namespace args::core::math::detail::glm

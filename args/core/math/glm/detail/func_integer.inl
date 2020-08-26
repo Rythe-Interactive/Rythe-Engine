@@ -16,7 +16,7 @@
 #	endif
 #endif
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template<typename T>
@@ -364,7 +364,7 @@ namespace detail
 
 		return detail::compute_findMSB_vec<L, T, Q, sizeof(T) * 8>::call(v);
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #if GLM_CONFIG_SIMD == GLM_ENABLE
 #	include "func_integer_simd.inl"

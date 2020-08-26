@@ -1,4 +1,4 @@
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename genType>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType identity()
@@ -149,4 +149,4 @@ namespace glm
 		else
 			return lookAtRH(eye, center, up);
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

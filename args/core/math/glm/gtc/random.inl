@@ -7,7 +7,7 @@
 #include <cassert>
 #include <cmath>
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template <length_t L, typename T, qualifier Q>
@@ -300,4 +300,4 @@ namespace detail
 
 		return vec<3, T, defaultp>(x, y, z) * Radius;
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

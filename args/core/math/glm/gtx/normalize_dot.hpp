@@ -24,7 +24,7 @@
 #	endif
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_normalize_dot
 	/// @{
@@ -44,6 +44,6 @@ namespace glm
 	GLM_FUNC_DECL T fastNormalizeDot(vec<L, T, Q> const& x, vec<L, T, Q> const& y);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "normalize_dot.inl"

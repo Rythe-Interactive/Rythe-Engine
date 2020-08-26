@@ -20,7 +20,7 @@
 #	pragma message("GLM: GLM_EXT_vector_uint2_sized extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_vector_uint2_sized
 	/// @{
@@ -46,4 +46,4 @@ namespace glm
 	typedef vec<2, uint64, defaultp>	u64vec2;
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm

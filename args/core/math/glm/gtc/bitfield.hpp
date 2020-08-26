@@ -27,7 +27,7 @@
 #	pragma message("GLM: GLM_GTC_bitfield extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtc_bitfield
 	/// @{
@@ -261,6 +261,6 @@ namespace glm
 	GLM_FUNC_DECL uint64 bitfieldInterleave(uint16 x, uint16 y, uint16 z, uint16 w);
 
 	/// @}
-} //namespace glm
+} //namespace args::core::math::detail::glm
 
 #include "bitfield.inl"

@@ -3,7 +3,7 @@
 #include "../ext/scalar_uint_sized.hpp"
 #include "../detail/type_float.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename genType>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR bool equal(genType const& x, genType const& y, genType const& epsilon)
@@ -37,4 +37,4 @@ namespace glm
 	{
 		return !equal(x, y, ULPs);
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm

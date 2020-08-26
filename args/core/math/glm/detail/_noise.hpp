@@ -2,7 +2,7 @@
 
 #include "../common.hpp"
 
-namespace glm{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template<typename T>
@@ -77,5 +77,5 @@ namespace detail
 		return (t * t * t) * (t * (t * static_cast<T>(6) - static_cast<T>(15)) + static_cast<T>(10));
 	}
 }//namespace detail
-}//namespace glm
+}//namespace args::core::math::detail::glm
 

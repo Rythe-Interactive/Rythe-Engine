@@ -25,7 +25,7 @@
 #	pragma message("GLM: GLM_GTC_color_space extension included")
 #endif
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtc_color_space
 	/// @{
@@ -51,6 +51,6 @@ namespace glm
 	GLM_FUNC_DECL vec<L, T, Q> convertSRGBToLinear(vec<L, T, Q> const& ColorSRGB, T Gamma);
 
 	/// @}
-} //namespace glm
+} //namespace args::core::math::detail::glm
 
 #include "color_space.inl"

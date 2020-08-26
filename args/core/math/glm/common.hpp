@@ -17,7 +17,7 @@
 #include "detail/qualifier.hpp"
 #include "detail/_fixes.hpp"
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup core_func_common
 	/// @{
@@ -533,7 +533,7 @@ namespace glm
 	GLM_FUNC_DECL vec<L, T, Q> ldexp(vec<L, T, Q> const& v, vec<L, int, Q> const& exp);
 
 	/// @}
-}//namespace glm
+}//namespace args::core::math::detail::glm
 
 #include "detail/func_common.inl"
 

@@ -1,6 +1,6 @@
 /// @ref gtx_extended_min_max
 
-namespace glm
+namespace args::core::math::detail::glm
 {
 	template<typename T>
 	GLM_FUNC_QUALIFIER T min(
@@ -135,4 +135,4 @@ namespace glm
 	{
 		return glm::max(glm::max(x, y), glm::max(z, w));
 	}
-}//namespace glm
+}//namespace args::core::math::detail::glm
