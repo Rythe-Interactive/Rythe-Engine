@@ -61,6 +61,11 @@ namespace args::core::filesystem
          */
         A_NODISCARD common::result_decay_more<std::string, fs_error> get_extension() const;
 
+        /**@brief Gets file name if applicable.
+         *  @note You can use args::common::valid to check for validity.
+         */
+        A_NODISCARD common::result_decay_more<std::string, fs_error> get_filename() const;
+
         /** @brief Gets the contents of the resource pointed to.
          *  @note You can use args::common::valid to check for validity.
          */

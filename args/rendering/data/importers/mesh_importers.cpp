@@ -28,7 +28,33 @@ namespace args::rendering
         tinyobj::attrib_t attributes = reader.GetAttrib();
         std::vector<tinyobj::shape_t> shapes = reader.GetShapes();
 
+        mesh_data data;
 
-        return decay(Ok(fs::basic_resource(nullptr)));
+        for (int i = 0; i < attributes.vertices.size() / 3; i++)
+        {
+            int ind3 = i * 3;
+            int ind2 = i * 2;
+            data.vertices.push_back({ attributes.vertices[ind3 + 0], attributes.vertices[ind3 + 1] , attributes.vertices[ind3 + 2] });
+            data.normals.push_back({ attributes.normals[ind3 + 0], attributes.normals[ind3 + 1] , attributes.normals[ind3 + 2] });
+            data.uvs.push_back({ attributes.texcoords[ind2 + 0], attributes.texcoords[ind2 + 1] });
+        }
+
+        mesh_data::calculate_tangents(&data);
+
+        for (auto& shape : shapes)
+        {
+            submesh_data submesh;
+            submesh.name = shape.name;
+            for (auto& index : shape.mesh.indices)
+                submesh.indices.push_back(index.vertex_index);
+
+            data.submeshes.push_back(submesh);
+        }
+
+        fs::basic_resource result(nullptr);
+
+        mesh_data::to_resource(&result, data);
+
+        return decay(Ok(result));
     }
 }

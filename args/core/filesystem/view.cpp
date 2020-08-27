@@ -1,5 +1,7 @@
 #include <algorithm>
 #include <core/filesystem/view.hpp>
+#include <filesystem>
+
 #include "navigator.hpp"
 #include "provider_registry.hpp"
 #include "detail/strpath_manip.hpp"
@@ -85,11 +87,23 @@ namespace args::core::filesystem
         if (!file_info().is_file) // check if the view is a file.
             return decay(Err(args_fs_error("requested file extension on view that isn't a file.")));
 
-        size_type token = m_path.find_last_of('.');
-        if (token == std::string::npos) // check if the view has an extension.
-            return decay(Err(args_fs_error("file doesn't have an extension.")));
+        std::filesystem::path path(m_path);
 
-        return decay(Ok(m_path.substr(token))); // wrap extension in decay.
+        return decay(Ok(path.extension().string())); // wrap extension in decay.
+    }
+
+    A_NODISCARD common::result_decay_more<std::string, fs_error> view::get_filename() const
+    {
+        using common::Err, common::Ok;
+        // decay overloads the operator of ok_type and operator== for valid_t.
+        using decay = common::result_decay_more<std::string, fs_error>;
+
+        if (!file_info().is_file) // check if the view is a file.
+            return decay(Err(args_fs_error("requested file name on view that isn't a file.")));
+
+        std::filesystem::path path(m_path);
+
+        return decay(Ok(path.filename().string())); // wrap extension in decay.
     }
 
     common::result_decay_more<basic_resource, fs_error> view::get()
