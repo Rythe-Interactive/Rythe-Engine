@@ -36,6 +36,28 @@ jobs:
         branch: gh-pages
         directory: gh-pages
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Clear Remote Server
+      uses: appleboy/ssh-action@master
+      with:
+        script: |
+         rm -rf ~/public_html/docs
+         mkdir docs
+        host: ${{ secrets.DOCS_HOST }}
+        username: ${{ secrets.DOCS_USER }}
+        key: ${{ secrets.DOCS_PRIVATE_KEY }}
+        port: ${{ secrets.DOCS_PORT }}
+
+    - name: Populate Remote Server
+      uses: appleboy/scp-action@master
+      with:
+        source: docs/build/html/*
+        target: ~/public_html/docs
+        host: ${{ secrets.DOCS_HOST }}
+        username: ${{ secrets.DOCS_USER }}
+        key: ${{ secrets.DOCS_PRIVATE_KEY }}
+        port: ${{ secrets.DOCS_PORT }}
+  
 
     # TODO(algo-ryth-mix,GlynLeine): here we need to insert the step that uploads to docs.args-engine.com
     # we can either open an ssh-tunnel to upload directly via scp or instantiate a git-repository on the 
