@@ -18,6 +18,7 @@
     <ClInclude Include="data\detail\tiny_obj_loader.h" />
     <ClInclude Include="data\importers\mesh_importers.hpp" />
     <ClInclude Include="data\mesh.hpp" />
+    <ClInclude Include="module\renderingmodule.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

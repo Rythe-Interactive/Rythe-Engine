@@ -30,7 +30,7 @@ namespace args::core::ecs
 	struct entity_data
 	{
 		id_type parent;
-		sparse_map<id_type, entity_handle> children;
+        entity_set children;
 		hashed_sparse_set<id_type> components;
 	};
 
@@ -49,7 +49,7 @@ namespace args::core::ecs
 		sparse_map<id_type, entity_data> m_entityData;
 
 		mutable async::readonly_rw_spinlock m_entityLock;
-		sparse_map<id_type, entity_handle> m_entities;
+		entity_set m_entities;
 
 		QueryRegistry m_queryRegistry;
         events::EventBus* m_eventBus;
@@ -193,7 +193,7 @@ namespace args::core::ecs
 		/**@brief Get a container with ALL entities.
 		 * @returns sparse_map<id_type, entity_handle>& Container that keeps both the id's and corresponding entity handles for easy use.
 		 */
-		A_NODISCARD std::pair<sparse_map<id_type, entity_handle>&, async::readonly_rw_spinlock&>  getEntities();
+		A_NODISCARD std::pair<entity_set&, async::readonly_rw_spinlock&>  getEntities();
 
 		/**@brief Get a query for your component combination.
 		 * @tparam component_types Variadic parameter types of all component types you wish to query for.

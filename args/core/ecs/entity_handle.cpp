@@ -25,14 +25,14 @@ namespace args::core::ecs
 		return invalid_id;
 	}
 
-	A_NODISCARD sparse_map<id_type, entity_handle>::const_iterator entity_handle::begin() const
+	A_NODISCARD entity_set::const_iterator entity_handle::begin() const
 	{
 		if (!m_registry)
 			throw args_invalid_entity_error;
 		return m_registry->getEntityData(m_id).children.begin();
 	}
 
-	A_NODISCARD sparse_map<id_type, entity_handle>::const_iterator entity_handle::end() const
+	A_NODISCARD entity_set::const_iterator entity_handle::end() const
 	{
 		if (!m_registry)
 			throw args_invalid_entity_error;
@@ -53,13 +53,13 @@ namespace args::core::ecs
 		entity_data& data = m_registry->getEntityData(m_id);
 
 		if (m_registry->validateEntity(data.parent))
-			m_registry->getEntityData(data.parent).children.erase(m_id);
+			m_registry->getEntityData(data.parent).children.erase(*this);
 
 		if (m_registry->validateEntity(newParent))
 		{
 			data.parent = newParent;
 
-			m_registry->getEntityData(data.parent).children.insert(m_id, *this);
+			m_registry->getEntityData(data.parent).children.insert(*this);
 		}
 		else
 			data.parent = invalid_id;
@@ -75,11 +75,9 @@ namespace args::core::ecs
 		if (!m_registry)
 			throw args_invalid_entity_error;
 
-		sparse_map<id_type, entity_handle>& children = m_registry->getEntityData(m_id).children;
-		if (index >= children.size())
-			throw std::out_of_range("Child index out of range.");
+		entity_set& children = m_registry->getEntityData(m_id).children;
 
-		return children.dense()[index];
+		return children[index];
 	}
 
 	A_NODISCARD size_type entity_handle::child_count() const
@@ -94,8 +92,11 @@ namespace args::core::ecs
 		if (!m_registry)
 			throw args_invalid_entity_error;
 		entity_data& data = m_registry->getEntityData(m_id);
-		if (!data.children.contains(childId))
-			data.children[childId].set_parent(m_id);
+
+        entity_handle child = m_registry->getEntity(childId);
+
+        if (child && !data.children.contains(child))
+            child.set_parent(m_id);
 	}
 
 	inline void entity_handle::remove_child(id_type childId) const
@@ -103,8 +104,10 @@ namespace args::core::ecs
 		if (!m_registry)
 			throw args_invalid_entity_error;
 		entity_data& data = m_registry->getEntityData(m_id);
-		if (!data.children.contains(childId))
-			data.children[childId].set_parent(invalid_id);
+        entity_handle child = m_registry->getEntity(childId);
+
+		if (child && data.children.contains(child))
+			child.set_parent(invalid_id);
 	}
 
 	A_NODISCARD inline bool entity_handle::has_component(id_type componentTypeId) const

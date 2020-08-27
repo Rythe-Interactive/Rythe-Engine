@@ -32,5 +32,8 @@
     <ClInclude Include="data\importers\mesh_importers.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="module\renderingmodule.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

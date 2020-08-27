@@ -1,6 +1,5 @@
 #pragma once
 #include <core/types/types.hpp>
-#include <core/containers/sparse_set.hpp>
 #include <core/containers/sparse_map.hpp>
 #include <core/containers/hashed_sparse_set.hpp>
 
@@ -16,6 +15,10 @@ namespace args::core::ecs
 
 	template<typename component_type>
 	class component_handle;
+
+    class ARGS_API entity_handle;
+
+    using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
 
 	/**@class entity_handle
 	 * @brief Serializable handle for executing operations on entities.
@@ -70,13 +73,13 @@ namespace args::core::ecs
 		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
 		 * @throws args_entity_not_found_error Thrown when handle's id is invalid.
 		 */
-		A_NODISCARD sparse_map<id_type, entity_handle>::const_iterator begin() const;
+		A_NODISCARD entity_set::const_iterator begin() const;
 
 		/**@brief Const iterator to last child entity. (dereferences to entity handle)
 		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
 		 * @throws args_entity_not_found_error Thrown when handle's id is invalid.
 		 */
-		A_NODISCARD sparse_map<id_type, entity_handle>::const_iterator end() const;
+		A_NODISCARD entity_set::const_iterator end() const;
 
 		/**@brief Returns entity handle to parent entity.
 		 * @returns entity_handle Entity handle that either points to the parent entity or is invalid if the entity doesn't have a parent.
