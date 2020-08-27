@@ -57,6 +57,7 @@ jobs:
         username: ${{ secrets.DOCS_USER }}
         key: ${{ secrets.DOCS_PRIVATE_KEY }}
         port: ${{ secrets.DOCS_PORT }}
+        strip_components: 3
   
 
     # TODO(algo-ryth-mix,GlynLeine): here we need to insert the step that uploads to docs.args-engine.com
