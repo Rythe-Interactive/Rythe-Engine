@@ -99,15 +99,26 @@ namespace args::rendering
     sparse_map<id_type, std::unique_ptr<mesh_data>> mesh_cache::m_meshdata;
     async::readonly_rw_spinlock mesh_cache::m_dataLock;
 
-    mesh_data* mesh_handle::get_data()
+    inline const mesh_data& mesh_handle::get_data()
     {
-        return nullptr;
+        return mesh_cache::get_data(id);
+    }
+
+    inline const mesh& mesh_handle::get_mesh()
+    {
+        return mesh_cache::get_mesh(id);
     }
 
     inline const mesh& mesh_cache::get_mesh(id_type id)
     {
         async::readonly_guard guard(m_meshLock);
         return m_meshes[id];
+    }
+
+    inline const mesh_data& mesh_cache::get_data(id_type id)
+    {
+        async::readonly_guard guard(m_dataLock);
+        return *m_meshdata[id];
     }
 
     void mesh_cache::buffer(mesh_data* data, mesh& mesh)
@@ -149,12 +160,12 @@ namespace args::rendering
             return { id };
 
         if (!file.is_valid() || !file.file_info().is_file)
-            return { 0 };
+            return invalid_mesh_handle;
 
         auto result = fs::AssetImporter::tryLoad<mesh_data>(file, settings);
 
         if (result != common::valid)
-            return { 0 };
+            return invalid_mesh_handle;
 
         mesh_data* data;
         {
@@ -178,13 +189,13 @@ namespace args::rendering
         id_type id = nameHash(name);
         if (m_meshes.contains(id))
             return { id };
-        return { 0 };
+        return invalid_mesh_handle;
     }
 
     inline mesh_handle mesh_cache::get_handle(id_type id)
     {
         if (m_meshes.contains(id))
             return { id };
-        return { 0 };
+        return invalid_mesh_handle;
     }
 }

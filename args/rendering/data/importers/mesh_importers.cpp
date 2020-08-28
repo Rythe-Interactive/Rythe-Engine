@@ -1,5 +1,5 @@
 #define TINYOBJLOADER_IMPLEMENTATION
-#include <rendering/data/detail/tiny_obj_loader.h>
+#include <rendering/detail/tiny_obj_loader.h>
 
 #include <rendering/data/importers/mesh_importers.hpp>
 

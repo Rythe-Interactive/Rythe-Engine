@@ -12,12 +12,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="data\importers\mesh_importers.cpp" />
+    <ClCompile Include="data\importers\texture_importers.cpp" />
     <ClCompile Include="data\mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="data\detail\tiny_obj_loader.h" />
+    <ClInclude Include="data\importers\texture_importers.hpp" />
+    <ClInclude Include="detail\engine_include.hpp" />
+    <ClInclude Include="detail\stb_image.h" />
+    <ClInclude Include="detail\tiny_obj_loader.h" />
     <ClInclude Include="data\importers\mesh_importers.hpp" />
     <ClInclude Include="data\mesh.hpp" />
+    <ClInclude Include="data\texture.hpp" />
     <ClInclude Include="module\renderingmodule.hpp" />
     <ClInclude Include="rendering.hpp" />
   </ItemGroup>

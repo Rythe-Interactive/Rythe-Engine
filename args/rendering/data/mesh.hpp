@@ -1,16 +1,9 @@
 #pragma once
+#include <rendering/detail/engine_include.hpp>
 
 #include <vector>
 #include <unordered_map>
 #include <set>
-
-#ifndef ARGS_IMPORT
-    #define ARGS_IMPORT
-    #include <application/application.hpp>
-    #include <core/platform/args_library.hpp>
-#else
-    #include <application/application.hpp>
-#endif // !ARGS_IMPORT
 
 namespace args::rendering
 {
@@ -57,7 +50,8 @@ namespace args::rendering
     {
         id_type id;
 
-        mesh_data* get_data();
+        const mesh_data& get_data();
+        const mesh& get_mesh();
     };
 
     constexpr mesh_handle invalid_mesh_handle { 0 };
@@ -82,6 +76,7 @@ namespace args::rendering
         static async::readonly_rw_spinlock m_dataLock;
 
         static const mesh& get_mesh(id_type id);
+        static const mesh_data& get_data(id_type id);
 
         static void buffer(mesh_data* data, mesh& mesh);
         
