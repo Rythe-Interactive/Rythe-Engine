@@ -2,17 +2,13 @@
 
 #include <core/events/event.hpp>
 #include <core/math/math.hpp>
-#include <core/containers/delegate.hpp>
-
-
 #include <application/input/inputmap.hpp>
-#include <unordered_map>
 
 
 namespace args::application
 {
     template <class T>
-    struct input_action : public core::events::event<T>
+    struct input_action : public events::event<T>
     {
 
         void set(bool v,inputmap::modifier_keys m,inputmap::method id)
@@ -31,7 +27,7 @@ namespace args::application
     };
 
     template <class T>
-    struct input_axis : public core::events::event<T>
+    struct input_axis : public events::event<T>
     {
         void set(float v,inputmap::modifier_keys m,inputmap::method id)
         {

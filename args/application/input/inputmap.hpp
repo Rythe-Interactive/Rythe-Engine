@@ -217,10 +217,6 @@ namespace args::application
         };
 
 
-#define RESOLVE(X) X
-#define CHECK(C) m == method::C ||
-
-
         static constexpr bool is_axis(method m)
         {
             return

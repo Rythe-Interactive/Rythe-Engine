@@ -4,7 +4,6 @@ namespace args::application
 {
     std::atomic_bool ContextHelper::m_initialized;
 
-
     bool ContextHelper::initialized()
     {
         return m_initialized.load(std::memory_order_acquire);
