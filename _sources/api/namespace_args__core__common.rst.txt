@@ -124,9 +124,9 @@ Functions
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1afa4b1a9718d911fed5c622171c9c099e`
 
-- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1ae2b02031ccd69bf1d2921e2392c6499e`
-
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a8262961f81d5d66cac48532fe9fe7c71`
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1ae2b02031ccd69bf1d2921e2392c6499e`
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1ac4617a8fd6b99ccbc0f425ab80335290`
 
