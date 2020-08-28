@@ -247,4 +247,10 @@ namespace args::application
     {
         (void)glfwUpdateGamepadMappings(name);
     }
+
+    bool ContextHelper::joystickPresent(int jid)
+    {
+        return glfwJoystickPresent(jid);
+    }
+
 }

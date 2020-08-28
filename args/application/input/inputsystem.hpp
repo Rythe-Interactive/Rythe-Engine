@@ -11,7 +11,7 @@ namespace args::application
     class InputSystem : public core::System<InputSystem>
     {
     public:
-        static inline std::set<int> m_presentGamepads;
+        
 
 
         void setup() override
@@ -23,7 +23,14 @@ namespace args::application
             createProcess<&InputSystem::onUpdate>("Input");
             ContextHelper::addOnInitCallback(delegate<void()>::create([]
             {
-                ContextHelper::setJoystickCallback(&InputSystem::onCheckGamepadPresence);    
+                ContextHelper::setJoystickCallback(&InputSystem::onCheckGamepadPresence);
+                for(size_t i = 0; i < inputmap::modifier_keys::JOYSTICK0 - inputmap::modifier_keys::MAX_SIZE; ++i)
+                {
+                    if(ContextHelper::joystickPresent(i))
+                    {
+                        m_presentGamepads.insert(i);
+                    }
+                }
             }));
             //make sure the mappings match here!
             //ContextHelper::updateGamepadMappings("assets/conf/gamepad.conf");
@@ -402,7 +409,7 @@ namespace args::application
         }
 
 
-
+        inline static std::set<int> m_presentGamepads;
         inline static sparse_map<inputmap::method, sparse_map<id_type, delegate<void(bool, inputmap::modifier_keys, inputmap::method)>>> m_actions;
         inline static sparse_map<inputmap::method, sparse_map<id_type, std::tuple<delegate<void(float, inputmap::modifier_keys, inputmap::method)>, float, inputmap::modifier_keys, inputmap::method>>> m_axes;
 

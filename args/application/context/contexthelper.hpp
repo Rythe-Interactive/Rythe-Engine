@@ -61,5 +61,6 @@ namespace args::application
         static GLFWjoystickfun setJoystickCallback(GLFWjoystickfun callback);
         static int getGamepadSate(int jid, GLFWgamepadstate* state);
         static void updateGamepadMappings(const char*name);
+        static bool joystickPresent(int jid);
     };
 }
