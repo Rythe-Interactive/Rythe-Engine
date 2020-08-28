@@ -16,8 +16,11 @@
   <ItemGroup>
     <ClInclude Include="application.hpp" />
     <ClInclude Include="context\contexthelper.hpp" />
-    <ClInclude Include="events\inputevents.hpp" />
+    <ClInclude Include="input\inputmap.hpp" />
+    <ClInclude Include="events\windowinputevents.hpp" />
     <ClInclude Include="events\windowevents.hpp" />
+    <ClInclude Include="events\inputevents.hpp" />
+    <ClInclude Include="input\inputsystem.hpp" />
     <ClInclude Include="module\applicationmodule.hpp" />
     <ClInclude Include="window\window.hpp" />
     <ClInclude Include="window\windowsystem.hpp" />

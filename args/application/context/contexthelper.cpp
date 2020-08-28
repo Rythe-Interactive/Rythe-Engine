@@ -4,6 +4,7 @@ namespace args::application
 {
     std::atomic_bool ContextHelper::m_initialized;
 
+
     bool ContextHelper::initialized()
     {
         return m_initialized.load(std::memory_order_acquire);
@@ -217,4 +218,14 @@ namespace args::application
         return glfwSetJoystickCallback(callback);
     }
 
+
+    int ContextHelper::getGamepadSate(int jid, GLFWgamepadstate* state)
+    {
+        return glfwGetGamepadState(jid,state);
+    }
+
+    void ContextHelper::updateGamepadMappings(const char* name)
+    {
+        (void) glfwUpdateGamepadMappings(name);
+    }
 }

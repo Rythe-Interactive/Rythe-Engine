@@ -56,5 +56,7 @@ namespace args::application
         static GLFWframebuffersizefun setFramebufferSizeCallback(GLFWwindow* window, GLFWframebuffersizefun callback);
         static GLFWwindowcontentscalefun setWindowContentScaleCallback(GLFWwindow* window, GLFWwindowcontentscalefun callback);
         static GLFWjoystickfun setJoystickCallback(GLFWjoystickfun callback);
+        static int getGamepadSate(int jid, GLFWgamepadstate* state);
+        static void updateGamepadMappings(const char*name);
     };
 }
