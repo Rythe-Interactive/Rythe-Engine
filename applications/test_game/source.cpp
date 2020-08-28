@@ -7,9 +7,8 @@
 #include <thread>
 
 #include <core/core.hpp>
-#include "core/common/result.hpp"
-
 #include <application/application.hpp>
+#include <rendering/rendering.hpp>
 
 #include "module/testModule.hpp"
 #include "systems/testsystem.hpp"
@@ -34,6 +33,8 @@ void ARGS_CCONV reportModules(Engine* engine)
 
 	engine->reportModule<TestModule>();
     engine->reportModule<app::ApplicationModule>();
+    engine->reportModule<rendering::RenderingModule>();
+
 	try
 	{
 		throw args_component_destroyed_error;

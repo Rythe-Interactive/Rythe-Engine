@@ -9,6 +9,7 @@ namespace args::application
     {
         return m_initialized.load(std::memory_order_acquire);
     }
+
     bool ContextHelper::init()
     {
         glfwSetErrorCallback([](int code, cstring desc)

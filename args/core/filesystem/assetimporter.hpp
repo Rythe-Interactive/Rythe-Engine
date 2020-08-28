@@ -19,7 +19,7 @@ namespace args::core::filesystem
         virtual common::result_decay_more<basic_resource, fs_error> load(const basic_resource& resource, Settings&&...) ARGS_PURE;
 
     protected:
-        void dont_call() override {};
+        virtual void dont_call() override {};
     };
 
     struct basic_resource_converter final : public resource_converter<basic_resource>
@@ -36,7 +36,7 @@ namespace args::core::filesystem
         template<typename T>
         static void reportConverter(cstring extension)
         {
-            m_loadfuncs.emplace(nameHash(extension), new T);
+            m_converters.emplace(nameHash(extension), new T);
         }
 
         template<typename T, typename... Settings>
