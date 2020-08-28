@@ -11,6 +11,8 @@ namespace args::application
     {
     private:
         static std::atomic_bool m_initialized;
+        static async::readonly_rw_spinlock m_initCallbackLock;
+        static multicast_delegate<void()> m_onInit;
 
     public:
         ContextHelper() = delete;
@@ -18,6 +20,7 @@ namespace args::application
 
         static bool initialized();
         static bool init();
+        static bool addOnInitCallback(delegate<void()> callback);
         static void terminate();
         static int getError(cstring* desc);
         static GLFWmonitor* getPrimaryMonitor();

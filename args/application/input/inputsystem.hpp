@@ -21,9 +21,10 @@ namespace args::application
             bindToEvent<mouse_button, &InputSystem::onMouseButton>();
             bindToEvent<mouse_scrolled, &InputSystem::onMouseScrolled>();
             createProcess<&InputSystem::onUpdate>("Input");
-            ContextHelper::setJoystickCallback(&InputSystem::onCheckGamepadPresence);
-
-
+            ContextHelper::addOnInitCallback(delegate<void()>::create([]
+            {
+                ContextHelper::setJoystickCallback(&InputSystem::onCheckGamepadPresence);    
+            }));
             //make sure the mappings match here!
             //ContextHelper::updateGamepadMappings("assets/conf/gamepad.conf");
 
@@ -31,7 +32,7 @@ namespace args::application
 
 
         template <class Event>
-        void createBinding(inputmap::method k, float value = 1) {
+        static void createBinding(inputmap::method k, float value = 1) {
             static_assert(std::is_base_of_v<input_action, Event> ||
                 std::is_base_of_v<input_axis, Event>,
                 "Event needs to either be an input_action or an input_axis");
@@ -96,7 +97,7 @@ namespace args::application
         }
 
         template<class Event>
-        void removeBinding(inputmap::method met)
+        static void removeBinding(inputmap::method met)
         {
             static_assert(std::is_base_of_v<input_action, Event> ||
                 std::is_base_of_v<input_axis, Event>,
@@ -402,8 +403,8 @@ namespace args::application
 
 
 
-        sparse_map<inputmap::method, sparse_map<id_type, delegate<void(bool, inputmap::modifier_keys, inputmap::method)>>> m_actions;
-        sparse_map<inputmap::method, sparse_map<id_type, std::tuple<delegate<void(float, inputmap::modifier_keys, inputmap::method)>, float, inputmap::modifier_keys, inputmap::method>>> m_axes;
+        inline static sparse_map<inputmap::method, sparse_map<id_type, delegate<void(bool, inputmap::modifier_keys, inputmap::method)>>> m_actions;
+        inline static sparse_map<inputmap::method, sparse_map<id_type, std::tuple<delegate<void(float, inputmap::modifier_keys, inputmap::method)>, float, inputmap::modifier_keys, inputmap::method>>> m_axes;
 
     };
 }
