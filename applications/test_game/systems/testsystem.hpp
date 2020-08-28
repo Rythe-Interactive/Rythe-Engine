@@ -19,23 +19,40 @@ struct sah
 	}
 };
 
+struct player_move_action : public application::input_axis<player_move_action> {};
 
 class TestSystem final : public System<TestSystem>
 {
 public:
 	virtual void setup()
 	{
-		auto ent = m_ecs->createEntity();
+        application::InputSystem::createBinding<player_move_action>(application::inputmap::method::A,-1);
+
+
+	    auto ent = m_ecs->createEntity();
 		ent.add_component<sah>();
         raiseEvent<application::window_request>(ent, math::ivec2(600, 300), "This is a test window!");
 
         auto ent2 = m_ecs->createEntity();
         raiseEvent<application::window_request>(ent2, math::ivec2(600, 300), "This is a test window2!");
 
+        bindToEvent<player_move_action,&TestSystem::onPlayerMove>();
+
+
 		createProcess<&TestSystem::update>("Update");
 		createProcess<&TestSystem::differentThread>("TestChain");
 		createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
+
 	}
+
+    void onPlayerMove(player_move_action* action)
+	{
+        std::cout << action->value << std::endl;
+
+	    if(action->value < 0)
+            std::cout << "Player Move Forward";
+	}
+
 
 	void update(time::time_span<fast_time> deltaTime)
 	{		
@@ -57,10 +74,10 @@ public:
 			{
 				auto comp = entity.get_component<sah>();
 				comp.write({ frameCount });
-				std::cout << "component value: " << comp.read().value << std::endl;
+				//std::cout << "component value: " << comp.read().value << std::endl;
 			}
 
-			std::cout << "Hi! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+			//std::cout << "Hi! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
 		}
 	}
 
@@ -81,7 +98,7 @@ public:
 		if (buffer > 1.f)
 		{
 			buffer -= 1.f;
-			std::cout << "This is a fixed interval!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+			//std::cout << "This is a fixed interval!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
 		}
 	}
 
@@ -104,10 +121,10 @@ public:
 			for (auto entity : query)
 			{
 				auto comp = entity.get_component<sah>();				
-				std::cout << "component value on different thread: " << comp.read().value << std::endl;
+				//std::cout << "component value on different thread: " << comp.read().value << std::endl;
 			}
 
-			std::cout << "This is a different thread!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+			//std::cout << "This is a different thread!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
 		}
 
 		//if (accumulated > 10.f)
