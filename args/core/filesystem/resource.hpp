@@ -184,43 +184,44 @@ class Test {
 	 * @{
 	 */
 	
-	template <	typename T,
-				typename C1 = std::enable_if<detail::has_to_resource<T,void(basic_resource*,const T&)>::value>>
+	template<typename T,
+			 typename C1 = std::enable_if<detail::has_to_resource<T,void(basic_resource*,const T&)>::value>>
 	void to_resource(basic_resource* resource,const T& value)
 	{
 		T::to_resource(resource,value);
 	}
 
-	template <	typename T,
-				typename C1 = std::enable_if<detail::has_to_resource<T,void(basic_resource*,const T&)>::value>>
+	template<typename T,
+			 typename C1 = std::enable_if<detail::has_to_resource<T,void(basic_resource*,const T&)>::value>>
 	basic_resource to_resource(const T& value)
 	{
 		basic_resource res(nullptr);
 		T::to_resource(&res,value);
 		return res;
 	}
-	
 
-	template <	typename T,
-				typename C1 = std::enable_if<detail::has_from_resource<T,void(T*,const basic_resource&)>::value>>
+	template<typename T,
+			 typename C1 = std::enable_if<detail::has_from_resource<T,void(T*,const basic_resource&)>::value>>
 	void from_resource(T* value, const basic_resource& resource)
 	{
-		T::from_resource(value,resource);
+		T::from_resource(value, resource);
 	}
-	template <	typename T,
-				typename C1 = std::enable_if<detail::has_from_resource<T,void(T*,const basic_resource&)>::value>,
-				typename C2 = std::enable_if<std::is_default_constructible<T>::value>,
-				typename C3 = std::enable_if<std::is_move_constructible<T>::value>>
+	
+   template<typename T,
+			typename C1 = std::enable_if<detail::has_from_resource<T,void(T*,const basic_resource&)>::value>,
+			typename C2 = std::enable_if<std::is_default_constructible<T>::value>,
+			typename C3 = std::enable_if<std::is_move_constructible<T>::value>>
 	T from_resource(const basic_resource& resource)
 	{
 		T value;
 		T::from_resource(&value,resource);
 		return std::move(value);
 	}
-		template <	typename T,
-				typename C1 = std::enable_if<detail::has_from_resource<T,void(T*,const basic_resource&)>::value>,
-				typename C2 = std::enable_if<std::is_move_constructible<T>::value>,
-				class ... Args>
+	
+   template<typename T,
+			typename C1 = std::enable_if<detail::has_from_resource<T,void(T*,const basic_resource&)>::value>,
+			typename C2 = std::enable_if<std::is_move_constructible<T>::value>,
+			class ... Args>
 	T from_resource(const basic_resource& resource,Args&&... args)
 	{
 		T value(std::forward<Args>(args)...);
@@ -232,14 +233,13 @@ class Test {
 	template <class T,class... Args>
 	A_NODISCARD T basic_resource::to(Args&&...args)
 	{
-		return std::move(from_resource(*this,std::forward<Args>(args)...));
+		return std::move(from_resource<T>(*this, std::forward<Args>(args)...));
 	}
 
 	template <class T>
 	void basic_resource::from(const T& v)
 	{
 		to_resource(this,v);
-
 	}
 	/**
 	 * //cond

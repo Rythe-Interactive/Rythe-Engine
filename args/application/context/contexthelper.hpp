@@ -1,7 +1,13 @@
 #pragma once
-#define ARGS_IMPORT
-#include <core/core.hpp>
-#include <core/platform/args_library.hpp>
+#ifndef ARGS_IMPORT
+    #define ARGS_IMPORT
+    #include <core/core.hpp>
+    #include <core/platform/args_library.hpp>
+#else
+    #include <core/core.hpp>
+#endif // !ARGS_IMPORT
+
+#define GLAPI ARGS_API extern
 
 #include <application/context/detail/glad/glad.h>
 #include <glfw/glfw3.h>

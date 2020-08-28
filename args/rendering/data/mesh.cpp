@@ -6,6 +6,93 @@
 
 namespace args::rendering
 {
+    void mesh_data::to_resource(fs::basic_resource* resource, const mesh_data& value)
+    {
+        byte_vec data;
+
+        appendBinaryData(&value.fileName, data);
+        appendBinaryData(&value.vertices, data);
+        appendBinaryData(&value.normals, data);
+        appendBinaryData(&value.uvs, data);
+        appendBinaryData(&value.tangents, data);
+
+        uint64 submeshCount = value.submeshes.size();
+
+        appendBinaryData(&submeshCount, data);
+
+        for (auto& submesh : value.submeshes)
+        {
+            appendBinaryData(&submesh.name, data);
+            appendBinaryData(&submesh.indices, data);
+        }
+
+        *resource = fs::basic_resource(data);
+    }
+
+    void mesh_data::from_resource(mesh_data* value, const fs::basic_resource& resource)
+    {
+        *value = mesh_data{};
+
+        byte_vec::const_iterator start = resource.begin();
+
+        retrieveBinaryData(value->fileName, start);
+        retrieveBinaryData(value->vertices, start);
+        retrieveBinaryData(value->normals, start);
+        retrieveBinaryData(value->uvs, start);
+        retrieveBinaryData(value->tangents, start);
+
+        uint64 submeshCount;
+
+        retrieveBinaryData(submeshCount, start);
+
+        for (int i = 0; i < submeshCount; i++)
+        {
+            submesh_data submesh;
+            retrieveBinaryData(submesh.name, start);
+            retrieveBinaryData(submesh.indices, start);
+            value->submeshes.push_back(submesh);
+        }
+    }
+
+    void mesh_data::calculate_tangents(mesh_data* data)
+    {
+        for (unsigned i = 0; i < data->normals.size(); i++)
+            data->tangents.push_back(math::vec3(0));
+
+        for (auto& submesh : data->submeshes)
+            for (unsigned i = 0; i < submesh.indices.size(); i += 3)
+            {
+                math::vec3 vtx0 = data->vertices[submesh.indices[i]];
+                math::vec3 vtx1 = data->vertices[submesh.indices[i + 1]];
+                math::vec3 vtx2 = data->vertices[submesh.indices[i + 2]];
+
+                math::vec2 uv0 = data->uvs[submesh.indices[i]];
+                math::vec2 uv2 = data->uvs[submesh.indices[i + 2]];
+                math::vec2 uv1 = data->uvs[submesh.indices[i + 1]];
+
+                math::vec3 edge0 = vtx1 - vtx0;
+                math::vec3 edge1 = vtx2 - vtx0;
+
+                math::vec2 deltaUV0 = uv1 - uv0;
+                math::vec2 deltaUV1 = uv2 - uv0;
+
+                float uvDetFrac = 1.0f / (deltaUV0.x * deltaUV1.y - deltaUV1.x * deltaUV0.y);
+
+                math::vec3 tangent;
+                tangent.x = uvDetFrac * (deltaUV1.y * edge0.x - deltaUV0.y * edge1.x);
+                tangent.y = uvDetFrac * (deltaUV1.y * edge0.y - deltaUV0.y * edge1.y);
+                tangent.z = uvDetFrac * (deltaUV1.y * edge0.z - deltaUV0.y * edge1.z);
+                tangent = math::normalize(tangent);
+
+                data->tangents[submesh.indices[i]] += tangent;
+                data->tangents[submesh.indices[i + 1]] += tangent;
+                data->tangents[submesh.indices[i + 2]] += tangent;
+            }
+
+        for (unsigned i = 0; i < data->tangents.size(); i++)
+            data->tangents[i] = math::normalize(data->tangents[i]);
+    }
+
     sparse_map<id_type, mesh> mesh_cache::m_meshes;
     async::readonly_rw_spinlock mesh_cache::m_meshLock;
 
@@ -72,11 +159,13 @@ namespace args::rendering
         mesh_data* data;
         {
             async::readwrite_guard guard(m_dataLock);
-            data = m_meshdata.emplace<mesh_data>(id, result).first->get();
+            data = m_meshdata.emplace(id, new mesh_data(result)).first->get();
         }
 
         mesh mesh;
-        //mesh.indexCount = submesh.indices.size();
+       
+        for (auto& submeshData : data->submeshes)
+            mesh.submeshes.push_back({ static_cast<uint>(submeshData.indices.size()), 0 });
 
         buffer(data, mesh);
         data->fileName = name;

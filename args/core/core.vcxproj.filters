@@ -16,6 +16,7 @@
     <ClCompile Include="scheduling\processchain.cpp" />
     <ClCompile Include="scheduling\scheduler.cpp" />
     <ClCompile Include="math\glm\detail\glm.cpp" />
+    <ClCompile Include="filesystem\filemanip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />

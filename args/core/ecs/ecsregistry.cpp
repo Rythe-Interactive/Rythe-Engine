@@ -43,10 +43,11 @@ namespace args::core::ecs
             recursiveDestroyEntityInternal(child);
     }
 
-    EcsRegistry::EcsRegistry(events::EventBus* eventBus) : m_families(), m_entityData(), m_entities(), m_queryRegistry(*this), m_eventBus(eventBus)
+    EcsRegistry::EcsRegistry(events::EventBus* eventBus) : m_families(), m_entityData(), m_containedEntities(), m_entities(), m_queryRegistry(*this), m_eventBus(eventBus)
     {
         // Create world entity.
         m_entityData.emplace(world_entity_id);
+        m_containedEntities.insert(world_entity_id);
         m_entities.emplace(world_entity_id, this);
         world = entity_handle(world_entity_id, this);
     }
@@ -104,7 +105,7 @@ namespace args::core::ecs
     A_NODISCARD inline bool EcsRegistry::validateEntity(id_type entityId)
     {
         async::readonly_guard guard(m_entityLock);
-        return entityId && m_entities.contains(entity_handle(entityId, this));
+        return entityId && m_containedEntities.contains(entityId);
     }
 
     inline entity_handle EcsRegistry::createEntity()
@@ -121,6 +122,7 @@ namespace args::core::ecs
 
         async::readwrite_guard guard(m_entityLock); // No scope needed because we also need read permission in the return line.
         m_entities.emplace(id, this);
+        m_containedEntities.insert(id);
 
         return entity_handle(id, this);
     }
@@ -138,6 +140,7 @@ namespace args::core::ecs
             async::readwrite_guard guard(m_entityLock); // Request read-write permission for the entity list.
             entity.set_parent(invalid_id); // Remove ourselves as child from parent.
             m_entities.erase(entity); // Erase the entity from the entity list first, invalidating the entity and stopping any other function from being called on this entity.
+            m_containedEntities.erase(entityId);
         }
 
         entity_data data = {};

@@ -30,7 +30,7 @@ namespace args::core::filesystem
     class AssetImporter
     {
     private:
-        static sparse_map<id_type, std::unique_ptr<resource_converter_base>> m_converters;
+        inline static sparse_map<id_type, std::unique_ptr<resource_converter_base>> m_converters;
 
     public:
         template<typename T>

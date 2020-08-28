@@ -49,6 +49,7 @@ namespace args::core::ecs
 		sparse_map<id_type, entity_data> m_entityData;
 
 		mutable async::readonly_rw_spinlock m_entityLock;
+        sparse_set<id_type> m_containedEntities;
 		entity_set m_entities;
 
 		QueryRegistry m_queryRegistry;
