@@ -109,11 +109,11 @@ Functions
 
 - :ref:`exhale_function_type__util_8hpp_1aef7996e5e7a874b93744d7f2b583ac7b`
 
+- :ref:`exhale_function_type__util_8hpp_1a94f51b351b18c1a001e896051db58df0`
+
 - :ref:`exhale_function_type__util_8cpp_1a1fddf5a1042b1af111b6612d5d4f4212`
 
 - :ref:`exhale_function_type__util_8cpp_1a403570424ba5abb682d7fe4046a317d0`
-
-- :ref:`exhale_function_type__util_8hpp_1a94f51b351b18c1a001e896051db58df0`
 
 - :ref:`exhale_function_type__util_8hpp_1a544d59e5fbfe271021385720ad13dbc6`
 
