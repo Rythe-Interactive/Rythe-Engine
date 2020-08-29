@@ -24,6 +24,9 @@
     <ClCompile Include="data\importers\texture_importers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="data\texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="data\mesh.hpp">

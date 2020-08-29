@@ -8,25 +8,21 @@ namespace args::rendering
 {
     void mesh_data::to_resource(fs::basic_resource* resource, const mesh_data& value)
     {
-        byte_vec data;
-
-        appendBinaryData(&value.fileName, data);
-        appendBinaryData(&value.vertices, data);
-        appendBinaryData(&value.normals, data);
-        appendBinaryData(&value.uvs, data);
-        appendBinaryData(&value.tangents, data);
+        resource->clear();
+        appendBinaryData(&value.fileName, resource->get());
+        appendBinaryData(&value.vertices, resource->get());
+        appendBinaryData(&value.normals, resource->get());
+        appendBinaryData(&value.uvs, resource->get());
+        appendBinaryData(&value.tangents, resource->get());
 
         uint64 submeshCount = value.submeshes.size();
-
-        appendBinaryData(&submeshCount, data);
+        appendBinaryData(&submeshCount, resource->get());
 
         for (auto& submesh : value.submeshes)
         {
-            appendBinaryData(&submesh.name, data);
-            appendBinaryData(&submesh.indices, data);
+            appendBinaryData(&submesh.name, resource->get());
+            appendBinaryData(&submesh.indices, resource->get());
         }
-
-        *resource = fs::basic_resource(data);
     }
 
     void mesh_data::from_resource(mesh_data* value, const fs::basic_resource& resource)
@@ -156,8 +152,12 @@ namespace args::rendering
     mesh_handle mesh_cache::create_mesh(const std::string& name, const fs::view& file, mesh_import_settings settings)
     {
         id_type id = nameHash(name);
-        if (m_meshes.contains(id))
-            return { id };
+
+        {
+            async::readonly_guard guard(m_meshLock);
+            if (m_meshes.contains(id))
+                return { id };
+        }
 
         if (!file.is_valid() || !file.file_info().is_file)
             return invalid_mesh_handle;
@@ -180,13 +180,19 @@ namespace args::rendering
 
         buffer(data, mesh);
         data->fileName = name;
-        m_meshes.insert(id, mesh);
+
+        {
+            async::readwrite_guard guard(m_meshLock);
+            m_meshes.insert(id, mesh);
+        }
+
         return { id };
     }
 
     inline mesh_handle mesh_cache::get_handle(const std::string& name)
     {
         id_type id = nameHash(name);
+        async::readonly_guard guard(m_meshLock);
         if (m_meshes.contains(id))
             return { id };
         return invalid_mesh_handle;
@@ -194,6 +200,7 @@ namespace args::rendering
 
     inline mesh_handle mesh_cache::get_handle(id_type id)
     {
+        async::readonly_guard guard(m_meshLock);
         if (m_meshes.contains(id))
             return { id };
         return invalid_mesh_handle;

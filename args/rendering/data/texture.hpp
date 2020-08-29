@@ -70,23 +70,36 @@ namespace args::rendering
         mirror_then_clamp = GL_MIRROR_CLAMP_TO_EDGE
     };
 
+    struct color : public math::vec4 { };
+
     struct texture_data
     {
-        int m_width;
-        int m_height;
-        int m_channels;
+        int width;
+        int height;
+        texture_components channels;
+        texture_type type;
+
+        std::vector<color> pixels;
     };
 
     struct texture
     {
         app::gl_id textureId = 0;
+
+        int width;
+        int height;
+        texture_components channels;
+        texture_type type;
+
+        static void to_resource(fs::basic_resource* resource, const texture& value);
+        static void from_resource(texture* value, const fs::basic_resource& resource);
     };
 
     struct ARGS_API texture_handle
     {
         id_type id;
 
-        const texture_data& get_data();
+        texture_data get_data();
         const texture& get_texture();
     };
 
@@ -117,11 +130,11 @@ namespace args::rendering
         friend class renderer;
         friend struct texture_handle;
     private:
-        static sparse_map<id_type, std::unique_ptr<texture_data>> m_texturedata;
-        static async::readonly_rw_spinlock m_dataLock;
+        static sparse_map<id_type, texture> m_textures;
+        static async::readonly_rw_spinlock m_textureLock;
 
         static const texture& get_texture(id_type id);
-        static const texture_data& get_data(id_type id);
+        static texture_data get_data(id_type id);
 
     public:
         static texture_handle create_texture(const std::string& name, const fs::view& file, texture_import_settings settings = default_texture_settings);

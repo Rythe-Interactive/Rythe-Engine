@@ -113,6 +113,11 @@ class Test {
 			return m_container.empty();
 		}
 
+        void clear() noexcept
+        {
+            m_container.clear();
+        }
+
 		/**@brief Gets the container element
 		 * @return args::core::byte_vec 
 		 */

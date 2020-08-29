@@ -17,7 +17,10 @@ namespace args::rendering
 
         stbi_set_flip_vertically_on_load(settings.flipVertical);
 
-        int width = 0, height = 0;
+        texture texture{};
+        texture.channels = settings.components;
+        texture.type = settings.type;
+
         texture_components components = texture_components::grey;
 
         void* imageData;
@@ -27,25 +30,24 @@ namespace args::rendering
             default: [[fallthrough]];
             case texture_channel_format::eight_bit:
             {
-                imageData = stbi_load_from_memory(data.data(), data.size(), &width, &height, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
+                imageData = stbi_load_from_memory(data.data(), data.size(), &texture.width, &texture.height, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
                 break;
             }
             case texture_channel_format::sixteen_bit:
             {
-                imageData = stbi_load_16_from_memory(data.data(), data.size(), &width, &height, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
+                imageData = stbi_load_16_from_memory(data.data(), data.size(), &texture.width, &texture.height, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
                 break;
             }
             case texture_channel_format::float_hdr:
             {
-                imageData = stbi_loadf_from_memory(data.data(), data.size(), &width, &height, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
+                imageData = stbi_loadf_from_memory(data.data(), data.size(), &texture.width, &texture.height, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
                 break;
             }
         }
 
-        app::gl_id texture;
-        glGenTextures(1, &texture);
+        glGenTextures(1, &texture.textureId);
 
-        glBindTexture(static_cast<GLenum>(settings.type), texture);
+        glBindTexture(static_cast<GLenum>(settings.type), texture.textureId);
 
         if (settings.generateMipmaps)
         {
@@ -61,8 +63,8 @@ namespace args::rendering
             static_cast<GLenum>(settings.type),
             0,							
             static_cast<GLint>(settings.intendedFormat),
-            width,						
-            height,						 
+            texture.width,
+            texture.height,
             0,							
             components_to_format[static_cast<int>(settings.components)],
             static_cast<GLenum>(settings.fileFormat),
@@ -75,7 +77,11 @@ namespace args::rendering
 
         data.clear();
 
-        appendBinaryData(&texture, data);
+        appendBinaryData(&texture.textureId, data);
+        appendBinaryData(&texture.width, data);
+        appendBinaryData(&texture.height, data);
+        appendBinaryData(&texture.channels, data);
+        appendBinaryData(&texture.type, data);
 
         return decay(Ok(fs::basic_resource(data)));
     }

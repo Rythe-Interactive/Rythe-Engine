@@ -14,6 +14,7 @@
     <ClCompile Include="data\importers\mesh_importers.cpp" />
     <ClCompile Include="data\importers\texture_importers.cpp" />
     <ClCompile Include="data\mesh.cpp" />
+    <ClCompile Include="data\texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="data\importers\texture_importers.hpp" />
