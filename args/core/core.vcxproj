@@ -116,6 +116,8 @@
     <ClInclude Include="containers\sparse_set.hpp" />
     <ClInclude Include="containers\vector_view.hpp" />
     <ClInclude Include="core.hpp" />
+    <ClInclude Include="defaults\coremodule.hpp" />
+    <ClInclude Include="defaults\defaultcomponents.hpp" />
     <ClInclude Include="detail\internals.hpp" />
     <ClInclude Include="ecs\component_container.hpp" />
     <ClInclude Include="ecs\component_handle.hpp" />
