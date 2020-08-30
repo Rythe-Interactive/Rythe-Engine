@@ -185,7 +185,7 @@ namespace detail
 	}
 
 	template<typename T, qualifier Q>
-	GLM_FUNC_QUALIFIER bool compose(mat<4, 4, T, Q>& ModelMatrix, const vec<3, T, Q>& Scale, const qua<T, Q>& Orientation, const vec<3, T, Q>& Translation)
+	GLM_FUNC_QUALIFIER void compose(mat<4, 4, T, Q>& ModelMatrix, const vec<3, T, Q>& Scale, const qua<T, Q>& Orientation, const vec<3, T, Q>& Translation)
 	{
 		ModelMatrix = scale(Scale) * toMat4(Orientation) * translate(Translation);
 	}

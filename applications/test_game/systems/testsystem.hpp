@@ -6,120 +6,151 @@ using namespace args;
 
 struct sah
 {
-    int value;
+	int value;
 
-    sah operator+(const sah& other)
-    {
-        return { value + other.value };
-    }
+	sah operator+(const sah& other)
+	{
+		return { value + other.value };
+	}
 
-    sah operator*(const sah& other)
-    {
-        return { value * other.value };
-    }
+	sah operator*(const sah& other)
+	{
+		return { value * other.value };
+	}
 };
 
 class TestSystem final : public System<TestSystem>
 {
 public:
-    virtual void setup()
-    {
-        auto ent = m_ecs->createEntity();
-        ent.add_component<sah>();
-        auto comps = m_ecs->createComponent<transform>(ent);
+	virtual void setup()
+	{
+		auto ent = m_ecs->createEntity();
+		ent.add_component<sah>();
+		auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
 
-        std::cout << ent.has_component<position>() << std::endl;
-        std::cout << ent.has_component<rotation>() << std::endl;
-        std::cout << ent.has_component<scale>() << std::endl;
+		rendering::renderable rendercomp = renderableHandle.read();
 
-        raiseEvent<application::window_request>(ent, math::ivec2(600, 300), "This is a test window!");
+		fs::view meshFile("basic://models/Cube.obj");
 
-        auto ent2 = m_ecs->createEntity();
-        raiseEvent<application::window_request>(ent2, math::ivec2(600, 300), "This is a test window2!");
+		fs::AssetImporter a;
+		a.foo();
 
-        createProcess<&TestSystem::update>("Update");
-        createProcess<&TestSystem::differentThread>("TestChain");
-        createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
-    }
+		rendercomp.mesh = rendering::mesh_cache::create_mesh("test", meshFile);
 
-    void update(time::time_span<fast_time> deltaTime)
-    {
-        static auto query = createQuery<sah>();
+		fs::AssetImporter b;
+		b.foo();
 
-        static time::time_span<fast_time> buffer;
-        static int frameCount;
-        static time::time_span<fast_time> accumulated;
+		renderableHandle.write(rendercomp);
 
-        buffer += deltaTime;
-        accumulated += deltaTime;
-        frameCount++;
+		m_ecs->createComponent<transform>(ent);
 
-        if (buffer > 1.f)
-        {
-            buffer -= 1.f;
+		std::cout << ent.has_component<position>() << std::endl;
+		std::cout << ent.has_component<rotation>() << std::endl;
+		std::cout << ent.has_component<scale>() << std::endl;
 
-            for (auto entity : query)
-            {
-                auto comp = entity.get_component<sah>();
-                comp.write({ frameCount });
-                std::cout << "component value: " << comp.read().value << std::endl;
-            }
+		raiseEvent<application::window_request>(ent, math::ivec2(600, 300), "This is a test window!");
 
-            std::cout << "Hi! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
-        }
-    }
+		auto ent2 = m_ecs->createEntity();
+		auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
 
-    void differentInterval(time::time_span<fast_time> deltaTime)
-    {
-        static time::time_span<fast_time> buffer;
-        static int frameCount;
-        static time::time_span<fast_time> accumulated;
+		position pos = positionH.read();
 
-        buffer += deltaTime;
-        accumulated += deltaTime;
-        frameCount++;
+		pos.z = -1.f;
 
-        math::vec2 v;
-        v.x = 10;
-        v.y = 20;
+		positionH.write(pos);
 
-        if (buffer > 1.f)
-        {
-            buffer -= 1.f;
-            std::cout << "This is a fixed interval!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
-        }
-    }
+		rotation rot = rotationH.read();
+		rot = math::toQuat(math::inverse(math::lookAtLH(math::vec3(0, 0, -1.f), math::vec3(0, 0, 0), math::vec3(0, 1, 0))));
+		rotationH.write(rot);
 
-    void differentThread(time::time_span<fast_time> deltaTime)
-    {
-        static auto query = createQuery<sah>();
 
-        static time::time_span<fast_time> buffer;
-        static int frameCount;
-        static time::time_span<fast_time> accumulated;
+		m_ecs->createComponent<rendering::camera>(ent);
 
-        buffer += deltaTime;
-        accumulated += deltaTime;
-        frameCount++;
+		raiseEvent<application::window_request>(ent2, math::ivec2(600, 300), "This is a test window2!");
 
-        if (buffer > 1.f)
-        {
-            buffer -= 1.f;
+		createProcess<&TestSystem::update>("Update");
+		createProcess<&TestSystem::differentThread>("TestChain");
+		createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
+	}
 
-            for (auto entity : query)
-            {
-                auto comp = entity.get_component<sah>();
-                std::cout << "component value on different thread: " << comp.read().value << std::endl;
-            }
+	void update(time::time_span<fast_time> deltaTime)
+	{
+		static auto query = createQuery<sah>();
 
-            std::cout << "This is a different thread!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
-        }
+		static time::time_span<fast_time> buffer;
+		static int frameCount;
+		static time::time_span<fast_time> accumulated;
 
-        //if (accumulated > 10.f)
-        //{
-        //	std::cout << "raising exit event" << std::endl;
-        //	raiseEvent<events::exit>();
-        //	//throw args_exception_msg("hehehe fuck you >:D");
-        //}
-    }
+		buffer += deltaTime;
+		accumulated += deltaTime;
+		frameCount++;
+
+		if (buffer > 1.f)
+		{
+			buffer -= 1.f;
+
+			for (auto entity : query)
+			{
+				auto comp = entity.get_component<sah>();
+				comp.write({ frameCount });
+				std::cout << "component value: " << comp.read().value << std::endl;
+			}
+
+			std::cout << "Hi! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+		}
+	}
+
+	void differentInterval(time::time_span<fast_time> deltaTime)
+	{
+		static time::time_span<fast_time> buffer;
+		static int frameCount;
+		static time::time_span<fast_time> accumulated;
+
+		buffer += deltaTime;
+		accumulated += deltaTime;
+		frameCount++;
+
+		math::vec2 v;
+		v.x = 10;
+		v.y = 20;
+
+		if (buffer > 1.f)
+		{
+			buffer -= 1.f;
+			std::cout << "This is a fixed interval!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+		}
+	}
+
+	void differentThread(time::time_span<fast_time> deltaTime)
+	{
+		static auto query = createQuery<sah>();
+
+		static time::time_span<fast_time> buffer;
+		static int frameCount;
+		static time::time_span<fast_time> accumulated;
+
+		buffer += deltaTime;
+		accumulated += deltaTime;
+		frameCount++;
+
+		if (buffer > 1.f)
+		{
+			buffer -= 1.f;
+
+			for (auto entity : query)
+			{
+				auto comp = entity.get_component<sah>();
+				std::cout << "component value on different thread: " << comp.read().value << std::endl;
+			}
+
+			std::cout << "This is a different thread!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+		}
+
+		//if (accumulated > 10.f)
+		//{
+		//	std::cout << "raising exit event" << std::endl;
+		//	raiseEvent<events::exit>();
+		//	//throw args_exception_msg("hehehe fuck you >:D");
+		//}
+	}
 };

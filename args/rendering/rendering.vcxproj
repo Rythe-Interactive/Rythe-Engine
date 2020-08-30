@@ -17,6 +17,7 @@
     <ClCompile Include="data\texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="components\camera.hpp" />
     <ClInclude Include="components\renderable.hpp" />
     <ClInclude Include="data\importers\texture_importers.hpp" />
     <ClInclude Include="detail\engine_include.hpp" />

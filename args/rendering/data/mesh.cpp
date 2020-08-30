@@ -162,6 +162,9 @@ namespace args::rendering
         if (!file.is_valid() || !file.file_info().is_file)
             return invalid_mesh_handle;
 
+        fs::AssetImporter a;
+        a.foo();
+
         auto result = fs::AssetImporter::tryLoad<mesh_data>(file, settings);
 
         if (result != common::valid)

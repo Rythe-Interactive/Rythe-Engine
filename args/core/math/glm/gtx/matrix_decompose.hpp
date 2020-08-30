@@ -41,7 +41,7 @@ namespace args::core::math::detail::glm
 		vec<3, T, Q> & scale, qua<T, Q> & orientation, vec<3, T, Q> & translation, vec<3, T, Q> & skew, vec<4, T, Q> & perspective);
 
     template<typename T, qualifier Q>
-    GLM_FUNC_DECL bool compose(
+    GLM_FUNC_DECL void compose(
         mat<4, 4, T, Q> & modelMatrix,
         vec<3, T, Q> const& scale, qua<T, Q> const& orientation, vec<3, T, Q> const& translation);
 

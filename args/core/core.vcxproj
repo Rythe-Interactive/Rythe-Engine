@@ -459,6 +459,7 @@
     <ClCompile Include="ecs\entityquery.cpp" />
     <ClCompile Include="ecs\queryregistry.cpp" />
     <ClCompile Include="filesystem\artifact_cache.cpp" />
+    <ClCompile Include="filesystem\assetimporter.cpp" />
     <ClCompile Include="filesystem\detail\strpath_manip.cpp" />
     <ClCompile Include="filesystem\filemanip.cpp" />
     <ClCompile Include="filesystem\filesystem_resolver.cpp" />

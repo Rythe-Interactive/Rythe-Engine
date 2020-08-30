@@ -50,6 +50,8 @@ namespace args::rendering
     {
         id_type id;
 
+        bool operator==(const mesh_handle& other) const { return id == other.id; }
+
         const mesh_data& get_data();
         const mesh& get_mesh();
     };
@@ -84,5 +86,17 @@ namespace args::rendering
         static mesh_handle create_mesh(const std::string& name, const fs::view& file, mesh_import_settings settings = default_mesh_settings);
         static mesh_handle get_handle(const std::string& name);
         static mesh_handle get_handle(id_type id);
+    };
+}
+
+namespace std
+{
+    template<>
+    struct hash<args::rendering::mesh_handle>
+    {
+        std::size_t operator()(args::rendering::mesh_handle const& handle) const noexcept
+        {
+            return static_cast<std::size_t>(handle.id);
+        }
     };
 }

@@ -183,7 +183,7 @@ namespace args::application
             bindToEvent<events::exit, &WindowSystem::onExit>();
             bindToEvent<window_request, &WindowSystem::onWindowRequest>();
 
-            raiseEvent<window_request>(world_entity_id);
+            raiseEvent<window_request>(world_entity_id, math::ivec2(400, 400), "<Args> Engine", nullptr, nullptr, 1);
 
             createProcess<&WindowSystem::refreshWindows>("Rendering");
             createProcess<&WindowSystem::handleWindowEvents>("Input");
@@ -198,6 +198,8 @@ namespace args::application
             async::readwrite_guard guard(m_requestLock);
             for (auto& request : m_requests)
             {
+                std::cout << "creating a window" << std::endl;
+
                 if (request.hints.size())
                 {
                     for (auto& [hint, value] : request.hints)
@@ -235,7 +237,6 @@ namespace args::application
 
                 {
                     async::readwrite_guard guard(m_creationLock);
-                    std::cout << "creating a window" << std::endl;
                     handle = m_ecs->createComponent<window>(request.entityId);
                     handle.write(win, std::memory_order_relaxed);
                 }
@@ -246,6 +247,8 @@ namespace args::application
                 ContextHelper::makeContextCurrent(win);
 
                 ContextHelper::swapInterval(request.swapInterval);
+
+                ContextHelper::makeContextCurrent(nullptr);
 
                 ContextHelper::setWindowCloseCallback(win, &WindowSystem::closeWindow);
                 ContextHelper::setWindowPosCallback(win, &WindowSystem::onWindowMoved);
@@ -263,6 +266,8 @@ namespace args::application
                 ContextHelper::setCursorPosCallback(win, &WindowSystem::onMouseMoved);
                 ContextHelper::setMouseButtonCallback(win, &WindowSystem::onMouseButton);
                 ContextHelper::setScrollCallback(win, &WindowSystem::onMouseScroll);
+
+                std::cout << "done creating a window" << std::endl;
             }
 
             m_requests.clear();

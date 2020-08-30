@@ -17,6 +17,7 @@
     <ClCompile Include="scheduling\scheduler.cpp" />
     <ClCompile Include="math\glm\detail\glm.cpp" />
     <ClCompile Include="filesystem\filemanip.cpp" />
+    <ClCompile Include="filesystem\assetimporter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
