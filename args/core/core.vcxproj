@@ -119,6 +119,7 @@
     <ClInclude Include="defaults\coremodule.hpp" />
     <ClInclude Include="defaults\defaultcomponents.hpp" />
     <ClInclude Include="detail\internals.hpp" />
+    <ClInclude Include="ecs\archetype.hpp" />
     <ClInclude Include="ecs\component_container.hpp" />
     <ClInclude Include="ecs\component_handle.hpp" />
     <ClInclude Include="ecs\ecs.hpp" />
@@ -471,6 +472,7 @@
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ecs\archetype.inl" />
     <None Include="math\glm\detail\func_common.inl" />
     <None Include="math\glm\detail\func_common_simd.inl" />
     <None Include="math\glm\detail\func_exponential.inl" />

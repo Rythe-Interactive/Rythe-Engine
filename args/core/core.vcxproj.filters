@@ -373,6 +373,7 @@
     <ClInclude Include="filesystem\assetimporter.hpp" />
     <ClInclude Include="defaults\coremodule.hpp" />
     <ClInclude Include="defaults\defaultcomponents.hpp" />
+    <ClInclude Include="ecs\archetype.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">
@@ -517,5 +518,6 @@
     <None Include="math\glm\gtx\vector_angle.inl" />
     <None Include="math\glm\gtx\vector_query.inl" />
     <None Include="math\glm\gtx\wrap.inl" />
+    <None Include="ecs\archetype.inl" />
   </ItemGroup>
 </Project>

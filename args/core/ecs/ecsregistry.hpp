@@ -7,6 +7,7 @@
 #include <core/ecs/queryregistry.hpp>
 #include <core/ecs/entityquery.hpp>
 #include <core/ecs/entity_handle.hpp>
+#include <core/ecs/archetype.hpp>
 
 #include <utility>
 #include <memory>
@@ -127,11 +128,23 @@ namespace args::core::ecs
 		 * @returns component_handle<component_type> Component handle to the created component.
 		 * @throws args_entity_not_found_error If the entity id does not belong to a valid entity.
 		 */
-		template<typename component_type>
+		template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
 		component_handle<component_type> createComponent(id_type entityId)
 		{
             return force_value_cast<component_handle<component_type>>(createComponent(entityId, typeHash<component_type>()));
 		}
+
+        template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
+        auto createComponent(id_type entityId)
+        {
+            return archetype_type::create(this, entityId);
+        }
+
+        template<typename... component_types>
+        std::tuple<component_handle<component_types>...> createComponents(id_type entityId)
+        {
+            return std::make_tuple(createComponent<component_types>(entityId)...);
+        }
 
 		/**@brief Create component of a certain type attached to a certain entity.
 		 * @param entityId Id of the entity you wish to attach the component to.
@@ -218,3 +231,5 @@ namespace args::core::ecs
 		}
 	};
 }
+
+#include <core/ecs/archetype.inl>

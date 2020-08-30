@@ -26,6 +26,12 @@ public:
     {
         auto ent = m_ecs->createEntity();
         ent.add_component<sah>();
+        auto comps = m_ecs->createComponent<transform>(ent);
+
+        std::cout << ent.has_component<position>() << std::endl;
+        std::cout << ent.has_component<rotation>() << std::endl;
+        std::cout << ent.has_component<scale>() << std::endl;
+
         raiseEvent<application::window_request>(ent, math::ivec2(600, 300), "This is a test window!");
 
         auto ent2 = m_ecs->createEntity();

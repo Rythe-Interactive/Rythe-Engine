@@ -56,5 +56,11 @@
     <ClInclude Include="data\importers\texture_importers.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="components\renderable.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\renderer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -17,6 +17,7 @@
     <ClCompile Include="data\texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="components\renderable.hpp" />
     <ClInclude Include="data\importers\texture_importers.hpp" />
     <ClInclude Include="detail\engine_include.hpp" />
     <ClInclude Include="detail\stb_image.h" />
@@ -26,6 +27,7 @@
     <ClInclude Include="data\texture.hpp" />
     <ClInclude Include="module\renderingmodule.hpp" />
     <ClInclude Include="rendering.hpp" />
+    <ClInclude Include="systems\renderer.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -6,6 +6,9 @@ namespace args::core
 	template<typename derived_type, typename base_type>
 	using inherits_from = typename std::enable_if<std::is_base_of<base_type, derived_type>::value, int>::type;
 
+    template<typename derived_type, typename base_type>
+    using doesnt_inherit_from = typename std::enable_if<!std::is_base_of<base_type, derived_type>::value, int>::type;
+
     template<typename, typename T>
     struct has_resize
     {
