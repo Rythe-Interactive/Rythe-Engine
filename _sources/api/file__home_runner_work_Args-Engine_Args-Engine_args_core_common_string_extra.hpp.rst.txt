@@ -102,19 +102,19 @@ Functions
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1aeae352974001b280179dbea000bc458c`
 
-- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a4d69cb49f87794b99abbbfcca11f02ef`
-
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1afa4b1a9718d911fed5c622171c9c099e`
 
-- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a8262961f81d5d66cac48532fe9fe7c71`
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a4d69cb49f87794b99abbbfcca11f02ef`
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1ae2b02031ccd69bf1d2921e2392c6499e`
 
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a8262961f81d5d66cac48532fe9fe7c71`
+
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1ac4617a8fd6b99ccbc0f425ab80335290`
 
-- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a669326fa267b170650664637d98dd441`
-
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1ada9dd0f44b688ac9d2f35098a2b2cf42`
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a669326fa267b170650664637d98dd441`
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a00a0e0ddbf04c8f93ce7045adf2188a1`
 
