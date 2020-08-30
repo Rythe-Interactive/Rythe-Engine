@@ -244,6 +244,7 @@ namespace args::application
                 m_windowEventBus.insert(win, m_eventBus);
 
                 ContextHelper::makeContextCurrent(win);
+
                 ContextHelper::swapInterval(request.swapInterval);
 
                 ContextHelper::setWindowCloseCallback(win, &WindowSystem::closeWindow);
