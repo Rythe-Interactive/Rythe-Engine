@@ -103,11 +103,11 @@ namespace args::core
 			return (ptr != nullptr) || (!isNull());
 		}
 
-        delegate(nullptr_t)
+        delegate(std::nullptr_t)
 		{
 		}
 
-        delegate& operator=(nullptr_t)
+        delegate& operator=(std::nullptr_t)
 		{
             m_invocation.stub = nullptr;
             return *this;

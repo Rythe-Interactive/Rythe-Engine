@@ -16,14 +16,25 @@ namespace args::application
 
         void setup() override
         {
+            //subscribe to the raw events emitted from the window system
             bindToEvent<key_input, &InputSystem::onKey>();
             bindToEvent<mouse_moved, &InputSystem::onMouseMove>();
             bindToEvent<mouse_button, &InputSystem::onMouseButton>();
             bindToEvent<mouse_scrolled, &InputSystem::onMouseScrolled>();
+
+            //create Update Process
             createProcess<&InputSystem::onUpdate>("Input");
+
+
+            //make sure we get the joystick-callback on initialization of GLFW
             ContextHelper::addOnInitCallback(delegate<void()>::create([]
                 {
                     ContextHelper::setJoystickCallback(&InputSystem::onCheckGamepadPresence);
+
+                    //also enumerate Joysticks at the beginning of the Engine, the callback is not called on Joysticks that
+                    //that are already connected
+
+                    //note that GLFW only supports 16 gamepads!
                     for (size_t i = 0; i < inputmap::modifier_keys::MAX_SIZE - inputmap::modifier_keys::JOYSTICK0; ++i)
                     {
                         if (ContextHelper::joystickPresent(i))
@@ -38,6 +49,15 @@ namespace args::application
         }
 
 
+
+        /**
+         * @brief Creates a Binding of a Key /Axis to the emission of an event in the event bus.
+         *
+         * @tparam Event The type of event you want to be emitted on the appearance of the action/axis.
+         * @param k The axis/action you want to listen to. @see inputmap::method for options
+         * @param value The value you want to map to if your Event is an Axis but the event is a button/key.
+         *         For instance if you want to map one axis to 'W/S' you can make 'W' emit 1 and 'S' -1.
+         */
         template <class Event>
         static void createBinding(inputmap::method k, float value = 1) {
             static_assert(std::is_base_of_v<input_action<Event>, Event> ||
@@ -103,6 +123,10 @@ namespace args::application
             }
         }
 
+        /** @brief removes a Binding from a method
+         *  @tparam Event the Event you want to unbind
+         *  @param met the method you want to unbind from
+         */
         template<class Event>
         static void removeBinding(inputmap::method met)
         {
@@ -160,7 +184,7 @@ namespace args::application
                 {
                     if (inputmap::is_key(met))
                     {
-                        m_actions[m][typeHash<Event>()].clear();
+                        m_actions[met][typeHash<Event>()].clear();
                     }
                     if (inputmap::is_axis(met))
                     {
@@ -175,6 +199,7 @@ namespace args::application
         template<class Event>
         static void bindKeyToAction(inputmap::method m)
         {
+            //creates a tuple with default value 0
             m_actions[m][typeHash<Event>()] = std::make_tuple(
                 delegate<void(InputSystem*, bool, inputmap::modifier_keys, inputmap::method,float)>::create([]
                 (InputSystem* self, bool state, inputmap::modifier_keys mods, inputmap::method method, float def)
@@ -191,6 +216,7 @@ namespace args::application
         template<class Event>
         static void bindKeyToAxis(inputmap::method m, float value)
         {
+            //creates tuple embedding `value`
             m_actions[m][typeHash<Event>()] = std::make_tuple(
                 delegate<void(InputSystem*, bool, inputmap::modifier_keys, inputmap::method,float)>::create([]
                 (InputSystem* self, bool state, inputmap::modifier_keys mods, inputmap::method method, float def)
@@ -206,6 +232,7 @@ namespace args::application
         template<class Event>
         static void bindAxisToAction(inputmap::method m, float value)
         {
+            //creates tuple embedding all parameters needed for invoking the action
             m_axes[m][typeHash<Event>()] = std::make_tuple(
                 delegate<void(InputSystem*, float, inputmap::modifier_keys, inputmap::method)>::create([]
                 (InputSystem* self, float value, inputmap::modifier_keys mods, inputmap::method method)
@@ -222,6 +249,7 @@ namespace args::application
         template<class Event>
         static void bindAxisToAxis(inputmap::method m, float value)
         {
+            //creates tuple embedding all parameters needed for invoking the action
             m_axes[m][typeHash<Event>()] = std::make_tuple(
                 delegate<void(InputSystem*, float, inputmap::modifier_keys, inputmap::method)>::create([]
                 (InputSystem* self, float value, inputmap::modifier_keys mods, inputmap::method method)
@@ -235,6 +263,7 @@ namespace args::application
             );
         }
 
+        //joystick (dis)connect callback
         static void onCheckGamepadPresence(int jid, int event)
         {
 

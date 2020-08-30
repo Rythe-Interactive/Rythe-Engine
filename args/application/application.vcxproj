@@ -23,7 +23,6 @@
     <ClInclude Include="context\detail\KHR\khrplatform.h" />
     <ClInclude Include="events\inputevents.hpp" />
     <ClInclude Include="events\windowevents.hpp" />
-    <ClInclude Include="events\inputevents.hpp" />
     <ClInclude Include="input\inputsystem.hpp" />
     <ClInclude Include="module\applicationmodule.hpp" />
     <ClInclude Include="window\window.hpp" />
