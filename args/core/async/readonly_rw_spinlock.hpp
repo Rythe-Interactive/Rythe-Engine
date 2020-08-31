@@ -30,12 +30,16 @@ namespace args::core::async
 	struct readonly_rw_spinlock
 	{
 	private:
-		inline static std::atomic_uint m_lastId = 1;
+        struct ARGS_API data
+        {
+            static std::atomic_uint m_lastId;
+        };
+
 		uint m_id;
 		std::atomic_int m_lockState = 0;
 		std::atomic_int m_readers = 0;
 
-		inline static thread_local std::unordered_map<uint, int> m_localWriters;
+        inline static thread_local std::unordered_map<uint, int> m_localWriters;
 		inline static thread_local std::unordered_map<uint, int> m_localReaders;
 		inline static thread_local std::unordered_map<uint, lock_state> m_localState;
 
@@ -215,7 +219,7 @@ namespace args::core::async
 		}
 
 	public:
-		readonly_rw_spinlock() : m_id(m_lastId.fetch_add(1, std::memory_order_relaxed))
+		readonly_rw_spinlock() : m_id(data::m_lastId.fetch_add(1, std::memory_order_relaxed))
 		{
 			m_lockState.store(lock_state::idle, std::memory_order_relaxed);
 			m_readers.store(0, std::memory_order_relaxed);

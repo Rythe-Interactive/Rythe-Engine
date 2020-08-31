@@ -52,8 +52,7 @@ namespace args::rendering
 
     void mesh_data::calculate_tangents(mesh_data* data)
     {
-        for (unsigned i = 0; i < data->normals.size(); i++)
-            data->tangents.push_back(math::vec3(0));
+        data->tangents.resize(data->normals.size());
 
         for (auto& submesh : data->submeshes)
             for (unsigned i = 0; i < submesh.indices.size(); i += 3)
@@ -75,9 +74,12 @@ namespace args::rendering
                 float uvDetFrac = 1.0f / (deltaUV0.x * deltaUV1.y - deltaUV1.x * deltaUV0.y);
 
                 math::vec3 tangent;
-                tangent.x = uvDetFrac * (deltaUV1.y * edge0.x - deltaUV0.y * edge1.x);
-                tangent.y = uvDetFrac * (deltaUV1.y * edge0.y - deltaUV0.y * edge1.y);
-                tangent.z = uvDetFrac * (deltaUV1.y * edge0.z - deltaUV0.y * edge1.z);
+                tangent.x = uvDetFrac * ((deltaUV1.y * edge0.x) - (deltaUV0.y * edge1.x));
+                tangent.y = uvDetFrac * ((deltaUV1.y * edge0.y) - (deltaUV0.y * edge1.y));
+                tangent.z = uvDetFrac * ((deltaUV1.y * edge0.z) - (deltaUV0.y * edge1.z));
+                if (tangent == math::vec3(0, 0, 0) || tangent != tangent)
+                    continue;
+
                 tangent = math::normalize(tangent);
 
                 data->tangents[submesh.indices[i]] += tangent;
@@ -86,7 +88,8 @@ namespace args::rendering
             }
 
         for (unsigned i = 0; i < data->tangents.size(); i++)
-            data->tangents[i] = math::normalize(data->tangents[i]);
+            if (data->tangents[i] != math::vec3(0, 0, 0))
+                data->tangents[i] = math::normalize(data->tangents[i]);
     }
 
     sparse_map<id_type, mesh> mesh_cache::m_meshes;
@@ -162,9 +165,6 @@ namespace args::rendering
         if (!file.is_valid() || !file.file_info().is_file)
             return invalid_mesh_handle;
 
-        fs::AssetImporter a;
-        a.foo();
-
         auto result = fs::AssetImporter::tryLoad<mesh_data>(file, settings);
 
         if (result != common::valid)
@@ -177,7 +177,7 @@ namespace args::rendering
         }
 
         mesh mesh;
-       
+
         for (auto& submeshData : data->submeshes)
             mesh.submeshes.push_back({ static_cast<uint>(submeshData.indices.size()), 0 });
 

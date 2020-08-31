@@ -3,6 +3,8 @@
 
 #include <rendering/data/importers/mesh_importers.hpp>
 
+#include <map>
+
 namespace args::rendering
 {
     common::result_decay_more<fs::basic_resource, fs_error> obj_mesh_loader::load(const fs::basic_resource& resource, mesh_import_settings&& settings)
@@ -30,26 +32,52 @@ namespace args::rendering
 
         mesh_data data;
 
-        for (int i = 0; i < attributes.vertices.size() / 3; i++)
+        struct vtx_data
         {
-            int ind3 = i * 3;
-            int ind2 = i * 2;
-            data.vertices.push_back({ attributes.vertices[ind3 + 0], attributes.vertices[ind3 + 1] , attributes.vertices[ind3 + 2] });
-            data.normals.push_back({ attributes.normals[ind3 + 0], attributes.normals[ind3 + 1] , attributes.normals[ind3 + 2] });
-            data.uvs.push_back({ attributes.texcoords[ind2 + 0], attributes.texcoords[ind2 + 1] });
-        }
+            math::vec3 vert;
+            math::vec3 norm;
+            math::vec2 uv;
 
-        mesh_data::calculate_tangents(&data);
+            bool operator==(const vtx_data& other)
+            {
+                return vert == other.vert && norm == other.norm && uv == other.uv;
+            }
+        };
+
+        std::vector<vtx_data> vertices;
 
         for (auto& shape : shapes)
         {
             submesh_data submesh;
             submesh.name = shape.name;
-            for (auto& index : shape.mesh.indices)
-                submesh.indices.push_back(index.vertex_index);
+
+            for (auto& indexData : shape.mesh.indices)
+            {
+                vtx_data vtx = { { attributes.vertices[indexData.vertex_index + 0], attributes.vertices[indexData.vertex_index + 1], attributes.vertices[indexData.vertex_index + 2] },
+                    { attributes.vertices[indexData.normal_index + 0], attributes.vertices[indexData.normal_index + 1], attributes.vertices[indexData.normal_index + 2] },
+                    { attributes.vertices[indexData.texcoord_index + 0], attributes.vertices[indexData.texcoord_index + 1] } };
+
+                size_type index = vertices.size();
+
+                for (size_type i = 0; i < vertices.size(); i++)
+                    if (vertices[i] == vtx)
+                        index = i;
+
+                if (index == vertices.size())
+                {
+                    vertices.push_back(vtx);
+                    data.vertices.push_back(vtx.vert);
+                    data.normals.push_back(vtx.norm);
+                    data.uvs.push_back(vtx.uv);
+                }
+
+                submesh.indices.push_back(index);
+            }
 
             data.submeshes.push_back(submesh);
         }
+
+        mesh_data::calculate_tangents(&data);
 
         fs::basic_resource result(nullptr);
 

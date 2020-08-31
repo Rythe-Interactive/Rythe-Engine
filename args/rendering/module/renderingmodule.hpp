@@ -15,9 +15,6 @@ namespace args::rendering
             for (cstring extension : stbi_texture_loader::extensions)
                 fs::AssetImporter::reportConverter<stbi_texture_loader>(extension);
 
-            fs::AssetImporter a;
-            a.foo();
-
             reportComponentType<camera>();
             reportComponentType<renderable>();
             reportSystem<Renderer>();

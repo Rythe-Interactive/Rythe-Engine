@@ -32,13 +32,7 @@ public:
 
 		fs::view meshFile("basic://models/Cube.obj");
 
-		fs::AssetImporter a;
-		a.foo();
-
 		rendercomp.mesh = rendering::mesh_cache::create_mesh("test", meshFile);
-
-		fs::AssetImporter b;
-		b.foo();
 
 		renderableHandle.write(rendercomp);
 

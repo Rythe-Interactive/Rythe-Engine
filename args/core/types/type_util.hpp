@@ -160,6 +160,12 @@ namespace args::core
         }
     }
 
+    template<>
+    void appendBinaryData<std::string>(std::string* value, byte_vec& data)
+    {
+        appendBinaryData(value->begin(), value->end(), data);
+    }
+
     template<typename Iterator>
     void appendBinaryData(Iterator first, Iterator last, byte_vec& data)
     {
@@ -202,6 +208,15 @@ namespace args::core
 
             start += sizeof(T);
         }
+    }
+
+    template<>
+    void retrieveBinaryData<std::string>(std::string& value, byte_vec::const_iterator& start)
+    {
+        uint64 arrSize = retrieveArraySize<typename std::string::value_type>(start);
+        value.resize(arrSize);
+
+        retrieveBinaryData(value.begin(), value.end(), start);
     }
 
     template<typename Iterator>
