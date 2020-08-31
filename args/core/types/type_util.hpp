@@ -130,14 +130,11 @@ namespace args::core
         return typeHash<T>();
     }
 
-    template<typename T>
-    void appendBinaryData(T* value, byte_vec& data);
-
     template<typename Iterator>
     void appendBinaryData(Iterator first, Iterator last, byte_vec& data);
 
     template<typename T>
-    void appendBinaryData(T* value, byte_vec& data)
+    void extern appendBinaryData(T* value, byte_vec& data)
     {
         if constexpr (has_resize<T, void(std::size_t)>::value)
         {
@@ -161,10 +158,10 @@ namespace args::core
     }
 
     template<>
-    void appendBinaryData<std::string>(std::string* value, byte_vec& data)
-    {
-        appendBinaryData(value->begin(), value->end(), data);
-    }
+    void extern ARGS_FUNC appendBinaryData<std::string>(std::string* value, byte_vec& data);
+
+    template<>
+    void extern ARGS_FUNC appendBinaryData<const std::string>(const std::string* value, byte_vec& data);
 
     template<typename Iterator>
     void appendBinaryData(Iterator first, Iterator last, byte_vec& data)
@@ -177,7 +174,7 @@ namespace args::core
     }
 
     template<typename T>
-    void retrieveBinaryData(T& value, byte_vec::const_iterator& start);
+    void extern retrieveBinaryData(T& value, byte_vec::const_iterator& start);
 
     template<typename Iterator>
     void retrieveBinaryData(Iterator first, Iterator last, byte_vec::const_iterator& start);
@@ -193,7 +190,7 @@ namespace args::core
     }
 
     template<typename T>
-    void retrieveBinaryData(T& value, byte_vec::const_iterator& start)
+    void extern retrieveBinaryData(T& value, byte_vec::const_iterator& start)
     {
         if constexpr (has_resize<T, void(std::size_t)>::value)
         {
@@ -211,13 +208,7 @@ namespace args::core
     }
 
     template<>
-    void retrieveBinaryData<std::string>(std::string& value, byte_vec::const_iterator& start)
-    {
-        uint64 arrSize = retrieveArraySize<typename std::string::value_type>(start);
-        value.resize(arrSize);
-
-        retrieveBinaryData(value.begin(), value.end(), start);
-    }
+    void extern ARGS_FUNC retrieveBinaryData<std::string>(std::string& value, byte_vec::const_iterator& start);
 
     template<typename Iterator>
     void retrieveBinaryData(Iterator first, Iterator last, byte_vec::const_iterator& start)
@@ -238,4 +229,5 @@ namespace args::core
 
         start += arrSize;
     }
+    
 }
