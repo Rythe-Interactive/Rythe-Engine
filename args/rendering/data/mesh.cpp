@@ -139,42 +139,42 @@ namespace args::rendering
             data = m_meshdata[id].get();
         }
 
-        mesh mesh;
-
         {
             async::readonly_guard guard(m_meshLock);
-            mesh = m_meshes[id];
+            mesh& mesh = m_meshes[id];
+
+            for (int i = 0; i < mesh.submeshes.size(); i++)
+            {
+                auto& submesh = mesh.submeshes[i];
+                auto& submeshData = data->submeshes[i];
+                submesh.indexCount = submeshData.indices.size();
+                glGenBuffers(1, &submesh.indexBufferId);
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, submesh.indexBufferId);
+                glBufferData(GL_ELEMENT_ARRAY_BUFFER, submeshData.indices.size() * sizeof(unsigned int), submeshData.indices.data(), GL_STATIC_DRAW);
+            }
+
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+            glGenBuffers(1, &mesh.vertexBufferId);
+            glBindBuffer(GL_ARRAY_BUFFER, mesh.vertexBufferId);
+            glBufferData(GL_ARRAY_BUFFER, data->vertices.size() * sizeof(math::vec3), data->vertices.data(), GL_STATIC_DRAW);
+
+            glGenBuffers(1, &mesh.normalBufferId);
+            glBindBuffer(GL_ARRAY_BUFFER, mesh.normalBufferId);
+            glBufferData(GL_ARRAY_BUFFER, data->normals.size() * sizeof(math::vec3), data->normals.data(), GL_STATIC_DRAW);
+
+            glGenBuffers(1, &mesh.uvBufferId);
+            glBindBuffer(GL_ARRAY_BUFFER, mesh.uvBufferId);
+            glBufferData(GL_ARRAY_BUFFER, data->uvs.size() * sizeof(math::vec2), data->uvs.data(), GL_STATIC_DRAW);
+
+            glGenBuffers(1, &mesh.tangentBufferId);
+            glBindBuffer(GL_ARRAY_BUFFER, mesh.tangentBufferId);
+            glBufferData(GL_ARRAY_BUFFER, data->tangents.size() * sizeof(math::vec3), data->tangents.data(), GL_STATIC_DRAW);
+
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+            mesh.buffered = true;
         }
-
-        for (int i = 0; i < mesh.submeshes.size(); i++)
-        {
-            auto& submesh = mesh.submeshes[i];
-            auto& submeshData = data->submeshes[i];
-            submesh.indexCount = submeshData.indices.size();
-            glGenBuffers(1, &submesh.indexBufferId);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, submesh.indexBufferId);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, submeshData.indices.size() * sizeof(unsigned int), &submeshData.indices[0], GL_STATIC_DRAW);
-        }
-
-        glGenBuffers(1, &mesh.vertexBufferId);
-        glBindBuffer(GL_ARRAY_BUFFER, mesh.vertexBufferId);
-        glBufferData(GL_ARRAY_BUFFER, data->vertices.size() * sizeof(math::vec3), &data->vertices[0], GL_STATIC_DRAW);
-
-        glGenBuffers(1, &mesh.normalBufferId);
-        glBindBuffer(GL_ARRAY_BUFFER, mesh.normalBufferId);
-        glBufferData(GL_ARRAY_BUFFER, data->normals.size() * sizeof(math::vec3), &data->normals[0], GL_STATIC_DRAW);
-
-        glGenBuffers(1, &mesh.uvBufferId);
-        glBindBuffer(GL_ARRAY_BUFFER, mesh.uvBufferId);
-        glBufferData(GL_ARRAY_BUFFER, data->uvs.size() * sizeof(math::vec2), &data->uvs[0], GL_STATIC_DRAW);
-
-        glGenBuffers(1, &mesh.tangentBufferId);
-        glBindBuffer(GL_ARRAY_BUFFER, mesh.tangentBufferId);
-        glBufferData(GL_ARRAY_BUFFER, data->tangents.size() * sizeof(math::vec3), &data->tangents[0], GL_STATIC_DRAW);
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-        mesh.buffered = true;
     }
 
     mesh_handle mesh_cache::create_mesh(const std::string& name, const fs::view& file, mesh_import_settings settings)
@@ -203,7 +203,7 @@ namespace args::rendering
 
         data->fileName = file.get_filename();
 
-        mesh mesh;
+        mesh mesh{};
 
         for (auto& submeshData : data->submeshes)
             mesh.submeshes.push_back({ static_cast<uint>(submeshData.indices.size()), 0 });

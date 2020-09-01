@@ -38,9 +38,9 @@ public:
 
 		m_ecs->createComponent<transform>(ent);
 
-		std::cout << ent.has_component<position>() << std::endl;
-		std::cout << ent.has_component<rotation>() << std::endl;
-		std::cout << ent.has_component<scale>() << std::endl;
+		//std::cout << ent.has_component<position>() << std::endl;
+		//std::cout << ent.has_component<rotation>() << std::endl;
+		//std::cout << ent.has_component<scale>() << std::endl;
 
 		raiseEvent<application::window_request>(ent, math::ivec2(600, 300), "This is a test window!");
 
@@ -49,7 +49,7 @@ public:
 
 		position pos = positionH.read();
 
-		pos.z = -1.f;
+		pos.z = 10.f;
 
 		positionH.write(pos);
 
@@ -58,7 +58,10 @@ public:
 		rotationH.write(rot);
 
 
-		m_ecs->createComponent<rendering::camera>(ent);
+		auto camH = m_ecs->createComponent<rendering::camera>(ent);
+        rendering::camera cam = camH.read();
+        cam.projection = math::perspective(60.f, 1.f, 0.1f, 1000.f);
+        camH.write(cam);
 
 		raiseEvent<application::window_request>(ent2, math::ivec2(600, 300), "This is a test window2!");
 
@@ -87,10 +90,10 @@ public:
 			{
 				auto comp = entity.get_component<sah>();
 				comp.write({ frameCount });
-				std::cout << "component value: " << comp.read().value << std::endl;
+				//std::cout << "component value: " << comp.read().value << std::endl;
 			}
 
-			std::cout << "Hi! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+			//std::cout << "Hi! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
 		}
 	}
 
@@ -111,7 +114,7 @@ public:
 		if (buffer > 1.f)
 		{
 			buffer -= 1.f;
-			std::cout << "This is a fixed interval!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+			//std::cout << "This is a fixed interval!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
 		}
 	}
 
@@ -134,10 +137,10 @@ public:
 			for (auto entity : query)
 			{
 				auto comp = entity.get_component<sah>();
-				std::cout << "component value on different thread: " << comp.read().value << std::endl;
+				//std::cout << "component value on different thread: " << comp.read().value << std::endl;
 			}
 
-			std::cout << "This is a different thread!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+			//std::cout << "This is a different thread!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
 		}
 
 		//if (accumulated > 10.f)

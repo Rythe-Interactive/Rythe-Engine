@@ -53,7 +53,12 @@ namespace args::rendering
 
             for (auto& indexData : shape.mesh.indices)
             {
-                vtx_data vtx = { { attributes.vertices[indexData.vertex_index + 0], attributes.vertices[indexData.vertex_index + 1], attributes.vertices[indexData.vertex_index + 2] },
+                submesh.indices.push_back(data.vertices.size());
+                data.vertices.push_back({ attributes.vertices[indexData.vertex_index + 0], attributes.vertices[indexData.vertex_index + 1], attributes.vertices[indexData.vertex_index + 2] });
+                data.normals.push_back(math::vec3());
+                data.uvs.push_back(math::vec2());
+
+                /*vtx_data vtx = { { attributes.vertices[indexData.vertex_index + 0], attributes.vertices[indexData.vertex_index + 1], attributes.vertices[indexData.vertex_index + 2] },
                     { attributes.vertices[indexData.normal_index + 0], attributes.vertices[indexData.normal_index + 1], attributes.vertices[indexData.normal_index + 2] },
                     { attributes.vertices[indexData.texcoord_index + 0], attributes.vertices[indexData.texcoord_index + 1] } };
 
@@ -71,7 +76,7 @@ namespace args::rendering
                     data.uvs.push_back(vtx.uv);
                 }
 
-                submesh.indices.push_back(index);
+                submesh.indices.push_back(index);*/
             }
 
             data.submeshes.push_back(submesh);
