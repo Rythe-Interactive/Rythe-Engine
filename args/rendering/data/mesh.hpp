@@ -38,10 +38,11 @@ namespace args::rendering
 
     struct mesh
     {
-        app::gl_id vertexBufferId{};
-        app::gl_id normalBufferId{};
-        app::gl_id uvBufferId{};
-        app::gl_id tangentBufferId{};
+        bool buffered;
+        app::gl_id vertexBufferId;
+        app::gl_id normalBufferId;
+        app::gl_id uvBufferId;
+        app::gl_id tangentBufferId;
 
         std::vector<sub_mesh> submeshes;
     };
@@ -49,9 +50,10 @@ namespace args::rendering
     struct ARGS_API mesh_handle
     {
         id_type id;
-
+        
         bool operator==(const mesh_handle& other) const { return id == other.id; }
-
+        bool is_buffered();
+        void buffer_data();
         const mesh_data& get_data();
         const mesh& get_mesh();
     };
@@ -79,10 +81,9 @@ namespace args::rendering
 
         static const mesh& get_mesh(id_type id);
         static const mesh_data& get_data(id_type id);
-
-        static void buffer(mesh_data* data, mesh& mesh);
         
     public:
+        static void buffer(id_type id);
         static mesh_handle create_mesh(const std::string& name, const fs::view& file, mesh_import_settings settings = default_mesh_settings);
         static mesh_handle get_handle(const std::string& name);
         static mesh_handle get_handle(id_type id);

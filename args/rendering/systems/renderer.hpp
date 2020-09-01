@@ -150,6 +150,9 @@ namespace args::rendering
                 if (mesh.submeshes.empty())
                     continue;
 
+                if (!mesh.buffered)
+                    batches.keys()[i].buffer_data();
+
                 auto instances = batches.dense()[i];
 
                 glUseProgram(shaderId);

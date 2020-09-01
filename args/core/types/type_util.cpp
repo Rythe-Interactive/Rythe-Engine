@@ -22,26 +22,4 @@ namespace args::core
         static std::hash<std::string> hasher{};
         return hasher(name);
     }
-
-    template<>
-    void ARGS_FUNC appendBinaryData(const std::string* value, byte_vec& data)
-    {
-        std::string copy = *value;
-        appendBinaryData(&copy, data);
-    }
-
-    template<>
-    void ARGS_FUNC appendBinaryData(std::string* value, byte_vec& data)
-    {
-        appendBinaryData(value->begin(), value->end(), data);
-    }
-
-    template<>
-    void ARGS_FUNC retrieveBinaryData(std::string& value, byte_vec::const_iterator& start)
-    {
-        uint64 arrSize = retrieveArraySize<char>(start);
-        value.resize(arrSize);
-
-        retrieveBinaryData(value.begin(), value.end(), start);
-    }
 }

@@ -98,6 +98,16 @@ namespace args::rendering
     sparse_map<id_type, std::unique_ptr<mesh_data>> mesh_cache::m_meshdata;
     async::readonly_rw_spinlock mesh_cache::m_dataLock;
 
+    bool mesh_handle::is_buffered()
+    {
+        return mesh_cache::get_mesh(id).buffered;
+    }
+
+    void mesh_handle::buffer_data()
+    {
+        mesh_cache::buffer(id);
+    }
+
     inline const mesh_data& mesh_handle::get_data()
     {
         return mesh_cache::get_data(id);
@@ -120,14 +130,27 @@ namespace args::rendering
         return *m_meshdata[id];
     }
 
-    void mesh_cache::buffer(mesh_data* data, mesh& mesh)
+    void mesh_cache::buffer(id_type id)
     {
+        mesh_data* data;
+
+        {
+            async::readonly_guard guard(m_dataLock);
+            data = m_meshdata[id].get();
+        }
+
+        mesh mesh;
+
+        {
+            async::readonly_guard guard(m_meshLock);
+            mesh = m_meshes[id];
+        }
+
         for (int i = 0; i < mesh.submeshes.size(); i++)
         {
             auto& submesh = mesh.submeshes[i];
             auto& submeshData = data->submeshes[i];
             submesh.indexCount = submeshData.indices.size();
-
             glGenBuffers(1, &submesh.indexBufferId);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, submesh.indexBufferId);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, submeshData.indices.size() * sizeof(unsigned int), &submeshData.indices[0], GL_STATIC_DRAW);
@@ -150,6 +173,8 @@ namespace args::rendering
         glBufferData(GL_ARRAY_BUFFER, data->tangents.size() * sizeof(math::vec3), &data->tangents[0], GL_STATIC_DRAW);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        mesh.buffered = true;
     }
 
     mesh_handle mesh_cache::create_mesh(const std::string& name, const fs::view& file, mesh_import_settings settings)
@@ -176,13 +201,15 @@ namespace args::rendering
             data = m_meshdata.emplace(id, new mesh_data(result)).first->get();
         }
 
+        data->fileName = file.get_filename();
+
         mesh mesh;
 
         for (auto& submeshData : data->submeshes)
             mesh.submeshes.push_back({ static_cast<uint>(submeshData.indices.size()), 0 });
 
-        buffer(data, mesh);
-        data->fileName = name;
+        mesh.buffered = false;
+        //buffer(data, mesh);
 
         {
             async::readwrite_guard guard(m_meshLock);
