@@ -40,7 +40,7 @@ namespace args::rendering
 
             bool operator==(const vtx_data& other)
             {
-                return vert == other.vert && norm == other.norm && uv == other.uv;
+                return vert.x == other.vert.x && vert.y == other.vert.y && vert.z == other.vert.z;
             }
         };
 
@@ -50,23 +50,32 @@ namespace args::rendering
         {
             submesh_data submesh;
             submesh.name = shape.name;
+            submesh.indexOffset = data.indices.size();
+            submesh.indexCount = shape.mesh.indices.size();
 
             for (auto& indexData : shape.mesh.indices)
             {
-                submesh.indices.push_back(data.vertices.size());
-                data.vertices.push_back({ attributes.vertices[indexData.vertex_index + 0], attributes.vertices[indexData.vertex_index + 1], attributes.vertices[indexData.vertex_index + 2] });
-                data.normals.push_back(math::vec3());
-                data.uvs.push_back(math::vec2());
+                //uint idx = data.vertices.size();
+                //submesh.indices.push_back(idx);
+                //data.vertices.push_back({ attributes.vertices[indexData.vertex_index + 0], attributes.vertices[indexData.vertex_index + 1], attributes.vertices[indexData.vertex_index + 2] });
+                //data.vertices[idx] = (data.vertices[idx] + math::vec3(1.f, 1.f, 1.f)) / 2.f;
+                //data.normals.push_back(math::vec3());
+                //data.uvs.push_back(math::vec2());
 
-                /*vtx_data vtx = { { attributes.vertices[indexData.vertex_index + 0], attributes.vertices[indexData.vertex_index + 1], attributes.vertices[indexData.vertex_index + 2] },
-                    { attributes.vertices[indexData.normal_index + 0], attributes.vertices[indexData.normal_index + 1], attributes.vertices[indexData.normal_index + 2] },
-                    { attributes.vertices[indexData.texcoord_index + 0], attributes.vertices[indexData.texcoord_index + 1] } };
+                uint vtxIdx = indexData.vertex_index * 3;
+
+                vtx_data vtx = { { attributes.vertices[vtxIdx + 0], attributes.vertices[vtxIdx + 1], attributes.vertices[vtxIdx + 2] },
+                    { 0.f, 0.f, 0.f },
+                    { 0.f, 0.f } };
 
                 size_type index = vertices.size();
 
                 for (size_type i = 0; i < vertices.size(); i++)
                     if (vertices[i] == vtx)
+                    {
                         index = i;
+                        break;
+                    }
 
                 if (index == vertices.size())
                 {
@@ -76,7 +85,7 @@ namespace args::rendering
                     data.uvs.push_back(vtx.uv);
                 }
 
-                submesh.indices.push_back(index);*/
+                data.indices.push_back(index);
             }
 
             data.submeshes.push_back(submesh);

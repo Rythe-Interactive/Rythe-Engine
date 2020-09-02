@@ -5,6 +5,12 @@
 #include <unordered_map>
 #include <set>
 
+#define SV_POSITION 0
+#define SV_NORMAL 1
+#define SV_TANGENT 2
+#define SV_TEXCOORD0 3
+#define SV_MODELMATRIX 4
+
 namespace args::rendering
 {
     struct attribute;
@@ -12,7 +18,8 @@ namespace args::rendering
     struct submesh_data
     {
         std::string name;
-        std::vector<uint> indices;
+        size_type indexCount;
+        size_type indexOffset;
     };
 
     struct ARGS_API mesh_data
@@ -22,6 +29,7 @@ namespace args::rendering
         std::vector<math::vec3> normals;
         std::vector<math::vec2> uvs;
         std::vector<math::vec3> tangents;
+        std::vector<uint> indices;
 
         std::vector<submesh_data> submeshes;
 
@@ -33,16 +41,18 @@ namespace args::rendering
     struct sub_mesh
     {
         uint indexCount;
-        app::gl_id indexBufferId{};
+        uint indexOffset;
     };
 
     struct mesh
     {
         bool buffered;
+        app::gl_id vertexArrayId;
         app::gl_id vertexBufferId;
         app::gl_id normalBufferId;
         app::gl_id uvBufferId;
         app::gl_id tangentBufferId;
+        app::gl_id indexBufferId;
 
         std::vector<sub_mesh> submeshes;
     };
@@ -53,7 +63,7 @@ namespace args::rendering
         
         bool operator==(const mesh_handle& other) const { return id == other.id; }
         bool is_buffered();
-        void buffer_data();
+        void buffer_data(app::gl_id matrixBuffer);
         const mesh_data& get_data();
         const mesh& get_mesh();
     };
@@ -83,7 +93,7 @@ namespace args::rendering
         static const mesh_data& get_data(id_type id);
         
     public:
-        static void buffer(id_type id);
+        static void buffer(id_type id, app::gl_id matrixBuffer);
         static mesh_handle create_mesh(const std::string& name, const fs::view& file, mesh_import_settings settings = default_mesh_settings);
         static mesh_handle get_handle(const std::string& name);
         static mesh_handle get_handle(id_type id);

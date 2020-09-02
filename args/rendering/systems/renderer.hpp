@@ -14,10 +14,7 @@ namespace args::rendering
 
         app::gl_id shaderId;
         app::gl_id modelMatrixBufferId;
-        app::gl_id defaultVAO;
-        app::gl_location modelMatrixAttrib;
 
-        app::gl_location vertexLoc;
         //app::gl_location camPosLoc;
         app::gl_location viewProjLoc;
 
@@ -84,8 +81,8 @@ namespace args::rendering
             const char* vertexShader = "\
             #version 450\n\
 \n\
-            layout(location = 1) in vec3 vertex;\n\
-            layout(location = 2) in mat4 modelMatrix;\n\
+            in vec3 vertex;\n\
+            in mat4 modelMatrix;\n\
             uniform	mat4 viewProjectionMatrix;\n\
 \n\
             void main(void)\n\
@@ -142,14 +139,11 @@ namespace args::rendering
                 attibuteNames.push_back(std::string(attribNameData));
             }
 
-            modelMatrixAttrib = glGetAttribLocation(shaderId, "modelMatrix");
-            vertexLoc = glGetAttribLocation(shaderId, "vertex");
+            glBindAttribLocation(shaderId, SV_MODELMATRIX, "modelMatrix");
+            glBindAttribLocation(shaderId, SV_POSITION, "vertex");
 
             //camPosLoc = glGetUniformLocation(shaderId, "");
             viewProjLoc = glGetUniformLocation(shaderId, "viewProjectionMatrix");
-
-            glGenVertexArrays(1, &defaultVAO);
-            glBindVertexArray(defaultVAO);
 
             glGenBuffers(1, &modelMatrixBufferId);
             glBindBuffer(GL_ARRAY_BUFFER, modelMatrixBufferId);
@@ -214,92 +208,28 @@ namespace args::rendering
             {
                 auto handle = batches.keys()[i];
                 if (!handle.is_buffered())
-                    handle.buffer_data();
+                    handle.buffer_data(modelMatrixBufferId);
 
                 mesh mesh = handle.get_mesh();
                 if (mesh.submeshes.empty())
                     continue;
 
                 auto instances = batches.dense()[i];
+                glBindBuffer(GL_ARRAY_BUFFER, modelMatrixBufferId);
+                glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(math::mat4) * instances.size(), instances.data());
+                glBindBuffer(GL_ARRAY_BUFFER, 0);
 
                 glUseProgram(shaderId);
 
-                //glUniform1i(location of lightCount, (int)lights.size());
-
                 glUniformMatrix4fv(viewProjLoc, 1, GL_FALSE, math::value_ptr(viewProj));
 
-                // set other uniforms
-                printErrors();
-                glBindBuffer(GL_ARRAY_BUFFER, mesh.vertexBufferId);
-                glEnableVertexAttribArray(vertexLoc);
-                glVertexAttribPointer(vertexLoc, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
-                printErrors();
+                glBindVertexArray(mesh.vertexArrayId);
 
-                //glBindBuffer(GL_ARRAY_BUFFER, normalBufferId);
-                //glEnableVertexAttribArray(pNormalsAttrib->GetLocation());
-                //glVertexAttribPointer(pNormalsAttrib->GetLocation(), 3, GL_FLOAT, GL_TRUE, 0, 0);
+                for (auto submesh : mesh.submeshes)
+                    glDrawElementsInstanced(GL_TRIANGLES, (GLsizei)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)0, (GLsizei)instances.size());
 
-                //glBindBuffer(GL_ARRAY_BUFFER, uvBufferId);
-                //glEnableVertexAttribArray(pUVsAttrib->GetLocation());
-                //glVertexAttribPointer(pUVsAttrib->GetLocation(), 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-                //glBindBuffer(GL_ARRAY_BUFFER, tangentBufferId);
-                //glEnableVertexAttribArray(pTangentsAttrib->GetLocation());
-                //glVertexAttribPointer(pTangentsAttrib->GetLocation(), 3, GL_FLOAT, GL_TRUE, 0, 0);
-
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.submeshes[0].indexBufferId);
-                printErrors();
-
-                /*glBindBuffer(GL_UNIFORM_BUFFER, lightsBufferId);
-                glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(LightData) * lights.size(), lights.data());*/
-
-                glBindBuffer(GL_ARRAY_BUFFER, modelMatrixBufferId);
-                printErrors();
-
-                glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(math::mat4) * instances.size(), instances.data());
-                printErrors();
-
-                glEnableVertexAttribArray(modelMatrixAttrib + 0);
-                glEnableVertexAttribArray(modelMatrixAttrib + 1);
-                glEnableVertexAttribArray(modelMatrixAttrib + 2);
-                glEnableVertexAttribArray(modelMatrixAttrib + 3);
-                printErrors();
-
-                glVertexAttribPointer(modelMatrixAttrib + 0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(math::vec4), (GLvoid*)0);
-                glVertexAttribPointer(modelMatrixAttrib + 1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(math::vec4), (GLvoid*)(sizeof(math::vec4)));
-                glVertexAttribPointer(modelMatrixAttrib + 2, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(math::vec4), (GLvoid*)(2 * sizeof(math::vec4)));
-                glVertexAttribPointer(modelMatrixAttrib + 3, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(math::vec4), (GLvoid*)(3 * sizeof(math::vec4)));
-                printErrors();
-
-                glVertexAttribDivisor(modelMatrixAttrib + 0, 1);
-                glVertexAttribDivisor(modelMatrixAttrib + 1, 1);
-                glVertexAttribDivisor(modelMatrixAttrib + 2, 1);
-                glVertexAttribDivisor(modelMatrixAttrib + 3, 1);
-                printErrors();
-
-                glDrawElementsInstanced(GL_TRIANGLES, (GLsizei)mesh.submeshes[0].indexCount, GL_UNSIGNED_INT, (GLvoid*)0, (GLsizei)instances.size());
-                printErrors();
-
-                glDisableVertexAttribArray(modelMatrixAttrib + 0);
-                glDisableVertexAttribArray(modelMatrixAttrib + 1);
-                glDisableVertexAttribArray(modelMatrixAttrib + 2);
-                glDisableVertexAttribArray(modelMatrixAttrib + 3);
-                printErrors();
-
-                ////fix for serious performance issue
-                //if (pTangentsAttrib && pTangentsAttrib->IsValid()) glDisableVertexAttribArray(pTangentsAttrib->GetLocation());
-                //if (pUVsAttrib && pUVsAttrib->IsValid()) glDisableVertexAttribArray(pUVsAttrib->GetLocation());
-                //if (pNormalsAttrib && pNormalsAttrib->IsValid()) glDisableVertexAttribArray(pNormalsAttrib->GetLocation());
-                glDisableVertexAttribArray(vertexLoc);
-                printErrors();
-
-                glBindBuffer(GL_ARRAY_BUFFER, 0);
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-                printErrors();
-
-                // glBindBuffer(GL_UNIFORM_BUFFER, 0);
+                glBindVertexArray(0);
                 glUseProgram(0);
-                printErrors();
             }
         }
     };

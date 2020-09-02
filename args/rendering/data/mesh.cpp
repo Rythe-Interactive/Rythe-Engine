@@ -14,6 +14,7 @@ namespace args::rendering
         appendBinaryData(&value.normals, resource->get());
         appendBinaryData(&value.uvs, resource->get());
         appendBinaryData(&value.tangents, resource->get());
+        appendBinaryData(&value.indices, resource->get());
 
         uint64 submeshCount = value.submeshes.size();
         appendBinaryData(&submeshCount, resource->get());
@@ -21,7 +22,8 @@ namespace args::rendering
         for (auto& submesh : value.submeshes)
         {
             appendBinaryData(&submesh.name, resource->get());
-            appendBinaryData(&submesh.indices, resource->get());
+            appendBinaryData(&submesh.indexCount, resource->get());
+            appendBinaryData(&submesh.indexOffset, resource->get());
         }
     }
 
@@ -36,6 +38,7 @@ namespace args::rendering
         retrieveBinaryData(value->normals, start);
         retrieveBinaryData(value->uvs, start);
         retrieveBinaryData(value->tangents, start);
+        retrieveBinaryData(value->indices, start);
 
         uint64 submeshCount;
 
@@ -45,7 +48,8 @@ namespace args::rendering
         {
             submesh_data submesh;
             retrieveBinaryData(submesh.name, start);
-            retrieveBinaryData(submesh.indices, start);
+            retrieveBinaryData(submesh.indexCount, start);
+            retrieveBinaryData(submesh.indexOffset, start);
             value->submeshes.push_back(submesh);
         }
     }
@@ -55,15 +59,15 @@ namespace args::rendering
         data->tangents.resize(data->normals.size());
 
         for (auto& submesh : data->submeshes)
-            for (unsigned i = 0; i < submesh.indices.size(); i += 3)
+            for (unsigned i = submesh.indexOffset; i < submesh.indexOffset + submesh.indexCount; i += 3)
             {
-                math::vec3 vtx0 = data->vertices[submesh.indices[i]];
-                math::vec3 vtx1 = data->vertices[submesh.indices[i + 1]];
-                math::vec3 vtx2 = data->vertices[submesh.indices[i + 2]];
+                math::vec3 vtx0 = data->vertices[data->indices[i]];
+                math::vec3 vtx1 = data->vertices[data->indices[i + 1]];
+                math::vec3 vtx2 = data->vertices[data->indices[i + 2]];
 
-                math::vec2 uv0 = data->uvs[submesh.indices[i]];
-                math::vec2 uv2 = data->uvs[submesh.indices[i + 2]];
-                math::vec2 uv1 = data->uvs[submesh.indices[i + 1]];
+                math::vec2 uv0 = data->uvs[data->indices[i]];
+                math::vec2 uv2 = data->uvs[data->indices[i + 2]];
+                math::vec2 uv1 = data->uvs[data->indices[i + 1]];
 
                 math::vec3 edge0 = vtx1 - vtx0;
                 math::vec3 edge1 = vtx2 - vtx0;
@@ -82,9 +86,9 @@ namespace args::rendering
 
                 tangent = math::normalize(tangent);
 
-                data->tangents[submesh.indices[i]] += tangent;
-                data->tangents[submesh.indices[i + 1]] += tangent;
-                data->tangents[submesh.indices[i + 2]] += tangent;
+                data->tangents[data->indices[i]] += tangent;
+                data->tangents[data->indices[i + 1]] += tangent;
+                data->tangents[data->indices[i + 2]] += tangent;
             }
 
         for (unsigned i = 0; i < data->tangents.size(); i++)
@@ -103,9 +107,9 @@ namespace args::rendering
         return mesh_cache::get_mesh(id).buffered;
     }
 
-    void mesh_handle::buffer_data()
+    void mesh_handle::buffer_data(app::gl_id matrixBuffer)
     {
-        mesh_cache::buffer(id);
+        mesh_cache::buffer(id, matrixBuffer);
     }
 
     inline const mesh_data& mesh_handle::get_data()
@@ -130,7 +134,7 @@ namespace args::rendering
         return *m_meshdata[id];
     }
 
-    void mesh_cache::buffer(id_type id)
+    void mesh_cache::buffer(id_type id, app::gl_id matrixBuffer)
     {
         mesh_data* data;
 
@@ -143,35 +147,56 @@ namespace args::rendering
             async::readonly_guard guard(m_meshLock);
             mesh& mesh = m_meshes[id];
 
-            for (int i = 0; i < mesh.submeshes.size(); i++)
-            {
-                auto& submesh = mesh.submeshes[i];
-                auto& submeshData = data->submeshes[i];
-                submesh.indexCount = submeshData.indices.size();
-                glGenBuffers(1, &submesh.indexBufferId);
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, submesh.indexBufferId);
-                glBufferData(GL_ELEMENT_ARRAY_BUFFER, submeshData.indices.size() * sizeof(unsigned int), submeshData.indices.data(), GL_STATIC_DRAW);
-            }
+            glGenVertexArrays(1, &mesh.vertexArrayId);
+            glBindVertexArray(mesh.vertexArrayId);
 
+            glGenBuffers(1, &mesh.indexBufferId);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, data->indices.size() * sizeof(unsigned int), data->indices.data(), GL_STATIC_DRAW);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
             glGenBuffers(1, &mesh.vertexBufferId);
             glBindBuffer(GL_ARRAY_BUFFER, mesh.vertexBufferId);
             glBufferData(GL_ARRAY_BUFFER, data->vertices.size() * sizeof(math::vec3), data->vertices.data(), GL_STATIC_DRAW);
+            glEnableVertexAttribArray(SV_POSITION);
+            glVertexAttribPointer(SV_POSITION, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
             glGenBuffers(1, &mesh.normalBufferId);
             glBindBuffer(GL_ARRAY_BUFFER, mesh.normalBufferId);
             glBufferData(GL_ARRAY_BUFFER, data->normals.size() * sizeof(math::vec3), data->normals.data(), GL_STATIC_DRAW);
-
-            glGenBuffers(1, &mesh.uvBufferId);
-            glBindBuffer(GL_ARRAY_BUFFER, mesh.uvBufferId);
-            glBufferData(GL_ARRAY_BUFFER, data->uvs.size() * sizeof(math::vec2), data->uvs.data(), GL_STATIC_DRAW);
+            glEnableVertexAttribArray(SV_NORMAL);
+            glVertexAttribPointer(SV_NORMAL, 3, GL_FLOAT, GL_TRUE, 0, 0);
 
             glGenBuffers(1, &mesh.tangentBufferId);
             glBindBuffer(GL_ARRAY_BUFFER, mesh.tangentBufferId);
             glBufferData(GL_ARRAY_BUFFER, data->tangents.size() * sizeof(math::vec3), data->tangents.data(), GL_STATIC_DRAW);
+            glEnableVertexAttribArray(SV_TANGENT);
+            glVertexAttribPointer(SV_TANGENT, 3, GL_FLOAT, GL_TRUE, 0, 0);
+
+            glGenBuffers(1, &mesh.uvBufferId);
+            glBindBuffer(GL_ARRAY_BUFFER, mesh.uvBufferId);
+            glBufferData(GL_ARRAY_BUFFER, data->uvs.size() * sizeof(math::vec2), data->uvs.data(), GL_STATIC_DRAW);
+            glEnableVertexAttribArray(SV_TEXCOORD0);
+            glVertexAttribPointer(SV_TEXCOORD0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+            glBindBuffer(GL_ARRAY_BUFFER, matrixBuffer);
+            glEnableVertexAttribArray(SV_MODELMATRIX + 0);
+            glEnableVertexAttribArray(SV_MODELMATRIX + 1);
+            glEnableVertexAttribArray(SV_MODELMATRIX + 2);
+            glEnableVertexAttribArray(SV_MODELMATRIX + 3);
+
+            glVertexAttribPointer(SV_MODELMATRIX + 0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(math::vec4), (GLvoid*)0);
+            glVertexAttribPointer(SV_MODELMATRIX + 1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(math::vec4), (GLvoid*)(sizeof(math::vec4)));
+            glVertexAttribPointer(SV_MODELMATRIX + 2, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(math::vec4), (GLvoid*)(2 * sizeof(math::vec4)));
+            glVertexAttribPointer(SV_MODELMATRIX + 3, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(math::vec4), (GLvoid*)(3 * sizeof(math::vec4)));
+
+            glVertexAttribDivisor(SV_MODELMATRIX + 0, 1);
+            glVertexAttribDivisor(SV_MODELMATRIX + 1, 1);
+            glVertexAttribDivisor(SV_MODELMATRIX + 2, 1);
+            glVertexAttribDivisor(SV_MODELMATRIX + 3, 1);
 
             glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glBindVertexArray(0);
 
             mesh.buffered = true;
         }
@@ -206,10 +231,9 @@ namespace args::rendering
         mesh mesh{};
 
         for (auto& submeshData : data->submeshes)
-            mesh.submeshes.push_back({ static_cast<uint>(submeshData.indices.size()), 0 });
+            mesh.submeshes.push_back({ static_cast<uint>(submeshData.indexCount), static_cast<uint>(submeshData.indexOffset) });
 
         mesh.buffered = false;
-        //buffer(data, mesh);
 
         {
             async::readwrite_guard guard(m_meshLock);

@@ -135,7 +135,7 @@ namespace args::core
 
     template<typename T>
     void appendBinaryData(T* value, byte_vec& data)
-    {        
+    {
         if constexpr (has_resize<std::remove_const_t<T>, void(const std::size_t)>::value)
         {
             auto first = value->begin();
@@ -147,7 +147,7 @@ namespace args::core
                 data.push_back(reinterpret_cast<const byte*>(&arrSize)[i]);
 
             for (auto it = first; it != last; ++it)
-                    appendBinaryData(&*it, data);
+                appendBinaryData(&*it, data);
         }
         else
         {
@@ -219,5 +219,5 @@ namespace args::core
 
         start += arrSize;
     }
-    
+
 }
