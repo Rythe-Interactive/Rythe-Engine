@@ -83,7 +83,7 @@ namespace args::rendering
             #version 450\n\
 \n\
             in vec3 vertex;\n\
-            layout(location = 4) in mat4 modelMatrix;\n\
+            in mat4 modelMatrix;\n\
             uniform	mat4 viewProjectionMatrix;\n\
 \n\
             void main(void)\n\
@@ -144,9 +144,8 @@ namespace args::rendering
 
             delete[] attribNameData;
 
-            //glBindAttribLocation(shaderId, SV_MODELMATRIX, "modelMatrix");
+            glBindAttribLocation(shaderId, SV_MODELMATRIX, "modelMatrix");
             glBindAttribLocation(shaderId, SV_POSITION, "vertex");
-
             //camPosLoc = glGetUniformLocation(shaderId, "");
             viewProjLoc = glGetUniformLocation(shaderId, "viewProjectionMatrix");
 

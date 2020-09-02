@@ -5,11 +5,11 @@
 #include <unordered_map>
 #include <set>
 
-#define SV_POSITION 0
-#define SV_NORMAL 1
-#define SV_TANGENT 2
-#define SV_TEXCOORD0 3
-#define SV_MODELMATRIX 4
+#define SV_POSITION 4
+#define SV_NORMAL 5
+#define SV_TANGENT 6
+#define SV_TEXCOORD0 7
+#define SV_MODELMATRIX 8
 
 namespace args::rendering
 {
