@@ -36,12 +36,13 @@ namespace args::rendering
 
         void initData(const app::window& window)
         {
-            glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
-            glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glEnable(GL_DEPTH_TEST);
-            glDepthMask(GL_TRUE);
-            glDepthFunc(GL_GREATER);
+            //glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
+            //glEnable(GL_BLEND);
+            //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            //glEnable(GL_DEPTH_TEST);
+            //glDepthMask(GL_TRUE);
+            //glDepthFunc(GL_GREATER);
+            //glEnable(GL_CULL_FACE);
             glDisable(GL_CULL_FACE);
             //glCullFace(GL_BACK);
             //glFrontFace(GL_CW);
@@ -82,12 +83,12 @@ namespace args::rendering
             #version 450\n\
 \n\
             in vec3 vertex;\n\
-            in mat4 modelMatrix;\n\
+            layout(location = 4) in mat4 modelMatrix;\n\
             uniform	mat4 viewProjectionMatrix;\n\
 \n\
             void main(void)\n\
             {\n\
-                gl_Position = viewProjectionMatrix * modelMatrix * vec4(vertex, 1.f);\n\
+                gl_Position = modelMatrix * vec4(vertex, 1.f);\n\
             }";
             int vertShaderLength = strlen(vertexShader);
 
@@ -105,7 +106,7 @@ namespace args::rendering
 
             GLint maxUniformNameLength = 0;
             glGetProgramiv(shaderId, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxUniformNameLength);
-            GLchar uniformNameData[maxUniformNameLength];
+            GLchar* uniformNameData = new GLchar[maxUniformNameLength];
 
             std::vector<std::string> uniformNames;
 
@@ -119,13 +120,15 @@ namespace args::rendering
                 uniformNames.push_back(std::string(uniformNameData));
 
             }
+            
+            delete[] uniformNameData;
 
             GLint numActiveAttribs = 0;
             glGetProgramiv(shaderId, GL_ACTIVE_ATTRIBUTES, &numActiveAttribs);
 
             GLint maxAttribNameLength = 0;
             glGetProgramiv(shaderId, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxAttribNameLength);
-            GLchar attribNameData[maxAttribNameLength];
+            GLchar* attribNameData = new GLchar[maxAttribNameLength];
 
             std::vector<std::string> attibuteNames;
 
@@ -139,7 +142,9 @@ namespace args::rendering
                 attibuteNames.push_back(std::string(attribNameData));
             }
 
-            glBindAttribLocation(shaderId, SV_MODELMATRIX, "modelMatrix");
+            delete[] attribNameData;
+
+            //glBindAttribLocation(shaderId, SV_MODELMATRIX, "modelMatrix");
             glBindAttribLocation(shaderId, SV_POSITION, "vertex");
 
             //camPosLoc = glGetUniformLocation(shaderId, "");
@@ -165,10 +170,12 @@ namespace args::rendering
             auto printErrors = []()
             {
                 GLenum error = glGetError();
-                while (error)
+                int i = 0;
+                while (error || i > 10)
                 {
                     std::cout << error << std::endl;
                     error = glGetError();
+                    i++;
                 }
             };
 
@@ -224,10 +231,13 @@ namespace args::rendering
                 glUniformMatrix4fv(viewProjLoc, 1, GL_FALSE, math::value_ptr(viewProj));
 
                 glBindVertexArray(mesh.vertexArrayId);
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);
 
+                printErrors();
                 for (auto submesh : mesh.submeshes)
-                    glDrawElementsInstanced(GL_TRIANGLES, (GLsizei)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)0, (GLsizei)instances.size());
+                    glDrawElementsInstanced(GL_TRIANGLES, submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)submesh.indexOffset, (GLsizei)instances.size());
 
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
                 glBindVertexArray(0);
                 glUseProgram(0);
             }

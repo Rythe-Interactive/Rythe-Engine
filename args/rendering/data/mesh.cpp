@@ -152,7 +152,7 @@ namespace args::rendering
 
             glGenBuffers(1, &mesh.indexBufferId);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, data->indices.size() * sizeof(unsigned int), data->indices.data(), GL_STATIC_DRAW);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, data->indices.size() * sizeof(uint), data->indices.data(), GL_STATIC_DRAW);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
             glGenBuffers(1, &mesh.vertexBufferId);
@@ -165,13 +165,13 @@ namespace args::rendering
             glBindBuffer(GL_ARRAY_BUFFER, mesh.normalBufferId);
             glBufferData(GL_ARRAY_BUFFER, data->normals.size() * sizeof(math::vec3), data->normals.data(), GL_STATIC_DRAW);
             glEnableVertexAttribArray(SV_NORMAL);
-            glVertexAttribPointer(SV_NORMAL, 3, GL_FLOAT, GL_TRUE, 0, 0);
+            glVertexAttribPointer(SV_NORMAL, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
             glGenBuffers(1, &mesh.tangentBufferId);
             glBindBuffer(GL_ARRAY_BUFFER, mesh.tangentBufferId);
             glBufferData(GL_ARRAY_BUFFER, data->tangents.size() * sizeof(math::vec3), data->tangents.data(), GL_STATIC_DRAW);
             glEnableVertexAttribArray(SV_TANGENT);
-            glVertexAttribPointer(SV_TANGENT, 3, GL_FLOAT, GL_TRUE, 0, 0);
+            glVertexAttribPointer(SV_TANGENT, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
             glGenBuffers(1, &mesh.uvBufferId);
             glBindBuffer(GL_ARRAY_BUFFER, mesh.uvBufferId);
@@ -185,10 +185,10 @@ namespace args::rendering
             glEnableVertexAttribArray(SV_MODELMATRIX + 2);
             glEnableVertexAttribArray(SV_MODELMATRIX + 3);
 
-            glVertexAttribPointer(SV_MODELMATRIX + 0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(math::vec4), (GLvoid*)0);
-            glVertexAttribPointer(SV_MODELMATRIX + 1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(math::vec4), (GLvoid*)(sizeof(math::vec4)));
-            glVertexAttribPointer(SV_MODELMATRIX + 2, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(math::vec4), (GLvoid*)(2 * sizeof(math::vec4)));
-            glVertexAttribPointer(SV_MODELMATRIX + 3, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(math::vec4), (GLvoid*)(3 * sizeof(math::vec4)));
+            glVertexAttribPointer(SV_MODELMATRIX + 0, 4, GL_FLOAT, GL_FALSE, sizeof(math::mat4), (GLvoid*)(0 * sizeof(math::mat4::col_type)));
+            glVertexAttribPointer(SV_MODELMATRIX + 1, 4, GL_FLOAT, GL_FALSE, sizeof(math::mat4), (GLvoid*)(1 * sizeof(math::mat4::col_type)));
+            glVertexAttribPointer(SV_MODELMATRIX + 2, 4, GL_FLOAT, GL_FALSE, sizeof(math::mat4), (GLvoid*)(2 * sizeof(math::mat4::col_type)));
+            glVertexAttribPointer(SV_MODELMATRIX + 3, 4, GL_FLOAT, GL_FALSE, sizeof(math::mat4), (GLvoid*)(3 * sizeof(math::mat4::col_type)));
 
             glVertexAttribDivisor(SV_MODELMATRIX + 0, 1);
             glVertexAttribDivisor(SV_MODELMATRIX + 1, 1);

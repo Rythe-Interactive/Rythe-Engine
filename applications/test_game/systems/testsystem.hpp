@@ -47,11 +47,11 @@ public:
 		auto ent2 = m_ecs->createEntity();
 		auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
 
-		position pos = positionH.read();
+		//position pos = positionH.read();
 
-		pos.z = 10.f;
+		//pos.z = 1.f;
 
-		positionH.write(pos);
+		//positionH.write(pos);
 
 		rotation rot = rotationH.read();
 		rot = math::toQuat(math::inverse(math::lookAtLH(math::vec3(0, 0, -1.f), math::vec3(0, 0, 0), math::vec3(0, 1, 0))));
