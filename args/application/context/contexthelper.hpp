@@ -21,6 +21,8 @@ namespace args::application
     {
     private:
         static std::atomic_bool m_initialized;
+        static async::readonly_rw_spinlock m_initCallbackLock;
+        static multicast_delegate<void()> m_onInit;
 
         static atomic_sparse_map<GLFWwindow*, bool> m_windowInitialized;
 
@@ -30,6 +32,7 @@ namespace args::application
 
         static bool initialized();
         static bool init();
+        static bool addOnInitCallback(delegate<void()> callback);
         static void terminate();
         static int getError(cstring* desc);
         static GLFWmonitor* getPrimaryMonitor();
@@ -68,5 +71,8 @@ namespace args::application
         static GLFWframebuffersizefun setFramebufferSizeCallback(GLFWwindow* window, GLFWframebuffersizefun callback);
         static GLFWwindowcontentscalefun setWindowContentScaleCallback(GLFWwindow* window, GLFWwindowcontentscalefun callback);
         static GLFWjoystickfun setJoystickCallback(GLFWjoystickfun callback);
+        static int getGamepadSate(int jid, GLFWgamepadstate* state);
+        static void updateGamepadMappings(const char*name);
+        static bool joystickPresent(int jid);
     };
 }

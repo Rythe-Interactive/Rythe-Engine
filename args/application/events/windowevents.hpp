@@ -3,6 +3,7 @@
 #include <application/window/window.hpp>
 #include <vector>
 
+
 namespace args::application
 {
     struct window_request final : public events::event<window_request>

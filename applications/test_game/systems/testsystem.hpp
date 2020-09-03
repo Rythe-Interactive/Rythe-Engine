@@ -19,11 +19,14 @@ struct sah
 	}
 };
 
+struct player_move_action : public application::input_axis<player_move_action> {};
+
 class TestSystem final : public System<TestSystem>
 {
 public:
 	virtual void setup()
 	{
+		application::InputSystem::createBinding<player_move_action>(application::inputmap::method::A,-1);
 		auto ent = m_ecs->createEntity();
 		ent.add_component<sah>();
 		auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
@@ -68,6 +71,14 @@ public:
 		createProcess<&TestSystem::update>("Update");
 		createProcess<&TestSystem::differentThread>("TestChain");
 		createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
+	}
+
+	void onPlayerMove(player_move_action* action)
+	{
+        std::cout << action->value << std::endl;
+
+	    if(action->value < 0)
+          std::cout << "Player Move Forward";
 	}
 
 	void update(time::time_span<fast_time> deltaTime)

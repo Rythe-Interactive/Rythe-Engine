@@ -73,7 +73,16 @@
     <ClInclude Include="events\windowevents.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="input\inputsystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="events\windowinputevents.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="events\inputevents.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="input\inputmap.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

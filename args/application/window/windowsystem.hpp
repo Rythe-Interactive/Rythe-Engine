@@ -2,7 +2,7 @@
 #include <application/window/window.hpp>
 #include <application/context/contexthelper.hpp>
 #include <application/events/windowevents.hpp>
-#include <application/events/inputevents.hpp>
+#include "application/events/windowinputevents.hpp"
 
 /**@file windowsystem.hpp
 */
@@ -19,7 +19,7 @@ namespace args::application
             static async::readonly_rw_spinlock m_creationLock;
         };
 
-        ecs::EntityQuery m_windowQuery;
+        ecs::EntityQuery m_windowQuery{};
         bool m_exit = false;
 
         async::readonly_rw_spinlock m_requestLock;
