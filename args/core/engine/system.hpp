@@ -118,7 +118,7 @@ namespace args::core
         template <typename event_type, void(SelfType::* func_type)(event_type*), inherits_from<event_type, events::event<event_type>> = 0>
         void bindToEvent()
         {
-            m_eventBus->bindToEvent<event_type>(delegate<void(event_type*)>::create<SelfType, func_type>((SelfType*)this));
+            m_eventBus->bindToEvent<event_type>(delegate<void(event_type*)>::template create<SelfType, func_type>((SelfType*)this));
         }
 
         template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
