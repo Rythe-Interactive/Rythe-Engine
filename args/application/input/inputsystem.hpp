@@ -282,9 +282,9 @@ namespace args::application
 
             //update all axis with their current values
 
-            for (auto inner_map : m_axes)
+            for (auto& inner_map : m_axes)
             {
-                for (auto [surrogate, value, mods, method] : inner_map)
+                for (auto& [surrogate, value, mods, method] : inner_map)
                 {
                     surrogate(this, value, mods, method);
                 }

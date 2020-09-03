@@ -36,16 +36,15 @@ namespace args::rendering
 
         void initData(const app::window& window)
         {
-            //glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
-            //glEnable(GL_BLEND);
-            //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            //glEnable(GL_DEPTH_TEST);
-            //glDepthMask(GL_TRUE);
-            //glDepthFunc(GL_GREATER);
-            //glEnable(GL_CULL_FACE);
-            glDisable(GL_CULL_FACE);
-            //glCullFace(GL_BACK);
-            //glFrontFace(GL_CW);
+            glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glEnable(GL_DEPTH_TEST);
+            glDepthMask(GL_TRUE);
+            glDepthFunc(GL_GREATER);
+            glEnable(GL_CULL_FACE);
+            glCullFace(GL_BACK);
+            glFrontFace(GL_CW);
             glEnable(GL_MULTISAMPLE);
 
             math::ivec2 viewportSize = app::ContextHelper::getFramebufferSize(window);
@@ -82,13 +81,13 @@ namespace args::rendering
             const char* vertexShader = "\
             #version 450\n\
 \n\
-            in vec3 vertex;\n\
-            in mat4 modelMatrix;\n\
+            layout(location = 8)in vec3 vertex;\n\
+            layout(location = 12)in mat4 modelMatrix;\n\
             uniform	mat4 viewProjectionMatrix;\n\
 \n\
             void main(void)\n\
             {\n\
-                gl_Position = modelMatrix * vec4(vertex, 1.f);\n\
+                gl_Position = viewProjectionMatrix * modelMatrix * vec4(vertex, 1.f);\n\
             }";
             int vertShaderLength = strlen(vertexShader);
 
@@ -144,8 +143,6 @@ namespace args::rendering
 
             delete[] attribNameData;
 
-            glBindAttribLocation(shaderId, SV_MODELMATRIX, "modelMatrix");
-            glBindAttribLocation(shaderId, SV_POSITION, "vertex");
             //camPosLoc = glGetUniformLocation(shaderId, "");
             viewProjLoc = glGetUniformLocation(shaderId, "viewProjectionMatrix");
 

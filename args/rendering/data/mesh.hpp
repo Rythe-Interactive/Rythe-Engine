@@ -5,16 +5,15 @@
 #include <unordered_map>
 #include <set>
 
-#define SV_POSITION 4
-#define SV_NORMAL 5
-#define SV_TANGENT 6
-#define SV_TEXCOORD0 7
-#define SV_MODELMATRIX 8
+#define SV_START 8
+#define SV_POSITION SV_START
+#define SV_NORMAL SV_START + 1
+#define SV_TANGENT SV_START + 2
+#define SV_TEXCOORD0 SV_START + 3
+#define SV_MODELMATRIX SV_START + 4
 
 namespace args::rendering
 {
-    struct attribute;
-
     struct submesh_data
     {
         std::string name;
