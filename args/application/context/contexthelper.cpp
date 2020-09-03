@@ -5,10 +5,14 @@ namespace args::application
     std::atomic_bool ContextHelper::m_initialized;
     atomic_sparse_map<GLFWwindow*, bool> ContextHelper::m_windowInitialized;
 
+    async::readonly_rw_spinlock ContextHelper::m_initCallbackLock;
+    multicast_delegate<void()> ContextHelper::m_onInit;
+
     bool ContextHelper::initialized()
     {
         return m_initialized.load(std::memory_order_acquire);
     }
+
     bool ContextHelper::init()
     {
         glfwSetErrorCallback([](int code, cstring desc)
@@ -18,9 +22,25 @@ namespace args::application
 
         bool success = glfwInit();
         if (success)
+        {
             m_initialized.store(true, std::memory_order_release);
+            async::readonly_guard guard(m_initCallbackLock);
+            m_onInit.invoke();
+        }
 
         return success;
+    }
+
+    bool ContextHelper::addOnInitCallback(delegate<void()> callback)
+    {
+        if (initialized()) {
+            callback();
+            return false;
+        }
+
+        async::readwrite_guard guard(m_initCallbackLock);
+        m_onInit += callback;
+        return true;
     }
 
     void ContextHelper::terminate()
@@ -248,6 +268,22 @@ namespace args::application
     GLFWjoystickfun ContextHelper::setJoystickCallback(GLFWjoystickfun callback)
     {
         return glfwSetJoystickCallback(callback);
+    }
+
+
+    int ContextHelper::getGamepadSate(int jid, GLFWgamepadstate* state)
+    {
+        return glfwGetGamepadState(jid, state);
+    }
+
+    void ContextHelper::updateGamepadMappings(const char* name)
+    {
+        (void)glfwUpdateGamepadMappings(name);
+    }
+
+    bool ContextHelper::joystickPresent(int jid)
+    {
+        return glfwJoystickPresent(jid);
     }
 
 }
