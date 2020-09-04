@@ -3,6 +3,7 @@
 #include <core/types/type_util.hpp>
 #include <core/platform/platform.hpp>
 #include <core/containers/hashed_sparse_set.hpp>
+#include <core/ecs/entity_handle.hpp>
 
 /**
  * @file entityquery.hpp
@@ -12,9 +13,6 @@ namespace args::core::ecs
 {
 	class ARGS_API QueryRegistry;
 	class ARGS_API EcsRegistry;
-	class ARGS_API entity_handle;
-
-    using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
 
 	/**@class EntityQuery
 	 * @brief Handle to an entity query. Allows you to acquire a list all of entities with a certain component combination.
