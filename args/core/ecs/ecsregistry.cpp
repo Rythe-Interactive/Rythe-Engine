@@ -117,7 +117,7 @@ namespace args::core::ecs
 
         {
             async::readwrite_guard guard(m_entityDataLock);  // We need write permission now because we hope to insert a new item.
-            m_entityData[id] = {};
+            m_entityData[id] = entity_data{};
         }
 
         async::readwrite_guard guard(m_entityLock); // No scope needed because we also need read permission in the return line.

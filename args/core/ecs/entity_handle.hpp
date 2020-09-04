@@ -16,10 +16,6 @@ namespace args::core::ecs
 	template<typename component_type>
 	class component_handle;
 
-    class ARGS_API entity_handle;
-
-    using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
-
 	/**@class entity_handle
 	 * @brief Serializable handle for executing operations on entities.
 	 *		  This class only stores a reference to the registry and the id of the entity.
@@ -31,6 +27,7 @@ namespace args::core::ecs
 	private:
 		id_type m_id;
 		EcsRegistry* m_registry;
+        using set_type = hashed_sparse_set<entity_handle, std::hash<id_type>>;
 
 	public:
 		/**@brief Main constructor for constructing a valid entity handle.
@@ -73,13 +70,13 @@ namespace args::core::ecs
 		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
 		 * @throws args_entity_not_found_error Thrown when handle's id is invalid.
 		 */
-		A_NODISCARD entity_set::const_iterator begin() const;
+		A_NODISCARD set_type::const_iterator begin() const;
 
 		/**@brief Const iterator to last child entity. (dereferences to entity handle)
 		 * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
 		 * @throws args_entity_not_found_error Thrown when handle's id is invalid.
 		 */
-		A_NODISCARD entity_set::const_iterator end() const;
+		A_NODISCARD set_type::const_iterator end() const;
 
 		/**@brief Returns entity handle to parent entity.
 		 * @returns entity_handle Entity handle that either points to the parent entity or is invalid if the entity doesn't have a parent.
@@ -224,4 +221,6 @@ namespace args::core::ecs
 		 */
 		bool valid() const;
 	};
+
+    using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
 }
