@@ -14,14 +14,12 @@
     <ClCompile Include="data\importers\mesh_importers.cpp" />
     <ClCompile Include="data\importers\texture_importers.cpp" />
     <ClCompile Include="data\mesh.cpp" />
-    <ClCompile Include="data\shader.cpp" />
     <ClCompile Include="data\texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\camera.hpp" />
     <ClInclude Include="components\renderable.hpp" />
     <ClInclude Include="data\importers\texture_importers.hpp" />
-    <ClInclude Include="data\shader.hpp" />
     <ClInclude Include="detail\engine_include.hpp" />
     <ClInclude Include="detail\stb_image.h" />
     <ClInclude Include="detail\tiny_obj_loader.h" />
