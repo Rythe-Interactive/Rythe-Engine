@@ -98,3 +98,4 @@ bld/
 
 # Windows Preview files
 **/Thumbs.db
+*.xcf

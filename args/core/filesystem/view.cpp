@@ -1,5 +1,7 @@
 #include <algorithm>
 #include <core/filesystem/view.hpp>
+#include <filesystem>
+
 #include "navigator.hpp"
 #include "provider_registry.hpp"
 #include "detail/strpath_manip.hpp"
@@ -20,7 +22,7 @@ namespace args::core::filesystem
 
         //if deep checking also check if the path meets the requirements of the
         //navigator system
-        if(deep_check)
+        if (deep_check)
         {
             const navigator n(m_path);
             if (n.find_solution().has_err()) return false;
@@ -29,7 +31,7 @@ namespace args::core::filesystem
         return true;
     }
 
-    file_traits view::file_info()
+    file_traits view::file_info() const
     {
         //get solution
         auto result = make_solution();
@@ -47,7 +49,7 @@ namespace args::core::filesystem
 
     }
 
-    filesystem_traits view::filesystem_info()
+    filesystem_traits view::filesystem_info() const
     {
         //get solution
         auto result = make_solution();
@@ -71,6 +73,39 @@ namespace args::core::filesystem
         return m_path.substr(0, idx + 1) + strpath_manip::separator() + strpath_manip::separator();
     }
 
+    A_NODISCARD const std::string& view::get_path() const
+    {
+        return m_path;
+    }
+
+    A_NODISCARD common::result_decay_more<std::string, fs_error> view::get_extension() const
+    {
+        using common::Err, common::Ok;
+        // decay overloads the operator of ok_type and operator== for valid_t.
+        using decay = common::result_decay_more<std::string, fs_error>;
+
+        if (!file_info().is_file) // check if the view is a file.
+            return decay(Err(args_fs_error("requested file extension on view that isn't a file.")));
+
+        std::filesystem::path path(m_path);
+
+        return decay(Ok(path.extension().string())); // wrap extension in decay.
+    }
+
+    A_NODISCARD common::result_decay_more<std::string, fs_error> view::get_filename() const
+    {
+        using common::Err, common::Ok;
+        // decay overloads the operator of ok_type and operator== for valid_t.
+        using decay = common::result_decay_more<std::string, fs_error>;
+
+        if (!file_info().is_file) // check if the view is a file.
+            return decay(Err(args_fs_error("requested file name on view that isn't a file.")));
+
+        std::filesystem::path path(m_path);
+
+        return decay(Ok(path.filename().string())); // wrap extension in decay.
+    }
+
     common::result_decay_more<basic_resource, fs_error> view::get()
     {
         using common::Err, common::Ok;
@@ -92,6 +127,31 @@ namespace args::core::filesystem
         {
             //wrap get in decay
             return decay(resolver->get());
+        }
+        return decay(Err(args_fs_error("invalid file traits: (not valid) or (does not exist) or (cannot be read)")));
+    }
+
+    A_NODISCARD common::result_decay_more<const basic_resource, fs_error> view::get() const
+    {
+        using common::Err, common::Ok;
+
+        //decay overloads the operator of ok_type and operator== for valid_t
+        using decay = common::result_decay_more<const basic_resource, fs_error>;
+
+        //get solution
+        auto result = make_solution();
+        if (result.has_err()) Err(result.get_error());
+
+        //get resolver of solution
+        auto resolver = build();
+        if (resolver == nullptr) return decay(Err(args_fs_error("unable to get required filesystem to get resource!")));
+
+        //get & check traits
+        const auto traits = resolver->get_traits();
+        if (traits.is_valid && traits.exists && traits.can_be_read)
+        {
+            //wrap get in decay
+            return decay(std::const_pointer_cast<const filesystem_resolver>(resolver)->get());
         }
         return decay(Err(args_fs_error("invalid file traits: (not valid) or (does not exist) or (cannot be read)")));
     }
@@ -146,7 +206,7 @@ namespace args::core::filesystem
         return find(identifier);
     }
 
-    std::string view::create_identifier(const navigator::solution::iterator& e)
+    std::string view::create_identifier(const navigator::solution::iterator& e) const
     {
         //iterate through path and create the ident for the provider
         std::string result;
@@ -159,7 +219,7 @@ namespace args::core::filesystem
 
     //TODO(algo-ryth-mix): the navigator should probably return a more efficient
     //TODO(cont.)          representation to begin with
-    std::shared_ptr<filesystem_resolver> view::build()
+    std::shared_ptr<filesystem_resolver> view::build() const
     {
         //first check if a solution even exists
         if (m_foundSolution.size() == 0)
@@ -211,7 +271,7 @@ namespace args::core::filesystem
     }
 
 
-    void view::make_inheritance()
+    void view::make_inheritance() const
     {
 
         //make all higher level fs inherit the traits from the lower level
@@ -221,7 +281,7 @@ namespace args::core::filesystem
         }
     }
 
-    std::shared_ptr<view::create_chain> view::translate_solution()
+    std::shared_ptr<view::create_chain> view::translate_solution() const
     {
         //this is a more approachable representation
          //of the solution
@@ -287,7 +347,7 @@ namespace args::core::filesystem
         return chain;
     }
 
-    common::result<void, fs_error> view::make_solution()
+    common::result<void, fs_error> view::make_solution() const
     {
         using common::Ok;
 

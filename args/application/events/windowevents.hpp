@@ -19,7 +19,7 @@ namespace args::application
         window_request(id_type entityId, math::ivec2 size, cstring name, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
             : entityId(entityId), size(size), name(name), monitor(monitor), share(share), swapInterval(swapInterval), hints(hints)
         {}
-        window_request(id_type entityId = invalid_id, math::ivec2 size = { 400, 400 }, cstring name = "<Args> Engine", GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 1)
+        window_request(id_type entityId = invalid_id, math::ivec2 size = { 400, 400 }, cstring name = "<Args> Engine", GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0)
             : entityId(entityId), size(size), name(name), monitor(monitor), share(share), swapInterval(swapInterval)
         {}
 

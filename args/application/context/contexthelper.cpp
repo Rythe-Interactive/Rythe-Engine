@@ -86,6 +86,94 @@ namespace args::application
         {
             std::cout << "Failed to load OpenGL" << std::endl;
         }
+        else
+        {
+            glEnable(GL_DEBUG_OUTPUT);
+            glDebugMessageCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+                {
+                    cstring s;
+                    switch (source)
+                    {
+                    case GL_DEBUG_SOURCE_API:
+                        s = "GL_DEBUG_SOURCE_API";
+                        break;
+                    case GL_DEBUG_SOURCE_SHADER_COMPILER:
+                        s = "GL_DEBUG_SOURCE_SHADER_COMPILER";
+                        break;
+                    case GL_DEBUG_SOURCE_THIRD_PARTY:
+                        s = "GL_DEBUG_SOURCE_THIRD_PARTY";
+                        break;
+                    case GL_DEBUG_SOURCE_APPLICATION:
+                        s = "GL_DEBUG_SOURCE_APPLICATION";
+                        break;
+                    case GL_DEBUG_SOURCE_OTHER:
+                        s = "GL_DEBUG_SOURCE_OTHER";
+                        break;
+                    default:
+                        s = "UNKNOWN SOURCE";
+                        break;
+                    }
+
+                    cstring t;
+
+                    switch (type)
+                    {
+                    case GL_DEBUG_TYPE_ERROR:
+                        t = "GL_DEBUG_TYPE_ERROR";
+                        break;
+                    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+                        t = "GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR";
+                        break;
+                    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+                        t = "GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR";
+                        break;
+                    case GL_DEBUG_TYPE_PERFORMANCE:
+                        t = "GL_DEBUG_TYPE_PERFORMANCE";
+                        break;
+                    case GL_DEBUG_TYPE_PORTABILITY:
+                        t = "GL_DEBUG_TYPE_PORTABILITY";
+                        break;
+                    case GL_DEBUG_TYPE_MARKER:
+                        t = "GL_DEBUG_TYPE_MARKER";
+                        break;
+                    case GL_DEBUG_TYPE_PUSH_GROUP:
+                        t = "GL_DEBUG_TYPE_PUSH_GROUP";
+                        break;
+                    case GL_DEBUG_TYPE_POP_GROUP:
+                        t = "GL_DEBUG_TYPE_POP_GROUP";
+                        break;
+                    case GL_DEBUG_TYPE_OTHER:
+                        t = "GL_DEBUG_TYPE_OTHER";
+                        break;
+                    default:
+                        t = "UNKNOWN TYPE";
+                        break;
+                    }
+
+                    cstring sev;
+                    switch (severity)
+                    {
+                    case GL_DEBUG_SEVERITY_HIGH:
+                        sev = "GL_DEBUG_SEVERITY_HIGH ";
+                        break;
+                    case GL_DEBUG_SEVERITY_MEDIUM:
+                        sev = "GL_DEBUG_SEVERITY_MEDIUM ";
+                        break;
+                    case GL_DEBUG_SEVERITY_LOW:
+                        sev = "GL_DEBUG_SEVERITY_LOW ";
+                        break;
+                    case GL_DEBUG_SEVERITY_NOTIFICATION:
+                        sev = "GL_DEBUG_SEVERITY_NOTIFICATION ";
+                        break;
+                    default:
+                        sev = "UNKNOWN SEVERITY";
+                        break;
+                    }
+
+
+                    std::printf("GL CALLBACK: %s source = %s type = %s, severity = %s, message = %s\n", (type == GL_DEBUG_TYPE_ERROR ? " GL ERROR " : ""), s, t, sev, message);
+                }, nullptr);
+        }
 
         std::cout << "loaded OpenGL version: " << GLVersion.major << '.' << GLVersion.minor << std::endl;
 
@@ -273,7 +361,9 @@ namespace args::application
 
     int ContextHelper::getGamepadSate(int jid, GLFWgamepadstate* state)
     {
-        return glfwGetGamepadState(jid, state);
+        if (initialized())
+            return glfwGetGamepadState(jid, state);
+        return 0;
     }
 
     void ContextHelper::updateGamepadMappings(const char* name)

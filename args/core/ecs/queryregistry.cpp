@@ -17,23 +17,23 @@ namespace args::core::ecs
 		}
 
 		// First we need to erase all the entities that no longer apply to the new query.
-		std::vector<id_type> toRemove;
+		std::vector<entity_handle> toRemove;
 
 		{
 			async::readonly_multiguard mguard(m_entityLock, m_componentLock);
 			for (int i = 0; i < m_entityLists[queryId]->size(); i++) // Iterate over all tracked entities.
 			{
-				id_type entityId = m_entityLists[queryId]->keys()[i]; // Get the id from the keys of the map.
-				if (!m_registry.getEntityData(entityId).components.contains(m_componentTypes[queryId])) // Check component composition
-					toRemove.push_back(entityId); // Mark for erasure if the component composition doesn't overlap with the query.
+                entity_handle entity = m_entityLists[queryId]->at(i); // Get the id from the keys of the map.
+				if (!m_registry.getEntityData(entity).components.contains(m_componentTypes[queryId])) // Check component composition
+					toRemove.push_back(entity); // Mark for erasure if the component composition doesn't overlap with the query.
 			}
 		}
 
 		if (toRemove.size() > 0)
 		{
 			async::readwrite_guard guard(m_entityLock);
-			for (id_type entityId : toRemove)
-				m_entityLists[queryId]->erase(entityId); // Erase all entities marked for erasure.
+			for (entity_handle entity : toRemove)
+				m_entityLists[queryId]->erase(entity); // Erase all entities marked for erasure.
 		}
 
 		// Next we need to filter through all the entities to get all the new ones that apply to the new query.
@@ -41,13 +41,13 @@ namespace args::core::ecs
 		auto [entities, entitiesLock] = m_registry.getEntities(); // getEntities returns a pair of both the container as well as the lock that should be locked by you when operating on it.
 		async::mixed_multiguard mguard(entitiesLock, async::read, m_componentLock, async::read, m_entityLock, async::write); // Lock locks.
 
-		for (id_type entityId : entities.keys()) // Iterate over all entities.
+		for (entity_handle entity : entities.dense()) // Iterate over all entities.
 		{
-			if (m_entityLists[queryId]->contains(entityId)) // If the entity is already tracked, continue to the next entity.
+			if (m_entityLists[queryId]->contains(entity)) // If the entity is already tracked, continue to the next entity.
 				continue;
 
-			if (m_registry.getEntityData(entityId).components.contains(m_componentTypes[queryId])) // Check if the queried components completely overlaps the components in the entity.
-				m_entityLists[queryId]->insert(entityId, entities[entityId]); // Insert entity into tracking list.
+			if (m_registry.getEntityData(entity).components.contains(m_componentTypes[queryId])) // Check if the queried components completely overlaps the components in the entity.
+				m_entityLists[queryId]->insert(entity); // Insert entity into tracking list.
 		}
 	}
 
@@ -59,27 +59,29 @@ namespace args::core::ecs
 		}
 
 		// Then we remove all the entities that no longer overlap with the query.
-		std::vector<id_type> toRemove;
+		std::vector<entity_handle> toRemove;
 
 		{
 			async::readonly_multiguard mguard(m_entityLock, m_componentLock);
 			for (int i = 0; i < m_entityLists[queryId]->size(); i++) // Iterate over all tracked entities.
 			{
-				id_type entityId = m_entityLists[queryId]->keys()[i]; // Get the id from the keys of the map.
-				if (!m_registry.getEntity(entityId).component_composition().contains(m_componentTypes[queryId])) // Check component composition
-					toRemove.push_back(entityId); // Mark for erasure if the component composition doesn't overlap with the query.
+				entity_handle entity = m_entityLists[queryId]->at(i); // Get the id from the keys of the map.
+				if (!m_registry.getEntity(entity).component_composition().contains(m_componentTypes[queryId])) // Check component composition
+					toRemove.push_back(entity); // Mark for erasure if the component composition doesn't overlap with the query.
 			}
 		}
 
 		{
 			async::readwrite_guard guard(m_entityLock);
-			for (id_type entityId : toRemove)
-				m_entityLists[queryId]->erase(entityId); // Erase all entities marked for erasure.
+			for (entity_handle entity : toRemove)
+				m_entityLists[queryId]->erase(entity); // Erase all entities marked for erasure.
 		}
 	}
 
 	inline void QueryRegistry::evaluateEntityChange(id_type entityId, id_type componentTypeId, bool removal)
 	{
+        entity_handle entity(entityId, &m_registry);
+
 		async::mixed_multiguard mmguard(m_entityLock, async::write, m_componentLock, async::read); // We lock now so that we don't need to reacquire the locks every iteration.
 
 		for (int i = 1; i <= m_entityLists.size(); i++)
@@ -87,27 +89,29 @@ namespace args::core::ecs
 			if (!m_componentTypes[i].contains(componentTypeId)) // This query doesn't care about this component type.
 				continue;
 
-			if (m_entityLists[i]->contains(entityId))
+			if (m_entityLists[i]->contains(entity))
 			{
 				if (removal)
 				{
-					m_entityLists[i]->erase(entityId); // Erase the entity from the query's tracking list if the component was removed from the entity.
+					m_entityLists[i]->erase(entity); // Erase the entity from the query's tracking list if the component was removed from the entity.
 					continue;
 				}
 			}
 			else if (m_registry.getEntityData(entityId).components.contains(m_componentTypes[i]))
 			{
-				m_entityLists[i]->insert(entityId, m_registry.getEntity(entityId)); // If the entity also contains all the other required components for this query, then add this entity to the tracking list.
+				m_entityLists[i]->insert(entity); // If the entity also contains all the other required components for this query, then add this entity to the tracking list.
 			}
 		}
 	}
 
 	inline void QueryRegistry::markEntityDestruction(id_type entityId)
 	{
+        entity_handle entity(entityId, &m_registry);
+
 		async::readwrite_guard guard(m_entityLock);
 		for (int i = 0; i < m_entityLists.size(); i++) // Iterate over all query tracking lists.
-			if (m_entityLists[i]->contains(entityId))
-				m_entityLists[i]->erase(entityId); // Erase entity from tracking list if it's present.
+			if (m_entityLists[i]->contains(entity))
+				m_entityLists[i]->erase(entity); // Erase entity from tracking list if it's present.
 	}
 
 	inline id_type QueryRegistry::getQueryId(const hashed_sparse_set<id_type>& componentTypes)
@@ -149,7 +153,7 @@ namespace args::core::ecs
             async::readwrite_multiguard mguard(m_referenceLock, m_entityLock, m_componentLock);
 
 			queryId = m_lastQueryId++;
-			m_entityLists.insert(queryId, new sparse_map<id_type, entity_handle>()); // Create a new entity tracking list.
+			m_entityLists.insert(queryId, new entity_set()); // Create a new entity tracking list.
 
 			m_references.emplace(queryId); // Create a new reference count.
 
@@ -160,15 +164,15 @@ namespace args::core::ecs
 			auto [entities, entitiesLock] = m_registry.getEntities(); // getEntities returns a pair of both the container as well as the lock that should be locked by you when operating on it.
 			async::mixed_multiguard mguard(entitiesLock, async::read, m_componentLock, async::read, m_entityLock, async::write); // Lock locks.
 
-			for (id_type entityId : entities.keys()) // Iterate over all entities.
-				if (m_registry.getEntityData(entityId).components.contains(m_componentTypes[queryId])) // Check if the queried components completely overlaps the components in the entity.
-					m_entityLists[queryId]->insert(entityId, entities[entityId]); // Insert entity into tracking list.
+			for (entity_handle entity : entities.dense()) // Iterate over all entities.
+				if (m_registry.getEntityData(entity).components.contains(m_componentTypes[queryId])) // Check if the queried components completely overlaps the components in the entity.
+					m_entityLists[queryId]->insert(entity); // Insert entity into tracking list.
 		}
 
         return queryId;
 	}
 
-	inline const sparse_map<id_type, entity_handle>& QueryRegistry::getEntities(id_type queryId)
+	inline const entity_set& QueryRegistry::getEntities(id_type queryId)
 	{
 		async::readonly_guard entguard(m_entityLock);
 

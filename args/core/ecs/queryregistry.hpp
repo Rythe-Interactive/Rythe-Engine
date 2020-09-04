@@ -14,6 +14,8 @@ namespace args::core::ecs
     class ARGS_API EcsRegistry;
     class ARGS_API entity_handle;
 
+    using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
+
     /**@class QueryRegistry
      * @brief Main manager and owner of all queries and query related objects.
      */
@@ -23,7 +25,7 @@ namespace args::core::ecs
     private:
         EcsRegistry& m_registry;
         async::readonly_rw_spinlock m_entityLock;
-        sparse_map<id_type, sparse_map<id_type, entity_handle>*> m_entityLists;
+        sparse_map<id_type, entity_set*> m_entityLists;
         async::readonly_rw_spinlock m_referenceLock;
         sparse_map<id_type, size_type> m_references;
         async::readonly_rw_spinlock m_componentLock;
@@ -121,7 +123,7 @@ namespace args::core::ecs
          * @param queryId Id of the query to get the entities from.
          * @return sparse_map<id_type, entity_handle>& Sparse map with the ids as the key and the handles as the value.
          */
-        const sparse_map<id_type, entity_handle>& getEntities(id_type queryId);
+        const entity_set& getEntities(id_type queryId);
 
         /**@brief Add to reference count of a query.
          * @param queryId Id of query to increase reference count of.
