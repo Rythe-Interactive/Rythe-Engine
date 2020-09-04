@@ -21,7 +21,7 @@ namespace args::application
 
         virtual priority_type priority() override
         {
-            return 10;
+            return 100;
         }
 
     };

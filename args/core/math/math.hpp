@@ -1,4 +1,8 @@
+#define GLM_SWIZZLE
+#define GLM_ENABLE_EXPERIMENTAL
 #include "glm/glm.hpp"
+#include "glm/ext.hpp"
+
 #include <core/math/constants.hpp>
 #include <core/math/trigonometry.hpp>
 

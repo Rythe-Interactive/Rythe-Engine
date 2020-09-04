@@ -19,6 +19,8 @@
 #include <core/events/events.hpp>
 #include <core/entry/entry_point.hpp>
 
+#include <core/filesystem/filesystem.hpp>
+
 namespace args
 {
     using namespace core;

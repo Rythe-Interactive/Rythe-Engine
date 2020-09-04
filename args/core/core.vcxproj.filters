@@ -16,6 +16,9 @@
     <ClCompile Include="scheduling\processchain.cpp" />
     <ClCompile Include="scheduling\scheduler.cpp" />
     <ClCompile Include="math\glm\detail\glm.cpp" />
+    <ClCompile Include="filesystem\filemanip.cpp" />
+    <ClCompile Include="filesystem\assetimporter.cpp" />
+    <ClCompile Include="async\readonly_rw_spinlock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -369,6 +372,10 @@
     <ClInclude Include="math\glm\vec4.hpp" />
     <ClInclude Include="math\glm\vector_relational.hpp" />
     <ClInclude Include="platform\args_library.hpp" />
+    <ClInclude Include="filesystem\assetimporter.hpp" />
+    <ClInclude Include="defaults\coremodule.hpp" />
+    <ClInclude Include="defaults\defaultcomponents.hpp" />
+    <ClInclude Include="ecs\archetype.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">
@@ -513,5 +520,6 @@
     <None Include="math\glm\gtx\vector_angle.inl" />
     <None Include="math\glm\gtx\vector_query.inl" />
     <None Include="math\glm\gtx\wrap.inl" />
+    <None Include="ecs\archetype.inl" />
   </ItemGroup>
 </Project>

@@ -6,6 +6,7 @@
 #include <core/ecs/ecsregistry.hpp>
 #include <core/scheduling/scheduler.hpp>
 #include <core/events/eventbus.hpp>
+#include <core/defaults/coremodule.hpp>
 
 #include <map>
 #include <vector>
@@ -36,7 +37,10 @@ namespace args::core
 		scheduling::Scheduler m_scheduler;
 
 	public:
-		Engine() : m_modules(), m_eventbus(), m_ecs(&m_eventbus), m_scheduler(&m_eventbus) {}
+		Engine() : m_modules(), m_eventbus(), m_ecs(&m_eventbus), m_scheduler(&m_eventbus)
+        {
+            reportModule<CoreModule>();
+        }
 
 		~Engine()
 		{

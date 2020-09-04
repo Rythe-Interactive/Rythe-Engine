@@ -53,12 +53,12 @@ namespace args::core::ecs
         }
     }
 
-    sparse_map<id_type, entity_handle>::const_iterator EntityQuery::begin() const
+    entity_set::const_iterator EntityQuery::begin() const
     {
         return m_registry->getEntities(m_id).begin();
     }
 
-    sparse_map<id_type, entity_handle>::const_iterator EntityQuery::end() const
+    entity_set::const_iterator EntityQuery::end() const
     {
         return m_registry->getEntities(m_id).end();
     }

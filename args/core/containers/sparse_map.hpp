@@ -363,7 +363,7 @@ namespace args::core
 					reserve(m_size + 1);
 
 				auto itr_value = m_dense_value.begin() + m_size;
-				*itr_value = std::forward<value_type>(value_type(arguments...));
+				*itr_value = value_type(arguments...);
 
 				auto itr_key = m_dense_key.begin() + m_size;
 				*itr_key = key;
@@ -390,7 +390,7 @@ namespace args::core
 					reserve(m_size + 1);
 
 				auto itr_value = m_dense_value.begin() + m_size;
-				*itr_value = std::forward<value_type>(value_type(arguments...));
+				*itr_value = value_type(arguments...);
 
 				auto itr_key = m_dense_key.begin() + m_size;
 				*itr_key = std::move(key);
@@ -418,7 +418,7 @@ namespace args::core
 					reserve(m_size + 1);
 
 				auto itr_value = m_dense_value.begin() + m_size;
-				*itr_value = std::forward<value_type>(value_type());
+				*itr_value = value_type();
 
 				auto itr_key = m_dense_key.begin() + m_size; // Find iterator location at which to store the key.
 				*itr_key = std::move(key); // Move the key into the location.
@@ -443,7 +443,7 @@ namespace args::core
 					reserve(m_size + 1);
 
 				auto itr_value = m_dense_value.begin() + m_size;
-				*itr_value = std::forward<value_type>(value_type());
+				*itr_value = value_type();
 
 				auto itr_key = m_dense_key.begin() + m_size;
 				*itr_key = key;

@@ -32,7 +32,14 @@ namespace args::core::filesystem {
     }
 
 
-    common::result<basic_resource, fs_error> filesystem_resolver::get() const noexcept
+    common::result<basic_resource, fs_error> filesystem_resolver::get() noexcept
+    {
+        //this interface might change on a library basis
+        //to avoid breaking the code the user has to implement a different method
+        return get(interfaces::implement_signal_t{});
+    }
+
+    common::result<const basic_resource, fs_error> filesystem_resolver::get() const noexcept
     {
         //this interface might change on a library basis
         //to avoid breaking the code the user has to implement a different method

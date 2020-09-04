@@ -2,7 +2,8 @@
 #include <core/types/primitives.hpp>
 #include <core/types/type_util.hpp>
 #include <core/platform/platform.hpp>
-#include <core/containers/sparse_map.hpp>
+#include <core/containers/hashed_sparse_set.hpp>
+#include <core/ecs/entity_handle.hpp>
 
 /**
  * @file entityquery.hpp
@@ -12,7 +13,6 @@ namespace args::core::ecs
 {
 	class ARGS_API QueryRegistry;
 	class ARGS_API EcsRegistry;
-	class ARGS_API entity_handle;
 
 	/**@class EntityQuery
 	 * @brief Handle to an entity query. Allows you to acquire a list all of entities with a certain component combination.
@@ -37,11 +37,11 @@ namespace args::core::ecs
 
 		/**@brief Get begin iterator for entity handles to the queried entities.
 		 */
-		sparse_map<id_type, entity_handle>::const_iterator begin() const;
+        entity_set::const_iterator begin() const;
 
 		/**@brief Get end iterator for entity handles to the queried entities.
 		 */
-		sparse_map<id_type, entity_handle>::const_iterator end() const;
+        entity_set::const_iterator end() const;
 
 		/**@brief Get query id.
 		 */

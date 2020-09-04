@@ -42,20 +42,35 @@ namespace args::core::filesystem
 
         /** @brief Gets the traits of the file pointed to.
          */
-        A_NODISCARD file_traits file_info();
+        A_NODISCARD file_traits file_info() const;
 
         /** @brief Gets the traits of the top most filesystem pointed to.
          */
-        A_NODISCARD filesystem_traits filesystem_info();
+        A_NODISCARD filesystem_traits filesystem_info() const;
 
         /** @brief Gets the root domain.
          */
         A_NODISCARD std::string get_domain() const;
 
+        /**@brief Gets full path.
+         */
+        A_NODISCARD const std::string& get_path() const;
+
+        /**@brief Gets file extension if applicable.
+         *  @note You can use args::common::valid to check for validity.
+         */
+        A_NODISCARD common::result_decay_more<std::string, fs_error> get_extension() const;
+
+        /**@brief Gets file name if applicable.
+         *  @note You can use args::common::valid to check for validity.
+         */
+        A_NODISCARD common::result_decay_more<std::string, fs_error> get_filename() const;
+
         /** @brief Gets the contents of the resource pointed to.
          *  @note You can use args::common::valid to check for validity.
          */
         A_NODISCARD common::result_decay_more<basic_resource,fs_error> get();
+        A_NODISCARD common::result_decay_more<const basic_resource,fs_error> get() const;
 
 
         /** @brief Sets the contents of the resource pointed to.
@@ -91,8 +106,8 @@ namespace args::core::filesystem
         view() = default;
         std::string m_path;
 
-        std::string create_identifier(const navigator::solution::iterator&);
-        std::shared_ptr<filesystem_resolver> build();
+        std::string create_identifier(const navigator::solution::iterator&) const;
+        std::shared_ptr<filesystem_resolver> build() const;
 
         struct create_chain
         {
@@ -102,13 +117,13 @@ namespace args::core::filesystem
             std::shared_ptr<create_chain> next; //next in chain
         };
 
-        void make_inheritance();
-        std::shared_ptr<create_chain> translate_solution();
+        void make_inheritance() const;
+        std::shared_ptr<create_chain> translate_solution() const;
 
 
-        common::result<void,fs_error> make_solution();
+        common::result<void,fs_error> make_solution() const;
 
-        navigator::solution m_foundSolution{};
+        mutable navigator::solution m_foundSolution{};
     };
 
 
