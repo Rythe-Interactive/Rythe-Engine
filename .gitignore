@@ -11,6 +11,9 @@ mono_crash.*
 # Visual Studio 2015/2017 cache/options directory
 .vs/
 
+# Visual Studio code files
+.vscode/
+
 # Visual C++ cache files
 ipch/
 *.aps
@@ -89,4 +92,10 @@ bld/
 
 # Word temporary files
 ~$*.*
+
+# linux Makefiles
+**/Makefile
+
+# Windows Preview files
 **/Thumbs.db
+*.xcf

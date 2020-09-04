@@ -11,15 +11,24 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="delete_this.cpp" />
+    <ClCompile Include="data\importers\mesh_importers.cpp" />
+    <ClCompile Include="data\importers\texture_importers.cpp" />
+    <ClCompile Include="data\mesh.cpp" />
+    <ClCompile Include="data\texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\application\application.vcxproj">
-      <Project>{ab3d3a2d-6510-4345-9d34-0222e46110e6}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\core\core.vcxproj">
-      <Project>{63d0d607-e99e-40b0-9b27-6e2430b57f7e}</Project>
-    </ProjectReference>
+    <ClInclude Include="components\camera.hpp" />
+    <ClInclude Include="components\renderable.hpp" />
+    <ClInclude Include="data\importers\texture_importers.hpp" />
+    <ClInclude Include="detail\engine_include.hpp" />
+    <ClInclude Include="detail\stb_image.h" />
+    <ClInclude Include="detail\tiny_obj_loader.h" />
+    <ClInclude Include="data\importers\mesh_importers.hpp" />
+    <ClInclude Include="data\mesh.hpp" />
+    <ClInclude Include="data\texture.hpp" />
+    <ClInclude Include="module\renderingmodule.hpp" />
+    <ClInclude Include="rendering.hpp" />
+    <ClInclude Include="systems\renderer.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

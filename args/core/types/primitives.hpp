@@ -1,9 +1,10 @@
 #pragma once
+#ifndef _MSC_VER
 #include <cstdint> //linux std::(u)int(8-64)_t
+#else
 #include <cstddef> //msc   std::(u)int(8-64)_t
+#endif
 #include <vector>  //      std::vector<T>
-#include <string>
-#include <cstring>
 
 namespace args::core
 {
@@ -22,6 +23,12 @@ namespace args::core
 	using size_type = std::size_t;
 	using index_type = std::size_t;
 
+	using f32 = float;
+	using f64 = double;
+
+	using f80 = long double;
+
+	
 	using time32 = float;
 	using time64 = double;
 
@@ -33,8 +40,11 @@ namespace args::core
     using byte_vec = std::vector<byte>;
 
 	using priority_type = uint8;
+#define default_priority 0
+#define PRIORITY_MAX UCHAR_MAX
 
 	using id_type = uint_max;
+
 #define invalid_id 0
 
 	using hours = time32;
@@ -49,6 +59,7 @@ namespace args::core
 	using fast_seconds = fast_time;
 	using fast_milli_seconds = fast_time;
 	using fast_micro_seconds = fast_time;
+	using fast_nano_seconds = fast_time;
 
 	using precise_time = time64;
 	using precise_hours = precise_time;
@@ -56,4 +67,5 @@ namespace args::core
 	using precise_seconds = precise_time;
 	using precise_milli_seconds = precise_time;
 	using precise_micro_seconds = precise_time;
+	using precise_nano_seconds = precise_time;
 }

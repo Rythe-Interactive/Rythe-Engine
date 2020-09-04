@@ -21,11 +21,11 @@ namespace args::core
 	 * @note With default container parameters iterators may be invalidated upon resize. See reference of std::vector.
 	 * @note Removing item might invalidate the iterator of the last item in the dense container.
 	 */
-	template <typename value_type, template<typename...> typename dense_type = std::vector, template<typename...> typename sparse_type = std::unordered_map>
+	template <typename value_type, typename hash_type = std::hash<value_type>, template<typename...> typename dense_type = std::vector, template<typename...> typename sparse_type = std::unordered_map>
 	class hashed_sparse_set
 	{
 	public:
-		using self_type = hashed_sparse_set<value_type, dense_type, sparse_type>;
+		using self_type = hashed_sparse_set<value_type, hash_type, dense_type, sparse_type>;
 		using self_reference = self_type&;
 		using self_const_reference = const self_type&;
 
@@ -33,7 +33,7 @@ namespace args::core
 		using value_const_reference = const value_type&;
 		using value_pointer = value_type*;
 
-		using sparse_container = sparse_type<value_type, size_type>;
+		using sparse_container = sparse_type<value_type, size_type, hash_type>;
 		using dense_container = dense_type<value_type>;
 
 		using iterator = typename dense_container::iterator;
@@ -334,6 +334,48 @@ namespace args::core
 				throw std::out_of_range("hashed_sparse_set subscript out of range");
 			return m_dense[index];
 		}
+#pragma endregion
+
+#pragma region at
+        /**@brief Returns item from dense container.
+         * @param index Index of item in dense container.
+         */
+        A_NODISCARD value_reference at(size_type&& index)
+        {
+            if (index < 0 || index > m_size)
+                throw std::out_of_range("hashed_sparse_set subscript out of range");
+            return m_dense[index];
+        }
+
+        /**@brief Returns item from dense container.
+         * @param index Index of item in dense container.
+         */
+        A_NODISCARD value_reference at(const size_type& index)
+        {
+            if (index < 0 || index > m_size)
+                throw std::out_of_range("hashed_sparse_set subscript out of range");
+            return m_dense[index];
+        }
+
+        /**@brief Returns item from dense container.
+         * @param index Index of item in dense container.
+         */
+        A_NODISCARD value_const_reference at(size_type&& index) const
+        {
+            if (index < 0 || index > m_size)
+                throw std::out_of_range("hashed_sparse_set subscript out of range");
+            return m_dense[index];
+        }
+
+        /**@brief Returns item from dense container.
+         * @param index Index of item in dense container.
+         */
+        A_NODISCARD value_const_reference at(const size_type& index) const
+        {
+            if (index < 0 || index > m_size)
+                throw std::out_of_range("hashed_sparse_set subscript out of range");
+            return m_dense[index];
+        }
 #pragma endregion
 
 		/**@brief Erases item from sparse_map.

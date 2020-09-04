@@ -6,6 +6,8 @@
 #include <core/ecs/component_container.hpp>
 #include <core/ecs/queryregistry.hpp>
 #include <core/ecs/entityquery.hpp>
+#include <core/ecs/entity_handle.hpp>
+#include <core/ecs/archetype.hpp>
 
 #include <utility>
 #include <memory>
@@ -16,7 +18,7 @@
 
 namespace args::core::ecs
 {
-	class entity_handle;
+#define world_entity_id 1
 
 	class component_handle_base;
 
@@ -29,7 +31,7 @@ namespace args::core::ecs
 	struct entity_data
 	{
 		id_type parent;
-		sparse_map<id_type, entity_handle> children;
+        entity_set children;
 		hashed_sparse_set<id_type> components;
 	};
 
@@ -48,18 +50,22 @@ namespace args::core::ecs
 		sparse_map<id_type, entity_data> m_entityData;
 
 		mutable async::readonly_rw_spinlock m_entityLock;
-		sparse_map<id_type, entity_handle> m_entities;
+        sparse_set<id_type> m_containedEntities;
+		entity_set m_entities;
 
 		QueryRegistry m_queryRegistry;
+        events::EventBus* m_eventBus;
 
 		/**@brief Internal function for recursively destroying all children and children of children etc.
 		 */
 		void recursiveDestroyEntityInternal(id_type entityId);
 
 	public:
+        entity_handle world;
+
 		/**@brief Constructor initializes everything for the ECS and creates world entity.
 		 */
-		EcsRegistry();
+		EcsRegistry(events::EventBus* eventBus);
 
 		/**@brief Reports component type to the registry so that it can be stored managed and recognized as a component.
 		 * @tparam component_type Type of struct you with to add as a component.
@@ -74,7 +80,7 @@ namespace args::core::ecs
 		{
 			async::readwrite_guard guard(m_familyLock);
 			if (!m_families.contains(typeHash<component_type>()))
-				m_families[typeHash<component_type>()] = std::make_unique<component_container<component_type>>();
+				m_families[typeHash<component_type>()] = std::make_unique<component_container<component_type>>(this, m_eventBus);
 		}
 
 		/**@brief Get component storage of a certain type.
@@ -122,11 +128,23 @@ namespace args::core::ecs
 		 * @returns component_handle<component_type> Component handle to the created component.
 		 * @throws args_entity_not_found_error If the entity id does not belong to a valid entity.
 		 */
-		template<typename component_type>
+		template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
 		component_handle<component_type> createComponent(id_type entityId)
 		{
-			return force_value_cast<component_handle<component_type>>(createComponent(entityId, typeHash<component_type>()));
+            return force_value_cast<component_handle<component_type>>(createComponent(entityId, typeHash<component_type>()));
 		}
+
+        template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
+        auto createComponent(id_type entityId)
+        {
+            return archetype_type::create(this, entityId);
+        }
+
+        template<typename... component_types>
+        std::tuple<component_handle<component_types>...> createComponents(id_type entityId)
+        {
+            return std::make_tuple(createComponent<component_types>(entityId)...);
+        }
 
 		/**@brief Create component of a certain type attached to a certain entity.
 		 * @param entityId Id of the entity you wish to attach the component to.
@@ -189,7 +207,7 @@ namespace args::core::ecs
 		/**@brief Get a container with ALL entities.
 		 * @returns sparse_map<id_type, entity_handle>& Container that keeps both the id's and corresponding entity handles for easy use.
 		 */
-		A_NODISCARD std::pair<sparse_map<id_type, entity_handle>&, async::readonly_rw_spinlock&>  getEntities();
+		A_NODISCARD std::pair<entity_set&, async::readonly_rw_spinlock&>  getEntities();
 
 		/**@brief Get a query for your component combination.
 		 * @tparam component_types Variadic parameter types of all component types you wish to query for.
@@ -213,3 +231,5 @@ namespace args::core::ecs
 		}
 	};
 }
+
+#include <core/ecs/archetype.inl>

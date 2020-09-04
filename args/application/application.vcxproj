@@ -11,12 +11,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="delete_this.cpp" />
+    <ClCompile Include="context\contexthelper.cpp" />
+    <ClCompile Include="context\detail\glad\glad.c" />
+    <ClCompile Include="window\windowsystem.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\core\core.vcxproj">
-      <Project>{63d0d607-e99e-40b0-9b27-6e2430b57f7e}</Project>
-    </ProjectReference>
+    <ClInclude Include="application.hpp" />
+    <ClInclude Include="context\contexthelper.hpp" />
+    <ClInclude Include="input\inputmap.hpp" />
+    <ClInclude Include="events\windowinputevents.hpp" />
+    <ClInclude Include="context\detail\glad\glad.h" />
+    <ClInclude Include="context\detail\KHR\khrplatform.h" />
+    <ClInclude Include="events\inputevents.hpp" />
+    <ClInclude Include="events\windowevents.hpp" />
+    <ClInclude Include="input\inputsystem.hpp" />
+    <ClInclude Include="module\applicationmodule.hpp" />
+    <ClInclude Include="window\window.hpp" />
+    <ClInclude Include="window\windowsystem.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -77,7 +88,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>args-core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>args-core.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
@@ -99,7 +110,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>args-core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>args-core.lib;glfw3.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>

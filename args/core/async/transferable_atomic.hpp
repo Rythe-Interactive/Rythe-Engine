@@ -14,23 +14,23 @@ namespace args::core::async
 	struct transferable_atomic
 	{
 	private:
-		std::atomic<T> m_atomic;
+		mutable std::atomic<T> m_atomic;
 		mutable readonly_rw_spinlock m_lock;
 	public:
-		transferable_atomic() noexcept = default;
+		transferable_atomic() = default;
 
-		explicit transferable_atomic(T val) noexcept : m_atomic(val), m_lock() {}
+		explicit transferable_atomic(T val) : m_atomic(val), m_lock() {}
 
-		transferable_atomic(const std::atomic<T>& other) noexcept : m_atomic(other.load(std::memory_order_acquire)), m_lock() {}
+		transferable_atomic(const std::atomic<T>& other) : m_atomic(other.load(std::memory_order_acquire)), m_lock() {}
 
-		transferable_atomic(const transferable_atomic<T>& other) noexcept : m_atomic(other->load(std::memory_order_acquire)), m_lock() {}
+		transferable_atomic(const transferable_atomic<T>& other) : m_atomic(other->load(std::memory_order_acquire)), m_lock() {}
 
-		transferable_atomic(std::atomic<T>&& other) noexcept : m_atomic(other.load(std::memory_order_acquire)), m_lock()
+		transferable_atomic(std::atomic<T>&& other) : m_atomic(other.load(std::memory_order_acquire)), m_lock()
 		{
 			other.store(T(), std::memory_order_release);
 		}
 
-		transferable_atomic(transferable_atomic<T>&& other) noexcept : m_atomic(other->load(std::memory_order_acquire)), m_lock()
+		transferable_atomic(transferable_atomic<T>&& other) : m_atomic(other->load(std::memory_order_acquire)), m_lock()
 		{
 			other->store(T(), std::memory_order_release);
 		}

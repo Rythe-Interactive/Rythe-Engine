@@ -1,10 +1,16 @@
 #pragma once
 
-#include <core/filesystem/filemanip.hpp>
 #include <core/filesystem/resource.hpp>
 
-//args::fs
+#include <core/filesystem/assetimporter.hpp>
+#include <core/filesystem/filesystem_resolver.hpp>
+#include <core/filesystem/mem_filesystem_resolver.hpp>
+#include <core/filesystem/basic_resolver.hpp>
+#include <core/filesystem/provider_registry.hpp>
+
+#include <core/filesystem/view.hpp>
+
 namespace args::core
 {
-	namespace fs = ::args::core::filesystem;
+    namespace fs = ::args::core::filesystem;
 }
