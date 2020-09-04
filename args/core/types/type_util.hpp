@@ -96,6 +96,11 @@ namespace args::core
      */
     id_type ARGS_FUNC nameHash(const std::string& name);
 
+    /**@brief Returns hash of a certain string
+     * @param name Name you wish to hash
+     */
+    id_type ARGS_FUNC nameHash(const std::string_view& name);
+
     /**@brief Returns hash of the type name.
      * @tparam T type of which you want the hash.
      */

@@ -10,24 +10,28 @@ namespace args::rendering
 	struct camera;
 	struct shader;
 
+    struct ARGS_API shader_handle
+    {
+        id_type id;
+    };
+
+    constexpr shader_handle invalid_shader_handle{ 0 };
+
 #pragma region shader parameters
 	class shader_parameter_base
 	{
 	protected:
-		shader* m_shader;
+        shader_handle m_shader;
 		std::string m_name;
 		GLenum m_type;
 		GLint m_location;
 
-		shader_parameter_base(shader* shader, std::string name, GLenum type, GLint location) : m_shader(shader), m_name(name), m_type(type), m_location(location) {};
+		shader_parameter_base(shader_handle shader, std::string_view name, GLenum type, GLint location) : m_shader(shader), m_name(name), m_type(type), m_location(location) {};
 
 	public:
 		virtual bool is_valid() const
 		{
-			if (this == nullptr)
-				return false;
-
-			return m_location != -1;
+			return m_location != -1 && m_shader.id != invalid_shader_handle.id;
 		}
 
 		virtual GLenum get_type() const { return m_type; }
@@ -38,7 +42,7 @@ namespace args::rendering
 	struct uniform : public shader_parameter_base
 	{
 	public:
-		uniform(shader* shader, std::string name, GLenum type, GLint location) : shader_parameter_base(shader, name, type, location) {}
+		uniform(shader_handle shader, std::string_view name, GLenum type, GLint location) : shader_parameter_base(shader, name, type, location) {}
 
 		void set_value(const T& value);
 	};
@@ -57,112 +61,112 @@ namespace args::rendering
 	template<>
 	inline void uniform<float>::set_value(const float& value)
 	{
-		if (this != nullptr)
+		if (is_valid())
 			glUniform1f(m_location, value);
 	}
 
 	template<>
 	inline void uniform<math::vec2>::set_value(const math::vec2& value)
 	{
-		if (this != nullptr)
+		if (is_valid())
 			glUniform2fv(m_location, 1, math::value_ptr(value));
 	}
 
 	template<>
 	inline void uniform<math::vec3>::set_value(const math::vec3& value)
 	{
-		if (this != nullptr)
+		if (is_valid())
 			glUniform3fv(m_location, 1, math::value_ptr(value));
 	}
 
 	template<>
 	inline void uniform<math::vec4>::set_value(const math::vec4& value)
 	{
-		if (this != nullptr)
+		if (is_valid())
 			glUniform4fv(m_location, 1, math::value_ptr(value));
 	}
 
 	template<>
 	inline void uniform<int>::set_value(const int& value)
 	{
-		if (this != nullptr)
+		if (is_valid())
 			glUniform1i(m_location, value);
 	}
 
 	template<>
 	inline void uniform<math::ivec2>::set_value(const math::ivec2& value)
 	{
-		if (this != nullptr)
+		if (is_valid())
 			glUniform2iv(m_location, 1, math::value_ptr(value));
 	}
 
 	template<>
 	inline void uniform<math::ivec3>::set_value(const math::ivec3& value)
 	{
-		if (this != nullptr)
+		if (is_valid())
 			glUniform3iv(m_location, 1, math::value_ptr(value));
 	}
 
 	template<>
 	inline void uniform<math::ivec4>::set_value(const math::ivec4& value)
 	{
-		if (this != nullptr)
+		if (is_valid())
 			glUniform4iv(m_location, 1, math::value_ptr(value));
 	}
 
 	template<>
 	inline void uniform<bool>::set_value(const bool& value)
 	{
-		if (this != nullptr)
+		if (is_valid())
 			glUniform1i(m_location, value);
 	}
 
 	template<>
 	inline void uniform<math::bvec2>::set_value(const math::bvec2& value)
 	{
-		if (this != nullptr)
+		if (is_valid())
 			glUniform2iv(m_location, 1, math::value_ptr(math::ivec2(value)));
 	}
 
 	template<>
 	inline void uniform<math::bvec3>::set_value(const math::bvec3& value)
 	{
-		if (this != nullptr)
+		if (is_valid())
 			glUniform3iv(m_location, 1, math::value_ptr(math::ivec3(value)));
 	}
 
 	template<>
 	inline void uniform<math::bvec4>::set_value(const math::bvec4& value)
 	{
-		if (this != nullptr)
+		if (is_valid())
 			glUniform4iv(m_location, 1, math::value_ptr(math::ivec4(value)));
 	}
 
 	template<>
 	inline void uniform<math::mat2>::set_value(const math::mat2& value)
 	{
-		if (this != nullptr)
+		if (is_valid())
 			glUniformMatrix2fv(m_location, 1, false, math::value_ptr(value));
 	}
 
 	template<>
 	inline void uniform<math::mat3>::set_value(const math::mat3& value)
 	{
-		if (this != nullptr)
+		if (is_valid())
 			glUniformMatrix3fv(m_location, 1, false, math::value_ptr(value));
 	}
 
 	template<>
 	inline void uniform<math::mat4>::set_value(const math::mat4& value)
 	{
-		if (this != nullptr)
+		if (is_valid())
 			glUniformMatrix4fv(m_location, 1, false, math::value_ptr(value));
 	}
 
 	class attribute : public shader_parameter_base
 	{
 	public:
-		attribute(shader* shader, std::string name, GLenum type, GLint location) : shader_parameter_base(shader, name, type, location) {}
+		attribute(shader_handle shader, std::string_view name, GLenum type, GLint location) : shader_parameter_base(shader, name, type, location) {}
 
 		void set_attribute_pointer(GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid* pointer)
 		{
@@ -178,19 +182,11 @@ namespace args::rendering
 
 #pragma endregion
 
-	struct ARGS_API shader_handle
-	{
-		id_type id;
-	};
-
-	constexpr shader_handle invalid_shader_handle{ 0 };
-
-
 	struct shader
 	{
 		GLint programId;
-		std::unordered_map<std::string, std::unique_ptr<shader_parameter_base>> uniforms;
-		std::unordered_map<std::string, std::unique_ptr<attribute>> attributes;
+		std::unordered_map<id_type, std::unique_ptr<shader_parameter_base>> uniforms;
+		std::unordered_map<id_type, std::unique_ptr<attribute>> attributes;
 
 		GLuint get_uniform_block_index(const std::string& pName) const;
 		void bind_uniform_block(GLuint uniformBlockIndex, GLuint uniformBlockBinding) const;
@@ -198,12 +194,13 @@ namespace args::rendering
 		template<typename T>
 		uniform<T>* get_uniform(const std::string& name)
 		{
-			return dynamic_cast<uniform<T>*>(uniforms[name].get());
+			return dynamic_cast<uniform<T>*>(uniforms[nameHash(name)].get());
 		}
 
-		attribute* get_attribute(const std::string& name);
-
-		std::vector<std::pair<std::string, GLenum>> get_uniform_info();
+        attribute* get_attribute(const std::string& name)
+        {
+            return attributes[nameHash(name)].get();
+        }
 	};
 
 	struct shader_import_settings
@@ -228,7 +225,7 @@ namespace args::rendering
 		static void process_includes(std::string& shaderSource);
 		static void process_mangling(std::string& shaderSource);
 		static shader_ilo seperate_shaders(std::string& shaderSource);
-		static void process_io(shader& shader);
+		static void process_io(shader& shader, id_type id);
 		static app::gl_id compile_shader(GLuint shaderType, cstring source, GLint sourceLength);
 
 	public:

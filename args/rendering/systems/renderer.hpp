@@ -205,7 +205,7 @@ namespace args::rendering
                 batches[rend.mesh].push_back(modelMatrix);
             }
 
-            std::cout << "created " << batches.size() << " batches" << std::endl;
+            //std::cout << "created " << batches.size() << " batches" << std::endl;
 
             for (int i = 0; i < batches.size(); i++)
             {

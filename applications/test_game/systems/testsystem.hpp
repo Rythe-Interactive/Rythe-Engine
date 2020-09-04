@@ -83,7 +83,7 @@ public:
         auto posH = player.get_component<position>();
         auto pos = posH.read();
         pos.z += action->value * 0.1f;
-        //std::cout << "[ " << pos.x << ", " << pos.y << ", " << pos.z << " ]\n";
+        std::cout << "[ " << pos.x << ", " << pos.y << ", " << pos.z << " ]\n";
         posH.write(pos);
     }
 

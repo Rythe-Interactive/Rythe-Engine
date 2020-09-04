@@ -22,4 +22,9 @@ namespace args::core
         static std::hash<std::string> hasher{};
         return hasher(name);
     }
+    id_type ARGS_FUNC nameHash(const std::string_view& name)
+    {
+        static std::hash<std::string_view> hasher{};
+        return hasher(name);
+    }
 }
