@@ -361,7 +361,9 @@ namespace args::application
 
     int ContextHelper::getGamepadSate(int jid, GLFWgamepadstate* state)
     {
-        return glfwGetGamepadState(jid, state);
+        if (initialized())
+            return glfwGetGamepadState(jid, state);
+        return 0;
     }
 
     void ContextHelper::updateGamepadMappings(const char* name)

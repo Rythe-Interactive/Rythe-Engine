@@ -136,6 +136,11 @@ namespace args::core::ecs
 
         entity_handle entity(entityId, this);
 
+        for (auto child : entity)
+        {
+
+        }
+
         {
             async::readwrite_guard guard(m_entityLock); // Request read-write permission for the entity list.
             entity.set_parent(invalid_id); // Remove ourselves as child from parent.
