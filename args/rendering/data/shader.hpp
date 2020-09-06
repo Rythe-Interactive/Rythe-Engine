@@ -215,7 +215,7 @@ namespace args::rendering
 		friend class renderer;
 		friend struct shader_handle;
 	private:
-		using shader_ilo = std::vector<std::tuple<GLuint, std::string>>; // Shader intermediate language object.
+		using shader_ilo = std::vector<std::pair<GLuint, std::string>>; // Shader intermediate language object.
 
 		static sparse_map<id_type, shader> m_shaders;
 		static async::readonly_rw_spinlock m_shaderLock;

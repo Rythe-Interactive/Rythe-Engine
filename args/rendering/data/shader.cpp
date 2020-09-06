@@ -20,7 +20,7 @@ namespace args::rendering
     {
         shader_ilo ilo;
         std::string_view rest(shaderSource.data(), shaderSource.size());
-
+ 
         auto versionOffset = rest.find("#version");
         std::string versionTxt;
 
@@ -38,7 +38,7 @@ namespace args::rendering
 
         auto vertEnd = vertOffset + std::string_view(rest.data() + vertOffset, rest.size() - vertOffset).find_first_of('}') + 1;
 
-        ilo.push_back(std::make_tuple(GL_VERTEX_SHADER, std::string(versionTxt) + std::string(rest.data(), vertEnd).replace(vertOffset, 5, " main")));
+        ilo.push_back(std::make_pair(GL_VERTEX_SHADER, std::string(versionTxt) + std::string(rest.data(), vertEnd).replace(vertOffset, 5, " main")));
         rest = std::string_view(rest.data() + vertEnd, rest.size() - vertEnd);
 
         auto fragOffset = rest.find(" frag(");
@@ -47,7 +47,7 @@ namespace args::rendering
 
         auto fragEnd = fragOffset + std::string_view(rest.data() + fragOffset, rest.size() - fragOffset).find_first_of('}') + 1;
 
-        ilo.push_back(std::make_tuple(GL_FRAGMENT_SHADER, std::string(versionTxt) + std::string(rest.data(), fragEnd).replace(fragOffset, 5, " main")));
+        ilo.push_back(std::make_pair(GL_FRAGMENT_SHADER, std::string(versionTxt) + std::string(rest.data(), fragEnd).replace(fragOffset, 5, " main")));
         rest = std::string_view(rest.data() + fragEnd, rest.size() - fragEnd);
         return ilo;
     }
