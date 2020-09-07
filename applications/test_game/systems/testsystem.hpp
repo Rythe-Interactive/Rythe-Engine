@@ -80,7 +80,7 @@ public:
 
     void onPlayerMove(player_move_action* action)
     {
-        auto posH = player.get_component<position>();
+        auto posH = player.get_component_handle<position>();
         auto pos = posH.read();
         pos.z += action->value * 0.1f;
         std::cout << "[ " << pos.x << ", " << pos.y << ", " << pos.z << " ]\n";
@@ -105,7 +105,7 @@ public:
 
             for (auto entity : query)
             {
-                auto comp = entity.get_component<sah>();
+                auto comp = entity.get_component_handle<sah>();
                 comp.write({ frameCount });
                 //std::cout << "component value: " << comp.read().value << std::endl;
             }
@@ -153,7 +153,7 @@ public:
 
             for (auto entity : query)
             {
-                auto comp = entity.get_component<sah>();
+                auto comp = entity.get_component_handle<sah>();
                 //std::cout << "component value on different thread: " << comp.read().value << std::endl;
             }
 

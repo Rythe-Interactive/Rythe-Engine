@@ -163,7 +163,7 @@ namespace args::application
             async::readwrite_guard guard(data::m_creationLock);
             for (auto entity : m_windowQuery)
             {
-                closeWindow(entity.get_component<window>().read(std::memory_order_relaxed));
+                closeWindow(entity.get_component_handle<window>().read(std::memory_order_relaxed));
             }
 
             m_exit = true;
@@ -285,7 +285,7 @@ namespace args::application
 
             for (auto entity : m_windowQuery)
             {
-                window win = entity.get_component<window>().read(std::memory_order_relaxed);
+                window win = entity.get_component_handle<window>().read(std::memory_order_relaxed);
                 ContextHelper::swapBuffers(win);
             }
         }

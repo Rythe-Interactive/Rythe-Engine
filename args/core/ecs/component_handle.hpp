@@ -123,6 +123,29 @@ namespace args::core::ecs
             return value;
         }
 
+        component_type read_modify_write(component_type&& value, component_type(*modifier)(const component_type&, component_type&&),
+            std::memory_order loadOrder = std::memory_order_acquire,
+            std::memory_order successOrder = std::memory_order_release,
+            std::memory_order failureOrder = std::memory_order_relaxed)
+        {
+            async::transferable_atomic<component_type>* comp = m_registry->getFamily<component_type>()->get_component(m_ownerId);
+            if (!comp)
+                return component_type();
+
+            async::readonly_guard guard(comp->get_lock());
+            if (!valid())
+                return component_type();
+
+            component_type oldVal = comp->get().load(loadOrder);
+            component_type newVal = modifier(oldVal, std::forward<component_type>(value));
+
+            // CAS loop to assure our modification will happen correctly without overwriting some other change.
+            while (!comp->get().compare_exchange_strong(oldVal, newVal, successOrder, failureOrder))
+                newVal = modifier(oldVal, std::forward<component_type>(value));
+
+            return newVal;
+        }
+
         /**@brief Atomic read modify write with add modification on component.
          * @param value Value you wish to add.
          * @param loadOrder Memory order at which to load the component.

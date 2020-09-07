@@ -34,8 +34,103 @@ namespace args::rendering
             //glBindBuffer(GL_UNIFORM_BUFFER, 0);
         }
 
-        void initData(const app::window& window)
+        bool initData(const app::window& window)
         {
+            if (!gladLoadGLLoader((GLADloadproc)app::ContextHelper::getProcAddress))
+            {
+                std::cout << "Failed to load OpenGL" << std::endl;
+                return false;
+            }
+            else
+            {
+                glEnable(GL_DEBUG_OUTPUT);
+                glDebugMessageCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+                    {
+                        cstring s;
+                        switch (source)
+                        {
+                        case GL_DEBUG_SOURCE_API:
+                            s = "GL_DEBUG_SOURCE_API";
+                            break;
+                        case GL_DEBUG_SOURCE_SHADER_COMPILER:
+                            s = "GL_DEBUG_SOURCE_SHADER_COMPILER";
+                            break;
+                        case GL_DEBUG_SOURCE_THIRD_PARTY:
+                            s = "GL_DEBUG_SOURCE_THIRD_PARTY";
+                            break;
+                        case GL_DEBUG_SOURCE_APPLICATION:
+                            s = "GL_DEBUG_SOURCE_APPLICATION";
+                            break;
+                        case GL_DEBUG_SOURCE_OTHER:
+                            s = "GL_DEBUG_SOURCE_OTHER";
+                            break;
+                        default:
+                            s = "UNKNOWN SOURCE";
+                            break;
+                        }
+
+                        cstring t;
+
+                        switch (type)
+                        {
+                        case GL_DEBUG_TYPE_ERROR:
+                            t = "GL_DEBUG_TYPE_ERROR";
+                            break;
+                        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+                            t = "GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR";
+                            break;
+                        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+                            t = "GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR";
+                            break;
+                        case GL_DEBUG_TYPE_PERFORMANCE:
+                            t = "GL_DEBUG_TYPE_PERFORMANCE";
+                            break;
+                        case GL_DEBUG_TYPE_PORTABILITY:
+                            t = "GL_DEBUG_TYPE_PORTABILITY";
+                            break;
+                        case GL_DEBUG_TYPE_MARKER:
+                            t = "GL_DEBUG_TYPE_MARKER";
+                            break;
+                        case GL_DEBUG_TYPE_PUSH_GROUP:
+                            t = "GL_DEBUG_TYPE_PUSH_GROUP";
+                            break;
+                        case GL_DEBUG_TYPE_POP_GROUP:
+                            t = "GL_DEBUG_TYPE_POP_GROUP";
+                            break;
+                        case GL_DEBUG_TYPE_OTHER:
+                            t = "GL_DEBUG_TYPE_OTHER";
+                            break;
+                        default:
+                            t = "UNKNOWN TYPE";
+                            break;
+                        }
+
+                        cstring sev;
+                        switch (severity)
+                        {
+                        case GL_DEBUG_SEVERITY_HIGH:
+                            sev = "GL_DEBUG_SEVERITY_HIGH ";
+                            break;
+                        case GL_DEBUG_SEVERITY_MEDIUM:
+                            sev = "GL_DEBUG_SEVERITY_MEDIUM ";
+                            break;
+                        case GL_DEBUG_SEVERITY_LOW:
+                            sev = "GL_DEBUG_SEVERITY_LOW ";
+                            break;
+                        case GL_DEBUG_SEVERITY_NOTIFICATION:
+                            sev = "GL_DEBUG_SEVERITY_NOTIFICATION ";
+                            break;
+                        default:
+                            sev = "UNKNOWN SEVERITY";
+                            break;
+                        }
+
+
+                        std::printf("GL CALLBACK: %s source = %s type = %s, severity = %s, message = %s\n", (type == GL_DEBUG_TYPE_ERROR ? " GL ERROR " : ""), s, t, sev, message);
+                    }, nullptr);
+                std::cout << "loaded OpenGL version: " << GLVersion.major << '.' << GLVersion.minor << std::endl;
+            }
+
             glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -150,6 +245,8 @@ namespace args::rendering
             glBindBuffer(GL_ARRAY_BUFFER, modelMatrixBufferId);
             glBufferData(GL_ARRAY_BUFFER, 65536, nullptr, GL_DYNAMIC_DRAW);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+            return true;
         }
 
         void render(time::time_span<fast_time> deltaTime)
@@ -159,9 +256,13 @@ namespace args::rendering
             if (!m_ecs->world.has_component<app::window>())
                 return;
 
-            app::window window = m_ecs->world.get_component<app::window>().read();
+            app::window window = m_ecs->world.get_component_handle<app::window>().read();
 
             app::ContextHelper::makeContextCurrent(window);
+
+            if (!shaderId)
+                if (!initData(window))
+                    return;
 
             auto printErrors = []()
             {
@@ -174,9 +275,6 @@ namespace args::rendering
                     i++;
                 }
             };
-
-            if (!shaderId)
-                initData(window);
 
             glClearColor(0.3f, 0.5f, 1.0f, 1.0f);
             glClearDepth(0.0f);
@@ -192,16 +290,16 @@ namespace args::rendering
             //math::vec3 camPos = camEnt.get_component<position>().read();
 
             math::mat4 viewProj;
-            math::compose(viewProj, camEnt.get_component<scale>().read(), camEnt.get_component<rotation>().read(), camEnt.get_component<position>().read());
-            viewProj = camEnt.get_component<camera>().read().projection * math::inverse(viewProj);
+            math::compose(viewProj, camEnt.get_component_handle<scale>().read(), camEnt.get_component_handle<rotation>().read(), camEnt.get_component_handle<position>().read());
+            viewProj = camEnt.get_component_handle<camera>().read().projection * math::inverse(viewProj);
 
 
             for (auto ent : renderablesQuery)
             {
-                renderable rend = ent.get_component<renderable>().read();
+                renderable rend = ent.get_component_handle<renderable>().read();
 
                 math::mat4 modelMatrix;
-                math::compose(modelMatrix, ent.get_component<scale>().read(), ent.get_component<rotation>().read(), ent.get_component<position>().read());
+                math::compose(modelMatrix, ent.get_component_handle<scale>().read(), ent.get_component_handle<rotation>().read(), ent.get_component_handle<position>().read());
                 batches[rend.mesh].push_back(modelMatrix);
             }
 
