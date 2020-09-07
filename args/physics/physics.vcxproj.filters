@@ -13,10 +13,48 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="systems">
+      <UniqueIdentifier>{b9a86026-4c42-43a9-8831-ea490664119e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module">
+      <UniqueIdentifier>{d533903f-f96c-4e47-8ba0-f06b8daaa6eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components">
+      <UniqueIdentifier>{fa9e01be-7eb5-421d-9bec-ac21fb408615}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="delete_this.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PhysicsSystem.hpp">
+      <Filter>systems</Filter>
+    </ClCompile>
+    <ClCompile Include="physicsComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsCollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConvexCollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="PhysicsModule.hpp">
+      <Filter>module</Filter>
+    </ClInclude>
+    <ClInclude Include="physicsComponent.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsCollider.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Manifold.hpp">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="ConvexCollider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

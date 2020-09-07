@@ -13,6 +13,8 @@
 #include "module/testModule.hpp"
 #include "systems/testsystem.hpp"
 
+#include <physics/PhysicsModule.hpp>
+
 #include "test_filesystem.hpp"
 
 using namespace args;
@@ -34,6 +36,7 @@ void ARGS_CCONV reportModules(Engine* engine)
 	engine->reportModule<TestModule>();
     engine->reportModule<app::ApplicationModule>();
     engine->reportModule<rendering::RenderingModule>();
+    engine->reportModule<physics::PhysicsModule>();
 
 	try
 	{
