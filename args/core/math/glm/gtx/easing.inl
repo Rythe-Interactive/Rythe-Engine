@@ -195,7 +195,7 @@ namespace args::core::math::detail::glm{
 		assert(a >= zero<genType>());
 		assert(a <= one<genType>());
 
-		return static_cast<genType>(0.5) * (one<genType>() - cos(a * pi<genType>()));
+		return static_cast<genType>(0.5) * (one<genType>() - cos(a * GLM_ONLY_PI<genType>()));
 	}
 
 	template <typename genType>

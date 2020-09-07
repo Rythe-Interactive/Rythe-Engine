@@ -1,19 +1,24 @@
 #pragma once
-#include <rendering/data/mesh.hpp>
+#include <rendering/data/model.hpp>
+#include <rendering/data/shader.hpp>
 #include <rendering/components/renderable.hpp>
 #include <rendering/components/camera.hpp>
+
+using namespace args::core::filesystem::literals;
 
 namespace args::rendering
 {
     class Renderer final : public System<Renderer>
     {
-        sparse_map<mesh_handle, std::vector<math::mat4>> batches;
+        sparse_map<model_handle, std::vector<math::mat4>> batches;
 
         ecs::EntityQuery renderablesQuery;
         ecs::EntityQuery cameraQuery;
 
         app::gl_id shaderId;
         app::gl_id modelMatrixBufferId;
+
+        shader_handle shdr;
 
         //app::gl_location camPosLoc;
         app::gl_location viewProjLoc;
@@ -156,16 +161,27 @@ namespace args::rendering
 
             std::cout << "Initialized Renderer\n\tCONTEXT INFO\n\t----------------------------------\n\tGPU Vendor:\t" << vendor << "\n\tGPU:\t\t" << renderer << "\n\tGL Version:\t" << version << "\n\tGLSL Version:\t" << glslVersion << "\n\t----------------------------------\n";
 
-            shaderId = glCreateProgram();
+            shdr = shader_cache::create_shader("wireframe", "basic:/shaders/wireframe.glsl"_view);
+
+            shaderId = -1;
+
+          /*  shaderId = glCreateProgram();
 
             const char* fragmentShader = "\
             #version 450\n\
 \n\
+            in vec3 barycentricCoords;\n\
             out vec4 fragment_color;\n\
 \n\
             void main(void)\n\
             {\n\
-                fragment_color = vec4(1, 0, 0, 1);\n\
+                vec3 deltas = fwidth(barycentricCoords);\n\
+                vec3 adjustedCoords = smoothstep(deltas, 2* deltas, barycentricCoords);\n\
+                float linePresence = min(adjustedCoords.x, min(adjustedCoords.y, adjustedCoords.z));\n\
+                if(linePresence > 0.9)\n\
+                    discard;\n\
+                \n\
+                fragment_color = vec4(vec3(0), 1);\n\
             }";
             int fragShaderLength = strlen(fragmentShader);
 
@@ -190,56 +206,41 @@ namespace args::rendering
             glShaderSource(vert, 1, &vertexShader, &vertShaderLength);
             glCompileShader(vert);
 
+            const char* geometryShader = "\
+            #version 450\n\
+\n\
+            layout(triangles)in;\n\
+            layout(triangle_strip, max_vertices = 3)out;\n\
+            \n\
+            out vec3 barycentricCoords;\n\
+            \n\
+            void main(void)\n\
+            {\n\
+                gl_Position = gl_in[0].gl_Position;\n\
+                barycentricCoords = vec3(1, 0, 0);\n\
+                EmitVertex();\n\
+                gl_Position = gl_in[1].gl_Position;\n\
+                barycentricCoords = vec3(0, 1, 0);\n\
+                EmitVertex();\n\
+                gl_Position = gl_in[2].gl_Position;\n\
+                barycentricCoords = vec3(0, 0, 1);\n\
+                EmitVertex();\n\
+                EndPrimitive();\n\
+            }";
+            int geometryShaderLength = strlen(geometryShader);
+
+            app::gl_id geom = glCreateShader(GL_GEOMETRY_SHADER);
+            glShaderSource(geom, 1, &geometryShader, &geometryShaderLength);
+            glCompileShader(geom);
+
             glAttachShader(shaderId, frag);
             glAttachShader(shaderId, vert);
+            glAttachShader(shaderId, geom);
 
-            glLinkProgram(shaderId);
-
-            GLint numActiveUniforms = 0;
-            glGetProgramiv(shaderId, GL_ACTIVE_UNIFORMS, &numActiveUniforms);
-
-            GLint maxUniformNameLength = 0;
-            glGetProgramiv(shaderId, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxUniformNameLength);
-            GLchar* uniformNameData = new GLchar[maxUniformNameLength];
-
-            std::vector<std::string> uniformNames;
-
-            for (int uniform = 0; uniform < numActiveUniforms; uniform++)
-            {
-                GLint arraySize = 0;
-                GLenum type = 0;
-                GLsizei actualLength = 0;
-                glGetActiveUniform(shaderId, uniform, (GLsizei)maxUniformNameLength, &actualLength, &arraySize, &type, uniformNameData);
-
-                uniformNames.push_back(std::string(uniformNameData));
-
-            }
-            
-            delete[] uniformNameData;
-
-            GLint numActiveAttribs = 0;
-            glGetProgramiv(shaderId, GL_ACTIVE_ATTRIBUTES, &numActiveAttribs);
-
-            GLint maxAttribNameLength = 0;
-            glGetProgramiv(shaderId, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxAttribNameLength);
-            GLchar* attribNameData = new GLchar[maxAttribNameLength];
-
-            std::vector<std::string> attibuteNames;
-
-            for (int attrib = 0; attrib < numActiveAttribs; ++attrib)
-            {
-                GLint arraySize = 0;
-                GLenum type = 0;
-                GLsizei actualLength = 0;
-                glGetActiveAttrib(shaderId, attrib, (GLsizei)maxAttribNameLength, &actualLength, &arraySize, &type, attribNameData);
-
-                attibuteNames.push_back(std::string(attribNameData));
-            }
-
-            delete[] attribNameData;
+            glLinkProgram(shaderId);*/
 
             //camPosLoc = glGetUniformLocation(shaderId, "");
-            viewProjLoc = glGetUniformLocation(shaderId, "viewProjectionMatrix");
+            //viewProjLoc = glGetUniformLocation(shaderId, "viewProjectionMatrix");
 
             glGenBuffers(1, &modelMatrixBufferId);
             glBindBuffer(GL_ARRAY_BUFFER, modelMatrixBufferId);
@@ -260,7 +261,7 @@ namespace args::rendering
 
             app::ContextHelper::makeContextCurrent(window);
 
-            if (!shaderId)
+            if (shaderId == 0)
                 if (!initData(window))
                     return;
 
@@ -280,7 +281,7 @@ namespace args::rendering
             glClearDepth(0.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glEnable(GL_DEPTH_TEST);
-            glEnable(GL_CULL_FACE);
+            glDisable(GL_CULL_FACE);
             glDepthFunc(GL_GREATER);
 
             batches.clear();
@@ -300,7 +301,7 @@ namespace args::rendering
 
                 math::mat4 modelMatrix;
                 math::compose(modelMatrix, ent.get_component_handle<scale>().read(), ent.get_component_handle<rotation>().read(), ent.get_component_handle<position>().read());
-                batches[rend.mesh].push_back(modelMatrix);
+                batches[rend.model].push_back(modelMatrix);
             }
 
             //std::cout << "created " << batches.size() << " batches" << std::endl;
@@ -311,7 +312,7 @@ namespace args::rendering
                 if (!handle.is_buffered())
                     handle.buffer_data(modelMatrixBufferId);
 
-                mesh mesh = handle.get_mesh();
+                model mesh = handle.get_model();
                 if (mesh.submeshes.empty())
                     continue;
 
@@ -320,16 +321,17 @@ namespace args::rendering
                 glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(math::mat4) * instances.size(), instances.data());
                 glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-                glUseProgram(shaderId);
-
-                glUniformMatrix4fv(viewProjLoc, 1, GL_FALSE, math::value_ptr(viewProj));
+                //glUseProgram(shaderId);
+                shdr.bind();
+                shdr.get_uniform<math::mat4>("viewProjectionMatrix").set_value(viewProj);
+                //glUniformMatrix4fv(viewProjLoc, 1, GL_FALSE, math::value_ptr(viewProj));
 
                 glBindVertexArray(mesh.vertexArrayId);
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);
 
                 printErrors();
                 for (auto submesh : mesh.submeshes)
-                    glDrawElementsInstanced(GL_TRIANGLES, submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)submesh.indexOffset, (GLsizei)instances.size());
+                    glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)submesh.indexOffset, (GLsizei)instances.size());
 
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
                 glBindVertexArray(0);

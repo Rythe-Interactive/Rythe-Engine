@@ -30,7 +30,7 @@ namespace args::rendering
         tinyobj::attrib_t attributes = reader.GetAttrib();
         std::vector<tinyobj::shape_t> shapes = reader.GetShapes();
 
-        mesh_data data;
+        mesh data;
 
         struct vtx_data
         {
@@ -48,7 +48,7 @@ namespace args::rendering
 
         for (auto& shape : shapes)
         {
-            submesh_data submesh;
+            sub_mesh submesh;
             submesh.name = shape.name;
             submesh.indexOffset = data.indices.size();
             submesh.indexCount = shape.mesh.indices.size();
@@ -91,11 +91,11 @@ namespace args::rendering
             data.submeshes.push_back(submesh);
         }
 
-        mesh_data::calculate_tangents(&data);
+        mesh::calculate_tangents(&data);
 
         fs::basic_resource result(nullptr);
 
-        mesh_data::to_resource(&result, data);
+        mesh::to_resource(&result, data);
 
         return decay(Ok(result));
     }

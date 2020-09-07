@@ -2,25 +2,135 @@
 
 namespace args::rendering
 {
-    const shader& shader_cache::get_shader(id_type id)
+    sparse_map<id_type, shader> shader_cache::m_shaders;
+    async::readonly_rw_spinlock shader_cache::m_shaderLock;
+
+    shader* shader_cache::get_shader(id_type id)
     {
         async::readonly_guard guard(m_shaderLock);
-        return m_shaders[id];
+        return &m_shaders[id];
+    }
+
+    void shader_cache::replace_items(std::string& source, const std::string& item, const std::string& value)
+    {
+        size_type n = 0;
+        while ((n = source.find(item, n)) != std::string::npos)
+        {
+            source.replace(n, item.size(), value);
+            n += value.size();
+        }
     }
 
     void shader_cache::process_includes(std::string& shaderSource)
     {
     }
 
-    void shader_cache::process_mangling(std::string& shaderSource)
+    void shader_cache::resolve_preprocess_features(std::string& shaderSource)
     {
+        replace_items(shaderSource, "SV_POSITION", std::to_string(SV_POSITION));
+        replace_items(shaderSource, "SV_MODELMATRIX", std::to_string(SV_MODELMATRIX));
+
+        static std::unordered_map<std::string, GLenum> funcTypes;
+        static bool funcTypesInitialized = false;
+        if(!funcTypesInitialized)
+        {
+            funcTypesInitialized = true;
+            funcTypes["DEPTH"] =  GL_DEPTH_TEST;
+            funcTypes["CULL"] =  GL_CULL_FACE;
+            funcTypes["ALPHA"] =  GL_BLEND;
+            funcTypes["DITHER"] =  GL_DITHER;
+        }
+
+        size_type n = 0;
+        while ((n = shaderSource.find("#enable", n)) != std::string::npos)
+        {
+            size_type end = shaderSource.find('\n', n);
+
+            auto tokens = common::split_string_at<' '>(shaderSource.substr(n, end - n));
+
+            if (tokens.size() < 3)
+                continue;
+
+            if (!funcTypes.count(tokens[1]))
+                continue;
+
+            GLenum funcType = funcTypes.at(tokens[1]);
+            GLenum param;
+            switch (funcType)
+            {
+            case GL_DEPTH_TEST:
+            {
+                static std::unordered_map<std::string, GLenum> params;
+                static bool initialized = false;
+                if (!initialized)
+                {
+                    initialized = true;
+                    params["NEVER"] = GL_NEVER;
+                    params["LESS"] = GL_LESS;
+                    params["EQUAL"] = GL_EQUAL;
+                    params["LEQUAL"] = GL_LEQUAL;
+                    params["GREATER"] = GL_GREATER;
+                    params["NOTEQUAL"] = GL_NOTEQUAL;
+                    params["GEQUAL"] = GL_GEQUAL;
+                    params["ALWAYS"] = GL_ALWAYS;
+                }
+
+                param = params.at(tokens[2]);
+            }
+            case GL_CULL_FACE:
+            {
+                static std::unordered_map<std::string, GLenum> params;
+                static bool initialized = false;
+                if (!initialized)
+                {
+                    initialized = true;
+                    params["FRONT"] = GL_FRONT;
+                    params["BACK"] = GL_BACK;
+                    params["FRONT_AND_BACK"] = GL_FRONT_AND_BACK;
+                }
+
+                param = params.at(tokens[2]);
+            }
+            case GL_BLEND:
+            {
+                static std::unordered_map<std::string, GLenum> params;
+                static bool initialized = false;
+                if (!initialized)
+                {
+                    initialized = true;
+                    params["ZERO"] = GL_ZERO;
+                    params["ONE"] = GL_ONE;
+                    params["SRC_COLOR"] = GL_SRC_COLOR;
+                    params["ONE_MINUS_SRC_COLOR"] = GL_ONE_MINUS_SRC_COLOR;
+                    params["DST_COLOR"] = GL_DST_COLOR;
+                    params["ONE_MINUS_DST_COLOR"] = GL_ONE_MINUS_DST_COLOR;
+                    params["SRC_ALPHA"] = GL_SRC_ALPHA;
+                    params["ONE_MINUS_SRC_ALPHA"] = GL_ONE_MINUS_SRC_ALPHA;
+                    params["DST_ALPHA"] = GL_DST_ALPHA;
+                    params["ONE_MINUS_DST_ALPHA"] = GL_ONE_MINUS_DST_ALPHA;
+                    params["CONSTANT_COLOR"] = GL_CONSTANT_COLOR;
+                    params["ONE_MINUS_CONSTANT_COLOR"] = GL_ONE_MINUS_CONSTANT_COLOR;
+                    params["CONSTANT_ALPHA"] = GL_CONSTANT_ALPHA;
+                    params["ONE_MINUS_CONSTANT_ALPHA"] = GL_ONE_MINUS_CONSTANT_ALPHA;
+                    params["SRC_ALPHA_SATURATE"] = GL_SRC_ALPHA_SATURATE;
+                }
+            }
+            default:
+                break;
+            }
+
+            shaderSource.replace(n, end, "\n");
+        }
+
+
+
     }
 
     shader_cache::shader_ilo shader_cache::seperate_shaders(std::string& shaderSource)
     {
         shader_ilo ilo;
         std::string_view rest(shaderSource.data(), shaderSource.size());
- 
+
         auto versionOffset = rest.find("#version");
         std::string versionTxt;
 
@@ -38,8 +148,17 @@ namespace args::rendering
 
         auto vertEnd = vertOffset + std::string_view(rest.data() + vertOffset, rest.size() - vertOffset).find_first_of('}') + 1;
 
-        ilo.push_back(std::make_pair(GL_VERTEX_SHADER, std::string(versionTxt) + std::string(rest.data(), vertEnd).replace(vertOffset, 5, " main")));
+        ilo.push_back(std::make_pair<GLuint, std::string>(GL_VERTEX_SHADER, versionTxt + std::string(rest.data(), vertEnd).replace(vertOffset, 5, " main")));
         rest = std::string_view(rest.data() + vertEnd, rest.size() - vertEnd);
+
+        auto geomOffset = rest.find(" geom(");
+        if (geomOffset != std::string_view::npos)
+        {
+            auto geomEnd = geomOffset + std::string_view(rest.data() + geomOffset, rest.size() - geomOffset).find_first_of('}') + 1;
+
+            ilo.push_back(std::make_pair<GLuint, std::string>(GL_GEOMETRY_SHADER, versionTxt + std::string(rest.data(), geomEnd).replace(geomOffset, 5, " main")));
+            rest = std::string_view(rest.data() + geomEnd, rest.size() - geomEnd);
+        }
 
         auto fragOffset = rest.find(" frag(");
         if (fragOffset == std::string_view::npos)
@@ -47,7 +166,7 @@ namespace args::rendering
 
         auto fragEnd = fragOffset + std::string_view(rest.data() + fragOffset, rest.size() - fragOffset).find_first_of('}') + 1;
 
-        ilo.push_back(std::make_pair(GL_FRAGMENT_SHADER, std::string(versionTxt) + std::string(rest.data(), fragEnd).replace(fragOffset, 5, " main")));
+        ilo.push_back(std::make_pair<GLuint, std::string>(GL_FRAGMENT_SHADER, versionTxt + std::string(rest.data(), fragEnd).replace(fragOffset, 5, " main")));
         rest = std::string_view(rest.data() + fragEnd, rest.size() - fragEnd);
         return ilo;
     }
@@ -82,57 +201,57 @@ namespace args::rendering
             switch (type)
             {
             case GL_SAMPLER_2D:
-                uniform = new rendering::uniform<texture>({ id }, name, type, location);
+                uniform = new rendering::uniform<texture>(id, name, type, location);
             case GL_FLOAT:
-                uniform = new rendering::uniform<float>({ id }, name, type, location);
+                uniform = new rendering::uniform<float>(id, name, type, location);
                 break;
             case GL_FLOAT_VEC2:
-                uniform = new rendering::uniform<math::vec2>({ id }, name, type, location);
+                uniform = new rendering::uniform<math::vec2>(id, name, type, location);
                 break;
             case GL_FLOAT_VEC3:
-                uniform = new rendering::uniform<math::vec3>({ id }, name, type, location);
+                uniform = new rendering::uniform<math::vec3>(id, name, type, location);
                 break;
             case GL_FLOAT_VEC4:
-                uniform = new rendering::uniform<math::vec4>({ id }, name, type, location);
+                uniform = new rendering::uniform<math::vec4>(id, name, type, location);
                 break;
             case GL_INT:
-                uniform = new rendering::uniform<int>({ id }, name, type, location);
+                uniform = new rendering::uniform<int>(id, name, type, location);
                 break;
             case GL_INT_VEC2:
-                uniform = new rendering::uniform<math::ivec2>({ id }, name, type, location);
+                uniform = new rendering::uniform<math::ivec2>(id, name, type, location);
                 break;
             case GL_INT_VEC3:
-                uniform = new rendering::uniform<math::ivec3>({ id }, name, type, location);
+                uniform = new rendering::uniform<math::ivec3>(id, name, type, location);
                 break;
             case GL_INT_VEC4:
-                uniform = new rendering::uniform<math::ivec4>({ id }, name, type, location);
+                uniform = new rendering::uniform<math::ivec4>(id, name, type, location);
                 break;
             case GL_BOOL:
-                uniform = new rendering::uniform<bool>({ id }, name, type, location);
+                uniform = new rendering::uniform<bool>(id, name, type, location);
                 break;
             case GL_BOOL_VEC2:
-                uniform = new rendering::uniform<math::bvec2>({ id }, name, type, location);
+                uniform = new rendering::uniform<math::bvec2>(id, name, type, location);
                 break;
             case GL_BOOL_VEC3:
-                uniform = new rendering::uniform<math::bvec3>({ id }, name, type, location);
+                uniform = new rendering::uniform<math::bvec3>(id, name, type, location);
                 break;
             case GL_BOOL_VEC4:
-                uniform = new rendering::uniform<math::bvec4>({ id }, name, type, location);
+                uniform = new rendering::uniform<math::bvec4>(id, name, type, location);
                 break;
             case GL_FLOAT_MAT2:
-                uniform = new rendering::uniform<math::mat2>({ id }, name, type, location);
+                uniform = new rendering::uniform<math::mat2>(id, name, type, location);
                 break;
             case GL_FLOAT_MAT3:
-                uniform = new rendering::uniform<math::mat3>({ id }, name, type, location);
+                uniform = new rendering::uniform<math::mat3>(id, name, type, location);
                 break;
             case GL_FLOAT_MAT4:
-                uniform = new rendering::uniform<math::mat4>({ id }, name, type, location);
+                uniform = new rendering::uniform<math::mat4>(id, name, type, location);
                 break;
             default:
                 continue;
             }
 
-            shader.uniforms[nameHash(name)] = std::unique_ptr<shader_parameter_base>(uniform);
+            shader.uniforms[nameHash(std::string(name).c_str())] = std::unique_ptr<shader_parameter_base>(uniform);
         }
 
         delete[] uniformNameBuffer;
@@ -157,7 +276,7 @@ namespace args::rendering
             if (name.find('[') != std::string_view::npos)
                 continue;
 
-            shader.attributes[nameHash(name)] = std::unique_ptr<attribute>(new attribute({ id }, name, type, location));
+            shader.attributes[nameHash(std::string(name).c_str())] = std::unique_ptr<attribute>(new attribute(id, name, type, location));
         }
 
         delete[] attribNameBuffer;
@@ -235,7 +354,7 @@ namespace args::rendering
         std::string source = ((fs::basic_resource)result).to_string();
 
         process_includes(source);
-        process_mangling(source);
+        resolve_preprocess_features(source);
 
         shader_ilo shaders = seperate_shaders(source);
         if (shaders.empty())
@@ -250,9 +369,12 @@ namespace args::rendering
         {
             auto shaderId = compile_shader(shaderType, shaderIL.c_str(), shaderIL.size());
 
-            if (shaderId < 0)
+            if (shaderId == (app::gl_id)-1)
             {
                 std::cout << "error occurred in shader: " << name.c_str() << std::endl;
+
+                std::cout << shaderIL << std::endl;
+
                 for (auto id : shaderIds)
                     glDeleteShader(id);
 
@@ -270,7 +392,7 @@ namespace args::rendering
 
         {
             async::readwrite_guard guard(m_shaderLock);
-            m_shaders.insert(id, shader);
+            m_shaders.insert(id, std::move(shader));
         }
 
         return { id };
@@ -294,6 +416,51 @@ namespace args::rendering
             return invalid_shader_handle;
         else
             return { id };
+    }
+
+    GLuint shader_handle::get_uniform_block_index(const std::string& name) const
+    {
+        return shader_cache::get_shader(id)->get_uniform_block_index(name);
+    }
+
+    void shader_handle::bind_uniform_block(GLuint uniformBlockIndex, GLuint uniformBlockBinding) const
+    {
+        shader_cache::get_shader(id)->bind_uniform_block(uniformBlockIndex, uniformBlockBinding);
+    }
+
+    attribute shader_handle::get_attribute(const std::string& name)
+    {
+        return shader_cache::get_shader(id)->get_attribute(name);
+    }
+
+    void shader_handle::bind()
+    {
+        shader_cache::get_shader(id)->bind();
+    }
+
+    void shader_handle::release()
+    {
+        glUseProgram(0);
+    }
+
+    void shader::bind()
+    {
+        glUseProgram(programId);
+    }
+
+    void shader::release()
+    {
+        glUseProgram(0);
+    }
+
+    GLuint shader::get_uniform_block_index(const std::string& name) const
+    {
+        return glGetUniformBlockIndex(programId, name.c_str());
+    }
+
+    void shader::bind_uniform_block(GLuint uniformBlockIndex, GLuint uniformBlockBinding) const
+    {
+        glUniformBlockBinding(programId, uniformBlockIndex, uniformBlockBinding);
     }
 
 }

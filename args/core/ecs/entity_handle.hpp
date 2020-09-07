@@ -203,7 +203,7 @@ namespace args::core::ecs
         template<typename component_type>
         A_NODISCARD void write_component(component_type&& value, std::memory_order order = std::memory_order_release)
         {
-            get_component_handle<component_type>().write(std::forward(value), order);
+            get_component_handle<std::remove_reference_t<component_type>>().write(std::forward<component_type>(value), order);
         }
 
 

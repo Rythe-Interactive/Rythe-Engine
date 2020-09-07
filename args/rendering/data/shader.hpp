@@ -1,37 +1,32 @@
 #pragma once
 #include <vector>
 #include <string>
-#include <rendering/data/mesh.hpp>
+#include <rendering/data/model.hpp>
 #include <rendering/data/texture.hpp>
 
 namespace args::rendering
 {
-	struct mesh;
+	struct model;
 	struct camera;
 	struct shader;
-
-    struct ARGS_API shader_handle
-    {
-        id_type id;
-    };
-
-    constexpr shader_handle invalid_shader_handle{ 0 };
+    struct shader_cache;
+    struct shader_handle;
 
 #pragma region shader parameters
-	class shader_parameter_base
+	struct shader_parameter_base
 	{
 	protected:
-        shader_handle m_shader;
+        id_type m_shaderId;
 		std::string m_name;
 		GLenum m_type;
 		GLint m_location;
 
-		shader_parameter_base(shader_handle shader, std::string_view name, GLenum type, GLint location) : m_shader(shader), m_name(name), m_type(type), m_location(location) {};
+		shader_parameter_base(id_type shaderId, std::string_view name, GLenum type, GLint location) : m_shaderId(shaderId), m_name(name), m_type(type), m_location(location) {};
 
 	public:
 		virtual bool is_valid() const
 		{
-			return m_location != -1 && m_shader.id != invalid_shader_handle.id;
+			return m_location != -1 && m_shaderId != invalid_id;
 		}
 
 		virtual GLenum get_type() const { return m_type; }
@@ -42,7 +37,7 @@ namespace args::rendering
 	struct uniform : public shader_parameter_base
 	{
 	public:
-		uniform(shader_handle shader, std::string_view name, GLenum type, GLint location) : shader_parameter_base(shader, name, type, location) {}
+		uniform(id_type shaderId, std::string_view name, GLenum type, GLint location) : shader_parameter_base(shaderId, name, type, location) {}
 
 		void set_value(const T& value);
 	};
@@ -163,10 +158,10 @@ namespace args::rendering
 			glUniformMatrix4fv(m_location, 1, false, math::value_ptr(value));
 	}
 
-	class attribute : public shader_parameter_base
+	struct attribute : public shader_parameter_base
 	{
 	public:
-		attribute(shader_handle shader, std::string_view name, GLenum type, GLint location) : shader_parameter_base(shader, name, type, location) {}
+		attribute(id_type shaderId, std::string_view name, GLenum type, GLint location) : shader_parameter_base(shaderId, name, type, location) {}
 
 		void set_attribute_pointer(GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid* pointer)
 		{
@@ -188,20 +183,48 @@ namespace args::rendering
 		std::unordered_map<id_type, std::unique_ptr<shader_parameter_base>> uniforms;
 		std::unordered_map<id_type, std::unique_ptr<attribute>> attributes;
 
-		GLuint get_uniform_block_index(const std::string& pName) const;
+        shader(const shader&) = delete;
+        shader(shader&&) = default;
+        shader() = default;
+
+        shader& operator=(shader&&) = default;
+        shader& operator=(const shader&) = delete;
+
+        void bind();
+        static void release();
+
+		GLuint get_uniform_block_index(const std::string& name) const;
 		void bind_uniform_block(GLuint uniformBlockIndex, GLuint uniformBlockBinding) const;
 
 		template<typename T>
-		uniform<T>* get_uniform(const std::string& name)
+		uniform<T> get_uniform(const std::string& name)
 		{
-			return dynamic_cast<uniform<T>*>(uniforms[nameHash(name)].get());
+			return *dynamic_cast<uniform<T>*>(uniforms[nameHash(name)].get());
 		}
 
-        attribute* get_attribute(const std::string& name)
+        attribute get_attribute(const std::string& name)
         {
-            return attributes[nameHash(name)].get();
+            return *(attributes[nameHash(name)].get());
         }
 	};
+
+    struct ARGS_API shader_handle
+    {
+        using cache = shader_cache;
+        id_type id;
+        GLuint get_uniform_block_index(const std::string& name) const;
+        void bind_uniform_block(GLuint uniformBlockIndex, GLuint uniformBlockBinding) const;
+
+        template<typename T>
+        uniform<T> get_uniform(const std::string& name);
+
+        attribute get_attribute(const std::string& name);
+
+        void bind();
+        static void release();
+    };
+
+    constexpr shader_handle invalid_shader_handle{ 0 };
 
 	struct shader_import_settings
 	{
@@ -220,10 +243,11 @@ namespace args::rendering
 		static sparse_map<id_type, shader> m_shaders;
 		static async::readonly_rw_spinlock m_shaderLock;
 
-		static const shader& get_shader(id_type id);
+		static shader* get_shader(id_type id);
 
+        static void replace_items(std::string& source, const std::string& item, const std::string& value);
 		static void process_includes(std::string& shaderSource);
-		static void process_mangling(std::string& shaderSource);
+		static void resolve_preprocess_features(std::string& shaderSource);
 		static shader_ilo seperate_shaders(std::string& shaderSource);
 		static void process_io(shader& shader, id_type id);
 		static app::gl_id compile_shader(GLuint shaderType, cstring source, GLint sourceLength);
@@ -233,4 +257,10 @@ namespace args::rendering
 		static shader_handle get_handle(const std::string& name);
 		static shader_handle get_handle(id_type id);
 	};
+
+    template<typename T>
+    inline uniform<T> shader_handle::get_uniform(const std::string& name)
+    {
+        return shader_cache::get_shader(id)->get_uniform<T>(name);
+    }
 }

@@ -1,10 +1,10 @@
 #pragma once
-#include <rendering/data/mesh.hpp>
+#include <rendering/data/model.hpp>
 
 namespace args::rendering
 {
     struct renderable
     {
-        mesh_handle mesh;
+        model_handle model;
     };
 }

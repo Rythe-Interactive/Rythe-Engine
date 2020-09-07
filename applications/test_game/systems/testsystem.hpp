@@ -40,7 +40,7 @@ public:
 
         fs::view meshFile("basic://models/Cube.obj");
 
-        rendercomp.mesh = rendering::mesh_cache::create_mesh("test", meshFile);
+        rendercomp.model = rendering::model_cache::create_model("test", meshFile);
 
         renderableHandle.write(rendercomp);
 
@@ -48,7 +48,7 @@ public:
 
         position pos = positionH.read();
 
-        pos.z = 10.f;
+        pos.z = 5.1f;
 
         positionH.write(pos);
 
@@ -68,7 +68,8 @@ public:
 
         auto camH = m_ecs->createComponent<rendering::camera>(player);
         rendering::camera cam = camH.read();
-        cam.set_projection(60, 1, 0.1);
+
+        cam.set_projection(60.f, 1360.f / 768.f, 0.1);
         camH.write(cam);
 
         raiseEvent<application::window_request>(player, math::ivec2(600, 300), "This is a test window2!");
@@ -91,27 +92,39 @@ public:
     {
         static auto query = createQuery<sah>();
 
-        static time::time_span<fast_time> buffer;
+        //static time::time_span<fast_time> buffer;
         static int frameCount;
-        static time::time_span<fast_time> accumulated;
+        //static time::time_span<fast_time> accumulated;
 
-        buffer += deltaTime;
-        accumulated += deltaTime;
+        //buffer += deltaTime;
+        //accumulated += deltaTime;
         frameCount++;
 
-        if (buffer > 1.f)
+        for (auto entity : query)
         {
-            buffer -= 1.f;
+            auto comp = entity.get_component_handle<sah>();
 
-            for (auto entity : query)
-            {
-                auto comp = entity.get_component_handle<sah>();
-                comp.write({ frameCount });
-                //std::cout << "component value: " << comp.read().value << std::endl;
-            }
+            auto rot = entity.read_component<rotation>();
 
-            //std::cout << "Hi! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+            rot *= math::angleAxis(math::deg2rad(45.f * deltaTime), math::vec3(0, 1, 0));
+
+            entity.write_component(rot);
+
+            comp.write({ frameCount });
         }
+
+        //if (buffer > 1.f)
+        //{
+        //    buffer -= 1.f;
+
+        //    for (auto entity : query)
+        //    {
+        //        auto comp = entity.get_component_handle<sah>();
+        //        std::cout << "component value: " << comp.read().value << std::endl;
+        //    }
+
+        //    std::cout << "Hi! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+        //}
     }
 
     void differentInterval(time::time_span<fast_time> deltaTime)
@@ -147,18 +160,18 @@ public:
         accumulated += deltaTime;
         frameCount++;
 
-        if (buffer > 1.f)
+       /* if (buffer > 1.f)
         {
             buffer -= 1.f;
 
             for (auto entity : query)
             {
                 auto comp = entity.get_component_handle<sah>();
-                //std::cout << "component value on different thread: " << comp.read().value << std::endl;
+                std::cout << "component value on different thread: " << comp.read().value << std::endl;
             }
 
-            //std::cout << "This is a different thread!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
-        }
+            std::cout << "This is a different thread!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+        }*/
 
         //if (accumulated > 10.f)
         //{

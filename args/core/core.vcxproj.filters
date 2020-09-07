@@ -19,6 +19,7 @@
     <ClCompile Include="filesystem\filemanip.cpp" />
     <ClCompile Include="filesystem\assetimporter.cpp" />
     <ClCompile Include="async\readonly_rw_spinlock.cpp" />
+    <ClCompile Include="data\mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -376,6 +377,8 @@
     <ClInclude Include="defaults\coremodule.hpp" />
     <ClInclude Include="defaults\defaultcomponents.hpp" />
     <ClInclude Include="ecs\archetype.hpp" />
+    <ClInclude Include="data\mesh.hpp" />
+    <ClInclude Include="data\data.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">

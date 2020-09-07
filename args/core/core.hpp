@@ -20,6 +20,7 @@
 #include <core/entry/entry_point.hpp>
 
 #include <core/filesystem/filesystem.hpp>
+#include <core/data/data.hpp>
 
 namespace args
 {

@@ -116,6 +116,8 @@
     <ClInclude Include="containers\sparse_set.hpp" />
     <ClInclude Include="containers\vector_view.hpp" />
     <ClInclude Include="core.hpp" />
+    <ClInclude Include="data\data.hpp" />
+    <ClInclude Include="data\mesh.hpp" />
     <ClInclude Include="defaults\coremodule.hpp" />
     <ClInclude Include="defaults\defaultcomponents.hpp" />
     <ClInclude Include="detail\internals.hpp" />
@@ -455,6 +457,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="async\readonly_rw_spinlock.cpp" />
+    <ClCompile Include="data\mesh.cpp" />
     <ClCompile Include="ecs\ecsregistry.cpp" />
     <ClCompile Include="ecs\entity_handle.cpp" />
     <ClCompile Include="ecs\entityquery.cpp" />
