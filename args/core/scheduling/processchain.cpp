@@ -4,10 +4,14 @@
 #include <core/common/exception.hpp>
 #include <thread>
 
+#include <core/logging/logging.hpp>
+
 namespace args::core::scheduling
 {
 	void ProcessChain::threadedRun(ProcessChain* chain)
 	{
+        args::core::log::impl::threadnames[std::this_thread::get_id()] = chain->m_name;
+
 		try
 		{
 			while (!chain->m_exit->load(std::memory_order_acquire)) // Check for exit flag.

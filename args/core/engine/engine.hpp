@@ -12,6 +12,8 @@
 #include <vector>
 #include <memory>
 
+#include "core/logging/logging.hpp"
+
 /**
  * @file engine.hpp
  */
@@ -71,6 +73,8 @@ namespace args::core
 		 */
 		void init()
 		{
+            log::setup();
+
 			for (const auto& [priority, moduleList] : m_modules)
 				for (auto& module : moduleList)
 					module->setup();

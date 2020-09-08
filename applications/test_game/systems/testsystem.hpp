@@ -2,6 +2,8 @@
 #include <core/core.hpp>
 #include <application/application.hpp>
 #include <core/math/math.hpp>
+
+#include "core/logging/logging.hpp"
 using namespace args;
 
 struct sah
@@ -28,6 +30,12 @@ public:
 
     virtual void setup()
     {
+        filter(log::severity::debug);
+        log::info("Hello World");
+        log::warn("Hello World");
+        log::error("Hello World");
+        log::debug("Hello World");
+
         application::InputSystem::createBinding<player_move_action>(application::inputmap::method::W, 1.f);
         application::InputSystem::createBinding<player_move_action>(application::inputmap::method::S, -1.f);
         bindToEvent<player_move_action, &TestSystem::onPlayerMove>();
@@ -56,7 +64,6 @@ public:
         //std::cout << ent.has_component<rotation>() << std::endl;
         //std::cout << ent.has_component<scale>() << std::endl;
 
-        raiseEvent<application::window_request>(ent, math::ivec2(600, 300), "This is a test window!");
 
         player = m_ecs->createEntity();
         m_ecs->createComponent<transform>(player);
@@ -72,7 +79,6 @@ public:
         cam.set_projection(60.f, 1360.f / 768.f, 0.1);
         camH.write(cam);
 
-        raiseEvent<application::window_request>(player, math::ivec2(600, 300), "This is a test window2!");
 
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::differentThread>("TestChain");
@@ -90,6 +96,8 @@ public:
 
     void update(time::span deltaTime)
     {
+
+        log::info("still alive! {}",deltaTime.seconds());
         static auto query = createQuery<sah>();
 
         //static time::span buffer;

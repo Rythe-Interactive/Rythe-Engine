@@ -25,10 +25,8 @@ namespace args::physics
 
         void fixedUpdate(time::time_span<fast_time> deltaTime)
         {
-            std::cout << "physics fixed update " << deltaTime << std::endl;
             
             tickTimeRemaining += deltaTime;
-            //std::cout << "tickTimeRemaining " << tickTimeRemaining << std::endl;
             int currentTickCount = 0;
 
             while (shouldPhysicsStillTick(currentTickCount))
@@ -43,7 +41,6 @@ namespace args::physics
                 currentTickCount++;
             }
 
-            //std::cout << "leftover integrate " << tickTimeRemaining << std::endl;
             integrateRigidbodies(math::clamp(tickTimeRemaining,0.0f, timeStep));
 
         }
