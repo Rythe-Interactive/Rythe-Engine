@@ -1,5 +1,5 @@
 #include <physics/convexcollider.hpp>
-#include <physics/physicsmanifold.hpp>
+#include <physics/physics_manifold.hpp>
 
 
 namespace args::physics
@@ -17,6 +17,10 @@ namespace args::physics
     void ConvexCollider::CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold* manifold)
     {
 
+    }
+
+    void ConvexCollider::ConstructConvexHullWithMesh()
+    {
     }
 
     void ConvexCollider::ConstructBoxWithMesh()

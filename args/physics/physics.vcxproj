@@ -14,7 +14,7 @@
     <ClCompile Include="convexcollider.cpp" />
     <ClCompile Include="delete_this.cpp" />
     <ClCompile Include="physicscollider.cpp" />
-    <ClCompile Include="physicscomponent.cpp" />
+    <ClCompile Include="physics_component.cpp" />
     <ClCompile Include="physicssystem.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -24,10 +24,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="convexcollider.hpp" />
-    <ClInclude Include="cubecolliderparams.hpp" />
-    <ClInclude Include="physicsmanifold.hpp" />
+    <ClInclude Include="cube_collider_params.hpp" />
+    <ClInclude Include="physics_manifold.hpp" />
     <ClInclude Include="physicscollider.hpp" />
-    <ClInclude Include="physicscomponent.hpp" />
+    <ClInclude Include="physics_component.hpp" />
     <ClInclude Include="physicsmodule.hpp" />
     <ClInclude Include="rigidbody.hpp" />
   </ItemGroup>

@@ -36,7 +36,7 @@
     <ClCompile Include="convexcollider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="physicscomponent.cpp">
+    <ClCompile Include="physics_component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,17 +50,17 @@
     <ClInclude Include="convexcollider.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cubecolliderparams.hpp">
-      <Filter>components</Filter>
-    </ClInclude>
     <ClInclude Include="physicsmodule.hpp">
       <Filter>module</Filter>
     </ClInclude>
-    <ClInclude Include="physicscomponent.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="physicsmanifold.hpp">
+    <ClInclude Include="cube_collider_params.hpp">
       <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="physics_manifold.hpp">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="physics_component.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

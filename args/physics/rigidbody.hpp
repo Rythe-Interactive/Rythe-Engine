@@ -27,8 +27,6 @@ namespace args::physics
 
         bool isAsleep;
 
-
-
         void addForce(math::vec3 force)
         {
 

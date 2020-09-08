@@ -31,8 +31,12 @@ namespace args::physics
 
     private:
 
-        const float m_timeStep = 0.02f;
         
+        const float m_timeStep = 0.02f;
+
+        /** @brief Performs the entire physics pipeline (
+         * Broadphase Collision Detection, Narrowphase Collision Detection, and the Collision Resolution)
+        */
         void runPhysicsPipeline()
         {
             //Broadphase Optimization
@@ -43,6 +47,8 @@ namespace args::physics
 
         }
 
+        /** @brief gets all the entities with a rigidbody component and calls the integrate function on them
+        */
         void integrateRigidbodies(float deltaTime)
         {
 

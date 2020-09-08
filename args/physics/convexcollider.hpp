@@ -1,7 +1,7 @@
 #pragma once
 
 #include <physics/physicscollider.hpp>
-#include <physics/cubecolliderparams.hpp>
+#include <physics/cube_collider_params.hpp>
 
 namespace args::physics
 {
@@ -15,8 +15,11 @@ namespace args::physics
 
 		virtual void CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold* manifold) override;
 
+		/**@brief Constructs a polyhedron-shaped convex hull that encompasses the given mesh
+		*/
+		void ConstructConvexHullWithMesh();
+
 		/**@brief Constructs a box-shaped convex hull that encompasses the given mesh
-		 * @param mesh : the mesh that the convex hull will encompass
 		*/
 		void ConstructBoxWithMesh();
 
