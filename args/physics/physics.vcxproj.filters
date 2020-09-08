@@ -56,5 +56,11 @@
     <ClInclude Include="ConvexCollider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CubeColliderParams.hpp">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="rigidbody.hpp">
+      <Filter>components</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

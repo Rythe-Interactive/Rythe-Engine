@@ -16,6 +16,16 @@ namespace args::physics
 
     void ConvexCollider::CheckCollisionWith(ConvexCollider* convexCollider, physicsManifold* manifold)
     {
+
+    }
+
+    void ConvexCollider::ConstructBoxWithMesh()
+    {
+
+    }
+
+    void ConvexCollider::CreateBox(const CubeColliderParams& cubeParams)
+    {
     }
 
 

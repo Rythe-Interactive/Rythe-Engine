@@ -7,12 +7,15 @@ namespace args::physics
     {
 
     }
-    void physicsComponent::ConstructOBB()
+
+    void physicsComponent::ConstructBox()
     {
     }
+
     void physicsComponent::AddBox()
     {
     }
+
     void physicsComponent::AddSphere()
     {
     }

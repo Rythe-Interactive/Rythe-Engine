@@ -24,10 +24,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConvexCollider.h" />
+    <ClInclude Include="CubeColliderParams.hpp" />
     <ClInclude Include="Manifold.hpp" />
     <ClInclude Include="PhysicsCollider.hpp" />
     <ClInclude Include="physicsComponent.hpp" />
     <ClInclude Include="PhysicsModule.hpp" />
+    <ClInclude Include="rigidbody.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

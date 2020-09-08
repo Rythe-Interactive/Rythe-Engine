@@ -17,7 +17,7 @@ namespace args::physics
 
 		void ConstructConvexHull();
 
-		void ConstructOBB();
+		void ConstructBox();
 
 		void AddBox();
 
