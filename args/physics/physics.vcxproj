@@ -11,12 +11,25 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConvexCollider.cpp" />
     <ClCompile Include="delete_this.cpp" />
+    <ClCompile Include="PhysicsCollider.cpp" />
+    <ClCompile Include="physicsComponent.cpp" />
+    <ClCompile Include="PhysicsSystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core\core.vcxproj">
       <Project>{63d0d607-e99e-40b0-9b27-6e2430b57f7e}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ConvexCollider.h" />
+    <ClInclude Include="CubeColliderParams.hpp" />
+    <ClInclude Include="Manifold.hpp" />
+    <ClInclude Include="PhysicsCollider.hpp" />
+    <ClInclude Include="physicsComponent.hpp" />
+    <ClInclude Include="PhysicsModule.hpp" />
+    <ClInclude Include="rigidbody.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
