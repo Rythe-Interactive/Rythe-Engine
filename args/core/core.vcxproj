@@ -116,7 +116,12 @@
     <ClInclude Include="containers\sparse_set.hpp" />
     <ClInclude Include="containers\vector_view.hpp" />
     <ClInclude Include="core.hpp" />
+    <ClInclude Include="data\data.hpp" />
+    <ClInclude Include="data\mesh.hpp" />
+    <ClInclude Include="defaults\coremodule.hpp" />
+    <ClInclude Include="defaults\defaultcomponents.hpp" />
     <ClInclude Include="detail\internals.hpp" />
+    <ClInclude Include="ecs\archetype.hpp" />
     <ClInclude Include="ecs\component_container.hpp" />
     <ClInclude Include="ecs\component_handle.hpp" />
     <ClInclude Include="ecs\ecs.hpp" />
@@ -130,6 +135,7 @@
     <ClInclude Include="engine\system.hpp" />
     <ClInclude Include="entry\entry_point.hpp" />
     <ClInclude Include="filesystem\artifact_cache.hpp" />
+    <ClInclude Include="filesystem\assetimporter.hpp" />
     <ClInclude Include="filesystem\basic_resolver.hpp" />
     <ClInclude Include="filesystem\detail\meta.hpp" />
     <ClInclude Include="events\defaultevents.hpp" />
@@ -450,12 +456,16 @@
     <ClInclude Include="types\type_util.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="async\readonly_rw_spinlock.cpp" />
+    <ClCompile Include="data\mesh.cpp" />
     <ClCompile Include="ecs\ecsregistry.cpp" />
     <ClCompile Include="ecs\entity_handle.cpp" />
     <ClCompile Include="ecs\entityquery.cpp" />
     <ClCompile Include="ecs\queryregistry.cpp" />
     <ClCompile Include="filesystem\artifact_cache.cpp" />
+    <ClCompile Include="filesystem\assetimporter.cpp" />
     <ClCompile Include="filesystem\detail\strpath_manip.cpp" />
+    <ClCompile Include="filesystem\filemanip.cpp" />
     <ClCompile Include="filesystem\filesystem_resolver.cpp" />
     <ClCompile Include="filesystem\mem_filesystem_resolver.cpp" />
     <ClCompile Include="filesystem\navigator.cpp" />
@@ -467,6 +477,7 @@
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ecs\archetype.inl" />
     <None Include="math\glm\detail\func_common.inl" />
     <None Include="math\glm\detail\func_common_simd.inl" />
     <None Include="math\glm\detail\func_exponential.inl" />

@@ -6,115 +6,178 @@ using namespace args;
 
 struct sah
 {
-	int value;
+    int value;
 
-	sah operator+(const sah& other)
-	{
-		return { value + other.value };
-	}
+    sah operator+(const sah& other)
+    {
+        return { value + other.value };
+    }
 
-	sah operator*(const sah& other)
-	{
-		return { value * other.value };
-	}
+    sah operator*(const sah& other)
+    {
+        return { value * other.value };
+    }
 };
 
+struct player_move_action : public application::input_axis<player_move_action> {};
 
 class TestSystem final : public System<TestSystem>
 {
 public:
-	virtual void setup()
-	{
-		auto ent = m_ecs->createEntity();
-		ent.add_component<sah>();
+    ecs::entity_handle player;
+
+    virtual void setup()
+    {
+        application::InputSystem::createBinding<player_move_action>(application::inputmap::method::W, 1.f);
+        application::InputSystem::createBinding<player_move_action>(application::inputmap::method::S, -1.f);
+        bindToEvent<player_move_action, &TestSystem::onPlayerMove>();
+
+        auto ent = m_ecs->createEntity();
+        ent.add_component<sah>();
+        auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+
+        rendering::renderable rendercomp = renderableHandle.read();
+
+        fs::view meshFile("basic://models/Cube.obj");
+
+        rendercomp.model = rendering::model_cache::create_model("test", meshFile);
+
+        renderableHandle.write(rendercomp);
+
+        auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+
+        position pos = positionH.read();
+
+        pos.z = 5.1f;
+
+        positionH.write(pos);
+
+        //std::cout << ent.has_component<position>() << std::endl;
+        //std::cout << ent.has_component<rotation>() << std::endl;
+        //std::cout << ent.has_component<scale>() << std::endl;
+
         raiseEvent<application::window_request>(ent, math::ivec2(600, 300), "This is a test window!");
 
-        auto ent2 = m_ecs->createEntity();
-        raiseEvent<application::window_request>(ent2, math::ivec2(600, 300), "This is a test window2!");
+        player = m_ecs->createEntity();
+        m_ecs->createComponent<transform>(player);
 
-		createProcess<&TestSystem::update>("Update");
-		createProcess<&TestSystem::differentThread>("TestChain");
-		createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
-	}
+        rotation rot = rotationH.read();
+        rot = math::toQuat(math::inverse(math::lookAtLH(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0))));
+        rotationH.write(rot);
 
-	void update(time::time_span<fast_time> deltaTime)
-	{		
-		static auto query = createQuery<sah>();
 
-		static time::time_span<fast_time> buffer;
-		static int frameCount;
-		static time::time_span<fast_time> accumulated;
+        auto camH = m_ecs->createComponent<rendering::camera>(player);
+        rendering::camera cam = camH.read();
 
-		buffer += deltaTime;
-		accumulated += deltaTime;
-		frameCount++;
+        cam.set_projection(60.f, 1360.f / 768.f, 0.1);
+        camH.write(cam);
 
-		if (buffer > 1.f)
-		{
-			buffer -= 1.f;
+        raiseEvent<application::window_request>(player, math::ivec2(600, 300), "This is a test window2!");
 
-			for (auto entity : query)
-			{
-				auto comp = entity.get_component<sah>();
-				comp.write({ frameCount });
-				std::cout << "component value: " << comp.read().value << std::endl;
-			}
+        createProcess<&TestSystem::update>("Update");
+        createProcess<&TestSystem::differentThread>("TestChain");
+        createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
+    }
 
-			std::cout << "Hi! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
-		}
-	}
+    void onPlayerMove(player_move_action* action)
+    {
+        auto posH = player.get_component_handle<position>();
+        auto pos = posH.read();
+        pos.z += action->value * 0.1f;
+        std::cout << "[ " << pos.x << ", " << pos.y << ", " << pos.z << " ]\n";
+        posH.write(pos);
+    }
 
-	void differentInterval(time::time_span<fast_time> deltaTime)
-	{
-		static time::time_span<fast_time> buffer;
-		static int frameCount;
-		static time::time_span<fast_time> accumulated;
+    void update(time::time_span<fast_time> deltaTime)
+    {
+        static auto query = createQuery<sah>();
 
-		buffer += deltaTime;
-		accumulated += deltaTime;
-		frameCount++;
+        //static time::time_span<fast_time> buffer;
+        static int frameCount;
+        //static time::time_span<fast_time> accumulated;
 
-		math::vec2 v;
-		v.x = 10;
-		v.y = 20;
+        //buffer += deltaTime;
+        //accumulated += deltaTime;
+        frameCount++;
 
-		if (buffer > 1.f)
-		{
-			buffer -= 1.f;
-			std::cout << "This is a fixed interval!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
-		}
-	}
+        for (auto entity : query)
+        {
+            auto comp = entity.get_component_handle<sah>();
 
-	void differentThread(time::time_span<fast_time> deltaTime)
-	{
-		static auto query = createQuery<sah>();
+            auto rot = entity.read_component<rotation>();
 
-		static time::time_span<fast_time> buffer;
-		static int frameCount;
-		static time::time_span<fast_time> accumulated;
+            rot *= math::angleAxis(math::deg2rad(45.f * deltaTime), math::vec3(0, 1, 0));
 
-		buffer += deltaTime;
-		accumulated += deltaTime;
-		frameCount++;
+            entity.write_component(rot);
 
-		if (buffer > 1.f)
-		{
-			buffer -= 1.f;
+            comp.write({ frameCount });
+        }
 
-			for (auto entity : query)
-			{
-				auto comp = entity.get_component<sah>();				
-				std::cout << "component value on different thread: " << comp.read().value << std::endl;
-			}
+        //if (buffer > 1.f)
+        //{
+        //    buffer -= 1.f;
 
-			std::cout << "This is a different thread!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
-		}
+        //    for (auto entity : query)
+        //    {
+        //        auto comp = entity.get_component_handle<sah>();
+        //        std::cout << "component value: " << comp.read().value << std::endl;
+        //    }
 
-		//if (accumulated > 10.f)
-		//{
-		//	std::cout << "raising exit event" << std::endl;
-		//	raiseEvent<events::exit>();
-		//	//throw args_exception_msg("hehehe fuck you >:D");
-		//}
-	}
+        //    std::cout << "Hi! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+        //}
+    }
+
+    void differentInterval(time::time_span<fast_time> deltaTime)
+    {
+        static time::time_span<fast_time> buffer;
+        static int frameCount;
+        static time::time_span<fast_time> accumulated;
+
+        buffer += deltaTime;
+        accumulated += deltaTime;
+        frameCount++;
+
+        math::vec2 v;
+        v.x = 10;
+        v.y = 20;
+
+        if (buffer > 1.f)
+        {
+            buffer -= 1.f;
+            //std::cout << "This is a fixed interval!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+        }
+    }
+
+    void differentThread(time::time_span<fast_time> deltaTime)
+    {
+        static auto query = createQuery<sah>();
+
+        static time::time_span<fast_time> buffer;
+        static int frameCount;
+        static time::time_span<fast_time> accumulated;
+
+        buffer += deltaTime;
+        accumulated += deltaTime;
+        frameCount++;
+
+       /* if (buffer > 1.f)
+        {
+            buffer -= 1.f;
+
+            for (auto entity : query)
+            {
+                auto comp = entity.get_component_handle<sah>();
+                std::cout << "component value on different thread: " << comp.read().value << std::endl;
+            }
+
+            std::cout << "This is a different thread!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+        }*/
+
+        //if (accumulated > 10.f)
+        //{
+        //	std::cout << "raising exit event" << std::endl;
+        //	raiseEvent<events::exit>();
+        //	//throw args_exception_msg("hehehe fuck you >:D");
+        //}
+    }
 };

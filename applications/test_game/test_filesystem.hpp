@@ -45,7 +45,7 @@ public:
     [[nodiscard]] std::set<std::string> ls() const noexcept override { return {"test.txt"}; }
 
     common::result<filesystem::basic_resource, fs_error>
-    get(interfaces::implement_signal_t) const noexcept override
+    get(interfaces::implement_signal_t) noexcept override
     {
         
         using common::Err, common::Ok;
@@ -55,6 +55,20 @@ public:
         const auto result = get_data();
 
         if(get_target() == "test.txt") return Ok(filesystem::basic_resource(result));
+        return Err(args_fs_error("this mock interface does not support file access"));
+    }
+
+    common::result<const filesystem::basic_resource, fs_error>
+        get(interfaces::implement_signal_t) const noexcept override
+    {
+
+        using common::Err, common::Ok;
+
+        if (!prewarm()) return Err(args_fs_error("was unable to cook the data!"));
+
+        const auto result = get_data();
+
+        if (get_target() == "test.txt") return Ok<const filesystem::basic_resource>(filesystem::basic_resource(result));
         return Err(args_fs_error("this mock interface does not support file access"));
     }
 

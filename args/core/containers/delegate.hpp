@@ -103,6 +103,21 @@ namespace args::core
 			return (ptr != nullptr) || (!isNull());
 		}
 
+        delegate(std::nullptr_t)
+		{
+		}
+
+        delegate& operator=(std::nullptr_t)
+		{
+            m_invocation.stub = nullptr;
+            return *this;
+		}
+
+        void clear()
+		{
+		    m_invocation.stub = nullptr;
+		}
+
 		template <typename lambda_type>
 		delegate(const lambda_type& lambda)
 		{

@@ -25,7 +25,7 @@ namespace args::core::math::detail::glm
 			if(q.w > static_cast<T>(0))
 				return qua<T, Q>(log(q.w), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0));
 			else if(q.w < static_cast<T>(0))
-				return qua<T, Q>(log(-q.w), pi<T>(), static_cast<T>(0), static_cast<T>(0));
+				return qua<T, Q>(log(-q.w), GLM_ONLY_PI<T>(), static_cast<T>(0), static_cast<T>(0));
 			else
 				return qua<T, Q>(std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity());
 		}

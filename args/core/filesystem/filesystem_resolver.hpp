@@ -98,8 +98,10 @@ namespace args::core::filesystem {
          *  @ref set_target
          *  @return basic_resource wrapped in Ok() or fs_error wrapped in Err().
          */
-        A_NODISCARD common::result<basic_resource, fs_error> get() const noexcept;
-        virtual common::result<basic_resource, fs_error> get(interfaces::implement_signal_t) const noexcept ARGS_PURE;
+        A_NODISCARD common::result<basic_resource, fs_error> get() noexcept;
+        A_NODISCARD common::result<const basic_resource, fs_error> get() const noexcept;
+        virtual common::result<basic_resource, fs_error> get(interfaces::implement_signal_t) noexcept ARGS_PURE;
+        virtual common::result<const basic_resource, fs_error> get(interfaces::implement_signal_t) const noexcept ARGS_PURE;
 
         /** @brief Sets the contents of the file pointed at.
          *  @note When not writeable should do nothing and return false.

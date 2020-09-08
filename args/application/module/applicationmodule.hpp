@@ -3,6 +3,8 @@
 #include <application/window/window.hpp>
 #include <application/window/windowsystem.hpp>
 
+#include "application/input/inputsystem.hpp"
+
 namespace args::application
 {
     class ApplicationModule : public Module
@@ -14,11 +16,12 @@ namespace args::application
             addProcessChain("Input");
             reportComponentType<window>();
             reportSystem<WindowSystem>();
+            reportSystem<InputSystem>();
         }
 
         virtual priority_type priority() override
         {
-            return 10;
+            return 100;
         }
 
     };

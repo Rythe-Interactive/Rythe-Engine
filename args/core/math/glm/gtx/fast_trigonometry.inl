@@ -48,10 +48,10 @@ namespace detail
 
 		if(angle < half_pi<T>())
 			return detail::cos_52s(angle);
-		if(angle < pi<T>())
-			return -detail::cos_52s(pi<T>() - angle);
+		if(angle < GLM_ONLY_PI<T>())
+			return -detail::cos_52s(GLM_ONLY_PI<T>() - angle);
 		if(angle < (T(3) * half_pi<T>()))
-			return -detail::cos_52s(angle - pi<T>());
+			return -detail::cos_52s(angle - GLM_ONLY_PI<T>());
 
 		return detail::cos_52s(two_pi<T>() - angle);
 	}

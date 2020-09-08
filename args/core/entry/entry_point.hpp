@@ -88,7 +88,7 @@ extern void reportModules(args::core::Engine* engine);
 		#endif
 	#endif
 
-		try
+		//try
 		{
 			args::core::Engine engine;
 
@@ -109,7 +109,7 @@ extern void reportModules(args::core::Engine* engine);
 	#endif
 
 		}
-		catch (const args::core::exception& e)
+		/*catch (const args::core::exception& e)
 		{
 	#if (defined(ARGS_WINDOWS) && !defined(ARGS_KEEP_CONSOLE))
 			::ShowWindow(::GetConsoleWindow(), SW_SHOW);
@@ -142,7 +142,7 @@ extern void reportModules(args::core::Engine* engine);
 			std::cout << "Press any key to exit." << std::endl;
 			std::cin.ignore();
 	#endif
-		}
+		}*/
 
 		return 0;
 	}

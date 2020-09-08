@@ -27,7 +27,6 @@ namespace args::core
 	using f64 = double;
 
 	using f80 = long double;
-
 	
 	using time32 = float;
 	using time64 = double;
@@ -41,8 +40,10 @@ namespace args::core
 
 	using priority_type = uint8;
 #define default_priority 0
+#define PRIORITY_MAX UCHAR_MAX
 
 	using id_type = uint_max;
+
 #define invalid_id 0
 
 	using hours = time32;

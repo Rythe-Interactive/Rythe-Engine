@@ -49,6 +49,7 @@ namespace args::core::filesystem
 		static auto& driver = get_driver();
 
 		return driver.m_domain_resolver_map->find(d) != driver.m_domain_resolver_map->end();
+
 		
 	}
 
