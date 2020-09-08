@@ -27,7 +27,6 @@ namespace args::core
 	using f64 = double;
 
 	using f80 = long double;
-
 	
 	using time32 = float;
 	using time64 = double;

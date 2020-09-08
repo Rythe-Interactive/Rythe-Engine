@@ -126,7 +126,7 @@ namespace args::core::ecs
         return m_registry->getEntityData(m_id).components.contains(componentTypeId);
     }
 
-    A_NODISCARD inline component_handle_base entity_handle::get_component(id_type componentTypeId) const
+    A_NODISCARD inline component_handle_base entity_handle::get_component_handle(id_type componentTypeId) const
     {
         if (!m_registry)
             throw args_invalid_entity_error;

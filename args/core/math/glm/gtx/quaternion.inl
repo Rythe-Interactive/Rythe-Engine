@@ -141,7 +141,7 @@ namespace args::core::math::detail::glm
 				rotationAxis = cross(vec<3, T, Q>(1, 0, 0), orig);
 
 			rotationAxis = normalize(rotationAxis);
-			return angleAxis(pi<T>(), rotationAxis);
+			return angleAxis(GLM_ONLY_PI<T>(), rotationAxis);
 		}
 
 		// Implementation from Stan Melax's Game Programming Gems 1 article

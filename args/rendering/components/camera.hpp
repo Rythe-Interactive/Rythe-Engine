@@ -11,9 +11,9 @@ namespace args::rendering
             0.0f, 0.0f, 0.0f, 1.0f,
             0.0f, 0.0f, 0.1f, 0.0f);
 
-        void set_projection(float fovy, float ratio, float nearz)
+        void set_projection(float fov, float ratio, float nearz)
         {
-            float f = 1.0f / math::tan(fovy / 2.0f);
+            float f = 1.0f / math::tan((fov * ratio) / 2.0f);
             projection = math::mat4(
                 f / ratio, 0.0f, 0.0f, 0.0f,
                 0.0f, f, 0.0f, 0.0f,

@@ -58,9 +58,8 @@ namespace args::core::scheduling
                         destroyThread(error.threadId);
                     }
 
+                    throw std::logic_error(m_errors[0].message); // Re-throw an empty error so that the normal error handling system can take care of the rest.
                     m_errors.clear();
-
-                    throw std::logic_error(""); // Re-throw an empty error so that the normal error handling system can take care of the rest.
                 }
             }
 
