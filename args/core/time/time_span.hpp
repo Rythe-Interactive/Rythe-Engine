@@ -135,4 +135,6 @@ namespace args::core::time
             return time_span((std::chrono::duration_values<time_type>::max)());
         }
 	};
+
+    using span = time_span<>;
 }

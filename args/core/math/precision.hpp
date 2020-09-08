@@ -4,7 +4,7 @@
 
 namespace args::core::math
 {
-	enum class precision
+	enum class data_precision
 	{
 		bit32,
 		bit64,
@@ -13,17 +13,17 @@ namespace args::core::math
 	};
 
 
-	template <precision p>
+	template <data_precision p>
 	struct precision_chooser
 	{
 		using type = 
-		/*if*/		std::conditional_t<p == precision::bit32,f32,
-		/*elseif*/	std::conditional_t<p == precision::bit64,f64,
-		/*elseif*/	std::conditional_t<p == precision::lots, f80,
+		/*if*/		std::conditional_t<p == data_precision::bit32,f32,
+		/*elseif*/	std::conditional_t<p == data_precision::bit64,f64,
+		/*elseif*/	std::conditional_t<p == data_precision::lots, f80,
 					int32>>>;
 	};
 
-	template <precision p>
+	template <data_precision p>
 	using precision_chooser_t = typename precision_chooser<p>::type;
 		
 }

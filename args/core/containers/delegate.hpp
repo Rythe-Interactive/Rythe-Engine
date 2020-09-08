@@ -346,7 +346,7 @@ namespace args::core
 		template<typename return_handler>
 		void operator()(parameter_types... arguments, return_handler handler) const
 		{
-			size_t index = 0;
+			size_type index = 0;
 			for (auto& item : m_invocationList)
 			{
 				return_type value = (*(item.stub))(item.object, arguments...);
@@ -358,7 +358,7 @@ namespace args::core
 		template<typename return_handler>
 		void invoke(parameter_types... arguments, return_handler handler) const
 		{
-			size_t index = 0;
+			size_type index = 0;
 			for (auto& item : m_invocationList)
 			{
 				return_type value = (*(item.stub))(item.object, arguments...);
@@ -367,22 +367,22 @@ namespace args::core
 			}
 		}
 
-		void operator()(parameter_types... arguments, delegate<void(size_t, return_type*)> handler) const
+		void operator()(parameter_types... arguments, delegate<void(size_type, return_type*)> handler) const
 		{
 			operator() < decltype(handler) > (arguments..., handler);
 		}
 
-		void invoke(parameter_types... arguments, delegate<void(size_t, return_type*)> handler) const
+		void invoke(parameter_types... arguments, delegate<void(size_type, return_type*)> handler) const
 		{
 			operator() < decltype(handler) > (arguments..., handler);
 		}
 
-		void operator()(parameter_types... arguments, std::function<void(size_t, return_type*)> handler) const
+		void operator()(parameter_types... arguments, std::function<void(size_type, return_type*)> handler) const
 		{
 			operator() < decltype(handler) > (arguments..., handler);
 		}
 
-		void invoke(parameter_types... arguments, std::function<void(size_t, return_type*)> handler) const
+		void invoke(parameter_types... arguments, std::function<void(size_type, return_type*)> handler) const
 		{
 			operator() < decltype(handler) > (arguments..., handler);
 		}

@@ -1,5 +1,3 @@
-#pragma once
-
 namespace args::core::ecs
 {
     template<typename component_type, typename ...component_types>
