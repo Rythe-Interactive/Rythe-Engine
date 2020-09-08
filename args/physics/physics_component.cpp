@@ -1,5 +1,5 @@
 
-#include "physicsComponent.hpp"
+#include <physics/physics_component.hpp>
 
 namespace args::physics
 {
@@ -12,7 +12,7 @@ namespace args::physics
     {
     }
 
-    void physicsComponent::AddBox()
+    void physicsComponent::AddBox(const cube_collider_params& cubeParams)
     {
     }
 

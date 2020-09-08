@@ -1,7 +1,7 @@
 #pragma once
 
 #include <core/core.hpp>
-#include <physics/PhysicsSystem.hpp>
+#include <physics/physicssystem.hpp>
 
 namespace args::physics
 {

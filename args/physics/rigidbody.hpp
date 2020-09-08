@@ -27,14 +27,12 @@ namespace args::physics
 
         bool isAsleep;
 
-
-
-        void add_force(math::vec3 force)
+        void addForce(math::vec3 force)
         {
 
         }
 
-        void add_force_at(math::vec3 worldPosition, math::vec3 force)
+        void addForceAt(math::vec3 worldPosition, math::vec3 force)
         {
 
         }
@@ -44,14 +42,19 @@ namespace args::physics
 
         }
 
-        void SetMass(float mass)
+        void setMass(float mass)
         {
             inverseMass = 1.0f / mass;
         }
 
-        void SetRestitution(float newRestitution)
+        void setRestitution(float newRestitution)
         {
             restitution = math::clamp(newRestitution,0.0f,1.0f);
+        }
+
+        void setFriction(float newFriction)
+        {
+            friction = math::clamp(newFriction, 0.0f, 1.0f);
         }
 
         

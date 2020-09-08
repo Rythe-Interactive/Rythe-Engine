@@ -2,7 +2,7 @@
 
 namespace args::physics
 {
-    struct CubeColliderParams
+    struct cube_collider_params
     {
 
     };
