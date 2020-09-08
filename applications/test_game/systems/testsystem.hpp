@@ -88,13 +88,13 @@ public:
         posH.write(pos);
     }
 
-    void update(time::time_span<fast_time> deltaTime)
+    void update(time::span deltaTime)
     {
         static auto query = createQuery<sah>();
 
-        //static time::time_span<fast_time> buffer;
+        //static time::span buffer;
         static int frameCount;
-        //static time::time_span<fast_time> accumulated;
+        //static time::span accumulated;
 
         //buffer += deltaTime;
         //accumulated += deltaTime;
@@ -127,11 +127,11 @@ public:
         //}
     }
 
-    void differentInterval(time::time_span<fast_time> deltaTime)
+    void differentInterval(time::span deltaTime)
     {
-        static time::time_span<fast_time> buffer;
+        static time::span buffer;
         static int frameCount;
-        static time::time_span<fast_time> accumulated;
+        static time::span accumulated;
 
         buffer += deltaTime;
         accumulated += deltaTime;
@@ -148,13 +148,13 @@ public:
         }
     }
 
-    void differentThread(time::time_span<fast_time> deltaTime)
+    void differentThread(time::span deltaTime)
     {
         static auto query = createQuery<sah>();
 
-        static time::time_span<fast_time> buffer;
+        static time::span buffer;
         static int frameCount;
-        static time::time_span<fast_time> accumulated;
+        static time::span accumulated;
 
         buffer += deltaTime;
         accumulated += deltaTime;

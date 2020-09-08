@@ -129,7 +129,6 @@
     <ClInclude Include="ecs\entity_handle.hpp" />
     <ClInclude Include="ecs\entityquery.hpp" />
     <ClInclude Include="ecs\queryregistry.hpp" />
-    <ClInclude Include="ecs\rw_component_buffer.hpp" />
     <ClInclude Include="engine\engine.hpp" />
     <ClInclude Include="engine\module.hpp" />
     <ClInclude Include="engine\system.hpp" />

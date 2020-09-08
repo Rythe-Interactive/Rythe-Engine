@@ -4,7 +4,7 @@
 
 namespace args::core::math
 {
-	enum class precision
+	enum class data_precision
 	{
 		bit32,
 		bit64,
@@ -13,7 +13,7 @@ namespace args::core::math
 	};
 
 
-	template <precision p>
+	template <data_precision p>
 	struct precision_chooser
 	{
 		using type = 
@@ -23,7 +23,7 @@ namespace args::core::math
 					int32>>>;
 	};
 
-	template <precision p>
+	template <data_precision p>
 	using precision_chooser_t = typename precision_chooser<p>::type;
 		
 }

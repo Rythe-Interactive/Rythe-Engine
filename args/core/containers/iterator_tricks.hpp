@@ -1,7 +1,6 @@
+#pragma once
 #include <utility>
 #include <core/platform/platform.hpp>
-
-#pragma once
 
 namespace args::core::iterator
 {
