@@ -349,7 +349,7 @@ namespace args::core::async
 			bool locked = true;
 			do
 			{
-				for (int i = 0; i < lastLocked; i++)
+				for (int i = 0; i <= lastLocked; i++)
 					m_locks[i]->unlock(read);
 
 				locked = true;
@@ -440,7 +440,7 @@ namespace args::core::async
 			bool locked = true;
 			do
 			{
-				for (int i = 0; i < lastLocked; i++)
+				for (int i = 0; i <= lastLocked; i++)
 					m_locks[i]->unlock(write);
 
 				locked = true;
@@ -519,7 +519,7 @@ namespace args::core::async
 			bool locked = true;
 			do
 			{
-				for (int i = 0; i < lastLocked; i++)
+				for (int i = 0; i <= lastLocked; i++)
 					m_locks[i]->unlock(m_states[i]);
 
 				locked = true;
