@@ -25,7 +25,7 @@ namespace args::physics
 
         void fixedUpdate(time::time_span<fast_time> deltaTime)
         {
-            std::cout << "physics fixed update " << deltaTime << std::endl;
+            //std::cout << "physics fixed update " << deltaTime << std::endl;
             
             tickTimeRemaining += deltaTime;
             //std::cout << "tickTimeRemaining " << tickTimeRemaining << std::endl;

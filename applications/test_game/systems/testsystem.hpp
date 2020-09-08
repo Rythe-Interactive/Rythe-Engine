@@ -56,7 +56,7 @@ public:
         //std::cout << ent.has_component<rotation>() << std::endl;
         //std::cout << ent.has_component<scale>() << std::endl;
 
-        raiseEvent<application::window_request>(ent, math::ivec2(600, 300), "This is a test window!");
+        //raiseEvent<application::window_request>(ent, math::ivec2(600, 300), "This is a test window!");
 
         player = m_ecs->createEntity();
         m_ecs->createComponent<transform>(player);
@@ -72,7 +72,7 @@ public:
         cam.set_projection(60.f, 1360.f / 768.f, 0.1);
         camH.write(cam);
 
-        raiseEvent<application::window_request>(player, math::ivec2(600, 300), "This is a test window2!");
+        //raiseEvent<application::window_request>(player, math::ivec2(600, 300), "This is a test window2!");
 
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::differentThread>("TestChain");

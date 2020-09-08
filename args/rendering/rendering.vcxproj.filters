@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="data\importers\mesh_importers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="data\importers\texture_importers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -32,9 +29,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="data\importers\mesh_importers.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="module\renderingmodule.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

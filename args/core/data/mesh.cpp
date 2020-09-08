@@ -1,7 +1,11 @@
 #include <core/data/mesh.hpp>
+#include <core/data/importers/mesh_importers.hpp>
 
 namespace args::core
 {
+    std::unordered_map<id_type, std::unique_ptr<std::pair<async::readonly_rw_spinlock, mesh>>> mesh_cache::m_meshes;
+    async::readonly_rw_spinlock mesh_cache::m_meshesLock;
+
     void mesh::to_resource(filesystem::basic_resource* resource, const mesh& value)
     {
         resource->clear();
@@ -90,5 +94,99 @@ namespace args::core
         for (unsigned i = 0; i < data->tangents.size(); i++)
             if (data->tangents[i] != math::vec3(0, 0, 0))
                 data->tangents[i] = math::normalize(data->tangents[i]);
+    }
+
+    std::pair<async::readonly_rw_spinlock&, mesh&> mesh_handle::get()
+    {
+        async::readonly_guard guard(mesh_cache::m_meshesLock);
+        auto& [lock, mesh] = *(mesh_cache::m_meshes[id].get());
+        return std::make_pair(std::ref(lock), std::ref(mesh));
+    }
+
+    mesh_handle mesh_cache::create_mesh(const std::string& name, const filesystem::view& file, mesh_import_settings settings)
+    {
+        id_type id = nameHash(name);
+
+        {
+            async::readonly_guard guard(m_meshesLock);
+            if (m_meshes.count(id))
+                return { id };
+        }
+
+        if (!file.is_valid() || !file.file_info().is_file)
+            return invalid_mesh_handle;
+
+        auto result = filesystem::AssetImporter::tryLoad<mesh>(file, settings);
+
+        if (result != common::valid)
+            return invalid_mesh_handle;
+
+        mesh* data;
+
+        {            
+            async::readwrite_guard guard(m_meshesLock);
+            auto* pair_ptr = new std::pair<async::readonly_rw_spinlock, mesh>(std::make_pair<async::readonly_rw_spinlock, mesh>(async::readonly_rw_spinlock(), result));
+            auto iterator = m_meshes.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::readonly_rw_spinlock, mesh>>(pair_ptr))).first;
+            data = &iterator->second.get()->second;
+        }
+
+        data->fileName = file.get_filename();
+
+        return { id };
+    }
+
+    mesh_handle mesh_cache::copy_mesh(const std::string& name, const std::string& newName)
+    {
+        id_type id = nameHash(name);
+        id_type newId = nameHash(newName);            
+
+        {
+            async::readonly_guard guard(m_meshesLock);
+            mesh data = m_meshes[id]->second;
+
+            if (m_meshes.count(newId))
+            {
+                mesh& destination = m_meshes[newId]->second;
+                async::readwrite_guard rwguard(m_meshes[newId]->first);
+                destination = data;
+            }
+            else
+            {
+                auto* pair_ptr = new std::pair<async::readonly_rw_spinlock, mesh>(std::make_pair(async::readonly_rw_spinlock(), data));
+                m_meshes.emplace(std::make_pair(newId, pair_ptr));
+            }
+        }
+        return { newId };
+    }
+
+    mesh_handle mesh_cache::copy_mesh(id_type id, const std::string& newName)
+    {
+        id_type newId = nameHash(newName);
+
+        if (m_meshes.count(newId))
+            m_meshes.erase(newId);
+
+        mesh data = m_meshes[id]->second;
+
+        auto* pair_ptr = new std::pair<async::readonly_rw_spinlock, mesh>(std::make_pair(async::readonly_rw_spinlock(), data));
+        m_meshes.emplace(std::make_pair(newId, pair_ptr));
+        return { newId };
+    }
+
+    mesh_handle mesh_cache::get_handle(const std::string& name)
+    {
+        id_type id = nameHash(name);
+        async::readonly_guard guard(mesh_cache::m_meshesLock);
+        if (mesh_cache::m_meshes.count(id))
+            return { id };
+        return invalid_mesh_handle;
+    }
+
+    mesh_handle mesh_cache::get_handle(id_type id)
+    {
+        async::readonly_guard guard(mesh_cache::m_meshesLock);
+        if (mesh_cache::m_meshes.count(id))
+            return { id };
+        return invalid_mesh_handle;
     }
 }
