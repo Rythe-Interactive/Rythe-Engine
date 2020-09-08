@@ -104,7 +104,7 @@ namespace args::core::math::detail::glm
         {
             // Graphics Gems III, page 96
             T angle = acos(cosTheta);
-            T phi = angle + k * glm::pi<T>();
+            T phi = angle + k * glm::GLM_ONLY_PI<T>();
             return (sin(angle - a * phi)* x + sin(a * phi) * z) / sin(angle);
         }
     }

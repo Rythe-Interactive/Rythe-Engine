@@ -10,7 +10,7 @@ namespace args::core::math::detail::glm
 	}
 
 	template<typename genType>
-	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType pi()
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType GLM_ONLY_PI()
 	{
 		GLM_STATIC_ASSERT(std::numeric_limits<genType>::is_iec559, "'pi' only accepts floating-point inputs");
 		return static_cast<genType>(3.14159265358979323846264338327950288);

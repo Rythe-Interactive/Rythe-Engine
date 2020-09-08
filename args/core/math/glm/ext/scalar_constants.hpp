@@ -28,7 +28,7 @@ namespace args::core::math::detail::glm
 
 	/// Return the pi constant for floating point types.
 	template<typename genType>
-	GLM_FUNC_DECL GLM_CONSTEXPR genType pi();
+	GLM_FUNC_DECL GLM_CONSTEXPR genType GLM_ONLY_PI();
 
 	/// Return the value of cos(1 / 2) for floating point types.
 	template<typename genType>

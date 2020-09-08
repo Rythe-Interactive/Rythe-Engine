@@ -163,7 +163,7 @@ namespace args::application
             async::readwrite_guard guard(data::m_creationLock);
             for (auto entity : m_windowQuery)
             {
-                closeWindow(entity.get_component<window>().read(std::memory_order_relaxed));
+                closeWindow(entity.get_component_handle<window>().read(std::memory_order_relaxed));
             }
 
             m_exit = true;
@@ -186,7 +186,7 @@ namespace args::application
             bindToEvent<events::exit, &WindowSystem::onExit>();
             bindToEvent<window_request, &WindowSystem::onWindowRequest>();
 
-            raiseEvent<window_request>(world_entity_id, math::ivec2(400, 400), "<Args> Engine", nullptr, nullptr, 1);
+            raiseEvent<window_request>(world_entity_id, math::ivec2(1360, 768), "<Args> Engine", nullptr, nullptr, 1);
 
             createProcess<&WindowSystem::refreshWindows>("Rendering");
             createProcess<&WindowSystem::handleWindowEvents>("Input");
@@ -227,6 +227,8 @@ namespace args::application
                     ContextHelper::windowHint(GLFW_BLUE_BITS, mode->blueBits);
                     ContextHelper::windowHint(GLFW_REFRESH_RATE, mode->refreshRate);
                 }
+
+                ContextHelper::windowHint(GLFW_SAMPLES, 16);
 
                 if (request.size == math::ivec2(0, 0))
                     request.size = { 400, 400 };
@@ -285,7 +287,7 @@ namespace args::application
 
             for (auto entity : m_windowQuery)
             {
-                window win = entity.get_component<window>().read(std::memory_order_relaxed);
+                window win = entity.get_component_handle<window>().read(std::memory_order_relaxed);
                 ContextHelper::swapBuffers(win);
             }
         }

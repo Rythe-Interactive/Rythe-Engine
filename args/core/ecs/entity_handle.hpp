@@ -2,6 +2,7 @@
 #include <core/types/types.hpp>
 #include <core/containers/sparse_map.hpp>
 #include <core/containers/hashed_sparse_set.hpp>
+#include <core/platform/platform.hpp>
 #include <memory>
 
 /**
@@ -179,7 +180,7 @@ namespace args::core::ecs
          * @returns component_handle_base Valid component handle if the entity has the component, invalid handle if the entity doesn't have the component.
          * @note component_handle_base needs to be force_cast to component_handle<T> in order to be usable.
          */
-        A_NODISCARD component_handle_base get_component(id_type componentTypeId) const;
+        A_NODISCARD component_handle_base get_component_handle(id_type componentTypeId) const;
 
         /**@brief Get component handle of a certain component.
          * @tparam component_type Type of component to fetch.
@@ -188,10 +189,23 @@ namespace args::core::ecs
          * @returns component_handle<component_type> Valid component handle if the entity has the component, invalid handle if the entity doesn't have the component.
          */
         template<typename component_type>
-        A_NODISCARD component_handle<component_type> get_component() const
+        A_NODISCARD component_handle<component_type> get_component_handle() const
         {
-            return force_value_cast<component_handle<component_type>>(get_component(typeHash<component_type>()));
+            return force_value_cast<component_handle<component_type>>(get_component_handle(typeHash<component_type>()));
         }
+
+        template<typename component_type>
+        A_NODISCARD component_type read_component(std::memory_order order = std::memory_order_acquire) const
+        {
+            return get_component_handle<component_type>().read(order);
+        }
+
+        template<typename component_type>
+        A_NODISCARD void write_component(component_type&& value, std::memory_order order = std::memory_order_release)
+        {
+            get_component_handle<std::remove_reference_t<component_type>>().write(std::forward<component_type>(value), order);
+        }
+
 
         /**@brief Add component to the entity.
          * @param componentTypeId Type id of component to add.
@@ -214,6 +228,14 @@ namespace args::core::ecs
         component_handle<component_type> add_component() const
         {
             return force_value_cast<component_handle<component_type>>(add_component(typeHash<component_type>()));
+        }
+
+        template<typename component_type>
+        component_handle<component_type> add_component(component_type&& value, std::memory_order order = std::memory_order_release) const
+        {
+            component_handle<component_type> handle = force_value_cast<component_handle<component_type>>(add_component(typeHash<component_type>()));
+            handle.write(value, order);
+            return handle;
         }
 
         /**@brief Remove component from entity.

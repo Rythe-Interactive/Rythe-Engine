@@ -41,6 +41,7 @@ namespace args::application
         static void windowHint(int hint, int value);
         static GLFWwindow* createWindow(math::ivec2 dim, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
         static GLFWwindow* createWindow(int width, int height, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
+        static GLFWglproc getProcAddress(cstring procname);
         static void setWindowShouldClose(GLFWwindow* window, int value);
         static int windowShouldClose(GLFWwindow* window);
         static void setWindowAttrib(GLFWwindow* window, int attrib, int value);
