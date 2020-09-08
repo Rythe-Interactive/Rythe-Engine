@@ -1,5 +1,5 @@
-#include "ConvexCollider.h"
-#include "Manifold.hpp"
+#include <physics/convexcollider.hpp>
+#include <physics/physicsmanifold.hpp>
 
 
 namespace args::physics
@@ -24,7 +24,7 @@ namespace args::physics
 
     }
 
-    void ConvexCollider::CreateBox(const CubeColliderParams& cubeParams)
+    void ConvexCollider::CreateBox(const cubeColliderParams& cubeParams)
     {
     }
 

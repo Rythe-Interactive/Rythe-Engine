@@ -1,4 +1,5 @@
 #pragma once
+
 #ifndef ARGS_IMPORT
 #define ARGS_IMPORT
 #include <core/core.hpp>
@@ -9,8 +10,6 @@
 
 #include <core/math/math.hpp>
 
-//#include <application/application.hpp>
-
 namespace args::physics
 {
     class PhysicsSystem final : public System<PhysicsSystem>
@@ -20,21 +19,20 @@ namespace args::physics
         virtual void setup()
         {
             createProcess<&PhysicsSystem::fixedUpdate>("Physics", 1 / 60.0f);
-
         }
 
         void fixedUpdate(time::time_span<fast_time> deltaTime)
         {
-            std::cout << "physics fixed update " << deltaTime << std::endl;
+            //std::cout << "physics fixed update " << deltaTime << std::endl;
             
-            tickTimeRemaining += deltaTime;
+            m_tickTimeRemaining += deltaTime;
             //std::cout << "tickTimeRemaining " << tickTimeRemaining << std::endl;
             int currentTickCount = 0;
 
             while (shouldPhysicsStillTick(currentTickCount))
             {
                 float tick{};
-                decreaseTimeRemaining(tickTimeRemaining,tick);
+                decreaseTimeRemaining(m_tickTimeRemaining,tick);
 
                 runPhysicsPipeline();
 
@@ -44,23 +42,19 @@ namespace args::physics
             }
 
             //std::cout << "leftover integrate " << tickTimeRemaining << std::endl;
-            integrateRigidbodies(math::clamp(tickTimeRemaining,0.0f, timeStep));
+            integrateRigidbodies(math::clamp(m_tickTimeRemaining,0.0f, m_timeStep));
 
         }
 
     private:
 
-        float tickTimeRemaining;
-        const float maxTickCount = 3;
-        const float timeStep = 0.02f;
-
-        //TODO Physics Documentation
-        /*
+        float m_tickTimeRemaining;
+        const float m_maxTickCount = 3;
+        const float m_timeStep = 0.02f;
         
-        */
         bool shouldPhysicsStillTick(int currentTick)
         {
-            return tickTimeRemaining > timeStep && currentTick <= maxTickCount;
+            return m_tickTimeRemaining > m_timeStep && currentTick <= m_maxTickCount;
         }
 
         void runPhysicsPipeline()
@@ -80,21 +74,16 @@ namespace args::physics
 
         void decreaseTimeRemaining(float& tickTimeRemaining,float & tick)
         {
-            if (tickTimeRemaining > timeStep)
+            if (tickTimeRemaining > m_timeStep)
             {
-                tickTimeRemaining -= timeStep;
-                tick = timeStep;
+                tickTimeRemaining -= m_timeStep;
+                tick = m_timeStep;
                 return;
             }
 
             tick = 0.0f;
 
         }
-
-
-
-
-
     };
 }
 
