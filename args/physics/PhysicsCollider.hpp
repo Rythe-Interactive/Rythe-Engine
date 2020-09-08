@@ -6,7 +6,7 @@
 namespace args::physics
 {
     struct physicsComponent;
-    struct physicsManifold;
+    struct physics_manifold;
     class ConvexCollider;
 
     class PhysicsCollider
@@ -16,9 +16,9 @@ namespace args::physics
         PhysicsCollider(physicsComponent* colliderOwner);
 
         virtual void CheckCollision(
-            std::shared_ptr<PhysicsCollider> physicsCollider, physicsManifold* manifold) {};
+            std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold* manifold) {};
 
-        virtual void CheckCollisionWith(ConvexCollider* convexCollider, physicsManifold* manifold) {};
+        virtual void CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold* manifold) {};
 
 
     protected:

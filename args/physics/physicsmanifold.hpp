@@ -2,7 +2,7 @@
 
 namespace args::physics
 {
-    struct physicsManifold
+    struct physics_manifold
     {
 
     };

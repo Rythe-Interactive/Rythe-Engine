@@ -9,12 +9,12 @@ namespace args::physics
 
     }
 
-    void ConvexCollider::CheckCollision(const std::shared_ptr<PhysicsCollider> physicsComponent, physicsManifold* manifold)
+    void ConvexCollider::CheckCollision(const std::shared_ptr<PhysicsCollider> physicsComponent, physics_manifold* manifold)
     {
         physicsComponent->CheckCollisionWith(this, manifold);
     }
 
-    void ConvexCollider::CheckCollisionWith(ConvexCollider* convexCollider, physicsManifold* manifold)
+    void ConvexCollider::CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold* manifold)
     {
 
     }
@@ -24,7 +24,7 @@ namespace args::physics
 
     }
 
-    void ConvexCollider::CreateBox(const cubeColliderParams& cubeParams)
+    void ConvexCollider::CreateBox(const cube_collider_params& cubeParams)
     {
     }
 

@@ -8,7 +8,7 @@
 #include <core/core.hpp>
 #endif // !ARGS_IMPORT
 
-#include <core/math/math.hpp>
+
 
 namespace args::physics
 {
@@ -18,45 +18,21 @@ namespace args::physics
 
         virtual void setup()
         {
-            createProcess<&PhysicsSystem::fixedUpdate>("Physics", 1 / 60.0f);
+            createProcess<&PhysicsSystem::fixedUpdate>("Physics", m_timeStep);
         }
 
         void fixedUpdate(time::time_span<fast_time> deltaTime)
         {
-            //std::cout << "physics fixed update " << deltaTime << std::endl;
-            
-            m_tickTimeRemaining += deltaTime;
-            //std::cout << "tickTimeRemaining " << tickTimeRemaining << std::endl;
-            int currentTickCount = 0;
+            runPhysicsPipeline();
 
-            while (shouldPhysicsStillTick(currentTickCount))
-            {
-                float tick{};
-                decreaseTimeRemaining(m_tickTimeRemaining,tick);
-
-                runPhysicsPipeline();
-
-                integrateRigidbodies(tick);
-
-                currentTickCount++;
-            }
-
-            //std::cout << "leftover integrate " << tickTimeRemaining << std::endl;
-            integrateRigidbodies(math::clamp(m_tickTimeRemaining,0.0f, m_timeStep));
+            integrateRigidbodies(deltaTime);
 
         }
 
     private:
 
-        float m_tickTimeRemaining;
-        const float m_maxTickCount = 3;
         const float m_timeStep = 0.02f;
         
-        bool shouldPhysicsStillTick(int currentTick)
-        {
-            return m_tickTimeRemaining > m_timeStep && currentTick <= m_maxTickCount;
-        }
-
         void runPhysicsPipeline()
         {
             //Broadphase Optimization
@@ -69,19 +45,6 @@ namespace args::physics
 
         void integrateRigidbodies(float deltaTime)
         {
-
-        }
-
-        void decreaseTimeRemaining(float& tickTimeRemaining,float & tick)
-        {
-            if (tickTimeRemaining > m_timeStep)
-            {
-                tickTimeRemaining -= m_timeStep;
-                tick = m_timeStep;
-                return;
-            }
-
-            tick = 0.0f;
 
         }
     };
