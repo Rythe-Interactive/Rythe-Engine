@@ -34,19 +34,11 @@ namespace args::rendering
         bool operator==(const model_handle& other) const { return id == other.id; }
         bool is_buffered();
         void buffer_data(app::gl_id matrixBuffer);
-        const mesh& get_data();
+        mesh_handle get_mesh();
         const model& get_model();
     };
 
     constexpr model_handle invalid_model_handle { 0 };
-
-    struct mesh_import_settings
-    {
-        bool triangulate;
-        bool vertex_color;
-    };
-
-    constexpr mesh_import_settings default_mesh_settings { true, false };
 
     struct ARGS_API model_cache
     {
@@ -56,17 +48,16 @@ namespace args::rendering
         static sparse_map<id_type, model> m_models;
         static async::readonly_rw_spinlock m_modelLock;
 
-        static sparse_map<id_type, std::unique_ptr<mesh>> m_meshdata;
-        static async::readonly_rw_spinlock m_dataLock;
-
         static const model& get_model(id_type id);
-        static const mesh& get_data(id_type id);
-        
+
     public:
         static void buffer(id_type id, app::gl_id matrixBuffer);
         static model_handle create_model(const std::string& name, const fs::view& file, mesh_import_settings settings = default_mesh_settings);
         static model_handle get_handle(const std::string& name);
         static model_handle get_handle(id_type id);
+        static mesh_handle get_mesh(const std::string& name);
+        static mesh_handle get_mesh(id_type id);
+
     };
 }
 

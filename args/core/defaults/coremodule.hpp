@@ -1,6 +1,7 @@
 #pragma once
 #include <core/engine/module.hpp>
 #include <core/defaults/defaultcomponents.hpp>
+#include <core/data/importers/mesh_importers.hpp>
 
 namespace args::core
 {
@@ -9,6 +10,8 @@ namespace args::core
     public:
         virtual void setup() override
         {
+            filesystem::AssetImporter::reportConverter<obj_mesh_loader>(".obj");
+
             reportComponentType<position>();
             reportComponentType<rotation>();
             reportComponentType<scale>();

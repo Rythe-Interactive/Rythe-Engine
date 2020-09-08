@@ -49,6 +49,7 @@
     <IntDir>$(SolutionDir)temp\intermediates\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName>args-$(ProjectName)</TargetName>
     <IncludePath>$(SolutionDir)args;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
+    <ClangTidyChecks>-c++17-extensions-*</ClangTidyChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -56,6 +57,7 @@
     <IntDir>$(SolutionDir)temp\intermediates\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName>args-$(ProjectName)</TargetName>
     <IncludePath>$(SolutionDir)args;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
+    <ClangTidyChecks>-c++17-extensions-*</ClangTidyChecks>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -117,6 +119,7 @@
     <ClInclude Include="containers\vector_view.hpp" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="data\data.hpp" />
+    <ClInclude Include="data\importers\mesh_importers.hpp" />
     <ClInclude Include="data\mesh.hpp" />
     <ClInclude Include="defaults\coremodule.hpp" />
     <ClInclude Include="defaults\defaultcomponents.hpp" />
@@ -456,6 +459,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="async\readonly_rw_spinlock.cpp" />
+    <ClCompile Include="data\importers\mesh_importers.cpp" />
     <ClCompile Include="data\mesh.cpp" />
     <ClCompile Include="ecs\ecsregistry.cpp" />
     <ClCompile Include="ecs\entity_handle.cpp" />
@@ -476,6 +480,7 @@
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\.editorconfig" />
     <None Include="ecs\archetype.inl" />
     <None Include="math\glm\detail\func_common.inl" />
     <None Include="math\glm\detail\func_common_simd.inl" />

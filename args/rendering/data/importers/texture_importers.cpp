@@ -1,7 +1,7 @@
 #define STBI_MAX_DIMENSIONS 16384
 #define STBI_NO_GIF
 #define STB_IMAGE_IMPLEMENTATION
-#include <rendering/detail/stb_image.h>
+#include <stb_image.h>
 
 #include <rendering/data/importers/texture_importers.hpp>
 

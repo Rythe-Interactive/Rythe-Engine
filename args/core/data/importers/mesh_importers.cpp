@@ -1,17 +1,18 @@
 #define TINYOBJLOADER_IMPLEMENTATION
-#include <rendering/detail/tiny_obj_loader.h>
+#include <tiny_obj_loader.h>
 
-#include <rendering/data/importers/mesh_importers.hpp>
+#include <core/data/importers/mesh_importers.hpp>
+#include <core/math/math.hpp>
 
 #include <map>
 
-namespace args::rendering
+namespace args::core
 {
-    common::result_decay_more<fs::basic_resource, fs_error> obj_mesh_loader::load(const fs::basic_resource& resource, mesh_import_settings&& settings)
+    common::result_decay_more<filesystem::basic_resource, fs_error> obj_mesh_loader::load(const filesystem::basic_resource& resource, mesh_import_settings&& settings)
     {
         using common::Err, common::Ok;
         // decay overloads the operator of ok_type and operator== for valid_t.
-        using decay = common::result_decay_more<fs::basic_resource, fs_error>;
+        using decay = common::result_decay_more<filesystem::basic_resource, fs_error>;
 
         tinyobj::ObjReader reader;
         tinyobj::ObjReaderConfig config;
@@ -55,13 +56,6 @@ namespace args::rendering
 
             for (auto& indexData : shape.mesh.indices)
             {
-                //uint idx = data.vertices.size();
-                //submesh.indices.push_back(idx);
-                //data.vertices.push_back({ attributes.vertices[indexData.vertex_index + 0], attributes.vertices[indexData.vertex_index + 1], attributes.vertices[indexData.vertex_index + 2] });
-                //data.vertices[idx] = (data.vertices[idx] + math::vec3(1.f, 1.f, 1.f)) / 2.f;
-                //data.normals.push_back(math::vec3());
-                //data.uvs.push_back(math::vec2());
-
                 uint vtxIdx = indexData.vertex_index * 3;
 
                 vtx_data vtx = { { attributes.vertices[vtxIdx + 0], attributes.vertices[vtxIdx + 1], attributes.vertices[vtxIdx + 2] },
@@ -93,7 +87,7 @@ namespace args::rendering
 
         mesh::calculate_tangents(&data);
 
-        fs::basic_resource result(nullptr);
+        filesystem::basic_resource result(nullptr);
 
         mesh::to_resource(&result, data);
 

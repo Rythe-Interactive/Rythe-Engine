@@ -22,7 +22,7 @@
 #include <stdexcept>
 #include <utility>
 
-#include "core/platform/platform.hpp"
+#include <core/platform/platform.hpp>
 
 namespace args::core::common {
 
@@ -142,7 +142,7 @@ namespace args::core::common {
     template <class... Args>
     inline typename result<Args...>::ok_type Ok_of(result<Args...>& res)
     {
-        return Err(res.get());
+        return Ok(res.get());
     }
     /********************************************************************************/
 
