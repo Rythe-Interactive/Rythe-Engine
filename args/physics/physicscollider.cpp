@@ -1,5 +1,5 @@
-#include "PhysicsCollider.hpp"
-#include "physicsComponent.hpp"
+#include <physics/physicscollider.hpp>
+#include  <physics/physics_component.hpp>
 
 namespace args::physics
 {

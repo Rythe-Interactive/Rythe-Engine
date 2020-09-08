@@ -27,40 +27,37 @@
     <ClCompile Include="delete_this.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PhysicsSystem.hpp">
+    <ClCompile Include="physics_component.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="convexcollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="physicscollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="physicssystem.hpp">
       <Filter>systems</Filter>
-    </ClCompile>
-    <ClCompile Include="physicsComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsCollider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ConvexCollider.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PhysicsModule.hpp">
-      <Filter>module</Filter>
-    </ClInclude>
-    <ClInclude Include="physicsComponent.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsCollider.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Manifold.hpp">
-      <Filter>components</Filter>
-    </ClInclude>
-    <ClInclude Include="ConvexCollider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeColliderParams.hpp">
-      <Filter>components</Filter>
-    </ClInclude>
     <ClInclude Include="rigidbody.hpp">
       <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="convexcollider.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="physics_manifold.hpp">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="physics_component.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cube_collider_params.hpp">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="physicsmodule.hpp">
+      <Filter>module</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
