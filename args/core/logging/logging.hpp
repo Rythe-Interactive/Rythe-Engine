@@ -1,6 +1,7 @@
 #pragma once
 
 #define SPDLOG_HEADER_ONLY
+#include <sstream>
 #include <core/logging/spdlog/spdlog.h>
 #include <core/logging/spdlog/sinks/stdout_color_sinks.h>
 #include <core/logging/spdlog/sinks/rotating_file_sink.h>
@@ -65,7 +66,12 @@ namespace args::core::log
             }
             else
             {
-                thread_ident = std::to_string(args::core::force_value_cast<uint>(std::this_thread::get_id()));
+                std::ostringstream oss;
+                oss << std::this_thread::get_id();
+                thread_ident = oss.str();
+
+                //NOTE(algo-ryth-mix): this conversion is not portable 
+                //thread_ident = std::to_string(args::core::force_value_cast<uint>(std::this_thread::get_id()));
             }
 
             dest.append(thread_ident.data(), thread_ident.data() + thread_ident.size());
