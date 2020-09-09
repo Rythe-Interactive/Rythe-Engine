@@ -31,10 +31,6 @@ public:
     virtual void setup()
     {
         filter(log::severity::debug);
-        log::info("Hello World");
-        log::warn("Hello World");
-        log::error("Hello World");
-        log::debug("Hello World");
 
         application::InputSystem::createBinding<player_move_action>(application::inputmap::method::W, 1.f);
         application::InputSystem::createBinding<player_move_action>(application::inputmap::method::S, -1.f);
@@ -92,14 +88,15 @@ public:
         auto posH = player.get_component_handle<position>();
         auto pos = posH.read();
         pos.z += action->value * 0.1f;
-        std::cout << "[ " << pos.x << ", " << pos.y << ", " << pos.z << " ]\n";
+
+        log::debug("{}",pos);
+
         posH.write(pos);
     }
 
     void update(time::span deltaTime)
     {
 
-        log::info("still alive! {}",deltaTime.seconds());
         static auto query = createQuery<sah>();
 
         //static time::span buffer;

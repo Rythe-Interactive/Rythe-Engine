@@ -4,6 +4,8 @@
 #include <core/filesystem/view.hpp>
 #include <iostream>
 
+#include "core/logging/logging.hpp"
+
 namespace args::core::filesystem
 {
     struct resource_converter_base
@@ -60,14 +62,14 @@ namespace args::core::filesystem
             resource_converter_base* base = data::m_converters[nameHash(view.get_extension())];
 
             std::string typeName = typeid(T).name();
-            std::cout << typeName << std::endl;
+            log::debug("{}", typeName);
 
             if constexpr (sizeof...(Settings) > 0)
             {
                 std::string settingNames[sizeof...(Settings)] = { typeid(Settings).name()... };
 
                 for (std::string name : settingNames)
-                    std::cout << name << std::endl;
+                   log::debug("{}", name );
             }
 
             auto* converter = reinterpret_cast<resource_converter<T, Settings...>*>(base);

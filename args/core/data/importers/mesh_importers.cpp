@@ -6,6 +6,8 @@
 
 #include <map>
 
+#include "core/logging/logging.hpp"
+
 namespace args::core
 {
     common::result_decay_more<filesystem::basic_resource, fs_error> obj_mesh_loader::load(const filesystem::basic_resource& resource, mesh_import_settings&& settings)
@@ -26,7 +28,7 @@ namespace args::core
         }
 
         if (!reader.Warning().empty())
-            std::cout << reader.Warning() << std::endl;
+            log::warn(reader.Warning().c_str());
 
         tinyobj::attrib_t attributes = reader.GetAttrib();
         std::vector<tinyobj::shape_t> shapes = reader.GetShapes();
