@@ -12,7 +12,7 @@ namespace args::core::scheduling
 
     Scheduler::Scheduler(events::EventBus* eventBus) : m_eventBus(eventBus)
     {
-        args::core::log::impl::threadnames[std::this_thread::get_id()] = "Initialization";
+        args::core::log::impl::thread_names[std::this_thread::get_id()] = "Initialization";
         std::cout << std::this_thread::get_id();
         addProcessChain("Update");
     }
@@ -35,7 +35,7 @@ namespace args::core::scheduling
                 chain.run();
         }
 
-        args::core::log::impl::threadnames[std::this_thread::get_id()] = "Update";
+        args::core::log::impl::thread_names[std::this_thread::get_id()] = "Update";
 
 
         while (!m_eventBus->checkEvent<events::exit>()) // Check for engine exit flag.

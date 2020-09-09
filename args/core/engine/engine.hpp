@@ -7,12 +7,12 @@
 #include <core/scheduling/scheduler.hpp>
 #include <core/events/eventbus.hpp>
 #include <core/defaults/coremodule.hpp>
+#include <core/logging/logging.hpp>
 
 #include <map>
 #include <vector>
 #include <memory>
 
-#include "core/logging/logging.hpp"
 
 /**
  * @file engine.hpp

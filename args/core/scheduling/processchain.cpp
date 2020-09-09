@@ -10,7 +10,7 @@ namespace args::core::scheduling
 {
 	void ProcessChain::threadedRun(ProcessChain* chain)
 	{
-        args::core::log::impl::threadnames[std::this_thread::get_id()] = chain->m_name;
+        args::core::log::impl::thread_names[std::this_thread::get_id()] = chain->m_name;
 
 		try
 		{
