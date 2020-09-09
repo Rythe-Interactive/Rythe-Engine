@@ -44,6 +44,8 @@ workspace "args"
 -- core module, must not have any dependencies and should be first
 include "core/build-core.lua"
 
+project "*"
+    includedirs { "../deps/include/" }
 
 -- how to build:
 --[[
