@@ -25,7 +25,6 @@
   <ItemGroup>
     <ClInclude Include="convexcollider.hpp" />
     <ClInclude Include="cube_collider_params.hpp" />
-    <ClInclude Include="physicscollider.hpp" />
     <ClInclude Include="physics_manifold.hpp" />
     <ClInclude Include="physics_component.hpp" />
     <ClInclude Include="physicsmodule.hpp" />
