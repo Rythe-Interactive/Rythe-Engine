@@ -31,7 +31,6 @@ namespace args::physics
 
     private:
 
-
         const float m_timeStep = 0.02f;
 
         /** @brief Performs the entire physics pipeline (
