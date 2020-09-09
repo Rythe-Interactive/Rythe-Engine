@@ -201,7 +201,7 @@ namespace args::application
             async::readwrite_guard guard(m_requestLock);
             for (auto& request : m_requests)
             {
-                std::cout << "creating a window" << std::endl;
+                log::debug("creating a window");
 
                 if (request.hints.size())
                 {
@@ -272,7 +272,7 @@ namespace args::application
                 ContextHelper::setMouseButtonCallback(win, &WindowSystem::onMouseButton);
                 ContextHelper::setScrollCallback(win, &WindowSystem::onMouseScroll);
 
-                std::cout << "done creating a window" << std::endl;
+                log::debug("created window: {}", request.name);
             }
 
             m_requests.clear();

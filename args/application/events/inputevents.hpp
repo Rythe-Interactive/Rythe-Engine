@@ -22,6 +22,8 @@ namespace args::application
         inputmap::modifier_keys mods{};
         inputmap::method identifier{};
 
+        virtual bool unique() override { return false; }
+
         A_NODISCARD bool pressed()  const { return value == true;  }
         A_NODISCARD bool released() const { return value == false; }
     };
@@ -39,6 +41,8 @@ namespace args::application
         float value{};
         inputmap::modifier_keys mods{};
         inputmap::method identifier{};
+
+        virtual bool unique() override { return false; }
     };
 
 }

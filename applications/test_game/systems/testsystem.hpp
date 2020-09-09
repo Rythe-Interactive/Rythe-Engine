@@ -21,7 +21,9 @@ struct sah
     }
 };
 
-struct player_move_action : public application::input_axis<player_move_action> {};
+struct player_move : public application::input_axis<player_move> {};
+struct player_strive : public application::input_axis<player_strive> {};
+struct player_fly : public application::input_axis<player_fly> {};
 
 class TestSystem final : public System<TestSystem>
 {
@@ -36,9 +38,17 @@ public:
         log::error("Hello World");
         log::debug("Hello World");
 
-        application::InputSystem::createBinding<player_move_action>(application::inputmap::method::W, 1.f);
-        application::InputSystem::createBinding<player_move_action>(application::inputmap::method::S, -1.f);
-        bindToEvent<player_move_action, &TestSystem::onPlayerMove>();
+        application::InputSystem::createBinding<player_move>(application::inputmap::method::W, 1.f);
+        application::InputSystem::createBinding<player_move>(application::inputmap::method::S, -1.f);
+        application::InputSystem::createBinding<player_strive>(application::inputmap::method::D, 1.f);
+        application::InputSystem::createBinding<player_strive>(application::inputmap::method::A, -1.f);
+        application::InputSystem::createBinding<player_fly>(application::inputmap::method::SPACE, 1.f);
+        application::InputSystem::createBinding<player_fly>(application::inputmap::method::LEFT_SHIFT, -1.f);
+
+
+        bindToEvent<player_move, &TestSystem::onPlayerMove>();
+        bindToEvent<player_strive, &TestSystem::onPlayerStrive>();
+        bindToEvent<player_fly, &TestSystem::onPlayerFly>();
 
         auto ent = m_ecs->createEntity();
         ent.add_component<sah>();
@@ -67,17 +77,17 @@ public:
         //raiseEvent<application::window_request>(ent, math::ivec2(600, 300), "This is a test window!");
 
         player = m_ecs->createEntity();
-        m_ecs->createComponent<transform>(player);
+        auto [posCam, rotCam, scaleCam] = m_ecs->createComponent<transform>(player);
 
-        rotation rot = rotationH.read();
-        rot = math::toQuat(math::inverse(math::lookAtLH(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0))));
-        rotationH.write(rot);
+        rotation rot = rotCam.read();
+        rot = math::toQuat(math::lookAt(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0)));
+        rotCam.write(rot);
 
 
         auto camH = m_ecs->createComponent<rendering::camera>(player);
         rendering::camera cam = camH.read();
 
-        cam.set_projection(60.f, 1360.f / 768.f, 0.1);
+        cam.set_projection(60.f, 1360.f / 768.f, 0.1, 1000.f);
         camH.write(cam);
 
         //raiseEvent<application::window_request>(player, math::ivec2(600, 300), "This is a test window2!");
@@ -87,19 +97,31 @@ public:
         createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
     }
 
-    void onPlayerMove(player_move_action* action)
+    void onPlayerMove(player_move* action)
     {
         auto posH = player.get_component_handle<position>();
-        auto pos = posH.read();
-        pos.z += action->value * 0.1f;
-        std::cout << "[ " << pos.x << ", " << pos.y << ", " << pos.z << " ]\n";
-        posH.write(pos);
+        log::debug("z");
+        posH.fetch_add(math::vec3(0.f, 0.f, action->value * 0.1f));
+    }
+
+    void onPlayerStrive(player_strive* action)
+    {
+        auto posH = player.get_component_handle<position>();
+        log::debug("x");
+        posH.fetch_add(math::vec3(action->value * 0.1f, 0.f, 0.f));
+    }
+
+    void onPlayerFly(player_fly* action)
+    {
+        auto posH = player.get_component_handle<position>();
+        log::debug("y");
+        posH.fetch_add(math::vec3(0.f, action->value * 0.1f, 0.f));
     }
 
     void update(time::span deltaTime)
     {
 
-        log::info("still alive! {}",deltaTime.seconds());
+        //log::info("still alive! {}",deltaTime.seconds());
         static auto query = createQuery<sah>();
 
         //static time::span buffer;
