@@ -12,7 +12,7 @@ namespace args::physics
     class PhysicsCollider
     {
     public:
-
+        
         PhysicsCollider(physicsComponent* colliderOwner);
 
         /** @brief given a PhysicsCollider CheckCollision calls "CheckCollisionWith". Both colliders are then passed through
