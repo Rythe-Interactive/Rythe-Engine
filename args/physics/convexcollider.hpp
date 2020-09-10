@@ -24,7 +24,7 @@ namespace args::physics
 		void ConstructBoxWithMesh();
 
 		/**@brief Constructs a box-shaped convex hull based on the given parameters
-		 * @param cubeParams : the parameters that will be used to create the box.
+		 * @param cubeParams the parameters that will be used to create the box.
 		*/
 		void CreateBox(const cube_collider_params& cubeParams);
 

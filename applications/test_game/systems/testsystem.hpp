@@ -2,6 +2,9 @@
 #include <core/core.hpp>
 #include <application/application.hpp>
 #include <core/math/math.hpp>
+#include <physics/physics_component.hpp>
+#include <physics/rigidbody.hpp>
+
 using namespace args;
 
 struct sah
@@ -32,6 +35,8 @@ public:
         application::InputSystem::createBinding<player_move_action>(application::inputmap::method::S, -1.f);
         bindToEvent<player_move_action, &TestSystem::onPlayerMove>();
 
+        //------------------------------------- Setup rotating block entity-------------------------------------------//
+
         auto ent = m_ecs->createEntity();
         ent.add_component<sah>();
         auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
@@ -47,6 +52,8 @@ public:
         auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
 
         position pos = positionH.read();
+       
+        rotation otherRot = rotationH.read();
 
         pos.z = 5.1f;
 
@@ -58,12 +65,61 @@ public:
 
         //raiseEvent<application::window_request>(ent, math::ivec2(600, 300), "This is a test window!");
 
-        player = m_ecs->createEntity();
-        m_ecs->createComponent<transform>(player);
+        setupCameraEntity();
+        //raiseEvent<application::window_request>(player, math::ivec2(600, 300), "This is a test window2!");
 
-        rotation rot = rotationH.read();
-        rot = math::toQuat(math::inverse(math::lookAtLH(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0))));
-        rotationH.write(rot);
+        //------------------------------------- Setup entity with rigidbody -------------------------------------------//
+
+        auto physicsEnt = m_ecs->createEntity();
+
+        //setup rendering for physics ent
+        auto renderableHandle2 = m_ecs->createComponent<rendering::renderable>(physicsEnt);
+
+        rendering::renderable rendercomp2 = renderableHandle2.read();
+        rendercomp2.model = rendering::model_cache::create_model("test", meshFile);
+        renderableHandle2.write(rendercomp2);
+
+        auto [bodyPosition, bodyRotation, bodyScale] = m_ecs->createComponent<transform>(physicsEnt);
+
+        position bodyP = bodyPosition.read();
+        bodyP.x = 0.0f;
+        bodyP.y = 4.0f;
+        bodyP.z = 5.1f;
+        bodyPosition.write(bodyP);
+
+        //setup physics component on physics ent
+        auto rbHandle = m_ecs->createComponent<physics::rigidbody>(physicsEnt);
+        auto physicsComponent = m_ecs->createComponent<physics::physicsComponent>(physicsEnt);
+
+        auto rb = rbHandle.read();
+
+        rb.globalCentreOfMass = bodyP;
+        //rb.addForce( math::vec3(-9, 0, 0));
+        rb.addForceAt(math::vec3(0, 4.5, 5.1f),math::vec3(-100, 0, 0));
+        rb.globalCentreOfMass = bodyP;
+
+        rbHandle.write(rb);
+
+        createProcess<&TestSystem::update>("Update");
+        createProcess<&TestSystem::differentThread>("TestChain");
+        createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
+
+    }
+
+    void setupCameraEntity()
+    {
+        player = m_ecs->createEntity();
+        auto [camPosHandle, camRotHandle, camScaleHandle] = m_ecs->createComponent<transform>(player);
+
+        position camPos = camPosHandle.read();
+        camPos.z = -20.0f;
+        camPos.x = -8.0f;
+        camPosHandle.write(camPos);
+
+
+        rotation rot = camRotHandle.read();
+        rot = math::toQuat(math::inverse(math::lookAtRH(math::vec3(0, 0, 0), math::vec3(0, 0, -1), math::vec3(0, -1, 0))));
+        camRotHandle.write(rot);
 
 
         auto camH = m_ecs->createComponent<rendering::camera>(player);
@@ -71,12 +127,6 @@ public:
 
         cam.set_projection(60.f, 1360.f / 768.f, 0.1);
         camH.write(cam);
-
-        //raiseEvent<application::window_request>(player, math::ivec2(600, 300), "This is a test window2!");
-
-        createProcess<&TestSystem::update>("Update");
-        createProcess<&TestSystem::differentThread>("TestChain");
-        createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
     }
 
     void onPlayerMove(player_move_action* action)

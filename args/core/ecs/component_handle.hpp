@@ -64,7 +64,7 @@ namespace args::core::ecs
         component_handle& operator=(const component_handle& other) { m_registry = other.m_registry; m_ownerId = other.m_ownerId; return *this; }
         component_handle& operator=(component_handle&& other) { m_registry = other.m_registry; m_ownerId = other.m_ownerId; return *this; }
 
-        bool operator==(const component_handle<component_type>& other) const { return m_registry == other.m_registry && m_ownerId == other.m_ownerId; }
+        bool operator==(const component_handle<component_type>& other) const { return valid(); }
 
         /**@brief Atomic read of component.
          * @param order Memory order at which to load the component.
