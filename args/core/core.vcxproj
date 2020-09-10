@@ -108,6 +108,7 @@
     <ClInclude Include="common\result.hpp" />
     <ClInclude Include="common\string_extra.hpp" />
     <ClInclude Include="common\exception.hpp" />
+    <ClInclude Include="common\unit_conversion.hpp" />
     <ClInclude Include="containers\atomic_sparse_map.hpp" />
     <ClInclude Include="containers\containers.hpp" />
     <ClInclude Include="containers\data_view.hpp" />

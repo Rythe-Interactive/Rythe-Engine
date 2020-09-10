@@ -380,6 +380,7 @@
     <ClInclude Include="data\mesh.hpp" />
     <ClInclude Include="data\data.hpp" />
     <ClInclude Include="data\importers\mesh_importers.hpp" />
+    <ClInclude Include="common\unit_conversion.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">
