@@ -3,7 +3,11 @@
 #include <application/application.hpp>
 #include <core/math/math.hpp>
 
-#include "core/logging/logging.hpp"
+#include <core/logging/logging.hpp>
+#include <physics/physics_component.hpp>
+#include <physics/rigidbody.hpp>
+
+
 using namespace args;
 
 struct sah
@@ -104,21 +108,68 @@ public:
             scaleH.write(math::vec3(0.25f));
         }
 
-        player = m_ecs->createEntity();
-        auto [posCam, rotCam, scaleCam] = m_ecs->createComponent<transform>(player);
-        rotation rot = rotCam.read();
-        rot = math::conjugate(math::toQuat(math::lookAt(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0))));
-        rotCam.write(rot);
+        setupCameraEntity();
+        //raiseEvent<application::window_request>(player, math::ivec2(600, 300), "This is a test window2!");
 
-        auto camH = m_ecs->createComponent<rendering::camera>(player);
-        rendering::camera cam = camH.read();
-        cam.set_projection(60.f, 1360.f / 768.f, 0.1, 1000.f);
-        camH.write(cam);
+        //------------------------------------- Setup entity with rigidbody -------------------------------------------//
 
+        auto physicsEnt = m_ecs->createEntity();
+
+        //setup rendering for physics ent
+        auto renderableHandle2 = m_ecs->createComponent<rendering::renderable>(physicsEnt);
+
+        rendering::renderable rendercomp2 = renderableHandle2.read();
+        rendercomp2.model = rendering::model_cache::create_model("test", meshFile);
+        renderableHandle2.write(rendercomp2);
+
+        auto [bodyPosition, bodyRotation, bodyScale] = m_ecs->createComponent<transform>(physicsEnt);
+
+        position bodyP = bodyPosition.read();
+        bodyP.x = 0.0f;
+        bodyP.y = 4.0f;
+        bodyP.z = 5.1f;
+        bodyPosition.write(bodyP);
+
+        //setup physics component on physics ent
+        auto rbHandle = m_ecs->createComponent<physics::rigidbody>(physicsEnt);
+        auto physicsComponent = m_ecs->createComponent<physics::physicsComponent>(physicsEnt);
+
+        auto rb = rbHandle.read();
+
+        rb.globalCentreOfMass = bodyP;
+        //rb.addForce( math::vec3(-9, 0, 0));
+        rb.addForceAt(math::vec3(0, 4.5, 5.1f),math::vec3(-100, 0, 0));
+        rb.globalCentreOfMass = bodyP;
+
+        rbHandle.write(rb);
 
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::differentThread>("TestChain");
         createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
+
+    }
+
+    void setupCameraEntity()
+    {
+        player = m_ecs->createEntity();
+        auto [camPosHandle, camRotHandle, camScaleHandle] = m_ecs->createComponent<transform>(player);
+
+        position camPos = camPosHandle.read();
+        camPos.z = -20.0f;
+        camPos.x = -8.0f;
+        camPosHandle.write(camPos);
+
+
+        rotation rot = camRotHandle.read();
+        rot = math::toQuat(math::inverse(math::lookAtRH(math::vec3(0, 0, 0), math::vec3(0, 0, -1), math::vec3(0, -1, 0))));
+        camRotHandle.write(rot);
+
+
+        auto camH = m_ecs->createComponent<rendering::camera>(player);
+        rendering::camera cam = camH.read();
+
+        cam.set_projection(60.f, 1360.f / 768.f, 0.1);
+        camH.write(cam);
     }
 
     void disableCursor(events::component_creation<app::window>* creation)
