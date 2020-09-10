@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="context\contexthelper.cpp" />
     <ClCompile Include="context\detail\glad\glad.c" />
+    <ClCompile Include="input\inputsystem.cpp" />
     <ClCompile Include="window\windowsystem.cpp" />
   </ItemGroup>
   <ItemGroup>

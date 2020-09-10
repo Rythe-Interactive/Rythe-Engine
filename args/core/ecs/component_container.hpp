@@ -23,6 +23,7 @@ namespace args::core::ecs
     public:
         virtual bool has_component(id_type entityId) ARGS_PURE;
         virtual void create_component(id_type entityId) ARGS_PURE;
+        virtual void create_component(id_type entityId, void* value) ARGS_PURE;
         virtual void destroy_component(id_type entityId) ARGS_PURE;
         virtual ~component_container_base() = default;
     };
@@ -78,6 +79,12 @@ namespace args::core::ecs
         virtual void create_component(id_type entityId) override
         {
             components.emplace(entityId);
+            m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId, m_registry));
+        }
+
+        virtual void create_component(id_type entityId, void* value) override
+        {
+            components.emplace(entityId, *reinterpret_cast<component_type*>(value));
             m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId, m_registry));
         }
 

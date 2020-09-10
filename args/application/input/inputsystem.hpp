@@ -1,19 +1,12 @@
 #pragma once
-#include "application/events/inputevents.hpp"
-#include "application/events/windowinputevents.hpp"
-#include "core/engine/system.hpp"
-#include <core/containers/iterator_tricks.hpp>
+#include <application/events/inputevents.hpp>
+#include <application/events/windowinputevents.hpp>
 
 namespace args::application
 {
-
-
     class InputSystem : public core::System<InputSystem>
     {
     public:
-
-
-
         void setup() override
         {
             //subscribe to the raw events emitted from the window system
@@ -39,7 +32,7 @@ namespace args::application
                     {
                         if (ContextHelper::joystickPresent(i))
                         {
-                            m_presentGamepads.insert(i);
+                            data::m_presentGamepads.insert(i);
                         }
                     }
                 }));
@@ -48,7 +41,15 @@ namespace args::application
 
         }
 
+        inline static math::dvec2 getMousePosition()
+        {
+            return data::m_mousePos;
+        }
 
+        inline static math::dvec2 getMouseDelta()
+        {
+            return data::m_mouseDelta;
+        }
 
         /**
          * @brief Creates a Binding of a Key /Axis to the emission of an event in the event bus.
@@ -144,7 +145,7 @@ namespace args::application
                     {
                         if (inputmap::is_key(member))
                         {
-                            m_actions[member][typeHash<Event>()].clear();
+                            data::m_actions[member][typeHash<Event>()].clear();
                         }
                         if (inputmap::is_axis(member))
                         {
@@ -156,7 +157,7 @@ namespace args::application
                 {
                     if (inputmap::is_key(met))
                     {
-                        m_actions[met][typeHash<Event>()].clear();
+                        data::m_actions[met][typeHash<Event>()].clear();
                     }
                     if (inputmap::is_axis(met))
                     {
@@ -172,7 +173,7 @@ namespace args::application
                     {
                         if (inputmap::is_key(member))
                         {
-                            m_actions[member][typeHash<Event>()].clear();
+                            data::m_actions[member][typeHash<Event>()].clear();
                         }
                         if (inputmap::is_axis(member))
                         {
@@ -184,7 +185,7 @@ namespace args::application
                 {
                     if (inputmap::is_key(met))
                     {
-                        m_actions[met][typeHash<Event>()].clear();
+                        data::m_actions[met][typeHash<Event>()].clear();
                     }
                     if (inputmap::is_axis(met))
                     {
@@ -200,8 +201,8 @@ namespace args::application
         static void bindKeyToAction(inputmap::method m)
         {
             //creates a tuple with default value 0
-            m_actions[m][typeHash<Event>()] = std::make_tuple(
-                delegate<void(InputSystem*, bool, inputmap::modifier_keys, inputmap::method,float)>::create([]
+            data::m_actions[m][typeHash<Event>()] = std::make_tuple(
+                delegate<void(InputSystem*, bool, inputmap::modifier_keys, inputmap::method, float)>::create([]
                 (InputSystem* self, bool state, inputmap::modifier_keys mods, inputmap::method method, float def)
                     {
                         (void)def;
@@ -210,15 +211,15 @@ namespace args::application
                         self->raiseEvent<Event>(e);
                     }),
                 0
-            );
+                        );
         }
 
         template<class Event>
         static void bindKeyToAxis(inputmap::method m, float value)
         {
             //creates tuple embedding `value`
-            m_actions[m][typeHash<Event>()] = std::make_tuple(
-                delegate<void(InputSystem*, bool, inputmap::modifier_keys, inputmap::method,float)>::create([]
+            data::m_actions[m][typeHash<Event>()] = std::make_tuple(
+                delegate<void(InputSystem*, bool, inputmap::modifier_keys, inputmap::method, float)>::create([]
                 (InputSystem* self, bool state, inputmap::modifier_keys mods, inputmap::method method, float def)
                     {
                         Event e;
@@ -226,7 +227,7 @@ namespace args::application
                         self->raiseEvent<Event>(e);
                     }),
                 value
-            );
+                        );
         }
 
         template<class Event>
@@ -243,14 +244,14 @@ namespace args::application
                     }
                 ),
                 value, inputmap::modifier_keys::NONE, m
-            );
+                        );
         }
 
         template<class Event>
         static void bindAxisToAxis(inputmap::method m, float value)
         {
             //creates tuple embedding all parameters needed for invoking the action
-            m_axes[m][typeHash<Event>()] = std::make_tuple(
+            data::m_axes[m][typeHash<Event>()] = std::make_tuple(
                 delegate<void(InputSystem*, float, inputmap::modifier_keys, inputmap::method)>::create([]
                 (InputSystem* self, float value, inputmap::modifier_keys mods, inputmap::method method)
                     {
@@ -260,34 +261,45 @@ namespace args::application
                     }
                 ),
                 value, inputmap::modifier_keys::NONE, m
-            );
+                        );
         }
 
         //joystick (dis)connect callback
         static void onCheckGamepadPresence(int jid, int event)
         {
-
             if (event == GLFW_CONNECTED)
-                m_presentGamepads.insert(jid);
+                data::m_presentGamepads.insert(jid);
             else if (event == GLFW_DISCONNECTED)
-                m_presentGamepads.erase(jid);
+                data::m_presentGamepads.erase(jid);
         }
 
         void onUpdate(time::time_span<fast_time> deltaTime)
         {
             (void)deltaTime;
 
-
             onJoystick();
 
             //update all axis with their current values
 
-            for (auto& inner_map : m_axes)
+            for (auto& inner_map : data::m_axes)
             {
                 for (auto& [surrogate, value, mods, method] : inner_map)
                 {
                     surrogate(this, value, mods, method);
                 }
+            }
+
+            for (auto& axis : data::m_axes[inputmap::method::MOUSE_X])
+            {
+                std::get<1>(axis) = static_cast<float>(0);
+                std::get<2>(axis) = inputmap::modifier_keys::NONE;
+                std::get<3>(axis) = inputmap::method::MOUSE_X;
+            }
+            for (auto& axis : data::m_axes[inputmap::method::MOUSE_Y])
+            {
+                std::get<1>(axis) = static_cast<float>(0);
+                std::get<2>(axis) = inputmap::modifier_keys::NONE;
+                std::get<3>(axis) = inputmap::method::MOUSE_Y;
             }
         }
 
@@ -295,7 +307,7 @@ namespace args::application
             const std::size_t glfw, inputmap::method m)
         {
             const float value = state.axes[glfw];
-            for (auto& axis : m_axes[m])
+            for (auto& axis : data::m_axes[m])
             {
                 std::get<1>(axis) = value;
                 std::get<2>(axis) = joystick;
@@ -305,7 +317,7 @@ namespace args::application
 
         void onJoystick()
         {
-            for (int glfw_joystick_id : m_presentGamepads)
+            for (int glfw_joystick_id : data::m_presentGamepads)
             {
                 using mods = inputmap::modifier_keys;
                 using method = inputmap::method;
@@ -315,34 +327,34 @@ namespace args::application
 
                 const auto joystick = mods::JOYSTICK0 + glfw_joystick_id;
 
-                for (auto& [action, def] : m_actions[method::GAMEPAD_A])
-                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_A], joystick, method::GAMEPAD_A,def);
-                for (auto& [action, def] : m_actions[method::GAMEPAD_B])
-                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_B], joystick, method::GAMEPAD_B,def);
-                for (auto& [action, def] : m_actions[method::GAMEPAD_X])
-                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_X], joystick, method::GAMEPAD_X,def);
-                for (auto& [action, def] : m_actions[method::GAMEPAD_Y])
-                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_Y], joystick, method::GAMEPAD_Y,def);
-                for (auto& [action, def] : m_actions[method::GAMEPAD_LEFT_BUMPER])
-                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_LEFT_BUMPER], joystick, method::GAMEPAD_LEFT_BUMPER,def);
-                for (auto& [action, def] : m_actions[method::GAMEPAD_RIGHT_BUMPER])
-                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER], joystick, method::GAMEPAD_RIGHT_BUMPER,def);
-                for (auto& [action, def] : m_actions[method::GAMEPAD_BACK])
-                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_BACK], joystick, method::GAMEPAD_BACK,def);
-                for (auto& [action, def] : m_actions[method::GAMEPAD_START])
-                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_START], joystick, method::GAMEPAD_START,def);
-                for (auto& [action, def] : m_actions[method::GAMEPAD_DPAD_UP])
-                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_UP], joystick, method::GAMEPAD_DPAD_UP,def);
-                for (auto& [action, def] : m_actions[method::GAMEPAD_DPAD_RIGHT])
-                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_RIGHT], joystick, method::GAMEPAD_DPAD_RIGHT,def);
-                for (auto& [action, def] : m_actions[method::GAMEPAD_DPAD_LEFT])
-                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_LEFT], joystick, method::GAMEPAD_DPAD_LEFT,def);
-                for (auto& [action, def] : m_actions[method::GAMEPAD_DPAD_DOWN])
-                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_DOWN], joystick, method::GAMEPAD_DPAD_DOWN,def);
-                for (auto& [action, def] : m_actions[method::GAMEPAD_LEFT_THUMB])
-                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_LEFT_THUMB], joystick, method::GAMEPAD_LEFT_THUMB,def);
-                for (auto& [action, def] : m_actions[method::GAMEPAD_RIGHT_THUMB])
-                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_RIGHT_THUMB], joystick, method::GAMEPAD_RIGHT_THUMB,def);
+                for (auto& [action, def] : data::m_actions[method::GAMEPAD_A])
+                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_A], joystick, method::GAMEPAD_A, def);
+                for (auto& [action, def] : data::m_actions[method::GAMEPAD_B])
+                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_B], joystick, method::GAMEPAD_B, def);
+                for (auto& [action, def] : data::m_actions[method::GAMEPAD_X])
+                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_X], joystick, method::GAMEPAD_X, def);
+                for (auto& [action, def] : data::m_actions[method::GAMEPAD_Y])
+                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_Y], joystick, method::GAMEPAD_Y, def);
+                for (auto& [action, def] : data::m_actions[method::GAMEPAD_LEFT_BUMPER])
+                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_LEFT_BUMPER], joystick, method::GAMEPAD_LEFT_BUMPER, def);
+                for (auto& [action, def] : data::m_actions[method::GAMEPAD_RIGHT_BUMPER])
+                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER], joystick, method::GAMEPAD_RIGHT_BUMPER, def);
+                for (auto& [action, def] : data::m_actions[method::GAMEPAD_BACK])
+                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_BACK], joystick, method::GAMEPAD_BACK, def);
+                for (auto& [action, def] : data::m_actions[method::GAMEPAD_START])
+                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_START], joystick, method::GAMEPAD_START, def);
+                for (auto& [action, def] : data::m_actions[method::GAMEPAD_DPAD_UP])
+                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_UP], joystick, method::GAMEPAD_DPAD_UP, def);
+                for (auto& [action, def] : data::m_actions[method::GAMEPAD_DPAD_RIGHT])
+                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_RIGHT], joystick, method::GAMEPAD_DPAD_RIGHT, def);
+                for (auto& [action, def] : data::m_actions[method::GAMEPAD_DPAD_LEFT])
+                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_LEFT], joystick, method::GAMEPAD_DPAD_LEFT, def);
+                for (auto& [action, def] : data::m_actions[method::GAMEPAD_DPAD_DOWN])
+                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_DOWN], joystick, method::GAMEPAD_DPAD_DOWN, def);
+                for (auto& [action, def] : data::m_actions[method::GAMEPAD_LEFT_THUMB])
+                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_LEFT_THUMB], joystick, method::GAMEPAD_LEFT_THUMB, def);
+                for (auto& [action, def] : data::m_actions[method::GAMEPAD_RIGHT_THUMB])
+                    action(this, state.buttons[GLFW_GAMEPAD_BUTTON_RIGHT_THUMB], joystick, method::GAMEPAD_RIGHT_THUMB, def);
 
                 matchGLFWAxisWithSignalAxis(state, joystick, GLFW_GAMEPAD_AXIS_LEFT_X, method::GAMEPAD_LEFT_X);
                 matchGLFWAxisWithSignalAxis(state, joystick, GLFW_GAMEPAD_AXIS_LEFT_Y, method::GAMEPAD_LEFT_Y);
@@ -373,24 +385,31 @@ namespace args::application
         void onKey(key_input* window_key_event)
         {
             const auto m = static_cast<inputmap::method>(window_key_event->key);
-            for (auto& [action, def] : m_actions[m])
+            for (auto& [action, def] : data::m_actions[m])
             {
-                action(this, window_key_event->action != GLFW_RELEASE, translateModifierKeys(window_key_event->mods), m,def);
+                action(this, window_key_event->action != GLFW_RELEASE, translateModifierKeys(window_key_event->mods), m, def);
             }
         }
 
         void onMouseMove(mouse_moved* window_mouse_event)
         {
-            auto pos = window_mouse_event->position;
-            for (auto& axis : m_axes[inputmap::method::MOUSE_X])
+            data::m_mouseDelta = window_mouse_event->position - data::m_mousePos;
+            data::m_mousePos = window_mouse_event->position;
+            if (math::abs(data::m_mouseDelta.x) < 0.0001)
+                data::m_mouseDelta.x = 0.0;
+
+            if (math::abs(data::m_mouseDelta.y) < 0.0001)
+                data::m_mouseDelta.y = 0.0;
+
+            for (auto& axis : data::m_axes[inputmap::method::MOUSE_X])
             {
-                std::get<1>(axis) = static_cast<float>(pos.x);
+                std::get<1>(axis) = static_cast<float>(data::m_mouseDelta.x);
                 std::get<2>(axis) = inputmap::modifier_keys::NONE;
                 std::get<3>(axis) = inputmap::method::MOUSE_X;
             }
-            for (auto& axis : m_axes[inputmap::method::MOUSE_Y])
+            for (auto& axis : data::m_axes[inputmap::method::MOUSE_Y])
             {
-                std::get<1>(axis) = static_cast<float>(pos.y);
+                std::get<1>(axis) = static_cast<float>(data::m_mouseDelta.y);
                 std::get<2>(axis) = inputmap::modifier_keys::NONE;
                 std::get<3>(axis) = inputmap::method::MOUSE_Y;
             }
@@ -401,26 +420,26 @@ namespace args::application
             switch (window_mouse_event->button)
             {
             case GLFW_MOUSE_BUTTON_LEFT: {
-                for (auto& [action, def] : m_actions[inputmap::method::MOUSE_LEFT])
+                for (auto& [action, def] : data::m_actions[inputmap::method::MOUSE_LEFT])
                 {
                     action(this, window_mouse_event->action != GLFW_RELEASE, translateModifierKeys(window_mouse_event->mods),
-                        inputmap::method::MOUSE_LEFT,def);
+                        inputmap::method::MOUSE_LEFT, def);
                 }
                 break;
             }
             case GLFW_MOUSE_BUTTON_MIDDLE: {
-                for (auto& [action, def] : m_actions[inputmap::method::MOUSE_MIDDLE])
+                for (auto& [action, def] : data::m_actions[inputmap::method::MOUSE_MIDDLE])
                 {
                     action(this, window_mouse_event->action != GLFW_RELEASE, translateModifierKeys(window_mouse_event->mods),
-                        inputmap::method::MOUSE_MIDDLE,def);
+                        inputmap::method::MOUSE_MIDDLE, def);
                 }
                 break;
             }
             case GLFW_MOUSE_BUTTON_RIGHT: {
-                for (auto& [action, def] : m_actions[inputmap::method::MOUSE_RIGHT])
+                for (auto& [action, def] : data::m_actions[inputmap::method::MOUSE_RIGHT])
                 {
                     action(this, window_mouse_event->action != GLFW_RELEASE, translateModifierKeys(window_mouse_event->mods),
-                        inputmap::method::MOUSE_RIGHT,def);
+                        inputmap::method::MOUSE_RIGHT, def);
                 }
                 break;
             }
@@ -430,13 +449,13 @@ namespace args::application
         void onMouseScrolled(mouse_scrolled* window_mouse_event)
         {
             const auto pos = window_mouse_event->offset;
-            for (auto& axis : m_axes[inputmap::method::HSCROLL])
+            for (auto& axis : data::m_axes[inputmap::method::HSCROLL])
             {
                 std::get<1>(axis) += static_cast<float>(pos.x);
                 std::get<2>(axis) = inputmap::modifier_keys::NONE;
                 std::get<3>(axis) = inputmap::method::HSCROLL;
             }
-            for (auto& axis : m_axes[inputmap::method::VSCROLL])
+            for (auto& axis : data::m_axes[inputmap::method::VSCROLL])
             {
                 std::get<1>(axis) += static_cast<float>(pos.y);
                 std::get<2>(axis) = inputmap::modifier_keys::NONE;
@@ -444,15 +463,20 @@ namespace args::application
             }
         }
 
+        struct ARGS_API data
+        {
+            static math::dvec2 m_mousePos;
+            static math::dvec2 m_mouseDelta;
 
-        inline static std::set<int> m_presentGamepads;
-        inline static sparse_map<inputmap::method, sparse_map<id_type,
-            std::tuple<delegate<void(InputSystem*, bool, inputmap::modifier_keys, inputmap::method, float)>, float>>
-            > m_actions;
+            static std::set<int> m_presentGamepads;
+            static sparse_map<inputmap::method, sparse_map<id_type,
+                std::tuple<delegate<void(InputSystem*, bool, inputmap::modifier_keys, inputmap::method, float)>, float>>
+                > m_actions;
 
-        inline static sparse_map<inputmap::method, sparse_map<id_type,
-            std::tuple<delegate<void(InputSystem*, float, inputmap::modifier_keys, inputmap::method)>, float, inputmap::modifier_keys, inputmap::method>>
-            > m_axes;
+            static sparse_map<inputmap::method, sparse_map<id_type,
+                std::tuple<delegate<void(InputSystem*, float, inputmap::modifier_keys, inputmap::method)>, float, inputmap::modifier_keys, inputmap::method>>
+                > m_axes;
+        };
 
     };
 }

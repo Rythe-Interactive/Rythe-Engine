@@ -3,7 +3,6 @@
 #include <core/containers/containers.hpp>
 #include <core/types/primitives.hpp>
 #include <core/ecs/entityquery.hpp>
-#include <iostream>
 
 /**
  * @file queryregistry.hpp

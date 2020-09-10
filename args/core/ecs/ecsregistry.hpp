@@ -134,6 +134,13 @@ namespace args::core::ecs
             return force_value_cast<component_handle<component_type>>(createComponent(entityId, typeHash<component_type>()));
 		}
 
+        template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
+        component_handle<component_type> createComponent(id_type entityId, const component_type& component)
+        {
+            component_type temp = component;
+            return force_value_cast<component_handle<component_type>>(createComponent(entityId, typeHash<component_type>(), &temp));
+        }
+
         template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
         auto createComponent(id_type entityId)
         {
@@ -154,6 +161,8 @@ namespace args::core::ecs
 		 * @throws args_entity_not_found_error If the entity id does not belong to a valid entity.
 		 */
 		component_handle_base createComponent(id_type entityId, id_type componentTypeId);
+
+		component_handle_base createComponent(id_type entityId, id_type componentTypeId, void* value);
 
 		/**@brief Destroy component of a certain type attached to a certain entity.
 		 * @tparam component_type Type of component you wish to destroy.
