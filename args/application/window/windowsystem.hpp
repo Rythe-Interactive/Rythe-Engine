@@ -50,7 +50,7 @@ namespace args::application
                         return;
 
                     delete handle.read().lock;
-                    handle.write(application::window());
+                    handle.write(invalid_window);
 
                     id_type ownerId = handle.entity;
 

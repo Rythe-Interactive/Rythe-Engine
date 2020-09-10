@@ -28,4 +28,6 @@ namespace args::application
             ContextHelper::makeContextCurrent(nullptr);
         }
     };
+
+    constexpr window invalid_window = {};
 }
