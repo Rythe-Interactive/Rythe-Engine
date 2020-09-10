@@ -13,6 +13,8 @@ namespace args::physics
 
 		//istrigger boolean
 
+        math::vec3 localCenterOfMass{};
+
 		//physics bitmask
 
         /** @brief Instantiates a ConvexCollider and calls ConstructConvexHullWithMesh on it and passes the given mesh. This
@@ -34,8 +36,6 @@ namespace args::physics
          * ConvexCollider is then added to the list of PhysicsColliders
         */
 		void AddSphere(/*mesh*/);
-
-		
 
 	};
 }

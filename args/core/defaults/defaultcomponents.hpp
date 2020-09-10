@@ -8,11 +8,15 @@ namespace args::core
 
     struct rotation : public math::quat
     {
-        rotation() = default;
-
-        rotation& operator=(const math::quat& other)
+        rotation() : math::quat(0, 0, 0, 1) {}
+        rotation(const rotation&) = default;
+        rotation(rotation&&) = default;
+        rotation(const math::quat& src) : math::quat(src) {}
+        rotation& operator=(const rotation&) = default;
+        rotation& operator=(rotation&&) = default;
+        rotation& operator=(const math::quat& src)
         {
-            data = other.data;
+            data = src.data;
             return *this;
         }
     };
