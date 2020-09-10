@@ -60,7 +60,7 @@ namespace args::core::scheduling
                 {
                     for (thread_error& error : m_errors)
                     {
-                        log::error(error.message.c_str());
+                       log::error("{}", error.message);
                         destroyThread(error.threadId);
                     }
 

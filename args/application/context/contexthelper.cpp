@@ -17,7 +17,7 @@ namespace args::application
     {
         glfwSetErrorCallback([](int code, cstring desc)
             {
-                std::cout << "GLFW ERROR " << code << ": " << desc << std::endl;
+                log::error("GLFW ERROR {}: {}",code,desc);
             });
 
         bool success = glfwInit();

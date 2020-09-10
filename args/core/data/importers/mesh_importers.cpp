@@ -7,6 +7,8 @@
 
 #include <map>
 
+#include "core/logging/logging.hpp"
+
 namespace args::core
 {
     common::result_decay_more<filesystem::basic_resource, fs_error> obj_mesh_loader::load(const filesystem::basic_resource& resource, mesh_import_settings&& settings)

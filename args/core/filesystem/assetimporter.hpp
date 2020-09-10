@@ -4,6 +4,8 @@
 #include <core/filesystem/view.hpp>
 #include <core/logging/logging.hpp>
 
+#include "core/logging/logging.hpp"
+
 namespace args::core::filesystem
 {
     struct resource_converter_base

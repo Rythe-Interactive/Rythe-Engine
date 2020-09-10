@@ -7,8 +7,150 @@
 #include <core/logging/spdlog/sinks/rotating_file_sink.h>
 #include <core/logging/spdlog/pattern_formatter.h>
 #include <core/types/type_util.hpp>
+#include <thread>
+#include <core/math/math.hpp>
 
 /** @file logging.hpp */
+
+namespace fmt
+{
+    template <>
+    struct formatter<std::thread::id>
+    {
+
+        constexpr auto parse(format_parse_context& ctx)
+        {
+            auto it = ctx.begin(), end = ctx.end();
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+            return it++;
+        }
+
+        template <typename FormatContext>
+        auto format(const std::thread::id& p, FormatContext& ctx) {
+            std::ostringstream oss;
+            oss << p;
+            return format_to(ctx.out(), "{}", oss.str());
+        }
+
+    };
+
+    template <>
+    struct fmt::formatter<args::core::math::vec2> {
+        // Presentation format: 'f' - fixed, 'e' - exponential.
+        char presentation = 'f';
+
+        // Parses format specifications of the form ['f' | 'e'].
+        constexpr auto parse(format_parse_context& ctx) {
+            // auto parse(format_parse_context &ctx) -> decltype(ctx.begin()) // c++11
+              // [ctx.begin(), ctx.end()) is a character range that contains a part of
+              // the format string starting from the format specifications to be parsed,
+              // e.g. in
+              //
+              //   fmt::format("{:f} - point of interest", point{1, 2});
+              //
+              // the range will contain "f} - point of interest". The formatter should
+              // parse specifiers until '}' or the end of the range. In this example
+              // the formatter should parse the 'f' specifier and return an iterator
+              // pointing to '}'.
+
+              // Parse the presentation format and store it in the formatter:
+            auto it = ctx.begin(), end = ctx.end();
+            if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
+
+            // Check if reached the end of the range:
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+
+            // Return an iterator past the end of the parsed range:
+            return it;
+        }
+
+        // Formats the point p using the parsed format specification (presentation)
+        // stored in this formatter.
+        template <typename FormatContext>
+        auto format(const args::core::math::vec2& p, FormatContext& ctx) {
+            // auto format(const point &p, FormatContext &ctx) -> decltype(ctx.out()) // c++11
+              // ctx.out() is an output iterator to write to.
+            return format_to(
+                ctx.out(),
+                presentation == 'f' ? "({:.1f}, {:.1f})" : "({:.1e}, {:.1e})",
+                p.x, p.y);
+        }
+    };
+
+    template <>
+    struct fmt::formatter<args::core::math::vec3> {
+        char presentation = 'f';
+
+        constexpr auto parse(format_parse_context& ctx) {
+            auto it = ctx.begin(), end = ctx.end();
+            if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+
+            return it;
+        }
+
+        template <typename FormatContext>
+        auto format(const args::core::math::vec3& p, FormatContext& ctx) {
+            return format_to(
+                ctx.out(),
+                presentation == 'f' ? "({:.1f}, {:.1f}, {:.1f})" : "({:.1e}, {:.1e}, {:.1e})",
+                p.x, p.y, p.z);
+        }
+    };
+
+    template <>
+    struct fmt::formatter<args::core::math::vec4> {
+        char presentation = 'f';
+
+        constexpr auto parse(format_parse_context& ctx) {
+            auto it = ctx.begin(), end = ctx.end();
+            if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+
+            return it;
+        }
+
+        template <typename FormatContext>
+        auto format(const args::core::math::vec4& p, FormatContext& ctx) {
+            return format_to(
+                ctx.out(),
+                presentation == 'f' ? "({:.1f}, {:.1f}, {:.1f}, {:.1f})" : "({:.1e}, {:.1e}, {:.1e}, {:.1e})",
+                p.x, p.y, p.z, p.w);
+        }
+    };
+
+    template <>
+    struct fmt::formatter<args::core::math::quat> {
+        char presentation = 'f';
+
+        constexpr auto parse(format_parse_context& ctx) {
+            auto it = ctx.begin(), end = ctx.end();
+            if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+
+            return it;
+        }
+
+        template <typename FormatContext>
+        auto format(const args::core::math::quat& p, FormatContext& ctx) {
+            return format_to(
+                ctx.out(),
+                presentation == 'f' ? "(({:.1f}, {:.1f}, {:.1f}),r: {:.1f})" : "(({:.1e}, {:.1e}, {:.1e}),r: {:.1e})",
+                p.x, p.y, p.z, p.w);
+        }
+    };
+
+}
+
 
 namespace args::core::log
 {
