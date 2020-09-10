@@ -1,5 +1,7 @@
 #include <core/scheduling/scheduler.hpp>
 
+#include <core/logging/logging.hpp>
+
 namespace args::core::scheduling
 {
     async::readonly_rw_spinlock Scheduler::m_threadsLock;
@@ -10,6 +12,8 @@ namespace args::core::scheduling
 
     Scheduler::Scheduler(events::EventBus* eventBus) : m_eventBus(eventBus)
     {
+        args::core::log::impl::thread_names[std::this_thread::get_id()] = "Initialization";
+        std::cout << std::this_thread::get_id();
         addProcessChain("Update");
     }
 
@@ -30,6 +34,9 @@ namespace args::core::scheduling
             for (ProcessChain& chain : m_processChains)
                 chain.run();
         }
+
+        args::core::log::impl::thread_names[std::this_thread::get_id()] = "Update";
+
 
         while (!m_eventBus->checkEvent<events::exit>()) // Check for engine exit flag.
         {
