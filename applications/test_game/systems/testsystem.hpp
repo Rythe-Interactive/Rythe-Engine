@@ -109,7 +109,6 @@ public:
         }
 
         setupCameraEntity();
-        //raiseEvent<application::window_request>(player, math::ivec2(600, 300), "This is a test window2!");
 
         //------------------------------------- Setup entity with rigidbody -------------------------------------------//
 
@@ -154,21 +153,15 @@ public:
         player = m_ecs->createEntity();
         auto [camPosHandle, camRotHandle, camScaleHandle] = m_ecs->createComponent<transform>(player);
 
-        position camPos = camPosHandle.read();
-        camPos.z = -20.0f;
-        camPos.x = -8.0f;
-        camPosHandle.write(camPos);
-
-
         rotation rot = camRotHandle.read();
-        rot = math::toQuat(math::inverse(math::lookAtRH(math::vec3(0, 0, 0), math::vec3(0, 0, -1), math::vec3(0, -1, 0))));
+        rot = math::toQuat(math::inverse(math::lookAt(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0))));
         camRotHandle.write(rot);
 
 
         auto camH = m_ecs->createComponent<rendering::camera>(player);
         rendering::camera cam = camH.read();
 
-        cam.set_projection(60.f, 1360.f / 768.f, 0.1);
+        cam.set_projection(60.f, 1360.f / 768.f, 0.1f, 1000.f);
         camH.write(cam);
     }
 
