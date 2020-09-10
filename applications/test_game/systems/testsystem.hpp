@@ -2,6 +2,8 @@
 #include <core/core.hpp>
 #include <application/application.hpp>
 #include <core/math/math.hpp>
+
+#include <core/logging/logging.hpp>
 #include <physics/physics_component.hpp>
 #include <physics/rigidbody.hpp>
 
@@ -31,6 +33,12 @@ public:
 
     virtual void setup()
     {
+        filter(log::severity::debug);
+        log::info("Hello World");
+        log::warn("Hello World");
+        log::error("Hello World");
+        log::debug("Hello World");
+
         application::InputSystem::createBinding<player_move_action>(application::inputmap::method::W, 1.f);
         application::InputSystem::createBinding<player_move_action>(application::inputmap::method::S, -1.f);
         bindToEvent<player_move_action, &TestSystem::onPlayerMove>();
@@ -140,6 +148,8 @@ public:
 
     void update(time::span deltaTime)
     {
+
+        log::info("still alive! {}",deltaTime.seconds());
         static auto query = createQuery<sah>();
 
         //static time::span buffer;
