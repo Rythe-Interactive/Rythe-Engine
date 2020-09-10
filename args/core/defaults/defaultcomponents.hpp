@@ -6,26 +6,49 @@
 
 namespace args::core
 {
-    struct position : public math::vec3 {};
+    struct position : public math::vec3
+    {
+        position() = default;
+        position(const position&) = default;
+        position(position&&) = default;
+        position(const math::vec3& src) : math::vec3(src) {}
+        position(float x, float y, float z) : math::vec3(x, y, z) {}
+        position& operator=(const position&) = default;
+        position& operator=(position&&) = default;
+        position& operator=(const math::vec3& src)
+        {
+            data = src.data;
+            return *this;
+        }
+    };
 
     struct rotation : public math::quat
     {
-        rotation() = default;
-
-        rotation& operator=(const math::quat& other)
+        rotation() : math::quat(0, 0, 0, 1) {}
+        rotation(const rotation&) = default;
+        rotation(rotation&&) = default;
+        rotation(const math::quat& src) : math::quat(src) {}
+        rotation& operator=(const rotation&) = default;
+        rotation& operator=(rotation&&) = default;
+        rotation& operator=(const math::quat& src)
         {
-            data = other.data;
+            data = src.data;
             return *this;
         }
     };
 
     struct scale : public math::vec3
     {
-        scale()
+        scale() : math::vec3(1, 1, 1) {}
+        scale(const scale&) = default;
+        scale(scale&&) = default;
+        scale(const math::vec3& src) : math::vec3(src) {}
+        scale& operator=(const scale&) = default;
+        scale& operator=(scale&&) = default;
+        scale& operator=(const math::vec3& src)
         {
-            x = 1;
-            y = 1;
-            z = 1;
+            data = src.data;
+            return *this;
         }
     };
 

@@ -114,7 +114,7 @@ namespace args::core::scheduling
             {
                 prevExits = exits;
                 prevChains = chains;
-                log::info("waiting for threads to end. {} threads left",(chains - exits) );
+                log::info("waiting for threads to end. {} threads left", chains - exits);
             }
 
             exits = m_exits.size();
@@ -207,7 +207,7 @@ namespace args::core::scheduling
 
     void Scheduler::waitForProcessSync()
     {
-        log::info( "synchronizing thread: {} ", std::this_thread::get_id());
+        log::debug("synchronizing thread: {}", log::impl::thread_names[std::this_thread::get_id()]);
         if (std::this_thread::get_id() != m_syncLock.ownerThread()) // Check if this is the main thread or not.
         {
             m_requestSync.store(true, std::memory_order_relaxed); // Request a synchronization.

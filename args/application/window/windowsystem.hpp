@@ -49,7 +49,8 @@ namespace args::application
                     if (!ContextHelper::windowShouldClose(window))
                         return;
 
-                    handle.write(application::window());
+                    delete handle.read().lock;
+                    handle.write(invalid_window);
 
                     id_type ownerId = handle.entity;
 
@@ -143,7 +144,7 @@ namespace args::application
         static void onMouseMoved(GLFWwindow* window, double xpos, double ypos)
         {
             if (data::m_windowComponents.contains(window))
-                raiseWindowEvent<mouse_moved>(window, data::m_windowComponents[window], math::dvec2(xpos, ypos));
+                raiseWindowEvent<mouse_moved>(window, data::m_windowComponents[window], math::dvec2(xpos, ypos) / (math::dvec2)ContextHelper::getFramebufferSize(window));
         }
 
         static void onMouseButton(GLFWwindow* window, int button, int action, int mods)
@@ -201,7 +202,7 @@ namespace args::application
             async::readwrite_guard guard(m_requestLock);
             for (auto& request : m_requests)
             {
-                std::cout << "creating a window" << std::endl;
+                log::debug("creating a window");
 
                 if (request.hints.size())
                 {
@@ -237,42 +238,42 @@ namespace args::application
                     request.name = "<Args> Engine";
 
                 window win = ContextHelper::createWindow(request.size, request.name, request.monitor, request.share);
+                win.lock = new async::readonly_rw_spinlock();
 
                 ecs::component_handle<window> handle;
 
                 {
                     async::readwrite_guard guard(data::m_creationLock);
-                    handle = m_ecs->createComponent<window>(request.entityId);
-                    handle.write(win, std::memory_order_relaxed);
+                    handle = m_ecs->createComponent<window>(request.entityId, win);
                 }
 
                 data::m_windowComponents.insert(win, handle);
                 data::m_windowEventBus.insert(win, m_eventBus);
 
-                ContextHelper::makeContextCurrent(win);
+                {
+                    async::readwrite_guard guard(*win.lock);
+                    ContextHelper::makeContextCurrent(win);
+                    ContextHelper::swapInterval(request.swapInterval);
+                    ContextHelper::setWindowCloseCallback(win, &WindowSystem::closeWindow);
+                    ContextHelper::setWindowPosCallback(win, &WindowSystem::onWindowMoved);
+                    ContextHelper::setWindowSizeCallback(win, &WindowSystem::onWindowResize);
+                    ContextHelper::setWindowRefreshCallback(win, &WindowSystem::onWindowRefresh);
+                    ContextHelper::setWindowFocusCallback(win, &WindowSystem::onWindowFocus);
+                    ContextHelper::setWindowIconifyCallback(win, &WindowSystem::onWindowIconify);
+                    ContextHelper::setWindowMaximizeCallback(win, &WindowSystem::onWindowMaximize);
+                    ContextHelper::setFramebufferSizeCallback(win, &WindowSystem::onWindowFrameBufferResize);
+                    ContextHelper::setWindowContentScaleCallback(win, &WindowSystem::onWindowContentRescale);
+                    ContextHelper::setDropCallback(win, &WindowSystem::onItemDroppedInWindow);
+                    ContextHelper::setCursorEnterCallback(win, &WindowSystem::onMouseEnterWindow);
+                    ContextHelper::setKeyCallback(win, &WindowSystem::onKeyInput);
+                    ContextHelper::setCharCallback(win, &WindowSystem::onCharInput);
+                    ContextHelper::setCursorPosCallback(win, &WindowSystem::onMouseMoved);
+                    ContextHelper::setMouseButtonCallback(win, &WindowSystem::onMouseButton);
+                    ContextHelper::setScrollCallback(win, &WindowSystem::onMouseScroll);
+                    ContextHelper::makeContextCurrent(nullptr);
+                }
 
-                ContextHelper::swapInterval(request.swapInterval);
-
-                ContextHelper::makeContextCurrent(nullptr);
-
-                ContextHelper::setWindowCloseCallback(win, &WindowSystem::closeWindow);
-                ContextHelper::setWindowPosCallback(win, &WindowSystem::onWindowMoved);
-                ContextHelper::setWindowSizeCallback(win, &WindowSystem::onWindowResize);
-                ContextHelper::setWindowRefreshCallback(win, &WindowSystem::onWindowRefresh);
-                ContextHelper::setWindowFocusCallback(win, &WindowSystem::onWindowFocus);
-                ContextHelper::setWindowIconifyCallback(win, &WindowSystem::onWindowIconify);
-                ContextHelper::setWindowMaximizeCallback(win, &WindowSystem::onWindowMaximize);
-                ContextHelper::setFramebufferSizeCallback(win, &WindowSystem::onWindowFrameBufferResize);
-                ContextHelper::setWindowContentScaleCallback(win, &WindowSystem::onWindowContentRescale);
-                ContextHelper::setDropCallback(win, &WindowSystem::onItemDroppedInWindow);
-                ContextHelper::setCursorEnterCallback(win, &WindowSystem::onMouseEnterWindow);
-                ContextHelper::setKeyCallback(win, &WindowSystem::onKeyInput);
-                ContextHelper::setCharCallback(win, &WindowSystem::onCharInput);
-                ContextHelper::setCursorPosCallback(win, &WindowSystem::onMouseMoved);
-                ContextHelper::setMouseButtonCallback(win, &WindowSystem::onMouseButton);
-                ContextHelper::setScrollCallback(win, &WindowSystem::onMouseScroll);
-
-                std::cout << "done creating a window" << std::endl;
+                log::debug("created window: {}", request.name);
             }
 
             m_requests.clear();
@@ -288,7 +289,12 @@ namespace args::application
             for (auto entity : m_windowQuery)
             {
                 window win = entity.get_component_handle<window>().read(std::memory_order_relaxed);
-                ContextHelper::swapBuffers(win);
+                {
+                    async::readwrite_guard guard(*win.lock);
+                    ContextHelper::makeContextCurrent(win);
+                    ContextHelper::swapBuffers(win);
+                    ContextHelper::makeContextCurrent(nullptr);
+                }
             }
         }
 

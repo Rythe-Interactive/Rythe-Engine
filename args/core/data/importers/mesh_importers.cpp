@@ -3,6 +3,7 @@
 
 #include <core/data/importers/mesh_importers.hpp>
 #include <core/math/math.hpp>
+#include <core/logging/logging.hpp>
 
 #include <map>
 

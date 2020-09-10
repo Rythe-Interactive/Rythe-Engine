@@ -2,7 +2,7 @@
 #include <core/containers/containers.hpp>
 #include <core/filesystem/resource.hpp>
 #include <core/filesystem/view.hpp>
-#include <iostream>
+#include <core/logging/logging.hpp>
 
 #include "core/logging/logging.hpp"
 
@@ -38,7 +38,7 @@ namespace args::core::filesystem
             static sparse_map<id_type, resource_converter_base*> m_converters;
         };
 
-    public:      
+    public:
         template<typename T>
         static void reportConverter(cstring extension)
         {
@@ -52,6 +52,13 @@ namespace args::core::filesystem
             // decay overloads the operator of ok_type and operator== for valid_t.
             using decay = common::result_decay_more<T, fs_error>;
 
+            if constexpr (sizeof...(settings) == 0)
+                log::debug("Tried to load asset of type{}", undecoratedTypeName<T>());
+            else if constexpr (sizeof...(settings) == 1)
+                log::debug("Tried to load asset of type{} with settings of type:{}", undecoratedTypeName<T>(), (std::string(undecoratedTypeName<Settings>()) + ...));
+            else
+                log::debug("Tried to load asset of type{} with settings of types:{}", undecoratedTypeName<T>(), ((std::string(undecoratedTypeName<Settings>()) + ", ") + ...));
+
             if (!view.is_valid() || !view.file_info().is_file)
                 return decay(Err(args_fs_error("requested asset load on view that isn't a valid file.")));
 
@@ -60,17 +67,6 @@ namespace args::core::filesystem
                 return decay(Err(result.get_error()));
 
             resource_converter_base* base = data::m_converters[nameHash(view.get_extension())];
-
-            std::string typeName = typeid(T).name();
-            log::debug("{}", typeName);
-
-            if constexpr (sizeof...(Settings) > 0)
-            {
-                std::string settingNames[sizeof...(Settings)] = { typeid(Settings).name()... };
-
-                for (std::string name : settingNames)
-                   log::debug("{}", name );
-            }
 
             auto* converter = reinterpret_cast<resource_converter<T, Settings...>*>(base);
 

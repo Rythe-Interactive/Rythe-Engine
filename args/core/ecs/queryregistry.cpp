@@ -3,7 +3,6 @@
 #include <core/ecs/entity_handle.hpp>
 #include <core/ecs/entityquery.hpp>
 #include <algorithm>
-#include <iostream>
 
 namespace args::core::ecs
 {
