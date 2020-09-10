@@ -37,9 +37,6 @@ namespace args::physics
         */
 		void AddSphere(/*mesh*/);
 
-
-		
-
 	};
 }
 
