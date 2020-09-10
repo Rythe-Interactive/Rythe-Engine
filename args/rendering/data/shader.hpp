@@ -222,6 +222,9 @@ namespace args::rendering
 
         void bind();
         static void release();
+
+        bool operator==(const shader_handle& other) { return id == other.id; }
+        operator bool() { return id != invalid_id; }
     };
 
     constexpr shader_handle invalid_shader_handle{ 0 };

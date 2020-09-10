@@ -2,6 +2,8 @@
 
 #include <core/core.hpp>
 #include <physics/physicssystem.hpp>
+#include <physics/physics_component.hpp>
+#include <physics/rigidbody.hpp>
 
 namespace args::physics
 {
@@ -13,6 +15,9 @@ namespace args::physics
         {
             addProcessChain("Physics");
             reportSystem<PhysicsSystem>();
+            reportComponentType<physicsComponent>();
+            reportComponentType<rigidbody>();
+
         }
 
         virtual priority_type priority() override

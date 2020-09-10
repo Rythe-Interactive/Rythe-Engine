@@ -1,5 +1,7 @@
 #include <core/scheduling/scheduler.hpp>
 
+#include <core/logging/logging.hpp>
+
 namespace args::core::scheduling
 {
     async::readonly_rw_spinlock Scheduler::m_threadsLock;
@@ -10,6 +12,7 @@ namespace args::core::scheduling
 
     Scheduler::Scheduler(events::EventBus* eventBus) : m_eventBus(eventBus)
     {
+        args::core::log::impl::thread_names[std::this_thread::get_id()] = "Initialization";
         addProcessChain("Update");
     }
 
@@ -30,6 +33,9 @@ namespace args::core::scheduling
             for (ProcessChain& chain : m_processChains)
                 chain.run();
         }
+
+        args::core::log::impl::thread_names[std::this_thread::get_id()] = "Update";
+
 
         while (!m_eventBus->checkEvent<events::exit>()) // Check for engine exit flag.
         {
@@ -54,7 +60,7 @@ namespace args::core::scheduling
                 {
                     for (thread_error& error : m_errors)
                     {
-                        std::cout << error.message << std::endl;
+                        log::error(error.message.c_str());
                         destroyThread(error.threadId);
                     }
 
@@ -108,7 +114,7 @@ namespace args::core::scheduling
             {
                 prevExits = exits;
                 prevChains = chains;
-                std::cout << "waiting for threads to end. " << (chains - exits) << " threads left\n";
+                log::info("waiting for threads to end. {} threads left", chains - exits);
             }
 
             exits = m_exits.size();
@@ -201,7 +207,7 @@ namespace args::core::scheduling
 
     void Scheduler::waitForProcessSync()
     {
-        std::cout << "synchronizing thread: " << std::this_thread::get_id() << std::endl;
+        log::debug("synchronizing thread: {}", log::impl::thread_names[std::this_thread::get_id()]);
         if (std::this_thread::get_id() != m_syncLock.ownerThread()) // Check if this is the main thread or not.
         {
             m_requestSync.store(true, std::memory_order_relaxed); // Request a synchronization.

@@ -263,4 +263,9 @@ namespace args::application
         return glfwJoystickPresent(jid);
     }
 
+    void ContextHelper::setInputMode(GLFWwindow* window, int mode, int value)
+    {
+        glfwSetInputMode(window, mode, value);
+    }
+
 }

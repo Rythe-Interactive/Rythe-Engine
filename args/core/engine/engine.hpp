@@ -7,10 +7,12 @@
 #include <core/scheduling/scheduler.hpp>
 #include <core/events/eventbus.hpp>
 #include <core/defaults/coremodule.hpp>
+#include <core/logging/logging.hpp>
 
 #include <map>
 #include <vector>
 #include <memory>
+
 
 /**
  * @file engine.hpp
@@ -71,6 +73,8 @@ namespace args::core
          */
         void init()
         {
+            log::setup();
+          
             for (const auto& [priority, moduleList] : m_modules)
                 for (auto& module : moduleList)
                     module->setup();
