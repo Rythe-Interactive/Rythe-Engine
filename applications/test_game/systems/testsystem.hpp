@@ -21,9 +21,11 @@ struct sah
     }
 };
 
-struct player_move : public application::input_axis<player_move> {};
-struct player_strive : public application::input_axis<player_strive> {};
-struct player_fly : public application::input_axis<player_fly> {};
+struct player_move : public app::input_axis<player_move> {};
+struct player_strive : public app::input_axis<player_strive> {};
+struct player_fly : public app::input_axis<player_fly> {};
+struct player_look_x : public app::input_axis<player_look_x> {};
+struct player_look_y : public app::input_axis<player_look_y> {};
 
 class TestSystem final : public System<TestSystem>
 {
@@ -38,84 +40,142 @@ public:
         log::error("Hello World");
         log::debug("Hello World");
 
-        application::InputSystem::createBinding<player_move>(application::inputmap::method::W, 1.f);
-        application::InputSystem::createBinding<player_move>(application::inputmap::method::S, -1.f);
-        application::InputSystem::createBinding<player_strive>(application::inputmap::method::D, 1.f);
-        application::InputSystem::createBinding<player_strive>(application::inputmap::method::A, -1.f);
-        application::InputSystem::createBinding<player_fly>(application::inputmap::method::SPACE, 1.f);
-        application::InputSystem::createBinding<player_fly>(application::inputmap::method::LEFT_SHIFT, -1.f);
-
+        app::InputSystem::createBinding<player_move>(app::inputmap::method::W, 1.f);
+        app::InputSystem::createBinding<player_move>(app::inputmap::method::S, -1.f);
+        app::InputSystem::createBinding<player_strive>(app::inputmap::method::D, 1.f);
+        app::InputSystem::createBinding<player_strive>(app::inputmap::method::A, -1.f);
+        app::InputSystem::createBinding<player_fly>(app::inputmap::method::SPACE, 1.f);
+        app::InputSystem::createBinding<player_fly>(app::inputmap::method::LEFT_SHIFT, -1.f);
+        app::InputSystem::createBinding<player_look_x>(app::inputmap::method::MOUSE_X, 1.f);
+        app::InputSystem::createBinding<player_look_y>(app::inputmap::method::MOUSE_Y, 1.f);
 
         bindToEvent<player_move, &TestSystem::onPlayerMove>();
         bindToEvent<player_strive, &TestSystem::onPlayerStrive>();
         bindToEvent<player_fly, &TestSystem::onPlayerFly>();
+        bindToEvent<player_look_x, &TestSystem::onPlayerLookX>();
+        bindToEvent<player_look_y, &TestSystem::onPlayerLookY>();
 
-        auto ent = m_ecs->createEntity();
-        ent.add_component<sah>();
-        auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-
-        rendering::renderable rendercomp = renderableHandle.read();
+        bindToEvent<events::component_creation<app::window>, &TestSystem::disableCursor>();
 
         fs::view meshFile("basic://models/Cube.obj");
+        auto modelH = rendering::model_cache::create_model("test", meshFile);
 
-        rendercomp.model = rendering::model_cache::create_model("test", meshFile);
+        {
+            auto ent = m_ecs->createEntity();
+            ent.add_component<sah>();
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ modelH });
 
-        renderableHandle.write(rendercomp);
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+            positionH.write(math::vec3(0, 0, 5.1f));
+            scaleH.write(math::vec3(1.f));
+        }
 
-        auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+        {
+            auto ent = m_ecs->createEntity();
+            ent.add_component<sah>();
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ modelH });
 
-        position pos = positionH.read();
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+            positionH.write(math::vec3(5.1f, 0, 0));
+            scaleH.write(math::vec3(0.75f));
+        }
 
-        pos.z = 5.1f;
+        {
+            auto ent = m_ecs->createEntity();
+            ent.add_component<sah>();
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ modelH });
 
-        positionH.write(pos);
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+            positionH.write(math::vec3(0, 0, -5.1f));
+            scaleH.write(math::vec3(0.5f));
+        }
 
-        //std::cout << ent.has_component<position>() << std::endl;
-        //std::cout << ent.has_component<rotation>() << std::endl;
-        //std::cout << ent.has_component<scale>() << std::endl;
+        {
+            auto ent = m_ecs->createEntity();
+            ent.add_component<sah>();
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ modelH });
 
-        //raiseEvent<application::window_request>(ent, math::ivec2(600, 300), "This is a test window!");
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+            positionH.write(math::vec3(-5.1f, 0, 0));
+            scaleH.write(math::vec3(0.25f));
+        }
 
         player = m_ecs->createEntity();
         auto [posCam, rotCam, scaleCam] = m_ecs->createComponent<transform>(player);
-
         rotation rot = rotCam.read();
-        rot = math::toQuat(math::lookAt(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0)));
+        rot = math::conjugate(math::toQuat(math::lookAt(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0))));
         rotCam.write(rot);
-
 
         auto camH = m_ecs->createComponent<rendering::camera>(player);
         rendering::camera cam = camH.read();
-
         cam.set_projection(60.f, 1360.f / 768.f, 0.1, 1000.f);
         camH.write(cam);
 
-        //raiseEvent<application::window_request>(player, math::ivec2(600, 300), "This is a test window2!");
 
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::differentThread>("TestChain");
         createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
     }
 
+    void disableCursor(events::component_creation<app::window>* creation)
+    {
+        creation->entity.get_component_handle<app::window>().read().enableCursor(false);
+    }
+
     void onPlayerMove(player_move* action)
     {
         auto posH = player.get_component_handle<position>();
-        log::debug("z");
-        posH.fetch_add(math::vec3(0.f, 0.f, action->value * 0.1f));
+        auto rot = player.get_component_handle<rotation>().read();
+        math::vec3 move = math::toMat3(rot) * math::vec3(0.f, 0.f, 1.f);
+        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * 0.1f;
+        posH.fetch_add(move);
+        log::debug("FORWD: ({:.3}, {:.3}, {:.3})", move.x, move.y, move.z);
     }
 
     void onPlayerStrive(player_strive* action)
     {
         auto posH = player.get_component_handle<position>();
-        log::debug("x");
-        posH.fetch_add(math::vec3(action->value * 0.1f, 0.f, 0.f));
+        auto rot = player.get_component_handle<rotation>().read();
+        math::vec3 move = math::toMat3(rot) * math::vec3(1.f, 0.f, 0.f);
+        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * 0.1f;
+        posH.fetch_add(move);
+        log::debug("RIGHT: ({:.3}, {:.3}, {:.3})", move.x, move.y, move.z);
     }
 
     void onPlayerFly(player_fly* action)
     {
         auto posH = player.get_component_handle<position>();
-        log::debug("y");
         posH.fetch_add(math::vec3(0.f, action->value * 0.1f, 0.f));
+    }
+
+    void onPlayerLookX(player_look_x* action)
+    {
+        auto rotH = player.get_component_handle<rotation>();
+        rotH.fetch_multiply(math::angleAxis(action->value, math::vec3(0, 1, 0)));
+        rotH.read_modify_write(rotation(), [](const rotation& src, rotation&& dummy)
+            {
+                (void)dummy;
+                math::vec3 fwd = math::toMat3(src) * math::vec3(0.f, 0.f, 1.f);
+                math::vec3 right = math::cross(fwd, math::vec3(0.f, 1.f, 0.f));
+                return (rotation)math::conjugate(math::toQuat(math::lookAt(math::vec3(0.f, 0.f, 0.f), fwd, math::cross(right, fwd))));
+            });
+    }
+
+    void onPlayerLookY(player_look_y* action)
+    {
+        auto rotH = player.get_component_handle<rotation>();
+        rotH.fetch_multiply(math::angleAxis(action->value, math::vec3(1, 0, 0)));
+        rotH.read_modify_write(rotation(), [](const rotation& src, rotation&& dummy)
+            {
+                (void)dummy;
+                math::vec3 fwd = math::toMat3(src) * math::vec3(0.f, 0.f, 1.f);
+                math::vec3 right = math::cross(fwd, math::vec3(0.f, 1.f, 0.f));
+                return (rotation)math::conjugate(math::toQuat(math::lookAt(math::vec3(0.f, 0.f, 0.f), fwd, math::cross(right, fwd))));
+            });
     }
 
     void update(time::span deltaTime)
@@ -192,24 +252,24 @@ public:
         accumulated += deltaTime;
         frameCount++;
 
-       /* if (buffer > 1.f)
-        {
-            buffer -= 1.f;
+        /* if (buffer > 1.f)
+         {
+             buffer -= 1.f;
 
-            for (auto entity : query)
-            {
-                auto comp = entity.get_component_handle<sah>();
-                std::cout << "component value on different thread: " << comp.read().value << std::endl;
-            }
+             for (auto entity : query)
+             {
+                 auto comp = entity.get_component_handle<sah>();
+                 std::cout << "component value on different thread: " << comp.read().value << std::endl;
+             }
 
-            std::cout << "This is a different thread!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
-        }*/
+             std::cout << "This is a different thread!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+         }*/
 
-        //if (accumulated > 10.f)
-        //{
-        //	std::cout << "raising exit event" << std::endl;
-        //	raiseEvent<events::exit>();
-        //	//throw args_exception_msg("hehehe fuck you >:D");
-        //}
+         //if (accumulated > 10.f)
+         //{
+         //	std::cout << "raising exit event" << std::endl;
+         //	raiseEvent<events::exit>();
+         //	//throw args_exception_msg("hehehe fuck you >:D");
+         //}
     }
 };

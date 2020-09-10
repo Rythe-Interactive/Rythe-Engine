@@ -168,6 +168,7 @@ namespace args::rendering
 
             app::window window = m_ecs->world.get_component_handle<app::window>().read();
 
+            async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
             if (!shdr)
@@ -177,9 +178,7 @@ namespace args::rendering
             glClearColor(0.3f, 0.5f, 1.0f, 1.0f);
             glClearDepth(0.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glEnable(GL_DEPTH_TEST);
             glDisable(GL_CULL_FACE);
-            glDepthFunc(GL_GREATER);
 
             batches.clear();
 
@@ -227,6 +226,8 @@ namespace args::rendering
                 glBindVertexArray(0);
                 glUseProgram(0);
             }
+
+            app::ContextHelper::makeContextCurrent(nullptr);
         }
     };
 }

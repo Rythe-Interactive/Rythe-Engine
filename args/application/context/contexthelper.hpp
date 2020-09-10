@@ -1,10 +1,10 @@
 #pragma once
 #ifndef ARGS_IMPORT
-    #define ARGS_IMPORT
-    #include <core/core.hpp>
-    #include <core/platform/args_library.hpp>
+#define ARGS_IMPORT
+#include <core/core.hpp>
+#include <core/platform/args_library.hpp>
 #else
-    #include <core/core.hpp>
+#include <core/core.hpp>
 #endif // !ARGS_IMPORT
 
 #define GLAPI ARGS_API extern
@@ -73,7 +73,8 @@ namespace args::application
         static GLFWwindowcontentscalefun setWindowContentScaleCallback(GLFWwindow* window, GLFWwindowcontentscalefun callback);
         static GLFWjoystickfun setJoystickCallback(GLFWjoystickfun callback);
         static int getGamepadSate(int jid, GLFWgamepadstate* state);
-        static void updateGamepadMappings(const char*name);
+        static void updateGamepadMappings(const char* name);
         static bool joystickPresent(int jid);
+        static void setInputMode(GLFWwindow* window, int mode, int value);
     };
 }
