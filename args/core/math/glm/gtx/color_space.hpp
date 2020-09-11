@@ -23,7 +23,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_color_space
 	/// @{
@@ -67,6 +67,6 @@ namespace args::core::math::detail::glm
 		vec<3, T, Q> const& color);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "color_space.inl"

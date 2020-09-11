@@ -23,7 +23,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_polar_coordinates
 	/// @{
@@ -43,6 +43,6 @@ namespace args::core::math::detail::glm
 		vec<2, T, Q> const& polar);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "polar_coordinates.inl"

@@ -45,7 +45,7 @@ namespace args::core
         bool operator==(const mesh_handle& other) const { return id == other.id; }
     };
 
-    constexpr mesh_handle invalid_mesh_handle{ 0 };
+    constexpr mesh_handle invalid_mesh_handle{ invalid_id };
 
     struct mesh_import_settings
     {
@@ -55,7 +55,7 @@ namespace args::core
 
     constexpr mesh_import_settings default_mesh_settings{ true, false };
 
-    struct ARGS_API mesh_cache
+    class ARGS_API MeshCache
     {
         friend class renderer;
         friend struct mesh_handle;

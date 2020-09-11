@@ -30,8 +30,9 @@ namespace args::core::scheduling
 		sparse_map<id_type, Process*> m_processes;
 		async::transferable_atomic<bool> m_exit;
 
-		static void threadedRun(ProcessChain* chain);
 	public:
+        static void threadedRun(ProcessChain* chain);
+
 		ProcessChain() = default;
 		ProcessChain(ProcessChain&&) = default;
 		ProcessChain& operator=(ProcessChain&&) = default;

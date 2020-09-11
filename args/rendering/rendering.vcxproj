@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="data\importers\texture_importers.cpp" />
+    <ClCompile Include="data\material.cpp" />
     <ClCompile Include="data\model.cpp" />
     <ClCompile Include="data\shader.cpp" />
     <ClCompile Include="data\texture.cpp" />

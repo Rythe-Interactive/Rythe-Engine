@@ -31,6 +31,8 @@ struct player_fly : public app::input_axis<player_fly> {};
 struct player_look_x : public app::input_axis<player_look_x> {};
 struct player_look_y : public app::input_axis<player_look_y> {};
 
+struct exit_action : public app::input_action<exit_action> {};
+
 class TestSystem final : public System<TestSystem>
 {
 public:
@@ -52,23 +54,24 @@ public:
         app::InputSystem::createBinding<player_fly>(app::inputmap::method::LEFT_SHIFT, -1.f);
         app::InputSystem::createBinding<player_look_x>(app::inputmap::method::MOUSE_X, 1.f);
         app::InputSystem::createBinding<player_look_y>(app::inputmap::method::MOUSE_Y, 1.f);
+        app::InputSystem::createBinding<exit_action>(app::inputmap::method::ESCAPE);
 
         bindToEvent<player_move, &TestSystem::onPlayerMove>();
         bindToEvent<player_strive, &TestSystem::onPlayerStrive>();
         bindToEvent<player_fly, &TestSystem::onPlayerFly>();
         bindToEvent<player_look_x, &TestSystem::onPlayerLookX>();
         bindToEvent<player_look_y, &TestSystem::onPlayerLookY>();
+        bindToEvent<exit_action, &TestSystem::onExit>();
 
         bindToEvent<events::component_creation<app::window>, &TestSystem::disableCursor>();
 
-        fs::view meshFile("basic://models/Cube.obj");
-        auto modelH = rendering::model_cache::create_model("test", meshFile);
+        auto modelH = rendering::ModelCache::create_model("test", "basic://models/Cube.obj"_view);
+        auto materialH = rendering::invalid_material_handle;//rendering::MaterialCache::create_material("wireframe", "basic:/shaders/wireframe.glsl"_view);
 
         {
             auto ent = m_ecs->createEntity();
             ent.add_component<sah>();
-            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH });
+            m_ecs->createComponent<rendering::renderable>(ent, { modelH, materialH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(0, 0, 5.1f));
@@ -78,8 +81,7 @@ public:
         {
             auto ent = m_ecs->createEntity();
             ent.add_component<sah>();
-            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH });
+            m_ecs->createComponent<rendering::renderable>(ent, { modelH, materialH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(5.1f, 0, 0));
@@ -89,8 +91,7 @@ public:
         {
             auto ent = m_ecs->createEntity();
             ent.add_component<sah>();
-            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH });
+            m_ecs->createComponent<rendering::renderable>(ent, { modelH, materialH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(0, 0, -5.1f));
@@ -100,8 +101,7 @@ public:
         {
             auto ent = m_ecs->createEntity();
             ent.add_component<sah>();
-            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH });
+            m_ecs->createComponent<rendering::renderable>(ent, { modelH, materialH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(-5.1f, 0, 0));
@@ -115,11 +115,7 @@ public:
         auto physicsEnt = m_ecs->createEntity();
 
         //setup rendering for physics ent
-        auto renderableHandle2 = m_ecs->createComponent<rendering::renderable>(physicsEnt);
-
-        rendering::renderable rendercomp2 = renderableHandle2.read();
-        rendercomp2.model = rendering::model_cache::create_model("test", meshFile);
-        renderableHandle2.write(rendercomp2);
+        m_ecs->createComponent<rendering::renderable>(physicsEnt, { modelH, materialH });
 
         auto [bodyPosition, bodyRotation, bodyScale] = m_ecs->createComponent<transform>(physicsEnt);
 
@@ -137,7 +133,7 @@ public:
 
         rb.globalCentreOfMass = bodyP;
         //rb.addForce( math::vec3(-9, 0, 0));
-        rb.addForceAt(math::vec3(0, 4.5, 5.1f),math::vec3(-100, 0, 0));
+        rb.addForceAt(math::vec3(0, 4.5, 5.1f), math::vec3(-100, 0, 0));
         rb.globalCentreOfMass = bodyP;
 
         rbHandle.write(rb);
@@ -163,6 +159,11 @@ public:
 
         cam.set_projection(60.f, 1360.f / 768.f, 0.1f, 1000.f);
         camH.write(cam);
+    }
+
+    void onExit(exit_action* action)
+    {
+        raiseEvent<events::exit>();
     }
 
     void disableCursor(events::component_creation<app::window>* creation)

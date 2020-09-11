@@ -6,13 +6,57 @@ namespace args::core::scheduling
 {
     async::readonly_rw_spinlock Scheduler::m_threadsLock;
     sparse_map<std::thread::id, std::unique_ptr<std::thread>> Scheduler::m_threads;
-    const uint Scheduler::m_maxThreadCount = std::thread::hardware_concurrency() == 0 ? std::numeric_limits<uint>::max() : std::thread::hardware_concurrency();
+    std::queue<std::thread::id> Scheduler::m_unreservedThreads;
+    const uint Scheduler::m_maxThreadCount = std::thread::hardware_concurrency() == 0 ? 8 : std::thread::hardware_concurrency();
     async::readonly_rw_spinlock Scheduler::m_availabilityLock;
     uint Scheduler::m_availableThreads = m_maxThreadCount - 2; // subtract OS and this_thread.
+
+    async::readonly_rw_spinlock Scheduler::m_jobQueueLock;
+    std::queue<Scheduler::runnable> Scheduler::m_jobs;
+    async::readonly_rw_spinlock Scheduler::m_commandLock;
+    sparse_map<std::thread::id, std::queue<Scheduler::runnable>> Scheduler::m_commands;
+
+    void Scheduler::threadMain(bool* exit)
+    {
+        std::thread::id id = std::this_thread::get_id();
+        while (!(*exit))
+        {
+            Scheduler::runnable instruction{};
+
+            {
+                async::readonly_guard guard(m_commandLock);
+                if (const_cast<const decltype(m_commands)&>(m_commands).contains(id) && !m_commands[id].empty())
+                {
+                    instruction = m_commands[id].front();
+                    async::readwrite_guard rwguard(m_commandLock);
+                    m_commands[id].pop();
+                }
+            }
+
+            instruction();
+            instruction = {};
+
+            {
+                async::readonly_guard guard(m_jobQueueLock);
+                if (!m_jobs.empty())
+                {
+                    instruction = m_jobs.front();
+                    async::readwrite_guard rwguard(m_jobQueueLock);
+                    m_jobs.pop();
+                }
+            }
+
+            instruction();
+        }
+    }
 
     Scheduler::Scheduler(events::EventBus* eventBus) : m_eventBus(eventBus)
     {
         args::core::log::impl::thread_names[std::this_thread::get_id()] = "Initialization";
+
+        while (createThread(threadMain, &m_threadsShouldTerminate) != std::thread::id())
+            ;
+
         addProcessChain("Update");
     }
 
@@ -20,6 +64,8 @@ namespace args::core::scheduling
     {
         for (auto& processChain : m_processChains)
             processChain.exit();
+
+        m_threadsShouldTerminate = true;
 
         for (auto& thread : m_threads)
             if (thread->joinable())
@@ -60,7 +106,7 @@ namespace args::core::scheduling
                 {
                     for (thread_error& error : m_errors)
                     {
-                       log::error("{}", error.message);
+                        log::error("{}", error.message);
                         destroyThread(error.threadId);
                     }
 
@@ -93,6 +139,8 @@ namespace args::core::scheduling
 
         for (auto& processChain : m_processChains)
             processChain.exit();
+
+        m_threadsShouldTerminate = true;
 
         size_type exits;
         size_type chains;
@@ -127,6 +175,18 @@ namespace args::core::scheduling
         }
 
         m_exits.clear();
+    }
+
+    void Scheduler::sendCommand(std::thread::id id, delegate<void(void*)> command, void* parameter)
+    {
+        async::readwrite_guard guard(m_commandLock);
+        m_commands[id].push({ command, parameter });
+    }
+
+    void Scheduler::queueJob(delegate<void(void*)> job, void* parameter)
+    {
+        async::readwrite_guard guard(m_jobQueueLock);
+        m_jobs.push({ job, parameter });
     }
 
     void Scheduler::destroyThread(std::thread::id id)

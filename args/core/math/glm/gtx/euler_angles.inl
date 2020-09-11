@@ -1,8 +1,8 @@
 /// @ref gtx_euler_angles
 
-#include "compatibility.hpp" // glm::atan2
+#include "compatibility.hpp" // math::atan2
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<typename T>
 	GLM_FUNC_QUALIFIER mat<4, 4, T, defaultp> eulerAngleX
@@ -10,8 +10,8 @@ namespace args::core::math::detail::glm
 		T const& angleX
 	)
 	{
-		T cosX = glm::cos(angleX);
-		T sinX = glm::sin(angleX);
+		T cosX = math::cos(angleX);
+		T sinX = math::sin(angleX);
 
 		return mat<4, 4, T, defaultp>(
 			T(1), T(0), T(0), T(0),
@@ -26,8 +26,8 @@ namespace args::core::math::detail::glm
 		T const& angleY
 	)
 	{
-		T cosY = glm::cos(angleY);
-		T sinY = glm::sin(angleY);
+		T cosY = math::cos(angleY);
+		T sinY = math::sin(angleY);
 
 		return mat<4, 4, T, defaultp>(
 			cosY,	T(0),	-sinY,	T(0),
@@ -42,8 +42,8 @@ namespace args::core::math::detail::glm
 		T const& angleZ
 	)
 	{
-		T cosZ = glm::cos(angleZ);
-		T sinZ = glm::sin(angleZ);
+		T cosZ = math::cos(angleZ);
+		T sinZ = math::sin(angleZ);
 
 		return mat<4, 4, T, defaultp>(
 			cosZ,	sinZ,	T(0), T(0),
@@ -59,8 +59,8 @@ namespace args::core::math::detail::glm
 		T const & angularVelocityX
 	)
 	{
-		T cosX = glm::cos(angleX) * angularVelocityX;
-		T sinX = glm::sin(angleX) * angularVelocityX;
+		T cosX = math::cos(angleX) * angularVelocityX;
+		T sinX = math::sin(angleX) * angularVelocityX;
 
 		return mat<4, 4, T, defaultp>(
 			T(0), T(0), T(0), T(0),
@@ -76,8 +76,8 @@ namespace args::core::math::detail::glm
 		T const & angularVelocityY
 	)
 	{
-		T cosY = glm::cos(angleY) * angularVelocityY;
-		T sinY = glm::sin(angleY) * angularVelocityY;
+		T cosY = math::cos(angleY) * angularVelocityY;
+		T sinY = math::sin(angleY) * angularVelocityY;
 
 		return mat<4, 4, T, defaultp>(
 			-sinY, T(0), -cosY, T(0),
@@ -93,8 +93,8 @@ namespace args::core::math::detail::glm
 		T const & angularVelocityZ
 	)
 	{
-		T cosZ = glm::cos(angleZ) * angularVelocityZ;
-		T sinZ = glm::sin(angleZ) * angularVelocityZ;
+		T cosZ = math::cos(angleZ) * angularVelocityZ;
+		T sinZ = math::sin(angleZ) * angularVelocityZ;
 
 		return mat<4, 4, T, defaultp>(
 			-sinZ,  cosZ, T(0), T(0),
@@ -110,10 +110,10 @@ namespace args::core::math::detail::glm
 		T const& angleY
 	)
 	{
-		T cosX = glm::cos(angleX);
-		T sinX = glm::sin(angleX);
-		T cosY = glm::cos(angleY);
-		T sinY = glm::sin(angleY);
+		T cosX = math::cos(angleX);
+		T sinX = math::sin(angleX);
+		T cosY = math::cos(angleY);
+		T sinY = math::sin(angleY);
 
 		return mat<4, 4, T, defaultp>(
 			cosY,   -sinX * -sinY,  cosX * -sinY,   T(0),
@@ -129,10 +129,10 @@ namespace args::core::math::detail::glm
 		T const& angleX
 	)
 	{
-		T cosX = glm::cos(angleX);
-		T sinX = glm::sin(angleX);
-		T cosY = glm::cos(angleY);
-		T sinY = glm::sin(angleY);
+		T cosX = math::cos(angleX);
+		T sinX = math::sin(angleX);
+		T cosY = math::cos(angleY);
+		T sinY = math::sin(angleY);
 
 		return mat<4, 4, T, defaultp>(
 			cosY,          0,      -sinY,    T(0),
@@ -189,12 +189,12 @@ namespace args::core::math::detail::glm
      T const& t3
      )
     {
-        T c1 = glm::cos(-t1);
-        T c2 = glm::cos(-t2);
-        T c3 = glm::cos(-t3);
-        T s1 = glm::sin(-t1);
-        T s2 = glm::sin(-t2);
-        T s3 = glm::sin(-t3);
+        T c1 = math::cos(-t1);
+        T c2 = math::cos(-t2);
+        T c3 = math::cos(-t3);
+        T s1 = math::sin(-t1);
+        T s2 = math::sin(-t2);
+        T s3 = math::sin(-t3);
 
         mat<4, 4, T, defaultp> Result;
         Result[0][0] = c2 * c3;
@@ -224,12 +224,12 @@ namespace args::core::math::detail::glm
 		T const& roll
 	)
 	{
-		T tmp_ch = glm::cos(yaw);
-		T tmp_sh = glm::sin(yaw);
-		T tmp_cp = glm::cos(pitch);
-		T tmp_sp = glm::sin(pitch);
-		T tmp_cb = glm::cos(roll);
-		T tmp_sb = glm::sin(roll);
+		T tmp_ch = math::cos(yaw);
+		T tmp_sh = math::sin(yaw);
+		T tmp_cp = math::cos(pitch);
+		T tmp_sp = math::sin(pitch);
+		T tmp_cb = math::cos(roll);
+		T tmp_sb = math::sin(roll);
 
 		mat<4, 4, T, defaultp> Result;
 		Result[0][0] = tmp_ch * tmp_cb + tmp_sh * tmp_sp * tmp_sb;
@@ -259,12 +259,12 @@ namespace args::core::math::detail::glm
 		T const & t3
 	)
 	{
-		T c1 = glm::cos(t1);
-		T s1 = glm::sin(t1);
-		T c2 = glm::cos(t2);
-		T s2 = glm::sin(t2);
-		T c3 = glm::cos(t3);
-		T s3 = glm::sin(t3);
+		T c1 = math::cos(t1);
+		T s1 = math::sin(t1);
+		T c2 = math::cos(t2);
+		T s2 = math::sin(t2);
+		T c3 = math::cos(t3);
+		T s3 = math::sin(t3);
 
 		mat<4, 4, T, defaultp> Result;
 		Result[0][0] = c2;
@@ -294,12 +294,12 @@ namespace args::core::math::detail::glm
 		T const & t3
 	)
 	{
-		T c1 = glm::cos(t1);
-		T s1 = glm::sin(t1);
-		T c2 = glm::cos(t2);
-		T s2 = glm::sin(t2);
-		T c3 = glm::cos(t3);
-		T s3 = glm::sin(t3);
+		T c1 = math::cos(t1);
+		T s1 = math::sin(t1);
+		T c2 = math::cos(t2);
+		T s2 = math::sin(t2);
+		T c3 = math::cos(t3);
+		T s3 = math::sin(t3);
 
 		mat<4, 4, T, defaultp> Result;
 		Result[0][0] = c2;
@@ -329,12 +329,12 @@ namespace args::core::math::detail::glm
 		T const & t3
 	)
 	{
-		T c1 = glm::cos(t1);
-		T s1 = glm::sin(t1);
-		T c2 = glm::cos(t2);
-		T s2 = glm::sin(t2);
-		T c3 = glm::cos(t3);
-		T s3 = glm::sin(t3);
+		T c1 = math::cos(t1);
+		T s1 = math::sin(t1);
+		T c2 = math::cos(t2);
+		T s2 = math::sin(t2);
+		T c3 = math::cos(t3);
+		T s3 = math::sin(t3);
 
 		mat<4, 4, T, defaultp> Result;
 		Result[0][0] = c1 * c3 - c2 * s1 * s3;
@@ -364,12 +364,12 @@ namespace args::core::math::detail::glm
 		T const & t3
 	)
 	{
-		T c1 = glm::cos(t1);
-		T s1 = glm::sin(t1);
-		T c2 = glm::cos(t2);
-		T s2 = glm::sin(t2);
-		T c3 = glm::cos(t3);
-		T s3 = glm::sin(t3);
+		T c1 = math::cos(t1);
+		T s1 = math::sin(t1);
+		T c2 = math::cos(t2);
+		T s2 = math::sin(t2);
+		T c3 = math::cos(t3);
+		T s3 = math::sin(t3);
 
 		mat<4, 4, T, defaultp> Result;
 		Result[0][0] = c1 * c2 * c3 - s1 * s3;
@@ -399,12 +399,12 @@ namespace args::core::math::detail::glm
 		T const & t3
 	)
 	{
-		T c1 = glm::cos(t1);
-		T s1 = glm::sin(t1);
-		T c2 = glm::cos(t2);
-		T s2 = glm::sin(t2);
-		T c3 = glm::cos(t3);
-		T s3 = glm::sin(t3);
+		T c1 = math::cos(t1);
+		T s1 = math::sin(t1);
+		T c2 = math::cos(t2);
+		T s2 = math::sin(t2);
+		T c3 = math::cos(t3);
+		T s3 = math::sin(t3);
 
 		mat<4, 4, T, defaultp> Result;
 		Result[0][0] = c1 * c2 * c3 - s1 * s3;
@@ -434,12 +434,12 @@ namespace args::core::math::detail::glm
 		T const & t3
 	)
 	{
-		T c1 = glm::cos(t1);
-		T s1 = glm::sin(t1);
-		T c2 = glm::cos(t2);
-		T s2 = glm::sin(t2);
-		T c3 = glm::cos(t3);
-		T s3 = glm::sin(t3);
+		T c1 = math::cos(t1);
+		T s1 = math::sin(t1);
+		T c2 = math::cos(t2);
+		T s2 = math::sin(t2);
+		T c3 = math::cos(t3);
+		T s3 = math::sin(t3);
 
 		mat<4, 4, T, defaultp> Result;
 		Result[0][0] = c1 * c3 - c2 * s1 * s3;
@@ -469,12 +469,12 @@ namespace args::core::math::detail::glm
 		T const & t3
 	)
 	{
-		T c1 = glm::cos(t1);
-		T s1 = glm::sin(t1);
-		T c2 = glm::cos(t2);
-		T s2 = glm::sin(t2);
-		T c3 = glm::cos(t3);
-		T s3 = glm::sin(t3);
+		T c1 = math::cos(t1);
+		T s1 = math::sin(t1);
+		T c2 = math::cos(t2);
+		T s2 = math::sin(t2);
+		T c3 = math::cos(t3);
+		T s3 = math::sin(t3);
 
 		mat<4, 4, T, defaultp> Result;
 		Result[0][0] = c2 * c3;
@@ -504,12 +504,12 @@ namespace args::core::math::detail::glm
 		T const & t3
 	)
 	{
-		T c1 = glm::cos(t1);
-		T s1 = glm::sin(t1);
-		T c2 = glm::cos(t2);
-		T s2 = glm::sin(t2);
-		T c3 = glm::cos(t3);
-		T s3 = glm::sin(t3);
+		T c1 = math::cos(t1);
+		T s1 = math::sin(t1);
+		T c2 = math::cos(t2);
+		T s2 = math::sin(t2);
+		T c3 = math::cos(t3);
+		T s3 = math::sin(t3);
 
 		mat<4, 4, T, defaultp> Result;
 		Result[0][0] = c1 * c2;
@@ -539,12 +539,12 @@ namespace args::core::math::detail::glm
 		T const & t3
 	)
 	{
-		T c1 = glm::cos(t1);
-		T s1 = glm::sin(t1);
-		T c2 = glm::cos(t2);
-		T s2 = glm::sin(t2);
-		T c3 = glm::cos(t3);
-		T s3 = glm::sin(t3);
+		T c1 = math::cos(t1);
+		T s1 = math::sin(t1);
+		T c2 = math::cos(t2);
+		T s2 = math::sin(t2);
+		T c3 = math::cos(t3);
+		T s3 = math::sin(t3);
 
 		mat<4, 4, T, defaultp> Result;
 		Result[0][0] = c1 * c2;
@@ -574,12 +574,12 @@ namespace args::core::math::detail::glm
 		T const & t3
 	)
 	{
-		T c1 = glm::cos(t1);
-		T s1 = glm::sin(t1);
-		T c2 = glm::cos(t2);
-		T s2 = glm::sin(t2);
-		T c3 = glm::cos(t3);
-		T s3 = glm::sin(t3);
+		T c1 = math::cos(t1);
+		T s1 = math::sin(t1);
+		T c2 = math::cos(t2);
+		T s2 = math::sin(t2);
+		T c3 = math::cos(t3);
+		T s3 = math::sin(t3);
 
 		mat<4, 4, T, defaultp> Result;
 		Result[0][0] = c1 * c3 - s1 * s2 * s3;
@@ -609,12 +609,12 @@ namespace args::core::math::detail::glm
 		T const& roll
 	)
 	{
-		T tmp_ch = glm::cos(yaw);
-		T tmp_sh = glm::sin(yaw);
-		T tmp_cp = glm::cos(pitch);
-		T tmp_sp = glm::sin(pitch);
-		T tmp_cb = glm::cos(roll);
-		T tmp_sb = glm::sin(roll);
+		T tmp_ch = math::cos(yaw);
+		T tmp_sh = math::sin(yaw);
+		T tmp_cp = math::cos(pitch);
+		T tmp_sp = math::sin(pitch);
+		T tmp_cb = math::cos(roll);
+		T tmp_sb = math::sin(roll);
 
 		mat<4, 4, T, defaultp> Result;
 		Result[0][0] = tmp_ch * tmp_cb + tmp_sh * tmp_sp * tmp_sb;
@@ -642,8 +642,8 @@ namespace args::core::math::detail::glm
 		T const& angle
 	)
 	{
-		T c = glm::cos(angle);
-		T s = glm::sin(angle);
+		T c = math::cos(angle);
+		T s = math::sin(angle);
 
 		mat<2, 2, T, defaultp> Result;
 		Result[0][0] = c;
@@ -659,8 +659,8 @@ namespace args::core::math::detail::glm
 		T const& angle
 	)
 	{
-		T c = glm::cos(angle);
-		T s = glm::sin(angle);
+		T c = math::cos(angle);
+		T s = math::sin(angle);
 
 		mat<3, 3, T, defaultp> Result;
 		Result[0][0] = c;
@@ -699,12 +699,12 @@ namespace args::core::math::detail::glm
                                             T & t2,
                                             T & t3)
     {
-        T T1 = glm::atan2<T, defaultp>(M[2][1], M[2][2]);
-        T C2 = glm::sqrt(M[0][0]*M[0][0] + M[1][0]*M[1][0]);
-        T T2 = glm::atan2<T, defaultp>(-M[2][0], C2);
-        T S1 = glm::sin(T1);
-        T C1 = glm::cos(T1);
-        T T3 = glm::atan2<T, defaultp>(S1*M[0][2] - C1*M[0][1], C1*M[1][1] - S1*M[1][2  ]);
+        T T1 = math::atan2<T, defaultp>(M[2][1], M[2][2]);
+        T C2 = math::sqrt(M[0][0]*M[0][0] + M[1][0]*M[1][0]);
+        T T2 = math::atan2<T, defaultp>(-M[2][0], C2);
+        T S1 = math::sin(T1);
+        T C1 = math::cos(T1);
+        T T3 = math::atan2<T, defaultp>(S1*M[0][2] - C1*M[0][1], C1*M[1][1] - S1*M[1][2  ]);
         t1 = -T1;
         t2 = -T2;
         t3 = -T3;
@@ -716,12 +716,12 @@ namespace args::core::math::detail::glm
 												 T & t2,
 												 T & t3)
 	{
-		T T1 = glm::atan2<T, defaultp>(M[2][0], M[2][2]);
-		T C2 = glm::sqrt(M[0][1]*M[0][1] + M[1][1]*M[1][1]);
-		T T2 = glm::atan2<T, defaultp>(-M[2][1], C2);
-		T S1 = glm::sin(T1);
-		T C1 = glm::cos(T1);
-		T T3 = glm::atan2<T, defaultp>(S1*M[1][2] - C1*M[1][0], C1*M[0][0] - S1*M[0][2]);
+		T T1 = math::atan2<T, defaultp>(M[2][0], M[2][2]);
+		T C2 = math::sqrt(M[0][1]*M[0][1] + M[1][1]*M[1][1]);
+		T T2 = math::atan2<T, defaultp>(-M[2][1], C2);
+		T S1 = math::sin(T1);
+		T C1 = math::cos(T1);
+		T T3 = math::atan2<T, defaultp>(S1*M[1][2] - C1*M[1][0], C1*M[0][0] - S1*M[0][2]);
 		t1 = T1;
 		t2 = T2;
 		t3 = T3;
@@ -733,12 +733,12 @@ namespace args::core::math::detail::glm
 												 T & t2,
 												 T & t3)
 	{
-		T T1 = glm::atan2<T, defaultp>(M[0][2], M[0][1]);
-		T S2 = glm::sqrt(M[1][0]*M[1][0] + M[2][0]*M[2][0]);
-		T T2 = glm::atan2<T, defaultp>(S2, M[0][0]);
-		T S1 = glm::sin(T1);
-		T C1 = glm::cos(T1);
-		T T3 = glm::atan2<T, defaultp>(C1*M[1][2] - S1*M[1][1], C1*M[2][2] - S1*M[2][1]);
+		T T1 = math::atan2<T, defaultp>(M[0][2], M[0][1]);
+		T S2 = math::sqrt(M[1][0]*M[1][0] + M[2][0]*M[2][0]);
+		T T2 = math::atan2<T, defaultp>(S2, M[0][0]);
+		T S1 = math::sin(T1);
+		T C1 = math::cos(T1);
+		T T3 = math::atan2<T, defaultp>(C1*M[1][2] - S1*M[1][1], C1*M[2][2] - S1*M[2][1]);
 		t1 = T1;
 		t2 = T2;
 		t3 = T3;
@@ -750,12 +750,12 @@ namespace args::core::math::detail::glm
 												 T & t2,
 												 T & t3)
 	{
-		T T1 = glm::atan2<T, defaultp>(M[0][1], -M[0][2]);
-		T S2 = glm::sqrt(M[1][0]*M[1][0] + M[2][0]*M[2][0]);
-		T T2 = glm::atan2<T, defaultp>(S2, M[0][0]);
-		T S1 = glm::sin(T1);
-		T C1 = glm::cos(T1);
-		T T3 = glm::atan2<T, defaultp>(-C1*M[2][1] - S1*M[2][2], C1*M[1][1] + S1*M[1][2]);
+		T T1 = math::atan2<T, defaultp>(M[0][1], -M[0][2]);
+		T S2 = math::sqrt(M[1][0]*M[1][0] + M[2][0]*M[2][0]);
+		T T2 = math::atan2<T, defaultp>(S2, M[0][0]);
+		T S1 = math::sin(T1);
+		T C1 = math::cos(T1);
+		T T3 = math::atan2<T, defaultp>(-C1*M[2][1] - S1*M[2][2], C1*M[1][1] + S1*M[1][2]);
 		t1 = T1;
 		t2 = T2;
 		t3 = T3;
@@ -767,12 +767,12 @@ namespace args::core::math::detail::glm
 												 T & t2,
 												 T & t3)
 	{
-		T T1 = glm::atan2<T, defaultp>(M[1][0], M[1][2]);
-		T S2 = glm::sqrt(M[0][1]*M[0][1] + M[2][1]*M[2][1]);
-		T T2 = glm::atan2<T, defaultp>(S2, M[1][1]);
-		T S1 = glm::sin(T1);
-		T C1 = glm::cos(T1);
-		T T3 = glm::atan2<T, defaultp>(C1*M[2][0] - S1*M[2][2], C1*M[0][0] - S1*M[0][2]);
+		T T1 = math::atan2<T, defaultp>(M[1][0], M[1][2]);
+		T S2 = math::sqrt(M[0][1]*M[0][1] + M[2][1]*M[2][1]);
+		T T2 = math::atan2<T, defaultp>(S2, M[1][1]);
+		T S1 = math::sin(T1);
+		T C1 = math::cos(T1);
+		T T3 = math::atan2<T, defaultp>(C1*M[2][0] - S1*M[2][2], C1*M[0][0] - S1*M[0][2]);
 		t1 = T1;
 		t2 = T2;
 		t3 = T3;
@@ -784,12 +784,12 @@ namespace args::core::math::detail::glm
 												 T & t2,
 												 T & t3)
 	{
-		T T1 = glm::atan2<T, defaultp>(M[1][2], -M[1][0]);
-		T S2 = glm::sqrt(M[0][1]*M[0][1] + M[2][1]*M[2][1]);
-		T T2 = glm::atan2<T, defaultp>(S2, M[1][1]);
-		T S1 = glm::sin(T1);
-		T C1 = glm::cos(T1);
-		T T3 = glm::atan2<T, defaultp>(-S1*M[0][0] - C1*M[0][2], S1*M[2][0] + C1*M[2][2]);
+		T T1 = math::atan2<T, defaultp>(M[1][2], -M[1][0]);
+		T S2 = math::sqrt(M[0][1]*M[0][1] + M[2][1]*M[2][1]);
+		T T2 = math::atan2<T, defaultp>(S2, M[1][1]);
+		T S1 = math::sin(T1);
+		T C1 = math::cos(T1);
+		T T3 = math::atan2<T, defaultp>(-S1*M[0][0] - C1*M[0][2], S1*M[2][0] + C1*M[2][2]);
 		t1 = T1;
 		t2 = T2;
 		t3 = T3;
@@ -801,12 +801,12 @@ namespace args::core::math::detail::glm
 												 T & t2,
 												 T & t3)
 	{
-		T T1 = glm::atan2<T, defaultp>(M[2][1], M[2][0]);
-		T S2 = glm::sqrt(M[0][2]*M[0][2] + M[1][2]*M[1][2]);
-		T T2 = glm::atan2<T, defaultp>(S2, M[2][2]);
-		T S1 = glm::sin(T1);
-		T C1 = glm::cos(T1);
-		T T3 = glm::atan2<T, defaultp>(C1*M[0][1] - S1*M[0][0], C1*M[1][1] - S1*M[1][0]);
+		T T1 = math::atan2<T, defaultp>(M[2][1], M[2][0]);
+		T S2 = math::sqrt(M[0][2]*M[0][2] + M[1][2]*M[1][2]);
+		T T2 = math::atan2<T, defaultp>(S2, M[2][2]);
+		T S1 = math::sin(T1);
+		T C1 = math::cos(T1);
+		T T3 = math::atan2<T, defaultp>(C1*M[0][1] - S1*M[0][0], C1*M[1][1] - S1*M[1][0]);
 		t1 = T1;
 		t2 = T2;
 		t3 = T3;
@@ -818,12 +818,12 @@ namespace args::core::math::detail::glm
 												 T & t2,
 												 T & t3)
 	{
-		T T1 = glm::atan2<T, defaultp>(M[2][0], -M[2][1]);
-		T S2 = glm::sqrt(M[0][2]*M[0][2] + M[1][2]*M[1][2]);
-		T T2 = glm::atan2<T, defaultp>(S2, M[2][2]);
-		T S1 = glm::sin(T1);
-		T C1 = glm::cos(T1);
-		T T3 = glm::atan2<T, defaultp>(-C1*M[1][0] - S1*M[1][1], C1*M[0][0] + S1*M[0][1]);
+		T T1 = math::atan2<T, defaultp>(M[2][0], -M[2][1]);
+		T S2 = math::sqrt(M[0][2]*M[0][2] + M[1][2]*M[1][2]);
+		T T2 = math::atan2<T, defaultp>(S2, M[2][2]);
+		T S1 = math::sin(T1);
+		T C1 = math::cos(T1);
+		T T3 = math::atan2<T, defaultp>(-C1*M[1][0] - S1*M[1][1], C1*M[0][0] + S1*M[0][1]);
 		t1 = T1;
 		t2 = T2;
 		t3 = T3;
@@ -835,12 +835,12 @@ namespace args::core::math::detail::glm
 												 T & t2,
 												 T & t3)
 	{
-		T T1 = glm::atan2<T, defaultp>(M[1][2], M[1][1]);
-		T C2 = glm::sqrt(M[0][0]*M[0][0] + M[2][0]*M[2][0]);
-		T T2 = glm::atan2<T, defaultp>(-M[1][0], C2);
-		T S1 = glm::sin(T1);
-		T C1 = glm::cos(T1);
-		T T3 = glm::atan2<T, defaultp>(S1*M[0][1] - C1*M[0][2], C1*M[2][2] - S1*M[2][1]);
+		T T1 = math::atan2<T, defaultp>(M[1][2], M[1][1]);
+		T C2 = math::sqrt(M[0][0]*M[0][0] + M[2][0]*M[2][0]);
+		T T2 = math::atan2<T, defaultp>(-M[1][0], C2);
+		T S1 = math::sin(T1);
+		T C1 = math::cos(T1);
+		T T3 = math::atan2<T, defaultp>(S1*M[0][1] - C1*M[0][2], C1*M[2][2] - S1*M[2][1]);
 		t1 = T1;
 		t2 = T2;
 		t3 = T3;
@@ -852,12 +852,12 @@ namespace args::core::math::detail::glm
 												 T & t2,
 												 T & t3)
 	{
-		T T1 = glm::atan2<T, defaultp>(-M[0][2], M[0][0]);
-		T C2 = glm::sqrt(M[1][1]*M[1][1] + M[2][1]*M[2][1]);
-		T T2 = glm::atan2<T, defaultp>(M[0][1], C2);
-		T S1 = glm::sin(T1);
-		T C1 = glm::cos(T1);
-		T T3 = glm::atan2<T, defaultp>(S1*M[1][0] + C1*M[1][2], S1*M[2][0] + C1*M[2][2]);
+		T T1 = math::atan2<T, defaultp>(-M[0][2], M[0][0]);
+		T C2 = math::sqrt(M[1][1]*M[1][1] + M[2][1]*M[2][1]);
+		T T2 = math::atan2<T, defaultp>(M[0][1], C2);
+		T S1 = math::sin(T1);
+		T C1 = math::cos(T1);
+		T T3 = math::atan2<T, defaultp>(S1*M[1][0] + C1*M[1][2], S1*M[2][0] + C1*M[2][2]);
 		t1 = T1;
 		t2 = T2;
 		t3 = T3;
@@ -869,12 +869,12 @@ namespace args::core::math::detail::glm
 												 T & t2,
 												 T & t3)
 	{
-		T T1 = glm::atan2<T, defaultp>(M[0][1], M[0][0]);
-		T C2 = glm::sqrt(M[1][2]*M[1][2] + M[2][2]*M[2][2]);
-		T T2 = glm::atan2<T, defaultp>(-M[0][2], C2);
-		T S1 = glm::sin(T1);
-		T C1 = glm::cos(T1);
-		T T3 = glm::atan2<T, defaultp>(S1*M[2][0] - C1*M[2][1], C1*M[1][1] - S1*M[1][0]);
+		T T1 = math::atan2<T, defaultp>(M[0][1], M[0][0]);
+		T C2 = math::sqrt(M[1][2]*M[1][2] + M[2][2]*M[2][2]);
+		T T2 = math::atan2<T, defaultp>(-M[0][2], C2);
+		T S1 = math::sin(T1);
+		T C1 = math::cos(T1);
+		T T3 = math::atan2<T, defaultp>(S1*M[2][0] - C1*M[2][1], C1*M[1][1] - S1*M[1][0]);
 		t1 = T1;
 		t2 = T2;
 		t3 = T3;
@@ -886,14 +886,14 @@ namespace args::core::math::detail::glm
 												 T & t2,
 												 T & t3)
 	{
-		T T1 = glm::atan2<T, defaultp>(-M[1][0], M[1][1]);
-		T C2 = glm::sqrt(M[0][2]*M[0][2] + M[2][2]*M[2][2]);
-		T T2 = glm::atan2<T, defaultp>(M[1][2], C2);
-		T S1 = glm::sin(T1);
-		T C1 = glm::cos(T1);
-		T T3 = glm::atan2<T, defaultp>(C1*M[2][0] + S1*M[2][1], C1*M[0][0] + S1*M[0][1]);
+		T T1 = math::atan2<T, defaultp>(-M[1][0], M[1][1]);
+		T C2 = math::sqrt(M[0][2]*M[0][2] + M[2][2]*M[2][2]);
+		T T2 = math::atan2<T, defaultp>(M[1][2], C2);
+		T S1 = math::sin(T1);
+		T C1 = math::cos(T1);
+		T T3 = math::atan2<T, defaultp>(C1*M[2][0] + S1*M[2][1], C1*M[0][0] + S1*M[0][1]);
 		t1 = T1;
 		t2 = T2;
 		t3 = T3;
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

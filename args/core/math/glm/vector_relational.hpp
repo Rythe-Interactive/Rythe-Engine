@@ -22,7 +22,7 @@
 #include "detail/qualifier.hpp"
 #include "detail/setup.hpp"
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup core_func_vector_relational
 	/// @{
@@ -116,6 +116,6 @@ namespace args::core::math::detail::glm
 	GLM_FUNC_DECL GLM_CONSTEXPR vec<L, bool, Q> not_(vec<L, bool, Q> const& v);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "detail/func_vector_relational.inl"

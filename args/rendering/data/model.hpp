@@ -38,9 +38,9 @@ namespace args::rendering
         const model& get_model();
     };
 
-    constexpr model_handle invalid_model_handle { 0 };
+    constexpr model_handle invalid_model_handle { invalid_id };
 
-    struct ARGS_API model_cache
+    class ARGS_API ModelCache
     {
         friend class renderer;
         friend struct model_handle;

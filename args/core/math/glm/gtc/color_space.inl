@@ -1,6 +1,6 @@
 /// @ref gtc_color_space
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace detail
 {
 	template<length_t L, typename T, qualifier Q>
@@ -81,4 +81,4 @@ namespace detail
 	{
 		return detail::compute_srgbToRgb<L, T, Q>::call(ColorSRGB, Gamma);
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

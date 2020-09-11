@@ -25,7 +25,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_std_based_type
 	/// @{
@@ -63,6 +63,6 @@ namespace args::core::math::detail::glm
 	typedef vec<4, std::size_t, defaultp>		size4_t;
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "std_based_type.inl"

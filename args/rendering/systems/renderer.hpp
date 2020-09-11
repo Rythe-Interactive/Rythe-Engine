@@ -10,14 +10,12 @@ namespace args::rendering
 {
     class Renderer final : public System<Renderer>
     {
-        sparse_map<model_handle, std::vector<math::mat4>> batches;
+        sparse_map<model_handle, sparse_map<material_handle, std::vector<math::mat4>>> batches;
 
         ecs::EntityQuery renderablesQuery;
         ecs::EntityQuery cameraQuery;
-
+        bool initialized = false;
         app::gl_id modelMatrixBufferId;
-
-        shader_handle shdr = invalid_shader_handle;
 
         virtual void setup()
         {
@@ -147,15 +145,13 @@ namespace args::rendering
             glGetIntegerv(GL_MAJOR_VERSION, &major);
             glGetIntegerv(GL_MINOR_VERSION, &minor);
 
-            std::cout << "Initialized Renderer\n\tCONTEXT INFO\n\t----------------------------------\n\tGPU Vendor:\t" << vendor << "\n\tGPU:\t\t" << renderer << "\n\tGL Version:\t" << version << "\n\tGLSL Version:\t" << glslVersion << "\n\t----------------------------------\n";
-
-            shdr = shader_cache::create_shader("wireframe", "basic:/shaders/wireframe.glsl"_view);
+            log::info("Initialized Renderer\n\tCONTEXT INFO\n\t----------------------------------\n\tGPU Vendor:\t{}\n\tGPU:\t\t{}\n\tGL Version:\t{}\n\tGLSL Version:\t{}\n\t----------------------------------\n", vendor, renderer, version, glslVersion);
 
             glGenBuffers(1, &modelMatrixBufferId);
             glBindBuffer(GL_ARRAY_BUFFER, modelMatrixBufferId);
             glBufferData(GL_ARRAY_BUFFER, 65536, nullptr, GL_DYNAMIC_DRAW);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+            initialized = true;
             return true;
         }
 
@@ -171,7 +167,7 @@ namespace args::rendering
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
-            if (!shdr)
+            if (!initialized)
                 if (!initData(window))
                     return;
 
@@ -195,36 +191,40 @@ namespace args::rendering
 
                 math::mat4 modelMatrix;
                 math::compose(modelMatrix, ent.get_component_handle<scale>().read(), ent.get_component_handle<rotation>().read(), ent.get_component_handle<position>().read());
-                batches[rend.model].push_back(modelMatrix);
+                batches[rend.model][rend.material].push_back(modelMatrix);
             }
 
             for (int i = 0; i < batches.size(); i++)
             {
-                auto handle = batches.keys()[i];
-                if (!handle.is_buffered())
-                    handle.buffer_data(modelMatrixBufferId);
+                auto modelH = batches.keys()[i];
+                if (!modelH.is_buffered())
+                    modelH.buffer_data(modelMatrixBufferId);
 
-                model mesh = handle.get_model();
+                model mesh = modelH.get_model();
                 if (mesh.submeshes.empty())
                     continue;
 
-                auto instances = batches.dense()[i];
-                glBindBuffer(GL_ARRAY_BUFFER, modelMatrixBufferId);
-                glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(math::mat4) * instances.size(), instances.data());
-                glBindBuffer(GL_ARRAY_BUFFER, 0);
+                for (int j = 0; j < batches.dense()[i].size(); j++)
+                {
+                    auto material = batches.dense()[i].keys()[j];
+                    auto instances = batches.dense()[i].dense()[j];
+                    glBindBuffer(GL_ARRAY_BUFFER, modelMatrixBufferId);
+                    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(math::mat4) * instances.size(), instances.data());
+                    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-                shdr.bind();
-                shdr.get_uniform<math::mat4>("viewProjectionMatrix").set_value(viewProj);
+                    material.bind();
+                    material.set_param<math::mat4>("viewProjectionMatrix", viewProj);
+                    material.prepare();
+                    glBindVertexArray(mesh.vertexArrayId);
+                    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);
 
-                glBindVertexArray(mesh.vertexArrayId);
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);
+                    for (auto submesh : mesh.submeshes)
+                        glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)submesh.indexOffset, (GLsizei)instances.size());
 
-                for (auto submesh : mesh.submeshes)
-                    glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)submesh.indexOffset, (GLsizei)instances.size());
-
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-                glBindVertexArray(0);
-                glUseProgram(0);
+                    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+                    glBindVertexArray(0);
+                    material.release();
+                }
             }
 
             app::ContextHelper::makeContextCurrent(nullptr);

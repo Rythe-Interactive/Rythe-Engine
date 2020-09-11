@@ -9,7 +9,7 @@ namespace args::rendering
 	struct model;
 	struct camera;
 	struct shader;
-    struct shader_cache;
+    struct ShaderCache;
     struct shader_handle;
 
 #pragma region shader parameters
@@ -30,6 +30,7 @@ namespace args::rendering
 		}
 
 		virtual GLenum get_type() const { return m_type; }
+		virtual std::string get_name() const { return m_name; }
 		virtual GLint get_location() const { return m_location; }
 	};
 
@@ -182,6 +183,7 @@ namespace args::rendering
 		GLint programId;
 		std::unordered_map<id_type, std::unique_ptr<shader_parameter_base>> uniforms;
 		std::unordered_map<id_type, std::unique_ptr<attribute>> attributes;
+        std::string name;
 
         shader(const shader&) = delete;
         shader(shader&&) = default;
@@ -202,32 +204,59 @@ namespace args::rendering
 			return *dynamic_cast<uniform<T>*>(uniforms[nameHash(name)].get());
 		}
 
+        template<typename T>
+        uniform<T> get_uniform(id_type id)
+        {
+            return *dynamic_cast<uniform<T>*>(uniforms[id].get());
+        }
+
         attribute get_attribute(const std::string& name)
         {
             return *(attributes[nameHash(name)].get());
+        }
+
+        std::vector<std::pair<std::string, GLenum>> get_uniform_info()
+        {
+            std::vector<std::pair<std::string, GLenum>> info;
+            for (auto& [_, uniform] : uniforms)
+                info.push_back(std::make_pair(uniform->get_name(), uniform->get_type()));
+            return std::move(info);
         }
 	};
 
     struct ARGS_API shader_handle
     {
-        using cache = shader_cache;
+        using cache = ShaderCache;
         id_type id;
         GLuint get_uniform_block_index(const std::string& name) const;
         void bind_uniform_block(GLuint uniformBlockIndex, GLuint uniformBlockBinding) const;
 
+        std::string get_name() const;
+
+        std::vector<std::pair<std::string, GLenum>> get_uniform_info() const;
+
         template<typename T>
-        uniform<T> get_uniform(const std::string& name);
+        uniform<T> get_uniform(const std::string& name)
+        {
+            return ShaderCache::get_shader(id)->get_uniform<T>(name);
+        }
+
+        template<typename T>
+        uniform<T> get_uniform(id_type uniformId)
+        {
+            return ShaderCache::get_shader(id)->get_uniform<T>(uniformId);
+        }
 
         attribute get_attribute(const std::string& name);
 
         void bind();
         static void release();
 
-        bool operator==(const shader_handle& other) { return id == other.id; }
+        bool operator==(const shader_handle& other) const { return id == other.id; }
         operator bool() { return id != invalid_id; }
     };
 
-    constexpr shader_handle invalid_shader_handle{ 0 };
+    constexpr shader_handle invalid_shader_handle{ invalid_id };
 
 	struct shader_import_settings
 	{
@@ -236,7 +265,7 @@ namespace args::rendering
 
 	constexpr shader_import_settings default_shader_settings{};
 
-	struct ARGS_API shader_cache
+	class ARGS_API ShaderCache
 	{
 		friend class renderer;
 		friend struct shader_handle;
@@ -259,11 +288,5 @@ namespace args::rendering
 		static shader_handle create_shader(const std::string& name, const fs::view& file, shader_import_settings settings = default_shader_settings);
 		static shader_handle get_handle(const std::string& name);
 		static shader_handle get_handle(id_type id);
-	};
-
-    template<typename T>
-    inline uniform<T> shader_handle::get_uniform(const std::string& name)
-    {
-        return shader_cache::get_shader(id)->get_uniform<T>(name);
-    }
+	};   
 }

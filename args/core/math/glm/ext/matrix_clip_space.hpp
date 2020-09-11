@@ -28,7 +28,7 @@
 #	pragma message("GLM: GLM_EXT_matrix_clip_space extension included")
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup ext_matrix_clip_space
 	/// @{
@@ -37,7 +37,7 @@ namespace args::core::math::detail::glm
 	///
 	/// @tparam T A floating-point scalar type
 	///
-	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top, T const& zNear, T const& zFar)
+	/// @see - math::ortho(T const& left, T const& right, T const& bottom, T const& top, T const& zNear, T const& zFar)
 	/// @see <a href="https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluOrtho2D.xml">gluOrtho2D man page</a>
 	template<typename T>
 	GLM_FUNC_DECL mat<4, 4, T, defaultp> ortho(
@@ -48,7 +48,7 @@ namespace args::core::math::detail::glm
 	///
 	/// @tparam T A floating-point scalar type
 	///
-	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top)
+	/// @see - math::ortho(T const& left, T const& right, T const& bottom, T const& top)
 	template<typename T>
 	GLM_FUNC_DECL mat<4, 4, T, defaultp> orthoLH_ZO(
 		T left, T right, T bottom, T top, T zNear, T zFar);
@@ -58,7 +58,7 @@ namespace args::core::math::detail::glm
 	///
 	/// @tparam T A floating-point scalar type
 	///
-	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top)
+	/// @see - math::ortho(T const& left, T const& right, T const& bottom, T const& top)
 	template<typename T>
 	GLM_FUNC_DECL mat<4, 4, T, defaultp> orthoLH_NO(
 		T left, T right, T bottom, T top, T zNear, T zFar);
@@ -68,7 +68,7 @@ namespace args::core::math::detail::glm
 	///
 	/// @tparam T A floating-point scalar type
 	///
-	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top)
+	/// @see - math::ortho(T const& left, T const& right, T const& bottom, T const& top)
 	template<typename T>
 	GLM_FUNC_DECL mat<4, 4, T, defaultp> orthoRH_ZO(
 		T left, T right, T bottom, T top, T zNear, T zFar);
@@ -78,7 +78,7 @@ namespace args::core::math::detail::glm
 	///
 	/// @tparam T A floating-point scalar type
 	///
-	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top)
+	/// @see - math::ortho(T const& left, T const& right, T const& bottom, T const& top)
 	template<typename T>
 	GLM_FUNC_DECL mat<4, 4, T, defaultp> orthoRH_NO(
 		T left, T right, T bottom, T top, T zNear, T zFar);
@@ -88,7 +88,7 @@ namespace args::core::math::detail::glm
 	///
 	/// @tparam T A floating-point scalar type
 	///
-	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top)
+	/// @see - math::ortho(T const& left, T const& right, T const& bottom, T const& top)
 	template<typename T>
 	GLM_FUNC_DECL mat<4, 4, T, defaultp> orthoZO(
 		T left, T right, T bottom, T top, T zNear, T zFar);
@@ -98,7 +98,7 @@ namespace args::core::math::detail::glm
 	///
 	/// @tparam T A floating-point scalar type
 	///
-	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top)
+	/// @see - math::ortho(T const& left, T const& right, T const& bottom, T const& top)
 	template<typename T>
 	GLM_FUNC_DECL mat<4, 4, T, defaultp> orthoNO(
 		T left, T right, T bottom, T top, T zNear, T zFar);
@@ -109,7 +109,7 @@ namespace args::core::math::detail::glm
 	///
 	/// @tparam T A floating-point scalar type
 	///
-	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top)
+	/// @see - math::ortho(T const& left, T const& right, T const& bottom, T const& top)
 	template<typename T>
 	GLM_FUNC_DECL mat<4, 4, T, defaultp> orthoLH(
 		T left, T right, T bottom, T top, T zNear, T zFar);
@@ -120,7 +120,7 @@ namespace args::core::math::detail::glm
 	///
 	/// @tparam T A floating-point scalar type
 	///
-	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top)
+	/// @see - math::ortho(T const& left, T const& right, T const& bottom, T const& top)
 	template<typename T>
 	GLM_FUNC_DECL mat<4, 4, T, defaultp> orthoRH(
 		T left, T right, T bottom, T top, T zNear, T zFar);
@@ -130,7 +130,7 @@ namespace args::core::math::detail::glm
 	///
 	/// @tparam T A floating-point scalar type
 	///
-	/// @see - glm::ortho(T const& left, T const& right, T const& bottom, T const& top)
+	/// @see - math::ortho(T const& left, T const& right, T const& bottom, T const& top)
 	/// @see <a href="https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glOrtho.xml">glOrtho man page</a>
 	template<typename T>
 	GLM_FUNC_DECL mat<4, 4, T, defaultp> ortho(
@@ -517,6 +517,6 @@ namespace args::core::math::detail::glm
 		T fovy, T aspect, T near, T ep);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "matrix_clip_space.inl"

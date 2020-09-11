@@ -8,7 +8,7 @@
 #include <limits>
 #include <cstddef>
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<typename T, qualifier Q>
 	struct mat<4, 2, T, Q>
@@ -164,7 +164,7 @@ namespace args::core::math::detail::glm
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_DECL bool operator!=(mat<4, 2, T, Q> const& m1, mat<4, 2, T, Q> const& m2);
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #ifndef GLM_EXTERNAL_TEMPLATE
 #include "type_mat4x2.inl"

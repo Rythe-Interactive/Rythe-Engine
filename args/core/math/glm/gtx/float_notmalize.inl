@@ -2,7 +2,7 @@
 
 #include <limits>
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER vec<L, float, Q> floatNormalize(vec<L, T, Q> const& v)
@@ -10,4 +10,4 @@ namespace args::core::math::detail::glm
 		return vec<L, float, Q>(v) / static_cast<float>(std::numeric_limits<T>::max());
 	}
 
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

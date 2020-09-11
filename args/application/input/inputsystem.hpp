@@ -234,7 +234,7 @@ namespace args::application
         static void bindAxisToAction(inputmap::method m, float value)
         {
             //creates tuple embedding all parameters needed for invoking the action
-            m_axes[m][typeHash<Event>()] = std::make_tuple(
+            data::m_axes[m][typeHash<Event>()] = std::make_tuple(
                 delegate<void(InputSystem*, float, inputmap::modifier_keys, inputmap::method)>::create([]
                 (InputSystem* self, float value, inputmap::modifier_keys mods, inputmap::method method)
                     {
