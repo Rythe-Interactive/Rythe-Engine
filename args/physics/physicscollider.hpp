@@ -13,7 +13,7 @@ namespace args::physics
     {
     public:
 
-        PhysicsCollider(physicsComponent* colliderOwner);
+        PhysicsCollider();
 
         /** @brief given a PhysicsCollider CheckCollision calls "CheckCollisionWith". Both colliders are then passed through
          * to the correct "CheckCollisionWith" function with double dispatch.
@@ -30,10 +30,6 @@ namespace args::physics
 
 
     protected:
-
-        physicsComponent * physicsComponentOwner;
-
-
 
     private:
        

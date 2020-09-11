@@ -55,7 +55,6 @@ namespace args::physics
         {
             forceAccumulator += force;
             math::vec3 a = worldForcePosition - globalCentreOfMass;
-            std::cout << "worldForcePosition - globalCentreOfMass " << a.x << "," << a.y << "," << a.z << std::endl;
             torqueAccumulator += math::cross(worldForcePosition - globalCentreOfMass, force);
         }
 
