@@ -254,12 +254,26 @@ namespace args::core::log
     /** @brief selects the severity you want to filter for or print with */
     enum class severity
     {
-        debug, // lowest severity
+        trace,   // lowest severity
+        debug,
         info,
         warn,
-        error  // highest severity
+        error,
+        fatal // highest severity
     };
 
+    inline spdlog::level::level_enum args2spdlog(severity s)
+    {
+        switch (s)
+        {
+        case severity::trace:return spdlog::level::trace;
+        case severity::debug:return spdlog::level::debug;
+        case severity::info: return spdlog::level::info;
+        case severity::warn: return spdlog::level::warn;
+        case severity::error:return spdlog::level::err;
+        case severity::fatal:return spdlog::level::critical;
+        }
+    }
 
     /** @brief prints a log line, using the specified `severity`
      *  @param s The severity you wan't to report this log with
@@ -268,17 +282,10 @@ namespace args::core::log
      *  @note This uses fmt lib style syntax check
      *         https://fmt.dev/latest/syntax.html
      */
-    template <class... Args>
-    void println(severity s, const char* format, Args&&... a)
+    template <class... Args, class FormatString>
+    void println(severity s, const FormatString& format, Args&&... a)
     {
-        switch (s)
-        {
-        case severity::debug:logger->debug(format, std::forward<Args>(a)...); break;
-        case severity::info: logger->info(format, std::forward<Args>(a)...); break;
-        case severity::warn: logger->warn(format, std::forward<Args>(a)...); break;
-        case severity::error:logger->error(format, std::forward<Args>(a)...); break;
-        default:break;
-        }
+        logger->log(args2spdlog(s),format,std::forward<Args>(a)...);
     }
 
 
@@ -287,44 +294,50 @@ namespace args::core::log
      */
     inline void filter(severity level)
     {
-        switch (level) {
-        case severity::debug: logger->set_level(spdlog::level::debug); break;
-        case severity::info: logger->set_level(spdlog::level::info); break;
-        case severity::warn: logger->set_level(spdlog::level::warn); break;
-        case severity::error: logger->set_level(spdlog::level::err); break;
-        default:break;
-        }
+        logger->set_level(args2spdlog(level));
+    }
+
+     /** @brief same as println but with severity = trace */
+    template<class... Args, class FormatString>
+    void trace(const FormatString& format, Args&&... a)
+    {
+        println(severity::trace, format, std::forward<Args>(a)...);
     }
 
     /** @brief same as println but with severity = debug */
-    template <class... Args>
-    void debug(const char* format, Args&&...a)
+    template<class... Args, class FormatString>
+    void debug(const FormatString& format, Args&&...a)
     {
         println(severity::debug, format, std::forward<Args>(a)...);
     }
 
     /** @brief same as println but with severity = info */
-    template <class... Args>
-    void info(const char* format, Args&&...a)
+    template<class... Args, class FormatString>
+    void info(const FormatString& format, Args&&...a)
     {
         println(severity::info, format, std::forward<Args>(a)...);
     }
 
     /** @brief same as println but with severity = warn */
-    template <class... Args>
-    void warn(const char* format, Args&&...a)
+    template<class... Args, class FormatString>
+    void warn(const FormatString& format, Args&&...a)
     {
         println(severity::warn, format, std::forward<Args>(a)...);
     }
 
     /** @brief same as println but with severity = error */
-    template <class... Args>
-    void error(const char* format, Args&&...a)
+    template<class... Args, class FormatString>
+    void error(const FormatString& format, Args&&...a)
     {
         println(severity::error, format, std::forward<Args>(a)...);
     }
 
-
+    /** @brief same as println but with severity = fatal */
+    template<class... Args, class FormatString>
+    void fatal(const FormatString& format, Args&&...a)
+    {
+        println(severity::fatal, format, std::forward<Args>(a)...);
+    }
 
 }
 #undef logger
