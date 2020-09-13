@@ -22,6 +22,7 @@
     <ClCompile Include="data\mesh.cpp" />
     <ClCompile Include="logging\logging.cpp" />
     <ClCompile Include="data\importers\mesh_importers.cpp" />
+    <ClCompile Include="serialization\SerializationUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -472,6 +473,7 @@
     <ClInclude Include="logging\spdlog\tweakme.h" />
     <ClInclude Include="logging\spdlog\version.h" />
     <ClInclude Include="data\importers\mesh_importers.hpp" />
+    <ClInclude Include="serialization\Serialization.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">
