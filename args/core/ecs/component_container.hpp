@@ -97,10 +97,7 @@ namespace args::core::ecs
 
         virtual void create_component(id_type entityId, void* value) override
         {
-            component_type comp = *reinterpret_cast<component_type*>(value);
-            if constexpr (detail::has_init<component_type, void(component_type&)>::value)
-                component_type::init(comp);
-            components.emplace(entityId, comp);
+            components.emplace(entityId, *reinterpret_cast<component_type*>(value));
             m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId, m_registry));
         }
 
