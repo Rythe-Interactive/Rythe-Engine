@@ -3,7 +3,7 @@
 
 namespace args::physics
 {
-    PhysicsCollider::PhysicsCollider(physicsComponent* colliderOwner) : physicsComponentOwner(colliderOwner)
+    PhysicsCollider::PhysicsCollider() 
     {
 
     }
