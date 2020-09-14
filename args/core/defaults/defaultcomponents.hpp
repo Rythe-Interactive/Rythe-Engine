@@ -20,6 +20,16 @@ namespace args::core
             data = src.data;
             return *this;
         }
+
+        static void init(position&)
+        {
+            log::debug("initializing position");
+        }
+
+        static void destroy(position&)
+        {
+            log::debug("destroying position");
+        }
     };
 
     struct rotation : public math::quat

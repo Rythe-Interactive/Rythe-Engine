@@ -126,6 +126,7 @@
     <ClInclude Include="defaults\defaultcomponents.hpp" />
     <ClInclude Include="detail\internals.hpp" />
     <ClInclude Include="ecs\archetype.hpp" />
+    <ClInclude Include="ecs\component_meta.hpp" />
     <ClInclude Include="ecs\component_container.hpp" />
     <ClInclude Include="ecs\component_handle.hpp" />
     <ClInclude Include="ecs\ecs.hpp" />
