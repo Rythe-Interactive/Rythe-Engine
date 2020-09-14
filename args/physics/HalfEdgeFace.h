@@ -13,19 +13,29 @@ namespace args::physics
 
 		}
 
+		/** @brief given a function that takes in a HalfEdgeEdge*, 
+		* executes the function on each edge connected to 'startEdge'
+		*/
+		void forEachEdge(args::core::delegate< void(HalfEdgeEdge*)> functionToExecute)
+		{
+			HalfEdgeEdge* initialEdge = startEdge;
+			HalfEdgeEdge* currentEdge = startEdge;
+
+			//initialEdge will eventually go back to "startEdge", ending the loop
+			while (initialEdge != currentEdge && currentEdge != nullptr)
+			{
+				functionToExecute(currentEdge);
+
+				currentEdge = currentEdge->nextEdge;
+
+			}
+		}
+
 		~HalfEdgeFace()
 		{
-			HalfEdgeEdge* edgeToDelete = startEdge;
+			auto deleteFunc = [](HalfEdgeEdge* edge) { delete edge; };
 
-			//edgeToDelete will eventually go back to "startEdge", ending the loop
-			while (edgeToDelete)
-			{
-				HalfEdgeEdge* nextEdgeToDelete = edgeToDelete->nextEdge;
-				delete edgeToDelete;
-
-				edgeToDelete = nextEdgeToDelete;
-			
-			}
+			forEachEdge(deleteFunc);
 
 		}
 

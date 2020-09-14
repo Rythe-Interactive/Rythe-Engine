@@ -99,15 +99,16 @@ namespace args::physics
         vertices.push_back(maxVertexMinusBreadth);
         math::vec3* h = &vertices.back();
 
-        typedef std::pair<char, char > charPair;
-
-        std::map<charPair, HalfEdgeEdge*> chairPairToEdgePtr;
-
+        for (auto& vertex : vertices)
+        {
+            vertex += cubeParams.offset;
+        }
 
         //note: each edge carries adjacency information. (for example, an edge 'eg' must know its edge pair 'ge').
         //This is why each edge must be declared explicitly.
 
         //[1] create face eghf
+
             HalfEdgeEdge* eg = new HalfEdgeEdge(e);
             HalfEdgeEdge* gh = new HalfEdgeEdge(g);
             HalfEdgeEdge* hf = new HalfEdgeEdge(h);
@@ -150,6 +151,7 @@ namespace args::physics
 
             HalfEdgeFace* fhdb = new HalfEdgeFace(fh, math::vec3(1, 0, 0));
             halfEdgeFaces.push_back(fhdb);
+
         //[4] create face efba
 
             HalfEdgeEdge* ef = new HalfEdgeEdge(e);
@@ -164,6 +166,7 @@ namespace args::physics
 
             HalfEdgeFace* efba = new HalfEdgeFace(ef, math::vec3(0, 0, 1));
             halfEdgeFaces.push_back(efba);
+
         //[5] create face geac
 
             HalfEdgeEdge* ge = new HalfEdgeEdge(g);
@@ -178,6 +181,7 @@ namespace args::physics
 
             HalfEdgeFace* geac = new HalfEdgeFace(ge, math::vec3(-1, 0, 0));
             halfEdgeFaces.push_back(geac);
+
         //[6] create face abdc
 
             HalfEdgeEdge* ab = new HalfEdgeEdge(a);
@@ -194,11 +198,48 @@ namespace args::physics
             halfEdgeFaces.push_back(abdc);
 
 
+
+        //manually connect each edge to its pair
+
+            //eghf                  //hgcd
+        eg->pairingEdge = ge;   hg->pairingEdge = gh;
+        gh->pairingEdge = hg;   gc->pairingEdge = cg;
+        hf->pairingEdge = fh;   cd->pairingEdge = dc;
+        fe->pairingEdge = ef;   dh->pairingEdge = hd;
+
+            //fhdb                   //efba
+        fh->pairingEdge = hf;    ef->pairingEdge = fe;
+        hd->pairingEdge = dh;    fb->pairingEdge = bf;
+        db->pairingEdge = bd;    ba->pairingEdge = ab;
+        bf->pairingEdge = fb;    ae->pairingEdge = ea;
+       
+            //geac                  //abdc
+        ge->pairingEdge = eg;   ab->pairingEdge = ba;
+        ea->pairingEdge = ae;   bd->pairingEdge = db;
+        ac->pairingEdge = ca;   dc->pairingEdge = cd;
+        cg->pairingEdge = gc;   ca->pairingEdge = ac;
+
+        //check if halfEdge data structure was initialized correctly. this will be commented when I know it always works
+        
+        auto assertFunc = [](HalfEdgeEdge* edge)
+        {
+            assert(edge->nextEdge);
+            assert(edge->prevEdge);
+            assert(edge->pairingEdge);
+            assert(edge->edgePositionPtr);
+        };
+
+        for( auto& face : halfEdgeFaces)
+        {
+            face->forEachEdge(assertFunc);
+        }
+        
+
     }
 
     HalfEdgeFace* ConvexCollider::instantiateMeshFace(const std::vector<math::vec3*>& vertices, const math::vec3& faceNormal)
     {
-        if (vertices.size() == 0) { return; }
+        if (vertices.size() == 0) { return nullptr; }
 
         std::vector<HalfEdgeEdge*> faceEdges;
 

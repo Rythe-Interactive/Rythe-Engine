@@ -6,6 +6,7 @@
 #include <core/logging/logging.hpp>
 #include <physics/physics_component.hpp>
 #include <physics/rigidbody.hpp>
+#include <physics/cube_collider_params.hpp>
 
 using namespace args;
 
@@ -97,7 +98,17 @@ public:
 
         //setup physics component on physics ent
         auto rbHandle = m_ecs->createComponent<physics::rigidbody>(physicsEnt);
-        auto physicsComponent = m_ecs->createComponent<physics::physicsComponent>(physicsEnt);
+        auto physicsComponentHandle = m_ecs->createComponent<physics::physicsComponent>(physicsEnt);
+
+        physics::physicsComponent physicsComponent;
+        physics::physicsComponent::init(physicsComponent);
+
+        physics::cube_collider_params cubeParams;
+        physicsComponent.AddBox(cubeParams);
+
+        physicsComponentHandle.write(physicsComponent);
+
+
 
         auto rb = rbHandle.read();
 
