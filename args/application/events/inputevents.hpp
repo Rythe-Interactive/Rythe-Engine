@@ -23,6 +23,7 @@ namespace args::application
             identifier = id;
         }
 
+        float input_delta;
         bool value{};
         inputmap::modifier_keys mods{};
         inputmap::method identifier{};
@@ -43,6 +44,7 @@ namespace args::application
             identifier = id;
         }
 
+        float input_delta;
         float value{};
         inputmap::modifier_keys mods{};
         inputmap::method identifier{};

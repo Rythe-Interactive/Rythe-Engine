@@ -6,7 +6,7 @@
 #include <core/logging/logging.hpp>
 #include <physics/physics_component.hpp>
 #include <physics/rigidbody.hpp>
-
+#include <physics/cube_collider_params.hpp>
 
 using namespace args;
 
@@ -127,7 +127,17 @@ public:
 
         //setup physics component on physics ent
         auto rbHandle = m_ecs->createComponent<physics::rigidbody>(physicsEnt);
-        auto physicsComponent = m_ecs->createComponent<physics::physicsComponent>(physicsEnt);
+        auto physicsComponentHandle = m_ecs->createComponent<physics::physicsComponent>(physicsEnt);
+
+        physics::physicsComponent physicsComponent;
+        physics::physicsComponent::init(physicsComponent);
+
+        physics::cube_collider_params cubeParams;
+        physicsComponent.AddBox(cubeParams);
+
+        physicsComponentHandle.write(physicsComponent);
+
+
 
         auto rb = rbHandle.read();
 
@@ -176,7 +186,7 @@ public:
         auto posH = player.get_component_handle<position>();
         auto rot = player.get_component_handle<rotation>().read();
         math::vec3 move = math::toMat3(rot) * math::vec3(0.f, 0.f, 1.f);
-        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * 0.1f;
+        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta;
         posH.fetch_add(move);
         log::debug("FORWD: ({:.3}, {:.3}, {:.3})", move.x, move.y, move.z);
     }
@@ -186,7 +196,7 @@ public:
         auto posH = player.get_component_handle<position>();
         auto rot = player.get_component_handle<rotation>().read();
         math::vec3 move = math::toMat3(rot) * math::vec3(1.f, 0.f, 0.f);
-        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * 0.1f;
+        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta;
         posH.fetch_add(move);
         log::debug("RIGHT: ({:.3}, {:.3}, {:.3})", move.x, move.y, move.z);
     }
@@ -194,7 +204,7 @@ public:
     void onPlayerFly(player_fly* action)
     {
         auto posH = player.get_component_handle<position>();
-        posH.fetch_add(math::vec3(0.f, action->value * 0.1f, 0.f));
+        posH.fetch_add(math::vec3(0.f, action->value * action->input_delta, 0.f));
     }
 
     void onPlayerLookX(player_look_x* action)
