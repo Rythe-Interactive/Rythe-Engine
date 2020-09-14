@@ -2,16 +2,28 @@
 #include <application/application.hpp>
 #include <physics/cube_collider_params.hpp>
 #include <vector>
-
+#include <physics/physicscollider.hpp>
 namespace args::physics
 {
-	struct physicsComponent
+	struct ARGS_API physicsComponent
 	{
+        static void init(physicsComponent& comp)
+        {
+            comp.colliders = new std::vector<std::shared_ptr<PhysicsCollider>>();
+        }
+
+        static void destroy(physicsComponent& comp)
+        {
+            delete comp.colliders;
+        }
+
 		//physics material
 
-		//list of collidables
+        std::vector<std::shared_ptr<PhysicsCollider>>* colliders;
 
-		//istrigger boolean
+        bool isTrigger;
+
+        math::vec3 localCenterOfMass{};
 
 		//physics bitmask
 
@@ -34,8 +46,6 @@ namespace args::physics
          * ConvexCollider is then added to the list of PhysicsColliders
         */
 		void AddSphere(/*mesh*/);
-
-		
 
 	};
 }

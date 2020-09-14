@@ -2,6 +2,8 @@
 
 #include <physics/physicscollider.hpp>
 #include <physics/cube_collider_params.hpp>
+#include <physics/HalfEdgeEdge.h>
+#include <physics/HalfEdgeFace.h>
 
 namespace args::physics
 {
@@ -9,26 +11,35 @@ namespace args::physics
 	{
 	public:
 
-		ConvexCollider(physicsComponent* colliderOwner);
+		ConvexCollider();
+
+        ~ConvexCollider();
 
 		virtual void CheckCollision(std::shared_ptr<PhysicsCollider> physicsComponent, physics_manifold* manifold) override;
 
 		virtual void CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold* manifold) override;
 
-		/**@brief Constructs a polyhedron-shaped convex hull that encompasses the given mesh
+		/**@brief Constructs a polyhedron-shaped convex hull that encompasses the given mesh.
 		*/
 		void ConstructConvexHullWithMesh();
 
-		/**@brief Constructs a box-shaped convex hull that encompasses the given mesh
+		/**@brief Constructs a box-shaped convex hull that encompasses the given mesh.
 		*/
 		void ConstructBoxWithMesh();
 
-		/**@brief Constructs a box-shaped convex hull based on the given parameters
-		 * @param cubeParams : the parameters that will be used to create the box.
+		/**@brief Constructs a box-shaped convex hull based on the given parameters.
+		 * @param cubeParams The parameters that will be used to create the box.
 		*/
 		void CreateBox(const cube_collider_params& cubeParams);
 
 	private:
+
+        HalfEdgeFace* instantiateMeshFace(const std::vector<math::vec3*>& vertices,const math::vec3& faceNormal);
+
+        std::vector<math::vec3> vertices;
+        std::vector<HalfEdgeFace*> halfEdgeFaces;
+
+
 
 	};
 }

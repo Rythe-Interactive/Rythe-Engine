@@ -13,12 +13,12 @@ namespace args::physics
     {
     public:
 
-        PhysicsCollider(physicsComponent* colliderOwner);
+        PhysicsCollider();
 
         /** @brief given a PhysicsCollider CheckCollision calls "CheckCollisionWith". Both colliders are then passed through
          * to the correct "CheckCollisionWith" function with double dispatch.
-         *  @param physicsCollider : the collider we would like to check collision against
-         *  @param [in/out] manifold : a manifold that will hold the information
+         *  @param physicsCollider The collider we would like to check collision against
+         *  @param [in/out] manifold A physics_manifold that holds information about the collision
         */
         virtual void CheckCollision(
             std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold* manifold) {};
@@ -30,10 +30,6 @@ namespace args::physics
 
 
     protected:
-
-        physicsComponent * physicsComponentOwner;
-
-
 
     private:
        

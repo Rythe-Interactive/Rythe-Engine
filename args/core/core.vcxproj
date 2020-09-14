@@ -108,6 +108,7 @@
     <ClInclude Include="common\result.hpp" />
     <ClInclude Include="common\string_extra.hpp" />
     <ClInclude Include="common\exception.hpp" />
+    <ClInclude Include="common\unit_conversion.hpp" />
     <ClInclude Include="containers\atomic_sparse_map.hpp" />
     <ClInclude Include="containers\containers.hpp" />
     <ClInclude Include="containers\data_view.hpp" />
@@ -125,6 +126,7 @@
     <ClInclude Include="defaults\defaultcomponents.hpp" />
     <ClInclude Include="detail\internals.hpp" />
     <ClInclude Include="ecs\archetype.hpp" />
+    <ClInclude Include="ecs\component_meta.hpp" />
     <ClInclude Include="ecs\component_container.hpp" />
     <ClInclude Include="ecs\component_handle.hpp" />
     <ClInclude Include="ecs\ecs.hpp" />

@@ -7,8 +7,150 @@
 #include <core/logging/spdlog/sinks/rotating_file_sink.h>
 #include <core/logging/spdlog/pattern_formatter.h>
 #include <core/types/type_util.hpp>
+#include <thread>
+#include <core/math/math.hpp>
 
 /** @file logging.hpp */
+
+namespace fmt
+{
+    template <>
+    struct formatter<std::thread::id>
+    {
+
+        constexpr auto parse(format_parse_context& ctx)
+        {
+            auto it = ctx.begin(), end = ctx.end();
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+            return it++;
+        }
+
+        template <typename FormatContext>
+        auto format(const std::thread::id& p, FormatContext& ctx) {
+            std::ostringstream oss;
+            oss << p;
+            return format_to(ctx.out(), "{}", oss.str());
+        }
+
+    };
+
+    template <>
+    struct fmt::formatter<args::core::math::vec2> {
+        // Presentation format: 'f' - fixed, 'e' - exponential.
+        char presentation = 'f';
+
+        // Parses format specifications of the form ['f' | 'e'].
+        constexpr auto parse(format_parse_context& ctx) {
+            // auto parse(format_parse_context &ctx) -> decltype(ctx.begin()) // c++11
+              // [ctx.begin(), ctx.end()) is a character range that contains a part of
+              // the format string starting from the format specifications to be parsed,
+              // e.g. in
+              //
+              //   fmt::format("{:f} - point of interest", point{1, 2});
+              //
+              // the range will contain "f} - point of interest". The formatter should
+              // parse specifiers until '}' or the end of the range. In this example
+              // the formatter should parse the 'f' specifier and return an iterator
+              // pointing to '}'.
+
+              // Parse the presentation format and store it in the formatter:
+            auto it = ctx.begin(), end = ctx.end();
+            if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
+
+            // Check if reached the end of the range:
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+
+            // Return an iterator past the end of the parsed range:
+            return it;
+        }
+
+        // Formats the point p using the parsed format specification (presentation)
+        // stored in this formatter.
+        template <typename FormatContext>
+        auto format(const args::core::math::vec2& p, FormatContext& ctx) {
+            // auto format(const point &p, FormatContext &ctx) -> decltype(ctx.out()) // c++11
+              // ctx.out() is an output iterator to write to.
+            return format_to(
+                ctx.out(),
+                presentation == 'f' ? "({:.1f}, {:.1f})" : "({:.1e}, {:.1e})",
+                p.x, p.y);
+        }
+    };
+
+    template <>
+    struct fmt::formatter<args::core::math::vec3> {
+        char presentation = 'f';
+
+        constexpr auto parse(format_parse_context& ctx) {
+            auto it = ctx.begin(), end = ctx.end();
+            if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+
+            return it;
+        }
+
+        template <typename FormatContext>
+        auto format(const args::core::math::vec3& p, FormatContext& ctx) {
+            return format_to(
+                ctx.out(),
+                presentation == 'f' ? "({:.1f}, {:.1f}, {:.1f})" : "({:.1e}, {:.1e}, {:.1e})",
+                p.x, p.y, p.z);
+        }
+    };
+
+    template <>
+    struct fmt::formatter<args::core::math::vec4> {
+        char presentation = 'f';
+
+        constexpr auto parse(format_parse_context& ctx) {
+            auto it = ctx.begin(), end = ctx.end();
+            if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+
+            return it;
+        }
+
+        template <typename FormatContext>
+        auto format(const args::core::math::vec4& p, FormatContext& ctx) {
+            return format_to(
+                ctx.out(),
+                presentation == 'f' ? "({:.1f}, {:.1f}, {:.1f}, {:.1f})" : "({:.1e}, {:.1e}, {:.1e}, {:.1e})",
+                p.x, p.y, p.z, p.w);
+        }
+    };
+
+    template <>
+    struct fmt::formatter<args::core::math::quat> {
+        char presentation = 'f';
+
+        constexpr auto parse(format_parse_context& ctx) {
+            auto it = ctx.begin(), end = ctx.end();
+            if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+
+            return it;
+        }
+
+        template <typename FormatContext>
+        auto format(const args::core::math::quat& p, FormatContext& ctx) {
+            return format_to(
+                ctx.out(),
+                presentation == 'f' ? "(({:.1f}, {:.1f}, {:.1f}),r: {:.1f})" : "(({:.1e}, {:.1e}, {:.1e}),r: {:.1e})",
+                p.x, p.y, p.z, p.w);
+        }
+    };
+
+}
+
 
 namespace args::core::log
 {
@@ -112,12 +254,26 @@ namespace args::core::log
     /** @brief selects the severity you want to filter for or print with */
     enum class severity
     {
-        debug, // lowest severity
+        trace,   // lowest severity
+        debug,
         info,
         warn,
-        error  // highest severity
+        error,
+        fatal // highest severity
     };
 
+    inline spdlog::level::level_enum args2spdlog(severity s)
+    {
+        switch (s)
+        {
+        case severity::trace:return spdlog::level::trace;
+        case severity::debug:return spdlog::level::debug;
+        case severity::info: return spdlog::level::info;
+        case severity::warn: return spdlog::level::warn;
+        case severity::error:return spdlog::level::err;
+        case severity::fatal:return spdlog::level::critical;
+        }
+    }
 
     /** @brief prints a log line, using the specified `severity`
      *  @param s The severity you wan't to report this log with
@@ -126,17 +282,10 @@ namespace args::core::log
      *  @note This uses fmt lib style syntax check
      *         https://fmt.dev/latest/syntax.html
      */
-    template <class... Args>
-    void println(severity s, const char* format, Args&&... a)
+    template <class... Args, class FormatString>
+    void println(severity s, const FormatString& format, Args&&... a)
     {
-        switch (s)
-        {
-        case severity::debug:logger->debug(format, std::forward<Args>(a)...); break;
-        case severity::info: logger->info(format, std::forward<Args>(a)...); break;
-        case severity::warn: logger->warn(format, std::forward<Args>(a)...); break;
-        case severity::error:logger->error(format, std::forward<Args>(a)...); break;
-        default:break;
-        }
+        logger->log(args2spdlog(s),format,std::forward<Args>(a)...);
     }
 
 
@@ -145,44 +294,50 @@ namespace args::core::log
      */
     inline void filter(severity level)
     {
-        switch (level) {
-        case severity::debug: logger->set_level(spdlog::level::debug); break;
-        case severity::info: logger->set_level(spdlog::level::info); break;
-        case severity::warn: logger->set_level(spdlog::level::warn); break;
-        case severity::error: logger->set_level(spdlog::level::err); break;
-        default:break;
-        }
+        logger->set_level(args2spdlog(level));
+    }
+
+     /** @brief same as println but with severity = trace */
+    template<class... Args, class FormatString>
+    void trace(const FormatString& format, Args&&... a)
+    {
+        println(severity::trace, format, std::forward<Args>(a)...);
     }
 
     /** @brief same as println but with severity = debug */
-    template <class... Args>
-    void debug(const char* format, Args&&...a)
+    template<class... Args, class FormatString>
+    void debug(const FormatString& format, Args&&...a)
     {
         println(severity::debug, format, std::forward<Args>(a)...);
     }
 
     /** @brief same as println but with severity = info */
-    template <class... Args>
-    void info(const char* format, Args&&...a)
+    template<class... Args, class FormatString>
+    void info(const FormatString& format, Args&&...a)
     {
         println(severity::info, format, std::forward<Args>(a)...);
     }
 
     /** @brief same as println but with severity = warn */
-    template <class... Args>
-    void warn(const char* format, Args&&...a)
+    template<class... Args, class FormatString>
+    void warn(const FormatString& format, Args&&...a)
     {
         println(severity::warn, format, std::forward<Args>(a)...);
     }
 
     /** @brief same as println but with severity = error */
-    template <class... Args>
-    void error(const char* format, Args&&...a)
+    template<class... Args, class FormatString>
+    void error(const FormatString& format, Args&&...a)
     {
         println(severity::error, format, std::forward<Args>(a)...);
     }
 
-
+    /** @brief same as println but with severity = fatal */
+    template<class... Args, class FormatString>
+    void fatal(const FormatString& format, Args&&...a)
+    {
+        println(severity::fatal, format, std::forward<Args>(a)...);
+    }
 
 }
 #undef logger

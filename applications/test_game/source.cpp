@@ -1,5 +1,3 @@
-#include <iostream>
-
 #define ARGS_ENTRY
 #define ARGS_KEEP_CONSOLE
 
@@ -23,15 +21,7 @@ using namespace args;
 
 void ARGS_CCONV reportModules(Engine* engine)
 {
-    //app::window win;
-    //win.create(200, 200, "test window");
-    //win.makeCurrent();
-    //win.display();
-    //math::ivec2 size = win.getFramebufferSize();
-
-    //std::cout << size.x << ", " << size.y << std::endl;
-
-    std::cout << "Hello Args!" << std::endl;
+    log::info("Hello Args!");
 
     test_filesystem();
 

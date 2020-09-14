@@ -3,8 +3,11 @@
 
 #include <core/data/importers/mesh_importers.hpp>
 #include <core/math/math.hpp>
+#include <core/logging/logging.hpp>
 
 #include <map>
+
+#include "core/logging/logging.hpp"
 
 namespace args::core
 {
@@ -26,7 +29,7 @@ namespace args::core
         }
 
         if (!reader.Warning().empty())
-            std::cout << reader.Warning() << std::endl;
+            log::warn(reader.Warning().c_str());
 
         tinyobj::attrib_t attributes = reader.GetAttrib();
         std::vector<tinyobj::shape_t> shapes = reader.GetShapes();

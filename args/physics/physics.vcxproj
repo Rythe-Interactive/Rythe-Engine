@@ -25,6 +25,11 @@
   <ItemGroup>
     <ClInclude Include="convexcollider.hpp" />
     <ClInclude Include="cube_collider_params.hpp" />
+    <ClInclude Include="HalfEdgeEdge.h" />
+    <ClInclude Include="HalfEdgeFace.h" />
+    <ClInclude Include="physicscollider.hpp" />
+    <ClInclude Include="physicsconstants.h" />
+    <ClInclude Include="physicsimport.h" />
     <ClInclude Include="physics_manifold.hpp" />
     <ClInclude Include="physics_component.hpp" />
     <ClInclude Include="physicsmodule.hpp" />
