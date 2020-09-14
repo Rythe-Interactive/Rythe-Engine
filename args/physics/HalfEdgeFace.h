@@ -21,14 +21,16 @@ namespace args::physics
 			HalfEdgeEdge* initialEdge = startEdge;
 			HalfEdgeEdge* currentEdge = startEdge;
 
+			if (!startEdge) { return; }
+
 			//initialEdge will eventually go back to "startEdge", ending the loop
-			while (initialEdge != currentEdge && currentEdge != nullptr)
+			do 
 			{
 				functionToExecute(currentEdge);
 
 				currentEdge = currentEdge->nextEdge;
+			} while (initialEdge != currentEdge && currentEdge != nullptr);
 
-			}
 		}
 
 		~HalfEdgeFace()

@@ -15,11 +15,11 @@ namespace args::physics
 
     void physicsComponent::AddBox(const cube_collider_params& cubeParams)
     {
-        auto newCuboidCollider = std::make_shared<ConvexCollider>();
+        auto cuboidCollider = std::make_shared<ConvexCollider>();
 
-        newCuboidCollider->CreateBox(cubeParams);
+        cuboidCollider->CreateBox(cubeParams);
 
-        colliders->push_back(newCuboidCollider);
+        colliders->push_back(cuboidCollider);
 
     }
 
