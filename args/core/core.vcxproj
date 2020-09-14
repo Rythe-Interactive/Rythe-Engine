@@ -535,11 +535,13 @@
     <ClInclude Include="math\trigonometry.hpp" />
     <ClInclude Include="platform\args_library.hpp" />
     <ClInclude Include="platform\platform.hpp" />
+    <ClInclude Include="scene management\scene.hpp" />
+    <ClInclude Include="scene management\scenemanager.hpp" />
     <ClInclude Include="scheduling\process.hpp" />
     <ClInclude Include="scheduling\processchain.hpp" />
     <ClInclude Include="scheduling\scheduler.hpp" />
     <ClInclude Include="scheduling\scheduling.hpp" />
-    <ClInclude Include="serialization\Serialization.hpp" />
+    <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="time\clock.hpp" />
     <ClInclude Include="time\time.hpp" />
     <ClInclude Include="time\time_span.hpp" />
