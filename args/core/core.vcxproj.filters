@@ -473,6 +473,7 @@
     <ClInclude Include="logging\spdlog\version.h" />
     <ClInclude Include="data\importers\mesh_importers.hpp" />
     <ClInclude Include="common\unit_conversion.hpp" />
+    <ClInclude Include="ecs\component_meta.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">
