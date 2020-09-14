@@ -22,7 +22,6 @@
     <ClCompile Include="data\mesh.cpp" />
     <ClCompile Include="logging\logging.cpp" />
     <ClCompile Include="data\importers\mesh_importers.cpp" />
-    <ClCompile Include="serialization\SerializationUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />

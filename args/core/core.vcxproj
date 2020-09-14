@@ -570,7 +570,6 @@
     <ClCompile Include="math\glm\detail\glm.cpp" />
     <ClCompile Include="scheduling\processchain.cpp" />
     <ClCompile Include="scheduling\scheduler.cpp" />
-    <ClCompile Include="serialization\SerializationUtil.cpp" />
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
   <ItemGroup>

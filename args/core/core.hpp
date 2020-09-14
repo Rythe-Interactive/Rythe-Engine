@@ -18,6 +18,7 @@
 #include <core/events/events.hpp>
 #include <core/entry/entry_point.hpp>
 #include <core/engine/engine.hpp>
+#include <core/serialization/Serialization.hpp>
 
 #include <core/filesystem/filesystem.hpp>
 #include <core/data/data.hpp>
