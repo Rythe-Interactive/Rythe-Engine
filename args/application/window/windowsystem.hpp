@@ -69,6 +69,7 @@ namespace args::application
             ContextHelper::destroyWindow(window);
         }
 
+#pragma region Callbacks
         static void onWindowMoved(GLFWwindow* window, int x, int y)
         {
             if (data::m_windowComponents.contains(window))
@@ -179,6 +180,7 @@ namespace args::application
                 m_requests.push_back(*windowRequest);
             }
         }
+#pragma endregion
 
     public:
         virtual void setup()
@@ -188,6 +190,13 @@ namespace args::application
             bindToEvent<window_request, &WindowSystem::onWindowRequest>();
 
             raiseEvent<window_request>(world_entity_id, math::ivec2(1360, 768), "<Args> Engine", nullptr, nullptr, 1);
+
+            m_scheduler->sendCommand(m_scheduler->getChainThreadId("Input"), [](void* param)
+                {
+                    WindowSystem* self = reinterpret_cast<WindowSystem*>(param);
+                    log::debug("Creating main window.");
+                    self->createWindows();
+                }, this);
 
             createProcess<&WindowSystem::refreshWindows>("Rendering");
             createProcess<&WindowSystem::handleWindowEvents>("Input");
@@ -246,6 +255,7 @@ namespace args::application
                     async::readwrite_guard guard(data::m_creationLock);
                     handle = m_ecs->createComponent<window>(request.entityId, win);
                 }
+                log::debug("created window: {}", request.name);
 
                 data::m_windowComponents.insert(win, handle);
                 data::m_windowEventBus.insert(win, m_eventBus);
@@ -272,8 +282,6 @@ namespace args::application
                     ContextHelper::setScrollCallback(win, &WindowSystem::onMouseScroll);
                     ContextHelper::makeContextCurrent(nullptr);
                 }
-
-                log::debug("created window: {}", request.name);
             }
 
             m_requests.clear();

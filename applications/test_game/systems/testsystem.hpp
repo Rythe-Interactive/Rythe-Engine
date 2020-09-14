@@ -65,8 +65,19 @@ public:
 
         bindToEvent<events::component_creation<app::window>, &TestSystem::disableCursor>();
 
-        auto modelH = rendering::ModelCache::create_model("test", "basic://models/Cube.obj"_view);
-        auto materialH = rendering::invalid_material_handle;//rendering::MaterialCache::create_material("wireframe", "basic:/shaders/wireframe.glsl"_view);
+        app::window window = m_ecs->world.get_component_handle<app::window>().read();
+        rendering::model_handle modelH;
+        rendering::material_handle materialH;
+
+        {
+            async::readwrite_guard guard(*window.lock);
+            app::ContextHelper::makeContextCurrent(window);
+
+            modelH = rendering::ModelCache::create_model("test", "basic://models/Cube.obj"_view);
+            materialH = rendering::MaterialCache::create_material("wireframe", "basic:/shaders/wireframe.glsl"_view);
+
+            app::ContextHelper::makeContextCurrent(nullptr);
+        }
 
         {
             auto ent = m_ecs->createEntity();
@@ -188,7 +199,6 @@ public:
         math::vec3 move = math::toMat3(rot) * math::vec3(0.f, 0.f, 1.f);
         move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta;
         posH.fetch_add(move);
-        log::debug("FORWD: ({:.3}, {:.3}, {:.3})", move.x, move.y, move.z);
     }
 
     void onPlayerStrive(player_strive* action)
@@ -198,7 +208,6 @@ public:
         math::vec3 move = math::toMat3(rot) * math::vec3(1.f, 0.f, 0.f);
         move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta;
         posH.fetch_add(move);
-        log::debug("RIGHT: ({:.3}, {:.3}, {:.3})", move.x, move.y, move.z);
     }
 
     void onPlayerFly(player_fly* action)

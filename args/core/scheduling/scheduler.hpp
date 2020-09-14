@@ -66,6 +66,7 @@ namespace args::core::scheduling
         events::EventBus* m_eventBus;
 
         bool m_threadsShouldTerminate = false;
+        bool m_threadsShouldStart = false;
 
         static async::readonly_rw_spinlock m_threadsLock;
         static sparse_map<std::thread::id, std::unique_ptr<std::thread>> m_threads;
@@ -76,10 +77,10 @@ namespace args::core::scheduling
 
         static async::readonly_rw_spinlock m_jobQueueLock;
         static std::queue<runnable> m_jobs;
-        static async::readonly_rw_spinlock m_commandLock;
+        static sparse_map<std::thread::id, async::readonly_rw_spinlock> m_commandLocks;
         static sparse_map<std::thread::id, std::queue<Scheduler::runnable>> m_commands;
 
-        static void threadMain(bool* exit);
+        static void threadMain(bool* exit, bool* start);
 
     public:
         Scheduler(events::EventBus* eventBus);
@@ -130,7 +131,7 @@ namespace args::core::scheduling
         template<size_type charc>
         std::thread::id getChainThreadId(const char(&name)[charc])
         {
-            id_type chainId = nameHash<charc>(processChainName);
+            id_type chainId = nameHash<charc>(name);
             return m_chainThreads[chainId];
         }
 
@@ -201,8 +202,12 @@ namespace args::core::scheduling
 
             id_type id = nameHash<charc>(name);
 
-            std::thread::id chainThreadId = m_unreservedThreads.front();
-            m_unreservedThreads.pop();
+            std::thread::id chainThreadId;
+            if (!m_unreservedThreads.empty())
+            {
+                chainThreadId = m_unreservedThreads.front();
+                m_unreservedThreads.pop();
+            }
 
             m_chainThreads[id] = chainThreadId;
 

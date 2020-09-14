@@ -19,6 +19,7 @@ using namespace args;
 
 void ARGS_CCONV reportModules(Engine* engine)
 {
+    log::filter(log::severity::trace);
     log::info("Hello Args!");
 
     test_filesystem();

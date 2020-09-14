@@ -2,11 +2,13 @@
 
 layout(location = SV_POSITION)in vec3 vertex;
 layout(location = SV_MODELMATRIX)in mat4 modelMatrix;
-uniform	mat4 viewProjectionMatrix;
+
+layout(location = SV_VIEW) uniform mat4 viewMatrix;
+layout(location = SV_PROJECT) uniform mat4 projectionMatrix;
 
 void vert(void)
 {
-    gl_Position = viewProjectionMatrix * modelMatrix * vec4(vertex, 1.f);
+    gl_Position = (modelMatrix * viewMatrix * projectionMatrix) * vec4(vertex, 1.f);
 }
 
 layout(triangles)in;

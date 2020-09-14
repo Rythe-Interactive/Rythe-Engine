@@ -29,6 +29,8 @@ namespace args::rendering
     {
         replace_items(shaderSource, "SV_POSITION", std::to_string(SV_POSITION));
         replace_items(shaderSource, "SV_MODELMATRIX", std::to_string(SV_MODELMATRIX));
+        replace_items(shaderSource, "SV_VIEW", std::to_string(SV_VIEW));
+        replace_items(shaderSource, "SV_PROJECT", std::to_string(SV_PROJECT));
 
         static std::unordered_map<std::string, GLenum> funcTypes;
         static bool funcTypesInitialized = false;

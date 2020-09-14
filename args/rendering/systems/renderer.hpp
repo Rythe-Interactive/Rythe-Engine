@@ -5,23 +5,54 @@
 #include <rendering/components/camera.hpp>
 
 using namespace args::core::filesystem::literals;
+using namespace std::literals::chrono_literals;
 
 namespace args::rendering
 {
     class Renderer final : public System<Renderer>
     {
+    public:
         sparse_map<model_handle, sparse_map<material_handle, std::vector<math::mat4>>> batches;
 
         ecs::EntityQuery renderablesQuery;
         ecs::EntityQuery cameraQuery;
-        bool initialized = false;
+        std::atomic_bool initialized = false;
         app::gl_id modelMatrixBufferId;
+
+        bool main_window_valid()
+        {
+            return m_ecs->world.has_component<app::window>();
+        }
+
+        app::window get_main_window()
+        {
+            return m_ecs->world.get_component_handle<app::window>().read();
+        }
 
         virtual void setup()
         {
             createProcess<&Renderer::render>("Rendering");
             renderablesQuery = createQuery<renderable, position, rotation, scale>();
             cameraQuery = createQuery<camera, position, rotation, scale>();
+
+            m_scheduler->sendCommand(m_scheduler->getChainThreadId("Rendering"), [](void* param)
+                {
+                    Renderer* self = reinterpret_cast<Renderer*>(param);
+                    log::debug("Waiting on main window.");
+                    while (!self->main_window_valid())
+                        ;
+                    app::window window = self->get_main_window();
+                    log::debug("Initializing context.");
+                    async::readwrite_guard guard(*window.lock);
+                    app::ContextHelper::makeContextCurrent(window);
+                    bool result = self->initData(window);
+                    app::ContextHelper::makeContextCurrent(nullptr);
+                    if (!result)
+                        log::error("Failed to initialize context.");
+                    self->initialized.store(result, std::memory_order_release);
+                }, this);
+            while (!initialized.load(std::memory_order_acquire))
+                std::this_thread::sleep_for(1ns);
         }
 
         bool initData(const app::window& window)
@@ -151,7 +182,6 @@ namespace args::rendering
             glBindBuffer(GL_ARRAY_BUFFER, modelMatrixBufferId);
             glBufferData(GL_ARRAY_BUFFER, 65536, nullptr, GL_DYNAMIC_DRAW);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
-            initialized = true;
             return true;
         }
 
@@ -167,10 +197,6 @@ namespace args::rendering
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
-            if (!initialized)
-                if (!initData(window))
-                    return;
-
             glClearColor(0.3f, 0.5f, 1.0f, 1.0f);
             glClearDepth(0.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -180,10 +206,10 @@ namespace args::rendering
 
             auto camEnt = cameraQuery[0];
 
-            math::mat4 viewProj;
-            math::compose(viewProj, camEnt.get_component_handle<scale>().read(), camEnt.get_component_handle<rotation>().read(), camEnt.get_component_handle<position>().read());
-            viewProj = camEnt.get_component_handle<camera>().read().projection * math::inverse(viewProj);
-
+            math::mat4 view;
+            math::compose(view, camEnt.get_component_handle<scale>().read(), camEnt.get_component_handle<rotation>().read(), camEnt.get_component_handle<position>().read());
+            view = math::inverse(view);
+            math::mat4 projection = camEnt.get_component_handle<camera>().read().projection;
 
             for (auto ent : renderablesQuery)
             {
@@ -213,8 +239,11 @@ namespace args::rendering
                     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
                     material.bind();
-                    material.set_param<math::mat4>("viewProjectionMatrix", viewProj);
                     material.prepare();
+
+                    glUniformMatrix4fv(SV_VIEW, 1, false, math::value_ptr(view));
+                    glUniformMatrix4fv(SV_PROJECT, 1, false, math::value_ptr(projection));
+
                     glBindVertexArray(mesh.vertexArrayId);
                     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);
 

@@ -13,22 +13,26 @@ namespace args::core::scheduling
 
     async::readonly_rw_spinlock Scheduler::m_jobQueueLock;
     std::queue<Scheduler::runnable> Scheduler::m_jobs;
-    async::readonly_rw_spinlock Scheduler::m_commandLock;
+    sparse_map<std::thread::id, async::readonly_rw_spinlock> Scheduler::m_commandLocks;
     sparse_map<std::thread::id, std::queue<Scheduler::runnable>> Scheduler::m_commands;
 
-    void Scheduler::threadMain(bool* exit)
+    void Scheduler::threadMain(bool* exit, bool* start)
     {
         std::thread::id id = std::this_thread::get_id();
+
+        while (!(*start))
+            ;
+
         while (!(*exit))
         {
             Scheduler::runnable instruction{};
 
             {
-                async::readonly_guard guard(m_commandLock);
-                if (const_cast<const decltype(m_commands)&>(m_commands).contains(id) && !m_commands[id].empty())
+                async::readonly_guard guard(m_commandLocks[id]);
+                if (!m_commands[id].empty())
                 {
                     instruction = m_commands[id].front();
-                    async::readwrite_guard rwguard(m_commandLock);
+                    async::readwrite_guard rwguard(m_commandLocks[id]);
                     m_commands[id].pop();
                 }
             }
@@ -40,6 +44,7 @@ namespace args::core::scheduling
                 async::readonly_guard guard(m_jobQueueLock);
                 if (!m_jobs.empty())
                 {
+                    log::debug("Starting work on a job.");
                     instruction = m_jobs.front();
                     async::readwrite_guard rwguard(m_jobQueueLock);
                     m_jobs.pop();
@@ -53,9 +58,17 @@ namespace args::core::scheduling
     Scheduler::Scheduler(events::EventBus* eventBus) : m_eventBus(eventBus)
     {
         args::core::log::impl::thread_names[std::this_thread::get_id()] = "Initialization";
+        async::readonly_rw_spinlock::reportThread(std::this_thread::get_id());
 
-        while (createThread(threadMain, &m_threadsShouldTerminate) != std::thread::id())
-            ;
+        std::thread::id id;
+        while ((id = createThread(threadMain, &m_threadsShouldTerminate, &m_threadsShouldStart)) != std::thread::id())
+        {
+            async::readonly_rw_spinlock::reportThread(id);
+            m_commands[id];
+            m_commandLocks[id];
+        }
+
+        m_threadsShouldStart = true;
 
         addProcessChain("Update");
     }
@@ -78,6 +91,17 @@ namespace args::core::scheduling
             async::readonly_guard guard(m_processChainsLock);
             for (ProcessChain& chain : m_processChains)
                 chain.run();
+        }
+
+        {
+            auto unreserved = m_unreservedThreads;
+            uint i = 0;
+            while (!unreserved.empty())
+            {
+                auto id = unreserved.front();
+                unreserved.pop();
+                args::core::log::impl::thread_names[id] = std::string("Worker ") + std::to_string(i++);
+            }
         }
 
         args::core::log::impl::thread_names[std::this_thread::get_id()] = "Update";
@@ -179,7 +203,7 @@ namespace args::core::scheduling
 
     void Scheduler::sendCommand(std::thread::id id, delegate<void(void*)> command, void* parameter)
     {
-        async::readwrite_guard guard(m_commandLock);
+        async::readwrite_guard guard(m_commandLocks[id]);
         m_commands[id].push({ command, parameter });
     }
 
