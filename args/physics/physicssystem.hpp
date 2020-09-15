@@ -91,7 +91,7 @@ namespace args::physics
         * @param [out] manifoldPrecursors A std::vector that will store the created physics_manifold_precursor from the scene graph iteration
         * @param initialEntity The entity where you would like to start the retrieval. If you would like to iterate through the entire scene
         * put the world as a parameter
-        * @param parentTransform The world transform of the initialEntity. If 'initialEntity' is the world parentTransform would be the identity matrix
+        * @param parentTransform The world transform of the initialEntity. If 'initialEntity' is the world, parentTransform would be the identity matrix
         * @param id An integer that is used to identiy a physics_manifold_precursor from one another
         */
         void recursiveRetrievePreManifoldData(std::vector<physics_manifold_precursor> & manifoldPrecursors,
