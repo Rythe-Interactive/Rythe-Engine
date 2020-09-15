@@ -7,7 +7,7 @@ namespace args::core::scheduling
     async::readonly_rw_spinlock Scheduler::m_threadsLock;
     sparse_map<std::thread::id, std::unique_ptr<std::thread>> Scheduler::m_threads;
     std::queue<std::thread::id> Scheduler::m_unreservedThreads;
-    const uint Scheduler::m_maxThreadCount = std::thread::hardware_concurrency() == 0 ? 8 : std::thread::hardware_concurrency();
+    const uint Scheduler::m_maxThreadCount = (((int)std::thread::hardware_concurrency()) - 3) <= 0 ? 4 : std::thread::hardware_concurrency();
     async::readonly_rw_spinlock Scheduler::m_availabilityLock;
     uint Scheduler::m_availableThreads = m_maxThreadCount - 3; // subtract OS, this_thread and misc.
 
