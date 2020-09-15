@@ -39,6 +39,8 @@ namespace args::physics
         std::vector<math::vec3> vertices;
         std::vector<HalfEdgeFace*> halfEdgeFaces;
 
+        //feature id container
+
 
 
 	};
