@@ -4,7 +4,9 @@
 
 namespace args::physics
 {
-	//contains the necessary data to create a physics_manifold
+	/** @struct physics_manifold_precursor
+	* @brief contains the necessary data to create a physics_manifold
+	*/
 	struct physics_manifold_precursor
 	{
 		math::mat4 worldTransform;

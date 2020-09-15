@@ -26,7 +26,14 @@ namespace args::physics
 
             rigidbodyIntegrationQuery = createQuery<rigidbody,position,rotation>();
 
-            OptimizeBroadPhase = std::bind(&PhysicsSystem::bruteForceBroadPhase, this, std::placeholders::_1, std::placeholders::_2);
+            auto broadPhaseLambda = [this]
+            (std::vector<physics_manifold_precursor>& manifoldPrecursors
+                , std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping)
+            {
+                bruteForceBroadPhase(manifoldPrecursors, manifoldPrecursorGrouping);
+            };
+
+            OptimizeBroadPhase = broadPhaseLambda;
             
         }
 
@@ -39,7 +46,7 @@ namespace args::physics
 
     private:
 
-        std::function<void(const std::vector<physics_manifold_precursor>&, std::vector<std::vector<physics_manifold_precursor>>&)> OptimizeBroadPhase;
+        args::delegate<void(std::vector<physics_manifold_precursor>&, std::vector<std::vector<physics_manifold_precursor>>&)> OptimizeBroadPhase;
         const float m_timeStep = 0.02f;
 
         /** @brief Performs the entire physics pipeline (
@@ -61,6 +68,8 @@ namespace args::physics
             
             //------------------------------------------------------ Narrophase -----------------------------------------------------//
 
+
+
             //-------------------------------------------------- Collision Solver ---------------------------------------------------//
         }
 
@@ -72,9 +81,9 @@ namespace args::physics
             {
                 auto rbPosHandle = ent.get_component_handle<position>();
                 auto rbRotHandle = ent.get_component_handle<rotation>();
-                auto rbPos = ent.get_component_handle<rigidbody>();
+                auto rbRigidbodyHandle = ent.get_component_handle<rigidbody>();
 
-                integrateRigidbody(rbPosHandle, rbRotHandle, rbPos, deltaTime);
+                integrateRigidbody(rbPosHandle, rbRotHandle, rbRigidbodyHandle, deltaTime);
             }
         }
 
@@ -85,7 +94,8 @@ namespace args::physics
         * @param parentTransform The world transform of the initialEntity. If 'initialEntity' is the world parentTransform would be the identity matrix
         * @param id An integer that is used to identiy a physics_manifold_precursor from one another
         */
-        void recursiveRetrievePreManifoldData(std::vector<physics_manifold_precursor> & manifoldPrecursors, const ecs::entity_handle& initialEntity,math::mat4 parentTransform = math::mat4(1.0f),int id =0)
+        void recursiveRetrievePreManifoldData(std::vector<physics_manifold_precursor> & manifoldPrecursors,
+            const ecs::entity_handle& initialEntity,math::mat4 parentTransform = math::mat4(1.0f),int id =0)
         {
             math::mat4 rootTransform = parentTransform;
             
@@ -106,7 +116,7 @@ namespace args::physics
 
             log::debug("colliderID hasNecessaryComponentsForPhysicsManifold {0} ", hasNecessaryComponentsForPhysicsManifold);*/
 
-            //if the entity has a physicsComponent and a transform and a physicsComponent
+            //if the entity has a physicsComponent and a transform
             if (hasNecessaryComponentsForPhysicsManifold)
             {
                 rotation rot = rotationHandle.read();
@@ -114,23 +124,8 @@ namespace args::physics
                 scale scale = scaleHandle.read();
 
                 //assemble the local transform matrix of the entity
-                math::mat4 scaleMat4 =
-                    math::mat4
-                    (scale.x, 0, 0, 0,
-                        0, scale.y, 0, 0,
-                        0, 0, scale.z, 0,
-                        0, 0, 0, 1);
-
-                math::mat4 rotationMat4 = math::toMat4(rot);
-
-                math::mat4 positionMat4 =
-                    math::mat4
-                    (1, 0, 0, 0,
-                        0, 1, 0, 0,
-                        0, 0, 1, 0,
-                        pos.x, pos.y, pos.z, 1);
- 
-                math::mat4 localTransform = scaleMat4 * rotationMat4 * positionMat4;
+                math::mat4 localTransform;
+                math::compose(localTransform, scale, rot, pos);
 
                 //multiply it with the parent to get the world transform
                 rootTransform = parentTransform * localTransform;
@@ -142,6 +137,7 @@ namespace args::physics
             }
 
             //log::debug("initialEntity.child_count() {} ", initialEntity.child_count());
+
             //call recursiveRetrievePreManifoldData on its children
             for (int i = 0; i < initialEntity.child_count(); i++)
             {
@@ -156,13 +152,11 @@ namespace args::physics
         /**@brief moves all physics_manifold_precursor into a singular std::vector. This esentially means that no optimization was done.
         * @note This should only be used for testing/debugging purposes
         */
-        void bruteForceBroadPhase(const std::vector<physics_manifold_precursor>& manifoldPrecursors, std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping)
+        void bruteForceBroadPhase(std::vector<physics_manifold_precursor>& manifoldPrecursors,
+            std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping)
         {
             manifoldPrecursorGrouping.push_back(std::move(manifoldPrecursors));
         }
-
-
-        
 
         /** @brief given a set of component handles, updates the position and orientation of an entity with a rigidbody component.
         */
@@ -173,13 +167,16 @@ namespace args::physics
             auto rbPos = posHandle.read();
             auto rbRot = rotHandle.read();
 
+            //-------------------- update position ------------------//
             math::vec3 acc = rb.forceAccumulator * rb.inverseMass;
             rb.velocity += (acc + constants::gravity) * dt;
             rbPos += rb.velocity * dt;
 
+            //-------------------- update rotation ------------------//
             math::vec3 angularAcc = rb.torqueAccumulator * rb.inverseInertiaTensor;
             rb.angularVelocity += (angularAcc);
 
+            //construct the rotation by using the direction of angularVelocity as the axis and its length as the angle
             float dtAngle = math::length(rb.angularVelocity) * dt;
             rbRot *= math::angleAxis(math::deg2rad(dtAngle), math::normalize(rb.angularVelocity));
 
