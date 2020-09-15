@@ -21,14 +21,16 @@ namespace args::physics
 			HalfEdgeEdge* initialEdge = startEdge;
 			HalfEdgeEdge* currentEdge = startEdge;
 
-			if (!startEdge) { return; }
+			if (!currentEdge) { return; }
 
-			//initialEdge will eventually go back to "startEdge", ending the loop
+			//the HalfEdgeEdge* 'startEdge' creates a ring buffer.
+			//This means that initialEdge will eventually go back to "startEdge", ending the loop.
 			do 
 			{
-				functionToExecute(currentEdge);
-
+				HalfEdgeEdge* edgeToExecuteOn = currentEdge;
 				currentEdge = currentEdge->nextEdge;
+				functionToExecute(edgeToExecuteOn);
+
 			} while (initialEdge != currentEdge && currentEdge != nullptr);
 
 		}

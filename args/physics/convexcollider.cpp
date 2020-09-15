@@ -74,7 +74,7 @@ namespace args::physics
         /*g*/ math::vec3 maxVertexMinusWidthMinusBreadth = math::vec3(-halfWidth, halfHeight, -halfBreath);
         /*h*/ math::vec3 maxVertexMinusBreadth = math::vec3(halfWidth, halfHeight, -halfBreath);
 
-        //the HalfEdgeEdge only needs a ptr to the vertex so 
+        //the HalfEdgeEdge only needs a ptr to the vertex  
         vertices.push_back(minVertexPlusBreadth);
         math::vec3* a = &vertices.back();
 
