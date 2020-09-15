@@ -9,7 +9,7 @@ namespace args::core::scheduling
     std::queue<std::thread::id> Scheduler::m_unreservedThreads;
     const uint Scheduler::m_maxThreadCount = std::thread::hardware_concurrency() == 0 ? 8 : std::thread::hardware_concurrency();
     async::readonly_rw_spinlock Scheduler::m_availabilityLock;
-    uint Scheduler::m_availableThreads = m_maxThreadCount - 2; // subtract OS and this_thread.
+    uint Scheduler::m_availableThreads = m_maxThreadCount - 3; // subtract OS, this_thread and misc.
 
     async::readonly_rw_spinlock Scheduler::m_jobQueueLock;
     std::queue<Scheduler::runnable> Scheduler::m_jobs;

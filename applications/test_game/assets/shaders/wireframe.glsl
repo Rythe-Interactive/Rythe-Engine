@@ -8,7 +8,7 @@ layout(location = SV_PROJECT) uniform mat4 projectionMatrix;
 
 void vert(void)
 {
-    gl_Position = (modelMatrix * viewMatrix * projectionMatrix) * vec4(vertex, 1.f);
+    gl_Position = (projectionMatrix * viewMatrix * modelMatrix) * vec4(vertex, 1.f);
 }
 
 layout(triangles)in;

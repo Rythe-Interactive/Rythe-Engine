@@ -200,13 +200,13 @@ namespace args::rendering
             glClearColor(0.3f, 0.5f, 1.0f, 1.0f);
             glClearDepth(0.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glDisable(GL_CULL_FACE);
+            //glDisable(GL_CULL_FACE);
 
             batches.clear();
 
             auto camEnt = cameraQuery[0];
 
-            math::mat4 view;
+            math::mat4 view(1.f);
             math::compose(view, camEnt.get_component_handle<scale>().read(), camEnt.get_component_handle<rotation>().read(), camEnt.get_component_handle<position>().read());
             view = math::inverse(view);
             math::mat4 projection = camEnt.get_component_handle<camera>().read().projection;

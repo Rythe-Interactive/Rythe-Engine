@@ -9,8 +9,8 @@ out vec3 position;
 
 void vert(void)
 {
-    gl_Position = (projectionMatrix * viewMatrix) * modelMatrix * vec4(vertex, 1.f);
-    position = (modelMatrix * vec4(vertex, 1.f)).xyz;
+    gl_Position = (projectionMatrix * viewMatrix * modelMatrix) * vec4(vertex, 1.f);
+    position = vertex;
 }
 
 in vec3 position;
