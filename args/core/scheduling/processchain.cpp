@@ -19,6 +19,9 @@ namespace args::core::scheduling
 
                 if (chain->m_scheduler->syncRequested()) // Sync if requested.
                     chain->m_scheduler->waitForProcessSync();
+
+                if (chain->m_low_power)
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1));
             }
 
             chain->m_scheduler->reportExit(chain->m_threadId); // Mark Exit.
@@ -33,8 +36,9 @@ namespace args::core::scheduling
         }
     }
 
-    inline bool ProcessChain::run()
+    inline bool ProcessChain::run(bool low_power)
     {
+        m_low_power = low_power;
         m_exit->store(false, std::memory_order_release);
         std::thread::id threadId = m_scheduler->getChainThreadId(m_nameHash);
         if (threadId != std::thread::id())

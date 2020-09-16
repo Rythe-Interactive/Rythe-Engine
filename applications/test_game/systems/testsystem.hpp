@@ -193,7 +193,7 @@ public:
         auto posH = player.get_component_handle<position>();
         auto rot = player.get_component_handle<rotation>().read();
         math::vec3 move = math::toMat3(rot) * math::vec3(0.f, 0.f, 1.f);
-        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 4.f;
+        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 6.f;
         posH.fetch_add(move);
     }
 
@@ -202,7 +202,7 @@ public:
         auto posH = player.get_component_handle<position>();
         auto rot = player.get_component_handle<rotation>().read();
         math::vec3 move = math::toMat3(rot) * math::vec3(1.f, 0.f, 0.f);
-        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 4.f;
+        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 6.f;
         posH.fetch_add(move);
     }
 

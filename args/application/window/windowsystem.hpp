@@ -49,8 +49,12 @@ namespace args::application
                     if (!ContextHelper::windowShouldClose(window))
                         return;
 
-                    delete handle.read().lock;
-                    handle.write(invalid_window);
+                    auto* lock = handle.read().lock;
+                    {
+                        async::readwrite_guard guard(*lock);
+                        handle.write(invalid_window);
+                    }
+                    delete lock;
 
                     id_type ownerId = handle.entity;
 
@@ -165,7 +169,7 @@ namespace args::application
             async::readwrite_guard guard(data::m_creationLock);
             for (auto entity : m_windowQuery)
             {
-                closeWindow(entity.get_component_handle<window>().read(std::memory_order_relaxed));
+                ContextHelper::setWindowShouldClose(entity.get_component_handle<window>().read(std::memory_order_relaxed), true);
             }
 
             m_exit = true;

@@ -68,6 +68,7 @@ namespace args::core::scheduling
 
         bool m_threadsShouldTerminate = false;
         bool m_threadsShouldStart = false;
+        bool m_low_power;
 
         static async::readonly_rw_spinlock m_threadsLock;
         static sparse_map<std::thread::id, std::unique_ptr<std::thread>> m_threads;
@@ -81,10 +82,10 @@ namespace args::core::scheduling
         static sparse_map<std::thread::id, async::readonly_rw_spinlock> m_commandLocks;
         static sparse_map<std::thread::id, std::queue<Scheduler::runnable>> m_commands;
 
-        static void threadMain(bool* exit, bool* start);
+        static void Scheduler::threadMain(bool* exit, bool* start, bool low_power);
 
     public:
-        Scheduler(events::EventBus* eventBus);
+        Scheduler(events::EventBus* eventBus, bool low_power);
 
         ~Scheduler();
 

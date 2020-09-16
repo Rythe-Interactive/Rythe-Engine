@@ -1,4 +1,5 @@
 #version 450
+#enable CULL OFF
 
 layout(location = SV_POSITION)in vec3 vertex;
 layout(location = SV_MODELMATRIX)in mat4 modelMatrix;

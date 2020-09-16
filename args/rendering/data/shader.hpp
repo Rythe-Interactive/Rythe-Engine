@@ -180,10 +180,12 @@ namespace args::rendering
 
     struct shader
     {
+        using shader_state = std::unordered_map<GLenum, GLenum>;
         GLint programId;
         std::unordered_map<id_type, std::unique_ptr<shader_parameter_base>> uniforms;
         std::unordered_map<id_type, std::unique_ptr<attribute>> attributes;
         std::string name;
+        shader_state state;
 
         shader(const shader&) = delete;
         shader(shader&&) = default;
@@ -271,6 +273,7 @@ namespace args::rendering
         friend struct shader_handle;
     private:
         using shader_ilo = std::vector<std::pair<GLuint, std::string>>; // Shader intermediate language object.
+        using shader_state = std::unordered_map<GLenum, GLenum>;
 
         static sparse_map<id_type, shader> m_shaders;
         static async::readonly_rw_spinlock m_shaderLock;
@@ -279,7 +282,7 @@ namespace args::rendering
 
         static void replace_items(std::string& source, const std::string& item, const std::string& value);
         static void process_includes(std::string& shaderSource);
-        static void resolve_preprocess_features(std::string& shaderSource);
+        static void resolve_preprocess_features(std::string& shaderSource, shader_state& state);
         static shader_ilo seperate_shaders(std::string& shaderSource);
         static void process_io(shader& shader, id_type id);
         static app::gl_id compile_shader(GLuint shaderType, cstring source, GLint sourceLength);

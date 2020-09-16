@@ -7,16 +7,16 @@ namespace args::core::scheduling
     async::readonly_rw_spinlock Scheduler::m_threadsLock;
     sparse_map<std::thread::id, std::unique_ptr<std::thread>> Scheduler::m_threads;
     std::queue<std::thread::id> Scheduler::m_unreservedThreads;
-    const uint Scheduler::m_maxThreadCount = (((int)std::thread::hardware_concurrency()) - 3) <= 0 ? 4 : std::thread::hardware_concurrency();
+    const uint Scheduler::m_maxThreadCount = (((int)std::thread::hardware_concurrency()) - 2) <= 0 ? 4 : std::thread::hardware_concurrency();
     async::readonly_rw_spinlock Scheduler::m_availabilityLock;
-    uint Scheduler::m_availableThreads = m_maxThreadCount - 3; // subtract OS, this_thread and misc.
+    uint Scheduler::m_availableThreads = m_maxThreadCount - 2; // subtract OS and this_thread.
 
     async::readonly_rw_spinlock Scheduler::m_jobQueueLock;
     std::queue<Scheduler::runnable> Scheduler::m_jobs;
     sparse_map<std::thread::id, async::readonly_rw_spinlock> Scheduler::m_commandLocks;
     sparse_map<std::thread::id, std::queue<Scheduler::runnable>> Scheduler::m_commands;
 
-    void Scheduler::threadMain(bool* exit, bool* start)
+    void Scheduler::threadMain(bool* exit, bool* start, bool low_power)
     {
         std::thread::id id = std::this_thread::get_id();
 
@@ -52,16 +52,20 @@ namespace args::core::scheduling
             }
 
             instruction();
+            if (low_power)
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            else
+                std::this_thread::yield();
         }
     }
 
-    Scheduler::Scheduler(events::EventBus* eventBus) : m_eventBus(eventBus)
+    Scheduler::Scheduler(events::EventBus* eventBus, bool low_power) : m_eventBus(eventBus), m_low_power(low_power)
     {
         args::core::log::impl::thread_names[std::this_thread::get_id()] = "Initialization";
         async::readonly_rw_spinlock::reportThread(std::this_thread::get_id());
 
         std::thread::id id;
-        while ((id = createThread(threadMain, &m_threadsShouldTerminate, &m_threadsShouldStart)) != std::thread::id())
+        while ((id = createThread(threadMain, &m_threadsShouldTerminate, &m_threadsShouldStart, low_power)) != std::thread::id())
         {
             async::readonly_rw_spinlock::reportThread(id);
             m_commands[id];
@@ -90,7 +94,7 @@ namespace args::core::scheduling
         { // Start threads of all the other chains.
             async::readonly_guard guard(m_processChainsLock);
             for (ProcessChain& chain : m_processChains)
-                chain.run();
+                chain.run(m_low_power);
         }
 
         {

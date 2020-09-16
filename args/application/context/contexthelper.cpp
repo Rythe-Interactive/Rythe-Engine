@@ -17,7 +17,7 @@ namespace args::application
     {
         glfwSetErrorCallback([](int code, cstring desc)
             {
-                log::error("GLFW ERROR {}: {}",code,desc);
+                log::error("GLFW ERROR {}: {}", code, desc);
             });
 
         bool success = glfwInit();
@@ -152,7 +152,8 @@ namespace args::application
 
     void ContextHelper::makeContextCurrent(GLFWwindow* window)
     {
-        glfwMakeContextCurrent(window);
+        if (initialized())
+            glfwMakeContextCurrent(window);
     }
 
     GLFWwindow* ContextHelper::getCurrentContext()

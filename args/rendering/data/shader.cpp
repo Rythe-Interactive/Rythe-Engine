@@ -25,7 +25,7 @@ namespace args::rendering
     {
     }
 
-    void ShaderCache::resolve_preprocess_features(std::string& shaderSource)
+    void ShaderCache::resolve_preprocess_features(std::string& shaderSource, shader_state& state)
     {
         replace_items(shaderSource, "SV_POSITION", std::to_string(SV_POSITION));
         replace_items(shaderSource, "SV_MODELMATRIX", std::to_string(SV_MODELMATRIX));
@@ -34,14 +34,16 @@ namespace args::rendering
 
         static std::unordered_map<std::string, GLenum> funcTypes;
         static bool funcTypesInitialized = false;
-        if(!funcTypesInitialized)
+        if (!funcTypesInitialized)
         {
             funcTypesInitialized = true;
-            funcTypes["DEPTH"] =  GL_DEPTH_TEST;
-            funcTypes["CULL"] =  GL_CULL_FACE;
-            funcTypes["ALPHA"] =  GL_BLEND;
-            funcTypes["DITHER"] =  GL_DITHER;
+            funcTypes["DEPTH"] = GL_DEPTH_TEST;
+            funcTypes["CULL"] = GL_CULL_FACE;
+            //funcTypes["ALPHA"] = GL_BLEND;
+            //funcTypes["DITHER"] = GL_DITHER;
         }
+        state[GL_DEPTH_TEST] = GL_GREATER;
+        state[GL_CULL_FACE] = GL_BACK;
 
         size_type n = 0;
         while ((n = shaderSource.find("#enable", n)) != std::string::npos)
@@ -79,6 +81,7 @@ namespace args::rendering
 
                 param = params.at(tokens[2]);
             }
+            break;
             case GL_CULL_FACE:
             {
                 static std::unordered_map<std::string, GLenum> params;
@@ -89,10 +92,12 @@ namespace args::rendering
                     params["FRONT"] = GL_FRONT;
                     params["BACK"] = GL_BACK;
                     params["FRONT_AND_BACK"] = GL_FRONT_AND_BACK;
+                    params["OFF"] = GL_FALSE;
                 }
 
                 param = params.at(tokens[2]);
             }
+            break;
             case GL_BLEND:
             {
                 static std::unordered_map<std::string, GLenum> params;
@@ -117,15 +122,14 @@ namespace args::rendering
                     params["SRC_ALPHA_SATURATE"] = GL_SRC_ALPHA_SATURATE;
                 }
             }
+            break;
             default:
                 break;
             }
 
-            shaderSource.replace(n, end, "\n");
+            state[funcType] = param;
+            shaderSource.replace(n, end - n, "");
         }
-
-
-
     }
 
     ShaderCache::shader_ilo ShaderCache::seperate_shaders(std::string& shaderSource)
@@ -354,15 +358,17 @@ namespace args::rendering
             return invalid_shader_handle;
 
         std::string source = ((fs::basic_resource)result).to_string();
+        shader_state state;
 
         process_includes(source);
-        resolve_preprocess_features(source);
+        resolve_preprocess_features(source, state);
 
         shader_ilo shaders = seperate_shaders(source);
         if (shaders.empty())
             return invalid_shader_handle;
 
         shader shader;
+        shader.state = state;
         shader.programId = glCreateProgram();
 
         std::vector<app::gl_id> shaderIds;
@@ -371,7 +377,7 @@ namespace args::rendering
         {
             auto shaderId = compile_shader(shaderType, shaderIL.c_str(), shaderIL.size());
 
-            if (shaderId == (app::gl_id)-1)
+            if (shaderId == (app::gl_id) - 1)
             {
                 std::cout << "error occurred in shader: " << name.c_str() << std::endl;
 
@@ -458,6 +464,37 @@ namespace args::rendering
     void shader::bind()
     {
         glUseProgram(programId);
+
+        for (auto& [func, param] : state)
+        {
+            if (param == GL_FALSE)
+            {
+                glDisable(func);
+                continue;
+            }
+
+            glEnable(func);
+            switch (func)
+            {
+            case GL_DEPTH_TEST:
+            {
+                glDepthFunc(param);
+            }
+            break;
+            case GL_CULL_FACE:
+            {
+                glCullFace(param);
+            }
+            break;
+            case GL_BLEND:
+            {
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            }
+            break;
+            default:
+                break;
+            }
+        }
     }
 
     void shader::release()

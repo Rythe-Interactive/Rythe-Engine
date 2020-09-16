@@ -1,5 +1,6 @@
 #define ARGS_ENTRY
 #define ARGS_KEEP_CONSOLE
+#define ARGS_LOW_POWER
 
 #include <chrono>
 #include <thread>
