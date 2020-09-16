@@ -11,7 +11,7 @@
 #endif
 #include <cstddef>
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	template<typename T, qualifier Q>
 	struct vec<4, T, Q>
@@ -498,7 +498,7 @@ namespace args::core::math
 
 	template<qualifier Q>
 	GLM_FUNC_DECL GLM_CONSTEXPR vec<4, bool, Q> operator||(vec<4, bool, Q> const& v1, vec<4, bool, Q> const& v2);
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #ifndef GLM_EXTERNAL_TEMPLATE
 #include "type_vec4.inl"

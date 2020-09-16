@@ -1,6 +1,6 @@
 #if GLM_ARCH & GLM_ARCH_SSE2_BIT
 
-namespace args::core::math{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template<qualifier Q>
@@ -12,7 +12,7 @@ namespace detail
 		}
 	};
 }//namespace detail
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #endif//GLM_ARCH & GLM_ARCH_SSE2_BIT
 

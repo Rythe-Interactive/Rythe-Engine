@@ -23,7 +23,7 @@
 #	endif
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_extend
 	/// @{
@@ -37,6 +37,6 @@ namespace args::core::math
 		typename genType::value_type const Length);
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #include "extend.inl"

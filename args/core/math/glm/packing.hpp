@@ -19,7 +19,7 @@
 #include "./ext/vector_float2.hpp"
 #include "./ext/vector_float4.hpp"
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup core_func_packing
 	/// @{
@@ -168,6 +168,6 @@ namespace args::core::math
 	GLM_FUNC_DECL vec2 unpackHalf2x16(uint v);
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #include "detail/func_packing.inl"

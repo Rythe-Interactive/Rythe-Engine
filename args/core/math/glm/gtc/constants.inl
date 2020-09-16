@@ -1,6 +1,6 @@
 /// @ref gtc_constants
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	template<typename genType>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType zero()
@@ -27,7 +27,7 @@ namespace args::core::math
 	}
 
 	template<typename genType>
-	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType GLM_ONLY_HALF_PI()
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType half_pi()
 	{
 		return genType(1.57079632679489661923132169163975144);
 	}
@@ -39,7 +39,7 @@ namespace args::core::math
 	}
 
 	template<typename genType>
-	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType GLM_ONLY_QUARTER_PI()
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType quarter_pi()
 	{
 		return genType(0.785398163397448309615660845819875721);
 	}
@@ -105,7 +105,7 @@ namespace args::core::math
 	}
 
 	template<typename genType>
-	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType GLM_ONLY_EULER()
+	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType euler()
 	{
 		return genType(0.577215664901532860606);
 	}
@@ -164,4 +164,4 @@ namespace args::core::math
 		return genType(1.61803398874989484820458683436563811);
 	}
 
-} //namespace args::core::math
+} //namespace args::core::math::detail::glm

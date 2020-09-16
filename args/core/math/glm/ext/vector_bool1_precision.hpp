@@ -16,7 +16,7 @@
 #	pragma message("GLM: GLM_EXT_vector_bool1_precision extension included")
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_vector_bool1_precision
 	/// @{
@@ -31,4 +31,4 @@ namespace args::core::math
 	typedef vec<1, bool, lowp>			lowp_bvec1;
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

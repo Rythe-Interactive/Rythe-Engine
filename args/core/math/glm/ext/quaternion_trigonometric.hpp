@@ -28,7 +28,7 @@
 #	pragma message("GLM: GLM_EXT_quaternion_trigonometric extension included")
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_quaternion_trigonometric
 	/// @{
@@ -38,14 +38,14 @@ namespace args::core::math
 	/// @tparam T A floating-point scalar type
 	/// @tparam Q A value from qualifier enum
 	template<typename T, qualifier Q>
-	GLM_FUNC_DECL T angleOfQuat(qua<T, Q> const& x);
+	GLM_FUNC_DECL T angle(qua<T, Q> const& x);
 
 	/// Returns the q rotation axis.
 	///
 	/// @tparam T A floating-point scalar type
 	/// @tparam Q A value from qualifier enum
 	template<typename T, qualifier Q>
-	GLM_FUNC_DECL vec<3, T, Q> axisOfQuat(qua<T, Q> const& x);
+	GLM_FUNC_DECL vec<3, T, Q> axis(qua<T, Q> const& x);
 
 	/// Build a quaternion from an angle and a normalized axis.
 	///
@@ -58,6 +58,6 @@ namespace args::core::math
 	GLM_FUNC_DECL qua<T, Q> angleAxis(T const& angle, vec<3, T, Q> const& axis);
 
 	/// @}
-} //namespace args::core::math
+} //namespace args::core::math::detail::glm
 
 #include "quaternion_trigonometric.inl"

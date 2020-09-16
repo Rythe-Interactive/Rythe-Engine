@@ -26,7 +26,7 @@
 #	endif
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_functions
 	/// @{
@@ -50,7 +50,7 @@ namespace args::core::math
 		vec<2, T, Q> const& StandardDeviation);
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #include "functions.inl"
 

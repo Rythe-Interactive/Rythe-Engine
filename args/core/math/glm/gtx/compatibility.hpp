@@ -33,7 +33,7 @@
 #	endif
 #endif//GLM_COMPILER
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_compatibility
 	/// @{
@@ -128,6 +128,6 @@ namespace args::core::math
 	typedef mat<4, 4, double, highp>		double4x4;		//!< \brief double-qualifier floating-point matrix with 4 x 4 components. (From GLM_GTX_compatibility extension)
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #include "compatibility.inl"

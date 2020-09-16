@@ -29,7 +29,7 @@
 #	pragma message("GLM: GLM_EXT_matrix_projection extension included")
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_matrix_projection
 	/// @{
@@ -144,6 +144,6 @@ namespace args::core::math
 		vec<2, T, Q> const& center, vec<2, T, Q> const& delta, vec<4, U, Q> const& viewport);
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #include "matrix_projection.inl"

@@ -1,4 +1,4 @@
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	// -- Constructors --
 
@@ -571,4 +571,4 @@ namespace args::core::math
 	{
 		return (m1[0] != m2[0]) || (m1[1] != m2[1]) || (m1[2] != m2[2]) || (m1[3] != m2[3]);
 	}
-} //namespace args::core::math
+} //namespace args::core::math::detail::glm

@@ -5,7 +5,7 @@
 #include "../detail/setup.hpp"
 #include "../detail/type_vec4.hpp"
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup core_vector_precision
 	/// @{
@@ -32,4 +32,4 @@ namespace args::core::math
 	typedef vec<4, double, lowp>		lowp_dvec4;
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

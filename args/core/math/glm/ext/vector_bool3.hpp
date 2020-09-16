@@ -4,7 +4,7 @@
 #pragma once
 #include "../detail/type_vec3.hpp"
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup core_vector
 	/// @{
@@ -15,4 +15,4 @@ namespace args::core::math
 	typedef vec<3, bool, defaultp>		bvec3;
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

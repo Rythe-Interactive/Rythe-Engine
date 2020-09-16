@@ -5,7 +5,7 @@
 #include "../ext/vector_relational.hpp"
 #include "../common.hpp"
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	template<length_t C, length_t R, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<C, bool, Q> equal(mat<C, R, T, Q> const& a, mat<C, R, T, Q> const& b)
@@ -79,4 +79,4 @@ namespace args::core::math
 		return Result;
 	}
 
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

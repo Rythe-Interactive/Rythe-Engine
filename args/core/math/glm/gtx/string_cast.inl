@@ -3,7 +3,7 @@
 #include <cstdarg>
 #include <cstdio>
 
-namespace args::core::math{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template <typename T>
@@ -489,4 +489,4 @@ GLM_FUNC_QUALIFIER std::string to_string(matType const& x)
 	return detail::compute_to_string<matType>::call(x);
 }
 
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

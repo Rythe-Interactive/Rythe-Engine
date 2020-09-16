@@ -1,6 +1,6 @@
 /// @ref gtx_extended_min_max
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	template<typename T>
 	GLM_FUNC_QUALIFIER T min(
@@ -8,7 +8,7 @@ namespace args::core::math
 		T const& y,
 		T const& z)
 	{
-		return math::min(math::min(x, y), z);
+		return glm::min(glm::min(x, y), z);
 	}
 
 	template<typename T, template<typename> class C>
@@ -19,7 +19,7 @@ namespace args::core::math
 		typename C<T>::T const& z
 	)
 	{
-		return math::min(math::min(x, y), z);
+		return glm::min(glm::min(x, y), z);
 	}
 
 	template<typename T, template<typename> class C>
@@ -30,7 +30,7 @@ namespace args::core::math
 		C<T> const& z
 	)
 	{
-		return math::min(math::min(x, y), z);
+		return glm::min(glm::min(x, y), z);
 	}
 
 	template<typename T>
@@ -42,7 +42,7 @@ namespace args::core::math
 		T const& w
 	)
 	{
-		return math::min(math::min(x, y), math::min(z, w));
+		return glm::min(glm::min(x, y), glm::min(z, w));
 	}
 
 	template<typename T, template<typename> class C>
@@ -54,7 +54,7 @@ namespace args::core::math
 		typename C<T>::T const& w
 	)
 	{
-		return math::min(math::min(x, y), math::min(z, w));
+		return glm::min(glm::min(x, y), glm::min(z, w));
 	}
 
 	template<typename T, template<typename> class C>
@@ -66,7 +66,7 @@ namespace args::core::math
 		C<T> const& w
 	)
 	{
-		return math::min(math::min(x, y), math::min(z, w));
+		return glm::min(glm::min(x, y), glm::min(z, w));
 	}
 
 	template<typename T>
@@ -75,7 +75,7 @@ namespace args::core::math
 		T const& y,
 		T const& z)
 	{
-		return math::max(math::max(x, y), z);
+		return glm::max(glm::max(x, y), z);
 	}
 
 	template<typename T, template<typename> class C>
@@ -86,7 +86,7 @@ namespace args::core::math
 		typename C<T>::T const& z
 	)
 	{
-		return math::max(math::max(x, y), z);
+		return glm::max(glm::max(x, y), z);
 	}
 
 	template<typename T, template<typename> class C>
@@ -97,7 +97,7 @@ namespace args::core::math
 		C<T> const& z
 	)
 	{
-		return math::max(math::max(x, y), z);
+		return glm::max(glm::max(x, y), z);
 	}
 
 	template<typename T>
@@ -109,7 +109,7 @@ namespace args::core::math
 		T const& w
 	)
 	{
-		return math::max(math::max(x, y), math::max(z, w));
+		return glm::max(glm::max(x, y), glm::max(z, w));
 	}
 
 	template<typename T, template<typename> class C>
@@ -121,7 +121,7 @@ namespace args::core::math
 		typename C<T>::T const& w
 	)
 	{
-		return math::max(math::max(x, y), math::max(z, w));
+		return glm::max(glm::max(x, y), glm::max(z, w));
 	}
 
 	template<typename T, template<typename> class C>
@@ -133,6 +133,6 @@ namespace args::core::math
 		C<T> const& w
 	)
 	{
-		return math::max(math::max(x, y), math::max(z, w));
+		return glm::max(glm::max(x, y), glm::max(z, w));
 	}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

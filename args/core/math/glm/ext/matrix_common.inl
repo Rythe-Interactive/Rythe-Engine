@@ -1,6 +1,6 @@
 #include "../matrix.hpp"
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	template<length_t C, length_t R, typename T, typename U, qualifier Q>
 	GLM_FUNC_QUALIFIER mat<C, R, T, Q> mix(mat<C, R, T, Q> const& x, mat<C, R, T, Q> const& y, U a)
@@ -13,4 +13,4 @@ namespace args::core::math
 	{
 		return matrixCompMult(mat<C, R, U, Q>(x), static_cast<U>(1) - a) + matrixCompMult(mat<C, R, U, Q>(y), a);
 	}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

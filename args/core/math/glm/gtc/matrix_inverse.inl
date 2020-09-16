@@ -1,6 +1,6 @@
 /// @ref gtc_matrix_inverse
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER mat<3, 3, T, Q> affineInverse(mat<3, 3, T, Q> const& m)
@@ -115,4 +115,4 @@ namespace args::core::math
 
 		return Inverse;
 	}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

@@ -23,7 +23,7 @@
 #	pragma message("GLM: GLM_EXT_quaternion_geometric extension included")
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_quaternion_geometric
 	/// @{
@@ -65,6 +65,6 @@ namespace args::core::math
 	GLM_FUNC_QUALIFIER qua<T, Q> cross(qua<T, Q> const& q1, qua<T, Q> const& q2);
 
 	/// @}
-} //namespace args::core::math
+} //namespace args::core::math::detail::glm
 
 #include "quaternion_geometric.inl"

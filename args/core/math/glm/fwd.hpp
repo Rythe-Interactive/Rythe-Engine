@@ -2,7 +2,7 @@
 
 #include "detail/qualifier.hpp"
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 #if GLM_HAS_EXTENDED_INTEGER_TYPE
 	typedef std::int8_t				int8;
@@ -1228,6 +1228,6 @@ namespace args::core::math
 	typedef qua<f64, mediump>			mediump_f64quat;
 	typedef qua<f64, highp>				highp_f64quat;
 	typedef qua<f64, defaultp>			f64quat;
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 

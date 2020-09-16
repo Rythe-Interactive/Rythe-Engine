@@ -5,7 +5,7 @@
 // Following Stefan Gustavson's paper "Simplex noise demystified":
 // http://www.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf
 
-namespace args::core::math{
+namespace args::core::math::detail::glm{
 namespace gtc
 {
 	template<typename T, qualifier Q>
@@ -23,8 +23,8 @@ namespace gtc
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER T perlin(vec<2, T, Q> const& Position)
 	{
-		vec<4, T, Q> Pi = math::floor(vec<4, T, Q>(Position.x, Position.y, Position.x, Position.y)) + vec<4, T, Q>(0.0, 0.0, 1.0, 1.0);
-		vec<4, T, Q> Pf = math::fract(vec<4, T, Q>(Position.x, Position.y, Position.x, Position.y)) - vec<4, T, Q>(0.0, 0.0, 1.0, 1.0);
+		vec<4, T, Q> Pi = glm::floor(vec<4, T, Q>(Position.x, Position.y, Position.x, Position.y)) + vec<4, T, Q>(0.0, 0.0, 1.0, 1.0);
+		vec<4, T, Q> Pf = glm::fract(vec<4, T, Q>(Position.x, Position.y, Position.x, Position.y)) - vec<4, T, Q>(0.0, 0.0, 1.0, 1.0);
 		Pi = mod(Pi, vec<4, T, Q>(289)); // To avoid truncation effects in permutation
 		vec<4, T, Q> ix(Pi.x, Pi.z, Pi.x, Pi.z);
 		vec<4, T, Q> iy(Pi.y, Pi.y, Pi.w, Pi.w);
@@ -33,9 +33,9 @@ namespace gtc
 
 		vec<4, T, Q> i = detail::permute(detail::permute(ix) + iy);
 
-		vec<4, T, Q> gx = static_cast<T>(2) * math::fract(i / T(41)) - T(1);
-		vec<4, T, Q> gy = math::abs(gx) - T(0.5);
-		vec<4, T, Q> tx = math::floor(gx + T(0.5));
+		vec<4, T, Q> gx = static_cast<T>(2) * glm::fract(i / T(41)) - T(1);
+		vec<4, T, Q> gy = glm::abs(gx) - T(0.5);
+		vec<4, T, Q> tx = glm::floor(gx + T(0.5));
 		gx = gx - tx;
 
 		vec<2, T, Q> g00(gx.x, gy.x);
@@ -588,7 +588,7 @@ namespace gtc
 	}
 
 	template<typename T, qualifier Q>
-	GLM_FUNC_QUALIFIER T simplex(math::vec<2, T, Q> const& v)
+	GLM_FUNC_QUALIFIER T simplex(glm::vec<2, T, Q> const& v)
 	{
 		vec<4, T, Q> const C = vec<4, T, Q>(
 			T( 0.211324865405187),  // (3.0 -  sqrt(3.0)) / 6.0
@@ -804,4 +804,4 @@ namespace gtc
 			(dot(m0 * m0, vec<3, T, Q>(dot(p0, x0), dot(p1, x1), dot(p2, x2))) +
 			dot(m1 * m1, vec<2, T, Q>(dot(p3, x3), dot(p4, x4))));
 	}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

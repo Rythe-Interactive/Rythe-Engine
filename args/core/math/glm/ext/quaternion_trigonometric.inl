@@ -1,9 +1,9 @@
 #include "scalar_constants.hpp"
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	template<typename T, qualifier Q>
-	GLM_FUNC_QUALIFIER T angleOfQuat(qua<T, Q> const& x)
+	GLM_FUNC_QUALIFIER T angle(qua<T, Q> const& x)
 	{
 		if (abs(x.w) > cos_one_over_two<T>())
 		{
@@ -14,7 +14,7 @@ namespace args::core::math
 	}
 
 	template<typename T, qualifier Q>
-	GLM_FUNC_QUALIFIER vec<3, T, Q> axisOfQuat(qua<T, Q> const& x)
+	GLM_FUNC_QUALIFIER vec<3, T, Q> axis(qua<T, Q> const& x)
 	{
 		T const tmp1 = static_cast<T>(1) - x.w * x.w;
 		if(tmp1 <= static_cast<T>(0))
@@ -27,8 +27,8 @@ namespace args::core::math
 	GLM_FUNC_QUALIFIER qua<T, Q> angleAxis(T const& angle, vec<3, T, Q> const& v)
 	{
 		T const a(angle);
-		T const s = math::sin(a * static_cast<T>(0.5));
+		T const s = glm::sin(a * static_cast<T>(0.5));
 
-		return qua<T, Q>(math::cos(a * static_cast<T>(0.5)), v * s);
+		return qua<T, Q>(glm::cos(a * static_cast<T>(0.5)), v * s);
 	}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

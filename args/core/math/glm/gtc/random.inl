@@ -7,7 +7,7 @@
 #include <cassert>
 #include <cmath>
 
-namespace args::core::math{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template <length_t L, typename T, qualifier Q>
@@ -283,7 +283,7 @@ namespace detail
 		assert(Radius > static_cast<T>(0));
 
 		T a = linearRand(T(0), static_cast<T>(6.283185307179586476925286766559));
-		return vec<2, T, defaultp>(math::cos(a), math::sin(a)) * Radius;
+		return vec<2, T, defaultp>(glm::cos(a), glm::sin(a)) * Radius;
 	}
 
 	template<typename T>
@@ -300,4 +300,4 @@ namespace detail
 
 		return vec<3, T, defaultp>(x, y, z) * Radius;
 	}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

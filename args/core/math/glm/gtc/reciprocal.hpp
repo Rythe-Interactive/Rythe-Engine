@@ -19,7 +19,7 @@
 #	pragma message("GLM: GLM_GTC_reciprocal extension included")
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtc_reciprocal
 	/// @{
@@ -130,6 +130,6 @@ namespace args::core::math
 	GLM_FUNC_DECL genType acoth(genType x);
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #include "reciprocal.inl"

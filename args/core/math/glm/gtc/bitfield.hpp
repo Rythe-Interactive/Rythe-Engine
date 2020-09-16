@@ -27,7 +27,7 @@
 #	pragma message("GLM: GLM_GTC_bitfield extension included")
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtc_bitfield
 	/// @{
@@ -136,7 +136,7 @@ namespace args::core::math
 	/// Deinterleaves the bits of x.
 	///
 	/// @see gtc_bitfield
-	GLM_FUNC_DECL math::u8vec2 bitfieldDeinterleave(math::uint16 x);
+	GLM_FUNC_DECL glm::u8vec2 bitfieldDeinterleave(glm::uint16 x);
 
 	/// Interleaves the bits of x and y.
 	/// The first bit is the first bit of x followed by the first bit of y.
@@ -162,7 +162,7 @@ namespace args::core::math
 	/// Deinterleaves the bits of x.
 	///
 	/// @see gtc_bitfield
-	GLM_FUNC_DECL math::u16vec2 bitfieldDeinterleave(math::uint32 x);
+	GLM_FUNC_DECL glm::u16vec2 bitfieldDeinterleave(glm::uint32 x);
 
 	/// Interleaves the bits of x and y.
 	/// The first bit is the first bit of x followed by the first bit of y.
@@ -188,7 +188,7 @@ namespace args::core::math
 	/// Deinterleaves the bits of x.
 	///
 	/// @see gtc_bitfield
-	GLM_FUNC_DECL math::u32vec2 bitfieldDeinterleave(math::uint64 x);
+	GLM_FUNC_DECL glm::u32vec2 bitfieldDeinterleave(glm::uint64 x);
 
 	/// Interleaves the bits of x, y and z.
 	/// The first bit is the first bit of x followed by the first bit of y and the first bit of z.
@@ -261,6 +261,6 @@ namespace args::core::math
 	GLM_FUNC_DECL uint64 bitfieldInterleave(uint16 x, uint16 y, uint16 z, uint16 w);
 
 	/// @}
-} //namespace args::core::math
+} //namespace args::core::math::detail::glm
 
 #include "bitfield.inl"

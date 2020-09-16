@@ -1,6 +1,6 @@
 /// @ref gtx_type_trait
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	template<typename T>
 	bool const type<T>::is_vec;
@@ -58,4 +58,4 @@ namespace args::core::math
 	bool const type<tdualquat<T, Q> >::is_quat;
 	template<typename T, qualifier Q>
 	length_t const type<tdualquat<T, Q> >::components;
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

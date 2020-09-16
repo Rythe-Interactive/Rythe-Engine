@@ -3,10 +3,10 @@
 
 #include <iomanip>                  // std::fixed, std::setfill<>, std::setprecision, std::right, std::setw
 #include <ostream>                  // std::basic_ostream<>
-#include "../gtc/matrix_access.hpp" // math::col, math::row
-#include "../gtx/type_trait.hpp"    // math::type<>
+#include "../gtc/matrix_access.hpp" // glm::col, glm::row
+#include "../gtx/type_trait.hpp"    // glm::type<>
 
-namespace args::core::math{
+namespace args::core::math::detail::glm{
 namespace io
 {
 	template<typename CTy>
@@ -437,4 +437,4 @@ namespace detail
 	{
 		return detail::print_matrix_pair_on(os, a);
 	}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

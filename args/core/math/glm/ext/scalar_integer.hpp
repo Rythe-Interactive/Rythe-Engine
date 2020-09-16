@@ -23,7 +23,7 @@
 #	pragma message("GLM: GLM_EXT_scalar_integer extension included")
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_scalar_integer
 	/// @{
@@ -87,6 +87,6 @@ namespace args::core::math
 	GLM_FUNC_DECL int findNSB(genIUType x, int significantBitCount);
 
 	/// @}
-} //namespace args::core::math
+} //namespace args::core::math::detail::glm
 
 #include "scalar_integer.inl"

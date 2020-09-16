@@ -7,7 +7,7 @@
 #	pragma warning(disable: 4512) // assignment operator could not be generated
 #endif
 
-namespace args::core::math{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template <typename T>
@@ -61,7 +61,7 @@ namespace detail
 		float_type f;
 	};
 }//namespace detail
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #if GLM_COMPILER == GLM_COMPILER_VC12
 #	pragma warning(pop)

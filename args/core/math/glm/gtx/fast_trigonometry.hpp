@@ -23,7 +23,7 @@
 #	endif
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_fast_trigonometry
 	/// @{
@@ -74,6 +74,6 @@ namespace args::core::math
 	GLM_FUNC_DECL T fastAtan(T angle);
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #include "fast_trigonometry.inl"

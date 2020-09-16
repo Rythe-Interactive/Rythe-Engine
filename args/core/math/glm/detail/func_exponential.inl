@@ -7,7 +7,7 @@
 #include <cmath>
 #include <cassert>
 
-namespace args::core::math{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 #	if GLM_HAS_CXX11_STL
@@ -144,7 +144,7 @@ namespace detail
 		GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559, "'inversesqrt' only accept floating-point inputs");
 		return detail::compute_inversesqrt<L, T, Q, detail::is_aligned<Q>::value>::call(x);
 	}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #if GLM_CONFIG_SIMD == GLM_ENABLE
 #	include "func_exponential_simd.inl"

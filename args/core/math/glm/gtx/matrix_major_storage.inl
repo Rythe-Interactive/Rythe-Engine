@@ -1,6 +1,6 @@
 /// @ref gtx_matrix_major_storage
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER mat<2, 2, T, Q> rowMajor2
@@ -163,4 +163,4 @@ namespace args::core::math
 	{
 		return mat<4, 4, T, Q>(m);
 	}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

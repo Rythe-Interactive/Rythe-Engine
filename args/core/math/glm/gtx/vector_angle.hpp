@@ -28,7 +28,7 @@
 #	endif
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_vector_angle
 	/// @{
@@ -37,7 +37,7 @@ namespace args::core::math
 	//! Parameters need to be normalized.
 	/// @see gtx_vector_angle extension.
 	template<length_t L, typename T, qualifier Q>
-	GLM_FUNC_DECL T angleBetween(vec<L, T, Q> const& x, vec<L, T, Q> const& y);
+	GLM_FUNC_DECL T angle(vec<L, T, Q> const& x, vec<L, T, Q> const& y);
 
 	//! Returns the oriented angle between two 2d vectors.
 	//! Parameters need to be normalized.
@@ -52,6 +52,6 @@ namespace args::core::math
 	GLM_FUNC_DECL T orientedAngle(vec<3, T, Q> const& x, vec<3, T, Q> const& y, vec<3, T, Q> const& ref);
 
 	/// @}
-}// namespace args::core::math
+}// namespace args::core::math::detail::glm
 
 #include "vector_angle.inl"

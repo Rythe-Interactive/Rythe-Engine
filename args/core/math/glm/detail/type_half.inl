@@ -1,4 +1,4 @@
-namespace args::core::math{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	GLM_FUNC_QUALIFIER float overflow()
@@ -238,4 +238,4 @@ namespace detail
 	}
 
 }//namespace detail
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

@@ -17,7 +17,7 @@
 #	pragma message("GLM: GLM_EXT_quaternion_float_precision extension included")
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_quaternion_float_precision
 	/// @{
@@ -32,5 +32,5 @@ namespace args::core::math
 	typedef qua<float, highp>		highp_quat;
 
 	/// @}
-} //namespace args::core::math
+} //namespace args::core::math::detail::glm
 

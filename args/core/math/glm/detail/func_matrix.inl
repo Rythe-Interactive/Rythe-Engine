@@ -1,7 +1,7 @@
 #include "../geometric.hpp"
 #include <limits>
 
-namespace args::core::math{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template<length_t C, length_t R, typename T, qualifier Q, bool Aligned>
@@ -390,7 +390,7 @@ namespace detail
 		GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559 || GLM_CONFIG_UNRESTRICTED_GENTYPE, "'inverse' only accept floating-point inputs");
 		return detail::compute_inverse<C, R, T, Q, detail::is_aligned<Q>::value>::call(m);
 	}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #if GLM_CONFIG_SIMD == GLM_ENABLE
 #	include "func_matrix_simd.inl"

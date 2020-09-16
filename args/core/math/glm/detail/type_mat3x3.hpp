@@ -7,7 +7,7 @@
 #include <limits>
 #include <cstddef>
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	template<typename T, qualifier Q>
 	struct mat<3, 3, T, Q>
@@ -177,7 +177,7 @@ namespace args::core::math
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_DECL bool operator!=(mat<3, 3, T, Q> const& m1, mat<3, 3, T, Q> const& m2);
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #ifndef GLM_EXTERNAL_TEMPLATE
 #include "type_mat3x3.inl"

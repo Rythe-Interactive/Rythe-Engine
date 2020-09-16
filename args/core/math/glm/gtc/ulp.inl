@@ -2,7 +2,7 @@
 
 #include "../ext/scalar_ulp.hpp"
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	template<>
 	GLM_FUNC_QUALIFIER float next_float(float x)
@@ -169,5 +169,5 @@ namespace args::core::math
 			Result[i] = float_distance(x[i], y[i]);
 		return Result;
 	}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 

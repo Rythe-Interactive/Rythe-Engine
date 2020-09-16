@@ -29,7 +29,7 @@ Suggestions:
  - Implement other types of matrix factorisation, such as: QL and LQ, L(D)U, eigendecompositions, etc...
 */
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_matrix_factorisation
 	/// @{

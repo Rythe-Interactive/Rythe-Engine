@@ -20,7 +20,7 @@
 #include "common.hpp"
 #include "vector_relational.hpp"
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup core_func_integer
 	/// @{
@@ -207,6 +207,6 @@ namespace args::core::math
 	GLM_FUNC_DECL vec<L, int, Q> findMSB(vec<L, T, Q> const& v);
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #include "detail/func_integer.inl"

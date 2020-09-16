@@ -21,7 +21,7 @@
 #	pragma message("GLM: GLM_EXT_vector_common extension included")
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_vector_common
 	/// @{
@@ -199,6 +199,6 @@ namespace args::core::math
 	GLM_FUNC_DECL vec<L, T, Q> mirrorRepeat(vec<L, T, Q> const& Texcoord);
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #include "vector_common.inl"

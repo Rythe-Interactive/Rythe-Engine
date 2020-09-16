@@ -10,10 +10,10 @@
 #include <cstring>
 #include <limits>
 
-namespace args::core::math{
+namespace args::core::math::detail::glm{
 namespace detail
 {
-	GLM_FUNC_QUALIFIER math::uint16 float2half(math::uint32 f)
+	GLM_FUNC_QUALIFIER glm::uint16 float2half(glm::uint32 f)
 	{
 		// 10 bits    =>                         EE EEEFFFFF
 		// 11 bits    =>                        EEE EEFFFFFF
@@ -31,7 +31,7 @@ namespace detail
 			((f >> 13) & 0x03ff); // Mantissa
 	}
 
-	GLM_FUNC_QUALIFIER math::uint32 float2packed11(math::uint32 f)
+	GLM_FUNC_QUALIFIER glm::uint32 float2packed11(glm::uint32 f)
 	{
 		// 10 bits    =>                         EE EEEFFFFF
 		// 11 bits    =>                        EEE EEFFFFFF
@@ -49,7 +49,7 @@ namespace detail
 			((f >> 17) & 0x003f); // Mantissa
 	}
 
-	GLM_FUNC_QUALIFIER math::uint32 packed11ToFloat(math::uint32 p)
+	GLM_FUNC_QUALIFIER glm::uint32 packed11ToFloat(glm::uint32 p)
 	{
 		// 10 bits    =>                         EE EEEFFFFF
 		// 11 bits    =>                        EEE EEFFFFFF
@@ -67,7 +67,7 @@ namespace detail
 			((p & 0x003f) << 17); // Mantissa
 	}
 
-	GLM_FUNC_QUALIFIER math::uint32 float2packed10(math::uint32 f)
+	GLM_FUNC_QUALIFIER glm::uint32 float2packed10(glm::uint32 f)
 	{
 		// 10 bits    =>                         EE EEEFFFFF
 		// 11 bits    =>                        EEE EEFFFFFF
@@ -88,7 +88,7 @@ namespace detail
 			((f >> 18) & 0x001f); // Mantissa
 	}
 
-	GLM_FUNC_QUALIFIER math::uint32 packed10ToFloat(math::uint32 p)
+	GLM_FUNC_QUALIFIER glm::uint32 packed10ToFloat(glm::uint32 p)
 	{
 		// 10 bits    =>                         EE EEEFFFFF
 		// 11 bits    =>                        EEE EEFFFFFF
@@ -109,18 +109,18 @@ namespace detail
 			((p & 0x001f) << 18); // Mantissa
 	}
 
-	GLM_FUNC_QUALIFIER math::uint half2float(math::uint h)
+	GLM_FUNC_QUALIFIER glm::uint half2float(glm::uint h)
 	{
 		return ((h & 0x8000) << 16) | ((( h & 0x7c00) + 0x1C000) << 13) | ((h & 0x03FF) << 13);
 	}
 
-	GLM_FUNC_QUALIFIER math::uint floatTo11bit(float x)
+	GLM_FUNC_QUALIFIER glm::uint floatTo11bit(float x)
 	{
 		if(x == 0.0f)
 			return 0u;
-		else if(math::isnan(x))
+		else if(glm::isnan(x))
 			return ~0u;
-		else if(math::isinf(x))
+		else if(glm::isinf(x))
 			return 0x1Fu << 6u;
 
 		uint Pack = 0u;
@@ -128,7 +128,7 @@ namespace detail
 		return float2packed11(Pack);
 	}
 
-	GLM_FUNC_QUALIFIER float packed11bitToFloat(math::uint x)
+	GLM_FUNC_QUALIFIER float packed11bitToFloat(glm::uint x)
 	{
 		if(x == 0)
 			return 0.0f;
@@ -144,13 +144,13 @@ namespace detail
 		return Temp;
 	}
 
-	GLM_FUNC_QUALIFIER math::uint floatTo10bit(float x)
+	GLM_FUNC_QUALIFIER glm::uint floatTo10bit(float x)
 	{
 		if(x == 0.0f)
 			return 0u;
-		else if(math::isnan(x))
+		else if(glm::isnan(x))
 			return ~0u;
-		else if(math::isinf(x))
+		else if(glm::isinf(x))
 			return 0x1Fu << 5u;
 
 		uint Pack = 0;
@@ -158,7 +158,7 @@ namespace detail
 		return float2packed10(Pack);
 	}
 
-	GLM_FUNC_QUALIFIER float packed10bitToFloat(math::uint x)
+	GLM_FUNC_QUALIFIER float packed10bitToFloat(glm::uint x)
 	{
 		if(x == 0)
 			return 0.0f;
@@ -174,7 +174,7 @@ namespace detail
 		return Temp;
 	}
 
-//	GLM_FUNC_QUALIFIER math::uint f11_f11_f10(float x, float y, float z)
+//	GLM_FUNC_QUALIFIER glm::uint f11_f11_f10(float x, float y, float z)
 //	{
 //		return ((floatTo11bit(x) & ((1 << 11) - 1)) << 0) |  ((floatTo11bit(y) & ((1 << 11) - 1)) << 11) | ((floatTo10bit(z) & ((1 << 10) - 1)) << 22);
 //	}
@@ -488,7 +488,7 @@ namespace detail
 		return detail::toFloat32(Unpack);
 	}
 
-	GLM_FUNC_QUALIFIER uint64 packHalf4x16(math::vec4 const& v)
+	GLM_FUNC_QUALIFIER uint64 packHalf4x16(glm::vec4 const& v)
 	{
 		i16vec4 const Unpack(
 			detail::toFloat16(v.x),
@@ -500,7 +500,7 @@ namespace detail
 		return Packed;
 	}
 
-	GLM_FUNC_QUALIFIER math::vec4 unpackHalf4x16(uint64 v)
+	GLM_FUNC_QUALIFIER glm::vec4 unpackHalf4x16(uint64 v)
 	{
 		i16vec4 Unpack;
 		memcpy(&Unpack, &v, sizeof(Unpack));
@@ -934,5 +934,5 @@ namespace detail
 		memcpy(&Unpack, &p, sizeof(Unpack));
 		return Unpack;
 	}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 

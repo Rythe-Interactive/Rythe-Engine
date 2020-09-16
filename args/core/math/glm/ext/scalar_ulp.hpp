@@ -24,7 +24,7 @@
 #	pragma message("GLM: GLM_EXT_scalar_ulp extension included")
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// Return the next ULP value(s) after the input value(s).
 	///
@@ -69,6 +69,6 @@ namespace args::core::math
 	GLM_FUNC_DECL int64 floatDistance(double x, double y);
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #include "scalar_ulp.inl"

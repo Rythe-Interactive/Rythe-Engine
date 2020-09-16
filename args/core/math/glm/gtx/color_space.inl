@@ -1,6 +1,6 @@
 /// @ref gtx_color_space
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER vec<3, T, Q> rgbColor(const vec<3, T, Q>& hsvColor)
@@ -138,4 +138,4 @@ namespace args::core::math
 		const vec<3, T, Q> tmp = vec<3, T, Q>(0.33, 0.59, 0.11);
 		return dot(color, tmp);
 	}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

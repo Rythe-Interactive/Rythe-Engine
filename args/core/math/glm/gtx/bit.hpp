@@ -23,7 +23,7 @@
 #	endif
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_bit
 	/// @{
@@ -91,7 +91,7 @@ namespace args::core::math
 	GLM_DEPRECATED GLM_FUNC_DECL vec<L, T, Q> powerOfTwoNearest(vec<L, T, Q> const& value);
 
 	/// @}
-} //namespace args::core::math
+} //namespace args::core::math::detail::glm
 
 
 #include "bit.inl"

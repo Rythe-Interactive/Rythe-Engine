@@ -1,6 +1,6 @@
 #pragma once
 
-namespace args::core::math{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 	template<template<length_t L, typename T, qualifier Q> class vec, length_t L, typename R, typename T, qualifier Q>
@@ -159,4 +159,4 @@ namespace detail
 		}
 	};
 }//namespace detail
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

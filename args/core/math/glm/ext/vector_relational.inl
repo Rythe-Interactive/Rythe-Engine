@@ -3,7 +3,7 @@
 #include "../detail/qualifier.hpp"
 #include "../detail/type_float.hpp"
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<L, bool, Q> equal(vec<L, T, Q> const& x, vec<L, T, Q> const& y, T Epsilon)
@@ -72,4 +72,4 @@ namespace args::core::math
 	{
 		return not_(equal(x, y, MaxULPs));
 	}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

@@ -29,7 +29,7 @@
 #	pragma message("GLM: GLM_EXT_matrix_transform extension included")
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_matrix_transform
 	/// @{
@@ -50,7 +50,7 @@ namespace args::core::math
 	/// #include <glm/glm.hpp>
 	/// #include <glm/gtc/matrix_transform.hpp>
 	/// ...
-	/// math::mat4 m = math::translate(math::mat4(1.0f), math::vec3(1.0f));
+	/// glm::mat4 m = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f));
 	/// // m[0][0] == 1.0f, m[0][1] == 0.0f, m[0][2] == 0.0f, m[0][3] == 0.0f
 	/// // m[1][0] == 0.0f, m[1][1] == 1.0f, m[1][2] == 0.0f, m[1][3] == 0.0f
 	/// // m[2][0] == 0.0f, m[2][1] == 0.0f, m[2][2] == 1.0f, m[2][3] == 0.0f
@@ -139,6 +139,6 @@ namespace args::core::math
 		vec<3, T, Q> const& eye, vec<3, T, Q> const& center, vec<3, T, Q> const& up);
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #include "matrix_transform.inl"

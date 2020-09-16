@@ -20,7 +20,7 @@
 #	pragma message("GLM: GLM_EXT_vector_int3_sized extension included")
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_vector_int3_sized
 	/// @{
@@ -46,4 +46,4 @@ namespace args::core::math
 	typedef vec<3, int64, defaultp>		i64vec3;
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

@@ -21,7 +21,7 @@
 #	pragma message("GLM: GLM_GTC_packing extension included")
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtc_packing
 	/// @{
@@ -723,6 +723,6 @@ namespace args::core::math
 	GLM_FUNC_DECL u32vec2 unpackUint2x32(uint64 p);
 
 	/// @}
-}// namespace args::core::math
+}// namespace args::core::math::detail::glm
 
 #include "packing.inl"

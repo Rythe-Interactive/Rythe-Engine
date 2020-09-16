@@ -1,6 +1,6 @@
 /// @ref gtx_transform
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER mat<4, 4, T, Q> translate(vec<3, T, Q> const& v)
@@ -20,4 +20,4 @@ namespace args::core::math
 		return scale(mat<4, 4, T, Q>(static_cast<T>(1)), v);
 	}
 
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

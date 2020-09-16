@@ -28,7 +28,7 @@
 #	endif
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_quaternion
 	/// @{
@@ -169,6 +169,6 @@ namespace args::core::math
 	GLM_FUNC_DECL GLM_CONSTEXPR T length2(qua<T, Q> const& q);
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #include "quaternion.inl"

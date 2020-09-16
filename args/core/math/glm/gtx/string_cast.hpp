@@ -36,7 +36,7 @@
 #	error "GLM_GTX_string_cast is not supported on CUDA compiler"
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_string_cast
 	/// @{
@@ -47,6 +47,6 @@ namespace args::core::math
 	GLM_FUNC_DECL std::string to_string(genType const& x);
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #include "string_cast.inl"

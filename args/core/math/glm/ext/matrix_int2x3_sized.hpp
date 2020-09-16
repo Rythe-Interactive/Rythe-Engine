@@ -20,7 +20,7 @@
 #	pragma message("GLM: GLM_EXT_matrix_int2x3_sized extension included")
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_matrix_int2x3_sized
 	/// @{
@@ -46,4 +46,4 @@ namespace args::core::math
 	typedef mat<2, 3, int64, defaultp>				i64mat2x3;
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

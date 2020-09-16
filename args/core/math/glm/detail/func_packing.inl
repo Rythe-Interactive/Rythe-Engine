@@ -4,7 +4,7 @@
 #include "../common.hpp"
 #include "type_half.hpp"
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	GLM_FUNC_QUALIFIER uint packUnorm2x16(vec2 const& v)
 	{
@@ -113,7 +113,7 @@ namespace args::core::math
 		return u.out;
 	}
 
-	GLM_FUNC_QUALIFIER math::vec4 unpackSnorm4x8(uint p)
+	GLM_FUNC_QUALIFIER glm::vec4 unpackSnorm4x8(uint p)
 	{
 		union
 		{
@@ -181,7 +181,7 @@ namespace args::core::math
 			detail::toFloat32(u.out[0]),
 			detail::toFloat32(u.out[1]));
 	}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #if GLM_CONFIG_SIMD == GLM_ENABLE
 #	include "func_packing_simd.inl"

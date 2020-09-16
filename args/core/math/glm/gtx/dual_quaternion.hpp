@@ -28,7 +28,7 @@
 #	endif
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup gtx_dual_quaternion
 	/// @{
@@ -269,6 +269,6 @@ namespace args::core::math
 #endif
 
 	/// @}
-} //namespace args::core::math
+} //namespace args::core::math::detail::glm
 
 #include "dual_quaternion.inl"

@@ -19,7 +19,7 @@
 #	pragma message("GLM: GLM_EXT_vector_float1 extension included")
 #endif
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup ext_vector_float1
 	/// @{
@@ -28,4 +28,4 @@ namespace args::core::math
 	typedef vec<1, float, defaultp>		vec1;
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

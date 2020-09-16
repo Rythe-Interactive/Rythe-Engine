@@ -1,6 +1,6 @@
 /// @ref gtx_bit
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	///////////////////
 	// highestBitValue
@@ -89,4 +89,4 @@ namespace args::core::math
 		return detail::functor1<vec, L, T, T, Q>::call(powerOfTwoNearest, v);
 	}
 
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

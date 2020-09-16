@@ -4,7 +4,7 @@
 #pragma once
 #include "../detail/type_vec3.hpp"
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	/// @addtogroup core_vector_precision
 	/// @{
@@ -31,4 +31,4 @@ namespace args::core::math
 	typedef vec<3, double, lowp>		lowp_dvec3;
 
 	/// @}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

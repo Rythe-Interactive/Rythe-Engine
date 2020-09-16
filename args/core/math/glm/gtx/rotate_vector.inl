@@ -1,6 +1,6 @@
 /// @ref gtx_rotate_vector
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER vec<3, T, Q> slerp
@@ -48,7 +48,7 @@ namespace args::core::math
 		vec<3, T, Q> const& normal
 	)
 	{
-		return mat<3, 3, T, Q>(math::rotate(angle, normal)) * v;
+		return mat<3, 3, T, Q>(glm::rotate(angle, normal)) * v;
 	}
 	/*
 	template<typename T, qualifier Q>
@@ -184,4 +184,4 @@ namespace args::core::math
 
 		return rotate(Angle, RotationAxis);
 	}
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm

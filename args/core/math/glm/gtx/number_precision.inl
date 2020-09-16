@@ -1,6 +1,6 @@
 /// @ref gtx_number_precision
 
-namespace args::core::math
+namespace args::core::math::detail::glm
 {
 
 }

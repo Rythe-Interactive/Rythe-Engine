@@ -5,7 +5,7 @@
 #include "../simd/matrix.h"
 #include <cstring>
 
-namespace args::core::math{
+namespace args::core::math::detail::glm{
 namespace detail
 {
 #	if GLM_CONFIG_ALIGNED_GENTYPES == GLM_ENABLE
@@ -89,11 +89,11 @@ namespace detail
 		return Result;
 	}
 #	endif
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 
 #elif GLM_ARCH & GLM_ARCH_NEON_BIT
 
-namespace args::core::math {
+namespace args::core::math::detail::glm {
 #if GLM_LANG & GLM_LANG_CXX11_FLAG
 	template <qualifier Q>
 	GLM_FUNC_QUALIFIER
@@ -245,5 +245,5 @@ namespace args::core::math {
 			return r;
 		}
 	};
-}//namespace args::core::math
+}//namespace args::core::math::detail::glm
 #endif
