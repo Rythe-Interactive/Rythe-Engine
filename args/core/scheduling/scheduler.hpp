@@ -1,5 +1,6 @@
 #pragma once
 #include <core/platform/platform.hpp>
+#include <core/logging/logging.hpp>
 #include <core/types/types.hpp>
 #include <core/containers/containers.hpp>
 #include <core/scheduling/processchain.hpp>
