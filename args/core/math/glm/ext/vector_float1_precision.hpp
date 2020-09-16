@@ -18,7 +18,7 @@
 #	pragma message("GLM: GLM_EXT_vector_float1_precision extension included")
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup ext_vector_float1_precision
 	/// @{
@@ -33,4 +33,4 @@ namespace args::core::math::detail::glm
 	typedef vec<1, float, lowp>			lowp_vec1;
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

@@ -1,6 +1,6 @@
 /// @ref gtx_polar_coordinates
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER vec<3, T, Q> polar
@@ -33,4 +33,4 @@ namespace args::core::math::detail::glm
 			cos(latitude) * cos(longitude));
 	}
 
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

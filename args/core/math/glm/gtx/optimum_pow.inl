@@ -1,6 +1,6 @@
 /// @ref gtx_optimum_pow
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType pow2(genType const& x)
@@ -19,4 +19,4 @@ namespace args::core::math::detail::glm
 	{
 		return (x * x) * (x * x);
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

@@ -26,7 +26,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace gtx
 {
 	/////////////////////////////
@@ -56,6 +56,6 @@ namespace gtx
 
 	/// @}
 }//namespace gtx
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "number_precision.inl"

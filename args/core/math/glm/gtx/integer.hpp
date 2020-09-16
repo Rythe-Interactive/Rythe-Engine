@@ -24,7 +24,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_integer
 	/// @{
@@ -71,6 +71,6 @@ namespace args::core::math::detail::glm
 	GLM_FUNC_DECL uint nlz(uint x);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "integer.inl"

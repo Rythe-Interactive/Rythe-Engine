@@ -20,13 +20,13 @@
 #	pragma message("GLM: GLM_EXT_vector_packing extension included")
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup ext_vector_packing
 	/// @{
 
 
 	/// @}
-}// namespace args::core::math::detail::glm
+}// namespace args::core::math
 
 #include "vector_packing.inl"

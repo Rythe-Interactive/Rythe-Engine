@@ -23,7 +23,7 @@
 #	pragma message("GLM: GLM_EXT_quaternion_relational extension included")
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup ext_quaternion_relational
 	/// @{
@@ -57,6 +57,6 @@ namespace args::core::math::detail::glm
 	GLM_FUNC_DECL vec<4, bool, Q> notEqual(qua<T, Q> const& x, qua<T, Q> const& y, T epsilon);
 
 	/// @}
-} //namespace args::core::math::detail::glm
+} //namespace args::core::math
 
 #include "quaternion_relational.inl"

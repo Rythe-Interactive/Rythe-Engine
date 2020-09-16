@@ -23,7 +23,7 @@
 #	pragma message("GLM: GLM_GTC_matrix_inverse extension included")
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtc_matrix_inverse
 	/// @{
@@ -45,6 +45,6 @@ namespace args::core::math::detail::glm
 	GLM_FUNC_DECL genType inverseTranspose(genType const& m);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "matrix_inverse.inl"

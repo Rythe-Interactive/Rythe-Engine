@@ -1,6 +1,6 @@
 /// @ref gtx_matrix_query
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER bool isNull(mat<2, 2, T, Q> const& m, T const& epsilon)
@@ -110,4 +110,4 @@ namespace args::core::math::detail::glm
 		}
 		return result;
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

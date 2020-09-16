@@ -25,7 +25,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_matrix_transform_2d
 	/// @{
@@ -76,6 +76,6 @@ namespace args::core::math::detail::glm
 		T x);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "matrix_transform_2d.inl"

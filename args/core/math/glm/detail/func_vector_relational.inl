@@ -1,4 +1,4 @@
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<L, bool, Q> lessThan(vec<L, T, Q> const& x, vec<L, T, Q> const& y)
@@ -80,7 +80,7 @@ namespace args::core::math::detail::glm
 			Result[i] = !v[i];
 		return Result;
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #if GLM_CONFIG_SIMD == GLM_ENABLE
 #	include "func_vector_relational_simd.inl"

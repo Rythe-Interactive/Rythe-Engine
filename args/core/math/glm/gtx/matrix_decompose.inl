@@ -3,7 +3,7 @@
 #include "../gtc/constants.hpp"
 #include "../gtc/epsilon.hpp"
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace detail
 {
 	/// Make a linear combination of two vectors and return the result.
@@ -69,8 +69,8 @@ namespace detail
 			// Solve the equation by inverting PerspectiveMatrix and multiplying
 			// rightHandSide by the inverse.  (This is the easiest way, not
 			// necessarily the best.)
-			mat<4, 4, T, Q> InversePerspectiveMatrix = glm::inverse(PerspectiveMatrix);//   inverse(PerspectiveMatrix, inversePerspectiveMatrix);
-			mat<4, 4, T, Q> TransposedInversePerspectiveMatrix = glm::transpose(InversePerspectiveMatrix);//   transposeMatrix4(inversePerspectiveMatrix, transposedInversePerspectiveMatrix);
+			mat<4, 4, T, Q> InversePerspectiveMatrix = math::inverse(PerspectiveMatrix);//   inverse(PerspectiveMatrix, inversePerspectiveMatrix);
+			mat<4, 4, T, Q> TransposedInversePerspectiveMatrix = math::transpose(InversePerspectiveMatrix);//   transposeMatrix4(inversePerspectiveMatrix, transposedInversePerspectiveMatrix);
 
 			Perspective = TransposedInversePerspectiveMatrix * RightHandSide;
 			//  v4MulPointByMatrix(rightHandSide, transposedInversePerspectiveMatrix, perspectivePoint);
@@ -111,9 +111,9 @@ namespace detail
 		Skew.z /= Scale.y;
 
 		// Compute XZ and YZ shears, orthogonalize 3rd row.
-		Skew.y = glm::dot(Row[0], Row[2]);
+		Skew.y = math::dot(Row[0], Row[2]);
 		Row[2] = detail::combine(Row[2], Row[0], static_cast<T>(1), -Skew.y);
-		Skew.x = glm::dot(Row[1], Row[2]);
+		Skew.x = math::dot(Row[1], Row[2]);
 		Row[2] = detail::combine(Row[2], Row[1], static_cast<T>(1), -Skew.x);
 
 		// Next, get Z scale and normalize 3rd row.
@@ -292,4 +292,4 @@ namespace detail
 
 		return true;
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

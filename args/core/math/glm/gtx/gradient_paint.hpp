@@ -25,7 +25,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_gradient_paint
 	/// @{
@@ -48,6 +48,6 @@ namespace args::core::math::detail::glm
 		vec<2, T, Q> const& Position);
 
 	/// @}
-}// namespace args::core::math::detail::glm
+}// namespace args::core::math
 
 #include "gradient_paint.inl"

@@ -28,7 +28,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_matrix_decompose
 	/// @{
@@ -51,6 +51,6 @@ namespace args::core::math::detail::glm
         vec<3, T, Q> & scale, qua<T, Q> & orientation, vec<3, T, Q> & translation);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "matrix_decompose.inl"

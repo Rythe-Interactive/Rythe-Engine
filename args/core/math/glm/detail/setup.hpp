@@ -538,16 +538,16 @@
 #include <CL/sycl.hpp>
 #include <limits>
 
-namespace args::core::math::detail::glm {
+namespace args::core::math {
 namespace std {
-	// Import SYCL's functions into the namespace args::core::math::detail::glm::std to force their usages.
+	// Import SYCL's functions into the namespace args::core::math::std to force their usages.
 	// It's important to use the math built-in function (sin, exp, ...)
 	// of SYCL instead the std ones.
 	using namespace cl::sycl;
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Import some "harmless" std's stuffs used by glm into
-	// the new glm::std namespace.
+	// the new math::std namespace.
 	template<typename T>
 	using numeric_limits = ::std::numeric_limits<T>;
 
@@ -566,7 +566,7 @@ namespace std {
 	using ::std::make_unsigned;
 	///////////////////////////////////////////////////////////////////////////////
 } //namespace std
-} //namespace args::core::math::detail::glm
+} //namespace args::core::math
 
 #endif
 
@@ -586,7 +586,7 @@ namespace std {
 #	define GLM_CONFIG_LENGTH_TYPE		GLM_LENGTH_INT
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	using std::size_t;
 #	if GLM_CONFIG_LENGTH_TYPE == GLM_LENGTH_SIZE_T
@@ -594,7 +594,7 @@ namespace args::core::math::detail::glm
 #	else
 		typedef int length_t;
 #	endif
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 ///////////////////////////////////////////////////////////////////////////////////
 // constexpr
@@ -602,15 +602,15 @@ namespace args::core::math::detail::glm
 #if GLM_HAS_CONSTEXPR
 #	define GLM_CONFIG_CONSTEXP GLM_ENABLE
 
-	namespace args::core::math::detail::glm
+	namespace args::core::math
 	{
 		template<typename T, std::size_t N>
 		constexpr std::size_t countof(T const (&)[N])
 		{
 			return N;
 		}
-	}//namespace args::core::math::detail::glm
-#	define GLM_COUNTOF(arr) glm::countof(arr)
+	}//namespace args::core::math
+#	define GLM_COUNTOF(arr) math::countof(arr)
 #elif defined(_MSC_VER)
 #	define GLM_CONFIG_CONSTEXP GLM_DISABLE
 
@@ -624,7 +624,7 @@ namespace args::core::math::detail::glm
 ///////////////////////////////////////////////////////////////////////////////////
 // uint
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace detail
 {
 	template<typename T>
@@ -647,7 +647,7 @@ namespace detail
 }//namespace detail
 
 	typedef unsigned int	uint;
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 ///////////////////////////////////////////////////////////////////////////////////
 // 64-bit int
@@ -656,7 +656,7 @@ namespace detail
 #	include <cstdint>
 #endif
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace detail
 {
 #	if GLM_HAS_EXTENDED_INTEGER_TYPE
@@ -681,7 +681,7 @@ namespace detail
 		typedef signed long long					int64;
 #	endif
 }//namespace detail
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 ///////////////////////////////////////////////////////////////////////////////////
 // make_unsigned
@@ -689,16 +689,16 @@ namespace detail
 #if GLM_HAS_MAKE_SIGNED
 #	include <type_traits>
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace detail
 {
 	using std::make_unsigned;
 }//namespace detail
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #else
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace detail
 {
 	template<typename genType>
@@ -771,7 +771,7 @@ namespace detail
 		typedef uint64 type;
 	};
 }//namespace detail
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -1081,9 +1081,9 @@ namespace detail
 
 	// Report .length() type
 #	if GLM_CONFIG_LENGTH_TYPE == GLM_LENGTH_SIZE_T
-#		pragma message("GLM: GLM_FORCE_SIZE_T_LENGTH is defined. .length() returns a glm::length_t, a typedef of std::size_t.")
+#		pragma message("GLM: GLM_FORCE_SIZE_T_LENGTH is defined. .length() returns a math::length_t, a typedef of std::size_t.")
 #	else
-#		pragma message("GLM: GLM_FORCE_SIZE_T_LENGTH is undefined. .length() returns a glm::length_t, a typedef of int following GLSL.")
+#		pragma message("GLM: GLM_FORCE_SIZE_T_LENGTH is undefined. .length() returns a math::length_t, a typedef of int following GLSL.")
 #	endif
 
 #	if GLM_CONFIG_UNRESTRICTED_GENTYPE == GLM_ENABLE

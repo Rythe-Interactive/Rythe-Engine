@@ -2,7 +2,7 @@
 
 #include <cstring>
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtc_type_ptr
 	/// @{
@@ -382,5 +382,5 @@ namespace args::core::math::detail::glm
 	}
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 

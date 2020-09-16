@@ -1,6 +1,6 @@
 /// @ref gtx_closest_point
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER vec<3, T, Q> closestPointOnLine
@@ -42,4 +42,4 @@ namespace args::core::math::detail::glm
 		return a + LineDirection * Distance;
 	}
 
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

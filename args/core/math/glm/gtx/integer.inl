@@ -1,6 +1,6 @@
 /// @ref gtx_integer
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	// pow
 	GLM_FUNC_QUALIFIER int pow(int x, uint y)
@@ -182,4 +182,4 @@ namespace detail
 
 #endif//(GLM_COMPILER)
 
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

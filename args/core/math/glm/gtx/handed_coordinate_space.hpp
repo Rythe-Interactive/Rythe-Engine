@@ -23,7 +23,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_handed_coordinate_space
 	/// @{
@@ -45,6 +45,6 @@ namespace args::core::math::detail::glm
 		vec<3, T, Q> const& normal);
 
 	/// @}
-}// namespace args::core::math::detail::glm
+}// namespace args::core::math
 
 #include "handed_coordinate_space.inl"

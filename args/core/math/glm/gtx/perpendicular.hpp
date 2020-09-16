@@ -25,7 +25,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_perpendicular
 	/// @{
@@ -36,6 +36,6 @@ namespace args::core::math::detail::glm
 	GLM_FUNC_DECL genType perp(genType const& x, genType const& Normal);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "perpendicular.inl"
