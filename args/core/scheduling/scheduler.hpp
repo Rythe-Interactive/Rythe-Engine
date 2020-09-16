@@ -82,7 +82,7 @@ namespace args::core::scheduling
         static sparse_map<std::thread::id, async::readonly_rw_spinlock> m_commandLocks;
         static sparse_map<std::thread::id, std::queue<Scheduler::runnable>> m_commands;
 
-        static void Scheduler::threadMain(bool* exit, bool* start, bool low_power);
+        static void threadMain(bool* exit, bool* start, bool low_power);
 
     public:
         Scheduler(events::EventBus* eventBus, bool low_power);
