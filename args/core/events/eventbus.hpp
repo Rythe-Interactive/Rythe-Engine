@@ -23,7 +23,7 @@ namespace args::core::events
     public:
         ~EventBus()
         {
-            for (auto& events : m_events)
+            for (auto [_, events] : m_events)
             {
                 for (auto* event : events)
                     delete event;
@@ -108,7 +108,7 @@ namespace args::core::events
         {
             if (checkEvent<event_type>())
             {
-                auto* event = m_events[event_type::id].dense()[index];
+                auto* event = m_events[event_type::id][index];
                 m_events[event_type::id].erase(event);
                 delete event;
             }
@@ -122,7 +122,7 @@ namespace args::core::events
         {
             if (checkEvent<event_type>())
             {
-                auto* event = m_events[event_type::id].dense()[m_events[event_type::id].size() - 1];
+                auto* event = m_events[event_type::id][m_events[event_type::id].size() - 1];
                 m_events[event_type::id].erase(event);
                 delete event;
             }

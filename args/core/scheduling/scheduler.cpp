@@ -21,7 +21,12 @@ namespace args::core::scheduling
         std::thread::id id = std::this_thread::get_id();
 
         while (!(*start))
-            ;
+        {
+            if (low_power)
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            else
+                std::this_thread::yield();
+        }
 
         while (!(*exit))
         {
@@ -79,12 +84,12 @@ namespace args::core::scheduling
 
     Scheduler::~Scheduler()
     {
-        for (auto& processChain : m_processChains)
+        for (auto [_, processChain] : m_processChains)
             processChain.exit();
 
         m_threadsShouldTerminate = true;
 
-        for (auto& thread : m_threads)
+        for (auto [_, thread] : m_threads)
             if (thread->joinable())
                 thread->join();
     }
@@ -93,7 +98,7 @@ namespace args::core::scheduling
     {
         { // Start threads of all the other chains.
             async::readonly_guard guard(m_processChainsLock);
-            for (ProcessChain& chain : m_processChains)
+            for (auto [_, chain] : m_processChains)
                 chain.run(m_low_power);
         }
 
@@ -148,9 +153,9 @@ namespace args::core::scheduling
 
                 {
                     async::readonly_multiguard rmguard(m_processChainsLock, m_threadsLock);
-                    for (auto& chain : m_processChains)
+                    for (auto [id, chain] : m_processChains)
                         if (chain.threadId() != std::thread::id() && !m_threads.contains(chain.threadId()))
-                            toRemove.push_back(chain.id());
+                            toRemove.push_back(id);
                 }
 
                 async::readwrite_guard wguard(m_processChainsLock);
@@ -165,7 +170,7 @@ namespace args::core::scheduling
                 waitForProcessSync();
         }
 
-        for (auto& processChain : m_processChains)
+        for (auto [_, processChain] : m_processChains)
             processChain.exit();
 
         m_threadsShouldTerminate = true;
@@ -184,6 +189,7 @@ namespace args::core::scheduling
 
         while (exits < chains)
         {
+            std::this_thread::yield();
             async::readonly_multiguard rmguard(m_exitsLock, m_processChainsLock);
 
             if (prevExits != exits || prevChains != chains)
@@ -306,7 +312,7 @@ namespace args::core::scheduling
             {
                 async::readonly_guard guard(m_processChainsLock);
                 while (m_syncLock.waiterCount() != m_processChains.size()) // Wait until all other threads have reached the synchronization moment.
-                    ;
+                    std::this_thread::yield();
             }
 
             m_requestSync.store(false, std::memory_order_release);

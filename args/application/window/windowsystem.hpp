@@ -193,7 +193,7 @@ namespace args::application
             bindToEvent<events::exit, &WindowSystem::onExit>();
             bindToEvent<window_request, &WindowSystem::onWindowRequest>();
 
-            raiseEvent<window_request>(world_entity_id, math::ivec2(1360, 768), "<Args> Engine", nullptr, nullptr, 1);
+            raiseEvent<window_request>(world_entity_id, math::ivec2(1360, 768), "<Args> Engine", nullptr, nullptr, 0);
 
             m_scheduler->sendCommand(m_scheduler->getChainThreadId("Input"), [](void* param)
                 {

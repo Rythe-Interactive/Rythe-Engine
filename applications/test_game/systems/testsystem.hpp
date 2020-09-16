@@ -74,8 +74,8 @@ public:
             app::ContextHelper::makeContextCurrent(window);
 
             modelH = rendering::ModelCache::create_model("test", "basic://models/Cube.obj"_view);
-            wireframeH = rendering::MaterialCache::create_material("wireframe", "basic:/shaders/wireframe.glsl"_view);
-            vertexH = rendering::MaterialCache::create_material("vertex", "basic:/shaders/position.glsl"_view);
+            wireframeH = rendering::MaterialCache::create_material("wireframe", "basic://shaders/wireframe.glsl"_view);
+            vertexH = rendering::MaterialCache::create_material("vertex", "basic://shaders/position.glsl"_view);
 
             app::ContextHelper::makeContextCurrent(nullptr);
         }

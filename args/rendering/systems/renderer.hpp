@@ -39,18 +39,27 @@ namespace args::rendering
                 {
                     Renderer* self = reinterpret_cast<Renderer*>(param);
                     log::debug("Waiting on main window.");
+
                     while (!self->main_window_valid())
-                        ;
+                        std::this_thread::yield();
+
                     app::window window = self->get_main_window();
+
                     log::debug("Initializing context.");
+
                     async::readwrite_guard guard(*window.lock);
                     app::ContextHelper::makeContextCurrent(window);
+
                     bool result = self->initData(window);
+
                     app::ContextHelper::makeContextCurrent(nullptr);
+
                     if (!result)
                         log::error("Failed to initialize context.");
+
                     self->initialized.store(result, std::memory_order_release);
                 }, this);
+
             while (!initialized.load(std::memory_order_acquire))
                 std::this_thread::sleep_for(1ns);
         }
@@ -187,10 +196,11 @@ namespace args::rendering
 
         void render(time::time_span<fast_time> deltaTime)
         {
-            (void)deltaTime;
-
             if (!m_ecs->world.has_component<app::window>())
                 return;
+
+            time::clock renderClock;
+            renderClock.start();
 
             app::window window = m_ecs->world.get_component_handle<app::window>().read();
 
@@ -200,7 +210,6 @@ namespace args::rendering
             glClearColor(0.3f, 0.5f, 1.0f, 1.0f);
             glClearDepth(0.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            //glDisable(GL_CULL_FACE);
 
             batches.clear();
 
@@ -209,6 +218,7 @@ namespace args::rendering
             math::mat4 view(1.f);
             math::compose(view, camEnt.get_component_handle<scale>().read(), camEnt.get_component_handle<rotation>().read(), camEnt.get_component_handle<position>().read());
             view = math::inverse(view);
+
             math::mat4 projection = camEnt.get_component_handle<camera>().read().projection;
 
             for (auto ent : renderablesQuery)
@@ -220,20 +230,17 @@ namespace args::rendering
                 batches[rend.model][rend.material].push_back(modelMatrix);
             }
 
-            for (int i = 0; i < batches.size(); i++)
+            for (auto [modelHandle, instancesPerMaterial] : batches)
             {
-                auto modelH = batches.keys()[i];
-                if (!modelH.is_buffered())
-                    modelH.buffer_data(modelMatrixBufferId);
+                if (!modelHandle.is_buffered())
+                    modelHandle.buffer_data(modelMatrixBufferId);
 
-                model mesh = modelH.get_model();
+                model mesh = modelHandle.get_model();
                 if (mesh.submeshes.empty())
                     continue;
 
-                for (int j = 0; j < batches.dense()[i].size(); j++)
+                for (auto [material, instances] : instancesPerMaterial)
                 {
-                    auto material = batches.dense()[i].keys()[j];
-                    auto instances = batches.dense()[i].dense()[j];
                     glBindBuffer(GL_ARRAY_BUFFER, modelMatrixBufferId);
                     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(math::mat4) * instances.size(), instances.data());
                     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -257,6 +264,9 @@ namespace args::rendering
             }
 
             app::ContextHelper::makeContextCurrent(nullptr);
+            auto elapsed = renderClock.end();
+
+            log::debug("render took: {:.3f}ms\tdeltaTime: {:.3f}ms fps: {:.3f}", elapsed.milliseconds(), deltaTime.milliseconds(), 1.0 / deltaTime);
         }
     };
 }

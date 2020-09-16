@@ -369,6 +369,38 @@ namespace args::rendering
 
         shader shader;
         shader.state = state;
+
+        for (auto& [func, param] : state)
+        {
+            if (param == GL_FALSE)
+            {
+                glDisable(func);
+                continue;
+            }
+
+            glEnable(func);
+            switch (func)
+            {
+            case GL_DEPTH_TEST:
+            {
+                glDepthFunc(param);
+            }
+            break;
+            case GL_CULL_FACE:
+            {
+                glCullFace(param);
+            }
+            break;
+            case GL_BLEND:
+            {
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            }
+            break;
+            default:
+                break;
+            }
+        }
+
         shader.programId = glCreateProgram();
 
         std::vector<app::gl_id> shaderIds;
@@ -463,8 +495,6 @@ namespace args::rendering
 
     void shader::bind()
     {
-        glUseProgram(programId);
-
         for (auto& [func, param] : state)
         {
             if (param == GL_FALSE)
@@ -495,6 +525,8 @@ namespace args::rendering
                 break;
             }
         }
+
+        glUseProgram(programId);
     }
 
     void shader::release()

@@ -63,10 +63,10 @@ namespace args::core::scheduling
         async::readonly_guard guard(m_processesLock); // Hooking more processes whilst executing isn't allowed.
         do
         {
-            for (auto process : m_processes)
-                if (!finishedProcesses.contains(process->id()))
+            for (auto [id, process] : m_processes)
+                if (!finishedProcesses.contains(id))
                     if (process->execute(m_scheduler->getTimeScale())) // If the process wasn't finished then execute it and check if it's finished now.
-                        finishedProcesses.insert(process->id());
+                        finishedProcesses.insert(id);
 
         } while (finishedProcesses.size() != m_processes.size());
     }

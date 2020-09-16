@@ -221,7 +221,7 @@ namespace args::core::scheduling
                 });
 
             async::readwrite_guard guard(m_processChainsLock);
-            return &(*m_processChains.emplace(id, name, this).first);
+            return &m_processChains.emplace(id, name, this).first.value();
         }
 
 
