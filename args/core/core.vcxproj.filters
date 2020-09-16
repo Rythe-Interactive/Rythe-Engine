@@ -474,6 +474,9 @@
     <ClInclude Include="data\importers\mesh_importers.hpp" />
     <ClInclude Include="common\unit_conversion.hpp" />
     <ClInclude Include="ecs\component_meta.hpp" />
+    <ClInclude Include="scene management\scene.hpp" />
+    <ClInclude Include="scene management\scenemanager.hpp" />
+    <ClInclude Include="serialization\serializationutil.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">

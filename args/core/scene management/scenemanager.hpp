@@ -1,12 +1,12 @@
 #pragma once
-#include <core/platform/platform.hpp>
+#include <core/scene management/scene.hpp>
 
 namespace args::scenemanagement
 {
     class ARGS_API SceneManager
     {
     public:
-        uint sceneCount;
-        std::unordered_map<>
+        int sceneCount;
+        std::unordered_map<std::string, args::scenemanagement::Scene> sceneList;
     };
 }

@@ -30,14 +30,16 @@ void ARGS_CCONV reportModules(Engine* engine)
     engine->reportModule<rendering::RenderingModule>();
     engine->reportModule<physics::PhysicsModule>();
 
-    MyRecord record;
-    record.x = 10;
-    record.y = 100;
-    record.z = 10000;
-    serialization::SerializationUtil<MyRecord>::serialize(std::ofstream("Scene1.cornflake", std::ios::binary), record);
+    Records records;
 
-    MyRecord output = serialization::SerializationUtil<MyRecord>::deserialize(std::ifstream("Scene1.cornflake"));
-    std::cout << output.x;
+    for (int i = 0; i < 20; i++)
+    {
+        records.records[i] = MyRecord(i * 10, i * 100, i * 1000);
+    }
+    serialization::SerializationUtil<Records>::JSONSerialize(std::ofstream("Scene1.cornflake", std::ios::binary), records);
+
+    Records output = serialization::SerializationUtil<Records>::JSONDeserialize(std::ifstream("Scene1.cornflake"));
+    std::cout << output.records[10].x;
 
     try
     {
