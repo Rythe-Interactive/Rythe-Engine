@@ -19,6 +19,10 @@ namespace args::rendering
         std::atomic_bool initialized = false;
         app::gl_id modelMatrixBufferId;
 
+        uint_max frameCount = 0;
+        uint temp = 0;
+        time::span totalTime;
+
         bool main_window_valid()
         {
             return m_ecs->world.has_component<app::window>();
@@ -266,7 +270,17 @@ namespace args::rendering
             app::ContextHelper::makeContextCurrent(nullptr);
             auto elapsed = renderClock.end();
 
-            log::debug("render took: {:.3f}ms\tdeltaTime: {:.3f}ms fps: {:.3f}", elapsed.milliseconds(), deltaTime.milliseconds(), 1.0 / deltaTime);
+            if (temp < 3)
+            {
+                temp++;
+                log::debug("render took: {:.3f}ms\tdeltaTime: {:.3f}ms fps: {:.3f}", elapsed.milliseconds(), deltaTime.milliseconds(), 1.0 / deltaTime);
+            }
+            else
+            {
+                frameCount++;
+                totalTime += deltaTime;
+                log::debug("render took: {:.3f}ms\tdeltaTime: {:.3f}ms fps: {:.3f} average: {:.3f}", elapsed.milliseconds(), deltaTime.milliseconds(), 1.0 / deltaTime, 1.0 / (totalTime / frameCount));
+            }
         }
     };
 }

@@ -86,6 +86,10 @@ extern void reportModules(args::core::Engine* engine);
 			std::cout << "=======================================" << std::endl;
 		}
 		#endif
+    #else
+        std::cout << "========================================" << std::endl;
+        std::cout << "| Engine will start in low power mode. |" << std::endl;
+        std::cout << "========================================" << std::endl;
 	#endif
 
 		//try
