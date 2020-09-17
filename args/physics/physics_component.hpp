@@ -27,6 +27,11 @@ namespace args::physics
 
 		//physics bitmask
 
+        /** @brief given the colliders this physicsComponent, calculates the new local center of mass.
+        * @note This is called internally by the physicsComponent every time a collider is added.
+        */
+        void calculateNewLocalCenterOfMass();
+
         /** @brief Instantiates a ConvexCollider and calls ConstructConvexHullWithMesh on it and passes the given mesh. This
          * ConvexCollider is then added to the list of PhysicsColliders
         */

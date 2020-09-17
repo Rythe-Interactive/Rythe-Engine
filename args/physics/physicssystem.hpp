@@ -10,7 +10,9 @@
 
 #include <physics/rigidbody.hpp>
 #include <physics/data/physics_manifold_precursor.h>
-
+#include <physics/physics_manifold.hpp>
+#include <physics/physics_contact.h>
+#include <physics/physics_component.hpp>
 
 namespace args::physics
 {
@@ -32,8 +34,8 @@ namespace args::physics
             {
                 bruteForceBroadPhase(manifoldPrecursors, manifoldPrecursorGrouping);
             };
-
-            OptimizeBroadPhase = broadPhaseLambda;
+            
+            m_optimizeBroadPhase = broadPhaseLambda;
             
         }
 
@@ -46,7 +48,7 @@ namespace args::physics
 
     private:
 
-        args::delegate<void(std::vector<physics_manifold_precursor>&, std::vector<std::vector<physics_manifold_precursor>>&)> OptimizeBroadPhase;
+        args::delegate<void(std::vector<physics_manifold_precursor>&, std::vector<std::vector<physics_manifold_precursor>>&)> m_optimizeBroadPhase;
         const float m_timeStep = 0.02f;
 
         /** @brief Performs the entire physics pipeline (
@@ -64,28 +66,103 @@ namespace args::physics
             //log::debug(" manifold precursor {}", manifoldPrecursors.size());
 
             std::vector<std::vector<physics_manifold_precursor>> manifoldPrecursorGrouping;
-            OptimizeBroadPhase(manifoldPrecursors, manifoldPrecursorGrouping);
+            m_optimizeBroadPhase(manifoldPrecursors, manifoldPrecursorGrouping);
             
-            //------------------------------------------------------ Narrophase -----------------------------------------------------//
+            //------------------------------------------------------ Narrowphase -----------------------------------------------------//
+            std::vector<physics_manifold> manifoldsToSolve;
 
+            for (auto& manifoldPrecursors : manifoldPrecursorGrouping)
+            {
+                for (int i = 0; i < manifoldPrecursors.size(); i++)
+                {
+                    for (int j = i+1; j < manifoldPrecursors.size(); j++)
+                    {
+                        physics_manifold_precursor& precursorA = manifoldPrecursors.at(i);
+                        physics_manifold_precursor& precursorB = manifoldPrecursors.at(j);
 
+                        auto phyCompHandleA = precursorA.physicsComponentHandle;
+                        auto phyCompHandleB = precursorA.physicsComponentHandle;
+
+                        physicsComponent precursorPhyCompA = phyCompHandleA.read();
+                        physicsComponent precursorPhyCompB = phyCompHandleB.read();
+
+                        auto precursorRigidbodyA = phyCompHandleA.entity.get_component_handle<rigidbody>();
+                        auto precursorRigidbodyB = phyCompHandleB.entity.get_component_handle<rigidbody>();
+
+                        //only construct a manifold if at least one of these requirement are fulfilled
+                        //1. One of the physicsComponents is a trigger and the other one is not
+                        //2. One of the physicsComponent's entity has a rigidbody and the other one is not a trigger
+                        //3. Both have a rigidbody
+
+                        bool isBetweenTriggerAndNonTrigger =
+                            (precursorPhyCompA.isTrigger && !precursorPhyCompB.isTrigger) || (!precursorPhyCompA.isTrigger && precursorPhyCompB.isTrigger);
+                            
+                        bool isBetweenRigidbodyAndNonTrigger =
+                            (precursorRigidbodyA && !precursorPhyCompB.isTrigger) || (precursorRigidbodyB && !precursorPhyCompA.isTrigger);
+
+                        bool isBetween2Rigidbodies = (precursorRigidbodyA && precursorRigidbodyB);
+
+                        
+                        if (isBetweenTriggerAndNonTrigger || isBetweenRigidbodyAndNonTrigger || isBetween2Rigidbodies)
+                        {
+                            constructManifoldsWithPrecursors(manifoldPrecursors.at(i), manifoldPrecursors.at(j),
+                                manifoldsToSolve,
+                                precursorRigidbodyA || precursorRigidbodyB
+                                , precursorPhyCompA.isTrigger || precursorPhyCompB.isTrigger);
+                        }
+                        
+
+                        //
+
+                    }
+                }
+            }
 
             //-------------------------------------------------- Collision Solver ---------------------------------------------------//
-        }
 
-        /** @brief gets all the entities with a rigidbody component and calls the integrate function on them
-        */
-        void integrateRigidbodies(float deltaTime)
-        {
-            for (auto ent : rigidbodyIntegrationQuery)
+            //the effective mass remains the same for every iteration of the solver. This means that we can precalculate it before
+            //we start the solver
+
+            for (auto& manifold : manifoldsToSolve)
             {
-                auto rbPosHandle = ent.get_component_handle<position>();
-                auto rbRotHandle = ent.get_component_handle<rotation>();
-                auto rbRigidbodyHandle = ent.get_component_handle<rigidbody>();
-
-                integrateRigidbody(rbPosHandle, rbRotHandle, rbRigidbodyHandle, deltaTime);
+                for (auto& contact : manifold.contacts)
+                {
+                    contact.preCalculateEffectiveMass();
+                }
             }
+
+            //for both contact and friction resolution, an iterative algorithm is used.
+            //Everytime physics_contact::resolveContactConstraint is called, the rigidbodies in question get closer to the actual
+            //"correct" linear and angular velocity (Projected Gauss Seidel). For the sake of simplicity, an arbitrary number is set for the
+            //iteration count.
+
+            //resolve contact constraint
+            for (size_t i = 0; i < constants::contactSolverIterationCount; i++)
+            {
+                for (auto& manifold : manifoldsToSolve)
+                {
+                    for (auto& contact : manifold.contacts)
+                    {
+                        contact.resolveContactConstraint();
+                    }
+                }
+            }
+
+            //resolve friction constraint
+            for (size_t i = 0; i < constants::frictionSolverIterationCount; i++)
+            {
+                for (auto& manifold : manifoldsToSolve)
+                {
+                    for (auto& contact : manifold.contacts)
+                    {
+                        contact.resolveFrictionConstraint();
+                    }
+                }
+            }
+
+
         }
+
 
         /**@brief recursively goes through the world to retrieve the physicsComponent of entities that have one 
         * @param [out] manifoldPrecursors A std::vector that will store the created physics_manifold_precursor from the scene graph iteration
@@ -156,6 +233,58 @@ namespace args::physics
             std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping)
         {
             manifoldPrecursorGrouping.push_back(std::move(manifoldPrecursors));
+        }
+
+        /**@brief given 2 physics_manifold_precursors precursorA and precursorB, create a manifold for each collider in precursorA 
+        * with every other collider in precursorB. The manifolds that involve rigidbodies are then pushed into the given manifold list
+        * @param manifoldsToSolve [out] a std::vector of physics_manifold that will store the manifolds created
+        * @param isRigidbodyInvolved A bool that indicates whether a rigidbody is involved in this manifold
+        * * @param isTriggerInvolved A bool that indicates whether a physicsComponent with a physicsComponent::isTrigger set to true is involved in this manifold
+        */
+        void constructManifoldsWithPrecursors(physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB,
+            std::vector<physics_manifold>& manifoldsToSolve,bool isRigidbodyInvolved,bool isTriggerInvolved)
+        {
+            auto physicsComponentA = precursorA.physicsComponentHandle.read();
+            auto physicsComponentB = precursorB.physicsComponentHandle.read();
+
+            for (auto colliderA : *physicsComponentA.colliders)
+            {
+                for (auto colliderB : *physicsComponentB.colliders)
+                {
+
+                    constructManifoldWithCollider();
+
+                    if (isRigidbodyInvolved)
+                    {
+                        //send it to 'manifoldsToSolve'
+                    }
+
+                    if (isTriggerInvolved)
+                    {
+                        //notify both the trigger and triggerer
+                    }
+
+                }
+            }
+        }
+
+        void constructManifoldWithCollider()
+        {
+
+        }
+
+        /** @brief gets all the entities with a rigidbody component and calls the integrate function on them
+        */
+        void integrateRigidbodies(float deltaTime)
+        {
+            for (auto ent : rigidbodyIntegrationQuery)
+            {
+                auto rbPosHandle = ent.get_component_handle<position>();
+                auto rbRotHandle = ent.get_component_handle<rotation>();
+                auto rbRigidbodyHandle = ent.get_component_handle<rigidbody>();
+
+                integrateRigidbody(rbPosHandle, rbRotHandle, rbRigidbodyHandle, deltaTime);
+            }
         }
 
         /** @brief given a set of component handles, updates the position and orientation of an entity with a rigidbody component.
