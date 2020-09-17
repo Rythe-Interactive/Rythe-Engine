@@ -239,7 +239,7 @@ namespace args::physics
         * with every other collider in precursorB. The manifolds that involve rigidbodies are then pushed into the given manifold list
         * @param manifoldsToSolve [out] a std::vector of physics_manifold that will store the manifolds created
         * @param isRigidbodyInvolved A bool that indicates whether a rigidbody is involved in this manifold
-        * * @param isTriggerInvolved A bool that indicates whether a physicsComponent with a physicsComponent::isTrigger set to true is involved in this manifold
+        * @param isTriggerInvolved A bool that indicates whether a physicsComponent with a physicsComponent::isTrigger set to true is involved in this manifold
         */
         void constructManifoldsWithPrecursors(physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB,
             std::vector<physics_manifold>& manifoldsToSolve,bool isRigidbodyInvolved,bool isTriggerInvolved)
