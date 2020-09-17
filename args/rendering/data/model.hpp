@@ -11,6 +11,8 @@
 #define SV_TANGENT SV_START + 2
 #define SV_TEXCOORD0 SV_START + 3
 #define SV_MODELMATRIX SV_START + 4
+#define SV_VIEW SV_START
+#define SV_PROJECT SV_START + 4
 
 namespace args::rendering
 {
@@ -38,9 +40,9 @@ namespace args::rendering
         const model& get_model();
     };
 
-    constexpr model_handle invalid_model_handle { 0 };
+    constexpr model_handle invalid_model_handle { invalid_id };
 
-    struct ARGS_API model_cache
+    class ARGS_API ModelCache
     {
         friend class renderer;
         friend struct model_handle;

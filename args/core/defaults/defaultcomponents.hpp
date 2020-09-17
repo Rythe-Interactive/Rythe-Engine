@@ -21,8 +21,9 @@ namespace args::core
             return *this;
         }
 
-        static void init(position&)
+        static void init(position& pos)
         {
+            pos.data = { 0.f, 0.f, 0.f };
             log::debug("initializing position");
         }
 

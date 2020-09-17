@@ -13,7 +13,7 @@ namespace args::rendering
 
         void set_projection(float fov, float ratio, float nearz, float farz)
         {
-            projection = math::perspective(math::deg2rad(fov * ratio), ratio, nearz, farz);
+            projection = math::perspective(math::deg2rad(fov * ratio), ratio, farz, nearz);
         }
     };
 }

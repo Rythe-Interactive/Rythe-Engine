@@ -39,7 +39,12 @@ namespace args::core
         scheduling::Scheduler m_scheduler;
 
     public:
-        Engine() : m_modules(), m_eventbus(), m_ecs(&m_eventbus), m_scheduler(&m_eventbus)
+        Engine() : m_modules(), m_eventbus(), m_ecs(&m_eventbus),
+#if defined(ARGS_LOW_POWER)
+            m_scheduler(&m_eventbus, true)
+#else
+            m_scheduler(&m_eventbus, false)
+#endif
         {
             reportModule<CoreModule>();
         }
