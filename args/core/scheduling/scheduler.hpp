@@ -20,7 +20,7 @@
 
 namespace args::core::scheduling
 {
-    constexpr std::thread::id invalid_thread_id();
+    const std::thread::id invalid_thread_id = std::thread::id();
 
     /**@class Scheduler
      * @brief Major engine part that handles the creation and destruction of threads and process chains. Also takes charge of the main program loop.
