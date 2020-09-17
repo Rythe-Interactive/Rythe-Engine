@@ -23,221 +23,273 @@
 
 namespace args::core
 {
-	template<typename T>
-	class delegate_base;
+    template<typename T>
+    class delegate_base;
 
-	template<typename return_type, typename ...parameter_types>
-	class delegate_base<return_type(parameter_types...)>
-	{
-	protected:
+    template<typename return_type, typename ...parameter_types>
+    class delegate_base<return_type(parameter_types...)>
+    {
+    protected:
 
-		using stub_type = return_type(*)(void* this_ptr, parameter_types...);
+        using stub_type = return_type(*)(void* this_ptr, parameter_types...);
 
-		struct invocation_element
-		{
-			invocation_element() = default;
-			invocation_element(void* this_ptr, stub_type aStub) : object(this_ptr), stub(aStub) {}
-			invocation_element(const invocation_element&) = default;
-			invocation_element(invocation_element&& source)
-			{
-				object = source.object;
-				stub = source.stub;
-				source.object = nullptr;
-				source.stub = nullptr;
-			}
+        struct invocation_element
+        {
+            invocation_element() = default;
+            invocation_element(void* this_ptr, stub_type aStub, bool aManaged, size_type aObjectSize) : object(this_ptr), stub(aStub), managed(aManaged), objectSize(aObjectSize) {}
+            invocation_element(const invocation_element& source)
+            {
+                if (source.managed)
+                {
+                    object = ::operator new(source.objectSize);
+                    std::memcpy(object, source.object, source.objectSize);
+                }
+                else
+                    object = source.object;
+                stub = source.stub;
+                managed = source.managed;
+                objectSize = source.objectSize;
+            }
+            invocation_element(invocation_element&& source)
+            {
+                object = source.object;
+                stub = source.stub;
+                managed = source.managed;
+                objectSize = source.objectSize;
+                source.object = nullptr;
+                source.stub = nullptr;
+                source.managed = false;
+                source.objectSize = 0;
+            }
 
-			invocation_element& operator=(const invocation_element&) = default;
-			invocation_element& operator=(invocation_element&& source)
-			{
-				object = source.object;
-				stub = source.stub;
-				source.object = nullptr;
-				source.stub = nullptr;
-				return *this;
-			}
+            ~invocation_element()
+            {
+                if (managed)
+                    delete object;
+            }
 
-			void Clone(invocation_element& target) const
-			{
-				target.stub = stub;
-				target.object = object;
-			}
+            invocation_element& operator=(const invocation_element&)
+            {
+                if (source.managed)
+                {
+                    object = ::operator new(source.objectSize);
+                    std::memcpy(object, source.object, source.objectSize);
+                }
+                else
+                    object = source.object;
+                stub = source.stub;
+                managed = source.managed;
+                objectSize = source.objectSize;
+                return *this;
+            }
 
-			bool operator ==(const invocation_element& other) const
-			{
-				return other.stub == stub && other.object == object;
-			}
-			bool operator !=(const invocation_element& other) const
-			{
-				return other.stub != stub || other.object != object;
-			}
+            invocation_element& operator=(invocation_element&& source)
+            {
+                object = source.object;
+                stub = source.stub;
+                managed = source.managed;
+                objectSize = source.objectSize;
+                source.object = nullptr;
+                source.stub = nullptr;
+                source.managed = false;
+                source.objectSize = 0;
+                return *this;
+            }
 
-			void* object = nullptr;
-			stub_type stub = nullptr;
-		};
-	};
+            void Clone(invocation_element& target) const
+            {
+                if (source.managed)
+                {
+                    target.object = ::operator new(objectSize);
+                    std::memcpy(target.object, object, objectSize);
+                }
+                else
+                    target.object = object;
+                target.stub = stub;
+                target.managed = managed;
+                target.objectSize = objectSize;
+            }
+
+            bool operator ==(const invocation_element& other) const
+            {
+                return other.stub == stub && other.managed == managed && other.objectSize == objectSize && std::memcmp(other.object, object, objectSize);
+            }
+            bool operator !=(const invocation_element& other) const
+            {
+                return other.stub != stub || other.object != object;
+            }
+
+            void* object = nullptr;
+            stub_type stub = nullptr;
+            bool managed = false;
+            size_type objectSize = 0;
+        };
+    };
 
 
-	template <typename T> class delegate;
-	template <typename T> class multicast_delegate;
+    template <typename T> class delegate;
+    template <typename T> class multicast_delegate;
 
-	template<typename return_type, typename ...parameter_types>
-	class delegate<return_type(parameter_types...)> final : private delegate_base<return_type(parameter_types...)>
-	{
-	public:
-		delegate() = default;
-		delegate(delegate&&) = default;
-		delegate& operator=(delegate&&) = default;
-		delegate(const delegate& other) = default;
+    template<typename return_type, typename ...parameter_types>
+    class delegate<return_type(parameter_types...)> final : private delegate_base<return_type(parameter_types...)>
+    {
+    public:
+        delegate() = default;
+        delegate(delegate&&) = default;
+        delegate& operator=(delegate&&) = default;
+        delegate(const delegate& other) = default;
 
-		bool isNull() const
-		{
-			return m_invocation.stub == nullptr;
-		}
+        bool isNull() const
+        {
+            return m_invocation.stub == nullptr;
+        }
 
-		bool operator ==(void* ptr) const
-		{
-			return (ptr == nullptr) && isNull();
-		}
-		bool operator !=(void* ptr) const
-		{
-			return (ptr != nullptr) || (!isNull());
-		}
+        bool operator ==(void* ptr) const
+        {
+            return (ptr == nullptr) && isNull();
+        }
+        bool operator !=(void* ptr) const
+        {
+            return (ptr != nullptr) || (!isNull());
+        }
 
         delegate(std::nullptr_t)
-		{
-		}
+        {
+        }
 
         delegate& operator=(std::nullptr_t)
-		{
+        {
             m_invocation.stub = nullptr;
             return *this;
-		}
+        }
 
         void clear()
-		{
-		    m_invocation.stub = nullptr;
-		}
+        {
+            m_invocation.stub = nullptr;
+        }
 
-		template <typename lambda_type>
-		delegate(const lambda_type& lambda)
-		{
-			assign((void*)(&lambda), lambda_stub<lambda_type>);
-		}
+        template <typename lambda_type>
+        delegate(const lambda_type& lambda)
+        {
+            assign((void*)(new lambda_type(lambda)), lambda_stub<lambda_type>);
+        }
 
-		delegate& operator =(const delegate& other)
-		{
-			other.m_invocation.Clone(m_invocation);
-			return *this;
-		}
+        delegate& operator =(const delegate& other)
+        {
+            other.m_invocation.Clone(m_invocation);
+            return *this;
+        }
 
-		template <typename lambda_type>
-		delegate& operator =(const lambda_type& instance)
-		{
-			assign((void*)(&instance), lambda_stub<lambda_type>);
-			return *this;
-		}
+        template <typename lambda_type>
+        delegate& operator =(const lambda_type& instance)
+        {
+            assign((void*)(new lambda_type(lambda)), lambda_stub<lambda_type>);
+            return *this;
+        }
 
-		bool operator == (const delegate& other) const
-		{
-			return m_invocation == other.m_invocation;
-		}
-		bool operator != (const delegate& other) const
-		{
-			return m_invocation != other.m_invocation;
-		}
+        bool operator == (const delegate& other) const
+        {
+            return m_invocation == other.m_invocation;
+        }
+        bool operator != (const delegate& other) const
+        {
+            return m_invocation != other.m_invocation;
+        }
 
-		bool operator ==(const multicast_delegate<return_type(parameter_types...)>& other) const
-		{
-			return other == (*this);
-		}
-		bool operator !=(const multicast_delegate<return_type(parameter_types...)>& other) const
-		{
-			return other != (*this);
-		}
+        bool operator ==(const multicast_delegate<return_type(parameter_types...)>& other) const
+        {
+            return other == (*this);
+        }
+        bool operator !=(const multicast_delegate<return_type(parameter_types...)>& other) const
+        {
+            return other != (*this);
+        }
 
-		template <class owner_type, return_type(owner_type::* func_type)(parameter_types...)>
-		static delegate create(owner_type* instance)
-		{
-			return delegate(instance, method_stub<owner_type, func_type>);
-		}
+        template <class owner_type, return_type(owner_type::* func_type)(parameter_types...)>
+        static delegate create(owner_type* instance)
+        {
+            return delegate(instance, method_stub<owner_type, func_type>);
+        }
 
-		template <class owner_type, return_type(owner_type::* func_type)(parameter_types...) const>
-		static delegate create(owner_type const* instance)
-		{
-			return delegate(const_cast<owner_type*>(instance), const_method_stub<owner_type, func_type>);
-		}
+        template <class owner_type, return_type(owner_type::* func_type)(parameter_types...) const>
+        static delegate create(owner_type const* instance)
+        {
+            return delegate(const_cast<owner_type*>(instance), const_method_stub<owner_type, func_type>);
+        }
 
-		template <return_type(*func_type)(parameter_types...)>
-		static delegate create()
-		{
-			return delegate(nullptr, function_stub<func_type>);
-		}
+        template <return_type(*func_type)(parameter_types...)>
+        static delegate create()
+        {
+            return delegate(nullptr, function_stub<func_type>);
+        }
 
-		template <typename lambda_type>
-		static delegate create(const lambda_type& instance)
-		{
-			return delegate((void*)(&instance), lambda_stub<lambda_type>);
-		}
+        template <typename lambda_type>
+        static delegate create(const lambda_type& instance)
+        {
+            return delegate((void*)(new lambda_type(instance)), lambda_stub<lambda_type>);
+        }
 
-		return_type operator()(parameter_types... arguments) const
-		{
-			return (*m_invocation.stub)(m_invocation.object, arguments...);
-		}
-		return_type invoke(parameter_types... arguments) const
-		{
-			return (*m_invocation.stub)(m_invocation.object, arguments...);
-		}
+        return_type operator()(parameter_types... arguments) const
+        {
+            return (*m_invocation.stub)(m_invocation.object, arguments...);
+        }
+        return_type invoke(parameter_types... arguments) const
+        {
+            return (*m_invocation.stub)(m_invocation.object, arguments...);
+        }
 
-	private:
-		delegate(void* anObject, typename delegate_base<return_type(parameter_types...)>::stub_type aStub)
-		{
-			m_invocation.object = anObject;
-			m_invocation.stub = aStub;
-		}
+    private:
+        delegate(void* anObject, typename delegate_base<return_type(parameter_types...)>::stub_type aStub)
+        {
+            m_invocation.object = anObject;
+            m_invocation.stub = aStub;
+        }
 
-		void assign(void* anObject, typename delegate_base<return_type(parameter_types...)>::stub_type aStub)
-		{
-			m_invocation.object = anObject;
-			m_invocation.stub = aStub;
-		}
+        void assign(void* anObject, typename delegate_base<return_type(parameter_types...)>::stub_type aStub, bool managed, size_type size)
+        {
+            m_invocation.object = anObject;
+            m_invocation.stub = aStub;
+            m_invocation.managed = managed;
+            m_invocation.objectSize = size;
+        }
 
-		template <class owner_type, return_type(owner_type::* func_type)(parameter_types...)>
-		static return_type method_stub(void* this_ptr, parameter_types... arguments)
-		{
-			owner_type* p = static_cast<owner_type*>(this_ptr);
-			return (p->*func_type)(arguments...);
-		}
+        template <class owner_type, return_type(owner_type::* func_type)(parameter_types...)>
+        static return_type method_stub(void* this_ptr, parameter_types... arguments)
+        {
+            owner_type* p = static_cast<owner_type*>(this_ptr);
+            return (p->*func_type)(arguments...);
+        }
 
-		template <class owner_type, return_type(owner_type::* func_type)(parameter_types...) const>
-		static return_type const_method_stub(void* this_ptr, parameter_types... arguments)
-		{
-			owner_type* const p = static_cast<owner_type*>(this_ptr);
-			return (p->*func_type)(arguments...);
-		}
+        template <class owner_type, return_type(owner_type::* func_type)(parameter_types...) const>
+        static return_type const_method_stub(void* this_ptr, parameter_types... arguments)
+        {
+            owner_type* const p = static_cast<owner_type*>(this_ptr);
+            return (p->*func_type)(arguments...);
+        }
 
-		template <return_type(*func_type)(parameter_types...)>
-		static return_type function_stub(void* this_ptr, parameter_types... arguments)
-		{
-			return (func_type)(arguments...);
-		}
+        template <return_type(*func_type)(parameter_types...)>
+        static return_type function_stub(void* this_ptr, parameter_types... arguments)
+        {
+            return (func_type)(arguments...);
+        }
 
-		template <typename lambda_type>
-		static return_type lambda_stub(void* this_ptr, parameter_types... arguments)
-		{
-			lambda_type* p = static_cast<lambda_type*>(this_ptr);
-			return (p->operator())(arguments...);
-		}
+        template <typename lambda_type>
+        static return_type lambda_stub(void* this_ptr, parameter_types... arguments)
+        {
+            lambda_type* p = static_cast<lambda_type*>(this_ptr);
+            return (p->operator())(arguments...);
+        }
 
-		friend class multicast_delegate<return_type(parameter_types...)>;
-		typename delegate_base<return_type(parameter_types...)>::invocation_element m_invocation;
-	};
+        friend class multicast_delegate<return_type(parameter_types...)>;
+        typename delegate_base<return_type(parameter_types...)>::invocation_element m_invocation;
+    };
 
-	template<typename return_type, typename ...parameter_types>
-	class multicast_delegate<return_type(parameter_types...)> final : private delegate_base<return_type(parameter_types...)>
-	{
-	public:
+    template<typename return_type, typename ...parameter_types>
+    class multicast_delegate<return_type(parameter_types...)> final : private delegate_base<return_type(parameter_types...)>
+    {
+    public:
 
-		multicast_delegate() = default;
+        multicast_delegate() = default;
         multicast_delegate(multicast_delegate&&) = default;
         multicast_delegate& operator=(multicast_delegate&&) = default;
         multicast_delegate(const multicast_delegate& other) = default;
@@ -252,142 +304,142 @@ namespace args::core
             return *this;
         }
 
-		~multicast_delegate()
-		{
-			m_invocationList.clear();
-		}
+        ~multicast_delegate()
+        {
+            m_invocationList.clear();
+        }
 
-		bool isNull() const
-		{
-			return m_invocationList.size() < 1;
-		}
+        bool isNull() const
+        {
+            return m_invocationList.size() < 1;
+        }
 
         size_type size() const
         {
             return m_invocationList.size();
         }
 
-		bool operator ==(void* ptr) const
-		{
-			return (ptr == nullptr) && isNull();
-		}
-		bool operator !=(void* ptr) const
-		{
-			return (ptr != nullptr) || (!isNull());
-		}
+        bool operator ==(void* ptr) const
+        {
+            return (ptr == nullptr) && isNull();
+        }
+        bool operator !=(void* ptr) const
+        {
+            return (ptr != nullptr) || (!isNull());
+        }
 
-		bool operator ==(const multicast_delegate& other) const
-		{
-			if (m_invocationList.size() != other.m_invocationList.size())
-				return false;
+        bool operator ==(const multicast_delegate& other) const
+        {
+            if (m_invocationList.size() != other.m_invocationList.size())
+                return false;
 
-			auto anotherIt = other.m_invocationList.begin();
-			for (auto it = m_invocationList.begin(); it != m_invocationList.end(); ++it)
-				if (*it != *anotherIt) return false;
+            auto anotherIt = other.m_invocationList.begin();
+            for (auto it = m_invocationList.begin(); it != m_invocationList.end(); ++it)
+                if (*it != *anotherIt) return false;
 
-			return true;
-		}
+            return true;
+        }
 
-		bool operator !=(const multicast_delegate& other) const
-		{
-			return !(*this == other);
-		}
+        bool operator !=(const multicast_delegate& other) const
+        {
+            return !(*this == other);
+        }
 
-		bool operator ==(const delegate<return_type(parameter_types...)>& other) const
-		{
-			if (isNull() && other.isNull())
-				return true;
-			if (other.isNull() || (size() != 1))
-				return false;
+        bool operator ==(const delegate<return_type(parameter_types...)>& other) const
+        {
+            if (isNull() && other.isNull())
+                return true;
+            if (other.isNull() || (size() != 1))
+                return false;
 
-			return (other.m_invocation == *m_invocationList.begin());
-		}
+            return (other.m_invocation == *m_invocationList.begin());
+        }
 
-		bool operator !=(const delegate<return_type(parameter_types...)>& other) const
-		{
-			return !(*this == other);
-		}
+        bool operator !=(const delegate<return_type(parameter_types...)>& other) const
+        {
+            return !(*this == other);
+        }
 
-		multicast_delegate& operator +=(const multicast_delegate& other)
-		{
-			for (auto& item : other.m_invocationList) // clone, not copy; flattens hierarchy:
-				m_invocationList.emplace_back(item.object, item.stub);
-			return *this;
-		}
+        multicast_delegate& operator +=(const multicast_delegate& other)
+        {
+            for (auto& item : other.m_invocationList) // clone, not copy; flattens hierarchy:
+                m_invocationList.emplace_back(item.object, item.stub);
+            return *this;
+        }
 
-		template <typename lambda_type>
-		multicast_delegate& operator +=(const lambda_type& lambda)
-		{
-			delegate<return_type(parameter_types...)> d = delegate<return_type(parameter_types...)>::template create<lambda_type>(lambda);
-			return *this += d;
-		}
+        template <typename lambda_type>
+        multicast_delegate& operator +=(const lambda_type& lambda)
+        {
+            delegate<return_type(parameter_types...)> d = delegate<return_type(parameter_types...)>::template create<lambda_type>(lambda);
+            return *this += d;
+        }
 
-		multicast_delegate& operator +=(const delegate<return_type(parameter_types...)>& other)
-		{
-			if (other.isNull())
-				return *this;
+        multicast_delegate& operator +=(const delegate<return_type(parameter_types...)>& other)
+        {
+            if (other.isNull())
+                return *this;
 
-			m_invocationList.emplace_back(other.m_invocation.object, other.m_invocation.stub);
-			return *this;
-		}
+            m_invocationList.emplace_back(other.m_invocation.object, other.m_invocation.stub);
+            return *this;
+        }
 
-		void operator()(parameter_types... arguments) const
-		{
-			for (auto& item : m_invocationList)
-				(*(item.stub))(item.object, arguments...);
-		}
+        void operator()(parameter_types... arguments) const
+        {
+            for (auto& item : m_invocationList)
+                (*(item.stub))(item.object, arguments...);
+        }
 
-		void invoke(parameter_types... arguments) const
-		{
-			for (auto& item : m_invocationList)
-				(*(item.stub))(item.object, arguments...);
-		}
+        void invoke(parameter_types... arguments) const
+        {
+            for (auto& item : m_invocationList)
+                (*(item.stub))(item.object, arguments...);
+        }
 
-		template<typename return_handler>
-		void operator()(parameter_types... arguments, return_handler handler) const
-		{
-			size_type index = 0;
-			for (auto& item : m_invocationList)
-			{
-				return_type value = (*(item.stub))(item.object, arguments...);
-				handler(index, &value);
-				++index;
-			}
-		}
+        template<typename return_handler>
+        void operator()(parameter_types... arguments, return_handler handler) const
+        {
+            size_type index = 0;
+            for (auto& item : m_invocationList)
+            {
+                return_type value = (*(item.stub))(item.object, arguments...);
+                handler(index, &value);
+                ++index;
+            }
+        }
 
-		template<typename return_handler>
-		void invoke(parameter_types... arguments, return_handler handler) const
-		{
-			size_type index = 0;
-			for (auto& item : m_invocationList)
-			{
-				return_type value = (*(item.stub))(item.object, arguments...);
-				handler(index, &value);
-				++index;
-			}
-		}
+        template<typename return_handler>
+        void invoke(parameter_types... arguments, return_handler handler) const
+        {
+            size_type index = 0;
+            for (auto& item : m_invocationList)
+            {
+                return_type value = (*(item.stub))(item.object, arguments...);
+                handler(index, &value);
+                ++index;
+            }
+        }
 
-		void operator()(parameter_types... arguments, delegate<void(size_type, return_type*)> handler) const
-		{
-			operator() < decltype(handler) > (arguments..., handler);
-		}
+        void operator()(parameter_types... arguments, delegate<void(size_type, return_type*)> handler) const
+        {
+            operator() < decltype(handler) > (arguments..., handler);
+        }
 
-		void invoke(parameter_types... arguments, delegate<void(size_type, return_type*)> handler) const
-		{
-			operator() < decltype(handler) > (arguments..., handler);
-		}
+        void invoke(parameter_types... arguments, delegate<void(size_type, return_type*)> handler) const
+        {
+            operator() < decltype(handler) > (arguments..., handler);
+        }
 
-		void operator()(parameter_types... arguments, std::function<void(size_type, return_type*)> handler) const
-		{
-			operator() < decltype(handler) > (arguments..., handler);
-		}
+        void operator()(parameter_types... arguments, std::function<void(size_type, return_type*)> handler) const
+        {
+            operator() < decltype(handler) > (arguments..., handler);
+        }
 
-		void invoke(parameter_types... arguments, std::function<void(size_type, return_type*)> handler) const
-		{
-			operator() < decltype(handler) > (arguments..., handler);
-		}
+        void invoke(parameter_types... arguments, std::function<void(size_type, return_type*)> handler) const
+        {
+            operator() < decltype(handler) > (arguments..., handler);
+        }
 
-	private:
-		std::vector<typename delegate_base<return_type(parameter_types...)>::invocation_element> m_invocationList;
-	};
+    private:
+        std::vector<typename delegate_base<return_type(parameter_types...)>::invocation_element> m_invocationList;
+    };
 }

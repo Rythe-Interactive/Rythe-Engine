@@ -214,6 +214,7 @@ public:
 
     void onPlayerLookX(player_look_x* action)
     {
+        log::debug("{}", action->input_delta);
         auto rotH = player.get_component_handle<rotation>();
         rotH.fetch_multiply(math::angleAxis(action->value, math::vec3(0, 1, 0)));
         rotH.read_modify_write(rotation(), [](const rotation& src, rotation&& dummy)

@@ -1,6 +1,6 @@
 #define ARGS_ENTRY
 #define ARGS_KEEP_CONSOLE
-#define ARGS_LOW_POWER
+//#define ARGS_LOW_POWER
 
 #include <chrono>
 #include <thread>
@@ -25,20 +25,20 @@ void ARGS_CCONV reportModules(Engine* engine)
 
     test_filesystem();
 
-	engine->reportModule<TestModule>();
+    engine->reportModule<TestModule>();
     engine->reportModule<app::ApplicationModule>();
     engine->reportModule<rendering::RenderingModule>();
     engine->reportModule<physics::PhysicsModule>();
 
-	try
-	{
-		throw args_component_destroyed_error;
-	}
-	catch (const exception& e)
-	{
-		std::cout << e.what() << std::endl;
-		std::cout << e.file() << std::endl;
-		std::cout << e.line() << std::endl;
-		std::cout << e.func() << std::endl;
-	}    
+    try
+    {
+        throw args_component_destroyed_error;
+    }
+    catch (const exception& e)
+    {
+        std::cout << e.what() << std::endl;
+        std::cout << e.file() << std::endl;
+        std::cout << e.line() << std::endl;
+        std::cout << e.func() << std::endl;
+    }    
 }
