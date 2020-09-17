@@ -1,9 +1,9 @@
 /// @ref gtx_vector_angle
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<typename genType>
-	GLM_FUNC_QUALIFIER genType angle
+	GLM_FUNC_QUALIFIER genType angleOf
 	(
 		genType const& x,
 		genType const& y
@@ -14,7 +14,7 @@ namespace args::core::math::detail::glm
 	}
 
 	template<length_t L, typename T, qualifier Q>
-	GLM_FUNC_QUALIFIER T angle(vec<L, T, Q> const& x, vec<L, T, Q> const& y)
+	GLM_FUNC_QUALIFIER T angleBetween(vec<L, T, Q> const& x, vec<L, T, Q> const& y)
 	{
 		GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559, "'angle' only accept floating-point inputs");
 		return acos(clamp(dot(x, y), T(-1), T(1)));
@@ -27,7 +27,7 @@ namespace args::core::math::detail::glm
 		GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559, "'orientedAngle' only accept floating-point inputs");
 		T const Angle(acos(clamp(dot(x, y), T(-1), T(1))));
 
-		if(all(epsilonEqual(y, glm::rotate(x, Angle), T(0.0001))))
+		if(all(epsilonEqual(y, math::rotate(x, Angle), T(0.0001))))
 			return Angle;
 		else
 			return -Angle;
@@ -41,4 +41,4 @@ namespace args::core::math::detail::glm
 		T const Angle(acos(clamp(dot(x, y), T(-1), T(1))));
 		return mix(Angle, -Angle, dot(ref, cross(x, y)) < T(0));
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

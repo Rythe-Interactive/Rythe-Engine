@@ -1,7 +1,7 @@
 #include "../exponential.hpp"
 #include "../common.hpp"
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace detail
 {
 	template<length_t L, typename T, qualifier Q, bool Aligned>
@@ -236,7 +236,7 @@ namespace detail
 		GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559, "'refract' accepts only floating-point inputs");
 		return detail::compute_refract<L, T, Q, detail::is_aligned<Q>::value>::call(I, N, eta);
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #if GLM_CONFIG_SIMD == GLM_ENABLE
 #	include "func_geometric_simd.inl"

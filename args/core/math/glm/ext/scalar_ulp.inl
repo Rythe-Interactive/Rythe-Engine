@@ -62,7 +62,7 @@ typedef union
 		(d) = iw_u.value;					\
 	} while (0)
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace detail
 {
 	GLM_FUNC_QUALIFIER float nextafterf(float x, float y)
@@ -180,13 +180,13 @@ namespace detail
 		return x;
 	}
 }//namespace detail
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #if(GLM_COMPILER & GLM_COMPILER_VC)
 #	pragma warning(pop)
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<>
 	GLM_FUNC_QUALIFIER float nextFloat(float x)
@@ -281,4 +281,4 @@ namespace args::core::math::detail::glm
 
 		return abs(a.i - b.i);
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

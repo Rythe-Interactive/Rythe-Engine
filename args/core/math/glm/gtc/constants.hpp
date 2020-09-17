@@ -19,7 +19,7 @@
 #	pragma message("GLM: GLM_GTC_constants extension included")
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtc_constants
 	/// @{
@@ -47,7 +47,7 @@ namespace args::core::math::detail::glm
 	/// Return pi / 2.
 	/// @see gtc_constants
 	template<typename genType>
-	GLM_FUNC_DECL GLM_CONSTEXPR genType half_pi();
+	GLM_FUNC_DECL GLM_CONSTEXPR genType GLM_ONLY_HALF_PI();
 
 	/// Return pi / 2 * 3.
 	/// @see gtc_constants
@@ -57,7 +57,7 @@ namespace args::core::math::detail::glm
 	/// Return pi / 4.
 	/// @see gtc_constants
 	template<typename genType>
-	GLM_FUNC_DECL GLM_CONSTEXPR genType quarter_pi();
+	GLM_FUNC_DECL GLM_CONSTEXPR genType GLM_ONLY_QUARTER_PI();
 
 	/// Return 1 / pi.
 	/// @see gtc_constants
@@ -112,7 +112,7 @@ namespace args::core::math::detail::glm
 	/// Return Euler's constant.
 	/// @see gtc_constants
 	template<typename genType>
-	GLM_FUNC_DECL GLM_CONSTEXPR genType euler();
+	GLM_FUNC_DECL GLM_CONSTEXPR genType GLM_ONLY_EULER();
 
 	/// Return sqrt(2).
 	/// @see gtc_constants
@@ -160,6 +160,6 @@ namespace args::core::math::detail::glm
 	GLM_FUNC_DECL GLM_CONSTEXPR genType golden_ratio();
 
 	/// @}
-} //namespace args::core::math::detail::glm
+} //namespace args::core::math
 
 #include "constants.inl"

@@ -1,4 +1,4 @@
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER T dot(qua<T, Q> const& x, qua<T, Q> const& y)
@@ -10,7 +10,7 @@ namespace args::core::math::detail::glm
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER T length(qua<T, Q> const& q)
 	{
-		return glm::sqrt(dot(q, q));
+		return math::sqrt(dot(q, q));
 	}
 
 	template<typename T, qualifier Q>
@@ -32,5 +32,5 @@ namespace args::core::math::detail::glm
 			q1.w * q2.y + q1.y * q2.w + q1.z * q2.x - q1.x * q2.z,
 			q1.w * q2.z + q1.z * q2.w + q1.x * q2.y - q1.y * q2.x);
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 

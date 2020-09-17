@@ -1,6 +1,6 @@
 /// @ref gtx_std_based_type
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 
 }

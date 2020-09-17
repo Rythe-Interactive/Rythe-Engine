@@ -1,6 +1,6 @@
 /// @ref gtx_fast_trigonometry
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace detail
 {
 	template<length_t L, typename T, qualifier Q>
@@ -46,11 +46,11 @@ namespace detail
 	{
 		T const angle(wrapAngle<T>(x));
 
-		if(angle < half_pi<T>())
+		if(angle < GLM_ONLY_HALF_PI<T>())
 			return detail::cos_52s(angle);
 		if(angle < GLM_ONLY_PI<T>())
 			return -detail::cos_52s(GLM_ONLY_PI<T>() - angle);
-		if(angle < (T(3) * half_pi<T>()))
+		if(angle < (T(3) * GLM_ONLY_HALF_PI<T>()))
 			return -detail::cos_52s(angle - GLM_ONLY_PI<T>());
 
 		return detail::cos_52s(two_pi<T>() - angle);
@@ -66,7 +66,7 @@ namespace detail
 	template<typename T>
 	GLM_FUNC_QUALIFIER T fastSin(T x)
 	{
-		return fastCos<T>(half_pi<T>() - x);
+		return fastCos<T>(GLM_ONLY_HALF_PI<T>() - x);
 	}
 
 	template<length_t L, typename T, qualifier Q>
@@ -139,4 +139,4 @@ namespace detail
 	{
 		return detail::functor1<vec, L, T, T, Q>::call(fastAtan, x);
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

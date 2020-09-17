@@ -1,6 +1,6 @@
 /// @ref gtx_rotate_normalized_axis
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER mat<4, 4, T, Q> rotateNormalizedAxis
@@ -55,4 +55,4 @@ namespace args::core::math::detail::glm
 		return q * qua<T, Q>(cos(AngleRad * static_cast<T>(0.5)), Tmp.x * Sin, Tmp.y * Sin, Tmp.z * Sin);
 		//return gtc::quaternion::cross(q, tquat<T, Q>(cos(AngleRad * T(0.5)), Tmp.x * fSin, Tmp.y * fSin, Tmp.z * fSin));
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

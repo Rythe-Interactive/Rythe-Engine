@@ -2,7 +2,7 @@
 
 #include "../detail/qualifier.hpp"
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace detail
 {
 	template<length_t L, typename T, qualifier Q, bool Aligned>
@@ -92,4 +92,4 @@ namespace detail
 		return compMax(abs(v));
 	}
 
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

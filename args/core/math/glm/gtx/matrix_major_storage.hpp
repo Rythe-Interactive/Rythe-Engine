@@ -24,7 +24,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_matrix_major_storage
 	/// @{
@@ -114,6 +114,6 @@ namespace args::core::math::detail::glm
 		mat<4, 4, T, Q> const& m);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "matrix_major_storage.inl"

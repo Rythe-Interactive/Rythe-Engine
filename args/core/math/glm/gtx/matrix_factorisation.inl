@@ -1,6 +1,6 @@
 /// @ref gtx_matrix_factorisation
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template <length_t C, length_t R, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER mat<C, R, T, Q> flipud(mat<C, R, T, Q> const& in)
@@ -81,4 +81,4 @@ namespace args::core::math::detail::glm
 		tq = fliplr(tq);
 		q = transpose(tq);
 	}
-} //namespace args::core::math::detail::glm
+} //namespace args::core::math

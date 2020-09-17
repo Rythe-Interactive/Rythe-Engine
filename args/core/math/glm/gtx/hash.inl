@@ -9,7 +9,7 @@
 ///
 /// <glm/gtx/hash.inl> need to be included to use the features of this extension.
 
-namespace args::core::math::detail::glm {
+namespace args::core::math {
 namespace detail
 {
 	GLM_INLINE void hash_combine(size_t &seed, size_t hash)
@@ -21,164 +21,164 @@ namespace detail
 
 namespace std
 {
-	template<typename T, glm::qualifier Q>
-	GLM_FUNC_QUALIFIER size_t hash<glm::vec<1, T, Q>>::operator()(glm::vec<1, T, Q> const& v) const
+	template<typename T, math::qualifier Q>
+	GLM_FUNC_QUALIFIER size_t hash<math::vec<1, T, Q>>::operator()(math::vec<1, T, Q> const& v) const
 	{
 		hash<T> hasher;
 		return hasher(v.x);
 	}
 
-	template<typename T, glm::qualifier Q>
-	GLM_FUNC_QUALIFIER size_t hash<glm::vec<2, T, Q>>::operator()(glm::vec<2, T, Q> const& v) const
+	template<typename T, math::qualifier Q>
+	GLM_FUNC_QUALIFIER size_t hash<math::vec<2, T, Q>>::operator()(math::vec<2, T, Q> const& v) const
 	{
 		size_t seed = 0;
 		hash<T> hasher;
-		glm::detail::hash_combine(seed, hasher(v.x));
-		glm::detail::hash_combine(seed, hasher(v.y));
+		math::detail::hash_combine(seed, hasher(v.x));
+		math::detail::hash_combine(seed, hasher(v.y));
 		return seed;
 	}
 
-	template<typename T, glm::qualifier Q>
-	GLM_FUNC_QUALIFIER size_t hash<glm::vec<3, T, Q>>::operator()(glm::vec<3, T, Q> const& v) const
+	template<typename T, math::qualifier Q>
+	GLM_FUNC_QUALIFIER size_t hash<math::vec<3, T, Q>>::operator()(math::vec<3, T, Q> const& v) const
 	{
 		size_t seed = 0;
 		hash<T> hasher;
-		glm::detail::hash_combine(seed, hasher(v.x));
-		glm::detail::hash_combine(seed, hasher(v.y));
-		glm::detail::hash_combine(seed, hasher(v.z));
+		math::detail::hash_combine(seed, hasher(v.x));
+		math::detail::hash_combine(seed, hasher(v.y));
+		math::detail::hash_combine(seed, hasher(v.z));
 		return seed;
 	}
 
-	template<typename T, glm::qualifier Q>
-	GLM_FUNC_QUALIFIER size_t hash<glm::vec<4, T, Q>>::operator()(glm::vec<4, T, Q> const& v) const
+	template<typename T, math::qualifier Q>
+	GLM_FUNC_QUALIFIER size_t hash<math::vec<4, T, Q>>::operator()(math::vec<4, T, Q> const& v) const
 	{
 		size_t seed = 0;
 		hash<T> hasher;
-		glm::detail::hash_combine(seed, hasher(v.x));
-		glm::detail::hash_combine(seed, hasher(v.y));
-		glm::detail::hash_combine(seed, hasher(v.z));
-		glm::detail::hash_combine(seed, hasher(v.w));
+		math::detail::hash_combine(seed, hasher(v.x));
+		math::detail::hash_combine(seed, hasher(v.y));
+		math::detail::hash_combine(seed, hasher(v.z));
+		math::detail::hash_combine(seed, hasher(v.w));
 		return seed;
 	}
 
-	template<typename T, glm::qualifier Q>
-	GLM_FUNC_QUALIFIER size_t hash<glm::qua<T, Q>>::operator()(glm::qua<T,Q> const& q) const
+	template<typename T, math::qualifier Q>
+	GLM_FUNC_QUALIFIER size_t hash<math::qua<T, Q>>::operator()(math::qua<T,Q> const& q) const
 	{
 		size_t seed = 0;
 		hash<T> hasher;
-		glm::detail::hash_combine(seed, hasher(q.x));
-		glm::detail::hash_combine(seed, hasher(q.y));
-		glm::detail::hash_combine(seed, hasher(q.z));
-		glm::detail::hash_combine(seed, hasher(q.w));
+		math::detail::hash_combine(seed, hasher(q.x));
+		math::detail::hash_combine(seed, hasher(q.y));
+		math::detail::hash_combine(seed, hasher(q.z));
+		math::detail::hash_combine(seed, hasher(q.w));
 		return seed;
 	}
 
-	template<typename T, glm::qualifier Q>
-	GLM_FUNC_QUALIFIER size_t hash<glm::tdualquat<T, Q>>::operator()(glm::tdualquat<T, Q> const& q) const
+	template<typename T, math::qualifier Q>
+	GLM_FUNC_QUALIFIER size_t hash<math::tdualquat<T, Q>>::operator()(math::tdualquat<T, Q> const& q) const
 	{
 		size_t seed = 0;
-		hash<glm::qua<T, Q>> hasher;
-		glm::detail::hash_combine(seed, hasher(q.real));
-		glm::detail::hash_combine(seed, hasher(q.dual));
+		hash<math::qua<T, Q>> hasher;
+		math::detail::hash_combine(seed, hasher(q.real));
+		math::detail::hash_combine(seed, hasher(q.dual));
 		return seed;
 	}
 
-	template<typename T, glm::qualifier Q>
-	GLM_FUNC_QUALIFIER size_t hash<glm::mat<2, 2, T, Q>>::operator()(glm::mat<2, 2, T, Q> const& m) const
+	template<typename T, math::qualifier Q>
+	GLM_FUNC_QUALIFIER size_t hash<math::mat<2, 2, T, Q>>::operator()(math::mat<2, 2, T, Q> const& m) const
 	{
 		size_t seed = 0;
-		hash<glm::vec<2, T, Q>> hasher;
-		glm::detail::hash_combine(seed, hasher(m[0]));
-		glm::detail::hash_combine(seed, hasher(m[1]));
+		hash<math::vec<2, T, Q>> hasher;
+		math::detail::hash_combine(seed, hasher(m[0]));
+		math::detail::hash_combine(seed, hasher(m[1]));
 		return seed;
 	}
 
-	template<typename T, glm::qualifier Q>
-	GLM_FUNC_QUALIFIER size_t hash<glm::mat<2, 3, T, Q>>::operator()(glm::mat<2, 3, T, Q> const& m) const
+	template<typename T, math::qualifier Q>
+	GLM_FUNC_QUALIFIER size_t hash<math::mat<2, 3, T, Q>>::operator()(math::mat<2, 3, T, Q> const& m) const
 	{
 		size_t seed = 0;
-		hash<glm::vec<3, T, Q>> hasher;
-		glm::detail::hash_combine(seed, hasher(m[0]));
-		glm::detail::hash_combine(seed, hasher(m[1]));
+		hash<math::vec<3, T, Q>> hasher;
+		math::detail::hash_combine(seed, hasher(m[0]));
+		math::detail::hash_combine(seed, hasher(m[1]));
 		return seed;
 	}
 
-	template<typename T, glm::qualifier Q>
-	GLM_FUNC_QUALIFIER size_t hash<glm::mat<2, 4, T, Q>>::operator()(glm::mat<2, 4, T, Q> const& m) const
+	template<typename T, math::qualifier Q>
+	GLM_FUNC_QUALIFIER size_t hash<math::mat<2, 4, T, Q>>::operator()(math::mat<2, 4, T, Q> const& m) const
 	{
 		size_t seed = 0;
-		hash<glm::vec<4, T, Q>> hasher;
-		glm::detail::hash_combine(seed, hasher(m[0]));
-		glm::detail::hash_combine(seed, hasher(m[1]));
+		hash<math::vec<4, T, Q>> hasher;
+		math::detail::hash_combine(seed, hasher(m[0]));
+		math::detail::hash_combine(seed, hasher(m[1]));
 		return seed;
 	}
 
-	template<typename T, glm::qualifier Q>
-	GLM_FUNC_QUALIFIER size_t hash<glm::mat<3, 2, T, Q>>::operator()(glm::mat<3, 2, T, Q> const& m) const
+	template<typename T, math::qualifier Q>
+	GLM_FUNC_QUALIFIER size_t hash<math::mat<3, 2, T, Q>>::operator()(math::mat<3, 2, T, Q> const& m) const
 	{
 		size_t seed = 0;
-		hash<glm::vec<2, T, Q>> hasher;
-		glm::detail::hash_combine(seed, hasher(m[0]));
-		glm::detail::hash_combine(seed, hasher(m[1]));
-		glm::detail::hash_combine(seed, hasher(m[2]));
+		hash<math::vec<2, T, Q>> hasher;
+		math::detail::hash_combine(seed, hasher(m[0]));
+		math::detail::hash_combine(seed, hasher(m[1]));
+		math::detail::hash_combine(seed, hasher(m[2]));
 		return seed;
 	}
 
-	template<typename T, glm::qualifier Q>
-	GLM_FUNC_QUALIFIER size_t hash<glm::mat<3, 3, T, Q>>::operator()(glm::mat<3, 3, T, Q> const& m) const
+	template<typename T, math::qualifier Q>
+	GLM_FUNC_QUALIFIER size_t hash<math::mat<3, 3, T, Q>>::operator()(math::mat<3, 3, T, Q> const& m) const
 	{
 		size_t seed = 0;
-		hash<glm::vec<3, T, Q>> hasher;
-		glm::detail::hash_combine(seed, hasher(m[0]));
-		glm::detail::hash_combine(seed, hasher(m[1]));
-		glm::detail::hash_combine(seed, hasher(m[2]));
+		hash<math::vec<3, T, Q>> hasher;
+		math::detail::hash_combine(seed, hasher(m[0]));
+		math::detail::hash_combine(seed, hasher(m[1]));
+		math::detail::hash_combine(seed, hasher(m[2]));
 		return seed;
 	}
 
-	template<typename T, glm::qualifier Q>
-	GLM_FUNC_QUALIFIER size_t hash<glm::mat<3, 4, T, Q>>::operator()(glm::mat<3, 4, T, Q> const& m) const
+	template<typename T, math::qualifier Q>
+	GLM_FUNC_QUALIFIER size_t hash<math::mat<3, 4, T, Q>>::operator()(math::mat<3, 4, T, Q> const& m) const
 	{
 		size_t seed = 0;
-		hash<glm::vec<4, T, Q>> hasher;
-		glm::detail::hash_combine(seed, hasher(m[0]));
-		glm::detail::hash_combine(seed, hasher(m[1]));
-		glm::detail::hash_combine(seed, hasher(m[2]));
+		hash<math::vec<4, T, Q>> hasher;
+		math::detail::hash_combine(seed, hasher(m[0]));
+		math::detail::hash_combine(seed, hasher(m[1]));
+		math::detail::hash_combine(seed, hasher(m[2]));
 		return seed;
 	}
 
-	template<typename T, glm::qualifier Q>
-	GLM_FUNC_QUALIFIER size_t hash<glm::mat<4, 2, T,Q>>::operator()(glm::mat<4, 2, T,Q> const& m) const
+	template<typename T, math::qualifier Q>
+	GLM_FUNC_QUALIFIER size_t hash<math::mat<4, 2, T,Q>>::operator()(math::mat<4, 2, T,Q> const& m) const
 	{
 		size_t seed = 0;
-		hash<glm::vec<2, T, Q>> hasher;
-		glm::detail::hash_combine(seed, hasher(m[0]));
-		glm::detail::hash_combine(seed, hasher(m[1]));
-		glm::detail::hash_combine(seed, hasher(m[2]));
-		glm::detail::hash_combine(seed, hasher(m[3]));
+		hash<math::vec<2, T, Q>> hasher;
+		math::detail::hash_combine(seed, hasher(m[0]));
+		math::detail::hash_combine(seed, hasher(m[1]));
+		math::detail::hash_combine(seed, hasher(m[2]));
+		math::detail::hash_combine(seed, hasher(m[3]));
 		return seed;
 	}
 
-	template<typename T, glm::qualifier Q>
-	GLM_FUNC_QUALIFIER size_t hash<glm::mat<4, 3, T,Q>>::operator()(glm::mat<4, 3, T,Q> const& m) const
+	template<typename T, math::qualifier Q>
+	GLM_FUNC_QUALIFIER size_t hash<math::mat<4, 3, T,Q>>::operator()(math::mat<4, 3, T,Q> const& m) const
 	{
 		size_t seed = 0;
-		hash<glm::vec<3, T, Q>> hasher;
-		glm::detail::hash_combine(seed, hasher(m[0]));
-		glm::detail::hash_combine(seed, hasher(m[1]));
-		glm::detail::hash_combine(seed, hasher(m[2]));
-		glm::detail::hash_combine(seed, hasher(m[3]));
+		hash<math::vec<3, T, Q>> hasher;
+		math::detail::hash_combine(seed, hasher(m[0]));
+		math::detail::hash_combine(seed, hasher(m[1]));
+		math::detail::hash_combine(seed, hasher(m[2]));
+		math::detail::hash_combine(seed, hasher(m[3]));
 		return seed;
 	}
 
-	template<typename T, glm::qualifier Q>
-	GLM_FUNC_QUALIFIER size_t hash<glm::mat<4, 4, T,Q>>::operator()(glm::mat<4, 4, T, Q> const& m) const
+	template<typename T, math::qualifier Q>
+	GLM_FUNC_QUALIFIER size_t hash<math::mat<4, 4, T,Q>>::operator()(math::mat<4, 4, T, Q> const& m) const
 	{
 		size_t seed = 0;
-		hash<glm::vec<4, T, Q>> hasher;
-		glm::detail::hash_combine(seed, hasher(m[0]));
-		glm::detail::hash_combine(seed, hasher(m[1]));
-		glm::detail::hash_combine(seed, hasher(m[2]));
-		glm::detail::hash_combine(seed, hasher(m[3]));
+		hash<math::vec<4, T, Q>> hasher;
+		math::detail::hash_combine(seed, hasher(m[0]));
+		math::detail::hash_combine(seed, hasher(m[1]));
+		math::detail::hash_combine(seed, hasher(m[2]));
+		math::detail::hash_combine(seed, hasher(m[3]));
 		return seed;
 	}
 }

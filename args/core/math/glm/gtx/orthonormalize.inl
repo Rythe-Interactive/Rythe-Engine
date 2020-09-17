@@ -1,6 +1,6 @@
 /// @ref gtx_orthonormalize
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER mat<3, 3, T, Q> orthonormalize(mat<3, 3, T, Q> const& m)
@@ -26,4 +26,4 @@ namespace args::core::math::detail::glm
 	{
 		return normalize(x - y * dot(y, x));
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

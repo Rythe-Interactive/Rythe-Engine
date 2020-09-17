@@ -25,7 +25,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_texture
 	/// @{
@@ -40,7 +40,7 @@ namespace args::core::math::detail::glm
 	T levels(vec<L, T, Q> const& Extent);
 
 	/// @}
-}// namespace args::core::math::detail::glm
+}// namespace args::core::math
 
 #include "texture.inl"
 

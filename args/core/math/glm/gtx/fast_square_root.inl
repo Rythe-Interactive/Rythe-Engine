@@ -1,6 +1,6 @@
 /// @ref gtx_fast_square_root
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	// fastSqrt
 	template<typename genType>
@@ -72,4 +72,4 @@ namespace args::core::math::detail::glm
 	{
 		return x * fastInverseSqrt(dot(x, x));
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
