@@ -31,15 +31,20 @@ void ARGS_CCONV reportModules(Engine* engine)
     engine->reportModule<physics::PhysicsModule>();
 
     Records records;
+    args::scenemanagement::SceneManager sceneManager;
+
 
     for (int i = 0; i < 20; i++)
     {
         records.records[i] = MyRecord(i * 10, i * 100, i * 1000);
     }
-    serialization::SerializationUtil<Records>::JSONSerialize(std::ofstream("Scene1.cornflake", std::ios::binary), records);
 
-    Records output = serialization::SerializationUtil<Records>::JSONDeserialize(std::ifstream("Scene1.cornflake"));
-    std::cout << output.records[10].x;
+    
+
+    serialization::SerializationUtil<std::unique_ptr<args::scenemanagement::Scene>>::JSONSerialize(std::ofstream("Scene1.cornflake", std::ios::binary),  sceneManager.createScene());
+
+   /* Records output = serialization::SerializationUtil<Records>::JSONDeserialize(std::ifstream("Scene1.cornflake"));
+    std::cout << output.records[10].x;*/
 
     try
     {

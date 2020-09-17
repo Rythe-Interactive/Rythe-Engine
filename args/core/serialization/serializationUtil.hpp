@@ -1,3 +1,4 @@
+#pragma once
 #include <core/platform/platform.hpp>
 
 #include <cereal/types/unordered_map.hpp>
