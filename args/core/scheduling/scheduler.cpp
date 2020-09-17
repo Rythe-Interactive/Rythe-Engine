@@ -33,11 +33,10 @@ namespace args::core::scheduling
             Scheduler::runnable instruction{};
 
             {
-                async::readonly_guard guard(m_commandLocks[id]);
+                async::readwrite_guard guard(m_commandLocks[id]);
                 if (!m_commands[id].empty())
                 {
                     instruction = m_commands[id].front();
-                    async::readwrite_guard rwguard(m_commandLocks[id]);
                     m_commands[id].pop();
                 }
             }
@@ -46,12 +45,11 @@ namespace args::core::scheduling
             instruction = {};
 
             {
-                async::readonly_guard guard(m_jobQueueLock);
+                async::readwrite_guard guard(m_jobQueueLock);
                 if (!m_jobs.empty())
                 {
                     log::debug("Starting work on a job.");
                     instruction = m_jobs.front();
-                    async::readwrite_guard rwguard(m_jobQueueLock);
                     m_jobs.pop();
                 }
             }
@@ -70,7 +68,7 @@ namespace args::core::scheduling
         async::readonly_rw_spinlock::reportThread(std::this_thread::get_id());
 
         std::thread::id id;
-        while ((id = createThread(threadMain, &m_threadsShouldTerminate, &m_threadsShouldStart, low_power)) != std::thread::id())
+        while ((id = createThread(threadMain, &m_threadsShouldTerminate, &m_threadsShouldStart, low_power)) != invalid_thread_id)
         {
             async::readonly_rw_spinlock::reportThread(id);
             m_commands[id];
@@ -90,8 +88,7 @@ namespace args::core::scheduling
         m_threadsShouldTerminate = true;
 
         for (auto [_, thread] : m_threads)
-            if (thread->joinable())
-                thread->join();
+            thread->join();
     }
 
     void Scheduler::run()
