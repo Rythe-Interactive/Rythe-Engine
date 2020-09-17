@@ -4,6 +4,9 @@
 
 namespace args::physics
 {
+    void physicsComponent::calculateNewLocalCenterOfMass()
+    {
+    }
     void physicsComponent::ConstructConvexHull()
     {
 
