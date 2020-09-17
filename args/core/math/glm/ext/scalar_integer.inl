@@ -1,6 +1,6 @@
 #include "../integer.hpp"
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace detail
 {
 	template<length_t L, typename T, qualifier Q, bool compute = false>
@@ -161,7 +161,7 @@ namespace detail
 	{
 		GLM_STATIC_ASSERT(std::numeric_limits<genIUType>::is_integer, "'isPowerOfTwo' only accept integer inputs");
 
-		genIUType const Result = glm::abs(Value);
+		genIUType const Result = math::abs(Value);
 		return !(Result & (Result - 1));
 	}
 
@@ -240,4 +240,4 @@ namespace detail
 
 		return static_cast<int>(bitPos);
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

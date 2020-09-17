@@ -1,6 +1,6 @@
 #if GLM_ARCH & GLM_ARCH_SSE2_BIT
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace detail
 {
 #	if GLM_CONFIG_SWIZZLE == GLM_SWIZZLE_OPERATOR
@@ -458,12 +458,12 @@ namespace detail
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<4, float, aligned_highp>::vec(int _x, int _y, int _z, int _w) :
 		data(_mm_cvtepi32_ps(_mm_set_epi32(_w, _z, _y, _x)))
 	{}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #endif//GLM_ARCH & GLM_ARCH_SSE2_BIT
 
 #if GLM_ARCH & GLM_ARCH_NEON_BIT
-namespace args::core::math::detail::glm {
+namespace args::core::math {
 namespace detail {
 
 	template<qualifier Q>
@@ -770,6 +770,6 @@ namespace detail {
 	{}
 
 #endif
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #endif

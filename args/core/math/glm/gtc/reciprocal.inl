@@ -3,14 +3,14 @@
 #include "../trigonometric.hpp"
 #include <limits>
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	// sec
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType sec(genType angle)
 	{
 		GLM_STATIC_ASSERT(std::numeric_limits<genType>::is_iec559, "'sec' only accept floating-point values");
-		return genType(1) / glm::cos(angle);
+		return genType(1) / math::cos(angle);
 	}
 
 	template<length_t L, typename T, qualifier Q>
@@ -25,7 +25,7 @@ namespace args::core::math::detail::glm
 	GLM_FUNC_QUALIFIER genType csc(genType angle)
 	{
 		GLM_STATIC_ASSERT(std::numeric_limits<genType>::is_iec559, "'csc' only accept floating-point values");
-		return genType(1) / glm::sin(angle);
+		return genType(1) / math::sin(angle);
 	}
 
 	template<length_t L, typename T, qualifier Q>
@@ -42,7 +42,7 @@ namespace args::core::math::detail::glm
 		GLM_STATIC_ASSERT(std::numeric_limits<genType>::is_iec559, "'cot' only accept floating-point values");
 
 		genType const pi_over_2 = genType(3.1415926535897932384626433832795 / 2.0);
-		return glm::tan(pi_over_2 - angle);
+		return math::tan(pi_over_2 - angle);
 	}
 
 	template<length_t L, typename T, qualifier Q>
@@ -104,7 +104,7 @@ namespace args::core::math::detail::glm
 	GLM_FUNC_QUALIFIER genType sech(genType angle)
 	{
 		GLM_STATIC_ASSERT(std::numeric_limits<genType>::is_iec559, "'sech' only accept floating-point values");
-		return genType(1) / glm::cosh(angle);
+		return genType(1) / math::cosh(angle);
 	}
 
 	template<length_t L, typename T, qualifier Q>
@@ -119,7 +119,7 @@ namespace args::core::math::detail::glm
 	GLM_FUNC_QUALIFIER genType csch(genType angle)
 	{
 		GLM_STATIC_ASSERT(std::numeric_limits<genType>::is_iec559, "'csch' only accept floating-point values");
-		return genType(1) / glm::sinh(angle);
+		return genType(1) / math::sinh(angle);
 	}
 
 	template<length_t L, typename T, qualifier Q>
@@ -134,7 +134,7 @@ namespace args::core::math::detail::glm
 	GLM_FUNC_QUALIFIER genType coth(genType angle)
 	{
 		GLM_STATIC_ASSERT(std::numeric_limits<genType>::is_iec559, "'coth' only accept floating-point values");
-		return glm::cosh(angle) / glm::sinh(angle);
+		return math::cosh(angle) / math::sinh(angle);
 	}
 
 	template<length_t L, typename T, qualifier Q>
@@ -188,4 +188,4 @@ namespace args::core::math::detail::glm
 		GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559, "'acoth' only accept floating-point inputs");
 		return detail::functor1<vec, L, T, T, Q>::call(acoth, x);
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

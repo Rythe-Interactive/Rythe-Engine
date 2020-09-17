@@ -1,12 +1,12 @@
 #include "scalar_constants.hpp"
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER qua<T, Q> exp(qua<T, Q> const& q)
 	{
 		vec<3, T, Q> u(q.x, q.y, q.z);
-		T const Angle = glm::length(u);
+		T const Angle = math::length(u);
 		if (Angle < epsilon<T>())
 			return qua<T, Q>();
 
@@ -56,7 +56,7 @@ namespace args::core::math::detail::glm
 
 			//Prevent a division by 0 error later on
 			T VectorMagnitude = x.x * x.x + x.y * x.y + x.z * x.z;
-			if (glm::abs(VectorMagnitude - static_cast<T>(0)) < glm::epsilon<T>()) {
+			if (math::abs(VectorMagnitude - static_cast<T>(0)) < math::epsilon<T>()) {
 				//Equivalent to raising a real number to a power
 				return qua<T, Q>(pow(x.w, y), 0, 0, 0);
 			}
@@ -80,6 +80,6 @@ namespace args::core::math::detail::glm
 	{
 		return pow(x, static_cast<T>(0.5));
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 

@@ -8,75 +8,80 @@
 
 namespace args::core::scheduling
 {
-	void ProcessChain::threadedRun(ProcessChain* chain)
-	{
-        log::impl::thread_names[std::this_thread::get_id()] = chain->m_name;
-        log::info("created.");
+    void ProcessChain::threadedRun(ProcessChain* chain)
+    {
+        log::info("Chain started.");
+        try
+        {
+            while (!chain->m_exit->load(std::memory_order_acquire)) // Check for exit flag.
+            {
+                chain->runInCurrentThread(); // Execute all processes.
 
-		try
-		{
-			while (!chain->m_exit->load(std::memory_order_acquire)) // Check for exit flag.
-			{
-				chain->runInCurrentThread(); // Execute all processes.
+                if (chain->m_scheduler->syncRequested()) // Sync if requested.
+                    chain->m_scheduler->waitForProcessSync();
 
-				if (chain->m_scheduler->syncRequested()) // Sync if requested.
-					chain->m_scheduler->waitForProcessSync();
-			}
+                if (chain->m_low_power)
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            }
 
-			chain->m_scheduler->reportExit(chain->m_threadId); // Mark Exit.
-		}
-		catch (const args::core::exception& e)
-		{
-			chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e); // Mark error.
-		}
-		catch (const std::exception& e)
-		{
-			chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e); // Mark error.
-		}
-	}
+            chain->m_scheduler->reportExit(chain->m_threadId); // Mark Exit.
+        }
+        catch (const args::core::exception& e)
+        {
+            chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e); // Mark error.
+        }
+        catch (const std::exception& e)
+        {
+            chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e); // Mark error.
+        }
+    }
 
-	inline bool ProcessChain::run()
-	{
-		m_exit->store(false, std::memory_order_release);
-		std::thread::id threadId = m_scheduler->createThread(threadedRun, this); // Create thread and run.
-		if (threadId != std::thread::id())
-		{
-			m_threadId = threadId;
-			return true;
-		}
-		return false;
-	}
+    inline bool ProcessChain::run(bool low_power)
+    {
+        m_low_power = low_power;
+        m_exit->store(false, std::memory_order_release);
+        std::thread::id threadId = m_scheduler->getChainThreadId(m_nameHash);
+        if (threadId != std::thread::id())
+        {
+            m_threadId = threadId;
 
-	inline void ProcessChain::exit()
-	{
-		m_exit->store(true, std::memory_order_release);
-	}
+            m_scheduler->sendCommand(threadId, [](void* param) { ProcessChain::threadedRun(reinterpret_cast<ProcessChain*>(param)); }, this);
 
-	inline void ProcessChain::runInCurrentThread()
-	{
-		hashed_sparse_set<id_type> finishedProcesses;
-		async::readonly_guard guard(m_processesLock); // Hooking more processes whilst executing isn't allowed.
-		do
-		{
-			for (auto process : m_processes)
-				if (!finishedProcesses.contains(process->id()))
-					if (process->execute(m_scheduler->getTimeScale())) // If the process wasn't finished then execute it and check if it's finished now.
-						finishedProcesses.insert(process->id());
+            return true;
+        }
+        return false;
+    }
 
-		} while (finishedProcesses.size() != m_processes.size());
-	}
+    inline void ProcessChain::exit()
+    {
+        m_exit->store(true, std::memory_order_release);
+    }
 
-	inline void ProcessChain::addProcess(Process* process)
-	{
-		async::readwrite_guard guard(m_processesLock);
-		if (m_processes.insert(process->id(), process).second)
-			process->m_hooks.insert(m_nameHash);
-	}
+    inline void ProcessChain::runInCurrentThread()
+    {
+        hashed_sparse_set<id_type> finishedProcesses;
+        async::readonly_guard guard(m_processesLock); // Hooking more processes whilst executing isn't allowed.
+        do
+        {
+            for (auto [id, process] : m_processes)
+                if (!finishedProcesses.contains(id))
+                    if (process->execute(m_scheduler->getTimeScale())) // If the process wasn't finished then execute it and check if it's finished now.
+                        finishedProcesses.insert(id);
 
-	inline void ProcessChain::removeProcess(Process* process)
-	{
-		async::readwrite_guard guard(m_processesLock);
-		if (m_processes.erase(process->id()))
-			process->m_hooks.erase(m_nameHash);
-	}
+        } while (finishedProcesses.size() != m_processes.size());
+    }
+
+    inline void ProcessChain::addProcess(Process* process)
+    {
+        async::readwrite_guard guard(m_processesLock);
+        if (m_processes.insert(process->id(), process).second)
+            process->m_hooks.insert(m_nameHash);
+    }
+
+    inline void ProcessChain::removeProcess(Process* process)
+    {
+        async::readwrite_guard guard(m_processesLock);
+        if (m_processes.erase(process->id()))
+            process->m_hooks.erase(m_nameHash);
+    }
 }

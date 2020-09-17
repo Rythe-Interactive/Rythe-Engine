@@ -1,16 +1,16 @@
 /// @ref gtx_normalize_dot
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER T normalizeDot(vec<L, T, Q> const& x, vec<L, T, Q> const& y)
 	{
-		return glm::dot(x, y) * glm::inversesqrt(glm::dot(x, x) * glm::dot(y, y));
+		return math::dot(x, y) * math::inversesqrt(math::dot(x, x) * math::dot(y, y));
 	}
 
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER T fastNormalizeDot(vec<L, T, Q> const& x, vec<L, T, Q> const& y)
 	{
-		return glm::dot(x, y) * glm::fastInverseSqrt(glm::dot(x, x) * glm::dot(y, y));
+		return math::dot(x, y) * math::fastInverseSqrt(math::dot(x, x) * math::dot(y, y));
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

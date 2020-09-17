@@ -10,7 +10,7 @@
 #include "_vectorize.hpp"
 #include <limits>
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	// min
 	template<typename genType>
@@ -63,9 +63,9 @@ namespace args::core::math::detail::glm
 		}
 #	endif
 
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace detail
 {
 	template<length_t L, typename T, qualifier Q, bool Aligned>
@@ -145,7 +145,7 @@ namespace detail
 	{
 		GLM_FUNC_QUALIFIER static vec<L, T, Q> call(vec<L, T, Q> const& x)
 		{
-			return vec<L, T, Q>(glm::lessThan(vec<L, T, Q>(0), x)) - vec<L, T, Q>(glm::lessThan(x, vec<L, T, Q>(0)));
+			return vec<L, T, Q>(math::lessThan(vec<L, T, Q>(0), x)) - vec<L, T, Q>(math::lessThan(x, vec<L, T, Q>(0)));
 		}
 	};
 
@@ -250,7 +250,7 @@ namespace detail
 	{
 		GLM_FUNC_QUALIFIER static vec<L, T, Q> call(vec<L, T, Q> const& edge, vec<L, T, Q> const& x)
 		{
-			return mix(vec<L, T, Q>(1), vec<L, T, Q>(0), glm::lessThan(x, edge));
+			return mix(vec<L, T, Q>(1), vec<L, T, Q>(0), math::lessThan(x, edge));
 		}
 	};
 
@@ -616,7 +616,7 @@ namespace detail
 
 		vec<L, bool, Q> Result;
 		for (length_t l = 0; l < v.length(); ++l)
-			Result[l] = glm::isnan(v[l]);
+			Result[l] = math::isnan(v[l]);
 		return Result;
 	}
 
@@ -658,7 +658,7 @@ namespace detail
 
 		vec<L, bool, Q> Result;
 		for (length_t l = 0; l < v.length(); ++l)
-			Result[l] = glm::isinf(v[l]);
+			Result[l] = math::isinf(v[l]);
 		return Result;
 	}
 
@@ -785,7 +785,7 @@ namespace detail
 			Result[l] = std::ldexp(v[l], exp[l]);
 		return Result;
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #if GLM_CONFIG_SIMD == GLM_ENABLE
 #	include "func_common_simd.inl"

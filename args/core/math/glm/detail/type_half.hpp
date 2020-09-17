@@ -2,7 +2,7 @@
 
 #include "setup.hpp"
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace detail
 {
 	typedef short hdata;
@@ -11,6 +11,6 @@ namespace detail
 	GLM_FUNC_DECL hdata toFloat16(float const& value);
 
 }//namespace detail
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "type_half.inl"

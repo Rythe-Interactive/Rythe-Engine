@@ -22,7 +22,7 @@
 #	pragma message("GLM: GLM_GTC_random extension included")
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtc_random
 	/// @{
@@ -77,6 +77,6 @@ namespace args::core::math::detail::glm
 	GLM_FUNC_DECL vec<3, T, defaultp> ballRand(T Radius);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "random.inl"

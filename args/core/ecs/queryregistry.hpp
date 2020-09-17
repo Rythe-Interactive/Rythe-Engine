@@ -49,7 +49,7 @@ namespace args::core::ecs
 
         ~QueryRegistry()
         {
-            for (auto* entityList : m_entityLists)
+            for (auto [_, entityList] : m_entityLists)
                 delete entityList;
 
             m_validRegistries.erase(this);

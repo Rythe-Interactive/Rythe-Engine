@@ -24,6 +24,8 @@ namespace args::core::time
 		template<typename other_time>
         constexpr time_span(other_time other) noexcept : duration(other) {}
 
+        explicit time_span(time_type duration) noexcept : duration(duration) {}
+
 		template<typename T>
 		T hours() { return std::chrono::duration_cast<std::chrono::duration<T, std::ratio<3600>>>(duration).count(); }
 		template<typename T>

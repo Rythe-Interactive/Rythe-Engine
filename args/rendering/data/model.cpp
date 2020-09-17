@@ -6,38 +6,38 @@
 
 namespace args::rendering
 {
-    sparse_map<id_type, model> model_cache::m_models;
-    async::readonly_rw_spinlock model_cache::m_modelLock;
+    sparse_map<id_type, model> ModelCache::m_models;
+    async::readonly_rw_spinlock ModelCache::m_modelLock;
 
     bool model_handle::is_buffered()
     {
-        return model_cache::get_model(id).buffered;
+        return ModelCache::get_model(id).buffered;
     }
 
     void model_handle::buffer_data(app::gl_id matrixBuffer)
     {
-        model_cache::buffer(id, matrixBuffer);
+        ModelCache::buffer(id, matrixBuffer);
     }
 
     inline mesh_handle model_handle::get_mesh()
     {
-        return model_cache::get_mesh(id);
+        return ModelCache::get_mesh(id);
     }
 
     inline const model& model_handle::get_model()
     {
-        return model_cache::get_model(id);
+        return ModelCache::get_model(id);
     }
 
-    inline const model& model_cache::get_model(id_type id)
+    inline const model& ModelCache::get_model(id_type id)
     {
         async::readonly_guard guard(m_modelLock);
         return m_models[id];
     }
 
-    void model_cache::buffer(id_type id, app::gl_id matrixBuffer)
+    void ModelCache::buffer(id_type id, app::gl_id matrixBuffer)
     {
-        auto [lock, data] = mesh_cache::get_handle(id).get();
+        auto [lock, data] = MeshCache::get_handle(id).get();
 
         async::readonly_multiguard guard(m_modelLock, lock);
         model& mesh = m_models[id];
@@ -96,7 +96,7 @@ namespace args::rendering
         mesh.buffered = true;
     }
 
-    model_handle model_cache::create_model(const std::string& name, const fs::view& file, mesh_import_settings settings)
+    model_handle ModelCache::create_model(const std::string& name, const fs::view& file, mesh_import_settings settings)
     {
         id_type id = nameHash(name);
 
@@ -112,7 +112,7 @@ namespace args::rendering
         model mesh{};
 
         {
-            auto [lock, data] = mesh_cache::create_mesh(name, file, settings).get();
+            auto [lock, data] = MeshCache::create_mesh(name, file, settings).get();
             async::readonly_guard guard(lock);
             for (auto& submeshData : data.submeshes)
                 mesh.submeshes.push_back(submeshData);
@@ -128,7 +128,7 @@ namespace args::rendering
         return { id };
     }
 
-    inline model_handle model_cache::get_handle(const std::string& name)
+    inline model_handle ModelCache::get_handle(const std::string& name)
     {
         id_type id = nameHash(name);
         async::readonly_guard guard(m_modelLock);
@@ -137,7 +137,7 @@ namespace args::rendering
         return invalid_model_handle;
     }
 
-    inline model_handle model_cache::get_handle(id_type id)
+    inline model_handle ModelCache::get_handle(id_type id)
     {
         async::readonly_guard guard(m_modelLock);
         if (m_models.contains(id))
@@ -145,14 +145,14 @@ namespace args::rendering
         return invalid_model_handle;
     }
 
-    inline mesh_handle model_cache::get_mesh(id_type id)
+    inline mesh_handle ModelCache::get_mesh(id_type id)
     {
-        return mesh_cache::get_handle(id);
+        return MeshCache::get_handle(id);
     }
 
-    inline mesh_handle model_cache::get_mesh(const std::string& name)
+    inline mesh_handle ModelCache::get_mesh(const std::string& name)
     {
         id_type id = nameHash(name);
-        return mesh_cache::get_handle(id);
+        return MeshCache::get_handle(id);
     }
 }

@@ -1,6 +1,6 @@
 /// @ref gtx_mixed_product
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER T mixedProduct
@@ -12,4 +12,4 @@ namespace args::core::math::detail::glm
 	{
 		return dot(cross(v1, v2), v3);
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

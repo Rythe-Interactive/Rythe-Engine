@@ -1,5 +1,6 @@
 #define ARGS_ENTRY
 #define ARGS_KEEP_CONSOLE
+#define ARGS_LOW_POWER
 
 #include <chrono>
 #include <thread>
@@ -21,6 +22,7 @@ using namespace args;
 
 void ARGS_CCONV reportModules(Engine* engine)
 {
+    log::filter(log::severity::trace);
     log::info("Hello Args!");
 
     test_filesystem();

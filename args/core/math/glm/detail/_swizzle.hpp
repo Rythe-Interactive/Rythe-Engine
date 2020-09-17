@@ -1,6 +1,6 @@
 #pragma once
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace detail
 {
 	// Internal class for implementing swizzle operators
@@ -268,9 +268,9 @@ namespace detail
 	}
 
 }//namespace detail
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	namespace detail
 	{

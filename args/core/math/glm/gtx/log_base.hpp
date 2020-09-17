@@ -23,7 +23,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_log_base
 	/// @{
@@ -43,6 +43,6 @@ namespace args::core::math::detail::glm
 		vec<L, T, Q> const& base);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "log_base.inl"

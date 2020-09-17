@@ -84,7 +84,7 @@ namespace args::rendering
 
     struct texture
     {
-        app::gl_id textureId = 0;
+        app::gl_id textureId = invalid_id;
 
         int width;
         int height;
@@ -103,7 +103,7 @@ namespace args::rendering
         const texture& get_texture();
     };
 
-    constexpr texture_handle invalid_texture_handle { 0 };
+    constexpr texture_handle invalid_texture_handle { invalid_id };
 
     struct texture_import_settings
     {
@@ -125,7 +125,7 @@ namespace args::rendering
         texture_components::rgba, true, true, texture_mipmap::linear, texture_mipmap::linear,
         texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat };
 
-    struct ARGS_API texture_cache
+    class ARGS_API TextureCache
     {
         friend class renderer;
         friend struct texture_handle;

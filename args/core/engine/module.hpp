@@ -30,7 +30,7 @@ namespace args::core
 
         void init()
         {
-            for (auto& system : m_systems)
+            for (auto [_, system] : m_systems)
                 system->setup();
         };
 

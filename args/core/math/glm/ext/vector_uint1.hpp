@@ -19,7 +19,7 @@
 #	pragma message("GLM: GLM_EXT_vector_uint1 extension included")
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup ext_vector_uint1
 	/// @{
@@ -28,5 +28,5 @@ namespace args::core::math::detail::glm
 	typedef vec<1, unsigned int, defaultp>			uvec1;
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 

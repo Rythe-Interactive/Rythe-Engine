@@ -18,7 +18,7 @@
 #	pragma message("GLM: GLM_EXT_scalar_uint_sized extension included")
 #endif
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace detail
 {
 #	if GLM_HAS_EXTENDED_INTEGER_TYPE
@@ -67,4 +67,4 @@ namespace detail
 	typedef detail::uint64		uint64;
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

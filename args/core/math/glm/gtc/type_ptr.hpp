@@ -11,7 +11,7 @@
 ///
 /// Handles the interaction between pointers and vector, matrix types.
 ///
-/// This extension defines an overloaded function, glm::value_ptr. It returns
+/// This extension defines an overloaded function, math::value_ptr. It returns
 /// a pointer to the memory layout of the object. Matrix types store their values
 /// in column-major order.
 ///
@@ -22,11 +22,11 @@
 /// #include <glm/glm.hpp>
 /// #include <glm/gtc/type_ptr.hpp>
 ///
-/// glm::vec3 aVector(3);
-/// glm::mat4 someMatrix(1.0);
+/// math::vec3 aVector(3);
+/// math::mat4 someMatrix(1.0);
 ///
-/// glUniform3fv(uniformLoc, 1, glm::value_ptr(aVector));
-/// glUniformMatrix4fv(uniformMatrixLoc, 1, GL_FALSE, glm::value_ptr(someMatrix));
+/// glUniform3fv(uniformLoc, 1, math::value_ptr(aVector));
+/// glUniformMatrix4fv(uniformMatrixLoc, 1, GL_FALSE, math::value_ptr(someMatrix));
 /// @endcode
 ///
 /// <glm/gtc/type_ptr.hpp> need to be included to use the features of this extension.
@@ -54,7 +54,7 @@
 #	pragma message("GLM: GLM_GTC_type_ptr extension included")
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtc_type_ptr
 	/// @{
@@ -225,6 +225,6 @@ namespace args::core::math::detail::glm
 	GLM_FUNC_DECL qua<T, defaultp> make_quat(T const * const ptr);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "type_ptr.inl"

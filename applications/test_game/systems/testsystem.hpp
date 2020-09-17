@@ -31,6 +31,8 @@ struct player_fly : public app::input_axis<player_fly> {};
 struct player_look_x : public app::input_axis<player_look_x> {};
 struct player_look_y : public app::input_axis<player_look_y> {};
 
+struct exit_action : public app::input_action<exit_action> {};
+
 class TestSystem final : public System<TestSystem>
 {
 public:
@@ -52,23 +54,36 @@ public:
         app::InputSystem::createBinding<player_fly>(app::inputmap::method::LEFT_SHIFT, -1.f);
         app::InputSystem::createBinding<player_look_x>(app::inputmap::method::MOUSE_X, 1.f);
         app::InputSystem::createBinding<player_look_y>(app::inputmap::method::MOUSE_Y, 1.f);
+        app::InputSystem::createBinding<exit_action>(app::inputmap::method::ESCAPE);
 
         bindToEvent<player_move, &TestSystem::onPlayerMove>();
         bindToEvent<player_strive, &TestSystem::onPlayerStrive>();
         bindToEvent<player_fly, &TestSystem::onPlayerFly>();
         bindToEvent<player_look_x, &TestSystem::onPlayerLookX>();
         bindToEvent<player_look_y, &TestSystem::onPlayerLookY>();
+        bindToEvent<exit_action, &TestSystem::onExit>();
 
-        bindToEvent<events::component_creation<app::window>, &TestSystem::disableCursor>();
+        app::window window = m_ecs->world.get_component_handle<app::window>().read();
+        window.enableCursor(false);
+        rendering::model_handle modelH;
+        rendering::material_handle wireframeH;
+        rendering::material_handle vertexH;
 
-        fs::view meshFile("basic://models/Cube.obj");
-        auto modelH = rendering::model_cache::create_model("test", meshFile);
+        {
+            async::readwrite_guard guard(*window.lock);
+            app::ContextHelper::makeContextCurrent(window);
+
+            modelH = rendering::ModelCache::create_model("test", "basic://models/Cube.obj"_view);
+            wireframeH = rendering::MaterialCache::create_material("wireframe", "basic://shaders/wireframe.glsl"_view);
+            vertexH = rendering::MaterialCache::create_material("vertex", "basic://shaders/position.glsl"_view);
+
+            app::ContextHelper::makeContextCurrent(nullptr);
+        }
 
         {
             auto ent = m_ecs->createEntity();
             ent.add_component<sah>();
-            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH });
+            m_ecs->createComponent<rendering::renderable>(ent, { modelH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(0, 0, 5.1f));
@@ -78,8 +93,7 @@ public:
         {
             auto ent = m_ecs->createEntity();
             ent.add_component<sah>();
-            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH });
+            m_ecs->createComponent<rendering::renderable>(ent, { modelH, vertexH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(5.1f, 0, 0));
@@ -89,8 +103,7 @@ public:
         {
             auto ent = m_ecs->createEntity();
             ent.add_component<sah>();
-            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH });
+            m_ecs->createComponent<rendering::renderable>(ent, { modelH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(0, 0, -5.1f));
@@ -100,8 +113,7 @@ public:
         {
             auto ent = m_ecs->createEntity();
             ent.add_component<sah>();
-            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH });
+            m_ecs->createComponent<rendering::renderable>(ent, { modelH, vertexH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(-5.1f, 0, 0));
@@ -115,11 +127,7 @@ public:
         auto physicsEnt = m_ecs->createEntity();
 
         //setup rendering for physics ent
-        auto renderableHandle2 = m_ecs->createComponent<rendering::renderable>(physicsEnt);
-
-        rendering::renderable rendercomp2 = renderableHandle2.read();
-        rendercomp2.model = rendering::model_cache::create_model("test", meshFile);
-        renderableHandle2.write(rendercomp2);
+        m_ecs->createComponent<rendering::renderable>(physicsEnt, { modelH, wireframeH });
 
         auto [bodyPosition, bodyRotation, bodyScale] = m_ecs->createComponent<transform>(physicsEnt);
 
@@ -147,7 +155,7 @@ public:
 
         rb.globalCentreOfMass = bodyP;
         //rb.addForce( math::vec3(-9, 0, 0));
-        rb.addForceAt(math::vec3(0, 4.5, 5.1f),math::vec3(-100, 0, 0));
+        rb.addForceAt(math::vec3(0, 4.5, 5.1f), math::vec3(-100, 0, 0));
         rb.globalCentreOfMass = bodyP;
 
         rbHandle.write(rb);
@@ -176,7 +184,7 @@ public:
         auto [camPosHandle, camRotHandle, camScaleHandle] = m_ecs->createComponent<transform>(player);
 
         rotation rot = camRotHandle.read();
-        rot = math::toQuat(math::inverse(math::lookAt(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0))));
+        rot = math::conjugate(math::normalize(math::toQuat(math::lookAt(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0)))));
         camRotHandle.write(rot);
 
 
@@ -187,9 +195,9 @@ public:
         camH.write(cam);
     }
 
-    void disableCursor(events::component_creation<app::window>* creation)
+    void onExit(exit_action* action)
     {
-        creation->entity.get_component_handle<app::window>().read().enableCursor(false);
+        raiseEvent<events::exit>();
     }
 
     void onPlayerMove(player_move* action)
@@ -197,9 +205,8 @@ public:
         auto posH = player.get_component_handle<position>();
         auto rot = player.get_component_handle<rotation>().read();
         math::vec3 move = math::toMat3(rot) * math::vec3(0.f, 0.f, 1.f);
-        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta;
+        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 6.f;
         posH.fetch_add(move);
-        log::debug("FORWD: ({:.3}, {:.3}, {:.3})", move.x, move.y, move.z);
     }
 
     void onPlayerStrive(player_strive* action)
@@ -207,15 +214,14 @@ public:
         auto posH = player.get_component_handle<position>();
         auto rot = player.get_component_handle<rotation>().read();
         math::vec3 move = math::toMat3(rot) * math::vec3(1.f, 0.f, 0.f);
-        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta;
+        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 6.f;
         posH.fetch_add(move);
-        log::debug("RIGHT: ({:.3}, {:.3}, {:.3})", move.x, move.y, move.z);
     }
 
     void onPlayerFly(player_fly* action)
     {
         auto posH = player.get_component_handle<position>();
-        posH.fetch_add(math::vec3(0.f, action->value * action->input_delta, 0.f));
+        posH.fetch_add(math::vec3(0.f, action->value * action->input_delta * 4.f, 0.f));
     }
 
     void onPlayerLookX(player_look_x* action)

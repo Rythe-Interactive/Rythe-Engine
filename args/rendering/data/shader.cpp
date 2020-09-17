@@ -2,16 +2,16 @@
 
 namespace args::rendering
 {
-    sparse_map<id_type, shader> shader_cache::m_shaders;
-    async::readonly_rw_spinlock shader_cache::m_shaderLock;
+    sparse_map<id_type, shader> ShaderCache::m_shaders;
+    async::readonly_rw_spinlock ShaderCache::m_shaderLock;
 
-    shader* shader_cache::get_shader(id_type id)
+    shader* ShaderCache::get_shader(id_type id)
     {
         async::readonly_guard guard(m_shaderLock);
         return &m_shaders[id];
     }
 
-    void shader_cache::replace_items(std::string& source, const std::string& item, const std::string& value)
+    void ShaderCache::replace_items(std::string& source, const std::string& item, const std::string& value)
     {
         size_type n = 0;
         while ((n = source.find(item, n)) != std::string::npos)
@@ -21,25 +21,29 @@ namespace args::rendering
         }
     }
 
-    void shader_cache::process_includes(std::string& shaderSource)
+    void ShaderCache::process_includes(std::string& shaderSource)
     {
     }
 
-    void shader_cache::resolve_preprocess_features(std::string& shaderSource)
+    void ShaderCache::resolve_preprocess_features(std::string& shaderSource, shader_state& state)
     {
         replace_items(shaderSource, "SV_POSITION", std::to_string(SV_POSITION));
         replace_items(shaderSource, "SV_MODELMATRIX", std::to_string(SV_MODELMATRIX));
+        replace_items(shaderSource, "SV_VIEW", std::to_string(SV_VIEW));
+        replace_items(shaderSource, "SV_PROJECT", std::to_string(SV_PROJECT));
 
         static std::unordered_map<std::string, GLenum> funcTypes;
         static bool funcTypesInitialized = false;
-        if(!funcTypesInitialized)
+        if (!funcTypesInitialized)
         {
             funcTypesInitialized = true;
-            funcTypes["DEPTH"] =  GL_DEPTH_TEST;
-            funcTypes["CULL"] =  GL_CULL_FACE;
-            funcTypes["ALPHA"] =  GL_BLEND;
-            funcTypes["DITHER"] =  GL_DITHER;
+            funcTypes["DEPTH"] = GL_DEPTH_TEST;
+            funcTypes["CULL"] = GL_CULL_FACE;
+            //funcTypes["ALPHA"] = GL_BLEND;
+            //funcTypes["DITHER"] = GL_DITHER;
         }
+        state[GL_DEPTH_TEST] = GL_GREATER;
+        state[GL_CULL_FACE] = GL_BACK;
 
         size_type n = 0;
         while ((n = shaderSource.find("#enable", n)) != std::string::npos)
@@ -77,6 +81,7 @@ namespace args::rendering
 
                 param = params.at(tokens[2]);
             }
+            break;
             case GL_CULL_FACE:
             {
                 static std::unordered_map<std::string, GLenum> params;
@@ -87,10 +92,12 @@ namespace args::rendering
                     params["FRONT"] = GL_FRONT;
                     params["BACK"] = GL_BACK;
                     params["FRONT_AND_BACK"] = GL_FRONT_AND_BACK;
+                    params["OFF"] = GL_FALSE;
                 }
 
                 param = params.at(tokens[2]);
             }
+            break;
             case GL_BLEND:
             {
                 static std::unordered_map<std::string, GLenum> params;
@@ -115,18 +122,17 @@ namespace args::rendering
                     params["SRC_ALPHA_SATURATE"] = GL_SRC_ALPHA_SATURATE;
                 }
             }
+            break;
             default:
                 break;
             }
 
-            shaderSource.replace(n, end, "\n");
+            state[funcType] = param;
+            shaderSource.replace(n, end - n, "");
         }
-
-
-
     }
 
-    shader_cache::shader_ilo shader_cache::seperate_shaders(std::string& shaderSource)
+    ShaderCache::shader_ilo ShaderCache::seperate_shaders(std::string& shaderSource)
     {
         shader_ilo ilo;
         std::string_view rest(shaderSource.data(), shaderSource.size());
@@ -171,7 +177,7 @@ namespace args::rendering
         return ilo;
     }
 
-    void shader_cache::process_io(shader& shader, id_type id)
+    void ShaderCache::process_io(shader& shader, id_type id)
     {
         shader.uniforms.clear();
         shader.attributes.clear();
@@ -282,7 +288,7 @@ namespace args::rendering
         delete[] attribNameBuffer;
     }
 
-    app::gl_id shader_cache::compile_shader(GLuint shaderType, cstring source, GLint sourceLength)
+    app::gl_id ShaderCache::compile_shader(GLuint shaderType, cstring source, GLint sourceLength)
     {
         app::gl_id shaderId = glCreateShader(shaderType);
         glShaderSource(shaderId, 1, &source, &sourceLength);
@@ -333,7 +339,7 @@ namespace args::rendering
         return shaderId;
     }
 
-    shader_handle shader_cache::create_shader(const std::string& name, const fs::view& file, shader_import_settings settings)
+    shader_handle ShaderCache::create_shader(const std::string& name, const fs::view& file, shader_import_settings settings)
     {
         id_type id = nameHash(name);
 
@@ -352,15 +358,49 @@ namespace args::rendering
             return invalid_shader_handle;
 
         std::string source = ((fs::basic_resource)result).to_string();
+        shader_state state;
 
         process_includes(source);
-        resolve_preprocess_features(source);
+        resolve_preprocess_features(source, state);
 
         shader_ilo shaders = seperate_shaders(source);
         if (shaders.empty())
             return invalid_shader_handle;
 
         shader shader;
+        shader.state = state;
+
+        for (auto& [func, param] : state)
+        {
+            if (param == GL_FALSE)
+            {
+                glDisable(func);
+                continue;
+            }
+
+            glEnable(func);
+            switch (func)
+            {
+            case GL_DEPTH_TEST:
+            {
+                glDepthFunc(param);
+            }
+            break;
+            case GL_CULL_FACE:
+            {
+                glCullFace(param);
+            }
+            break;
+            case GL_BLEND:
+            {
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            }
+            break;
+            default:
+                break;
+            }
+        }
+
         shader.programId = glCreateProgram();
 
         std::vector<app::gl_id> shaderIds;
@@ -369,7 +409,7 @@ namespace args::rendering
         {
             auto shaderId = compile_shader(shaderType, shaderIL.c_str(), shaderIL.size());
 
-            if (shaderId == (app::gl_id)-1)
+            if (shaderId == (app::gl_id) - 1)
             {
                 std::cout << "error occurred in shader: " << name.c_str() << std::endl;
 
@@ -398,7 +438,7 @@ namespace args::rendering
         return { id };
     }
 
-    shader_handle shader_cache::get_handle(const std::string& name)
+    shader_handle ShaderCache::get_handle(const std::string& name)
     {
         id_type id = nameHash(name);
 
@@ -409,7 +449,7 @@ namespace args::rendering
             return { id };
     }
 
-    shader_handle shader_cache::get_handle(id_type id)
+    shader_handle ShaderCache::get_handle(id_type id)
     {
         async::readonly_guard guard(m_shaderLock);
         if (!m_shaders.contains(id))
@@ -420,22 +460,32 @@ namespace args::rendering
 
     GLuint shader_handle::get_uniform_block_index(const std::string& name) const
     {
-        return shader_cache::get_shader(id)->get_uniform_block_index(name);
+        return ShaderCache::get_shader(id)->get_uniform_block_index(name);
     }
 
     void shader_handle::bind_uniform_block(GLuint uniformBlockIndex, GLuint uniformBlockBinding) const
     {
-        shader_cache::get_shader(id)->bind_uniform_block(uniformBlockIndex, uniformBlockBinding);
+        ShaderCache::get_shader(id)->bind_uniform_block(uniformBlockIndex, uniformBlockBinding);
+    }
+
+    std::string shader_handle::get_name() const
+    {
+        return ShaderCache::get_shader(id)->name;
+    }
+
+    std::vector<std::pair<std::string, GLenum>> shader_handle::get_uniform_info() const
+    {
+        return ShaderCache::get_shader(id)->get_uniform_info();
     }
 
     attribute shader_handle::get_attribute(const std::string& name)
     {
-        return shader_cache::get_shader(id)->get_attribute(name);
+        return ShaderCache::get_shader(id)->get_attribute(name);
     }
 
     void shader_handle::bind()
     {
-        shader_cache::get_shader(id)->bind();
+        ShaderCache::get_shader(id)->bind();
     }
 
     void shader_handle::release()
@@ -445,6 +495,37 @@ namespace args::rendering
 
     void shader::bind()
     {
+        for (auto& [func, param] : state)
+        {
+            if (param == GL_FALSE)
+            {
+                glDisable(func);
+                continue;
+            }
+
+            glEnable(func);
+            switch (func)
+            {
+            case GL_DEPTH_TEST:
+            {
+                glDepthFunc(param);
+            }
+            break;
+            case GL_CULL_FACE:
+            {
+                glCullFace(param);
+            }
+            break;
+            case GL_BLEND:
+            {
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            }
+            break;
+            default:
+                break;
+            }
+        }
+
         glUseProgram(programId);
     }
 

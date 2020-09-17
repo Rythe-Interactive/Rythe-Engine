@@ -19,7 +19,7 @@
 #	pragma message("GLM: GLM_EXT_matrix_uint4x4 extension included")
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup ext_matrix_uint4x4
 	/// @{
@@ -35,4 +35,4 @@ namespace args::core::math::detail::glm
 	typedef mat<4, 4, uint, defaultp>	umat4;
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

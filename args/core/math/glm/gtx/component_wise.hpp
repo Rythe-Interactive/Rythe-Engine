@@ -26,7 +26,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_component_wise
 	/// @{
@@ -64,6 +64,6 @@ namespace args::core::math::detail::glm
 	GLM_FUNC_DECL typename genType::value_type compMax(genType const& v);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "component_wise.inl"

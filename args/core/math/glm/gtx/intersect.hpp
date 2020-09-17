@@ -29,7 +29,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_intersect
 	/// @{
@@ -87,6 +87,6 @@ namespace args::core::math::detail::glm
 		genType & intersectionPosition2 = genType(), genType & intersectionNormal2 = genType());
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "intersect.inl"
