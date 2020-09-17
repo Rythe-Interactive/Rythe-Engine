@@ -1,5 +1,6 @@
 #pragma once
 
+#include <physics/physicsimport.h>
 #include <physics/physicscollider.hpp>
 #include <physics/cube_collider_params.hpp>
 #include <physics/HalfEdgeEdge.h>
@@ -18,6 +19,10 @@ namespace args::physics
 		virtual void CheckCollision(std::shared_ptr<PhysicsCollider> physicsComponent, physics_manifold* manifold) override;
 
 		virtual void CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold* manifold) override;
+
+        /**@brief Given the current transform of the entity, creates a tight AABB of the collider;
+        */
+        void UpdateTightAABB(math::mat4 transform);
 
 		/**@brief Constructs a polyhedron-shaped convex hull that encompasses the given mesh.
 		*/
@@ -38,6 +43,8 @@ namespace args::physics
 
         std::vector<math::vec3> vertices;
         std::vector<HalfEdgeFace*> halfEdgeFaces;
+
+        //feature id container
 
 
 

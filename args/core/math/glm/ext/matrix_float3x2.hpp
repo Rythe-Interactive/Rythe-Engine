@@ -4,7 +4,7 @@
 #pragma once
 #include "../detail/type_mat3x2.hpp"
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup core
 	/// @{
@@ -15,4 +15,4 @@ namespace args::core::math::detail::glm
 	typedef mat<3, 2, float, defaultp>			mat3x2;
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

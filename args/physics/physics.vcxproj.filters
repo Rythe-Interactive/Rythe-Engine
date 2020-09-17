@@ -74,5 +74,11 @@
     <ClInclude Include="HalfEdgeFace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="data\physics_manifold_precursor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="physics_contact.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

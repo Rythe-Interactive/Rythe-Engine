@@ -1,6 +1,6 @@
 /// @ref gtx_associated_min_max
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 
 // Min comparison between 2 variables
 template<typename T, typename U, qualifier Q>
@@ -351,4 +351,4 @@ GLM_FUNC_QUALIFIER vec<L, U, Q> associatedMax
 	}
 	return Result;
 }
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

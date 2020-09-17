@@ -3,7 +3,7 @@
 
 #include "../trigonometric.hpp"
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 
 	template<typename T, qualifier Q>
@@ -65,4 +65,4 @@ namespace args::core::math::detail::glm
 		return m * Result;
 	}
 
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

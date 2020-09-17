@@ -2,7 +2,7 @@
 
 #include "setup.hpp"
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// Qualify GLM types in term of alignment (packed, aligned) and precision in term of ULPs (lowp, mediump, highp)
 	enum qualifier
@@ -55,7 +55,7 @@ namespace args::core::math::detail::glm
 
 namespace detail
 {
-	template<glm::qualifier P>
+	template<math::qualifier P>
 	struct is_aligned
 	{
 		static const bool value = false;
@@ -63,19 +63,19 @@ namespace detail
 
 #	if GLM_CONFIG_ALIGNED_GENTYPES == GLM_ENABLE
 		template<>
-		struct is_aligned<glm::aligned_lowp>
+		struct is_aligned<math::aligned_lowp>
 		{
 			static const bool value = true;
 		};
 
 		template<>
-		struct is_aligned<glm::aligned_mediump>
+		struct is_aligned<math::aligned_mediump>
 		{
 			static const bool value = true;
 		};
 
 		template<>
-		struct is_aligned<glm::aligned_highp>
+		struct is_aligned<math::aligned_highp>
 		{
 			static const bool value = true;
 		};
@@ -227,4 +227,4 @@ namespace detail
 		}
 	};
 }//namespace detail
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

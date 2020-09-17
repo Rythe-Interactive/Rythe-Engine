@@ -23,7 +23,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_closest_point
 	/// @{
@@ -44,6 +44,6 @@ namespace args::core::math::detail::glm
 		vec<2, T, Q> const& b);
 
 	/// @}
-}// namespace args::core::math::detail::glm
+}// namespace args::core::math
 
 #include "closest_point.inl"

@@ -29,7 +29,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 	/// @addtogroup gtx_easing
 	/// @{
 
@@ -214,6 +214,6 @@ namespace args::core::math::detail::glm{
 	GLM_FUNC_DECL genType bounceEaseInOut(genType const& a);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "easing.inl"

@@ -3,7 +3,7 @@
 #include "../integer.hpp"
 #include "../ext/vector_integer.hpp"
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace detail
 {
 	template<bool is_float, bool is_signed>
@@ -152,4 +152,4 @@ namespace detail
 	{
 		return detail::functor2<vec, L, T, Q>::call(roundMultiple, Source, Multiple);
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

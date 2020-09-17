@@ -1,6 +1,6 @@
 /// @ref gtx_extend
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType extend
@@ -45,4 +45,4 @@ namespace args::core::math::detail::glm
 	{
 		return Origin + (Source - Origin) * Distance;
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

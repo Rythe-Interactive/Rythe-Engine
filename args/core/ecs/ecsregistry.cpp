@@ -141,6 +141,8 @@ namespace args::core::ecs
         m_entities.emplace(id, this);
         m_containedEntities.insert(id);
 
+        entity_handle(id, this).set_parent(world_entity_id);
+
         return entity_handle(id, this);
     }
 

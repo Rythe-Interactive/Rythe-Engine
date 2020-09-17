@@ -20,7 +20,7 @@
 #include "detail/type_vec4.hpp"
 #include <cmath>
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup core_func_exponential
 	/// @{
@@ -105,6 +105,6 @@ namespace args::core::math::detail::glm
 	GLM_FUNC_DECL vec<L, T, Q> inversesqrt(vec<L, T, Q> const& v);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "detail/func_exponential.inl"

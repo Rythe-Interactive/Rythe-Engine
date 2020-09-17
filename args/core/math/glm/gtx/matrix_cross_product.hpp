@@ -24,7 +24,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_matrix_cross_product
 	/// @{
@@ -42,6 +42,6 @@ namespace args::core::math::detail::glm
 		vec<3, T, Q> const& x);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "matrix_cross_product.inl"

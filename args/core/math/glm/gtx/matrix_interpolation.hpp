@@ -24,7 +24,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_matrix_interpolation
 	/// @{
@@ -55,6 +55,6 @@ namespace args::core::math::detail::glm
 		mat<4, 4, T, Q> const& m1, mat<4, 4, T, Q> const& m2, T const Delta);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "matrix_interpolation.inl"

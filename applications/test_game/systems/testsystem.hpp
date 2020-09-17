@@ -160,6 +160,18 @@ public:
 
         rbHandle.write(rb);
 
+        {
+            auto ent = m_ecs->createEntity();
+            ent.add_component<physics::physicsComponent>();
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ modelH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+            positionH.write(math::vec3(5.1f, -2.0f, 0));
+            scaleH.write(math::vec3(0.25f));
+        }
+
+
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::differentThread>("TestChain");
         createProcess<&TestSystem::differentInterval>("TestChain", 1.f);

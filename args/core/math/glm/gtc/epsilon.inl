@@ -4,7 +4,7 @@
 #include "../vector_relational.hpp"
 #include "../common.hpp"
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<>
 	GLM_FUNC_QUALIFIER bool epsilonEqual
@@ -77,4 +77,4 @@ namespace args::core::math::detail::glm
 		vec<4, T, Q> v(x.x - y.x, x.y - y.y, x.z - y.z, x.w - y.w);
 		return greaterThanEqual(abs(v), vec<4, T, Q>(epsilon));
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
