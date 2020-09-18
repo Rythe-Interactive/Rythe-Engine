@@ -12,11 +12,19 @@
 #include <application/context/detail/glad/glad.h>
 #include <glfw/glfw3.h>
 
+/**
+ * @file contexthelper.hpp
+ */
+
 namespace args::application
 {
     using gl_id = GLuint;
     using gl_location = GLint;
 
+    /**@class ContextHelper
+     * @brief Static helper class for calling functions on the GLFW context.
+     * @ref https://www.glfw.org/docs/latest/pages.html
+     */
     class ARGS_API ContextHelper
     {
     private:
@@ -30,8 +38,13 @@ namespace args::application
         ContextHelper() = delete;
         ~ContextHelper() = delete;
 
+        /**@brief Checks if the context has been initialized.
+         */
         static bool initialized();
         static bool init();
+
+        /**@brief Binds callback to be executed right after the context has been initialized. The callback will be invoked immediately if the context is already initialized.
+         */
         static bool addOnInitCallback(delegate<void()> callback);
         static void terminate();
         static int getError(cstring* desc);

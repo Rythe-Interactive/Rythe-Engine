@@ -19,6 +19,7 @@
 
 #include <vector>
 #include <functional>
+#include <utility>
 #include <core/types/primitives.hpp>
 
 namespace args::core
@@ -33,96 +34,104 @@ namespace args::core
 
         using stub_type = return_type(*)(void* this_ptr, parameter_types...);
 
+        using allocator = void* (*)(void*);
+        using deleter = void(*)(void*);
+
         struct invocation_element
         {
             invocation_element() = default;
-            invocation_element(void* this_ptr, stub_type aStub, bool aManaged, size_type aObjectSize) : object(this_ptr), stub(aStub), managed(aManaged), objectSize(aObjectSize) {}
+            invocation_element(void* this_ptr, stub_type aStub, allocator aCopy = nullptr, allocator aMove = nullptr, deleter aDelete = nullptr) : object(this_ptr), stub(aStub), copy(aCopy), move(aMove), del(aDelete) {}
             invocation_element(const invocation_element& source)
             {
-                if (source.managed)
+                if (source.copy != nullptr)
                 {
-                    object = ::operator new(source.objectSize);
-                    std::memcpy(object, source.object, source.objectSize);
+                    object = source.copy(source.object);
                 }
                 else
                     object = source.object;
                 stub = source.stub;
-                managed = source.managed;
-                objectSize = source.objectSize;
+                copy = source.copy;
+                move = source.move;
+                del = source.del;
             }
             invocation_element(invocation_element&& source)
             {
-                object = source.object;
+                if (source.move != nullptr)
+                {
+                    object = source.move(source.object);
+                }
+                else
+                    object = source.object;
                 stub = source.stub;
-                managed = source.managed;
-                objectSize = source.objectSize;
-                source.object = nullptr;
-                source.stub = nullptr;
-                source.managed = false;
-                source.objectSize = 0;
+                copy = source.copy;
+                move = source.move;
+                del = source.del;
             }
 
             ~invocation_element()
             {
-                if (managed)
-                    delete object;
+                if (del != nullptr)
+                    del(object);
             }
 
-            invocation_element& operator=(const invocation_element&)
+            invocation_element& operator=(const invocation_element& source)
             {
-                if (source.managed)
+                if (source.copy != nullptr)
                 {
-                    object = ::operator new(source.objectSize);
-                    std::memcpy(object, source.object, source.objectSize);
+                    object = source.copy(source.object);
                 }
                 else
                     object = source.object;
                 stub = source.stub;
-                managed = source.managed;
-                objectSize = source.objectSize;
+                copy = source.copy;
+                move = source.move;
+                del = source.del;
                 return *this;
             }
 
             invocation_element& operator=(invocation_element&& source)
             {
-                object = source.object;
+                if (source.move != nullptr)
+                {
+                    object = source.move(source.object);
+                }
+                else
+                    object = source.object;
                 stub = source.stub;
-                managed = source.managed;
-                objectSize = source.objectSize;
-                source.object = nullptr;
-                source.stub = nullptr;
-                source.managed = false;
-                source.objectSize = 0;
+                copy = source.copy;
+                move = source.move;
+                del = source.del;
                 return *this;
             }
 
             void Clone(invocation_element& target) const
             {
-                if (source.managed)
+                if (copy != nullptr)
                 {
-                    target.object = ::operator new(objectSize);
-                    std::memcpy(target.object, object, objectSize);
+                    target.object = copy(object);
                 }
                 else
                     target.object = object;
                 target.stub = stub;
-                target.managed = managed;
-                target.objectSize = objectSize;
+                target.copy = copy;
+                target.move = move;
+                target.del = del;
             }
 
             bool operator ==(const invocation_element& other) const
             {
-                return other.stub == stub && other.managed == managed && other.objectSize == objectSize && std::memcmp(other.object, object, objectSize);
+                return other.stub == stub && (object == other.object || (copy == other.copy && move == other.move && del == other.del));
             }
             bool operator !=(const invocation_element& other) const
             {
-                return other.stub != stub || other.object != object;
+                return other.stub != stub || (object != other.object || (copy != other.copy || move != other.move || del != other.del));
             }
 
             void* object = nullptr;
             stub_type stub = nullptr;
-            bool managed = false;
-            size_type objectSize = 0;
+            allocator copy = nullptr;
+            allocator move = nullptr;
+            deleter del = nullptr;
         };
     };
 
@@ -171,7 +180,22 @@ namespace args::core
         template <typename lambda_type>
         delegate(const lambda_type& lambda)
         {
-            assign((void*)(new lambda_type(lambda)), lambda_stub<lambda_type>);
+            assign((void*)(new lambda_type(lambda)), lambda_stub<lambda_type>,
+                [](void* ptr)
+                {
+                    lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
+                    return (void*)(new lambda_type(*p));
+                },
+                [](void* ptr)
+                {
+                    lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
+                    return (void*)(new lambda_type(std::move(*p)));
+                },
+                [](void* ptr)
+                {
+                    lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
+                    delete p;
+                });
         }
 
         delegate& operator =(const delegate& other)
@@ -183,7 +207,22 @@ namespace args::core
         template <typename lambda_type>
         delegate& operator =(const lambda_type& instance)
         {
-            assign((void*)(new lambda_type(lambda)), lambda_stub<lambda_type>);
+            assign((void*)(new lambda_type(instance)), lambda_stub<lambda_type>,
+                [](void* ptr)
+                {
+                    lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
+                    return (void*)(new lambda_type(*p));
+                },
+                [](void* ptr)
+                {
+                    lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
+                    return (void*)(new lambda_type(std::move(*p)));
+                },
+                    [](void* ptr)
+                {
+                    lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
+                    delete p;
+                });
             return *this;
         }
 
@@ -245,12 +284,16 @@ namespace args::core
             m_invocation.stub = aStub;
         }
 
-        void assign(void* anObject, typename delegate_base<return_type(parameter_types...)>::stub_type aStub, bool managed, size_type size)
+        void assign(void* anObject, typename delegate_base<return_type(parameter_types...)>::stub_type aStub,
+            typename delegate_base<return_type(parameter_types...)>::allocator aCopy = nullptr,
+            typename delegate_base<return_type(parameter_types...)>::allocator aMove = nullptr,
+            typename delegate_base<return_type(parameter_types...)>::deleter aDelete = nullptr)
         {
             m_invocation.object = anObject;
             m_invocation.stub = aStub;
-            m_invocation.managed = managed;
-            m_invocation.objectSize = size;
+            m_invocation.copy = aCopy;
+            m_invocation.move = aMove;
+            m_invocation.del = aDelete;
         }
 
         template <class owner_type, return_type(owner_type::* func_type)(parameter_types...)>

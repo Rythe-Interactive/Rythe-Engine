@@ -52,8 +52,8 @@ public:
         app::InputSystem::createBinding<player_strive>(app::inputmap::method::A, -1.f);
         app::InputSystem::createBinding<player_fly>(app::inputmap::method::SPACE, 1.f);
         app::InputSystem::createBinding<player_fly>(app::inputmap::method::LEFT_SHIFT, -1.f);
-        app::InputSystem::createBinding<player_look_x>(app::inputmap::method::MOUSE_X, 1.f);
-        app::InputSystem::createBinding<player_look_y>(app::inputmap::method::MOUSE_Y, 1.f);
+        app::InputSystem::createBinding<player_look_x>(app::inputmap::method::MOUSE_X, 0.f);
+        app::InputSystem::createBinding<player_look_y>(app::inputmap::method::MOUSE_Y, 0.f);
         app::InputSystem::createBinding<exit_action>(app::inputmap::method::ESCAPE);
 
         bindToEvent<player_move, &TestSystem::onPlayerMove>();
@@ -164,7 +164,7 @@ public:
             auto ent = m_ecs->createEntity();
             ent.add_component<physics::physicsComponent>();
             auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH });
+            renderableHandle.write({ modelH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(5.1f, -2.0f, 0));
@@ -226,7 +226,6 @@ public:
 
     void onPlayerLookX(player_look_x* action)
     {
-        log::debug("{}", action->input_delta);
         auto rotH = player.get_component_handle<rotation>();
         rotH.fetch_multiply(math::angleAxis(action->value, math::vec3(0, 1, 0)));
         rotH.read_modify_write(rotation(), [](const rotation& src, rotation&& dummy)

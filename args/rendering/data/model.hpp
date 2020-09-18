@@ -5,6 +5,10 @@
 #include <unordered_map>
 #include <set>
 
+/**
+ * @file model.hpp
+ */
+
 #define SV_START 8
 #define SV_POSITION SV_START
 #define SV_NORMAL SV_START + 1
@@ -16,6 +20,9 @@
 
 namespace args::rendering
 {
+    /**@class model
+     * @brief Struct containing all the buffer ids and the VAO needed for rendering.
+     */
     struct model
     {
         bool buffered;
@@ -29,6 +36,9 @@ namespace args::rendering
         std::vector<sub_mesh> submeshes;
     };
 
+    /**@class model_handle
+     * @brief Handle used for using models.
+     */
     struct ARGS_API model_handle
     {
         id_type id;

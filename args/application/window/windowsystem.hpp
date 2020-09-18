@@ -9,22 +9,26 @@
 
 namespace args::application
 {
+    /**@class WindowSystem
+     * @brief The system that's responsible for raising and polling all window events, swapping the buffers of the windows and creation and destruction of windows.
+     */
     class WindowSystem final : public System<WindowSystem>
     {
     private:
-        struct ARGS_API data
+        struct ARGS_API data //Static data that needs to be exported.
         {
             static sparse_map<GLFWwindow*, ecs::component_handle<window>> m_windowComponents;
             static sparse_map<GLFWwindow*, events::EventBus*> m_windowEventBus;
             static async::readonly_rw_spinlock m_creationLock;
         };
 
-        ecs::EntityQuery m_windowQuery{};
-        bool m_exit = false;
+        ecs::EntityQuery m_windowQuery{}; //Query with all the windows to update.
+        bool m_exit = false; //Keep track of whether the exit event has been raised. If any window requests happen after this boolean has been set then they will be denied.
 
-        async::readonly_rw_spinlock m_requestLock;
-        std::vector<window_request> m_requests;
+        async::readonly_rw_spinlock m_requestLock; //Lock to keep the request list thread-safe.
+        std::vector<window_request> m_requests; //List of requests since the last creation loop.
 
+        // Way of raising events from a static context.
         template<typename event_type, typename... Args>
         static void raiseWindowEvent(GLFWwindow* window, Args&&... args)
         {
@@ -32,28 +36,29 @@ namespace args::application
                 data::m_windowEventBus[window]->raiseEvent<event_type>(args...);
         }
 
+        // Internal function for closing a window safely.
         static void closeWindow(GLFWwindow* window)
         {
             if (!ContextHelper::initialized())
                 return;
 
             {
-                async::readwrite_guard guard(data::m_creationLock);
+                async::readwrite_guard guard(data::m_creationLock); // Lock all creation sensitive data.
 
                 auto handle = data::m_windowComponents[window];
 
                 if (handle.valid())
                 {
-                    raiseWindowEvent<window_close>(window, data::m_windowComponents[window]);
+                    raiseWindowEvent<window_close>(window, data::m_windowComponents[window]); // Trigger any callbacks that want to know about any windows closing.
 
-                    if (!ContextHelper::windowShouldClose(window))
+                    if (!ContextHelper::windowShouldClose(window)) // If a callback cancelled the window destruction then we should cancel.
                         return;
 
                     auto* lock = handle.read().lock;
                     {
-                        async::readwrite_guard guard(*lock);
-                        handle.write(invalid_window);
-                    }
+                        async::readwrite_guard guard(*lock); // "deleting" the window is technically writing, so we copy the pointer and use that to lock it.
+                        handle.write(invalid_window); // We mark the window as deleted without deleting it yet. It can cause users to find invalid windows,                                                    
+                    }                                 // but at least they won't use a destroyed component after the lock unlocks.
                     delete lock;
 
                     id_type ownerId = handle.entity;
@@ -63,14 +68,14 @@ namespace args::application
 
                     if (ownerId == world_entity_id)
                     {
-                        raiseWindowEvent<events::exit>(window);
-                    }
+                        raiseWindowEvent<events::exit>(window); // If the current window we're closing is the main window we want to close the application.
+                    }                                           // (we might want to leave this up to the user at some point.)
 
                     data::m_windowEventBus.erase(window);
                 }
             }
 
-            ContextHelper::destroyWindow(window);
+            ContextHelper::destroyWindow(window); // After all traces of the window throughout the engine have been erased we actually close the window.
         }
 
 #pragma region Callbacks
@@ -187,17 +192,29 @@ namespace args::application
 #pragma endregion
 
     public:
+        void exit()
+        {
+            raiseEvent<events::exit>();
+        }
+
         virtual void setup()
         {
             m_windowQuery = createQuery<window>();
             bindToEvent<events::exit, &WindowSystem::onExit>();
             bindToEvent<window_request, &WindowSystem::onWindowRequest>();
 
-            raiseEvent<window_request>(world_entity_id, math::ivec2(1360, 768), "<Args> Engine", nullptr, nullptr, 0);
+            raiseEvent<window_request>(world_entity_id, math::ivec2(1360, 768), "<Args> Engine", nullptr, nullptr, 1); // Create the request for the main window.
 
-            m_scheduler->sendCommand(m_scheduler->getChainThreadId("Input"), [](void* param)
-                {
+            m_scheduler->sendCommand(m_scheduler->getChainThreadId("Input"), [](void* param) // We send a command to the input thread before the input process chain starts.
+                {                                                                            // This way we can create the main window before the rest of the engine get initialised.
                     WindowSystem* self = reinterpret_cast<WindowSystem*>(param);
+
+                    if (!ContextHelper::initialized()) // Initialize context.
+                        if (!ContextHelper::init())
+                        {
+                            self->exit();
+                            return; // If we can't initialize we can't create any windows, not creating the main window means the engine should shut down.
+                        }
                     log::debug("Creating main window.");
                     self->createWindows();
                 }, this);
@@ -208,9 +225,8 @@ namespace args::application
 
         void createWindows()
         {
-            if (!ContextHelper::initialized() && !m_exit)
-                if (!ContextHelper::init())
-                    return;
+            if (m_exit) // If the engine is exiting then we can't create new windows.
+                return;
 
             async::readwrite_guard guard(m_requestLock);
             for (auto& request : m_requests)
@@ -222,19 +238,19 @@ namespace args::application
                     for (auto& [hint, value] : request.hints)
                         ContextHelper::windowHint(hint, value);
                 }
-                else
+                else // Default window hints.
                 {
                     ContextHelper::windowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
                     ContextHelper::windowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
                     ContextHelper::windowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
                     ContextHelper::windowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-                    GLFWmonitor* moniter = request.monitor;
+                    GLFWmonitor* monitor = request.monitor;
 
                     if (!request.monitor)
-                        moniter = ContextHelper::getPrimaryMonitor();
+                        monitor = ContextHelper::getPrimaryMonitor();
 
-                    const GLFWvidmode* mode = ContextHelper::getVideoMode(moniter);
+                    const GLFWvidmode* mode = ContextHelper::getVideoMode(monitor);
 
                     ContextHelper::windowHint(GLFW_RED_BITS, mode->redBits);
                     ContextHelper::windowHint(GLFW_GREEN_BITS, mode->greenBits);
@@ -256,16 +272,16 @@ namespace args::application
                 ecs::component_handle<window> handle;
 
                 {
-                    async::readwrite_guard guard(data::m_creationLock);
+                    async::readwrite_guard wguard(*win.lock);           // This is the only code that has access to win.lock right now, so there's no deadlock risk.
+                    async::readwrite_guard cguard(data::m_creationLock);// Locking them both seperately is faster than using a multilock.
                     handle = m_ecs->createComponent<window>(request.entityId, win);
-                }
-                log::debug("created window: {}", request.name);
 
-                data::m_windowComponents.insert(win, handle);
-                data::m_windowEventBus.insert(win, m_eventBus);
+                    log::debug("created window: {}", request.name);
 
-                {
-                    async::readwrite_guard guard(*win.lock);
+                    data::m_windowComponents.insert(win, handle);
+                    data::m_windowEventBus.insert(win, m_eventBus);
+
+                    // Set all callbacks.
                     ContextHelper::makeContextCurrent(win);
                     ContextHelper::swapInterval(request.swapInterval);
                     ContextHelper::setWindowCloseCallback(win, &WindowSystem::closeWindow);

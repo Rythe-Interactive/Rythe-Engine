@@ -22,6 +22,7 @@ namespace args::rendering
         uint_max frameCount = 0;
         uint temp = 0;
         time::span totalTime;
+        bool m_exit = false;
 
         bool main_window_valid()
         {
@@ -35,6 +36,7 @@ namespace args::rendering
 
         virtual void setup()
         {
+            bindToEvent<events::exit, &Renderer::onExit>();
             createProcess<&Renderer::render>("Rendering");
             renderablesQuery = createQuery<renderable, position, rotation, scale>();
             cameraQuery = createQuery<camera, position, rotation, scale>();
@@ -65,7 +67,12 @@ namespace args::rendering
                 }, this);
 
             while (!initialized.load(std::memory_order_acquire))
-                std::this_thread::sleep_for(1ns);
+                std::this_thread::yield();
+        }
+
+        void onExit(events::exit* event)
+        {
+            m_exit = true;
         }
 
         bool initData(const app::window& window)
@@ -200,7 +207,7 @@ namespace args::rendering
 
         void render(time::time_span<fast_time> deltaTime)
         {
-            if (!m_ecs->world.has_component<app::window>())
+            if (!m_ecs->world.has_component<app::window>() || m_exit)
                 return;
 
             time::clock renderClock;
@@ -228,6 +235,12 @@ namespace args::rendering
             for (auto ent : renderablesQuery)
             {
                 renderable rend = ent.get_component_handle<renderable>().read();
+
+                if (rend.material == invalid_material_handle)
+                {
+                    log::warn("Entity {} has an invalid material.", ent.get_id());
+                    continue;
+                }
 
                 math::mat4 modelMatrix;
                 math::compose(modelMatrix, ent.get_component_handle<scale>().read(), ent.get_component_handle<rotation>().read(), ent.get_component_handle<position>().read());
@@ -273,13 +286,13 @@ namespace args::rendering
             if (temp < 3)
             {
                 temp++;
-                log::debug("render took: {:.3f}ms\tdeltaTime: {:.3f}ms fps: {:.3f}", elapsed.milliseconds(), deltaTime.milliseconds(), 1.0 / deltaTime);
+                //log::debug("render took: {:.3f}ms\tdeltaTime: {:.3f}ms fps: {:.3f}", elapsed.milliseconds(), deltaTime.milliseconds(), 1.0 / deltaTime);
             }
             else
             {
                 frameCount++;
                 totalTime += deltaTime;
-                log::debug("render took: {:.3f}ms\tdeltaTime: {:.3f}ms fps: {:.3f} average: {:.3f}", elapsed.milliseconds(), deltaTime.milliseconds(), 1.0 / deltaTime, 1.0 / (totalTime / frameCount));
+                //log::debug("render took: {:.3f}ms\tdeltaTime: {:.3f}ms fps: {:.3f} average: {:.3f}", elapsed.milliseconds(), deltaTime.milliseconds(), 1.0 / deltaTime, 1.0 / (totalTime / frameCount));
             }
         }
     };

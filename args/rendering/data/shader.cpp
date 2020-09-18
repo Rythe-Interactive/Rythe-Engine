@@ -121,9 +121,11 @@ namespace args::rendering
                     params["ONE_MINUS_CONSTANT_ALPHA"] = GL_ONE_MINUS_CONSTANT_ALPHA;
                     params["SRC_ALPHA_SATURATE"] = GL_SRC_ALPHA_SATURATE;
                 }
+                param = GL_FALSE;
             }
             break;
             default:
+                param = GL_FALSE;
                 break;
             }
 
