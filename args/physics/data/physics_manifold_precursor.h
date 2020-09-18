@@ -13,10 +13,10 @@ namespace args::physics
 		ecs::component_handle<physicsComponent> physicsComponentHandle;
 		int id;
 
-		physics_manifold_precursor(math::mat4 pWorldTransform, ecs::component_handle<physicsComponent>& pPhysicsCompHandle,int precursorID) :
-			worldTransform(pWorldTransform),physicsComponentHandle(pPhysicsCompHandle),id(precursorID)
+		physics_manifold_precursor(math::mat4 pWorldTransform,ecs::component_handle<physicsComponent>& pPhysicsCompHandle,int precursorID) :
+			worldTransform(pWorldTransform), physicsComponentHandle(pPhysicsCompHandle),id(precursorID)
 		{
-			
+
 		}
 	};
 

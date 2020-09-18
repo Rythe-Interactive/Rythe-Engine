@@ -4,13 +4,19 @@
 
 namespace args::physics
 {
+    void physicsComponent::calculateNewLocalCenterOfMass()
+    {
+    }
     void physicsComponent::ConstructConvexHull()
     {
 
+        calculateNewLocalCenterOfMass();
     }
 
     void physicsComponent::ConstructBox()
     {
+
+        calculateNewLocalCenterOfMass();
     }
 
     void physicsComponent::AddBox(const cube_collider_params& cubeParams)
@@ -21,10 +27,12 @@ namespace args::physics
 
         colliders->push_back(cuboidCollider);
 
+        calculateNewLocalCenterOfMass();
     }
 
     void physicsComponent::AddSphere()
     {
+        calculateNewLocalCenterOfMass();
     }
 }
 

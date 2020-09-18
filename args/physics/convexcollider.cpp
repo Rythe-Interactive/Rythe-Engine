@@ -29,6 +29,10 @@ namespace args::physics
 
     }
 
+    void ConvexCollider::UpdateTightAABB(math::mat4 transform)
+    {
+    }
+
     void ConvexCollider::ConstructConvexHullWithMesh()
     {
     }
