@@ -48,7 +48,7 @@ struct Records
 namespace args::serialization
 {
     template<class T>
-    class SerializationUtil
+    class ARGS_API SerializationUtil
     {
     public:
         static void JSONSerialize(std::stringstream os, T component)

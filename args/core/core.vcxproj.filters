@@ -477,6 +477,7 @@
     <ClInclude Include="scene management\scene.hpp" />
     <ClInclude Include="scene management\scenemanager.hpp" />
     <ClInclude Include="serialization\serializationutil.hpp" />
+    <ClInclude Include="scene management\SceneManagerModule.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">

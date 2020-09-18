@@ -1,5 +1,8 @@
 #include <core/platform/platform.hpp>
 #include <core/types/primitives.hpp>
+#include <unordered_map>
+#include <string>
+#include <memory>
 
 namespace args::scenemanagement
 {
@@ -8,10 +11,12 @@ namespace args::scenemanagement
     public:
         std::unordered_map<int, std::string> sceneObjects;
         int objectCount = 0;
-        args::core::ecs::EcsRegistry m_registry;
+        args::core::ecs::EcsRegistry* m_registry;
 
-        Scene();
-        Scene(const Scene& scene);
+        Scene(args::core::ecs::EcsRegistry& _registry)
+        {
+            m_registry = &_registry;
+        };
 
         template<typename Archive>
         void serialize(Archive& archive)

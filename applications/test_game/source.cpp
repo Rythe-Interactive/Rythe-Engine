@@ -12,6 +12,8 @@
 #include "module/testModule.hpp"
 #include "systems/testsystem.hpp"
 
+#include <core/scene management/SceneManagerModule.hpp>
+
 #include <physics/PhysicsModule.hpp>
 
 #include "test_filesystem.hpp"
@@ -31,9 +33,9 @@ void ARGS_CCONV reportModules(Engine* engine)
     engine->reportModule<app::ApplicationModule>();
     engine->reportModule<rendering::RenderingModule>();
     engine->reportModule<physics::PhysicsModule>();
+    engine->reportModule<scenemanagement::SceneManagerModule>();
 
     Records records;
-    args::scenemanagement::SceneManager sceneManager;
 
 
     for (int i = 0; i < 20; i++)
@@ -41,9 +43,7 @@ void ARGS_CCONV reportModules(Engine* engine)
         records.records[i] = MyRecord(i * 10, i * 100, i * 1000);
     }
 
-    
-
-    serialization::SerializationUtil<std::unique_ptr<args::scenemanagement::Scene>>::JSONSerialize(std::ofstream("Scene1.cornflake", std::ios::binary),  sceneManager.createScene());
+    serialization::SerializationUtil<std::unique_ptr<args::scenemanagement::Scene>>::JSONSerialize(std::ofstream("Scene1.cornflake", std::ios::binary), args::scenemanagement::SceneManager.createScene());
 
    /* Records output = serialization::SerializationUtil<Records>::JSONDeserialize(std::ifstream("Scene1.cornflake"));
     std::cout << output.records[10].x;*/
