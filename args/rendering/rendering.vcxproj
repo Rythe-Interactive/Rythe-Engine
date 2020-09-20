@@ -20,8 +20,10 @@
   <ItemGroup>
     <ClInclude Include="components\camera.hpp" />
     <ClInclude Include="components\renderable.hpp" />
+    <ClInclude Include="data\framebuffer.hpp" />
     <ClInclude Include="data\importers\texture_importers.hpp" />
     <ClInclude Include="data\material.hpp" />
+    <ClInclude Include="data\renderbuffer.h" />
     <ClInclude Include="data\shader.hpp" />
     <ClInclude Include="detail\engine_include.hpp" />
     <ClInclude Include="detail\stb_image.h" />
@@ -29,7 +31,11 @@
     <ClInclude Include="data\model.hpp" />
     <ClInclude Include="data\texture.hpp" />
     <ClInclude Include="module\renderingmodule.hpp" />
+    <ClInclude Include="pipeline\base\pipeline.hpp" />
+    <ClInclude Include="pipeline\base\renderstage.hpp" />
     <ClInclude Include="rendering.hpp" />
+    <ClInclude Include="render_pipeline\base\pipeline.hpp" />
+    <ClInclude Include="render_pipeline\base\renderstage.hpp" />
     <ClInclude Include="systems\renderer.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
