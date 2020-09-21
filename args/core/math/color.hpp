@@ -5,9 +5,9 @@ namespace args::core::math
 {
     struct color : public vec4
     {
-        color(const vec4& s) { vec4::data = { s.r, s.g, s.b, s.a }; }
-        color(vec4&& s) { vec4::data = { s.r, s.g, s.b, s.a }; }
-        color(float r, float g, float b, float a = 1.f) { vec4::data = { r, g, b, a }; }
+        color(const vec4& s) : vec4(s) {}
+        color(vec4&& s) :vec4(s) {}
+        color(float r, float g, float b, float a = 1.f) : vec4(r, g, b, a) {}
         color() = default;
 
         bool operator==(const color& other) const
