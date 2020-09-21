@@ -7,6 +7,8 @@
 #include <physics/physics_component.hpp>
 #include <physics/rigidbody.hpp>
 
+#include <core/compute/clcontext.hpp>
+
 
 using namespace args;
 
@@ -43,6 +45,58 @@ public:
         log::warn("Hello World");
         log::error("Hello World");
         log::debug("Hello World");
+
+        compute::Kernel k = compute::Context::createKernel(fs::view("basic://kernels/vadd_kernel.cl").get());
+ 
+
+        std::vector<int> ints;
+
+        auto res = fs::view("basic://bigint.txt").get();
+        if (res == common::valid) {
+
+            char* buf = new char[6];
+            memset(buf,0,6);
+            filesystem::basic_resource contents = res;
+
+            for (size_t i = 0; i < contents.size() && i < 5*2048; i += 5)
+            {
+                memcpy(buf,contents.data()+ i,5);
+                ints.push_back(std::atol(buf));
+                
+            }
+
+            delete[] buf;
+        }
+
+        std::vector<int> first_ints (ints.begin(), ints.begin()+ints.size()/2);
+        std::vector<int> second_ints (ints.begin() + ints.size() /2 , ints.end());
+
+        size_t to_process = std::min(first_ints.size(),second_ints.size());
+
+        std::vector<int> results(to_process);
+
+
+        auto A = compute::Context::createBuffer(first_ints,compute::buffer_type::READ_BUFFER);
+        auto B = compute::Context::createBuffer(second_ints,compute::buffer_type::READ_BUFFER);
+        auto C = compute::Context::createBuffer(results,compute::buffer_type::WRITE_BUFFER);
+
+         k.functionContext("vector_add")
+            .enqueue_buffer(A,"A")
+            .enqueue_buffer(B,"B")
+            .tell_buffer(C,"C")
+            .global(1024)
+            .local(64)
+            .dispatch()
+            .show_buffer(C,"C")
+            .finish();
+
+
+       // auto [data,len] = C.read<int>();
+
+        for (int& i : results)
+        {
+            log::info("got {}", i);
+        }
 
         app::InputSystem::createBinding<player_move>(app::inputmap::method::W, 1.f);
         app::InputSystem::createBinding<player_move>(app::inputmap::method::S, -1.f);
@@ -137,7 +191,7 @@ public:
 
         rb.globalCentreOfMass = bodyP;
         //rb.addForce( math::vec3(-9, 0, 0));
-        rb.addForceAt(math::vec3(0, 4.5, 5.1f),math::vec3(-100, 0, 0));
+        rb.addForceAt(math::vec3(0, 4.5, 5.1f), math::vec3(-100, 0, 0));
         rb.globalCentreOfMass = bodyP;
 
         rbHandle.write(rb);
@@ -177,7 +231,7 @@ public:
         math::vec3 move = math::toMat3(rot) * math::vec3(0.f, 0.f, 1.f);
         move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta;
         posH.fetch_add(move);
-        log::debug("FORWD: ({:.3}, {:.3}, {:.3})", move.x, move.y, move.z);
+        //log::debug("FORWD: ({:.3}, {:.3}, {:.3})", move.x, move.y, move.z);
     }
 
     void onPlayerStrive(player_strive* action)
@@ -187,7 +241,7 @@ public:
         math::vec3 move = math::toMat3(rot) * math::vec3(1.f, 0.f, 0.f);
         move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta;
         posH.fetch_add(move);
-        log::debug("RIGHT: ({:.3}, {:.3}, {:.3})", move.x, move.y, move.z);
+        //log::debug("RIGHT: ({:.3}, {:.3}, {:.3})", move.x, move.y, move.z);
     }
 
     void onPlayerFly(player_fly* action)

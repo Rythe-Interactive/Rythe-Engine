@@ -22,6 +22,9 @@
     <ClCompile Include="data\mesh.cpp" />
     <ClCompile Include="logging\logging.cpp" />
     <ClCompile Include="data\importers\mesh_importers.cpp" />
+    <ClCompile Include="compute\clcontext.cpp" />
+    <ClCompile Include="compute\kernel.cpp" />
+    <ClCompile Include="compute\buffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -473,6 +476,9 @@
     <ClInclude Include="logging\spdlog\version.h" />
     <ClInclude Include="data\importers\mesh_importers.hpp" />
     <ClInclude Include="common\unit_conversion.hpp" />
+    <ClInclude Include="compute\clcontext.hpp" />
+    <ClInclude Include="compute\kernel.hpp" />
+    <ClInclude Include="compute\buffer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">

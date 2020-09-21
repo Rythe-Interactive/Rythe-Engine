@@ -217,7 +217,7 @@ namespace args::application
                     }
                     if (inputmap::is_axis(met))
                     {
-                        std::get<0>(m_axes[met][typeHash<Event>()]).clear();
+                        data::m_axes[met][typeHash<Event>()].callback.clear();
                     }
                 }
             }

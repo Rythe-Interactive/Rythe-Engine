@@ -3,6 +3,8 @@
 #include <core/defaults/defaultcomponents.hpp>
 #include <core/data/importers/mesh_importers.hpp>
 
+#include <core/compute/clcontext.hpp>
+
 namespace args::core
 {
     class CoreModule : public Module
@@ -11,6 +13,9 @@ namespace args::core
         virtual void setup() override
         {
             filesystem::AssetImporter::reportConverter<obj_mesh_loader>(".obj");
+            log::info("Creating OpenCL");
+            compute::Context::create();
+            log::info("Done creating OpenCL");
 
             reportComponentType<position>();
             reportComponentType<rotation>();
