@@ -73,9 +73,9 @@ public:
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
-            modelH = rendering::ModelCache::create_model("test", "basic://models/Cube.obj"_view);
-            wireframeH = rendering::MaterialCache::create_material("wireframe", "basic://shaders/wireframe.glsl"_view);
-            vertexH = rendering::MaterialCache::create_material("vertex", "basic://shaders/position.glsl"_view);
+            modelH = rendering::ModelCache::create_model("test", "assets://models/Cube.obj"_view);
+            wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.glsl"_view);
+            vertexH = rendering::MaterialCache::create_material("vertex", "assets://shaders/position.glsl"_view);
 
             app::ContextHelper::makeContextCurrent(nullptr);
         }
@@ -252,6 +252,10 @@ public:
 
     void update(time::span deltaTime)
     {
+        debug::drawLine(math::vec3(0, 0, 0), math::vec3(0, 1, 0), math::colors::black);
+        debug::drawLine(math::vec3(1, 0, 0), math::vec3(0.5, 1, 0), math::colors::red, 1, false);
+        debug::drawLine(math::vec3(1, 0, 0), math::vec3(0, 0, 1), math::colors::green, 10, true);
+        debug::drawLine(math::vec3(1, 0, 0), math::vec3(0, 3, 1), math::colors::yellow, 4, false);
 
         //log::info("still alive! {}",deltaTime.seconds());
         static auto query = createQuery<sah>();

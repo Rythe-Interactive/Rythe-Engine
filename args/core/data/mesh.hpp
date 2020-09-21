@@ -57,7 +57,6 @@ namespace args::core
 
     class ARGS_API MeshCache
     {
-        friend class renderer;
         friend struct mesh_handle;
     private:
         static std::unordered_map<id_type, std::unique_ptr<std::pair<async::readonly_rw_spinlock, mesh>>> m_meshes;
