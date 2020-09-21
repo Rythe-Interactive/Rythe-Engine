@@ -77,6 +77,11 @@ namespace args::rendering
             log::error("material {} does not have a parameter named {} of type {}", m_name, name, undecoratedTypeName<T>());
             return T();
         }
+
+        attribute get_attribute(const std::string& name)
+        {
+            return m_shader.get_attribute(nameHash(name));
+        }
     };
 
     struct ARGS_API material_handle
@@ -105,6 +110,8 @@ namespace args::rendering
             async::readonly_guard guard(MaterialCache::m_materialLock);
             return MaterialCache::m_materials[id].get_param<T>(name);
         }
+
+        attribute get_attribute(const std::string& name);
 
         bool operator==(const material_handle& other) const { return id == other.id; }
     };
