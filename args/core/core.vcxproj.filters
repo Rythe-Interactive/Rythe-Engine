@@ -474,6 +474,8 @@
     <ClInclude Include="data\importers\mesh_importers.hpp" />
     <ClInclude Include="common\unit_conversion.hpp" />
     <ClInclude Include="ecs\component_meta.hpp" />
+    <ClInclude Include="math\color.hpp" />
+    <ClInclude Include="math\glm\glm_include.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">

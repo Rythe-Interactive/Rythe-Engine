@@ -226,7 +226,7 @@ namespace args::application
                 {
                     ContextHelper::windowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
                     ContextHelper::windowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-                    ContextHelper::windowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+                    ContextHelper::windowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_FALSE);
                     ContextHelper::windowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
                     GLFWmonitor* moniter = request.monitor;

@@ -250,6 +250,7 @@
     <ClInclude Include="logging\spdlog\stopwatch.h" />
     <ClInclude Include="logging\spdlog\tweakme.h" />
     <ClInclude Include="logging\spdlog\version.h" />
+    <ClInclude Include="math\color.hpp" />
     <ClInclude Include="math\constants.hpp" />
     <ClInclude Include="math\glm\common.hpp" />
     <ClInclude Include="math\glm\detail\compute_common.hpp" />
@@ -423,6 +424,7 @@
     <ClInclude Include="math\glm\fwd.hpp" />
     <ClInclude Include="math\glm\geometric.hpp" />
     <ClInclude Include="math\glm\glm.hpp" />
+    <ClInclude Include="math\glm\glm_include.hpp" />
     <ClInclude Include="math\glm\gtc\bitfield.hpp" />
     <ClInclude Include="math\glm\gtc\color_space.hpp" />
     <ClInclude Include="math\glm\gtc\constants.hpp" />

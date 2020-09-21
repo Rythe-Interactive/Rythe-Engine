@@ -52,8 +52,8 @@ public:
         app::InputSystem::createBinding<player_strive>(app::inputmap::method::A, -1.f);
         app::InputSystem::createBinding<player_fly>(app::inputmap::method::SPACE, 1.f);
         app::InputSystem::createBinding<player_fly>(app::inputmap::method::LEFT_SHIFT, -1.f);
-        app::InputSystem::createBinding<player_look_x>(app::inputmap::method::MOUSE_X, 1.f);
-        app::InputSystem::createBinding<player_look_y>(app::inputmap::method::MOUSE_Y, 1.f);
+        app::InputSystem::createBinding<player_look_x>(app::inputmap::method::MOUSE_X, 0.f);
+        app::InputSystem::createBinding<player_look_y>(app::inputmap::method::MOUSE_Y, 0.f);
         app::InputSystem::createBinding<exit_action>(app::inputmap::method::ESCAPE);
 
         bindToEvent<player_move, &TestSystem::onPlayerMove>();
@@ -73,9 +73,9 @@ public:
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
-            modelH = rendering::ModelCache::create_model("test", "basic://models/Cube.obj"_view);
-            wireframeH = rendering::MaterialCache::create_material("wireframe", "basic://shaders/wireframe.glsl"_view);
-            vertexH = rendering::MaterialCache::create_material("vertex", "basic://shaders/position.glsl"_view);
+            modelH = rendering::ModelCache::create_model("test", "assets://models/Cube.obj"_view);
+            wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.glsl"_view);
+            vertexH = rendering::MaterialCache::create_material("vertex", "assets://shaders/position.glsl"_view);
 
             app::ContextHelper::makeContextCurrent(nullptr);
         }
@@ -164,7 +164,7 @@ public:
             auto ent = m_ecs->createEntity();
             ent.add_component<physics::physicsComponent>();
             auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH });
+            renderableHandle.write({ modelH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(5.1f, -2.0f, 0));
@@ -252,6 +252,10 @@ public:
 
     void update(time::span deltaTime)
     {
+        debug::drawLine(math::vec3(0, 0, 0), math::vec3(0, 1, 0), math::colors::black);
+        debug::drawLine(math::vec3(1, 0, 0), math::vec3(0.5, 1, 0), math::colors::red, 1, false);
+        debug::drawLine(math::vec3(1, 0, 0), math::vec3(0, 0, 1), math::colors::green, 10, true);
+        debug::drawLine(math::vec3(1, 0, 0), math::vec3(0, 3, 1), math::colors::yellow, 4, false);
 
         //log::info("still alive! {}",deltaTime.seconds());
         static auto query = createQuery<sah>();
