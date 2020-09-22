@@ -74,19 +74,6 @@ namespace args::core::ecs
             data.parent = invalid_id;
     }
 
-    template<typename Archive>
-    A_NODISCARD void entity_handle::serialize(Archive& oarchive)
-    {
-        oarchive(cereal::make_nvp("ENTITY", *this), cereal::make_nvp("COMPONENT", entity_handle::get_component_handle(0)));
-    }
-
-    template<typename Archive>
-    A_NODISCARD entity_handle entity_handle::deserialize(Archive& iarchive)
-    {
-        entity_handle output = m_registry->createEntity();
-        iarchive(output, output.add_component);
-    }
-
     A_NODISCARD inline entity_handle entity_handle::operator[](index_type index) const
     {
         return get_child(index);

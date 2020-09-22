@@ -42,7 +42,20 @@ namespace args::core::ecs
         /**@brief Checks if handle still points to a valid component.
          */
         operator bool() { return valid(); }
+        template<typename Archive>
+        void serialize(Archive& oarchive)
+        {
+            oarchive(cereal::make_nvp("Parent",entity));
+        }
+
+        template<typename Archive>
+        A_NODISCARD component_handle_base deserialize(Archive& iarchive)
+        {
+            //iarchive(*this);
+            return std::unique_ptr<this>);
+        }
     };
+
 
     /**@class component_handle
      * @brief Handle to components that allow safe component loading and storing.
@@ -65,6 +78,19 @@ namespace args::core::ecs
         component_handle& operator=(component_handle&& other) { m_registry = other.m_registry; m_ownerId = other.m_ownerId; return *this; }
 
         bool operator==(const component_handle<component_type>& other) const { return m_registry == other.m_registry && m_ownerId == other.m_ownerId; }
+
+        template<typename Archive>
+        void serialize(Archive& oarchive)
+        {
+            oarchive(cereal::make_nvp("Type", component_type));
+        }
+
+        template<typename Archive>
+        A_NODISCARD component_handle_base deserialize(Archive& iarchive)
+        {
+            iarchive(*this);
+            return std::unique_ptr<this>);
+        }
 
         /**@brief Atomic read of component.
          * @param order Memory order at which to load the component.

@@ -176,6 +176,10 @@ public:
         createProcess<&TestSystem::differentThread>("TestChain");
         createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
 
+        args::core::scenemanagement::SceneManager::createScene("Test");
+
+        serialization::SerializationUtil<args::core::scenemanagement::Scene>::JSONSerialize(std::ofstream("Scene1.cornflake", std::ios::binary), *args::core::scenemanagement::SceneManager::getScene("Test"));
+
     }
 
     void setupCameraEntity()

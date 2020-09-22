@@ -2,7 +2,7 @@
 #include <core/engine/module.hpp>
 #include <core/defaults/defaultcomponents.hpp>
 #include <core/data/importers/mesh_importers.hpp>
-#include <core/scene management/scenemanager.hpp>
+#include <core/scenemanagement/scenemanager.hpp>
 
 namespace args::core
 {
@@ -16,7 +16,7 @@ namespace args::core
             reportComponentType<position>();
             reportComponentType<rotation>();
             reportComponentType<scale>();
-            reportSystem<scenemanagement::SceneManager>();
+            reportSystem < ::args::core::scenemanagement::SceneManager > ();
         }
 
         virtual priority_type priority() override

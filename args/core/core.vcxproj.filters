@@ -22,6 +22,7 @@
     <ClCompile Include="data\mesh.cpp" />
     <ClCompile Include="logging\logging.cpp" />
     <ClCompile Include="data\importers\mesh_importers.cpp" />
+    <ClCompile Include="scenemanagement\scenemanager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -474,10 +475,10 @@
     <ClInclude Include="data\importers\mesh_importers.hpp" />
     <ClInclude Include="common\unit_conversion.hpp" />
     <ClInclude Include="ecs\component_meta.hpp" />
-    <ClInclude Include="scene management\scene.hpp" />
-    <ClInclude Include="scene management\scenemanager.hpp" />
     <ClInclude Include="serialization\serializationutil.hpp" />
-    <ClInclude Include="scene management\SceneManagerModule.hpp" />
+    <ClInclude Include="scenemanagement\scene.hpp" />
+    <ClInclude Include="scenemanagement\scenemanager.hpp" />
+    <ClInclude Include="scenemanagement\SceneManagerModule.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">

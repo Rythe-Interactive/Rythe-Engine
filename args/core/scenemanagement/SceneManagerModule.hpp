@@ -1,16 +1,15 @@
 #pragma once
-#include <core/scene management/scenemanager.hpp>
+#include <core/scenemanagement/scenemanager.hpp>
 
-namespace args::scenemanagement
+namespace args::core::scenemanagement
 {
     class SceneManagerModule: public Module
     {
     public:
-        SceneManager sceneManager;
         virtual void setup() override
         {
             addProcessChain("SceneModule");
-            reportSystem<SceneManager>();
+            reportSystem<args::core::scenemanagement::SceneManager>();
         }
 
         virtual priority_type priority() override

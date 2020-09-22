@@ -538,9 +538,9 @@
     <ClInclude Include="math\trigonometry.hpp" />
     <ClInclude Include="platform\args_library.hpp" />
     <ClInclude Include="platform\platform.hpp" />
-    <ClInclude Include="scene management\scene.hpp" />
-    <ClInclude Include="scene management\scenemanager.hpp" />
-    <ClInclude Include="scene management\SceneManagerModule.hpp" />
+    <ClInclude Include="scenemanagement\scene.hpp" />
+    <ClInclude Include="scenemanagement\scenemanager.hpp" />
+    <ClInclude Include="scenemanagement\SceneManagerModule.hpp" />
     <ClInclude Include="scheduling\process.hpp" />
     <ClInclude Include="scheduling\processchain.hpp" />
     <ClInclude Include="scheduling\scheduler.hpp" />
@@ -574,6 +574,7 @@
     <ClCompile Include="filesystem\view.cpp" />
     <ClCompile Include="logging\logging.cpp" />
     <ClCompile Include="math\glm\detail\glm.cpp" />
+    <ClCompile Include="scenemanagement\scenemanager.cpp" />
     <ClCompile Include="scheduling\processchain.cpp" />
     <ClCompile Include="scheduling\scheduler.cpp" />
     <ClCompile Include="types\type_util.cpp" />

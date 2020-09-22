@@ -122,16 +122,16 @@ namespace args::core::ecs
         void set_parent(id_type newParent) const;
 
         /**@brief serializes the entity depending on its archive
-      * @param oarchive template<typename Archive>
-      * @note Will only be called when said entity is serializes through an archive.
-      */
+         * @param oarchive template<typename Archive>
+         * @note Will only be called when said entity is serializes through an archive.
+         */
         template<typename Archive>
-        A_NODISCARD void serialize(Archive& oarchive);
+        void serialize(Archive& oarchive);
 
         /**@brief deserializes the entity depending on its archive
-    * @param oarchive template<typename Archive>
-    * @note not sure how i'm doing this yet, yeet
-    */
+         * @param oarchive template<typename Archive>
+         * @note not sure how i'm doing this yet, yeet
+         */
         template<typename Archive>
         A_NODISCARD entity_handle deserialize(Archive& iarchive);
 
@@ -284,6 +284,20 @@ namespace args::core::ecs
          */
         bool valid() const;
     };
+
+    template<typename Archive>
+    void entity_handle::serialize(Archive& oarchive)
+    {
+        oarchive(cereal::make_nvp("COMPONENT", component));
+    }
+
+    template<typename Archive>
+    A_NODISCARD entity_handle entity_handle::deserialize(Archive& iarchive)
+    {
+        iarchive(*this);
+        return std::unique_ptr<this>);
+    }
+
 
     using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
 }

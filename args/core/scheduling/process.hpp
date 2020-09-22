@@ -35,6 +35,7 @@ namespace args::core::scheduling
         Process() = default;
         Process(Process&&) = default;
         Process& operator=(Process&&) = default;
+        ~Process() = default;
 
         /**@brief Returns the hash of the name of the process.
          */

@@ -5,6 +5,8 @@
 #include <core/ecs/ecsregistry.hpp>
 #include <core/scheduling/scheduler.hpp>
 #include <core/events/eventbus.hpp>
+#include <core/time/time_span.hpp>
+#include <core/scheduling/process.hpp>
 #include <memory>
 
 namespace args::core
@@ -45,7 +47,7 @@ namespace args::core
 
             m_scheduler->hookProcess<charc>(processChainName, m_processes[id].get());
         }
-
+        /*
         void createProcess(cstring processChainName, delegate<void(time::time_span<fast_time>)>&& operation, time::time_span<fast_time> interval = 0)
         {
             std::string name = std::string(processChainName) + undecoratedTypeName<SelfType>() + std::to_string(interval);
@@ -58,6 +60,7 @@ namespace args::core
             m_scheduler->hookProcess(processChainName, m_processes[id].get());
         }
 
+        */
         void destroyProcess(cstring processChainName, time::time_span<fast_time> interval = 0)
         {
             std::string name = std::string(processChainName) + undecoratedTypeName<SelfType>() + std::to_string(interval);
