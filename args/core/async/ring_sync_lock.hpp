@@ -5,6 +5,10 @@
 #include <unordered_map>
 #include <core/async/transferable_atomic.hpp>
 
+/**
+ * @file ring_sync_lock.hpp
+ */
+
 namespace args::core::async
 {
 	/**@class ring_sync_lock

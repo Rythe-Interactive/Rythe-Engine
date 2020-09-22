@@ -27,6 +27,11 @@ namespace args::application
             ContextHelper::setInputMode(handle, GLFW_CURSOR, enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
             ContextHelper::makeContextCurrent(nullptr);
         }
+
+        inline void show()
+        {
+            ContextHelper::showWindow(handle);
+        }
     };
 
     constexpr window invalid_window = {};

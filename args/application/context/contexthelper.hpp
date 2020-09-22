@@ -34,6 +34,8 @@ namespace args::application
 
         static atomic_sparse_map<GLFWwindow*, bool> m_windowInitialized;
 
+        static std::atomic<GLFWwindow*> newFocus;
+
     public:
         ContextHelper() = delete;
         ~ContextHelper() = delete;
@@ -54,6 +56,12 @@ namespace args::application
         static void windowHint(int hint, int value);
         static GLFWwindow* createWindow(math::ivec2 dim, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
         static GLFWwindow* createWindow(int width, int height, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
+        /**@brief Request the input thread to give focus to this window.
+         */
+        static void showWindow(GLFWwindow* window);
+        /**@brief Gives focus to the window that has requested it. (may only be called from the input thread)
+         */
+        static void updateWindowFocus();
         static GLFWglproc getProcAddress(cstring procname);
         static void setWindowShouldClose(GLFWwindow* window, int value);
         static int windowShouldClose(GLFWwindow* window);

@@ -32,6 +32,16 @@ namespace args::rendering
         virtual GLenum get_type() const { return m_type; }
         virtual std::string get_name() const { return m_name; }
         virtual GLint get_location() const { return m_location; }
+
+        bool operator==(const shader_parameter_base& other)
+        {
+            return m_shaderId == other.m_shaderId && m_name == other.m_name && m_type == other.m_type && m_location == other.m_location;
+        }
+
+        bool operator!=(const shader_parameter_base& other)
+        {
+            return m_shaderId != other.m_shaderId || m_name != other.m_name || m_type != other.m_type || m_location != other.m_location;
+        }
     };
 
     template<typename T>
@@ -181,6 +191,8 @@ namespace args::rendering
         }
     };
 
+    const attribute invalid_attribute(0, std::string_view(), 0, 0);
+
 #pragma endregion
 
     struct shader
@@ -219,12 +231,20 @@ namespace args::rendering
 
         attribute get_attribute(const std::string& name)
         {
-            return *(attributes[nameHash(name)].get());
+            id_type id = nameHash(name);
+            if (attributes.count(id))
+                return *(attributes[id].get());
+
+            log::error("Shader {} does not contain attribute {}", this->name, name);
+            return invalid_attribute;
         }
 
         attribute get_attribute(id_type id)
         {
-            return *(attributes[id].get());
+            if (attributes.count(id))
+                return *(attributes[id].get());
+            log::error("Shader {} does not contain attribute with id {}", this->name, id);
+            return invalid_attribute;
         }
 
         std::vector<std::pair<std::string, GLenum>> get_uniform_info()
@@ -301,6 +321,7 @@ namespace args::rendering
 
     public:
         static shader_handle create_shader(const std::string& name, const fs::view& file, shader_import_settings settings = default_shader_settings);
+        static shader_handle create_shader(const fs::view& file, shader_import_settings settings = default_shader_settings);
         static shader_handle get_handle(const std::string& name);
         static shader_handle get_handle(id_type id);
     };

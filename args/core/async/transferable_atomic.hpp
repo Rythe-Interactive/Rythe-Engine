@@ -2,7 +2,8 @@
 #include <atomic>
 #include <core/async/readonly_rw_spinlock.hpp>
 
-/** @file transferable_atomic.hpp
+/**
+ * @file transferable_atomic.hpp
  */
 
 namespace args::core::async

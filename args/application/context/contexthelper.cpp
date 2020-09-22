@@ -8,6 +8,8 @@ namespace args::application
     async::readonly_rw_spinlock ContextHelper::m_initCallbackLock;
     multicast_delegate<void()> ContextHelper::m_onInit;
 
+    std::atomic<GLFWwindow*> ContextHelper::newFocus;
+
     bool ContextHelper::initialized()
     {
         return m_initialized.load(std::memory_order_acquire);
@@ -82,6 +84,25 @@ namespace args::application
     GLFWwindow* ContextHelper::createWindow(int width, int height, const char* title, GLFWmonitor* monitor, GLFWwindow* share)
     {
         return glfwCreateWindow(width, height, title, monitor, share);
+    }
+
+    void ContextHelper::showWindow(GLFWwindow* window)
+    {
+        newFocus.store(window, std::memory_order_release);
+    }
+
+    void ContextHelper::updateWindowFocus()
+    {
+        GLFWwindow* focus = newFocus.load(std::memory_order_acquire);
+        if (!focus)
+            return;
+
+        while (!newFocus.compare_exchange_weak(focus, nullptr, std::memory_order_release, std::memory_order_relaxed))
+            ;
+
+        glfwHideWindow(focus);
+        glfwShowWindow(focus);
+        glfwFocusWindow(focus);
     }
 
     GLFWglproc ContextHelper::getProcAddress(cstring procname)

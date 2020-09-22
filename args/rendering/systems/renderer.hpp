@@ -59,12 +59,15 @@ namespace args::rendering
                 debugLines.clear();
             }            
 
-            static material_handle debugMaterial = MaterialCache::create_material("color", ShaderCache::create_shader("color", "assets://shaders/debug.glsl"_view));
+            static material_handle debugMaterial = MaterialCache::create_material("debug", "assets://shaders/debug.glsl"_view);
             static app::gl_id vertexBuffer = -1;
             static size_type vertexBufferSize = 0;
             static app::gl_id colorBuffer = -1;
             static size_type colorBufferSize = 0;
             static app::gl_id vao = -1;
+
+            if (debugMaterial == invalid_material_handle)
+                return;
 
             if (vertexBuffer == -1)
                 glGenBuffers(1, &vertexBuffer);
@@ -125,6 +128,13 @@ namespace args::rendering
                     glBufferSubData(GL_ARRAY_BUFFER, 0, colorCount * sizeof(math::color), colors.data());
 
                     auto colorAttrib = debugMaterial.get_attribute("color");
+
+                    if (colorAttrib == invalid_attribute)
+                    {
+                        glBindBuffer(GL_ARRAY_BUFFER, 0);
+                        break;
+                    }
+
                     colorAttrib.set_attribute_pointer(4, GL_FLOAT, GL_FALSE, 0, 0);
 
                     ///------------ camera ------------///

@@ -7,6 +7,7 @@
 #include <physics/physics_component.hpp>
 #include <physics/rigidbody.hpp>
 #include <physics/cube_collider_params.hpp>
+#include <rendering/debugrendering.hpp>
 
 using namespace args;
 
@@ -65,17 +66,22 @@ public:
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
         window.enableCursor(false);
+        window.show();
         rendering::model_handle modelH;
         rendering::material_handle wireframeH;
         rendering::material_handle vertexH;
+        rendering::material_handle uvH;
+        rendering::material_handle normalH;
 
         {
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
             modelH = rendering::ModelCache::create_model("test", "assets://models/Cube.obj"_view);
-            wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.glsl"_view);
+            wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wirefrrame.glsl"_view);
             vertexH = rendering::MaterialCache::create_material("vertex", "assets://shaders/position.glsl"_view);
+            uvH = rendering::MaterialCache::create_material("uv", "assets://shaders/uv.glsl"_view);
+            normalH = rendering::MaterialCache::create_material("normal", "assets://shaders/normal.glsl"_view);
 
             app::ContextHelper::makeContextCurrent(nullptr);
         }
@@ -83,7 +89,7 @@ public:
         {
             auto ent = m_ecs->createEntity();
             ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { modelH, wireframeH });
+            m_ecs->createComponent<rendering::renderable>(ent, { modelH, normalH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(0, 0, 5.1f));
@@ -93,7 +99,7 @@ public:
         {
             auto ent = m_ecs->createEntity();
             ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { modelH, vertexH });
+            m_ecs->createComponent<rendering::renderable>(ent, { modelH, uvH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(5.1f, 0, 0));
@@ -252,10 +258,9 @@ public:
 
     void update(time::span deltaTime)
     {
-        debug::drawLine(math::vec3(0, 0, 0), math::vec3(0, 1, 0), math::colors::black);
-        debug::drawLine(math::vec3(1, 0, 0), math::vec3(0.5, 1, 0), math::colors::red, 1, false);
-        debug::drawLine(math::vec3(1, 0, 0), math::vec3(0, 0, 1), math::colors::green, 10, true);
-        debug::drawLine(math::vec3(1, 0, 0), math::vec3(0, 3, 1), math::colors::yellow, 4, false);
+        debug::drawLine(math::vec3(0, 0, 0), math::vec3(1, 0, 0), math::colors::red, 10);
+        debug::drawLine(math::vec3(0, 0, 0), math::vec3(0, 1, 0), math::colors::green, 10);
+        debug::drawLine(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::colors::blue, 10);
 
         //log::info("still alive! {}",deltaTime.seconds());
         static auto query = createQuery<sah>();

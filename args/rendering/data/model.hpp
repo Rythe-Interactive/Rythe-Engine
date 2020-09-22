@@ -15,6 +15,7 @@
 #define SV_TANGENT SV_START + 2
 #define SV_TEXCOORD0 SV_START + 3
 #define SV_MODELMATRIX SV_START + 4
+
 #define SV_VIEW SV_START
 #define SV_PROJECT SV_START + 4
 

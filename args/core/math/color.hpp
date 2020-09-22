@@ -1,8 +1,16 @@
 #pragma once
 #include <core/math/glm/glm_include.hpp>
 
+/**
+ * @file color.hpp
+ */
+
 namespace args::core::math
 {
+    /**@class color
+     * @brief Color oriented wrapper around vec4.
+     * @ref args::core::math::vec4
+     */
     struct color : public vec4
     {
         color(const vec4& s) : vec4(s) {}
@@ -21,6 +29,9 @@ namespace args::core::math
         }
     };
 
+    /**
+     * @brief Default colors in RGBA.
+     */
     namespace colors
     {
         const color black       { 0.f, 0.f, 0.f, 1.f };

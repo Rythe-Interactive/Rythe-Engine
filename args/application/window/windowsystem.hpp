@@ -192,6 +192,11 @@ namespace args::application
 #pragma endregion
 
     public:
+        void showMainWindow()
+        {
+            ContextHelper::showWindow(m_ecs->world.read_component<window>());
+        }
+
         void exit()
         {
             raiseEvent<events::exit>();
@@ -217,6 +222,7 @@ namespace args::application
                         }
                     log::debug("Creating main window.");
                     self->createWindows();
+                    self->showMainWindow();
                 }, this);
 
             createProcess<&WindowSystem::refreshWindows>("Rendering");
@@ -334,6 +340,7 @@ namespace args::application
                 return;
 
             ContextHelper::pollEvents();
+            ContextHelper::updateWindowFocus();
         }
     };
 }
