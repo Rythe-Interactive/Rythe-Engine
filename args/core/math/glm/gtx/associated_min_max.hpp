@@ -24,7 +24,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_associated_min_max
 	/// @{
@@ -202,6 +202,6 @@ namespace args::core::math::detail::glm
 		vec<L, T, Q> const& w, U d);
 
 	/// @}
-} //namespace args::core::math::detail::glm
+} //namespace args::core::math
 
 #include "associated_min_max.inl"

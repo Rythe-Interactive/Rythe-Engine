@@ -66,6 +66,7 @@
       <PreprocessorDefinitions>ARGS_INTERNAL;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,6 +131,7 @@
     <ClInclude Include="defaults\defaultcomponents.hpp" />
     <ClInclude Include="detail\internals.hpp" />
     <ClInclude Include="ecs\archetype.hpp" />
+    <ClInclude Include="ecs\component_meta.hpp" />
     <ClInclude Include="ecs\component_container.hpp" />
     <ClInclude Include="ecs\component_handle.hpp" />
     <ClInclude Include="ecs\ecs.hpp" />
@@ -253,6 +255,7 @@
     <ClInclude Include="logging\spdlog\stopwatch.h" />
     <ClInclude Include="logging\spdlog\tweakme.h" />
     <ClInclude Include="logging\spdlog\version.h" />
+    <ClInclude Include="math\color.hpp" />
     <ClInclude Include="math\constants.hpp" />
     <ClInclude Include="math\glm\common.hpp" />
     <ClInclude Include="math\glm\detail\compute_common.hpp" />
@@ -426,6 +429,7 @@
     <ClInclude Include="math\glm\fwd.hpp" />
     <ClInclude Include="math\glm\geometric.hpp" />
     <ClInclude Include="math\glm\glm.hpp" />
+    <ClInclude Include="math\glm\glm_include.hpp" />
     <ClInclude Include="math\glm\gtc\bitfield.hpp" />
     <ClInclude Include="math\glm\gtc\color_space.hpp" />
     <ClInclude Include="math\glm\gtc\constants.hpp" />

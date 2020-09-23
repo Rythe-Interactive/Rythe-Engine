@@ -6,6 +6,7 @@
 #include <core/types/types.hpp>
 #include <core/events/eventbus.hpp>
 #include <core/events/events.hpp>
+#include <core/ecs/component_meta.hpp>
 
 /**
  * @file component_container.hpp
@@ -45,6 +46,15 @@ namespace args::core::ecs
         component_container() = default;
         component_container(EcsRegistry* registry, events::EventBus* eventBus) : m_registry(registry), m_eventBus(eventBus) {}
 
+        ~component_container()
+        {
+            auto entities = components.keys();
+            auto count = components.size();
+
+            for (int i = 0; i < count; i++)
+                destroy_component(entities[i]);
+        }
+
         /**@brief Checks whether entity has the component.
          * @note Thread will be halted if there are any writes until they are finished.
          * @note Will trigger read on this container.
@@ -78,7 +88,10 @@ namespace args::core::ecs
          */
         virtual void create_component(id_type entityId) override
         {
-            components.emplace(entityId);
+            component_type comp;
+            if constexpr (detail::has_init<component_type, void(component_type&)>::value)
+                component_type::init(comp);
+            components.emplace(entityId, comp);
             m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId, m_registry));
         }
 
@@ -95,8 +108,11 @@ namespace args::core::ecs
          * @ref args::core::async::readonly_rw_spinlock
          */
         virtual void destroy_component(id_type entityId) override
-        {
+        {            
             m_eventBus->raiseEvent<events::component_destruction<component_type>>(entity_handle(entityId, m_registry));
+            component_type comp = components[entityId]->load(std::memory_order_acquire);
+            if constexpr (detail::has_destroy<component_type, void(component_type&)>::value)
+                component_type::destroy(comp);
             components.erase(entityId);
         }
     };

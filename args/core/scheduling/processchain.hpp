@@ -29,9 +29,11 @@ namespace args::core::scheduling
 		async::readonly_rw_spinlock m_processesLock;
 		sparse_map<id_type, Process*> m_processes;
 		async::transferable_atomic<bool> m_exit;
+        bool m_low_power;
 
-		static void threadedRun(ProcessChain* chain);
 	public:
+        static void threadedRun(ProcessChain* chain);
+
 		ProcessChain() = default;
 		ProcessChain(ProcessChain&&) = default;
 		ProcessChain& operator=(ProcessChain&&) = default;
@@ -43,7 +45,7 @@ namespace args::core::scheduling
 		 * @return bool Scheduler::createThread()
 		 * @ref Scheduler::createThread()
 		 */
-		bool run();
+		bool run(bool low_power);
 
 		/**@brief Returns the hash of the name of the process-chain.
 		 */

@@ -1,6 +1,6 @@
 #include <limits>
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<typename genType>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType epsilon()
@@ -21,4 +21,4 @@ namespace args::core::math::detail::glm
 	{
 		return genType(0.877582561890372716130286068203503191);
 	}
-} //namespace args::core::math::detail::glm
+} //namespace args::core::math

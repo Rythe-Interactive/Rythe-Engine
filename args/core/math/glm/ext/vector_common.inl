@@ -1,33 +1,33 @@
 #include "../detail/_vectorize.hpp"
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<L, T, Q> min(vec<L, T, Q> const& x, vec<L, T, Q> const& y, vec<L, T, Q> const& z)
 	{
 		GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559, "'min' only accept floating-point or integer inputs");
-		return glm::min(glm::min(x, y), z);
+		return math::min(math::min(x, y), z);
 	}
 
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<L, T, Q> min(vec<L, T, Q> const& x, vec<L, T, Q> const& y, vec<L, T, Q> const& z, vec<L, T, Q> const& w)
 	{
 		GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559, "'min' only accept floating-point or integer inputs");
-		return glm::min(glm::min(x, y), glm::min(z, w));
+		return math::min(math::min(x, y), math::min(z, w));
 	}
 
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<L, T, Q> max(vec<L, T, Q> const& x, vec<L, T, Q> const& y, vec<L, T, Q> const& z)
 	{
 		GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559, "'max' only accept floating-point or integer inputs");
-		return glm::max(glm::max(x, y), z);
+		return math::max(math::max(x, y), z);
 	}
 
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<L, T, Q> max(vec<L, T, Q> const& x, vec<L, T, Q> const& y, vec<L, T, Q> const& z, vec<L, T, Q> const& w)
 	{
 		GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559, "'max' only accept floating-point or integer inputs");
-		return glm::max(glm::max(x, y), glm::max(z, w));
+		return math::max(math::max(x, y), math::max(z, w));
 	}
 
 	template<length_t L, typename T, qualifier Q>
@@ -101,29 +101,29 @@ namespace args::core::math::detail::glm
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER vec<L, T, Q> clamp(vec<L, T, Q> const& Texcoord)
 	{
-		return glm::clamp(Texcoord, vec<L, T, Q>(0), vec<L, T, Q>(1));
+		return math::clamp(Texcoord, vec<L, T, Q>(0), vec<L, T, Q>(1));
 	}
 
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER vec<L, T, Q> repeat(vec<L, T, Q> const& Texcoord)
 	{
-		return glm::fract(Texcoord);
+		return math::fract(Texcoord);
 	}
 
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER vec<L, T, Q> mirrorClamp(vec<L, T, Q> const& Texcoord)
 	{
-		return glm::fract(glm::abs(Texcoord));
+		return math::fract(math::abs(Texcoord));
 	}
 
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER vec<L, T, Q> mirrorRepeat(vec<L, T, Q> const& Texcoord)
 	{
-		vec<L, T, Q> const Abs = glm::abs(Texcoord);
-		vec<L, T, Q> const Clamp = glm::mod(glm::floor(Abs), vec<L, T, Q>(2));
-		vec<L, T, Q> const Floor = glm::floor(Abs);
+		vec<L, T, Q> const Abs = math::abs(Texcoord);
+		vec<L, T, Q> const Clamp = math::mod(math::floor(Abs), vec<L, T, Q>(2));
+		vec<L, T, Q> const Floor = math::floor(Abs);
 		vec<L, T, Q> const Rest = Abs - Floor;
 		vec<L, T, Q> const Mirror = Clamp + Rest;
-		return mix(Rest, vec<L, T, Q>(1) - Rest, glm::greaterThanEqual(Mirror, vec<L, T, Q>(1)));
+		return mix(Rest, vec<L, T, Q>(1) - Rest, math::greaterThanEqual(Mirror, vec<L, T, Q>(1)));
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

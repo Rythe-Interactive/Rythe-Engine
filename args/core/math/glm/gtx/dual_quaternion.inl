@@ -3,7 +3,7 @@
 #include "../geometric.hpp"
 #include <limits>
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	// -- Component accesses --
 
@@ -166,7 +166,7 @@ namespace args::core::math::detail::glm
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER vec<3, T, Q> operator*(vec<3, T, Q> const& v,	tdualquat<T, Q> const& q)
 	{
-		return glm::inverse(q) * v;
+		return math::inverse(q) * v;
 	}
 
 	template<typename T, qualifier Q>
@@ -178,7 +178,7 @@ namespace args::core::math::detail::glm
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER vec<4, T, Q> operator*(vec<4, T, Q> const& v,	tdualquat<T, Q> const& q)
 	{
-		return glm::inverse(q) * v;
+		return math::inverse(q) * v;
 	}
 
 	template<typename T, qualifier Q>
@@ -244,8 +244,8 @@ namespace args::core::math::detail::glm
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER tdualquat<T, Q> inverse(tdualquat<T, Q> const& q)
 	{
-		const glm::qua<T, Q> real = conjugate(q.real);
-		const glm::qua<T, Q> dual = conjugate(q.dual);
+		const math::qua<T, Q> real = conjugate(q.real);
+		const math::qua<T, Q> dual = conjugate(q.dual);
 		return tdualquat<T, Q>(real, dual + (real * (-2.0f * dot(real,dual))));
 	}
 
@@ -349,4 +349,4 @@ namespace args::core::math::detail::glm
 		dual.w = -static_cast<T>(0.5) * ( x[0].w * real.x + x[1].w * real.y + x[2].w * real.z);
 		return tdualquat<T, Q>(real, dual);
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

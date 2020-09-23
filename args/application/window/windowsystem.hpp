@@ -49,8 +49,12 @@ namespace args::application
                     if (!ContextHelper::windowShouldClose(window))
                         return;
 
-                    delete handle.read().lock;
-                    handle.write(invalid_window);
+                    auto* lock = handle.read().lock;
+                    {
+                        async::readwrite_guard guard(*lock);
+                        handle.write(invalid_window);
+                    }
+                    delete lock;
 
                     id_type ownerId = handle.entity;
 
@@ -69,6 +73,7 @@ namespace args::application
             ContextHelper::destroyWindow(window);
         }
 
+#pragma region Callbacks
         static void onWindowMoved(GLFWwindow* window, int x, int y)
         {
             if (data::m_windowComponents.contains(window))
@@ -164,7 +169,7 @@ namespace args::application
             async::readwrite_guard guard(data::m_creationLock);
             for (auto entity : m_windowQuery)
             {
-                closeWindow(entity.get_component_handle<window>().read(std::memory_order_relaxed));
+                ContextHelper::setWindowShouldClose(entity.get_component_handle<window>().read(std::memory_order_relaxed), true);
             }
 
             m_exit = true;
@@ -179,6 +184,7 @@ namespace args::application
                 m_requests.push_back(*windowRequest);
             }
         }
+#pragma endregion
 
     public:
         virtual void setup()
@@ -187,7 +193,14 @@ namespace args::application
             bindToEvent<events::exit, &WindowSystem::onExit>();
             bindToEvent<window_request, &WindowSystem::onWindowRequest>();
 
-            raiseEvent<window_request>(world_entity_id, math::ivec2(1360, 768), "<Args> Engine", nullptr, nullptr, 1);
+            raiseEvent<window_request>(world_entity_id, math::ivec2(1360, 768), "<Args> Engine", nullptr, nullptr, 0);
+
+            m_scheduler->sendCommand(m_scheduler->getChainThreadId("Input"), [](void* param)
+                {
+                    WindowSystem* self = reinterpret_cast<WindowSystem*>(param);
+                    log::debug("Creating main window.");
+                    self->createWindows();
+                }, this);
 
             createProcess<&WindowSystem::refreshWindows>("Rendering");
             createProcess<&WindowSystem::handleWindowEvents>("Input");
@@ -213,7 +226,7 @@ namespace args::application
                 {
                     ContextHelper::windowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
                     ContextHelper::windowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-                    ContextHelper::windowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+                    ContextHelper::windowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_FALSE);
                     ContextHelper::windowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
                     GLFWmonitor* moniter = request.monitor;
@@ -246,6 +259,7 @@ namespace args::application
                     async::readwrite_guard guard(data::m_creationLock);
                     handle = m_ecs->createComponent<window>(request.entityId, win);
                 }
+                log::debug("created window: {}", request.name);
 
                 data::m_windowComponents.insert(win, handle);
                 data::m_windowEventBus.insert(win, m_eventBus);
@@ -272,8 +286,6 @@ namespace args::application
                     ContextHelper::setScrollCallback(win, &WindowSystem::onMouseScroll);
                     ContextHelper::makeContextCurrent(nullptr);
                 }
-
-                log::debug("created window: {}", request.name);
             }
 
             m_requests.clear();

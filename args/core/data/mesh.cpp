@@ -3,8 +3,8 @@
 
 namespace args::core
 {
-    std::unordered_map<id_type, std::unique_ptr<std::pair<async::readonly_rw_spinlock, mesh>>> mesh_cache::m_meshes;
-    async::readonly_rw_spinlock mesh_cache::m_meshesLock;
+    std::unordered_map<id_type, std::unique_ptr<std::pair<async::readonly_rw_spinlock, mesh>>> MeshCache::m_meshes;
+    async::readonly_rw_spinlock MeshCache::m_meshesLock;
 
     void mesh::to_resource(filesystem::basic_resource* resource, const mesh& value)
     {
@@ -98,12 +98,12 @@ namespace args::core
 
     std::pair<async::readonly_rw_spinlock&, mesh&> mesh_handle::get()
     {
-        async::readonly_guard guard(mesh_cache::m_meshesLock);
-        auto& [lock, mesh] = *(mesh_cache::m_meshes[id].get());
+        async::readonly_guard guard(MeshCache::m_meshesLock);
+        auto& [lock, mesh] = *(MeshCache::m_meshes[id].get());
         return std::make_pair(std::ref(lock), std::ref(mesh));
     }
 
-    mesh_handle mesh_cache::create_mesh(const std::string& name, const filesystem::view& file, mesh_import_settings settings)
+    mesh_handle MeshCache::create_mesh(const std::string& name, const filesystem::view& file, mesh_import_settings settings)
     {
         id_type id = nameHash(name);
 
@@ -135,7 +135,7 @@ namespace args::core
         return { id };
     }
 
-    mesh_handle mesh_cache::copy_mesh(const std::string& name, const std::string& newName)
+    mesh_handle MeshCache::copy_mesh(const std::string& name, const std::string& newName)
     {
         id_type id = nameHash(name);
         id_type newId = nameHash(newName);            
@@ -159,7 +159,7 @@ namespace args::core
         return { newId };
     }
 
-    mesh_handle mesh_cache::copy_mesh(id_type id, const std::string& newName)
+    mesh_handle MeshCache::copy_mesh(id_type id, const std::string& newName)
     {
         id_type newId = nameHash(newName);
 
@@ -173,19 +173,19 @@ namespace args::core
         return { newId };
     }
 
-    mesh_handle mesh_cache::get_handle(const std::string& name)
+    mesh_handle MeshCache::get_handle(const std::string& name)
     {
         id_type id = nameHash(name);
-        async::readonly_guard guard(mesh_cache::m_meshesLock);
-        if (mesh_cache::m_meshes.count(id))
+        async::readonly_guard guard(MeshCache::m_meshesLock);
+        if (MeshCache::m_meshes.count(id))
             return { id };
         return invalid_mesh_handle;
     }
 
-    mesh_handle mesh_cache::get_handle(id_type id)
+    mesh_handle MeshCache::get_handle(id_type id)
     {
-        async::readonly_guard guard(mesh_cache::m_meshesLock);
-        if (mesh_cache::m_meshes.count(id))
+        async::readonly_guard guard(MeshCache::m_meshesLock);
+        if (MeshCache::m_meshes.count(id))
             return { id };
         return invalid_mesh_handle;
     }
