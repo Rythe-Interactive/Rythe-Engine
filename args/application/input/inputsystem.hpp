@@ -173,11 +173,11 @@ namespace args::application
                     {
                         if (inputmap::is_key(member))
                         {
-                            data::m_actions[member][typeHash<Event>()].clear();
+                            data::m_actions[member][typeHash<Event>()].callback.clear();
                         }
                         if (inputmap::is_axis(member))
                         {
-                            std::get<0>(m_axes[member][typeHash<Event>()]).clear();
+                            data::m_axes[member][typeHash<Event>()].callback.clear();
                         }
                     }
                 }
@@ -185,11 +185,11 @@ namespace args::application
                 {
                     if (inputmap::is_key(met))
                     {
-                        data::m_actions[met][typeHash<Event>()].clear();
+                        data::m_actions[met][typeHash<Event>()].callback.clear();
                     }
                     if (inputmap::is_axis(met))
                     {
-                        std::get<0>(m_axes[met][typeHash<Event>()]).clear();
+                        data::m_axes[met][typeHash<Event>()].callback.clear();
                     }
                 }
             }
@@ -201,11 +201,11 @@ namespace args::application
                     {
                         if (inputmap::is_key(member))
                         {
-                            data::m_actions[member][typeHash<Event>()].clear();
+                            data::m_actions[member][typeHash<Event>()].callback.clear();
                         }
                         if (inputmap::is_axis(member))
                         {
-                            std::get<0>(m_axes[member][typeHash<Event>()]).clear();
+                            data::m_axes[member][typeHash<Event>()].callback.clear();
                         }
                     }
                 }
@@ -213,7 +213,7 @@ namespace args::application
                 {
                     if (inputmap::is_key(met))
                     {
-                        data::m_actions[met][typeHash<Event>()].clear();
+                        data::m_actions[met][typeHash<Event>()].callback.clear();
                     }
                     if (inputmap::is_axis(met))
                     {
