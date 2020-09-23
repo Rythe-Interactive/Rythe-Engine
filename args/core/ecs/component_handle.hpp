@@ -42,19 +42,16 @@ namespace args::core::ecs
         /**@brief Checks if handle still points to a valid component.
          */
         operator bool() { return valid(); }
-        template<typename Archive>
-        void serialize(Archive& oarchive)
-        {
-            oarchive(cereal::make_nvp("Parent",entity));
-        }
 
-        template<typename Archive>
-        A_NODISCARD component_handle_base deserialize(Archive& iarchive)
-        {
-            //iarchive(*this);
-            return std::unique_ptr<this>);
-        }
+        template<class Archive>
+        void serialize(Archive& oarchive);
     };
+    template<class Archive>
+    inline void component_handle_base::serialize(Archive& oarchive)
+    {
+        //This isn't staying
+        oarchive(cereal::make_nvp("OWNER", m_ownerId));
+    }
 
 
     /**@class component_handle
@@ -82,15 +79,12 @@ namespace args::core::ecs
         template<typename Archive>
         void serialize(Archive& oarchive)
         {
-            oarchive(cereal::make_nvp("Type", component_type));
+            oarchive(cereal::make_nvp("Type", std::string(typeName<component_type>())));
+            component_type component = read();
+            component.serialize(oarchive);
+            //oarchive(component);
         }
 
-        template<typename Archive>
-        A_NODISCARD component_handle_base deserialize(Archive& iarchive)
-        {
-            iarchive(*this);
-            return std::unique_ptr<this>);
-        }
 
         /**@brief Atomic read of component.
          * @param order Memory order at which to load the component.

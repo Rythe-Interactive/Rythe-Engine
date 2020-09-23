@@ -51,10 +51,10 @@ namespace args::core::serialization
     class SerializationUtil
     {
     public:
-        static void JSONSerialize(std::stringstream os, T component)
+        static void JSONSerialize(std::stringstream os, T serializable)
         {
             cereal::JSONOutputArchive archive(os);
-            archive(CEREAL_NVP(component));
+            archive(CEREAL_NVP(serializable));
         }
 
         static T JSONDeserialize(std::stringstream is)
@@ -65,10 +65,10 @@ namespace args::core::serialization
             return t;
         }
 
-        static void BinarySerialize(std::stringstream os, T component)
+        static void BinarySerialize(std::stringstream os, T serializable)
         {
             cereal::BinaryOutputArchive archive(os);
-            archive(CEREAL_NVP(component));
+            archive(CEREAL_NVP(serializable));
         }
 
         static T BinaryDeserialize(std::stringstream is)
@@ -79,11 +79,17 @@ namespace args::core::serialization
             return t;
         }
 
-        static void JSONSerialize(std::ofstream os, T component)
+        static void JSONSerialize(std::ofstream &os, T serializable)
         {
             cereal::JSONOutputArchive archive(os);
-            archive(CEREAL_NVP(component));
-            //return archive;
+            if (std::is_same<T,ecs::component_handle<scenemanagement::scene>>::value)
+            {
+                archive(cereal::make_nvp("SceneRoot", serializable));
+            }
+            else
+            {
+                archive(cereal::make_nvp("Entity", serializable));
+            }
         }
 
         static T JSONDeserialize(std::ifstream is)
@@ -95,10 +101,10 @@ namespace args::core::serialization
         }
 
 
-        static void BinarySerialize(std::ofstream os, T component)
+        static void BinarySerialize(std::ofstream os, T serializable)
         {
             cereal::BinaryOutputArchive archive(os);
-            archive(CEREAL_NVP(component));
+            archive(CEREAL_NVP(serializable));
         }
 
         static T BinaryDeserialize(std::ifstream is)

@@ -4,6 +4,7 @@
 #include <core/containers/hashed_sparse_set.hpp>
 #include <core/platform/platform.hpp>
 #include <memory>
+#include <cereal/types/vector.hpp>
 
 /**
  * @file entity_handle.hpp
@@ -245,9 +246,10 @@ namespace args::core::ecs
         }
 
         template<typename component_type>
-        component_handle<component_type> add_component(component_type&& value, std::memory_order order = std::memory_order_release) const
+        component_handle<std::remove_reference_t<component_type>> add_component(component_type&& value, std::memory_order order = std::memory_order_release) const
         {
-            component_handle<component_type> handle = force_value_cast<component_handle<component_type>>(add_component(typeHash<component_type>()));
+            using actual_type = std::remove_reference_t<component_type>;
+            component_handle<actual_type> handle = force_value_cast<component_handle<actual_type>>(add_component(typeHash<actual_type>()));
             handle.write(value, order);
             return handle;
         }
@@ -288,14 +290,24 @@ namespace args::core::ecs
     template<typename Archive>
     void entity_handle::serialize(Archive& oarchive)
     {
-        oarchive(cereal::make_nvp("COMPONENT", component));
+        std::vector <ecs::component_handle_base> components;
+        std::vector <ecs::entity_handle> children;
+        for (int i = 0; i < m_registry->getEntity(m_id).component_composition().size(); i++)
+        {
+            components.push_back(m_registry->getComponent(m_id, m_registry->getEntity(m_id).component_composition()[i]));
+        }
+        for  (auto child : m_registry->getEntityData(m_id).children)
+        {
+            children.push_back(child);
+        }
+        oarchive(cereal::make_nvp("ID", m_id), cereal::make_nvp("COMPONENTS", components),cereal::make_nvp("CHILDREN",children));
     }
 
     template<typename Archive>
     A_NODISCARD entity_handle entity_handle::deserialize(Archive& iarchive)
     {
         iarchive(*this);
-        return std::unique_ptr<this>);
+        return std::unique_ptr<this>;
     }
 
 

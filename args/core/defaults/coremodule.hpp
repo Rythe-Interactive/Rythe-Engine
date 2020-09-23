@@ -16,6 +16,7 @@ namespace args::core
             reportComponentType<position>();
             reportComponentType<rotation>();
             reportComponentType<scale>();
+            reportComponentType<scenemanagement::scene>();
             reportSystem < ::args::core::scenemanagement::SceneManager > ();
         }
 

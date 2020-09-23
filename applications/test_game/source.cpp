@@ -35,17 +35,7 @@ void ARGS_CCONV reportModules(Engine* engine)
     engine->reportModule<rendering::RenderingModule>();
     engine->reportModule<physics::PhysicsModule>();
     engine->reportModule<core::scenemanagement::SceneManagerModule>();
-
-    Records records;
-
-    for (int i = 0; i < 20; i++)
-    {
-        records.records[i] = MyRecord(i * 10, i * 100, i * 1000);
-    }
-    
-
-   /* Records output = serialization::SerializationUtil<Records>::JSONDeserialize(std::ifstream("Scene1.cornflake"));
-    std::cout << output.records[10].x;*/
+   
 
     try
     {

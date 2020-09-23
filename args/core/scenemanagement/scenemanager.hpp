@@ -1,24 +1,24 @@
 #pragma once
 #include <core/engine/system.hpp>
 #include <core/scenemanagement/scene.hpp>
+#include <core/ecs/component_handle.hpp>
 
 namespace args::core::scenemanagement
 {
-    class Scene;
+    class scene;
 
-    class SceneManager final : public core::System<args::core::scenemanagement::SceneManager>
+    class SceneManager final : public core::System<SceneManager>
     {
     public:
         int sceneCount;
 
 
         struct ARGS_API static_data {
-            static std::unordered_map<id_type, args::core::scenemanagement::Scene> sceneList;
-            static std::unique_ptr<args::core::scenemanagement::Scene> scene;
+            static std::unordered_map < id_type, std::string> sceneNames;
+            static std::unordered_map < id_type, ecs::component_handle < scene > > sceneList;
             static args::core::ecs::EcsRegistry* registry;
-
         };
-       
+
         SceneManager() = default;
 
         virtual void setup()
@@ -36,13 +36,17 @@ namespace args::core::scenemanagement
 
         static void createScene(const std::string& name)
         {
-            static_data::sceneList.emplace(nameHash(name), args::core::scenemanagement::Scene(static_data::registry));
+            scene s;
+            s.id = nameHash(name);
+            static_data::sceneNames.emplace(s.id,name);
+            auto sceneHandle = static_data::registry->createEntity().add_component(s);
+            static_data::sceneList.emplace(nameHash(name), sceneHandle);
         }
 
 
-        static args::core::scenemanagement::Scene* getScene(std::string name)
+        static ecs::component_handle<scene> getScene(std::string name)
         {
-            return &(static_data::sceneList[nameHash(name)]);
+            return static_data::sceneList[nameHash(name)];
         }
 
         void loadScene()

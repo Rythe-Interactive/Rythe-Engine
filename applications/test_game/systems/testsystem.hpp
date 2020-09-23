@@ -37,9 +37,14 @@ class TestSystem final : public System<TestSystem>
 {
 public:
     ecs::entity_handle player;
-
+    std::string scenePath = "assets/scenes/";
     virtual void setup()
     {
+        args::core::scenemanagement::SceneManager::createScene("Test");
+        auto scene = args::core::scenemanagement::SceneManager::getScene("Test");
+        auto sceneEntity = scene.entity;
+
+
         filter(log::severity::debug);
         log::info("Hello World");
         log::warn("Hello World");
@@ -82,6 +87,7 @@ public:
 
         {
             auto ent = m_ecs->createEntity();
+            ent.set_parent(sceneEntity);
             ent.add_component<sah>();
             m_ecs->createComponent<rendering::renderable>(ent, { modelH, wireframeH });
 
@@ -92,6 +98,7 @@ public:
 
         {
             auto ent = m_ecs->createEntity();
+            ent.set_parent(sceneEntity);
             ent.add_component<sah>();
             m_ecs->createComponent<rendering::renderable>(ent, { modelH, vertexH });
 
@@ -102,6 +109,7 @@ public:
 
         {
             auto ent = m_ecs->createEntity();
+            ent.set_parent(sceneEntity);
             ent.add_component<sah>();
             m_ecs->createComponent<rendering::renderable>(ent, { modelH, wireframeH });
 
@@ -112,6 +120,7 @@ public:
 
         {
             auto ent = m_ecs->createEntity();
+            ent.set_parent(sceneEntity);
             ent.add_component<sah>();
             m_ecs->createComponent<rendering::renderable>(ent, { modelH, vertexH });
 
@@ -120,11 +129,12 @@ public:
             scaleH.write(math::vec3(0.25f));
         }
 
-        setupCameraEntity();
+        setupCameraEntity(sceneEntity);
 
         //------------------------------------- Setup entity with rigidbody -------------------------------------------//
 
         auto physicsEnt = m_ecs->createEntity();
+        physicsEnt.set_parent(sceneEntity);
 
         //setup rendering for physics ent
         m_ecs->createComponent<rendering::renderable>(physicsEnt, { modelH, wireframeH });
@@ -162,6 +172,7 @@ public:
 
         {
             auto ent = m_ecs->createEntity();
+            ent.set_parent(sceneEntity);
             ent.add_component<physics::physicsComponent>();
             auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
             renderableHandle.write({ modelH });
@@ -176,15 +187,14 @@ public:
         createProcess<&TestSystem::differentThread>("TestChain");
         createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
 
-        args::core::scenemanagement::SceneManager::createScene("Test");
-
-        serialization::SerializationUtil<args::core::scenemanagement::Scene>::JSONSerialize(std::ofstream("Scene1.cornflake", std::ios::binary), *args::core::scenemanagement::SceneManager::getScene("Test"));
-
+        std::ofstream outFile(scenePath + scenemanagement::SceneManager::static_data::sceneNames[scene.read().id] + ".cornflake", std::ios::binary);
+        serialization::SerializationUtil<ecs::entity_handle>::JSONSerialize(outFile, scene.entity);
     }
 
-    void setupCameraEntity()
+    void setupCameraEntity(ecs::entity_handle scene)
     {
         player = m_ecs->createEntity();
+        player.set_parent(scene);
         auto [camPosHandle, camRotHandle, camScaleHandle] = m_ecs->createComponent<transform>(player);
 
         rotation rot = camRotHandle.read();
