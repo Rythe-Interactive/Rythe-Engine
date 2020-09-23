@@ -1,4 +1,4 @@
-#include <core/compute/kernel.hpp>
+#include <core/compute/program.hpp>
 #include <core/logging/logging.hpp>
 
 #include <core/filesystem/resource.hpp>
@@ -6,7 +6,7 @@
 
 namespace args::core::compute {
 
-    Kernel::Kernel(cl_context ctx, cl_device_id device, filesystem::basic_resource container) {
+    Program::Program(cl_context ctx, cl_device_id device, filesystem::basic_resource container) {
 
 
         this->make_command_queue = std::function([ctx, device]() -> cl_command_queue
@@ -44,7 +44,7 @@ namespace args::core::compute {
         }
     }
 
-    Kernel::ExecutionContext& Kernel::ExecutionContext::build_buffer_names()
+    Program::ExecutionContext& Program::ExecutionContext::build_buffer_names()
     {
         size_t size;
         cl_uint num_args;
@@ -64,13 +64,13 @@ namespace args::core::compute {
         return *this;
     }
 
-    Kernel::ExecutionContext& Kernel::ExecutionContext::read_write_mode(buffer_type t)
+    Program::ExecutionContext& Program::ExecutionContext::read_write_mode(buffer_type t)
     {
         m_default_type = t;
         return *this;
     }
 
-    Kernel::ExecutionContext& Kernel::ExecutionContext::tell_buffer(Buffer buffer, const std::string& name)
+    Program::ExecutionContext& Program::ExecutionContext::tell_buffer(Buffer buffer, const std::string& name)
     {
         if (m_paramsMap.empty())
         {
@@ -84,7 +84,7 @@ namespace args::core::compute {
         return *this;
     }
 
-    Kernel::ExecutionContext& Kernel::ExecutionContext::show_buffer(Buffer buffer, const std::string& name, bool blocking)
+    Program::ExecutionContext& Program::ExecutionContext::show_buffer(Buffer buffer, const std::string& name, bool blocking)
     {
         if (m_paramsMap.empty())
         {
@@ -98,7 +98,7 @@ namespace args::core::compute {
         return *this;
     }
 
-    Kernel::ExecutionContext& Kernel::ExecutionContext::tell_buffer(Buffer buffer, size_t index)
+    Program::ExecutionContext& Program::ExecutionContext::tell_buffer(Buffer buffer, size_t index)
     {
         const cl_int ret = clSetKernelArg(m_func, index, sizeof(cl_mem), &buffer.m_memory_object);
         
@@ -109,7 +109,7 @@ namespace args::core::compute {
         return *this;
     }
 
-    Kernel::ExecutionContext& Kernel::ExecutionContext::show_buffer(Buffer buffer, size_t index, bool blocking)
+    Program::ExecutionContext& Program::ExecutionContext::show_buffer(Buffer buffer, size_t index, bool blocking)
     {
         cl_int ret = 0;
         switch (buffer.m_type)
@@ -144,7 +144,7 @@ namespace args::core::compute {
     }
 
 
-    Kernel::ExecutionContext& Kernel::ExecutionContext::enqueue_buffer(Buffer buffer, const std::string& name, bool blocking)
+    Program::ExecutionContext& Program::ExecutionContext::enqueue_buffer(Buffer buffer, const std::string& name, bool blocking)
     {
         if (m_paramsMap.empty())
         {
@@ -158,7 +158,7 @@ namespace args::core::compute {
         return *this;
     }
 
-    Kernel::ExecutionContext& Kernel::ExecutionContext::enqueue_buffer(Buffer buffer, size_t index, bool blocking)
+    Program::ExecutionContext& Program::ExecutionContext::enqueue_buffer(Buffer buffer, size_t index, bool blocking)
     {
         cl_int ret = 0;
         switch (buffer.m_type)
@@ -197,7 +197,7 @@ namespace args::core::compute {
     }
 
 
-    Kernel::ExecutionContext& Kernel::ExecutionContext::dispatch()
+    Program::ExecutionContext& Program::ExecutionContext::dispatch()
     {
         cl_int ret = clEnqueueNDRangeKernel(m_queue, m_func, 1, NULL, &m_global_size, &m_local_size, 0, NULL, NULL);
         if (ret != CL_SUCCESS)
@@ -207,7 +207,7 @@ namespace args::core::compute {
         return *this;
     }
 
-    void Kernel::ExecutionContext::finish() const
+    void Program::ExecutionContext::finish() const
     {
         clFlush(m_queue);
         clFinish(m_queue);
@@ -215,7 +215,7 @@ namespace args::core::compute {
     }
 
 
-    Kernel::ExecutionContext::ExecutionContext(Kernel* program, cl_kernel kernel) :
+    Program::ExecutionContext::ExecutionContext(Program* program, cl_kernel kernel) :
         m_prog(program),
         m_func(kernel),
         m_default_type(buffer_type::READ_BUFFER),
@@ -227,13 +227,13 @@ namespace args::core::compute {
 
     }
 
-    Kernel::ExecutionContext& Kernel::ExecutionContext::local(size_t s)
+    Program::ExecutionContext& Program::ExecutionContext::local(size_t s)
     {
         m_local_size = s;
         return *this;
     }
 
-    Kernel::ExecutionContext& Kernel::ExecutionContext::global(size_t s)
+    Program::ExecutionContext& Program::ExecutionContext::global(size_t s)
     {
         m_global_size = s;
         return *this;
@@ -241,7 +241,7 @@ namespace args::core::compute {
     }
 
 
-    Kernel::ExecutionContext Kernel::functionContext(const std::string& name)
+    Program::ExecutionContext Program::functionContext(const std::string& name)
     {
         // check if we already have the kernel and create a context from it if we do, otherwise initialize it
 
@@ -257,7 +257,7 @@ namespace args::core::compute {
 
     }
 
-    cl_kernel Kernel::prewarm(const std::string& name)
+    cl_kernel Program::prewarm(const std::string& name)
     {
         // create the kernel and push it into the cache
         // do some error checking along the way

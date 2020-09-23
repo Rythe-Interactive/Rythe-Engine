@@ -10,14 +10,14 @@
 namespace args::core::compute {
 
 
-    class ARGS_API Kernel
+    class ARGS_API Program
     {
     public:
 
         class ARGS_API ExecutionContext
         {
         public:
-            ExecutionContext(Kernel*, cl_kernel);
+            ExecutionContext(Program*, cl_kernel);
 
             ExecutionContext& local(size_t);
             ExecutionContext& global(size_t);
@@ -43,7 +43,7 @@ namespace args::core::compute {
 
             buffer_type m_default_type;
             std::map<std::string, cl_uint> m_paramsMap;
-            Kernel* m_prog;
+            Program* m_prog;
             cl_kernel m_func;
             cl_command_queue m_queue;
             size_t m_global_size;
@@ -52,13 +52,13 @@ namespace args::core::compute {
         };
 
 
-        Kernel(cl_context, cl_device_id, filesystem::basic_resource);
+        Program(cl_context, cl_device_id, filesystem::basic_resource);
 
 
-        Kernel(const Kernel& other) = default;
-        Kernel(Kernel&& other) noexcept = default;
-        Kernel& operator=(const Kernel& other) = default;
-        Kernel& operator=(Kernel&& other) noexcept = default;
+        Program(const Program& other) = default;
+        Program(Program&& other) noexcept = default;
+        Program& operator=(const Program& other) = default;
+        Program& operator=(Program&& other) noexcept = default;
 
         ExecutionContext functionContext(const std::string& name);
 

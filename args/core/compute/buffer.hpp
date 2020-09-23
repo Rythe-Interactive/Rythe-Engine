@@ -13,7 +13,6 @@
 
 namespace args::core::compute {
 
-    //Welcome to the commenting stream
 
     /**
      * @brief Describes what kind of compute buffer you want,
@@ -69,7 +68,7 @@ namespace args::core::compute {
 
         ~Buffer();
     private:
-        friend class Kernel;
+        friend class Program;
 
         std::string m_name;
         cl_mem m_memory_object;
