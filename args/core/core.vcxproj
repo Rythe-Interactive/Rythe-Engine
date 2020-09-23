@@ -72,6 +72,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
@@ -94,6 +95,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
@@ -104,12 +106,15 @@
     <ClInclude Include="async\ring_sync_lock.hpp" />
     <ClInclude Include="async\readonly_rw_spinlock.hpp" />
     <ClInclude Include="async\transferable_atomic.hpp" />
+    <ClInclude Include="compute\buffer.hpp" />
+    <ClInclude Include="compute\context.hpp" />
     <ClInclude Include="common\common.hpp" />
     <ClInclude Include="common\inteface_traits.hpp" />
     <ClInclude Include="common\result.hpp" />
     <ClInclude Include="common\string_extra.hpp" />
     <ClInclude Include="common\exception.hpp" />
     <ClInclude Include="common\unit_conversion.hpp" />
+    <ClInclude Include="compute\kernel.hpp" />
     <ClInclude Include="containers\atomic_sparse_map.hpp" />
     <ClInclude Include="containers\containers.hpp" />
     <ClInclude Include="containers\data_view.hpp" />
@@ -159,6 +164,7 @@
     <ClInclude Include="filesystem\provider_registry.hpp" />
     <ClInclude Include="filesystem\resource.hpp" />
     <ClInclude Include="filesystem\view.hpp" />
+    <ClInclude Include="compute\program.hpp" />
     <ClInclude Include="logging\logging.hpp" />
     <ClInclude Include="logging\spdlog\async.h" />
     <ClInclude Include="logging\spdlog\async_logger-inl.h" />
@@ -555,6 +561,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="async\readonly_rw_spinlock.cpp" />
+    <ClCompile Include="compute\buffer.cpp" />
+    <ClCompile Include="compute\context.cpp" />
+    <ClCompile Include="compute\kernel.cpp" />
     <ClCompile Include="data\importers\mesh_importers.cpp" />
     <ClCompile Include="data\mesh.cpp" />
     <ClCompile Include="ecs\ecsregistry.cpp" />
@@ -570,6 +579,7 @@
     <ClCompile Include="filesystem\navigator.cpp" />
     <ClCompile Include="filesystem\provider_registry.cpp" />
     <ClCompile Include="filesystem\view.cpp" />
+    <ClCompile Include="compute\program.cpp" />
     <ClCompile Include="logging\logging.cpp" />
     <ClCompile Include="math\glm\detail\glm.cpp" />
     <ClCompile Include="scheduling\processchain.cpp" />

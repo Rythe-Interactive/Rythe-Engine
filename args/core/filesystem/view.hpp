@@ -91,6 +91,15 @@ namespace args::core::filesystem
          */
         A_NODISCARD view operator[](std::string_view identifier) const;
 
+        /** @brief same as get().decay().to<T>()
+         */
+        template <class T>
+        auto load_as() -> decltype(auto)
+        {
+            return get().decay().to<T>();
+        }
+
+
 #if  !defined( ARGS_DISABLE_POTENTIALLY_WEIRD_SYNTAX )
 
         /** @brief alternative syntax for find
