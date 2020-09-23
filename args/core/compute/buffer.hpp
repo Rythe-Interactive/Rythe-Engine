@@ -36,7 +36,7 @@ namespace args::core::compute {
     }
 
     /**
-     * @brief Bitwise and operator for type: buffer_type
+     * @brief Bitwise or assignment operator for type: buffer_type
      */
     inline buffer_type& operator|=(buffer_type& lhs,const buffer_type& rhs)
     {

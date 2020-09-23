@@ -44,12 +44,8 @@ public:
     virtual void setup()
     {
         filter(log::severity::debug);
-        log::info("Hello World");
-        log::warn("Hello World");
-        log::error("Hello World");
-        log::debug("Hello World");
 
-        compute::Program prog = compute::Context::createProgram(fs::view("basic://kernels/vadd_kernel.cl").get());
+        compute::Program prog =  fs::view("basic://kernels/vadd_kernel.cl").load_as<compute::Program>();
         prog.prewarm("vector_add");
 
         std::vector<int> ints;

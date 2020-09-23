@@ -35,7 +35,7 @@ namespace args::core::compute
 
             /**
              * @brief Determines the "Global Work Size", aka how many Kernels should run in total
-             *         This number should match your input arrays (but not exceed it!
+             *         This number should match your input arrays (but not exceed it!)
              */
             Kernel& global(size_t);
 
