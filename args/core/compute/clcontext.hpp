@@ -20,9 +20,9 @@ public:
     static Kernel createKernel(const filesystem::basic_resource& vec);
 
     template <class T>
-    static Buffer createBuffer(std::vector<T>& container,buffer_type type)
+    static Buffer createBuffer(std::vector<T>& container,buffer_type type,std::string name = "Unamed")
     {
-        return Buffer(m_context,reinterpret_cast<byte*>(container.data()),container.size() * sizeof( T ),type);
+        return Buffer(m_context,reinterpret_cast<byte*>(container.data()),container.size() * sizeof( T ),type,std::forward<std::string>(name));
     }
 
 

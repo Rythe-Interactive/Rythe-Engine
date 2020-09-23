@@ -50,7 +50,7 @@ public:
         log::debug("Hello World");
 
         compute::Kernel k = compute::Context::createKernel(fs::view("basic://kernels/vadd_kernel.cl").get());
- 
+        k.prewarm("vector_add");
 
         std::vector<int> ints;
 
@@ -229,7 +229,7 @@ public:
 
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::differentThread>("TestChain");
-        createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
+       // createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
 
     }
 
@@ -262,7 +262,7 @@ public:
         math::vec3 move = math::toMat3(rot) * math::vec3(0.f, 0.f, 1.f);
         move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 6.f;
         posH.fetch_add(move);
-        log::debug("FORWD: ({:.3}, {:.3}, {:.3})", move.x, move.y, move.z);
+        //log::debug("FORWD: ({:.3}, {:.3}, {:.3})", move.x, move.y, move.z);
     }
 
     void onPlayerStrive(player_strive* action)
@@ -272,7 +272,7 @@ public:
         math::vec3 move = math::toMat3(rot) * math::vec3(1.f, 0.f, 0.f);
         move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 6.f;
         posH.fetch_add(move);
-        log::debug("RIGHT: ({:.3}, {:.3}, {:.3})", move.x, move.y, move.z);
+        //log::debug("RIGHT: ({:.3}, {:.3}, {:.3})", move.x, move.y, move.z);
     }
 
     void onPlayerFly(player_fly* action)
