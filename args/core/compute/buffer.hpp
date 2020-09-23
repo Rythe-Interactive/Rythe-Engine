@@ -53,7 +53,7 @@ namespace args::core::compute {
     class ARGS_API Buffer
     {
     public:
-        Buffer(cl_context,byte*,size_t,buffer_type,std::string name);
+        Buffer(cl_context,byte*,size_t,buffer_type,std::string);
 
         Buffer(Buffer&& b) noexcept;
         Buffer(const Buffer& b);
@@ -73,10 +73,10 @@ namespace args::core::compute {
 
         std::string m_name;
         cl_mem m_memory_object;
-        size_t* m_ref_count;
+        size_type* m_ref_count;
         cl_mem_flags m_type;
         byte*  m_data;
-        std::size_t m_size;
+        size_type m_size;
     };
 }
 

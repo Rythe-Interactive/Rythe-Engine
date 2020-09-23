@@ -30,7 +30,7 @@ namespace args::core::compute
         m_memory_object = clCreateBuffer(ctx,m_type,m_size,nullptr,&ret);
         if(ret != NULL)
         {
-            log::error("clCreateBuffer failed");
+            log::error("clCreateBuffer failed for Buffer: {}", name);
         }
 
     }

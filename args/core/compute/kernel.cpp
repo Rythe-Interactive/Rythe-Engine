@@ -6,7 +6,7 @@ namespace args::core::compute
 {
     Kernel& Kernel::build_buffer_names()
     {
-        size_t size;
+        size_type size;
         cl_uint num_args;
         std::string container;
 
@@ -130,7 +130,7 @@ namespace args::core::compute
 
             //buffer was write only
         case CL_MEM_WRITE_ONLY:
-            //similarly we read from a buffer that was read only for the kernel 
+            //similarly we read from a buffer that was write-only for the kernel 
             ret = clEnqueueReadBuffer(m_queue, buffer.m_memory_object, static_cast<cl_bool>(blocking), 0, buffer.m_size, buffer.m_data, 0, nullptr, nullptr);
             break;
 

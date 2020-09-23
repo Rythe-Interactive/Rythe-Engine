@@ -31,13 +31,13 @@ namespace args::core::compute
              * @brief Determines the "Local Work Size", aka how many Kernels should run in parallel
              *         This number should not exceed the amount of available cores, a good max is 1024
              */
-            Kernel& local(size_t);
+            Kernel& local(size_type);
 
             /**
              * @brief Determines the "Global Work Size", aka how many Kernels should run in total
              *         This number should match your input arrays (but not exceed it!)
              */
-            Kernel& global(size_t);
+            Kernel& global(size_type);
 
             /**
              * @brief Maps Parameter Names to indices, for example:
@@ -154,8 +154,8 @@ namespace args::core::compute
             Program* m_prog;
             cl_kernel m_func;
             cl_command_queue m_queue;
-            size_t m_global_size;
-            size_t m_local_size;
+            size_type m_global_size;
+            size_type m_local_size;
 
 
             //helper function to wrap parameter checking 
