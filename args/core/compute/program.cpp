@@ -8,24 +8,26 @@ namespace args::core::compute {
 
     Program::Program(cl_context ctx, cl_device_id device, filesystem::basic_resource container) {
 
-
+        //bind command queue creation to surrogate
         this->make_command_queue = std::function([ctx, device]() -> cl_command_queue
-            {
-                cl_int ret;
-                auto* const command_queue = clCreateCommandQueueWithProperties(ctx, device, nullptr, &ret);
-                if (ret != NULL) {
-                    log::error("clCreateCommandQueueWithProperties failed!");
-                    return nullptr;
-                }
-                return command_queue;
-            });
+        {
+            cl_int ret;
+            //creates a command queue and checks it for errors
+            auto* const command_queue = clCreateCommandQueueWithProperties(ctx, device, nullptr, &ret);
+            if (ret != NULL) {
+                log::error("clCreateCommandQueueWithProperties failed!");
+                return nullptr;
+            }
+            return command_queue;
+        });
 
         cl_int ret;
 
-
+        //convert to c-style array
         const char* data = reinterpret_cast<const char*>(container.data());
         size_t size = container.size();
 
+        //create program from source
         m_program = clCreateProgramWithSource(ctx, 1, &data, &size, &ret);
         if (ret != NULL)
         {
@@ -33,13 +35,26 @@ namespace args::core::compute {
             return;
         }
 
-#ifdef ARGS_DEBUG
-        //DEBUG
-        ret = clBuildProgram(m_program, 1, &device, "-cl-std=CL2.0 -cl-kernel-arg-info -DARGS_LIBRARY -DDEBUG", nullptr, nullptr);
-#else
-        //NDEBUG
-        ret = clBuildProgram(m_program, 1, &device, "-cl-std=CL2.0 -cl-kernel-arg-info -DARGS_LIBRARY -DNDEBUG", nullptr, nullptr);
-#endif
+
+        // clBuildProgram parameters guide:
+        //
+        // -cl-std=2.0: We want OpenCL Standard 2.0 the driver reports 1.2 but it actually is 2.0 on most devices
+        // -cl-kernel-arg-info: We want kernel informations built into the binary so that we can query the kernel args by name instead of index
+        // -DARGS_LIBRARY this is indicates to your kernel that it was built for use with the ARGS-Engine, it defines the macor ARGS_LIBRARY
+        // -DDEBUG if the Engine is built in debug mode, the kernel  will also receive the DEBUG define
+        // -DNDEBUG if the Engine is built in release mode, the kernel will receive the NDEBUG define
+
+
+        //check if we are running in debug and adjust build command accordingly
+        if constexpr (ARGS_CONFIGURATION == ARGS_DEBUG_VALUE) {
+            //DEBUG
+            ret = clBuildProgram(m_program, 1, &device, "-cl-std=CL2.0 -cl-kernel-arg-info -DARGS_LIBRARY -DDEBUG", nullptr, nullptr);
+        } else {
+            //NDEBUG
+            ret = clBuildProgram(m_program, 1, &device, "-cl-std=CL2.0 -cl-kernel-arg-info -DARGS_LIBRARY -DNDEBUG", nullptr, nullptr);
+        }
+
+        //check if building was successful
         if (ret != CL_SUCCESS)
         {
             log::error("clBuildProgram failed");
