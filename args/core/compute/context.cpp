@@ -85,7 +85,7 @@ namespace args::core::compute {
         return m_initialized;
     }
 
-    Program Context::createKernel(const filesystem::basic_resource& data)
+    Program Context::createProgram(const filesystem::basic_resource& data)
     {
         return Program(m_context,m_device_id,data);
     }

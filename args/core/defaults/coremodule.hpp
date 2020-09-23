@@ -5,7 +5,7 @@
 #include <core/filesystem/provider_registry.hpp>
 #include <core/filesystem/basic_resolver.hpp>
 
-#include <core/compute/clcontext.hpp>
+#include "core/compute/context.hpp"
 
 namespace args::core
 {
@@ -18,7 +18,7 @@ namespace args::core
 
             filesystem::AssetImporter::reportConverter<obj_mesh_loader>(".obj");
             log::info("Creating OpenCL");
-            compute::Context::create();
+            compute::Context::init();
             log::info("Done creating OpenCL");
 
             reportComponentType<position>();

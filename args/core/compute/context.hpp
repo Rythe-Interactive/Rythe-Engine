@@ -37,7 +37,7 @@ public:
      *         You can for instance use fs::view.get()
      * @return A Program Object that supports execution
      */
-    static Program createKernel(const filesystem::basic_resource& vec);
+    static Program createProgram(const filesystem::basic_resource& vec);
 
 
     /**

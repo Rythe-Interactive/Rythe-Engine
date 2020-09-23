@@ -69,6 +69,7 @@ namespace args::core::compute {
         ~Buffer();
     private:
         friend class Program;
+        friend class Kernel;
 
         std::string m_name;
         cl_mem m_memory_object;

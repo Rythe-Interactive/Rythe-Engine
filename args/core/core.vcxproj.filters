@@ -25,6 +25,7 @@
     <ClCompile Include="compute\buffer.cpp" />
     <ClCompile Include="compute\context.cpp" />
     <ClCompile Include="compute\Program.cpp" />
+    <ClCompile Include="compute\kernel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -482,6 +483,7 @@
     <ClInclude Include="math\glm\glm_include.hpp" />
     <ClInclude Include="compute\context.hpp" />
     <ClInclude Include="compute\Program.hpp" />
+    <ClInclude Include="compute\kernel.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">

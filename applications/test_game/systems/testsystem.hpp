@@ -8,8 +8,8 @@
 #include <physics/rigidbody.hpp>
 #include <physics/cube_collider_params.hpp>
 
-#include <core/compute/clcontext.hpp>
-
+#include <core/compute/context.hpp>
+#include <core/compute/kernel.hpp>
 
 using namespace args;
 
@@ -49,8 +49,8 @@ public:
         log::error("Hello World");
         log::debug("Hello World");
 
-        compute::Kernel k = compute::Context::createKernel(fs::view("basic://kernels/vadd_kernel.cl").get());
-        k.prewarm("vector_add");
+        compute::Program prog = compute::Context::createProgram(fs::view("basic://kernels/vadd_kernel.cl").get());
+        prog.prewarm("vector_add");
 
         std::vector<int> ints;
 
@@ -79,22 +79,21 @@ public:
         std::vector<int> results(to_process);
 
 
-        auto A = compute::Context::createBuffer(first_ints,compute::buffer_type::READ_BUFFER);
-        auto B = compute::Context::createBuffer(second_ints,compute::buffer_type::READ_BUFFER);
-        auto C = compute::Context::createBuffer(results,compute::buffer_type::WRITE_BUFFER);
+        auto A = compute::Context::createBuffer(first_ints,compute::buffer_type::READ_BUFFER, "A");
+        auto B = compute::Context::createBuffer(second_ints,compute::buffer_type::READ_BUFFER, "B");
+        auto C = compute::Context::createBuffer(results,compute::buffer_type::WRITE_BUFFER, "C");
 
-         k.functionContext("vector_add")
-            .enqueue_buffer(A,"A")
-            .enqueue_buffer(B,"B")
-            .tell_buffer(C,"C")
+         prog.kernelContext("vector_add")
+            .set_and_enqueue_buffer(A)
+            .set_and_enqueue_buffer(B)
+            .set_buffer(C)
             .global(1024)
             .local(64)
             .dispatch()
-            .show_buffer(C,"C")
+            .enqueue_buffer(C)
             .finish();
 
 
-       // auto [data,len] = C.read<int>();
 
         for (int& i : results)
         {
