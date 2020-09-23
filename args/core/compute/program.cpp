@@ -2,6 +2,7 @@
 #include <core/logging/logging.hpp>
 
 #include <core/filesystem/resource.hpp>
+#include <core/compute/context.hpp>
 
 
 namespace args::core::compute {
@@ -92,5 +93,10 @@ namespace args::core::compute {
 
         m_kernelCache[name] = kernel;
         return kernel;
+    }
+
+    void Program::from_resource(Program* value, const filesystem::basic_resource& resource)
+    {
+        *value = Context::createProgram(resource);
     }
 }

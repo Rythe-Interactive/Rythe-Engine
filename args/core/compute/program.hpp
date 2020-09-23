@@ -38,7 +38,7 @@ namespace args::core::compute {
         /**
          * @brief Makes sure that a kernel is loaded, otherwise the kernel
          *         will be lazy initialized on first request
-         *     
+         *
          * @param name The name of the Kernel you want to load (function-name)
          * @return A raw cl_kernel object
         */
@@ -53,7 +53,14 @@ namespace args::core::compute {
             return make_command_queue();
         }
 
+        static void from_resource(Program* value, const filesystem::basic_resource& resource);
+
     private:
+        friend filesystem::basic_resource;
+        template <class T, class C1,class C2,class C3>
+        friend T filesystem::from_resource(const filesystem::basic_resource& resource);
+
+        Program() = default;
 
         std::function<cl_command_queue()> make_command_queue;
         cl_program m_program;
