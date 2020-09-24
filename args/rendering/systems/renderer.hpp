@@ -3,6 +3,8 @@
 #include <rendering/data/shader.hpp>
 #include <rendering/components/renderable.hpp>
 #include <rendering/components/camera.hpp>
+#include <rendering/debugrendering.hpp>
+#include <unordered_set>
 
 using namespace args::core::filesystem::literals;
 using namespace std::literals::chrono_literals;
@@ -23,6 +25,9 @@ namespace args::rendering
         uint temp = 0;
         time::span totalTime;
 
+        async::readonly_rw_spinlock debugLinesLock;
+        std::unordered_set<debug::debug_line> debugLines;
+
         bool main_window_valid()
         {
             return m_ecs->world.has_component<app::window>();
@@ -33,8 +38,124 @@ namespace args::rendering
             return m_ecs->world.get_component_handle<app::window>().read();
         }
 
+        void drawLine(debug::debug_line* line)
+        {
+            async::readwrite_guard guard(debugLinesLock);
+            if (!debugLines.count(*line))
+                debugLines.insert(*line);
+        }
+
+        void debugRenderPass(const math::mat4& view, const math::mat4& projection)
+        {
+            std::vector<debug::debug_line> lines;
+
+            {
+                async::readwrite_guard guard(debugLinesLock);
+                if (debugLines.size() == 0)
+                    return;
+
+                lines.assign(debugLines.begin(), debugLines.end());
+                debugLines.clear();
+            }            
+
+            static material_handle debugMaterial = MaterialCache::create_material("color", ShaderCache::create_shader("color", "assets://shaders/debug.glsl"_view));
+            static app::gl_id vertexBuffer = -1;
+            static size_type vertexBufferSize = 0;
+            static app::gl_id colorBuffer = -1;
+            static size_type colorBufferSize = 0;
+            static app::gl_id vao = -1;
+
+            if (vertexBuffer == -1)
+                glGenBuffers(1, &vertexBuffer);
+
+            if (colorBuffer == -1)
+                glGenBuffers(1, &colorBuffer);
+
+            if (vao == -1)
+                glGenVertexArrays(1, &vao);
+
+            std::unordered_map<bool, std::unordered_map<float, std::pair<std::vector<math::color>, std::vector<math::vec3>>>> lineBatches;
+
+            for (auto& line : lines)
+            {
+                auto& [colors, vertices] = lineBatches[line.ignoreDepth][line.width];
+
+                colors.push_back(line.color);
+                colors.push_back(line.color);
+                vertices.push_back(line.start);
+                vertices.push_back(line.end);
+            }
+
+            debugMaterial.bind();
+            debugMaterial.prepare();
+
+            glEnable(GL_LINE_SMOOTH);
+            glBindVertexArray(vao);
+
+            for (auto& [ignoreDepth, widthNdata] : lineBatches)
+                for (auto& [width, lineData] : widthNdata)
+                {
+                    auto& [colors, vertices] = lineData;
+
+                    ///------------ vertices ------------///
+                    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+
+                    size_type vertexCount = vertices.size();
+                    if (vertexCount > vertexBufferSize)
+                    {
+                        glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(math::vec3), 0, GL_DYNAMIC_DRAW);
+                        vertexBufferSize = vertexCount;
+                    }
+
+                    glBufferSubData(GL_ARRAY_BUFFER, 0, vertexCount * sizeof(math::vec3), vertices.data());
+                    glEnableVertexAttribArray(SV_POSITION);
+                    glVertexAttribPointer(SV_POSITION, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+                    ///------------ colors ------------///
+                    glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
+
+                    size_type colorCount = colors.size();
+                    if (colorCount > colorBufferSize)
+                    {
+                        glBufferData(GL_ARRAY_BUFFER, colorCount * sizeof(math::color), 0, GL_DYNAMIC_DRAW);
+                        colorBufferSize = colorCount;
+                    }
+
+                    glBufferSubData(GL_ARRAY_BUFFER, 0, colorCount * sizeof(math::color), colors.data());
+
+                    auto colorAttrib = debugMaterial.get_attribute("color");
+                    colorAttrib.set_attribute_pointer(4, GL_FLOAT, GL_FALSE, 0, 0);
+
+                    ///------------ camera ------------///
+                    glUniformMatrix4fv(SV_VIEW, 1, false, math::value_ptr(view));
+                    glUniformMatrix4fv(SV_PROJECT, 1, false, math::value_ptr(projection));
+
+                    glLineWidth(width + 1);
+
+                    if(ignoreDepth)
+                        glDisable(GL_DEPTH_TEST);
+
+                    glDrawArraysInstanced(GL_LINES, 0, vertices.size(), colors.size());
+
+                    if (ignoreDepth)
+                        glEnable(GL_DEPTH_TEST);
+                    colorAttrib.disable_attribute_pointer();
+                    glBindBuffer(GL_ARRAY_BUFFER, 0);
+                }
+
+            glBindVertexArray(0);
+
+            glDisable(GL_LINE_SMOOTH);
+
+            debugMaterial.release();
+        }
+
         virtual void setup()
         {
+            debug::detail::eventBus = m_eventBus;
+
+            bindToEvent<debug::debug_line, &Renderer::drawLine>();
+
             createProcess<&Renderer::render>("Rendering");
             renderablesQuery = createQuery<renderable, position, rotation, scale>();
             cameraQuery = createQuery<camera, position, rotation, scale>();
@@ -115,7 +236,7 @@ namespace args::rendering
                             t = "Error";
                             break;
                         case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-                            t = "Deprication";
+                            t = "Deprecation";
                             break;
                         case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
                             t = "Undefined behavior";
@@ -267,10 +388,12 @@ namespace args::rendering
                 }
             }
 
+            debugRenderPass(view, projection);
+
             app::ContextHelper::makeContextCurrent(nullptr);
             auto elapsed = renderClock.end();
 
-            if (temp < 3)
+            /*if (temp < 3)
             {
                 temp++;
                 log::debug("render took: {:.3f}ms\tdeltaTime: {:.3f}ms fps: {:.3f}", elapsed.milliseconds(), deltaTime.milliseconds(), 1.0 / deltaTime);
@@ -280,7 +403,7 @@ namespace args::rendering
                 frameCount++;
                 totalTime += deltaTime;
                 log::debug("render took: {:.3f}ms\tdeltaTime: {:.3f}ms fps: {:.3f} average: {:.3f}", elapsed.milliseconds(), deltaTime.milliseconds(), 1.0 / deltaTime, 1.0 / (totalTime / frameCount));
-            }
+            }*/
         }
     };
 }

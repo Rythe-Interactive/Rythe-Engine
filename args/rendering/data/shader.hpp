@@ -174,6 +174,11 @@ namespace args::rendering
         {
             glDisableVertexAttribArray(m_location);
         }
+
+        void set_divisor(uint offset, uint divisor)
+        {
+            glVertexAttribDivisor(m_location + offset, divisor);
+        }
     };
 
 #pragma endregion
@@ -217,6 +222,11 @@ namespace args::rendering
             return *(attributes[nameHash(name)].get());
         }
 
+        attribute get_attribute(id_type id)
+        {
+            return *(attributes[id].get());
+        }
+
         std::vector<std::pair<std::string, GLenum>> get_uniform_info()
         {
             std::vector<std::pair<std::string, GLenum>> info;
@@ -250,6 +260,8 @@ namespace args::rendering
         }
 
         attribute get_attribute(const std::string& name);
+
+        attribute get_attribute(id_type attributeId);
 
         void bind();
         static void release();

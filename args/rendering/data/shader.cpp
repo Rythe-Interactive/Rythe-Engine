@@ -59,7 +59,7 @@ namespace args::rendering
                 continue;
 
             GLenum funcType = funcTypes.at(tokens[1]);
-            GLenum param;
+            GLenum param = GL_FALSE;
             switch (funcType)
             {
             case GL_DEPTH_TEST:
@@ -481,6 +481,11 @@ namespace args::rendering
     attribute shader_handle::get_attribute(const std::string& name)
     {
         return ShaderCache::get_shader(id)->get_attribute(name);
+    }
+
+    attribute shader_handle::get_attribute(id_type attributeId)
+    {
+        return ShaderCache::get_shader(id)->get_attribute(attributeId);
     }
 
     void shader_handle::bind()

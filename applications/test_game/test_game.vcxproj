@@ -101,6 +101,9 @@
     <ClInclude Include="module\testmodule.hpp" />
     <ClInclude Include="systems\testsystem.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\kernels\vadd_kernel.cl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

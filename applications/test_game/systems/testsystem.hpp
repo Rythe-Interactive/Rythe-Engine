@@ -8,6 +8,9 @@
 #include <physics/rigidbody.hpp>
 #include <physics/cube_collider_params.hpp>
 
+#include <core/compute/context.hpp>
+#include <core/compute/kernel.hpp>
+
 using namespace args;
 
 struct sah
@@ -46,10 +49,57 @@ public:
 
 
         filter(log::severity::debug);
-        log::info("Hello World");
-        log::warn("Hello World");
-        log::error("Hello World");
-        log::debug("Hello World");
+
+        compute::Program prog =  fs::view("basic://kernels/vadd_kernel.cl").load_as<compute::Program>();
+        prog.prewarm("vector_add");
+
+        std::vector<int> ints;
+
+        auto res = fs::view("basic://bigint.txt").get();
+        if (res == common::valid) {
+
+            char* buf = new char[6];
+            memset(buf,0,6);
+            filesystem::basic_resource contents = res;
+
+            for (size_t i = 0; i < contents.size() && i < 5*2048; i += 5)
+            {
+                memcpy(buf,contents.data()+ i,5);
+                ints.push_back(std::atol(buf));
+                
+            }
+
+            delete[] buf;
+        }
+
+        std::vector<int> first_ints (ints.begin(), ints.begin()+ints.size()/2);
+        std::vector<int> second_ints (ints.begin() + ints.size() /2 , ints.end());
+
+        size_t to_process = std::min(first_ints.size(),second_ints.size());
+
+        std::vector<int> results(to_process);
+
+
+        auto A = compute::Context::createBuffer(first_ints,compute::buffer_type::READ_BUFFER, "A");
+        auto B = compute::Context::createBuffer(second_ints,compute::buffer_type::READ_BUFFER, "B");
+        auto C = compute::Context::createBuffer(results,compute::buffer_type::WRITE_BUFFER, "C");
+
+         prog.kernelContext("vector_add")
+            .set_and_enqueue_buffer(A)
+            .set_and_enqueue_buffer(B)
+            .set_buffer(C)
+            .global(1024)
+            .local(64)
+            .dispatch()
+            .enqueue_buffer(C)
+            .finish();
+
+
+
+        for (int& i : results)
+        {
+            log::info("got {}", i);
+        }
 
         app::InputSystem::createBinding<player_move>(app::inputmap::method::W, 1.f);
         app::InputSystem::createBinding<player_move>(app::inputmap::method::S, -1.f);
@@ -57,8 +107,8 @@ public:
         app::InputSystem::createBinding<player_strive>(app::inputmap::method::A, -1.f);
         app::InputSystem::createBinding<player_fly>(app::inputmap::method::SPACE, 1.f);
         app::InputSystem::createBinding<player_fly>(app::inputmap::method::LEFT_SHIFT, -1.f);
-        app::InputSystem::createBinding<player_look_x>(app::inputmap::method::MOUSE_X, 1.f);
-        app::InputSystem::createBinding<player_look_y>(app::inputmap::method::MOUSE_Y, 1.f);
+        app::InputSystem::createBinding<player_look_x>(app::inputmap::method::MOUSE_X, 0.f);
+        app::InputSystem::createBinding<player_look_y>(app::inputmap::method::MOUSE_Y, 0.f);
         app::InputSystem::createBinding<exit_action>(app::inputmap::method::ESCAPE);
 
         bindToEvent<player_move, &TestSystem::onPlayerMove>();
@@ -78,9 +128,9 @@ public:
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
-            modelH = rendering::ModelCache::create_model("test", "basic://models/Cube.obj"_view);
-            wireframeH = rendering::MaterialCache::create_material("wireframe", "basic://shaders/wireframe.glsl"_view);
-            vertexH = rendering::MaterialCache::create_material("vertex", "basic://shaders/position.glsl"_view);
+            modelH = rendering::ModelCache::create_model("test", "assets://models/Cube.obj"_view);
+            wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.glsl"_view);
+            vertexH = rendering::MaterialCache::create_material("vertex", "assets://shaders/position.glsl"_view);
 
             app::ContextHelper::makeContextCurrent(nullptr);
         }
@@ -175,7 +225,7 @@ public:
             ent.set_parent(sceneEntity);
             ent.add_component<physics::physicsComponent>();
             auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH });
+            renderableHandle.write({ modelH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(5.1f, -2.0f, 0));
@@ -185,7 +235,7 @@ public:
 
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::differentThread>("TestChain");
-        createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
+       // createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
 
         std::ofstream outFile(scenePath + scenemanagement::SceneManager::static_data::sceneNames[scene.read().id] + ".cornflake", std::ios::binary);
         serialization::SerializationUtil<ecs::entity_handle>::JSONSerialize(outFile, scene.entity);
@@ -221,6 +271,7 @@ public:
         math::vec3 move = math::toMat3(rot) * math::vec3(0.f, 0.f, 1.f);
         move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 6.f;
         posH.fetch_add(move);
+        //log::debug("FORWD: ({:.3}, {:.3}, {:.3})", move.x, move.y, move.z);
     }
 
     void onPlayerStrive(player_strive* action)
@@ -230,6 +281,7 @@ public:
         math::vec3 move = math::toMat3(rot) * math::vec3(1.f, 0.f, 0.f);
         move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 6.f;
         posH.fetch_add(move);
+        //log::debug("RIGHT: ({:.3}, {:.3}, {:.3})", move.x, move.y, move.z);
     }
 
     void onPlayerFly(player_fly* action)
@@ -266,6 +318,10 @@ public:
 
     void update(time::span deltaTime)
     {
+        debug::drawLine(math::vec3(0, 0, 0), math::vec3(0, 1, 0), math::colors::black);
+        debug::drawLine(math::vec3(1, 0, 0), math::vec3(0.5, 1, 0), math::colors::red, 1, false);
+        debug::drawLine(math::vec3(1, 0, 0), math::vec3(0, 0, 1), math::colors::green, 10, true);
+        debug::drawLine(math::vec3(1, 0, 0), math::vec3(0, 3, 1), math::colors::yellow, 4, false);
 
         //log::info("still alive! {}",deltaTime.seconds());
         static auto query = createQuery<sah>();

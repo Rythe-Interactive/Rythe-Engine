@@ -123,4 +123,9 @@ namespace args::rendering
             param->apply(MaterialCache::m_materials[id].m_shader);
     }
 
+    attribute material_handle::get_attribute(const std::string& name)
+    {
+        return MaterialCache::m_materials[id].m_shader.get_attribute(name);
+    }
+
 }
