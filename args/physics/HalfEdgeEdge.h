@@ -1,13 +1,16 @@
 #pragma once
 #include <physics/physicsimport.h>
+#include <physics/HalfEdgeFace.h>
 
 namespace args::physics
 {
 	struct HalfEdgeEdge
 	{
-		HalfEdgeEdge* pairingEdge;
-		HalfEdgeEdge * nextEdge;
-		HalfEdgeEdge* prevEdge;
+		HalfEdgeEdge* pairingEdge = nullptr;
+		HalfEdgeEdge * nextEdge = nullptr;
+		HalfEdgeEdge* prevEdge = nullptr;
+
+		HalfEdgeFace* face = nullptr;
 
 		math::vec3* edgePositionPtr;
 

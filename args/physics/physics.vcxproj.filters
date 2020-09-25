@@ -30,14 +30,17 @@
     <ClCompile Include="physics_component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="convexcollider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="physicscollider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="physicssystem.hpp">
       <Filter>systems</Filter>
+    </ClCompile>
+    <ClCompile Include="HalfEdgeFace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="convexcollider.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +81,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="physics_contact.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsStatics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

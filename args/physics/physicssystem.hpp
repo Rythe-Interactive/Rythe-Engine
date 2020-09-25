@@ -16,6 +16,8 @@
 
 namespace args::physics
 {
+    typedef std::shared_ptr<PhysicsCollider> PhysicsColliderPtr;
+
     class PhysicsSystem final : public System<PhysicsSystem>
     {
     public:
@@ -46,6 +48,78 @@ namespace args::physics
             integrateRigidbodies(deltaTime);
         }
 
+        //The following function is public static so that it can be called by testSystem
+
+        /**@brief recursively goes through the world to retrieve the physicsComponent of entities that have one
+        * @param [out] manifoldPrecursors A std::vector that will store the created physics_manifold_precursor from the scene graph iteration
+        * @param initialEntity The entity where you would like to start the retrieval. If you would like to iterate through the entire scene
+        * put the world as a parameter
+        * @param parentTransform The world transform of the initialEntity. If 'initialEntity' is the world, parentTransform would be the identity matrix
+        * @param id An integer that is used to identiy a physics_manifold_precursor from one another
+        */
+        inline static void recursiveRetrievePreManifoldData(std::vector<physics_manifold_precursor>& manifoldPrecursors,
+            const ecs::entity_handle& initialEntity, math::mat4 parentTransform = math::mat4(1.0f), int id = 0)
+        {
+            math::mat4 rootTransform = parentTransform;
+
+            auto rotationHandle = initialEntity.get_component_handle<rotation>();
+            auto positionHandle = initialEntity.get_component_handle<position>();
+            auto scaleHandle = initialEntity.get_component_handle<scale>();
+            auto physicsComponentHandle = initialEntity.get_component_handle<physicsComponent>();
+
+
+            bool hasTransform = rotationHandle && positionHandle && scaleHandle;
+            bool hasNecessaryComponentsForPhysicsManifold = hasTransform && physicsComponentHandle;
+
+            int colliderID = id;
+            /* log::debug("----------- recursiveRetrievePreManifoldData ------------------------");
+             log::debug("colliderID count {0} ", colliderID);
+
+             log::debug("colliderID hasTransform {0} ", hasTransform);
+
+             log::debug("colliderID hasNecessaryComponentsForPhysicsManifold {0} ", hasNecessaryComponentsForPhysicsManifold);*/
+
+             //if the entity has a physicsComponent and a transform
+            if (hasNecessaryComponentsForPhysicsManifold)
+            {
+                rotation rot = rotationHandle.read();
+                position pos = positionHandle.read();
+                scale scale = scaleHandle.read();
+
+                //assemble the local transform matrix of the entity
+                math::mat4 localTransform;
+                math::compose(localTransform, scale, rot, pos);
+
+                //multiply it with the parent to get the world transform
+                rootTransform = parentTransform * localTransform;
+
+                //create its physics_manifold_precursor
+                physics_manifold_precursor manifoldPrecursor(rootTransform, physicsComponentHandle, colliderID);
+
+                auto physicsComponent = physicsComponentHandle.read();
+
+                for (auto physCollider : *physicsComponent.colliders)
+                {
+                    physCollider->DrawColliderRepresentation(rootTransform);
+                }
+
+                manifoldPrecursors.push_back(manifoldPrecursor);
+            }
+
+            //log::debug("initialEntity.child_count() {} ", initialEntity.child_count());
+
+            //call recursiveRetrievePreManifoldData on its children
+            for (int i = 0; i < initialEntity.child_count(); i++)
+            {
+                colliderID++;
+                auto child = initialEntity.get_child(i);
+                recursiveRetrievePreManifoldData(manifoldPrecursors, child, rootTransform, colliderID);
+            }
+
+
+        }
+
+
     private:
 
         args::delegate<void(std::vector<physics_manifold_precursor>&, std::vector<std::vector<physics_manifold_precursor>>&)> m_optimizeBroadPhase;
@@ -71,9 +145,11 @@ namespace args::physics
             //------------------------------------------------------ Narrowphase -----------------------------------------------------//
             std::vector<physics_manifold> manifoldsToSolve;
 
+            log::debug("------------- Narrowphase");
+
             for (auto& manifoldPrecursors : manifoldPrecursorGrouping)
             {
-                for (int i = 0; i < manifoldPrecursors.size(); i++)
+                for (int i = 0; i < manifoldPrecursors.size()-1; i++)
                 {
                     for (int j = i+1; j < manifoldPrecursors.size(); j++)
                     {
@@ -81,7 +157,7 @@ namespace args::physics
                         physics_manifold_precursor& precursorB = manifoldPrecursors.at(j);
 
                         auto phyCompHandleA = precursorA.physicsComponentHandle;
-                        auto phyCompHandleB = precursorA.physicsComponentHandle;
+                        auto phyCompHandleB = precursorB.physicsComponentHandle;
 
                         physicsComponent precursorPhyCompA = phyCompHandleA.read();
                         physicsComponent precursorPhyCompB = phyCompHandleB.read();
@@ -105,6 +181,7 @@ namespace args::physics
                         
                         if (isBetweenTriggerAndNonTrigger || isBetweenRigidbodyAndNonTrigger || isBetween2Rigidbodies)
                         {
+
                             constructManifoldsWithPrecursors(manifoldPrecursors.at(i), manifoldPrecursors.at(j),
                                 manifoldsToSolve,
                                 precursorRigidbodyA || precursorRigidbodyB
@@ -164,68 +241,7 @@ namespace args::physics
         }
 
 
-        /**@brief recursively goes through the world to retrieve the physicsComponent of entities that have one 
-        * @param [out] manifoldPrecursors A std::vector that will store the created physics_manifold_precursor from the scene graph iteration
-        * @param initialEntity The entity where you would like to start the retrieval. If you would like to iterate through the entire scene
-        * put the world as a parameter
-        * @param parentTransform The world transform of the initialEntity. If 'initialEntity' is the world, parentTransform would be the identity matrix
-        * @param id An integer that is used to identiy a physics_manifold_precursor from one another
-        */
-        void recursiveRetrievePreManifoldData(std::vector<physics_manifold_precursor> & manifoldPrecursors,
-            const ecs::entity_handle& initialEntity,math::mat4 parentTransform = math::mat4(1.0f),int id =0)
-        {
-            math::mat4 rootTransform = parentTransform;
-            
-            auto rotationHandle = initialEntity.get_component_handle<rotation>();
-            auto positionHandle = initialEntity.get_component_handle<position>();
-            auto scaleHandle = initialEntity.get_component_handle<scale>();
-            auto physicsComponentHandle = initialEntity.get_component_handle<physicsComponent>();
-
-                
-            bool hasTransform = rotationHandle && positionHandle && scaleHandle;
-            bool hasNecessaryComponentsForPhysicsManifold = hasTransform && physicsComponentHandle;
-
-            int colliderID = id;
-           /* log::debug("----------- recursiveRetrievePreManifoldData ------------------------");
-            log::debug("colliderID count {0} ", colliderID);
-
-            log::debug("colliderID hasTransform {0} ", hasTransform);
-
-            log::debug("colliderID hasNecessaryComponentsForPhysicsManifold {0} ", hasNecessaryComponentsForPhysicsManifold);*/
-
-            //if the entity has a physicsComponent and a transform
-            if (hasNecessaryComponentsForPhysicsManifold)
-            {
-                rotation rot = rotationHandle.read();
-                position pos = positionHandle.read();
-                scale scale = scaleHandle.read();
-
-                //assemble the local transform matrix of the entity
-                math::mat4 localTransform;
-                math::compose(localTransform, scale, rot, pos);
-
-                //multiply it with the parent to get the world transform
-                rootTransform = parentTransform * localTransform;
-
-                //create its physics_manifold_precursor
-                physics_manifold_precursor manifoldPrecursor(rootTransform,physicsComponentHandle, colliderID);
-
-                manifoldPrecursors.push_back(manifoldPrecursor);
-            }
-
-            //log::debug("initialEntity.child_count() {} ", initialEntity.child_count());
-
-            //call recursiveRetrievePreManifoldData on its children
-            for (int i = 0; i < initialEntity.child_count(); i++)
-            {
-                colliderID++;
-                auto child = initialEntity.get_child(i);
-                recursiveRetrievePreManifoldData(manifoldPrecursors, child, rootTransform, colliderID);
-            }
-                
-            
-        }
-
+       
         /**@brief moves all physics_manifold_precursor into a singular std::vector. This esentially means that no optimization was done.
         * @note This should only be used for testing/debugging purposes
         */
@@ -244,6 +260,8 @@ namespace args::physics
         void constructManifoldsWithPrecursors(physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB,
             std::vector<physics_manifold>& manifoldsToSolve,bool isRigidbodyInvolved,bool isTriggerInvolved)
         {
+            
+
             auto physicsComponentA = precursorA.physicsComponentHandle.read();
             auto physicsComponentB = precursorB.physicsComponentHandle.read();
 
@@ -251,8 +269,8 @@ namespace args::physics
             {
                 for (auto colliderB : *physicsComponentB.colliders)
                 {
-
-                    constructManifoldWithCollider();
+                    physics::physics_manifold m;
+                    constructManifoldWithCollider(colliderA,colliderB,precursorA,precursorB,m);
 
                     if (isRigidbodyInvolved)
                     {
@@ -268,8 +286,21 @@ namespace args::physics
             }
         }
 
-        void constructManifoldWithCollider()
+        void constructManifoldWithCollider(
+            PhysicsColliderPtr colliderA, PhysicsColliderPtr colliderB
+            , physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB,physics_manifold& manifold)
         {
+            manifold.colliderA = colliderA;
+            manifold.colliderB = colliderB;
+
+            manifold.physicsCompA = precursorA.physicsComponentHandle;
+            manifold.physicsCompB = precursorB.physicsComponentHandle;
+
+            manifold.transformA = precursorA.worldTransform;
+            manifold.transformB = precursorB.worldTransform;
+
+           // log::debug("colliderA->CheckCollision(colliderB, manifold)");
+            colliderA->CheckCollision(colliderB, manifold);
 
         }
 
