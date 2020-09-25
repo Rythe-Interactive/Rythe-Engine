@@ -7,10 +7,12 @@
 #include <core/scheduling/scheduler.hpp>
 #include <core/events/eventbus.hpp>
 #include <core/defaults/coremodule.hpp>
+#include <core/logging/logging.hpp>
 
 #include <map>
 #include <vector>
 #include <memory>
+
 
 /**
  * @file engine.hpp
@@ -37,7 +39,12 @@ namespace args::core
         scheduling::Scheduler m_scheduler;
 
     public:
-        Engine() : m_modules(), m_eventbus(), m_ecs(&m_eventbus), m_scheduler(&m_eventbus)
+        Engine() : m_modules(), m_eventbus(), m_ecs(&m_eventbus),
+#if defined(ARGS_LOW_POWER)
+            m_scheduler(&m_eventbus, true)
+#else
+            m_scheduler(&m_eventbus, false)
+#endif
         {
             reportModule<CoreModule>();
         }
@@ -71,6 +78,8 @@ namespace args::core
          */
         void init()
         {
+            log::setup();
+          
             for (const auto& [priority, moduleList] : m_modules)
                 for (auto& module : moduleList)
                     module->setup();

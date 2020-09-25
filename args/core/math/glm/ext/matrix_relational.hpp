@@ -21,7 +21,7 @@
 #	pragma message("GLM: GLM_EXT_matrix_relational extension included")
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup ext_matrix_relational
 	/// @{
@@ -127,6 +127,6 @@ namespace args::core::math::detail::glm
 	GLM_FUNC_DECL GLM_CONSTEXPR vec<C, bool, Q> notEqual(mat<C, R, T, Q> const& x, mat<C, R, T, Q> const& y, vec<C, int, Q> const& ULPs);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "matrix_relational.inl"

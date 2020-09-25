@@ -128,7 +128,7 @@ namespace args::core::ecs
 
     inline entity_handle EntityQuery::operator[](size_type index)
     {
-        return m_ecsRegistry->getEntity(m_registry->getEntities(m_id).dense()[index]);
+        return m_ecsRegistry->getEntity(m_registry->getEntities(m_id)[index]);
     }
 
     inline size_type EntityQuery::size()

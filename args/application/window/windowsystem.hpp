@@ -49,7 +49,12 @@ namespace args::application
                     if (!ContextHelper::windowShouldClose(window))
                         return;
 
-                    handle.write(application::window());
+                    auto* lock = handle.read().lock;
+                    {
+                        async::readwrite_guard guard(*lock);
+                        handle.write(invalid_window);
+                    }
+                    delete lock;
 
                     id_type ownerId = handle.entity;
 
@@ -68,6 +73,7 @@ namespace args::application
             ContextHelper::destroyWindow(window);
         }
 
+#pragma region Callbacks
         static void onWindowMoved(GLFWwindow* window, int x, int y)
         {
             if (data::m_windowComponents.contains(window))
@@ -143,7 +149,7 @@ namespace args::application
         static void onMouseMoved(GLFWwindow* window, double xpos, double ypos)
         {
             if (data::m_windowComponents.contains(window))
-                raiseWindowEvent<mouse_moved>(window, data::m_windowComponents[window], math::dvec2(xpos, ypos));
+                raiseWindowEvent<mouse_moved>(window, data::m_windowComponents[window], math::dvec2(xpos, ypos) / (math::dvec2)ContextHelper::getFramebufferSize(window));
         }
 
         static void onMouseButton(GLFWwindow* window, int button, int action, int mods)
@@ -163,7 +169,7 @@ namespace args::application
             async::readwrite_guard guard(data::m_creationLock);
             for (auto entity : m_windowQuery)
             {
-                closeWindow(entity.get_component_handle<window>().read(std::memory_order_relaxed));
+                ContextHelper::setWindowShouldClose(entity.get_component_handle<window>().read(std::memory_order_relaxed), true);
             }
 
             m_exit = true;
@@ -178,6 +184,7 @@ namespace args::application
                 m_requests.push_back(*windowRequest);
             }
         }
+#pragma endregion
 
     public:
         virtual void setup()
@@ -186,7 +193,14 @@ namespace args::application
             bindToEvent<events::exit, &WindowSystem::onExit>();
             bindToEvent<window_request, &WindowSystem::onWindowRequest>();
 
-            raiseEvent<window_request>(world_entity_id, math::ivec2(1360, 768), "<Args> Engine", nullptr, nullptr, 1);
+            raiseEvent<window_request>(world_entity_id, math::ivec2(1360, 768), "<Args> Engine", nullptr, nullptr, 0);
+
+            m_scheduler->sendCommand(m_scheduler->getChainThreadId("Input"), [](void* param)
+                {
+                    WindowSystem* self = reinterpret_cast<WindowSystem*>(param);
+                    log::debug("Creating main window.");
+                    self->createWindows();
+                }, this);
 
             createProcess<&WindowSystem::refreshWindows>("Rendering");
             createProcess<&WindowSystem::handleWindowEvents>("Input");
@@ -201,7 +215,7 @@ namespace args::application
             async::readwrite_guard guard(m_requestLock);
             for (auto& request : m_requests)
             {
-                std::cout << "creating a window" << std::endl;
+                log::debug("creating a window");
 
                 if (request.hints.size())
                 {
@@ -212,7 +226,7 @@ namespace args::application
                 {
                     ContextHelper::windowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
                     ContextHelper::windowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-                    ContextHelper::windowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+                    ContextHelper::windowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_FALSE);
                     ContextHelper::windowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
                     GLFWmonitor* moniter = request.monitor;
@@ -237,42 +251,41 @@ namespace args::application
                     request.name = "<Args> Engine";
 
                 window win = ContextHelper::createWindow(request.size, request.name, request.monitor, request.share);
+                win.lock = new async::readonly_rw_spinlock();
 
                 ecs::component_handle<window> handle;
 
                 {
                     async::readwrite_guard guard(data::m_creationLock);
-                    handle = m_ecs->createComponent<window>(request.entityId);
-                    handle.write(win, std::memory_order_relaxed);
+                    handle = m_ecs->createComponent<window>(request.entityId, win);
                 }
+                log::debug("created window: {}", request.name);
 
                 data::m_windowComponents.insert(win, handle);
                 data::m_windowEventBus.insert(win, m_eventBus);
 
-                ContextHelper::makeContextCurrent(win);
-
-                ContextHelper::swapInterval(request.swapInterval);
-
-                ContextHelper::makeContextCurrent(nullptr);
-
-                ContextHelper::setWindowCloseCallback(win, &WindowSystem::closeWindow);
-                ContextHelper::setWindowPosCallback(win, &WindowSystem::onWindowMoved);
-                ContextHelper::setWindowSizeCallback(win, &WindowSystem::onWindowResize);
-                ContextHelper::setWindowRefreshCallback(win, &WindowSystem::onWindowRefresh);
-                ContextHelper::setWindowFocusCallback(win, &WindowSystem::onWindowFocus);
-                ContextHelper::setWindowIconifyCallback(win, &WindowSystem::onWindowIconify);
-                ContextHelper::setWindowMaximizeCallback(win, &WindowSystem::onWindowMaximize);
-                ContextHelper::setFramebufferSizeCallback(win, &WindowSystem::onWindowFrameBufferResize);
-                ContextHelper::setWindowContentScaleCallback(win, &WindowSystem::onWindowContentRescale);
-                ContextHelper::setDropCallback(win, &WindowSystem::onItemDroppedInWindow);
-                ContextHelper::setCursorEnterCallback(win, &WindowSystem::onMouseEnterWindow);
-                ContextHelper::setKeyCallback(win, &WindowSystem::onKeyInput);
-                ContextHelper::setCharCallback(win, &WindowSystem::onCharInput);
-                ContextHelper::setCursorPosCallback(win, &WindowSystem::onMouseMoved);
-                ContextHelper::setMouseButtonCallback(win, &WindowSystem::onMouseButton);
-                ContextHelper::setScrollCallback(win, &WindowSystem::onMouseScroll);
-
-                std::cout << "done creating a window" << std::endl;
+                {
+                    async::readwrite_guard guard(*win.lock);
+                    ContextHelper::makeContextCurrent(win);
+                    ContextHelper::swapInterval(request.swapInterval);
+                    ContextHelper::setWindowCloseCallback(win, &WindowSystem::closeWindow);
+                    ContextHelper::setWindowPosCallback(win, &WindowSystem::onWindowMoved);
+                    ContextHelper::setWindowSizeCallback(win, &WindowSystem::onWindowResize);
+                    ContextHelper::setWindowRefreshCallback(win, &WindowSystem::onWindowRefresh);
+                    ContextHelper::setWindowFocusCallback(win, &WindowSystem::onWindowFocus);
+                    ContextHelper::setWindowIconifyCallback(win, &WindowSystem::onWindowIconify);
+                    ContextHelper::setWindowMaximizeCallback(win, &WindowSystem::onWindowMaximize);
+                    ContextHelper::setFramebufferSizeCallback(win, &WindowSystem::onWindowFrameBufferResize);
+                    ContextHelper::setWindowContentScaleCallback(win, &WindowSystem::onWindowContentRescale);
+                    ContextHelper::setDropCallback(win, &WindowSystem::onItemDroppedInWindow);
+                    ContextHelper::setCursorEnterCallback(win, &WindowSystem::onMouseEnterWindow);
+                    ContextHelper::setKeyCallback(win, &WindowSystem::onKeyInput);
+                    ContextHelper::setCharCallback(win, &WindowSystem::onCharInput);
+                    ContextHelper::setCursorPosCallback(win, &WindowSystem::onMouseMoved);
+                    ContextHelper::setMouseButtonCallback(win, &WindowSystem::onMouseButton);
+                    ContextHelper::setScrollCallback(win, &WindowSystem::onMouseScroll);
+                    ContextHelper::makeContextCurrent(nullptr);
+                }
             }
 
             m_requests.clear();
@@ -288,7 +301,12 @@ namespace args::application
             for (auto entity : m_windowQuery)
             {
                 window win = entity.get_component_handle<window>().read(std::memory_order_relaxed);
-                ContextHelper::swapBuffers(win);
+                {
+                    async::readwrite_guard guard(*win.lock);
+                    ContextHelper::makeContextCurrent(win);
+                    ContextHelper::swapBuffers(win);
+                    ContextHelper::makeContextCurrent(nullptr);
+                }
             }
         }
 

@@ -4,6 +4,7 @@
 #include <core/types/meta.hpp>
 #include <core/platform/platform.hpp>
 #include <string>
+#include <string_view>
 #include <cstring>
 
 /**

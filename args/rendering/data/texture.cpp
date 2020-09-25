@@ -22,26 +22,26 @@ namespace args::rendering
         retrieveBinaryData(value->type, start);
     }
 
-    sparse_map<id_type, texture> texture_cache::m_textures;
-    async::readonly_rw_spinlock texture_cache::m_textureLock;
+    sparse_map<id_type, texture> TextureCache::m_textures;
+    async::readonly_rw_spinlock TextureCache::m_textureLock;
 
     texture_data texture_handle::get_data()
     {
-        return texture_cache::get_data(id);
+        return TextureCache::get_data(id);
     }
 
     const texture& texture_handle::get_texture()
     {
-        return texture_cache::get_texture(id);
+        return TextureCache::get_texture(id);
     }
 
-    const texture& texture_cache::get_texture(id_type id)
+    const texture& TextureCache::get_texture(id_type id)
     {
         async::readonly_guard guard(m_textureLock);
         return m_textures[id];
     }
 
-    texture_data texture_cache::get_data(id_type id)
+    texture_data TextureCache::get_data(id_type id)
     {
         texture texture;
 
@@ -60,7 +60,7 @@ namespace args::rendering
         return data;
     }
 
-    texture_handle texture_cache::create_texture(const std::string& name, const fs::view& file, texture_import_settings settings)
+    texture_handle TextureCache::create_texture(const std::string& name, const fs::view& file, texture_import_settings settings)
     {
         id_type id = nameHash(name);
 
@@ -86,7 +86,7 @@ namespace args::rendering
         return { id };
     }
 
-    texture_handle texture_cache::get_handle(const std::string& name)
+    texture_handle TextureCache::get_handle(const std::string& name)
     {
         id_type id = nameHash(name);
         async::readonly_guard guard(m_textureLock);
@@ -95,7 +95,7 @@ namespace args::rendering
         return invalid_texture_handle;
     }
 
-    texture_handle texture_cache::get_handle(id_type id)
+    texture_handle TextureCache::get_handle(id_type id)
     {
         async::readonly_guard guard(m_textureLock);
         if (m_textures.contains(id))

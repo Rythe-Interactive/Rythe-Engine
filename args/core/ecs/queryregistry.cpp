@@ -3,7 +3,6 @@
 #include <core/ecs/entity_handle.hpp>
 #include <core/ecs/entityquery.hpp>
 #include <algorithm>
-#include <iostream>
 
 namespace args::core::ecs
 {
@@ -41,7 +40,7 @@ namespace args::core::ecs
 		auto [entities, entitiesLock] = m_registry.getEntities(); // getEntities returns a pair of both the container as well as the lock that should be locked by you when operating on it.
 		async::mixed_multiguard mguard(entitiesLock, async::read, m_componentLock, async::read, m_entityLock, async::write); // Lock locks.
 
-		for (entity_handle entity : entities.dense()) // Iterate over all entities.
+		for (entity_handle entity : entities) // Iterate over all entities.
 		{
 			if (m_entityLists[queryId]->contains(entity)) // If the entity is already tracked, continue to the next entity.
 				continue;
@@ -118,9 +117,9 @@ namespace args::core::ecs
 	{
 		async::readonly_guard guard(m_componentLock);
 
-		for (int id : m_componentTypes.keys())
+		for (auto [id, types] : m_componentTypes)
 		{
-			if (m_componentTypes[id] == componentTypes) // Iterate over all component type lists of all queries and check if it's the same as the requested list.
+			if (types == componentTypes) // Iterate over all component type lists of all queries and check if it's the same as the requested list.
 				return id;
 		}
 
@@ -164,7 +163,7 @@ namespace args::core::ecs
 			auto [entities, entitiesLock] = m_registry.getEntities(); // getEntities returns a pair of both the container as well as the lock that should be locked by you when operating on it.
 			async::mixed_multiguard mguard(entitiesLock, async::read, m_componentLock, async::read, m_entityLock, async::write); // Lock locks.
 
-			for (entity_handle entity : entities.dense()) // Iterate over all entities.
+			for (entity_handle entity : entities) // Iterate over all entities.
 				if (m_registry.getEntityData(entity).components.contains(m_componentTypes[queryId])) // Check if the queried components completely overlaps the components in the entity.
 					m_entityLists[queryId]->insert(entity); // Insert entity into tracking list.
 		}

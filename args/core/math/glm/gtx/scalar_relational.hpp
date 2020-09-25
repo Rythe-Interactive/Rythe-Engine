@@ -23,7 +23,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_scalar_relational
 	/// @{
@@ -31,6 +31,6 @@ namespace args::core::math::detail::glm
 
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "scalar_relational.inl"

@@ -30,14 +30,17 @@
     <ClCompile Include="physics_component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="convexcollider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="physicscollider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="physicssystem.hpp">
       <Filter>systems</Filter>
+    </ClCompile>
+    <ClCompile Include="HalfEdgeFace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="convexcollider.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +61,30 @@
     </ClInclude>
     <ClInclude Include="physicsmodule.hpp">
       <Filter>module</Filter>
+    </ClInclude>
+    <ClInclude Include="physicscollider.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="physicsconstants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HalfEdgeEdge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="physicsimport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HalfEdgeFace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\physics_manifold_precursor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="physics_contact.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsStatics.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

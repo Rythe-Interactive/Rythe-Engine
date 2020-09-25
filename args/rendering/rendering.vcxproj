@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="data\importers\texture_importers.cpp" />
+    <ClCompile Include="data\material.cpp" />
     <ClCompile Include="data\model.cpp" />
     <ClCompile Include="data\shader.cpp" />
     <ClCompile Include="data\texture.cpp" />
@@ -20,7 +21,9 @@
     <ClInclude Include="components\camera.hpp" />
     <ClInclude Include="components\renderable.hpp" />
     <ClInclude Include="data\importers\texture_importers.hpp" />
+    <ClInclude Include="data\material.hpp" />
     <ClInclude Include="data\shader.hpp" />
+    <ClInclude Include="debugrendering.hpp" />
     <ClInclude Include="detail\engine_include.hpp" />
     <ClInclude Include="detail\stb_image.h" />
     <ClInclude Include="detail\tiny_obj_loader.h" />
@@ -86,6 +89,7 @@
       <PreprocessorDefinitions>ARGS_INTERNAL;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -106,6 +110,7 @@
       <PreprocessorDefinitions>ARGS_INTERNAL;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

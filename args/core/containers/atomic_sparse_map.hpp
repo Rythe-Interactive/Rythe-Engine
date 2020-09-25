@@ -64,6 +64,9 @@ namespace args::core
 		std::atomic<size_type> m_capacity = 0;
 
 	public:
+        A_NODISCARD dense_key_container& keys() { return m_dense_key; }
+        A_NODISCARD const dense_key_container& keys() const { return m_dense_key; }
+
 		A_NODISCARD inline iterator begin()
 		{
 			async::readonly_guard lock(m_container_lock); return m_dense_value.begin();

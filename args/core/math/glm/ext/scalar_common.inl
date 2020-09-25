@@ -1,27 +1,27 @@
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<typename T>
 	GLM_FUNC_QUALIFIER T min(T a, T b, T c)
 	{
-		return glm::min(glm::min(a, b), c);
+		return math::min(math::min(a, b), c);
 	}
 
 	template<typename T>
 	GLM_FUNC_QUALIFIER T min(T a, T b, T c, T d)
 	{
-		return glm::min(glm::min(a, b), glm::min(c, d));
+		return math::min(math::min(a, b), math::min(c, d));
 	}
 
 	template<typename T>
 	GLM_FUNC_QUALIFIER T max(T a, T b, T c)
 	{
-		return glm::max(glm::max(a, b), c);
+		return math::max(math::max(a, b), c);
 	}
 
 	template<typename T>
 	GLM_FUNC_QUALIFIER T max(T a, T b, T c, T d)
 	{
-		return glm::max(glm::max(a, b), glm::max(c, d));
+		return math::max(math::max(a, b), math::max(c, d));
 	}
 
 #	if GLM_HAS_CXX11_STL
@@ -124,29 +124,29 @@ namespace args::core::math::detail::glm
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType clamp(genType const& Texcoord)
 	{
-		return glm::clamp(Texcoord, static_cast<genType>(0), static_cast<genType>(1));
+		return math::clamp(Texcoord, static_cast<genType>(0), static_cast<genType>(1));
 	}
 
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType repeat(genType const& Texcoord)
 	{
-		return glm::fract(Texcoord);
+		return math::fract(Texcoord);
 	}
 
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType mirrorClamp(genType const& Texcoord)
 	{
-		return glm::fract(glm::abs(Texcoord));
+		return math::fract(math::abs(Texcoord));
 	}
 
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType mirrorRepeat(genType const& Texcoord)
 	{
-		genType const Abs = glm::abs(Texcoord);
-		genType const Clamp = glm::mod(glm::floor(Abs), static_cast<genType>(2));
-		genType const Floor = glm::floor(Abs);
+		genType const Abs = math::abs(Texcoord);
+		genType const Clamp = math::mod(math::floor(Abs), static_cast<genType>(2));
+		genType const Floor = math::floor(Abs);
 		genType const Rest = Abs - Floor;
 		genType const Mirror = Clamp + Rest;
 		return mix(Rest, static_cast<genType>(1) - Rest, Mirror >= static_cast<genType>(1));
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

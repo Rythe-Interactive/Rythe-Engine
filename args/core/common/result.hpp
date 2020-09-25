@@ -392,6 +392,11 @@ namespace args::core::common {
             return m_r;
         }
 
+        auto decay() -> decltype(auto) 
+        {
+            return m_r.get();
+        }
+
         err_type get_error()
         {
             return m_r.get_error();
@@ -403,11 +408,16 @@ namespace args::core::common {
 
     };
 
+   
+
     /**@brief convenience wrapper around result_decay that does not need the
      *        common::result<...>
      **/
     template <class...Args>
     using result_decay_more = result_decay<result<Args...>>;
+
+    template <class T,class E>
+    auto decay(result_decay_more<T,E>& x) ->decltype(auto) { return x.get(); }
 
     constexpr valid_t valid{};
 

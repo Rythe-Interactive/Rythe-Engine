@@ -16,7 +16,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm{
+namespace args::core::math{
 namespace detail
 {
 	template<typename T>
@@ -69,7 +69,7 @@ namespace detail
 			if(Value == 0)
 				return -1;
 
-			return glm::bitCount(~Value & (Value - static_cast<genIUType>(1)));
+			return math::bitCount(~Value & (Value - static_cast<genIUType>(1)));
 		}
 	};
 
@@ -129,7 +129,7 @@ namespace detail
 			x = compute_findMSB_step_vec<L, T, Q, sizeof(T) * 8 >= 16>::call(x, static_cast<T>( 8));
 			x = compute_findMSB_step_vec<L, T, Q, sizeof(T) * 8 >= 32>::call(x, static_cast<T>(16));
 			x = compute_findMSB_step_vec<L, T, Q, sizeof(T) * 8 >= 64>::call(x, static_cast<T>(32));
-			return vec<L, int, Q>(sizeof(T) * 8 - 1) - glm::bitCount(~x);
+			return vec<L, int, Q>(sizeof(T) * 8 - 1) - math::bitCount(~x);
 		}
 	};
 
@@ -280,7 +280,7 @@ namespace detail
 	{
 		GLM_STATIC_ASSERT(std::numeric_limits<genIUType>::is_integer, "'bitfieldReverse' only accept integer values");
 
-		return bitfieldReverse(glm::vec<1, genIUType, glm::defaultp>(x)).x;
+		return bitfieldReverse(math::vec<1, genIUType, math::defaultp>(x)).x;
 	}
 
 	template<length_t L, typename T, qualifier Q>
@@ -304,7 +304,7 @@ namespace detail
 	{
 		GLM_STATIC_ASSERT(std::numeric_limits<genIUType>::is_integer, "'bitCount' only accept integer values");
 
-		return bitCount(glm::vec<1, genIUType, glm::defaultp>(x)).x;
+		return bitCount(math::vec<1, genIUType, math::defaultp>(x)).x;
 	}
 
 	template<length_t L, typename T, qualifier Q>
@@ -364,7 +364,7 @@ namespace detail
 
 		return detail::compute_findMSB_vec<L, T, Q, sizeof(T) * 8>::call(v);
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #if GLM_CONFIG_SIMD == GLM_ENABLE
 #	include "func_integer_simd.inl"

@@ -24,7 +24,7 @@
 #	endif
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup gtx_extended_min_max
 	/// @{
@@ -132,6 +132,6 @@ namespace args::core::math::detail::glm
 		C<T> const& w);
 
 	/// @}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math
 
 #include "extended_min_max.inl"

@@ -3,7 +3,6 @@
 #include <core/containers/containers.hpp>
 #include <core/types/primitives.hpp>
 #include <core/ecs/entityquery.hpp>
-#include <iostream>
 
 /**
  * @file queryregistry.hpp
@@ -50,7 +49,7 @@ namespace args::core::ecs
 
         ~QueryRegistry()
         {
-            for (auto* entityList : m_entityLists)
+            for (auto [_, entityList] : m_entityLists)
                 delete entityList;
 
             m_validRegistries.erase(this);

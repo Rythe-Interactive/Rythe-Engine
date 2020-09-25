@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="convexcollider.cpp" />
     <ClCompile Include="delete_this.cpp" />
+    <ClCompile Include="HalfEdgeFace.cpp" />
     <ClCompile Include="physicscollider.cpp" />
     <ClCompile Include="physics_component.cpp" />
     <ClCompile Include="physicssystem.hpp" />
@@ -25,6 +26,14 @@
   <ItemGroup>
     <ClInclude Include="convexcollider.hpp" />
     <ClInclude Include="cube_collider_params.hpp" />
+    <ClInclude Include="data\physics_manifold_precursor.h" />
+    <ClInclude Include="HalfEdgeEdge.h" />
+    <ClInclude Include="HalfEdgeFace.h" />
+    <ClInclude Include="physicscollider.hpp" />
+    <ClInclude Include="physicsconstants.h" />
+    <ClInclude Include="physicsimport.h" />
+    <ClInclude Include="PhysicsStatics.h" />
+    <ClInclude Include="physics_contact.h" />
     <ClInclude Include="physics_manifold.hpp" />
     <ClInclude Include="physics_component.hpp" />
     <ClInclude Include="physicsmodule.hpp" />
@@ -86,6 +95,7 @@
       <PreprocessorDefinitions>ARGS_INTERNAL;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -106,6 +116,7 @@
       <PreprocessorDefinitions>ARGS_INTERNAL;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

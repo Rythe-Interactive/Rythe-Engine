@@ -2,8 +2,7 @@
 #include <application/context/contexthelper.hpp>
 #include <application/window/window.hpp>
 #include <application/window/windowsystem.hpp>
-
-#include "application/input/inputsystem.hpp"
+#include <application/input/inputsystem.hpp>
 
 namespace args::application
 {

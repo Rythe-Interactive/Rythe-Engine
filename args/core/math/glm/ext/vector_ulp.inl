@@ -1,4 +1,4 @@
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER vec<L, T, Q> nextFloat(vec<L, T, Q> const& x)
@@ -71,4 +71,4 @@ namespace args::core::math::detail::glm
 			Result[i] = floatDistance(x[i], y[i]);
 		return Result;
 	}
-}//namespace args::core::math::detail::glm
+}//namespace args::core::math

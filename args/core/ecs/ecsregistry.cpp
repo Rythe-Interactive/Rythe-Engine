@@ -87,6 +87,23 @@ namespace args::core::ecs
         return component_handle_base(entityId, this);
     }
 
+    inline component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId, void* value)
+    {
+        if (!validateEntity(entityId))
+            throw args_entity_not_found_error;
+
+        getFamily(componentTypeId)->create_component(entityId, value);
+
+        {
+            async::readonly_guard guard(m_entityDataLock);
+            m_entityData[entityId].components.insert(componentTypeId); // Is fine because the lock only locks order changes in the container, not the values themselves.
+        }
+
+        m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, false);
+
+        return component_handle_base(entityId, this);
+    }
+
     inline void EcsRegistry::destroyComponent(id_type entityId, id_type componentTypeId)
     {
         if (!validateEntity(entityId))
@@ -123,6 +140,8 @@ namespace args::core::ecs
         async::readwrite_guard guard(m_entityLock); // No scope needed because we also need read permission in the return line.
         m_entities.emplace(id, this);
         m_containedEntities.insert(id);
+
+        entity_handle(id, this).set_parent(world_entity_id);
 
         return entity_handle(id, this);
     }

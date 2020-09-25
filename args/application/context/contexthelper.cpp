@@ -17,7 +17,7 @@ namespace args::application
     {
         glfwSetErrorCallback([](int code, cstring desc)
             {
-                std::cout << "GLFW ERROR " << code << ": " << desc << std::endl;
+                log::error("GLFW ERROR {}: {}", code, desc);
             });
 
         bool success = glfwInit();
@@ -152,7 +152,8 @@ namespace args::application
 
     void ContextHelper::makeContextCurrent(GLFWwindow* window)
     {
-        glfwMakeContextCurrent(window);
+        if (initialized())
+            glfwMakeContextCurrent(window);
     }
 
     GLFWwindow* ContextHelper::getCurrentContext()
@@ -261,6 +262,11 @@ namespace args::application
     bool ContextHelper::joystickPresent(int jid)
     {
         return glfwJoystickPresent(jid);
+    }
+
+    void ContextHelper::setInputMode(GLFWwindow* window, int mode, int value)
+    {
+        glfwSetInputMode(window, mode, value);
     }
 
 }

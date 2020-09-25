@@ -24,7 +24,7 @@
 #	pragma message("GLM: GLM_EXT_quaternion_exponential extension included")
 #endif
 
-namespace args::core::math::detail::glm
+namespace args::core::math
 {
 	/// @addtogroup ext_quaternion_transform
 	/// @{
@@ -58,6 +58,6 @@ namespace args::core::math::detail::glm
 	GLM_FUNC_DECL qua<T, Q> sqrt(qua<T, Q> const& q);
 
 	/// @}
-} //namespace args::core::math::detail::glm
+} //namespace args::core::math
 
 #include "quaternion_exponential.inl"
