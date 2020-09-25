@@ -67,7 +67,12 @@ public:
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
         window.enableCursor(false);
         window.show();
-        rendering::model_handle modelH;
+        rendering::model_handle cubeH;
+        rendering::model_handle sphereH;
+        rendering::model_handle suzanneH;
+        rendering::model_handle uvsphereH;
+        rendering::model_handle axesH;
+        rendering::model_handle submeshtestH;
         rendering::material_handle wireframeH;
         rendering::material_handle vertexH;
         rendering::material_handle uvH;
@@ -77,8 +82,14 @@ public:
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
-            modelH = rendering::ModelCache::create_model("test", "assets://models/Cube.obj"_view);
-            wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wirefrrame.glsl"_view);
+            cubeH = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
+            sphereH = rendering::ModelCache::create_model("sphere", "assets://models/sphere.obj"_view);
+            suzanneH = rendering::ModelCache::create_model("suzanne", "assets://models/suzanne.obj"_view);
+            uvsphereH = rendering::ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view);
+            axesH = rendering::ModelCache::create_model("axes", "assets://models/xyz.obj"_view);
+            submeshtestH = rendering::ModelCache::create_model("submeshtest", "assets://models/submeshtest.obj"_view);
+
+            wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.glsl"_view);
             vertexH = rendering::MaterialCache::create_material("vertex", "assets://shaders/position.glsl"_view);
             uvH = rendering::MaterialCache::create_material("uv", "assets://shaders/uv.glsl"_view);
             normalH = rendering::MaterialCache::create_material("normal", "assets://shaders/normal.glsl"_view);
@@ -89,7 +100,7 @@ public:
         {
             auto ent = m_ecs->createEntity();
             ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { modelH, normalH });
+            m_ecs->createComponent<rendering::renderable>(ent, { suzanneH, normalH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(0, 0, 5.1f));
@@ -99,7 +110,23 @@ public:
         {
             auto ent = m_ecs->createEntity();
             ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { modelH, uvH });
+            m_ecs->createComponent<rendering::renderable>(ent, { submeshtestH, normalH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+            positionH.write(math::vec3(0, 5, 0));
+            scaleH.write(math::vec3(1.f));
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+            m_ecs->createComponent<rendering::renderable>(ent, { axesH, normalH });
+            m_ecs->createComponent<transform>(ent);
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+            ent.add_component<sah>();
+            m_ecs->createComponent<rendering::renderable>(ent, { cubeH, uvH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(5.1f, 0, 0));
@@ -109,21 +136,21 @@ public:
         {
             auto ent = m_ecs->createEntity();
             ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { modelH, wireframeH });
+            m_ecs->createComponent<rendering::renderable>(ent, { sphereH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(0, 0, -5.1f));
-            scaleH.write(math::vec3(0.5f));
+            scaleH.write(math::vec3(2.5f));
         }
 
         {
             auto ent = m_ecs->createEntity();
             ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { modelH, vertexH });
+            m_ecs->createComponent<rendering::renderable>(ent, { uvsphereH, vertexH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(-5.1f, 0, 0));
-            scaleH.write(math::vec3(0.25f));
+            scaleH.write(math::vec3(2.5f));
         }
 
         setupCameraEntity();
@@ -133,7 +160,7 @@ public:
         auto physicsEnt = m_ecs->createEntity();
 
         //setup rendering for physics ent
-        m_ecs->createComponent<rendering::renderable>(physicsEnt, { modelH, wireframeH });
+        m_ecs->createComponent<rendering::renderable>(physicsEnt, { cubeH, wireframeH });
 
         auto [bodyPosition, bodyRotation, bodyScale] = m_ecs->createComponent<transform>(physicsEnt);
 
@@ -155,8 +182,6 @@ public:
 
         physicsComponentHandle.write(physicsComponent);
 
-
-
         auto rb = rbHandle.read();
 
         rb.globalCentreOfMass = bodyP;
@@ -170,7 +195,7 @@ public:
             auto ent = m_ecs->createEntity();
             ent.add_component<physics::physicsComponent>();
             auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH, wireframeH });
+            renderableHandle.write({ cubeH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(5.1f, -2.0f, 0));

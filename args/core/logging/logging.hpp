@@ -9,6 +9,7 @@
 #include <core/types/type_util.hpp>
 #include <thread>
 #include <core/math/math.hpp>
+#include <core/common/exception.hpp>
 
 /** @file logging.hpp */
 
@@ -34,6 +35,46 @@ namespace fmt
             return format_to(ctx.out(), "{}", oss.str());
         }
 
+    };
+
+    template <>
+    struct formatter<args::core::exception>
+    {
+
+        constexpr auto parse(format_parse_context& ctx)
+        {
+            auto it = ctx.begin(), end = ctx.end();
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+            return it++;
+        }
+
+        template <typename FormatContext>
+        auto format(const args::core::exception& error, FormatContext& ctx)
+        {
+            return format_to(ctx.out(), "[{}({}) T {}(...)] {}", error.file(), error.line(), error.func(), error.what());
+        }
+    };
+
+    template <>
+    struct formatter<args::core::fs_error>
+    {
+
+        constexpr auto parse(format_parse_context& ctx)
+        {
+            auto it = ctx.begin(), end = ctx.end();
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+            return it++;
+        }
+
+        template <typename FormatContext>
+        auto format(const args::core::fs_error& error, FormatContext& ctx)
+        {
+            return format_to(ctx.out(), "[{}({}) T {}(...)] {}", error.file(), error.line(), error.func(), error.what());
+        }
     };
 
     template <>

@@ -110,20 +110,29 @@ namespace args::rendering
         if (!file.is_valid() || !file.file_info().is_file)
             return invalid_model_handle;
 
-        model mesh{};
+        model model{};
 
         {// Load the mesh if it wasn't already. (It's called MeshCache for a reason.)
-            auto [lock, data] = MeshCache::create_mesh(name, file, settings).get();
+            auto handle = MeshCache::create_mesh(name, file, settings);
+            if (handle == invalid_mesh_handle)
+            {
+                log::error("Failed to load model {}", name);
+                return invalid_model_handle;
+            }
+
+            // Copy the sub-mesh data.
+            auto [lock, data] = handle.get();
             async::readonly_guard guard(lock);
             for (auto& submeshData : data.submeshes)
-                mesh.submeshes.push_back(submeshData);
+                model.submeshes.push_back(submeshData);
         }
 
-        mesh.buffered = false;
+        // The model still needs to be buffered on the rendering thread.
+        model.buffered = false;
 
-        {
+        { // Insert the model into the model list.
             async::readwrite_guard guard(m_modelLock);
-            m_models.insert(id, mesh);
+            m_models.insert(id, model);
         }
 
         return { id };

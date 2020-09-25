@@ -98,10 +98,12 @@ namespace args::core
                 uint normalIndex = indexData.normal_index * 3;
                 uint uvIndex = indexData.texcoord_index * 2;
 
-                // Extract the actual vertex data.
-                math::vec3 vertex(attributes.vertices[vertexIndex + 0], attributes.vertices[vertexIndex + 1], attributes.vertices[vertexIndex + 2]);
+                // Extract the actual vertex data.         (We flip the Y axis to convert it to our left handed coordinate system.)
+                math::vec3 vertex(attributes.vertices[vertexIndex + 0], -attributes.vertices[vertexIndex + 1], attributes.vertices[vertexIndex + 2]);
                 math::vec3 normal(attributes.normals[normalIndex + 0], attributes.normals[normalIndex + 1], attributes.normals[normalIndex + 2]);
-                math::vec2 uv(attributes.texcoords[uvIndex + 0], attributes.texcoords[uvIndex + 1]);
+                math::vec2 uv{};
+                if (uvIndex + 1 < attributes.texcoords.size())
+                    uv = math::vec2(attributes.texcoords[uvIndex + 0], attributes.texcoords[uvIndex + 1]);
 
                 // Create a hash to check for doubles.
                 detail::vertex_hash hash(vertex, normal, uv);
@@ -125,6 +127,15 @@ namespace args::core
 
             // Add the sub-mesh to the mesh.
             data.submeshes.push_back(submesh);
+        }
+
+        // Because we only flip one axis we also need to flip the triangle rotation.
+        for (int i = 0; i < data.indices.size(); i += 3)
+        {
+            uint i1 = data.indices[i + 1];
+            uint i2 = data.indices[i + 2];
+            data.indices[i + 1] = i2;
+            data.indices[i + 2] = i1;
         }
 
         // Calculate the tangents.

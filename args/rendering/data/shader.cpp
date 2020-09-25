@@ -401,8 +401,7 @@ namespace args::rendering
 
         if (result != common::valid)
         {
-            auto error = result.get_error();
-            log::error("[{}({}) T {}(...)] {}", error.file(), error.line(), error.func(), error.what());
+            log::error("{}", result.get_error());
             return invalid_shader_handle;
         }
 

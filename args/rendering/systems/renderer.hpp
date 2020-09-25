@@ -46,7 +46,7 @@ namespace args::rendering
                 debugLines.insert(*line);
         }
 
-        void debugRenderPass(const math::mat4& view, const math::mat4& projection)
+        void debugRenderPass(const math::mat4& view, const math::mat4& projection, time::time_span<fast_time> deltaTime)
         {
             std::vector<debug::debug_line> lines;
 
@@ -56,7 +56,18 @@ namespace args::rendering
                     return;
 
                 lines.assign(debugLines.begin(), debugLines.end());
-                debugLines.clear();
+
+                std::vector<debug::debug_line> toRemove;
+                for (auto& line : debugLines)
+                {
+                    line.timeBuffer += deltaTime;
+
+                    if (line.timeBuffer >= line.time)
+                        toRemove.push_back(line);
+                }
+
+                for (auto line : toRemove)
+                    debugLines.erase(line);
             }            
 
             static material_handle debugMaterial = MaterialCache::create_material("debug", "assets://shaders/debug.glsl"_view);
@@ -403,7 +414,7 @@ namespace args::rendering
                     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);
 
                     for (auto submesh : mesh.submeshes)
-                        glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)submesh.indexOffset, (GLsizei)instances.size());
+                        glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)(submesh.indexOffset * sizeof(uint)), (GLsizei)instances.size());
 
                     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
                     glBindVertexArray(0);
@@ -411,7 +422,7 @@ namespace args::rendering
                 }
             }
 
-            debugRenderPass(view, projection);
+            debugRenderPass(view, projection, deltaTime);
 
             app::ContextHelper::makeContextCurrent(nullptr);
             auto elapsed = renderClock.end();

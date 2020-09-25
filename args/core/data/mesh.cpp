@@ -105,9 +105,10 @@ namespace args::core
 
     mesh_handle MeshCache::create_mesh(const std::string& name, const filesystem::view& file, mesh_import_settings settings)
     {
+        // Get ID.
         id_type id = nameHash(name);
 
-        {
+        { // Check if the mesh already exists, and return that instead if it does.
             async::readonly_guard guard(m_meshesLock);
             if (m_meshes.count(id))
                 return { id };
@@ -116,21 +117,23 @@ namespace args::core
         if (!file.is_valid() || !file.file_info().is_file)
             return invalid_mesh_handle;
 
+        // Try to load the mesh.
         auto result = filesystem::AssetImporter::tryLoad<mesh>(file, settings);
 
         if (result != common::valid)
+        {
+            log::error("{}", result.get_error());
             return invalid_mesh_handle;
-
-        mesh* data;
-
-        {            
-            async::readwrite_guard guard(m_meshesLock);
-            auto* pair_ptr = new std::pair<async::readonly_rw_spinlock, mesh>(std::make_pair<async::readonly_rw_spinlock, mesh>(async::readonly_rw_spinlock(), result));
-            auto iterator = m_meshes.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::readonly_rw_spinlock, mesh>>(pair_ptr))).first;
-            data = &iterator->second.get()->second;
         }
 
-        data->fileName = file.get_filename();
+        mesh data = result;
+        data.fileName = file.get_filename(); // Set the filename.
+
+        { // Insert the mesh into the mesh list.
+            async::readwrite_guard guard(m_meshesLock);
+            auto* pair_ptr = new std::pair<async::readonly_rw_spinlock, mesh>(std::make_pair<async::readonly_rw_spinlock, mesh>(async::readonly_rw_spinlock(), std::move(data)));
+            m_meshes.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::readonly_rw_spinlock, mesh>>(pair_ptr)));
+        }
 
         return { id };
     }
