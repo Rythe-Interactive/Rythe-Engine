@@ -20,7 +20,7 @@ namespace args::physics
         static void GetSupportPoint(math::vec3 planePosition, math::vec3 direction, ConvexCollider* collider, math::mat4 colliderTransform
             ,math::vec3& worldSupportPoint)
         {
-            float largestDistanceInDirection = -FLT_MAX;
+            float largestDistanceInDirection = std::numeric_limits<float>::lowest();
 
             for (const auto& vert : collider->GetVertices())
             {
@@ -47,7 +47,7 @@ namespace args::physics
         static bool FindSeperatingAxisByExtremePointProjection(ConvexCollider* convexA
             , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, HalfEdgeFace* refFace, float& maximumSeperation)
         {
-            float currentMaximumSeperation = -FLT_MAX;
+            float currentMaximumSeperation = std::numeric_limits<float>::lowest();
  
 
             for (const auto face : convexB->GetHalfEdgeFaces())
@@ -70,22 +70,14 @@ namespace args::physics
                     refFace = face;
                 }
 
-                
                 if (seperation > 0)
                 {
                     //we have found a seperating axis, we can exit early
                     return true;
                 }
             }
-
             //no seperating axis was found
             return false;
-
         }
-
 	};
-
-
-
-
 }

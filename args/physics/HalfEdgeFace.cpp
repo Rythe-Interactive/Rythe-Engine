@@ -23,7 +23,7 @@ namespace args::physics
         };
         forEachEdge(calculateFaceCentroid);
 
-        centroid = faceCenter/(float)edgeCount;
+        centroid = faceCenter/static_cast<float>( edgeCount);
        
     }
 

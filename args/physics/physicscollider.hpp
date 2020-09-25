@@ -50,8 +50,6 @@ namespace args::physics
 
         // this is only here for debug reasons
         std::vector<TempLine> collisionsFound;
-    protected:
-
     private:
        //this is not used, its mostly for debug reasons
         std::vector<HalfEdgeFace*> dummyHalfEdges;
