@@ -5,14 +5,12 @@
 #include <core/math/math.hpp>
 
 #include <core/logging/logging.hpp>
-#include <physics/physics_component.hpp>
-#include <physics/rigidbody.hpp>
+#include <physics/components/physics_component.hpp>
+#include <physics/components/rigidbody.hpp>
 #include <physics/cube_collider_params.hpp>
 #include <physics/data/physics_manifold_precursor.h>
-#include <physics/physicssystem.hpp>
+#include <physics/systems/physicssystem.hpp>
 #include <physics/HalfEdgeFace.h>
-
-
 
 #include <core/compute/context.hpp>
 #include <core/compute/kernel.hpp>

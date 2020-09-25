@@ -2,7 +2,7 @@
 #include <physics/physicsimport.h>
 #include <physics/physics_contact.h>
 #include <physics/physicsimport.h>
-#include <physics/physics_component.hpp>
+#include <physics/components/physics_component.hpp>
 
 namespace args::physics
 {

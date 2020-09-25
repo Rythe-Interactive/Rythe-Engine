@@ -1,6 +1,6 @@
 #pragma once
 #include <physics/physicsimport.h>
-#include <physics/convexcollider.hpp>
+#include <physics/colliders/convexcollider.hpp>
 
 namespace args::physics
 {
@@ -79,5 +79,24 @@ namespace args::physics
             //no seperating axis was found
             return false;
         }
+
+        static bool FindSeperatingAxisByGaussMapEdgeEdgeCheck()
+        {
+            //for each edge in convexA
+                //for each edge in conve
+
+        }
+
+        static bool AttemptBuildMinkowskiFace()
+        {
+
+        }
+
+        static bool IsMinkowskiFace()
+        {
+
+        }
+
+
 	};
 }

@@ -1,4 +1,4 @@
-#include <physics/convexcollider.hpp>
+#include <physics/colliders/convexcollider.hpp>
 #include <physics/PhysicsStatics.h>
 
 namespace args::physics
