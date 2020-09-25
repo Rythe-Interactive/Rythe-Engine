@@ -4,7 +4,7 @@
 #include <core/data/importers/mesh_importers.hpp>
 #include <core/math/math.hpp>
 #include <core/logging/logging.hpp>
-
+#include <core/common/string_extra.hpp>
 #include <unordered_map>
 
 namespace args::core::detail
@@ -62,15 +62,39 @@ namespace args::core
         config.triangulate = settings.triangulate;
         config.vertex_color = settings.vertex_color;
 
+        std::string mtl = "newmtl None\n\
+            Ns 0\n\
+            Ka 0.000000 0.000000 0.000000\n\
+            Kd 0.8 0.8 0.8\n\
+            Ks 0.8 0.8 0.8\n\
+            d 1\n\
+            illum 2\n\0";
+
+        if (settings.materialFile.get_path() != std::string(""))
+        {
+            auto result = settings.materialFile.get();
+            if (result != common::valid)
+                log::warn("{}", result.get_error());
+            else
+            {
+                filesystem::basic_resource resource = result;
+                mtl = resource.to_string();
+            }
+        }
+
         // Try to parse the mesh data from the text data in the file.
-        if (!reader.ParseFromString(resource.to_string(), "", config))
+        if (!reader.ParseFromString(resource.to_string(), mtl, config))
         {
             return decay(Err(args_fs_error(reader.Error().c_str())));
         }
 
         // Print any warnings.
         if (!reader.Warning().empty())
-            log::warn(reader.Warning().c_str());
+        {
+            std::string warnings = reader.Warning();
+            common::replace_items(warnings, "\n", " ");
+            log::warn(warnings.c_str());
+        }
 
         // Get all the vertex and composition data.
         tinyobj::attrib_t attributes = reader.GetAttrib();

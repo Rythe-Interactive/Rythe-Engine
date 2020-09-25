@@ -111,6 +111,7 @@ namespace args::rendering
             return invalid_model_handle;
 
         model model{};
+        std::string meshName;
 
         {// Load the mesh if it wasn't already. (It's called MeshCache for a reason.)
             auto handle = MeshCache::create_mesh(name, file, settings);
@@ -123,6 +124,8 @@ namespace args::rendering
             // Copy the sub-mesh data.
             auto [lock, data] = handle.get();
             async::readonly_guard guard(lock);
+            meshName = data.fileName;
+
             for (auto& submeshData : data.submeshes)
                 model.submeshes.push_back(submeshData);
         }
@@ -134,6 +137,8 @@ namespace args::rendering
             async::readwrite_guard guard(m_modelLock);
             m_models.insert(id, model);
         }
+
+        log::debug("Created model {} with mesh: {}", name, meshName);
 
         return { id };
     }

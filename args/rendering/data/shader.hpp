@@ -312,7 +312,6 @@ namespace args::rendering
 
         static shader* get_shader(id_type id);
 
-        static void replace_items(std::string& source, const std::string& item, const std::string& value);
         static void process_includes(std::string& shaderSource);
         static void resolve_preprocess_features(std::string& shaderSource, shader_state& state);
         static shader_ilo seperate_shaders(std::string& shaderSource);

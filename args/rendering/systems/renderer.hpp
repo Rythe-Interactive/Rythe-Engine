@@ -326,9 +326,6 @@ namespace args::rendering
             glFrontFace(GL_CW);
             glEnable(GL_MULTISAMPLE);
 
-            math::ivec2 viewportSize = app::ContextHelper::getFramebufferSize(window);
-            glViewport(0, 0, viewportSize.x, viewportSize.y);
-
             const unsigned char* vendor = glGetString(GL_VENDOR);
             const unsigned char* renderer = glGetString(GL_RENDERER);
             const unsigned char* version = glGetString(GL_VERSION);
@@ -360,6 +357,8 @@ namespace args::rendering
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
+            math::ivec2 viewportSize = app::ContextHelper::getFramebufferSize(window);
+            glViewport(0, 0, viewportSize.x, viewportSize.y);
             glClearColor(0.3f, 0.5f, 1.0f, 1.0f);
             glClearDepth(0.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -372,7 +371,7 @@ namespace args::rendering
             math::compose(view, camEnt.get_component_handle<scale>().read(), camEnt.get_component_handle<rotation>().read(), camEnt.get_component_handle<position>().read());
             view = math::inverse(view);
 
-            math::mat4 projection = camEnt.get_component_handle<camera>().read().projection;
+            math::mat4 projection = camEnt.get_component_handle<camera>().read().get_projection(((float)viewportSize.x) / viewportSize.y);
 
             for (auto ent : renderablesQuery)
             {

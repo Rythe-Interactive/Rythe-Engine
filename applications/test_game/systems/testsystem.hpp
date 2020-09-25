@@ -73,10 +73,14 @@ public:
         rendering::model_handle uvsphereH;
         rendering::model_handle axesH;
         rendering::model_handle submeshtestH;
+        rendering::model_handle floorH;
+
         rendering::material_handle wireframeH;
         rendering::material_handle vertexH;
         rendering::material_handle uvH;
         rendering::material_handle normalH;
+        rendering::material_handle skyboxH;
+        rendering::material_handle floorMH;
 
         {
             async::readwrite_guard guard(*window.lock);
@@ -86,15 +90,38 @@ public:
             sphereH = rendering::ModelCache::create_model("sphere", "assets://models/sphere.obj"_view);
             suzanneH = rendering::ModelCache::create_model("suzanne", "assets://models/suzanne.obj"_view);
             uvsphereH = rendering::ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view);
-            axesH = rendering::ModelCache::create_model("axes", "assets://models/xyz.obj"_view);
+            axesH = rendering::ModelCache::create_model("axes", "assets://models/xyz.obj"_view, { true, false, "assets://models/xyz.mtl"_view });
             submeshtestH = rendering::ModelCache::create_model("submeshtest", "assets://models/submeshtest.obj"_view);
+            floorH = rendering::ModelCache::create_model("floor", "assets://models/groundplane.obj"_view);
 
             wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.glsl"_view);
             vertexH = rendering::MaterialCache::create_material("vertex", "assets://shaders/position.glsl"_view);
             uvH = rendering::MaterialCache::create_material("uv", "assets://shaders/uv.glsl"_view);
             normalH = rendering::MaterialCache::create_material("normal", "assets://shaders/normal.glsl"_view);
+            skyboxH = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.glsl"_view);
+            floorMH = rendering::MaterialCache::create_material("floor", "assets://shaders/groundplane.glsl"_view);
 
             app::ContextHelper::makeContextCurrent(nullptr);
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+            ent.add_component<sah>();
+            m_ecs->createComponent<rendering::renderable>(ent, { suzanneH, vertexH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+            positionH.write(math::vec3(0, 3, 5.1f));
+            scaleH.write(math::vec3(1.f));
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+            ent.add_component<sah>();
+            m_ecs->createComponent<rendering::renderable>(ent, { suzanneH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+            positionH.write(math::vec3(0, 3, 8.1f));
+            scaleH.write(math::vec3(1.f));
         }
 
         {
@@ -103,7 +130,7 @@ public:
             m_ecs->createComponent<rendering::renderable>(ent, { suzanneH, normalH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
-            positionH.write(math::vec3(0, 0, 5.1f));
+            positionH.write(math::vec3(0, 3, 11.1f));
             scaleH.write(math::vec3(1.f));
         }
 
@@ -113,7 +140,7 @@ public:
             m_ecs->createComponent<rendering::renderable>(ent, { submeshtestH, normalH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
-            positionH.write(math::vec3(0, 5, 0));
+            positionH.write(math::vec3(0, 10, 0));
             scaleH.write(math::vec3(1.f));
         }
 
@@ -129,27 +156,42 @@ public:
             m_ecs->createComponent<rendering::renderable>(ent, { cubeH, uvH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
-            positionH.write(math::vec3(5.1f, 0, 0));
+            positionH.write(math::vec3(5.1f, 3, 0));
             scaleH.write(math::vec3(0.75f));
         }
 
         {
             auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { sphereH, wireframeH });
+            m_ecs->createComponent<rendering::renderable>(ent, { cubeH, skyboxH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
-            positionH.write(math::vec3(0, 0, -5.1f));
+            scaleH.write(math::vec3(500.f));
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+            m_ecs->createComponent<rendering::renderable>(ent, { floorH, floorMH });
+
+            m_ecs->createComponent<transform>(ent);
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+            ent.add_component<sah>();
+            m_ecs->createComponent<rendering::renderable>(ent, { sphereH, normalH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+            positionH.write(math::vec3(0, 3, -5.1f));
             scaleH.write(math::vec3(2.5f));
         }
 
         {
             auto ent = m_ecs->createEntity();
             ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { uvsphereH, vertexH });
+            m_ecs->createComponent<rendering::renderable>(ent, { uvsphereH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
-            positionH.write(math::vec3(-5.1f, 0, 0));
+            positionH.write(math::vec3(-5.1f, 3, 0));
             scaleH.write(math::vec3(2.5f));
         }
 
@@ -218,11 +260,12 @@ public:
         rot = math::conjugate(math::normalize(math::toQuat(math::lookAt(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0)))));
         camRotHandle.write(rot);
 
+        camPosHandle.write({ 0.f, 3.f, 0.f });
 
         auto camH = m_ecs->createComponent<rendering::camera>(player);
         rendering::camera cam = camH.read();
 
-        cam.set_projection(60.f, 1360.f / 768.f, 0.1f, 1000.f);
+        cam.set_projection(90.f, 0.1f, 1000.f);
         camH.write(cam);
     }
 

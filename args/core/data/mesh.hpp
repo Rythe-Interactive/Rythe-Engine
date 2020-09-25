@@ -51,9 +51,10 @@ namespace args::core
     {
         bool triangulate;
         bool vertex_color;
+        filesystem::view materialFile;
     };
 
-    constexpr mesh_import_settings default_mesh_settings{ true, false };
+    const mesh_import_settings default_mesh_settings{ true, false, filesystem::view("") };
 
     class ARGS_API MeshCache
     {

@@ -12,16 +12,6 @@ namespace args::rendering
         return &m_shaders[id];
     }
 
-    void ShaderCache::replace_items(std::string& source, const std::string& item, const std::string& value)
-    {
-        size_type n = 0;
-        while ((n = source.find(item, n)) != std::string::npos) // While there's items to be found, keep replacing them with value.
-        {
-            source.replace(n, item.size(), value);
-            n += value.size();
-        }
-    }
-
     void ShaderCache::process_includes(std::string& shaderSource)
     {
         // WIP
@@ -30,15 +20,15 @@ namespace args::rendering
     void ShaderCache::resolve_preprocess_features(std::string& shaderSource, shader_state& state)
     {
         // Replace all the attribute binding locations.
-        replace_items(shaderSource, "SV_POSITION", std::to_string(SV_POSITION));
-        replace_items(shaderSource, "SV_NORMAL", std::to_string(SV_NORMAL));
-        replace_items(shaderSource, "SV_TANGENT", std::to_string(SV_TANGENT));
-        replace_items(shaderSource, "SV_TEXCOORD0", std::to_string(SV_TEXCOORD0));
-        replace_items(shaderSource, "SV_MODELMATRIX", std::to_string(SV_MODELMATRIX));
+        common::replace_items(shaderSource, "SV_POSITION", std::to_string(SV_POSITION));
+        common::replace_items(shaderSource, "SV_NORMAL", std::to_string(SV_NORMAL));
+        common::replace_items(shaderSource, "SV_TANGENT", std::to_string(SV_TANGENT));
+        common::replace_items(shaderSource, "SV_TEXCOORD0", std::to_string(SV_TEXCOORD0));
+        common::replace_items(shaderSource, "SV_MODELMATRIX", std::to_string(SV_MODELMATRIX));
 
         // Replace all the uniform binding locations.
-        replace_items(shaderSource, "SV_VIEW", std::to_string(SV_VIEW));
-        replace_items(shaderSource, "SV_PROJECT", std::to_string(SV_PROJECT));
+        common::replace_items(shaderSource, "SV_VIEW", std::to_string(SV_VIEW));
+        common::replace_items(shaderSource, "SV_PROJECT", std::to_string(SV_PROJECT));
 
         // Create lookup table for the OpenGL function types that can be changed by the shader state.
         static std::unordered_map<std::string, GLenum> funcTypes;
