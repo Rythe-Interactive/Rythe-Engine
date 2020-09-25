@@ -1,47 +1,25 @@
 #pragma once
-#include <physics/HalfEdgeEdge.h>
+#include <physics/physicsimport.h>
 
 namespace args::physics
 {
+	struct HalfEdgeEdge;
+
 	struct HalfEdgeFace
 	{
 		HalfEdgeEdge* startEdge;
 		math::vec3 normal;
+		math::vec3 centroid;
 
-		HalfEdgeFace(HalfEdgeEdge* newStartEdge,math::vec3 newNormal) : startEdge{newStartEdge} , normal{newNormal}
-		{
-
-		}
+		HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
 
 		/** @brief given a function that takes in a HalfEdgeEdge*, 
 		* executes the function on each edge connected to 'startEdge'
 		*/
-		void forEachEdge(args::core::delegate< void(HalfEdgeEdge*)> functionToExecute)
-		{
-			HalfEdgeEdge* initialEdge = startEdge;
-			HalfEdgeEdge* currentEdge = startEdge;
+		void forEachEdge(args::core::delegate< void(HalfEdgeEdge*)> functionToExecute);
+		
 
-			if (!currentEdge) { return; }
-
-			//the HalfEdgeEdge* 'startEdge' creates a ring buffer.
-			//This means that initialEdge will eventually go back to "startEdge", ending the loop.
-			do 
-			{
-				HalfEdgeEdge* edgeToExecuteOn = currentEdge;
-				currentEdge = currentEdge->nextEdge;
-				functionToExecute(edgeToExecuteOn);
-
-			} while (initialEdge != currentEdge && currentEdge != nullptr);
-
-		}
-
-		~HalfEdgeFace()
-		{
-			auto deleteFunc = [](HalfEdgeEdge* edge) { delete edge; };
-
-			forEachEdge(deleteFunc);
-
-		}
+		~HalfEdgeFace();
 
 
 	};
