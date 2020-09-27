@@ -13,9 +13,10 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{c578d912-3beb-4ee1-8aa1-e9eacf7ca441}</ProjectGuid>
+    <ProjectGuid>{A946EE4C-D731-4F82-AEB9-A4BA3B99F941}</ProjectGuid>
     <RootNamespace>testgame</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>unit_tests</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -97,12 +98,10 @@
     <ClCompile Include="source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="test_filesystem.hpp" />
-    <ClInclude Include="module\testmodule.hpp" />
-    <ClInclude Include="systems\testsystem.hpp" />
+    <None Include="assets\kernels\vadd_kernel.cl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\kernels\vadd_kernel.cl" />
+    <ClInclude Include="test_filesystem.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,8 +3,6 @@
 
 #include <iostream>
 
-#include "core/filesystem/basic_resolver.hpp"
-
 inline namespace {
 
 using namespace ::args::core;

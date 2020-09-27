@@ -247,6 +247,7 @@ public:
         //----------- AABB Test ------------//
         {
             auto ent = m_ecs->createEntity();
+            ent.add_component<sah>();
 
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
