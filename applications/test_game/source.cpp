@@ -8,6 +8,8 @@
 #include <core/core.hpp>
 #include <application/application.hpp>
 #include <rendering/rendering.hpp>
+#define AUDIO_EXIT_ON_FAIL
+#include <audio/audio.hpp>
 
 #include "module/testModule.hpp"
 #include "systems/testsystem.hpp"
@@ -29,6 +31,7 @@ void ARGS_CCONV reportModules(Engine* engine)
     engine->reportModule<app::ApplicationModule>();
     engine->reportModule<rendering::RenderingModule>();
     engine->reportModule<physics::PhysicsModule>();
+    engine->reportModule<audio::AudioModule>();
 
     try
     {

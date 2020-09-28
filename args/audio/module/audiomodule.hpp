@@ -1,6 +1,8 @@
 #pragma once
 #include <audio/detail/engine_include.hpp>
 #include <audio/systems/audiosystem.hpp>
+#include <audio/components/audio_source.hpp>
+#include <audio/components/audio_listener.hpp>
 
 namespace args::audio
 {
@@ -11,13 +13,14 @@ namespace args::audio
         {
             addProcessChain("Audio");
 
-            //reportComponentType<sah>();
+            reportComponentType<audio_source>();
+            reportComponentType<audio_listener>();
             reportSystem<AudioSystem>();
         }
 
         virtual priority_type priority() override
         {
-            return default_priority;
+            return 50;
         }
     };
 }

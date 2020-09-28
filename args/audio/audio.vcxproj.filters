@@ -18,6 +18,9 @@
     <ClCompile Include="delete_this.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="systems\audiosystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="systems\audiosystem.hpp">
@@ -26,10 +29,13 @@
     <ClInclude Include="detail\engine_include.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="module\module.hpp">
+    <ClInclude Include="audio.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="module\audio.hpp">
+    <ClInclude Include="module\audiomodule.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\audio_source.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

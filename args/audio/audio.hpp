@@ -1,3 +1,3 @@
 #pragma once
-#include <audio/module/module.hpp>
+#include <audio/module/audiomodule.hpp>
 #include <audio/systems/audiosystem.hpp>
