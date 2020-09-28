@@ -43,7 +43,7 @@ namespace args::core
 
     struct rotation : public math::quat
     {
-        rotation() : math::quat(0, 0, 0, 1) {}
+        rotation() : math::quat(1,0,0,0) {}
         rotation(const rotation&) = default;
         rotation(rotation&&) = default;
         rotation(const math::quat& src) : math::quat(src) {}

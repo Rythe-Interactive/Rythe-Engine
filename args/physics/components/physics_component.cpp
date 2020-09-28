@@ -1,6 +1,6 @@
 
-#include <physics/physics_component.hpp>
-#include <physics/convexcollider.hpp>
+#include <physics/components/physics_component.hpp>
+#include <physics/colliders/convexcollider.hpp>
 
 namespace args::physics
 {

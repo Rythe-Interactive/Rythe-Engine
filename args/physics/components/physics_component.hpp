@@ -2,7 +2,8 @@
 #include <application/application.hpp>
 #include <physics/cube_collider_params.hpp>
 #include <vector>
-#include <physics/physicscollider.hpp>
+#include <physics/colliders/physicscollider.hpp>
+
 namespace args::physics
 {
 	struct ARGS_API physicsComponent
