@@ -13,6 +13,15 @@
   <ItemGroup>
     <ClCompile Include="delete_this.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="detail\engine_include.hpp" />
+    <ClInclude Include="module\audio.hpp" />
+    <ClInclude Include="module\module.hpp" />
+    <ClInclude Include="systems\audiosystem.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="systems\audiosystem.inl" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -75,10 +84,11 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>args-application.lib;args-core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>args-application.lib;args-core.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
+      <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"
+copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -98,10 +108,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>args-application.lib;args-core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>args-application.lib;args-core.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
+      <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"
+copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
