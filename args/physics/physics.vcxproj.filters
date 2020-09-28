@@ -39,6 +39,12 @@
     <ClCompile Include="halfedgeface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="data\penetrationquerys.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="convexconvexpenetrationquerys.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cube_collider_params.hpp">
@@ -81,6 +87,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="halfedgeface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\penetrationquerys.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="convexconvexpenetrationquerys.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

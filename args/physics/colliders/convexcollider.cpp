@@ -5,8 +5,6 @@ namespace args::physics
 {
     void ConvexCollider::CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) 
     {
-      
-
         //'this' is colliderA and 'convexCollider' is colliderB
 
         HalfEdgeFace* ARefFace = nullptr;
@@ -14,7 +12,7 @@ namespace args::physics
 
         if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(this, convexCollider, manifold.transformA, manifold.transformB, ARefFace, ARefSeperation))
         {
-            //log::debug("Seperating Axis Found With ConvexA as ref");
+            manifold.isColliding = false;
             return;
         }
 
@@ -23,7 +21,7 @@ namespace args::physics
 
         if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider, this, manifold.transformB, manifold.transformA, BRefFace, BRefSeperation))
         {
-            //log::debug("Seperating Axis Found With ConvexB as ref");
+            manifold.isColliding = false;
             return;
         }
 
@@ -35,9 +33,11 @@ namespace args::physics
         if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck(this, convexCollider, manifold.transformA, manifold.transformB,
             edgeRef, edgeInc, edgeNormal, aToBEdgeSeperation))
         {
+            manifold.isColliding = false;
             return;
         }
 
+        manifold.isColliding = true;
 
         log::debug("No seperating axis found!");
         TempLine line;
