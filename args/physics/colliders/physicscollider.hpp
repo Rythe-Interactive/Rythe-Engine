@@ -1,8 +1,8 @@
 #pragma once
 
-#include <application/application.hpp>
+#include <physics/physicsimport.h>
 #include <memory>
-#include <physics/HalfEdgeFace.h>
+#include <physics/halfedgeface.hpp>
 
 namespace args::physics
 {

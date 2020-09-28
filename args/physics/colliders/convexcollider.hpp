@@ -3,8 +3,8 @@
 #include <physics/physicsimport.h>
 #include <physics/colliders/physicscollider.hpp>
 #include <physics/cube_collider_params.hpp>
-#include <physics/HalfEdgeEdge.h>
-#include <physics/HalfEdgeFace.h>
+#include <physics/halfedgeedge.hpp>
+#include <physics/halfedgeface.hpp>
 
 #include <physics/data/physics_manifold.hpp>
 

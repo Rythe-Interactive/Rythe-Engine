@@ -13,13 +13,13 @@ namespace args::physics
         //---------------------------------------------------------------- Collision Detection ----------------------------------------------------------------------------//
 
         /** @brief Given a transformed ConvexCollider and a direction, Gets the vertex furthest in the given direction
-        * @param planePosition The position of the support plane in world space
-        * @param direction The direction we would like to know the support point of
-        * @param collider The ConvexCollider in question
-        * @param colliderTransform A mat4 describing the transform of the collider
-        * @param worldSupportPoint [out] the resulting support point
-        * @return returns true if a seperating axis was found
-        */
+         * @param planePosition The position of the support plane in world space
+         * @param direction The direction we would like to know the support point of
+         * @param collider The ConvexCollider in question
+         * @param colliderTransform A mat4 describing the transform of the collider
+         * @param worldSupportPoint [out] the resulting support point
+         * @return returns true if a seperating axis was found
+         */
         static void GetSupportPoint(const math::vec3& planePosition, const math::vec3& direction, ConvexCollider* collider, const math::mat4& colliderTransform
             , math::vec3& worldSupportPoint)
         {
@@ -40,15 +40,15 @@ namespace args::physics
         }
 		
         /** @brief Given 2 ConvexColliders, convexA and convexB, checks if one of the faces of convexB creates a seperating axis 
-        * that seperates the given convex shapes
-        * @param convexA the reference collider 
-        * @param convexB the collider that will create the seperating axes
-        * @param transformA the transform of convexA
-        * @param transformB the transform of convexB
-        * @param refFace [out] a HalfEdgeEdge* that has a normal parallel to the seperating axis
-        * @param maximumSeperation [out] the seperation on the given seperating axis
-        * @return returns true if a seperating axis was found
-        */
+         * that seperates the given convex shapes
+         * @param convexA the reference collider 
+         * @param convexB the collider that will create the seperating axes
+         * @param transformA the transform of convexA
+         * @param transformB the transform of convexB
+         * @param refFace [out] a HalfEdgeEdge* that has a normal parallel to the seperating axis
+         * @param maximumSeperation [out] the seperation on the given seperating axis
+         * @return returns true if a seperating axis was found
+         */
         static bool FindSeperatingAxisByExtremePointProjection(ConvexCollider* convexA
             , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, HalfEdgeFace* refFace, float& maximumSeperation) 
         {
@@ -86,17 +86,17 @@ namespace args::physics
         }
 
         /** @brief Given 2 ConvexColliders, Goes through every single possible edge combination in order to check for a seperating axis. This is done
-        * by creating a minkowski face with each edge combination.
-        * @param convexA the reference collider 
-        * @param convexB the incident collider
-        * @param transformA the transform of convexA
-        * @param transformB the transform of convexB
-        * @param refEdge [out] the resulting reference Edge
-        * @param incEdge [out] the resulting incident Edge
-        * @param seperatingAxisFound [out] the resulting seperating axis found
-        * @param seperation [out] the amount of seperation
-        * @return returns true if a seperating axis was found
-        */
+         * by creating a minkowski face with each edge combination.
+         * @param convexA the reference collider 
+         * @param convexB the incident collider
+         * @param transformA the transform of convexA
+         * @param transformB the transform of convexB
+         * @param refEdge [out] the resulting reference Edge
+         * @param incEdge [out] the resulting incident Edge
+         * @param seperatingAxisFound [out] the resulting seperating axis found
+         * @param seperation [out] the amount of seperation
+         * @return returns true if a seperating axis was found
+         */
         static bool FindSeperatingAxisByGaussMapEdgeCheck(ConvexCollider* convexA, ConvexCollider* convexB, 
             const math::mat4& transformA, const math::mat4& transformB,HalfEdgeEdge* refEdge,HalfEdgeEdge* incEdge,
             math::vec3& seperatingAxisFound,float & seperation)
@@ -182,17 +182,11 @@ namespace args::physics
                                 {
                                     return true;
                                 }
-
                             }
-
                         }
                     }
-
                 }
             }
-         
-
-    
             return false;
         }
 
@@ -201,8 +195,8 @@ namespace args::physics
         //--------------------------------------------- private helper functions -------------------------------------------------------//
 
         /** @brief Given 2 HalfEdgeEdges and their respective transforms, transforms their normals and checks if they create a minkowski face
-        * @return returns true if a minkowski face was succesfully constructed
-        */
+         * @return returns true if a minkowski face was succesfully constructed
+         */
         static bool attemptBuildMinkowskiFace(HalfEdgeEdge* edgeA,HalfEdgeEdge* edgeB,const math::mat4& transformA, 
             const math::mat4& transformB)
         {
@@ -216,9 +210,9 @@ namespace args::physics
         }
 
         /** @brief Given 2 arcs, one that starts from transformedA1 and ends at transformedA2 and another arc 
-        * that starts at transformedB1 and ends at transformedB2, checks if the given arcs collider each other
-        * @return returns true if the given arcs intersect
-        */
+         * that starts at transformedB1 and ends at transformedB2, checks if the given arcs collider each other
+         * @return returns true if the given arcs intersect
+         */
         static bool isMinkowskiFace(const math::vec3 transformedA1,const math::vec3 transformedA2,
             const math::vec3 transformedB1,const math::vec3 transformedB2)
         {
@@ -226,10 +220,13 @@ namespace args::physics
 
             math::vec3 planeANormal = math::cross(transformedA1, transformedA2);
 
-            float b1DotPlaneAMultB2DotPlaneA = 
-                math::dot(planeANormal, transformedB1) * math::dot(planeANormal, transformedB2);
+            float planeADotB1 = math::dot(planeANormal, transformedB1);
+            float planeADotB2 = math::dot(planeANormal, transformedB2);
 
-            if (b1DotPlaneAMultB2DotPlaneA > 0.0f ||  math::epsilonEqual(b1DotPlaneAMultB2DotPlaneA,0.0f,math::epsilon<float>()))
+            float dotMultiplyResultA = 
+                planeADotB1 * planeADotB2;
+
+            if (dotMultiplyResultA > 0.0f ||  math::epsilonEqual(dotMultiplyResultA,0.0f,math::epsilon<float>()))
             {
                 return false;
             }
@@ -238,10 +235,12 @@ namespace args::physics
 
             math::vec3 planeBNormal = math::cross(transformedB1, transformedB2);
 
-            float a1DotPlaneBMultA2DotPlaneB =
-                math::dot(planeBNormal, transformedA1) * math::dot(planeBNormal, transformedA2);
+            float planeBDotA1 = math::dot(planeBNormal, transformedA1);
+            float planeBDotA2 = math::dot(planeBNormal, transformedA2);
 
-            if (a1DotPlaneBMultA2DotPlaneB > 0.0f || math::epsilonEqual(a1DotPlaneBMultA2DotPlaneB, 0.0f, math::epsilon<float>()))
+            float  dotMultiplyResultB = planeBDotA1 * planeBDotA2;
+
+            if (dotMultiplyResultB > 0.0f || math::epsilonEqual(dotMultiplyResultB, 0.0f, math::epsilon<float>()))
             {
                 return false;
             }
@@ -250,9 +249,12 @@ namespace args::physics
 
             math::vec3 abNormal = math::cross(transformedA2, transformedB2);
 
-            float a1DotAbNormalMultb1DotAbNormal = math::dot(abNormal, transformedA1) * math::dot(abNormal, transformedB1);
+            float planeABDotA1 = math::dot(abNormal, transformedA1);
+            float planeABDotB1 = math::dot(abNormal, transformedB1);
 
-            if (a1DotAbNormalMultb1DotAbNormal < 0.0f || math::epsilonEqual(a1DotAbNormalMultb1DotAbNormal, 0.0f, math::epsilon<float>()))
+            float dotMultiplyResultAB = planeABDotA1 * planeABDotB1;
+
+            if (dotMultiplyResultAB < 0.0f || math::epsilonEqual(dotMultiplyResultAB, 0.0f, math::epsilon<float>()))
             {
                 return false;
             }

@@ -1,6 +1,6 @@
 #pragma once
 #include <core/core.hpp>
-#include <physics/HalfEdgeEdge.h>
+#include <physics/halfedgeedge.hpp>
 #include <application/application.hpp>
 #include <core/math/math.hpp>
 
@@ -10,7 +10,7 @@
 #include <physics/cube_collider_params.hpp>
 #include <physics/data/physics_manifold_precursor.h>
 #include <physics/systems/physicssystem.hpp>
-#include <physics/HalfEdgeFace.h>
+#include <physics/halfedgeface.hpp>
 
 #include <core/compute/context.hpp>
 #include <core/compute/kernel.hpp>

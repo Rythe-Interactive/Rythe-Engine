@@ -27,9 +27,6 @@
     <ClCompile Include="delete_this.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HalfEdgeFace.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="components\physics_component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -38,6 +35,9 @@
     </ClCompile>
     <ClCompile Include="systems\physicssystem.hpp">
       <Filter>systems</Filter>
+    </ClCompile>
+    <ClCompile Include="halfedgeface.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -50,22 +50,13 @@
     <ClInclude Include="physicsconstants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HalfEdgeEdge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="physicsimport.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HalfEdgeFace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\physics_manifold_precursor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="physics_contact.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsStatics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="components\physics_component.hpp">
@@ -82,6 +73,15 @@
     </ClInclude>
     <ClInclude Include="components\rigidbody.hpp">
       <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="physicsstatics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="halfedgeedge.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="halfedgeface.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

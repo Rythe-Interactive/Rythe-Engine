@@ -30,10 +30,10 @@ namespace args::physics
         HalfEdgeEdge* edgeRef = nullptr;
         HalfEdgeEdge* edgeInc = nullptr;
         math::vec3 edgeNormal;
-        float AtoBEdgeSeperation;
+        float aToBEdgeSeperation;
 
         if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck(this, convexCollider, manifold.transformA, manifold.transformB,
-            edgeRef, edgeInc, edgeNormal, AtoBEdgeSeperation))
+            edgeRef, edgeInc, edgeNormal, aToBEdgeSeperation))
         {
             return;
         }
