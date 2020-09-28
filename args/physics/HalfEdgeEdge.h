@@ -26,6 +26,16 @@ namespace args::physics
 			nextEdge = newNextEdge;
 			prevEdge = newPrevEdge;
 		}
+
+		math::vec3 getLocalNormal() const
+		{
+			return face->normal;
+		}
+
+		math::vec3 getLocalEdgeDirection()  const
+		{
+			return *nextEdge->edgePositionPtr - *edgePositionPtr;
+		}
 	};
 }
 

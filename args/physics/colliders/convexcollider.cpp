@@ -27,6 +27,18 @@ namespace args::physics
             return;
         }
 
+        HalfEdgeEdge* edgeRef = nullptr;
+        HalfEdgeEdge* edgeInc = nullptr;
+        math::vec3 edgeNormal;
+        float AtoBEdgeSeperation;
+
+        if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck(this, convexCollider, manifold.transformA, manifold.transformB,
+            edgeRef, edgeInc, edgeNormal, AtoBEdgeSeperation))
+        {
+            return;
+        }
+
+
         log::debug("No seperating axis found!");
         TempLine line;
         line.start = manifold.transformA[3];
