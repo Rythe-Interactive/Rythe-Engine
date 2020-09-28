@@ -51,6 +51,8 @@ namespace args::application
         static void terminate();
         static int getError(cstring* desc);
         static GLFWmonitor* getPrimaryMonitor();
+        static GLFWmonitor* getCurrentMonitor(GLFWwindow* window);
+        static void setWindowMonitor(GLFWwindow* window, GLFWmonitor* monitor, math::ivec2 pos, math::ivec2 size, int refreshRate);
         static const GLFWvidmode* getPrimaryVideoMode();
         static const GLFWvidmode* getVideoMode(GLFWmonitor* monitor);
         static void windowHint(int hint, int value);

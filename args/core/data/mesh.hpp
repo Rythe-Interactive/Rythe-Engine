@@ -11,8 +11,14 @@
 #include <memory>
 #include <functional>
 
+/**
+ * @file mesh.hpp
+ */
+
 namespace args::core
 {
+    /**@class sub_mesh
+     */
     struct sub_mesh
     {
         std::string name;
@@ -20,6 +26,8 @@ namespace args::core
         size_type indexOffset;
     };
 
+    /**@class mesh
+     */
     struct ARGS_API mesh
     {
         std::string fileName;
@@ -31,15 +39,27 @@ namespace args::core
 
         std::vector<sub_mesh> submeshes;
 
+        /**@brief Standard to resource conversion.
+         */
         static void to_resource(filesystem::basic_resource* resource, const mesh& value);
+
+        /**@brief Standard from resource conversion.
+         */
         static void from_resource(mesh* value, const filesystem::basic_resource& resource);
+
+        /**@brief Calculate the tangents from the triangles, vertices and normals of a certain mesh.
+         */
         static void calculate_tangents(mesh* data);
     };
 
+    /**@class mesh_handle
+     */
     struct ARGS_API mesh_handle
     {
         id_type id;
 
+        /**@brief Get the mesh and the attached lock.
+         */
         std::pair<async::readonly_rw_spinlock&, mesh&> get();
 
         bool operator==(const mesh_handle& other) const { return id == other.id; }

@@ -24,13 +24,13 @@ namespace args::core
         static void init(position& pos)
         {
             pos.data = { 0.f, 0.f, 0.f };
-            log::debug("initializing position");
+            //log::debug("initializing position");
         }
 
-        static void destroy(position&)
+       /* static void destroy(position&)
         {
             log::debug("destroying position");
-        }
+        }*/
     };
 
     struct rotation : public math::quat

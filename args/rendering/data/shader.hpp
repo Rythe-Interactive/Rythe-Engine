@@ -4,6 +4,10 @@
 #include <rendering/data/model.hpp>
 #include <rendering/data/texture.hpp>
 
+/**
+ * @file shader.hpp
+ */
+
 namespace args::rendering
 {
     struct model;
@@ -13,6 +17,9 @@ namespace args::rendering
     struct shader_handle;
 
 #pragma region shader parameters
+    /**@class shader_parameter_base
+     * @brief Common base of all shader parameter types. 
+     */
     struct shader_parameter_base
     {
     protected:
@@ -24,13 +31,21 @@ namespace args::rendering
         shader_parameter_base(id_type shaderId, std::string_view name, GLenum type, GLint location) : m_shaderId(shaderId), m_name(name), m_type(type), m_location(location) {};
 
     public:
+        /**@brief Returns whether the parameter is referencing a valid shader and parameter location.
+         */
         virtual bool is_valid() const
         {
             return m_location != -1 && m_shaderId != invalid_id;
         }
 
+        /**@brief Returns the GLenum of the data type of the parameter.
+         */
         virtual GLenum get_type() const { return m_type; }
+        /**@brief Returns the name of the shader parameter.
+         */
         virtual std::string get_name() const { return m_name; }
+        /**@brief Returns the location of the shader parameter.
+         */
         virtual GLint get_location() const { return m_location; }
 
         bool operator==(const shader_parameter_base& other)
@@ -44,12 +59,17 @@ namespace args::rendering
         }
     };
 
+    /**@class uniform
+     * @brief Shader parameter that represents an uniform.
+     */
     template<typename T>
     struct uniform : public shader_parameter_base
     {
     public:
         uniform(id_type shaderId, std::string_view name, GLenum type, GLint location) : shader_parameter_base(shaderId, name, type, location) {}
 
+        /**@brief Set the value of the uniform.
+         */
         void set_value(const T& value);
     };
 
@@ -169,34 +189,57 @@ namespace args::rendering
             glUniformMatrix4fv(m_location, 1, false, math::value_ptr(value));
     }
 
+    /**@class attribute
+     * @brief Shader parameter that represents an attribute.
+     */
     struct attribute : public shader_parameter_base
     {
     public:
         attribute(id_type shaderId, std::string_view name, GLenum type, GLint location) : shader_parameter_base(shaderId, name, type, location) {}
 
-        void set_attribute_pointer(GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid* pointer)
+        /**@brief Attach the currently bound array buffer to this attribute.
+         * @param size Number of components in the data tensor (1: r, 2: rg, 3: rgb, 4: rgba).
+         * @param type Data type of the components in the tensor.
+         * @param normalized Normalize the tensors before sending to VRAM.
+         * @param stride Amount of bytes in-between valid data chunks.
+         * @param pointer Amount of bytes until the first valid data chunk. 
+         */
+        void set_attribute_pointer(GLint size, GLenum type, GLboolean normalized, GLsizei stride, GLsizei pointer)
         {
             glEnableVertexAttribArray(m_location);
-            glVertexAttribPointer(m_location, size, type, normalized, stride, pointer);
+            glVertexAttribPointer(m_location, size, type, normalized, stride, (const GLvoid*)pointer);
         }
 
+        /**@brief Disable the attribute after you're done with it. Leaving it enabled can cause performance issues due to limiting the GPU to move and reallocate it's VRAM.
+         */
         void disable_attribute_pointer()
         {
             glDisableVertexAttribArray(m_location);
         }
 
+        /**@brief Set an interval between the iteration increments of the array.
+         * @param offset Offset for the targeting location (0: vector or matrix row0, 1: matrix row1, 2: matrix row2... etc.).
+         * @param divisor Amount of instances between each iteration increment. 0 means the iteration will increment for each vertex.
+         */
         void set_divisor(uint offset, uint divisor)
         {
             glVertexAttribDivisor(m_location + offset, divisor);
         }
     };
 
+    /**@brief Invalid default attribute
+     */
     const attribute invalid_attribute(0, std::string_view(), 0, 0);
 
 #pragma endregion
 
+    /**@class shader
+     * @brief Abstraction class of a shader program.
+     */
     struct shader
     {
+        /**@brief Data-structure to hold mapping of context functions and parameters.
+         */
         using shader_state = std::unordered_map<GLenum, GLenum>;
         GLint programId;
         std::unordered_map<id_type, std::unique_ptr<shader_parameter_base>> uniforms;
@@ -204,7 +247,9 @@ namespace args::rendering
         std::string name;
         shader_state state;
 
+        // Since copying would mean that the in-vram version of the actual shader would also need to be copied, we don't allow copying.
         shader(const shader&) = delete;
+        // Moving should be fine though.
         shader(shader&&) = default;
         shader() = default;
 

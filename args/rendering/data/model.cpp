@@ -37,6 +37,9 @@ namespace args::rendering
 
     void ModelCache::buffer(id_type id, app::gl_id matrixBuffer)
     {
+        if (id == invalid_id)
+            return;
+
         auto [lock, mesh] = MeshCache::get_handle(id).get();
 
         async::readonly_multiguard guard(m_modelLock, lock);

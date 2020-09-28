@@ -178,6 +178,16 @@ namespace args::core::scheduling
          */
         void reportExitWithError(const std::thread::id& id, const std::exception& exc);
 
+        void subscribeToSync()
+        {
+            m_syncLock.subscribe();
+        }
+        
+        void unsubscribeFromSync()
+        {
+            m_syncLock.unsubscribe();
+        }
+
         /**@brief Request thread synchronization and wait for that synchronization moment.
          */
         void waitForProcessSync();

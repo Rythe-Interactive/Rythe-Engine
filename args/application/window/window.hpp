@@ -15,12 +15,15 @@ namespace args::application
         window() = default;
 
         GLFWwindow* handle;
+        cstring title;
+        bool isFullscreen;
         async::readonly_rw_spinlock* lock;
+        int swapInterval;
 
         operator GLFWwindow* () const { return handle; }
         window& operator=(GLFWwindow* ptr) { handle = ptr; return *this; }
 
-        inline void enableCursor(bool enabled)
+        inline void enableCursor(bool enabled) const
         {
             async::readwrite_guard guard(*lock);
             ContextHelper::makeContextCurrent(handle);
@@ -28,7 +31,16 @@ namespace args::application
             ContextHelper::makeContextCurrent(nullptr);
         }
 
-        inline void show()
+        inline void setSwapInterval(uint interval)
+        {
+            async::readwrite_guard guard(*lock);
+            ContextHelper::makeContextCurrent(handle);
+            ContextHelper::swapInterval(interval);
+            swapInterval = interval;
+            ContextHelper::makeContextCurrent(nullptr);
+        }
+
+        inline void show() const
         {
             ContextHelper::showWindow(handle);
         }

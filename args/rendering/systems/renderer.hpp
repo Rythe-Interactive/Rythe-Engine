@@ -349,6 +349,8 @@ namespace args::rendering
             if (!m_ecs->world.has_component<app::window>() || m_exit)
                 return;
 
+            waitForSync();
+
             time::clock renderClock;
             renderClock.start();
 
@@ -358,75 +360,83 @@ namespace args::rendering
             app::ContextHelper::makeContextCurrent(window);
 
             math::ivec2 viewportSize = app::ContextHelper::getFramebufferSize(window);
-            glViewport(0, 0, viewportSize.x, viewportSize.y);
-            glClearColor(0.3f, 0.5f, 1.0f, 1.0f);
-            glClearDepth(0.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            batches.clear();
-
-            auto camEnt = cameraQuery[0];
-
-            math::mat4 view(1.f);
-            math::compose(view, camEnt.get_component_handle<scale>().read(), camEnt.get_component_handle<rotation>().read(), camEnt.get_component_handle<position>().read());
-            view = math::inverse(view);
-
-            math::mat4 projection = camEnt.get_component_handle<camera>().read().get_projection(((float)viewportSize.x) / viewportSize.y);
-
-            for (auto ent : renderablesQuery)
+            if (viewportSize.x != 0 && viewportSize.y != 0)
             {
-                renderable rend = ent.get_component_handle<renderable>().read();
 
-                if (rend.material == invalid_material_handle)
+                glViewport(0, 0, viewportSize.x, viewportSize.y);
+                glClearColor(0.3f, 0.5f, 1.0f, 1.0f);
+                glClearDepth(0.0f);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                batches.clear();
+
+                auto camEnt = cameraQuery[0];
+
+                math::mat4 view(1.f);
+                math::compose(view, camEnt.get_component_handle<scale>().read(), camEnt.get_component_handle<rotation>().read(), camEnt.get_component_handle<position>().read());
+                view = math::inverse(view);
+
+                math::mat4 projection = camEnt.get_component_handle<camera>().read().get_projection(((float)viewportSize.x) / viewportSize.y);
+
+                for (auto ent : renderablesQuery)
                 {
-                    log::warn("Entity {} has an invalid material.", ent.get_id());
-                    continue;
+                    renderable rend = ent.get_component_handle<renderable>().read();
+
+                    if (rend.material == invalid_material_handle)
+                    {
+                        log::warn("Entity {} has an invalid material.", ent.get_id());
+                        continue;
+                    }
+
+                    math::mat4 modelMatrix;
+                    math::compose(modelMatrix, ent.get_component_handle<scale>().read(), ent.get_component_handle<rotation>().read(), ent.get_component_handle<position>().read());
+                    batches[rend.model][rend.material].push_back(modelMatrix);
                 }
 
-                math::mat4 modelMatrix;
-                math::compose(modelMatrix, ent.get_component_handle<scale>().read(), ent.get_component_handle<rotation>().read(), ent.get_component_handle<position>().read());
-                batches[rend.model][rend.material].push_back(modelMatrix);
-            }
-
-            for (auto [modelHandle, instancesPerMaterial] : batches)
-            {
-                if (!modelHandle.is_buffered())
-                    modelHandle.buffer_data(modelMatrixBufferId);
-
-                model mesh = modelHandle.get_model();
-                if (mesh.submeshes.empty())
-                    continue;
-
-                for (auto [material, instances] : instancesPerMaterial)
+                for (auto [modelHandle, instancesPerMaterial] : batches)
                 {
-                    glBindBuffer(GL_ARRAY_BUFFER, modelMatrixBufferId);
-                    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(math::mat4) * instances.size(), instances.data());
-                    glBindBuffer(GL_ARRAY_BUFFER, 0);
+                    if (!modelHandle.is_buffered())
+                        modelHandle.buffer_data(modelMatrixBufferId);
 
-                    material.bind();
-                    material.prepare();
+                    model mesh = modelHandle.get_model();
+                    if (mesh.submeshes.empty())
+                        continue;
 
-                    glUniformMatrix4fv(SV_VIEW, 1, false, math::value_ptr(view));
-                    glUniformMatrix4fv(SV_PROJECT, 1, false, math::value_ptr(projection));
+                    for (auto [material, instances] : instancesPerMaterial)
+                    {
+                        glBindBuffer(GL_ARRAY_BUFFER, modelMatrixBufferId);
+                        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(math::mat4) * instances.size(), instances.data());
+                        glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-                    glBindVertexArray(mesh.vertexArrayId);
-                    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);
+                        material.bind();
+                        material.prepare();
 
-                    for (auto submesh : mesh.submeshes)
-                        glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)(submesh.indexOffset * sizeof(uint)), (GLsizei)instances.size());
+                        glUniformMatrix4fv(SV_VIEW, 1, false, math::value_ptr(view));
+                        glUniformMatrix4fv(SV_PROJECT, 1, false, math::value_ptr(projection));
 
-                    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-                    glBindVertexArray(0);
-                    material.release();
+                        glBindVertexArray(mesh.vertexArrayId);
+                        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);
+
+                        for (auto submesh : mesh.submeshes)
+                            glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)(submesh.indexOffset * sizeof(uint)), (GLsizei)instances.size());
+
+                        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+                        glBindVertexArray(0);
+                        material.release();
+                    }
                 }
-            }
 
-            debugRenderPass(view, projection, deltaTime);
+                debugRenderPass(view, projection, deltaTime);
+            }
+            else
+            {
+                log::error("Invalid frame-buffer size {}", viewportSize);
+            }
 
             app::ContextHelper::makeContextCurrent(nullptr);
             auto elapsed = renderClock.end();
 
-            /*if (temp < 3)
+           /* if (temp < 3)
             {
                 temp++;
                 log::debug("render took: {:.3f}ms\tdeltaTime: {:.3f}ms fps: {:.3f}", elapsed.milliseconds(), deltaTime.milliseconds(), 1.0 / deltaTime);

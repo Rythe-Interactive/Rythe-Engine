@@ -93,11 +93,11 @@ namespace args::core::filesystem
 
             // Debug log the settings used for loading the files so that you can track down why something got loaded wrong if it did.
             if constexpr (sizeof...(settings) == 0)
-                log::debug("Tried to load asset of type{}", undecoratedTypeName<T>());
+                log::trace("Tried to load asset of type{}", undecoratedTypeName<T>());
             else if constexpr (sizeof...(settings) == 1)
-                log::debug("Tried to load asset of type{} with settings of type:{}", undecoratedTypeName<T>(), (std::string(undecoratedTypeName<Settings>()) + ...));
+                log::trace("Tried to load asset of type{} with settings of type:{}", undecoratedTypeName<T>(), (std::string(undecoratedTypeName<Settings>()) + ...));
             else
-                log::debug("Tried to load asset of type{} with settings of types:{}", undecoratedTypeName<T>(), ((std::string(undecoratedTypeName<Settings>()) + ", ") + ...));
+                log::trace("Tried to load asset of type{} with settings of types:{}", undecoratedTypeName<T>(), ((std::string(undecoratedTypeName<Settings>()) + ", ") + ...));
 
             // Check if the view is valid to load as a file.
             if (!view.is_valid() || !view.file_info().is_file)
