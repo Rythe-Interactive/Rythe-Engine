@@ -1,8 +1,8 @@
 #pragma once
 
-#include <application/application.hpp>
+#include <physics/physicsimport.h>
 #include <memory>
-#include <physics/HalfEdgeFace.h>
+#include <physics/halfedgeface.hpp>
 
 namespace args::physics
 {
@@ -22,7 +22,7 @@ namespace args::physics
     {
     public:
 
-        PhysicsCollider();
+        PhysicsCollider() = default;
 
         /** @brief given a PhysicsCollider CheckCollision calls "CheckCollisionWith". Both colliders are then passed through
         * to the correct "CheckCollisionWith" function with double dispatch.

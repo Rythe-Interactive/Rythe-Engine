@@ -8,11 +8,11 @@
 #include <core/core.hpp>
 #endif // !ARGS_IMPORT
 
-#include <physics/rigidbody.hpp>
+#include <physics/components/rigidbody.hpp>
 #include <physics/data/physics_manifold_precursor.h>
-#include <physics/physics_manifold.hpp>
+#include <physics/data/physics_manifold.hpp>
 #include <physics/physics_contact.h>
-#include <physics/physics_component.hpp>
+#include <physics/components/physics_component.hpp>
 
 namespace args::physics
 {

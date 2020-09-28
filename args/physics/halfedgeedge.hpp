@@ -1,6 +1,6 @@
 #pragma once
 #include <physics/physicsimport.h>
-#include <physics/HalfEdgeFace.h>
+#include <physics/halfedgeface.hpp>
 
 namespace args::physics
 {
@@ -25,6 +25,19 @@ namespace args::physics
 		{
 			nextEdge = newNextEdge;
 			prevEdge = newPrevEdge;
+		}
+
+		math::vec3 getLocalNormal() const
+		{
+			return face->normal;
+		}
+
+		/**@brief Gets the direction of the edge by getting the
+		* vector starting from the current edge's position to the next edge
+		*/
+		math::vec3 getLocalEdgeDirection()  const
+		{
+			return *nextEdge->edgePositionPtr - *edgePositionPtr;
 		}
 	};
 }

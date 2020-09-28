@@ -9,7 +9,7 @@
 #endif // !ARGS_IMPORT
 
 #include <physics/physicsconstants.h>
-#include <physics/physics_component.hpp>
+#include <physics/components/physics_component.hpp>
 
 namespace args::physics
 {
