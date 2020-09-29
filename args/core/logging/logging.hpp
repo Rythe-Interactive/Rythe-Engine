@@ -2,10 +2,10 @@
 
 #define SPDLOG_HEADER_ONLY
 #include <sstream>
-#include <core/logging/spdlog/spdlog.h>
-#include <core/logging/spdlog/sinks/stdout_color_sinks.h>
-#include <core/logging/spdlog/sinks/rotating_file_sink.h>
-#include <core/logging/spdlog/pattern_formatter.h>
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/sinks/rotating_file_sink.h>
+#include <spdlog/pattern_formatter.h>
 #include <core/types/type_util.hpp>
 #include <thread>
 #include <core/math/math.hpp>
