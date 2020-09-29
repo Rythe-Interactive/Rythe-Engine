@@ -39,7 +39,7 @@ namespace args::core::scheduling
         }
     }
 
-    inline bool ProcessChain::run(bool low_power)
+    bool ProcessChain::run(bool low_power)
     {
         m_low_power = low_power;
         m_exit->store(false, std::memory_order_release);
@@ -55,12 +55,12 @@ namespace args::core::scheduling
         return false;
     }
 
-    inline void ProcessChain::exit()
+    void ProcessChain::exit()
     {
         m_exit->store(true, std::memory_order_release);
     }
 
-    inline void ProcessChain::runInCurrentThread()
+    void ProcessChain::runInCurrentThread()
     {
         hashed_sparse_set<id_type> finishedProcesses;
         async::readonly_guard guard(m_processesLock); // Hooking more processes whilst executing isn't allowed.
@@ -74,14 +74,14 @@ namespace args::core::scheduling
         } while (finishedProcesses.size() != m_processes.size());
     }
 
-    inline void ProcessChain::addProcess(Process* process)
+    void ProcessChain::addProcess(Process* process)
     {
         async::readwrite_guard guard(m_processesLock);
         if (m_processes.insert(process->id(), process).second)
             process->m_hooks.insert(m_nameHash);
     }
 
-    inline void ProcessChain::removeProcess(Process* process)
+    void ProcessChain::removeProcess(Process* process)
     {
         async::readwrite_guard guard(m_processesLock);
         if (m_processes.erase(process->id()))

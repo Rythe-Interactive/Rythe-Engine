@@ -5,6 +5,8 @@
 #include <core/filesystem/provider_registry.hpp>
 #include <core/filesystem/basic_resolver.hpp>
 
+#include <core/compute/context.hpp>
+
 namespace args::core
 {
     class CoreModule : public Module
@@ -15,6 +17,9 @@ namespace args::core
             filesystem::provider_registry::domain_create_resolver<filesystem::basic_resolver>("assets://", "./assets");
 
             filesystem::AssetImporter::reportConverter<obj_mesh_loader>(".obj");
+            log::info("Creating OpenCL");
+            compute::Context::init();
+            log::info("Done creating OpenCL");
 
             reportComponentType<position>();
             reportComponentType<rotation>();
