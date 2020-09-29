@@ -19,17 +19,17 @@ namespace args::rendering
         ModelCache::buffer(id, matrixBuffer);
     }
 
-    inline mesh_handle model_handle::get_mesh()
+      mesh_handle model_handle::get_mesh()
     {
         return ModelCache::get_mesh(id);
     }
 
-    inline const model& model_handle::get_model()
+      const model& model_handle::get_model()
     {
         return ModelCache::get_model(id);
     }
 
-    inline const model& ModelCache::get_model(id_type id)
+      const model& ModelCache::get_model(id_type id)
     {
         async::readonly_guard guard(m_modelLock);
         return m_models[id];
@@ -128,7 +128,7 @@ namespace args::rendering
         return { id };
     }
 
-    inline model_handle ModelCache::get_handle(const std::string& name)
+      model_handle ModelCache::get_handle(const std::string& name)
     {
         id_type id = nameHash(name);
         async::readonly_guard guard(m_modelLock);
@@ -137,7 +137,7 @@ namespace args::rendering
         return invalid_model_handle;
     }
 
-    inline model_handle ModelCache::get_handle(id_type id)
+      model_handle ModelCache::get_handle(id_type id)
     {
         async::readonly_guard guard(m_modelLock);
         if (m_models.contains(id))
@@ -145,12 +145,12 @@ namespace args::rendering
         return invalid_model_handle;
     }
 
-    inline mesh_handle ModelCache::get_mesh(id_type id)
+      mesh_handle ModelCache::get_mesh(id_type id)
     {
         return MeshCache::get_handle(id);
     }
 
-    inline mesh_handle ModelCache::get_mesh(const std::string& name)
+      mesh_handle ModelCache::get_mesh(const std::string& name)
     {
         id_type id = nameHash(name);
         return MeshCache::get_handle(id);

@@ -10,9 +10,9 @@
     #undef ARGS_API
     #if defined(ARGS_WINDOWS)
         #if defined(ARGS_INTERNAL)
-            #define ARGS_API __declspec(dllexport)
+            #define ARGS_API //__declspec(dllexport)
         #else
-            #define ARGS_API __declspec(dllimport)
+            #define ARGS_API //__declspec(dllimport)
         #endif
     #else
         #define ARGS_API __attribute__((visibility("default")))
