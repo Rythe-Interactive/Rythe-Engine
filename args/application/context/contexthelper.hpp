@@ -12,11 +12,19 @@
 #include <application/context/detail/glad/glad.h>
 #include <glfw/glfw3.h>
 
+/**
+ * @file contexthelper.hpp
+ */
+
 namespace args::application
 {
     using gl_id = GLuint;
     using gl_location = GLint;
 
+    /**@class ContextHelper
+     * @brief Static helper class for calling functions on the GLFW context.
+     * @ref https://www.glfw.org/docs/latest/pages.html
+     */
     class ARGS_API ContextHelper
     {
     private:
@@ -26,21 +34,37 @@ namespace args::application
 
         static atomic_sparse_map<GLFWwindow*, bool> m_windowInitialized;
 
+        static std::atomic<GLFWwindow*> newFocus;
+
     public:
         ContextHelper() = delete;
         ~ContextHelper() = delete;
 
+        /**@brief Checks if the context has been initialized.
+         */
         static bool initialized();
         static bool init();
+
+        /**@brief Binds callback to be executed right after the context has been initialized.
+         *        The callback will be invoked immediately if the context is already initialized.
+         */
         static bool addOnInitCallback(delegate<void()> callback);
         static void terminate();
         static int getError(cstring* desc);
         static GLFWmonitor* getPrimaryMonitor();
+        static GLFWmonitor* getCurrentMonitor(GLFWwindow* window);
+        static void setWindowMonitor(GLFWwindow* window, GLFWmonitor* monitor, math::ivec2 pos, math::ivec2 size, int refreshRate);
         static const GLFWvidmode* getPrimaryVideoMode();
         static const GLFWvidmode* getVideoMode(GLFWmonitor* monitor);
         static void windowHint(int hint, int value);
         static GLFWwindow* createWindow(math::ivec2 dim, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
         static GLFWwindow* createWindow(int width, int height, const char* title, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr);
+        /**@brief Request the input thread to give focus to this window.
+         */
+        static void showWindow(GLFWwindow* window);
+        /**@brief Gives focus to the window that has requested it. (may only be called from the input thread)
+         */
+        static void updateWindowFocus();
         static GLFWglproc getProcAddress(cstring procname);
         static void setWindowShouldClose(GLFWwindow* window, int value);
         static int windowShouldClose(GLFWwindow* window);

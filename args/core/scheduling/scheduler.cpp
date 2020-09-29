@@ -93,12 +93,6 @@ namespace args::core::scheduling
 
     void Scheduler::run()
     {
-        { // Start threads of all the other chains.
-            async::readonly_guard guard(m_processChainsLock);
-            for (auto [_, chain] : m_processChains)
-                chain.run(m_low_power);
-        }
-
         {
             auto unreserved = m_unreservedThreads;
             uint i = 0;
@@ -107,7 +101,18 @@ namespace args::core::scheduling
                 auto id = unreserved.front();
                 unreserved.pop();
                 args::core::log::impl::thread_names[id] = std::string("Worker ") + std::to_string(i++);
+                sendCommand(id, [](void* param)
+                    {
+                        (void)param;
+                        log::info("Thread {} assigned.", std::this_thread::get_id());
+                    });
             }
+        }
+
+        { // Start threads of all the other chains.
+            async::readonly_guard guard(m_processChainsLock);
+            for (auto [_, chain] : m_processChains)
+                chain.run(m_low_power);
         }
 
         args::core::log::impl::thread_names[std::this_thread::get_id()] = "Update";
@@ -171,6 +176,7 @@ namespace args::core::scheduling
             processChain.exit();
 
         m_threadsShouldTerminate = true;
+        m_syncLock.force_release();
 
         size_type exits;
         size_type chains;
@@ -298,7 +304,7 @@ namespace args::core::scheduling
 
     void Scheduler::waitForProcessSync()
     {
-        log::debug("synchronizing thread: {}", log::impl::thread_names[std::this_thread::get_id()]);
+        //log::debug("synchronizing thread: {}", log::impl::thread_names[std::this_thread::get_id()]);
         if (std::this_thread::get_id() != m_syncLock.ownerThread()) // Check if this is the main thread or not.
         {
             m_requestSync.store(true, std::memory_order_relaxed); // Request a synchronization.

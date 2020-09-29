@@ -13,7 +13,6 @@
 #include <vector>
 #include <memory>
 
-
 /**
  * @file engine.hpp
  */

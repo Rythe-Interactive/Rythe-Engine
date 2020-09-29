@@ -1,4 +1,5 @@
 #include <rendering/data/shader.hpp>
+#include <algorithm>
 
 namespace args::rendering
 {
@@ -11,27 +12,25 @@ namespace args::rendering
         return &m_shaders[id];
     }
 
-    void ShaderCache::replace_items(std::string& source, const std::string& item, const std::string& value)
-    {
-        size_type n = 0;
-        while ((n = source.find(item, n)) != std::string::npos)
-        {
-            source.replace(n, item.size(), value);
-            n += value.size();
-        }
-    }
-
     void ShaderCache::process_includes(std::string& shaderSource)
     {
+        // WIP
     }
 
     void ShaderCache::resolve_preprocess_features(std::string& shaderSource, shader_state& state)
     {
-        replace_items(shaderSource, "SV_POSITION", std::to_string(SV_POSITION));
-        replace_items(shaderSource, "SV_MODELMATRIX", std::to_string(SV_MODELMATRIX));
-        replace_items(shaderSource, "SV_VIEW", std::to_string(SV_VIEW));
-        replace_items(shaderSource, "SV_PROJECT", std::to_string(SV_PROJECT));
+        // Replace all the attribute binding locations.
+        common::replace_items(shaderSource, "SV_POSITION", std::to_string(SV_POSITION));
+        common::replace_items(shaderSource, "SV_NORMAL", std::to_string(SV_NORMAL));
+        common::replace_items(shaderSource, "SV_TANGENT", std::to_string(SV_TANGENT));
+        common::replace_items(shaderSource, "SV_TEXCOORD0", std::to_string(SV_TEXCOORD0));
+        common::replace_items(shaderSource, "SV_MODELMATRIX", std::to_string(SV_MODELMATRIX));
 
+        // Replace all the uniform binding locations.
+        common::replace_items(shaderSource, "SV_VIEW", std::to_string(SV_VIEW));
+        common::replace_items(shaderSource, "SV_PROJECT", std::to_string(SV_PROJECT));
+
+        // Create lookup table for the OpenGL function types that can be changed by the shader state.
         static std::unordered_map<std::string, GLenum> funcTypes;
         static bool funcTypesInitialized = false;
         if (!funcTypesInitialized)
@@ -42,29 +41,37 @@ namespace args::rendering
             //funcTypes["ALPHA"] = GL_BLEND;
             //funcTypes["DITHER"] = GL_DITHER;
         }
+
+        // Default shader state in case nothing was specified by the shader.
         state[GL_DEPTH_TEST] = GL_GREATER;
         state[GL_CULL_FACE] = GL_BACK;
 
         size_type n = 0;
-        while ((n = shaderSource.find("#enable", n)) != std::string::npos)
+        while ((n = shaderSource.find("#state", n)) != std::string::npos) // Look for any shader state tokens.
         {
+            // Split the line up in: "#state", "function_type", "function_params..."
             size_type end = shaderSource.find('\n', n);
-
             auto tokens = common::split_string_at<' '>(shaderSource.substr(n, end - n));
 
-            if (tokens.size() < 3)
+            //for(auto& token : tokens)
+            //    std::
+
+            if (tokens.size() < 3) // There was some syntax error here because we should have at least 3 items. (1 parameter)
+                continue;          // So in this case we want the shader to fail compilation in order to notify the programmer of his error.
+                                   // By not deleting the "#enable..." line we can guarantee that the shader won't compile properly and that
+                                   // the programmer will get to see his error.
+
+            if (!funcTypes.count(tokens[1])) // If the function type is unsupported or unknown we also want to fail compilation.
                 continue;
 
-            if (!funcTypes.count(tokens[1]))
-                continue;
-
-            GLenum funcType = funcTypes.at(tokens[1]);
+            GLenum funcType = funcTypes.at(tokens[1]); // Fetch the function type without risking editing the lookup table.
             GLenum param = GL_FALSE;
+
             switch (funcType)
             {
             case GL_DEPTH_TEST:
             {
-                static std::unordered_map<std::string, GLenum> params;
+                static std::unordered_map<std::string, GLenum> params; // Initialize parameter lookup table.
                 static bool initialized = false;
                 if (!initialized)
                 {
@@ -84,7 +91,7 @@ namespace args::rendering
             break;
             case GL_CULL_FACE:
             {
-                static std::unordered_map<std::string, GLenum> params;
+                static std::unordered_map<std::string, GLenum> params; // Initialize parameter lookup table.
                 static bool initialized = false;
                 if (!initialized)
                 {
@@ -100,7 +107,7 @@ namespace args::rendering
             break;
             case GL_BLEND:
             {
-                static std::unordered_map<std::string, GLenum> params;
+                static std::unordered_map<std::string, GLenum> params; // Initialize parameter lookup table.
                 static bool initialized = false;
                 if (!initialized)
                 {
@@ -121,9 +128,11 @@ namespace args::rendering
                     params["ONE_MINUS_CONSTANT_ALPHA"] = GL_ONE_MINUS_CONSTANT_ALPHA;
                     params["SRC_ALPHA_SATURATE"] = GL_SRC_ALPHA_SATURATE;
                 }
+                param = GL_FALSE;
             }
             break;
             default:
+                param = GL_FALSE;
                 break;
             }
 
@@ -137,6 +146,8 @@ namespace args::rendering
         shader_ilo ilo;
         std::string_view rest(shaderSource.data(), shaderSource.size());
 
+
+        // Look for the "#version 460".
         auto versionOffset = rest.find("#version");
         std::string versionTxt;
 
@@ -148,6 +159,7 @@ namespace args::rendering
             rest = std::string_view(rest.data() + versionEnd, rest.size() - versionEnd);
         }
 
+        //  Extract the vertex shader.
         auto vertOffset = rest.find(" vert(");
         if (vertOffset == std::string_view::npos)
             return {};
@@ -157,6 +169,7 @@ namespace args::rendering
         ilo.push_back(std::make_pair<GLuint, std::string>(GL_VERTEX_SHADER, versionTxt + std::string(rest.data(), vertEnd).replace(vertOffset, 5, " main")));
         rest = std::string_view(rest.data() + vertEnd, rest.size() - vertEnd);
 
+        //  Extract the geometry shader.
         auto geomOffset = rest.find(" geom(");
         if (geomOffset != std::string_view::npos)
         {
@@ -166,6 +179,7 @@ namespace args::rendering
             rest = std::string_view(rest.data() + geomEnd, rest.size() - geomEnd);
         }
 
+        //  Extract the fragment shader.
         auto fragOffset = rest.find(" frag(");
         if (fragOffset == std::string_view::npos)
             return {};
@@ -173,37 +187,43 @@ namespace args::rendering
         auto fragEnd = fragOffset + std::string_view(rest.data() + fragOffset, rest.size() - fragOffset).find_first_of('}') + 1;
 
         ilo.push_back(std::make_pair<GLuint, std::string>(GL_FRAGMENT_SHADER, versionTxt + std::string(rest.data(), fragEnd).replace(fragOffset, 5, " main")));
-        rest = std::string_view(rest.data() + fragEnd, rest.size() - fragEnd);
+        //rest = std::string_view(rest.data() + fragEnd, rest.size() - fragEnd);
+
+        // Return the found shaders.
         return ilo;
     }
 
     void ShaderCache::process_io(shader& shader, id_type id)
     {
+        // Clear all values.
         shader.uniforms.clear();
         shader.attributes.clear();
 
+#pragma region uniforms
+        // Find the number of active uniforms.
         GLint numActiveUniforms = 0;
         glGetProgramiv(shader.programId, GL_ACTIVE_UNIFORMS, &numActiveUniforms);
 
-        GLint maxUniformNameLength = 0;
+        GLint maxUniformNameLength = 0; // Get name buffer length.
         glGetProgramiv(shader.programId, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxUniformNameLength);
-        GLchar* uniformNameBuffer = new GLchar[maxUniformNameLength];
+
+        GLchar* uniformNameBuffer = new GLchar[maxUniformNameLength]; // Create buffer with the right length.
 
         for (int uniformId = 0; uniformId < numActiveUniforms; uniformId++)
         {
-            GLint arraySize = 0; // use this later for uniform arrays.
+            GLint arraySize = 0; // Use this later for uniform arrays.
             GLenum type = 0;
             GLsizei nameLength = 0;
             glGetActiveUniform(shader.programId, uniformId, (GLsizei)maxUniformNameLength, &nameLength, &arraySize, &type, uniformNameBuffer);
 
-            std::string_view name(uniformNameBuffer, nameLength + 1);
-            if (name.find('[') != std::string_view::npos)
+            std::string_view name(uniformNameBuffer, nameLength + 1); // Get string_view of the actual name within the buffer.
+
+            if (name.find('[') != std::string_view::npos) // We don't support uniform arrays yet.
                 continue;
 
-            app::gl_location location = glGetUniformLocation(shader.programId, uniformNameBuffer);
-
+            // Get location and create uniform object.
+            app::gl_location location = glGetUniformLocation(shader.programId, uniformNameBuffer); 
             shader_parameter_base* uniform = nullptr;
-
             switch (type)
             {
             case GL_SAMPLER_2D:
@@ -257,48 +277,58 @@ namespace args::rendering
                 continue;
             }
 
+            // Insert uniform into the uniform list.
             shader.uniforms[nameHash(std::string(name).c_str())] = std::unique_ptr<shader_parameter_base>(uniform);
         }
 
-        delete[] uniformNameBuffer;
-
+        delete[] uniformNameBuffer; // Delete name buffer
+#pragma endregion
+#pragma region attributes
+        // Find the number of active attributes.
         GLint numActiveAttribs = 0;
         glGetProgramiv(shader.programId, GL_ACTIVE_ATTRIBUTES, &numActiveAttribs);
 
-        GLint maxAttribNameLength = 0;
+        GLint maxAttribNameLength = 0; // Get name buffer length.
         glGetProgramiv(shader.programId, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxAttribNameLength);
-        GLchar* attribNameBuffer = new GLchar[maxAttribNameLength];
+
+        GLchar* attribNameBuffer = new GLchar[maxAttribNameLength]; // Create buffer with the right length.
 
         for (int attrib = 0; attrib < numActiveAttribs; ++attrib)
         {
-            GLint arraySize = 0; // use this later for attribute arrays.
+            GLint arraySize = 0; // Use this later for attribute arrays.
             GLenum type = 0;
             GLsizei nameLength = 0;
             glGetActiveAttrib(shader.programId, attrib, (GLsizei)maxAttribNameLength, &nameLength, &arraySize, &type, attribNameBuffer);
 
-            std::string_view name(attribNameBuffer, nameLength + 1);
-            GLint location = glGetAttribLocation(shader.programId, attribNameBuffer);
+            std::string_view name(attribNameBuffer, nameLength + 1); // Get string_view of the actual name within the buffer.
 
-            if (name.find('[') != std::string_view::npos)
+            if (name.find('[') != std::string_view::npos) // We don't support attribute arrays yet.
                 continue;
 
+            // Get location and create attribute object
+            GLint location = glGetAttribLocation(shader.programId, attribNameBuffer);
             shader.attributes[nameHash(std::string(name).c_str())] = std::unique_ptr<attribute>(new attribute(id, name, type, location));
         }
 
         delete[] attribNameBuffer;
+#pragma endregion
     }
 
     app::gl_id ShaderCache::compile_shader(GLuint shaderType, cstring source, GLint sourceLength)
     {
+        // Create and compile shader.
         app::gl_id shaderId = glCreateShader(shaderType);
         glShaderSource(shaderId, 1, &source, &sourceLength);
         glCompileShader(shaderId);
 
+        // Fetch compile status.
         GLint compilerResult = GL_FALSE;
         glGetShaderiv(shaderId, GL_COMPILE_STATUS, &compilerResult);
 
+        // Check for errors.
         if (!compilerResult)
         {
+            // Create message buffer and fetch message.
             GLint infoLogLength;
             glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &infoLogLength);
             char* errorMessage = new char[infoLogLength + 1];
@@ -330,10 +360,10 @@ namespace args::rendering
                 break;
             }
 
-            std::cout << "Error compiling " << shaderTypename << " shader:\n\t" << errorMessage << std::endl;
-            delete[] errorMessage;
+            log::error("Error compiling {} shader:\n\t{}", shaderTypename, errorMessage);
+            delete[] errorMessage; // Delete message.
 
-            glDeleteShader(shaderId);
+            glDeleteShader(shaderId); // Delete shader.
             return -1;
         }
         return shaderId;
@@ -341,21 +371,29 @@ namespace args::rendering
 
     shader_handle ShaderCache::create_shader(const std::string& name, const fs::view& file, shader_import_settings settings)
     {
+        // Get the id of the new shader.
         id_type id = nameHash(name);
 
-        {
+        { // Check if the shader already exists.
             async::readonly_guard guard(m_shaderLock);
             if (m_shaders.contains(id))
+            {
+                log::debug("Shader {} already exists, existing shader will be returned instead.", name);
                 return { id };
+            }
         }
 
+        // Check if the file is valid to read
         if (!file.is_valid() || !file.file_info().is_file)
             return invalid_shader_handle;
 
         auto result = file.get();
 
         if (result != common::valid)
+        {
+            log::error("{}", result.get_error());
             return invalid_shader_handle;
+        }
 
         std::string source = ((fs::basic_resource)result).to_string();
         shader_state state;
@@ -368,6 +406,7 @@ namespace args::rendering
             return invalid_shader_handle;
 
         shader shader;
+        shader.name = name;
         shader.state = state;
 
         for (auto& [func, param] : state)
@@ -411,12 +450,13 @@ namespace args::rendering
 
             if (shaderId == (app::gl_id) - 1)
             {
-                std::cout << "error occurred in shader: " << name.c_str() << std::endl;
-
-                std::cout << shaderIL << std::endl;
+                log::error("Error occurred in shader: {}\n{}", name, shaderIL);
 
                 for (auto id : shaderIds)
+                {
+                    glDetachShader(shader.programId, id);
                     glDeleteShader(id);
+                }
 
                 glDeleteProgram(shader.programId);
                 return invalid_shader_handle;
@@ -428,6 +468,58 @@ namespace args::rendering
 
         glLinkProgram(shader.programId);
 
+        GLint linkStatus;
+        glGetProgramiv(shader.programId, GL_LINK_STATUS, &linkStatus);
+
+        if (!linkStatus)
+        {
+            GLint infoLogLength;
+            glGetProgramiv(shader.programId, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+            char* errorMessage = new char[infoLogLength + 1];
+            glGetProgramInfoLog(shader.programId, infoLogLength, nullptr, errorMessage);
+
+            log::error("Error linking {} shader:\n\t{}", name, errorMessage);
+            delete[] errorMessage;
+
+            for (auto& id : shaderIds)
+            {
+                glDetachShader(shader.programId, id);
+                glDeleteShader(id);
+            }
+
+            glDeleteProgram(shader.programId);
+
+            return invalid_shader_handle;
+        }
+
+        glValidateProgram(shader.programId);
+
+        GLint validationStatus;
+        glGetProgramiv(shader.programId, GL_VALIDATE_STATUS, &validationStatus);
+
+        if (!validationStatus)
+        {
+            GLint infoLogLength;
+            glGetProgramiv(shader.programId, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+            char* errorMessage = new char[infoLogLength + 1];
+            glGetProgramInfoLog(shader.programId, infoLogLength, nullptr, errorMessage);
+
+            log::error("Error validating {} shader:\n\t{}", name, errorMessage);
+            delete[] errorMessage;
+
+            for (auto& shaderId : shaderIds)
+            {
+                glDetachShader(shader.programId, shaderId);
+                glDeleteShader(shaderId);
+            }
+
+            glDeleteProgram(shader.programId);
+
+            return invalid_shader_handle;
+        }
+
         process_io(shader, id);
 
         {
@@ -436,6 +528,11 @@ namespace args::rendering
         }
 
         return { id };
+    }
+
+    shader_handle ShaderCache::create_shader(const fs::view& file, shader_import_settings settings)
+    {
+        return create_shader(file.get_filename(), file, settings);
     }
 
     shader_handle ShaderCache::get_handle(const std::string& name)

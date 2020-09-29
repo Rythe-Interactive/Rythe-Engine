@@ -11,6 +11,7 @@ namespace args::core::scheduling
     void ProcessChain::threadedRun(ProcessChain* chain)
     {
         log::info("Chain started.");
+        chain->m_scheduler->subscribeToSync();
         try
         {
             while (!chain->m_exit->load(std::memory_order_acquire)) // Check for exit flag.
@@ -23,15 +24,17 @@ namespace args::core::scheduling
                 if (chain->m_low_power)
                     std::this_thread::sleep_for(std::chrono::milliseconds(1));
             }
-
+            chain->m_scheduler->unsubscribeFromSync();
             chain->m_scheduler->reportExit(chain->m_threadId); // Mark Exit.
         }
         catch (const args::core::exception& e)
         {
+            chain->m_scheduler->unsubscribeFromSync();
             chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e); // Mark error.
         }
         catch (const std::exception& e)
         {
+            chain->m_scheduler->unsubscribeFromSync();
             chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e); // Mark error.
         }
     }

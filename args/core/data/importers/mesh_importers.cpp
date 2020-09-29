@@ -4,52 +4,110 @@
 #include <core/data/importers/mesh_importers.hpp>
 #include <core/math/math.hpp>
 #include <core/logging/logging.hpp>
+#include <core/common/string_extra.hpp>
+#include <unordered_map>
 
-#include <map>
+namespace args::core::detail
+{
+    // Utility hash class for hashing all the vertex data.
+    struct vertex_hash
+    {
+        id_type hash;
+        vertex_hash(math::vec3 vertex, math::vec3 normal, math::vec2 uv)
+        {
+            std::hash<math::vec3> vec3Hasher;
+            std::hash<math::vec2> vec2Hasher;
+            hash = 0;
+            math::detail::hash_combine(hash, vec3Hasher(vertex));
+            math::detail::hash_combine(hash, vec3Hasher(normal));
+            math::detail::hash_combine(hash, vec2Hasher(uv));
+        }
 
-#include "core/logging/logging.hpp"
+        bool operator==(const vertex_hash& other) const
+        {
+            return hash == other.hash;
+        }
+        bool operator!=(const vertex_hash& other) const
+        {
+            return hash != other.hash;
+        }
+    };
+}
+
+namespace std
+{
+    template<>
+    struct hash<args::core::detail::vertex_hash>
+    {
+        size_t operator()(args::core::detail::vertex_hash const& vh) const
+        {
+            return vh.hash;
+        }
+    };
+}
 
 namespace args::core
 {
-    common::result_decay_more<filesystem::basic_resource, fs_error> obj_mesh_loader::load(const filesystem::basic_resource& resource, mesh_import_settings&& settings)
+    common::result_decay_more<mesh, fs_error> obj_mesh_loader::load(const filesystem::basic_resource& resource, mesh_import_settings&& settings)
     {
         using common::Err, common::Ok;
         // decay overloads the operator of ok_type and operator== for valid_t.
-        using decay = common::result_decay_more<filesystem::basic_resource, fs_error>;
+        using decay = common::result_decay_more<mesh, fs_error>;
 
+        // tinyobj objects
         tinyobj::ObjReader reader;
         tinyobj::ObjReaderConfig config;
 
+        // Configure settings.
         config.triangulate = settings.triangulate;
         config.vertex_color = settings.vertex_color;
 
-        if (!reader.ParseFromString(resource.to_string(), "", config))
+        std::string mtl = "newmtl None\n\
+            Ns 0\n\
+            Ka 0.000000 0.000000 0.000000\n\
+            Kd 0.8 0.8 0.8\n\
+            Ks 0.8 0.8 0.8\n\
+            d 1\n\
+            illum 2\n\0";
+
+        if (settings.materialFile.get_path() != std::string(""))
+        {
+            auto result = settings.materialFile.get();
+            if (result != common::valid)
+                log::warn("{}", result.get_error());
+            else
+            {
+                filesystem::basic_resource resource = result;
+                mtl = resource.to_string();
+            }
+        }
+
+        // Try to parse the mesh data from the text data in the file.
+        if (!reader.ParseFromString(resource.to_string(), mtl, config))
         {
             return decay(Err(args_fs_error(reader.Error().c_str())));
         }
 
+        // Print any warnings.
         if (!reader.Warning().empty())
-            log::warn(reader.Warning().c_str());
+        {
+            std::string warnings = reader.Warning();
+            common::replace_items(warnings, "\n", " ");
+            log::warn(warnings.c_str());
+        }
 
+        // Get all the vertex and composition data.
         tinyobj::attrib_t attributes = reader.GetAttrib();
         std::vector<tinyobj::shape_t> shapes = reader.GetShapes();
 
+        // Create the mesh
         mesh data;
 
-        struct vtx_data
-        {
-            math::vec3 vert;
-            math::vec3 norm;
-            math::vec2 uv;
+        // Sparse map like constructs to map both vertices and indices.
+        std::vector<detail::vertex_hash> vertices;
+        std::unordered_map<detail::vertex_hash, size_type> indices;
 
-            bool operator==(const vtx_data& other)
-            {
-                return vert.x == other.vert.x && vert.y == other.vert.y && vert.z == other.vert.z;
-            }
-        };
-
-        std::vector<vtx_data> vertices;
-
+        // Iterate submeshes.
         for (auto& shape : shapes)
         {
             sub_mesh submesh;
@@ -59,41 +117,55 @@ namespace args::core
 
             for (auto& indexData : shape.mesh.indices)
             {
-                uint vtxIdx = indexData.vertex_index * 3;
+                // Get the indices into the tinyobj attributes.
+                uint vertexIndex = indexData.vertex_index * 3;
+                uint normalIndex = indexData.normal_index * 3;
+                uint uvIndex = indexData.texcoord_index * 2;
 
-                vtx_data vtx = { { attributes.vertices[vtxIdx + 0], attributes.vertices[vtxIdx + 1], attributes.vertices[vtxIdx + 2] },
-                    { 0.f, 0.f, 0.f },
-                    { 0.f, 0.f } };
+                // Extract the actual vertex data. (We flip the X axis to convert it to our left handed coordinate system.)
+                math::vec3 vertex(-attributes.vertices[vertexIndex + 0], attributes.vertices[vertexIndex + 1], attributes.vertices[vertexIndex + 2]);
+                math::vec3 normal(attributes.normals[normalIndex + 0], attributes.normals[normalIndex + 1], attributes.normals[normalIndex + 2]);
+                math::vec2 uv{};
+                if (uvIndex + 1 < attributes.texcoords.size())
+                    uv = math::vec2(attributes.texcoords[uvIndex + 0], attributes.texcoords[uvIndex + 1]);
 
-                size_type index = vertices.size();
+                // Create a hash to check for doubles.
+                detail::vertex_hash hash(vertex, normal, uv);
 
-                for (size_type i = 0; i < vertices.size(); i++)
-                    if (vertices[i] == vtx)
-                    {
-                        index = i;
-                        break;
-                    }
-
-                if (index == vertices.size())
+                // Use the properties of sparse containers to check for duplicate items.
+                if (indices[hash] >= vertices.size() || vertices[indices[hash]] != hash)
                 {
-                    vertices.push_back(vtx);
-                    data.vertices.push_back(vtx.vert);
-                    data.normals.push_back(vtx.norm);
-                    data.uvs.push_back(vtx.uv);
+                    // Insert new hash into sparse container.
+                    indices[hash] = vertices.size();
+                    vertices.push_back(hash);
+
+                    // Append vertex data.
+                    data.vertices.push_back(vertex);
+                    data.normals.push_back(normal);
+                    data.uvs.push_back(uv);
                 }
 
-                data.indices.push_back(index);
+                // Append the index of the newly added vertex or whichever one was added earlier.
+                data.indices.push_back(indices[hash]);
             }
 
+            // Add the sub-mesh to the mesh.
             data.submeshes.push_back(submesh);
         }
 
+        // Because we only flip one axis we also need to flip the triangle rotation.
+        for (int i = 0; i < data.indices.size(); i += 3)
+        {
+            uint i1 = data.indices[i + 1];
+            uint i2 = data.indices[i + 2];
+            data.indices[i + 1] = i2;
+            data.indices[i + 2] = i1;
+        }
+
+        // Calculate the tangents.
         mesh::calculate_tangents(&data);
 
-        filesystem::basic_resource result(nullptr);
-
-        mesh::to_resource(&result, data);
-
-        return decay(Ok(result));
+        // Construct and return the result.
+        return decay(Ok(data));
     }
 }

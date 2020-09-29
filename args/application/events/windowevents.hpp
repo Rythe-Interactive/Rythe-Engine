@@ -27,6 +27,18 @@ namespace args::application
         virtual bool unique() override { return false; }
     };
 
+    struct window_toggle_fullscreen_request final : public events::event<window_toggle_fullscreen_request>
+    {
+        id_type entityId;
+        math::ivec2 position;
+        math::ivec2 size;
+
+        window_toggle_fullscreen_request(id_type entityId = invalid_id, math::ivec2 position = { 100 ,100 }, math::ivec2 size = { 400, 400 }) : entityId(entityId), position(position), size(size) {}
+
+        virtual bool persistent() override { return false; }
+        virtual bool unique() override { return false; }
+    };
+
     struct window_close final : public events::event<window_close>
     {
         ecs::component_handle<window> windowHandle;

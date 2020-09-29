@@ -9,17 +9,17 @@ using namespace args;
 class TestModule : public Module
 {
 public:
-	virtual void setup() override
-	{
-		addProcessChain("TestChain");
+    virtual void setup() override
+    {
+        addProcessChain("TestChain");
 
-		reportComponentType<sah>();
-		reportSystem<TestSystem>();
-	}
+        reportComponentType<sah>();
+        reportSystem<TestSystem>();
+    }
 
-	virtual priority_type priority() override
-	{
-		return default_priority;
-	}
+    virtual priority_type priority() override
+    {
+        return default_priority;
+    }
 };
 
