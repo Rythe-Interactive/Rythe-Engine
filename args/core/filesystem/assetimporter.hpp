@@ -53,7 +53,7 @@ namespace args::core::filesystem
     template<typename T>
     struct basic_converter final : public resource_converter<T>
     {
-        virtual common::result_decay_more<T, fs_error> load(const basic_resource& resource) override { return common::result_decay_more<T, fs_error>(common::Ok(from_resource<T>(resource)); }
+        virtual common::result_decay_more<T, fs_error> load(const basic_resource& resource) override { return common::result_decay_more<T, fs_error>(common::Ok(from_resource<T>(resource))); }
     };
 
     /**@class AssetImporter

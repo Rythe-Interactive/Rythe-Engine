@@ -38,7 +38,7 @@ namespace args::rendering
     };
 
     /**@class model_handle
-     * @brief Handle used for using models.
+     * @brief Save to pass around handle to a model in the model cache.
      */
     struct ARGS_API model_handle
     {
