@@ -349,7 +349,7 @@ namespace args::rendering
             if (!m_ecs->world.has_component<app::window>() || m_exit)
                 return;
 
-            waitForSync();
+            //waitForSync();
 
             time::clock renderClock;
             renderClock.start();

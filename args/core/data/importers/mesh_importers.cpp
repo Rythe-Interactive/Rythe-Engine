@@ -122,8 +122,8 @@ namespace args::core
                 uint normalIndex = indexData.normal_index * 3;
                 uint uvIndex = indexData.texcoord_index * 2;
 
-                // Extract the actual vertex data.         (We flip the Y axis to convert it to our left handed coordinate system.)
-                math::vec3 vertex(attributes.vertices[vertexIndex + 0], -attributes.vertices[vertexIndex + 1], attributes.vertices[vertexIndex + 2]);
+                // Extract the actual vertex data. (We flip the X axis to convert it to our left handed coordinate system.)
+                math::vec3 vertex(-attributes.vertices[vertexIndex + 0], attributes.vertices[vertexIndex + 1], attributes.vertices[vertexIndex + 2]);
                 math::vec3 normal(attributes.normals[normalIndex + 0], attributes.normals[normalIndex + 1], attributes.normals[normalIndex + 2]);
                 math::vec2 uv{};
                 if (uvIndex + 1 < attributes.texcoords.size())

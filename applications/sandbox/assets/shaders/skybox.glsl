@@ -37,5 +37,5 @@ void frag(void)
 {
     vec3 unitDir = normalize(inData.position);
 
-    fragment_color = vec4(mix(vec3(0.3f, 0.5f, 1.0f), vec3(1.f), dot(unitDir, vec3(0.f, 1.f, 0.f))), 1);
+    fragment_color = vec4(mix(vec3(1.f), vec3(0.2f, 0.4f, 1.0f), clamp(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.5f, 0.f, 1.f)), 1.f);
 }
