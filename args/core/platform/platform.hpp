@@ -10,7 +10,7 @@
 #define ARGS_CPP17V 201703L
 
 #define ARGS_DEBUG_VALUE 1
-#define ARGS_RELEASE_VALUE
+#define ARGS_RELEASE_VALUE 2
 
 #if defined(_DEBUG) || defined(DEBUG)
 	/**@def ARGS_DEBUG
@@ -91,9 +91,9 @@
 		/**@def ARGS_API
 		 * @brief sets the export setting for shared libraries
 		 */
-		#define ARGS_API __declspec(dllexport)
+		#define ARGS_API //__declspec(dllexport)
 	#else
-		#define ARGS_API __declspec(dllimport)
+		#define ARGS_API //__declspec(dllimport)
 	#endif
 #else
 	#define ARGS_API __attribute__((visibility("default")))

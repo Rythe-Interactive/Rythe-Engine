@@ -540,5 +540,6 @@
     <None Include="math\glm\gtx\wrap.inl" />
     <None Include="ecs\archetype.inl" />
     <None Include="..\..\.editorconfig" />
+    <None Include="..\..\.clang-tidy" />
   </ItemGroup>
 </Project>

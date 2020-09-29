@@ -246,7 +246,6 @@ namespace args::application
         return glfwSetJoystickCallback(callback);
     }
 
-
     int ContextHelper::getGamepadSate(int jid, GLFWgamepadstate* state)
     {
         if (initialized())
@@ -268,5 +267,4 @@ namespace args::application
     {
         glfwSetInputMode(window, mode, value);
     }
-
 }
