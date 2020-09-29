@@ -1,5 +1,5 @@
-#include <physics/HalfEdgeFace.h>
-#include <physics/HalfEdgeEdge.h>
+#include <physics/halfedgeface.hpp>
+#include <physics/halfedgeedge.hpp>
 
 namespace args::physics
 {

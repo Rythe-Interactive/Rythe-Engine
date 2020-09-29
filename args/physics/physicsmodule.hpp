@@ -1,9 +1,9 @@
 #pragma once
 
 #include <core/core.hpp>
-#include <physics/physicssystem.hpp>
-#include <physics/physics_component.hpp>
-#include <physics/rigidbody.hpp>
+#include <physics/systems/physicssystem.hpp>
+#include <physics/components/physics_component.hpp>
+#include <physics/components/rigidbody.hpp>
 
 namespace args::physics
 {

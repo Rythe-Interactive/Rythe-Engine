@@ -1,4 +1,4 @@
-#include <physics/convexcollider.hpp>
+#include <physics/colliders/convexcollider.hpp>
 #include <physics/PhysicsStatics.h>
 
 namespace args::physics
@@ -26,6 +26,18 @@ namespace args::physics
             //log::debug("Seperating Axis Found With ConvexB as ref");
             return;
         }
+
+        HalfEdgeEdge* edgeRef = nullptr;
+        HalfEdgeEdge* edgeInc = nullptr;
+        math::vec3 edgeNormal;
+        float aToBEdgeSeperation;
+
+        if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck(this, convexCollider, manifold.transformA, manifold.transformB,
+            edgeRef, edgeInc, edgeNormal, aToBEdgeSeperation))
+        {
+            return;
+        }
+
 
         log::debug("No seperating axis found!");
         TempLine line;
