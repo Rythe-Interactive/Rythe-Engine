@@ -1,12 +1,12 @@
 #pragma once
 
 #include <physics/physicsimport.h>
-#include <physics/physicscollider.hpp>
+#include <physics/colliders/physicscollider.hpp>
 #include <physics/cube_collider_params.hpp>
-#include <physics/HalfEdgeEdge.h>
-#include <physics/HalfEdgeFace.h>
+#include <physics/halfedgeedge.hpp>
+#include <physics/halfedgeface.hpp>
 
-#include <physics/physics_manifold.hpp>
+#include <physics/data/physics_manifold.hpp>
 
 namespace args::physics
 {
