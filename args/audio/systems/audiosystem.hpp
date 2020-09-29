@@ -6,6 +6,14 @@
  * @file audiosystem.hpp
  */
 
+void openal_error()
+{
+    ALCenum error;
+    error = alGetError();
+    if (error != AL_NO_ERROR)
+        args::log::warn("ERROR: OpenAl error: {}", error);
+}
+
 namespace args::audio
 {
     /**@class AudioSystem
@@ -37,6 +45,7 @@ namespace args::audio
 #endif
                 return;
             }
+
             // Succesfully created alcDevice
             log::info("Succesfully created openAl device");
 
@@ -57,6 +66,12 @@ namespace args::audio
             alListener3f(AL_VELOCITY, 0, 0, 0);
             ALfloat ori[] = { 0, 0, 1.0f, 0, 1.0f, 0 };
             alListenerfv(AL_ORIENTATION, ori);
+
+            ALCint srate;
+            alcGetIntegerv(data::m_alDevice, ALC_FREQUENCY, 1, &srate);
+            log::info("OpenAl device freq: {}", srate);
+
+            //ARGS function binding
 
             sourceQuery = createQuery<audio_source, position>();
             listenerQuery = createQuery<audio_listener, position, rotation>();
