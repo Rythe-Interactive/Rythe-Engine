@@ -207,7 +207,7 @@ namespace args::rendering
         void set_attribute_pointer(GLint size, GLenum type, GLboolean normalized, GLsizei stride, GLsizei pointer)
         {
             glEnableVertexAttribArray(m_location);
-            glVertexAttribPointer(m_location, size, type, normalized, stride, (const GLvoid*)pointer);
+            glVertexAttribPointer(m_location, size, type, normalized, stride, reinterpret_cast<const GLvoid*>(pointer));
         }
 
         /**@brief Disable the attribute after you're done with it. Leaving it enabled can cause performance issues due to limiting the GPU to move and reallocate it's VRAM.

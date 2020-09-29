@@ -155,7 +155,7 @@ namespace fmt
         // Formats the point p using the parsed format specification (presentation)
         // stored in this formatter.
         template <typename FormatContext>
-        auto format(const args::core::math::vec2& p, FormatContext& ctx) {
+        auto format(const args::core::math::ivec2& p, FormatContext& ctx) {
             // auto format(const point &p, FormatContext &ctx) -> decltype(ctx.out()) // c++11
               // ctx.out() is an output iterator to write to.
             return format_to(

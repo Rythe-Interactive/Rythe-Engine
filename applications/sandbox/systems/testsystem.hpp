@@ -365,7 +365,7 @@ public:
     {
         if (action->released())
         {
-            raiseEvent<app::window_fullscreen_request>(world_entity_id, math::ivec2(100, 100), math::ivec2(1360, 768));
+            raiseEvent<app::window_toggle_fullscreen_request>(world_entity_id, math::ivec2(100, 100), math::ivec2(1360, 768));
         }
     }
 
@@ -387,8 +387,8 @@ public:
         {
             auto handle = m_ecs->world.get_component_handle<app::window>();
             app::window window = handle.read();
-            window.setSwapInterval(window.swapInterval ? 0 : 1);
-            log::debug("set swap interval to {}", window.swapInterval);
+            window.setSwapInterval(window.swapInterval() ? 0 : 1);
+            log::debug("set swap interval to {}", window.swapInterval());
             handle.write(window);
         }
     }

@@ -11,14 +11,12 @@ namespace args::application
 {
     struct window
     {
+        friend class WindowSystem;
         window(GLFWwindow* ptr) : handle(ptr) {}
         window() = default;
 
         GLFWwindow* handle;
-        cstring title;
-        bool isFullscreen;
         async::readonly_rw_spinlock* lock;
-        int swapInterval;
 
         operator GLFWwindow* () const { return handle; }
         window& operator=(GLFWwindow* ptr) { handle = ptr; return *this; }
@@ -36,7 +34,7 @@ namespace args::application
             async::readwrite_guard guard(*lock);
             ContextHelper::makeContextCurrent(handle);
             ContextHelper::swapInterval(interval);
-            swapInterval = interval;
+            m_swapInterval = interval;
             ContextHelper::makeContextCurrent(nullptr);
         }
 
@@ -44,6 +42,26 @@ namespace args::application
         {
             ContextHelper::showWindow(handle);
         }
+
+        inline int swapInterval() const
+        {
+            return m_swapInterval;
+        }
+
+        inline bool isFullscreen() const
+        {
+            return m_isFullscreen;
+        }
+
+        inline cstring title() const
+        {
+            return m_title;
+        }
+
+    private:
+        cstring m_title;
+        bool m_isFullscreen;
+        int m_swapInterval;
     };
 
     constexpr window invalid_window = {};

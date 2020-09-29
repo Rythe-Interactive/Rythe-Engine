@@ -45,7 +45,8 @@ namespace args::application
         static bool initialized();
         static bool init();
 
-        /**@brief Binds callback to be executed right after the context has been initialized. The callback will be invoked immediately if the context is already initialized.
+        /**@brief Binds callback to be executed right after the context has been initialized.
+         *        The callback will be invoked immediately if the context is already initialized.
          */
         static bool addOnInitCallback(delegate<void()> callback);
         static void terminate();

@@ -10,26 +10,28 @@
 namespace args::application
 {
     /**@class WindowSystem
-     * @brief The system that's responsible for raising and polling all window events, swapping the buffers of the windows and creation and destruction of windows.
+     * @brief The system that's responsible for raising and polling all window events,
+     *        swapping the buffers of the windows and creation and destruction of windows.
      */
     class WindowSystem final : public System<WindowSystem>
     {
     private:
-        struct ARGS_API data //Static data that needs to be exported.
+        struct ARGS_API data // Static data that needs to be exported.
         {
             static sparse_map<GLFWwindow*, ecs::component_handle<window>> m_windowComponents;
             static sparse_map<GLFWwindow*, events::EventBus*> m_windowEventBus;
             static async::readonly_rw_spinlock m_creationLock;
         };
 
-        ecs::EntityQuery m_windowQuery{}; //Query with all the windows to update.
-        bool m_exit = false; //Keep track of whether the exit event has been raised. If any window requests happen after this boolean has been set then they will be denied.
+        ecs::EntityQuery m_windowQuery{}; // Query with all the windows to update.
+        bool m_exit = false; // Keep track of whether the exit event has been raised.
+                             // If any window requests happen after this boolean has been set then they will be denied.
 
-        async::readonly_rw_spinlock m_creationRequestLock; //Lock to keep the creation request list thread-safe.
-        std::vector<window_request> m_creationRequests; //List of requests since the last creation loop.
+        async::readonly_rw_spinlock m_creationRequestLock; // Lock to keep the creation request list thread-safe.
+        std::vector<window_request> m_creationRequests; // List of requests since the last creation loop.
 
-        async::readonly_rw_spinlock m_fullscreenRequestLock; //Lock to keep the fullscreen request list thread-safe.
-        std::vector<window_fullscreen_request> m_fullscreenRequests; //List of requests since the last fullscreen update loop.
+        async::readonly_rw_spinlock m_fullscreenRequestLock; // Lock to keep the fullscreen request list thread-safe.
+        std::vector<window_toggle_fullscreen_request> m_fullscreenRequests; // List of requests since the last fullscreen update loop.
 
         // Way of raising events from a static context.
         template<typename event_type, typename... Args>
@@ -193,7 +195,7 @@ namespace args::application
             }
         }
 
-        void onFullscreenRequest(window_fullscreen_request* fullscreenRequest)
+        void onFullscreenRequest(window_toggle_fullscreen_request* fullscreenRequest)
         {
             if (fullscreenRequest->entityId)
             {
@@ -219,7 +221,7 @@ namespace args::application
             m_windowQuery = createQuery<window>();
             bindToEvent<events::exit, &WindowSystem::onExit>();
             bindToEvent<window_request, &WindowSystem::onWindowRequest>();
-            bindToEvent<window_fullscreen_request, &WindowSystem::onFullscreenRequest>();
+            bindToEvent<window_toggle_fullscreen_request, &WindowSystem::onFullscreenRequest>();
 
             raiseEvent<window_request>(world_entity_id, math::ivec2(1360, 768), "<Args> Engine", nullptr, nullptr, 1); // Create the request for the main window.
 
@@ -286,29 +288,16 @@ namespace args::application
                     request.name = "<Args> Engine";
 
                 window win = ContextHelper::createWindow(request.size, request.name, request.monitor, request.share);
-                win.title = request.name;
-                win.isFullscreen = (request.monitor != nullptr);
-                win.swapInterval = request.swapInterval;
+                win.m_title = request.name;
+                win.m_isFullscreen = (request.monitor != nullptr);
+                win.m_swapInterval = request.swapInterval;
 
                 ecs::component_handle<window> handle;
 
-                if (!m_ecs->getEntityData(request.entityId).components.contains(typeHash<window>()))
+                auto setCallbacks = [](const window& win)
                 {
-                    win.lock = new async::readonly_rw_spinlock();
-
-                    async::readwrite_guard wguard(*win.lock);           // This is the only code that has access to win.lock right now, so there's no deadlock risk.
-                    async::readwrite_guard cguard(data::m_creationLock);// Locking them both seperately is faster than using a multilock.
-
-                    handle = m_ecs->createComponent<window>(request.entityId, win);
-
-                    log::debug("created window: {}", request.name);
-
-                    data::m_windowComponents.insert(win, handle);
-                    data::m_windowEventBus.insert(win, m_eventBus);
-
-                    // Set all callbacks.
                     ContextHelper::makeContextCurrent(win);
-                    ContextHelper::swapInterval(win.swapInterval);
+                    ContextHelper::swapInterval(win.m_swapInterval);
                     ContextHelper::setWindowCloseCallback(win, &WindowSystem::closeWindow);
                     ContextHelper::setWindowPosCallback(win, &WindowSystem::onWindowMoved);
                     ContextHelper::setWindowSizeCallback(win, &WindowSystem::onWindowResize);
@@ -326,6 +315,24 @@ namespace args::application
                     ContextHelper::setMouseButtonCallback(win, &WindowSystem::onMouseButton);
                     ContextHelper::setScrollCallback(win, &WindowSystem::onMouseScroll);
                     ContextHelper::makeContextCurrent(nullptr);
+                };
+
+                if (!m_ecs->getEntityData(request.entityId).components.contains(typeHash<window>()))
+                {
+                    win.lock = new async::readonly_rw_spinlock();
+
+                    async::readwrite_guard wguard(*win.lock);           // This is the only code that has access to win.lock right now, so there's no deadlock risk.
+                    async::readwrite_guard cguard(data::m_creationLock);// Locking them both seperately is faster than using a multilock.
+
+                    handle = m_ecs->createComponent<window>(request.entityId, win);
+
+                    log::debug("created window: {}", request.name);
+
+                    data::m_windowComponents.insert(win, handle);
+                    data::m_windowEventBus.insert(win, m_eventBus);
+
+                    // Set all callbacks.
+                    setCallbacks(win);
                 }
                 else
                 {
@@ -347,25 +354,7 @@ namespace args::application
                     data::m_windowEventBus.insert(win, m_eventBus);
 
                     // Set all callbacks.
-                    ContextHelper::makeContextCurrent(win);
-                    ContextHelper::swapInterval(win.swapInterval);
-                    ContextHelper::setWindowCloseCallback(win, &WindowSystem::closeWindow);
-                    ContextHelper::setWindowPosCallback(win, &WindowSystem::onWindowMoved);
-                    ContextHelper::setWindowSizeCallback(win, &WindowSystem::onWindowResize);
-                    ContextHelper::setWindowRefreshCallback(win, &WindowSystem::onWindowRefresh);
-                    ContextHelper::setWindowFocusCallback(win, &WindowSystem::onWindowFocus);
-                    ContextHelper::setWindowIconifyCallback(win, &WindowSystem::onWindowIconify);
-                    ContextHelper::setWindowMaximizeCallback(win, &WindowSystem::onWindowMaximize);
-                    ContextHelper::setFramebufferSizeCallback(win, &WindowSystem::onWindowFrameBufferResize);
-                    ContextHelper::setWindowContentScaleCallback(win, &WindowSystem::onWindowContentRescale);
-                    ContextHelper::setDropCallback(win, &WindowSystem::onItemDroppedInWindow);
-                    ContextHelper::setCursorEnterCallback(win, &WindowSystem::onMouseEnterWindow);
-                    ContextHelper::setKeyCallback(win, &WindowSystem::onKeyInput);
-                    ContextHelper::setCharCallback(win, &WindowSystem::onCharInput);
-                    ContextHelper::setCursorPosCallback(win, &WindowSystem::onMouseMoved);
-                    ContextHelper::setMouseButtonCallback(win, &WindowSystem::onMouseButton);
-                    ContextHelper::setScrollCallback(win, &WindowSystem::onMouseScroll);
-                    ContextHelper::makeContextCurrent(nullptr);
+                    setCallbacks(win);
                 }
             }
 
@@ -384,7 +373,7 @@ namespace args::application
                 window win = handle.read();
                 async::readwrite_guard wguard(*win.lock);
 
-                if (win.isFullscreen)
+                if (win.m_isFullscreen)
                 {
                     GLFWmonitor* monitor = ContextHelper::getPrimaryMonitor();
                     const GLFWvidmode* mode = ContextHelper::getVideoMode(monitor);
@@ -399,12 +388,12 @@ namespace args::application
 
                     ContextHelper::setWindowMonitor(win, monitor, { 0 ,0 }, math::ivec2(mode->width, mode->height), mode->refreshRate);
                     ContextHelper::makeContextCurrent(win);
-                    ContextHelper::swapInterval(win.swapInterval);
+                    ContextHelper::swapInterval(win.m_swapInterval);
                     ContextHelper::makeContextCurrent(nullptr);
                     log::debug("set window {} to fullscreen", request.entityId);
                 }
 
-                win.isFullscreen = !win.isFullscreen;
+                win.m_isFullscreen = !win.m_isFullscreen;
                 handle.write(win);
             }
             m_fullscreenRequests.clear();
