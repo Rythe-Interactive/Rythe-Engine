@@ -12,11 +12,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="colliders\convexcollider.cpp" />
-    <ClCompile Include="convexconvexpenetrationquerys.cpp" />
+    <ClCompile Include="data\convexconvexpenetrationquery.cpp" />
     <ClCompile Include="delete_this.cpp" />
+    <ClCompile Include="data\edgepenetrationquery.cpp" />
     <ClCompile Include="halfedgeface.cpp" />
     <ClCompile Include="components\physics_component.cpp" />
-    <ClCompile Include="data\penetrationquerys.cpp" />
     <ClCompile Include="systems\physicssystem.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -26,13 +26,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colliders\convexcollider.hpp" />
-    <ClInclude Include="convexconvexpenetrationquerys.h" />
+    <ClInclude Include="data\convexconvexpenetrationquery.h" />
     <ClInclude Include="cube_collider_params.hpp" />
     <ClInclude Include="data\physics_manifold_precursor.h" />
+    <ClInclude Include="data\edgepenetrationquery.h" />
     <ClInclude Include="halfedgeedge.hpp" />
     <ClInclude Include="halfedgeface.hpp" />
     <ClInclude Include="colliders\physicscollider.hpp" />
-    <ClInclude Include="data\penetrationquerys.h" />
+    <ClInclude Include="data\penetrationquery.h" />
     <ClInclude Include="physicsconstants.h" />
     <ClInclude Include="physicsimport.h" />
     <ClInclude Include="physicsstatics.h" />

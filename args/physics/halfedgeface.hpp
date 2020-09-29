@@ -10,7 +10,7 @@ namespace args::physics
 		HalfEdgeEdge* startEdge;
 		math::vec3 normal;
 		math::vec3 centroid;
-
+        HalfEdgeFace() {};
 		HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
 
 		/** @brief given a function that takes in a HalfEdgeEdge*, 

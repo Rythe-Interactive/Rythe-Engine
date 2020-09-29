@@ -39,10 +39,10 @@
     <ClCompile Include="halfedgeface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="data\penetrationquerys.cpp">
+    <ClCompile Include="data\convexconvexpenetrationquery.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="convexconvexpenetrationquerys.cpp">
+    <ClCompile Include="data\edgepenetrationquery.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,10 +89,13 @@
     <ClInclude Include="halfedgeface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\penetrationquerys.h">
+    <ClInclude Include="data\convexconvexpenetrationquery.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="convexconvexpenetrationquerys.h">
+    <ClInclude Include="data\edgepenetrationquery.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\penetrationquery.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

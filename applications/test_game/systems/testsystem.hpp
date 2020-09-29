@@ -4,13 +4,16 @@
 #include <application/application.hpp>
 #include <core/math/math.hpp>
 
+
 #include <core/logging/logging.hpp>
+
 #include <physics/components/physics_component.hpp>
 #include <physics/components/rigidbody.hpp>
 #include <physics/cube_collider_params.hpp>
 #include <physics/data/physics_manifold_precursor.h>
 #include <physics/systems/physicssystem.hpp>
 #include <physics/halfedgeface.hpp>
+#include <physics/data/penetrationquery.h>
 
 #include <core/compute/context.hpp>
 #include <core/compute/kernel.hpp>
@@ -32,10 +35,7 @@ struct sah
     }
 };
 
-struct physicsIdentifier
-{
 
-};
 
 struct player_move : public app::input_axis<player_move> {};
 struct player_strive : public app::input_axis<player_strive> {};
@@ -52,6 +52,10 @@ struct physics_unit_test_move : public app::input_axis<physics_unit_test_move> {
 class TestSystem final : public System<TestSystem>
 {
 public:
+    
+
+    //static std::vector<std::shared_ptr<physics::PenetrationQuery>> queries;
+
     ecs::entity_handle player;
 
     std::vector<ecs::entity_handle> physicsUnitTestObjects;
@@ -662,9 +666,6 @@ public:
                         } while (initialEdge != currentEdge && currentEdge != nullptr);
                     }
 
-
-
-
                     //----------------- draw collisions --------------//
                     for (auto line : physCollider->collisionsFound)
                     {
@@ -673,6 +674,19 @@ public:
 
                     physCollider->collisionsFound.clear();
 
+
+                    //
+                    //for (auto penetrationInfo : queries)
+                    //{
+                    //   
+                    //    debug::drawLine(penetrationInfo->faceCentroid,
+                    //        penetrationInfo->faceCentroid + penetrationInfo->normal,
+                    //        math::vec4(0, 0, 0, 1), 20.0f);
+                    //    //debug::drawLine(line.start, line.end, math::vec4(1, 0, 0, 1), 20.0f);
+                    //}
+
+                    //queries.clear();
+                    //physCollider->manifoldsFound.clear();
                 }
 
             }

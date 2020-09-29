@@ -1,5 +1,5 @@
 
-#include "convexconvexpenetrationquerys.h"
+#include <physics/data/convexconvexpenetrationquery.h>
 
 namespace args::physics
 {

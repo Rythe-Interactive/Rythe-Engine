@@ -50,12 +50,12 @@ namespace args::physics
          * @return returns true if a seperating axis was found
          */
         static bool FindSeperatingAxisByExtremePointProjection(ConvexCollider* convexA
-            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, HalfEdgeFace* refFace, float& maximumSeperation) 
+            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, HalfEdgeFace** refFace, float& maximumSeperation) 
         {
             float currentMaximumSeperation = std::numeric_limits<float>::lowest();
- 
 
-            for (const auto face : convexB->GetHalfEdgeFaces())
+
+            for ( auto face : convexB->GetHalfEdgeFaces())
             {
                 //get inverse normal
                 math::vec3 seperatingAxis = transformB * math::vec4( face->normal, 0);
@@ -72,7 +72,7 @@ namespace args::physics
                 if (seperation > currentMaximumSeperation)
                 {
                     currentMaximumSeperation = seperation;
-                    refFace = face;
+                    *refFace = face;
                 }
 
                 if (seperation > 0)
@@ -82,6 +82,8 @@ namespace args::physics
                 }
             }
             //no seperating axis was found
+            
+
             return false;
         }
 
@@ -98,14 +100,14 @@ namespace args::physics
          * @return returns true if a seperating axis was found
          */
         static bool FindSeperatingAxisByGaussMapEdgeCheck(ConvexCollider* convexA, ConvexCollider* convexB, 
-            const math::mat4& transformA, const math::mat4& transformB,HalfEdgeEdge* refEdge,HalfEdgeEdge* incEdge,
+            const math::mat4& transformA, const math::mat4& transformB,HalfEdgeEdge** refEdge,HalfEdgeEdge** incEdge,
             math::vec3& seperatingAxisFound,float & seperation)
         {
             float currentMaximumSeperation = std::numeric_limits<float>::lowest();
+      
 
             math::vec3 positionA = transformA[3];
-            refEdge = convexA->GetHalfEdgeFaces().at(0)->startEdge;
-            incEdge = convexB->GetHalfEdgeFaces().at(0)->startEdge;
+
             seperation = 0.0f;
 
             for (auto faceA : convexA->GetHalfEdgeFaces())
@@ -171,8 +173,8 @@ namespace args::physics
 
                                 if (currentMaximumSeperation > distance)
                                 {
-                                    refEdge = edgeA;
-                                    incEdge = edgeB;
+                                    refEdge = &edgeA;
+                                    incEdge = &edgeB;
                                     seperatingAxisFound = seperatingAxis;
                                     currentMaximumSeperation = distance;
                                     seperation = distance;
@@ -187,6 +189,8 @@ namespace args::physics
                     }
                 }
             }
+
+
             return false;
         }
 
