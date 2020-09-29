@@ -18,5 +18,10 @@ namespace args::core::ecs
         friend class EcsRegistry;
     private:
         static std::tuple<component_handle<component_type>, component_handle<component_types>...> create(EcsRegistry* registry, id_type entityId);
+        static std::tuple<component_handle<component_type>, component_handle<component_types>...> create(EcsRegistry* registry, id_type entityId, component_type&& defaultValue, component_types&&... defaultValues);
+
+        static std::tuple<component_handle<component_type>, component_handle<component_types>...> get(EcsRegistry* registry, id_type entityId);
+        static void destroy(EcsRegistry* registry, id_type entityId);
+        static bool has(EcsRegistry* registry, id_type entityId);
     };
 }

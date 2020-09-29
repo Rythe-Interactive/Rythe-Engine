@@ -20,6 +20,11 @@ namespace args::core
             data = src.data;
             return *this;
         }
+        position& operator=(math::vec3&& src)
+        {
+            data = src.data;
+            return *this;
+        }
 
         static void init(position& pos)
         {
@@ -27,15 +32,16 @@ namespace args::core
             //log::debug("initializing position");
         }
 
-       /* static void destroy(position&)
-        {
-            log::debug("destroying position");
-        }*/
+        /* static void destroy(position&)
+         {
+             log::debug("destroying position");
+         }*/
     };
 
     struct rotation : public math::quat
     {
-        rotation() : math::quat(1,0,0,0) {}
+        rotation() : math::quat(1, 0, 0, 0) {}
+        rotation(float w, float x, float y, float z) : math::quat(w, x, y, z) {}
         rotation(const rotation&) = default;
         rotation(rotation&&) = default;
         rotation(const math::quat& src) : math::quat(src) {}
@@ -46,17 +52,28 @@ namespace args::core
             data = src.data;
             return *this;
         }
+        rotation& operator=(math::quat&& src)
+        {
+            data = src.data;
+            return *this;
+        }
     };
 
     struct scale : public math::vec3
     {
         scale() : math::vec3(1, 1, 1) {}
+        scale(float x, float y, float z) : math::vec3(x, y, z) {}
         scale(const scale&) = default;
         scale(scale&&) = default;
         scale(const math::vec3& src) : math::vec3(src) {}
         scale& operator=(const scale&) = default;
         scale& operator=(scale&&) = default;
         scale& operator=(const math::vec3& src)
+        {
+            data = src.data;
+            return *this;
+        }
+        scale& operator=(math::vec3&& src)
         {
             data = src.data;
             return *this;

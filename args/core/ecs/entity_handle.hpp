@@ -195,15 +195,15 @@ namespace args::core::ecs
         }
 
         template<typename component_type>
-        A_NODISCARD component_type read_component(std::memory_order order = std::memory_order_acquire) const
+        A_NODISCARD component_type read_component() const
         {
-            return get_component_handle<component_type>().read(order);
+            return get_component_handle<component_type>().read();
         }
 
         template<typename component_type>
-        void write_component(component_type&& value, std::memory_order order = std::memory_order_release)
+        void write_component(component_type&& value)
         {
-            get_component_handle<std::remove_reference_t<component_type>>().write(std::forward<component_type>(value), order);
+            get_component_handle<std::remove_reference_t<component_type>>().write(std::forward<component_type>(value));
         }
 
 
@@ -218,6 +218,17 @@ namespace args::core::ecs
         component_handle_base add_component(id_type componentTypeId) const;
 
         /**@brief Add component to the entity.
+         * @param componentTypeId Type id of component to add.
+         * @param value Pointer to component_type that has the starting value you require.
+         * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
+         * @throws args_entity_not_found_error Thrown when handle's id is invalid.
+         * @throws args_unknown_component_error Thrown when the component type is unknown.
+         * @returns component_handle_base Valid component handle base for the newly created component.
+         * @note component_handle_base needs to be force_cast to component_handle<T> in order to be usable.
+         */
+        component_handle_base add_component(id_type componentTypeId, void* value) const;
+
+        /**@brief Add component to the entity.
          * @tparam component_type Type of component to add.
          * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
          * @throws args_entity_not_found_error Thrown when handle's id is invalid.
@@ -230,12 +241,18 @@ namespace args::core::ecs
             return force_value_cast<component_handle<component_type>>(add_component(typeHash<component_type>()));
         }
 
+        /**@brief Add component to the entity.
+         * @param value Starting value of the component.
+         * @tparam component_type Type of component to add.
+         * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
+         * @throws args_entity_not_found_error Thrown when handle's id is invalid.
+         * @throws args_unknown_component_error Thrown when the component type is unknown.
+         * @returns component_handle<component_type> Valid component handle for the newly created component.
+         */
         template<typename component_type>
-        component_handle<component_type> add_component(component_type&& value, std::memory_order order = std::memory_order_release) const
+        component_handle<component_type> add_component(component_type&& value) const
         {
-            component_handle<component_type> handle = force_value_cast<component_handle<component_type>>(add_component(typeHash<component_type>()));
-            handle.write(value, order);
-            return handle;
+            return force_value_cast<component_handle<component_type>>(add_component(typeHash<component_type>(), reinterpret_cast<void*>(&value)));
         }
 
         /**@brief Remove component from entity.
