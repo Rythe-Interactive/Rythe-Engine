@@ -25,6 +25,7 @@
     <ClInclude Include="data\material.hpp" />
     <ClInclude Include="data\renderbuffer.h" />
     <ClInclude Include="data\shader.hpp" />
+    <ClInclude Include="debugrendering.hpp" />
     <ClInclude Include="detail\engine_include.hpp" />
     <ClInclude Include="detail\stb_image.h" />
     <ClInclude Include="detail\tiny_obj_loader.h" />
@@ -47,16 +48,16 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>ClangCL</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>ClangCL</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -105,6 +106,10 @@
     <PostBuildEvent>
       <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
     </PostBuildEvent>
+    <Lib>
+      <AdditionalDependencies>args-core.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -128,6 +133,13 @@
     <PostBuildEvent>
       <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
     </PostBuildEvent>
+    <Lib>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalOptions>-flto=thin %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

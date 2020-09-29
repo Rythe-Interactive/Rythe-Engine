@@ -87,6 +87,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\renderbuffer.h">
+    <ClInclude Include="debugrendering.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

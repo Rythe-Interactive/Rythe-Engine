@@ -94,7 +94,7 @@ extern void reportModules(args::core::Engine* engine);
 
 		//try
 		{
-			args::core::Engine engine;
+			args::core::Engine engine(argc,argv);
 
 			reportModules(&engine);
 			std::cout << "==========================" << std::endl;
