@@ -66,13 +66,10 @@ namespace args::audio
 		const ALchar* renderer = alGetString(AL_RENDERER);
 		const ALchar* openALExtensions = alGetString(AL_EXTENSIONS);
 		const ALchar* ALCExtensions = alcGetString(data::alDevice, ALC_EXTENSIONS);
-		const ALchar* auxSends = "";//alGetString(AL_MAX_AUXILIARY_SEND_FILTER_GAIN_AUTO);
-		log::info("OpenAL info:\n\n\t\t\tOpenAL information\n\tVendor: {}\n\tVersion: {}\n\tRenderer: {}\n\tOpenAl Extensions: {}\n\tALC Extensions: {}\n\tmax aux send filter gain auto: {}\n",
-			vendor, version, renderer, openALExtensions, ALCExtensions, auxSends);
-
 		ALCint srate;
 		alcGetIntegerv(data::alDevice, ALC_FREQUENCY, 1, &srate);
-		log::info("OpenAl device freq: {}", srate);
+		log::info("OpenAL info:\n\n\t\t\tOpenAL information\n\tVendor: {}\n\tVersion: {}\n\tRenderer: {}\n\tOpenAl Extensions: {}\n\tALC Extensions: {}\n\tDevice samplerate: {}\n",
+			vendor, version, renderer, openALExtensions, ALCExtensions, srate);
 	}
 
 	inline void AudioSystem::update(time::span deltatime)
