@@ -93,7 +93,7 @@ namespace args::core::iterator
         }
         friend auto operator!=(const key_value_pair_iterator& rhs, const key_value_pair_iterator& lhs)
         {
-            return rhs.m_key != lhs.m_key && rhs.m_value != lhs.m_value;
+            return rhs.m_key != lhs.m_key || rhs.m_value != lhs.m_value;
         }
 
         auto operator++()

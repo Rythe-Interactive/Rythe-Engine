@@ -8,6 +8,8 @@ namespace args::application
     async::readonly_rw_spinlock ContextHelper::m_initCallbackLock;
     multicast_delegate<void()> ContextHelper::m_onInit;
 
+    std::atomic<GLFWwindow*> ContextHelper::newFocus;
+
     bool ContextHelper::initialized()
     {
         return m_initialized.load(std::memory_order_acquire);
@@ -59,6 +61,47 @@ namespace args::application
         return glfwGetPrimaryMonitor();
     }
 
+    GLFWmonitor* ContextHelper::getCurrentMonitor(GLFWwindow* window)
+    {
+        int nmonitors, i;
+        int wx, wy, ww, wh;
+        int mx, my, mw, mh;
+        int overlap, bestoverlap;
+        GLFWmonitor* bestmonitor;
+        GLFWmonitor** monitors;
+        const GLFWvidmode* mode;
+
+        bestoverlap = 0;
+        bestmonitor = NULL;
+
+        glfwGetWindowPos(window, &wx, &wy);
+        glfwGetWindowSize(window, &ww, &wh);
+        monitors = glfwGetMonitors(&nmonitors);
+
+        for (i = 0; i < nmonitors; i++) {
+            mode = glfwGetVideoMode(monitors[i]);
+            glfwGetMonitorPos(monitors[i], &mx, &my);
+            mw = mode->width;
+            mh = mode->height;
+
+            overlap =
+                math::max(0, math::min(wx + ww, mx + mw) - math::max(wx, mx)) *
+                math::max(0, math::min(wy + wh, my + mh) - math::max(wy, my));
+
+            if (bestoverlap < overlap) {
+                bestoverlap = overlap;
+                bestmonitor = monitors[i];
+            }
+        }
+
+        return bestmonitor;
+    }
+
+    void ContextHelper::setWindowMonitor(GLFWwindow* window, GLFWmonitor* monitor, math::ivec2 pos, math::ivec2 size, int refreshRate)
+    {
+        glfwSetWindowMonitor(window, monitor, pos.x, pos.y, size.x, size.y, refreshRate);
+    }
+
     const GLFWvidmode* ContextHelper::getPrimaryVideoMode()
     {
         return glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -82,6 +125,25 @@ namespace args::application
     GLFWwindow* ContextHelper::createWindow(int width, int height, const char* title, GLFWmonitor* monitor, GLFWwindow* share)
     {
         return glfwCreateWindow(width, height, title, monitor, share);
+    }
+
+    void ContextHelper::showWindow(GLFWwindow* window)
+    {
+        newFocus.store(window, std::memory_order_release);
+    }
+
+    void ContextHelper::updateWindowFocus()
+    {
+        GLFWwindow* focus = newFocus.load(std::memory_order_acquire);
+        if (!focus)
+            return;
+
+        while (!newFocus.compare_exchange_weak(focus, nullptr, std::memory_order_release, std::memory_order_relaxed))
+            ;
+
+        glfwHideWindow(focus);
+        glfwShowWindow(focus);
+        glfwFocusWindow(focus);
     }
 
     GLFWglproc ContextHelper::getProcAddress(cstring procname)
@@ -246,7 +308,6 @@ namespace args::application
         return glfwSetJoystickCallback(callback);
     }
 
-
     int ContextHelper::getGamepadSate(int jid, GLFWgamepadstate* state)
     {
         if (initialized())
@@ -268,5 +329,4 @@ namespace args::application
     {
         glfwSetInputMode(window, mode, value);
     }
-
 }

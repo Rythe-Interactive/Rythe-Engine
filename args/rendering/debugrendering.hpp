@@ -1,13 +1,13 @@
 #pragma once
 
 #if !defined(ARGS_API)
-    #if !defined(ARGS_IMPORT)
-        #define ARGS_IMPORT
-        #include <core/core.hpp>
-        #include <core/platform/args_library.hpp>
-    #else
-        #include <core/core.hpp>
-    #endif
+#if !defined(ARGS_IMPORT)
+#define ARGS_IMPORT
+#include <core/core.hpp>
+#include <core/platform/args_library.hpp>
+#else
+#include <core/core.hpp>
+#endif
 #endif
 
 namespace args::debug
@@ -23,9 +23,11 @@ namespace args::debug
         math::vec3 end;
         math::color color = math::colors::white;
         float width = 1.f;
+        float time = 0;
+        mutable float timeBuffer = 0;
         bool ignoreDepth = false;
 
-        debug_line(math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, bool ignoreDepth = false) : start(start), end(end), color(color), width(width), ignoreDepth(ignoreDepth) {}
+        debug_line(math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false) : start(start), end(end), color(color), width(width), time(time), ignoreDepth(ignoreDepth) {}
         debug_line() = default;
         debug_line(const debug_line&) = default;
         debug_line(debug_line&&) = default;
@@ -41,12 +43,12 @@ namespace args::debug
         virtual bool unique() override { return false; }
     };
 
-    void drawLine(math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, bool ignoreDepth = false)
+    void drawLine(math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false)
     {
         if (!detail::eventBus)
             return;
 
-        detail::eventBus->raiseEvent<debug_line>(start, end, color, width, ignoreDepth);
+        detail::eventBus->raiseEvent<debug_line>(start, end, color, width, time, ignoreDepth);
     }
 }
 

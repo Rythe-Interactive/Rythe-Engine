@@ -70,7 +70,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>args-application.lib;args-audio.lib;args-core.lib;args-editor.lib;args-networking.lib;args-physics.lib;args-rendering.lib;args-scripting.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>args-application.lib;args-audio.lib;args-core.lib;args-editor.lib;args-networking.lib;args-physics.lib;args-rendering.lib;args-scripting.lib;OpenCL.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -90,7 +90,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>args-application.lib;args-audio.lib;args-core.lib;args-editor.lib;args-networking.lib;args-physics.lib;args-rendering.lib;args-scripting.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>args-application.lib;args-audio.lib;args-core.lib;args-editor.lib;args-networking.lib;args-physics.lib;args-rendering.lib;args-scripting.lib;OpenCL.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

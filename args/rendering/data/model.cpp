@@ -19,17 +19,17 @@ namespace args::rendering
         ModelCache::buffer(id, matrixBuffer);
     }
 
-    inline mesh_handle model_handle::get_mesh()
+      mesh_handle model_handle::get_mesh()
     {
         return ModelCache::get_mesh(id);
     }
 
-    inline const model& model_handle::get_model()
+      const model& model_handle::get_model()
     {
         return ModelCache::get_model(id);
     }
 
-    inline const model& ModelCache::get_model(id_type id)
+      const model& ModelCache::get_model(id_type id)
     {
         async::readonly_guard guard(m_modelLock);
         return m_models[id];
@@ -37,40 +37,43 @@ namespace args::rendering
 
     void ModelCache::buffer(id_type id, app::gl_id matrixBuffer)
     {
-        auto [lock, data] = MeshCache::get_handle(id).get();
+        if (id == invalid_id)
+            return;
+
+        auto [lock, mesh] = MeshCache::get_handle(id).get();
 
         async::readonly_multiguard guard(m_modelLock, lock);
-        model& mesh = m_models[id];
+        model& model = m_models[id];
 
-        glGenVertexArrays(1, &mesh.vertexArrayId);
-        glBindVertexArray(mesh.vertexArrayId);
+        glGenVertexArrays(1, &model.vertexArrayId);
+        glBindVertexArray(model.vertexArrayId);
 
-        glGenBuffers(1, &mesh.indexBufferId);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.indices.size() * sizeof(uint), data.indices.data(), GL_STATIC_DRAW);
+        glGenBuffers(1, &model.indexBufferId);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.indexBufferId);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.indices.size() * sizeof(uint), mesh.indices.data(), GL_STATIC_DRAW);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-        glGenBuffers(1, &mesh.vertexBufferId);
-        glBindBuffer(GL_ARRAY_BUFFER, mesh.vertexBufferId);
-        glBufferData(GL_ARRAY_BUFFER, data.vertices.size() * sizeof(math::vec3), data.vertices.data(), GL_STATIC_DRAW);
+        glGenBuffers(1, &model.vertexBufferId);
+        glBindBuffer(GL_ARRAY_BUFFER, model.vertexBufferId);
+        glBufferData(GL_ARRAY_BUFFER, mesh.vertices.size() * sizeof(math::vec3), mesh.vertices.data(), GL_STATIC_DRAW);
         glEnableVertexAttribArray(SV_POSITION);
         glVertexAttribPointer(SV_POSITION, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-        glGenBuffers(1, &mesh.normalBufferId);
-        glBindBuffer(GL_ARRAY_BUFFER, mesh.normalBufferId);
-        glBufferData(GL_ARRAY_BUFFER, data.normals.size() * sizeof(math::vec3), data.normals.data(), GL_STATIC_DRAW);
+        glGenBuffers(1, &model.normalBufferId);
+        glBindBuffer(GL_ARRAY_BUFFER, model.normalBufferId);
+        glBufferData(GL_ARRAY_BUFFER, mesh.normals.size() * sizeof(math::vec3), mesh.normals.data(), GL_STATIC_DRAW);
         glEnableVertexAttribArray(SV_NORMAL);
         glVertexAttribPointer(SV_NORMAL, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-        glGenBuffers(1, &mesh.tangentBufferId);
-        glBindBuffer(GL_ARRAY_BUFFER, mesh.tangentBufferId);
-        glBufferData(GL_ARRAY_BUFFER, data.tangents.size() * sizeof(math::vec3), data.tangents.data(), GL_STATIC_DRAW);
+        glGenBuffers(1, &model.tangentBufferId);
+        glBindBuffer(GL_ARRAY_BUFFER, model.tangentBufferId);
+        glBufferData(GL_ARRAY_BUFFER, mesh.tangents.size() * sizeof(math::vec3), mesh.tangents.data(), GL_STATIC_DRAW);
         glEnableVertexAttribArray(SV_TANGENT);
         glVertexAttribPointer(SV_TANGENT, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-        glGenBuffers(1, &mesh.uvBufferId);
-        glBindBuffer(GL_ARRAY_BUFFER, mesh.uvBufferId);
-        glBufferData(GL_ARRAY_BUFFER, data.uvs.size() * sizeof(math::vec2), data.uvs.data(), GL_STATIC_DRAW);
+        glGenBuffers(1, &model.uvBufferId);
+        glBindBuffer(GL_ARRAY_BUFFER, model.uvBufferId);
+        glBufferData(GL_ARRAY_BUFFER, mesh.uvs.size() * sizeof(math::vec2), mesh.uvs.data(), GL_STATIC_DRAW);
         glEnableVertexAttribArray(SV_TEXCOORD0);
         glVertexAttribPointer(SV_TEXCOORD0, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
@@ -93,42 +96,57 @@ namespace args::rendering
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
 
-        mesh.buffered = true;
+        model.buffered = true;
     }
 
     model_handle ModelCache::create_model(const std::string& name, const fs::view& file, mesh_import_settings settings)
     {
         id_type id = nameHash(name);
 
-        {
+        {// Check if the model already exists.
             async::readonly_guard guard(m_modelLock);
             if (m_models.contains(id))
                 return { id };
         }
 
+        // Check if the file is valid to load.
         if (!file.is_valid() || !file.file_info().is_file)
             return invalid_model_handle;
 
-        model mesh{};
+        model model{};
+        std::string meshName;
 
-        {
-            auto [lock, data] = MeshCache::create_mesh(name, file, settings).get();
+        {// Load the mesh if it wasn't already. (It's called MeshCache for a reason.)
+            auto handle = MeshCache::create_mesh(name, file, settings);
+            if (handle == invalid_mesh_handle)
+            {
+                log::error("Failed to load model {}", name);
+                return invalid_model_handle;
+            }
+
+            // Copy the sub-mesh data.
+            auto [lock, data] = handle.get();
             async::readonly_guard guard(lock);
+            meshName = data.fileName;
+
             for (auto& submeshData : data.submeshes)
-                mesh.submeshes.push_back(submeshData);
+                model.submeshes.push_back(submeshData);
         }
 
-        mesh.buffered = false;
+        // The model still needs to be buffered on the rendering thread.
+        model.buffered = false;
 
-        {
+        { // Insert the model into the model list.
             async::readwrite_guard guard(m_modelLock);
-            m_models.insert(id, mesh);
+            m_models.insert(id, model);
         }
+
+        log::debug("Created model {} with mesh: {}", name, meshName);
 
         return { id };
     }
 
-    inline model_handle ModelCache::get_handle(const std::string& name)
+      model_handle ModelCache::get_handle(const std::string& name)
     {
         id_type id = nameHash(name);
         async::readonly_guard guard(m_modelLock);
@@ -137,7 +155,7 @@ namespace args::rendering
         return invalid_model_handle;
     }
 
-    inline model_handle ModelCache::get_handle(id_type id)
+      model_handle ModelCache::get_handle(id_type id)
     {
         async::readonly_guard guard(m_modelLock);
         if (m_models.contains(id))
@@ -145,12 +163,12 @@ namespace args::rendering
         return invalid_model_handle;
     }
 
-    inline mesh_handle ModelCache::get_mesh(id_type id)
+      mesh_handle ModelCache::get_mesh(id_type id)
     {
         return MeshCache::get_handle(id);
     }
 
-    inline mesh_handle ModelCache::get_mesh(const std::string& name)
+      mesh_handle ModelCache::get_mesh(const std::string& name)
     {
         id_type id = nameHash(name);
         return MeshCache::get_handle(id);
