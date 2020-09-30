@@ -74,7 +74,7 @@ public:
             for (size_t i = 0; i < contents.size() && i < 5*2048; i += 5)
             {
                 memcpy(buf,contents.data()+ i,5);
-                ints.push_back(std::atol(buf));                
+                ints.push_back(std::atol(buf));
             }
 
             delete[] buf;
@@ -151,7 +151,7 @@ public:
 
         rendering::material_handle wireframeH;
         rendering::material_handle vertexH;
-        
+
         rendering::material_handle uvH;
         rendering::material_handle normalH;
         rendering::material_handle skyboxH;
@@ -283,57 +283,223 @@ public:
 
         setupCameraEntity();
 
-        //------------------------------------- Setup entity with rigidbody -------------------------------------------//
+        {
+            auto ent = m_ecs->createEntity();
 
-        auto physicsEnt = m_ecs->createEntity();
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
-        //setup rendering for physics ent
-        m_ecs->createComponent<rendering::renderable>(physicsEnt, { cubeH, wireframeH });
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
 
-        auto [bodyPosition, bodyRotation, bodyScale] = m_ecs->createComponent<transform>(physicsEnt);
 
-        position bodyP = bodyPosition.read();
-        bodyP.x = 0.0f;
-        bodyP.y = 4.0f;
-        bodyP.z = 5.1f;
-        bodyPosition.write(bodyP);
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
 
-        //setup physics component on physics ent
-        auto rbHandle = m_ecs->createComponent<physics::rigidbody>(physicsEnt);
-        auto physicsComponentHandle = m_ecs->createComponent<physics::physicsComponent>(physicsEnt);
 
-        physics::physicsComponent physicsComponent;
-        physics::physicsComponent::init(physicsComponent);
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ modelH, wireframeH });
 
-        physics::cube_collider_params cubeParams;
-        physicsComponent.AddBox(cubeParams);
-
-        physicsComponentHandle.write(physicsComponent);
-
-        auto rb = rbHandle.read();
-
-        rb.globalCentreOfMass = bodyP;
-        //rb.addForce( math::vec3(-9, 0, 0));
-        rb.addForceAt(math::vec3(0, 4.5, 5.1f), math::vec3(-100, 0, 0));
-        rb.globalCentreOfMass = bodyP;
-
-        rbHandle.write(rb);
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+            positionH.write(math::vec3(0, -3.0f, 5.0f));
+            scaleH.write(math::vec3(1.0f));
+        }
 
         {
             auto ent = m_ecs->createEntity();
-            ent.add_component<physics::physicsComponent>();
+            physicsUnitTestObjects.push_back(ent);
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = true;
+            entPhyHande.write(physicsComponent2);
+
+
             auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ cubeH, wireframeH });
+            renderableHandle.write({ modelH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
-            positionH.write(math::vec3(5.1f, -2.0f, 0));
-            scaleH.write(math::vec3(0.25f));
+            positionH.write(math::vec3(3.0, -2.0f, 4.0f));
+            scaleH.write(math::vec3(1.0f));
+        }
+        //*/
+
+        //----------- AABB to OBB Test  ------------//
+        //**
+        {
+            auto ent = m_ecs->createEntity();
+
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ modelH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+            positionH.write(math::vec3(0, -3.0f, -2.0f));
+            scaleH.write(math::vec3(1.0f));
         }
 
+        {
+            auto ent = m_ecs->createEntity();
+            physicsUnitTestObjects.push_back(ent);
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = true;
+            entPhyHande.write(physicsComponent2);
+
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ modelH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+            positionH.write(math::vec3(3.0, -3.0f, -2.0f));
+
+            auto rot = rotationH.read();
+            rot *= math::angleAxis(45.f , math::vec3(0, 1, 0));
+            rot *= math::angleAxis(45.f, math::vec3(0, 0, 1));
+
+            rotationH.write(rot);
+
+            scaleH.write(math::vec3(1.0f));
+        }
+          //*/
+        //----------- OBB to OBB Test  ------------//
+        //**
+        {
+            auto ent = m_ecs->createEntity();
+
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ modelH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+            positionH.write(math::vec3(0, -3.0f, -7.0f));
+
+            auto rot = rotationH.read();
+            rot *= math::angleAxis(20.f, math::vec3(0, 1, 0));
+            rotationH.write(rot);
+
+            scaleH.write(math::vec3(1.0f));
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+            physicsUnitTestObjects.push_back(ent);
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = true;
+            entPhyHande.write(physicsComponent2);
+
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ modelH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+            positionH.write(math::vec3(3.0, -3.0f, -7.0f));
+
+            auto rot = rotationH.read();
+            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
+            rot *= math::angleAxis(45.f, math::vec3(0, 0, 1));
+
+            rotationH.write(rot);
+
+            scaleH.write(math::vec3(1.0f));
+        }
+        //*/
+
+        //----------- OBB Edge-Edge Test  ------------//
+        //**
+        {
+            auto ent = m_ecs->createEntity();
+            //physicsUnitTestObjects.push_back(ent);
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ modelH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+            positionH.write(math::vec3(0, -3.0f, -12.0f));
+
+            auto rot = rotationH.read();
+            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
+            rotationH.write(rot);
+
+            scaleH.write(math::vec3(1.0f));
+        }
+        {
+            auto ent = m_ecs->createEntity();
+            physicsUnitTestObjects.push_back(ent);
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = true;
+            entPhyHande.write(physicsComponent2);
+
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ modelH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+            positionH.write(math::vec3(3.0, -3.0f, -13.0f));
+
+            auto rot = rotationH.read();
+            rot *= math::angleAxis(45.f, math::vec3(1, 0, 0));
+            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
+            rotationH.write(rot);
+
+            scaleH.write(math::vec3(1.0f));
+        }
 
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::differentThread>("TestChain");
         createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
+        createProcess<&TestSystem::drawInterval>("Physics",0.01);
 
     }
 
@@ -549,5 +715,94 @@ public:
          //	raiseEvent<events::exit>();
          //	//throw args_exception_msg("hehehe fuck you >:D");
          //}
+    }
+
+    void drawInterval(time::span deltaTime)
+    {
+        static auto physicsQuery = createQuery< physics::physicsComponent>();
+        int i = 0;
+        //this is called so that i can draw stuff
+        for (auto entity : physicsQuery)
+        {
+            auto rotationHandle = entity.get_component_handle<rotation>();
+            auto positionHandle = entity.get_component_handle<position>();
+            auto scaleHandle = entity.get_component_handle<scale>();
+            auto physicsComponentHandle = entity.get_component_handle<physics::physicsComponent>();
+
+            bool hasTransform = rotationHandle && positionHandle && scaleHandle;
+            bool hasNecessaryComponentsForPhysicsManifold = hasTransform && physicsComponentHandle;
+
+            if (hasNecessaryComponentsForPhysicsManifold)
+            {
+                rotation rot = rotationHandle.read();
+                position pos = positionHandle.read();
+                scale scale = scaleHandle.read();
+
+                //assemble the local transform matrix of the entity
+                math::mat4 localTransform;
+                math::compose(localTransform, scale, rot, pos);
+
+                auto physicsComponent = physicsComponentHandle.read();
+
+                for (auto physCollider : *physicsComponent.colliders)
+                {
+                    //--------------------------------- Draw Collider Outlines ---------------------------------------------//
+
+                    for (auto face : physCollider->GetHalfEdgeFaces())
+                    {
+                        //face->forEachEdge(drawFunc);
+                        physics::HalfEdgeEdge* initialEdge = face->startEdge;
+                        physics::HalfEdgeEdge* currentEdge = face->startEdge;
+
+                        math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
+                        math::vec3 faceEnd = faceStart + math::vec3((localTransform * math::vec4(face->normal, 0)));
+
+                        //debug::drawLine(faceStart, faceEnd, math::colors::green, 5.0f);
+
+                        if (!currentEdge) { return; }
+
+                        //log::debug(("---- face"));
+                        do
+                        {
+                            //log::debug(("edge"));
+                            physics::HalfEdgeEdge* edgeToExecuteOn = currentEdge;
+                            currentEdge = currentEdge->nextEdge;
+
+                            math::vec3 worldStart = localTransform * math::vec4(*(edgeToExecuteOn->edgePositionPtr), 1);
+                            math::vec3 worldEnd = localTransform * math::vec4(*(edgeToExecuteOn->nextEdge->edgePositionPtr), 1);
+
+                            debug::drawLine(worldStart, worldEnd, math::vec4(0, 1, 0, 1), 5.0f);
+                            i++;
+                        } while (initialEdge != currentEdge && currentEdge != nullptr);
+                    }
+
+                    //----------------- draw collisions --------------//
+                    for (auto line : physCollider->collisionsFound)
+                    {
+                        debug::drawLine(line.start, line.end, math::vec4(1,0,0,1), 20.0f);
+                    }
+
+                    physCollider->collisionsFound.clear();
+
+
+                    //
+                    //for (auto penetrationInfo : queries)
+                    //{
+                    //
+                    //    debug::drawLine(penetrationInfo->faceCentroid,
+                    //        penetrationInfo->faceCentroid + penetrationInfo->normal,
+                    //        math::vec4(0, 0, 0, 1), 20.0f);
+                    //    //debug::drawLine(line.start, line.end, math::vec4(1, 0, 0, 1), 20.0f);
+                    //}
+
+                    //queries.clear();
+                    //physCollider->manifoldsFound.clear();
+                }
+
+            }
+
+        }
+
+        //log::debug("{:.3f}", deltaTime);
     }
 };
