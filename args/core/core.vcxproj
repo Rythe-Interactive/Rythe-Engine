@@ -503,6 +503,7 @@
     <None Include="..\..\.clang-tidy" />
     <None Include="..\..\.editorconfig" />
     <None Include="ecs\archetype.inl" />
+    <None Include="ecs\entity_handle.inl" />
     <None Include="math\glm\detail\func_common.inl" />
     <None Include="math\glm\detail\func_common_simd.inl" />
     <None Include="math\glm\detail\func_exponential.inl" />

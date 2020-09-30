@@ -180,55 +180,46 @@ public:
         }
 
         {
-            auto ent = m_ecs->createEntity();
-            m_ecs->createComponent<rendering::renderable>(ent, { cubeH, skyboxH });
+            auto ent = createEntity();
+            ent.add_component<rendering::renderable>({ cubeH, skyboxH });
+            ent.add_components<transform>(position(), rotation(), scale(500.f));
+        }
 
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            scaleH.write(math::vec3(500.f));
+        {
+            auto ent = createEntity();
+            ent.add_component<rendering::renderable>({ floorH, floorMH });
+            ent.add_components<transform>();
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ suzanneH, vertexH }, {});
+            ent.add_components<transform>(position(0, 3, 5.1f), rotation(), scale());
+
+            auto [positionH, rotationH, scaleH] = ent.get_component_handles<transform>();
+
+            log::debug("p {}, r {}, s {}, has {}", positionH.read(), rotationH.read(), scaleH.read(), ent.has_components<transform>());
+
+            ent.remove_components<transform>();
+
+            log::debug("p {}, r {}, s {}, has {}", positionH.read(), rotationH.read(), scaleH.read(), ent.has_components<position, rotation, scale>());
+            auto [positionH2, rotationH2, scaleH2] = ent.add_components<transform>(position(0, 3, 5.1f), rotation(), scale());
+
+            log::debug("p {}, r {}, s {}, has {}", positionH2.read(), rotationH2.read(), scaleH2.read(), ent.has_components<position, rotation, scale>());
+
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ suzanneH, wireframeH }, {});
+            ent.add_components<transform>(position(0, 3, 8.1f), rotation(), scale());
         }
 
         {
             auto ent = m_ecs->createEntity();
-            m_ecs->createComponent<rendering::renderable>(ent, { floorH, floorMH });
+            ent.add_components<rendering::renderable, sah>({ suzanneH, normalH }, {});
 
-            m_ecs->createComponents<transform>(ent);
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            ent.add_component<rendering::renderable>({ suzanneH, vertexH });
-
-            m_ecs->createComponents<transform>(ent, position(0, 3, 5.1f), rotation(), scale());
-
-            auto [positionH, rotationH, scaleH] = m_ecs->getComponents<transform>(ent);
-
-            log::debug("p {}, r {}, s {}, has {}", positionH.read(), rotationH.read(), scaleH.read(), m_ecs->hasComponents<transform>(ent));
-
-            m_ecs->destroyComponents<transform>(ent);
-
-            log::debug("p {}, r {}, s {}, has {}", positionH.read(), rotationH.read(), scaleH.read(), m_ecs->hasComponents<transform>(ent));
-            m_ecs->createComponents<transform>(ent, position(0, 3, 5.1f), rotation(), scale());
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { suzanneH, wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, 3, 8.1f));
-            scaleH.write(math::vec3(1.f));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { suzanneH, normalH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, 3, 11.1f));
-            scaleH.write(math::vec3(1.f));
+            ent.add_components<transform>(position(0, 3, 11.1f), rotation(), scale());
         }
 
         /*   {
@@ -242,98 +233,68 @@ public:
            }*/
 
         {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { submeshtestH, normalH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, 10, 0));
-            scaleH.write(math::vec3(1.f));
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ submeshtestH, normalH }, {});
+            ent.add_components<transform>(position(0, 10, 0), rotation(), scale());
         }
 
         {
-            auto ent = m_ecs->createEntity();
-            m_ecs->createComponent<rendering::renderable>(ent, { axesH, normalH });
-            m_ecs->createComponents<transform>(ent);
+            auto ent = createEntity();
+            ent.add_component<rendering::renderable>({ axesH, normalH });
+            ent.add_components<transform>();
         }
 
         {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { cubeH, uvH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(5.1f, 3, 0));
-            scaleH.write(math::vec3(0.75f));
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ cubeH, uvH }, {});
+            ent.add_components<transform>(position(5.1f, 3, 0), rotation(), scale(0.75f));
         }
 
         {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { sphereH, normalH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, 3, -5.1f));
-            scaleH.write(math::vec3(2.5f));
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ sphereH, normalH }, {});
+            ent.add_components<transform>(position(0, 3, -5.1f), rotation(), scale(2.5f));
         }
 
         {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { uvsphereH, wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(-5.1f, 3, 0));
-            scaleH.write(math::vec3(2.5f));
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ uvsphereH, wireframeH }, {});
+            ent.add_components<transform>(position(-5.1f, 3, 0), rotation(), scale(2.5f));
         }
 
         setupCameraEntity();
 
         //------------------------------------- Setup entity with rigidbody -------------------------------------------//
 
-        auto physicsEnt = m_ecs->createEntity();
+        auto physicsEnt = createEntity();
 
         //setup rendering for physics ent
-        m_ecs->createComponent<rendering::renderable>(physicsEnt, { cubeH, wireframeH });
+        physicsEnt.add_component<rendering::renderable>({ cubeH, wireframeH });
 
-        auto [bodyPosition, bodyRotation, bodyScale] = m_ecs->createComponents<transform>(physicsEnt);
-
-        position bodyP = bodyPosition.read();
-        bodyP.x = 0.0f;
-        bodyP.y = 4.0f;
-        bodyP.z = 5.1f;
-        bodyPosition.write(bodyP);
+        position bodyP(0, 4, 5.1f);
+        physicsEnt.add_components<transform>(bodyP, rotation(), scale());
 
         //setup physics component on physics ent
-        auto rbHandle = m_ecs->createComponent<physics::rigidbody>(physicsEnt);
-        auto physicsComponentHandle = m_ecs->createComponent<physics::physicsComponent>(physicsEnt);
-
         physics::physicsComponent physicsComponent;
         physics::physicsComponent::init(physicsComponent);
 
         physics::cube_collider_params cubeParams;
         physicsComponent.AddBox(cubeParams);
 
-        physicsComponentHandle.write(physicsComponent);
-
-        auto rb = rbHandle.read();
-
+        physics::rigidbody rb;
         rb.globalCentreOfMass = bodyP;
         //rb.addForce( math::vec3(-9, 0, 0));
         rb.addForceAt(math::vec3(0, 4.5, 5.1f), math::vec3(-100, 0, 0));
         rb.globalCentreOfMass = bodyP;
 
-        rbHandle.write(rb);
+        physicsEnt.add_components<physics::rigidbody, physics::physicsComponent>(rb, physicsComponent);
 
         {
-            auto ent = m_ecs->createEntity();
+            auto ent = createEntity();
             ent.add_component<physics::physicsComponent>();
-            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ cubeH, wireframeH });
+            ent.add_component<rendering::renderable>({ cubeH, wireframeH });
 
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(5.1f, -2.0f, 0));
-            scaleH.write(math::vec3(0.25f));
+            ent.add_components<transform>(position(5.1f, -2.0f, 0), rotation(), scale(0.25f));
         }
 
 
@@ -345,20 +306,13 @@ public:
 
     void setupCameraEntity()
     {
-        player = m_ecs->createEntity();
-        auto [camPosHandle, camRotHandle, camScaleHandle] = m_ecs->createComponents<transform>(player);
+        player = createEntity();
+        rotation rot = math::conjugate(math::normalize(math::toQuat(math::lookAt(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0)))));
+        player.add_components<transform>(position(0.f, 3.f, 0.f), rot, scale());
 
-        rotation rot = camRotHandle.read();
-        rot = math::conjugate(math::normalize(math::toQuat(math::lookAt(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0)))));
-        camRotHandle.write(rot);
-
-        camPosHandle.write({ 0.f, 3.f, 0.f });
-
-        auto camH = m_ecs->createComponent<rendering::camera>(player);
-        rendering::camera cam = camH.read();
-
+        rendering::camera cam;
         cam.set_projection(90.f, 0.1f, 1000.f);
-        camH.write(cam);
+        player.add_component(cam);
     }
 
     void onExit(exit_action* action)

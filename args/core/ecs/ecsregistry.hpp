@@ -89,7 +89,7 @@ namespace args::core::ecs
          * @throws args_unknown_component_error When component type is unknown.
          */
         template<typename component_type>
-        component_container<component_type>* getFamily()
+        A_NODISCARD component_container<component_type>* getFamily()
         {
             return static_cast<component_container<component_type>*>(getFamily(typeHash<component_type>()));
         }
@@ -99,7 +99,7 @@ namespace args::core::ecs
          * @returns component_container_base* Pointer to the component container that contains all components of the requested type. (needs to be cast to original type to use)
          * @throws args_unknown_component_error When component type is unknown.
          */
-        component_container_base* getFamily(id_type componentTypeId);
+        A_NODISCARD component_container_base* getFamily(id_type componentTypeId);
 
         /**@brief Get component handle of a certain type attached to a certain entity.
          * @param entityId Id of entity to get the component from.
@@ -108,7 +108,7 @@ namespace args::core::ecs
          * @note Handle needs to force_cast to component_handle<T> in order to use correctly.
          * @throws args_entity_not_found_error If the entity id does not belong to a valid entity.
          */
-        bool hasComponent(id_type entityId, id_type componentTypeId);
+        A_NODISCARD bool hasComponent(id_type entityId, id_type componentTypeId);
 
         /**@brief Get component handle of a certain type attached to a certain entity.
          * @tparam component_type Type of component to get handle of.
@@ -117,19 +117,19 @@ namespace args::core::ecs
          * @throws args_entity_not_found_error If the entity id does not belong to a valid entity.
          */
         template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
-        bool hasComponent(id_type entityId)
+        A_NODISCARD bool hasComponent(id_type entityId)
         {
             return hasComponent(entityId, typeHash<component_type>());
         }
 
         template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
-        bool hasComponents(id_type entityId)
+        A_NODISCARD bool hasComponents(id_type entityId)
         {
             return hasComponent<component_type>(entityId) && (hasComponent<component_types>(entityId) && ...);
         }
 
         template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
-        bool hasComponents(id_type entityId)
+        A_NODISCARD bool hasComponents(id_type entityId)
         {
             return archetype_type::has(this, entityId);
         }
@@ -141,7 +141,7 @@ namespace args::core::ecs
          * @note Handle needs to force_cast to component_handle<T> in order to use correctly.
          * @throws args_entity_not_found_error If the entity id does not belong to a valid entity.
          */
-        component_handle_base getComponent(id_type entityId, id_type componentTypeId);
+        A_NODISCARD component_handle_base getComponent(id_type entityId, id_type componentTypeId);
 
         /**@brief Get component handle of a certain type attached to a certain entity.
          * @tparam component_type Type of component to get handle of.
@@ -150,19 +150,19 @@ namespace args::core::ecs
          * @throws args_entity_not_found_error If the entity id does not belong to a valid entity.
          */
         template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
-        component_handle<component_type> getComponent(id_type entityId)
+        A_NODISCARD component_handle<component_type> getComponent(id_type entityId)
         {
             return force_value_cast<component_handle<component_type>>(getComponent(entityId, typeHash<component_type>()));
         }
 
         template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
-        std::tuple<component_handle<component_type>, component_handle<component_types>...> getComponents(id_type entityId)
+        A_NODISCARD std::tuple<component_handle<component_type>, component_handle<component_types>...> getComponents(id_type entityId)
         {
             return std::make_tuple(getComponent<component_type>(entityId), getComponent<component_types>(entityId)...);
         }
 
         template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
-        auto getComponents(id_type entityId)
+        A_NODISCARD auto getComponents(id_type entityId)
         {
             return archetype_type::get(this, entityId);
         }
@@ -180,10 +180,17 @@ namespace args::core::ecs
         }
 
         template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
-        component_handle<component_type> createComponent(id_type entityId, const component_type& component)
+        component_handle<std::remove_reference_t<component_type>> createComponent(id_type entityId, component_type&& component)
         {
-            component_type temp = component;
-            return force_value_cast<component_handle<component_type>>(createComponent(entityId, typeHash<component_type>(), &temp));
+            std::remove_reference_t<component_type> temp = component;
+            return force_value_cast<component_handle<std::remove_reference_t<component_type>>>(createComponent(entityId, typeHash<std::remove_reference_t<component_type>>(), &temp));
+        }
+
+        template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
+        component_handle<std::remove_reference_t<component_type>> createComponent(id_type entityId, component_type& component)
+        {
+            std::remove_reference_t<component_type> temp = component;
+            return force_value_cast<component_handle<std::remove_reference_t<component_type>>>(createComponent(entityId, typeHash<std::remove_reference_t<component_type>>(), &temp));
         }
 
         template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
@@ -205,9 +212,9 @@ namespace args::core::ecs
         }
 
         template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
-        std::tuple<component_handle<component_type>, component_handle<component_types>...> createComponents(id_type entityId, component_type&& defaultValue, component_types&&... defaultValues)
+        std::tuple<component_handle<std::remove_reference_t<component_type>>, component_handle<std::remove_reference_t<component_types>>...> createComponents(id_type entityId, component_type&& defaultValue, component_types&&... defaultValues)
         {
-            return std::make_tuple(createComponent<component_type>(entityId, std::forward<component_type>(defaultValue)), createComponent<component_types>(entityId, std::forward<component_types>(defaultValues))...);
+            return std::make_tuple(createComponent<std::remove_reference_t<component_type>>(entityId, std::forward<component_type>(defaultValue)), createComponent<std::remove_reference_t<component_types>>(entityId, std::forward<component_types>(defaultValues))...);
         }
 
         /**@brief Create component of a certain type attached to a certain entity.
@@ -270,7 +277,7 @@ namespace args::core::ecs
          * @returns entity_handle Entity handle pointing to the newly created entity.
          * @throws args_entity_exists_error When the next entity id is somehow already taken. (only possible if someone else messed with my/Glyn's code)
          */
-        entity_handle createEntity();
+        A_NODISCARD entity_handle createEntity();
 
         /**@brief Destroys entity and all of its components.
          * @param entityId Id of entity you wish to destroy.
@@ -319,4 +326,5 @@ namespace args::core::ecs
     };
 }
 
+#include <core/ecs/entity_handle.inl>
 #include <core/ecs/archetype.inl>

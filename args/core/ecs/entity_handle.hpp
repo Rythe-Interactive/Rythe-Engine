@@ -3,6 +3,7 @@
 #include <core/containers/sparse_map.hpp>
 #include <core/containers/hashed_sparse_set.hpp>
 #include <core/platform/platform.hpp>
+#include <core/ecs/archetype.hpp>
 #include <memory>
 
 /**
@@ -166,6 +167,12 @@ namespace args::core::ecs
         template<typename component_type>
         A_NODISCARD bool has_component() const { return has_component(typeHash<component_type>()); }
 
+        template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+        A_NODISCARD bool has_components() const;
+
+        template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
+        A_NODISCARD bool has_components() const;
+
         /**@brief Check if entity contains a certain component.
          * @param componentTypeId Type id of component to check for.
          * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
@@ -193,6 +200,12 @@ namespace args::core::ecs
         {
             return force_value_cast<component_handle<component_type>>(get_component_handle(typeHash<component_type>()));
         }
+
+        template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+        A_NODISCARD auto get_component_handles() const;
+
+        template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
+        A_NODISCARD auto get_component_handles() const;
 
         template<typename component_type>
         A_NODISCARD component_type read_component() const
@@ -250,10 +263,32 @@ namespace args::core::ecs
          * @returns component_handle<component_type> Valid component handle for the newly created component.
          */
         template<typename component_type>
-        component_handle<component_type> add_component(component_type&& value) const
+        component_handle<std::remove_reference_t<component_type>> add_component(component_type&& value) const
         {
-            return force_value_cast<component_handle<component_type>>(add_component(typeHash<component_type>(), reinterpret_cast<void*>(&value)));
+            return force_value_cast<component_handle<std::remove_reference_t<component_type>>>(add_component(typeHash<std::remove_reference_t<component_type>>(), reinterpret_cast<void*>(&value)));
         }
+
+        template<typename component_type>
+        component_handle<std::remove_reference_t<component_type>> add_component(const component_type& value) const
+        {
+            return force_value_cast<component_handle<std::remove_reference_t<component_type>>>(add_component(typeHash<std::remove_reference_t<component_type>>(), reinterpret_cast<void*>(&value)));
+        }
+
+
+        template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+        auto add_components() const;
+
+        template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
+        auto add_components() const;
+
+        template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+        auto add_components(component_type&& value, component_types&&... values) const;        
+
+        template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+        auto add_components(component_type& value, component_types&... values) const;
+
+        template<typename archetype_type, typename... component_types, typename = inherits_from<archetype_type, archetype_base>>
+        auto add_components(component_types&&... values) const;
 
         /**@brief Remove component from entity.
          * @param componentTypeId Type id of component to remove.
@@ -276,6 +311,13 @@ namespace args::core::ecs
         {
             remove_component(typeHash<component_type>());
         }
+
+        template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+        void remove_components() const;
+
+        template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
+        void remove_components() const;
+
 
         /**@brief Destroy this entity. Destroys entity and invalidates handle. (also destroys all of it's components)
          * @param recurse Destroy all children and children of children as well? Default value is true.

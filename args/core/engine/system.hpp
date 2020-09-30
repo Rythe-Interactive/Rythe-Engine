@@ -72,6 +72,11 @@ namespace args::core
             m_scheduler->waitForProcessSync();
         }
 
+        A_NODISCARD ecs::entity_handle createEntity()
+        {
+            return m_ecs->createEntity();
+        }
+
         template<typename... component_types>
         A_NODISCARD ecs::EntityQuery createQuery()
         {

@@ -13,6 +13,7 @@ namespace args::core
         position(position&&) = default;
         position(const math::vec3& src) : math::vec3(src) {}
         position(float x, float y, float z) : math::vec3(x, y, z) {}
+        position(float v) : math::vec3(v) {}
         position& operator=(const position&) = default;
         position& operator=(position&&) = default;
         position& operator=(const math::vec3& src)
@@ -63,6 +64,7 @@ namespace args::core
     {
         scale() : math::vec3(1, 1, 1) {}
         scale(float x, float y, float z) : math::vec3(x, y, z) {}
+        scale(float v) : math::vec3(v) {}
         scale(const scale&) = default;
         scale(scale&&) = default;
         scale(const math::vec3& src) : math::vec3(src) {}
