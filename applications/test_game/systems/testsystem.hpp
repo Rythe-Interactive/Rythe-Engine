@@ -502,11 +502,11 @@ public:
 
     void update(time::span deltaTime)
     {
-        debug::drawLine(math::vec3(0, -1, 0), math::vec3(0, -1, 5), math::colors::black);
-        debug::drawLine(math::vec3(0, 0, 0), math::vec3(0, 1, 0), math::colors::black);
-        debug::drawLine(math::vec3(1, 0, 0), math::vec3(0.5, 1, 0), math::colors::red, 1, false);
-        debug::drawLine(math::vec3(1, 0, 0), math::vec3(0, 0, 1), math::colors::green, 10, true);
-        debug::drawLine(math::vec3(1, 0, 0), math::vec3(0, 3, 1), math::colors::yellow, 4, false);
+        //debug::drawLine(math::vec3(0, -1, 0), math::vec3(0, -1, 5), math::colors::black);
+        //debug::drawLine(math::vec3(0, 0, 0), math::vec3(0, 1, 0), math::colors::black);
+        debug::drawLine(math::vec3(0, 0, 0), math::vec3(0, 1, 0), math::colors::red, 1, false);
+        debug::drawLine(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::colors::green, 1, false);
+        debug::drawLine(math::vec3(0, 0, 0), math::vec3(1, 0, 0), math::colors::yellow, 1, false);
 
         //log::info("still alive! {}",deltaTime.seconds());
         static auto query = createQuery<sah>();

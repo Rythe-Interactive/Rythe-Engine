@@ -1,9 +1,84 @@
 #pragma once
+#define AL_ALEXT_PROTOTYPES
+#include <al/alext.h>
 
 namespace args::audio
 {
+	inline void AudioSystem::setup()
+	{
+		m_lock = new async::readonly_rw_spinlock();
+		async::readwrite_guard guard(*m_lock);
+
+		data::alDevice = alcOpenDevice(NULL);
+		if (!data::alDevice)
+		{
+			// Failed to create alcDevice
+			log::error("OpenAl device failed to open");
+#if defined(AUDIO_EXIT_ON_FAIL)
+			raiseEvent<events::exit>();
+#endif
+			return;
+		}
+
+		// Succesfully created alcDevice
+		log::info("Succesfully created openAl device");
+
+		data::alContext = alcCreateContext(data::alDevice, NULL);
+		if (!alcMakeContextCurrent(data::alContext))
+		{
+			// Failed to create alcContext
+			log::error("OpenAl context failed to create");
+#if defined(AUDIO_EXIT_ON_FAIL)
+			raiseEvent<events::exit>();
+#endif
+			return;
+		}
+		// Succesfully created alcContext
+		log::info("Succesfully created openAl context");
+
+		alListener3f(AL_POSITION, 0, 0, 0);
+		alListener3f(AL_VELOCITY, 0, 0, 0);
+		ALfloat ori[] = { 0, 0, 1.0f, 0, 1.0f, 0 };
+		alListenerfv(AL_ORIENTATION, ori);
+
+
+		// Check and set device frequency
+		ALCint srate;
+		alcGetIntegerv(data::alDevice, ALC_FREQUENCY, 1, &srate);
+		log::info("OpenAl device freq: {}", srate);
+
+		/*if (srate != 44100)
+		{
+			if (!alcResetDeviceSOFT(data::alDevice, NULL))
+			{
+				log::warn("alcDevice failed to reset");
+			}
+			else
+			{
+				log::info("alcDevice succesfully reset");
+				alcGetIntegerv(data::alDevice, ALC_FREQUENCY, 1, &srate);
+				log::info("OpenAl device freq: {}", srate);
+			}
+		}*/
+
+		//ARGS function binding
+
+		sourceQuery = createQuery<audio_source, position>();
+		listenerQuery = createQuery<audio_listener, position, rotation>();
+
+		createProcess<&AudioSystem::update>("Audio");
+		bindToEvent<events::component_creation<audio_source>, &AudioSystem::onComponentCreate>();
+		bindToEvent<events::component_destruction<audio_source>, &AudioSystem::onComponentDestroy>();
+
+		// Release context on this thread
+		alcMakeContextCurrent(nullptr);
+	}
+
 	inline void AudioSystem::update(time::span deltatime)
 	{
+		async::readwrite_guard guard(*m_lock);
+		alcMakeContextCurrent(data::alContext);
+
 		for (auto entity : sourceQuery)
 		{
 			auto sourceHandle = entity.get_component_handle<audio_source>();
@@ -29,10 +104,57 @@ namespace args::audio
 			ALfloat ori[] = { forward.x, forward.y, forward.z, up.x, up.y, up.z };
 			alListenerfv(AL_ORIENTATION, ori);
 		}
+
+		alcMakeContextCurrent(nullptr);
+	}
+
+	inline void AudioSystem::onComponentCreate(events::component_creation<audio_source>* event)
+	{
+		async::readwrite_guard guard(*m_lock);
+		alcMakeContextCurrent(data::alContext);
+
+		auto handle = event->entity.get_component_handle<audio_source>();
+		audio_source a = handle.read();
+		// do something with a.
+		if (!initSource(a))
+		{
+			handle.destroy();
+
+			alcMakeContextCurrent(nullptr);
+
+#if defined(AUDIO_EXIT_ON_FAIL)
+			raiseEvent<events::exit>();
+#endif
+			return;
+		}
+		log::debug("playing sound");
+		alSourcePlay(a.m_sourceId);
+
+		handle.write(a);
+		++data::sourceCount;
+
+		alcMakeContextCurrent(nullptr);
+	}
+
+
+	inline void AudioSystem::onComponentDestroy(events::component_destruction<audio_source>* event)
+	{
+		async::readwrite_guard guard(*m_lock);
+		alcMakeContextCurrent(data::alContext);
+
+		auto handle = event->entity.get_component_handle<audio_source>();
+		audio_source a = handle.read();
+		handle.write(a);
+		--data::sourceCount;
+
+		alcMakeContextCurrent(nullptr);
 	}
 
 	inline bool AudioSystem::initSource(audio_source& source)
 	{
+		// No need for setting a lock and makeContextCurrent since this function
+		// is called from another function (AudioSystem::onComponentCreate).
+
 		alGenSources((ALuint)1, &source.m_sourceId);
 		alSourcef(source.m_sourceId, AL_PITCH, 1);
 		alSourcef(source.m_sourceId, AL_GAIN, 1);
