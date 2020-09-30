@@ -36,7 +36,7 @@
     <ClInclude Include="data\penetrationquery.h" />
     <ClInclude Include="physicsconstants.h" />
     <ClInclude Include="physicsimport.h" />
-    <ClInclude Include="physicsstatics.h" />
+    <ClInclude Include="physics_statics.hpp" />
     <ClInclude Include="physics_contact.h" />
     <ClInclude Include="data\physics_manifold.hpp" />
     <ClInclude Include="components\physics_component.hpp" />

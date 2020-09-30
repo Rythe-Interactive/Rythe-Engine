@@ -1,5 +1,5 @@
 #include <physics/colliders/convexcollider.hpp>
-#include <physics/PhysicsStatics.h>
+#include <physics/physics_statics.hpp>
 
 #include <physics/data/convexconvexpenetrationquery.h>
 #include <physics/data/edgepenetrationquery.h>

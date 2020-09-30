@@ -80,9 +80,6 @@
     <ClInclude Include="components\rigidbody.hpp">
       <Filter>components</Filter>
     </ClInclude>
-    <ClInclude Include="physicsstatics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="halfedgeedge.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -96,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\penetrationquery.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="physics_statics.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
