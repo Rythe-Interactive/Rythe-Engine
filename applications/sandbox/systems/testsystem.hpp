@@ -50,10 +50,16 @@ struct fullscreen_action : public app::input_action<fullscreen_action> {};
 struct escape_cursor_action : public app::input_action<escape_cursor_action> {};
 struct vsync_action : public app::input_action<vsync_action> {};
 
+struct physics_test_move : public app::input_axis<physics_test_move>{};
+
+
 class TestSystem final : public System<TestSystem>
 {
 public:
     ecs::entity_handle player;
+
+
+    std::vector< ecs::entity_handle > physicsUnitTestObjects;
 
     virtual void setup()
     {
@@ -113,6 +119,8 @@ public:
         log::error("Hello World");
         log::debug("Hello World");
 
+        app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::LEFT, -1.f);
+        app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::RIGHT, 1.f);
         app::InputSystem::createBinding<player_move>(app::inputmap::method::W, 1.f);
         app::InputSystem::createBinding<player_move>(app::inputmap::method::S, -1.f);
         app::InputSystem::createBinding<player_strive>(app::inputmap::method::D, 1.f);
@@ -135,6 +143,7 @@ public:
         bindToEvent<fullscreen_action, &TestSystem::onFullscreen>();
         bindToEvent<escape_cursor_action, &TestSystem::onEscapeCursor>();
         bindToEvent<vsync_action, &TestSystem::onVSYNCSwap>();
+        bindToEvent<physics_test_move, &TestSystem::onUnitPhysicsUnitTestMove>();
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
         window.enableCursor(false);
@@ -283,6 +292,17 @@ public:
 
         setupCameraEntity();
 
+
+
+        //---------------------------------------------------------- Physics Collision Unit Test -------------------------------------------------------------------//
+
+        physics::cube_collider_params cubeParams;
+        cubeParams.breadth = 2.0f;
+        cubeParams.width = 2.0f;
+        cubeParams.height = 2.0f;
+
+        //----------- AABB to AABB Test  ------------//
+        //**
         {
             auto ent = m_ecs->createEntity();
 
@@ -298,7 +318,7 @@ public:
 
 
             auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH, wireframeH });
+            renderableHandle.write({ cubeH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(0, -3.0f, 5.0f));
@@ -320,7 +340,7 @@ public:
 
 
             auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH, wireframeH });
+            renderableHandle.write({ cubeH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(3.0, -2.0f, 4.0f));
@@ -345,7 +365,7 @@ public:
 
 
             auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH, wireframeH });
+            renderableHandle.write({ cubeH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(0, -3.0f, -2.0f));
@@ -367,7 +387,7 @@ public:
 
 
             auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH, wireframeH });
+            renderableHandle.write({ cubeH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(3.0, -3.0f, -2.0f));
@@ -398,7 +418,7 @@ public:
 
 
             auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH, wireframeH });
+            renderableHandle.write({ cubeH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(0, -3.0f, -7.0f));
@@ -425,7 +445,7 @@ public:
 
 
             auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH, wireframeH });
+            renderableHandle.write({ cubeH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(3.0, -3.0f, -7.0f));
@@ -457,7 +477,7 @@ public:
 
 
             auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH, wireframeH });
+            renderableHandle.write({ cubeH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(0, -3.0f, -12.0f));
@@ -483,7 +503,7 @@ public:
 
 
             auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ modelH, wireframeH });
+            renderableHandle.write({ cubeH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(3.0, -3.0f, -13.0f));
@@ -619,6 +639,21 @@ public:
             });
     }
 
+    void onUnitPhysicsUnitTestMove(physics_test_move* action)
+    {
+        for (auto entity : physicsUnitTestObjects)
+        {
+            auto posHandle = entity.get_component_handle<position>();
+
+            auto pos = posHandle.read();
+            pos.x += 0.005 * action->value;
+
+     
+            posHandle.write(pos);
+
+        }
+    }
+
     void update(time::span deltaTime)
     {
         debug::drawLine(math::vec3(0, 0, 0), math::vec3(1, 0, 0), math::colors::red, 10);
@@ -648,6 +683,8 @@ public:
 
             comp.write({ frameCount });
         }
+
+       
 
         //if (buffer > 1.f)
         //{
