@@ -64,6 +64,7 @@ namespace args::audio
         * @brief ALC Extentions and device sample rate
         */
         void queryInformation();
+        math::vec3 m_lisPos;
 
         struct ARGS_API data
         {

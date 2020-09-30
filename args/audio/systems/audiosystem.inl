@@ -42,6 +42,7 @@ namespace args::audio
 		alListenerfv(AL_ORIENTATION, ori);
 		log::info("initialized listener!");
 
+		alDopplerFactor(1.0f);
 		alDistanceModel(AL_EXPONENT_DISTANCE);
 
 		queryInformation();
@@ -85,8 +86,9 @@ namespace args::audio
 			//audio_source a = sourceHandle.read();
 		}
 
-		for (auto entity : listenerQuery)
+		if (listenerQuery.size() != 0)
 		{
+			auto entity = listenerQuery[0];
 			auto listenerHandle = entity.get_component_handle<audio_listener>();
 			auto positionHandle = entity.get_component_handle<position>();
 			auto rotationHandle = entity.get_component_handle<rotation>();
@@ -95,13 +97,16 @@ namespace args::audio
 			rotation r = rotationHandle.read();
 
 			alListener3f(AL_POSITION, p.x, p.y, p.z);
-			alListener3f(AL_VELOCITY, 0, 0, 0);
+			math::vec3 vel = m_lisPos - p;
+			m_lisPos = p;
+			alListener3f(AL_VELOCITY, vel.x*100, vel.y*100, vel.z*100);
 			math::mat3 mat3 = math::toMat3(r);
-			math::vec3 forward = mat3 * math::vec3(0.f, 0.f, 1.f);
+			math::vec3 forward = mat3 * math::vec3(0.f, 0.f, -1.f);
 			math::vec3 up = mat3 * math::vec3(0.f, 1.f, 0.f);
 			ALfloat ori[] = { forward.x, forward.y, forward.z, up.x, up.y, up.z };
 			alListenerfv(AL_ORIENTATION, ori);
 		}
+		
 
 		alcMakeContextCurrent(nullptr);
 	}
