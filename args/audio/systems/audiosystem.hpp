@@ -51,9 +51,19 @@ namespace args::audio
 
         void update(time::span deltatime);
 
+        static void setDistanceModel(ALenum distanceModel);
+
     private:
         bool initSource(audio_source& source);
         async::readonly_rw_spinlock* m_lock;
+
+        /**
+        * @brief Function to print information about openal.
+        * @brief Information that will be printed includes:
+        * @brief Vendor, Version, Renderer, OpenALExtensions,
+        * @brief ALC Extentions and device sample rate
+        */
+        void queryInformation();
 
         struct ARGS_API data
         {

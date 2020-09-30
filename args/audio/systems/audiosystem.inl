@@ -19,7 +19,6 @@ namespace args::audio
 #endif
 			return;
 		}
-
 		// Succesfully created alcDevice
 		log::info("Succesfully created openAl device");
 
@@ -28,6 +27,7 @@ namespace args::audio
 		{
 			// Failed to create alcContext
 			log::error("OpenAl context failed to create");
+			openal_error();
 #if defined(AUDIO_EXIT_ON_FAIL)
 			raiseEvent<events::exit>();
 #endif
@@ -40,26 +40,11 @@ namespace args::audio
 		alListener3f(AL_VELOCITY, 0, 0, 0);
 		ALfloat ori[] = { 0, 0, 1.0f, 0, 1.0f, 0 };
 		alListenerfv(AL_ORIENTATION, ori);
+		log::info("initialized listener!");
 
+		alDistanceModel(AL_EXPONENT_DISTANCE);
 
-		// Check and set device frequency
-		ALCint srate;
-		alcGetIntegerv(data::alDevice, ALC_FREQUENCY, 1, &srate);
-		log::info("OpenAl device freq: {}", srate);
-
-		/*if (srate != 44100)
-		{
-			if (!alcResetDeviceSOFT(data::alDevice, NULL))
-			{
-				log::warn("alcDevice failed to reset");
-			}
-			else
-			{
-				log::info("alcDevice succesfully reset");
-				alcGetIntegerv(data::alDevice, ALC_FREQUENCY, 1, &srate);
-				log::info("OpenAl device freq: {}", srate);
-			}
-		}*/
+		queryInformation();
 
 		//ARGS function binding
 
@@ -72,6 +57,22 @@ namespace args::audio
 
 		// Release context on this thread
 		alcMakeContextCurrent(nullptr);
+	}
+
+	inline void AudioSystem::queryInformation()
+	{
+		const ALchar* vendor = alGetString(AL_VENDOR);
+		const ALchar* version = alGetString(AL_VERSION);
+		const ALchar* renderer = alGetString(AL_RENDERER);
+		const ALchar* openALExtensions = alGetString(AL_EXTENSIONS);
+		const ALchar* ALCExtensions = alcGetString(data::alDevice, ALC_EXTENSIONS);
+		const ALchar* auxSends = "";//alGetString(AL_MAX_AUXILIARY_SEND_FILTER_GAIN_AUTO);
+		log::info("OpenAL info:\n\n\t\t\tOpenAL information\n\tVendor: {}\n\tVersion: {}\n\tRenderer: {}\n\tOpenAl Extensions: {}\n\tALC Extensions: {}\n\tmax aux send filter gain auto: {}\n",
+			vendor, version, renderer, openALExtensions, ALCExtensions, auxSends);
+
+		ALCint srate;
+		alcGetIntegerv(data::alDevice, ALC_FREQUENCY, 1, &srate);
+		log::info("OpenAl device freq: {}", srate);
 	}
 
 	inline void AudioSystem::update(time::span deltatime)
@@ -176,7 +177,7 @@ namespace args::audio
 
 		alGenBuffers((ALuint)1, &source.m_audioBufferId);
 
-		fs::view view("assets://audio/02_Vampire_Killer_(Courtyard)_MONO.mp3");
+		fs::view view("assets://audio/365921__inspectorj__waterfall-small-b[mono].mp3");
 		auto result = view.get();
 		if (result != common::valid)
 		{
@@ -208,5 +209,10 @@ namespace args::audio
 			source.m_audioInfo.avg_bitrate_kbps);
 
 		return true;
+	}
+
+	inline void AudioSystem::setDistanceModel(ALenum distanceModel)
+	{
+		alDistanceModel(distanceModel);
 	}
 }

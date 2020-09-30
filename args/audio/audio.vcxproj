@@ -65,6 +65,7 @@
     <TargetName>args-$(ProjectName)</TargetName>
     <IncludePath>$(SolutionDir)args;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
     <ClangTidyChecks>-c++17-extensions-*</ClangTidyChecks>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -73,6 +74,7 @@
     <TargetName>args-$(ProjectName)</TargetName>
     <IncludePath>$(SolutionDir)args;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
     <ClangTidyChecks>-c++17-extensions-*</ClangTidyChecks>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

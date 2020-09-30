@@ -38,6 +38,9 @@
     <ClInclude Include="components\audio_source.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="components\audio_listener.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="systems\audiosystem.inl">
