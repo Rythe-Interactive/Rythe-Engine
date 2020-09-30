@@ -24,6 +24,7 @@ namespace args::rendering
         uint_max frameCount = 0;
         uint temp = 0;
         time::span totalTime;
+        bool m_exit = false;
 
         async::readonly_rw_spinlock debugLinesLock;
         std::unordered_set<debug::debug_line> debugLines;
@@ -45,7 +46,7 @@ namespace args::rendering
                 debugLines.insert(*line);
         }
 
-        void debugRenderPass(const math::mat4& view, const math::mat4& projection)
+        void debugRenderPass(const math::mat4& view, const math::mat4& projection, time::time_span<fast_time> deltaTime)
         {
             std::vector<debug::debug_line> lines;
 
@@ -55,15 +56,29 @@ namespace args::rendering
                     return;
 
                 lines.assign(debugLines.begin(), debugLines.end());
-                debugLines.clear();
+
+                std::vector<debug::debug_line> toRemove;
+                for (auto& line : debugLines)
+                {
+                    line.timeBuffer += deltaTime;
+
+                    if (line.timeBuffer >= line.time)
+                        toRemove.push_back(line);
+                }
+
+                for (auto line : toRemove)
+                    debugLines.erase(line);
             }            
 
-            static material_handle debugMaterial = MaterialCache::create_material("color", ShaderCache::create_shader("color", "assets://shaders/debug.glsl"_view));
+            static material_handle debugMaterial = MaterialCache::create_material("debug", "assets://shaders/debug.glsl"_view);
             static app::gl_id vertexBuffer = -1;
             static size_type vertexBufferSize = 0;
             static app::gl_id colorBuffer = -1;
             static size_type colorBufferSize = 0;
             static app::gl_id vao = -1;
+
+            if (debugMaterial == invalid_material_handle)
+                return;
 
             if (vertexBuffer == -1)
                 glGenBuffers(1, &vertexBuffer);
@@ -124,6 +139,13 @@ namespace args::rendering
                     glBufferSubData(GL_ARRAY_BUFFER, 0, colorCount * sizeof(math::color), colors.data());
 
                     auto colorAttrib = debugMaterial.get_attribute("color");
+
+                    if (colorAttrib == invalid_attribute)
+                    {
+                        glBindBuffer(GL_ARRAY_BUFFER, 0);
+                        break;
+                    }
+
                     colorAttrib.set_attribute_pointer(4, GL_FLOAT, GL_FALSE, 0, 0);
 
                     ///------------ camera ------------///
@@ -156,6 +178,7 @@ namespace args::rendering
 
             bindToEvent<debug::debug_line, &Renderer::drawLine>();
 
+            bindToEvent<events::exit, &Renderer::onExit>();
             createProcess<&Renderer::render>("Rendering");
             renderablesQuery = createQuery<renderable, position, rotation, scale>();
             cameraQuery = createQuery<camera, position, rotation, scale>();
@@ -186,7 +209,12 @@ namespace args::rendering
                 }, this);
 
             while (!initialized.load(std::memory_order_acquire))
-                std::this_thread::sleep_for(1ns);
+                std::this_thread::yield();
+        }
+
+        void onExit(events::exit* event)
+        {
+            m_exit = true;
         }
 
         bool initData(const app::window& window)
@@ -298,9 +326,6 @@ namespace args::rendering
             glFrontFace(GL_CW);
             glEnable(GL_MULTISAMPLE);
 
-            math::ivec2 viewportSize = app::ContextHelper::getFramebufferSize(window);
-            glViewport(0, 0, viewportSize.x, viewportSize.y);
-
             const unsigned char* vendor = glGetString(GL_VENDOR);
             const unsigned char* renderer = glGetString(GL_RENDERER);
             const unsigned char* version = glGetString(GL_VERSION);
@@ -321,8 +346,10 @@ namespace args::rendering
 
         void render(time::time_span<fast_time> deltaTime)
         {
-            if (!m_ecs->world.has_component<app::window>())
+            if (!m_ecs->world.has_component<app::window>() || m_exit)
                 return;
+
+            //waitForSync();
 
             time::clock renderClock;
             renderClock.start();
@@ -332,68 +359,84 @@ namespace args::rendering
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
-            glClearColor(0.3f, 0.5f, 1.0f, 1.0f);
-            glClearDepth(0.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            batches.clear();
-
-            auto camEnt = cameraQuery[0];
-
-            math::mat4 view(1.f);
-            math::compose(view, camEnt.get_component_handle<scale>().read(), camEnt.get_component_handle<rotation>().read(), camEnt.get_component_handle<position>().read());
-            view = math::inverse(view);
-
-            math::mat4 projection = camEnt.get_component_handle<camera>().read().projection;
-
-            for (auto ent : renderablesQuery)
+            math::ivec2 viewportSize = app::ContextHelper::getFramebufferSize(window);
+            if (viewportSize.x != 0 && viewportSize.y != 0)
             {
-                renderable rend = ent.get_component_handle<renderable>().read();
 
-                math::mat4 modelMatrix;
-                math::compose(modelMatrix, ent.get_component_handle<scale>().read(), ent.get_component_handle<rotation>().read(), ent.get_component_handle<position>().read());
-                batches[rend.model][rend.material].push_back(modelMatrix);
-            }
+                glViewport(0, 0, viewportSize.x, viewportSize.y);
+                glClearColor(0.3f, 0.5f, 1.0f, 1.0f);
+                glClearDepth(0.0f);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            for (auto [modelHandle, instancesPerMaterial] : batches)
-            {
-                if (!modelHandle.is_buffered())
-                    modelHandle.buffer_data(modelMatrixBufferId);
+                batches.clear();
 
-                model mesh = modelHandle.get_model();
-                if (mesh.submeshes.empty())
-                    continue;
+                auto camEnt = cameraQuery[0];
 
-                for (auto [material, instances] : instancesPerMaterial)
+                math::mat4 view(1.f);
+                math::compose(view, camEnt.get_component_handle<scale>().read(), camEnt.get_component_handle<rotation>().read(), camEnt.get_component_handle<position>().read());
+                view = math::inverse(view);
+
+                math::mat4 projection = camEnt.get_component_handle<camera>().read().get_projection(((float)viewportSize.x) / viewportSize.y);
+
+                for (auto ent : renderablesQuery)
                 {
-                    glBindBuffer(GL_ARRAY_BUFFER, modelMatrixBufferId);
-                    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(math::mat4) * instances.size(), instances.data());
-                    glBindBuffer(GL_ARRAY_BUFFER, 0);
+                    renderable rend = ent.get_component_handle<renderable>().read();
 
-                    material.bind();
-                    material.prepare();
+                    if (rend.material == invalid_material_handle)
+                    {
+                        log::warn("Entity {} has an invalid material.", ent.get_id());
+                        continue;
+                    }
 
-                    glUniformMatrix4fv(SV_VIEW, 1, false, math::value_ptr(view));
-                    glUniformMatrix4fv(SV_PROJECT, 1, false, math::value_ptr(projection));
-
-                    glBindVertexArray(mesh.vertexArrayId);
-                    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);
-
-                    for (auto submesh : mesh.submeshes)
-                        glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)submesh.indexOffset, (GLsizei)instances.size());
-
-                    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-                    glBindVertexArray(0);
-                    material.release();
+                    math::mat4 modelMatrix;
+                    math::compose(modelMatrix, ent.get_component_handle<scale>().read(), ent.get_component_handle<rotation>().read(), ent.get_component_handle<position>().read());
+                    batches[rend.model][rend.material].push_back(modelMatrix);
                 }
-            }
 
-            debugRenderPass(view, projection);
+                for (auto [modelHandle, instancesPerMaterial] : batches)
+                {
+                    if (!modelHandle.is_buffered())
+                        modelHandle.buffer_data(modelMatrixBufferId);
+
+                    model mesh = modelHandle.get_model();
+                    if (mesh.submeshes.empty())
+                        continue;
+
+                    for (auto [material, instances] : instancesPerMaterial)
+                    {
+                        glBindBuffer(GL_ARRAY_BUFFER, modelMatrixBufferId);
+                        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(math::mat4) * instances.size(), instances.data());
+                        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+                        material.bind();
+                        material.prepare();
+
+                        glUniformMatrix4fv(SV_VIEW, 1, false, math::value_ptr(view));
+                        glUniformMatrix4fv(SV_PROJECT, 1, false, math::value_ptr(projection));
+
+                        glBindVertexArray(mesh.vertexArrayId);
+                        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);
+
+                        for (auto submesh : mesh.submeshes)
+                            glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)(submesh.indexOffset * sizeof(uint)), (GLsizei)instances.size());
+
+                        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+                        glBindVertexArray(0);
+                        material.release();
+                    }
+                }
+
+                debugRenderPass(view, projection, deltaTime);
+            }
+            else
+            {
+                log::error("Invalid frame-buffer size {}", viewportSize);
+            }
 
             app::ContextHelper::makeContextCurrent(nullptr);
             auto elapsed = renderClock.end();
 
-            /*if (temp < 3)
+           /* if (temp < 3)
             {
                 temp++;
                 log::debug("render took: {:.3f}ms\tdeltaTime: {:.3f}ms fps: {:.3f}", elapsed.milliseconds(), deltaTime.milliseconds(), 1.0 / deltaTime);

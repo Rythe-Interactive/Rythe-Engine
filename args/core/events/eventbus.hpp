@@ -39,8 +39,6 @@ namespace args::core::events
         template<typename event_type, typename... Args, typename = inherits_from<event_type, event<event_type>>>
         void raiseEvent(Args&&... arguments)
         {
-            //std::cout << "\n\n" << typeid(event_type).name() << "\n\n";
-
             event_type* eventptr;
 
             event_type event(arguments...); // Create new event.

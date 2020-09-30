@@ -13,7 +13,7 @@ namespace args::core::ecs
 
     EntityQuery::EntityQuery(EntityQuery&& other)
     {
-        m_id = other.m_id; 
+        m_id = other.m_id;
         m_registry = other.m_registry;
         m_ecsRegistry = other.m_ecsRegistry;
         other.m_id = invalid_id;
@@ -21,9 +21,9 @@ namespace args::core::ecs
 
     EntityQuery::EntityQuery(const EntityQuery& other)
     {
-        m_id = other.m_id; 
+        m_id = other.m_id;
         m_registry = other.m_registry;
-        m_ecsRegistry = other.m_ecsRegistry; 
+        m_ecsRegistry = other.m_ecsRegistry;
         m_registry->addReference(m_id);
     }
 
@@ -63,7 +63,7 @@ namespace args::core::ecs
         return m_registry->getEntities(m_id).end();
     }
 
-    inline void EntityQuery::addComponentType(id_type componentTypeId)
+    void EntityQuery::addComponentType(id_type componentTypeId)
     {
         hashed_sparse_set<id_type> componentTypes;
         if (m_id)
@@ -94,7 +94,7 @@ namespace args::core::ecs
 
     }
 
-    inline void EntityQuery::removeComponentType(id_type componentTypeId)
+    void EntityQuery::removeComponentType(id_type componentTypeId)
     {
         if (!m_id) // We're not pointing to a valid query, there's nothing to remove from.
             return;
@@ -126,12 +126,12 @@ namespace args::core::ecs
 
     }
 
-    inline entity_handle EntityQuery::operator[](size_type index)
+    entity_handle EntityQuery::operator[](size_type index)
     {
         return m_ecsRegistry->getEntity(m_registry->getEntities(m_id)[index]);
     }
 
-    inline size_type EntityQuery::size()
+    size_type EntityQuery::size()
     {
         return m_registry->getEntities(m_id).size();
     }

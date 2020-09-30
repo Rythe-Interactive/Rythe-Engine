@@ -67,6 +67,11 @@ namespace args::core
                 m_processes.erase(id);
         }
 
+        void waitForSync()
+        {
+            m_scheduler->waitForProcessSync();
+        }
+
         template<typename... component_types>
         A_NODISCARD ecs::EntityQuery createQuery()
         {
