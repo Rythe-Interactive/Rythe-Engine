@@ -12,6 +12,9 @@
 
 namespace args::core::ecs
 {
+    template<typename component_type>
+    class component_handle;
+
     /**@class component_handle_base
      * @brief Base class of args::core::ecs::component_handle.
      * @ref args::core::ecs::component_handle.
@@ -42,6 +45,9 @@ namespace args::core::ecs
         /**@brief Checks if handle still points to a valid component.
          */
         operator bool() { return valid(); }
+
+        template<typename component_type>
+        component_handle<component_type> cast();
     };
 
     /**@class component_handle
@@ -66,204 +72,167 @@ namespace args::core::ecs
 
         bool operator==(const component_handle<component_type>& other) const { return m_registry == other.m_registry && m_ownerId == other.m_ownerId; }
 
-        /**@brief Atomic read of component.
-         * @param order Memory order at which to load the component.
+        /**@brief Thread-safe read of component.
          * @returns component_type Current value of component.
          */
-        A_NODISCARD component_type read(std::memory_order order = std::memory_order_acquire)
+        A_NODISCARD component_type read()
         {
-            async::transferable_atomic<component_type>* comp = m_registry->getFamily<component_type>()->get_component(m_ownerId);
-            if (!comp)
+            if (!m_ownerId || !m_registry)
                 return component_type();
 
-            async::readonly_guard guard(comp->get_lock());
-            if (!valid())
+            component_container<component_type>* family = m_registry->getFamily<component_type>();
+
+            async::readonly_guard rguard(family->get_lock());
+
+            if (!family->has_component(m_ownerId))
                 return component_type();
 
-            return comp->get().load(order);
+            return family->get_component(m_ownerId);
         }
 
-        /**@brief Atomic write of component.
+        /**@brief Thread-safe write of component.
          * @param value Value you wish to write.
-         * @param order Memory order at which to write the component.
          * @returns component_type Current value of component.
          */
-        component_type write(component_type&& value, std::memory_order order = std::memory_order_release)
+        component_type write(component_type&& value)
         {
-            async::transferable_atomic<component_type>* comp = m_registry->getFamily<component_type>()->get_component(m_ownerId);
-            if (!comp)
+            if (!m_ownerId || !m_registry)
                 return component_type();
 
-            async::readonly_guard guard(comp->get_lock());
-            if (!valid())
+            component_container<component_type>* family = m_registry->getFamily<component_type>();
+
+            async::readonly_guard rguard(family->get_lock());
+
+            if (!family->has_component(m_ownerId))
                 return component_type();
 
-            comp->get().store(value, order);
-
+            family->get_component(m_ownerId) = value;
             return value;
         }
 
-        /**@brief Atomic write of component.
+        /**@brief Thread-safe write of component.
          * @param value Value you wish to write.
-         * @param order Memory order at which to write the component.
          * @returns component_type Current value of component.
          */
-        component_type write(const component_type& value, std::memory_order order = std::memory_order_release)
+        component_type write(const component_type& value)
         {
-            async::transferable_atomic<component_type>* comp = m_registry->getFamily<component_type>()->get_component(m_ownerId);
-            if (!comp)
+            if (!m_ownerId || !m_registry)
                 return component_type();
 
-            async::readonly_guard guard(comp->get_lock());
-            if (!valid())
+            component_container<component_type>* family = m_registry->getFamily<component_type>();
+
+            async::readonly_guard rguard(family->get_lock());
+
+            if (!family->has_component(m_ownerId))
                 return component_type();
 
-            comp->get().store(value, order);
-
+            family->get_component(m_ownerId) = value;
             return value;
         }
 
-        component_type read_modify_write(component_type&& value, component_type(*modifier)(const component_type&, component_type&&),
-            std::memory_order loadOrder = std::memory_order_acquire,
-            std::memory_order successOrder = std::memory_order_release,
-            std::memory_order failureOrder = std::memory_order_relaxed)
-        {
-            async::transferable_atomic<component_type>* comp = m_registry->getFamily<component_type>()->get_component(m_ownerId);
-            if (!comp)
-                return component_type();
-
-            async::readonly_guard guard(comp->get_lock());
-            if (!valid())
-                return component_type();
-
-            component_type oldVal = comp->get().load(loadOrder);
-            component_type newVal = modifier(oldVal, std::forward<component_type>(value));
-
-            // CAS loop to assure our modification will happen correctly without overwriting some other change.
-            while (!comp->get().compare_exchange_strong(oldVal, newVal, successOrder, failureOrder))
-                newVal = modifier(oldVal, std::forward<component_type>(value));
-
-            return newVal;
-        }
-
-        /**@brief Atomic read modify write with add modification on component.
+        /**@brief Thread-safe read modify write with a custom modification on component.
          * @param value Value you wish to add.
-         * @param loadOrder Memory order at which to load the component.
-         * @param successOrder Memory order upon success of CAS-loop.
-         * @param failureOrder Memory order upon failure of CAS-loop.
          * @returns component_type Current value of component.
          */
-        component_type fetch_add(component_type&& value,
-            std::memory_order loadOrder = std::memory_order_acquire,
-            std::memory_order successOrder = std::memory_order_release,
-            std::memory_order failureOrder = std::memory_order_relaxed)
+        component_type read_modify_write(component_type&& value, component_type(*modifier)(const component_type&, component_type&&))
         {
-            async::transferable_atomic<component_type>* comp = m_registry->getFamily<component_type>()->get_component(m_ownerId);
-            if (!comp)
+            if (!m_ownerId || !m_registry)
                 return component_type();
 
-            async::readonly_guard guard(comp->get_lock());
-            if (!valid())
+            component_container<component_type>* family = m_registry->getFamily<component_type>();
+
+            async::readonly_guard rguard(family->get_lock());
+
+            if (!family->has_component(m_ownerId))
                 return component_type();
 
-            component_type oldVal = comp->get().load(loadOrder);
-            component_type newVal = oldVal + value;
-
-            // CAS loop to assure our modification will happen correctly without overwriting some other change.
-            while (!comp->get().compare_exchange_strong(oldVal, newVal, successOrder, failureOrder))
-                newVal = oldVal + value;
-
-            return newVal;
+            component_type& comp = family->get_component(m_ownerId);
+            comp = modifier(comp, std::forward<component_type>(value));
+            return comp;
         }
 
-        /**@brief Atomic read modify write with add modification on component.
+        /**@brief Thread-safe read modify write with add modification on component.
          * @param value Value you wish to add.
-         * @param loadOrder Memory order at which to load the component.
-         * @param successOrder Memory order upon success of CAS-loop.
-         * @param failureOrder Memory order upon failure of CAS-loop.
          * @returns component_type Current value of component.
          */
-        component_type fetch_add(const component_type& value,
-            std::memory_order loadOrder = std::memory_order_acquire,
-            std::memory_order successOrder = std::memory_order_release,
-            std::memory_order failureOrder = std::memory_order_relaxed)
+        component_type fetch_add(component_type&& value)
         {
-            async::transferable_atomic<component_type>* comp = m_registry->getFamily<component_type>()->get_component(m_ownerId);
-            if (!comp)
+            if (!m_ownerId || !m_registry)
                 return component_type();
 
-            async::readonly_guard guard(comp->get_lock());
-            if (!valid())
+            component_container<component_type>* family = m_registry->getFamily<component_type>();
+
+            async::readonly_guard rguard(family->get_lock());
+
+            if (!family->has_component(m_ownerId))
                 return component_type();
 
-            component_type oldVal = comp->get().load(loadOrder);
-            component_type newVal = oldVal + value;
-
-            // CAS loop to assure our modification will happen correctly without overwriting some other change.
-            while (!comp->get().compare_exchange_strong(oldVal, newVal, successOrder, failureOrder))
-                newVal = oldVal + value;
-
-            return newVal;
+            component_type& comp = family->get_component(m_ownerId);
+            comp = comp + value;
+            return comp;
         }
 
-        /**@brief Atomic read modify write with multiply modification on component.
-         * @param value Value you wish to multiply by.
-         * @param loadOrder Memory order at which to load the component.
-         * @param successOrder Memory order upon success of CAS-loop.
-         * @param failureOrder Memory order upon failure of CAS-loop.
+        /**@brief Thread-safe read modify write with add modification on component.
+         * @param value Value you wish to add.
          * @returns component_type Current value of component.
          */
-        component_type fetch_multiply(component_type&& value,
-            std::memory_order loadOrder = std::memory_order_acquire,
-            std::memory_order successOrder = std::memory_order_release,
-            std::memory_order failureOrder = std::memory_order_relaxed)
+        component_type fetch_add(const component_type& value)
         {
-            async::transferable_atomic<component_type>* comp = m_registry->getFamily<component_type>()->get_component(m_ownerId);
-            if (!comp)
+            if (!m_ownerId || !m_registry)
                 return component_type();
 
-            async::readonly_guard guard(comp->get_lock());
-            if (!valid())
+            component_container<component_type>* family = m_registry->getFamily<component_type>();
+
+            async::readonly_guard rguard(family->get_lock());
+
+            if (!family->has_component(m_ownerId))
                 return component_type();
 
-            component_type oldVal = comp->get().load(loadOrder);
-            component_type newVal = oldVal * value;
-
-            // CAS loop to assure our modification will happen correctly without overwriting some other change.
-            while (!comp->get().compare_exchange_strong(oldVal, newVal, successOrder, failureOrder))
-                newVal = oldVal * value;
-
-            return newVal;
+            component_type& comp = family->get_component(m_ownerId);
+            comp = comp + value;
+            return comp;
         }
 
-        /**@brief Atomic read modify write with multiply modification on component.
+        /**@brief Thread-safe read modify write with multiply modification on component.
          * @param value Value you wish to multiply by.
-         * @param loadOrder Memory order at which to load the component.
-         * @param successOrder Memory order upon success of CAS-loop.
-         * @param failureOrder Memory order upon failure of CAS-loop.
          * @returns component_type Current value of component.
          */
-        component_type fetch_multiply(const component_type& value,
-            std::memory_order loadOrder = std::memory_order_acquire,
-            std::memory_order successOrder = std::memory_order_release,
-            std::memory_order failureOrder = std::memory_order_relaxed)
+        component_type fetch_multiply(component_type&& value)
         {
-            async::transferable_atomic<component_type>* comp = m_registry->getFamily<component_type>()->get_component(m_ownerId);
-            if (!comp)
+            if (!m_ownerId || !m_registry)
                 return component_type();
 
-            async::readonly_guard guard(comp->get_lock());
-            if (!valid())
+            component_container<component_type>* family = m_registry->getFamily<component_type>();
+
+            async::readonly_guard rguard(family->get_lock());
+
+            if (!family->has_component(m_ownerId))
                 return component_type();
 
-            component_type oldVal = comp->get().load(loadOrder);
-            component_type newVal = oldVal * value;
+            component_type& comp = family->get_component(m_ownerId);
+            comp = comp * value;
+            return comp;
+        }
 
-            // CAS loop to assure our modification will happen correctly without overwriting some other change.
-            while (!comp->get().compare_exchange_strong(oldVal, newVal, successOrder, failureOrder))
-                newVal = oldVal * value;
+        /**@brief Thread-safe read modify write with multiply modification on component.
+         * @param value Value you wish to multiply by.
+         * @returns component_type Current value of component.
+         */
+        component_type fetch_multiply(const component_type& value)
+        {
+            if (!m_ownerId || !m_registry)
+                return component_type();
 
-            return newVal;
+            component_container<component_type>* family = m_registry->getFamily<component_type>();
+
+            async::readonly_guard rguard(family->get_lock());
+
+            if (!family->has_component(m_ownerId))
+                return component_type();
+
+            component_type& comp = family->get_component(m_ownerId);
+            comp = comp * value;
+            return comp;
         }
 
         /**@brief Locks component family and destroys component.
@@ -271,13 +240,10 @@ namespace args::core::ecs
          */
         void destroy()
         {
-            async::transferable_atomic<component_type>* comp = m_registry->getFamily<component_type>()->get_component(m_ownerId);
-            if (!comp)
+            if (!m_ownerId || !m_registry)
                 return;
 
-            async::readwrite_guard guard(comp->get_lock());
-            if (valid())
-                m_registry->destroyComponent<component_type>(m_ownerId);
+            m_registry->getFamily<component_type>()->destroy_component(m_ownerId);
         }
 
         /**@brief Checks if handle still points to a valid component.
@@ -287,6 +253,13 @@ namespace args::core::ecs
             return m_ownerId && m_registry && m_registry->getFamily<component_type>()->has_component(m_ownerId);
         }
     };
+
+
+    template<typename component_type>
+    inline component_handle<component_type> component_handle_base::cast()
+    {
+        return component_handle<component_type>(m_ownerId, m_registry);
+    }
 }
 
 namespace std
@@ -295,7 +268,7 @@ namespace std
     {
         std::size_t operator()(args::core::ecs::component_handle<component_type> const& handle) const noexcept
         {
-            std::size_t h1 = std::hash<intptr_t>{}(handle.m_ownerId);
+            std::size_t h1 = std::hash<intptr_t>{}(handle.m_registry);
             std::size_t h2 = std::hash<args::core::id_type>{}(handle.m_ownerId);
             return h1 ^ (h2 << 1);
         }

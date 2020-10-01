@@ -10,7 +10,7 @@ namespace args::application
     {
         id_type entityId;
         math::ivec2 size;
-        cstring name;
+        std::string name;
         GLFWmonitor* monitor;
         GLFWwindow* share;
         int swapInterval;
@@ -22,6 +22,18 @@ namespace args::application
         window_request(id_type entityId = invalid_id, math::ivec2 size = { 400, 400 }, cstring name = "<Args> Engine", GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0)
             : entityId(entityId), size(size), name(name), monitor(monitor), share(share), swapInterval(swapInterval)
         {}
+
+        virtual bool persistent() override { return false; }
+        virtual bool unique() override { return false; }
+    };
+
+    struct window_toggle_fullscreen_request final : public events::event<window_toggle_fullscreen_request>
+    {
+        id_type entityId;
+        math::ivec2 position;
+        math::ivec2 size;
+
+        window_toggle_fullscreen_request(id_type entityId = invalid_id, math::ivec2 position = { 100 ,100 }, math::ivec2 size = { 400, 400 }) : entityId(entityId), position(position), size(size) {}
 
         virtual bool persistent() override { return false; }
         virtual bool unique() override { return false; }

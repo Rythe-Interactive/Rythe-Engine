@@ -19,16 +19,16 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>ClangCL</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>ClangCL</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -49,7 +49,7 @@
     <IntDir>$(SolutionDir)temp\intermediates\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName>args-$(ProjectName)</TargetName>
     <IncludePath>$(SolutionDir)args;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
-    <ClangTidyChecks>-c++17-extensions-*</ClangTidyChecks>
+    <ClangTidyChecks>-clang-diagnostic-c++17-extensions</ClangTidyChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -100,6 +100,9 @@
     <PostBuildEvent>
       <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
     </PostBuildEvent>
+    <Lib>
+      <AdditionalOptions>-flto=thin %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -166,96 +169,6 @@
     <ClInclude Include="filesystem\view.hpp" />
     <ClInclude Include="compute\program.hpp" />
     <ClInclude Include="logging\logging.hpp" />
-    <ClInclude Include="logging\spdlog\async.h" />
-    <ClInclude Include="logging\spdlog\async_logger-inl.h" />
-    <ClInclude Include="logging\spdlog\async_logger.h" />
-    <ClInclude Include="logging\spdlog\cfg\argv.h" />
-    <ClInclude Include="logging\spdlog\cfg\env.h" />
-    <ClInclude Include="logging\spdlog\cfg\helpers-inl.h" />
-    <ClInclude Include="logging\spdlog\cfg\helpers.h" />
-    <ClInclude Include="logging\spdlog\cfg\log_levels.h" />
-    <ClInclude Include="logging\spdlog\common-inl.h" />
-    <ClInclude Include="logging\spdlog\common.h" />
-    <ClInclude Include="logging\spdlog\details\backtracer-inl.h" />
-    <ClInclude Include="logging\spdlog\details\backtracer.h" />
-    <ClInclude Include="logging\spdlog\details\circular_q.h" />
-    <ClInclude Include="logging\spdlog\details\console_globals.h" />
-    <ClInclude Include="logging\spdlog\details\file_helper-inl.h" />
-    <ClInclude Include="logging\spdlog\details\file_helper.h" />
-    <ClInclude Include="logging\spdlog\details\fmt_helper.h" />
-    <ClInclude Include="logging\spdlog\details\log_msg-inl.h" />
-    <ClInclude Include="logging\spdlog\details\log_msg.h" />
-    <ClInclude Include="logging\spdlog\details\log_msg_buffer-inl.h" />
-    <ClInclude Include="logging\spdlog\details\log_msg_buffer.h" />
-    <ClInclude Include="logging\spdlog\details\mpmc_blocking_q.h" />
-    <ClInclude Include="logging\spdlog\details\null_mutex.h" />
-    <ClInclude Include="logging\spdlog\details\os-inl.h" />
-    <ClInclude Include="logging\spdlog\details\os.h" />
-    <ClInclude Include="logging\spdlog\details\periodic_worker-inl.h" />
-    <ClInclude Include="logging\spdlog\details\periodic_worker.h" />
-    <ClInclude Include="logging\spdlog\details\registry-inl.h" />
-    <ClInclude Include="logging\spdlog\details\registry.h" />
-    <ClInclude Include="logging\spdlog\details\synchronous_factory.h" />
-    <ClInclude Include="logging\spdlog\details\tcp_client-windows.h" />
-    <ClInclude Include="logging\spdlog\details\tcp_client.h" />
-    <ClInclude Include="logging\spdlog\details\thread_pool-inl.h" />
-    <ClInclude Include="logging\spdlog\details\thread_pool.h" />
-    <ClInclude Include="logging\spdlog\details\windows_include.h" />
-    <ClInclude Include="logging\spdlog\fmt\bin_to_hex.h" />
-    <ClInclude Include="logging\spdlog\fmt\bundled\chrono.h" />
-    <ClInclude Include="logging\spdlog\fmt\bundled\color.h" />
-    <ClInclude Include="logging\spdlog\fmt\bundled\compile.h" />
-    <ClInclude Include="logging\spdlog\fmt\bundled\core.h" />
-    <ClInclude Include="logging\spdlog\fmt\bundled\format-inl.h" />
-    <ClInclude Include="logging\spdlog\fmt\bundled\format.h" />
-    <ClInclude Include="logging\spdlog\fmt\bundled\locale.h" />
-    <ClInclude Include="logging\spdlog\fmt\bundled\os.h" />
-    <ClInclude Include="logging\spdlog\fmt\bundled\ostream.h" />
-    <ClInclude Include="logging\spdlog\fmt\bundled\posix.h" />
-    <ClInclude Include="logging\spdlog\fmt\bundled\printf.h" />
-    <ClInclude Include="logging\spdlog\fmt\bundled\ranges.h" />
-    <ClInclude Include="logging\spdlog\fmt\chrono.h" />
-    <ClInclude Include="logging\spdlog\fmt\fmt.h" />
-    <ClInclude Include="logging\spdlog\fmt\ostr.h" />
-    <ClInclude Include="logging\spdlog\formatter.h" />
-    <ClInclude Include="logging\spdlog\fwd.h" />
-    <ClInclude Include="logging\spdlog\logger-inl.h" />
-    <ClInclude Include="logging\spdlog\logger.h" />
-    <ClInclude Include="logging\spdlog\pattern_formatter-inl.h" />
-    <ClInclude Include="logging\spdlog\pattern_formatter.h" />
-    <ClInclude Include="logging\spdlog\sinks\android_sink.h" />
-    <ClInclude Include="logging\spdlog\sinks\ansicolor_sink-inl.h" />
-    <ClInclude Include="logging\spdlog\sinks\ansicolor_sink.h" />
-    <ClInclude Include="logging\spdlog\sinks\base_sink-inl.h" />
-    <ClInclude Include="logging\spdlog\sinks\base_sink.h" />
-    <ClInclude Include="logging\spdlog\sinks\basic_file_sink-inl.h" />
-    <ClInclude Include="logging\spdlog\sinks\basic_file_sink.h" />
-    <ClInclude Include="logging\spdlog\sinks\daily_file_sink.h" />
-    <ClInclude Include="logging\spdlog\sinks\dist_sink.h" />
-    <ClInclude Include="logging\spdlog\sinks\dup_filter_sink.h" />
-    <ClInclude Include="logging\spdlog\sinks\msvc_sink.h" />
-    <ClInclude Include="logging\spdlog\sinks\null_sink.h" />
-    <ClInclude Include="logging\spdlog\sinks\ostream_sink.h" />
-    <ClInclude Include="logging\spdlog\sinks\ringbuffer_sink.h" />
-    <ClInclude Include="logging\spdlog\sinks\rotating_file_sink-inl.h" />
-    <ClInclude Include="logging\spdlog\sinks\rotating_file_sink.h" />
-    <ClInclude Include="logging\spdlog\sinks\sink-inl.h" />
-    <ClInclude Include="logging\spdlog\sinks\sink.h" />
-    <ClInclude Include="logging\spdlog\sinks\stdout_color_sinks-inl.h" />
-    <ClInclude Include="logging\spdlog\sinks\stdout_color_sinks.h" />
-    <ClInclude Include="logging\spdlog\sinks\stdout_sinks-inl.h" />
-    <ClInclude Include="logging\spdlog\sinks\stdout_sinks.h" />
-    <ClInclude Include="logging\spdlog\sinks\syslog_sink.h" />
-    <ClInclude Include="logging\spdlog\sinks\systemd_sink.h" />
-    <ClInclude Include="logging\spdlog\sinks\tcp_sink.h" />
-    <ClInclude Include="logging\spdlog\sinks\wincolor_sink-inl.h" />
-    <ClInclude Include="logging\spdlog\sinks\wincolor_sink.h" />
-    <ClInclude Include="logging\spdlog\sinks\win_eventlog_sink.h" />
-    <ClInclude Include="logging\spdlog\spdlog-inl.h" />
-    <ClInclude Include="logging\spdlog\spdlog.h" />
-    <ClInclude Include="logging\spdlog\stopwatch.h" />
-    <ClInclude Include="logging\spdlog\tweakme.h" />
-    <ClInclude Include="logging\spdlog\version.h" />
     <ClInclude Include="math\color.hpp" />
     <ClInclude Include="math\constants.hpp" />
     <ClInclude Include="math\glm\common.hpp" />
@@ -587,8 +500,10 @@
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\.clang-tidy" />
     <None Include="..\..\.editorconfig" />
     <None Include="ecs\archetype.inl" />
+    <None Include="ecs\entity_handle.inl" />
     <None Include="math\glm\detail\func_common.inl" />
     <None Include="math\glm\detail\func_common_simd.inl" />
     <None Include="math\glm\detail\func_exponential.inl" />

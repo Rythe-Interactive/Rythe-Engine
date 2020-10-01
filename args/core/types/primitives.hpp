@@ -6,6 +6,10 @@
 #endif
 #include <vector>  //      std::vector<T>
 
+/**
+ * @file primitives.hpp
+ */
+
 namespace args::core
 {
 	using uint8 = std::uint8_t;

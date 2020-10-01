@@ -20,6 +20,8 @@
 
 namespace args::core::scheduling
 {
+    /**@brief Invalid thread id.
+     */
     const std::thread::id invalid_thread_id = std::thread::id();
 
     /**@class Scheduler
@@ -29,6 +31,9 @@ namespace args::core::scheduling
     class ARGS_API Scheduler
     {
     public:
+        /**@class Scheduler::runnable
+         * @brief A data structure encapsulating commands and jobs sent to any thread and it's parameters.
+         */
         struct runnable
         {
             runnable() = default;
@@ -172,6 +177,16 @@ namespace args::core::scheduling
         /**@brief Report an unintentional exit from a thread.
          */
         void reportExitWithError(const std::thread::id& id, const std::exception& exc);
+
+        void subscribeToSync()
+        {
+            m_syncLock.subscribe();
+        }
+        
+        void unsubscribeFromSync()
+        {
+            m_syncLock.unsubscribe();
+        }
 
         /**@brief Request thread synchronization and wait for that synchronization moment.
          */

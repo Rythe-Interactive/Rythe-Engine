@@ -2,13 +2,14 @@
 
 #define SPDLOG_HEADER_ONLY
 #include <sstream>
-#include <core/logging/spdlog/spdlog.h>
-#include <core/logging/spdlog/sinks/stdout_color_sinks.h>
-#include <core/logging/spdlog/sinks/rotating_file_sink.h>
-#include <core/logging/spdlog/pattern_formatter.h>
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/sinks/rotating_file_sink.h>
+#include <spdlog/pattern_formatter.h>
 #include <core/types/type_util.hpp>
 #include <thread>
 #include <core/math/math.hpp>
+#include <core/common/exception.hpp>
 
 /** @file logging.hpp */
 
@@ -34,6 +35,46 @@ namespace fmt
             return format_to(ctx.out(), "{}", oss.str());
         }
 
+    };
+
+    template <>
+    struct formatter<args::core::exception>
+    {
+
+        constexpr auto parse(format_parse_context& ctx)
+        {
+            auto it = ctx.begin(), end = ctx.end();
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+            return it++;
+        }
+
+        template <typename FormatContext>
+        auto format(const args::core::exception& error, FormatContext& ctx)
+        {
+            return format_to(ctx.out(), "[{}({}) T {}(...)] {}", error.file(), error.line(), error.func(), error.what());
+        }
+    };
+
+    template <>
+    struct formatter<args::core::fs_error>
+    {
+
+        constexpr auto parse(format_parse_context& ctx)
+        {
+            auto it = ctx.begin(), end = ctx.end();
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+            return it++;
+        }
+
+        template <typename FormatContext>
+        auto format(const args::core::fs_error& error, FormatContext& ctx)
+        {
+            return format_to(ctx.out(), "[{}({}) T {}(...)] {}", error.file(), error.line(), error.func(), error.what());
+        }
     };
 
     template <>
@@ -71,6 +112,50 @@ namespace fmt
         // stored in this formatter.
         template <typename FormatContext>
         auto format(const args::core::math::vec2& p, FormatContext& ctx) {
+            // auto format(const point &p, FormatContext &ctx) -> decltype(ctx.out()) // c++11
+              // ctx.out() is an output iterator to write to.
+            return format_to(
+                ctx.out(),
+                presentation == 'f' ? "({:.1f}, {:.1f})" : "({:.1e}, {:.1e})",
+                p.x, p.y);
+        }
+    };
+
+    template <>
+    struct fmt::formatter<args::core::math::ivec2> {
+        // Presentation format: 'f' - fixed, 'e' - exponential.
+        char presentation = 'f';
+
+        // Parses format specifications of the form ['f' | 'e'].
+        constexpr auto parse(format_parse_context& ctx) {
+            // auto parse(format_parse_context &ctx) -> decltype(ctx.begin()) // c++11
+              // [ctx.begin(), ctx.end()) is a character range that contains a part of
+              // the format string starting from the format specifications to be parsed,
+              // e.g. in
+              //
+              //   fmt::format("{:f} - point of interest", point{1, 2});
+              //
+              // the range will contain "f} - point of interest". The formatter should
+              // parse specifiers until '}' or the end of the range. In this example
+              // the formatter should parse the 'f' specifier and return an iterator
+              // pointing to '}'.
+
+              // Parse the presentation format and store it in the formatter:
+            auto it = ctx.begin(), end = ctx.end();
+            if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
+
+            // Check if reached the end of the range:
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+
+            // Return an iterator past the end of the parsed range:
+            return it;
+        }
+
+        // Formats the point p using the parsed format specification (presentation)
+        // stored in this formatter.
+        template <typename FormatContext>
+        auto format(const args::core::math::ivec2& p, FormatContext& ctx) {
             // auto format(const point &p, FormatContext &ctx) -> decltype(ctx.out()) // c++11
               // ctx.out() is an output iterator to write to.
             return format_to(
