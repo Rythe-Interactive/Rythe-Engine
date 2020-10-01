@@ -46,6 +46,10 @@ namespace args::core::math
         vec<3, T, Q> const& scale, qua<T, Q> const& orientation, vec<3, T, Q> const& translation);
 
     template<typename T, qualifier Q>
+    GLM_FUNC_DECL mat<4, 4, T, Q> compose(
+        vec<3, T, Q> const& scale, qua<T, Q> const& orientation, vec<3, T, Q> const& translation);
+
+    template<typename T, qualifier Q>
     GLM_FUNC_DECL bool decompose(
         mat<4, 4, T, Q> const& modelMatrix,
         vec<3, T, Q> & scale, qua<T, Q> & orientation, vec<3, T, Q> & translation);
