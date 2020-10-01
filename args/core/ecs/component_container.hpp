@@ -22,7 +22,7 @@ namespace args::core::ecs
     class component_container_base
     {
     public:
-        virtual bool has_component(id_type entityId) ARGS_PURE;
+        A_NODISCARD virtual bool has_component(id_type entityId) const ARGS_PURE;
         virtual void create_component(id_type entityId) ARGS_PURE;
         virtual void create_component(id_type entityId, void* value) ARGS_PURE;
         virtual void destroy_component(id_type entityId) ARGS_PURE;
@@ -37,83 +37,108 @@ namespace args::core::ecs
     class component_container : public component_container_base
     {
     private:
-        atomic_sparse_map<id_type, component_type> components;
+        sparse_map<id_type, component_type> m_components;
+        mutable async::readonly_rw_spinlock m_lock;
 
         events::EventBus* m_eventBus;
         EcsRegistry* m_registry;
-
+        component_type m_nullComp;
     public:
         component_container() = default;
         component_container(EcsRegistry* registry, events::EventBus* eventBus) : m_registry(registry), m_eventBus(eventBus) {}
 
-        ~component_container()
+        /**@brief Get the readonly_rw_spinlock of this container.
+         */
+        async::readonly_rw_spinlock& get_lock() const
         {
-            auto entities = components.keys();
-            auto count = components.size();
-
-            for (int i = 0; i < count; i++)
-                destroy_component(entities[i]);
+            return m_lock;
         }
 
-        /**@brief Checks whether entity has the component.
-         * @note Thread will be halted if there are any writes until they are finished.
-         * @note Will trigger read on this container.
+        /**@brief Thread-safe check for whether an entity has the component.
          * @param entityId ID of the entity you wish to check for.
-         * @ref args::core::async::readonly_rw_spinlock
          */
-        virtual bool has_component(id_type entityId) override
+        A_NODISCARD virtual bool has_component(id_type entityId) const override
         {
-            return components.contains(entityId);
+            async::readonly_guard guard(m_lock);
+            return m_components.contains(entityId);
         }
 
-        /**@brief Fetches std::atomic wrapped component.
-         * @note Thread will be halted if there are any writes until they are finished.
-         * @note Will trigger read on this container.
+        /**@brief Thread unsafe component fetch, use component_container::get_lock and lock for at least read_only before calling this function.
          * @param entityId ID of entity you want to get the component from.
-         * @returns std::atomic<component_type>* Pointer to std::atomic wrapped component.
+         * @ref component_container::get_lock()
          * @ref args::core::async::readonly_rw_spinlock
          */
-        async::transferable_atomic<component_type>* get_component(id_type entityId)
+        A_NODISCARD component_type& get_component(id_type entityId)
         {
-            if (components.contains(entityId))
-                return &components.get(entityId);
-            return nullptr;
+            if (m_components.contains(entityId))
+                return m_components[entityId];
+            return m_nullComp;
         }
 
-        /**@brief Creates new std::atomic wrapped component.
-         * @note Thread will be halted if there are any reads or writes until they are finished.
-         * @note Will trigger write on this container.
-         * @param entityId ID of entity you wish to add the component to.
+        /**@brief Thread unsafe component fetch, use component_container::get_lock and lock for at least read_only before calling this function.
+         * @param entityId ID of entity you want to get the component from.
+         * @ref component_container::get_lock()
          * @ref args::core::async::readonly_rw_spinlock
+         */
+        A_NODISCARD const component_type& get_component(id_type entityId) const
+        {
+            if (m_components.contains(entityId))
+                return m_components[entityId];
+            return m_nullComp;
+        }
+
+        /**@brief Creates component in a thread-safe way.
+         * @note Calls component_type::init if it exists.
+         * @note Raises the events::component_creation<component_type>> event.
+         * @param entityId ID of entity you wish to add the component to.
          */
         virtual void create_component(id_type entityId) override
         {
             component_type comp;
             if constexpr (detail::has_init<component_type, void(component_type&)>::value)
                 component_type::init(comp);
-            components.emplace(entityId, comp);
+
+            {
+                async::readwrite_guard guard(m_lock);
+                m_components.insert(entityId, std::move(comp));
+            }
+
             m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId, m_registry));
         }
 
+        /**@brief Creates component in a thread-safe way and initializes it with the given value.
+         * @note Does NOT call component_type::init.
+         * @note Raises the events::component_creation<component_type>> event.
+         * @param entityId ID of entity you wish to add the component to.
+         * @param value Pointer to component_type that has the starting value you require.
+         */
         virtual void create_component(id_type entityId, void* value) override
         {
-            components.emplace(entityId, *reinterpret_cast<component_type*>(value));
+            {
+                async::readwrite_guard guard(m_lock);
+                m_components.insert(entityId, *reinterpret_cast<component_type*>(value));
+            }
+
             m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId, m_registry));
         }
 
-        /**@brief Destroys component atomically.
-         * @note Thread will be halted if there are any reads or writes until they are finished.
-         * @note Will trigger write on this container.
+        /**@brief Destroys component in a thread-safe way.
+         * @note Calls component_type::destroy if it exists.
+         * @note Raises the events::component_destruction<component_type>> event.
          * @param entityId ID of entity you wish to remove the component from.
-         * @ref args::core::async::readonly_rw_spinlock
          */
         virtual void destroy_component(id_type entityId) override
-        {            
+        {
             m_eventBus->raiseEvent<events::component_destruction<component_type>>(entity_handle(entityId, m_registry));
-            component_type comp = components[entityId]->load(std::memory_order_acquire);
+
             if constexpr (detail::has_destroy<component_type, void(component_type&)>::value)
-                component_type::destroy(comp);
-            components.erase(entityId);
+            {
+                async::readonly_guard rguard(m_lock);
+                component_type::destroy(m_components[entityId]);
+            }
+
+            async::readwrite_guard wguard(m_lock);
+            m_components.erase(entityId);
         }
     };
 }

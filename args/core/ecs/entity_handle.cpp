@@ -140,6 +140,13 @@ namespace args::core::ecs
         return m_registry->createComponent(m_id, componentTypeId);
     }
 
+    component_handle_base entity_handle::add_component(id_type componentTypeId, void* value) const
+    {
+        if (!m_registry)
+            throw args_invalid_entity_error;
+        return m_registry->createComponent(m_id, componentTypeId, value);
+    }
+
     void entity_handle::remove_component(id_type componentTypeId) const
     {
         if (!m_registry)

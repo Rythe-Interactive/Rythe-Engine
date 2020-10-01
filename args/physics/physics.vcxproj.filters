@@ -39,6 +39,12 @@
     <ClCompile Include="halfedgeface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="data\convexconvexpenetrationquery.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="data\edgepenetrationquery.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cube_collider_params.hpp">
@@ -74,13 +80,22 @@
     <ClInclude Include="components\rigidbody.hpp">
       <Filter>components</Filter>
     </ClInclude>
-    <ClInclude Include="physicsstatics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="halfedgeedge.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="halfedgeface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\convexconvexpenetrationquery.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\edgepenetrationquery.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\penetrationquery.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="physics_statics.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
