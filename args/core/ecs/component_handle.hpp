@@ -12,6 +12,9 @@
 
 namespace args::core::ecs
 {
+    template<typename component_type>
+    class component_handle;
+
     /**@class component_handle_base
      * @brief Base class of args::core::ecs::component_handle.
      * @ref args::core::ecs::component_handle.
@@ -42,6 +45,9 @@ namespace args::core::ecs
         /**@brief Checks if handle still points to a valid component.
          */
         operator bool() { return valid(); }
+
+        template<typename component_type>
+        component_handle<component_type> cast();
     };
 
     /**@class component_handle
@@ -247,6 +253,13 @@ namespace args::core::ecs
             return m_ownerId && m_registry && m_registry->getFamily<component_type>()->has_component(m_ownerId);
         }
     };
+
+
+    template<typename component_type>
+    inline component_handle<component_type> component_handle_base::cast()
+    {
+        return component_handle<component_type>(m_ownerId, m_registry);
+    }
 }
 
 namespace std
