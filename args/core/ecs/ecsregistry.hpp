@@ -160,7 +160,7 @@ namespace args::core::ecs
         template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
         A_NODISCARD component_handle<component_type> getComponent(id_type entityId)
         {
-            return getComponent(entityId, typeHash<component_type>()).cast<component_type>();
+            return getComponent(entityId, typeHash<component_type>()).template cast<component_type>();
         }
 
         /**@brief Get component handles of a certain types attached to a certain entity.
@@ -191,21 +191,21 @@ namespace args::core::ecs
         template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
         component_handle<component_type> createComponent(id_type entityId)
         {
-            return createComponent(entityId, typeHash<component_type>()).cast<component_type>();
+            return createComponent(entityId, typeHash<component_type>()).template cast<component_type>();
         }
 
         template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
         component_handle<std::remove_reference_t<component_type>> createComponent(id_type entityId, component_type&& component)
         {
             std::remove_reference_t<component_type> temp = component;
-            return createComponent(entityId, typeHash<std::remove_reference_t<component_type>>(), &temp).cast<std::remove_reference_t<component_type>>();
+            return createComponent(entityId, typeHash<std::remove_reference_t<component_type>>(), &temp).template cast<std::remove_reference_t<component_type>>();
         }
 
         template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
         component_handle<std::remove_reference_t<component_type>> createComponent(id_type entityId, component_type& component)
         {
             std::remove_reference_t<component_type> temp = component;
-            return createComponent(entityId, typeHash<std::remove_reference_t<component_type>>(), &temp).cast<std::remove_reference_t<component_type>>();
+            return createComponent(entityId, typeHash<std::remove_reference_t<component_type>>(), &temp).template cast<std::remove_reference_t<component_type>>();
         }
 
         template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
