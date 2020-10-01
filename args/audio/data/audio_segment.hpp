@@ -1,8 +1,5 @@
 #pragma once
 #include <audio/detail/engine_include.hpp>
-#define MINIMP3_IMPLEMENTATION
-#include <minimp3.h>
-#include <minimp3_ex.h>
 
 namespace args::audio
 {

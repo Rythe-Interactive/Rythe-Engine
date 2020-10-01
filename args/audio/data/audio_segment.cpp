@@ -16,7 +16,8 @@ namespace args::audio
         auto result = fs::AssetImporter::tryLoad<audio_segment>(file, settings);
         if (result != common::valid)
         {
-            log::error("Error while loading file: {}, {}", file.get_filename(), result.get_error());
+            log::error("Audio file wrong!");
+            //log::error("Error while loading file: {}, {}", file.get_filename(), result.get_error().what());
             return invalid_audio_segment_handle;
         }
 
@@ -41,4 +42,7 @@ namespace args::audio
 
         return std::make_pair(std::ref(lock), std::ref(segment));
     }
+
+    std::unordered_map < id_type, std::unique_ptr<std::pair<async::readonly_rw_spinlock, audio_segment>>> AudioSegmentCache::m_segments;
+    async::readonly_rw_spinlock AudioSegmentCache::m_segmentsLock;
 }

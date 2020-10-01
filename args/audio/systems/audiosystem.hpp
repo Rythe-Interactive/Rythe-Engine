@@ -1,12 +1,14 @@
 #pragma once
 #include <audio/components/audio_source.hpp>
 #include <audio/components/audio_listener.hpp>
+#define AL_ALEXT_PROTOTYPES
+#include <al/alext.h>
 
 /**
  * @file audiosystem.hpp
  */
 
-void openal_error()
+inline void openal_error()
 {
     ALCenum error;
     error = alGetError();

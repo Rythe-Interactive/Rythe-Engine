@@ -1,4 +1,7 @@
 #include <audio/data/importers/audio_importers.hpp>
+#define MINIMP3_IMPLEMENTATION
+#include <minimp3.h>
+#include <minimp3_ex.h>
 
 namespace args::audio
 {

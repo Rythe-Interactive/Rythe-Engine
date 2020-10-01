@@ -1,6 +1,4 @@
 #pragma once
-#define AL_ALEXT_PROTOTYPES
-#include <al/alext.h>
 
 namespace args::audio
 {
@@ -264,14 +262,12 @@ namespace args::audio
 
 	inline void AudioSystem::setListener(position p, rotation r)
 	{
-		// Do not readwrite lock, assume the the function that called this has 
-
 		// Position - invert x for left-right hand coord system conversion
-		alListener3f(AL_POSITION, -p.x, p.y, p.z);
+		alListener3f(AL_POSITION, p.x, p.y, p.z);
 		//rotation
 		math::mat3 mat3 = math::toMat3(r);
 		// Invert z axis here for left-right hand coord system conversion
-		math::vec3 forward = mat3 * math::vec3(0.f, 0.f, 1.f);
+		math::vec3 forward = mat3 * math::vec3(0.f, 0.f, -1.f);
 		math::vec3 up = mat3 * math::vec3(0.f, 1.f, 0.f);
 		ALfloat ori[] = { forward.x, forward.y, forward.z, up.x, up.y, up.z };
 		alListenerfv(AL_ORIENTATION, ori);
