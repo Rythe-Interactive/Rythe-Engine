@@ -11,12 +11,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="convexcollider.cpp" />
+    <ClCompile Include="colliders\convexcollider.cpp" />
+    <ClCompile Include="data\convexconvexpenetrationquery.cpp" />
     <ClCompile Include="delete_this.cpp" />
-    <ClCompile Include="HalfEdgeFace.cpp" />
-    <ClCompile Include="physicscollider.cpp" />
-    <ClCompile Include="physics_component.cpp" />
-    <ClCompile Include="physicssystem.hpp" />
+    <ClCompile Include="data\edgepenetrationquery.cpp" />
+    <ClCompile Include="halfedgeface.cpp" />
+    <ClCompile Include="components\physics_component.cpp" />
+    <ClCompile Include="systems\physicssystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core\core.vcxproj">
@@ -24,20 +25,23 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="convexcollider.hpp" />
+    <ClInclude Include="colliders\convexcollider.hpp" />
+    <ClInclude Include="data\convexconvexpenetrationquery.h" />
     <ClInclude Include="cube_collider_params.hpp" />
     <ClInclude Include="data\physics_manifold_precursor.h" />
-    <ClInclude Include="HalfEdgeEdge.h" />
-    <ClInclude Include="HalfEdgeFace.h" />
-    <ClInclude Include="physicscollider.hpp" />
+    <ClInclude Include="data\edgepenetrationquery.h" />
+    <ClInclude Include="halfedgeedge.hpp" />
+    <ClInclude Include="halfedgeface.hpp" />
+    <ClInclude Include="colliders\physicscollider.hpp" />
+    <ClInclude Include="data\penetrationquery.h" />
     <ClInclude Include="physicsconstants.h" />
     <ClInclude Include="physicsimport.h" />
-    <ClInclude Include="PhysicsStatics.h" />
+    <ClInclude Include="physics_statics.hpp" />
     <ClInclude Include="physics_contact.h" />
-    <ClInclude Include="physics_manifold.hpp" />
-    <ClInclude Include="physics_component.hpp" />
+    <ClInclude Include="data\physics_manifold.hpp" />
+    <ClInclude Include="components\physics_component.hpp" />
     <ClInclude Include="physicsmodule.hpp" />
-    <ClInclude Include="rigidbody.hpp" />
+    <ClInclude Include="components\rigidbody.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -48,16 +52,16 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>ClangCL</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>ClangCL</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -106,6 +110,12 @@
     <PostBuildEvent>
       <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
     </PostBuildEvent>
+    <Lib>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -129,6 +139,13 @@
     <PostBuildEvent>
       <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
     </PostBuildEvent>
+    <Lib>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalOptions>-flto=thin %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

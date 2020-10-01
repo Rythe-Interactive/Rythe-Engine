@@ -13,7 +13,6 @@
 #include <vector>
 #include <memory>
 
-
 /**
  * @file engine.hpp
  */
@@ -32,6 +31,7 @@ namespace args::core
     class Engine
     {
     private:
+        std::vector<char*> m_cliargs;
         std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<>> m_modules;
 
         events::EventBus m_eventbus;
@@ -39,7 +39,7 @@ namespace args::core
         scheduling::Scheduler m_scheduler;
 
     public:
-        Engine() : m_modules(), m_eventbus(), m_ecs(&m_eventbus),
+        Engine(int argc, char** argv) : m_modules(), m_eventbus(), m_ecs(&m_eventbus), m_cliargs(argv, argv + argc),
 #if defined(ARGS_LOW_POWER)
             m_scheduler(&m_eventbus, true)
 #else
@@ -74,12 +74,15 @@ namespace args::core
 
         /**@brief Calls init on all reported modules and thus engine internals.
          * @note Needs to be called manually if ARGS_ENTRY was not used.
+         * @param argc argc of main
+         * @param argv argv of main
          * @ref args::core::Module
          */
         void init()
         {
+
             log::setup();
-          
+
             for (const auto& [priority, moduleList] : m_modules)
                 for (auto& module : moduleList)
                     module->setup();
@@ -95,5 +98,10 @@ namespace args::core
         {
             m_scheduler.run();
         }
+
+        std::vector<char*>& getCliArgs() {
+            return m_cliargs;
+        }
+
     };
 }
