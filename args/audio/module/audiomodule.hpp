@@ -3,6 +3,7 @@
 #include <audio/systems/audiosystem.hpp>
 #include <audio/components/audio_source.hpp>
 #include <audio/components/audio_listener.hpp>
+#include <audio/data/importers/audio_importers.hpp>
 
 namespace args::audio
 {
@@ -12,6 +13,8 @@ namespace args::audio
         virtual void setup() override
         {
             addProcessChain("Audio");
+
+            fs::AssetImporter::reportConverter<mp3_audio_loader>(".mp3");
 
             reportComponentType<audio_source>();
             reportComponentType<audio_listener>();

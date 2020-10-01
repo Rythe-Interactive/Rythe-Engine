@@ -1,10 +1,7 @@
 #pragma once
-#include <audio/detail/engine_include.hpp>
 #include <AL/al.h>
 #include <AL/alc.h>
-#define MINIMP3_IMPLEMENTATION
-#include <minimp3.h>
-#include <minimp3_ex.h>
+#include <audio/data/audio_segment.hpp>
 
 namespace args::audio
 {
@@ -24,7 +21,7 @@ namespace args::audio
         /**
         * @brief Function to get the current pitch
         */
-        const float getPitch() { return m_pitch; };
+        float getPitch() const { return m_pitch; }
         /**
         * @brief Function to set the gain for the audio source
         * @param const float gain: new gain value
@@ -37,7 +34,17 @@ namespace args::audio
         /**
         * @brief Function to get the current gain
         */
-        const float getGain() { return m_gain; };
+        float getGain() const { return m_gain; };
+
+        void setAudioHandle(audio_segment_handle handle)
+        {
+            m_audio_handle = handle;
+        }
+
+        audio_segment_handle getAudioHandle() const
+        {
+            return m_audio_handle;
+        }
 
     private:
         /**
@@ -50,8 +57,7 @@ namespace args::audio
 
         ALuint m_sourceId;
         ALuint m_audioBufferId;
-        mp3dec_t m_mp3dec;
-        mp3dec_file_info_t m_audioInfo;
+        audio_segment_handle m_audio_handle;
 
         float m_pitch;
         float m_gain;

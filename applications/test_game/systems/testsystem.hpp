@@ -166,7 +166,9 @@ public:
             ent.add_component<sah>();
             m_ecs->createComponent<rendering::renderable>(ent, { modelH, wireframeH });
 
-            auto sourceH = m_ecs->createComponent<audio::audio_source>(ent);
+            audio::audio_source source;
+            source.setAudioHandle(audio::AudioSegmentCache::createAudioSegment("waterfall", "assets://audio/365921__inspectorj__waterfall-small-b[mono].mp3"_view));
+            auto sourceH = m_ecs->createComponent<audio::audio_source>(ent, source);
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
             positionH.write(math::vec3(0, 0, 5.1f));

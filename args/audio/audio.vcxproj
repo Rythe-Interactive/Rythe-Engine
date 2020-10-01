@@ -11,12 +11,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="data\audio_segment.cpp" />
+    <ClCompile Include="data\importers\audio_importers.cpp" />
     <ClCompile Include="delete_this.cpp" />
     <ClCompile Include="systems\audiosystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\audio_listener.hpp" />
     <ClInclude Include="components\audio_source.hpp" />
+    <ClInclude Include="data\audio_segment.hpp" />
+    <ClInclude Include="data\importers\audio_importers.hpp" />
     <ClInclude Include="detail\engine_include.hpp" />
     <ClInclude Include="audio.hpp" />
     <ClInclude Include="module\audiomodule.hpp" />

@@ -76,7 +76,6 @@ namespace args::audio
 
 	inline void AudioSystem::update(time::span deltatime)
 	{
-		async::readwrite_guard guard(*m_lock);
 		alcMakeContextCurrent(data::alContext);
 
 		for (auto entity : sourceQuery)
@@ -105,7 +104,6 @@ namespace args::audio
 #pragma region Component creation&destruction
 	inline void AudioSystem::onAudioSourceComponentCreate(events::component_creation<audio_source>* event)
 	{
-		async::readwrite_guard guard(*m_lock);
 		alcMakeContextCurrent(data::alContext);
 
 		auto handle = event->entity.get_component_handle<audio_source>();
@@ -134,7 +132,6 @@ namespace args::audio
 
 	inline void AudioSystem::onAudioSourceComponentDestroy(events::component_destruction<audio_source>* event)
 	{
-		async::readwrite_guard guard(*m_lock);
 		alcMakeContextCurrent(data::alContext);
 
 		auto handle = event->entity.get_component_handle<audio_source>();
@@ -147,7 +144,6 @@ namespace args::audio
 
 	inline void AudioSystem::onAudioListenerComponentCreate(events::component_creation<audio_listener>* event)
 	{
-		async::readwrite_guard guard(*m_lock);
 		alcMakeContextCurrent(data::alContext);
 
 		log::debug("Creating Audio Listener...");
@@ -219,7 +215,7 @@ namespace args::audio
 
 		alGenBuffers((ALuint)1, &source.m_audioBufferId);
 
-		fs::view view("assets://audio/365921__inspectorj__waterfall-small-b[mono].mp3");
+		/*fs::view view("assets://audio/365921__inspectorj__waterfall-small-b[mono].mp3");
 		auto result = view.get();
 		if (result != common::valid)
 		{
@@ -238,17 +234,25 @@ namespace args::audio
 			return false;
 		}
 
-		alBufferData(source.m_audioBufferId, AL_FORMAT_MONO16, source.m_audioInfo.buffer, source.m_audioInfo.samples * sizeof(mp3d_sample_t), source.m_audioInfo.hz);
-		alSourcei(source.m_sourceId, AL_BUFFER, source.m_audioBufferId);
-
 		log::info("audioFile: {}\nBuffer: \t{}\nChannels: \t{}\nHz: \t\t{}\nLayer \t\t{}\nSamples: \t{}\navg kbps: \t{}\n-------------------------------------\n",
 			view.get_path(),
 			(void*)source.m_audioInfo.buffer,
 			source.m_audioInfo.channels,
-			source.m_audioInfo.hz,
+			source.m_audioInfo.sampleRate,
 			source.m_audioInfo.layer,
 			source.m_audioInfo.samples,
-			source.m_audioInfo.avg_bitrate_kbps);
+			source.m_audioInfo.avg_bitrate_kbps);*/
+
+		//source.m_audio.loadFromFileMp3("audio/365921__inspectorj__waterfall-small-b[mono].mp3");
+
+		auto [lock, segment] = source.m_audio_handle.get();
+
+		{
+			async::readonly_guard guard(lock);
+			alBufferData(source.m_audioBufferId, AL_FORMAT_MONO16, segment.buffer, segment.samples * sizeof(int16), segment.sampleRate);
+		}
+		
+		alSourcei(source.m_sourceId, AL_BUFFER, source.m_audioBufferId);
 
 		return true;
 	}
