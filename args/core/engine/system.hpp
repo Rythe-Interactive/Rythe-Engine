@@ -72,6 +72,8 @@ namespace args::core
             m_scheduler->waitForProcessSync();
         }
 
+        /**@brief Create a new entity and return the handle.
+         */
         A_NODISCARD ecs::entity_handle createEntity()
         {
             return m_ecs->createEntity();

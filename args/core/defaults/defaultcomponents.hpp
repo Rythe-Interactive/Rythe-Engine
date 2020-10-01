@@ -82,7 +82,12 @@ namespace args::core
         }
     };
 
-    struct transform : public ecs::archetype<position, rotation, scale> {};
+    struct transform : public ecs::archetype<position, rotation, scale>
+    {
+        using base = ecs::archetype<position, rotation, scale>;
+
+        transform(const base::handleGroup& handles) : base(handles) {}
+    };
 }
 
 namespace fmt

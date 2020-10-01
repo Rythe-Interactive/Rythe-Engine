@@ -59,7 +59,7 @@ public:
     {
         filter(log::severity::debug);
 
-        compute::Program prog =  fs::view("basic://kernels/vadd_kernel.cl").load_as<compute::Program>();
+        compute::Program prog = fs::view("basic://kernels/vadd_kernel.cl").load_as<compute::Program>();
         prog.prewarm("vector_add");
 
         std::vector<int> ints;
@@ -68,31 +68,31 @@ public:
         if (res == common::valid) {
 
             char* buf = new char[6];
-            memset(buf,0,6);
+            memset(buf, 0, 6);
             filesystem::basic_resource contents = res;
 
-            for (size_t i = 0; i < contents.size() && i < 5*2048; i += 5)
+            for (size_t i = 0; i < contents.size() && i < 5 * 2048; i += 5)
             {
-                memcpy(buf,contents.data()+ i,5);
-                ints.push_back(std::atol(buf));                
+                memcpy(buf, contents.data() + i, 5);
+                ints.push_back(std::atol(buf));
             }
 
             delete[] buf;
         }
 
-        std::vector<int> first_ints (ints.begin(), ints.begin()+ints.size()/2);
-        std::vector<int> second_ints (ints.begin() + ints.size() /2 , ints.end());
+        std::vector<int> first_ints(ints.begin(), ints.begin() + ints.size() / 2);
+        std::vector<int> second_ints(ints.begin() + ints.size() / 2, ints.end());
 
-        size_t to_process = std::min(first_ints.size(),second_ints.size());
+        size_t to_process = std::min(first_ints.size(), second_ints.size());
 
         std::vector<int> results(to_process);
 
 
-        auto A = compute::Context::createBuffer(first_ints,compute::buffer_type::READ_BUFFER, "A");
-        auto B = compute::Context::createBuffer(second_ints,compute::buffer_type::READ_BUFFER, "B");
-        auto C = compute::Context::createBuffer(results,compute::buffer_type::WRITE_BUFFER, "C");
+        auto A = compute::Context::createBuffer(first_ints, compute::buffer_type::READ_BUFFER, "A");
+        auto B = compute::Context::createBuffer(second_ints, compute::buffer_type::READ_BUFFER, "B");
+        auto C = compute::Context::createBuffer(results, compute::buffer_type::WRITE_BUFFER, "C");
 
-         prog.kernelContext("vector_add")
+        prog.kernelContext("vector_add")
             .set_and_enqueue_buffer(A)
             .set_and_enqueue_buffer(B)
             .set_buffer(C)
@@ -102,10 +102,10 @@ public:
             .enqueue_buffer(C)
             .finish();
 
-       /* for (int& i : results)
-        {
-            log::info("got {}", i);
-        }*/
+        /* for (int& i : results)
+         {
+             log::info("got {}", i);
+         }*/
 
         log::info("Hello World");
         log::warn("Hello World");
@@ -150,7 +150,7 @@ public:
 
         rendering::material_handle wireframeH;
         rendering::material_handle vertexH;
-        
+
         rendering::material_handle uvH;
         rendering::material_handle normalH;
         rendering::material_handle skyboxH;
@@ -183,6 +183,7 @@ public:
             auto ent = createEntity();
             ent.add_component<rendering::renderable>({ cubeH, skyboxH });
             ent.add_components<transform>(position(), rotation(), scale(500.f));
+            log::debug("has transform: {}", ent.has_components<transform>());
         }
 
         {
@@ -203,10 +204,12 @@ public:
             ent.remove_components<transform>();
 
             log::debug("p {}, r {}, s {}, has {}", positionH.read(), rotationH.read(), scaleH.read(), ent.has_components<position, rotation, scale>());
-            auto [positionH2, rotationH2, scaleH2] = ent.add_components<transform>(position(0, 3, 5.1f), rotation(), scale());
+            transform transf = ent.add_components<transform>(position(0, 3, 5.1f), rotation(), scale());
+
+            auto& [_, rotationH2, scaleH2] = transf.handles;
+            auto positionH2 = transf.get<position>();
 
             log::debug("p {}, r {}, s {}, has {}", positionH2.read(), rotationH2.read(), scaleH2.read(), ent.has_components<position, rotation, scale>());
-
         }
 
         {

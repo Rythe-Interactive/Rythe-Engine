@@ -167,9 +167,20 @@ namespace args::core::ecs
         template<typename component_type>
         A_NODISCARD bool has_component() const { return has_component(typeHash<component_type>()); }
 
+        /**@brief Check if entity contains a certain components.
+         * @tparam component_type First type of component to check for.
+         * @tparam component_types The rest of the types of components to check for.
+         * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
+         * @throws args_entity_not_found_error Thrown when handle's id is invalid.
+         */
         template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
         A_NODISCARD bool has_components() const;
 
+        /**@brief Check if entity contains the components of a certain archetype.
+         * @tparam archetype_type The type of archetype to check for.
+         * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
+         * @throws args_entity_not_found_error Thrown when handle's id is invalid.
+         */
         template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
         A_NODISCARD bool has_components() const;
 
@@ -201,18 +212,35 @@ namespace args::core::ecs
             return force_value_cast<component_handle<component_type>>(get_component_handle(typeHash<component_type>()));
         }
 
+        /**@brief Get component handles of certain components.
+         * @tparam component_type First type of component to fetch.
+         * @tparam component_types The rest of the types of components to fetch.
+         * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
+         * @throws args_entity_not_found_error Thrown when handle's id is invalid.
+         * @returns Tuple with all the handles.
+         */
         template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
         A_NODISCARD auto get_component_handles() const;
 
+        /**@brief Get component handles of all components of a certain archetype.
+         * @tparam archetype_type The type of archetype to fetch the components of.
+         * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
+         * @throws args_entity_not_found_error Thrown when handle's id is invalid.
+         * @returns Tuple with all the handles.
+         */
         template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
         A_NODISCARD auto get_component_handles() const;
 
+        /**@brief Shortcut to component_handle::read
+         */
         template<typename component_type>
         A_NODISCARD component_type read_component() const
         {
             return get_component_handle<component_type>().read();
         }
 
+        /**@brief Shortcut to component_handle::write
+         */
         template<typename component_type>
         void write_component(component_type&& value)
         {
@@ -268,25 +296,75 @@ namespace args::core::ecs
             return force_value_cast<component_handle<std::remove_reference_t<component_type>>>(add_component(typeHash<std::remove_reference_t<component_type>>(), reinterpret_cast<void*>(&value)));
         }
 
+        /**@brief Add component to the entity.
+         * @param value Starting value of the component.
+         * @tparam component_type Type of component to add.
+         * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
+         * @throws args_entity_not_found_error Thrown when handle's id is invalid.
+         * @throws args_unknown_component_error Thrown when the component type is unknown.
+         * @returns component_handle<component_type> Valid component handle for the newly created component.
+         */
         template<typename component_type>
         component_handle<std::remove_reference_t<component_type>> add_component(const component_type& value) const
         {
             return force_value_cast<component_handle<std::remove_reference_t<component_type>>>(add_component(typeHash<std::remove_reference_t<component_type>>(), reinterpret_cast<void*>(&value)));
         }
 
-
+        /**@brief Add multiple components to the entity.
+         * @tparam component_type First type of component to add.
+         * @tparam component_types The rest of the types of components to add.
+         * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
+         * @throws args_entity_not_found_error Thrown when handle's id is invalid.
+         * @throws args_unknown_component_error Thrown when the component type is unknown.
+         * @returns Tuple with all the handles.
+         */
         template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
         auto add_components() const;
 
+        /**@brief Add multiple components to the entity through the use of an archetype.
+         * @tparam archetype_type The type of archetype to add the components of.
+         * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
+         * @throws args_entity_not_found_error Thrown when handle's id is invalid.
+         * @throws args_unknown_component_error Thrown when the component type is unknown.
+         * @returns Tuple with all the handles.
+         */
         template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
         auto add_components() const;
 
+        /**@brief Add multiple components to the entity.
+         * @tparam component_type First type of component to add.
+         * @tparam component_types The rest of the types of components to add.
+         * @param value Starting value of the first component.
+         * @param values... Starting values of the other components.
+         * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
+         * @throws args_entity_not_found_error Thrown when handle's id is invalid.
+         * @throws args_unknown_component_error Thrown when the component type is unknown.
+         * @returns Tuple with all the handles.
+         */
         template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
         auto add_components(component_type&& value, component_types&&... values) const;        
 
+        /**@brief Add multiple components to the entity.
+         * @tparam component_type First type of component to add.
+         * @tparam component_types The rest of the types of components to add.
+         * @param value Starting value of the first component.
+         * @param values... Starting values of the other components.
+         * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
+         * @throws args_entity_not_found_error Thrown when handle's id is invalid.
+         * @throws args_unknown_component_error Thrown when the component type is unknown.
+         * @returns Tuple with all the handles.
+         */
         template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
         auto add_components(component_type& value, component_types&... values) const;
 
+        /**@brief Add multiple components to the entity through the use of an archetype.
+         * @tparam archetype_type The type of archetype to add the components of.
+         * @param values... Starting values of the components.
+         * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
+         * @throws args_entity_not_found_error Thrown when handle's id is invalid.
+         * @throws args_unknown_component_error Thrown when the component type is unknown.
+         * @returns Tuple with all the handles.
+         */
         template<typename archetype_type, typename... component_types, typename = inherits_from<archetype_type, archetype_base>>
         auto add_components(component_types&&... values) const;
 
@@ -312,9 +390,24 @@ namespace args::core::ecs
             remove_component(typeHash<component_type>());
         }
 
+        /**@brief Remove multiple components from entity.
+         * @tparam component_type Type of the first component to remove.
+         * @tparam component_types Types of the other components to remove.
+         * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
+         * @throws args_entity_not_found_error Thrown when handle's id is invalid.
+         * @throws args_unknown_component_error Thrown when the component type is unknown.
+         * @note Nothing will happen if the entity doesn't have a component.
+         */
         template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
         void remove_components() const;
 
+        /**@brief Remove multiple components from entity through an archetype.
+         * @tparam archetype_type Type of the archetype with the components to remove.
+         * @throws args_invalid_entity_error Thrown when handle's registry reference is invalid.
+         * @throws args_entity_not_found_error Thrown when handle's id is invalid.
+         * @throws args_unknown_component_error Thrown when the component type is unknown.
+         * @note Nothing will happen if the entity doesn't have a component.
+         */
         template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
         void remove_components() const;
 
