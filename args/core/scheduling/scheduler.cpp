@@ -4,12 +4,14 @@
 
 namespace args::core::scheduling
 {
+    constexpr size_type reserved_threads = 2;
+         
     async::readonly_rw_spinlock Scheduler::m_threadsLock;
     sparse_map<std::thread::id, std::unique_ptr<std::thread>> Scheduler::m_threads;
     std::queue<std::thread::id> Scheduler::m_unreservedThreads;
-    const uint Scheduler::m_maxThreadCount = (((int)std::thread::hardware_concurrency()) - 2) <= 0 ? 4 : std::thread::hardware_concurrency();
+    const uint Scheduler::m_maxThreadCount = (static_cast<int>(std::thread::hardware_concurrency()) - reserved_threads) <= 0 ? 4 : std::thread::hardware_concurrency();
     async::readonly_rw_spinlock Scheduler::m_availabilityLock;
-    uint Scheduler::m_availableThreads = m_maxThreadCount - 2; // subtract OS and this_thread.
+    uint Scheduler::m_availableThreads = m_maxThreadCount - reserved_threads; // subtract OS and this_thread.
 
     async::readonly_rw_spinlock Scheduler::m_jobQueueLock;
     std::queue<Scheduler::runnable> Scheduler::m_jobs;

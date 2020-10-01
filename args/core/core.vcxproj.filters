@@ -541,5 +541,6 @@
     <None Include="ecs\archetype.inl" />
     <None Include="..\..\.editorconfig" />
     <None Include="..\..\.clang-tidy" />
+    <None Include="ecs\entity_handle.inl" />
   </ItemGroup>
 </Project>

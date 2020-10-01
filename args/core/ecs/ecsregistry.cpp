@@ -62,6 +62,14 @@ namespace args::core::ecs
         return m_families[componentTypeId].get();
     }
 
+    bool EcsRegistry::hasComponent(id_type entityId, id_type componentTypeId)
+    {
+        if (!validateEntity(entityId))
+            throw args_entity_not_found_error;
+
+        return getFamily(componentTypeId)->has_component(entityId);
+    }
+
     component_handle_base EcsRegistry::getComponent(id_type entityId, id_type componentTypeId)
     {
         if (!validateEntity(entityId))

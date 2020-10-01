@@ -179,7 +179,7 @@ namespace args::application
             async::readwrite_guard guard(data::m_creationLock);
             for (auto entity : m_windowQuery)
             {
-                ContextHelper::setWindowShouldClose(entity.get_component_handle<window>().read(std::memory_order_relaxed), true);
+                ContextHelper::setWindowShouldClose(entity.get_component_handle<window>().read(), true);
             }
 
             m_exit = true;
@@ -284,10 +284,10 @@ namespace args::application
                 if (request.size == math::ivec2(0, 0))
                     request.size = { 400, 400 };
 
-                if (!request.name)
+                if (request.name.empty())
                     request.name = "<Args> Engine";
 
-                window win = ContextHelper::createWindow(request.size, request.name, request.monitor, request.share);
+                window win = ContextHelper::createWindow(request.size, request.name.c_str(), request.monitor, request.share);
                 win.m_title = request.name;
                 win.m_isFullscreen = (request.monitor != nullptr);
                 win.m_swapInterval = request.swapInterval;
@@ -408,7 +408,7 @@ namespace args::application
 
             for (auto entity : m_windowQuery)
             {
-                window win = entity.get_component_handle<window>().read(std::memory_order_relaxed);
+                window win = entity.get_component_handle<window>().read();
                 {
                     async::readwrite_guard guard(*win.lock);
                     ContextHelper::makeContextCurrent(win);

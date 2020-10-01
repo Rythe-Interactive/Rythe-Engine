@@ -53,16 +53,16 @@ namespace args::application
             return m_isFullscreen;
         }
 
-        inline cstring title() const
+        inline const std::string& title() const
         {
             return m_title;
         }
 
     private:
-        cstring m_title;
+        std::string m_title;
         bool m_isFullscreen;
         int m_swapInterval;
     };
 
-    constexpr window invalid_window = {};
+    const window invalid_window = {};
 }
