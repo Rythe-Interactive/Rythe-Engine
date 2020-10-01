@@ -50,11 +50,12 @@ namespace args::audio
 		//ARGS function binding
 
 		sourceQuery = createQuery<audio_source, position>();
-		listenerQuery = createQuery<audio_listener, position, rotation>();
 
 		createProcess<&AudioSystem::update>("Audio");
-		bindToEvent<events::component_creation<audio_source>, &AudioSystem::onComponentCreate>();
-		bindToEvent<events::component_destruction<audio_source>, &AudioSystem::onComponentDestroy>();
+		bindToEvent<events::component_creation<audio_source>, &AudioSystem::onAudioSourceComponentCreate>();
+		bindToEvent<events::component_destruction<audio_source>, &AudioSystem::onAudioSourceComponentDestroy>();
+		bindToEvent<events::component_creation<audio_listener>, &AudioSystem::onAudioListenerComponentCreate>();
+		//bindToEvent<events::component_destruction<audio_listener>, &AudioSystem::onAudioListenerComponentDestroy>();
 
 		// Release context on this thread
 		alcMakeContextCurrent(nullptr);
@@ -86,32 +87,23 @@ namespace args::audio
 			//audio_source a = sourceHandle.read();
 		}
 
-		if (listenerQuery.size() != 0)
+		if (m_listenerEnt)
 		{
-			auto entity = listenerQuery[0];
-			auto listenerHandle = entity.get_component_handle<audio_listener>();
-			auto positionHandle = entity.get_component_handle<position>();
-			auto rotationHandle = entity.get_component_handle<rotation>();
+			position p = m_listenerEnt->read_component<position>();
+			rotation r = m_listenerEnt->read_component<rotation>();
 
-			position p = positionHandle.read();
-			rotation r = rotationHandle.read();
+			setListener(p, r);
 
-			alListener3f(AL_POSITION, p.x, p.y, p.z);
 			math::vec3 vel = m_lisPos - p;
 			m_lisPos = p;
-			alListener3f(AL_VELOCITY, vel.x*100, vel.y*100, vel.z*100);
-			math::mat3 mat3 = math::toMat3(r);
-			math::vec3 forward = mat3 * math::vec3(0.f, 0.f, -1.f);
-			math::vec3 up = mat3 * math::vec3(0.f, 1.f, 0.f);
-			ALfloat ori[] = { forward.x, forward.y, forward.z, up.x, up.y, up.z };
-			alListenerfv(AL_ORIENTATION, ori);
+			alListener3f(AL_VELOCITY, vel.x, vel.y, vel.z);
 		}
-		
 
 		alcMakeContextCurrent(nullptr);
 	}
 
-	inline void AudioSystem::onComponentCreate(events::component_creation<audio_source>* event)
+#pragma region Component creation&destruction
+	inline void AudioSystem::onAudioSourceComponentCreate(events::component_creation<audio_source>* event)
 	{
 		async::readwrite_guard guard(*m_lock);
 		alcMakeContextCurrent(data::alContext);
@@ -140,7 +132,7 @@ namespace args::audio
 	}
 
 
-	inline void AudioSystem::onComponentDestroy(events::component_destruction<audio_source>* event)
+	inline void AudioSystem::onAudioSourceComponentDestroy(events::component_destruction<audio_source>* event)
 	{
 		async::readwrite_guard guard(*m_lock);
 		alcMakeContextCurrent(data::alContext);
@@ -153,10 +145,53 @@ namespace args::audio
 		alcMakeContextCurrent(nullptr);
 	}
 
+	inline void AudioSystem::onAudioListenerComponentCreate(events::component_creation<audio_listener>* event)
+	{
+		async::readwrite_guard guard(*m_lock);
+		alcMakeContextCurrent(data::alContext);
+
+		auto handle = event->entity.get_component_handle<audio_listener>();
+		audio_listener a = handle.read();
+		++data::listenerCount;
+		if (data::listenerCount > 1)
+		{
+			event->entity.remove_component<audio_listener>();
+		}
+		else
+		{
+			// listener count == 1
+			m_listenerEnt = &event->entity;
+			setListener(event->entity.read_component<position>(), event->entity.read_component<rotation>());
+		}
+		handle.write(a);
+		alcMakeContextCurrent(nullptr);
+	}
+
+	inline void AudioSystem::onAudioListenerComponentDestroy(events::component_creation<audio_listener>* event)
+	{
+		async::readwrite_guard guard(*m_lock);
+		alcMakeContextCurrent(data::alContext);
+
+		--data::listenerCount;
+		if (data::listenerCount == 0)
+		{
+			m_listenerEnt = nullptr;
+			// Reset listener
+			alListener3f(AL_POSITION, 0, 0, 0);
+			alListener3f(AL_VELOCITY, 0, 0, 0);
+			ALfloat ori[] = { 0, 0, 1.0f, 0, 1.0f, 0 };
+			alListenerfv(AL_ORIENTATION, ori);
+		}
+		alcMakeContextCurrent(nullptr);
+	}
+
+
+#pragma endregion
+
 	inline bool AudioSystem::initSource(audio_source& source)
 	{
 		// No need for setting a lock and makeContextCurrent since this function
-		// is called from another function (AudioSystem::onComponentCreate).
+		// is called from another function (AudioSystem::onAudioSourceComponentCreate).
 
 		alGenSources((ALuint)1, &source.m_sourceId);
 		alSourcef(source.m_sourceId, AL_PITCH, 1);
@@ -216,5 +251,20 @@ namespace args::audio
 	inline void AudioSystem::setDistanceModel(ALenum distanceModel)
 	{
 		alDistanceModel(distanceModel);
+	}
+
+	inline void AudioSystem::setListener(position p, rotation r)
+	{
+		// Do not readwrite lock, assume the the function that called this has 
+
+		// Position - invert x for left-right hand coord system conversion
+		alListener3f(AL_POSITION, -p.x, p.y, p.z);
+		//rotation
+		math::mat3 mat3 = math::toMat3(r);
+		// Invert z axis here for left-right hand coord system conversion
+		math::vec3 forward = mat3 * math::vec3(0.f, 0.f, -1.f);
+		math::vec3 up = mat3 * math::vec3(0.f, 1.f, 0.f);
+		ALfloat ori[] = { forward.x, forward.y, forward.z, up.x, up.y, up.z };
+		alListenerfv(AL_ORIENTATION, ori);
 	}
 }

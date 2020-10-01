@@ -22,10 +22,7 @@ namespace args::audio
     class AudioSystem final : public System<AudioSystem>
     {
     public:
-
         ecs::EntityQuery sourceQuery;
-        ecs::EntityQuery listenerQuery;
-
 
         ~AudioSystem()
         {
@@ -40,14 +37,25 @@ namespace args::audio
         * @brief Function callback for audio_source component creation.
         * @brief Initiallizes sound source and sound file
         */
-        void onComponentCreate(events::component_creation<audio_source>* event);
+        void onAudioSourceComponentCreate(events::component_creation<audio_source>* event);
 
         /**
         * @brief Function callback for audio_source component destruction.
         */
         // NOTE TO SELF
         // Make sure this releases the audio file and source
-        void onComponentDestroy(events::component_destruction<audio_source>* event);
+        void onAudioSourceComponentDestroy(events::component_destruction<audio_source>* event);
+
+        /**
+        * @brief Function callback for audio_listener component creation.
+        * @brief Initiallizes sound listener
+        */
+        void onAudioListenerComponentCreate(events::component_creation<audio_listener>* event);
+
+        /**
+        * @brief Function callback for audio_listener component destruction.
+        */
+        void onAudioListenerComponentDestroy(events::component_creation<audio_listener>* event);
 
         void update(time::span deltatime);
 
@@ -64,13 +72,16 @@ namespace args::audio
         * @brief ALC Extentions and device sample rate
         */
         void queryInformation();
+        void setListener(position p, rotation r);
         math::vec3 m_lisPos;
+        ecs::entity_handle* m_listenerEnt = nullptr;
 
         struct ARGS_API data
         {
             static ALCdevice* alDevice;
             static ALCcontext* alContext;
             static unsigned int sourceCount;
+            static unsigned int listenerCount;
         };
     };
 }
