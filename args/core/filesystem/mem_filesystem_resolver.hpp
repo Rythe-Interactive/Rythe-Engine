@@ -80,7 +80,7 @@ namespace args::core::filesystem
         /**@brief A hint to how big the fast memory representation is going to be.
          * @param [in] in The array with the compressed data.
          */
-        virtual std::size_t size_hint(std::shared_ptr<const byte_vec> in) const ARGS_IMPURE_RETURN(0)
+        virtual std::size_t size_hint(std::shared_ptr<const byte_vec> in) const ARGS_IMPURE_RETURN(0);
 
 
     private:
