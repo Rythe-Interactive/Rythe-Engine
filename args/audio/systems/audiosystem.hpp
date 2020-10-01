@@ -55,7 +55,7 @@ namespace args::audio
         /**
         * @brief Function callback for audio_listener component destruction.
         */
-        void onAudioListenerComponentDestroy(events::component_creation<audio_listener>* event);
+        void onAudioListenerComponentDestroy(events::component_destruction<audio_listener>* event);
 
         void update(time::span deltatime);
 
@@ -74,7 +74,7 @@ namespace args::audio
         void queryInformation();
         void setListener(position p, rotation r);
         math::vec3 m_lisPos;
-        ecs::entity_handle* m_listenerEnt = nullptr;
+        ecs::entity_handle m_listenerEnt;
 
         struct ARGS_API data
         {

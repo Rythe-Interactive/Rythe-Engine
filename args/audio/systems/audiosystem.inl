@@ -55,7 +55,7 @@ namespace args::audio
 		bindToEvent<events::component_creation<audio_source>, &AudioSystem::onAudioSourceComponentCreate>();
 		bindToEvent<events::component_destruction<audio_source>, &AudioSystem::onAudioSourceComponentDestroy>();
 		bindToEvent<events::component_creation<audio_listener>, &AudioSystem::onAudioListenerComponentCreate>();
-		//bindToEvent<events::component_destruction<audio_listener>, &AudioSystem::onAudioListenerComponentDestroy>();
+		bindToEvent<events::component_destruction<audio_listener>, &AudioSystem::onAudioListenerComponentDestroy>();
 
 		// Release context on this thread
 		alcMakeContextCurrent(nullptr);
@@ -89,8 +89,8 @@ namespace args::audio
 
 		if (m_listenerEnt)
 		{
-			position p = m_listenerEnt->read_component<position>();
-			rotation r = m_listenerEnt->read_component<rotation>();
+			position p = m_listenerEnt.read_component<position>();
+			rotation r = m_listenerEnt.read_component<rotation>();
 
 			setListener(p, r);
 
@@ -150,6 +150,8 @@ namespace args::audio
 		async::readwrite_guard guard(*m_lock);
 		alcMakeContextCurrent(data::alContext);
 
+		log::debug("Creating Audio Listener...");
+
 		auto handle = event->entity.get_component_handle<audio_listener>();
 		audio_listener a = handle.read();
 		++data::listenerCount;
@@ -160,22 +162,25 @@ namespace args::audio
 		else
 		{
 			// listener count == 1
-			m_listenerEnt = &event->entity;
+			m_listenerEnt = event->entity;
 			setListener(event->entity.read_component<position>(), event->entity.read_component<rotation>());
 		}
 		handle.write(a);
 		alcMakeContextCurrent(nullptr);
 	}
 
-	inline void AudioSystem::onAudioListenerComponentDestroy(events::component_creation<audio_listener>* event)
+	inline void AudioSystem::onAudioListenerComponentDestroy(events::component_destruction<audio_listener>* event)
 	{
 		async::readwrite_guard guard(*m_lock);
 		alcMakeContextCurrent(data::alContext);
 
-		--data::listenerCount;
+		log::debug("Destroying Audio Listener...");
+
+		data::listenerCount = math::max((int)(data::listenerCount-1), 0);
 		if (data::listenerCount == 0)
 		{
-			m_listenerEnt = nullptr;
+			log::debug("No Listeners left, resetting listener");
+			m_listenerEnt = ecs::entity_handle();
 			// Reset listener
 			alListener3f(AL_POSITION, 0, 0, 0);
 			alListener3f(AL_VELOCITY, 0, 0, 0);
@@ -262,7 +267,7 @@ namespace args::audio
 		//rotation
 		math::mat3 mat3 = math::toMat3(r);
 		// Invert z axis here for left-right hand coord system conversion
-		math::vec3 forward = mat3 * math::vec3(0.f, 0.f, -1.f);
+		math::vec3 forward = mat3 * math::vec3(0.f, 0.f, 1.f);
 		math::vec3 up = mat3 * math::vec3(0.f, 1.f, 0.f);
 		ALfloat ori[] = { forward.x, forward.y, forward.z, up.x, up.y, up.z };
 		alListenerfv(AL_ORIENTATION, ori);

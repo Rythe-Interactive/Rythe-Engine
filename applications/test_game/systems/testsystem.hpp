@@ -51,6 +51,9 @@ struct exit_action : public app::input_action<exit_action> {};
 
 struct physics_unit_test_move : public app::input_axis<physics_unit_test_move> {};
 
+struct create_listener : public app::input_action<create_listener> {};
+struct destroy_listener : public app::input_action<destroy_listener> {};
+
 
 
 class TestSystem final : public System<TestSystem>
@@ -124,6 +127,8 @@ public:
         app::InputSystem::createBinding<player_look_x>(app::inputmap::method::MOUSE_X, 0.f);
         app::InputSystem::createBinding<player_look_y>(app::inputmap::method::MOUSE_Y, 0.f);
         app::InputSystem::createBinding<exit_action>(app::inputmap::method::ESCAPE);
+        app::InputSystem::createBinding<create_listener>(app::inputmap::method::C);
+        app::InputSystem::createBinding<destroy_listener>(app::inputmap::method::V);
 
         app::InputSystem::createBinding< physics_unit_test_move>(app::inputmap::method::RIGHT, 1.0f);
         app::InputSystem::createBinding< physics_unit_test_move>(app::inputmap::method::LEFT, -1.0f);
@@ -136,6 +141,8 @@ public:
         bindToEvent<player_look_y, &TestSystem::onPlayerLookY>();
         bindToEvent<exit_action, &TestSystem::onExit>();
         bindToEvent<physics_unit_test_move, &TestSystem::onPhysicsUnitTest>();
+        bindToEvent<create_listener, &TestSystem::onListenerCreation>();
+        bindToEvent<destroy_listener, &TestSystem::onListenerDestruction>();
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
         window.enableCursor(false);
@@ -413,6 +420,16 @@ public:
         
 
         
+    }
+
+    void onListenerCreation(create_listener* action)
+    {
+        m_ecs->createComponent<audio::audio_listener>(player);
+    }
+
+    void onListenerDestruction(destroy_listener* action)
+    {
+        player.remove_component<audio::audio_listener>();
     }
 
     void setupCameraEntity()
