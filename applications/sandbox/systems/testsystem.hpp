@@ -16,6 +16,8 @@
 #include <core/compute/kernel.hpp>
 #include <rendering/debugrendering.hpp>
 
+#include <audio/audio.hpp>
+
 using namespace args;
 
 struct sah
@@ -263,6 +265,9 @@ public:
             auto ent = createEntity();
             ent.add_components<rendering::renderable, sah>({ uvsphereH, wireframeH }, {});
             ent.add_components<transform>(position(-5.1f, 3, 0), rotation(), scale(2.5f));
+            audio::audio_source source;
+            source.setAudioHandle(audio::AudioSegmentCache::createAudioSegment("waterfall", "assets://audio/365921__inspectorj__waterfall-small-b[mono].mp3"_view));
+            ent.add_component<audio::audio_source>(source);
         }
 
         setupCameraEntity();
@@ -312,6 +317,7 @@ public:
         player = createEntity();
         rotation rot = math::conjugate(math::normalize(math::toQuat(math::lookAt(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0)))));
         player.add_components<transform>(position(0.f, 3.f, 0.f), rot, scale());
+        player.add_component<audio::audio_listener>();
 
         rendering::camera cam;
         cam.set_projection(90.f, 0.1f, 1000.f);
