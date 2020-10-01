@@ -4,6 +4,7 @@
 #include <memory>
 #include <physics/halfedgeface.hpp>
 
+
 namespace args::physics
 {
 
@@ -17,6 +18,7 @@ namespace args::physics
     struct physicsComponent;
     struct physics_manifold;
     class ConvexCollider;
+
 
     class PhysicsCollider
     {
@@ -50,6 +52,7 @@ namespace args::physics
 
         // this is only here for debug reasons
         std::vector<TempLine> collisionsFound;
+
     private:
        //this is not used, its mostly for debug reasons
         std::vector<HalfEdgeFace*> dummyHalfEdges;
