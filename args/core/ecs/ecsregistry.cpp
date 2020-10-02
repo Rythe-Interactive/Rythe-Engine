@@ -52,7 +52,7 @@ namespace args::core::ecs
         world = entity_handle(world_entity_id, this);
     }
 
-    inline component_container_base* EcsRegistry::getFamily(id_type componentTypeId)
+    component_container_base* EcsRegistry::getFamily(id_type componentTypeId)
     {
         async::readonly_guard guard(m_familyLock);
 
@@ -62,7 +62,15 @@ namespace args::core::ecs
         return m_families[componentTypeId].get();
     }
 
-    inline component_handle_base EcsRegistry::getComponent(id_type entityId, id_type componentTypeId)
+    bool EcsRegistry::hasComponent(id_type entityId, id_type componentTypeId)
+    {
+        if (!validateEntity(entityId))
+            throw args_entity_not_found_error;
+
+        return getFamily(componentTypeId)->has_component(entityId);
+    }
+
+    component_handle_base EcsRegistry::getComponent(id_type entityId, id_type componentTypeId)
     {
         if (!validateEntity(entityId))
             throw args_entity_not_found_error;
@@ -70,7 +78,7 @@ namespace args::core::ecs
         return component_handle_base(entityId, this);
     }
 
-    inline component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId)
+    component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId)
     {
         if (!validateEntity(entityId))
             throw args_entity_not_found_error;
@@ -87,7 +95,7 @@ namespace args::core::ecs
         return component_handle_base(entityId, this);
     }
 
-    inline component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId, void* value)
+    component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId, void* value)
     {
         if (!validateEntity(entityId))
             throw args_entity_not_found_error;
@@ -104,7 +112,7 @@ namespace args::core::ecs
         return component_handle_base(entityId, this);
     }
 
-    inline void EcsRegistry::destroyComponent(id_type entityId, id_type componentTypeId)
+    void EcsRegistry::destroyComponent(id_type entityId, id_type componentTypeId)
     {
         if (!validateEntity(entityId))
             throw args_entity_not_found_error;
@@ -119,13 +127,13 @@ namespace args::core::ecs
         m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
     }
 
-    A_NODISCARD inline bool EcsRegistry::validateEntity(id_type entityId)
+    A_NODISCARD   bool EcsRegistry::validateEntity(id_type entityId)
     {
         async::readonly_guard guard(m_entityLock);
         return entityId && m_containedEntities.contains(entityId);
     }
 
-    inline entity_handle EcsRegistry::createEntity()
+    entity_handle EcsRegistry::createEntity()
     {
         id_type id = m_nextEntityId++;
 
@@ -146,7 +154,7 @@ namespace args::core::ecs
         return entity_handle(id, this);
     }
 
-    inline void EcsRegistry::destroyEntity(id_type entityId, bool recurse)
+    void EcsRegistry::destroyEntity(id_type entityId, bool recurse)
     {
         if (!validateEntity(entityId))
             throw args_entity_not_found_error;
@@ -190,7 +198,7 @@ namespace args::core::ecs
                 child.set_parent(invalid_id); // Remove parent from children.
     }
 
-    A_NODISCARD inline entity_handle EcsRegistry::getEntity(id_type entityId)
+    A_NODISCARD   entity_handle EcsRegistry::getEntity(id_type entityId)
     {
         if (!validateEntity(entityId))
             return entity_handle(invalid_id, this);
@@ -198,7 +206,7 @@ namespace args::core::ecs
         return entity_handle(entityId, this);;
     }
 
-    A_NODISCARD inline entity_data& EcsRegistry::getEntityData(id_type entityId)
+    A_NODISCARD   entity_data& EcsRegistry::getEntityData(id_type entityId)
     {
         if (!validateEntity(entityId))
             throw args_entity_not_found_error;
@@ -216,7 +224,7 @@ namespace args::core::ecs
         return *data;
     }
 
-    A_NODISCARD inline std::pair<entity_set&, async::readonly_rw_spinlock&> EcsRegistry::getEntities()
+    A_NODISCARD   std::pair<entity_set&, async::readonly_rw_spinlock&> EcsRegistry::getEntities()
     {
         return { m_entities, m_entityLock };
     }

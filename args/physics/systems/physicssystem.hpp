@@ -145,8 +145,6 @@ namespace args::physics
             //------------------------------------------------------ Narrowphase -----------------------------------------------------//
             std::vector<physics_manifold> manifoldsToSolve;
 
-            log::debug("------------- Narrowphase");
-
             for (auto& manifoldPrecursors : manifoldPrecursorGrouping)
             {
                 for (int i = 0; i < manifoldPrecursors.size()-1; i++)
@@ -181,21 +179,20 @@ namespace args::physics
                         
                         if (isBetweenTriggerAndNonTrigger || isBetweenRigidbodyAndNonTrigger || isBetween2Rigidbodies)
                         {
-
                             constructManifoldsWithPrecursors(manifoldPrecursors.at(i), manifoldPrecursors.at(j),
                                 manifoldsToSolve,
                                 precursorRigidbodyA || precursorRigidbodyB
                                 , precursorPhyCompA.isTrigger || precursorPhyCompB.isTrigger);
                         }
-                        
-
-                        //
-
                     }
                 }
             }
 
             //-------------------------------------------------- Collision Solver ---------------------------------------------------//
+            //for both contact and friction resolution, an iterative algorithm is used.
+            //Everytime physics_contact::resolveContactConstraint is called, the rigidbodies in question get closer to the actual
+            //"correct" linear and angular velocity (Projected Gauss Seidel). For the sake of simplicity, an arbitrary number is set for the
+            //iteration count.
 
             //the effective mass remains the same for every iteration of the solver. This means that we can precalculate it before
             //we start the solver
@@ -207,11 +204,6 @@ namespace args::physics
                     contact.preCalculateEffectiveMass();
                 }
             }
-
-            //for both contact and friction resolution, an iterative algorithm is used.
-            //Everytime physics_contact::resolveContactConstraint is called, the rigidbodies in question get closer to the actual
-            //"correct" linear and angular velocity (Projected Gauss Seidel). For the sake of simplicity, an arbitrary number is set for the
-            //iteration count.
 
             //resolve contact constraint
             for (size_t i = 0; i < constants::contactSolverIterationCount; i++)

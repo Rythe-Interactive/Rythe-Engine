@@ -116,7 +116,7 @@ namespace args::core::filesystem {
         /** @brief Gets the delimiter of the filesystem.
          *  @return char single character for the delimiter of the filesystem (default: strpath_manip::separator()).
          */
-        A_NODISCARD virtual char get_delimiter() const noexcept ARGS_IMPURE_RETURN(strpath_manip::separator())
+        A_NODISCARD virtual char get_delimiter() const noexcept ARGS_IMPURE_RETURN(strpath_manip::separator());
 
 
         /** @brief Destroys the file pointed to.

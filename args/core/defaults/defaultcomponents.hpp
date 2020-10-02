@@ -13,6 +13,7 @@ namespace args::core
         position(position&&) = default;
         position(const math::vec3& src) : math::vec3(src) {}
         position(float x, float y, float z) : math::vec3(x, y, z) {}
+        position(float v) : math::vec3(v) {}
         position& operator=(const position&) = default;
         position& operator=(position&&) = default;
         position& operator=(const math::vec3& src)
@@ -22,17 +23,22 @@ namespace args::core
         }
         template<typename Archive>
         void serialize(Archive& archive);
+        position& operator=(math::vec3&& src)
+        {
+            data = src.data;
+            return *this;
+        }
 
         static void init(position& pos)
         {
             pos.data = { 0.f, 0.f, 0.f };
-            log::debug("initializing position");
+            //log::debug("initializing position");
         }
 
-        static void destroy(position&)
-        {
-            log::debug("destroying position");
-        }
+        /* static void destroy(position&)
+         {
+             log::debug("destroying position");
+         }*/
     };
 
     template<typename Archive>
@@ -43,13 +49,19 @@ namespace args::core
 
     struct rotation : public math::quat
     {
-        rotation() : math::quat(1,0,0,0) {}
+        rotation() : math::quat(1, 0, 0, 0) {}
+        rotation(float w, float x, float y, float z) : math::quat(w, x, y, z) {}
         rotation(const rotation&) = default;
         rotation(rotation&&) = default;
         rotation(const math::quat& src) : math::quat(src) {}
         rotation& operator=(const rotation&) = default;
         rotation& operator=(rotation&&) = default;
         rotation& operator=(const math::quat& src)
+        {
+            data = src.data;
+            return *this;
+        }
+        rotation& operator=(math::quat&& src)
         {
             data = src.data;
             return *this;
@@ -67,6 +79,8 @@ namespace args::core
     struct scale : public math::vec3
     {
         scale() : math::vec3(1, 1, 1) {}
+        scale(float x, float y, float z) : math::vec3(x, y, z) {}
+        scale(float v) : math::vec3(v) {}
         scale(const scale&) = default;
         scale(scale&&) = default;
         scale(const math::vec3& src) : math::vec3(src) {}
@@ -77,6 +91,19 @@ namespace args::core
             data = src.data;
             return *this;
         }
+        scale& operator=(math::vec3&& src)
+        {
+            data = src.data;
+            return *this;
+        }
+    };
+
+    struct transform : public ecs::archetype<position, rotation, scale>
+    {
+        using base = ecs::archetype<position, rotation, scale>;
+
+        transform(const base::handleGroup& handles) : base(handles) {}
+    };
 
         template<typename Archive>
         void serialize(Archive& archive);

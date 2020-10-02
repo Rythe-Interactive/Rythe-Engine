@@ -13,14 +13,14 @@ namespace args::core::ecs
 
     child_iterator::child_iterator(impl* implptr) : m_pimpl(implptr) {}
 
-    inline entity_handle& entity_handle::operator=(const entity_handle& other)
+    entity_handle& entity_handle::operator=(const entity_handle& other)
     {
         m_id = other.m_id;
         m_registry = other.m_registry;
         return *this;
     }
 
-    A_NODISCARD inline const hashed_sparse_set<id_type>& entity_handle::component_composition() const
+    A_NODISCARD   const hashed_sparse_set<id_type>& entity_handle::component_composition() const
     {
         if (!m_registry)
             throw args_invalid_entity_error;
@@ -55,7 +55,7 @@ namespace args::core::ecs
         return m_registry->getEntity(m_registry->getEntityData(m_id).parent);
     }
 
-    inline void entity_handle::set_parent(id_type newParent) const
+    void entity_handle::set_parent(id_type newParent) const
     {
         if (!m_registry)
             throw args_invalid_entity_error;
@@ -74,12 +74,12 @@ namespace args::core::ecs
             data.parent = invalid_id;
     }
 
-    A_NODISCARD inline entity_handle entity_handle::operator[](index_type index) const
+    A_NODISCARD   entity_handle entity_handle::operator[](index_type index) const
     {
         return get_child(index);
     }
 
-    A_NODISCARD inline entity_handle entity_handle::get_child(index_type index) const
+    A_NODISCARD   entity_handle entity_handle::get_child(index_type index) const
     {
         if (!m_registry)
             throw args_invalid_entity_error;
@@ -96,7 +96,7 @@ namespace args::core::ecs
         return m_registry->getEntityData(m_id).children.size();
     }
 
-    inline void entity_handle::add_child(id_type childId) const
+    void entity_handle::add_child(id_type childId) const
     {
         if (!m_registry)
             throw args_invalid_entity_error;
@@ -108,7 +108,7 @@ namespace args::core::ecs
             child.set_parent(m_id);
     }
 
-    inline void entity_handle::remove_child(id_type childId) const
+    void entity_handle::remove_child(id_type childId) const
     {
         if (!m_registry)
             throw args_invalid_entity_error;
@@ -119,25 +119,32 @@ namespace args::core::ecs
             child.set_parent(invalid_id);
     }
 
-    A_NODISCARD inline bool entity_handle::has_component(id_type componentTypeId) const
+    A_NODISCARD   bool entity_handle::has_component(id_type componentTypeId) const
     {
         if (!m_registry)
             throw args_invalid_entity_error;
         return m_registry->getEntityData(m_id).components.contains(componentTypeId);
     }
 
-    A_NODISCARD inline component_handle_base entity_handle::get_component_handle(id_type componentTypeId) const
+    A_NODISCARD   component_handle_base entity_handle::get_component_handle(id_type componentTypeId) const
     {
         if (!m_registry)
             throw args_invalid_entity_error;
         return m_registry->getComponent(m_id, componentTypeId);
     }
 
-    inline component_handle_base entity_handle::add_component(id_type componentTypeId) const
+    component_handle_base entity_handle::add_component(id_type componentTypeId) const
     {
         if (!m_registry)
             throw args_invalid_entity_error;
         return m_registry->createComponent(m_id, componentTypeId);
+    }
+
+    component_handle_base entity_handle::add_component(id_type componentTypeId, void* value) const
+    {
+        if (!m_registry)
+            throw args_invalid_entity_error;
+        return m_registry->createComponent(m_id, componentTypeId, value);
     }
 
     void entity_handle::remove_component(id_type componentTypeId) const
@@ -147,14 +154,14 @@ namespace args::core::ecs
         m_registry->destroyComponent(m_id, componentTypeId);
     }
 
-    inline void entity_handle::destroy(bool recurse) const
+    void entity_handle::destroy(bool recurse) const
     {
         if (!m_registry)
             throw args_invalid_entity_error;
         m_registry->destroyEntity(m_id);
     }
 
-    inline bool entity_handle::valid() const
+    bool entity_handle::valid() const
     {
         if (m_registry && m_id)
             if (m_registry->validateEntity(m_id))
