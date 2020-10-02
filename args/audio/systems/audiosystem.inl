@@ -38,6 +38,7 @@ namespace args::audio
 		alListener3f(AL_VELOCITY, 0, 0, 0);
 		ALfloat ori[] = { 0, 0, 1.0f, 0, 1.0f, 0 };
 		alListenerfv(AL_ORIENTATION, ori);
+		m_listenerPosition = position(0,0,0);
 		log::info("initialized listener!");
 
 		alDopplerFactor(1.0f);
@@ -45,9 +46,11 @@ namespace args::audio
 
 		queryInformation();
 
+		//m_sourcePositions = std::unordered_map<ecs::component_handle<audio_source>, position>();
+
 		//ARGS function binding
 
-		sourceQuery = createQuery<audio_source, position>();
+		sourceQuery = createQuery<audio_source>();
 
 		createProcess<&AudioSystem::update>("Audio");
 		bindToEvent<events::component_creation<audio_source>, &AudioSystem::onAudioSourceComponentCreate>();
@@ -76,12 +79,33 @@ namespace args::audio
 	{
 		alcMakeContextCurrent(data::alContext);
 
+		int i;
+
 		for (auto entity : sourceQuery)
 		{
 			auto sourceHandle = entity.get_component_handle<audio_source>();
-			auto posHandle = entity.get_component_handle<position>();
 
-			//audio_source a = sourceHandle.read();
+			audio_source source = sourceHandle.read();
+			position p = entity.read_component<position>();
+			position& previousP = m_sourcePositions.at(sourceHandle);
+			math::vec3 vel = previousP - p;
+			previousP = p;
+			alSource3f(source.m_sourceId, AL_POSITION, p.x, p.y, p.z);
+			alSource3f(source.m_sourceId, AL_VELOCITY, vel.x, vel.y, vel.z);
+			log::debug(source.m_changes);
+			if (source.m_changes & 1)
+			{
+				// Pitch has changed
+				alSourcef(source.m_sourceId, AL_PITCH, source.getPitch());
+			}
+			if (source.m_changes & 2)
+			{
+				// Gain has changed
+				alSourcef(source.m_sourceId, AL_GAIN, source.getGain());
+			}
+
+			source.clearChanges();
+			sourceHandle.write(source);
 		}
 
 		if (m_listenerEnt)
@@ -91,8 +115,8 @@ namespace args::audio
 
 			setListener(p, r);
 
-			math::vec3 vel = m_lisPos - p;
-			m_lisPos = p;
+			math::vec3 vel = m_listenerPosition - p;
+			m_listenerPosition = p;
 			alListener3f(AL_VELOCITY, vel.x, vel.y, vel.z);
 		}
 
@@ -106,6 +130,7 @@ namespace args::audio
 
 		auto handle = event->entity.get_component_handle<audio_source>();
 		audio_source a = handle.read();
+
 		// do something with a.
 		if (!initSource(a))
 		{
@@ -118,8 +143,13 @@ namespace args::audio
 #endif
 			return;
 		}
+
+		// NOTE TO SELF:
+		// REMOVE THE AUTO PLAY (TESTING PURPOSE)
 		log::debug("playing sound");
 		alSourcePlay(a.m_sourceId);
+
+		m_sourcePositions.emplace(handle, event->entity.read_component<position>());
 
 		handle.write(a);
 		++data::sourceCount;
@@ -134,6 +164,9 @@ namespace args::audio
 
 		auto handle = event->entity.get_component_handle<audio_source>();
 		audio_source a = handle.read();
+
+		m_sourcePositions.erase(handle);
+
 		handle.write(a);
 		--data::sourceCount;
 
@@ -158,6 +191,7 @@ namespace args::audio
 			// listener count == 1
 			m_listenerEnt = event->entity;
 			setListener(event->entity.read_component<position>(), event->entity.read_component<rotation>());
+			m_listenerPosition = event->entity.read_component<position>();
 		}
 		handle.write(a);
 		alcMakeContextCurrent(nullptr);
@@ -212,36 +246,6 @@ namespace args::audio
 		//		This is here for testing purposes
 
 		alGenBuffers((ALuint)1, &source.m_audioBufferId);
-
-		/*fs::view view("assets://audio/365921__inspectorj__waterfall-small-b[mono].mp3");
-		auto result = view.get();
-		if (result != common::valid)
-		{
-			log::error("{}", result.get_error().what());
-			return false;
-		}
-
-		fs::basic_resource fileContents = result;
-		mp3dec_map_info_t map_info;
-		map_info.buffer = fileContents.data();
-		map_info.size = fileContents.size();
-
-		if (mp3dec_load_mapinfo(&source.m_mp3dec, &map_info, &source.m_audioInfo, NULL, NULL))
-		{
-			log::error("Failed to load audio file: {}", view.get_path());
-			return false;
-		}
-
-		log::info("audioFile: {}\nBuffer: \t{}\nChannels: \t{}\nHz: \t\t{}\nLayer \t\t{}\nSamples: \t{}\navg kbps: \t{}\n-------------------------------------\n",
-			view.get_path(),
-			(void*)source.m_audioInfo.buffer,
-			source.m_audioInfo.channels,
-			source.m_audioInfo.sampleRate,
-			source.m_audioInfo.layer,
-			source.m_audioInfo.samples,
-			source.m_audioInfo.avg_bitrate_kbps);*/
-
-		//source.m_audio.loadFromFileMp3("audio/365921__inspectorj__waterfall-small-b[mono].mp3");
 
 		auto [lock, segment] = source.m_audio_handle.get();
 

@@ -75,8 +75,10 @@ namespace args::audio
         */
         void queryInformation();
         void setListener(position p, rotation r);
-        math::vec3 m_lisPos;
         ecs::entity_handle m_listenerEnt;
+
+        position m_listenerPosition;
+        std::unordered_map <ecs::component_handle<audio_source>, position > m_sourcePositions;
 
         struct ARGS_API data
         {

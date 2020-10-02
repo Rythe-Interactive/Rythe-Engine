@@ -13,10 +13,10 @@ namespace args::audio
         * @brief Function to set the pitch for the audio source
         * @param const float pitch: new pitch value
         */
-        float setPitch(const float pitch)
+        void setPitch(const float pitch)
         {
             m_changes |= 1; // set b0
-            m_pitch = pitch;
+            m_pitch = args::math::max(0.0f, pitch);
         }
         /**
         * @brief Function to get the current pitch
@@ -26,10 +26,10 @@ namespace args::audio
         * @brief Function to set the gain for the audio source
         * @param const float gain: new gain value
         */
-        float setGain(const float gain)
+        void setGain(const float gain)
         {
             m_changes |= 2; // set b1
-            m_gain = gain;
+            m_gain = args::math::max(0.0f, gain);
         }
         /**
         * @brief Function to get the current gain
@@ -50,21 +50,21 @@ namespace args::audio
         /**
         * @brief Function to clear the changes that will be applied
         */
-        const void clearChanges()
+        void clearChanges()
         {
-            m_changes = 0;
+            m_changes ^= m_changes; // Reset
         }
 
         ALuint m_sourceId;
         ALuint m_audioBufferId;
         audio_segment_handle m_audio_handle;
 
-        float m_pitch;
-        float m_gain;
+        float m_pitch = 1.0f;
+        float m_gain = 1.0f;
 
         // Byte to keep track of changes made to audio source
         // b0 - pitch changed
         // b1 - gain changed
-        byte m_changes;
+        byte m_changes = 0;
     };
 }
