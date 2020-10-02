@@ -117,7 +117,7 @@ namespace args::core::ecs
         {
             {
                 async::readwrite_guard guard(m_lock);
-                m_components.insert(entityId, *reinterpret_cast<component_type*>(value));
+                m_components[entityId] = *reinterpret_cast<component_type*>(value);
             }
 
             m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId, m_registry));
