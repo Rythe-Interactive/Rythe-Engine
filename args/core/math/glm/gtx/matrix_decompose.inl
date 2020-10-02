@@ -191,6 +191,12 @@ namespace detail
 	}
 
 	template<typename T, qualifier Q>
+	GLM_FUNC_DECL mat<4, 4, T, Q> compose(vec<3, T, Q> const& Scale, qua<T, Q> const& Orientation, vec<3, T, Q> const& Translation)
+	{
+		return translate(Translation) * toMat4(Orientation) * scale(Scale);
+	}
+
+	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER bool decompose(mat<4, 4, T, Q> const& ModelMatrix, vec<3, T, Q>& Scale, qua<T, Q>& Orientation, vec<3, T, Q>& Translation)
 	{
 		mat<4, 4, T, Q> LocalMatrix(ModelMatrix);
