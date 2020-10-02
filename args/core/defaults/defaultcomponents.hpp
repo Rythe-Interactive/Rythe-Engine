@@ -122,16 +122,16 @@ namespace args::core
             if (parent && parent.has_components<transform>())
             {
                 transform transf = parent.get_component_handles<transform>();
-                return transf.get_local_to_world_matrix() * math::compose(positionH.read(), rotationH.read(), scaleH.read());
+                return transf.get_local_to_world_matrix() * math::compose(scaleH.read(), rotationH.read(), positionH.read());
             }
 
-            return math::compose(positionH.read(), rotationH.read(), scaleH.read());
+            return math::compose(scaleH.read(), rotationH.read(), positionH.read());
         }
 
         math::mat4 get_local_to_parent_matrix()
         {
             auto& [positionH, rotationH, scaleH] = handles;
-            return math::compose(positionH.read(), rotationH.read(), scaleH.read());
+            return math::compose(scaleH.read(), rotationH.read(), positionH.read());
         }
     };
 }
