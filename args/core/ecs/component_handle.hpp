@@ -263,7 +263,7 @@ namespace args::core::ecs
             if (!m_ownerId || !m_registry)
                 return;
 
-            m_registry->getFamily<component_type>()->destroy_component(m_ownerId);
+            m_registry->destroyComponent(m_ownerId, typeHash<component_type>());
         }
 
         /**@brief Checks if handle still points to a valid component.
