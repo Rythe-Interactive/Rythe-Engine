@@ -4,8 +4,8 @@ namespace args::audio
 {
 	inline void AudioSystem::setup()
 	{
-		m_lock = new async::readonly_rw_spinlock();
-		async::readwrite_guard guard(*m_lock);
+		m_contextLock = async::readonly_rw_spinlock();
+		async::readwrite_guard guard(m_contextLock);
 
 		alDevice = alcOpenDevice(NULL);
 		if (!alDevice)
@@ -62,6 +62,10 @@ namespace args::audio
 		alcMakeContextCurrent(nullptr);
 	}
 
+	inline AudioSystem::~AudioSystem()
+	{
+	}
+
 	inline void AudioSystem::queryInformation()
 	{
 		const ALchar* vendor = alGetString(AL_VENDOR);
@@ -77,9 +81,8 @@ namespace args::audio
 
 	inline void AudioSystem::update(time::span deltatime)
 	{
+		async::readonly_guard guard(m_contextLock);
 		alcMakeContextCurrent(alContext);
-
-		int i;
 
 		for (auto entity : sourceQuery)
 		{
@@ -126,8 +129,6 @@ namespace args::audio
 #pragma region Component creation&destruction
 	inline void AudioSystem::onAudioSourceComponentCreate(events::component_creation<audio_source>* event)
 	{
-		alcMakeContextCurrent(alContext);
-
 		auto handle = event->entity.get_component_handle<audio_source>();
 		audio_source a = handle.read();
 
@@ -135,33 +136,31 @@ namespace args::audio
 		if (!initSource(a))
 		{
 			handle.destroy();
-
-			alcMakeContextCurrent(nullptr);
-
 #if defined(AUDIO_EXIT_ON_FAIL)
 			raiseEvent<events::exit>();
 #endif
 			return;
 		}
 
-		// NOTE TO SELF:
-		// REMOVE THE AUTO PLAY (TESTING PURPOSE)
-		log::debug("playing sound");
-		alSourcePlay(a.m_sourceId);
+		{
+			async::readwrite_guard guard(m_contextLock);
+			alcMakeContextCurrent(alContext);
+			// NOTE TO SELF:
+			// REMOVE THE AUTO PLAY (TESTING PURPOSE)
+			log::debug("playing sound");
+			alSourcePlay(a.m_sourceId);
+			alcMakeContextCurrent(nullptr);
+		}
 
 		m_sourcePositions.emplace(handle, event->entity.read_component<position>());
 
 		handle.write(a);
 		++sourceCount;
-
-		alcMakeContextCurrent(nullptr);
 	}
 
 
 	inline void AudioSystem::onAudioSourceComponentDestroy(events::component_destruction<audio_source>* event)
 	{
-		alcMakeContextCurrent(alContext);
-
 		auto handle = event->entity.get_component_handle<audio_source>();
 		audio_source a = handle.read();
 
@@ -169,13 +168,10 @@ namespace args::audio
 
 		handle.write(a);
 		--sourceCount;
-
-		alcMakeContextCurrent(nullptr);
 	}
 
 	inline void AudioSystem::onAudioListenerComponentCreate(events::component_creation<audio_listener>* event)
 	{
-		alcMakeContextCurrent(alContext);
 
 		log::debug("Creating Audio Listener...");
 
@@ -194,14 +190,10 @@ namespace args::audio
 			m_listenerPosition = event->entity.read_component<position>();
 		}
 		handle.write(a);
-		alcMakeContextCurrent(nullptr);
 	}
 
 	inline void AudioSystem::onAudioListenerComponentDestroy(events::component_destruction<audio_listener>* event)
 	{
-		async::readwrite_guard guard(*m_lock);
-		alcMakeContextCurrent(alContext);
-
 		log::debug("Destroying Audio Listener...");
 
 		listenerCount = math::max((int)(listenerCount-1), 0);
@@ -210,12 +202,13 @@ namespace args::audio
 			log::debug("No Listeners left, resetting listener");
 			m_listenerEnt = ecs::entity_handle();
 			// Reset listener
+			async::readwrite_guard guard(m_contextLock);
+			alcMakeContextCurrent(alContext);
 			alListener3f(AL_POSITION, 0, 0, 0);
 			alListener3f(AL_VELOCITY, 0, 0, 0);
 			ALfloat ori[] = { 0, 0, 1.0f, 0, 1.0f, 0 };
 			alListenerfv(AL_ORIENTATION, ori);
 		}
-		alcMakeContextCurrent(nullptr);
 	}
 
 
@@ -223,8 +216,8 @@ namespace args::audio
 
 	inline bool AudioSystem::initSource(audio_source& source)
 	{
-		// No need for setting a lock and makeContextCurrent since this function
-		// is called from another function (AudioSystem::onAudioSourceComponentCreate).
+		async::readwrite_guard guard(m_contextLock);
+		alcMakeContextCurrent(alContext);
 
 		alGenSources((ALuint)1, &source.m_sourceId);
 		alSourcef(source.m_sourceId, AL_PITCH, 1);
@@ -255,6 +248,7 @@ namespace args::audio
 		}
 		
 		alSourcei(source.m_sourceId, AL_BUFFER, source.m_audioBufferId);
+		alcMakeContextCurrent(nullptr);
 
 		return true;
 	}
@@ -266,6 +260,8 @@ namespace args::audio
 
 	inline void AudioSystem::setListener(position p, rotation r)
 	{
+		async::readwrite_guard guard(m_contextLock);
+		alcMakeContextCurrent(alContext);
 		// Position - invert x for left-right hand coord system conversion
 		alListener3f(AL_POSITION, p.x, p.y, p.z);
 		//rotation
@@ -275,5 +271,6 @@ namespace args::audio
 		math::vec3 up = mat3 * math::vec3(0.f, 1.f, 0.f);
 		ALfloat ori[] = { forward.x, forward.y, forward.z, up.x, up.y, up.z };
 		alListenerfv(AL_ORIENTATION, ori);
+		alcMakeContextCurrent(nullptr);
 	}
 }

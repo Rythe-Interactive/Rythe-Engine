@@ -28,10 +28,7 @@ namespace args::audio
     public:
         ecs::EntityQuery sourceQuery;
 
-        ~AudioSystem()
-        {
-
-        }
+        ~AudioSystem();
 
         /**@brief Function for initializing the system.
          */
@@ -67,7 +64,7 @@ namespace args::audio
 
     private:
         bool initSource(audio_source& source);
-        async::readonly_rw_spinlock* m_lock;
+        async::readonly_rw_spinlock m_contextLock;
 
         /**
         * @brief Function to print information about openal.
