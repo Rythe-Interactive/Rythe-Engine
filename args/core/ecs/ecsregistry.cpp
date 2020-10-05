@@ -117,14 +117,13 @@ namespace args::core::ecs
         if (!validateEntity(entityId))
             throw args_entity_not_found_error;
 
+        m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
         getFamily(componentTypeId)->destroy_component(entityId);
 
         {
             async::readonly_guard guard(m_entityDataLock);
             m_entityData[entityId].components.erase(componentTypeId); // Is fine because the lock only locks order changes in the container, not the values themselves.
         }
-
-        m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
     }
 
     A_NODISCARD   bool EcsRegistry::validateEntity(id_type entityId)
