@@ -66,6 +66,7 @@ namespace args::core
         std::pair<async::readonly_rw_spinlock&, mesh&> get();
 
         bool operator==(const mesh_handle& other) const { return id == other.id; }
+        operator id_type() { return id; }
     };
 
     /**@brief Default invalid mesh handle.
