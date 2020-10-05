@@ -8,16 +8,18 @@
  * @file audiosystem.hpp
  */
 
-inline void openal_error()
-{
-    ALCenum error;
-    error = alGetError();
-    if (error != AL_NO_ERROR)
-        args::log::warn("ERROR: OpenAl error: {}", error);
-}
+
 
 namespace args::audio
 {
+    inline void openal_error()
+    {
+        ALCenum error;
+        error = alGetError();
+        if (error != AL_NO_ERROR)
+            args::log::warn("ERROR: OpenAl error: {}", error);
+    }
+
     /**@class AudioSystem
      * @brief This is a system that handles audio components.
      */
@@ -80,13 +82,10 @@ namespace args::audio
         position m_listenerPosition;
         std::unordered_map <ecs::component_handle<audio_source>, position > m_sourcePositions;
 
-        struct ARGS_API data
-        {
-            static ALCdevice* alDevice;
-            static ALCcontext* alContext;
-            static unsigned int sourceCount;
-            static unsigned int listenerCount;
-        };
+        static ALCdevice* alDevice;
+        static ALCcontext* alContext;
+        static unsigned int sourceCount;
+        static unsigned int listenerCount;
     };
 }
 

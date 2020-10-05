@@ -2,8 +2,8 @@
 
 namespace args::audio
 {
-    ALCdevice* AudioSystem::data::alDevice = nullptr;
-    ALCcontext* AudioSystem::data::alContext = nullptr;
-    unsigned int AudioSystem::data::sourceCount = 0;
-    unsigned int AudioSystem::data::listenerCount = 0;
+    ALCdevice* AudioSystem::alDevice = nullptr;
+    ALCcontext* AudioSystem::alContext = nullptr;
+    unsigned int AudioSystem::sourceCount = 0;
+    unsigned int AudioSystem::listenerCount = 0;
 }

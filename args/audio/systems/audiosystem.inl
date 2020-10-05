@@ -7,8 +7,8 @@ namespace args::audio
 		m_lock = new async::readonly_rw_spinlock();
 		async::readwrite_guard guard(*m_lock);
 
-		data::alDevice = alcOpenDevice(NULL);
-		if (!data::alDevice)
+		alDevice = alcOpenDevice(NULL);
+		if (!alDevice)
 		{
 			// Failed to create alcDevice
 			log::error("OpenAl device failed to open");
@@ -20,8 +20,8 @@ namespace args::audio
 		// Succesfully created alcDevice
 		log::info("Succesfully created openAl device");
 
-		data::alContext = alcCreateContext(data::alDevice, NULL);
-		if (!alcMakeContextCurrent(data::alContext))
+		alContext = alcCreateContext(alDevice, NULL);
+		if (!alcMakeContextCurrent(alContext))
 		{
 			// Failed to create alcContext
 			log::error("OpenAl context failed to create");
@@ -68,16 +68,16 @@ namespace args::audio
 		const ALchar* version = alGetString(AL_VERSION);
 		const ALchar* renderer = alGetString(AL_RENDERER);
 		const ALchar* openALExtensions = alGetString(AL_EXTENSIONS);
-		const ALchar* ALCExtensions = alcGetString(data::alDevice, ALC_EXTENSIONS);
+		const ALchar* ALCExtensions = alcGetString(alDevice, ALC_EXTENSIONS);
 		ALCint srate;
-		alcGetIntegerv(data::alDevice, ALC_FREQUENCY, 1, &srate);
+		alcGetIntegerv(alDevice, ALC_FREQUENCY, 1, &srate);
 		log::info("OpenAL info:\n\n\t\t\tOpenAL information\n\tVendor: {}\n\tVersion: {}\n\tRenderer: {}\n\tOpenAl Extensions: {}\n\tALC Extensions: {}\n\tDevice samplerate: {}\n",
 			vendor, version, renderer, openALExtensions, ALCExtensions, srate);
 	}
 
 	inline void AudioSystem::update(time::span deltatime)
 	{
-		alcMakeContextCurrent(data::alContext);
+		alcMakeContextCurrent(alContext);
 
 		int i;
 
@@ -126,7 +126,7 @@ namespace args::audio
 #pragma region Component creation&destruction
 	inline void AudioSystem::onAudioSourceComponentCreate(events::component_creation<audio_source>* event)
 	{
-		alcMakeContextCurrent(data::alContext);
+		alcMakeContextCurrent(alContext);
 
 		auto handle = event->entity.get_component_handle<audio_source>();
 		audio_source a = handle.read();
@@ -152,7 +152,7 @@ namespace args::audio
 		m_sourcePositions.emplace(handle, event->entity.read_component<position>());
 
 		handle.write(a);
-		++data::sourceCount;
+		++sourceCount;
 
 		alcMakeContextCurrent(nullptr);
 	}
@@ -160,7 +160,7 @@ namespace args::audio
 
 	inline void AudioSystem::onAudioSourceComponentDestroy(events::component_destruction<audio_source>* event)
 	{
-		alcMakeContextCurrent(data::alContext);
+		alcMakeContextCurrent(alContext);
 
 		auto handle = event->entity.get_component_handle<audio_source>();
 		audio_source a = handle.read();
@@ -168,21 +168,21 @@ namespace args::audio
 		m_sourcePositions.erase(handle);
 
 		handle.write(a);
-		--data::sourceCount;
+		--sourceCount;
 
 		alcMakeContextCurrent(nullptr);
 	}
 
 	inline void AudioSystem::onAudioListenerComponentCreate(events::component_creation<audio_listener>* event)
 	{
-		alcMakeContextCurrent(data::alContext);
+		alcMakeContextCurrent(alContext);
 
 		log::debug("Creating Audio Listener...");
 
 		auto handle = event->entity.get_component_handle<audio_listener>();
 		audio_listener a = handle.read();
-		++data::listenerCount;
-		if (data::listenerCount > 1)
+		++listenerCount;
+		if (listenerCount > 1)
 		{
 			event->entity.remove_component<audio_listener>();
 		}
@@ -200,12 +200,12 @@ namespace args::audio
 	inline void AudioSystem::onAudioListenerComponentDestroy(events::component_destruction<audio_listener>* event)
 	{
 		async::readwrite_guard guard(*m_lock);
-		alcMakeContextCurrent(data::alContext);
+		alcMakeContextCurrent(alContext);
 
 		log::debug("Destroying Audio Listener...");
 
-		data::listenerCount = math::max((int)(data::listenerCount-1), 0);
-		if (data::listenerCount == 0)
+		listenerCount = math::max((int)(listenerCount-1), 0);
+		if (listenerCount == 0)
 		{
 			log::debug("No Listeners left, resetting listener");
 			m_listenerEnt = ecs::entity_handle();
