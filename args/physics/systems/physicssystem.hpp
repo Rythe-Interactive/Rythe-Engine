@@ -22,6 +22,11 @@ namespace args::physics
     {
     public:
 
+        static std::vector<std::shared_ptr<physics::PenetrationQuery>> penetrationQueries;
+
+        static std::vector<math::vec3 > aPoint;
+        static std::vector<math::vec3> bPoint;
+
         ecs::EntityQuery  rigidbodyIntegrationQuery;
 
         virtual void setup()

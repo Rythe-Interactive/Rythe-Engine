@@ -1,8 +1,9 @@
 #include <physics/colliders/convexcollider.hpp>
 #include <physics/physics_statics.hpp>
-
+#include <physics/systems/physicssystem.hpp>
 #include <physics/data/convexconvexpenetrationquery.h>
 #include <physics/data/edgepenetrationquery.h>
+
 
 namespace args::physics
 {
@@ -10,21 +11,21 @@ namespace args::physics
     {
 
         //--------------------- Check for a collision by going through the edges and faces of both polyhedrons  --------------//
-        //'this' is colliderA and 'convexCollider' is colliderB
+        //'this' is colliderB and 'convexCollider' is colliderA
 
         HalfEdgeFace** ARefFace = &convexCollider->GetHalfEdgeFaces().at(0);
         float ARefSeperation;
-
-        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(this, convexCollider, manifold.transformA, manifold.transformB, ARefFace, ARefSeperation))
+        math::vec3 a;
+        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(this, convexCollider, manifold.transformB,manifold.transformA,  ARefFace, ARefSeperation, a))
         {
             manifold.isColliding = false;
             return;
         }
 
-        HalfEdgeFace** BRefFace = &convexCollider->GetHalfEdgeFaces().at(0);
+        HalfEdgeFace** BRefFace = &this->GetHalfEdgeFaces().at(0);
         float BRefSeperation;
-
-        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider, this, manifold.transformB, manifold.transformA, BRefFace, BRefSeperation))
+        math::vec3 b;
+        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider, this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation, b))
         {
             manifold.isColliding = false;
             return;
@@ -35,42 +36,40 @@ namespace args::physics
         math::vec3 edgeNormal;
         float aToBEdgeSeperation;
 
-        if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck(this, convexCollider, manifold.transformA, manifold.transformB,
+        if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck(this, convexCollider, manifold.transformB, manifold.transformA,
             edgeRef, edgeInc, edgeNormal, aToBEdgeSeperation))
         {
             manifold.isColliding = false;
             return;
         }
 
-        //gets the value of edgePositionPtr. HalfEdgeEdge is stored as a pointer to a pointer,
-        //it has a variable edgePositionPtr which is a pointer to a math::vec3.
-        auto edgeposgetter = [](HalfEdgeEdge** p) {
-            return *(*p)->edgePositionPtr;
-        };
+
+
 
         //--------------------- A Collision has been found, find the most shallow penetration  -------------------------------------//
 
         //Get world position and normal of reference faces //
 
         math::vec3 worldFaceCentroidA = manifold.transformA * math::vec4((*ARefFace)->centroid, 1);
-        math::vec3 worldFaceNormalA = manifold.transformA * math::vec4((*ARefFace)->centroid, 0);
+        math::vec3 worldFaceNormalA = manifold.transformA * math::vec4((*ARefFace)->normal, 0);
         
         math::vec3 worldFaceCentroidB = manifold.transformB * math::vec4((*BRefFace)->centroid, 1);
-        math::vec3 worldFaceNormalB = manifold.transformB * math::vec4((*BRefFace)->centroid, 0);
+        math::vec3 worldFaceNormalB = manifold.transformB * math::vec4((*BRefFace)->normal, 0);
 
-        math::vec3 worldEdgeAPosition = manifold.transformA * math::vec4(edgeposgetter(edgeRef), 1);
-        math::vec3 worldEdgeNormal = manifold.transformA * math::vec4(edgeposgetter(edgeRef), 0);
+        HalfEdgeEdge* refEdge = *edgeRef;
+        math::vec3 worldEdgeAPosition = manifold.transformA * math::vec4(*refEdge->edgePositionPtr, 1);
+        math::vec3 worldEdgeNormal = -edgeNormal;
 
         auto abPenetrationQuery =
-            std::make_shared< ConvexConvexPenetrationQuery>(*ARefFace,*BRefFace, worldFaceCentroidA,worldFaceNormalA,ARefSeperation,true);
+            std::make_shared< ConvexConvexPenetrationQuery>(*ARefFace,*BRefFace, worldFaceCentroidA,worldFaceNormalA,ARefSeperation,false);
 
         auto baPenetrationQuery =
-            std::make_shared < ConvexConvexPenetrationQuery>(*BRefFace, *ARefFace, worldFaceCentroidB, worldFaceNormalB, BRefSeperation, false);
+            std::make_shared < ConvexConvexPenetrationQuery>(*BRefFace, *ARefFace, worldFaceCentroidB, worldFaceNormalB, BRefSeperation, true);
 
         auto abEdgePenetrationQuery = 
-            std::make_shared < EdgePenetrationQuery>(*edgeRef,*edgeInc,worldEdgeAPosition,worldEdgeNormal,aToBEdgeSeperation,true);
+            std::make_shared < EdgePenetrationQuery>(*edgeRef,*edgeInc,worldEdgeAPosition,worldEdgeNormal,aToBEdgeSeperation,false);
 
-        std::array<std::shared_ptr<PenetrationQuery>, 3> penetrationQueryArray{ abEdgePenetrationQuery ,abPenetrationQuery, baPenetrationQuery };
+        std::array<std::shared_ptr<PenetrationQuery>, 3> penetrationQueryArray{ abEdgePenetrationQuery, abPenetrationQuery, baPenetrationQuery  };
 
         auto lessThan
         {
@@ -80,16 +79,17 @@ namespace args::physics
             }
         };
 
-        manifold.penetrationInformation = *std::max_element(penetrationQueryArray.begin(), penetrationQueryArray.end(), lessThan);
+        manifold.penetrationInformation = *std::max_element(penetrationQueryArray.begin(), penetrationQueryArray.end(),lessThan);
 
         manifold.isColliding = true;
-
-        log::debug("No seperating axis found!");
         TempLine line;
         line.start = manifold.transformA[3];
         line.end = manifold.transformB[3];
 
         //convexCollider->manifoldsFound.push_back(manifold.penetrationInformation);
+        PhysicsSystem::penetrationQueries.push_back(manifold.penetrationInformation);
+        PhysicsSystem::aPoint.push_back(a);
+        PhysicsSystem::bPoint.push_back(b);
 
         collisionsFound.push_back(line);
     }

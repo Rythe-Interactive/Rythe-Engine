@@ -50,7 +50,7 @@ namespace args::physics
          * @return returns true if a seperating axis was found
          */
         static bool FindSeperatingAxisByExtremePointProjection(ConvexCollider* convexA
-            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, HalfEdgeFace** refFace, float& maximumSeperation) 
+            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, HalfEdgeFace** refFace, float& maximumSeperation, math::vec3& debugPoint)
         {
             float currentMaximumSeperation = std::numeric_limits<float>::lowest();
 
@@ -58,7 +58,7 @@ namespace args::physics
             for ( auto face : convexB->GetHalfEdgeFaces())
             {
                 //get inverse normal
-                math::vec3 seperatingAxis = transformB * math::vec4( face->normal, 0);
+                math::vec3 seperatingAxis = math::normalize(transformB * math::vec4( face->normal, 0));
 
                 math::vec3 transformedPositionB = transformB * math::vec4(face->centroid, 1);
 
@@ -71,6 +71,7 @@ namespace args::physics
 
                 if (seperation > currentMaximumSeperation)
                 {
+                    debugPoint = worldSupportPoint;
                     currentMaximumSeperation = seperation;
                     *refFace = face;
                 }
@@ -78,12 +79,13 @@ namespace args::physics
                 if (seperation > 0)
                 {
                     //we have found a seperating axis, we can exit early
+                    maximumSeperation = currentMaximumSeperation;
                     return true;
                 }
             }
             //no seperating axis was found
             
-
+            maximumSeperation = currentMaximumSeperation;
             return false;
         }
 
@@ -101,14 +103,13 @@ namespace args::physics
          */
         static bool FindSeperatingAxisByGaussMapEdgeCheck(ConvexCollider* convexA, ConvexCollider* convexB, 
             const math::mat4& transformA, const math::mat4& transformB,HalfEdgeEdge** refEdge,HalfEdgeEdge** incEdge,
-            math::vec3& seperatingAxisFound,float & seperation)
+            math::vec3& seperatingAxisFound,float & maximumSeperation)
         {
             float currentMaximumSeperation = std::numeric_limits<float>::lowest();
       
 
             math::vec3 positionA = transformA[3];
 
-            seperation = 0.0f;
 
             for (auto faceA : convexA->GetHalfEdgeFaces())
             {
@@ -151,12 +152,14 @@ namespace args::physics
                                 edgeBNormal = math::normalize(edgeBNormal);
 
                                 //get the seperating axis
-                                math::vec3 seperatingAxis = math::normalize(math::cross(edgeANormal, edgeBNormal));
+                                math::vec3 seperatingAxis = math::cross(edgeANormal, edgeBNormal);
 
                                 if (math::epsilonEqual(math::length(seperatingAxis), 0.0f, math::epsilon<float>()))
                                 {
                                     continue;
                                 }
+
+                                seperatingAxis = math::normalize(seperatingAxis);
 
                                 //get world edge position
                                 math::vec3 edgeAtransformedPosition = transformA * math::vec4(*edgeA->edgePositionPtr, 1);
@@ -171,17 +174,17 @@ namespace args::physics
                                 //check if given edges create a seperating axis
                                 float distance = math::dot(seperatingAxis, edgeBtransformedPosition - edgeAtransformedPosition);
 
-                                if (currentMaximumSeperation > distance)
+                                if (distance > currentMaximumSeperation )
                                 {
                                     refEdge = &edgeA;
                                     incEdge = &edgeB;
                                     seperatingAxisFound = seperatingAxis;
                                     currentMaximumSeperation = distance;
-                                    seperation = distance;
                                 }
 
                                 if (distance > 0.0f)
                                 {
+                                    maximumSeperation = currentMaximumSeperation;
                                     return true;
                                 }
                             }
@@ -190,7 +193,7 @@ namespace args::physics
                 }
             }
 
-
+            maximumSeperation = currentMaximumSeperation;
             return false;
         }
 

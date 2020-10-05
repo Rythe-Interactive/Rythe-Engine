@@ -11,8 +11,6 @@ namespace args::physics
 		HalfEdgeEdge* refEdge = nullptr;
 		HalfEdgeEdge* incEdge = nullptr;
 
-		EdgePenetrationQuery() = default;
-
 		EdgePenetrationQuery(HalfEdgeEdge* pRefEdge, HalfEdgeEdge* pIncEdge,
 			math::vec3& pFaceCentroid, math::vec3& pNormal, float& pPenetration, bool pIsARef);
 

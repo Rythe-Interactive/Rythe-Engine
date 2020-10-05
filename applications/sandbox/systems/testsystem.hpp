@@ -11,10 +11,12 @@
 #include <physics/data/physics_manifold_precursor.h>
 #include <physics/systems/physicssystem.hpp>
 #include <physics/halfedgeface.hpp>
+#include <physics/data/penetrationquery.h>
 
 #include <core/compute/context.hpp>
 #include <core/compute/kernel.hpp>
 #include <rendering/debugrendering.hpp>
+#include <physics/systems/physicssystem.hpp>
 
 using namespace args;
 
@@ -58,6 +60,7 @@ class TestSystem final : public System<TestSystem>
 public:
     ecs::entity_handle player;
 
+   
 
     std::vector< ecs::entity_handle > physicsUnitTestObjects;
 
@@ -301,6 +304,11 @@ public:
         cubeParams.width = 2.0f;
         cubeParams.height = 2.0f;
 
+        physics::cube_collider_params cubeParams2;
+        cubeParams2.breadth = 3.0f;
+        cubeParams2.width = 3.0f;
+        cubeParams2.height = 3.0f;
+
         //----------- AABB to AABB Test  ------------//
         //**
         {
@@ -400,7 +408,7 @@ public:
 
             scaleH.write(math::vec3(1.0f));
         }
-          //*/
+        //*/
         //----------- OBB to OBB Test  ------------//
         //**
         {
@@ -515,6 +523,7 @@ public:
 
             scaleH.write(math::vec3(1.0f));
         }
+        //*/
 
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::differentThread>("TestChain");
@@ -758,6 +767,32 @@ public:
     {
         static auto physicsQuery = createQuery< physics::physicsComponent>();
         int i = 0;
+
+        for (auto penetration : physics::PhysicsSystem::penetrationQueries)
+        {
+            debug::drawLine(penetration->faceCentroid
+                , penetration->faceCentroid + penetration->normal, math::vec4(1, 0, 0, 1), 15.0f);
+
+        }
+
+        for (auto penetration : physics::PhysicsSystem::aPoint)
+        {
+            debug::drawLine(penetration
+                , penetration + math::vec3(0,0.2,0), math::vec4(1, 0, 0, 1), 15.0f);
+
+        }
+
+        for (auto penetration : physics::PhysicsSystem::bPoint)
+        {
+            debug::drawLine(penetration
+                , penetration + math::vec3(0, 0.2, 0), math::vec4(0, 0, 1, 1), 15.0f);
+
+        }
+
+        physics::PhysicsSystem::penetrationQueries.clear();
+        physics::PhysicsSystem::aPoint.clear();
+        physics::PhysicsSystem::bPoint.clear();
+
         //this is called so that i can draw stuff
         for (auto entity : physicsQuery)
         {
@@ -794,7 +829,7 @@ public:
                         math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
                         math::vec3 faceEnd = faceStart + math::vec3((localTransform * math::vec4(face->normal, 0)));
 
-                        //debug::drawLine(faceStart, faceEnd, math::colors::green, 5.0f);
+                       // debug::drawLine(faceStart, faceEnd, math::colors::green, 5.0f);
 
                         if (!currentEdge) { return; }
 
@@ -813,27 +848,8 @@ public:
                         } while (initialEdge != currentEdge && currentEdge != nullptr);
                     }
 
-                    //----------------- draw collisions --------------//
-                    for (auto line : physCollider->collisionsFound)
-                    {
-                        debug::drawLine(line.start, line.end, math::vec4(1,0,0,1), 20.0f);
-                    }
 
                     physCollider->collisionsFound.clear();
-
-
-                    //
-                    //for (auto penetrationInfo : queries)
-                    //{
-                    //
-                    //    debug::drawLine(penetrationInfo->faceCentroid,
-                    //        penetrationInfo->faceCentroid + penetrationInfo->normal,
-                    //        math::vec4(0, 0, 0, 1), 20.0f);
-                    //    //debug::drawLine(line.start, line.end, math::vec4(1, 0, 0, 1), 20.0f);
-                    //}
-
-                    //queries.clear();
-                    //physCollider->manifoldsFound.clear();
                 }
 
             }

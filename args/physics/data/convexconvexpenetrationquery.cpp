@@ -4,8 +4,8 @@
 namespace args::physics
 {
     ConvexConvexPenetrationQuery::ConvexConvexPenetrationQuery(HalfEdgeFace* pRefFace, HalfEdgeFace* pIncFace,
-        math::vec3& pFaceCentroid, math::vec3& pNormal, float& pPenetration, bool pIsARef)
-        : PenetrationQuery(pFaceCentroid,pNormal,penetration,pIsARef),refFace(pRefFace),incFace(pIncFace)
+        math::vec3& pFaceCentroid, math::vec3& pNormal, float pPenetration, bool pIsARef)
+        :  PenetrationQuery(pFaceCentroid,pNormal,pPenetration,pIsARef),refFace(pRefFace), incFace(pIncFace)
     {
 
     }

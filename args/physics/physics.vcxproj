@@ -17,6 +17,7 @@
     <ClCompile Include="data\edgepenetrationquery.cpp" />
     <ClCompile Include="halfedgeface.cpp" />
     <ClCompile Include="components\physics_component.cpp" />
+    <ClCompile Include="systems\physicssystem.cpp" />
     <ClCompile Include="systems\physicssystem.hpp" />
   </ItemGroup>
   <ItemGroup>

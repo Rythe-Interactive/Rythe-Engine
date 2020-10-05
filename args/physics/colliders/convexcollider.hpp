@@ -36,6 +36,11 @@ namespace args::physics
         * of both ConvexColliders 
         */
         void CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) override;
+
+
+
+
+
        
 
         //inline void DrawColliderRepresentation(math::mat4 transform) override

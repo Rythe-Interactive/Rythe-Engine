@@ -26,7 +26,7 @@ namespace args::physics
 
         PhysicsCollider() = default;
 
-        /** @brief given a PhysicsCollider CheckCollision calls "CheckCollisionWith". Both colliders are then passed through
+        /** @brief given a PhysicsCollider, CheckCollision calls "CheckCollisionWith". Both colliders are then passed through
         * to the correct "CheckCollisionWith" function with double dispatch.
         * @param physicsCollider The collider we would like to check collision against
         * @param [in/out] manifold A physics_manifold that holds information about the collision
@@ -38,6 +38,19 @@ namespace args::physics
         * the information is then passed to the manifold.
         */
         virtual void CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) {};
+
+        /** @brief given a PhysicsCollider, PopulateContactPoints calls PopulateContactPointsWith. Both colliders are then passed through
+        * to the corrent FillManifoldWith function with double dispatch.
+        */
+        virtual void PopulateContactPoints(
+            std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold& manifold) {};
+
+        /** @brief Creates the contact points between this physics collider and the given ConvexCollider and
+        * stores them in the manifold
+        */
+        virtual void PopulateContactPointsWith(
+            ConvexCollider* convexCollider, physics_manifold& manifold) {};
+
 
         /** @brief Given the transform of the entity that the collider is attached to, draws a visual representation
         * of the collider.

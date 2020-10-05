@@ -11,12 +11,10 @@ namespace args::physics
 	public:
 
 		math::vec3 faceCentroid,normal;
-		float penetration;
+		float penetration = 0.0f;
 		bool isARef;
 
-		PenetrationQuery() = default;
-
-		PenetrationQuery(math::vec3& pFaceCentroid,math::vec3& pNormal,float& pPenetration,bool pIsARef) :
+		PenetrationQuery(math::vec3& pFaceCentroid,math::vec3& pNormal,float pPenetration,bool pIsARef) :
 			faceCentroid(pFaceCentroid),normal(pNormal),penetration(pPenetration),isARef(pIsARef)
 		{
 
