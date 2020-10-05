@@ -1,5 +1,5 @@
 #pragma once
-#include <audio/detail/engine_include.hpp>
+#include <core/core.hpp>
 #include <audio/data/audio_segment.hpp>
 
 namespace args::audio

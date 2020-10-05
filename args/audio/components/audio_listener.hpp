@@ -1,5 +1,5 @@
 #pragma once
-#include <audio/detail/engine_include.hpp>
+#include <core/core.hpp>
 #include <AL/al.h>
 #include <AL/alc.h>
 

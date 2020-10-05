@@ -1,5 +1,5 @@
 #pragma once
-#include <audio/detail/engine_include.hpp>
+#include <core/core.hpp>
 #include <audio/systems/audiosystem.hpp>
 #include <audio/components/audio_source.hpp>
 #include <audio/components/audio_listener.hpp>

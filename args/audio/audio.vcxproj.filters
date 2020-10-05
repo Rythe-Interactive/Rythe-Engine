@@ -21,12 +21,15 @@
     <ClCompile Include="systems\audiosystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="data\audio_segment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="data\importers\audio_importers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="systems\audiosystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="detail\engine_include.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="audio.hpp">
@@ -39,6 +42,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="components\audio_listener.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\audio_segment.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\importers\audio_importers.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
