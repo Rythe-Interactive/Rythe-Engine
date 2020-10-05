@@ -93,7 +93,6 @@ namespace args::core::ecs
 
         /**@brief Atomic read of component.
          * @param order Memory order at which to load the component.
-        /**@brief Thread-safe read of component.
          * @returns component_type Current value of component.
          */
         A_NODISCARD component_type read()
@@ -131,10 +130,10 @@ namespace args::core::ecs
             return value;
         }
 
-        /**@brief Thread-safe write of component.
-         * @param value Value you wish to write.
-         * @returns component_type Current value of component.
-         */
+        ///**@brief Thread-safe write of component.
+        // * @param value Value you wish to write.
+        // * @returns component_type Current value of component.
+        // */
         component_type write(const component_type& value)
         {
             if (!m_ownerId || !m_registry)

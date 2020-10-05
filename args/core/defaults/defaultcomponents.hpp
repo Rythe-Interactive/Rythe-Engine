@@ -21,8 +21,6 @@ namespace args::core
             data = src.data;
             return *this;
         }
-        template<typename Archive>
-        void serialize(Archive& archive);
         position& operator=(math::vec3&& src)
         {
             data = src.data;
@@ -40,12 +38,6 @@ namespace args::core
              log::debug("destroying position");
          }*/
     };
-
-    template<typename Archive>
-    inline void position::serialize(Archive& archive)
-    {
-        archive(cereal::make_nvp("Position", *this));
-    }
 
     struct rotation : public math::quat
     {
@@ -66,15 +58,7 @@ namespace args::core
             data = src.data;
             return *this;
         }
-        template<typename Archive>
-        void serialize(Archive& archive);
     };
-
-    template<typename Archive>
-    inline void rotation::serialize(Archive& archive)
-    {
-        archive(cereal::make_nvp("Rotation", *this));
-    }
 
     struct scale : public math::vec3
     {
@@ -104,29 +88,6 @@ namespace args::core
 
         transform(const base::handleGroup& handles) : base(handles) {}
     };
-
-        template<typename Archive>
-        void serialize(Archive& archive);
-      
-    };
-
-    template<typename Archive>
-    inline void scale::serialize(Archive& archive)
-    {
-        archive(cereal::make_nvp("Scale", *this));
-    }
-
-    struct transform : public ecs::archetype<position, rotation, scale> {
-
-        template<typename Archive>
-        void serialize(Archive& archive);
-    };
-
-    template<typename Archive>
-    inline void transform::serialize(Archive& archive)
-    {
-        archive();
-    }
 }
 
 namespace fmt
@@ -181,6 +142,7 @@ namespace fmt
                 static_cast<math::quat>(r));
         }
     };
+
     template <>
     struct fmt::formatter<scale> {
         char presentation = 'f';

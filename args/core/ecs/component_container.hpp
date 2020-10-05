@@ -123,7 +123,6 @@ namespace args::core::ecs
             m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId, m_registry));
         }
 
-<<<<<<< HEAD
        /**@brief Serializes the component, into either JSON or Binary
         * @param template typenmae Archive oarchive
         * @ref args::core::async::readonly_rw_spinlock
@@ -147,19 +146,11 @@ namespace args::core::ecs
         }
 
 
-       /**@brief Destroys component atomically.
-        * @note Thread will be halted if there are any reads or writes until they are finished.
-        * @note Will trigger write on this container.
-        * @param entityId ID of entity you wish to remove the component from.
-        * @ref args::core::async::readonly_rw_spinlock
-        */
-=======
         /**@brief Destroys component in a thread-safe way.
          * @note Calls component_type::destroy if it exists.
          * @note Raises the events::component_destruction<component_type>> event.
          * @param entityId ID of entity you wish to remove the component from.
          */
->>>>>>> develop
         virtual void destroy_component(id_type entityId) override
         {
             m_eventBus->raiseEvent<events::component_destruction<component_type>>(entity_handle(entityId, m_registry));
