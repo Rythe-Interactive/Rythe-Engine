@@ -307,7 +307,7 @@ namespace args::core::ecs
         template<typename component_type>
         component_handle<std::remove_reference_t<component_type>> add_component(component_type& value) const
         {
-            return add_component(typeHash<std::remove_reference_t<component_type>>(), reinterpret_cast<void*>(&value)).cast<std::remove_reference_t<component_type>>();
+            return add_component(typeHash<std::remove_reference_t<component_type>>(), reinterpret_cast<void*>(&value)).template cast<std::remove_reference_t<component_type>>();
         }
 
         /**@brief Add multiple components to the entity.
