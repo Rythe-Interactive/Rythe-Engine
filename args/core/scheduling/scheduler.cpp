@@ -67,12 +67,10 @@ namespace args::core::scheduling
     Scheduler::Scheduler(events::EventBus* eventBus, bool low_power) : m_eventBus(eventBus), m_low_power(low_power)
     {
         args::core::log::impl::thread_names[std::this_thread::get_id()] = "Initialization";
-        async::readonly_rw_spinlock::reportThread(std::this_thread::get_id());
 
         std::thread::id id;
         while ((id = createThread(threadMain, &m_threadsShouldTerminate, &m_threadsShouldStart, low_power)) != invalid_thread_id)
         {
-            async::readonly_rw_spinlock::reportThread(id);
             m_commands[id];
             m_commandLocks[id];
         }
