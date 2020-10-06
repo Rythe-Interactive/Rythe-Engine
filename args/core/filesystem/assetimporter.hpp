@@ -62,7 +62,7 @@ namespace args::core::filesystem
     class AssetImporter
     {
     private:
-        struct ARGS_API data
+        struct data
         {
             static sparse_map<id_type, detail::resource_converter_base*> m_converters;
         };

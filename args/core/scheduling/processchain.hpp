@@ -12,14 +12,14 @@
 
 namespace args::core::scheduling
 {
-	class ARGS_API Scheduler;
-	class ARGS_API Process;
+	class Scheduler;
+	class Process;
 
 	/**@class ProcessChain
 	 * @brief Chain of processes that either run in a separate thread or on the main thread.
 	 * @note If chain is to run on a separate thread, then the chain has it's own program loop. ProcessChain::exit() needs to be called in order to end the thread.
 	 */
-	class ARGS_API ProcessChain
+	class ProcessChain
 	{
 	private:
 		std::string m_name;

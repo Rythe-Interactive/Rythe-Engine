@@ -10,7 +10,7 @@ namespace args::rendering
     /**@class stbi_texture_loader
      * @brief Resource converter for loading textures using stb_image
      */
-    struct ARGS_API stbi_texture_loader : public fs::resource_converter<texture, texture_import_settings>
+    struct stbi_texture_loader : public fs::resource_converter<texture, texture_import_settings>
     {
         // All file extensions supported by stb_image
         constexpr static cstring extensions[] = { ".png", ".jpg", ".jpeg", ".jpe", ".jfif", ".jfi", ".jif", ".bmp", ".dib", ".raw", ".psd", ".psb", ".tga", ".icb", ".vda", ".vst", ".hdr", ".ppm", ".pgm" };

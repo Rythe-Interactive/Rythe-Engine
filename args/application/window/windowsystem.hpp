@@ -16,7 +16,7 @@ namespace args::application
     class WindowSystem final : public System<WindowSystem>
     {
     private:
-        struct ARGS_API data // Static data that needs to be exported.
+        struct data // Static data that needs to be exported.
         {
             static sparse_map<GLFWwindow*, ecs::component_handle<window>> m_windowComponents;
             static sparse_map<GLFWwindow*, events::EventBus*> m_windowEventBus;

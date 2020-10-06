@@ -38,7 +38,7 @@ namespace args::core::ecs
     /**@class EcsRegistry
      * @brief Manager and owner of all ECS related objects.
      */
-    class ARGS_API EcsRegistry
+    class EcsRegistry
     {
     private:
         static id_type m_nextEntityId;

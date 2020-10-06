@@ -530,6 +530,7 @@ namespace args::application
                 axis.last_mods   = inputmap::modifier_keys::NONE;
                 axis.last_method = inputmap::method::HSCROLL;
             }
+
             for (auto [_, axis] : data::m_axes[inputmap::method::VSCROLL])
             {
                 axis.last_value  += static_cast<float>(pos.y);
@@ -538,7 +539,7 @@ namespace args::application
             }
         }
 
-        struct ARGS_API data
+        struct data
         {
             static math::dvec2 m_mousePos;
             static math::dvec2 m_mouseDelta;

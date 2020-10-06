@@ -24,7 +24,6 @@
     <ClInclude Include="data\material.hpp" />
     <ClInclude Include="data\shader.hpp" />
     <ClInclude Include="debugrendering.hpp" />
-    <ClInclude Include="detail\engine_include.hpp" />
     <ClInclude Include="detail\stb_image.h" />
     <ClInclude Include="detail\tiny_obj_loader.h" />
     <ClInclude Include="data\model.hpp" />

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <physics/physicsimport.h>
+#include <core/core.hpp>
 #include <physics/colliders/physicscollider.hpp>
 #include <physics/cube_collider_params.hpp>
 #include <physics/halfedgeedge.hpp>
@@ -13,7 +13,7 @@ namespace args::physics
 
 
 
-	class ARGS_API ConvexCollider : public PhysicsCollider
+	class ConvexCollider : public PhysicsCollider
 	{
 	public:
 
