@@ -60,6 +60,7 @@ namespace args::audio
 
 		// Release context on this thread
 		alcMakeContextCurrent(nullptr);
+		mp3_audio_loader::context = std::shared_ptr<ALCcontext>(alContext);
 	}
 
 	inline AudioSystem::~AudioSystem()
@@ -95,7 +96,6 @@ namespace args::audio
 			previousP = p;
 			alSource3f(source.m_sourceId, AL_POSITION, p.x, p.y, p.z);
 			alSource3f(source.m_sourceId, AL_VELOCITY, vel.x, vel.y, vel.z);
-			log::debug(source.m_changes);
 			if (source.m_changes & 1)
 			{
 				// Pitch has changed
@@ -172,7 +172,6 @@ namespace args::audio
 
 	inline void AudioSystem::onAudioListenerComponentCreate(events::component_creation<audio_listener>* event)
 	{
-
 		log::debug("Creating Audio Listener...");
 
 		auto handle = event->entity.get_component_handle<audio_listener>();
@@ -234,20 +233,18 @@ namespace args::audio
 		alSource3f(source.m_sourceId, AL_POSITION, 0, 0, 0);
 		alSource3f(source.m_sourceId, AL_VELOCITY, 0, 0, 0);
 
-		// NOTE TO SELF:
-		//		Move audio loading somewhere else
-		//		This is here for testing purposes
-
-		alGenBuffers((ALuint)1, &source.m_audioBufferId);
+		// Moved gen buffers to audio_importers.cpp
+		//alGenBuffers((ALuint)1, &source.m_audioBufferId);
 
 		auto [lock, segment] = source.m_audio_handle.get();
 
-		{
+		// Moved alBufferData to audio_importers.cpp
+		/*{
 			async::readonly_guard guard(lock);
 			alBufferData(source.m_audioBufferId, AL_FORMAT_MONO16, segment.buffer, segment.samples * sizeof(int16), segment.sampleRate);
-		}
+		}*/
 		
-		alSourcei(source.m_sourceId, AL_BUFFER, source.m_audioBufferId);
+		alSourcei(source.m_sourceId, AL_BUFFER, segment.audioBufferId);
 		alcMakeContextCurrent(nullptr);
 
 		return true;

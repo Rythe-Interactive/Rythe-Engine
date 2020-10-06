@@ -56,7 +56,6 @@ namespace args::audio
         }
 
         ALuint m_sourceId;
-        ALuint m_audioBufferId;
         audio_segment_handle m_audio_handle;
 
         float m_pitch = 1.0f;

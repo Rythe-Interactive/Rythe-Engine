@@ -1,12 +1,16 @@
 #pragma once
 #include <core/core.hpp>
+#include <AL/al.h>
+#include <AL/alc.h>
 
 namespace args::audio
 {
 	struct audio_segment
 	{
 	public:
-        int16* buffer;
+        int16* data;
+        ALuint audioBufferId;
+
         /* Channels included, byte size = samples*sizeof(int16) */
         size_type samples; 
         int channels, sampleRate, layer, avg_bitrate_kbps;

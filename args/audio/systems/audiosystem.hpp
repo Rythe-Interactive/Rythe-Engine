@@ -3,6 +3,7 @@
 #include <audio/components/audio_listener.hpp>
 #define AL_ALEXT_PROTOTYPES
 #include <al/alext.h>
+#include <audio/data/importers/audio_importers.hpp>
 
 /**
  * @file audiosystem.hpp

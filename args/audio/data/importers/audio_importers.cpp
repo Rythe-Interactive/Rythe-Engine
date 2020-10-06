@@ -5,6 +5,9 @@
 
 namespace args::audio
 {
+    std::shared_ptr<ALCcontext> mp3_audio_loader::context = nullptr;
+    auto mp3_audio_loader::contextLock = async::readonly_rw_spinlock();
+
     common::result_decay_more<audio_segment, fs_error> mp3_audio_loader::load(const fs::basic_resource& resource, audio_import_settings&& settings)
     {
         using common::Err, common::Ok;
@@ -24,12 +27,20 @@ namespace args::audio
 
         audio_segment as{
             fileInfo.buffer,
+            0,
             fileInfo.samples,
             fileInfo.channels,
             fileInfo.hz,
             fileInfo.layer,
             fileInfo.avg_bitrate_kbps
         };
+
+        async::readwrite_guard guard(contextLock);
+        alcMakeContextCurrent(context.get());
+        //Generate openal buffer
+        alGenBuffers((ALuint)1, &as.audioBufferId);
+        alBufferData(as.audioBufferId, AL_FORMAT_MONO16, as.data, as.samples * sizeof(int16), as.sampleRate);
+        alcMakeContextCurrent(nullptr);
 
         return decay(Ok(as));
     }
