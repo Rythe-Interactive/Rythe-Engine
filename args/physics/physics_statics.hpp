@@ -89,7 +89,7 @@ namespace args::physics
             return false;
         }
 
-        /** @brief Given 2 ConvexColliders, Goes through every single possible edge combination in order to check for a seperating axis. This is done
+        /** @brief Given 2 ConvexColliders, Goes through every single possible edge combination in order to check for a valid seperating axis. This is done
          * by creating a minkowski face with each edge combination.
          * @param convexA the reference collider 
          * @param convexB the incident collider
@@ -197,9 +197,102 @@ namespace args::physics
             return false;
         }
 
-        private:
+        //---------------------------------------------------------- Polyhedron Clipping ----------------------------------------------------------------------------//
 
-        //--------------------------------------------- private helper functions -------------------------------------------------------//
+        /** @brief Given a 3D plane, clips the vertices in the inputList and places the results in the output list
+         * 
+         */
+        static void SutherlandHodgmanFaceClip(math::vec3& planeNormal, math::vec3& planePosition,
+             std::vector<math::vec3>& inputList, std::vector<math::vec3>& outputList)
+        {
+            for (size_t i = 0; i < inputList.size(); i++)
+            {
+                math::vec3 currentVertex = inputList.at(i);
+                math::vec3 nextVertex = i + 1 >= inputList.size() ? inputList.at(0) : inputList.at(i + 1);
+
+                bool isCurrentVertexUnderPlane = !IsPointAbovePlane(planeNormal, planePosition, currentVertex);
+                bool isNextVertexUnderPlane = !IsPointAbovePlane(planeNormal, planePosition, nextVertex);
+
+                //we always check clipping with a line that goes from the point below the plane to the point outside the plane.
+                //We do this mostly for numerical robustness reasons.
+                const math::vec3& pointAbovePlane = isCurrentVertexUnderPlane ? nextVertex : currentVertex;
+                const math::vec3& pointBelowPlane = isCurrentVertexUnderPlane ? currentVertex : nextVertex;
+
+                if (isCurrentVertexUnderPlane && isNextVertexUnderPlane)
+                {
+                    //send next vertex to outputlist
+                    outputList.push_back(nextVertex);
+                }
+                else if (!isCurrentVertexUnderPlane && isNextVertexUnderPlane)
+                {
+                    //send next vertex to outputlist and the intersection between the line and the plane
+
+                    math::vec3 intersectionPoint;
+
+                    if (FindLineToPlaneIntersectionPoint(planeNormal, planePosition,
+                        pointBelowPlane, pointAbovePlane, intersectionPoint))
+                    {
+                        outputList.push_back(intersectionPoint);
+                    }
+
+                    outputList.push_back(nextVertex);
+
+                }
+                else if (isCurrentVertexUnderPlane && !isNextVertexUnderPlane)
+                {
+                    //send intersection between the line and the plane
+
+                    math::vec3 intersectionPoint;
+
+                    if (FindLineToPlaneIntersectionPoint(planeNormal, planePosition,
+                        pointBelowPlane, pointAbovePlane, intersectionPoint))
+                    {
+                        outputList.push_back(intersectionPoint);
+                    }
+                }
+                
+
+
+
+            }
+        }
+
+        //------------------------------------------------------------ helper functions -----------------------------------------------------------------------//
+
+        static float PointDistanceToPlane(const math::vec3 & planeNormal, const math::vec3& planePosition, const math::vec3& point)
+        {
+            return math::dot(point - planePosition, planeNormal);
+        }
+
+        static bool IsPointAbovePlane(const math::vec3& planeNormal, const math::vec3& planePosition, const math::vec3& point)
+        {
+            return PointDistanceToPlane(planeNormal, planePosition, point) > 0.0f;
+        }
+
+        static bool FindLineToPlaneIntersectionPoint(const math::vec3& planeNormal, const math::vec3& planePosition,
+            const math::vec3& startPoint, const math::vec3& endPoint, math::vec3& intersectionPoint)
+        {
+            math::vec3 direction = endPoint - startPoint;
+
+            if (math::epsilonEqual(math::dot(direction, planeNormal), 0.0f, math::epsilon<float>()))
+            {
+                return false;
+            }
+
+            float t = FindVectorToPlaneInterpolation(startPoint, endPoint, planePosition, planeNormal);
+
+            intersectionPoint = startPoint + math::normalize(direction) * t;
+
+            return true;
+        }
+
+        static float FindVectorToPlaneInterpolation(const math::vec3& startPoint, const math::vec3& endPoint, const math::vec3& planePosition,
+            const math::vec3& planeNormal)
+        {
+            return math::dot(planePosition - startPoint, planeNormal) / math::dot(math::normalize(endPoint - startPoint), planeNormal);
+        }
+
+        private:
 
         /** @brief Given 2 HalfEdgeEdges and their respective transforms, transforms their normals and checks if they create a minkowski face
          * @return returns true if a minkowski face was succesfully constructed

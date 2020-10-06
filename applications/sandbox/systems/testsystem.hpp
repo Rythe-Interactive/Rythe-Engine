@@ -35,9 +35,10 @@ struct sah
     }
 };
 
-struct physicsIdentifier
+enum class PhysicsUnitTestMode
 {
-
+    CollisionDetectionMode,
+    CollisionResolution
 };
 
 struct player_move : public app::input_axis<player_move> {};
@@ -60,9 +61,8 @@ class TestSystem final : public System<TestSystem>
 public:
     ecs::entity_handle player;
 
-   
-
-    std::vector< ecs::entity_handle > physicsUnitTestObjects;
+    std::vector< ecs::entity_handle > physicsUnitTestCD;
+    std::vector< ecs::entity_handle > physicsUnitTestCR;
 
     virtual void setup()
     {
@@ -295,10 +295,24 @@ public:
 
         setupCameraEntity();
 
-
-
         //---------------------------------------------------------- Physics Collision Unit Test -------------------------------------------------------------------//
 
+        setupPhysicsCDUnitTest(cubeH, wireframeH);
+      
+        //----------- Rigidbody-Collider AABB Test------------//
+
+        setupPhysicsCRUnitTest(cubeH, wireframeH);
+
+
+        createProcess<&TestSystem::update>("Update");
+        createProcess<&TestSystem::differentThread>("TestChain");
+        createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
+        createProcess<&TestSystem::drawInterval>("Physics",0.01);
+
+    }
+
+    void setupPhysicsCDUnitTest(rendering::model_handle cubeH, rendering::material_handle wireframeH)
+    {
         physics::cube_collider_params cubeParams;
         cubeParams.breadth = 2.0f;
         cubeParams.width = 2.0f;
@@ -308,6 +322,53 @@ public:
         cubeParams2.breadth = 3.0f;
         cubeParams2.width = 3.0f;
         cubeParams2.height = 3.0f;
+
+        //----------- AABB to AABB Test(Single Axis)  ------------//
+        //**
+        {
+            auto ent = m_ecs->createEntity();
+
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+            positionH.write(math::vec3(0, -3.0f, 8.0f));
+            scaleH.write(math::vec3(1.0f));
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+            physicsUnitTestCD.push_back(ent);
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = true;
+            entPhyHande.write(physicsComponent2);
+
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+            positionH.write(math::vec3(3.0, -3.0f, 8.0f));
+            scaleH.write(math::vec3(1.0f));
+        }
+
+        
 
         //----------- AABB to AABB Test  ------------//
         //**
@@ -335,7 +396,7 @@ public:
 
         {
             auto ent = m_ecs->createEntity();
-            physicsUnitTestObjects.push_back(ent);
+            physicsUnitTestCD.push_back(ent);
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
@@ -382,7 +443,7 @@ public:
 
         {
             auto ent = m_ecs->createEntity();
-            physicsUnitTestObjects.push_back(ent);
+            physicsUnitTestCD.push_back(ent);
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
@@ -401,7 +462,7 @@ public:
             positionH.write(math::vec3(3.0, -3.0f, -2.0f));
 
             auto rot = rotationH.read();
-            rot *= math::angleAxis(45.f , math::vec3(0, 1, 0));
+            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
             rot *= math::angleAxis(45.f, math::vec3(0, 0, 1));
 
             rotationH.write(rot);
@@ -440,7 +501,7 @@ public:
 
         {
             auto ent = m_ecs->createEntity();
-            physicsUnitTestObjects.push_back(ent);
+            physicsUnitTestCD.push_back(ent);
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
@@ -498,7 +559,7 @@ public:
         }
         {
             auto ent = m_ecs->createEntity();
-            physicsUnitTestObjects.push_back(ent);
+            physicsUnitTestCD.push_back(ent);
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
@@ -525,10 +586,11 @@ public:
         }
         //*/
 
-        createProcess<&TestSystem::update>("Update");
-        createProcess<&TestSystem::differentThread>("TestChain");
-        createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
-        createProcess<&TestSystem::drawInterval>("Physics",0.01);
+      
+    }
+
+    void setupPhysicsCRUnitTest(rendering::model_handle cubeH, rendering::material_handle wireframeH)
+    {
 
     }
 
@@ -650,7 +712,7 @@ public:
 
     void onUnitPhysicsUnitTestMove(physics_test_move* action)
     {
-        for (auto entity : physicsUnitTestObjects)
+        for (auto entity : physicsUnitTestCD)
         {
             auto posHandle = entity.get_component_handle<position>();
 
@@ -771,11 +833,28 @@ public:
         for (auto penetration : physics::PhysicsSystem::penetrationQueries)
         {
             debug::drawLine(penetration->faceCentroid
-                , penetration->faceCentroid + penetration->normal, math::vec4(1, 0, 0, 1), 15.0f);
+                , penetration->faceCentroid + penetration->normal, math::vec4(0, 0.5f, 0, 1), 15.0f);
 
         }
 
-        for (auto penetration : physics::PhysicsSystem::aPoint)
+       //--------------------------------------- Draw contact points ---------------------------------------//
+
+        for (auto contact : physics::PhysicsSystem::contactPoints)
+        {
+            debug::drawLine(contact.worldContactInc
+                , contact.worldContactRef, math::vec4(1, 0, 0, 1), 5.0f,false);
+
+            debug::drawLine(contact.worldContactInc
+                , contact.worldContactInc + math::vec3(0, 0.1f,0), math::vec4(0.5, 0.5, 0.5, 1), 5.0f, true);
+
+            debug::drawLine(contact.worldContactRef
+                , contact.worldContactRef + math::vec3(0, 0.1f, 0), math::vec4(0, 0, 0, 1), 5.0f, true);
+
+        }
+
+        //--------------------------------------- Draw extreme points ---------------------------------------//
+
+       /* for (auto penetration : physics::PhysicsSystem::aPoint)
         {
             debug::drawLine(penetration
                 , penetration + math::vec3(0,0.2,0), math::vec4(1, 0, 0, 1), 15.0f);
@@ -787,11 +866,12 @@ public:
             debug::drawLine(penetration
                 , penetration + math::vec3(0, 0.2, 0), math::vec4(0, 0, 1, 1), 15.0f);
 
-        }
+        }*/
 
         physics::PhysicsSystem::penetrationQueries.clear();
         physics::PhysicsSystem::aPoint.clear();
         physics::PhysicsSystem::bPoint.clear();
+        physics::PhysicsSystem::contactPoints.clear();
 
         //this is called so that i can draw stuff
         for (auto entity : physicsQuery)

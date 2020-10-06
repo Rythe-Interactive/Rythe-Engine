@@ -43,9 +43,6 @@ namespace args::physics
             return;
         }
 
-
-
-
         //--------------------- A Collision has been found, find the most shallow penetration  -------------------------------------//
 
         //Get world position and normal of reference faces //
@@ -61,13 +58,13 @@ namespace args::physics
         math::vec3 worldEdgeNormal = -edgeNormal;
 
         auto abPenetrationQuery =
-            std::make_shared< ConvexConvexPenetrationQuery>(*ARefFace,*BRefFace, worldFaceCentroidA,worldFaceNormalA,ARefSeperation,false);
+            std::make_shared< ConvexConvexPenetrationQuery>(*ARefFace,*BRefFace, worldFaceCentroidA,worldFaceNormalA,ARefSeperation,true);
 
         auto baPenetrationQuery =
-            std::make_shared < ConvexConvexPenetrationQuery>(*BRefFace, *ARefFace, worldFaceCentroidB, worldFaceNormalB, BRefSeperation, true);
+            std::make_shared < ConvexConvexPenetrationQuery>(*BRefFace, *ARefFace, worldFaceCentroidB, worldFaceNormalB, BRefSeperation, false);
 
         auto abEdgePenetrationQuery = 
-            std::make_shared < EdgePenetrationQuery>(*edgeRef,*edgeInc,worldEdgeAPosition,worldEdgeNormal,aToBEdgeSeperation,false);
+            std::make_shared < EdgePenetrationQuery>(*edgeRef,*edgeInc,worldEdgeAPosition,worldEdgeNormal,aToBEdgeSeperation, true);
 
         std::array<std::shared_ptr<PenetrationQuery>, 3> penetrationQueryArray{ abEdgePenetrationQuery, abPenetrationQuery, baPenetrationQuery  };
 
@@ -86,12 +83,25 @@ namespace args::physics
         line.start = manifold.transformA[3];
         line.end = manifold.transformB[3];
 
-        //convexCollider->manifoldsFound.push_back(manifold.penetrationInformation);
         PhysicsSystem::penetrationQueries.push_back(manifold.penetrationInformation);
         PhysicsSystem::aPoint.push_back(a);
         PhysicsSystem::bPoint.push_back(b);
 
         collisionsFound.push_back(line);
+    }
+
+    void ConvexCollider::PopulateContactPointsWith(ConvexCollider* convexCollider, physics_manifold& manifold)
+    {
+        log::debug("ConvexCollider::PopulateContactPointsWith ");
+
+        math::mat4& refTransform = manifold.penetrationInformation->isARef ? manifold.transformA : manifold.transformB;
+        math::mat4& incTransform = manifold.penetrationInformation->isARef ? manifold.transformB : manifold.transformA;
+
+        manifold.penetrationInformation->populateContactList(manifold,refTransform,incTransform);
+
+
+
+
     }
 
 

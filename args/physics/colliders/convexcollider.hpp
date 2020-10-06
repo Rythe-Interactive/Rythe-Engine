@@ -38,7 +38,12 @@ namespace args::physics
         void CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) override;
 
 
+        void PopulateContactPoints(std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold& manifold) override
+        {
+            physicsCollider->PopulateContactPointsWith(this, manifold);
+        }
 
+        void PopulateContactPointsWith(ConvexCollider* convexCollider, physics_manifold& manifold) override;
 
 
        

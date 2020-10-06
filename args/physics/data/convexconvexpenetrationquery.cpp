@@ -1,5 +1,8 @@
 
 #include <physics/data/convexconvexpenetrationquery.h>
+#include <physics/physics_statics.hpp>
+#include <physics/systems/physicssystem.hpp>
+#include <physics/physics_contact.h>
 
 namespace args::physics
 {
@@ -10,9 +13,65 @@ namespace args::physics
 
     }
 
-    void ConvexConvexPenetrationQuery::populateContactList(physics_manifold& manifold)
+    void ConvexConvexPenetrationQuery::populateContactList(physics_manifold& manifold, math::mat4& refTransform, math::mat4 incTransform)
     {
         log::debug("ConvexConvexPenetrationQuery::populateContactList");
+
+        assert(refFace);
+        assert(incFace);
+
+        //------------------------------- get all world vertex positions in incFace -------------------------------------------------//
+        std::vector<math::vec3> outputContactPoints;
+
+        auto sendToInitialOutput = [&outputContactPoints,&incTransform](HalfEdgeEdge* edge)
+        {
+            math::vec3 localVertexPosition = *edge->edgePositionPtr;
+            outputContactPoints.push_back(incTransform * math::vec4(localVertexPosition, 1));
+        };
+
+        incFace->forEachEdge(sendToInitialOutput);
+
+        //------------------------------- clip vertices with faces that are the neighbors of refFace  ---------------------------------//
+
+        auto clipNeigboringFaceWithOutput = [&refTransform,&outputContactPoints](HalfEdgeEdge* edge)
+        {
+            HalfEdgeFace* neighborFace = edge->pairingEdge->face;
+            math::vec3 planePosition = refTransform * math::vec4(neighborFace->centroid, 1);
+            math::vec3 planeNormal = refTransform * math::vec4(neighborFace->normal, 0);
+
+            auto inputContactList = outputContactPoints;
+            outputContactPoints.clear();
+
+            PhysicsStatics::SutherlandHodgmanFaceClip(planeNormal, planePosition, inputContactList, outputContactPoints);
+            
+        };
+
+        refFace->forEachEdge(clipNeigboringFaceWithOutput);
+
+     
+
+        //-------- get the contect points of the ref polyhedron by projecting the contacts  to the collision plane ---------//
+
+        for (const auto& incidentContact : outputContactPoints)
+        {
+            float distanceToCollisionPlane = PhysicsStatics::PointDistanceToPlane(normal, faceCentroid, incidentContact);
+
+            if (distanceToCollisionPlane < -0.005f)
+            {
+                math::vec3 referenceContact = incidentContact - normal * distanceToCollisionPlane;
+
+                physics_contact contact;
+                contact.incTransform = incTransform;
+                contact.refTransform = refTransform;
+
+                contact.worldContactInc = incidentContact;
+                contact.worldContactRef = referenceContact;
+
+                PhysicsSystem::contactPoints.push_back(contact);
+
+            }
+        }
+
     }
 
 

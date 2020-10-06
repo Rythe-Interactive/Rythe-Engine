@@ -13,6 +13,7 @@
 #include <physics/data/physics_manifold.hpp>
 #include <physics/physics_contact.h>
 #include <physics/components/physics_component.hpp>
+#include <memory>
 
 namespace args::physics
 {
@@ -23,7 +24,7 @@ namespace args::physics
     public:
 
         static std::vector<std::shared_ptr<physics::PenetrationQuery>> penetrationQueries;
-
+        static std::vector<physics_contact> contactPoints;
         static std::vector<math::vec3 > aPoint;
         static std::vector<math::vec3> bPoint;
 
@@ -268,6 +269,13 @@ namespace args::physics
                 {
                     physics::physics_manifold m;
                     constructManifoldWithCollider(colliderA,colliderB,precursorA,precursorB,m);
+
+                    if (!m.isColliding)
+                    {
+                        continue;
+                    }
+
+                    colliderA->PopulateContactPoints(colliderB, m);
 
                     if (isRigidbodyInvolved)
                     {

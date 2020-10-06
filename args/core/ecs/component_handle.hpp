@@ -54,8 +54,8 @@ namespace args::core::ecs
         friend class std::hash<component_handle<component_type>>;
     public:
         component_handle() : component_handle_base() {}
-        component_handle(const component_handle& other) : component_handle_base(other.m_ownerId, other.m_registry) {};
-        component_handle(component_handle&& other) : component_handle_base(other.m_ownerId, other.m_registry) {};
+        component_handle(const component_handle& other) : component_handle_base(other) {};
+        component_handle(component_handle&& other) : component_handle_base(other) {};
 
         /**@brief Creates component handle for the given entity.
          */
