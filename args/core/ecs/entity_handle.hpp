@@ -6,6 +6,7 @@
 #include <core/ecs/archetype.hpp>
 #include <memory>
 #include <cereal/types/vector.hpp>
+#include <core/ecs/ecsregistry.hpp>
 
 /**
  * @file entity_handle.hpp
@@ -360,7 +361,7 @@ namespace args::core::ecs
          * @returns Tuple with all the handles.
          */
         template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
-        auto add_components(component_type&& value, component_types&&... values) const;        
+        auto add_components(component_type&& value, component_types&&... values) const;
 
         /**@brief Add multiple components to the entity.
          * @tparam component_type First type of component to add.
@@ -450,20 +451,12 @@ namespace args::core::ecs
         {
             components.push_back(m_registry->getComponent(m_id, m_registry->getEntity(m_id).component_composition()[i]));
         }
-        for  (auto child : m_registry->getEntityData(m_id).children)
+        for (auto child : m_registry->getEntityData(m_id).children)
         {
             children.push_back(child);
         }
-        oarchive(cereal::make_nvp("ID", m_id), cereal::make_nvp("COMPONENTS", components),cereal::make_nvp("CHILDREN",children));
+        oarchive(cereal::make_nvp("ID", m_id), cereal::make_nvp("COMPONENTS", components), cereal::make_nvp("CHILDREN", children));
     }
-
-    template<typename Archive>
-    A_NODISCARD entity_handle entity_handle::deserialize(Archive& iarchive)
-    {
-        iarchive(*this);
-        return std::unique_ptr<this>;
-    }
-
 
     using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
 }
