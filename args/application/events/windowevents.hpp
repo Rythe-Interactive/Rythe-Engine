@@ -10,7 +10,7 @@ namespace args::application
     {
         id_type entityId;
         math::ivec2 size;
-        cstring name;
+        std::string name;
         GLFWmonitor* monitor;
         GLFWwindow* share;
         int swapInterval;

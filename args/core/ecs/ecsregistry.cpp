@@ -62,6 +62,14 @@ namespace args::core::ecs
         return m_families[componentTypeId].get();
     }
 
+    bool EcsRegistry::hasComponent(id_type entityId, id_type componentTypeId)
+    {
+        if (!validateEntity(entityId))
+            throw args_entity_not_found_error;
+
+        return getFamily(componentTypeId)->has_component(entityId);
+    }
+
     component_handle_base EcsRegistry::getComponent(id_type entityId, id_type componentTypeId)
     {
         if (!validateEntity(entityId))
@@ -109,14 +117,13 @@ namespace args::core::ecs
         if (!validateEntity(entityId))
             throw args_entity_not_found_error;
 
+        m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
         getFamily(componentTypeId)->destroy_component(entityId);
 
         {
             async::readonly_guard guard(m_entityDataLock);
             m_entityData[entityId].components.erase(componentTypeId); // Is fine because the lock only locks order changes in the container, not the values themselves.
         }
-
-        m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
     }
 
     A_NODISCARD   bool EcsRegistry::validateEntity(id_type entityId)
@@ -203,17 +210,15 @@ namespace args::core::ecs
         if (!validateEntity(entityId))
             throw args_entity_not_found_error;
 
-        entity_data* data = nullptr;
 
-        {
-            async::readonly_guard guard(m_entityDataLock);
-            data = &m_entityData[entityId]; // Is fine because the lock only locks order changes in the container, not the values themselves.
-        }
+        async::readonly_guard guard(m_entityDataLock);
+        entity_data& data = m_entityData[entityId]; // Is fine because the lock only locks order changes in the container, not the values themselves.
 
-        if (!validateEntity(data->parent)) // Re-validate parent.
-            data->parent = invalid_id;
 
-        return *data;
+        if (!validateEntity(data.parent)) // Re-validate parent.
+            data.parent = invalid_id;
+
+        return data;
     }
 
     A_NODISCARD   std::pair<entity_set&, async::readonly_rw_spinlock&> EcsRegistry::getEntities()

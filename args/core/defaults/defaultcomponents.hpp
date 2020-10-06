@@ -8,11 +8,12 @@ namespace args::core
 {
     struct position : public math::vec3
     {
-        position() = default;
+        position() : math::vec3(0, 0, 0) {}
         position(const position&) = default;
         position(position&&) = default;
         position(const math::vec3& src) : math::vec3(src) {}
         position(float x, float y, float z) : math::vec3(x, y, z) {}
+        position(float v) : math::vec3(v) {}
         position& operator=(const position&) = default;
         position& operator=(position&&) = default;
         position& operator=(const math::vec3& src)
@@ -20,22 +21,17 @@ namespace args::core
             data = src.data;
             return *this;
         }
-
-        static void init(position& pos)
+        position& operator=(math::vec3&& src)
         {
-            pos.data = { 0.f, 0.f, 0.f };
-            //log::debug("initializing position");
+            data = src.data;
+            return *this;
         }
-
-       /* static void destroy(position&)
-        {
-            log::debug("destroying position");
-        }*/
     };
 
     struct rotation : public math::quat
     {
-        rotation() : math::quat(1,0,0,0) {}
+        rotation() : math::quat(1, 0, 0, 0) {}
+        rotation(float w, float x, float y, float z) : math::quat(w, x, y, z) {}
         rotation(const rotation&) = default;
         rotation(rotation&&) = default;
         rotation(const math::quat& src) : math::quat(src) {}
@@ -46,11 +42,38 @@ namespace args::core
             data = src.data;
             return *this;
         }
+        rotation& operator=(math::quat&& src)
+        {
+            data = src.data;
+            return *this;
+        }
+
+        math::vec3 right()
+        {
+            return math::toMat3(*this) * math::vec3(1.f, 0.f, 0.f);
+        }
+
+        math::vec3 up()
+        {
+            return math::toMat3(*this) * math::vec3(0.f, 1.f, 0.f);
+        }
+
+        math::vec3 forward()
+        {
+            return math::toMat3(*this) * math::vec3(0.f, 0.f, 1.f);
+        }
+
+        math::mat3 matrix()
+        {
+            return math::toMat3(*this);
+        }
     };
 
     struct scale : public math::vec3
     {
         scale() : math::vec3(1, 1, 1) {}
+        scale(float x, float y, float z) : math::vec3(x, y, z) {}
+        scale(float v) : math::vec3(v) {}
         scale(const scale&) = default;
         scale(scale&&) = default;
         scale(const math::vec3& src) : math::vec3(src) {}
@@ -61,9 +84,56 @@ namespace args::core
             data = src.data;
             return *this;
         }
+        scale& operator=(math::vec3&& src)
+        {
+            data = src.data;
+            return *this;
+        }
     };
 
-    struct transform : public ecs::archetype<position, rotation, scale> {};
+    struct transform : public ecs::archetype<position, rotation, scale>
+    {
+        using base = ecs::archetype<position, rotation, scale>;
+
+        transform(const base::handleGroup& handles) : base(handles) {}
+
+        std::tuple<position, rotation, scale> get_world_components()
+        {
+            math::mat4 worldMatrix = get_world_to_local_matrix();
+            math::vec3 p;
+            math::quat r;
+            math::vec3 s;
+
+            math::decompose(worldMatrix, s, r, p);
+
+            return std::make_tuple<position, rotation, scale>(p, r, s);
+        }
+
+        math::mat4 get_world_to_local_matrix()
+        {
+            return math::inverse(get_local_to_world_matrix());
+        }
+
+        math::mat4 get_local_to_world_matrix()
+        {
+            auto& [positionH, rotationH, scaleH] = handles;
+            auto parent = positionH.entity.get_parent();
+
+            if (parent && parent.has_components<transform>())
+            {
+                transform transf = parent.get_component_handles<transform>();
+                return transf.get_local_to_world_matrix() * math::compose(scaleH.read(), rotationH.read(), positionH.read());
+            }
+
+            return math::compose(scaleH.read(), rotationH.read(), positionH.read());
+        }
+
+        math::mat4 get_local_to_parent_matrix()
+        {
+            auto& [positionH, rotationH, scaleH] = handles;
+            return math::compose(scaleH.read(), rotationH.read(), positionH.read());
+        }
+    };
 }
 
 namespace fmt
@@ -94,6 +164,7 @@ namespace fmt
                 static_cast<math::vec3>(p));
         }
     };
+
     template <>
     struct fmt::formatter<rotation> {
         char presentation = 'f';
@@ -118,6 +189,7 @@ namespace fmt
                 static_cast<math::quat>(r));
         }
     };
+
     template <>
     struct fmt::formatter<scale> {
         char presentation = 'f';
