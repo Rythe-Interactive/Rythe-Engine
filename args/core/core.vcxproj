@@ -482,6 +482,7 @@
     <ClCompile Include="compute\kernel.cpp" />
     <ClCompile Include="data\importers\mesh_importers.cpp" />
     <ClCompile Include="data\mesh.cpp" />
+    <ClCompile Include="ecs\component_handle.cpp" />
     <ClCompile Include="ecs\ecsregistry.cpp" />
     <ClCompile Include="ecs\entity_handle.cpp" />
     <ClCompile Include="ecs\entityquery.cpp" />

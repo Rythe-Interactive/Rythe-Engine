@@ -48,15 +48,11 @@ namespace args::core::ecs
 
         template<typename component_type>
         component_handle<component_type> cast();
-        template<class Archive>
-        void serialize(Archive& oarchive);
+        void serialize(cereal::JSONOutputArchive& oarchive);
+        void serialize(cereal::BinaryOutputArchive& oarchive);
+        void serialize(cereal::JSONInputArchive& oarchive);
+        void serialize(cereal::BinaryInputArchive& oarchive);
     };
-    template<class Archive>
-    inline void component_handle_base::serialize(Archive& oarchive)
-    {
-        //This isn't staying
-        oarchive(cereal::make_nvp("OWNER", m_ownerId));
-    }
 
 
     /**@class component_handle
@@ -80,16 +76,6 @@ namespace args::core::ecs
         component_handle& operator=(component_handle&& other) { entity = other.entity; m_registry = other.m_registry; m_ownerId = other.m_ownerId; return *this; }
 
         bool operator==(const component_handle<component_type>& other) const { return m_registry == other.m_registry && m_ownerId == other.m_ownerId; }
-
-        template<typename Archive>
-        void serialize(Archive& oarchive)
-        {
-            oarchive(cereal::make_nvp("Type", std::string(typeName<component_type>())));
-            component_type component = read();
-            component.serialize(oarchive);
-            //oarchive(component);
-        }
-
 
         /**@brief Atomic read of component.
          * @param order Memory order at which to load the component.

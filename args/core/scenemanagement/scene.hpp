@@ -1,7 +1,5 @@
 #pragma once
-#include <unordered_map>
-#include <core/ecs/ecsregistry.hpp>
-#include <string>
+#include <core/scenemanagement/scenemanager.hpp>
 
 namespace args::core::scenemanagement
 {

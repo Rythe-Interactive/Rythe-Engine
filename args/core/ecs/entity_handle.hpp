@@ -6,7 +6,8 @@
 #include <core/ecs/archetype.hpp>
 #include <memory>
 #include <cereal/types/vector.hpp>
-#include <core/ecs/ecsregistry.hpp>
+#include <cereal/archives/binary.hpp>
+#include <cereal/archives/json.hpp>
 
 /**
  * @file entity_handle.hpp
@@ -128,15 +129,10 @@ namespace args::core::ecs
          * @param oarchive template<typename Archive>
          * @note Will only be called when said entity is serializes through an archive.
          */
-        template<typename Archive>
-        void serialize(Archive& oarchive);
-
-        /**@brief deserializes the entity depending on its archive
-         * @param oarchive template<typename Archive>
-         * @note not sure how i'm doing this yet, yeet
-         */
-        template<typename Archive>
-        A_NODISCARD entity_handle deserialize(Archive& iarchive);
+        void serialize(cereal::JSONOutputArchive& oarchive);
+        void serialize(cereal::BinaryOutputArchive& oarchive);
+        void serialize(cereal::JSONInputArchive& oarchive);
+        void serialize(cereal::BinaryInputArchive& oarchive);
 
         /**@brief Get child of the entity at a certain index.
          * @throws std::out_of_range Thrown when index is more than or equal to the child count.
@@ -442,21 +438,6 @@ namespace args::core::ecs
         bool valid() const;
     };
 
-    template<typename Archive>
-    void entity_handle::serialize(Archive& oarchive)
-    {
-        std::vector <ecs::component_handle_base> components;
-        std::vector <ecs::entity_handle> children;
-        for (int i = 0; i < m_registry->getEntity(m_id).component_composition().size(); i++)
-        {
-            components.push_back(m_registry->getComponent(m_id, m_registry->getEntity(m_id).component_composition()[i]));
-        }
-        for (auto child : m_registry->getEntityData(m_id).children)
-        {
-            children.push_back(child);
-        }
-        oarchive(cereal::make_nvp("ID", m_id), cereal::make_nvp("COMPONENTS", components), cereal::make_nvp("CHILDREN", children));
-    }
 
     using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
 }

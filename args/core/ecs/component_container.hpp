@@ -7,7 +7,6 @@
 #include <core/events/eventbus.hpp>
 #include <core/events/events.hpp>
 #include <core/ecs/component_meta.hpp>
-#include <core/serialization/serializationUtil.hpp>
 
 /**
  * @file component_container.hpp
@@ -131,18 +130,6 @@ namespace args::core::ecs
         void serialize(Archive& oarchvie)
         {
             oarchive((component_type)*this);
-        }
-
-        /**@brief Serializes the component, into either JSON or Binary
-       * @param template typenmae Archive oarchive
-       * @ref args::core::async::readonly_rw_spinlock
-       */
-        template<typename Archive>
-        component_type deserialize(Archive& oarchvie)
-        {
-            component_type component;
-            oarchive(component);
-            return component;
         }
 
 
