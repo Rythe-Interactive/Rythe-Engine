@@ -10,15 +10,15 @@
 
 namespace args::core::ecs
 {
-    class ARGS_API EcsRegistry;
-    class ARGS_API entity_handle;
+    class EcsRegistry;
+    class entity_handle;
 
     using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
 
     /**@class QueryRegistry
      * @brief Main manager and owner of all queries and query related objects.
      */
-    class ARGS_API QueryRegistry
+    class QueryRegistry
     {
         friend class EntityQuery;
     private:

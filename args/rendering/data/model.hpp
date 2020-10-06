@@ -1,5 +1,5 @@
 #pragma once
-#include <rendering/detail/engine_include.hpp>
+#include <application/application.hpp>
 
 #include <vector>
 #include <unordered_map>
@@ -40,7 +40,7 @@ namespace args::rendering
     /**@class model_handle
      * @brief Save to pass around handle to a model in the model cache.
      */
-    struct ARGS_API model_handle
+    struct model_handle
     {
         id_type id;
         
@@ -53,7 +53,7 @@ namespace args::rendering
 
     constexpr model_handle invalid_model_handle { invalid_id };
 
-    class ARGS_API ModelCache
+    class ModelCache
     {
         friend class renderer;
         friend struct model_handle;

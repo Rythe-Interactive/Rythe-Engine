@@ -1,14 +1,6 @@
 #pragma once
 
-#if !defined(ARGS_API)
-#if !defined(ARGS_IMPORT)
-#define ARGS_IMPORT
 #include <core/core.hpp>
-#include <core/platform/args_library.hpp>
-#else
-#include <core/core.hpp>
-#endif
-#endif
 
 namespace args::debug
 {

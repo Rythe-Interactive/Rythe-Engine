@@ -12,7 +12,7 @@
 #include "mem_filesystem_resolver.hpp"
 
 namespace args::core::filesystem{
-    class ARGS_API provider_registry
+    class provider_registry
     {
     public:
         using domain = std::string;
