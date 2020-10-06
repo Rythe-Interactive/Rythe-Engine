@@ -6,6 +6,8 @@
 #include <cereal/archives/binary.hpp>
 #include <cereal/archives/json.hpp>
 
+#include <core/scenemanagement/scene.hpp>
+
 #include <sstream>
 #include <fstream>
 #include <string>
@@ -19,7 +21,7 @@ struct MyRecord
 
     }
 
-    MyRecord(uint8_t _x,uint8_t _y, float _z)
+    MyRecord(uint8_t _x, uint8_t _y, float _z)
     {
         x = _x;
         y = _y;
@@ -79,10 +81,10 @@ namespace args::core::serialization
             return t;
         }
 
-        static void JSONSerialize(std::ofstream &os, T serializable)
+        static void JSONSerialize(std::ofstream& os, T serializable)
         {
             cereal::JSONOutputArchive archive(os);
-            if (std::is_same<T,ecs::component_handle<scenemanagement::scene>>::value)
+            if (std::is_same<T, ecs::component_handle<scenemanagement::scene>>::value)
             {
                 archive(cereal::make_nvp("SceneRoot", serializable));
             }
