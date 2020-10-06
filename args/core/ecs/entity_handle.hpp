@@ -310,7 +310,7 @@ namespace args::core::ecs
         {
             using actual_type = std::remove_reference_t<component_type>;
             component_handle<actual_type> handle = force_value_cast<component_handle<actual_type>>(add_component(typeHash<actual_type>()));
-            handle.write(value, order);
+            handle.write(value);
             return handle;
         }
 
