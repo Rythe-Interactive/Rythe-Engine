@@ -23,20 +23,20 @@ namespace args::core::ecs
     {
     public:
         // Entity that owns this component.
-        const entity_handle entity;
+        entity_handle entity;
 
     protected:
         EcsRegistry* m_registry;
         id_type m_ownerId;
 
     public:
-        component_handle_base() : m_registry(nullptr), m_ownerId(invalid_id) {};
-        component_handle_base(const component_handle_base& other) : m_registry(other.m_registry), m_ownerId(other.m_ownerId) {};
-        component_handle_base(component_handle_base&& other) : m_registry(other.m_registry), m_ownerId(other.m_ownerId) {};
-        component_handle_base(id_type entityId, EcsRegistry* registry) : entity(registry->getEntity(entityId)), m_registry(registry), m_ownerId(entityId) {}
+        component_handle_base() : entity(), m_registry(nullptr), m_ownerId(invalid_id) {};
+        component_handle_base(const component_handle_base& other) : entity(other.entity), m_registry(other.m_registry), m_ownerId(other.m_ownerId) {};
+        component_handle_base(component_handle_base&& other) : entity(other.entity), m_registry(other.m_registry), m_ownerId(other.m_ownerId) {};
+        component_handle_base(id_type entityId, EcsRegistry* registry) : entity(entityId, registry), m_registry(registry), m_ownerId(entityId) {}
 
-        component_handle_base& operator=(const component_handle_base& other) { m_registry = other.m_registry; m_ownerId = other.m_ownerId; return *this; }
-        component_handle_base& operator=(component_handle_base&& other) { m_registry = other.m_registry; m_ownerId = other.m_ownerId; return *this; }
+        component_handle_base& operator=(const component_handle_base& other) { entity = other.entity; m_registry = other.m_registry; m_ownerId = other.m_ownerId; return *this; }
+        component_handle_base& operator=(component_handle_base&& other) { entity = other.entity; m_registry = other.m_registry; m_ownerId = other.m_ownerId; return *this; }
 
         /**@brief Checks if handle still points to a valid component.
          */
@@ -67,8 +67,8 @@ namespace args::core::ecs
          */
         component_handle(id_type entityId, EcsRegistry* registry) : component_handle_base(entityId, registry) {}
 
-        component_handle& operator=(const component_handle& other) { m_registry = other.m_registry; m_ownerId = other.m_ownerId; return *this; }
-        component_handle& operator=(component_handle&& other) { m_registry = other.m_registry; m_ownerId = other.m_ownerId; return *this; }
+        component_handle& operator=(const component_handle& other) { entity = other.entity; m_registry = other.m_registry; m_ownerId = other.m_ownerId; return *this; }
+        component_handle& operator=(component_handle&& other) { entity = other.entity; m_registry = other.m_registry; m_ownerId = other.m_ownerId; return *this; }
 
         bool operator==(const component_handle<component_type>& other) const { return m_registry == other.m_registry && m_ownerId == other.m_ownerId; }
 
