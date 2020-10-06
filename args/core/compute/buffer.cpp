@@ -9,26 +9,26 @@ namespace args::core::compute
         return static_cast<int>(lhs) & static_cast<int>(rhs);
     }
 
-    Buffer::Buffer(cl_context ctx,byte* data,size_t len, buffer_type type,std::string name) : m_data(data) , m_size(len) , m_name(std::move(name))
+    Buffer::Buffer(cl_context ctx, byte* data, size_t len, buffer_type type, std::string name) : m_data(data), m_size(len), m_name(std::move(name))
     {
-    	//initialize new ref-counter
+        //initialize new ref-counter
         m_ref_count = new size_t(1);
 
 
-    	//convert buffer_type to cl_mem_flags
+        //convert buffer_type to cl_mem_flags
         if (type == buffer_type::READ_BUFFER)
             m_type = CL_MEM_READ_ONLY;
         else if (type == buffer_type::WRITE_BUFFER)
             m_type = CL_MEM_WRITE_ONLY;
         else
             m_type = CL_MEM_READ_WRITE;
-            
+
 
         cl_int ret;
 
-    	//create buffer
-        m_memory_object = clCreateBuffer(ctx,m_type,m_size,nullptr,&ret);
-        if(ret != NULL)
+        //create buffer
+        m_memory_object = clCreateBuffer(ctx, m_type, m_size, nullptr, &ret);
+        if (ret != NULL)
         {
             log::error("clCreateBuffer failed for Buffer: {}", name);
         }
@@ -37,21 +37,21 @@ namespace args::core::compute
 
     void Buffer::rename(const std::string& name)
     {
-    	m_name = name;
+        m_name = name;
     }
-	
+
     Buffer::Buffer(Buffer&& b) noexcept :
         m_name(std::move(b.m_name)),
-		m_memory_object(b.m_memory_object),
+        m_memory_object(b.m_memory_object),
         m_ref_count(b.m_ref_count),
         m_type(b.m_type),
         m_data(b.m_data),
         m_size(b.m_size)
     {
 
-    	//Move Ctor needs to be explicitly defined
-    	//to increase Reference Counter
-        ++*m_ref_count;
+        //Move Ctor needs to be explicitly defined
+        //to increase Reference Counter
+        ++* m_ref_count;
     }
 
     Buffer::Buffer(const Buffer& b) :
@@ -62,9 +62,9 @@ namespace args::core::compute
         m_data(b.m_data),
         m_size(b.m_size)
     {
-    	//Copy Ctor needs to be explicitly defined
-    	//to increase Reference Counter
-        ++*m_ref_count;
+        //Copy Ctor needs to be explicitly defined
+        //to increase Reference Counter
+        ++* m_ref_count;
     }
 
 
@@ -73,11 +73,11 @@ namespace args::core::compute
     Buffer::~Buffer()
     {
 
-    	//check if this is the last element
-    	//TODO(algo-ryth-mix): make this thread-safe
-        if(--*m_ref_count == 0)
+        //check if this is the last element
+        //TODO(algo-ryth-mix): make this thread-safe
+        if (-- * m_ref_count == 0)
         {
-        	//free ref-counter & memory_object
+            //free ref-counter & memory_object
             delete m_ref_count;
             clReleaseMemObject(m_memory_object);
         }
