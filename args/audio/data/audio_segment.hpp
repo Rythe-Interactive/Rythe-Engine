@@ -33,7 +33,7 @@ namespace args::audio
 
     const audio_segment_handle invalid_audio_segment_handle{ invalid_id };
 
-    class ARGS_API AudioSegmentCache
+    class AudioSegmentCache
     {
         friend struct audio_segment_handle;
     public:
