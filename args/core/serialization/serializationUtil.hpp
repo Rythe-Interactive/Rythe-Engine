@@ -3,8 +3,8 @@
 
 #include <cereal/types/unordered_map.hpp>
 #include <cereal/types/memory.hpp>
-#include <cereal/archives/binary.hpp>
 #include <cereal/archives/json.hpp>
+#include <cereal/archives/portable_binary.hpp>
 
 #include <core/scenemanagement/scene.hpp>
 

@@ -57,6 +57,7 @@ public:
 
     virtual void setup()
     {
+        
         filter(log::severity::debug);
 
         compute::Program prog = fs::view("basic://kernels/vadd_kernel.cl").load_as<compute::Program>();
