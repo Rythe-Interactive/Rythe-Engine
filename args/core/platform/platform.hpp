@@ -85,33 +85,15 @@
  */
 #define NO_MANGLING extern "C"
 
-#if defined(ARGS_WINDOWS) || defined(DOXY_INCLUDE)
-	#if (defined(ARGS_INTERNAL) && !defined(ARGS_IMPORT)) || defined(DOXY_INCLUDE)
-
-		/**@def ARGS_API
-		 * @brief sets the export setting for shared libraries
-		 */
-		#define ARGS_API //__declspec(dllexport)
-	#else
-		#define ARGS_API //__declspec(dllimport)
-	#endif
-#else
-	#define ARGS_API __attribute__((visibility("default")))
-#endif
-
-#if defined(ARGS_IMPORT)
-#define ARGS_LIBRARY 
-#endif
-
 /**@def ARGS_FUNC
  * @brief export setting + calling convention used by the engine
  */
-#define ARGS_FUNC ARGS_API ARGS_CCONV
+#define ARGS_FUNC ARGS_CCONV
 
 /**@def ARGS_INTERFACE
  * @brief un-mangled function name +  export setting + calling convention used by the engine
  */
-#define ARGS_INTERFACE NO_MANGLING ARGS_API ARGS_CCONV 
+#define ARGS_INTERFACE NO_MANGLING ARGS_CCONV 
 
 #if defined(__has_cpp_attribute)|| defined(DOXY_INCLUDE) 
 /**@def AHASCPPATTRIB
@@ -160,3 +142,7 @@
  * @param x value the function should return.
  */
 #define ARGS_IMPURE_RETURN(x) { return (x); }
+
+#if !defined(LEGION_MIN_THREADS)
+#define LEGION_MIN_THREADS 5
+#endif

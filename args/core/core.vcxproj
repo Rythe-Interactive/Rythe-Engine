@@ -456,7 +456,6 @@
     <ClInclude Include="math\math.hpp" />
     <ClInclude Include="math\precision.hpp" />
     <ClInclude Include="math\trigonometry.hpp" />
-    <ClInclude Include="platform\args_library.hpp" />
     <ClInclude Include="platform\platform.hpp" />
     <ClInclude Include="scheduling\process.hpp" />
     <ClInclude Include="scheduling\processchain.hpp" />

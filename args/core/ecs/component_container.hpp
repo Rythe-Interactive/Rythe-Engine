@@ -14,7 +14,7 @@
 
 namespace args::core::ecs
 {
-    class ARGS_API EcsRegistry;
+    class EcsRegistry;
 
     /**@class component_container_base
      * @brief Base class of args::core::ecs::component_container

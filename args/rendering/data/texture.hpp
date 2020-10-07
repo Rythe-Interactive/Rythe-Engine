@@ -1,5 +1,5 @@
 #pragma once
-#include <rendering/detail/engine_include.hpp>
+#include <application/application.hpp>
 
 namespace args::rendering
 {
@@ -95,7 +95,7 @@ namespace args::rendering
         static void from_resource(texture* value, const fs::basic_resource& resource);
     };
 
-    struct ARGS_API texture_handle
+    struct texture_handle
     {
         id_type id;
 
@@ -125,7 +125,7 @@ namespace args::rendering
         texture_components::rgba, true, true, texture_mipmap::linear, texture_mipmap::linear,
         texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat };
 
-    class ARGS_API TextureCache
+    class TextureCache
     {
         friend class renderer;
         friend struct texture_handle;

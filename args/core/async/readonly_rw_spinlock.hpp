@@ -381,9 +381,10 @@ namespace args::core::async
         readonly_multiguard& operator=(readonly_multiguard&&) = delete;
     };
 
+    #if !defined(DOXY_EXCLUDE)
     template<typename... types>
     readonly_multiguard(types...)->readonly_multiguard<sizeof...(types)>;
-
+    #endif
     /**@class readwrite_guard
      * @brief RAII guard that uses ::async::readonly_rw_spinlock to lock for read-write.
      * @note Read-Write operations cannot happen simultaneously and will wait for each other.

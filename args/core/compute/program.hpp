@@ -17,7 +17,7 @@ namespace args::core::compute {
      *  @brief A Mid-Level Wrapper around a cl_program, creates command-queues
      *          and Kernels for you automatically
      */
-    class ARGS_API Program
+    class Program
     {
     public:
 
