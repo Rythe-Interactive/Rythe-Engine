@@ -142,3 +142,7 @@
  * @param x value the function should return.
  */
 #define ARGS_IMPURE_RETURN(x) { return (x); }
+
+#if !defined(LEGION_MIN_THREADS)
+#define LEGION_MIN_THREADS 5
+#endif

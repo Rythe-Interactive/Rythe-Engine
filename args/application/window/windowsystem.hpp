@@ -220,7 +220,7 @@ namespace args::application
             bindToEvent<window_request, &WindowSystem::onWindowRequest>();
             bindToEvent<window_toggle_fullscreen_request, &WindowSystem::onFullscreenRequest>();
 
-            raiseEvent<window_request>(world_entity_id, math::ivec2(1360, 768), "<Args> Engine", nullptr, nullptr, 1); // Create the request for the main window.
+            raiseEvent<window_request>(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", nullptr, nullptr, 1); // Create the request for the main window.
 
             m_scheduler->sendCommand(m_scheduler->getChainThreadId("Input"), [](void* param) // We send a command to the input thread before the input process chain starts.
                 {                                                                            // This way we can create the main window before the rest of the engine get initialised.
