@@ -14,7 +14,13 @@ namespace args::physics
 
 		math::vec3* edgePositionPtr;
 
+
         HalfEdgeEdge() = default;
+
+        ~HalfEdgeEdge()
+        {
+            log::debug("");
+        }
 
 		HalfEdgeEdge(math::vec3* newEdgePositionPtr) : edgePositionPtr{ newEdgePositionPtr }
 		{

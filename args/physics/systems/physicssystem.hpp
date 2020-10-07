@@ -1,13 +1,7 @@
 #pragma once
 
-#ifndef ARGS_IMPORT
-#define ARGS_IMPORT
-#include <core/core.hpp>
-#include <core/platform/args_library.hpp>
-#else
-#include <core/core.hpp>
-#endif // !ARGS_IMPORT
 
+#include <core/core.hpp>
 #include <physics/components/rigidbody.hpp>
 #include <physics/data/physics_manifold_precursor.h>
 #include <physics/data/physics_manifold.hpp>
@@ -244,10 +238,8 @@ namespace args::physics
         * @note This should only be used for testing/debugging purposes
         */
         void bruteForceBroadPhase(std::vector<physics_manifold_precursor>& manifoldPrecursors,
-            std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping)
-        {
-            manifoldPrecursorGrouping.push_back(std::move(manifoldPrecursors));
-        }
+            std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping);
+
 
         /**@brief given 2 physics_manifold_precursors precursorA and precursorB, create a manifold for each collider in precursorA 
         * with every other collider in precursorB. The manifolds that involve rigidbodies are then pushed into the given manifold list

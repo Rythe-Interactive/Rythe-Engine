@@ -42,8 +42,11 @@ namespace args::physics
             auto inputContactList = outputContactPoints;
             outputContactPoints.clear();
 
+
+            log::debug("before clip inputContactList {}" , inputContactList.size());
             PhysicsStatics::SutherlandHodgmanFaceClip(planeNormal, planePosition, inputContactList, outputContactPoints);
-            
+            log::debug("clipped");
+            log::debug("after clip outputContactPoints {}" , outputContactPoints.size());
         };
 
         refFace->forEachEdge(clipNeigboringFaceWithOutput);
@@ -67,6 +70,7 @@ namespace args::physics
                 contact.worldContactInc = incidentContact;
                 contact.worldContactRef = referenceContact;
 
+                manifold.contacts.push_back(contact);
                 PhysicsSystem::contactPoints.push_back(contact);
 
             }

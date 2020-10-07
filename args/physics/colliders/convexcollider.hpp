@@ -13,7 +13,7 @@ namespace args::physics
 
 
 
-	class ARGS_API ConvexCollider : public PhysicsCollider
+	class ConvexCollider : public PhysicsCollider
 	{
 	public:
 

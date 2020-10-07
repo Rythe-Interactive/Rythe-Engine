@@ -4,11 +4,11 @@
 
 namespace args::physics
 {
-	struct HalfEdgeFace;
+    struct HalfEdgeFace;
 
-	class PhysicsStatics
-	{
-	public:
+    class PhysicsStatics
+    {
+    public:
 
         //---------------------------------------------------------------- Collision Detection ----------------------------------------------------------------------------//
 
@@ -38,10 +38,10 @@ namespace args::physics
                 }
             }
         }
-		
-        /** @brief Given 2 ConvexColliders, convexA and convexB, checks if one of the faces of convexB creates a seperating axis 
+
+        /** @brief Given 2 ConvexColliders, convexA and convexB, checks if one of the faces of convexB creates a seperating axis
          * that seperates the given convex shapes
-         * @param convexA the reference collider 
+         * @param convexA the reference collider
          * @param convexB the collider that will create the seperating axes
          * @param transformA the transform of convexA
          * @param transformB the transform of convexB
@@ -55,10 +55,10 @@ namespace args::physics
             float currentMaximumSeperation = std::numeric_limits<float>::lowest();
 
 
-            for ( auto face : convexB->GetHalfEdgeFaces())
+            for (auto face : convexB->GetHalfEdgeFaces())
             {
                 //get inverse normal
-                math::vec3 seperatingAxis = math::normalize(transformB * math::vec4( face->normal, 0));
+                math::vec3 seperatingAxis = math::normalize(transformB * math::vec4(face->normal, 0));
 
                 math::vec3 transformedPositionB = transformB * math::vec4(face->centroid, 1);
 
@@ -84,14 +84,14 @@ namespace args::physics
                 }
             }
             //no seperating axis was found
-            
+
             maximumSeperation = currentMaximumSeperation;
             return false;
         }
 
         /** @brief Given 2 ConvexColliders, Goes through every single possible edge combination in order to check for a valid seperating axis. This is done
          * by creating a minkowski face with each edge combination.
-         * @param convexA the reference collider 
+         * @param convexA the reference collider
          * @param convexB the incident collider
          * @param transformA the transform of convexA
          * @param transformB the transform of convexB
@@ -101,12 +101,12 @@ namespace args::physics
          * @param seperation [out] the amount of seperation
          * @return returns true if a seperating axis was found
          */
-        static bool FindSeperatingAxisByGaussMapEdgeCheck(ConvexCollider* convexA, ConvexCollider* convexB, 
-            const math::mat4& transformA, const math::mat4& transformB,HalfEdgeEdge** refEdge,HalfEdgeEdge** incEdge,
-            math::vec3& seperatingAxisFound,float & maximumSeperation)
+        static bool FindSeperatingAxisByGaussMapEdgeCheck(ConvexCollider* convexA, ConvexCollider* convexB,
+            const math::mat4& transformA, const math::mat4& transformB, HalfEdgeEdge** refEdge, HalfEdgeEdge** incEdge,
+            math::vec3& seperatingAxisFound, float& maximumSeperation)
         {
             float currentMaximumSeperation = std::numeric_limits<float>::lowest();
-      
+
 
             math::vec3 positionA = transformA[3];
 
@@ -142,17 +142,21 @@ namespace args::physics
                         for (HalfEdgeEdge* edgeB : convexBHalfEdges)
                         {
                             //if the given edges creates a minkowski face
-                            if (attemptBuildMinkowskiFace(edgeA,edgeB,transformA,transformB))
+                            if (attemptBuildMinkowskiFace(edgeA, edgeB, transformA, transformB))
                             {
                                 //get world edge direction
-                                math::vec3 edgeANormal = transformA * math::vec4(edgeA->getLocalEdgeDirection(), 0);
-                                math::vec3 edgeBNormal = transformB * math::vec4(edgeB->getLocalEdgeDirection(), 0);
+                                math::vec3 edgeADirection= transformA * math::vec4(*edgeA->nextEdge->edgePositionPtr, 1) - 
+                                    transformA * math::vec4(*edgeA->edgePositionPtr, 1);
 
-                                edgeANormal = math::normalize(edgeANormal);
-                                edgeBNormal = math::normalize(edgeBNormal);
+
+                                math::vec3 edgeBDirection = transformB * math::vec4(*edgeB->nextEdge->edgePositionPtr, 1) -
+                                    transformB * math::vec4(*edgeB->edgePositionPtr, 1);
+
+                                edgeADirection = math::normalize(edgeADirection);
+                                edgeBDirection = math::normalize(edgeBDirection);
 
                                 //get the seperating axis
-                                math::vec3 seperatingAxis = math::cross(edgeANormal, edgeBNormal);
+                                math::vec3 seperatingAxis = math::cross(edgeADirection, edgeBDirection);
 
                                 if (math::epsilonEqual(math::length(seperatingAxis), 0.0f, math::epsilon<float>()))
                                 {
@@ -174,10 +178,10 @@ namespace args::physics
                                 //check if given edges create a seperating axis
                                 float distance = math::dot(seperatingAxis, edgeBtransformedPosition - edgeAtransformedPosition);
 
-                                if (distance > currentMaximumSeperation )
+                                if (distance > currentMaximumSeperation)
                                 {
-                                    refEdge = &edgeA;
-                                    incEdge = &edgeB;
+                                   /* *refEdge = edgeA;
+                                    *incEdge = edgeB;*/
                                     seperatingAxisFound = seperatingAxis;
                                     currentMaximumSeperation = distance;
                                 }
@@ -200,10 +204,10 @@ namespace args::physics
         //---------------------------------------------------------- Polyhedron Clipping ----------------------------------------------------------------------------//
 
         /** @brief Given a 3D plane, clips the vertices in the inputList and places the results in the output list
-         * 
+         *
          */
         static void SutherlandHodgmanFaceClip(math::vec3& planeNormal, math::vec3& planePosition,
-             std::vector<math::vec3>& inputList, std::vector<math::vec3>& outputList)
+            std::vector<math::vec3>& inputList, std::vector<math::vec3>& outputList)
         {
             for (size_t i = 0; i < inputList.size(); i++)
             {
@@ -250,7 +254,7 @@ namespace args::physics
                         outputList.push_back(intersectionPoint);
                     }
                 }
-                
+
 
 
 
@@ -259,7 +263,74 @@ namespace args::physics
 
         //------------------------------------------------------------ helper functions -----------------------------------------------------------------------//
 
-        static float PointDistanceToPlane(const math::vec3 & planeNormal, const math::vec3& planePosition, const math::vec3& point)
+        /**
+        *
+        */
+        static void FindClosestPointsToLineSegment(math::vec3 p1, math::vec3 p2,
+            math::vec3 p3, math::vec3 p4,math::vec3& outp1p2, math::vec3& outp3p4)
+        {
+            //------------------find the interpolants of both lines that represent the closest points of the line segments-----------//
+
+            float a, b, c, d, e, f;
+
+            // ( [p2] ^ 2 - [p1] ^ 2) 
+            a = math::pow2(p2.x - p1.x) +
+                math::pow2(p2.y - p1.y) +
+                math::pow2(p2.z - p1.z);
+
+            // ([p4] - [p3])([p2] - [p1])
+            b = (p4.x - p3.x) * (p2.x - p1.x) +
+                (p4.y - p3.y) * (p2.y - p1.y) +
+                (p4.z - p3.z) * (p2.z - p1.z);
+
+            // ([p4] - [p3])([p2] - [p1])
+            c = b;
+
+            // ( [p4] ^ 2 - [p3] ^ 2) 
+            d = (math::pow2(p4.x - p3.x) +
+                math::pow2(p4.y - p3.y) +
+                math::pow2(p4.z - p3.z));
+
+            //([p3] - [p1])([p2] - [p1])
+            e = (p3.x - p1.x) * (p2.x - p1.x) +
+                (p3.y - p1.y) * (p2.y - p1.y) +
+                (p3.z - p1.z) * (p2.z - p1.z);
+
+            //([p4] - [p3])([p3] - [p1])
+            f = (p4.x - p3.x) * (p3.x - p1.x) +
+                (p4.y - p3.y) * (p3.y - p1.y) +
+                (p4.z - p3.z) * (p3.z - p1.z);
+
+            math::vec2 interpolantVector = LinearSystemCramerSolver2D(a, b, c, d, e, f);
+
+            outp1p2 = p1 + (p2 - p1) * math::clamp(interpolantVector.x,0.0f,1.0f);
+            outp3p4 = p3 + (p4 - p3) * math::clamp(interpolantVector.y,0.0f,1.0f);
+
+        }
+
+
+        /**
+        *
+        */
+        static math::vec2 LinearSystemCramerSolver2D(float a, float b, float c, float d, float e, float f)
+        {
+            //[ a c ] [x] [e]
+            //[ b d ] [y] [f]
+
+            float denom = (a * d) - (c * b);
+
+            //[ e c ] 
+            //[ f d ] 
+            float x  = ((e * d) - (c * f)) / denom;
+
+            //[ a e ]
+            //[ b f ] 
+            float y = ((a * f) - (e * b)) / denom;
+
+            return math::vec2(x,-y);
+        }
+
+        static float PointDistanceToPlane(const math::vec3& planeNormal, const math::vec3& planePosition, const math::vec3& point)
         {
             return math::dot(point - planePosition, planeNormal);
         }
@@ -292,29 +363,29 @@ namespace args::physics
             return math::dot(planePosition - startPoint, planeNormal) / math::dot(math::normalize(endPoint - startPoint), planeNormal);
         }
 
-        private:
+    private:
 
         /** @brief Given 2 HalfEdgeEdges and their respective transforms, transforms their normals and checks if they create a minkowski face
          * @return returns true if a minkowski face was succesfully constructed
          */
-        static bool attemptBuildMinkowskiFace(HalfEdgeEdge* edgeA,HalfEdgeEdge* edgeB,const math::mat4& transformA, 
+        static bool attemptBuildMinkowskiFace(HalfEdgeEdge* edgeA, HalfEdgeEdge* edgeB, const math::mat4& transformA,
             const math::mat4& transformB)
         {
-            const math::vec3 transformedA1 = transformA * math::vec4(edgeA->getLocalNormal(),0);
+            const math::vec3 transformedA1 = transformA * math::vec4(edgeA->getLocalNormal(), 0);
             const math::vec3 transformedA2 = transformA * math::vec4(edgeA->pairingEdge->getLocalNormal(), 0);
 
             const math::vec3 transformedB1 = transformB * math::vec4(edgeB->getLocalNormal(), 0);
             const math::vec3 transformedB2 = transformB * math::vec4(edgeB->pairingEdge->getLocalNormal(), 0);
 
-            return isMinkowskiFace(transformedA1,transformedA2,-transformedB1,-transformedB2);
+            return isMinkowskiFace(transformedA1, transformedA2, -transformedB1, -transformedB2);
         }
 
-        /** @brief Given 2 arcs, one that starts from transformedA1 and ends at transformedA2 and another arc 
+        /** @brief Given 2 arcs, one that starts from transformedA1 and ends at transformedA2 and another arc
          * that starts at transformedB1 and ends at transformedB2, checks if the given arcs collider each other
          * @return returns true if the given arcs intersect
          */
-        static bool isMinkowskiFace(const math::vec3 transformedA1,const math::vec3 transformedA2,
-            const math::vec3 transformedB1,const math::vec3 transformedB2)
+        static bool isMinkowskiFace(const math::vec3 transformedA1, const math::vec3 transformedA2,
+            const math::vec3 transformedB1, const math::vec3 transformedB2)
         {
             //------------------------ Check if normals created by arcA seperate normals of B --------------------------------------//
 
@@ -323,10 +394,10 @@ namespace args::physics
             float planeADotB1 = math::dot(planeANormal, transformedB1);
             float planeADotB2 = math::dot(planeANormal, transformedB2);
 
-            float dotMultiplyResultA = 
+            float dotMultiplyResultA =
                 planeADotB1 * planeADotB2;
 
-            if (dotMultiplyResultA > 0.0f ||  math::epsilonEqual(dotMultiplyResultA,0.0f,math::epsilon<float>()))
+            if (dotMultiplyResultA > 0.0f || math::epsilonEqual(dotMultiplyResultA, 0.0f, math::epsilon<float>()))
             {
                 return false;
             }
@@ -361,5 +432,6 @@ namespace args::physics
 
             return true;
         }
-	};
+    };
 }
+
