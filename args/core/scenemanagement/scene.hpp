@@ -15,6 +15,6 @@ namespace args::core::scenemanagement
     template<typename Archive>
     inline void scene::serialize(Archive& archive)
     {
-        archive(cereal::make_nvp("NAME",SceneManager::static_data::sceneNames[id]));
+        archive(cereal::make_nvp("NAME",SceneManager::sceneNames[id]));
     }
 }
