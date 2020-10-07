@@ -379,7 +379,6 @@
     <ClInclude Include="math\glm\vec3.hpp" />
     <ClInclude Include="math\glm\vec4.hpp" />
     <ClInclude Include="math\glm\vector_relational.hpp" />
-    <ClInclude Include="platform\args_library.hpp" />
     <ClInclude Include="filesystem\assetimporter.hpp" />
     <ClInclude Include="defaults\coremodule.hpp" />
     <ClInclude Include="defaults\defaultcomponents.hpp" />

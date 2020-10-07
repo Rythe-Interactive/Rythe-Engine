@@ -6,7 +6,7 @@
 
 namespace args::physics
 {
-	struct ARGS_API physicsComponent
+	struct physicsComponent
 	{
         static void init(physicsComponent& comp)
         {

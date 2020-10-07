@@ -25,8 +25,11 @@ namespace args::core::iterator
         std::pair<T, T> range;
     };
 
+
+    #if !defined(DOXY_EXCLUDE)
     template <class T>
     pair_range(std::pair<T, T>)->pair_range<T>;
+    #endif
 
     template <class It>
     bool checked_next(It& iter, It end, std::size_t diff)

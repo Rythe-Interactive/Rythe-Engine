@@ -1,5 +1,5 @@
 #pragma once
-#include <physics/physicsimport.h>
+#include <core/core.hpp>
 #include <physics/colliders/convexcollider.hpp>
 
 namespace args::physics

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <physics/physicsimport.h>
+#include <core/core.hpp>
 #include <physics/data/physics_manifold.hpp>
 
 namespace args::physics

@@ -15,16 +15,16 @@
 
 namespace args::core::ecs
 {
-    class ARGS_API EcsRegistry;
+    class EcsRegistry;
 
     class component_handle_base;
 
     template<typename component_type>
     class component_handle;
 
-    class ARGS_API entity_handle;
+    class entity_handle;
 
-    struct ARGS_API child_iterator
+    struct child_iterator
     {
     public:
         struct impl;
@@ -54,7 +54,7 @@ namespace args::core::ecs
      * @brief Serializable handle for executing operations on entities.
      *		  This class only stores a reference to the registry and the id of the entity.
      */
-    class ARGS_API entity_handle
+    class entity_handle
     {
         friend class EcsRegistry;
     private:

@@ -1,5 +1,5 @@
 #pragma once
-#include <physics/physicsimport.h>
+#include <core/core.hpp>
 #include <physics/components/physics_component.hpp>
 
 namespace args::physics
