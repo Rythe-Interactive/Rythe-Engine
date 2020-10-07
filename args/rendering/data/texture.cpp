@@ -51,11 +51,11 @@ namespace args::rendering
         }
 
         texture_data data{};
-        data.width = texture.width;
-        data.height = texture.height;
+        data.size.x = texture.width;
+        data.size.y = texture.height;
         data.channels = texture.channels;
         data.type = texture.type;
-        data.pixels.resize(data.width * data.height);
+        data.pixels.resize(data.size.x * data.size.y);
         glGetTexImage(static_cast<GLenum>(data.type), 0, components_to_format[static_cast<int>(data.channels)], GL_RGBA, data.pixels.data());
         return data;
     }

@@ -70,16 +70,13 @@ namespace args::rendering
         mirror_then_clamp = GL_MIRROR_CLAMP_TO_EDGE
     };
 
-    struct color : public math::vec4 { };
-
     struct texture_data
     {
-        int width;
-        int height;
+        math::ivec2 size;
         texture_components channels;
         texture_type type;
 
-        std::vector<color> pixels;
+        std::vector<math::color> pixels;
     };
 
     struct texture
