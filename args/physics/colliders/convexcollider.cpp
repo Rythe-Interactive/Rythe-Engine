@@ -3,7 +3,7 @@
 #include <physics/systems/physicssystem.hpp>
 #include <physics/data/convexconvexpenetrationquery.h>
 #include <physics/data/edgepenetrationquery.h>
-
+#include <physics/data/pointer_encapsulator.hpp>
 
 namespace args::physics
 {
@@ -13,7 +13,8 @@ namespace args::physics
         //--------------------- Check for a collision by going through the edges and faces of both polyhedrons  --------------//
         //'this' is colliderB and 'convexCollider' is colliderA
 
-        HalfEdgeFace** ARefFace = &convexCollider->GetHalfEdgeFaces().at(0);
+        PointerEncapsulator < HalfEdgeFace> ARefFace;
+
         float ARefSeperation;
         math::vec3 a;
         if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(this, convexCollider, manifold.transformB,manifold.transformA,  ARefFace, ARefSeperation, a))
@@ -22,7 +23,8 @@ namespace args::physics
             return;
         }
 
-        HalfEdgeFace** BRefFace = &this->GetHalfEdgeFaces().at(0);
+        PointerEncapsulator < HalfEdgeFace> BRefFace;
+      
         float BRefSeperation;
         math::vec3 b;
         if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider, this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation, b))
@@ -31,8 +33,11 @@ namespace args::physics
             return;
         }
 
-        HalfEdgeEdge** edgeRef = &convexCollider->GetHalfEdgeFaces().at(0)->startEdge;
-        HalfEdgeEdge** edgeInc = &this->GetHalfEdgeFaces().at(0)->startEdge;
+        PointerEncapsulator< HalfEdgeEdge> edgeRef;
+        PointerEncapsulator< HalfEdgeEdge> edgeInc;
+
+        //edgeRef.ptr = 
+
         math::vec3 edgeNormal;
         float aToBEdgeSeperation;
 
@@ -50,24 +55,24 @@ namespace args::physics
 
         //Get world position and normal of reference faces //
 
-        math::vec3 worldFaceCentroidA = manifold.transformA * math::vec4((*ARefFace)->centroid, 1);
-        math::vec3 worldFaceNormalA = manifold.transformA * math::vec4((*ARefFace)->normal, 0);
+        math::vec3 worldFaceCentroidA = manifold.transformA * math::vec4((ARefFace.ptr)->centroid, 1);
+        math::vec3 worldFaceNormalA = manifold.transformA * math::vec4((ARefFace.ptr)->normal, 0);
         
-        math::vec3 worldFaceCentroidB = manifold.transformB * math::vec4((*BRefFace)->centroid, 1);
-        math::vec3 worldFaceNormalB = manifold.transformB * math::vec4((*BRefFace)->normal, 0);
+        math::vec3 worldFaceCentroidB = manifold.transformB * math::vec4((BRefFace.ptr)->centroid, 1);
+        math::vec3 worldFaceNormalB = manifold.transformB * math::vec4((BRefFace.ptr)->normal, 0);
 
-        HalfEdgeEdge* refEdge = *edgeRef;
-        math::vec3 worldEdgeAPosition = manifold.transformA * math::vec4(*refEdge->edgePositionPtr, 1);
+    
+        math::vec3 worldEdgeAPosition = edgeRef.ptr? manifold.transformA * math::vec4(*edgeRef.ptr->edgePositionPtr, 1) : math::vec3();
         math::vec3 worldEdgeNormal = -edgeNormal;
 
         auto abPenetrationQuery =
-            std::make_shared< ConvexConvexPenetrationQuery>(*ARefFace,*BRefFace, worldFaceCentroidA,worldFaceNormalA,ARefSeperation,true);
+            std::make_shared< ConvexConvexPenetrationQuery>(ARefFace.ptr,BRefFace.ptr, worldFaceCentroidA,worldFaceNormalA,ARefSeperation,true);
 
         auto baPenetrationQuery =
-            std::make_shared < ConvexConvexPenetrationQuery>(*BRefFace, *ARefFace, worldFaceCentroidB, worldFaceNormalB, BRefSeperation, false);
+            std::make_shared < ConvexConvexPenetrationQuery>(BRefFace.ptr, ARefFace.ptr, worldFaceCentroidB, worldFaceNormalB, BRefSeperation, false);
 
         auto abEdgePenetrationQuery = 
-            std::make_shared < EdgePenetrationQuery>(*edgeRef,*edgeInc,worldEdgeAPosition,worldEdgeNormal,aToBEdgeSeperation, false);
+            std::make_shared < EdgePenetrationQuery>(edgeRef.ptr,edgeInc.ptr,worldEdgeAPosition,worldEdgeNormal,aToBEdgeSeperation, false);
 
         std::array<std::shared_ptr<PenetrationQuery>, 3> penetrationQueryArray{ abEdgePenetrationQuery, abPenetrationQuery, baPenetrationQuery  };
 

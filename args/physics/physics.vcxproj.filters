@@ -101,5 +101,8 @@
     <ClInclude Include="physics_statics.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="data\pointer_encapsulator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

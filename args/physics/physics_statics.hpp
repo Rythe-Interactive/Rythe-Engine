@@ -1,7 +1,7 @@
 #pragma once
 #include <physics/physicsimport.h>
 #include <physics/colliders/convexcollider.hpp>
-
+#include <physics/data/pointer_encapsulator.hpp>
 namespace args::physics
 {
     struct HalfEdgeFace;
@@ -50,7 +50,7 @@ namespace args::physics
          * @return returns true if a seperating axis was found
          */
         static bool FindSeperatingAxisByExtremePointProjection(ConvexCollider* convexA
-            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, HalfEdgeFace** refFace, float& maximumSeperation, math::vec3& debugPoint)
+            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeFace>&refFace, float& maximumSeperation, math::vec3& debugPoint)
         {
             float currentMaximumSeperation = std::numeric_limits<float>::lowest();
 
@@ -73,7 +73,7 @@ namespace args::physics
                 {
                     debugPoint = worldSupportPoint;
                     currentMaximumSeperation = seperation;
-                    *refFace = face;
+                    refFace.ptr = face;
                 }
 
                 if (seperation > 0)
@@ -102,16 +102,14 @@ namespace args::physics
          * @return returns true if a seperating axis was found
          */
         static bool FindSeperatingAxisByGaussMapEdgeCheck(ConvexCollider* convexA, ConvexCollider* convexB,
-            const math::mat4& transformA, const math::mat4& transformB, HalfEdgeEdge** refEdge, HalfEdgeEdge** incEdge,
+            const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeEdge>& refEdge, PointerEncapsulator<HalfEdgeEdge>& incEdge,
             math::vec3& seperatingAxisFound, float& maximumSeperation)
         {
             float currentMaximumSeperation = std::numeric_limits<float>::lowest();
 
-
             math::vec3 positionA = transformA[3];
 
-
-            for (auto faceA : convexA->GetHalfEdgeFaces())
+            for (const auto faceA : convexA->GetHalfEdgeFaces())
             {
                 //----------------- Get all edges of faceA ------------//
 
@@ -124,7 +122,7 @@ namespace args::physics
 
                 faceA->forEachEdge(lambda);
 
-                for (auto faceB : convexB->GetHalfEdgeFaces())
+                for (const auto faceB : convexB->GetHalfEdgeFaces())
                 {
                     //----------------- Get all edges of faceB ------------//
 
@@ -179,9 +177,10 @@ namespace args::physics
                                 float distance = math::dot(seperatingAxis, edgeBtransformedPosition - edgeAtransformedPosition);
 
                                 if (distance > currentMaximumSeperation)
-                                {
-                                   /* *refEdge = edgeA;
-                                    *incEdge = edgeB;*/
+                                {                                 
+                                    refEdge.ptr = edgeA;
+                                    incEdge.ptr = edgeB;
+
                                     seperatingAxisFound = seperatingAxis;
                                     currentMaximumSeperation = distance;
                                 }
@@ -263,13 +262,31 @@ namespace args::physics
 
         //------------------------------------------------------------ helper functions -----------------------------------------------------------------------//
 
-        /**
-        *
+        /**@brief Given a set of points that represent 2 line segments, find a line segment that
+        * reperesents the closest points between the 2 lines
+        * @param p1 The start of the first line
+        * @param p2 The end of the second line
+        * @param p3 The start of the third line
+        * @param p4 The end of the fourth line
         */
         static void FindClosestPointsToLineSegment(math::vec3 p1, math::vec3 p2,
             math::vec3 p3, math::vec3 p4,math::vec3& outp1p2, math::vec3& outp3p4)
         {
             //------------------find the interpolants of both lines that represent the closest points of the line segments-----------//
+
+            //Given the 2 closest points of the given 2 line segments, L1(x) and L2(y), where L1 is the line created from the points
+            //p1 and p2, and L2 is the line created from the points p3 and p4. and x and y are the interpolants, We know that these
+            //2 points create a line that is perpendicular to both the lines of L1 and L2. Therefore:
+
+            // (L1(x) - L2(y)) . (p2 - p1) = 0
+            // (L1(x) - L2(y)) . (p4 - p3) = 0
+
+            //these 2 function can be simplified into a linear system of 2 variables.
+
+            // ax + cy = e
+            // bx + dy = f
+
+            //where a,b,c,d,e,f are equal to the following:
 
             float a, b, c, d, e, f;
 
@@ -309,8 +326,14 @@ namespace args::physics
         }
 
 
-        /**
-        *
+        /**Solves a linear system with 2 equations using cramers rule
+        * @param a The value at a11 of the matrix
+        * @param b The value at a21 of the matrix
+        * @param c The value at a12 of the matrix
+        * @param d The value at a22 of the matrix
+        * @param e The result of the linear transformation in the x axis
+        * @param f The result of the linear transformation in the y axis
+        * @note a,b,c,d is a column major matrix
         */
         static math::vec2 LinearSystemCramerSolver2D(float a, float b, float c, float d, float e, float f)
         {
@@ -330,16 +353,23 @@ namespace args::physics
             return math::vec2(x,-y);
         }
 
+        /**@brief Finds the distance of a point given a 3D plane
+        */
         static float PointDistanceToPlane(const math::vec3& planeNormal, const math::vec3& planePosition, const math::vec3& point)
         {
             return math::dot(point - planePosition, planeNormal);
         }
 
+        /**@brief Checks if the distance of a point from a 3D plane is above zero
+        */
         static bool IsPointAbovePlane(const math::vec3& planeNormal, const math::vec3& planePosition, const math::vec3& point)
         {
             return PointDistanceToPlane(planeNormal, planePosition, point) > 0.0f;
         }
 
+        /**@brief Given a line going from start point to end point finds the intersection point of the line to a given 3D plane
+        * @return Returns true if an intersection is found
+        */
         static bool FindLineToPlaneIntersectionPoint(const math::vec3& planeNormal, const math::vec3& planePosition,
             const math::vec3& startPoint, const math::vec3& endPoint, math::vec3& intersectionPoint)
         {
@@ -350,14 +380,16 @@ namespace args::physics
                 return false;
             }
 
-            float t = FindVectorToPlaneInterpolation(startPoint, endPoint, planePosition, planeNormal);
+            float t = FindLineToPointInterpolant(startPoint, endPoint, planePosition, planeNormal);
 
             intersectionPoint = startPoint + math::normalize(direction) * t;
 
             return true;
         }
 
-        static float FindVectorToPlaneInterpolation(const math::vec3& startPoint, const math::vec3& endPoint, const math::vec3& planePosition,
+        /** Given a line going from a startPoint to and endPoint, finds the interpolant required to intersect a given 3D plane
+        */
+        static float FindLineToPointInterpolant(const math::vec3& startPoint, const math::vec3& endPoint, const math::vec3& planePosition,
             const math::vec3& planeNormal)
         {
             return math::dot(planePosition - startPoint, planeNormal) / math::dot(math::normalize(endPoint - startPoint), planeNormal);

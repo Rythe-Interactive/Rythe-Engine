@@ -325,99 +325,99 @@ public:
         cubeParams2.width = 3.0f;
         cubeParams2.height = 3.0f;
 
-        ////----------- AABB to AABB Test(Single Axis)  ------------//
-        ////**
-        //{
-        //    auto ent = m_ecs->createEntity();
+        //----------- AABB to AABB Test(Single Axis)  ------------//
+        //**
+        {
+            auto ent = m_ecs->createEntity();
 
-        //    auto entPhyHande = ent.add_component<physics::physicsComponent>();
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
-        //    physics::physicsComponent physicsComponent2;
-        //    physics::physicsComponent::init(physicsComponent2);
-
-
-        //    physicsComponent2.AddBox(cubeParams);
-        //    physicsComponent2.isTrigger = false;
-        //    entPhyHande.write(physicsComponent2);
-
-        //    auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-        //    renderableHandle.write({ cubeH, wireframeH });
-
-        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-        //    positionH.write(math::vec3(0, -3.0f, 8.0f));
-        //    scaleH.write(math::vec3(1.0f));
-        //}
-
-        //{
-        //    auto ent = m_ecs->createEntity();
-        //    physicsUnitTestCD.push_back(ent);
-        //    auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-        //    physics::physicsComponent physicsComponent2;
-        //    physics::physicsComponent::init(physicsComponent2);
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
 
 
-        //    physicsComponent2.AddBox(cubeParams);
-        //    physicsComponent2.isTrigger = true;
-        //    entPhyHande.write(physicsComponent2);
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(0, -3.0f, 8.0f));
+            scaleH.write(math::vec3(1.0f));
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+            physicsUnitTestCD.push_back(ent);
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
 
 
-        //    auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-        //    renderableHandle.write({ cubeH, wireframeH });
-
-        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-        //    positionH.write(math::vec3(3.0, -3.0f, 8.0f));
-        //    scaleH.write(math::vec3(1.0f));
-        //}
-
-        //
-
-        ////----------- AABB to AABB Test  ------------//
-        ////**
-        //{
-        //    auto ent = m_ecs->createEntity();
-
-        //    auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-        //    physics::physicsComponent physicsComponent2;
-        //    physics::physicsComponent::init(physicsComponent2);
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = true;
+            entPhyHande.write(physicsComponent2);
 
 
-        //    physicsComponent2.AddBox(cubeParams);
-        //    physicsComponent2.isTrigger = false;
-        //    entPhyHande.write(physicsComponent2);
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(3.0, -3.0f, 8.0f));
+            scaleH.write(math::vec3(1.0f));
+        }
+
+        
+
+        //----------- AABB to AABB Test  ------------//
+        //**
+        {
+            auto ent = m_ecs->createEntity();
+
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
 
 
-        //    auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-        //    renderableHandle.write({ cubeH, wireframeH });
-
-        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-        //    positionH.write(math::vec3(0, -3.0f, 5.0f));
-        //    scaleH.write(math::vec3(1.0f));
-        //}
-
-        //{
-        //    auto ent = m_ecs->createEntity();
-        //    physicsUnitTestCD.push_back(ent);
-        //    auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-        //    physics::physicsComponent physicsComponent2;
-        //    physics::physicsComponent::init(physicsComponent2);
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
 
 
-        //    physicsComponent2.AddBox(cubeParams);
-        //    physicsComponent2.isTrigger = true;
-        //    entPhyHande.write(physicsComponent2);
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(0, -3.0f, 5.0f));
+            scaleH.write(math::vec3(1.0f));
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+            physicsUnitTestCD.push_back(ent);
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
 
 
-        //    auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-        //    renderableHandle.write({ cubeH, wireframeH });
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = true;
+            entPhyHande.write(physicsComponent2);
 
-        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-        //    positionH.write(math::vec3(3.0, -2.0f, 4.0f));
-        //    scaleH.write(math::vec3(1.0f));
-        //}
-        ////*/
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(3.0, -2.0f, 4.0f));
+            scaleH.write(math::vec3(1.0f));
+        }
+        //*/
 
         //----------- AABB to OBB Test  ------------//
         //**
@@ -461,7 +461,7 @@ public:
             renderableHandle.write({ cubeH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(3.0, -3.0f, -2.0f));
+            positionH.write(math::vec3(1.5, -3.0f, -2.0f));
 
             auto rot = rotationH.read();
             rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
@@ -473,119 +473,119 @@ public:
         }
         ////*/
         ////----------- OBB to OBB Test  ------------//
-        ////**
-        //{
-        //    auto ent = m_ecs->createEntity();
+        //**
+        {
+            auto ent = m_ecs->createEntity();
 
-        //    auto entPhyHande = ent.add_component<physics::physicsComponent>();
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
-        //    physics::physicsComponent physicsComponent2;
-        //    physics::physicsComponent::init(physicsComponent2);
-
-
-        //    physicsComponent2.AddBox(cubeParams);
-        //    physicsComponent2.isTrigger = false;
-        //    entPhyHande.write(physicsComponent2);
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
 
 
-        //    auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-        //    renderableHandle.write({ cubeH, wireframeH });
-
-        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-        //    positionH.write(math::vec3(0, -3.0f, -7.0f));
-
-        //    auto rot = rotationH.read();
-        //    rot *= math::angleAxis(20.f, math::vec3(0, 1, 0));
-        //    rotationH.write(rot);
-
-        //    scaleH.write(math::vec3(1.0f));
-        //}
-
-        //{
-        //    auto ent = m_ecs->createEntity();
-        //    physicsUnitTestCD.push_back(ent);
-        //    auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-        //    physics::physicsComponent physicsComponent2;
-        //    physics::physicsComponent::init(physicsComponent2);
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
 
 
-        //    physicsComponent2.AddBox(cubeParams);
-        //    physicsComponent2.isTrigger = true;
-        //    entPhyHande.write(physicsComponent2);
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ cubeH, wireframeH });
 
-        //    auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-        //    renderableHandle.write({ cubeH, wireframeH });
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(0, -3.0f, -7.0f));
 
-        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-        //    positionH.write(math::vec3(3.0, -3.0f, -7.0f));
+            auto rot = rotationH.read();
+            rot *= math::angleAxis(20.f, math::vec3(0, 1, 0));
+            rotationH.write(rot);
 
-        //    auto rot = rotationH.read();
-        //    rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
-        //    rot *= math::angleAxis(45.f, math::vec3(0, 0, 1));
+            scaleH.write(math::vec3(1.0f));
+        }
 
-        //    rotationH.write(rot);
+        {
+            auto ent = m_ecs->createEntity();
+            physicsUnitTestCD.push_back(ent);
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
-        //    scaleH.write(math::vec3(1.0f));
-        //}
-        ////*/
-
-        ////----------- OBB Edge-Edge Test  ------------//
-        ////**
-        //{
-        //    auto ent = m_ecs->createEntity();
-        //    //physicsUnitTestObjects.push_back(ent);
-        //    auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-        //    physics::physicsComponent physicsComponent2;
-        //    physics::physicsComponent::init(physicsComponent2);
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
 
 
-        //    physicsComponent2.AddBox(cubeParams);
-        //    physicsComponent2.isTrigger = false;
-        //    entPhyHande.write(physicsComponent2);
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = true;
+            entPhyHande.write(physicsComponent2);
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(3.0, -3.0f, -7.0f));
+
+            auto rot = rotationH.read();
+            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
+            rot *= math::angleAxis(45.f, math::vec3(0, 0, 1));
+
+            rotationH.write(rot);
+
+            scaleH.write(math::vec3(1.0f));
+        }
+        //*/
+
+        //----------- OBB Edge-Edge Test  ------------//
+        //**
+        {
+            auto ent = m_ecs->createEntity();
+            //physicsUnitTestObjects.push_back(ent);
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
 
 
-        //    auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-        //    renderableHandle.write({ cubeH, wireframeH });
-
-        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-        //    positionH.write(math::vec3(0, -3.0f, -12.0f));
-
-        //    auto rot = rotationH.read();
-        //    rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
-        //    rotationH.write(rot);
-
-        //    scaleH.write(math::vec3(1.0f));
-        //}
-        //{
-        //    auto ent = m_ecs->createEntity();
-        //    physicsUnitTestCD.push_back(ent);
-        //    auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-        //    physics::physicsComponent physicsComponent2;
-        //    physics::physicsComponent::init(physicsComponent2);
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
 
 
-        //    physicsComponent2.AddBox(cubeParams);
-        //    physicsComponent2.isTrigger = true;
-        //    entPhyHande.write(physicsComponent2);
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(0, -3.0f, -12.0f));
+
+            auto rot = rotationH.read();
+            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
+            rotationH.write(rot);
+
+            scaleH.write(math::vec3(1.0f));
+        }
+        {
+            auto ent = m_ecs->createEntity();
+            physicsUnitTestCD.push_back(ent);
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
 
 
-        //    auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-        //    renderableHandle.write({ cubeH, wireframeH });
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = true;
+            entPhyHande.write(physicsComponent2);
 
-        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-        //    positionH.write(math::vec3(3.0, -3.0f, -13.0f));
 
-        //    auto rot = rotationH.read();
-        //    rot *= math::angleAxis(45.f, math::vec3(1, 0, 0));
-        //    rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
-        //    rotationH.write(rot);
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ cubeH, wireframeH });
 
-        //    scaleH.write(math::vec3(1.0f));
-        //}
-        ////*/
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(3.0, -3.0f, -13.0f));
+
+            auto rot = rotationH.read();
+            rot *= math::angleAxis(45.f, math::vec3(1, 0, 0));
+            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
+            rotationH.write(rot);
+
+            scaleH.write(math::vec3(1.0f));
+        }
+        //*/
     }
 
     void setupPhysicsCRUnitTest(rendering::model_handle cubeH, rendering::material_handle wireframeH)

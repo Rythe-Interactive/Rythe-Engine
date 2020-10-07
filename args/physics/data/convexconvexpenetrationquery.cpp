@@ -26,13 +26,13 @@ namespace args::physics
         auto sendToInitialOutput = [&outputContactPoints,&incTransform](HalfEdgeEdge* edge)
         {
             math::vec3 localVertexPosition = *edge->edgePositionPtr;
+            math::vec3 worldVertexPosition = incTransform * math::vec4(localVertexPosition, 1);
             outputContactPoints.push_back(incTransform * math::vec4(localVertexPosition, 1));
         };
 
         incFace->forEachEdge(sendToInitialOutput);
 
         //------------------------------- clip vertices with faces that are the neighbors of refFace  ---------------------------------//
-
         auto clipNeigboringFaceWithOutput = [&refTransform,&outputContactPoints](HalfEdgeEdge* edge)
         {
             HalfEdgeFace* neighborFace = edge->pairingEdge->face;
@@ -41,12 +41,8 @@ namespace args::physics
 
             auto inputContactList = outputContactPoints;
             outputContactPoints.clear();
-
-
-            log::debug("before clip inputContactList {}" , inputContactList.size());
+        
             PhysicsStatics::SutherlandHodgmanFaceClip(planeNormal, planePosition, inputContactList, outputContactPoints);
-            log::debug("clipped");
-            log::debug("after clip outputContactPoints {}" , outputContactPoints.size());
         };
 
         refFace->forEachEdge(clipNeigboringFaceWithOutput);
@@ -69,6 +65,8 @@ namespace args::physics
 
                 contact.worldContactInc = incidentContact;
                 contact.worldContactRef = referenceContact;
+
+                //log::debug("incidentContact {} ", math::to_string(incidentContact));
 
                 manifold.contacts.push_back(contact);
                 PhysicsSystem::contactPoints.push_back(contact);

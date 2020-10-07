@@ -13,11 +13,7 @@ namespace args::physics
 
     void EdgePenetrationQuery::populateContactList(physics_manifold& manifold, math::mat4& refTransform, math::mat4 incTransform)
     {
-        if (!refEdge) { return; }
-        log::debug(" EdgePenetrationQuery::populateContactList");
-
-        assert(refEdge);
-        assert(incEdge);
+        //------------------- The contact points between 2 edges are the closest points between the 2 edges --------------------//
 
         math::vec3 p1 = refTransform * math::vec4(*refEdge->edgePositionPtr, 1);
         math::vec3 p2 = refTransform * math::vec4(*refEdge->nextEdge->edgePositionPtr, 1);
@@ -27,8 +23,6 @@ namespace args::physics
 
         math::vec3 refContactPoint;
         math::vec3 incContactPoint;
-
-       
 
         PhysicsStatics::FindClosestPointsToLineSegment(p1, p2, p3, p4, refContactPoint, incContactPoint);
 
@@ -42,20 +36,6 @@ namespace args::physics
 
         manifold.contacts.push_back(contact);
         PhysicsSystem::contactPoints.push_back(contact);
-
-
-        //physics_contact fakecontact1;
-
-        //fakecontact1.worldContactInc = p1;
-        //fakecontact1.worldContactRef = p2;
-
-        //physics_contact fakecontact2;
-
-        //fakecontact2.worldContactInc = p3;
-        //fakecontact2.worldContactRef = p4;
-
-        //PhysicsSystem::contactPoints.push_back(fakecontact1);
-        //PhysicsSystem::contactPoints.push_back(fakecontact2);
 
     }
 
