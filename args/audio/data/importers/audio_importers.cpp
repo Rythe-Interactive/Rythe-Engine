@@ -2,11 +2,11 @@
 #define MINIMP3_IMPLEMENTATION
 #include <minimp3.h>
 #include <minimp3_ex.h>
+#include <audio/systems/audiosystem.hpp>
 
 namespace args::audio
 {
     std::shared_ptr<ALCcontext> mp3_audio_loader::context = nullptr;
-    auto mp3_audio_loader::contextLock = async::readonly_rw_spinlock();
 
     common::result_decay_more<audio_segment, fs_error> mp3_audio_loader::load(const fs::basic_resource& resource, audio_import_settings&& settings)
     {
@@ -35,7 +35,7 @@ namespace args::audio
             fileInfo.avg_bitrate_kbps
         };
 
-        async::readwrite_guard guard(contextLock);
+        async::readwrite_guard guard(AudioSystem::contextLock);
         alcMakeContextCurrent(context.get());
         //Generate openal buffer
         alGenBuffers((ALuint)1, &as.audioBufferId);

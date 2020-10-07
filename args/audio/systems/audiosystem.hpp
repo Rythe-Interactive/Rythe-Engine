@@ -63,9 +63,9 @@ namespace args::audio
 
         static void setDistanceModel(ALenum distanceModel);
 
+        static async::readonly_rw_spinlock contextLock;
     private:
-        bool initSource(audio_source& source);
-        async::readonly_rw_spinlock m_contextLock;
+        void initSource(audio_source& source);
 
         /**
         * @brief Function to print information about openal.

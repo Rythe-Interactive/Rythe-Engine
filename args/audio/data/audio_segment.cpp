@@ -16,8 +16,8 @@ namespace args::audio
         auto result = fs::AssetImporter::tryLoad<audio_segment>(file, settings);
         if (result != common::valid)
         {
-            log::error("Audio file wrong!");
-            //log::error("Error while loading file: {}, {}", file.get_filename(), result.get_error().what());
+            //log::error("Audio file wrong!");
+            log::error("Error while loading file: {}, {}", static_cast<std::string>(file.get_filename()), result.get_error());
             return invalid_audio_segment_handle;
         }
 

@@ -4,9 +4,6 @@ namespace args::audio
 {
 	inline void AudioSystem::setup()
 	{
-		m_contextLock = async::readonly_rw_spinlock();
-		async::readwrite_guard guard(m_contextLock);
-
 		alDevice = alcOpenDevice(NULL);
 		if (!alDevice)
 		{
@@ -69,6 +66,9 @@ namespace args::audio
 
 	inline void AudioSystem::queryInformation()
 	{
+		// This function is called from setup()
+		// In setup everything is still single threaded and therefore no lock is required
+
 		const ALchar* vendor = alGetString(AL_VENDOR);
 		const ALchar* version = alGetString(AL_VERSION);
 		const ALchar* renderer = alGetString(AL_RENDERER);
@@ -82,7 +82,7 @@ namespace args::audio
 
 	inline void AudioSystem::update(time::span deltatime)
 	{
-		async::readonly_guard guard(m_contextLock);
+		async::readonly_guard guard(contextLock);
 		alcMakeContextCurrent(alContext);
 
 		for (auto entity : sourceQuery)
@@ -96,12 +96,12 @@ namespace args::audio
 			previousP = p;
 			alSource3f(source.m_sourceId, AL_POSITION, p.x, p.y, p.z);
 			alSource3f(source.m_sourceId, AL_VELOCITY, vel.x, vel.y, vel.z);
-			if (source.m_changes & 1)
+			if (source.m_changes & audio_source::sound_properties::pitch)
 			{
 				// Pitch has changed
 				alSourcef(source.m_sourceId, AL_PITCH, source.getPitch());
 			}
-			if (source.m_changes & 2)
+			if (source.m_changes & audio_source::sound_properties::gain)
 			{
 				// Gain has changed
 				alSourcef(source.m_sourceId, AL_GAIN, source.getGain());
@@ -133,17 +133,10 @@ namespace args::audio
 		audio_source a = handle.read();
 
 		// do something with a.
-		if (!initSource(a))
-		{
-			handle.destroy();
-#if defined(AUDIO_EXIT_ON_FAIL)
-			raiseEvent<events::exit>();
-#endif
-			return;
-		}
+		initSource(a);
 
 		{
-			async::readwrite_guard guard(m_contextLock);
+			async::readwrite_guard guard(contextLock);
 			alcMakeContextCurrent(alContext);
 			// NOTE TO SELF:
 			// REMOVE THE AUTO PLAY (TESTING PURPOSE)
@@ -162,11 +155,7 @@ namespace args::audio
 	inline void AudioSystem::onAudioSourceComponentDestroy(events::component_destruction<audio_source>* event)
 	{
 		auto handle = event->entity.get_component_handle<audio_source>();
-		audio_source a = handle.read();
-
 		m_sourcePositions.erase(handle);
-
-		handle.write(a);
 		--sourceCount;
 	}
 
@@ -174,8 +163,6 @@ namespace args::audio
 	{
 		log::debug("Creating Audio Listener...");
 
-		auto handle = event->entity.get_component_handle<audio_listener>();
-		audio_listener a = handle.read();
 		++listenerCount;
 		if (listenerCount > 1)
 		{
@@ -188,7 +175,6 @@ namespace args::audio
 			setListener(event->entity.read_component<position>(), event->entity.read_component<rotation>());
 			m_listenerPosition = event->entity.read_component<position>();
 		}
-		handle.write(a);
 	}
 
 	inline void AudioSystem::onAudioListenerComponentDestroy(events::component_destruction<audio_listener>* event)
@@ -201,7 +187,7 @@ namespace args::audio
 			log::debug("No Listeners left, resetting listener");
 			m_listenerEnt = ecs::entity_handle();
 			// Reset listener
-			async::readwrite_guard guard(m_contextLock);
+			async::readwrite_guard guard(contextLock);
 			alcMakeContextCurrent(alContext);
 			alListener3f(AL_POSITION, 0, 0, 0);
 			alListener3f(AL_VELOCITY, 0, 0, 0);
@@ -213,9 +199,9 @@ namespace args::audio
 
 #pragma endregion
 
-	inline bool AudioSystem::initSource(audio_source& source)
+	inline void AudioSystem::initSource(audio_source& source)
 	{
-		async::readwrite_guard guard(m_contextLock);
+		async::readwrite_guard guard(contextLock);
 		alcMakeContextCurrent(alContext);
 
 		alGenSources((ALuint)1, &source.m_sourceId);
@@ -246,8 +232,6 @@ namespace args::audio
 		
 		alSourcei(source.m_sourceId, AL_BUFFER, segment.audioBufferId);
 		alcMakeContextCurrent(nullptr);
-
-		return true;
 	}
 
 	inline void AudioSystem::setDistanceModel(ALenum distanceModel)
@@ -257,7 +241,7 @@ namespace args::audio
 
 	inline void AudioSystem::setListener(position p, rotation r)
 	{
-		async::readwrite_guard guard(m_contextLock);
+		async::readwrite_guard guard(contextLock);
 		alcMakeContextCurrent(alContext);
 		// Position - invert x for left-right hand coord system conversion
 		alListener3f(AL_POSITION, p.x, p.y, p.z);

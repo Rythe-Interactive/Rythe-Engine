@@ -9,13 +9,18 @@ namespace args::audio
     {
         friend class AudioSystem;
     public:
+        enum sound_properties
+        {
+            pitch = 1,
+            gain = 2,
+        };
         /**
         * @brief Function to set the pitch for the audio source
         * @param const float pitch: new pitch value
         */
         void setPitch(const float pitch)
         {
-            m_changes |= 1; // set b0
+            m_changes |= sound_properties::pitch; // set b0
             m_pitch = args::math::max(0.0f, pitch);
         }
         /**
@@ -28,7 +33,7 @@ namespace args::audio
         */
         void setGain(const float gain)
         {
-            m_changes |= 2; // set b1
+            m_changes |= sound_properties::gain; // set b1
             m_gain = args::math::max(0.0f, gain);
         }
         /**

@@ -2,6 +2,7 @@
 
 namespace args::audio
 {
+    async::readonly_rw_spinlock AudioSystem::contextLock;
     ALCdevice* AudioSystem::alDevice = nullptr;
     ALCcontext* AudioSystem::alContext = nullptr;
     unsigned int AudioSystem::sourceCount = 0;

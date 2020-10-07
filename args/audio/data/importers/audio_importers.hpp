@@ -8,7 +8,5 @@ namespace args::audio
     {
         virtual common::result_decay_more<audio_segment, fs_error> load(const fs::basic_resource& resource, audio_import_settings&& settings) override;
         static std::shared_ptr<ALCcontext> context;
-    private:
-        static async::readonly_rw_spinlock contextLock;
     };
 }
