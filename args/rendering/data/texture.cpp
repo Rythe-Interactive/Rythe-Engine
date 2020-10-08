@@ -6,8 +6,8 @@ namespace args::rendering
     {
         resource->clear();
         appendBinaryData(&value.textureId, resource->get());
-        appendBinaryData(&value.width, resource->get());
-        appendBinaryData(&value.height, resource->get());
+        appendBinaryData(&value.size.x, resource->get());
+        appendBinaryData(&value.size.y, resource->get());
         appendBinaryData(&value.channels, resource->get());
         appendBinaryData(&value.type, resource->get());
     }
@@ -16,8 +16,8 @@ namespace args::rendering
     {
         byte_vec::const_iterator start = resource.begin();
         retrieveBinaryData(value->textureId, start);
-        retrieveBinaryData(value->width, start);
-        retrieveBinaryData(value->height, start);
+        retrieveBinaryData(value->size.x, start);
+        retrieveBinaryData(value->size.y, start);
         retrieveBinaryData(value->channels, start);
         retrieveBinaryData(value->type, start);
     }
@@ -51,12 +51,11 @@ namespace args::rendering
         }
 
         texture_data data{};
-        data.size.x = texture.width;
-        data.size.y = texture.height;
-        data.channels = texture.channels;
+        data.size.x = texture.size.x;
+        data.size.y = texture.size.y;
         data.type = texture.type;
         data.pixels.resize(data.size.x * data.size.y);
-        glGetTexImage(static_cast<GLenum>(data.type), 0, components_to_format[static_cast<int>(data.channels)], GL_RGBA, data.pixels.data());
+        glGetTexImage(static_cast<GLenum>(data.type), 0, components_to_format[static_cast<int>(texture.channels)], GL_RGBA, data.pixels.data());
         return data;
     }
 
@@ -115,7 +114,6 @@ namespace args::rendering
         }
 
         texture texture{};
-        texture.channels = settings.components;
         texture.type = settings.type;
 
         // Allocate and bind the texture.
@@ -146,16 +144,19 @@ namespace args::rendering
                 return invalid_texture_handle;
             }
 
+            texture.size = img.size;
+            texture.channels = img.components;
+
             // Construct the texture using the loaded data.
             glTexImage2D(
                 static_cast<GLenum>(settings.type),
                 0,
                 static_cast<GLint>(settings.intendedFormat),
-                texture.width,
-                texture.height,
+                texture.size.x,
+                texture.size.y,
                 0,
-                components_to_format[static_cast<int>(settings.components)],
-                channels_to_glenum[static_cast<uint>(settings.fileFormat)],
+                components_to_format[static_cast<int>(img.components)],
+                channels_to_glenum[static_cast<uint>(img.format)],
                 img.get_raw_data<void>());
         }
 

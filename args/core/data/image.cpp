@@ -21,6 +21,11 @@ namespace args::core
             ImageCache::process_raw(m_id);
     }
 
+    const std::vector<math::color>& image::read_colors()
+    {
+        return ImageCache::read_colors(m_id);
+    }
+
     size_type image::data_size()
     {
         return m_dataSize;
