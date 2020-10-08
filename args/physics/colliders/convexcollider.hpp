@@ -146,6 +146,8 @@ namespace args::physics
             //note: each edge carries adjacency information. (for example, an edge 'eg' must know its edge pair 'ge').
             //This is why each edge must be declared explicitly.
 
+            //each face also has an id. It is mostly used for debugging reasons and will be removed when it is no longer needed.
+
             //[1] create face eghf
 
             HalfEdgeEdge* eg = new HalfEdgeEdge(e);
@@ -263,10 +265,10 @@ namespace args::physics
             ac->pairingEdge = ca;   dc->pairingEdge = cd;
             cg->pairingEdge = gc;   ca->pairingEdge = ac;
 
-            //check if halfEdge data structure was initialized correctly. this will be commented when I know it always works
-
-            //
-
+            
+            //initialize the ID of the edges, this is done mostly for debugging reasons and will be removed when it
+            //is no longer needed
+            
             //eghf           //hgcd
             eg->id = "eg";   hg->id = "hg";
             gh->id = "gh";   gc->id = "gc";
@@ -285,7 +287,7 @@ namespace args::physics
             ac->id = "ac";   dc->id = "dc";
             cg->id = "cg";   ca->id = "ca";
           
-
+            //check if halfEdge data structure was initialized correctly. this will be commented when I know it always works
             AssertEdgeValidity();
 
         }

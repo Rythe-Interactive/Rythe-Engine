@@ -49,7 +49,7 @@ namespace args::physics
 
      
 
-        //-------- get the contect points of the ref polyhedron by projecting the contacts  to the collision plane ---------//
+        //-------- get the contact points of the ref polyhedron by projecting the incident contacts to the collision plane ---------//
 
         for (const auto& incidentContact : outputContactPoints)
         {
