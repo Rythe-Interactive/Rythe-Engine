@@ -62,10 +62,7 @@ namespace args::core::filesystem
     class AssetImporter
     {
     private:
-        struct ARGS_API data
-        {
-            static sparse_map<id_type, detail::resource_converter_base*> m_converters;
-        };
+        static sparse_map<id_type, detail::resource_converter_base*> m_converters;
 
     public:
         /**@brief Reports a converter type to the importer and allows converting from the given extension to the given object type.
@@ -75,7 +72,7 @@ namespace args::core::filesystem
         template<typename T>
         static void reportConverter(cstring extension)
         {
-            data::m_converters.insert(nameHash(extension), new T());
+            m_converters.insert(nameHash(extension), new T());
         }
 
         /**@brief Attempt to load an object from a file using the pre-reported converters.
@@ -109,7 +106,7 @@ namespace args::core::filesystem
                 return decay(Err(result.get_error()));
 
             // Retrieve the correct converter to use.
-            detail::resource_converter_base* base = data::m_converters[nameHash(view.get_extension())];
+            detail::resource_converter_base* base = m_converters[nameHash(view.get_extension())];
             auto* converter = reinterpret_cast<resource_converter<T, Settings...>*>(base);
 
             // Do a safety check if the cast was valid before we call any functions on it.

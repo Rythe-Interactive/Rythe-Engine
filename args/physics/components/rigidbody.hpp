@@ -33,7 +33,7 @@ namespace args::physics
         bool isAsleep;
 
 
-        
+
         /** @brief Pushes the rigidbody in the direction parallel to 'force' and equal to the
         * length of 'force'.
         * @note This does NOT cause torque
@@ -59,7 +59,7 @@ namespace args::physics
 
         void setRestitution(float newRestitution)
         {
-            restitution = math::clamp(newRestitution,0.0f,1.0f);
+            restitution = math::clamp(newRestitution, 0.0f, 1.0f);
         }
 
         void setFriction(float newFriction)

@@ -240,7 +240,7 @@ namespace fmt
 namespace args::core::log
 {
     /** @brief Holds the non const static data of logging. */
-    struct ARGS_API impl {
+    struct impl {
         static std::shared_ptr<spdlog::logger> file_logger;
         static std::shared_ptr<spdlog::logger> console_logger;
         static std::unordered_map<std::thread::id, std::string> thread_names;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <physics/physicsimport.h>
+#include <core/core.hpp>
 #include <physics/colliders/physicscollider.hpp>
 #include <physics/cube_collider_params.hpp>
 #include <physics/halfedgeedge.hpp>

@@ -12,7 +12,7 @@ namespace args::core::ecs
     template<typename component_type>
     class component_handle;
 
-    class ARGS_API EcsRegistry;
+    class EcsRegistry;
 
     /**@class archetype_base
      * @brief Common base class of all archetypes. Allows SFINAE checks for whether a templated type is an archetype.

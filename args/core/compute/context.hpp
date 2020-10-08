@@ -1,7 +1,6 @@
 #pragma once
 #include <CL/cl.h>
 
-#include <core/platform/platform.hpp> // ARGS_API
 #include <core/compute/program.hpp> // Kernel, Buffer
 #include <core/filesystem/resource.hpp> // basic_resource
 
@@ -16,7 +15,7 @@ namespace args::core::compute {
 /** @class Context
  *  @brief Wraps a cl_context in a neater interface.
  */
-class ARGS_API Context
+class Context
 {
 public:
 

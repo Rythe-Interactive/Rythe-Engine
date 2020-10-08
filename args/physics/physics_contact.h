@@ -1,6 +1,7 @@
 #pragma once
-#include <physics/physicsimport.h>
+
 #include <physics/components/rigidbody.hpp>
+#include <core/core.hpp>
 
 namespace args::physics
 {

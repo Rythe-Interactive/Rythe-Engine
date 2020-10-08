@@ -1,9 +1,9 @@
 #pragma once
 
 #include <physics/colliders/physicscollider.hpp>
-#include <physics/physicsimport.h>
+#include <core/core.hpp>
 #include <physics/physics_contact.h>
-#include <physics/physicsimport.h>
+#include <core/core.hpp>
 #include <physics/components/physics_component.hpp>
 
 

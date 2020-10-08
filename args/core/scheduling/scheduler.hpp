@@ -28,7 +28,7 @@ namespace args::core::scheduling
      * @brief Major engine part that handles the creation and destruction of threads and process chains. Also takes charge of the main program loop.
      * @note Also handle synchronization.
      */
-    class ARGS_API Scheduler
+    class Scheduler
     {
     public:
         /**@class Scheduler::runnable
@@ -75,7 +75,7 @@ namespace args::core::scheduling
 
         bool m_threadsShouldTerminate = false;
         bool m_threadsShouldStart = false;
-        bool m_low_power;
+        bool m_lowPower;
 
         static async::readonly_rw_spinlock m_threadsLock;
         static sparse_map<std::thread::id, std::unique_ptr<std::thread>> m_threads;
@@ -89,10 +89,10 @@ namespace args::core::scheduling
         static sparse_map<std::thread::id, async::readonly_rw_spinlock> m_commandLocks;
         static sparse_map<std::thread::id, std::queue<Scheduler::runnable>> m_commands;
 
-        static void threadMain(bool* exit, bool* start, bool low_power);
+        static void threadMain(bool* exit, bool* start, bool lowPower);
 
     public:
-        Scheduler(events::EventBus* eventBus, bool low_power);
+        Scheduler(events::EventBus* eventBus, bool lowPower, uint minThreads);
 
         ~Scheduler();
 

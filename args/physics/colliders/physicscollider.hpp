@@ -1,6 +1,6 @@
 #pragma once
 
-#include <physics/physicsimport.h>
+#include <core/core.hpp>
 #include <memory>
 #include <physics/halfedgeface.hpp>
 

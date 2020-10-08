@@ -37,7 +37,6 @@
     <ClInclude Include="colliders\physicscollider.hpp" />
     <ClInclude Include="data\penetrationquery.h" />
     <ClInclude Include="physicsconstants.h" />
-    <ClInclude Include="physicsimport.h" />
     <ClInclude Include="physics_statics.hpp" />
     <ClInclude Include="physics_contact.h" />
     <ClInclude Include="data\physics_manifold.hpp" />
