@@ -74,7 +74,7 @@ namespace args::core
             size_type colorSize = static_cast<int>(image.components) * channelSize;
             for (byte* colorPtr = start; colorPtr < end; colorPtr += colorSize)
             {
-                math::color color;
+                math::color col;
 
                 switch (image.components)
                 {
@@ -85,22 +85,22 @@ namespace args::core
                     case channel_format::eight_bit:
                     {
                         float grayValue = (*colorPtr / 255.f);
-                        color.rgb = { grayValue ,grayValue ,grayValue };
-                        color.a = 1.f;
+                        col.rgb = { grayValue ,grayValue ,grayValue };
+                        col.a = 1.f;
                         break;
                     }
                     case channel_format::sixteen_bit:
                     {
                         float grayValue = (*reinterpret_cast<uint16*>(colorPtr) / 65535.f);
-                        color.rgb = { grayValue ,grayValue ,grayValue };
-                        color.a = 1.f;
+                        col.rgb = { grayValue ,grayValue ,grayValue };
+                        col.a = 1.f;
                         break;
                     }
                     case channel_format::float_hdr:
                     {
                         float grayValue = *reinterpret_cast<float*>(colorPtr);
-                        color.rgb = { grayValue ,grayValue ,grayValue };
-                        color.a = 1.f;
+                        col.rgb = { grayValue ,grayValue ,grayValue };
+                        col.a = 1.f;
                         break;
                     }
                     }
@@ -116,22 +116,22 @@ namespace args::core
                     case channel_format::eight_bit:
                     {
                         float grayValue = (*gPtr / 255.f);
-                        color.rgb = { grayValue ,grayValue ,grayValue };
-                        color.a = (*aPtr / 255.f);
+                        col.rgb = { grayValue ,grayValue ,grayValue };
+                        col.a = (*aPtr / 255.f);
                         break;
                     }
                     case channel_format::sixteen_bit:
                     {
                         float grayValue = (*reinterpret_cast<uint16*>(gPtr) / 65535.f);
-                        color.rgb = { grayValue ,grayValue ,grayValue };
-                        color.a = (*reinterpret_cast<uint16*>(aPtr) / 65535.f);
+                        col.rgb = { grayValue ,grayValue ,grayValue };
+                        col.a = (*reinterpret_cast<uint16*>(aPtr) / 65535.f);
                         break;
                     }
                     case channel_format::float_hdr:
                     {
                         float grayValue = *reinterpret_cast<float*>(gPtr);
-                        color.rgb = { grayValue ,grayValue ,grayValue };
-                        color.a = *reinterpret_cast<float*>(aPtr);
+                        col.rgb = { grayValue ,grayValue ,grayValue };
+                        col.a = *reinterpret_cast<float*>(aPtr);
                         break;
                     }
                     }
@@ -147,26 +147,26 @@ namespace args::core
                     {
                     case channel_format::eight_bit:
                     {
-                        color.r = (*rPtr / 255.f);
-                        color.g = (*gPtr / 255.f);
-                        color.b = (*bPtr / 255.f);
-                        color.a = 1.f;
+                        col.r = (*rPtr / 255.f);
+                        col.g = (*gPtr / 255.f);
+                        col.b = (*bPtr / 255.f);
+                        col.a = 1.f;
                         break;
                     }
                     case channel_format::sixteen_bit:
                     {
-                        color.r = (*reinterpret_cast<uint16*>(rPtr) / 65535.f);
-                        color.g = (*reinterpret_cast<uint16*>(gPtr) / 65535.f);
-                        color.b = (*reinterpret_cast<uint16*>(bPtr) / 65535.f);
-                        color.a = 1.f;
+                        col.r = (*reinterpret_cast<uint16*>(rPtr) / 65535.f);
+                        col.g = (*reinterpret_cast<uint16*>(gPtr) / 65535.f);
+                        col.b = (*reinterpret_cast<uint16*>(bPtr) / 65535.f);
+                        col.a = 1.f;
                         break;
                     }
                     case channel_format::float_hdr:
                     {
-                        color.r = *reinterpret_cast<float*>(rPtr);
-                        color.g = *reinterpret_cast<float*>(gPtr);
-                        color.b = *reinterpret_cast<float*>(bPtr);
-                        color.a = 1.f;
+                        col.r = *reinterpret_cast<float*>(rPtr);
+                        col.g = *reinterpret_cast<float*>(gPtr);
+                        col.b = *reinterpret_cast<float*>(bPtr);
+                        col.a = 1.f;
                         break;
                     }
                     }
@@ -183,26 +183,26 @@ namespace args::core
                     {
                     case channel_format::eight_bit:
                     {
-                        color.r = (*rPtr / 255.f);
-                        color.g = (*gPtr / 255.f);
-                        color.b = (*bPtr / 255.f);
-                        color.a = (*aPtr / 255.f);
+                        col.r = (*rPtr / 255.f);
+                        col.g = (*gPtr / 255.f);
+                        col.b = (*bPtr / 255.f);
+                        col.a = (*aPtr / 255.f);
                         break;
                     }
                     case channel_format::sixteen_bit:
                     {
-                        color.r = (*reinterpret_cast<uint16*>(rPtr) / 65535.f);
-                        color.g = (*reinterpret_cast<uint16*>(gPtr) / 65535.f);
-                        color.b = (*reinterpret_cast<uint16*>(bPtr) / 65535.f);
-                        color.a = (*reinterpret_cast<uint16*>(aPtr) / 65535.f);
+                        col.r = (*reinterpret_cast<uint16*>(rPtr) / 65535.f);
+                        col.g = (*reinterpret_cast<uint16*>(gPtr) / 65535.f);
+                        col.b = (*reinterpret_cast<uint16*>(bPtr) / 65535.f);
+                        col.a = (*reinterpret_cast<uint16*>(aPtr) / 65535.f);
                         break;
                     }
                     case channel_format::float_hdr:
                     {
-                        color.r = *reinterpret_cast<float*>(rPtr);
-                        color.g = *reinterpret_cast<float*>(gPtr);
-                        color.b = *reinterpret_cast<float*>(bPtr);
-                        color.a = *reinterpret_cast<float*>(aPtr);
+                        col.r = *reinterpret_cast<float*>(rPtr);
+                        col.g = *reinterpret_cast<float*>(gPtr);
+                        col.b = *reinterpret_cast<float*>(bPtr);
+                        col.a = *reinterpret_cast<float*>(aPtr);
                         break;
                     }
                     }
@@ -210,7 +210,7 @@ namespace args::core
                 }
                 }
 
-                output.push_back(color);
+                output.push_back(col);
             }
         }
 
