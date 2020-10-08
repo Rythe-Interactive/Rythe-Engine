@@ -12,8 +12,8 @@ namespace args::core::scheduling
     {
         log::info("Chain started.");
         chain->m_scheduler->subscribeToSync();
-        try
-        {
+       /* try
+        {*/
             while (!chain->m_exit->load(std::memory_order_acquire)) // Check for exit flag.
             {
                 chain->runInCurrentThread(); // Execute all processes.
@@ -26,17 +26,17 @@ namespace args::core::scheduling
             }
             chain->m_scheduler->unsubscribeFromSync();
             chain->m_scheduler->reportExit(chain->m_threadId); // Mark Exit.
-        }
-        catch (const args::core::exception& e)
-        {
-            chain->m_scheduler->unsubscribeFromSync();
-            chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e); // Mark error.
-        }
-        catch (const std::exception& e)
-        {
-            chain->m_scheduler->unsubscribeFromSync();
-            chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e); // Mark error.
-        }
+       ///* }
+       // catch (const args::core::exception& e)
+       // {*/
+       //     chain->m_scheduler->unsubscribeFromSync();
+       //     chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e); // Mark error.
+       ///* }
+       // catch (const std::exception& e)
+       // {*/
+       //     chain->m_scheduler->unsubscribeFromSync();
+       //     chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e); // Mark error.
+       // //}
     }
 
     bool ProcessChain::run(bool low_power)

@@ -11,10 +11,16 @@ namespace args::physics
 		HalfEdgeEdge* prevEdge = nullptr;
 
 		HalfEdgeFace* face = nullptr;
-
+        
 		math::vec3* edgePositionPtr;
+        std::string id;
 
         HalfEdgeEdge() = default;
+
+        ~HalfEdgeEdge()
+        {
+            log::debug("");
+        }
 
 		HalfEdgeEdge(math::vec3* newEdgePositionPtr) : edgePositionPtr{ newEdgePositionPtr }
 		{
