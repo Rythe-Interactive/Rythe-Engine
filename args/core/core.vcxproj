@@ -88,6 +88,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>-flto=thin %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -100,9 +101,7 @@
     <PostBuildEvent>
       <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
     </PostBuildEvent>
-    <Lib>
-      <AdditionalOptions>-flto=thin %(AdditionalOptions)</AdditionalOptions>
-    </Lib>
+    <Lib />
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -457,7 +456,6 @@
     <ClInclude Include="math\math.hpp" />
     <ClInclude Include="math\precision.hpp" />
     <ClInclude Include="math\trigonometry.hpp" />
-    <ClInclude Include="platform\args_library.hpp" />
     <ClInclude Include="platform\platform.hpp" />
     <ClInclude Include="scheduling\process.hpp" />
     <ClInclude Include="scheduling\processchain.hpp" />

@@ -16,12 +16,9 @@ namespace args::application
     class WindowSystem final : public System<WindowSystem>
     {
     private:
-        struct ARGS_API data // Static data that needs to be exported.
-        {
-            static sparse_map<GLFWwindow*, ecs::component_handle<window>> m_windowComponents;
-            static sparse_map<GLFWwindow*, events::EventBus*> m_windowEventBus;
-            static async::readonly_rw_spinlock m_creationLock;
-        };
+        static sparse_map<GLFWwindow*, ecs::component_handle<window>> m_windowComponents;
+        static sparse_map<GLFWwindow*, events::EventBus*> m_windowEventBus;
+        static async::readonly_rw_spinlock m_creationLock;
 
         ecs::EntityQuery m_windowQuery{}; // Query with all the windows to update.
         bool m_exit = false; // Keep track of whether the exit event has been raised.
@@ -37,8 +34,8 @@ namespace args::application
         template<typename event_type, typename... Args>
         static void raiseWindowEvent(GLFWwindow* window, Args&&... args)
         {
-            if (data::m_windowEventBus.contains(window))
-                data::m_windowEventBus[window]->raiseEvent<event_type>(args...);
+            if (m_windowEventBus.contains(window))
+                m_windowEventBus[window]->raiseEvent<event_type>(args...);
         }
 
         // Internal function for closing a window safely.
@@ -48,13 +45,13 @@ namespace args::application
                 return;
 
             {
-                async::readwrite_guard guard(data::m_creationLock); // Lock all creation sensitive data.
+                async::readwrite_guard guard(m_creationLock); // Lock all creation sensitive data.
 
-                auto handle = data::m_windowComponents[window];
+                auto handle = m_windowComponents[window];
 
                 if (handle.valid())
                 {
-                    raiseWindowEvent<window_close>(window, data::m_windowComponents[window]); // Trigger any callbacks that want to know about any windows closing.
+                    raiseWindowEvent<window_close>(window, m_windowComponents[window]); // Trigger any callbacks that want to know about any windows closing.
 
                     if (!ContextHelper::windowShouldClose(window)) // If a callback cancelled the window destruction then we should cancel.
                         return;
@@ -69,14 +66,14 @@ namespace args::application
                     id_type ownerId = handle.entity;
 
                     handle.destroy();
-                    data::m_windowComponents.erase(window);
+                    m_windowComponents.erase(window);
 
                     if (ownerId == world_entity_id)
                     {
                         raiseWindowEvent<events::exit>(window); // If the current window we're closing is the main window we want to close the application.
                     }                                           // (we might want to leave this up to the user at some point.)
 
-                    data::m_windowEventBus.erase(window);
+                    m_windowEventBus.erase(window);
                 }
             }
 
@@ -86,97 +83,97 @@ namespace args::application
 #pragma region Callbacks
         static void onWindowMoved(GLFWwindow* window, int x, int y)
         {
-            if (data::m_windowComponents.contains(window))
-                raiseWindowEvent<window_move>(window, data::m_windowComponents[window], math::ivec2(x, y));
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<window_move>(window, m_windowComponents[window], math::ivec2(x, y));
         }
 
         static void onWindowResize(GLFWwindow* window, int width, int height)
         {
-            if (data::m_windowComponents.contains(window))
-                raiseWindowEvent<window_resize>(window, data::m_windowComponents[window], math::ivec2(width, height));
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<window_resize>(window, m_windowComponents[window], math::ivec2(width, height));
         }
 
         static void onWindowRefresh(GLFWwindow* window)
         {
-            if (data::m_windowComponents.contains(window))
-                raiseWindowEvent<window_refresh>(window, data::m_windowComponents[window]);
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<window_refresh>(window, m_windowComponents[window]);
         }
 
         static void onWindowFocus(GLFWwindow* window, int focused)
         {
-            if (data::m_windowComponents.contains(window))
-                raiseWindowEvent<window_focus>(window, data::m_windowComponents[window], focused);
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<window_focus>(window, m_windowComponents[window], focused);
         }
 
         static void onWindowIconify(GLFWwindow* window, int iconified)
         {
-            if (data::m_windowComponents.contains(window))
-                raiseWindowEvent<window_iconified>(window, data::m_windowComponents[window], iconified);
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<window_iconified>(window, m_windowComponents[window], iconified);
         }
 
         static void onWindowMaximize(GLFWwindow* window, int maximized)
         {
-            if (data::m_windowComponents.contains(window))
-                raiseWindowEvent<window_maximized>(window, data::m_windowComponents[window], maximized);
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<window_maximized>(window, m_windowComponents[window], maximized);
         }
 
         static void onWindowFrameBufferResize(GLFWwindow* window, int width, int height)
         {
-            if (data::m_windowComponents.contains(window))
-                raiseWindowEvent<window_framebuffer_resize>(window, data::m_windowComponents[window], math::ivec2(width, height));
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<window_framebuffer_resize>(window, m_windowComponents[window], math::ivec2(width, height));
         }
 
         static void onWindowContentRescale(GLFWwindow* window, float xscale, float yscale)
         {
-            if (data::m_windowComponents.contains(window))
-                raiseWindowEvent<window_content_rescale>(window, data::m_windowComponents[window], math::fvec2(xscale, xscale));
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<window_content_rescale>(window, m_windowComponents[window], math::fvec2(xscale, xscale));
         }
 
         static void onItemDroppedInWindow(GLFWwindow* window, int count, const char** paths)
         {
-            if (data::m_windowComponents.contains(window))
-                raiseWindowEvent<window_item_dropped>(window, data::m_windowComponents[window], count, paths);
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<window_item_dropped>(window, m_windowComponents[window], count, paths);
         }
 
         static void onMouseEnterWindow(GLFWwindow* window, int entered)
         {
-            if (data::m_windowComponents.contains(window))
-                raiseWindowEvent<mouse_enter_window>(window, data::m_windowComponents[window], entered);
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<mouse_enter_window>(window, m_windowComponents[window], entered);
         }
 
         static void onKeyInput(GLFWwindow* window, int key, int scancode, int action, int mods)
         {
-            if (data::m_windowComponents.contains(window))
-                raiseWindowEvent<key_input>(window, data::m_windowComponents[window], key, scancode, action, mods);
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<key_input>(window, m_windowComponents[window], key, scancode, action, mods);
         }
 
         static void onCharInput(GLFWwindow* window, uint codepoint)
         {
-            if (data::m_windowComponents.contains(window))
-                raiseWindowEvent<char_input>(window, data::m_windowComponents[window], codepoint);
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<char_input>(window, m_windowComponents[window], codepoint);
         }
 
         static void onMouseMoved(GLFWwindow* window, double xpos, double ypos)
         {
-            if (data::m_windowComponents.contains(window))
-                raiseWindowEvent<mouse_moved>(window, data::m_windowComponents[window], math::dvec2(xpos, ypos) / (math::dvec2)ContextHelper::getFramebufferSize(window));
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<mouse_moved>(window, m_windowComponents[window], math::dvec2(xpos, ypos) / (math::dvec2)ContextHelper::getFramebufferSize(window));
         }
 
         static void onMouseButton(GLFWwindow* window, int button, int action, int mods)
         {
-            if (data::m_windowComponents.contains(window))
-                raiseWindowEvent<mouse_button>(window, data::m_windowComponents[window], button, action, mods);
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<mouse_button>(window, m_windowComponents[window], button, action, mods);
         }
 
         static void onMouseScroll(GLFWwindow* window, double xoffset, double yoffset)
         {
-            if (data::m_windowComponents.contains(window))
-                raiseWindowEvent<mouse_scrolled>(window, data::m_windowComponents[window], math::dvec2(xoffset, yoffset));
+            if (m_windowComponents.contains(window))
+                raiseWindowEvent<mouse_scrolled>(window, m_windowComponents[window], math::dvec2(xoffset, yoffset));
         }
 
         void onExit(events::exit* event)
         {
-            async::readwrite_guard guard(data::m_creationLock);
+            async::readwrite_guard guard(m_creationLock);
             for (auto entity : m_windowQuery)
             {
                 ContextHelper::setWindowShouldClose(entity.get_component_handle<window>().read(), true);
@@ -223,7 +220,7 @@ namespace args::application
             bindToEvent<window_request, &WindowSystem::onWindowRequest>();
             bindToEvent<window_toggle_fullscreen_request, &WindowSystem::onFullscreenRequest>();
 
-            raiseEvent<window_request>(world_entity_id, math::ivec2(1360, 768), "<Args> Engine", nullptr, nullptr, 1); // Create the request for the main window.
+            raiseEvent<window_request>(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", nullptr, nullptr, 1); // Create the request for the main window.
 
             m_scheduler->sendCommand(m_scheduler->getChainThreadId("Input"), [](void* param) // We send a command to the input thread before the input process chain starts.
                 {                                                                            // This way we can create the main window before the rest of the engine get initialised.
@@ -322,14 +319,14 @@ namespace args::application
                     win.lock = new async::readonly_rw_spinlock();
 
                     async::readwrite_guard wguard(*win.lock);           // This is the only code that has access to win.lock right now, so there's no deadlock risk.
-                    async::readwrite_guard cguard(data::m_creationLock);// Locking them both seperately is faster than using a multilock.
+                    async::readwrite_guard cguard(m_creationLock);// Locking them both seperately is faster than using a multilock.
 
                     handle = m_ecs->createComponent<window>(request.entityId, win);
 
                     log::debug("created window: {}", request.name);
 
-                    data::m_windowComponents.insert(win, handle);
-                    data::m_windowEventBus.insert(win, m_eventBus);
+                    m_windowComponents.insert(win, handle);
+                    m_windowEventBus.insert(win, m_eventBus);
 
                     // Set all callbacks.
                     setCallbacks(win);
@@ -339,19 +336,19 @@ namespace args::application
                     handle = m_ecs->getComponent<window>(request.entityId);
                     window oldWindow = handle.read();
 
-                    async::readwrite_multiguard wguard(*oldWindow.lock, data::m_creationLock);
+                    async::readwrite_multiguard wguard(*oldWindow.lock, m_creationLock);
 
                     ContextHelper::destroyWindow(oldWindow);
-                    data::m_windowComponents.erase(oldWindow);
-                    data::m_windowEventBus.erase(oldWindow);
+                    m_windowComponents.erase(oldWindow);
+                    m_windowEventBus.erase(oldWindow);
 
                     win.lock = oldWindow.lock;
                     handle.write(win);
 
                     log::debug("replaced window: {}", request.name);
 
-                    data::m_windowComponents.insert(win, handle);
-                    data::m_windowEventBus.insert(win, m_eventBus);
+                    m_windowComponents.insert(win, handle);
+                    m_windowEventBus.insert(win, m_eventBus);
 
                     // Set all callbacks.
                     setCallbacks(win);
@@ -404,7 +401,7 @@ namespace args::application
             if (!ContextHelper::initialized())
                 return;
 
-            async::readonly_guard guard(data::m_creationLock);
+            async::readonly_guard guard(m_creationLock);
 
             for (auto entity : m_windowQuery)
             {

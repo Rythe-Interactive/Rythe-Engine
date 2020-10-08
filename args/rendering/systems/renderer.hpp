@@ -388,9 +388,8 @@ namespace args::rendering
                         continue;
                     }
 
-                    math::mat4 modelMatrix;
-                    math::compose(modelMatrix, ent.get_component_handle<scale>().read(), ent.get_component_handle<rotation>().read(), ent.get_component_handle<position>().read());
-                    batches[rend.model][rend.material].push_back(modelMatrix);
+                    transform transf = ent.get_component_handles<transform>();
+                    batches[rend.model][rend.material].push_back(transf.get_local_to_world_matrix());
                 }
 
                 for (auto [modelHandle, instancesPerMaterial] : batches)

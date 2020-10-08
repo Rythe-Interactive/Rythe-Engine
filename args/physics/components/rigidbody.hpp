@@ -1,13 +1,7 @@
 #pragma once
 
-#ifndef ARGS_IMPORT
-    #define ARGS_IMPORT
-    #include <core/core.hpp>
-    #include <core/platform/args_library.hpp>
-#else
-    #include <application/application.hpp>
-#endif // !ARGS_IMPORT
 
+#include <core/core.hpp>
 #include <physics/physicsconstants.h>
 #include <physics/components/physics_component.hpp>
 
@@ -15,23 +9,23 @@ namespace args::physics
 {
     struct rigidbody
     {
-        math::vec3 globalCentreOfMass;
-
-        math::mat3 inverseInertiaTensor = math::mat3(12.0f);
-
+        //linear motion component
+        float inverseMass = 1.0f;
         math::vec3 velocity;
         math::vec3 acc;
+        float linearDrag;
+
+        //angular motion component
+        math::mat3 inverseInertiaTensor = math::mat3(12.0f);
 
         math::vec3 angularAcc;
         math::vec3 angularVelocity;
+        float angularDrag = 0.01f;
 
+        //force application component
+        math::vec3 globalCentreOfMass;
         math::vec3 forceAccumulator;
         math::vec3 torqueAccumulator;
-
-        float angularDrag = 0.01f;
-        float linearDrag;
-
-        float inverseMass = 1.0f;
 
         float restitution;
         float friction;
@@ -39,7 +33,7 @@ namespace args::physics
         bool isAsleep;
 
 
-        
+
         /** @brief Pushes the rigidbody in the direction parallel to 'force' and equal to the
         * length of 'force'.
         * @note This does NOT cause torque
@@ -65,7 +59,7 @@ namespace args::physics
 
         void setRestitution(float newRestitution)
         {
-            restitution = math::clamp(newRestitution,0.0f,1.0f);
+            restitution = math::clamp(newRestitution, 0.0f, 1.0f);
         }
 
         void setFriction(float newFriction)

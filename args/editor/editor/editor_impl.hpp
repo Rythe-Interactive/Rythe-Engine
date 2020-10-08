@@ -13,7 +13,7 @@ namespace args::editor
 	 * @brief The editors main object that handles editor modules.
 	 * @ref args::editor::EditorModule
 	 */
-	class ARGS_API Editor
+	class Editor
 	{
 		/**@brief Reports an editor module.
 		 * @tparam ModuleType The module you want to report.

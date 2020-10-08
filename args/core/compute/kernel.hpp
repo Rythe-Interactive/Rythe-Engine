@@ -22,7 +22,7 @@ namespace args::core::compute
      * @brief Wraps a cl_kernel, allows you to parametrize an
      *         OpenCL kernel without worrying about the CommandQueue
      */
-    class ARGS_API Kernel
+    class Kernel
         {
         public:
             Kernel(Program*, cl_kernel);
