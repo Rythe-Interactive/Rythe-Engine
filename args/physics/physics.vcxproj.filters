@@ -45,6 +45,9 @@
     <ClCompile Include="data\edgepenetrationquery.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="systems\physicssystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cube_collider_params.hpp">
@@ -93,6 +96,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="physics_statics.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\pointer_encapsulator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
