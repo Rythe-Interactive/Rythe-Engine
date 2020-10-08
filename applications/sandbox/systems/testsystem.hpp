@@ -60,6 +60,8 @@ struct fullscreen_action : public app::input_action<fullscreen_action> {};
 struct escape_cursor_action : public app::input_action<escape_cursor_action> {};
 struct vsync_action : public app::input_action<vsync_action> {};
 
+struct set_distance_model : public app::input_action<set_distance_model> {};
+
 class TestSystem final : public System<TestSystem>
 {
 public:
@@ -148,6 +150,8 @@ public:
         app::InputSystem::createBinding<pitch_change>(app::inputmap::method::APOSTROPHE, 1.0f);
         app::InputSystem::createBinding<pitch_change>(app::inputmap::method::SEMICOLON, -1.0f);
 
+        app::InputSystem::createBinding<set_distance_model>(app::inputmap::method::N);
+
         bindToEvent<player_move, &TestSystem::onPlayerMove>();
         bindToEvent<player_strive, &TestSystem::onPlayerStrive>();
         bindToEvent<player_fly, &TestSystem::onPlayerFly>();
@@ -162,6 +166,8 @@ public:
         bindToEvent<sphere_strive, &TestSystem::onSphereAAStrive>();
         bindToEvent<gain_change, &TestSystem::onGainChange>();
         bindToEvent<pitch_change, &TestSystem::onPitchChange>();
+
+        bindToEvent<set_distance_model, &TestSystem::onDistanceModelSet>();
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
         window.enableCursor(false);
@@ -485,6 +491,11 @@ public:
                 math::vec3 right = math::cross(fwd, math::vec3(0.f, 1.f, 0.f));
                 return (rotation)math::conjugate(math::toQuat(math::lookAt(math::vec3(0.f, 0.f, 0.f), fwd, math::cross(right, fwd))));
             });
+    }
+
+    void onDistanceModelSet(set_distance_model* action)
+    {
+        audio::AudioSystem::setDistanceModel(AL_LINEAR_DISTANCE);
     }
 
     void update(time::span deltaTime)

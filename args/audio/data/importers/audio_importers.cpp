@@ -6,7 +6,7 @@
 
 namespace args::audio
 {
-    std::shared_ptr<ALCcontext> mp3_audio_loader::context = nullptr;
+    ALCcontext* mp3_audio_loader::context = nullptr;
 
     common::result_decay_more<audio_segment, fs_error> mp3_audio_loader::load(const fs::basic_resource& resource, audio_import_settings&& settings)
     {
@@ -36,7 +36,7 @@ namespace args::audio
         };
 
         async::readwrite_guard guard(AudioSystem::contextLock);
-        alcMakeContextCurrent(context.get());
+        alcMakeContextCurrent(context);
         //Generate openal buffer
         alGenBuffers((ALuint)1, &as.audioBufferId);
         alBufferData(as.audioBufferId, AL_FORMAT_MONO16, as.data, as.samples * sizeof(int16), as.sampleRate);

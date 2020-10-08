@@ -81,7 +81,7 @@ namespace args::audio
         std::unordered_map <ecs::component_handle<audio_source>, position > m_sourcePositions;
 
         static ALCdevice* alDevice;
-        static ALCcontext* alContext;
+        static ALCcontext* alcContext;
         static unsigned int sourceCount;
         static unsigned int listenerCount;
     };

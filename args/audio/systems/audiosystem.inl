@@ -17,8 +17,8 @@ namespace args::audio
 		// Succesfully created alcDevice
 		log::info("Succesfully created openAl device");
 
-		alContext = alcCreateContext(alDevice, NULL);
-		if (!alcMakeContextCurrent(alContext))
+		alcContext = alcCreateContext(alDevice, NULL);
+		if (!alcMakeContextCurrent(alcContext))
 		{
 			// Failed to create alcContext
 			log::error("OpenAl context failed to create");
@@ -57,7 +57,7 @@ namespace args::audio
 
 		// Release context on this thread
 		alcMakeContextCurrent(nullptr);
-		mp3_audio_loader::context = std::shared_ptr<ALCcontext>(alContext);
+		mp3_audio_loader::context = alcContext;
 	}
 
 	inline AudioSystem::~AudioSystem()
@@ -83,7 +83,7 @@ namespace args::audio
 	inline void AudioSystem::update(time::span deltatime)
 	{
 		async::readonly_guard guard(contextLock);
-		alcMakeContextCurrent(alContext);
+		alcMakeContextCurrent(alcContext);
 
 		for (auto entity : sourceQuery)
 		{
@@ -137,7 +137,7 @@ namespace args::audio
 
 		{
 			async::readwrite_guard guard(contextLock);
-			alcMakeContextCurrent(alContext);
+			alcMakeContextCurrent(alcContext);
 			// NOTE TO SELF:
 			// REMOVE THE AUTO PLAY (TESTING PURPOSE)
 			log::debug("playing sound");
@@ -188,7 +188,7 @@ namespace args::audio
 			m_listenerEnt = ecs::entity_handle();
 			// Reset listener
 			async::readwrite_guard guard(contextLock);
-			alcMakeContextCurrent(alContext);
+			alcMakeContextCurrent(alcContext);
 			alListener3f(AL_POSITION, 0, 0, 0);
 			alListener3f(AL_VELOCITY, 0, 0, 0);
 			ALfloat ori[] = { 0, 0, 1.0f, 0, 1.0f, 0 };
@@ -202,7 +202,7 @@ namespace args::audio
 	inline void AudioSystem::initSource(audio_source& source)
 	{
 		async::readwrite_guard guard(contextLock);
-		alcMakeContextCurrent(alContext);
+		alcMakeContextCurrent(alcContext);
 
 		alGenSources((ALuint)1, &source.m_sourceId);
 		alSourcef(source.m_sourceId, AL_PITCH, 1);
@@ -236,13 +236,16 @@ namespace args::audio
 
 	inline void AudioSystem::setDistanceModel(ALenum distanceModel)
 	{
+		async::readwrite_guard guard(contextLock);
+		alcMakeContextCurrent(alcContext);
 		alDistanceModel(distanceModel);
+		alcMakeContextCurrent(nullptr);
 	}
 
 	inline void AudioSystem::setListener(position p, rotation r)
 	{
 		async::readwrite_guard guard(contextLock);
-		alcMakeContextCurrent(alContext);
+		alcMakeContextCurrent(alcContext);
 		// Position - invert x for left-right hand coord system conversion
 		alListener3f(AL_POSITION, p.x, p.y, p.z);
 		//rotation
