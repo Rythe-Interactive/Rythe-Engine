@@ -29,8 +29,6 @@
 #ifndef CEREAL_ARCHIVES_JSON_HPP_
 #define CEREAL_ARCHIVES_JSON_HPP_
 
-#define RAPIDJSON_ENDIAN 0
-
 #include "cereal/cereal.hpp"
 #include "cereal/details/util.hpp"
 

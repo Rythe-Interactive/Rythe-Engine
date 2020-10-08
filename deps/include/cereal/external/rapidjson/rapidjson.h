@@ -196,7 +196,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // CEREAL_RAPIDJSON_ENDIAN
 #define CEREAL_RAPIDJSON_LITTLEENDIAN  0   //!< Little endian machine
-#define CEREAL_RAPIDJSON_BIGENDIAN     1   //!< Big endian machine
+//#define CEREAL_RAPIDJSON_BIGENDIAN     1   //!< Big endian machine
 
 //! Endianness of the machine.
 /*!
