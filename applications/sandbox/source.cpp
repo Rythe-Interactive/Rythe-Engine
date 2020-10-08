@@ -21,25 +21,12 @@ using namespace args;
 
 void ARGS_CCONV reportModules(Engine* engine)
 {
-    log::filter(log::severity::trace);
-    log::info("Hello Legion!");
+    log::filter(log::severity::debug);
 
-    test_filesystem();
+    //test_filesystem();
 
     engine->reportModule<TestModule>();
     engine->reportModule<app::ApplicationModule>();
     engine->reportModule<rendering::RenderingModule>();
-    engine->reportModule<physics::PhysicsModule>();
-
-    try
-    {
-        throw args_component_destroyed_error;
-    }
-    catch (const exception& e)
-    {
-        std::cout << e.what() << std::endl;
-        std::cout << e.file() << std::endl;
-        std::cout << e.line() << std::endl;
-        std::cout << e.func() << std::endl;
-    }    
+    engine->reportModule<physics::PhysicsModule>(); 
 }

@@ -17,19 +17,26 @@ namespace args::core
     enum struct image_components : int
     {
         grey = 1,
-        gray_alpha = 2,
+        grey_alpha = 2,
         rgb = 3,
         rgba = 4
     };
 
     struct image
     {
+        friend struct stb_image_loader;
+        friend class ImageCache;
+
         math::ivec2 size;
         channel_format format;
+        image_components components;
 
         template<typename T>
         T* get_raw_data();
-        void apply_raw();
+        void apply_raw(bool lazyApply = true);
+
+        size_type data_size();
+
 
         bool operator==(const image& other)
         {
@@ -38,38 +45,45 @@ namespace args::core
 
     private:
         id_type m_id;
-        byte* pixels;
+        size_type m_dataSize;
+        byte* m_pixels;
     };
 
-    image invalid_image;
+    inline static image invalid_image{};
 
     template<typename T>
-    T* core::image::get_raw_data()
+    T* image::get_raw_data()
     {
         return nullptr;
     }
 
     template<>
-    byte* core::image::get_raw_data()
+    inline void* image::get_raw_data<void>()
+    {
+        return reinterpret_cast<void*>(m_pixels);
+    }
+
+    template<>
+    inline byte* image::get_raw_data<byte>()
     {
         if (format == channel_format::eight_bit)
-            return pixels;
+            return m_pixels;
         return nullptr;
     }
 
     template<>
-    uint16* core::image::get_raw_data()
+    inline uint16* image::get_raw_data<uint16>()
     {
         if (format == channel_format::sixteen_bit)
-            return reinterpret_cast<uint16*>(pixels);
+            return reinterpret_cast<uint16*>(m_pixels);
         return nullptr;
     }
 
     template<>
-    float* core::image::get_raw_data()
+    inline float* image::get_raw_data<float>()
     {
         if (format == channel_format::float_hdr)
-            return reinterpret_cast<float*>(pixels);
+            return reinterpret_cast<float*>(m_pixels);
         return nullptr;
     }
 
@@ -77,8 +91,11 @@ namespace args::core
     struct image_handle
     {
         id_type id;
+        math::ivec2 size();
         const std::vector<math::color>& read_colors();
         std::pair<async::readonly_rw_spinlock&, image&> get_raw_image();
+
+        bool operator==(const image_handle& other) { return id == other.id; }
     };
 
     constexpr image_handle invalid_image_handle{ invalid_id };

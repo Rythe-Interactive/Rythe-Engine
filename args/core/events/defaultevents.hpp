@@ -8,7 +8,7 @@ namespace args::core::events
     {
         const int exitcode;
 
-        exit(int exitcode = 0) : exitcode(exitcode) {}
+        exit(int exitcode = 0);
 
         virtual bool persistent() override { return true; }
 

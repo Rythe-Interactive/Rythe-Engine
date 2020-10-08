@@ -38,22 +38,11 @@ namespace args::rendering
         bgra_int = GL_BGRA_INTEGER,
     };
 
-    enum struct texture_channel_format : GLenum
-    {
-        eight_bit = GL_UNSIGNED_BYTE,
-        sixteen_bit = GL_UNSIGNED_SHORT,
-        float_hdr = GL_FLOAT
-    };
-
-    enum struct texture_components : int
-    {
-        grey = 1,
-        gray_alpha = 2,
-        rgb = 3,
-        rgba = 4
-    };
+    using texture_components = image_components;
 
     constexpr GLenum components_to_format[] = { 0, GL_RED, GL_RG, GL_RGB, GL_RGBA };
+
+    constexpr GLenum channels_to_glenum[] = {0, GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT, 0, GL_FLOAT };
 
     enum struct texture_mipmap : GLint
     {
@@ -105,7 +94,7 @@ namespace args::rendering
     struct texture_import_settings
     {
         texture_type type;
-        texture_channel_format fileFormat;
+        channel_format fileFormat;
         texture_format intendedFormat;
         texture_components components;
         bool flipVertical;
@@ -118,7 +107,7 @@ namespace args::rendering
     };
 
     constexpr texture_import_settings default_texture_settings{
-        texture_type::two_dimensional, texture_channel_format::sixteen_bit, texture_format::rgba,
+        texture_type::two_dimensional, channel_format::eight_bit, texture_format::rgba,
         texture_components::rgba, true, true, texture_mipmap::linear, texture_mipmap::linear,
         texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat };
 
@@ -135,6 +124,8 @@ namespace args::rendering
 
     public:
         static texture_handle create_texture(const std::string& name, const fs::view& file, texture_import_settings settings = default_texture_settings);
+        static texture_handle create_texture(const std::string& name, texture_import_settings settings = default_texture_settings);
+        static texture_handle create_texture(image_handle image, texture_import_settings settings = default_texture_settings);
         static texture_handle get_handle(const std::string& name);
         static texture_handle get_handle(id_type id);
     };

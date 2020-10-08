@@ -86,6 +86,91 @@ namespace args::rendering
         return { id };
     }
 
+    texture_handle TextureCache::create_texture(const std::string& name, texture_import_settings settings)
+    {
+        image_handle image = ImageCache::get_handle(name);
+        if (image == invalid_image_handle)
+        {
+            log::warn("Image {} doesn't exist.", name);
+            return invalid_texture_handle;
+        }
+
+        return create_texture(image, settings);
+    }
+
+    texture_handle TextureCache::create_texture(image_handle image, texture_import_settings settings)
+    {
+        if (image == invalid_image_handle)
+        {
+            log::warn("Tried to create a texture with an invalid image");
+            return invalid_texture_handle;
+        }
+
+        id_type id = image.id;
+
+        {
+            async::readonly_guard guard(m_textureLock);
+            if (m_textures.contains(id))
+                return { id };
+        }
+
+        texture texture{};
+        texture.channels = settings.components;
+        texture.type = settings.type;
+
+        // Allocate and bind the texture.
+        glGenTextures(1, &texture.textureId);
+        glBindTexture(static_cast<GLenum>(settings.type), texture.textureId);
+
+        // Handle mips
+        if (settings.generateMipmaps)
+        {
+            glTexParameteri(static_cast<GLenum>(settings.type), GL_TEXTURE_MIN_FILTER, static_cast<GLint>(settings.min));
+            glTexParameteri(static_cast<GLenum>(settings.type), GL_TEXTURE_MAG_FILTER, static_cast<GLint>(settings.mag));
+        }
+
+        // Handle wrapping behavior.
+        glTexParameteri(static_cast<GLenum>(settings.type), GL_TEXTURE_WRAP_R, static_cast<GLint>(settings.wrapR));
+        glTexParameteri(static_cast<GLenum>(settings.type), GL_TEXTURE_WRAP_S, static_cast<GLint>(settings.wrapS));
+        glTexParameteri(static_cast<GLenum>(settings.type), GL_TEXTURE_WRAP_T, static_cast<GLint>(settings.wrapT));
+
+        auto [lock, img] = image.get_raw_image();
+        {
+            async::readonly_guard guard(lock);
+
+            if(img == invalid_image)
+            {
+                glBindTexture(static_cast<GLenum>(settings.type), 0);
+                glDeleteTextures(0, &texture.textureId);
+                log::warn("Tried to create a texture with an invalid image");
+                return invalid_texture_handle;
+            }
+
+            // Construct the texture using the loaded data.
+            glTexImage2D(
+                static_cast<GLenum>(settings.type),
+                0,
+                static_cast<GLint>(settings.intendedFormat),
+                texture.width,
+                texture.height,
+                0,
+                components_to_format[static_cast<int>(settings.components)],
+                channels_to_glenum[static_cast<uint>(settings.fileFormat)],
+                img.get_raw_data<void>());
+        }
+
+        // Generate mips.
+        if (settings.generateMipmaps)
+            glGenerateMipmap(static_cast<GLenum>(settings.type));
+
+        {
+            async::readwrite_guard guard(m_textureLock);
+            m_textures.insert(id, texture);
+        }
+
+        return { id };
+    }
+
     texture_handle TextureCache::get_handle(const std::string& name)
     {
         id_type id = nameHash(name);

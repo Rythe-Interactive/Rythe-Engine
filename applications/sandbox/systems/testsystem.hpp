@@ -53,18 +53,22 @@ struct vsync_action : public app::input_action<vsync_action> {};
 class TestSystem final : public System<TestSystem>
 {
 public:
+    TestSystem()
+    {
+        app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
+    }
+
     ecs::entity_handle player;
 
     virtual void setup()
     {
-        filter(log::severity::debug);
-
-        compute::Program prog = fs::view("basic://kernels/vadd_kernel.cl").load_as<compute::Program>();
+#pragma region OpenCL
+        compute::Program prog = fs::view("assets://kernels/vadd_kernel.cl").load_as<compute::Program>();
         prog.prewarm("vector_add");
 
         std::vector<int> ints;
 
-        auto res = fs::view("basic://bigint.txt").get();
+        auto res = fs::view("assets://bigint.txt").get();
         if (res == common::valid) {
 
             char* buf = new char[6];
@@ -106,12 +110,9 @@ public:
          {
              log::info("got {}", i);
          }*/
+#pragma endregion
 
-        log::info("Hello World");
-        log::warn("Hello World");
-        log::error("Hello World");
-        log::debug("Hello World");
-
+#pragma region Input binding
         app::InputSystem::createBinding<player_move>(app::inputmap::method::W, 1.f);
         app::InputSystem::createBinding<player_move>(app::inputmap::method::S, -1.f);
         app::InputSystem::createBinding<player_strive>(app::inputmap::method::D, 1.f);
@@ -134,11 +135,13 @@ public:
         bindToEvent<fullscreen_action, &TestSystem::onFullscreen>();
         bindToEvent<escape_cursor_action, &TestSystem::onEscapeCursor>();
         bindToEvent<vsync_action, &TestSystem::onVSYNCSwap>();
+#pragma endregion
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
         window.enableCursor(false);
         window.show();
 
+#pragma region Model and material loading
         rendering::model_handle cubeH;
         rendering::model_handle sphereH;
         rendering::model_handle suzanneH;
@@ -178,12 +181,13 @@ public:
 
             app::ContextHelper::makeContextCurrent(nullptr);
         }
+#pragma endregion
 
+#pragma region Entities
         {
             auto ent = createEntity();
             ent.add_component<rendering::renderable>({ cubeH, skyboxH });
             ent.add_components<transform>(position(), rotation(), scale(500.f));
-            log::debug("has transform: {}", ent.has_components<transform>());
         }
 
         {
@@ -199,17 +203,17 @@ public:
 
             auto [positionH, rotationH, scaleH] = ent.get_component_handles<transform>();
 
-            log::debug("p {}, r {}, s {}, has {}", positionH.read(), rotationH.read(), scaleH.read(), ent.has_components<transform>());
+            log::trace("p {}, r {}, s {}, has {}", positionH.read(), rotationH.read(), scaleH.read(), ent.has_components<transform>());
 
             ent.remove_components<transform>();
 
-            log::debug("p {}, r {}, s {}, has {}", positionH.read(), rotationH.read(), scaleH.read(), ent.has_components<position, rotation, scale>());
+            log::trace("p {}, r {}, s {}, has {}", positionH.read(), rotationH.read(), scaleH.read(), ent.has_components<position, rotation, scale>());
             transform transf = ent.add_components<transform>(position(0, 3, 5.1f), rotation(), scale());
 
             auto& [_, rotationH2, scaleH2] = transf.handles;
             auto positionH2 = transf.get<position>();
 
-            log::debug("p {}, r {}, s {}, has {}", positionH2.read(), rotationH2.read(), scaleH2.read(), ent.has_components<position, rotation, scale>());
+            log::trace("p {}, r {}, s {}, has {}", positionH2.read(), rotationH2.read(), scaleH2.read(), ent.has_components<position, rotation, scale>());
         }
 
         {
@@ -264,9 +268,11 @@ public:
             ent.add_components<rendering::renderable, sah>({ uvsphereH, wireframeH }, {});
             ent.add_components<transform>(position(-5.1f, 3, 0), rotation(), scale(2.5f));
         }
+#pragma endregion
 
         setupCameraEntity();
 
+#pragma region Physics entities
         //------------------------------------- Setup entity with rigidbody -------------------------------------------//
 
         auto physicsEnt = createEntity();
@@ -299,7 +305,7 @@ public:
 
             ent.add_components<transform>(position(5.1f, -2.0f, 0), rotation(), scale(0.25f));
         }
-
+#pragma endregion
 
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::differentThread>("TestChain");
@@ -328,7 +334,7 @@ public:
     {
         if (action->released())
         {
-            raiseEvent<app::window_toggle_fullscreen_request>(world_entity_id, math::ivec2(100, 100), math::ivec2(1360, 768));
+            app::WindowSystem::requestFullscreenToggle(world_entity_id, math::ivec2(100, 100), math::ivec2(1360, 768));
         }
     }
 

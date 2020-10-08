@@ -485,6 +485,9 @@
     <ClCompile Include="ecs\entity_handle.cpp" />
     <ClCompile Include="ecs\entityquery.cpp" />
     <ClCompile Include="ecs\queryregistry.cpp" />
+    <ClCompile Include="engine\module.cpp" />
+    <ClCompile Include="engine\system.cpp" />
+    <ClCompile Include="events\defaultevents.cpp" />
     <ClCompile Include="filesystem\artifact_cache.cpp" />
     <ClCompile Include="filesystem\assetimporter.cpp" />
     <ClCompile Include="filesystem\detail\strpath_manip.cpp" />

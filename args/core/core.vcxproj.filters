@@ -28,6 +28,9 @@
     <ClCompile Include="compute\kernel.cpp" />
     <ClCompile Include="data\image.cpp" />
     <ClCompile Include="data\importers\image_importers.cpp" />
+    <ClCompile Include="engine\system.cpp" />
+    <ClCompile Include="engine\module.cpp" />
+    <ClCompile Include="events\defaultevents.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
