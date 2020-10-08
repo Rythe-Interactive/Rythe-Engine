@@ -20,6 +20,8 @@
 
 #include <physics/physics_statics.hpp>
 
+#include <audio/audio.hpp>
+
 using namespace args;
 
 struct sah
@@ -49,19 +51,32 @@ struct player_fly : public app::input_axis<player_fly> {};
 struct player_look_x : public app::input_axis<player_look_x> {};
 struct player_look_y : public app::input_axis<player_look_y> {};
 
+// Move and strive for the wireframe sphere (which holds the only audio source)
+// For testing the movement of audio sources (Spatial audio/doppler)
+struct sphere_move : public app::input_axis<sphere_move> {};
+struct sphere_strive : public app::input_axis<sphere_strive> {};
+// Gain and Pitch knob
+struct gain_change : public app::input_axis<gain_change> {};
+struct pitch_change : public app::input_axis<pitch_change> {};
+
 struct exit_action : public app::input_action<exit_action> {};
 
 struct fullscreen_action : public app::input_action<fullscreen_action> {};
 struct escape_cursor_action : public app::input_action<escape_cursor_action> {};
 struct vsync_action : public app::input_action<vsync_action> {};
 
+
 struct physics_test_move : public app::input_axis<physics_test_move>{};
+
+
+struct set_distance_model : public app::input_action<set_distance_model> {};
 
 
 class TestSystem final : public System<TestSystem>
 {
 public:
     ecs::entity_handle player;
+    ecs::entity_handle sphere;
 
     std::vector< ecs::entity_handle > physicsUnitTestCD;
     std::vector< ecs::entity_handle > physicsUnitTestCR;
@@ -139,6 +154,20 @@ public:
         app::InputSystem::createBinding<escape_cursor_action>(app::inputmap::method::TAB);
         app::InputSystem::createBinding<vsync_action>(app::inputmap::method::F1);
 
+        app::InputSystem::createBinding<sphere_move>(app::inputmap::method::I, 1.f);
+        app::InputSystem::createBinding<sphere_move>(app::inputmap::method::K, -1.f);
+        app::InputSystem::createBinding<sphere_strive>(app::inputmap::method::J, 1.f);
+        app::InputSystem::createBinding<sphere_strive>(app::inputmap::method::U, 10.f); // Power mode of J
+        app::InputSystem::createBinding<sphere_strive>(app::inputmap::method::L, -1.f);
+        app::InputSystem::createBinding<sphere_strive>(app::inputmap::method::O, -10.f); // Power mode of O
+
+        app::InputSystem::createBinding<gain_change>(app::inputmap::method::F10, 0.05f);
+        app::InputSystem::createBinding<gain_change>(app::inputmap::method::F9, -0.05f);
+        app::InputSystem::createBinding<pitch_change>(app::inputmap::method::APOSTROPHE, 1.0f);
+        app::InputSystem::createBinding<pitch_change>(app::inputmap::method::SEMICOLON, -1.0f);
+
+        app::InputSystem::createBinding<set_distance_model>(app::inputmap::method::N);
+
         bindToEvent<player_move, &TestSystem::onPlayerMove>();
         bindToEvent<player_strive, &TestSystem::onPlayerStrive>();
         bindToEvent<player_fly, &TestSystem::onPlayerFly>();
@@ -149,6 +178,13 @@ public:
         bindToEvent<escape_cursor_action, &TestSystem::onEscapeCursor>();
         bindToEvent<vsync_action, &TestSystem::onVSYNCSwap>();
         bindToEvent<physics_test_move, &TestSystem::onUnitPhysicsUnitTestMove>();
+
+        bindToEvent<sphere_move, &TestSystem::onSphereAAMove>();
+        bindToEvent<sphere_strive, &TestSystem::onSphereAAStrive>();
+        bindToEvent<gain_change, &TestSystem::onGainChange>();
+        bindToEvent<pitch_change, &TestSystem::onPitchChange>();
+
+        bindToEvent<set_distance_model, &TestSystem::onDistanceModelSet>();
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
         window.enableCursor(false);
@@ -285,14 +321,15 @@ public:
             scaleH.write(math::vec3(2.5f));
         }
 
+        // Sphere setup (with audio source)
         {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { uvsphereH, wireframeH });
+            sphere = createEntity();
+            sphere.add_components<rendering::renderable, sah>({ uvsphereH, wireframeH }, {});
+            sphere.add_components<transform>(position(-5.1f, 3, 0), rotation(), scale(2.5f));
+            audio::audio_source source;
+            source.setAudioHandle(audio::AudioSegmentCache::createAudioSegment("waterfall", "assets://audio/365921__inspectorj__waterfall-small-b[mono].mp3"_view));
+            sphere.add_component<audio::audio_source>(source);
 
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(-5.1f, 3, 0));
-            scaleH.write(math::vec3(2.5f));
         }
 
         setupCameraEntity();
@@ -595,17 +632,10 @@ public:
 
     void setupCameraEntity()
     {
-        player = m_ecs->createEntity();
-        auto [camPosHandle, camRotHandle, camScaleHandle] = m_ecs->createComponents<transform>(player);
-
-        rotation rot = camRotHandle.read();
-        rot = math::conjugate(math::normalize(math::toQuat(math::lookAt(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0)))));
-        camRotHandle.write(rot);
-
-        camPosHandle.write({ 0.f, 3.f, 0.f });
-
-        auto camH = m_ecs->createComponent<rendering::camera>(player);
-        rendering::camera cam = camH.read();
+        player = createEntity();
+        rotation rot = math::conjugate(math::normalize(math::toQuat(math::lookAt(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0)))));
+        player.add_components<transform>(position(0.f, 3.f, 0.f), rot, scale());
+        player.add_component<audio::audio_listener>();
 
         cam.set_projection(90.f, 0.1f, 1000.f);
         camH.write(cam);
@@ -667,6 +697,44 @@ public:
         posH.fetch_add(move);
     }
 
+    void onSphereAAMove(sphere_move* action)
+    {
+        auto posH = sphere.get_component_handle<position>();
+        math::vec3 move = math::vec3(0.f, 0.f, 1.f);
+        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 10.f;
+        posH.fetch_add(move);
+    }
+
+    void onSphereAAStrive(sphere_strive* action)
+    {
+        auto posH = sphere.get_component_handle<position>();
+        math::vec3 move = math::vec3(1.f, 0.f, 0.f);
+        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 10.f;
+        posH.fetch_add(move);
+    }
+
+    void onGainChange(gain_change* action)
+    {
+        if (action->value == 0) return;
+        using namespace audio;
+        auto sourceH = sphere.get_component_handle<audio_source>();
+        audio_source source = sourceH.read();
+        const float g = source.getGain() + action->value * action->input_delta * 10.0f;
+        source.setGain(g);
+        sourceH.write(source);
+    }
+
+    void onPitchChange(pitch_change* action)
+    {
+        if (action->value == 0) return;
+        using namespace audio;
+        auto sourceH = sphere.get_component_handle<audio_source>();
+        audio_source source = sourceH.read();
+        const float p = source.getPitch() + action->value * action->input_delta * 10.0f;
+        source.setPitch(p);
+        sourceH.write(source);
+    }
+
     void onPlayerFly(player_fly* action)
     {
         auto posH = player.get_component_handle<position>();
@@ -722,6 +790,10 @@ public:
             posHandle.write(pos);
 
         }
+    }
+    void onDistanceModelSet(set_distance_model* action)
+    {
+        audio::AudioSystem::setDistanceModel(AL_LINEAR_DISTANCE);
     }
 
     void update(time::span deltaTime)
