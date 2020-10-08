@@ -2,7 +2,7 @@
 #define ARGS_KEEP_CONSOLE
 #define LEGION_MIN_THREADS 6 // Update, Rendering, Input, Audio, Physics, TestChain
 //#define ARGS_LOW_POWER
-#define CEAREAL_RAPIDJSON_ENDIAN 0
+
 
 
 #include <chrono>

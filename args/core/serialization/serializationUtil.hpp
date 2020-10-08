@@ -11,7 +11,6 @@
 #include <sstream>
 #include <fstream>
 #include <string>
-#define RAPIDJSON_ENDIAN 0
 
 struct MyRecord
 {

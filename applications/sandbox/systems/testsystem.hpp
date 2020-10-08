@@ -15,7 +15,6 @@
 #include <core/compute/context.hpp>
 #include <core/compute/kernel.hpp>
 #include <rendering/debugrendering.hpp>
-#define RAPIDJSON_ENDIAN 0
 
 using namespace args;
 
