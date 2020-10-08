@@ -1,0 +1,48 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_compute_kernel.cpp:
+
+File kernel.cpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_compute>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/compute``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/compute/kernel.cpp``)
+---------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_compute_kernel.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/compute/kernel.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_compute_kernel.hpp`)
+
+- ``core/compute/program.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_compute_program.hpp`)
+
+- ``core/logging/logging.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__compute`
+

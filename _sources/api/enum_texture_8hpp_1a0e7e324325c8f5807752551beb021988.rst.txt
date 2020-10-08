@@ -1,0 +1,13 @@
+.. _exhale_enum_texture_8hpp_1a0e7e324325c8f5807752551beb021988:
+
+Enum texture_wrap
+=================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_texture.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: args::rendering::texture_wrap

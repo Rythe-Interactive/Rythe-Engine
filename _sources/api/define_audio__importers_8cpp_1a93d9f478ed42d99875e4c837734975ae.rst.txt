@@ -1,0 +1,13 @@
+.. _exhale_define_audio__importers_8cpp_1a93d9f478ed42d99875e4c837734975ae:
+
+Define MINIMP3_IMPLEMENTATION
+=============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_data_importers_audio_importers.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: MINIMP3_IMPLEMENTATION

@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1physics_1_1_half_edge_edge:
+
+Struct HalfEdgeEdge
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_halfedgeedge.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::physics::HalfEdgeEdge
+   :members:
+   :protected-members:
+   :undoc-members:

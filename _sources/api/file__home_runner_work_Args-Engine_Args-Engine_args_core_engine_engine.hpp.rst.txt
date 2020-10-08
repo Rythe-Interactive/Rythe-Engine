@@ -29,11 +29,15 @@ Includes
 --------
 
 
+- ``core/defaults/coremodule.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_defaults_coremodule.hpp`)
+
 - ``core/ecs/ecsregistry.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecsregistry.hpp`)
 
 - ``core/engine/module.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_module.hpp`)
 
 - ``core/events/eventbus.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_eventbus.hpp`)
+
+- ``core/logging/logging.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`)
 
 - ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
 

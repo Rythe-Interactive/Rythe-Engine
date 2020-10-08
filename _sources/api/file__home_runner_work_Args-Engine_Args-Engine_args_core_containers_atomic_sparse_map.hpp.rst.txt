@@ -33,7 +33,7 @@ Includes
 
 - ``core/async/readonly_rw_spinlock.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_readonly_rw_spinlock.hpp`)
 
-- ``core/async/transferable_atomic.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_transferable_atomic.hpp`)
+- ``core/containers/iterator_tricks.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_iterator_tricks.hpp`)
 
 - ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
 

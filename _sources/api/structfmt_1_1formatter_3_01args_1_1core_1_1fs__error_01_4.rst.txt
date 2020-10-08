@@ -1,0 +1,16 @@
+.. _exhale_struct_structfmt_1_1formatter_3_01args_1_1core_1_1fs__error_01_4:
+
+Template Struct formatter< args::core::fs_error >
+=================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: fmt::formatter< args::core::fs_error >
+   :members:
+   :protected-members:
+   :undoc-members:

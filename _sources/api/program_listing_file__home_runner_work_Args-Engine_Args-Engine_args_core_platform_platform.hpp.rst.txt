@@ -14,12 +14,17 @@ Program Listing for File platform.hpp
    
    #define ARGS_CPP17V 201703L
    
+   #define ARGS_DEBUG_VALUE 1
+   #define ARGS_RELEASE_VALUE 2
+   
    #if defined(_DEBUG) || defined(DEBUG)
    
        #define ARGS_DEBUG
+       #define ARGS_CONFIGURATION ARGS_DEBUG_VALUE
    #else
    
-       #define ARGS_RELEASE
+       #define ARGS_RELEASE 
+       #define ARGS_CONFIGURATION ARGS_RELEASE_VALUE
    #endif
    
    #if (!defined(ARGS_LOW_POWER) && !defined(ARGS_HIGH_PERFORMANCE))
@@ -69,24 +74,9 @@ Program Listing for File platform.hpp
    
    #define NO_MANGLING extern "C"
    
-   #if defined(ARGS_WINDOWS) || defined(DOXY_INCLUDE)
-       #if (defined(ARGS_INTERNAL) && !defined(ARGS_IMPORT)) || defined(DOXY_INCLUDE)
+   #define ARGS_FUNC ARGS_CCONV
    
-           #define ARGS_API __declspec(dllexport)
-       #else
-           #define ARGS_API __declspec(dllimport)
-       #endif
-   #else
-       #define ARGS_API __attribute__((visibility("default")))
-   #endif
-   
-   #if defined(ARGS_IMPORT)
-   #define ARGS_LIBRARY 
-   #endif
-   
-   #define ARGS_FUNC ARGS_API ARGS_CCONV
-   
-   #define ARGS_INTERFACE NO_MANGLING ARGS_API ARGS_CCONV 
+   #define ARGS_INTERFACE NO_MANGLING ARGS_CCONV 
    
    #if defined(__has_cpp_attribute)|| defined(DOXY_INCLUDE) 
    
@@ -116,3 +106,7 @@ Program Listing for File platform.hpp
    #define ARGS_IMPURE {}
    
    #define ARGS_IMPURE_RETURN(x) { return (x); }
+   
+   #if !defined(LEGION_MIN_THREADS)
+   #define LEGION_MIN_THREADS 5
+   #endif

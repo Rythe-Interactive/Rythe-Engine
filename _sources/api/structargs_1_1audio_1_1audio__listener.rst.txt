@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1audio_1_1audio__listener:
+
+Struct audio_listener
+=====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_components_audio_listener.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::audio::audio_listener
+   :members:
+   :protected-members:
+   :undoc-members:

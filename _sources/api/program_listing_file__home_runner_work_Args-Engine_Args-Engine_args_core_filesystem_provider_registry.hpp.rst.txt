@@ -10,6 +10,7 @@ Program Listing for File provider_registry.hpp
 
 .. code-block:: cpp
 
+   #pragma once
    #include <memory>
    
    #include <string_view>
@@ -23,7 +24,7 @@ Program Listing for File provider_registry.hpp
    #include "mem_filesystem_resolver.hpp"
    
    namespace args::core::filesystem{
-       class ARGS_API provider_registry
+       class provider_registry
        {
        public:
            using domain = std::string;

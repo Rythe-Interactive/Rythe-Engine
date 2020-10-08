@@ -52,10 +52,10 @@
 <span class="cp">#include</span> <span class="cpf">&lt;type_traits&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;stdexcept&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/async/transferable_atomic.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/async/readonly_rw_spinlock.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/platform/platform.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/types/primitives.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/containers/iterator_tricks.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span>
 <span class="p">{</span>
@@ -71,21 +71,16 @@
         <span class="k">using</span> <span class="n">key_const_reference</span> <span class="o">=</span> <span class="k">const</span> <span class="n">key_type</span><span class="o">&amp;</span><span class="p">;</span>
         <span class="k">using</span> <span class="n">key_pointer</span> <span class="o">=</span> <span class="n">key_type</span><span class="o">*</span><span class="p">;</span>
 
-        <span class="k">using</span> <span class="n">atomic_type</span> <span class="o">=</span> <span class="n">async</span><span class="o">::</span><span class="n">transferable_atomic</span><span class="o">&lt;</span><span class="n">value_type</span><span class="o">&gt;</span><span class="p">;</span>
-        <span class="k">using</span> <span class="n">atomic_reference</span> <span class="o">=</span> <span class="n">atomic_type</span><span class="o">&amp;</span><span class="p">;</span>
-        <span class="k">using</span> <span class="n">atomic_const_reference</span> <span class="o">=</span> <span class="k">const</span> <span class="n">atomic_type</span><span class="o">&amp;</span><span class="p">;</span>
-        <span class="k">using</span> <span class="n">atomic_pointer</span> <span class="o">=</span> <span class="n">atomic_type</span><span class="o">*</span><span class="p">;</span>
-
         <span class="k">using</span> <span class="n">value_reference</span> <span class="o">=</span> <span class="n">value_type</span><span class="o">&amp;</span><span class="p">;</span>
         <span class="k">using</span> <span class="n">value_const_reference</span> <span class="o">=</span> <span class="k">const</span> <span class="n">value_type</span><span class="o">&amp;</span><span class="p">;</span>
         <span class="k">using</span> <span class="n">value_pointer</span> <span class="o">=</span> <span class="n">value_type</span><span class="o">*</span><span class="p">;</span>
 
         <span class="k">using</span> <span class="n">sparse_container</span> <span class="o">=</span> <span class="n">sparse_type</span><span class="o">&lt;</span><span class="n">key_type</span><span class="p">,</span> <span class="n">size_type</span><span class="o">&gt;</span><span class="p">;</span>
-        <span class="k">using</span> <span class="n">dense_value_container</span> <span class="o">=</span> <span class="n">dense_type</span><span class="o">&lt;</span><span class="n">atomic_type</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">dense_value_container</span> <span class="o">=</span> <span class="n">dense_type</span><span class="o">&lt;</span><span class="n">value_type</span><span class="o">&gt;</span><span class="p">;</span>
         <span class="k">using</span> <span class="n">dense_key_container</span> <span class="o">=</span> <span class="n">dense_type</span><span class="o">&lt;</span><span class="n">key_type</span><span class="o">&gt;</span><span class="p">;</span>
 
-        <span class="k">using</span> <span class="n">iterator</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">dense_value_container</span><span class="o">::</span><span class="n">iterator</span><span class="p">;</span>
-        <span class="k">using</span> <span class="n">const_iterator</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">dense_value_container</span><span class="o">::</span><span class="n">const_iterator</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">core</span><span class="o">::</span><span class="n">iterator</span><span class="o">::</span><span class="n">key_value_pair_iterator</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">dense_key_container</span><span class="o">::</span><span class="n">iterator</span><span class="p">,</span> <span class="k">typename</span> <span class="n">dense_value_container</span><span class="o">::</span><span class="n">iterator</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">const_iterator</span> <span class="o">=</span> <span class="n">core</span><span class="o">::</span><span class="n">iterator</span><span class="o">::</span><span class="n">key_value_pair_iterator</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">dense_key_container</span><span class="o">::</span><span class="n">const_iterator</span><span class="p">,</span> <span class="k">typename</span> <span class="n">dense_value_container</span><span class="o">::</span><span class="n">const_iterator</span><span class="o">&gt;</span><span class="p">;</span>
 
     <span class="k">private</span><span class="o">:</span>
         <span class="k">mutable</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_container_lock</span><span class="p">;</span>
@@ -98,50 +93,64 @@
         <span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">size_type</span><span class="o">&gt;</span> <span class="n">m_capacity</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
     <span class="k">public</span><span class="o">:</span>
-        <span class="n">A_NODISCARD</span> <span class="kr">inline</span> <span class="n">iterator</span> <span class="n">begin</span><span class="p">()</span>
-        <span class="p">{</span>
-            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span> <span class="k">return</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
-        <span class="p">}</span>
-        <span class="n">A_NODISCARD</span> <span class="kr">inline</span> <span class="n">const_iterator</span> <span class="n">begin</span><span class="p">()</span> <span class="k">const</span>
-        <span class="p">{</span>
-            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span> <span class="k">return</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">cbegin</span><span class="p">();</span>
-        <span class="p">}</span>
-        <span class="n">A_NODISCARD</span> <span class="kr">inline</span> <span class="n">const_iterator</span> <span class="n">cbegin</span><span class="p">()</span> <span class="k">const</span>
-        <span class="p">{</span>
-            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span> <span class="k">return</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">cbegin</span><span class="p">();</span>
-        <span class="p">}</span>
+        <span class="n">A_NODISCARD</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span> <span class="n">get_lock</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_container_lock</span><span class="p">;</span> <span class="p">}</span>
+        <span class="n">A_NODISCARD</span> <span class="n">dense_value_container</span><span class="o">&amp;</span> <span class="n">dense</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_dense_value</span><span class="p">;</span> <span class="p">}</span>
+        <span class="n">A_NODISCARD</span> <span class="k">const</span> <span class="n">dense_value_container</span><span class="o">&amp;</span> <span class="n">dense</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_dense_value</span><span class="p">;</span> <span class="p">}</span>
 
-        <span class="n">A_NODISCARD</span> <span class="kr">inline</span> <span class="n">iterator</span> <span class="n">end</span><span class="p">()</span>
+        <span class="n">A_NODISCARD</span> <span class="n">dense_key_container</span><span class="o">&amp;</span> <span class="n">keys</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_dense_key</span><span class="p">;</span> <span class="p">}</span>
+        <span class="n">A_NODISCARD</span> <span class="k">const</span> <span class="n">dense_key_container</span><span class="o">&amp;</span> <span class="n">keys</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_dense_key</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="n">A_NODISCARD</span> <span class="n">iterator</span> <span class="n">begin</span><span class="p">()</span>
         <span class="p">{</span>
-            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span> <span class="k">return</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">);</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nf">iterator</span><span class="p">(</span><span class="n">m_dense_key</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">begin</span><span class="p">());</span>
         <span class="p">}</span>
-        <span class="n">A_NODISCARD</span> <span class="kr">inline</span> <span class="n">const_iterator</span> <span class="n">end</span><span class="p">()</span> <span class="k">const</span>
+        <span class="n">A_NODISCARD</span> <span class="n">const_iterator</span> <span class="n">begin</span><span class="p">()</span> <span class="k">const</span>
         <span class="p">{</span>
-            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span> <span class="k">return</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">cbegin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">);</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nf">const_iterator</span><span class="p">(</span><span class="n">m_dense_key</span><span class="p">.</span><span class="n">cbegin</span><span class="p">(),</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">cbegin</span><span class="p">());</span>
         <span class="p">}</span>
-        <span class="n">A_NODISCARD</span> <span class="kr">inline</span> <span class="n">const_iterator</span> <span class="n">cend</span><span class="p">()</span> <span class="k">const</span>
+        <span class="n">A_NODISCARD</span> <span class="n">const_iterator</span> <span class="n">cbegin</span><span class="p">()</span> <span class="k">const</span>
         <span class="p">{</span>
-            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span> <span class="k">return</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">cbegin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">);</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nf">const_iterator</span><span class="p">(</span><span class="n">m_dense_key</span><span class="p">.</span><span class="n">cbegin</span><span class="p">(),</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">cbegin</span><span class="p">());</span>
         <span class="p">}</span>
 
-        <span class="n">A_NODISCARD</span> <span class="kr">inline</span> <span class="n">size_type</span> <span class="n">size</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_size</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">);</span> <span class="p">}</span>
-
-        <span class="n">A_NODISCARD</span> <span class="kr">inline</span> <span class="n">size_type</span> <span class="n">capacity</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_capacity</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">);</span> <span class="p">}</span>
-
-        <span class="n">A_NODISCARD</span> <span class="n">size_type</span> <span class="n">max_size</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">max_size</span><span class="p">();</span> <span class="p">}</span>
-
-        <span class="n">A_NODISCARD</span> <span class="kr">inline</span> <span class="kt">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_size</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
-
-        <span class="kr">inline</span> <span class="kt">void</span> <span class="n">clear</span><span class="p">()</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="n">m_size</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span> <span class="p">}</span>
-
-        <span class="kr">inline</span> <span class="kt">void</span> <span class="n">reserve</span><span class="p">(</span><span class="n">size_type</span> <span class="n">size</span><span class="p">)</span>
+        <span class="n">A_NODISCARD</span> <span class="n">iterator</span> <span class="n">end</span><span class="p">()</span>
         <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">m_capacity</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">))</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nf">iterator</span><span class="p">(</span><span class="n">m_dense_key</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">,</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">A_NODISCARD</span> <span class="n">const_iterator</span> <span class="n">end</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nf">const_iterator</span><span class="p">(</span><span class="n">m_dense_key</span><span class="p">.</span><span class="n">cbegin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">,</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">cbegin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">A_NODISCARD</span> <span class="n">const_iterator</span> <span class="n">cend</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nf">const_iterator</span><span class="p">(</span><span class="n">m_dense_key</span><span class="p">.</span><span class="n">cbegin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">,</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">cbegin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+        <span class="n">A_NODISCARD</span> <span class="kr">inline</span> <span class="n">size_type</span> <span class="n">size</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order</span> <span class="n">order</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">)</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_size</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">order</span><span class="p">);</span> <span class="p">}</span>
+
+        <span class="n">A_NODISCARD</span> <span class="kr">inline</span> <span class="n">size_type</span> <span class="n">capacity</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order</span> <span class="n">order</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">)</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_capacity</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">order</span><span class="p">);</span> <span class="p">}</span>
+
+        <span class="n">A_NODISCARD</span> <span class="n">size_type</span> <span class="n">max_size</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span> <span class="k">return</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">max_size</span><span class="p">();</span> <span class="p">}</span>
+
+        <span class="n">A_NODISCARD</span> <span class="kr">inline</span> <span class="kt">bool</span> <span class="n">empty</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order</span> <span class="n">order</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">)</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_size</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">order</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="kr">inline</span> <span class="kt">void</span> <span class="n">clear</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order</span> <span class="n">order</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="n">m_size</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">order</span><span class="p">);</span> <span class="p">}</span>
+
+        <span class="kr">inline</span> <span class="kt">void</span> <span class="n">reserve</span><span class="p">(</span><span class="n">size_type</span> <span class="n">size</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order</span> <span class="n">loadOrder</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order</span> <span class="n">storeOrder</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">m_capacity</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">loadOrder</span><span class="p">))</span>
             <span class="p">{</span>
                 <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
                 <span class="n">m_dense_value</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
                 <span class="n">m_dense_key</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
-                <span class="n">m_capacity</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+                <span class="n">m_capacity</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">storeOrder</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span>
 
@@ -187,13 +196,13 @@
 
 <span class="cp">#pragma region find</span>
 
-        <span class="n">A_NODISCARD</span> <span class="kr">inline</span> <span class="n">iterator</span> <span class="n">find</span><span class="p">(</span><span class="n">atomic_const_reference</span> <span class="n">val</span><span class="p">)</span>
+        <span class="n">A_NODISCARD</span> <span class="kr">inline</span> <span class="n">iterator</span> <span class="n">find</span><span class="p">(</span><span class="n">value_const_reference</span> <span class="n">val</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
             <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">find</span><span class="p">(</span><span class="n">begin</span><span class="p">(),</span> <span class="n">end</span><span class="p">(),</span> <span class="n">val</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="n">A_NODISCARD</span> <span class="kr">inline</span> <span class="n">const_iterator</span> <span class="n">find</span><span class="p">(</span><span class="n">atomic_const_reference</span> <span class="n">val</span><span class="p">)</span> <span class="k">const</span>
+        <span class="n">A_NODISCARD</span> <span class="kr">inline</span> <span class="n">const_iterator</span> <span class="n">find</span><span class="p">(</span><span class="n">value_const_reference</span> <span class="n">val</span><span class="p">)</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
             <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">find</span><span class="p">(</span><span class="n">begin</span><span class="p">(),</span> <span class="n">end</span><span class="p">(),</span> <span class="n">val</span><span class="p">);</span>
@@ -202,7 +211,7 @@
 
 <span class="cp">#pragma region insert</span>
 
-        <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">iterator</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">insert</span><span class="p">(</span><span class="n">key_const_reference</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_const_reference</span> <span class="n">val</span><span class="p">)</span>
+        <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">iterator</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">insert</span><span class="p">(</span><span class="n">key_const_reference</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_const_reference</span> <span class="n">val</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order</span> <span class="n">incrementOrder</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acq_rel</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
             <span class="p">{</span>
@@ -212,19 +221,18 @@
                 <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
 
                 <span class="k">auto</span> <span class="n">itr_value</span> <span class="o">=</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
-                <span class="n">itr_value</span><span class="o">-&gt;</span><span class="n">store</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+                <span class="o">*</span><span class="n">itr_value</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span>
 
                 <span class="k">auto</span> <span class="n">itr_key</span> <span class="o">=</span> <span class="n">m_dense_key</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
                 <span class="o">*</span><span class="n">itr_key</span> <span class="o">=</span> <span class="n">key</span><span class="p">;</span>
 
-                <span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_size</span><span class="p">;</span>
-                <span class="o">++</span><span class="n">m_size</span><span class="p">;</span>
-                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">itr_value</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+                <span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_size</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">incrementOrder</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">iterator</span><span class="p">(</span><span class="n">itr_key</span><span class="p">,</span> <span class="n">itr_value</span><span class="p">),</span> <span class="nb">true</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">end</span><span class="p">(),</span> <span class="nb">false</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">iterator</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">insert</span><span class="p">(</span><span class="n">key_type</span><span class="o">&amp;&amp;</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_const_reference</span> <span class="n">val</span><span class="p">)</span>
+        <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">iterator</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">insert</span><span class="p">(</span><span class="n">key_type</span><span class="o">&amp;&amp;</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_const_reference</span> <span class="n">val</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order</span> <span class="n">incrementOrder</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acq_rel</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
             <span class="p">{</span>
@@ -234,19 +242,18 @@
                 <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
 
                 <span class="k">auto</span> <span class="n">itr_value</span> <span class="o">=</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
-                <span class="n">itr_value</span><span class="o">-&gt;</span><span class="n">store</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+                <span class="o">*</span><span class="n">itr_value</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span>
 
                 <span class="k">auto</span> <span class="n">itr_key</span> <span class="o">=</span> <span class="n">m_dense_key</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
                 <span class="o">*</span><span class="n">itr_key</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
 
-                <span class="n">m_sparse</span><span class="p">[</span><span class="o">*</span><span class="n">itr_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_size</span><span class="p">;</span>
-                <span class="o">++</span><span class="n">m_size</span><span class="p">;</span>
-                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">itr_value</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+                <span class="n">m_sparse</span><span class="p">[</span><span class="o">*</span><span class="n">itr_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_size</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">incrementOrder</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">iterator</span><span class="p">(</span><span class="n">itr_key</span><span class="p">,</span> <span class="n">itr_value</span><span class="p">),</span> <span class="nb">true</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">end</span><span class="p">(),</span> <span class="nb">false</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">iterator</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">insert</span><span class="p">(</span><span class="n">key_const_reference</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_type</span><span class="o">&amp;&amp;</span> <span class="n">val</span><span class="p">)</span>
+        <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">iterator</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">insert</span><span class="p">(</span><span class="n">key_const_reference</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_type</span><span class="o">&amp;&amp;</span> <span class="n">val</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order</span> <span class="n">incrementOrder</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acq_rel</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
             <span class="p">{</span>
@@ -256,19 +263,18 @@
                 <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
 
                 <span class="k">auto</span> <span class="n">itr_value</span> <span class="o">=</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
-                <span class="n">itr_value</span><span class="o">-&gt;</span><span class="n">store</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">val</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+                <span class="o">*</span><span class="n">itr_value</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span>
 
                 <span class="k">auto</span> <span class="n">itr_key</span> <span class="o">=</span> <span class="n">m_dense_key</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
                 <span class="o">*</span><span class="n">itr_key</span> <span class="o">=</span> <span class="n">key</span><span class="p">;</span>
 
-                <span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_size</span><span class="p">;</span>
-                <span class="o">++</span><span class="n">m_size</span><span class="p">;</span>
-                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">itr_value</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+                <span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_size</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">incrementOrder</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">iterator</span><span class="p">(</span><span class="n">itr_key</span><span class="p">,</span> <span class="n">itr_value</span><span class="p">),</span> <span class="nb">true</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">end</span><span class="p">(),</span> <span class="nb">false</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">iterator</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">insert</span><span class="p">(</span><span class="n">key_type</span><span class="o">&amp;&amp;</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_type</span><span class="o">&amp;&amp;</span> <span class="n">val</span><span class="p">)</span>
+        <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">iterator</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">insert</span><span class="p">(</span><span class="n">key_type</span><span class="o">&amp;&amp;</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_type</span><span class="o">&amp;&amp;</span> <span class="n">val</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order</span> <span class="n">incrementOrder</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acq_rel</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
             <span class="p">{</span>
@@ -278,20 +284,67 @@
                 <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
 
                 <span class="k">auto</span> <span class="n">itr_value</span> <span class="o">=</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
-                <span class="n">itr_value</span><span class="o">-&gt;</span><span class="n">store</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+                <span class="o">*</span><span class="n">itr_value</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span>
 
                 <span class="k">auto</span> <span class="n">itr_key</span> <span class="o">=</span> <span class="n">m_dense_key</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
                 <span class="o">*</span><span class="n">itr_key</span> <span class="o">=</span> <span class="n">key</span><span class="p">;</span>
 
-                <span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_size</span><span class="p">;</span>
-                <span class="o">++</span><span class="n">m_size</span><span class="p">;</span>
-                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">itr_value</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+                <span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_size</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">incrementOrder</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">iterator</span><span class="p">(</span><span class="n">itr_key</span><span class="p">,</span> <span class="n">itr_value</span><span class="p">),</span> <span class="nb">true</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">end</span><span class="p">(),</span> <span class="nb">false</span><span class="p">);</span>
         <span class="p">}</span>
 <span class="cp">#pragma endregion</span>
 
 <span class="cp">#pragma region emplace</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span> <span class="n">Arguments</span><span class="o">&gt;</span>
+        <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">iterator</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">emplace</span><span class="p">(</span><span class="n">key_const_reference</span> <span class="n">key</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order</span> <span class="n">incrementOrder</span><span class="p">,</span> <span class="n">Arguments</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">arguments</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">m_size</span> <span class="o">&gt;=</span> <span class="n">m_capacity</span><span class="p">)</span>
+                    <span class="n">reserve</span><span class="p">(</span><span class="n">m_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+
+                <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
+
+                <span class="k">auto</span> <span class="n">itr_value</span> <span class="o">=</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
+                <span class="o">*</span><span class="n">itr_value</span> <span class="o">=</span> <span class="n">value_type</span><span class="p">(</span><span class="n">arguments</span><span class="p">...);</span>
+
+                <span class="k">auto</span> <span class="n">itr_key</span> <span class="o">=</span> <span class="n">m_dense_key</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
+                <span class="o">*</span><span class="n">itr_key</span> <span class="o">=</span> <span class="n">key</span><span class="p">;</span>
+
+                <span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_size</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">incrementOrder</span><span class="p">);</span>
+
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">iterator</span><span class="p">(</span><span class="n">itr_key</span><span class="p">,</span> <span class="n">itr_value</span><span class="p">),</span> <span class="nb">true</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">end</span><span class="p">(),</span> <span class="nb">false</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span> <span class="n">Arguments</span><span class="o">&gt;</span>
+        <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">iterator</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">emplace</span><span class="p">(</span><span class="n">key_type</span><span class="o">&amp;&amp;</span> <span class="n">key</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order</span> <span class="n">incrementOrder</span><span class="p">,</span> <span class="n">Arguments</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">arguments</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">m_size</span> <span class="o">&gt;=</span> <span class="n">m_capacity</span><span class="p">)</span>
+                    <span class="n">reserve</span><span class="p">(</span><span class="n">m_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+
+                <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
+
+                <span class="k">auto</span> <span class="n">itr_value</span> <span class="o">=</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
+                <span class="o">*</span><span class="n">itr_value</span> <span class="o">=</span> <span class="n">value_type</span><span class="p">(</span><span class="n">arguments</span><span class="p">...);</span>
+
+                <span class="k">auto</span> <span class="n">itr_key</span> <span class="o">=</span> <span class="n">m_dense_key</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
+                <span class="o">*</span><span class="n">itr_key</span> <span class="o">=</span> <span class="n">key</span><span class="p">;</span>
+
+                <span class="n">m_sparse</span><span class="p">[</span><span class="o">*</span><span class="n">itr_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_size</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">incrementOrder</span><span class="p">);</span>
+
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">iterator</span><span class="p">(</span><span class="n">itr_key</span><span class="p">,</span> <span class="n">itr_value</span><span class="p">),</span> <span class="nb">true</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">end</span><span class="p">(),</span> <span class="nb">false</span><span class="p">);</span>
+        <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span> <span class="n">Arguments</span><span class="o">&gt;</span>
         <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">iterator</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">emplace</span><span class="p">(</span><span class="n">key_const_reference</span> <span class="n">key</span><span class="p">,</span> <span class="n">Arguments</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">arguments</span><span class="p">)</span>
@@ -304,15 +357,14 @@
                 <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
 
                 <span class="k">auto</span> <span class="n">itr_value</span> <span class="o">=</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
-                <span class="n">itr_value</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">().</span><span class="n">store</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">value_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">value_type</span><span class="p">(</span><span class="n">arguments</span><span class="p">...)),</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+                <span class="o">*</span><span class="n">itr_value</span> <span class="o">=</span> <span class="n">value_type</span><span class="p">(</span><span class="n">arguments</span><span class="p">...);</span>
 
                 <span class="k">auto</span> <span class="n">itr_key</span> <span class="o">=</span> <span class="n">m_dense_key</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
                 <span class="o">*</span><span class="n">itr_key</span> <span class="o">=</span> <span class="n">key</span><span class="p">;</span>
 
-                <span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_size</span><span class="p">;</span>
-                <span class="o">++</span><span class="n">m_size</span><span class="p">;</span>
+                <span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_size</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acq_rel</span><span class="p">);</span>
 
-                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">itr_value</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">iterator</span><span class="p">(</span><span class="n">itr_key</span><span class="p">,</span> <span class="n">itr_value</span><span class="p">),</span> <span class="nb">true</span><span class="p">);</span>
             <span class="p">}</span>
 
             <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">end</span><span class="p">(),</span> <span class="nb">false</span><span class="p">);</span>
@@ -329,15 +381,14 @@
                 <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
 
                 <span class="k">auto</span> <span class="n">itr_value</span> <span class="o">=</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
-                <span class="n">itr_value</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">().</span><span class="n">store</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">value_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">value_type</span><span class="p">(</span><span class="n">arguments</span><span class="p">...)),</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+                <span class="o">*</span><span class="n">itr_value</span> <span class="o">=</span> <span class="n">value_type</span><span class="p">(</span><span class="n">arguments</span><span class="p">...);</span>
 
                 <span class="k">auto</span> <span class="n">itr_key</span> <span class="o">=</span> <span class="n">m_dense_key</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
                 <span class="o">*</span><span class="n">itr_key</span> <span class="o">=</span> <span class="n">key</span><span class="p">;</span>
 
-                <span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_size</span><span class="p">;</span>
-                <span class="o">++</span><span class="n">m_size</span><span class="p">;</span>
+                <span class="n">m_sparse</span><span class="p">[</span><span class="o">*</span><span class="n">itr_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_size</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acq_rel</span><span class="p">);</span>
 
-                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">itr_value</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">iterator</span><span class="p">(</span><span class="n">itr_key</span><span class="p">,</span> <span class="n">itr_value</span><span class="p">),</span> <span class="nb">true</span><span class="p">);</span>
             <span class="p">}</span>
 
             <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">end</span><span class="p">(),</span> <span class="nb">false</span><span class="p">);</span>
@@ -346,7 +397,7 @@
 
 <span class="cp">#pragma region operator[]</span>
 
-        <span class="kr">inline</span> <span class="n">atomic_reference</span> <span class="k">operator</span><span class="p">[](</span><span class="n">key_type</span><span class="o">&amp;&amp;</span> <span class="n">key</span><span class="p">)</span>
+        <span class="kr">inline</span> <span class="n">value_reference</span> <span class="k">operator</span><span class="p">[](</span><span class="n">key_type</span><span class="o">&amp;&amp;</span> <span class="n">key</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">key_type</span> <span class="n">k</span><span class="p">;</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
@@ -357,13 +408,12 @@
                 <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
 
                 <span class="k">auto</span> <span class="n">itr_value</span> <span class="o">=</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
-                <span class="n">itr_value</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">().</span><span class="n">store</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">value_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">value_type</span><span class="p">()),</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+                <span class="o">*</span><span class="n">itr_value</span> <span class="o">=</span> <span class="n">value_type</span><span class="p">();</span>
 
                 <span class="k">auto</span> <span class="n">itr_key</span> <span class="o">=</span> <span class="n">m_dense_key</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span> <span class="c1">// Find iterator location at which to store the key.</span>
                 <span class="o">*</span><span class="n">itr_key</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">key</span><span class="p">);</span> <span class="c1">// Move the key into the location.</span>
                 <span class="n">k</span> <span class="o">=</span> <span class="o">*</span><span class="n">itr_key</span><span class="p">;</span> <span class="c1">// Fetch a copy of the key for reuse in the rest of the function.</span>
-                <span class="n">m_sparse</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_size</span><span class="p">;</span>
-                <span class="o">++</span><span class="n">m_size</span><span class="p">;</span>
+                <span class="n">m_sparse</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_size</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acq_rel</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">else</span>
                 <span class="n">k</span> <span class="o">=</span> <span class="n">key</span><span class="p">;</span>
@@ -373,7 +423,7 @@
             <span class="k">return</span> <span class="n">m_dense_value</span><span class="p">[</span><span class="n">m_sparse</span><span class="p">[</span><span class="n">k</span><span class="p">]];</span>
         <span class="p">}</span>
 
-        <span class="kr">inline</span> <span class="n">atomic_reference</span> <span class="k">operator</span><span class="p">[](</span><span class="n">key_const_reference</span> <span class="n">key</span><span class="p">)</span>
+        <span class="kr">inline</span> <span class="n">value_reference</span> <span class="k">operator</span><span class="p">[](</span><span class="n">key_const_reference</span> <span class="n">key</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
             <span class="p">{</span>
@@ -383,13 +433,12 @@
                 <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
 
                 <span class="k">auto</span> <span class="n">itr_value</span> <span class="o">=</span> <span class="n">m_dense_value</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
-                <span class="n">itr_value</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">().</span><span class="n">store</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">value_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">value_type</span><span class="p">()),</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+                <span class="o">*</span><span class="n">itr_value</span> <span class="o">=</span> <span class="n">value_type</span><span class="p">();</span>
 
                 <span class="k">auto</span> <span class="n">itr_key</span> <span class="o">=</span> <span class="n">m_dense_key</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">m_size</span><span class="p">;</span>
                 <span class="o">*</span><span class="n">itr_key</span> <span class="o">=</span> <span class="n">key</span><span class="p">;</span>
 
-                <span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_size</span><span class="p">;</span>
-                <span class="o">++</span><span class="n">m_size</span><span class="p">;</span>
+                <span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_size</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acq_rel</span><span class="p">);</span>
             <span class="p">}</span>
 
             <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">readonlyLock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
@@ -397,7 +446,7 @@
             <span class="k">return</span> <span class="n">m_dense_value</span><span class="p">[</span><span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]];</span>
         <span class="p">}</span>
 
-        <span class="kr">inline</span> <span class="n">atomic_const_reference</span> <span class="k">operator</span><span class="p">[](</span><span class="n">key_type</span><span class="o">&amp;&amp;</span> <span class="n">key</span><span class="p">)</span> <span class="k">const</span>
+        <span class="kr">inline</span> <span class="n">value_const_reference</span> <span class="k">operator</span><span class="p">[](</span><span class="n">key_type</span><span class="o">&amp;&amp;</span> <span class="n">key</span><span class="p">)</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
                 <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">out_of_range</span><span class="p">(</span><span class="s">&quot;Sparse map does not contain this key and is non modifiable.&quot;</span><span class="p">);</span>
@@ -407,7 +456,7 @@
             <span class="k">return</span> <span class="n">m_dense_value</span><span class="p">[</span><span class="n">m_sparse</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">key</span><span class="p">)];</span>
         <span class="p">}</span>
 
-        <span class="kr">inline</span> <span class="n">atomic_const_reference</span> <span class="k">operator</span><span class="p">[](</span><span class="n">key_const_reference</span> <span class="n">key</span><span class="p">)</span> <span class="k">const</span>
+        <span class="kr">inline</span> <span class="n">value_const_reference</span> <span class="k">operator</span><span class="p">[](</span><span class="n">key_const_reference</span> <span class="n">key</span><span class="p">)</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
                 <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">out_of_range</span><span class="p">(</span><span class="s">&quot;Sparse map does not contain this key and is non modifiable.&quot;</span><span class="p">);</span>
@@ -420,7 +469,7 @@
 
 <span class="cp">#pragma region get</span>
 
-        <span class="kr">inline</span> <span class="n">atomic_reference</span> <span class="n">get</span><span class="p">(</span><span class="n">key_type</span><span class="o">&amp;&amp;</span> <span class="n">key</span><span class="p">)</span>
+        <span class="kr">inline</span> <span class="n">value_type</span> <span class="n">get</span><span class="p">(</span><span class="n">key_type</span><span class="o">&amp;&amp;</span> <span class="n">key</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
                 <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">out_of_range</span><span class="p">(</span><span class="s">&quot;Sparse map does not contain this key.&quot;</span><span class="p">);</span>
@@ -430,7 +479,7 @@
             <span class="k">return</span> <span class="n">m_dense_value</span><span class="p">[</span><span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]];</span>
         <span class="p">}</span>
 
-        <span class="kr">inline</span> <span class="n">atomic_reference</span> <span class="n">get</span><span class="p">(</span><span class="n">key_const_reference</span> <span class="n">key</span><span class="p">)</span>
+        <span class="kr">inline</span> <span class="n">value_type</span> <span class="n">get</span><span class="p">(</span><span class="n">key_const_reference</span> <span class="n">key</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
                 <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">out_of_range</span><span class="p">(</span><span class="s">&quot;Sparse map does not contain this key.&quot;</span><span class="p">);</span>
@@ -440,7 +489,7 @@
             <span class="k">return</span> <span class="n">m_dense_value</span><span class="p">[</span><span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]];</span>
         <span class="p">}</span>
 
-        <span class="kr">inline</span> <span class="n">atomic_const_reference</span> <span class="n">get</span><span class="p">(</span><span class="n">key_type</span><span class="o">&amp;&amp;</span> <span class="n">key</span><span class="p">)</span> <span class="k">const</span>
+        <span class="kr">inline</span> <span class="n">value_type</span> <span class="n">get</span><span class="p">(</span><span class="n">key_type</span><span class="o">&amp;&amp;</span> <span class="n">key</span><span class="p">)</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
                 <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">out_of_range</span><span class="p">(</span><span class="s">&quot;Sparse map does not contain this key and is non modifiable.&quot;</span><span class="p">);</span>
@@ -450,7 +499,7 @@
             <span class="k">return</span> <span class="n">m_dense_value</span><span class="p">[</span><span class="n">m_sparse</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">key</span><span class="p">)];</span>
         <span class="p">}</span>
 
-        <span class="kr">inline</span> <span class="n">atomic_const_reference</span> <span class="n">get</span><span class="p">(</span><span class="n">key_const_reference</span> <span class="n">key</span><span class="p">)</span> <span class="k">const</span>
+        <span class="kr">inline</span> <span class="n">value_type</span> <span class="n">get</span><span class="p">(</span><span class="n">key_const_reference</span> <span class="n">key</span><span class="p">)</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
                 <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">out_of_range</span><span class="p">(</span><span class="s">&quot;Sparse map does not contain this key and is non modifiable.&quot;</span><span class="p">);</span>
@@ -458,6 +507,49 @@
             <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
 
             <span class="k">return</span> <span class="n">m_dense_value</span><span class="p">[</span><span class="n">m_sparse</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">key</span><span class="p">)];</span>
+        <span class="p">}</span>
+<span class="cp">#pragma endregion</span>
+
+<span class="cp">#pragma region set</span>
+
+        <span class="kr">inline</span> <span class="kt">void</span> <span class="n">set</span><span class="p">(</span><span class="n">key_type</span><span class="o">&amp;&amp;</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_const_reference</span> <span class="n">val</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+                <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">out_of_range</span><span class="p">(</span><span class="s">&quot;Sparse map does not contain this key.&quot;</span><span class="p">);</span>
+
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
+
+            <span class="n">m_dense_value</span><span class="p">[</span><span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kr">inline</span> <span class="kt">void</span> <span class="n">set</span><span class="p">(</span><span class="n">key_const_reference</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_const_reference</span> <span class="n">val</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+                <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">out_of_range</span><span class="p">(</span><span class="s">&quot;Sparse map does not contain this key.&quot;</span><span class="p">);</span>
+
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
+
+            <span class="n">m_dense_value</span><span class="p">[</span><span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kr">inline</span> <span class="kt">void</span> <span class="n">set</span><span class="p">(</span><span class="n">key_type</span><span class="o">&amp;&amp;</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_type</span><span class="o">&amp;&amp;</span> <span class="n">val</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+                <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">out_of_range</span><span class="p">(</span><span class="s">&quot;Sparse map does not contain this key and is non modifiable.&quot;</span><span class="p">);</span>
+
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
+
+            <span class="n">m_dense_value</span><span class="p">[</span><span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kr">inline</span> <span class="kt">void</span> <span class="n">set</span><span class="p">(</span><span class="n">key_const_reference</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_type</span><span class="o">&amp;&amp;</span> <span class="n">val</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+                <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">out_of_range</span><span class="p">(</span><span class="s">&quot;Sparse map does not contain this key and is non modifiable.&quot;</span><span class="p">);</span>
+
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_container_lock</span><span class="p">);</span>
+
+            <span class="n">m_dense_value</span><span class="p">[</span><span class="n">m_sparse</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span>
         <span class="p">}</span>
 <span class="cp">#pragma endregion</span>
 

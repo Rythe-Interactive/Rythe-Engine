@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Namespace args::core::async" href="namespace_args__core__async.html" />
-    <link rel="prev" title="Namespace args::application" href="namespace_args__application.html" />
+    <link rel="prev" title="Namespace args::audio" href="namespace_args__audio.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -39,7 +39,7 @@
           <a href="namespace_args__core__async.html" title="Namespace args::core::async"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="namespace_args__application.html" title="Namespace args::application"
+          <a href="namespace_args__audio.html" title="Namespace args::audio"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
@@ -61,6 +61,7 @@
 <li><p><a class="reference internal" href="#classes" id="id3">Classes</a></p></li>
 <li><p><a class="reference internal" href="#functions" id="id4">Functions</a></p></li>
 <li><p><a class="reference internal" href="#typedefs" id="id5">Typedefs</a></p></li>
+<li><p><a class="reference internal" href="#variables" id="id6">Variables</a></p></li>
 </ul>
 </div>
 <div class="section" id="namespaces">
@@ -68,11 +69,15 @@
 <ul class="simple">
 <li><p><a class="reference internal" href="namespace_args__core__async.html#namespace-args-core-async"><span class="std std-ref">Namespace args::core::async</span></a></p></li>
 <li><p><a class="reference internal" href="namespace_args__core__common.html#namespace-args-core-common"><span class="std std-ref">Namespace args::core::common</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_args__core__compute.html#namespace-args-core-compute"><span class="std std-ref">Namespace args::core::compute</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_args__core__detail.html#namespace-args-core-detail"><span class="std std-ref">Namespace args::core::detail</span></a></p></li>
 <li><p><a class="reference internal" href="namespace_args__core__ecs.html#namespace-args-core-ecs"><span class="std std-ref">Namespace args::core::ecs</span></a></p></li>
 <li><p><a class="reference internal" href="namespace_args__core__events.html#namespace-args-core-events"><span class="std std-ref">Namespace args::core::events</span></a></p></li>
 <li><p><a class="reference internal" href="namespace_args__core__filesystem.html#namespace-args-core-filesystem"><span class="std std-ref">Namespace args::core::filesystem</span></a></p></li>
 <li><p><a class="reference internal" href="namespace_args__core__interfaces.html#namespace-args-core-interfaces"><span class="std std-ref">Namespace args::core::interfaces</span></a></p></li>
 <li><p><a class="reference internal" href="namespace_args__core__iterator.html#namespace-args-core-iterator"><span class="std std-ref">Namespace args::core::iterator</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_args__core__literals.html#namespace-args-core-literals"><span class="std std-ref">Namespace args::core::literals</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_args__core__log.html#namespace-args-core-log"><span class="std std-ref">Namespace args::core::log</span></a></p></li>
 <li><p><a class="reference internal" href="namespace_args__core__math.html#namespace-args-core-math"><span class="std std-ref">Namespace args::core::math</span></a></p></li>
 <li><p><a class="reference internal" href="namespace_args__core__scheduling.html#namespace-args-core-scheduling"><span class="std std-ref">Namespace args::core::scheduling</span></a></p></li>
 <li><p><a class="reference internal" href="namespace_args__core__time.html#namespace-args-core-time"><span class="std std-ref">Namespace args::core::time</span></a></p></li>
@@ -82,9 +87,16 @@
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="structargs_1_1core_1_1delegate__base_3_01return__type_07parameter__types_8_8_8_08_4_1_1invocation__element.html#exhale-struct-structargs-1-1core-1-1delegate-base-3-01return-type-07parameter-types-8-8-8-08-4-1-1invocation-element"><span class="std std-ref">Template Struct delegate_base&lt; return_type(parameter_types…)&gt;::delegate_base&lt; return_type(parameter_types…)&gt;</span></a></p></li>
+<li><p><a class="reference internal" href="structargs_1_1core_1_1has__resize.html#exhale-struct-structargs-1-1core-1-1has-resize"><span class="std std-ref">Template Struct has_resize</span></a></p></li>
+<li><p><a class="reference internal" href="structargs_1_1core_1_1has__resize_3_01_c_00_01_ret_07_args_8_8_8_08_4.html#exhale-struct-structargs-1-1core-1-1has-resize-3-01-c-00-01-ret-07-args-8-8-8-08-4"><span class="std std-ref">Template Struct has_resize&lt; C, Ret(Args…)&gt;</span></a></p></li>
+<li><p><a class="reference internal" href="structargs_1_1core_1_1position.html#exhale-struct-structargs-1-1core-1-1position"><span class="std std-ref">Struct position</span></a></p></li>
+<li><p><a class="reference internal" href="structargs_1_1core_1_1rotation.html#exhale-struct-structargs-1-1core-1-1rotation"><span class="std std-ref">Struct rotation</span></a></p></li>
+<li><p><a class="reference internal" href="structargs_1_1core_1_1scale.html#exhale-struct-structargs-1-1core-1-1scale"><span class="std std-ref">Struct scale</span></a></p></li>
+<li><p><a class="reference internal" href="structargs_1_1core_1_1transform.html#exhale-struct-structargs-1-1core-1-1transform"><span class="std std-ref">Struct transform</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1core_1_1atomic__sparse__map.html#exhale-class-classargs-1-1core-1-1atomic-sparse-map"><span class="std std-ref">Template Class atomic_sparse_map</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1core_1_1component__destroyed__error.html#exhale-class-classargs-1-1core-1-1component-destroyed-error"><span class="std std-ref">Class component_destroyed_error</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1core_1_1component__exists__error.html#exhale-class-classargs-1-1core-1-1component-exists-error"><span class="std std-ref">Class component_exists_error</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1core_1_1_core_module.html#exhale-class-classargs-1-1core-1-1-core-module"><span class="std std-ref">Class CoreModule</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1core_1_1data__view.html#exhale-class-classargs-1-1core-1-1data-view"><span class="std std-ref">Template Class data_view</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1core_1_1delegate.html#exhale-class-classargs-1-1core-1-1delegate"><span class="std std-ref">Template Class delegate</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1core_1_1delegate_3_01return__type_07parameter__types_8_8_8_08_4.html#exhale-class-classargs-1-1core-1-1delegate-3-01return-type-07parameter-types-8-8-8-08-4"><span class="std std-ref">Template Class delegate&lt; return_type(parameter_types…)&gt;</span></a></p></li>
@@ -101,11 +113,17 @@
 <li><p><a class="reference internal" href="classargs_1_1core_1_1invalid__entity__error.html#exhale-class-classargs-1-1core-1-1invalid-entity-error"><span class="std std-ref">Class invalid_entity_error</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1core_1_1invalid__fetch__error.html#exhale-class-classargs-1-1core-1-1invalid-fetch-error"><span class="std std-ref">Class invalid_fetch_error</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1core_1_1invalid__type__error.html#exhale-class-classargs-1-1core-1-1invalid-type-error"><span class="std std-ref">Class invalid_type_error</span></a></p></li>
+<li><p><a class="reference internal" href="class_structargs_1_1core_1_1mesh.html#exhale-class-structargs-1-1core-1-1mesh"><span class="std std-ref">Class mesh</span></a></p></li>
+<li><p><a class="reference internal" href="class_structargs_1_1core_1_1mesh__handle.html#exhale-class-structargs-1-1core-1-1mesh-handle"><span class="std std-ref">Class mesh_handle</span></a></p></li>
+<li><p><a class="reference internal" href="class_structargs_1_1core_1_1mesh__import__settings.html#exhale-class-structargs-1-1core-1-1mesh-import-settings"><span class="std std-ref">Class mesh_import_settings</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1core_1_1_mesh_cache.html#exhale-class-classargs-1-1core-1-1-mesh-cache"><span class="std std-ref">Class MeshCache</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1core_1_1_module.html#exhale-class-classargs-1-1core-1-1-module"><span class="std std-ref">Class Module</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1core_1_1multicast__delegate.html#exhale-class-classargs-1-1core-1-1multicast-delegate"><span class="std std-ref">Template Class multicast_delegate</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1core_1_1multicast__delegate_3_01return__type_07parameter__types_8_8_8_08_4.html#exhale-class-classargs-1-1core-1-1multicast-delegate-3-01return-type-07parameter-types-8-8-8-08-4"><span class="std std-ref">Template Class multicast_delegate&lt; return_type(parameter_types…)&gt;</span></a></p></li>
+<li><p><a class="reference internal" href="class_structargs_1_1core_1_1obj__mesh__loader.html#exhale-class-structargs-1-1core-1-1obj-mesh-loader"><span class="std std-ref">Class obj_mesh_loader</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1core_1_1sparse__map.html#exhale-class-classargs-1-1core-1-1sparse-map"><span class="std std-ref">Template Class sparse_map</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1core_1_1sparse__set.html#exhale-class-classargs-1-1core-1-1sparse-set"><span class="std std-ref">Template Class sparse_set</span></a></p></li>
+<li><p><a class="reference internal" href="class_structargs_1_1core_1_1sub__mesh.html#exhale-class-structargs-1-1core-1-1sub-mesh"><span class="std std-ref">Class sub_mesh</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1core_1_1_system.html#exhale-class-classargs-1-1core-1-1-system"><span class="std std-ref">Template Class System</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1core_1_1_system_base.html#exhale-class-classargs-1-1core-1-1-system-base"><span class="std std-ref">Class SystemBase</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1core_1_1unknown__component__error.html#exhale-class-classargs-1-1core-1-1unknown-component-error"><span class="std std-ref">Class unknown_component_error</span></a></p></li>
@@ -116,10 +134,16 @@
 <div class="section" id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
+<li><p><a class="reference internal" href="function_type__util_8hpp_1a1a2afb981820cf3e184df092c1174259.html#exhale-function-type-util-8hpp-1a1a2afb981820cf3e184df092c1174259"><span class="std std-ref">Template Function args::core::appendBinaryData(Iterator, Iterator, byte_vec&amp;)</span></a></p></li>
+<li><p><a class="reference internal" href="function_type__util_8hpp_1a039285431243c5a1071fe865f1015b24.html#exhale-function-type-util-8hpp-1a039285431243c5a1071fe865f1015b24"><span class="std std-ref">Template Function args::core::appendBinaryData(T *, byte_vec&amp;)</span></a></p></li>
 <li><p><a class="reference internal" href="function_type__util_8hpp_1aef7996e5e7a874b93744d7f2b583ac7b.html#exhale-function-type-util-8hpp-1aef7996e5e7a874b93744d7f2b583ac7b"><span class="std std-ref">Template Function args::core::force_value_cast</span></a></p></li>
 <li><p><a class="reference internal" href="function_type__util_8cpp_1a1fddf5a1042b1af111b6612d5d4f4212.html#exhale-function-type-util-8cpp-1a1fddf5a1042b1af111b6612d5d4f4212"><span class="std std-ref">Function args::core::nameHash(cstring)</span></a></p></li>
 <li><p><a class="reference internal" href="function_type__util_8cpp_1a403570424ba5abb682d7fe4046a317d0.html#exhale-function-type-util-8cpp-1a403570424ba5abb682d7fe4046a317d0"><span class="std std-ref">Function args::core::nameHash(const std::string&amp;)</span></a></p></li>
+<li><p><a class="reference internal" href="function_type__util_8cpp_1ae8289ddd6fbe5789a4b896e61dd2b523.html#exhale-function-type-util-8cpp-1ae8289ddd6fbe5789a4b896e61dd2b523"><span class="std std-ref">Function args::core::nameHash(const std::string_view&amp;)</span></a></p></li>
 <li><p><a class="reference internal" href="function_type__util_8hpp_1a94f51b351b18c1a001e896051db58df0.html#exhale-function-type-util-8hpp-1a94f51b351b18c1a001e896051db58df0"><span class="std std-ref">Template Function args::core::nameHash(const char(&amp;))</span></a></p></li>
+<li><p><a class="reference internal" href="function_type__util_8hpp_1ade524ded96c15dadf32aba9d35077294.html#exhale-function-type-util-8hpp-1ade524ded96c15dadf32aba9d35077294"><span class="std std-ref">Template Function args::core::retrieveArraySize</span></a></p></li>
+<li><p><a class="reference internal" href="function_type__util_8hpp_1a4fee05c5aa73ff07bd4297a3be98db70.html#exhale-function-type-util-8hpp-1a4fee05c5aa73ff07bd4297a3be98db70"><span class="std std-ref">Template Function args::core::retrieveBinaryData(T&amp;, byte_vec::const_iterator&amp;)</span></a></p></li>
+<li><p><a class="reference internal" href="function_type__util_8hpp_1a5f09163d626aaf72a2b5e5c2fbd4980e.html#exhale-function-type-util-8hpp-1a5f09163d626aaf72a2b5e5c2fbd4980e"><span class="std std-ref">Template Function args::core::retrieveBinaryData(Iterator, Iterator, byte_vec::const_iterator&amp;)</span></a></p></li>
 <li><p><a class="reference internal" href="function_type__util_8hpp_1a544d59e5fbfe271021385720ad13dbc6.html#exhale-function-type-util-8hpp-1a544d59e5fbfe271021385720ad13dbc6"><span class="std std-ref">Template Function args::core::typeHash()</span></a></p></li>
 <li><p><a class="reference internal" href="function_type__util_8hpp_1a2fb26749a4216416b95b3c4c2728e8af.html#exhale-function-type-util-8hpp-1a2fb26749a4216416b95b3c4c2728e8af"><span class="std std-ref">Template Function args::core::typeHash(T)</span></a></p></li>
 <li><p><a class="reference internal" href="function_type__util_8hpp_1a411f45df69ab476f24027197bd72c878.html#exhale-function-type-util-8hpp-1a411f45df69ab476f24027197bd72c878"><span class="std std-ref">Template Function args::core::typeName()</span></a></p></li>
@@ -133,6 +157,7 @@
 <li><p><a class="reference internal" href="typedef_primitives_8hpp_1ad35a77c7c53f7774b26618ecb37281f2.html#exhale-typedef-primitives-8hpp-1ad35a77c7c53f7774b26618ecb37281f2"><span class="std std-ref">Typedef args::core::byte</span></a></p></li>
 <li><p><a class="reference internal" href="typedef_primitives_8hpp_1a499c96eef2823c2ad4423a1cf0c1f62a.html#exhale-typedef-primitives-8hpp-1a499c96eef2823c2ad4423a1cf0c1f62a"><span class="std std-ref">Typedef args::core::byte_vec</span></a></p></li>
 <li><p><a class="reference internal" href="typedef_primitives_8hpp_1a971227bd505340c1fb73ac555d4854ff.html#exhale-typedef-primitives-8hpp-1a971227bd505340c1fb73ac555d4854ff"><span class="std std-ref">Typedef args::core::cstring</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_types_2meta_8hpp_1afe0993f90e5c684616de2c792f0a98c7.html#exhale-typedef-types-2meta-8hpp-1afe0993f90e5c684616de2c792f0a98c7"><span class="std std-ref">Typedef args::core::doesnt_inherit_from</span></a></p></li>
 <li><p><a class="reference internal" href="typedef_primitives_8hpp_1a60e673407401ce50e9dd15fd85255ba6.html#exhale-typedef-primitives-8hpp-1a60e673407401ce50e9dd15fd85255ba6"><span class="std std-ref">Typedef args::core::f32</span></a></p></li>
 <li><p><a class="reference internal" href="typedef_primitives_8hpp_1aaff53380e318e5ec7ab6c980adf67fe6.html#exhale-typedef-primitives-8hpp-1aaff53380e318e5ec7ab6c980adf67fe6"><span class="std std-ref">Typedef args::core::f64</span></a></p></li>
 <li><p><a class="reference internal" href="typedef_primitives_8hpp_1aa44e7928dce5940b469dc45ed0ce9c13.html#exhale-typedef-primitives-8hpp-1aa44e7928dce5940b469dc45ed0ce9c13"><span class="std std-ref">Typedef args::core::f80</span></a></p></li>
@@ -175,6 +200,13 @@
 <li><p><a class="reference internal" href="typedef_primitives_8hpp_1a39809ad7e5d007ca9eb005dd9d42c747.html#exhale-typedef-primitives-8hpp-1a39809ad7e5d007ca9eb005dd9d42c747"><span class="std std-ref">Typedef args::core::uint_max</span></a></p></li>
 </ul>
 </div>
+<div class="section" id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="variable_mesh_8hpp_1a7e5fb68da7b0dfa4c41ec09a683396a1.html#exhale-variable-mesh-8hpp-1a7e5fb68da7b0dfa4c41ec09a683396a1"><span class="std std-ref">Variable args::core::default_mesh_settings</span></a></p></li>
+<li><p><a class="reference internal" href="variable_mesh_8hpp_1a46310039450eca86e27496c6d8c8ca9c.html#exhale-variable-mesh-8hpp-1a46310039450eca86e27496c6d8c8ca9c"><span class="std std-ref">Variable args::core::invalid_mesh_handle</span></a></p></li>
+</ul>
+</div>
 </div>
 
 
@@ -191,6 +223,7 @@
 <li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#functions">Functions</a></li>
 <li><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li><a class="reference internal" href="#variables">Variables</a></li>
 </ul>
 </li>
 </ul>
@@ -198,7 +231,7 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">ARGS API</a><ul>
-      <li>Previous: <a href="namespace_args__application.html" title="previous chapter">Namespace args::application</a></li>
+      <li>Previous: <a href="namespace_args__audio.html" title="previous chapter">Namespace args::audio</a></li>
       <li>Next: <a href="namespace_args__core__async.html" title="next chapter">Namespace args::core::async</a></li>
   </ul></li>
   </ul></li>

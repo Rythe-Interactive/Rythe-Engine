@@ -31,9 +31,11 @@ Includes
 
 - ``algorithm``
 
-- ``artifact_cache.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_artifact_cache.hpp`)
-
 - ``core/containers/iterator_tricks.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_iterator_tricks.hpp`)
+
+- ``core/filesystem/artifact_cache.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_artifact_cache.hpp`)
+
+- ``functional``
 
 
 

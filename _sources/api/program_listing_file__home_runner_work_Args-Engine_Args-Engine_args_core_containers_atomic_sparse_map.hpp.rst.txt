@@ -16,10 +16,10 @@ Program Listing for File atomic_sparse_map.hpp
    #include <type_traits>
    #include <algorithm>
    #include <stdexcept>
-   #include <core/async/transferable_atomic.hpp>
    #include <core/async/readonly_rw_spinlock.hpp>
    #include <core/platform/platform.hpp>
    #include <core/types/primitives.hpp>
+   #include <core/containers/iterator_tricks.hpp>
    
    namespace args::core
    {
@@ -35,21 +35,16 @@ Program Listing for File atomic_sparse_map.hpp
            using key_const_reference = const key_type&;
            using key_pointer = key_type*;
    
-           using atomic_type = async::transferable_atomic<value_type>;
-           using atomic_reference = atomic_type&;
-           using atomic_const_reference = const atomic_type&;
-           using atomic_pointer = atomic_type*;
-   
            using value_reference = value_type&;
            using value_const_reference = const value_type&;
            using value_pointer = value_type*;
    
            using sparse_container = sparse_type<key_type, size_type>;
-           using dense_value_container = dense_type<atomic_type>;
+           using dense_value_container = dense_type<value_type>;
            using dense_key_container = dense_type<key_type>;
    
-           using iterator = typename dense_value_container::iterator;
-           using const_iterator = typename dense_value_container::const_iterator;
+           using iterator = core::iterator::key_value_pair_iterator<typename dense_key_container::iterator, typename dense_value_container::iterator>;
+           using const_iterator = core::iterator::key_value_pair_iterator<typename dense_key_container::const_iterator, typename dense_value_container::const_iterator>;
    
        private:
            mutable async::readonly_rw_spinlock m_container_lock;
@@ -62,50 +57,64 @@ Program Listing for File atomic_sparse_map.hpp
            std::atomic<size_type> m_capacity = 0;
    
        public:
-           A_NODISCARD inline iterator begin()
-           {
-               async::readonly_guard lock(m_container_lock); return m_dense_value.begin();
-           }
-           A_NODISCARD inline const_iterator begin() const
-           {
-               async::readonly_guard lock(m_container_lock); return m_dense_value.cbegin();
-           }
-           A_NODISCARD inline const_iterator cbegin() const
-           {
-               async::readonly_guard lock(m_container_lock); return m_dense_value.cbegin();
-           }
+           A_NODISCARD async::readonly_rw_spinlock& get_lock() const { return m_container_lock; }
+           A_NODISCARD dense_value_container& dense() { return m_dense_value; }
+           A_NODISCARD const dense_value_container& dense() const { return m_dense_value; }
    
-           A_NODISCARD inline iterator end()
+           A_NODISCARD dense_key_container& keys() { return m_dense_key; }
+           A_NODISCARD const dense_key_container& keys() const { return m_dense_key; }
+   
+           A_NODISCARD iterator begin()
            {
-               async::readonly_guard lock(m_container_lock); return m_dense_value.begin() + m_size.load(std::memory_order_acquire);
+               async::readonly_guard lock(m_container_lock);
+               return iterator(m_dense_key.begin(), m_dense_value.begin());
            }
-           A_NODISCARD inline const_iterator end() const
+           A_NODISCARD const_iterator begin() const
            {
-               async::readonly_guard lock(m_container_lock); return m_dense_value.cbegin() + m_size.load(std::memory_order_acquire);
+               async::readonly_guard lock(m_container_lock);
+               return const_iterator(m_dense_key.cbegin(), m_dense_value.cbegin());
            }
-           A_NODISCARD inline const_iterator cend() const
+           A_NODISCARD const_iterator cbegin() const
            {
-               async::readonly_guard lock(m_container_lock); return m_dense_value.cbegin() + m_size.load(std::memory_order_acquire);
+               async::readonly_guard lock(m_container_lock);
+               return const_iterator(m_dense_key.cbegin(), m_dense_value.cbegin());
            }
    
-           A_NODISCARD inline size_type size() const noexcept { return m_size.load(std::memory_order_acquire); }
-   
-           A_NODISCARD inline size_type capacity() const noexcept { return m_capacity.load(std::memory_order_acquire); }
-   
-           A_NODISCARD size_type max_size() const noexcept { return m_dense_value.max_size(); }
-   
-           A_NODISCARD inline bool empty() const noexcept { return m_size.load(std::memory_order_acquire) == 0; }
-   
-           inline void clear() noexcept { m_size.store(0, std::memory_order_release); }
-   
-           inline void reserve(size_type size)
+           A_NODISCARD iterator end()
            {
-               if (size > m_capacity.load(std::memory_order_acquire))
+               async::readonly_guard lock(m_container_lock);
+               return iterator(m_dense_key.begin() + m_size, m_dense_value.begin() + m_size);
+           }
+           A_NODISCARD const_iterator end() const
+           {
+               async::readonly_guard lock(m_container_lock);
+               return const_iterator(m_dense_key.cbegin() + m_size, m_dense_value.cbegin() + m_size);
+           }
+           A_NODISCARD const_iterator cend() const
+           {
+               async::readonly_guard lock(m_container_lock);
+               return const_iterator(m_dense_key.cbegin() + m_size, m_dense_value.cbegin() + m_size);
+           }
+   
+   
+           A_NODISCARD inline size_type size(std::memory_order order = std::memory_order_acquire) const noexcept { return m_size.load(order); }
+   
+           A_NODISCARD inline size_type capacity(std::memory_order order = std::memory_order_acquire) const noexcept { return m_capacity.load(order); }
+   
+           A_NODISCARD size_type max_size() const noexcept { async::readonly_guard lock(m_container_lock); return m_dense_value.max_size(); }
+   
+           A_NODISCARD inline bool empty(std::memory_order order = std::memory_order_acquire) const noexcept { return m_size.load(order) == 0; }
+   
+           inline void clear(std::memory_order order = std::memory_order_release) noexcept { m_size.store(0, order); }
+   
+           inline void reserve(size_type size, std::memory_order loadOrder = std::memory_order_acquire, std::memory_order storeOrder = std::memory_order_release)
+           {
+               if (size > m_capacity.load(loadOrder))
                {
                    async::readwrite_guard lock(m_container_lock);
                    m_dense_value.resize(size);
                    m_dense_key.resize(size);
-                   m_capacity.store(size, std::memory_order_release);
+                   m_capacity.store(size, storeOrder);
                }
            }
    
@@ -151,13 +160,13 @@ Program Listing for File atomic_sparse_map.hpp
    
    #pragma region find
    
-           A_NODISCARD inline iterator find(atomic_const_reference val)
+           A_NODISCARD inline iterator find(value_const_reference val)
            {
                async::readonly_guard lock(m_container_lock);
                return std::find(begin(), end(), val);
            }
    
-           A_NODISCARD inline const_iterator find(atomic_const_reference val) const
+           A_NODISCARD inline const_iterator find(value_const_reference val) const
            {
                async::readonly_guard lock(m_container_lock);
                return std::find(begin(), end(), val);
@@ -166,7 +175,7 @@ Program Listing for File atomic_sparse_map.hpp
    
    #pragma region insert
    
-           inline std::pair<iterator, bool> insert(key_const_reference key, value_const_reference val)
+           inline std::pair<iterator, bool> insert(key_const_reference key, value_const_reference val, std::memory_order incrementOrder = std::memory_order_acq_rel)
            {
                if (!contains(key))
                {
@@ -176,19 +185,18 @@ Program Listing for File atomic_sparse_map.hpp
                    async::readwrite_guard lock(m_container_lock);
    
                    auto itr_value = m_dense_value.begin() + m_size;
-                   itr_value->store(val, std::memory_order_release);
+                   *itr_value = val;
    
                    auto itr_key = m_dense_key.begin() + m_size;
                    *itr_key = key;
    
-                   m_sparse[key] = m_size;
-                   ++m_size;
-                   return std::make_pair(itr_value, true);
+                   m_sparse[key] = m_size.fetch_add(1, incrementOrder);
+                   return std::make_pair(iterator(itr_key, itr_value), true);
                }
                return std::make_pair(end(), false);
            }
    
-           inline std::pair<iterator, bool> insert(key_type&& key, value_const_reference val)
+           inline std::pair<iterator, bool> insert(key_type&& key, value_const_reference val, std::memory_order incrementOrder = std::memory_order_acq_rel)
            {
                if (!contains(key))
                {
@@ -198,19 +206,18 @@ Program Listing for File atomic_sparse_map.hpp
                    async::readwrite_guard lock(m_container_lock);
    
                    auto itr_value = m_dense_value.begin() + m_size;
-                   itr_value->store(val, std::memory_order_release);
+                   *itr_value = val;
    
                    auto itr_key = m_dense_key.begin() + m_size;
                    *itr_key = std::move(key);
    
-                   m_sparse[*itr_key] = m_size;
-                   ++m_size;
-                   return std::make_pair(itr_value, true);
+                   m_sparse[*itr_key] = m_size.fetch_add(1, incrementOrder);
+                   return std::make_pair(iterator(itr_key, itr_value), true);
                }
                return std::make_pair(end(), false);
            }
    
-           inline std::pair<iterator, bool> insert(key_const_reference key, value_type&& val)
+           inline std::pair<iterator, bool> insert(key_const_reference key, value_type&& val, std::memory_order incrementOrder = std::memory_order_acq_rel)
            {
                if (!contains(key))
                {
@@ -220,19 +227,18 @@ Program Listing for File atomic_sparse_map.hpp
                    async::readwrite_guard lock(m_container_lock);
    
                    auto itr_value = m_dense_value.begin() + m_size;
-                   itr_value->store(std::move(val), std::memory_order_release);
+                   *itr_value = val;
    
                    auto itr_key = m_dense_key.begin() + m_size;
                    *itr_key = key;
    
-                   m_sparse[key] = m_size;
-                   ++m_size;
-                   return std::make_pair(itr_value, true);
+                   m_sparse[key] = m_size.fetch_add(1, incrementOrder);
+                   return std::make_pair(iterator(itr_key, itr_value), true);
                }
                return std::make_pair(end(), false);
            }
    
-           inline std::pair<iterator, bool> insert(key_type&& key, value_type&& val)
+           inline std::pair<iterator, bool> insert(key_type&& key, value_type&& val, std::memory_order incrementOrder = std::memory_order_acq_rel)
            {
                if (!contains(key))
                {
@@ -242,20 +248,67 @@ Program Listing for File atomic_sparse_map.hpp
                    async::readwrite_guard lock(m_container_lock);
    
                    auto itr_value = m_dense_value.begin() + m_size;
-                   itr_value->store(val, std::memory_order_release);
+                   *itr_value = val;
    
                    auto itr_key = m_dense_key.begin() + m_size;
                    *itr_key = key;
    
-                   m_sparse[key] = m_size;
-                   ++m_size;
-                   return std::make_pair(itr_value, true);
+                   m_sparse[key] = m_size.fetch_add(1, incrementOrder);
+                   return std::make_pair(iterator(itr_key, itr_value), true);
                }
                return std::make_pair(end(), false);
            }
    #pragma endregion
    
    #pragma region emplace
+   
+           template<typename... Arguments>
+           inline std::pair<iterator, bool> emplace(key_const_reference key, std::memory_order incrementOrder, Arguments&&... arguments)
+           {
+               if (!contains(key))
+               {
+                   if (m_size >= m_capacity)
+                       reserve(m_size + 1);
+   
+                   async::readwrite_guard lock(m_container_lock);
+   
+                   auto itr_value = m_dense_value.begin() + m_size;
+                   *itr_value = value_type(arguments...);
+   
+                   auto itr_key = m_dense_key.begin() + m_size;
+                   *itr_key = key;
+   
+                   m_sparse[key] = m_size.fetch_add(1, incrementOrder);
+   
+                   return std::make_pair(iterator(itr_key, itr_value), true);
+               }
+   
+               return std::make_pair(end(), false);
+           }
+   
+           template<typename... Arguments>
+           inline std::pair<iterator, bool> emplace(key_type&& key, std::memory_order incrementOrder, Arguments&&... arguments)
+           {
+               if (!contains(key))
+               {
+                   if (m_size >= m_capacity)
+                       reserve(m_size + 1);
+   
+                   async::readwrite_guard lock(m_container_lock);
+   
+                   auto itr_value = m_dense_value.begin() + m_size;
+                   *itr_value = value_type(arguments...);
+   
+                   auto itr_key = m_dense_key.begin() + m_size;
+                   *itr_key = key;
+   
+                   m_sparse[*itr_key] = m_size.fetch_add(1, incrementOrder);
+   
+                   return std::make_pair(iterator(itr_key, itr_value), true);
+               }
+   
+               return std::make_pair(end(), false);
+           }
    
            template<typename... Arguments>
            inline std::pair<iterator, bool> emplace(key_const_reference key, Arguments&&... arguments)
@@ -268,15 +321,14 @@ Program Listing for File atomic_sparse_map.hpp
                    async::readwrite_guard lock(m_container_lock);
    
                    auto itr_value = m_dense_value.begin() + m_size;
-                   itr_value->get().store(std::forward<value_type>(value_type(arguments...)), std::memory_order_release);
+                   *itr_value = value_type(arguments...);
    
                    auto itr_key = m_dense_key.begin() + m_size;
                    *itr_key = key;
    
-                   m_sparse[key] = m_size;
-                   ++m_size;
+                   m_sparse[key] = m_size.fetch_add(1, std::memory_order_acq_rel);
    
-                   return std::make_pair(itr_value, true);
+                   return std::make_pair(iterator(itr_key, itr_value), true);
                }
    
                return std::make_pair(end(), false);
@@ -293,15 +345,14 @@ Program Listing for File atomic_sparse_map.hpp
                    async::readwrite_guard lock(m_container_lock);
    
                    auto itr_value = m_dense_value.begin() + m_size;
-                   itr_value->get().store(std::forward<value_type>(value_type(arguments...)), std::memory_order_release);
+                   *itr_value = value_type(arguments...);
    
                    auto itr_key = m_dense_key.begin() + m_size;
                    *itr_key = key;
    
-                   m_sparse[key] = m_size;
-                   ++m_size;
+                   m_sparse[*itr_key] = m_size.fetch_add(1, std::memory_order_acq_rel);
    
-                   return std::make_pair(itr_value, true);
+                   return std::make_pair(iterator(itr_key, itr_value), true);
                }
    
                return std::make_pair(end(), false);
@@ -310,7 +361,7 @@ Program Listing for File atomic_sparse_map.hpp
    
    #pragma region operator[]
    
-           inline atomic_reference operator[](key_type&& key)
+           inline value_reference operator[](key_type&& key)
            {
                key_type k;
                if (!contains(key))
@@ -321,13 +372,12 @@ Program Listing for File atomic_sparse_map.hpp
                    async::readwrite_guard lock(m_container_lock);
    
                    auto itr_value = m_dense_value.begin() + m_size;
-                   itr_value->get().store(std::forward<value_type>(value_type()), std::memory_order_release);
+                   *itr_value = value_type();
    
                    auto itr_key = m_dense_key.begin() + m_size; // Find iterator location at which to store the key.
                    *itr_key = std::move(key); // Move the key into the location.
                    k = *itr_key; // Fetch a copy of the key for reuse in the rest of the function.
-                   m_sparse[k] = m_size;
-                   ++m_size;
+                   m_sparse[k] = m_size.fetch_add(1, std::memory_order_acq_rel);
                }
                else
                    k = key;
@@ -337,7 +387,7 @@ Program Listing for File atomic_sparse_map.hpp
                return m_dense_value[m_sparse[k]];
            }
    
-           inline atomic_reference operator[](key_const_reference key)
+           inline value_reference operator[](key_const_reference key)
            {
                if (!contains(key))
                {
@@ -347,13 +397,12 @@ Program Listing for File atomic_sparse_map.hpp
                    async::readwrite_guard lock(m_container_lock);
    
                    auto itr_value = m_dense_value.begin() + m_size;
-                   itr_value->get().store(std::forward<value_type>(value_type()), std::memory_order_release);
+                   *itr_value = value_type();
    
                    auto itr_key = m_dense_key.begin() + m_size;
                    *itr_key = key;
    
-                   m_sparse[key] = m_size;
-                   ++m_size;
+                   m_sparse[key] = m_size.fetch_add(1, std::memory_order_acq_rel);
                }
    
                async::readonly_guard readonlyLock(m_container_lock);
@@ -361,7 +410,7 @@ Program Listing for File atomic_sparse_map.hpp
                return m_dense_value[m_sparse[key]];
            }
    
-           inline atomic_const_reference operator[](key_type&& key) const
+           inline value_const_reference operator[](key_type&& key) const
            {
                if (!contains(key))
                    throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
@@ -371,7 +420,7 @@ Program Listing for File atomic_sparse_map.hpp
                return m_dense_value[m_sparse.at(key)];
            }
    
-           inline atomic_const_reference operator[](key_const_reference key) const
+           inline value_const_reference operator[](key_const_reference key) const
            {
                if (!contains(key))
                    throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
@@ -384,7 +433,7 @@ Program Listing for File atomic_sparse_map.hpp
    
    #pragma region get
    
-           inline atomic_reference get(key_type&& key)
+           inline value_type get(key_type&& key)
            {
                if (!contains(key))
                    throw std::out_of_range("Sparse map does not contain this key.");
@@ -394,7 +443,7 @@ Program Listing for File atomic_sparse_map.hpp
                return m_dense_value[m_sparse[key]];
            }
    
-           inline atomic_reference get(key_const_reference key)
+           inline value_type get(key_const_reference key)
            {
                if (!contains(key))
                    throw std::out_of_range("Sparse map does not contain this key.");
@@ -404,7 +453,7 @@ Program Listing for File atomic_sparse_map.hpp
                return m_dense_value[m_sparse[key]];
            }
    
-           inline atomic_const_reference get(key_type&& key) const
+           inline value_type get(key_type&& key) const
            {
                if (!contains(key))
                    throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
@@ -414,7 +463,7 @@ Program Listing for File atomic_sparse_map.hpp
                return m_dense_value[m_sparse.at(key)];
            }
    
-           inline atomic_const_reference get(key_const_reference key) const
+           inline value_type get(key_const_reference key) const
            {
                if (!contains(key))
                    throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
@@ -422,6 +471,49 @@ Program Listing for File atomic_sparse_map.hpp
                async::readonly_guard lock(m_container_lock);
    
                return m_dense_value[m_sparse.at(key)];
+           }
+   #pragma endregion
+   
+   #pragma region set
+   
+           inline void set(key_type&& key, value_const_reference val)
+           {
+               if (!contains(key))
+                   throw std::out_of_range("Sparse map does not contain this key.");
+   
+               async::readonly_guard lock(m_container_lock);
+   
+               m_dense_value[m_sparse[key]] = val;
+           }
+   
+           inline void set(key_const_reference key, value_const_reference val)
+           {
+               if (!contains(key))
+                   throw std::out_of_range("Sparse map does not contain this key.");
+   
+               async::readonly_guard lock(m_container_lock);
+   
+               m_dense_value[m_sparse[key]] = val;
+           }
+   
+           inline void set(key_type&& key, value_type&& val)
+           {
+               if (!contains(key))
+                   throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
+   
+               async::readonly_guard lock(m_container_lock);
+   
+               m_dense_value[m_sparse[key]] = val;
+           }
+   
+           inline void set(key_const_reference key, value_type&& val)
+           {
+               if (!contains(key))
+                   throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
+   
+               async::readonly_guard lock(m_container_lock);
+   
+               m_dense_value[m_sparse[key]] = val;
            }
    #pragma endregion
    

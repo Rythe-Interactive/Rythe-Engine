@@ -1,0 +1,20 @@
+
+.. _namespace_args__core__detail:
+
+Namespace args::core::detail
+============================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1core_1_1detail_1_1vertex__hash`

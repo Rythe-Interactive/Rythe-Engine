@@ -1,0 +1,25 @@
+.. _exhale_class_structargs_1_1core_1_1filesystem_1_1basic__converter:
+
+Template Class basic_converter
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_assetimporter.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public args::core::filesystem::resource_converter< T >`` (:ref:`exhale_class_structargs_1_1core_1_1filesystem_1_1resource__converter`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::filesystem::basic_converter
+   :members:
+   :protected-members:
+   :undoc-members:

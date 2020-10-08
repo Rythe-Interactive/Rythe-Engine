@@ -1,0 +1,13 @@
+.. _exhale_variable_material_8hpp_1ab560833432b20be0aac7ef9ada8b5d53:
+
+Variable args::rendering::invalid_material_handle
+=================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_material.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::rendering::invalid_material_handle

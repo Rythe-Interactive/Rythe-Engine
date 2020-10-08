@@ -1,0 +1,61 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_penetrationquery.h:
+
+File penetrationquery.h
+=======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_physics_data>` (``/home/runner/work/Args-Engine/Args-Engine/args/physics/data``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/physics/data/penetrationquery.h``)
+-----------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_penetrationquery.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`)
+
+- ``physics/data/physics_manifold.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_physics_manifold.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_convexconvexpenetrationquery.h`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_edgepenetrationquery.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__physics`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1physics_1_1_penetration_query`
+

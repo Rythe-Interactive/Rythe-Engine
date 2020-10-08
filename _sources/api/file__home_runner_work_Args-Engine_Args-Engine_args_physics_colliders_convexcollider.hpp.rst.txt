@@ -1,0 +1,71 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_physics_colliders_convexcollider.hpp:
+
+File convexcollider.hpp
+=======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_physics_colliders>` (``/home/runner/work/Args-Engine/Args-Engine/args/physics/colliders``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/physics/colliders/convexcollider.hpp``)
+----------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_physics_colliders_convexcollider.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`)
+
+- ``physics/colliders/physicscollider.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_colliders_physicscollider.hpp`)
+
+- ``physics/cube_collider_params.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_cube_collider_params.hpp`)
+
+- ``physics/data/physics_manifold.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_physics_manifold.hpp`)
+
+- ``physics/halfedgeedge.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_halfedgeedge.hpp`)
+
+- ``physics/halfedgeface.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_halfedgeface.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_colliders_convexcollider.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_components_physics_component.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_physics_statics.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__physics`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1physics_1_1_convex_collider`
+

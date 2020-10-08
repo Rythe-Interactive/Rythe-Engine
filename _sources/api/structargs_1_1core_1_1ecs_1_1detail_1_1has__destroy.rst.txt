@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1core_1_1ecs_1_1detail_1_1has__destroy:
+
+Template Struct has_destroy
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_component_meta.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::core::ecs::detail::has_destroy
+   :members:
+   :protected-members:
+   :undoc-members:

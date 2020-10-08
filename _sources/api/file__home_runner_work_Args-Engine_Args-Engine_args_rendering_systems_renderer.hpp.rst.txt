@@ -1,0 +1,71 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_rendering_systems_renderer.hpp:
+
+File renderer.hpp
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_rendering_systems>` (``/home/runner/work/Args-Engine/Args-Engine/args/rendering/systems``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/rendering/systems/renderer.hpp``)
+----------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_rendering_systems_renderer.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``rendering/components/camera.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_components_camera.hpp`)
+
+- ``rendering/components/renderable.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_components_renderable.hpp`)
+
+- ``rendering/data/model.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.hpp`)
+
+- ``rendering/data/shader.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_shader.hpp`)
+
+- ``rendering/debugrendering.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_debugrendering.hpp`)
+
+- ``unordered_set``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_module_renderingmodule.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_rendering.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__rendering`
+
+- :ref:`namespace_std__literals__chrono_literals`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1rendering_1_1_renderer`
+

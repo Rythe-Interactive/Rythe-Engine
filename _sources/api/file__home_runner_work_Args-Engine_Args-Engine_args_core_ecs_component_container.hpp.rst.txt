@@ -35,6 +35,8 @@ Includes
 
 - ``core/containers/atomic_sparse_map.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_atomic_sparse_map.hpp`)
 
+- ``core/ecs/component_meta.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_component_meta.hpp`)
+
 - ``core/events/eventbus.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_eventbus.hpp`)
 
 - ``core/events/events.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_events.hpp`)
@@ -57,8 +59,6 @@ Included By
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_ecsregistry.hpp`
 
-- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_rw_component_buffer.hpp`
-
 
 
 
@@ -76,11 +76,4 @@ Classes
 - :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1component__container`
 
 - :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1component__container__base`
-
-
-Variables
----------
-
-
-- :ref:`exhale_variable_component__container_8hpp_1ad125b4fe2ab031b4a43b9ab5e54fbeb9`
 

@@ -1,0 +1,85 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_audio_systems_audiosystem.hpp:
+
+File audiosystem.hpp
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_audio_systems>` (``/home/runner/work/Args-Engine/Args-Engine/args/audio/systems``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/audio/systems/audiosystem.hpp``)
+---------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_audio_systems_audiosystem.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``al/alext.h``
+
+- ``audio/components/audio_listener.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_components_audio_listener.hpp`)
+
+- ``audio/components/audio_source.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_components_audio_source.hpp`)
+
+- ``audio/data/importers/audio_importers.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_data_importers_audio_importers.hpp`)
+
+- ``audio/systems/audiosystem.inl`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_systems_audiosystem.inl`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_audio.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_data_importers_audio_importers.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_module_audiomodule.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_systems_audiosystem.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__audio`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1audio_1_1_audio_system`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_audiosystem_8hpp_1a09f8b2c43a89ad3f49e2c7f78fe12be2`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_audiosystem_8hpp_1aacd195bb53fa75ae6a89eabcca21c4a8`
+

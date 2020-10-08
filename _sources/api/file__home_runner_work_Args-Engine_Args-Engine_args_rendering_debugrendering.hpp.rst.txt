@@ -1,0 +1,79 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_rendering_debugrendering.hpp:
+
+File debugrendering.hpp
+=======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_rendering>` (``/home/runner/work/Args-Engine/Args-Engine/args/rendering``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/rendering/debugrendering.hpp``)
+--------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_rendering_debugrendering.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_rendering.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_systems_renderer.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__debug`
+
+- :ref:`namespace_args__debug__detail`
+
+- :ref:`namespace_std`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1debug_1_1debug__line`
+
+- :ref:`exhale_struct_structstd_1_1hash_3_01args_1_1debug_1_1debug__line_01_4`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_debugrendering_8hpp_1a335f7e8a9aa0c9a1ea275bec8caf98ca`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_debugrendering_8hpp_1ad777ac31d075ecabbc058d6554a6c9d8`
+

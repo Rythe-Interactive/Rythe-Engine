@@ -1,0 +1,13 @@
+.. _exhale_variable_texture_8hpp_1afde8ce671317860b3c5d35d3fc52f84f:
+
+Variable args::rendering::default_texture_settings
+==================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_texture.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::rendering::default_texture_settings

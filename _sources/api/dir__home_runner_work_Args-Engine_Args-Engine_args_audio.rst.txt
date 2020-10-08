@@ -11,10 +11,19 @@ Directory audio
 
 *Directory path:* ``/home/runner/work/Args-Engine/Args-Engine/args/audio``
 
+Subdirectories
+--------------
+
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_audio_components`
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_audio_data`
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_audio_module`
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_audio_systems`
+
 
 Files
 -----
 
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_audio.hpp`
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_delete_this.cpp`
 
 

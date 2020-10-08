@@ -1,0 +1,23 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_physics_physicscollider.cpp:
+
+Program Listing for File physicscollider.cpp
+============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_physics_physicscollider.cpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/physics/physicscollider.cpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include <physics/physicscollider.hpp>
+   
+   
+   namespace args::physics
+   {
+       PhysicsCollider::PhysicsCollider() 
+       {
+   
+       }
+   
+   }

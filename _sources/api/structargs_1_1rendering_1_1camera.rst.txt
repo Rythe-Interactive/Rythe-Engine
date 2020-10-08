@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1rendering_1_1camera:
+
+Struct camera
+=============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_components_camera.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::rendering::camera
+   :members:
+   :protected-members:
+   :undoc-members:

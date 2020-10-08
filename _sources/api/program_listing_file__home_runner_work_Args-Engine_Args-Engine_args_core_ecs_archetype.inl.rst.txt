@@ -1,0 +1,45 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_archetype.inl:
+
+Program Listing for File archetype.inl
+======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_archetype.inl>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/ecs/archetype.inl``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   namespace args::core::ecs
+   {
+       template<typename component_type, typename ...component_types>
+       inline std::tuple<component_handle<component_type>, component_handle<component_types>...> archetype<component_type, component_types...>::create(EcsRegistry* registry, id_type entityId)
+       {
+           return registry->createComponents<component_type, component_types...>(entityId);
+       }
+   
+       template<typename component_type, typename ...component_types>
+       inline std::tuple<component_handle<component_type>, component_handle<component_types>...> archetype<component_type, component_types...>::create(EcsRegistry* registry, id_type entityId, component_type&& defaultValue, component_types&&... defaultValues)
+       {
+           return registry->createComponents<component_type, component_types...>(entityId, std::forward<component_type>(defaultValue), std::forward<component_types>(defaultValues)...);
+       }
+   
+       template<typename component_type, typename ...component_types>
+       inline std::tuple<component_handle<component_type>, component_handle<component_types>...> archetype<component_type, component_types...>::get(EcsRegistry* registry, id_type entityId)
+       {
+           return registry->getComponents<component_type, component_types...>(entityId);
+       }
+   
+       template<typename component_type, typename ...component_types>
+       inline void archetype<component_type, component_types...>::destroy(EcsRegistry* registry, id_type entityId)
+       {
+           registry->destroyComponents<component_type, component_types...>(entityId);
+       }
+   
+       template<typename component_type, typename ...component_types>
+       inline bool archetype<component_type, component_types...>::has(EcsRegistry* registry, id_type entityId)
+       {
+           return registry->hasComponents<component_type, component_types...>(entityId);
+       }
+   
+   }

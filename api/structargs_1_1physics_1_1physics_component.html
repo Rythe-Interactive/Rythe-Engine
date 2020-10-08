@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Struct physicsComponent &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Struct rigidbody" href="structargs_1_1physics_1_1rigidbody.html" />
+    <link rel="prev" title="Struct physics_manifold_precursor" href="structargs_1_1physics_1_1physics__manifold__precursor.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="structargs_1_1physics_1_1rigidbody.html" title="Struct rigidbody"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="structargs_1_1physics_1_1physics__manifold__precursor.html" title="Struct physics_manifold_precursor"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Struct physicsComponent</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="struct-physicscomponent">
+<span id="exhale-struct-structargs-1-1physics-1-1physics-component"></span><h1>Struct physicsComponent<a class="headerlink" href="#struct-physicscomponent" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_physics_components_physics_component.hpp.html#file-home-runner-work-args-engine-args-engine-args-physics-components-physics-component-hpp"><span class="std std-ref">File physics_component.hpp</span></a></p></li>
+</ul>
+<div class="section" id="struct-documentation">
+<h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp struct">
+<dt id="_CPPv4N4args7physics16physicsComponentE">
+<span id="_CPPv3N4args7physics16physicsComponentE"></span><span id="_CPPv2N4args7physics16physicsComponentE"></span><span id="args::physics::physicsComponent"></span><span class="target" id="structargs_1_1physics_1_1physics_component"></span><em class="property">struct </em><code class="sig-prename descclassname">args::physics<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">physicsComponent</code><a class="headerlink" href="#_CPPv4N4args7physics16physicsComponentE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N4args7physics16physicsComponent29calculateNewLocalCenterOfMassEv">
+<span id="_CPPv3N4args7physics16physicsComponent29calculateNewLocalCenterOfMassEv"></span><span id="_CPPv2N4args7physics16physicsComponent29calculateNewLocalCenterOfMassEv"></span><span id="args::physics::physicsComponent::calculateNewLocalCenterOfMass"></span><span class="target" id="structargs_1_1physics_1_1physics_component_1ab8b33e38720cc4506459eec9b55692bf"></span>void <code class="sig-name descname">calculateNewLocalCenterOfMass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args7physics16physicsComponent29calculateNewLocalCenterOfMassEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>given the colliders this <a class="reference internal" href="#structargs_1_1physics_1_1physics_component"><span class="std std-ref">physicsComponent</span></a>, calculates the new local center of mass. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>This is called internally by the <a class="reference internal" href="#structargs_1_1physics_1_1physics_component"><span class="std std-ref">physicsComponent</span></a> every time a collider is added. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args7physics16physicsComponent19ConstructConvexHullEv">
+<span id="_CPPv3N4args7physics16physicsComponent19ConstructConvexHullEv"></span><span id="_CPPv2N4args7physics16physicsComponent19ConstructConvexHullEv"></span><span id="args::physics::physicsComponent::ConstructConvexHull"></span><span class="target" id="structargs_1_1physics_1_1physics_component_1a5b9762ce81092c1fd740487f4a0005e8"></span>void <code class="sig-name descname">ConstructConvexHull</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args7physics16physicsComponent19ConstructConvexHullEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Instantiates a <a class="reference internal" href="classargs_1_1physics_1_1_convex_collider.html#classargs_1_1physics_1_1_convex_collider"><span class="std std-ref">ConvexCollider</span></a> and calls ConstructConvexHullWithMesh on it and passes the given mesh. This <a class="reference internal" href="classargs_1_1physics_1_1_convex_collider.html#classargs_1_1physics_1_1_convex_collider"><span class="std std-ref">ConvexCollider</span></a> is then added to the list of PhysicsColliders. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args7physics16physicsComponent12ConstructBoxEv">
+<span id="_CPPv3N4args7physics16physicsComponent12ConstructBoxEv"></span><span id="_CPPv2N4args7physics16physicsComponent12ConstructBoxEv"></span><span id="args::physics::physicsComponent::ConstructBox"></span><span class="target" id="structargs_1_1physics_1_1physics_component_1a3aaf5532399469cbbd538d9289e82e86"></span>void <code class="sig-name descname">ConstructBox</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args7physics16physicsComponent12ConstructBoxEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Instantiates a <a class="reference internal" href="classargs_1_1physics_1_1_convex_collider.html#classargs_1_1physics_1_1_convex_collider"><span class="std std-ref">ConvexCollider</span></a> and calls ConstructBoxWithMesh on it and passes the given mesh. This <a class="reference internal" href="classargs_1_1physics_1_1_convex_collider.html#classargs_1_1physics_1_1_convex_collider"><span class="std std-ref">ConvexCollider</span></a> is then added to the list of PhysicsColliders. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args7physics16physicsComponent6AddBoxERK20cube_collider_params">
+<span id="_CPPv3N4args7physics16physicsComponent6AddBoxERK20cube_collider_params"></span><span id="_CPPv2N4args7physics16physicsComponent6AddBoxERK20cube_collider_params"></span><span id="args::physics::physicsComponent::AddBox__cube_collider_paramsCR"></span><span class="target" id="structargs_1_1physics_1_1physics_component_1a7766665b9992ef553fa3eb9ad00d5f5d"></span>void <code class="sig-name descname">AddBox</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="structargs_1_1physics_1_1cube__collider__params.html#_CPPv4N4args7physics20cube_collider_paramsE" title="args::physics::cube_collider_params">cube_collider_params</a> &amp;<em>cubeParams</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args7physics16physicsComponent6AddBoxERK20cube_collider_params" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Instantiates a <a class="reference internal" href="classargs_1_1physics_1_1_convex_collider.html#classargs_1_1physics_1_1_convex_collider"><span class="std std-ref">ConvexCollider</span></a> and calls CreateBox on it and passes the given mesh. This <a class="reference internal" href="classargs_1_1physics_1_1_convex_collider.html#classargs_1_1physics_1_1_convex_collider"><span class="std std-ref">ConvexCollider</span></a> is then added to the list of PhysicsColliders. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args7physics16physicsComponent9AddSphereEv">
+<span id="_CPPv3N4args7physics16physicsComponent9AddSphereEv"></span><span id="_CPPv2N4args7physics16physicsComponent9AddSphereEv"></span><span id="args::physics::physicsComponent::AddSphere"></span><span class="target" id="structargs_1_1physics_1_1physics_component_1a3b3156662428d8fa2d96b988f0d2efbc"></span>void <code class="sig-name descname">AddSphere</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args7physics16physicsComponent9AddSphereEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Instantiates a SphereCollider and creates a sphere that encompasses the given mesh. This <a class="reference internal" href="classargs_1_1physics_1_1_convex_collider.html#classargs_1_1physics_1_1_convex_collider"><span class="std std-ref">ConvexCollider</span></a> is then added to the list of PhysicsColliders. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="cpp var">
+<dt id="_CPPv4N4args7physics16physicsComponent9collidersE">
+<span id="_CPPv3N4args7physics16physicsComponent9collidersE"></span><span id="_CPPv2N4args7physics16physicsComponent9collidersE"></span><span id="args::physics::physicsComponent::colliders__std::vector:std::shared_ptr:PhysicsCollider::P"></span><span class="target" id="structargs_1_1physics_1_1physics_component_1ac431e2d5a1b18cd14694d87a1584dcfb"></span>std::vector&lt;std::shared_ptr&lt;<a class="reference internal" href="classargs_1_1physics_1_1_physics_collider.html#_CPPv4N4args7physics15PhysicsColliderE" title="args::physics::PhysicsCollider">PhysicsCollider</a>&gt;&gt; *<code class="sig-name descname">colliders</code><a class="headerlink" href="#_CPPv4N4args7physics16physicsComponent9collidersE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args7physics16physicsComponent9isTriggerE">
+<span id="_CPPv3N4args7physics16physicsComponent9isTriggerE"></span><span id="_CPPv2N4args7physics16physicsComponent9isTriggerE"></span><span id="args::physics::physicsComponent::isTrigger__b"></span><span class="target" id="structargs_1_1physics_1_1physics_component_1a9866b1bc1f5afb9fd1674d23bb8aba5f"></span>bool <code class="sig-name descname">isTrigger</code><a class="headerlink" href="#_CPPv4N4args7physics16physicsComponent9isTriggerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args7physics16physicsComponent17localCenterOfMassE">
+<span id="_CPPv3N4args7physics16physicsComponent17localCenterOfMassE"></span><span id="_CPPv2N4args7physics16physicsComponent17localCenterOfMassE"></span><span id="args::physics::physicsComponent::localCenterOfMass__math::vec3"></span><span class="target" id="structargs_1_1physics_1_1physics_component_1aad07e76828f6ce67393cf006523190f3"></span>math::vec3 <code class="sig-name descname">localCenterOfMass</code> = {}<a class="headerlink" href="#_CPPv4N4args7physics16physicsComponent17localCenterOfMassE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N4args7physics16physicsComponent4initER16physicsComponent">
+<span id="_CPPv3N4args7physics16physicsComponent4initER16physicsComponent"></span><span id="_CPPv2N4args7physics16physicsComponent4initER16physicsComponent"></span><span id="args::physics::physicsComponent::init__physicsComponentR"></span><span class="target" id="structargs_1_1physics_1_1physics_component_1aa2ecc6639a462cf6817cc84d93f30846"></span>void <code class="sig-name descname">init</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args7physics16physicsComponentE" title="args::physics::physicsComponent">physicsComponent</a> &amp;<em>comp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args7physics16physicsComponent4initER16physicsComponent" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args7physics16physicsComponent7destroyER16physicsComponent">
+<span id="_CPPv3N4args7physics16physicsComponent7destroyER16physicsComponent"></span><span id="_CPPv2N4args7physics16physicsComponent7destroyER16physicsComponent"></span><span id="args::physics::physicsComponent::destroy__physicsComponentR"></span><span class="target" id="structargs_1_1physics_1_1physics_component_1a8688edc39b8822133b9125ce9ddc70a7"></span>void <code class="sig-name descname">destroy</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args7physics16physicsComponentE" title="args::physics::physicsComponent">physicsComponent</a> &amp;<em>comp</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args7physics16physicsComponent7destroyER16physicsComponent" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Struct physicsComponent</a><ul>
+<li><a class="reference internal" href="#struct-documentation">Struct Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">ARGS API</a><ul>
+      <li>Previous: <a href="structargs_1_1physics_1_1physics__manifold__precursor.html" title="previous chapter">Struct physics_manifold_precursor</a></li>
+      <li>Next: <a href="structargs_1_1physics_1_1rigidbody.html" title="next chapter">Struct rigidbody</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/structargs_1_1physics_1_1physics_component.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

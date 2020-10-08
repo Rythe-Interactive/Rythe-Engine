@@ -1,0 +1,25 @@
+.. _exhale_struct_structargs_1_1rendering_1_1color:
+
+Struct color
+============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_texture.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public vec4``
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::rendering::color
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,13 @@
+.. _exhale_function_logging_8hpp_1a361102b6d65eb45d8f376e46504555b6:
+
+Template Function args::core::log::fatal
+========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::log::fatal(const FormatString&, Args&&...)

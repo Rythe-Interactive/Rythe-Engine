@@ -1,0 +1,26 @@
+.. _exhale_class_classargs_1_1physics_1_1_penetration_query:
+
+Class PenetrationQuery
+======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_penetrationquery.h`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public args::physics::ConvexConvexPenetrationQuery`` (:ref:`exhale_class_classargs_1_1physics_1_1_convex_convex_penetration_query`)
+- ``public args::physics::EdgePenetrationQuery`` (:ref:`exhale_class_classargs_1_1physics_1_1_edge_penetration_query`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::physics::PenetrationQuery
+   :members:
+   :protected-members:
+   :undoc-members:

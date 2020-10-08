@@ -1,0 +1,69 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_application_events_windowinputevents.hpp:
+
+File windowinputevents.hpp
+==========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_application_events>` (``/home/runner/work/Args-Engine/Args-Engine/args/application/events``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/application/events/windowinputevents.hpp``)
+--------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_application_events_windowinputevents.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``application/window/window.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_window_window.hpp`)
+
+- ``core/events/event.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_event.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_input_inputsystem.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_window_windowsystem.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__application`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1application_1_1char__input`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1key__input`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1mouse__button`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1mouse__moved`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1mouse__scrolled`
+

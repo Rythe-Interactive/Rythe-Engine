@@ -1,0 +1,59 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_rendering_components_renderable.hpp:
+
+File renderable.hpp
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_rendering_components>` (``/home/runner/work/Args-Engine/Args-Engine/args/rendering/components``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/rendering/components/renderable.hpp``)
+---------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_rendering_components_renderable.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``rendering/data/material.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_material.hpp`)
+
+- ``rendering/data/model.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_systems_renderer.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__rendering`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1renderable`
+

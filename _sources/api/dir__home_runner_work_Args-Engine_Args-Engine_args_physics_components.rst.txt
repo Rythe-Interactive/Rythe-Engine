@@ -1,0 +1,22 @@
+.. _dir__home_runner_work_Args-Engine_Args-Engine_args_physics_components:
+
+
+Directory components
+====================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_physics>` (``/home/runner/work/Args-Engine/Args-Engine/args/physics``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Args-Engine/Args-Engine/args/physics/components``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_components_physics_component.cpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_components_physics_component.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_components_rigidbody.hpp`
+
+

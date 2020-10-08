@@ -31,11 +31,15 @@ Includes
 
 - ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
 
+- ``core/types/meta.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_meta.hpp`)
+
 - ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`)
 
 - ``cstring``
 
 - ``string`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_string_extra.hpp`)
+
+- ``string_view``
 
 - ``typeinfo``
 
@@ -50,6 +54,8 @@ Included By
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_system.hpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_event.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_processchain.hpp`
 
@@ -71,17 +77,27 @@ Functions
 ---------
 
 
+- :ref:`exhale_function_type__util_8hpp_1a1a2afb981820cf3e184df092c1174259`
+
+- :ref:`exhale_function_type__util_8hpp_1a039285431243c5a1071fe865f1015b24`
+
 - :ref:`exhale_function_type__util_8hpp_1aef7996e5e7a874b93744d7f2b583ac7b`
 
 - :ref:`exhale_function_type__util_8hpp_1a94f51b351b18c1a001e896051db58df0`
+
+- :ref:`exhale_function_type__util_8hpp_1ade524ded96c15dadf32aba9d35077294`
+
+- :ref:`exhale_function_type__util_8hpp_1a4fee05c5aa73ff07bd4297a3be98db70`
+
+- :ref:`exhale_function_type__util_8hpp_1a5f09163d626aaf72a2b5e5c2fbd4980e`
 
 - :ref:`exhale_function_type__util_8hpp_1a544d59e5fbfe271021385720ad13dbc6`
 
 - :ref:`exhale_function_type__util_8hpp_1a2fb26749a4216416b95b3c4c2728e8af`
 
-- :ref:`exhale_function_type__util_8hpp_1a4035cf7b740ef4518234c4b0b5ecb3d3`
-
 - :ref:`exhale_function_type__util_8hpp_1a411f45df69ab476f24027197bd72c878`
+
+- :ref:`exhale_function_type__util_8hpp_1a4035cf7b740ef4518234c4b0b5ecb3d3`
 
 - :ref:`exhale_function_type__util_8hpp_1a62948713119b6c4f2d157513f06e1831`
 

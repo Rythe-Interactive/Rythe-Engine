@@ -53,9 +53,13 @@ Included By
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`
 
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_archetype.hpp`
+
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_component_container.hpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_component_handle.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entity_handle.hpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entityquery.hpp`
 
@@ -106,11 +110,13 @@ Defines
 
 - :ref:`exhale_define_platform_8hpp_1ae75e161cf2a70872598c0becb912bb9c`
 
-- :ref:`exhale_define_platform_8hpp_1a95f48fc8959c9b037b521a5b4493b646`
-
 - :ref:`exhale_define_platform_8hpp_1aadd5c903c07d5262a88073ca41458fdc`
 
+- :ref:`exhale_define_platform_8hpp_1a9a9717af5b550f11dda5077a1ddd5af5`
+
 - :ref:`exhale_define_platform_8hpp_1a1b615ef40773fc553b3a95738b5db51c`
+
+- :ref:`exhale_define_platform_8hpp_1a9214fae5080fddcb5b5a3186f8b2b811`
 
 - :ref:`exhale_define_platform_8hpp_1a1e0b40c3b72e9524a534435c3a0060d3`
 
@@ -125,6 +131,10 @@ Defines
 - :ref:`exhale_define_platform_8hpp_1a1db9851589b1e9ba81b655bc10b65ee1`
 
 - :ref:`exhale_define_platform_8hpp_1a8c9ad10a246e4631453782d9de1a9712`
+
+- :ref:`exhale_define_platform_8hpp_1a25cbf34559d1fa853ee400eb60a28478`
+
+- :ref:`exhale_define_platform_8hpp_1ab3c50cb2adb69516a6ac6d80e9a3d9c7`
 
 - :ref:`exhale_define_platform_8hpp_1ac8c687223be2bdac90dfd02bf6bb4a9a`
 

@@ -1,0 +1,13 @@
+.. _exhale_enum_texture_8hpp_1af6ed77971a6f9811618517b6dace3bef:
+
+Enum texture_format
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_texture.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: args::rendering::texture_format

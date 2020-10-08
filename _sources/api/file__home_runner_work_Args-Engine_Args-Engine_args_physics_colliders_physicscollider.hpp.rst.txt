@@ -1,0 +1,67 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_physics_colliders_physicscollider.hpp:
+
+File physicscollider.hpp
+========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_physics_colliders>` (``/home/runner/work/Args-Engine/Args-Engine/args/physics/colliders``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/physics/colliders/physicscollider.hpp``)
+-----------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_physics_colliders_physicscollider.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`)
+
+- ``memory``
+
+- ``physics/halfedgeface.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_halfedgeface.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_colliders_convexcollider.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_components_physics_component.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_physics_manifold.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__physics`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1physics_1_1_temp_line`
+
+- :ref:`exhale_class_classargs_1_1physics_1_1_physics_collider`
+

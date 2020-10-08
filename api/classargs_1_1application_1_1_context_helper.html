@@ -18,7 +18,7 @@
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class WindowSystem" href="classargs_1_1application_1_1_window_system.html" />
+    <link rel="next" title="Class InputSystem" href="classargs_1_1application_1_1_input_system.html" />
     <link rel="prev" title="Class ApplicationModule" href="classargs_1_1application_1_1_application_module.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -36,7 +36,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="classargs_1_1application_1_1_window_system.html" title="Class WindowSystem"
+          <a href="classargs_1_1application_1_1_input_system.html" title="Class InputSystem"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="classargs_1_1application_1_1_application_module.html" title="Class ApplicationModule"
@@ -62,7 +62,8 @@
 <dl class="cpp class">
 <dt id="_CPPv4N4args11application13ContextHelperE">
 <span id="_CPPv3N4args11application13ContextHelperE"></span><span id="_CPPv2N4args11application13ContextHelperE"></span><span id="args::application::ContextHelper"></span><span class="target" id="classargs_1_1application_1_1_context_helper"></span><em class="property">class </em><code class="sig-prename descclassname">args::application<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">ContextHelper</code><a class="headerlink" href="#_CPPv4N4args11application13ContextHelperE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>Static helper class for calling functions on the GLFW context. https://www.glfw.org/docs/latest/pages.html. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
 <dt id="_CPPv4N4args11application13ContextHelper13ContextHelperEv">
@@ -80,12 +81,19 @@
 <dl class="cpp function">
 <dt id="_CPPv4N4args11application13ContextHelper11initializedEv">
 <span id="_CPPv3N4args11application13ContextHelper11initializedEv"></span><span id="_CPPv2N4args11application13ContextHelper11initializedEv"></span><span id="args::application::ContextHelper::initialized"></span><span class="target" id="classargs_1_1application_1_1_context_helper_1ae84bb48e80dbe9c34275f693f0a3cff8"></span>bool <code class="sig-name descname">initialized</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application13ContextHelper11initializedEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<dd><p>Checks if the context has been initialized. </p>
+</dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N4args11application13ContextHelper4initEv">
 <span id="_CPPv3N4args11application13ContextHelper4initEv"></span><span id="_CPPv2N4args11application13ContextHelper4initEv"></span><span id="args::application::ContextHelper::init"></span><span class="target" id="classargs_1_1application_1_1_context_helper_1ae3e7abbe783e1e6ac82b3dbbbe1f98eb"></span>bool <code class="sig-name descname">init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application13ContextHelper4initEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args11application13ContextHelper17addOnInitCallbackE8delegateIFvvEE">
+<span id="_CPPv3N4args11application13ContextHelper17addOnInitCallbackE8delegateIFvvEE"></span><span id="_CPPv2N4args11application13ContextHelper17addOnInitCallbackE8delegateIFvvEE"></span><span class="target" id="classargs_1_1application_1_1_context_helper_1a2959b5b2e7387391995d3ad31ac75c88"></span>bool <code class="sig-name descname">addOnInitCallback</code><span class="sig-paren">(</span>delegate&lt;void<span class="sig-paren">(</span><span class="sig-paren">)</span>&gt; <em>callback</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application13ContextHelper17addOnInitCallbackE8delegateIFvvEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Binds callback to be executed right after the context has been initialized. The callback will be invoked immediately if the context is already initialized. </p>
+</dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N4args11application13ContextHelper9terminateEv">
@@ -100,6 +108,16 @@
 <dl class="cpp function">
 <dt id="_CPPv4N4args11application13ContextHelper17getPrimaryMonitorEv">
 <span id="_CPPv3N4args11application13ContextHelper17getPrimaryMonitorEv"></span><span id="_CPPv2N4args11application13ContextHelper17getPrimaryMonitorEv"></span><span id="args::application::ContextHelper::getPrimaryMonitor"></span><span class="target" id="classargs_1_1application_1_1_context_helper_1aa7be3a132b2bfd509ab93ae21defc20c"></span>GLFWmonitor *<code class="sig-name descname">getPrimaryMonitor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application13ContextHelper17getPrimaryMonitorEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args11application13ContextHelper17getCurrentMonitorEP10GLFWwindow">
+<span id="_CPPv3N4args11application13ContextHelper17getCurrentMonitorEP10GLFWwindow"></span><span id="_CPPv2N4args11application13ContextHelper17getCurrentMonitorEP10GLFWwindow"></span><span id="args::application::ContextHelper::getCurrentMonitor__GLFWwindowP"></span><span class="target" id="classargs_1_1application_1_1_context_helper_1a708fab2fd3111096f746f73f99590d90"></span>GLFWmonitor *<code class="sig-name descname">getCurrentMonitor</code><span class="sig-paren">(</span>GLFWwindow *<em>window</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application13ContextHelper17getCurrentMonitorEP10GLFWwindow" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args11application13ContextHelper16setWindowMonitorEP10GLFWwindowP11GLFWmonitorN4math5ivec2EN4math5ivec2Ei">
+<span id="_CPPv3N4args11application13ContextHelper16setWindowMonitorEP10GLFWwindowP11GLFWmonitorN4math5ivec2EN4math5ivec2Ei"></span><span id="_CPPv2N4args11application13ContextHelper16setWindowMonitorEP10GLFWwindowP11GLFWmonitorN4math5ivec2EN4math5ivec2Ei"></span><span id="args::application::ContextHelper::setWindowMonitor__GLFWwindowP.GLFWmonitorP.math::ivec2.math::ivec2.i"></span><span class="target" id="classargs_1_1application_1_1_context_helper_1a1c9cd31772a9928f7a8e11b05e6089f2"></span>void <code class="sig-name descname">setWindowMonitor</code><span class="sig-paren">(</span>GLFWwindow *<em>window</em>, GLFWmonitor *<em>monitor</em>, math::ivec2 <em>pos</em>, math::ivec2 <em>size</em>, int <em>refreshRate</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application13ContextHelper16setWindowMonitorEP10GLFWwindowP11GLFWmonitorN4math5ivec2EN4math5ivec2Ei" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -125,6 +143,23 @@
 <dl class="cpp function">
 <dt id="_CPPv4N4args11application13ContextHelper12createWindowEiiPKcP11GLFWmonitorP10GLFWwindow">
 <span id="_CPPv3N4args11application13ContextHelper12createWindowEiiPKcP11GLFWmonitorP10GLFWwindow"></span><span id="_CPPv2N4args11application13ContextHelper12createWindowEiiPKcP11GLFWmonitorP10GLFWwindow"></span><span id="args::application::ContextHelper::createWindow__i.i.cCP.GLFWmonitorP.GLFWwindowP"></span><span class="target" id="classargs_1_1application_1_1_context_helper_1ae52617d957eecb9cdfc552441671dacc"></span>GLFWwindow *<code class="sig-name descname">createWindow</code><span class="sig-paren">(</span>int <em>width</em>, int <em>height</em>, <em class="property">const</em> char *<em>title</em>, GLFWmonitor *<em>monitor</em> = nullptr, GLFWwindow *<em>share</em> = nullptr<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application13ContextHelper12createWindowEiiPKcP11GLFWmonitorP10GLFWwindow" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args11application13ContextHelper10showWindowEP10GLFWwindow">
+<span id="_CPPv3N4args11application13ContextHelper10showWindowEP10GLFWwindow"></span><span id="_CPPv2N4args11application13ContextHelper10showWindowEP10GLFWwindow"></span><span id="args::application::ContextHelper::showWindow__GLFWwindowP"></span><span class="target" id="classargs_1_1application_1_1_context_helper_1a3ed171016370a649920735789fc9e37f"></span>void <code class="sig-name descname">showWindow</code><span class="sig-paren">(</span>GLFWwindow *<em>window</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application13ContextHelper10showWindowEP10GLFWwindow" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Request the input thread to give focus to this window. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args11application13ContextHelper17updateWindowFocusEv">
+<span id="_CPPv3N4args11application13ContextHelper17updateWindowFocusEv"></span><span id="_CPPv2N4args11application13ContextHelper17updateWindowFocusEv"></span><span id="args::application::ContextHelper::updateWindowFocus"></span><span class="target" id="classargs_1_1application_1_1_context_helper_1a37184421297a8814ceb67f05e6ada27c"></span>void <code class="sig-name descname">updateWindowFocus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application13ContextHelper17updateWindowFocusEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gives focus to the window that has requested it. (may only be called from the input thread) </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args11application13ContextHelper14getProcAddressE7cstring">
+<span id="_CPPv3N4args11application13ContextHelper14getProcAddressE7cstring"></span><span id="_CPPv2N4args11application13ContextHelper14getProcAddressE7cstring"></span><span id="args::application::ContextHelper::getProcAddress__cstring"></span><span class="target" id="classargs_1_1application_1_1_context_helper_1ad26ad341152f6e262e81f6bc3561f6bb"></span>GLFWglproc <code class="sig-name descname">getProcAddress</code><span class="sig-paren">(</span>cstring <em>procname</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application13ContextHelper14getProcAddressE7cstring" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -277,6 +312,26 @@
 <span id="_CPPv3N4args11application13ContextHelper19setJoystickCallbackE15GLFWjoystickfun"></span><span id="_CPPv2N4args11application13ContextHelper19setJoystickCallbackE15GLFWjoystickfun"></span><span id="args::application::ContextHelper::setJoystickCallback__GLFWjoystickfun"></span><span class="target" id="classargs_1_1application_1_1_context_helper_1a34d07e007c8acd7562246be99ea3fc65"></span>GLFWjoystickfun <code class="sig-name descname">setJoystickCallback</code><span class="sig-paren">(</span>GLFWjoystickfun <em>callback</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application13ContextHelper19setJoystickCallbackE15GLFWjoystickfun" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
+<dl class="cpp function">
+<dt id="_CPPv4N4args11application13ContextHelper14getGamepadSateEiP16GLFWgamepadstate">
+<span id="_CPPv3N4args11application13ContextHelper14getGamepadSateEiP16GLFWgamepadstate"></span><span id="_CPPv2N4args11application13ContextHelper14getGamepadSateEiP16GLFWgamepadstate"></span><span id="args::application::ContextHelper::getGamepadSate__i.GLFWgamepadstateP"></span><span class="target" id="classargs_1_1application_1_1_context_helper_1ab8a9caabedbca0264620baebb1a9ea07"></span>int <code class="sig-name descname">getGamepadSate</code><span class="sig-paren">(</span>int <em>jid</em>, GLFWgamepadstate *<em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application13ContextHelper14getGamepadSateEiP16GLFWgamepadstate" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args11application13ContextHelper21updateGamepadMappingsEPKc">
+<span id="_CPPv3N4args11application13ContextHelper21updateGamepadMappingsEPKc"></span><span id="_CPPv2N4args11application13ContextHelper21updateGamepadMappingsEPKc"></span><span id="args::application::ContextHelper::updateGamepadMappings__cCP"></span><span class="target" id="classargs_1_1application_1_1_context_helper_1a30da3ea57ec6c8e86ffa57481b2d39a9"></span>void <code class="sig-name descname">updateGamepadMappings</code><span class="sig-paren">(</span><em class="property">const</em> char *<em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application13ContextHelper21updateGamepadMappingsEPKc" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args11application13ContextHelper15joystickPresentEi">
+<span id="_CPPv3N4args11application13ContextHelper15joystickPresentEi"></span><span id="_CPPv2N4args11application13ContextHelper15joystickPresentEi"></span><span id="args::application::ContextHelper::joystickPresent__i"></span><span class="target" id="classargs_1_1application_1_1_context_helper_1af381825a879d93ebab9f6778cf00b511"></span>bool <code class="sig-name descname">joystickPresent</code><span class="sig-paren">(</span>int <em>jid</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application13ContextHelper15joystickPresentEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args11application13ContextHelper12setInputModeEP10GLFWwindowii">
+<span id="_CPPv3N4args11application13ContextHelper12setInputModeEP10GLFWwindowii"></span><span id="_CPPv2N4args11application13ContextHelper12setInputModeEP10GLFWwindowii"></span><span id="args::application::ContextHelper::setInputMode__GLFWwindowP.i.i"></span><span class="target" id="classargs_1_1application_1_1_context_helper_1a916e85f4b61beed1897f45f9c6e8f59a"></span>void <code class="sig-name descname">setInputMode</code><span class="sig-paren">(</span>GLFWwindow *<em>window</em>, int <em>mode</em>, int <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application13ContextHelper12setInputModeEP10GLFWwindowii" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
 </div>
 </dd></dl>
 
@@ -302,7 +357,7 @@
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">ARGS API</a><ul>
       <li>Previous: <a href="classargs_1_1application_1_1_application_module.html" title="previous chapter">Class ApplicationModule</a></li>
-      <li>Next: <a href="classargs_1_1application_1_1_window_system.html" title="next chapter">Class WindowSystem</a></li>
+      <li>Next: <a href="classargs_1_1application_1_1_input_system.html" title="next chapter">Class InputSystem</a></li>
   </ul></li>
   </ul></li>
 </ul>

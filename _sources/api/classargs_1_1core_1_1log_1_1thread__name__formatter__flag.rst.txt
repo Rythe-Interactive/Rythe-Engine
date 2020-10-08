@@ -1,0 +1,25 @@
+.. _exhale_class_classargs_1_1core_1_1log_1_1thread__name__formatter__flag:
+
+Class thread_name_formatter_flag
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public custom_flag_formatter``
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::log::thread_name_formatter_flag
+   :members:
+   :protected-members:
+   :undoc-members:

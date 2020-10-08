@@ -72,6 +72,8 @@
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">other_time</span><span class="o">&gt;</span>
         <span class="k">constexpr</span> <span class="n">time_span</span><span class="p">(</span><span class="n">other_time</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">:</span> <span class="n">duration</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="p">{}</span>
 
+        <span class="k">explicit</span> <span class="n">time_span</span><span class="p">(</span><span class="n">time_type</span> <span class="n">duration</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">:</span> <span class="n">duration</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span> <span class="p">{}</span>
+
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
         <span class="n">T</span> <span class="n">hours</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ratio</span><span class="o">&lt;</span><span class="mi">3600</span><span class="o">&gt;&gt;&gt;</span><span class="p">(</span><span class="n">duration</span><span class="p">).</span><span class="n">count</span><span class="p">();</span> <span class="p">}</span>
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
@@ -183,6 +185,8 @@
             <span class="k">return</span> <span class="n">time_span</span><span class="p">((</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_values</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;::</span><span class="n">max</span><span class="p">)());</span>
         <span class="p">}</span>
     <span class="p">};</span>
+
+    <span class="k">using</span> <span class="n">span</span> <span class="o">=</span> <span class="n">time_span</span><span class="o">&lt;&gt;</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>

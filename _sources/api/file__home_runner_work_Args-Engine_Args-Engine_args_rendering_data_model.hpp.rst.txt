@@ -1,0 +1,107 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.hpp:
+
+File model.hpp
+==============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_rendering_data>` (``/home/runner/work/Args-Engine/Args-Engine/args/rendering/data``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/rendering/data/model.hpp``)
+----------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``application/application.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_application.hpp`)
+
+- ``set`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_assetimporter.cpp`)
+
+- ``unordered_map``
+
+- ``vector`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_vector_view.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_components_renderable.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_shader.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_rendering.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_systems_renderer.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__rendering`
+
+- :ref:`namespace_std`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structstd_1_1hash_3_01args_1_1rendering_1_1model__handle_01_4`
+
+- :ref:`exhale_class_structargs_1_1rendering_1_1model`
+
+- :ref:`exhale_class_structargs_1_1rendering_1_1model__handle`
+
+- :ref:`exhale_class_classargs_1_1rendering_1_1_model_cache`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_model_8hpp_1a49878cd27ca0a45c5122677d484bc9b3`
+
+- :ref:`exhale_define_model_8hpp_1a7705dfed803d377413fff18f4c0ca1b2`
+
+- :ref:`exhale_define_model_8hpp_1a75e330b4c664e88eff45319b5e8ca1fe`
+
+- :ref:`exhale_define_model_8hpp_1a9e73a0b1f0ae6c28111bff100fd9a154`
+
+- :ref:`exhale_define_model_8hpp_1aa776123367fa4dbd736e826118154708`
+
+- :ref:`exhale_define_model_8hpp_1a9b029c397244dbaab3d6e7114dd398d5`
+
+- :ref:`exhale_define_model_8hpp_1a51df415fb8d0db59b968bae24fab920b`
+
+- :ref:`exhale_define_model_8hpp_1aaf42be1105908eb41f70c56ac1d2519e`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_model_8hpp_1a07c5ade62c28a585917547062d0d6f67`
+

@@ -1,0 +1,13 @@
+.. _exhale_typedef_entity__handle_8hpp_1a8b1e7fb4d0b1f7b15c2e01dc67f01dc8:
+
+Typedef args::core::ecs::entity_set
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entity_handle.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::ecs::entity_set

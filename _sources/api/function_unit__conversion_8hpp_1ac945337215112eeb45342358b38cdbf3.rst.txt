@@ -1,0 +1,13 @@
+.. _exhale_function_unit__conversion_8hpp_1ac945337215112eeb45342358b38cdbf3:
+
+Function args::core::literals::operator""_gb
+============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_unit_conversion.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::literals::operator""_gb(unsigned long long)

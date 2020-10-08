@@ -1,0 +1,13 @@
+.. _exhale_define_platform_8hpp_1a9a9717af5b550f11dda5077a1ddd5af5:
+
+Define ARGS_CONFIGURATION
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: ARGS_CONFIGURATION

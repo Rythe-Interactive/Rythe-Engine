@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1rendering_1_1texture__data:
+
+Struct texture_data
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_texture.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::rendering::texture_data
+   :members:
+   :protected-members:
+   :undoc-members:

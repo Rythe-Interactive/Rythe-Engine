@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File texture_importers.cpp &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File texture_importers.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-texture-importers-cpp">
+<span id="program-listing-file-home-runner-work-args-engine-args-engine-args-rendering-data-importers-texture-importers-cpp"></span><h1>Program Listing for File texture_importers.cpp<a class="headerlink" href="#program-listing-for-file-texture-importers-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_importers_texture_importers.cpp.html#file-home-runner-work-args-engine-args-engine-args-rendering-data-importers-texture-importers-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/rendering/data/importers/texture_importers.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#define STBI_MAX_DIMENSIONS 16384</span>
+<span class="cp">#define STBI_NO_GIF</span>
+<span class="cp">#define STB_IMAGE_IMPLEMENTATION</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stb_image.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/data/importers/texture_importers.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">rendering</span>
+<span class="p">{</span>
+    <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">texture</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">stbi_texture_loader</span><span class="o">::</span><span class="n">load</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">resource</span><span class="p">,</span> <span class="n">texture_import_settings</span><span class="o">&amp;&amp;</span> <span class="n">settings</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">common</span><span class="o">::</span><span class="n">Err</span><span class="p">,</span> <span class="n">common</span><span class="o">::</span><span class="n">Ok</span><span class="p">;</span>
+        <span class="c1">// Decay overloads the operator of ok_type and operator== for valid_t.</span>
+        <span class="k">using</span> <span class="n">decay</span> <span class="o">=</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">texture</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span><span class="p">;</span>
+
+        <span class="c1">// Prefetch data from the resource.</span>
+        <span class="k">const</span> <span class="n">byte_vec</span><span class="o">&amp;</span> <span class="n">data</span> <span class="o">=</span> <span class="n">resource</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+
+        <span class="c1">// Setup stb_image settings.</span>
+        <span class="n">stbi_set_flip_vertically_on_load</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">flipVertical</span><span class="p">);</span>
+
+        <span class="c1">// Create texture object and store the representation values.</span>
+        <span class="n">texture</span> <span class="n">texture</span><span class="p">{};</span>
+        <span class="n">texture</span><span class="p">.</span><span class="n">channels</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">components</span><span class="p">;</span>
+        <span class="n">texture</span><span class="p">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">type</span><span class="p">;</span>
+
+        <span class="c1">// Throwaway temporary storage for the original components in the texture that we&#39;re loading. (Everything gets converted to the components specified in the settings anyways.)</span>
+        <span class="n">texture_components</span> <span class="n">components</span> <span class="o">=</span> <span class="n">texture_components</span><span class="o">::</span><span class="n">grey</span><span class="p">;</span>
+
+        <span class="c1">// Pointer to the start of the data array created by stb_image. It needs to be void because it could either be filled with bytes, ushorts, or floats.</span>
+        <span class="kt">void</span><span class="o">*</span> <span class="n">imageData</span><span class="p">;</span>
+
+        <span class="c1">// Load the image data using stb_image.</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">fileFormat</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">default</span><span class="o">:</span> <span class="p">[[</span><span class="n">fallthrough</span><span class="p">]];</span>
+            <span class="k">case</span> <span class="n">texture_channel_format</span><span class="o">::</span><span class="nl">eight_bit</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="n">imageData</span> <span class="o">=</span> <span class="n">stbi_load_from_memory</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">.</span><span class="n">height</span><span class="p">,</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">components</span><span class="p">),</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">components</span><span class="p">));</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">case</span> <span class="n">texture_channel_format</span><span class="o">::</span><span class="nl">sixteen_bit</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="n">imageData</span> <span class="o">=</span> <span class="n">stbi_load_16_from_memory</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">.</span><span class="n">height</span><span class="p">,</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">components</span><span class="p">),</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">components</span><span class="p">));</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">case</span> <span class="n">texture_channel_format</span><span class="o">::</span><span class="nl">float_hdr</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="n">imageData</span> <span class="o">=</span> <span class="n">stbi_loadf_from_memory</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">.</span><span class="n">height</span><span class="p">,</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">components</span><span class="p">),</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">components</span><span class="p">));</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Allocate and bind the texture.</span>
+        <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">.</span><span class="n">textureId</span><span class="p">);</span>
+        <span class="n">glBindTexture</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">type</span><span class="p">),</span> <span class="n">texture</span><span class="p">.</span><span class="n">textureId</span><span class="p">);</span>
+
+        <span class="c1">// Handle mips</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">generateMipmaps</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">glTexParameteri</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">type</span><span class="p">),</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLint</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">min</span><span class="p">));</span>
+            <span class="n">glTexParameteri</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">type</span><span class="p">),</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLint</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">mag</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Handle wrapping behavior.</span>
+        <span class="n">glTexParameteri</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">type</span><span class="p">),</span> <span class="n">GL_TEXTURE_WRAP_R</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLint</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">wrapR</span><span class="p">));</span>
+        <span class="n">glTexParameteri</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">type</span><span class="p">),</span> <span class="n">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLint</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">wrapS</span><span class="p">));</span>
+        <span class="n">glTexParameteri</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">type</span><span class="p">),</span> <span class="n">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLint</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">wrapT</span><span class="p">));</span>
+
+        <span class="c1">// Construct the texture using the loaded data.</span>
+        <span class="n">glTexImage2D</span><span class="p">(</span>
+            <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">type</span><span class="p">),</span>
+            <span class="mi">0</span><span class="p">,</span>
+            <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLint</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">intendedFormat</span><span class="p">),</span>
+            <span class="n">texture</span><span class="p">.</span><span class="n">width</span><span class="p">,</span>
+            <span class="n">texture</span><span class="p">.</span><span class="n">height</span><span class="p">,</span>
+            <span class="mi">0</span><span class="p">,</span>
+            <span class="n">components_to_format</span><span class="p">[</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">components</span><span class="p">)],</span>
+            <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">fileFormat</span><span class="p">),</span>
+            <span class="n">imageData</span><span class="p">);</span>
+
+        <span class="c1">// Generate mips.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">generateMipmaps</span><span class="p">)</span>
+            <span class="n">glGenerateMipmap</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">type</span><span class="p">));</span>
+
+        <span class="c1">// Cleanup and return.</span>
+        <span class="n">stbi_image_free</span><span class="p">(</span><span class="n">imageData</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nf">decay</span><span class="p">(</span><span class="n">Ok</span><span class="p">(</span><span class="n">texture</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_importers_texture_importers.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

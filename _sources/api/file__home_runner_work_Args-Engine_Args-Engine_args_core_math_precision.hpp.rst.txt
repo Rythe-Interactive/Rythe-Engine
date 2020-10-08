@@ -60,7 +60,7 @@ Enums
 -----
 
 
-- :ref:`exhale_enum_precision_8hpp_1a91a59bb574b478728cb97aee74fe5a83`
+- :ref:`exhale_enum_precision_8hpp_1a58c94069dd39ee09479b3e5c3a47fe67`
 
 
 Typedefs

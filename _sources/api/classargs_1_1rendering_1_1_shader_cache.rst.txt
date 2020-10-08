@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1rendering_1_1_shader_cache:
+
+Class ShaderCache
+=================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_shader.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::rendering::ShaderCache
+   :members:
+   :protected-members:
+   :undoc-members:

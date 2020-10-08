@@ -1,0 +1,13 @@
+.. _exhale_variable_logging_8hpp_1ab447d9caa7761fc55a4cfe10749697ea:
+
+Variable args::core::log::genesis
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::core::log::genesis

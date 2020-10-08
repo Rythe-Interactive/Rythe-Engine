@@ -1,0 +1,13 @@
+.. _exhale_typedef_types_2meta_8hpp_1afe0993f90e5c684616de2c792f0a98c7:
+
+Typedef args::core::doesnt_inherit_from
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_meta.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::doesnt_inherit_from

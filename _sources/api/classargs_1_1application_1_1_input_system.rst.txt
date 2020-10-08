@@ -1,0 +1,36 @@
+.. _exhale_class_classargs_1_1application_1_1_input_system:
+
+Class InputSystem
+=================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_input_inputsystem.hpp`
+
+
+Nested Relationships
+--------------------
+
+
+Nested Types
+************
+
+- :ref:`exhale_struct_structargs_1_1application_1_1_input_system_1_1action__data`
+- :ref:`exhale_struct_structargs_1_1application_1_1_input_system_1_1axis__data`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public args::core::System< InputSystem >`` (:ref:`exhale_class_classargs_1_1core_1_1_system`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::application::InputSystem
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -39,6 +39,8 @@ Included By
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_engine.hpp`
 
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_type_util.hpp`
+
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp`
 
 
@@ -51,9 +53,20 @@ Namespaces
 - :ref:`namespace_args__core`
 
 
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1core_1_1has__resize`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1has__resize_3_01_c_00_01_ret_07_args_8_8_8_08_4`
+
+
 Typedefs
 --------
 
+
+- :ref:`exhale_typedef_types_2meta_8hpp_1afe0993f90e5c684616de2c792f0a98c7`
 
 - :ref:`exhale_typedef_types_2meta_8hpp_1a91a5094436ccecc924bd45dd02437003`
 

@@ -56,332 +56,347 @@
 <span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
 
-<span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">common</span><span class="p">{</span>
+<span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">common</span> <span class="p">{</span>
 
-<span class="k">struct</span> <span class="n">isChars</span>
-<span class="p">{</span>
-    <span class="n">isChars</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">chars</span><span class="p">)</span> <span class="o">:</span><span class="n">_chars</span><span class="p">(</span><span class="n">chars</span><span class="p">){}</span>
-
-    <span class="kt">bool</span> <span class="k">operator</span><span class="p">()(</span><span class="kt">char</span> <span class="n">c</span><span class="p">)</span> <span class="k">const</span>
+    <span class="kr">inline</span> <span class="kt">size_t</span> <span class="n">replace_items</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">source</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">item</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="k">for</span><span class="p">(</span><span class="k">auto</span> <span class="n">testChar</span> <span class="o">=</span> <span class="n">_chars</span><span class="p">;</span><span class="o">*</span><span class="n">testChar</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span><span class="o">++</span><span class="n">testChar</span><span class="p">)</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">testChar</span> <span class="o">==</span> <span class="n">c</span><span class="p">)</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="kt">size_t</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">size_t</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="k">while</span> <span class="p">((</span><span class="n">n</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="o">!=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span> <span class="c1">// While there&#39;s items to be found, keep replacing them with value.</span>
+        <span class="p">{</span>
+            <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">source</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">item</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">value</span><span class="p">);</span>
+            <span class="n">n</span> <span class="o">+=</span> <span class="n">value</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">count</span><span class="p">;</span>
     <span class="p">}</span>
-<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">_chars</span><span class="p">;</span>
-<span class="p">};</span>
 
-
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">t</span><span class="o">&gt;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">string_from_data</span><span class="p">(</span><span class="n">t</span> <span class="n">data</span><span class="p">);</span>
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="n">T</span> <span class="n">data_from_string_</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">);</span>
-
-
-
-<span class="k">template</span> <span class="o">&lt;</span><span class="kt">char</span> <span class="n">token</span><span class="p">,</span><span class="kt">char</span><span class="p">...</span> <span class="n">tokens</span><span class="o">&gt;</span>
-<span class="kt">bool</span> <span class="n">str_tokens_helper</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ctype</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;::</span><span class="n">mask</span> <span class="o">*</span> <span class="n">rc</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">rc</span><span class="p">[</span><span class="n">token</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">ctype</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;::</span><span class="n">space</span><span class="p">;</span>
-    <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="k">sizeof</span><span class="p">...(</span><span class="n">tokens</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">str_tokens_helper</span><span class="o">&lt;</span><span class="n">tokens</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="n">rc</span><span class="p">);</span>
-    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="c1">//dilems helper classlo</span>
-<span class="k">template</span> <span class="o">&lt;</span><span class="kt">char</span> <span class="n">token</span><span class="p">,</span> <span class="kt">char</span><span class="p">...</span> <span class="n">tokens</span><span class="o">&gt;</span>
-<span class="k">struct</span> <span class="nl">str_tokens</span> <span class="p">:</span> <span class="n">std</span><span class="o">::</span><span class="n">ctype</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span>
-<span class="p">{</span>
-    <span class="n">str_tokens</span><span class="p">()</span> <span class="o">:</span> <span class="n">ctype</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">(</span><span class="n">get_table</span><span class="p">())</span>
+    <span class="k">struct</span> <span class="n">isChars</span>
     <span class="p">{</span>
-    <span class="p">}</span>
+        <span class="n">isChars</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">chars</span><span class="p">)</span> <span class="o">:</span><span class="n">_chars</span><span class="p">(</span><span class="n">chars</span><span class="p">)</span> <span class="p">{}</span>
 
-    <span class="k">static</span> <span class="n">mask</span> <span class="k">const</span><span class="o">*</span> <span class="n">get_table</span><span class="p">()</span>
+        <span class="kt">bool</span> <span class="k">operator</span><span class="p">()(</span><span class="kt">char</span> <span class="n">c</span><span class="p">)</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">testChar</span> <span class="o">=</span> <span class="n">_chars</span><span class="p">;</span> <span class="o">*</span><span class="n">testChar</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">++</span><span class="n">testChar</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">testChar</span> <span class="o">==</span> <span class="n">c</span><span class="p">)</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">_chars</span><span class="p">;</span>
+    <span class="p">};</span>
+
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">t</span><span class="o">&gt;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">string_from_data</span><span class="p">(</span><span class="n">t</span> <span class="n">data</span><span class="p">);</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="n">T</span> <span class="n">data_from_string_</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">);</span>
+
+
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="kt">char</span> <span class="n">token</span><span class="p">,</span> <span class="kt">char</span><span class="p">...</span> <span class="n">tokens</span><span class="o">&gt;</span>
+    <span class="kt">bool</span> <span class="n">str_tokens_helper</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ctype</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;::</span><span class="n">mask</span><span class="o">*</span> <span class="n">rc</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="c1">//create const and normal rc</span>
-        <span class="k">static</span> <span class="k">const</span> <span class="n">mask</span><span class="o">*</span> <span class="n">const_rc</span> <span class="o">=</span> <span class="n">classic_table</span><span class="p">();</span>
-        <span class="k">static</span> <span class="n">mask</span> <span class="n">rc</span><span class="p">[</span><span class="n">table_size</span><span class="p">];</span>
-        <span class="k">static</span> <span class="k">auto</span> <span class="n">memory</span> <span class="o">=</span> <span class="n">memcpy</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">const_rc</span><span class="p">,</span> <span class="n">table_size</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">mask</span><span class="p">));</span>
-        <span class="k">static</span> <span class="kt">bool</span> <span class="n">memory2</span> <span class="o">=</span> <span class="n">str_tokens_helper</span><span class="o">&lt;</span><span class="n">token</span><span class="p">,</span> <span class="n">tokens</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="n">rc</span><span class="p">);</span>
-        <span class="c1">//set spaces</span>
-
-        <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="c1">//split string at any given char via variadic template and insert into vector</span>
-<span class="k">template</span> <span class="o">&lt;</span><span class="kt">char</span> <span class="n">token_1</span><span class="p">,</span> <span class="kt">char</span><span class="p">...</span> <span class="n">token</span><span class="o">&gt;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">split_string_at</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">string</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="c1">//copy string into stringstream</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">stringstream</span> <span class="n">ss</span><span class="p">(</span><span class="n">string</span><span class="p">);</span>
-
-    <span class="c1">//set tokens</span>
-    <span class="n">ss</span><span class="p">.</span><span class="n">imbue</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">locale</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">locale</span><span class="p">(),</span> <span class="k">new</span> <span class="n">str_tokens</span><span class="o">&lt;</span><span class="n">token_1</span><span class="p">,</span> <span class="n">token</span><span class="p">...</span><span class="o">&gt;</span><span class="p">()));</span>
-
-    <span class="c1">//create iterators</span>
-    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">istream_iterator</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">begin</span><span class="p">(</span><span class="n">ss</span><span class="p">);</span>
-    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">istream_iterator</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">end</span><span class="p">;</span>
-
-    <span class="c1">//copy using iterators</span>
-    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">vstrings</span><span class="p">(</span><span class="n">begin</span><span class="p">,</span> <span class="n">end</span><span class="p">);</span>
-
-    <span class="k">return</span> <span class="n">vstrings</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="k">const</span> <span class="n">delim</span><span class="p">,</span><span class="k">typename</span> <span class="n">Range</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Value</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">Range</span><span class="o">::</span><span class="n">value_type</span><span class="o">&gt;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">join_strings_with</span><span class="p">(</span><span class="n">Range</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">elements</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">ostringstream</span> <span class="n">os</span><span class="p">;</span>
-    <span class="k">auto</span> <span class="n">b</span> <span class="o">=</span> <span class="n">begin</span><span class="p">(</span><span class="n">elements</span><span class="p">),</span> <span class="n">e</span> <span class="o">=</span> <span class="n">end</span><span class="p">(</span><span class="n">elements</span><span class="p">);</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">prev</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream_iterator</span><span class="o">&lt;</span><span class="n">Value</span><span class="o">&gt;</span><span class="p">(</span><span class="n">os</span><span class="p">,</span> <span class="n">delim</span><span class="p">));</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">prev</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">b</span><span class="p">;</span>
+        <span class="n">rc</span><span class="p">[</span><span class="n">token</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">ctype</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;::</span><span class="n">space</span><span class="p">;</span>
+        <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="k">sizeof</span><span class="p">...(</span><span class="n">tokens</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">str_tokens_helper</span><span class="o">&lt;</span><span class="n">tokens</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="n">rc</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
-<span class="p">}</span>
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">Range</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Value</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">Range</span><span class="o">::</span><span class="n">value_type</span><span class="o">&gt;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">join_strings_with</span><span class="p">(</span><span class="n">Range</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">elements</span><span class="p">,</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="k">const</span> <span class="n">delim</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">ostringstream</span> <span class="n">os</span><span class="p">;</span>
-    <span class="k">auto</span> <span class="n">b</span> <span class="o">=</span> <span class="n">begin</span><span class="p">(</span><span class="n">elements</span><span class="p">),</span> <span class="n">e</span> <span class="o">=</span> <span class="n">end</span><span class="p">(</span><span class="n">elements</span><span class="p">);</span>
+    <span class="c1">//dilems helper classlo</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="kt">char</span> <span class="n">token</span><span class="p">,</span> <span class="kt">char</span><span class="p">...</span> <span class="n">tokens</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="nl">str_tokens</span> <span class="p">:</span> <span class="n">std</span><span class="o">::</span><span class="n">ctype</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span>
+    <span class="p">{</span>
+        <span class="n">str_tokens</span><span class="p">()</span> <span class="o">:</span> <span class="n">ctype</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">(</span><span class="n">get_table</span><span class="p">())</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">prev</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream_iterator</span><span class="o">&lt;</span><span class="n">Value</span><span class="o">&gt;</span><span class="p">(</span><span class="n">os</span><span class="p">,</span> <span class="n">delim</span><span class="p">));</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">prev</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">b</span><span class="p">;</span>
-    <span class="p">}</span>
+        <span class="k">static</span> <span class="n">mask</span> <span class="k">const</span><span class="o">*</span> <span class="n">get_table</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="c1">//create const and normal rc</span>
+            <span class="k">static</span> <span class="k">const</span> <span class="n">mask</span><span class="o">*</span> <span class="n">const_rc</span> <span class="o">=</span> <span class="n">classic_table</span><span class="p">();</span>
+            <span class="k">static</span> <span class="n">mask</span> <span class="n">rc</span><span class="p">[</span><span class="n">table_size</span><span class="p">];</span>
+            <span class="k">static</span> <span class="k">auto</span> <span class="n">memory</span> <span class="o">=</span> <span class="n">memcpy</span><span class="p">(</span><span class="n">rc</span><span class="p">,</span> <span class="n">const_rc</span><span class="p">,</span> <span class="n">table_size</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">mask</span><span class="p">));</span>
+            <span class="k">static</span> <span class="kt">bool</span> <span class="n">memory2</span> <span class="o">=</span> <span class="n">str_tokens_helper</span><span class="o">&lt;</span><span class="n">token</span><span class="p">,</span> <span class="n">tokens</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="n">rc</span><span class="p">);</span>
+            <span class="c1">//set spaces</span>
 
-    <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
-<span class="p">}</span>
+            <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
 
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">const</span> <span class="kt">char</span> <span class="n">delim</span><span class="p">,</span><span class="k">typename</span> <span class="n">Range</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Value</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">Range</span><span class="o">::</span><span class="n">value_type</span><span class="o">&gt;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">join_strings_with</span><span class="p">(</span><span class="n">Range</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">elements</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">ostringstream</span> <span class="n">os</span><span class="p">;</span>
-    <span class="k">auto</span> <span class="n">b</span> <span class="o">=</span> <span class="n">begin</span><span class="p">(</span><span class="n">elements</span><span class="p">),</span> <span class="n">e</span> <span class="o">=</span> <span class="n">end</span><span class="p">(</span><span class="n">elements</span><span class="p">);</span>
+    <span class="c1">//split string at any given char via variadic template and insert into vector</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="kt">char</span> <span class="n">token_1</span><span class="p">,</span> <span class="kt">char</span><span class="p">...</span> <span class="n">token</span><span class="o">&gt;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">split_string_at</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">string</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//copy string into stringstream</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">stringstream</span> <span class="n">ss</span><span class="p">(</span><span class="n">string</span><span class="p">);</span>
 
-    <span class="kt">char</span> <span class="n">promoter</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">delim</span><span class="p">};</span>
+        <span class="c1">//set tokens</span>
+        <span class="n">ss</span><span class="p">.</span><span class="n">imbue</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">locale</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">locale</span><span class="p">(),</span> <span class="k">new</span> <span class="n">str_tokens</span><span class="o">&lt;</span><span class="n">token_1</span><span class="p">,</span> <span class="n">token</span><span class="p">...</span><span class="o">&gt;</span><span class="p">()));</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">prev</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream_iterator</span><span class="o">&lt;</span><span class="n">Value</span><span class="o">&gt;</span><span class="p">(</span><span class="n">os</span><span class="p">,</span> <span class="n">delim</span><span class="p">));</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">prev</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">b</span><span class="p">;</span>
-    <span class="p">}</span>
+        <span class="c1">//create iterators</span>
+        <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">istream_iterator</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">begin</span><span class="p">(</span><span class="n">ss</span><span class="p">);</span>
+        <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">istream_iterator</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">end</span><span class="p">;</span>
 
-    <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
-<span class="p">}</span>
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">Range</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Value</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">Range</span><span class="o">::</span><span class="n">value_type</span><span class="o">&gt;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">join_strings_with</span><span class="p">(</span><span class="n">Range</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">elements</span><span class="p">,</span><span class="kt">char</span> <span class="n">delim</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">ostringstream</span> <span class="n">os</span><span class="p">;</span>
-    <span class="k">auto</span> <span class="n">b</span> <span class="o">=</span> <span class="n">begin</span><span class="p">(</span><span class="n">elements</span><span class="p">),</span> <span class="n">e</span> <span class="o">=</span> <span class="n">end</span><span class="p">(</span><span class="n">elements</span><span class="p">);</span>
+        <span class="c1">//copy using iterators</span>
+        <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">vstrings</span><span class="p">(</span><span class="n">begin</span><span class="p">,</span> <span class="n">end</span><span class="p">);</span>
 
-    <span class="kt">char</span> <span class="n">promoter</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">delim</span><span class="p">};</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">prev</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream_iterator</span><span class="o">&lt;</span><span class="n">Value</span><span class="o">&gt;</span><span class="p">(</span><span class="n">os</span><span class="p">,</span> <span class="n">promoter</span><span class="p">));</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">prev</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">b</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">vstrings</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
-<span class="p">}</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="k">const</span> <span class="n">delim</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Range</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Value</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">Range</span><span class="o">::</span><span class="n">value_type</span><span class="o">&gt;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">join_strings_with</span><span class="p">(</span><span class="n">Range</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">elements</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">ostringstream</span> <span class="n">os</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">b</span> <span class="o">=</span> <span class="n">begin</span><span class="p">(</span><span class="n">elements</span><span class="p">),</span> <span class="n">e</span> <span class="o">=</span> <span class="n">end</span><span class="p">(</span><span class="n">elements</span><span class="p">);</span>
 
-<span class="c1">//remove given word from string at offset and return true if success and false on fail</span>
-<span class="kr">inline</span> <span class="kt">bool</span> <span class="n">find_and_remove_at</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">search</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="c1">//create temporary</span>
-    <span class="kt">size_t</span> <span class="n">loc</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">prev</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream_iterator</span><span class="o">&lt;</span><span class="n">Value</span><span class="o">&gt;</span><span class="p">(</span><span class="n">os</span><span class="p">,</span> <span class="n">delim</span><span class="p">));</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">prev</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">b</span><span class="p">;</span>
+        <span class="p">}</span>
 
-    <span class="c1">//find given word</span>
-    <span class="k">if</span> <span class="p">((</span><span class="n">loc</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">search</span><span class="p">,</span> <span class="n">offset</span><span class="p">))</span> <span class="o">==</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">Range</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Value</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">Range</span><span class="o">::</span><span class="n">value_type</span><span class="o">&gt;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">join_strings_with</span><span class="p">(</span><span class="n">Range</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">elements</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="k">const</span> <span class="n">delim</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">ostringstream</span> <span class="n">os</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">b</span> <span class="o">=</span> <span class="n">begin</span><span class="p">(</span><span class="n">elements</span><span class="p">),</span> <span class="n">e</span> <span class="o">=</span> <span class="n">end</span><span class="p">(</span><span class="n">elements</span><span class="p">);</span>
 
-    <span class="c1">//erase word</span>
-    <span class="n">src</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="n">search</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">prev</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream_iterator</span><span class="o">&lt;</span><span class="n">Value</span><span class="o">&gt;</span><span class="p">(</span><span class="n">os</span><span class="p">,</span> <span class="n">delim</span><span class="p">));</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">prev</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">b</span><span class="p">;</span>
+        <span class="p">}</span>
 
-    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-<span class="p">}</span>
+        <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
+    <span class="p">}</span>
 
-<span class="c1">//remove given word from string at offset and return the position</span>
-<span class="kr">inline</span> <span class="kt">size_t</span> <span class="n">locate_and_delete_at</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">search</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="c1">//create temporary</span>
-    <span class="kt">size_t</span> <span class="n">loc</span><span class="p">;</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">const</span> <span class="kt">char</span> <span class="n">delim</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Range</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Value</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">Range</span><span class="o">::</span><span class="n">value_type</span><span class="o">&gt;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">join_strings_with</span><span class="p">(</span><span class="n">Range</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">elements</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">ostringstream</span> <span class="n">os</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">b</span> <span class="o">=</span> <span class="n">begin</span><span class="p">(</span><span class="n">elements</span><span class="p">),</span> <span class="n">e</span> <span class="o">=</span> <span class="n">end</span><span class="p">(</span><span class="n">elements</span><span class="p">);</span>
 
-    <span class="c1">//find given word</span>
-    <span class="k">if</span> <span class="p">((</span><span class="n">loc</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">search</span><span class="p">,</span> <span class="n">offset</span><span class="p">))</span> <span class="o">==</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">;</span>
+        <span class="kt">char</span> <span class="n">promoter</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="n">delim</span> <span class="p">};</span>
 
-    <span class="c1">//erase word</span>
-    <span class="n">src</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="n">search</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">prev</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream_iterator</span><span class="o">&lt;</span><span class="n">Value</span><span class="o">&gt;</span><span class="p">(</span><span class="n">os</span><span class="p">,</span> <span class="n">delim</span><span class="p">));</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">prev</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">b</span><span class="p">;</span>
+        <span class="p">}</span>
 
-    <span class="k">return</span> <span class="n">loc</span><span class="p">;</span>
-<span class="p">}</span>
+        <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">Range</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Value</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">Range</span><span class="o">::</span><span class="n">value_type</span><span class="o">&gt;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">join_strings_with</span><span class="p">(</span><span class="n">Range</span> <span class="k">const</span><span class="o">&amp;</span> <span class="n">elements</span><span class="p">,</span> <span class="kt">char</span> <span class="n">delim</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">ostringstream</span> <span class="n">os</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">b</span> <span class="o">=</span> <span class="n">begin</span><span class="p">(</span><span class="n">elements</span><span class="p">),</span> <span class="n">e</span> <span class="o">=</span> <span class="n">end</span><span class="p">(</span><span class="n">elements</span><span class="p">);</span>
 
-<span class="c1">//find the nearest of given tokens in a string at an offset</span>
-<span class="k">template</span> <span class="o">&lt;</span><span class="kt">char</span> <span class="n">token_1</span><span class="p">,</span> <span class="kt">char</span><span class="p">...</span> <span class="n">tokens</span><span class="o">&gt;</span>
-<span class="kr">inline</span> <span class="kt">size_t</span> <span class="n">nearest_of_any_at</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">string</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="c1">//create tokens using variadic unfolding</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">tokensVector</span> <span class="o">=</span> <span class="p">{</span> <span class="n">token_1</span> <span class="p">,</span> <span class="n">tokens</span><span class="p">...</span> <span class="p">};</span>
+        <span class="kt">char</span> <span class="n">promoter</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="n">delim</span> <span class="p">};</span>
 
-    <span class="c1">//create locations</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span> <span class="n">locationsVector</span><span class="p">(</span><span class="n">tokensVector</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">prev</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream_iterator</span><span class="o">&lt;</span><span class="n">Value</span><span class="o">&gt;</span><span class="p">(</span><span class="n">os</span><span class="p">,</span> <span class="n">promoter</span><span class="p">));</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">prev</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">!=</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">b</span><span class="p">;</span>
+        <span class="p">}</span>
 
-    <span class="c1">//find locations</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">char</span><span class="o">&amp;</span> <span class="nl">token</span> <span class="p">:</span> <span class="n">tokensVector</span><span class="p">)</span> <span class="n">locationsVector</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">string</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">offset</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">os</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
+    <span class="p">}</span>
 
-    <span class="c1">//find smallest element and return</span>
-    <span class="k">return</span> <span class="o">*</span><span class="nf">min_element</span><span class="p">(</span><span class="n">begin</span><span class="p">(</span><span class="n">locationsVector</span><span class="p">),</span> <span class="n">end</span><span class="p">(</span><span class="n">locationsVector</span><span class="p">));</span>
-<span class="p">}</span>
+    <span class="c1">//remove given word from string at offset and return true if success and false on fail</span>
+    <span class="kr">inline</span> <span class="kt">bool</span> <span class="n">find_and_remove_at</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">search</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//create temporary</span>
+        <span class="kt">size_t</span> <span class="n">loc</span><span class="p">;</span>
 
+        <span class="c1">//find given word</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">loc</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">search</span><span class="p">,</span> <span class="n">offset</span><span class="p">))</span> <span class="o">==</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
 
-<span class="k">template</span> <span class="o">&lt;&gt;</span>
-<span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">data_from_string_</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">str</span><span class="p">;</span>
-<span class="p">}</span>
+        <span class="c1">//erase word</span>
+        <span class="n">src</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="n">search</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
 
-<span class="k">template</span> <span class="o">&lt;&gt;</span>
-<span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">data_from_string_</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">split_string_at</span><span class="o">&lt;</span><span class="sc">&#39;,&#39;</span><span class="p">,</span><span class="sc">&#39; &#39;</span><span class="o">&gt;</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
-<span class="p">}</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
 
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="kr">inline</span> <span class="n">T</span> <span class="n">data_from_string_</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">stringstream</span> <span class="n">temp</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
-    <span class="n">T</span> <span class="n">value</span><span class="p">;</span>
-    <span class="n">temp</span> <span class="o">&gt;&gt;</span> <span class="n">value</span><span class="p">;</span>
-    <span class="k">return</span> <span class="n">value</span><span class="p">;</span>
-<span class="p">}</span>
+    <span class="c1">//remove given word from string at offset and return the position</span>
+    <span class="kr">inline</span> <span class="kt">size_t</span> <span class="n">locate_and_delete_at</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">search</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//create temporary</span>
+        <span class="kt">size_t</span> <span class="n">loc</span><span class="p">;</span>
 
+        <span class="c1">//find given word</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">loc</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">search</span><span class="p">,</span> <span class="n">offset</span><span class="p">))</span> <span class="o">==</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">;</span>
 
-<span class="k">template</span> <span class="o">&lt;&gt;</span>
-<span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">string_from_data</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">data</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">data</span><span class="p">;</span>
-<span class="p">}</span>
+        <span class="c1">//erase word</span>
+        <span class="n">src</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">loc</span><span class="p">,</span> <span class="n">search</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
 
-<span class="k">template</span> <span class="o">&lt;&gt;</span>
-<span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">string_from_data</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">ret</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="nl">str</span> <span class="p">:</span> <span class="n">data</span><span class="p">)</span>
-        <span class="n">ret</span> <span class="o">+=</span> <span class="n">str</span><span class="p">;</span>
-    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
-<span class="p">}</span>
+        <span class="k">return</span> <span class="n">loc</span><span class="p">;</span>
+    <span class="p">}</span>
 
+    <span class="c1">//find the nearest of given tokens in a string at an offset</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="kt">char</span> <span class="n">token_1</span><span class="p">,</span> <span class="kt">char</span><span class="p">...</span> <span class="n">tokens</span><span class="o">&gt;</span>
+    <span class="kr">inline</span> <span class="kt">size_t</span> <span class="n">nearest_of_any_at</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">string</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//create tokens using variadic unfolding</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">tokensVector</span> <span class="o">=</span> <span class="p">{</span> <span class="n">token_1</span> <span class="p">,</span> <span class="n">tokens</span><span class="p">...</span> <span class="p">};</span>
 
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">t</span><span class="o">&gt;</span>
-<span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">string_from_data</span><span class="p">(</span><span class="n">t</span> <span class="n">data</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">stringstream</span> <span class="n">temp</span><span class="p">;</span>
-    <span class="n">temp</span> <span class="o">&lt;&lt;</span> <span class="n">data</span><span class="p">;</span>
-    <span class="k">return</span> <span class="n">temp</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
-<span class="p">}</span>
-<span class="k">template</span> <span class="o">&lt;</span><span class="kt">char</span> <span class="n">D</span> <span class="o">=</span> <span class="sc">&#39;.&#39;</span><span class="o">&gt;</span>
-<span class="k">constexpr</span> <span class="kt">size_t</span> <span class="n">count_delimiter</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;\0&#39;</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">D</span> <span class="o">?</span> <span class="n">count_delimiter</span><span class="o">&lt;</span><span class="n">D</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">:</span> <span class="n">count_delimiter</span><span class="o">&lt;</span><span class="n">D</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
-<span class="p">}</span>
+        <span class="c1">//create locations</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span> <span class="n">locationsVector</span><span class="p">(</span><span class="n">tokensVector</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
 
-<span class="k">constexpr</span> <span class="kt">size_t</span> <span class="n">cstrptr_length</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span><span class="n">str</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="o">*</span><span class="n">str</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">cstrptr_length</span><span class="p">(</span><span class="n">str</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+        <span class="c1">//find locations</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">char</span><span class="o">&amp;</span> <span class="nl">token</span> <span class="p">:</span> <span class="n">tokensVector</span><span class="p">)</span> <span class="n">locationsVector</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">string</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">offset</span><span class="p">));</span>
 
-
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span><span class="kt">size_t</span> <span class="n">N</span><span class="o">&gt;</span> <span class="k">constexpr</span> <span class="kt">size_t</span> <span class="n">arr_length</span><span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="n">N</span><span class="p">])</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">N</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="c1">// trim from start (in place)</span>
-<span class="k">static</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="n">ltrim</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">s</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">s</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">std</span><span class="o">::</span><span class="n">find_if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[](</span><span class="kt">int</span> <span class="n">ch</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">isspace</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
-    <span class="p">}));</span>
-<span class="p">}</span>
-
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Trimmer</span><span class="o">&gt;</span>
-<span class="k">static</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="n">ltrim</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="n">s</span><span class="p">,</span><span class="n">Trimmer</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">s</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">find_if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">t</span><span class="p">](</span><span class="kt">int</span> <span class="n">ch</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="o">!</span><span class="n">t</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
-    <span class="p">}),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
-<span class="p">}</span>
-
-<span class="c1">// trim from end (in place)</span>
-<span class="k">static</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="n">rtrim</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">s</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">s</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">find_if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">rbegin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">rend</span><span class="p">(),</span> <span class="p">[](</span><span class="kt">int</span> <span class="n">ch</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">isspace</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
-    <span class="p">}).</span><span class="n">base</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
-<span class="p">}</span>
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Trimmer</span><span class="o">&gt;</span>
-<span class="k">static</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="n">rtrim</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="n">s</span><span class="p">,</span><span class="n">Trimmer</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">s</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">find_if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">rbegin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">rend</span><span class="p">(),</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">t</span><span class="p">](</span><span class="kt">int</span> <span class="n">ch</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="o">!</span><span class="n">t</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
-    <span class="p">}).</span><span class="n">base</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
-<span class="p">}</span>
+        <span class="c1">//find smallest element and return</span>
+        <span class="k">return</span> <span class="o">*</span><span class="nf">min_element</span><span class="p">(</span><span class="n">begin</span><span class="p">(</span><span class="n">locationsVector</span><span class="p">),</span> <span class="n">end</span><span class="p">(</span><span class="n">locationsVector</span><span class="p">));</span>
+    <span class="p">}</span>
 
 
-<span class="c1">// trim from both ends (in place)</span>
-<span class="k">static</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="n">trim</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">s</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">ltrim</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
-    <span class="n">rtrim</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
-<span class="p">}</span>
+    <span class="k">template</span> <span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">data_from_string_</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">str</span><span class="p">;</span>
+    <span class="p">}</span>
 
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Trimmer</span><span class="o">&gt;</span>
-<span class="k">static</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="n">trim</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="n">s</span><span class="p">,</span><span class="n">Trimmer</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">ltrim</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">t</span><span class="p">);</span>
-    <span class="n">rtrim</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">t</span><span class="p">);</span>
-<span class="p">}</span>
+    <span class="k">template</span> <span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">data_from_string_</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">split_string_at</span><span class="o">&lt;</span><span class="sc">&#39;,&#39;</span><span class="p">,</span> <span class="sc">&#39; &#39;</span><span class="o">&gt;</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
+    <span class="p">}</span>
 
-<span class="c1">// trim from start (copying)</span>
-<span class="k">static</span> <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">ltrim_copy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">ltrim</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
-<span class="p">}</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="kr">inline</span> <span class="n">T</span> <span class="n">data_from_string_</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">stringstream</span> <span class="n">temp</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
+        <span class="n">T</span> <span class="n">value</span><span class="p">;</span>
+        <span class="n">temp</span> <span class="o">&gt;&gt;</span> <span class="n">value</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">value</span><span class="p">;</span>
+    <span class="p">}</span>
 
-<span class="c1">// trim from end (copying)</span>
-<span class="k">static</span> <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">rtrim_copy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">rtrim</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
-<span class="p">}</span>
 
-<span class="c1">// trim from both ends (copying)</span>
-<span class="k">static</span> <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">trim_copy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">trim</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Trimmer</span><span class="o">&gt;</span>
-<span class="c1">// trim from start (copying)</span>
-<span class="k">static</span> <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">ltrim_copy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span><span class="n">Trimmer</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">ltrim</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">t</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Trimmer</span><span class="o">&gt;</span>
-<span class="c1">// trim from end (copying)</span>
-<span class="k">static</span> <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">rtrim_copy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span><span class="n">Trimmer</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">rtrim</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">t</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Trimmer</span><span class="o">&gt;</span>
-<span class="c1">// trim from both ends (copying)</span>
-<span class="k">static</span> <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">trim_copy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span><span class="n">Trimmer</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">trim</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">t</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
-<span class="p">}</span>
+    <span class="k">template</span> <span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">string_from_data</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">data</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">data</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span> <span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">string_from_data</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">ret</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="nl">str</span> <span class="p">:</span> <span class="n">data</span><span class="p">)</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="n">str</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">t</span><span class="o">&gt;</span>
+    <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">string_from_data</span><span class="p">(</span><span class="n">t</span> <span class="n">data</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">stringstream</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="n">temp</span> <span class="o">&lt;&lt;</span> <span class="n">data</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">temp</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="kt">char</span> <span class="n">D</span> <span class="o">=</span> <span class="sc">&#39;.&#39;</span><span class="o">&gt;</span>
+    <span class="k">constexpr</span> <span class="kt">size_t</span> <span class="n">count_delimiter</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;\0&#39;</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">D</span> <span class="o">?</span> <span class="n">count_delimiter</span><span class="o">&lt;</span><span class="n">D</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">:</span> <span class="n">count_delimiter</span><span class="o">&lt;</span><span class="n">D</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="k">constexpr</span> <span class="kt">size_t</span> <span class="n">cstrptr_length</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="o">*</span><span class="n">str</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">cstrptr_length</span><span class="p">(</span><span class="n">str</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">N</span><span class="o">&gt;</span> <span class="k">constexpr</span> <span class="kt">size_t</span> <span class="n">arr_length</span><span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="n">N</span><span class="p">])</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">N</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// trim from start (in place)</span>
+    <span class="k">static</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="n">ltrim</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">s</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">std</span><span class="o">::</span><span class="n">find_if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[](</span><span class="kt">int</span> <span class="n">ch</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">isspace</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
+            <span class="p">}));</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Trimmer</span><span class="o">&gt;</span>
+    <span class="k">static</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="n">ltrim</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">,</span> <span class="n">Trimmer</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">s</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">find_if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">t</span><span class="p">](</span><span class="kt">int</span> <span class="n">ch</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="o">!</span><span class="n">t</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
+            <span class="p">}),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+    <span class="p">}</span>
+
+    <span class="c1">// trim from end (in place)</span>
+    <span class="k">static</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="n">rtrim</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">s</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">find_if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">rbegin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">rend</span><span class="p">(),</span> <span class="p">[](</span><span class="kt">int</span> <span class="n">ch</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">isspace</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
+            <span class="p">}).</span><span class="n">base</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+    <span class="p">}</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Trimmer</span><span class="o">&gt;</span>
+    <span class="k">static</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="n">rtrim</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">,</span> <span class="n">Trimmer</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">s</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">find_if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">rbegin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">rend</span><span class="p">(),</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">t</span><span class="p">](</span><span class="kt">int</span> <span class="n">ch</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="o">!</span><span class="n">t</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
+            <span class="p">}).</span><span class="n">base</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+    <span class="p">}</span>
+
+
+    <span class="c1">// trim from both ends (in place)</span>
+    <span class="k">static</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="n">trim</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ltrim</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+        <span class="n">rtrim</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Trimmer</span><span class="o">&gt;</span>
+    <span class="k">static</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="n">trim</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">,</span> <span class="n">Trimmer</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ltrim</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+        <span class="n">rtrim</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// trim from start (copying)</span>
+    <span class="k">static</span> <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">ltrim_copy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ltrim</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// trim from end (copying)</span>
+    <span class="k">static</span> <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">rtrim_copy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">rtrim</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// trim from both ends (copying)</span>
+    <span class="k">static</span> <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">trim_copy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">trim</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Trimmer</span><span class="o">&gt;</span>
+    <span class="c1">// trim from start (copying)</span>
+    <span class="k">static</span> <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">ltrim_copy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">Trimmer</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ltrim</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Trimmer</span><span class="o">&gt;</span>
+    <span class="c1">// trim from end (copying)</span>
+    <span class="k">static</span> <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">rtrim_copy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">Trimmer</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">rtrim</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Trimmer</span><span class="o">&gt;</span>
+    <span class="c1">// trim from both ends (copying)</span>
+    <span class="k">static</span> <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">trim_copy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="n">Trimmer</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">trim</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+    <span class="p">}</span>
 
 <span class="p">}</span>
 </pre></div>

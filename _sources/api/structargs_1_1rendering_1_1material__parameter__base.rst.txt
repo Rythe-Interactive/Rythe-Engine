@@ -1,0 +1,25 @@
+.. _exhale_struct_structargs_1_1rendering_1_1material__parameter__base:
+
+Struct material_parameter_base
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_material.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Type
+************
+
+- ``public args::rendering::material_parameter< T >`` (:ref:`exhale_struct_structargs_1_1rendering_1_1material__parameter`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::rendering::material_parameter_base
+   :members:
+   :protected-members:
+   :undoc-members:

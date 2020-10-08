@@ -1,0 +1,63 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_edgepenetrationquery.h:
+
+File edgepenetrationquery.h
+===========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_physics_data>` (``/home/runner/work/Args-Engine/Args-Engine/args/physics/data``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/physics/data/edgepenetrationquery.h``)
+---------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_edgepenetrationquery.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`)
+
+- ``physics/data/penetrationquery.h`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_penetrationquery.h`)
+
+- ``physics/halfedgeedge.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_halfedgeedge.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_colliders_convexcollider.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_edgepenetrationquery.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__physics`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1physics_1_1_edge_penetration_query`
+

@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1physics_1_1cube__collider__params:
+
+Struct cube_collider_params
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_cube_collider_params.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::physics::cube_collider_params
+   :members:
+   :protected-members:
+   :undoc-members:

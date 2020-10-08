@@ -16,12 +16,14 @@ Derived Types
 - ``public args::core::events::event< char_input >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
 - ``public args::core::events::event< component_creation< component_type > >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
 - ``public args::core::events::event< component_destruction< component_type > >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
+- ``public args::core::events::event< debug_line >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
 - ``public args::core::events::event< exit >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
 - ``public args::core::events::event< key_input >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
 - ``public args::core::events::event< mouse_button >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
 - ``public args::core::events::event< mouse_enter_window >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
 - ``public args::core::events::event< mouse_moved >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
 - ``public args::core::events::event< mouse_scrolled >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
+- ``public args::core::events::event< T >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
 - ``public args::core::events::event< window_close >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
 - ``public args::core::events::event< window_content_rescale >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
 - ``public args::core::events::event< window_focus >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
@@ -33,6 +35,7 @@ Derived Types
 - ``public args::core::events::event< window_refresh >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
 - ``public args::core::events::event< window_request >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
 - ``public args::core::events::event< window_resize >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
+- ``public args::core::events::event< window_toggle_fullscreen_request >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
 
 
 Class Documentation

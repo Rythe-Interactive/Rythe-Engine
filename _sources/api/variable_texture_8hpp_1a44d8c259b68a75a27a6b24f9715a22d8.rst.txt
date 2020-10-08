@@ -1,0 +1,13 @@
+.. _exhale_variable_texture_8hpp_1a44d8c259b68a75a27a6b24f9715a22d8:
+
+Variable args::rendering::components_to_format
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_texture.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::rendering::components_to_format

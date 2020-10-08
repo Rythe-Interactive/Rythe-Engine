@@ -1,0 +1,78 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_material.hpp:
+
+File material.hpp
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_rendering_data>` (``/home/runner/work/Args-Engine/Args-Engine/args/rendering/data``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/rendering/data/material.hpp``)
+-------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_material.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``rendering/data/shader.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_shader.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_components_renderable.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_material.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__rendering`
+
+- :ref:`namespace_std`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1material`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1material__handle`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1material__parameter`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1material__parameter__base`
+
+- :ref:`exhale_struct_structstd_1_1hash_3_01args_1_1rendering_1_1material__handle_01_4`
+
+- :ref:`exhale_class_classargs_1_1rendering_1_1_material_cache`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_material_8hpp_1ab560833432b20be0aac7ef9ada8b5d53`
+

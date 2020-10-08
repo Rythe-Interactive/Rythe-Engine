@@ -1,0 +1,16 @@
+.. _exhale_struct_structstd_1_1hash_3_01args_1_1core_1_1detail_1_1vertex__hash_01_4:
+
+Template Struct hash< args::core::detail::vertex_hash >
+=======================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_importers_mesh_importers.cpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: std::hash< args::core::detail::vertex_hash >
+   :members:
+   :protected-members:
+   :undoc-members:

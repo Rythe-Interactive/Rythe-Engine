@@ -70,7 +70,7 @@
 
         <span class="kt">void</span> <span class="nf">init</span><span class="p">()</span>
         <span class="p">{</span>
-            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">system</span> <span class="p">:</span> <span class="n">m_systems</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">system</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_systems</span><span class="p">)</span>
                 <span class="n">system</span><span class="o">-&gt;</span><span class="n">setup</span><span class="p">();</span>
         <span class="p">};</span>
 

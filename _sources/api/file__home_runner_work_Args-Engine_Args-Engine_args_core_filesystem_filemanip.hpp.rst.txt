@@ -49,6 +49,8 @@ Included By
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_basic_resolver.hpp`
 
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.cpp`
+
 
 
 
@@ -66,12 +68,6 @@ Functions
 
 
 - :ref:`exhale_function_filemanip_8hpp_1adf4757f8bfa68b75a2ee4f41e9d3b84c`
-
-- :ref:`exhale_function_namespaceargs_1_1core_1_1filesystem_1_1literals_1a0f311ec9646ea3caf5ce189ebae826a6`
-
-- :ref:`exhale_function_namespaceargs_1_1core_1_1filesystem_1_1literals_1acc3142f046c9c3dca88de33c8c1d6ced`
-
-- :ref:`exhale_function_namespaceargs_1_1core_1_1filesystem_1_1literals_1a5e12aaf09e12d80528fcc3636d8cfaf7`
 
 - :ref:`exhale_function_filemanip_8hpp_1ab37ec71e56f634b5d953917b91e395cc`
 

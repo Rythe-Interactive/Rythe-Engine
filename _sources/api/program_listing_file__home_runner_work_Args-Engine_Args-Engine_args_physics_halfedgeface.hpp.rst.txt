@@ -1,0 +1,36 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_physics_halfedgeface.hpp:
+
+Program Listing for File halfedgeface.hpp
+=========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_physics_halfedgeface.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/physics/halfedgeface.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/core.hpp>
+   
+   namespace args::physics
+   {
+       struct HalfEdgeEdge;
+   
+       struct HalfEdgeFace
+       {
+           HalfEdgeEdge* startEdge;
+           math::vec3 normal;
+           math::vec3 centroid;
+           std::string id;
+   
+           HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
+   
+           void forEachEdge(args::core::delegate< void(HalfEdgeEdge*)> functionToExecute);
+           
+   
+           ~HalfEdgeFace();
+   
+   
+       };
+   }

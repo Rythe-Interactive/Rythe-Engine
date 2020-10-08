@@ -46,7 +46,8 @@
   <div class="section" id="program-listing-for-file-provider-registry-hpp">
 <span id="program-listing-file-home-runner-work-args-engine-args-engine-args-core-filesystem-provider-registry-hpp"></span><h1>Program Listing for File provider_registry.hpp<a class="headerlink" href="#program-listing-for-file-provider-registry-hpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_provider_registry.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-filesystem-provider-registry-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/provider_registry.hpp</span></code>)</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp"></span>
 
 <span class="cp">#include</span> <span class="cpf">&lt;string_view&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
@@ -59,7 +60,7 @@
 <span class="cp">#include</span> <span class="cpf">&quot;mem_filesystem_resolver.hpp&quot;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">filesystem</span><span class="p">{</span>
-    <span class="k">class</span> <span class="nc">ARGS_API</span> <span class="n">provider_registry</span>
+    <span class="k">class</span> <span class="nc">provider_registry</span>
     <span class="p">{</span>
     <span class="k">public</span><span class="o">:</span>
         <span class="k">using</span> <span class="n">domain</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">;</span>

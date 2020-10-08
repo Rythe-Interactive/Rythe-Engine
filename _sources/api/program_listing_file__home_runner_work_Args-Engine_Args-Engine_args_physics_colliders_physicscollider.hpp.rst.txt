@@ -1,0 +1,71 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_physics_colliders_physicscollider.hpp:
+
+Program Listing for File physicscollider.hpp
+============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_physics_colliders_physicscollider.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/physics/colliders/physicscollider.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   #include <core/core.hpp>
+   #include <memory>
+   #include <physics/halfedgeface.hpp>
+   
+   
+   namespace args::physics
+   {
+   
+       //for debugging purposes only
+       struct TempLine
+       {
+           math::vec3 start;
+           math::vec3 end;
+       };
+   
+       struct physicsComponent;
+       struct physics_manifold;
+       class ConvexCollider;
+   
+   
+       class PhysicsCollider
+       {
+       public:
+   
+           PhysicsCollider() = default;
+   
+           virtual void CheckCollision(
+               std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold& manifold) {};
+   
+           virtual void CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) {};
+   
+           virtual void PopulateContactPoints(
+               std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold& manifold) {};
+   
+           virtual void PopulateContactPointsWith(
+               ConvexCollider* convexCollider, physics_manifold& manifold) {};
+   
+   
+           inline virtual void DrawColliderRepresentation(math::mat4 transform) {};
+   
+           inline virtual std::vector<HalfEdgeFace*>& GetHalfEdgeFaces()
+           {
+               return dummyHalfEdges;
+           }
+   
+           // this is only here for debug reasons
+           std::vector<TempLine> collisionsFound;
+   
+       private:
+          //this is not used, its mostly for debug reasons
+           std::vector<HalfEdgeFace*> dummyHalfEdges;
+   
+       };
+   }
+   
+   
+   

@@ -56,14 +56,60 @@
 <span class="p">{</span>
     <span class="k">struct</span> <span class="n">window</span>
     <span class="p">{</span>
+        <span class="k">friend</span> <span class="k">class</span> <span class="nc">WindowSystem</span><span class="p">;</span>
         <span class="n">window</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">ptr</span><span class="p">)</span> <span class="o">:</span> <span class="n">handle</span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span> <span class="p">{}</span>
         <span class="n">window</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
 
         <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">handle</span><span class="p">;</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">*</span> <span class="n">lock</span><span class="p">;</span>
 
         <span class="k">operator</span> <span class="n">GLFWwindow</span><span class="o">*</span> <span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">handle</span><span class="p">;</span> <span class="p">}</span>
         <span class="n">window</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">ptr</span><span class="p">)</span> <span class="p">{</span> <span class="n">handle</span> <span class="o">=</span> <span class="n">ptr</span><span class="p">;</span> <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="kr">inline</span> <span class="kt">void</span> <span class="n">enableCursor</span><span class="p">(</span><span class="kt">bool</span> <span class="n">enabled</span><span class="p">)</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="o">*</span><span class="n">lock</span><span class="p">);</span>
+            <span class="n">ContextHelper</span><span class="o">::</span><span class="n">makeContextCurrent</span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>
+            <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setInputMode</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">GLFW_CURSOR</span><span class="p">,</span> <span class="n">enabled</span> <span class="o">?</span> <span class="nl">GLFW_CURSOR_NORMAL</span> <span class="p">:</span> <span class="n">GLFW_CURSOR_DISABLED</span><span class="p">);</span>
+            <span class="n">ContextHelper</span><span class="o">::</span><span class="n">makeContextCurrent</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kr">inline</span> <span class="kt">void</span> <span class="n">setSwapInterval</span><span class="p">(</span><span class="n">uint</span> <span class="n">interval</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="o">*</span><span class="n">lock</span><span class="p">);</span>
+            <span class="n">ContextHelper</span><span class="o">::</span><span class="n">makeContextCurrent</span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>
+            <span class="n">ContextHelper</span><span class="o">::</span><span class="n">swapInterval</span><span class="p">(</span><span class="n">interval</span><span class="p">);</span>
+            <span class="n">m_swapInterval</span> <span class="o">=</span> <span class="n">interval</span><span class="p">;</span>
+            <span class="n">ContextHelper</span><span class="o">::</span><span class="n">makeContextCurrent</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kr">inline</span> <span class="kt">void</span> <span class="n">show</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="n">ContextHelper</span><span class="o">::</span><span class="n">showWindow</span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kr">inline</span> <span class="kt">int</span> <span class="n">swapInterval</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_swapInterval</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kr">inline</span> <span class="kt">bool</span> <span class="n">isFullscreen</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_isFullscreen</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kr">inline</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">title</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_title</span><span class="p">;</span>
+        <span class="p">}</span>
+
+    <span class="k">private</span><span class="o">:</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">m_title</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">m_isFullscreen</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">m_swapInterval</span><span class="p">;</span>
     <span class="p">};</span>
+
+    <span class="k">const</span> <span class="n">window</span> <span class="n">invalid_window</span> <span class="o">=</span> <span class="p">{};</span>
 <span class="p">}</span>
 </pre></div>
 </div>

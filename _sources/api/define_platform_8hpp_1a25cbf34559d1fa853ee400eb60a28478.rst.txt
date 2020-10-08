@@ -1,0 +1,13 @@
+.. _exhale_define_platform_8hpp_1a25cbf34559d1fa853ee400eb60a28478:
+
+Define ARGS_RELEASE_VALUE
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: ARGS_RELEASE_VALUE

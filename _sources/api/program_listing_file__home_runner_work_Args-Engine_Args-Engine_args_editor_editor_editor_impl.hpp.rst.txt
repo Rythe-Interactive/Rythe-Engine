@@ -17,7 +17,7 @@ Program Listing for File editor_impl.hpp
    
    namespace args::editor
    {
-       class ARGS_API Editor
+       class Editor
        {
            template<class ModuleType, core::inherits_from<ModuleType, EditorModule> = 0>
            void reportModule()

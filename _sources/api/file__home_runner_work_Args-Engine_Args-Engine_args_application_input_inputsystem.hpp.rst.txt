@@ -1,0 +1,65 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_application_input_inputsystem.hpp:
+
+File inputsystem.hpp
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_application_input>` (``/home/runner/work/Args-Engine/Args-Engine/args/application/input``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/application/input/inputsystem.hpp``)
+-------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_application_input_inputsystem.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``application/events/inputevents.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_events_inputevents.hpp`)
+
+- ``application/events/windowinputevents.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_events_windowinputevents.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_input_inputsystem.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_module_applicationmodule.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__application`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1application_1_1_input_system_1_1action__data`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1_input_system_1_1axis__data`
+
+- :ref:`exhale_class_classargs_1_1application_1_1_input_system`
+

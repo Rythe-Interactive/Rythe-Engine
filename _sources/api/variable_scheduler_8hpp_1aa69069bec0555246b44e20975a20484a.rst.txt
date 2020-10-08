@@ -1,0 +1,13 @@
+.. _exhale_variable_scheduler_8hpp_1aa69069bec0555246b44e20975a20484a:
+
+Variable args::core::scheduling::invalid_thread_id
+==================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_scheduler.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::core::scheduling::invalid_thread_id

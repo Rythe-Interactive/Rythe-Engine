@@ -1,0 +1,13 @@
+.. _exhale_typedef_physicssystem_8hpp_1ae8a937515f8011e01c8a338c4769bd8a:
+
+Typedef args::physics::PhysicsColliderPtr
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_systems_physicssystem.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::physics::PhysicsColliderPtr

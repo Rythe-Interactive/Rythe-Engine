@@ -1,0 +1,20 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_application_window_windowsystem.cpp:
+
+Program Listing for File windowsystem.cpp
+=========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_application_window_windowsystem.cpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/application/window/windowsystem.cpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include <application/window/windowsystem.hpp>
+   
+   namespace args::application
+   {
+       sparse_map<GLFWwindow*, ecs::component_handle<window>> WindowSystem::m_windowComponents;
+       sparse_map<GLFWwindow*, events::EventBus*> WindowSystem::m_windowEventBus;
+       async::readonly_rw_spinlock WindowSystem::m_creationLock;
+   }

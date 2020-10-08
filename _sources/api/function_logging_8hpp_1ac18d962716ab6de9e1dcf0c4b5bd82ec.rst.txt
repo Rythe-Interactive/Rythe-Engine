@@ -1,0 +1,13 @@
+.. _exhale_function_logging_8hpp_1ac18d962716ab6de9e1dcf0c4b5bd82ec:
+
+Template Function args::core::log::warn
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::log::warn(const FormatString&, Args&&...)

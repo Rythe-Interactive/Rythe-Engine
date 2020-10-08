@@ -19,6 +19,14 @@ Namespaces
 
 - :ref:`namespace_args__application`
 
+- :ref:`namespace_args__audio`
+
 - :ref:`namespace_args__core`
 
+- :ref:`namespace_args__debug`
+
 - :ref:`namespace_args__editor`
+
+- :ref:`namespace_args__physics`
+
+- :ref:`namespace_args__rendering`

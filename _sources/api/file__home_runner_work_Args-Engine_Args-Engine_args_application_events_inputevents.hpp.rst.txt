@@ -29,9 +29,9 @@ Includes
 --------
 
 
-- ``application/window/window.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_window_window.hpp`)
+- ``application/input/inputmap.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_input_inputmap.hpp`)
 
-- ``core/events/event.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_event.hpp`)
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`)
 
 
 
@@ -39,7 +39,9 @@ Included By
 -----------
 
 
-- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_window_windowsystem.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_application.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_input_inputsystem.hpp`
 
 
 
@@ -55,13 +57,7 @@ Classes
 -------
 
 
-- :ref:`exhale_struct_structargs_1_1application_1_1char__input`
+- :ref:`exhale_struct_structargs_1_1application_1_1input__action`
 
-- :ref:`exhale_struct_structargs_1_1application_1_1key__input`
-
-- :ref:`exhale_struct_structargs_1_1application_1_1mouse__button`
-
-- :ref:`exhale_struct_structargs_1_1application_1_1mouse__moved`
-
-- :ref:`exhale_struct_structargs_1_1application_1_1mouse__scrolled`
+- :ref:`exhale_struct_structargs_1_1application_1_1input__axis`
 

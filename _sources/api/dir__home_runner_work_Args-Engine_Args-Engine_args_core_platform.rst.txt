@@ -15,7 +15,6 @@ Directory platform
 Files
 -----
 
-- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_args_library.hpp`
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`
 
 

@@ -1,0 +1,80 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_audio_data_audio_segment.hpp:
+
+File audio_segment.hpp
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_audio_data>` (``/home/runner/work/Args-Engine/Args-Engine/args/audio/data``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/audio/data/audio_segment.hpp``)
+--------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_audio_data_audio_segment.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``AL/al.h``
+
+- ``AL/alc.h``
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_components_audio_source.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_data_audio_segment.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_data_importers_audio_importers.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__audio`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1audio_1_1audio__import__settings`
+
+- :ref:`exhale_struct_structargs_1_1audio_1_1audio__segment`
+
+- :ref:`exhale_struct_structargs_1_1audio_1_1audio__segment__handle`
+
+- :ref:`exhale_class_classargs_1_1audio_1_1_audio_segment_cache`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_audio__segment_8hpp_1ac7c1a964b61c1dd72b72135230cfbae8`
+
+- :ref:`exhale_variable_audio__segment_8hpp_1acdfbca067ccb8e401154623899163623`
+

@@ -1,0 +1,16 @@
+.. _exhale_struct_structfmt_1_1formatter_3_01std_1_1thread_1_1id_01_4:
+
+Template Struct formatter< std::thread::id >
+============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: fmt::formatter< std::thread::id >
+   :members:
+   :protected-members:
+   :undoc-members:

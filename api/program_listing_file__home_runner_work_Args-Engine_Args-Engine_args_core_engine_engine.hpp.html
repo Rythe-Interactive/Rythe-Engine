@@ -54,6 +54,8 @@
 <span class="cp">#include</span> <span class="cpf">&lt;core/ecs/ecsregistry.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/scheduling/scheduler.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/events/eventbus.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/defaults/coremodule.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/logging/logging.hpp&gt;</span><span class="cp"></span>
 
 <span class="cp">#include</span> <span class="cpf">&lt;map&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
@@ -64,6 +66,7 @@
     <span class="k">class</span> <span class="nc">Engine</span>
     <span class="p">{</span>
     <span class="k">private</span><span class="o">:</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;</span> <span class="n">m_cliargs</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">priority_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">greater</span><span class="o">&lt;&gt;&gt;</span> <span class="n">m_modules</span><span class="p">;</span>
 
         <span class="n">events</span><span class="o">::</span><span class="n">EventBus</span> <span class="n">m_eventbus</span><span class="p">;</span>
@@ -71,7 +74,15 @@
         <span class="n">scheduling</span><span class="o">::</span><span class="n">Scheduler</span> <span class="n">m_scheduler</span><span class="p">;</span>
 
     <span class="k">public</span><span class="o">:</span>
-        <span class="n">Engine</span><span class="p">()</span> <span class="o">:</span> <span class="n">m_modules</span><span class="p">(),</span> <span class="n">m_eventbus</span><span class="p">(),</span> <span class="n">m_ecs</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_eventbus</span><span class="p">),</span> <span class="n">m_scheduler</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_eventbus</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">Engine</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_modules</span><span class="p">(),</span> <span class="n">m_eventbus</span><span class="p">(),</span> <span class="n">m_ecs</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_eventbus</span><span class="p">),</span> <span class="n">m_cliargs</span><span class="p">(</span><span class="n">argv</span><span class="p">,</span> <span class="n">argv</span> <span class="o">+</span> <span class="n">argc</span><span class="p">),</span>
+<span class="cp">#if defined(ARGS_LOW_POWER)</span>
+            <span class="n">m_scheduler</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_eventbus</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="n">LEGION_MIN_THREADS</span><span class="p">)</span>
+<span class="cp">#else</span>
+            <span class="n">m_scheduler</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_eventbus</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="n">LEGION_MIN_THREADS</span><span class="p">)</span>
+<span class="cp">#endif</span>
+        <span class="p">{</span>
+            <span class="n">reportModule</span><span class="o">&lt;</span><span class="n">CoreModule</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="p">}</span>
 
         <span class="o">~</span><span class="n">Engine</span><span class="p">()</span>
         <span class="p">{</span>
@@ -92,6 +103,9 @@
 
         <span class="kt">void</span> <span class="n">init</span><span class="p">()</span>
         <span class="p">{</span>
+
+            <span class="n">log</span><span class="o">::</span><span class="n">setup</span><span class="p">();</span>
+
             <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">priority</span><span class="p">,</span> <span class="n">moduleList</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_modules</span><span class="p">)</span>
                 <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="k">module</span> <span class="o">:</span> <span class="n">moduleList</span><span class="p">)</span>
                     <span class="k">module</span><span class="o">-&gt;</span><span class="n">setup</span><span class="p">();</span>
@@ -105,6 +119,11 @@
         <span class="p">{</span>
             <span class="n">m_scheduler</span><span class="p">.</span><span class="n">run</span><span class="p">();</span>
         <span class="p">}</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">*&gt;&amp;</span> <span class="n">getCliArgs</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_cliargs</span><span class="p">;</span>
+        <span class="p">}</span>
+
     <span class="p">};</span>
 <span class="p">}</span>
 </pre></div>

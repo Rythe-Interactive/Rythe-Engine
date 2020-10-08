@@ -1,0 +1,70 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_compute_buffer.hpp:
+
+Program Listing for File buffer.hpp
+===================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_compute_buffer.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/compute/buffer.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <CL/cl.h> // cl_context , cl_mem , cl_mem_flags
+   
+   #include <core/types/primitives.hpp> // byte, size_t
+   
+   #include <tuple> // pair
+   #include <string> // string
+   
+   namespace args::core::compute {
+   
+   
+       enum class buffer_type : int
+       {
+           WRITE_BUFFER = 1,
+           READ_BUFFER = 2
+       };
+   
+       inline buffer_type operator|(const buffer_type& lhs,const buffer_type& rhs)
+       {
+           return static_cast<buffer_type>(static_cast<int>(lhs) | static_cast<int>(rhs));
+       }
+   
+       inline buffer_type& operator|=(buffer_type& lhs,const buffer_type& rhs)
+       {
+           return lhs = lhs | rhs;
+       }
+   
+   
+       class Buffer
+       {
+       public:
+           Buffer(cl_context,byte*,size_t,buffer_type,std::string);
+   
+           Buffer(Buffer&& b) noexcept;
+           Buffer(const Buffer& b);
+   
+           //copy assign & move assign operator
+           //are deleted since the Buffer
+           //refcounts
+           Buffer& operator=(Buffer&&) noexcept = delete;
+           Buffer& operator=(const Buffer&) = delete;
+   
+           void rename(const std::string& name);
+   
+           ~Buffer();
+       private:
+           friend class Program;
+           friend class Kernel;
+   
+           std::string m_name;
+           cl_mem m_memory_object;
+           size_type* m_ref_count;
+           cl_mem_flags m_type;
+           byte*  m_data;
+           size_type m_size;
+       };
+   }
+   

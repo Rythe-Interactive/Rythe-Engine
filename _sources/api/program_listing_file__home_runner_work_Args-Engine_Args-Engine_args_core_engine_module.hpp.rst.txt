@@ -34,7 +34,7 @@ Program Listing for File module.hpp
    
            void init()
            {
-               for (auto& system : m_systems)
+               for (auto [_, system] : m_systems)
                    system->setup();
            };
    

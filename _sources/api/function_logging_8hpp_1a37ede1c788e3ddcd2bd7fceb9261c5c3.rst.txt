@@ -1,0 +1,13 @@
+.. _exhale_function_logging_8hpp_1a37ede1c788e3ddcd2bd7fceb9261c5c3:
+
+Function args::core::log::args2spdlog
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::log::args2spdlog(severity)

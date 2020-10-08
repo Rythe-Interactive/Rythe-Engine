@@ -1,0 +1,13 @@
+.. _exhale_variable_shader_8hpp_1a9f270ca83d0c735c781a8f591dffc826:
+
+Variable args::rendering::invalid_shader_handle
+===============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_shader.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::rendering::invalid_shader_handle

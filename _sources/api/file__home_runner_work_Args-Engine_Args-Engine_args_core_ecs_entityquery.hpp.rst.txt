@@ -29,7 +29,9 @@ Includes
 --------
 
 
-- ``core/containers/sparse_map.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_sparse_map.hpp`)
+- ``core/containers/hashed_sparse_set.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_hashed_sparse_set.hpp`)
+
+- ``core/ecs/entity_handle.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entity_handle.hpp`)
 
 - ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
 
@@ -68,13 +70,4 @@ Classes
 
 
 - :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1_entity_query`
-
-
-Variables
----------
-
-
-- :ref:`exhale_variable_entityquery_8hpp_1a55d81d7290c164ff4dbb4ddff1af3b62`
-
-- :ref:`exhale_variable_entityquery_8hpp_1aa908909eb9338c3b0f3749e7d4cd0c1c`
 

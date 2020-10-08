@@ -114,23 +114,11 @@
 
     <span class="k">namespace</span> <span class="n">literals</span>
     <span class="p">{</span>
-        <span class="n">byte_vec</span> <span class="k">operator</span><span class="s">&quot;&quot;</span><span class="n">_readfile</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">str</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="o">::</span><span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">read_file</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">len</span><span class="p">));</span>
-        <span class="p">}</span>
+        <span class="n">byte_vec</span> <span class="n">ARGS_FUNC</span> <span class="k">operator</span><span class="s">&quot;&quot;</span><span class="n">_readfile</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">len</span><span class="p">);</span>
 
-        <span class="k">auto</span> <span class="k">operator</span><span class="s">&quot;&quot;</span><span class="n">_writefile</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">str</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="p">[</span><span class="n">path</span><span class="o">=</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">len</span><span class="p">)](</span><span class="k">const</span> <span class="n">byte_vec</span><span class="o">&amp;</span> <span class="n">container</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="o">::</span><span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">write_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="n">container</span><span class="p">);</span>
-            <span class="p">};</span>
-        <span class="p">}</span>
+        <span class="k">auto</span> <span class="n">ARGS_FUNC</span> <span class="k">operator</span><span class="s">&quot;&quot;</span><span class="n">_writefile</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">len</span><span class="p">);</span>
 
-        <span class="kt">bool</span> <span class="k">operator</span><span class="s">&quot;&quot;</span><span class="n">_exists</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="o">::</span><span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">exists</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="n">len</span><span class="p">));</span>
-        <span class="p">}</span>
+        <span class="kt">bool</span> <span class="n">ARGS_FUNC</span> <span class="k">operator</span><span class="s">&quot;&quot;</span><span class="n">_exists</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">len</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
 

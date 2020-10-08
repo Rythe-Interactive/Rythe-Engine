@@ -1,0 +1,13 @@
+.. _exhale_variable_audio__segment_8hpp_1ac7c1a964b61c1dd72b72135230cfbae8:
+
+Variable args::audio::default_audio_import_settings
+===================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_data_audio_segment.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::audio::default_audio_import_settings

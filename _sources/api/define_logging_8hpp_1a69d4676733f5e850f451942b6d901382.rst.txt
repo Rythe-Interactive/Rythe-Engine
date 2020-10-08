@@ -1,0 +1,13 @@
+.. _exhale_define_logging_8hpp_1a69d4676733f5e850f451942b6d901382:
+
+Define LOG_FILE
+===============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: LOG_FILE

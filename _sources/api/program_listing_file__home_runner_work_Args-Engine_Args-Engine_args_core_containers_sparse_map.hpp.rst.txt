@@ -18,6 +18,7 @@ Program Listing for File sparse_map.hpp
    #include <stdexcept>
    #include <core/platform/platform.hpp>
    #include <core/types/primitives.hpp>
+   #include <core/containers/iterator_tricks.hpp>
    
    namespace args::core
    {
@@ -41,8 +42,8 @@ Program Listing for File sparse_map.hpp
            using dense_value_container = dense_type<value_type>;
            using dense_key_container = dense_type<key_type>;
    
-           using iterator = typename dense_value_container::iterator;
-           using const_iterator = typename dense_value_container::const_iterator;
+           using iterator = core::iterator::key_value_pair_iterator<typename dense_key_container::iterator, typename dense_value_container::iterator>;
+           using const_iterator = core::iterator::key_value_pair_iterator<typename dense_key_container::const_iterator, typename dense_value_container::const_iterator>;
    
        private:
            dense_value_container m_dense_value;
@@ -59,13 +60,13 @@ Program Listing for File sparse_map.hpp
            A_NODISCARD dense_key_container& keys() { return m_dense_key; }
            A_NODISCARD const dense_key_container& keys() const { return m_dense_key; }
    
-           A_NODISCARD iterator begin() { return m_dense_value.begin(); }
-           A_NODISCARD const_iterator begin() const { return m_dense_value.cbegin(); }
-           A_NODISCARD const_iterator cbegin() const { return m_dense_value.cbegin(); }
+           A_NODISCARD iterator begin() { return iterator(m_dense_key.begin(), m_dense_value.begin()); }
+           A_NODISCARD const_iterator begin() const { return const_iterator(m_dense_key.cbegin(), m_dense_value.cbegin()); }
+           A_NODISCARD const_iterator cbegin() const { return const_iterator(m_dense_key.cbegin(), m_dense_value.cbegin()); }
    
-           A_NODISCARD iterator end() { return m_dense_value.begin() + m_size; }
-           A_NODISCARD const_iterator end() const { return m_dense_value.cbegin() + m_size; }
-           A_NODISCARD const_iterator cend() const { return m_dense_value.cbegin() + m_size; }
+           A_NODISCARD iterator end() { return iterator(m_dense_key.begin() + m_size, m_dense_value.begin() + m_size); }
+           A_NODISCARD const_iterator end() const { return const_iterator(m_dense_key.cbegin() + m_size, m_dense_value.cbegin() + m_size); }
+           A_NODISCARD const_iterator cend() const { return const_iterator(m_dense_key.cbegin() + m_size, m_dense_value.cbegin() + m_size); }
    
            A_NODISCARD size_type size() const noexcept { return m_size; }
    
@@ -197,7 +198,7 @@ Program Listing for File sparse_map.hpp
    
                    m_sparse[key] = m_size;
                    ++m_size;
-                   return std::make_pair(itr_value, true);
+                   return std::make_pair(iterator(itr_key, itr_value), true);
                }
                return std::make_pair(end(), false);
            }
@@ -217,7 +218,7 @@ Program Listing for File sparse_map.hpp
    
                    m_sparse[*itr_key] = m_size;
                    ++m_size;
-                   return std::make_pair(itr_value, true);
+                   return std::make_pair(iterator(itr_key, itr_value), true);
                }
                return std::make_pair(end(), false);
            }
@@ -237,7 +238,7 @@ Program Listing for File sparse_map.hpp
    
                    m_sparse[key] = m_size;
                    ++m_size;
-                   return std::make_pair(itr_value, true);
+                   return std::make_pair(iterator(itr_key, itr_value), true);
                }
                return std::make_pair(end(), false);
            }
@@ -257,7 +258,7 @@ Program Listing for File sparse_map.hpp
    
                    m_sparse[*itr_key] = m_size;
                    ++m_size;
-                   return std::make_pair(itr_value, true);
+                   return std::make_pair(iterator(itr_key, itr_value), true);
                }
                return std::make_pair(end(), false);
            }
@@ -274,7 +275,7 @@ Program Listing for File sparse_map.hpp
                        reserve(m_size + 1);
    
                    auto itr_value = m_dense_value.begin() + m_size;
-                   *itr_value = std::forward<value_type>(value_type(arguments...));
+                   *itr_value = value_type(arguments...);
    
                    auto itr_key = m_dense_key.begin() + m_size;
                    *itr_key = key;
@@ -282,7 +283,7 @@ Program Listing for File sparse_map.hpp
                    m_sparse[key] = m_size;
                    ++m_size;
    
-                   return std::make_pair(itr_value, true);
+                   return std::make_pair(iterator(itr_key, itr_value), true);
                }
    
                return std::make_pair(end(), false);
@@ -297,7 +298,7 @@ Program Listing for File sparse_map.hpp
                        reserve(m_size + 1);
    
                    auto itr_value = m_dense_value.begin() + m_size;
-                   *itr_value = std::forward<value_type>(value_type(arguments...));
+                   *itr_value = value_type(arguments...);
    
                    auto itr_key = m_dense_key.begin() + m_size;
                    *itr_key = std::move(key);
@@ -305,7 +306,7 @@ Program Listing for File sparse_map.hpp
                    m_sparse[*itr_key] = m_size;
                    ++m_size;
    
-                   return std::make_pair(itr_value, true);
+                   return std::make_pair(iterator(itr_key, itr_value), true);
                }
    
                return std::make_pair(end(), false);
@@ -323,7 +324,7 @@ Program Listing for File sparse_map.hpp
                        reserve(m_size + 1);
    
                    auto itr_value = m_dense_value.begin() + m_size;
-                   *itr_value = std::forward<value_type>(value_type());
+                   *itr_value = value_type();
    
                    auto itr_key = m_dense_key.begin() + m_size; // Find iterator location at which to store the key.
                    *itr_key = std::move(key); // Move the key into the location.
@@ -345,7 +346,7 @@ Program Listing for File sparse_map.hpp
                        reserve(m_size + 1);
    
                    auto itr_value = m_dense_value.begin() + m_size;
-                   *itr_value = std::forward<value_type>(value_type());
+                   *itr_value = value_type();
    
                    auto itr_key = m_dense_key.begin() + m_size;
                    *itr_key = key;

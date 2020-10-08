@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1core_1_1_mesh_cache:
+
+Class MeshCache
+===============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_mesh.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::MeshCache
+   :members:
+   :protected-members:
+   :undoc-members:

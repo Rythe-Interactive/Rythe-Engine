@@ -1,0 +1,13 @@
+.. _exhale_enum_kernel_8hpp_1a7341ccf9e8fc253af90c9b42bbb936b6:
+
+Enum block_mode
+===============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_compute_kernel.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: args::core::compute::block_mode

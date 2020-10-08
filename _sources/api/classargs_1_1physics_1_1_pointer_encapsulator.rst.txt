@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1physics_1_1_pointer_encapsulator:
+
+Template Class PointerEncapsulator
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_pointer_encapsulator.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::physics::PointerEncapsulator
+   :members:
+   :protected-members:
+   :undoc-members:

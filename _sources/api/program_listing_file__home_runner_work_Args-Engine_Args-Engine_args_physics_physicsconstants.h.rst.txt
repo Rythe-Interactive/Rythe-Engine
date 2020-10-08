@@ -1,0 +1,24 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_physics_physicsconstants.h:
+
+Program Listing for File physicsconstants.h
+===========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_physics_physicsconstants.h>` (``/home/runner/work/Args-Engine/Args-Engine/args/physics/physicsconstants.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   #include <core/core.hpp>
+   
+   namespace args::physics::constants
+   {
+       static math::vec3 gravity = math::vec3(0, -9.81, 0);
+   
+       static constexpr int contactSolverIterationCount = 10;
+   
+       static constexpr int frictionSolverIterationCount = 4;
+   }

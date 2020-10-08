@@ -33,9 +33,13 @@ Includes
 
 - ``core/containers/sparse_map.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_sparse_map.hpp`)
 
-- ``core/containers/sparse_set.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_sparse_set.hpp`)
+- ``core/ecs/archetype.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_archetype.hpp`)
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp`)
 
 - ``core/types/types.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp`)
+
+- ``memory``
 
 
 
@@ -55,9 +59,9 @@ Included By
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entityquery.cpp`
 
-- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_queryregistry.cpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entityquery.hpp`
 
-- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_rw_component_buffer.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_queryregistry.cpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_defaultevents.hpp`
 
@@ -75,7 +79,16 @@ Classes
 -------
 
 
+- :ref:`exhale_struct_structargs_1_1core_1_1ecs_1_1child__iterator`
+
 - :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1component__handle`
 
 - :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1entity__handle`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_entity__handle_8hpp_1a8b1e7fb4d0b1f7b15c2e01dc67f01dc8`
 

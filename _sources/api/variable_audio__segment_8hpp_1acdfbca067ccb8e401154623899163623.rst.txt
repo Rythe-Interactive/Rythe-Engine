@@ -1,0 +1,13 @@
+.. _exhale_variable_audio__segment_8hpp_1acdfbca067ccb8e401154623899163623:
+
+Variable args::audio::invalid_audio_segment_handle
+==================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_data_audio_segment.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::audio::invalid_audio_segment_handle

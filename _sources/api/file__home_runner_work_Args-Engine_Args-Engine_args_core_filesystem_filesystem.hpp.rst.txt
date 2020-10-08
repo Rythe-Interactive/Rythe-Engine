@@ -29,6 +29,8 @@ Includes
 --------
 
 
+- ``core/filesystem/assetimporter.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_assetimporter.hpp`)
+
 - ``core/filesystem/basic_resolver.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_basic_resolver.hpp`)
 
 - ``core/filesystem/filesystem_resolver.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem_resolver.hpp`)
@@ -47,7 +49,14 @@ Included By
 -----------
 
 
-- :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_test_filesystem.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`
 
 
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core`
 

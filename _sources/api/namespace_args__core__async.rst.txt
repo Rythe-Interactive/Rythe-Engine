@@ -47,6 +47,4 @@ Functions
 
 - :ref:`exhale_function_readonly__rw__spinlock_8hpp_1a16318197043589d16101d4f5d6966a05`
 
-- :ref:`exhale_function_readonly__rw__spinlock_8hpp_1a3228900989b9c52a50d4b24fefbdb112`
-
 - :ref:`exhale_function_readonly__rw__spinlock_8hpp_1ada9b38708b0f1d5f40cbf4b98777bba1`

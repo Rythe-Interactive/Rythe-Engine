@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File assetimporter.hpp &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File assetimporter.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-assetimporter-hpp">
+<span id="program-listing-file-home-runner-work-args-engine-args-engine-args-core-filesystem-assetimporter-hpp"></span><h1>Program Listing for File assetimporter.hpp<a class="headerlink" href="#program-listing-for-file-assetimporter-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_assetimporter.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-filesystem-assetimporter-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/assetimporter.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/containers/containers.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/resource.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/view.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/logging/logging.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">filesystem</span>
+<span class="p">{</span>
+    <span class="k">namespace</span> <span class="n">detail</span>
+    <span class="p">{</span>
+        <span class="k">struct</span> <span class="n">resource_converter_base</span>
+        <span class="p">{</span>
+        <span class="k">protected</span><span class="o">:</span>
+            <span class="k">virtual</span> <span class="kt">void</span> <span class="n">dont_call</span><span class="p">()</span> <span class="n">ARGS_PURE</span><span class="p">;</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">result</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Settings</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="nl">resource_converter</span> <span class="p">:</span> <span class="k">public</span> <span class="n">detail</span><span class="o">::</span><span class="n">resource_converter_base</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">result_type</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">result</span><span class="o">&gt;</span><span class="p">();</span> <span class="p">}</span>
+
+        <span class="k">virtual</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">result</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">load</span><span class="p">(</span><span class="k">const</span> <span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">resource</span><span class="p">,</span> <span class="n">Settings</span><span class="o">&amp;&amp;</span><span class="p">...)</span> <span class="n">ARGS_PURE</span><span class="p">;</span>
+
+    <span class="k">protected</span><span class="o">:</span>
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">dont_call</span><span class="p">()</span> <span class="k">override</span> <span class="p">{};</span>
+    <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="n">basic_resource_converter</span> <span class="k">final</span> <span class="o">:</span> <span class="k">public</span> <span class="n">resource_converter</span><span class="o">&lt;</span><span class="n">basic_resource</span><span class="o">&gt;</span>
+    <span class="p">{</span>
+        <span class="k">virtual</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">basic_resource</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">load</span><span class="p">(</span><span class="k">const</span> <span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">resource</span><span class="p">)</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">basic_resource</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span><span class="p">(</span><span class="n">common</span><span class="o">::</span><span class="n">Ok</span><span class="p">(</span><span class="n">basic_resource</span><span class="p">(</span><span class="n">resource</span><span class="p">)));</span> <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="n">basic_converter</span> <span class="k">final</span> <span class="o">:</span> <span class="k">public</span> <span class="n">resource_converter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
+    <span class="p">{</span>
+        <span class="k">virtual</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">load</span><span class="p">(</span><span class="k">const</span> <span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">resource</span><span class="p">)</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span><span class="p">(</span><span class="n">common</span><span class="o">::</span><span class="n">Ok</span><span class="p">(</span><span class="n">from_resource</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">resource</span><span class="p">)));</span> <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">class</span> <span class="nc">AssetImporter</span>
+    <span class="p">{</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="k">static</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">detail</span><span class="o">::</span><span class="n">resource_converter_base</span><span class="o">*&gt;</span> <span class="n">m_converters</span><span class="p">;</span>
+
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="n">reportConverter</span><span class="p">(</span><span class="n">cstring</span> <span class="n">extension</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_converters</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">nameHash</span><span class="p">(</span><span class="n">extension</span><span class="p">),</span> <span class="k">new</span> <span class="n">T</span><span class="p">());</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Settings</span><span class="o">&gt;</span>
+        <span class="k">static</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">tryLoad</span><span class="p">(</span><span class="k">const</span> <span class="n">view</span><span class="o">&amp;</span> <span class="n">view</span><span class="p">,</span> <span class="n">Settings</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">settings</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">using</span> <span class="n">common</span><span class="o">::</span><span class="n">Err</span><span class="p">,</span> <span class="n">common</span><span class="o">::</span><span class="n">Ok</span><span class="p">;</span>
+            <span class="c1">// Decay overloads the operator of ok_type and operator== for valid_t.</span>
+            <span class="k">using</span> <span class="n">decay</span> <span class="o">=</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span><span class="p">;</span>
+
+            <span class="c1">// Debug log the settings used for loading the files so that you can track down why something got loaded wrong if it did.</span>
+            <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="k">sizeof</span><span class="p">...(</span><span class="n">settings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;Tried to load asset of type</span><span class="p">{}</span><span class="s">&quot;, undecoratedTypeName&lt;T&gt;());</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="k">sizeof</span><span class="p">...(</span><span class="n">settings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;Tried to load asset of type</span><span class="p">{}</span> <span class="n">with</span> <span class="n">settings</span> <span class="n">of</span> <span class="nl">type</span><span class="p">:{}</span><span class="s">&quot;, undecoratedTypeName&lt;T&gt;(), (std::string(undecoratedTypeName&lt;Settings&gt;()) + ...));</span>
+            <span class="k">else</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;Tried to load asset of type{} with settings of types:{}&quot;</span><span class="p">,</span> <span class="n">undecoratedTypeName</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(),</span> <span class="p">((</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">undecoratedTypeName</span><span class="o">&lt;</span><span class="n">Settings</span><span class="o">&gt;</span><span class="p">())</span> <span class="o">+</span> <span class="s">&quot;, &quot;</span><span class="p">)</span> <span class="o">+</span> <span class="p">...));</span>
+
+            <span class="c1">// Check if the view is valid to load as a file.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">view</span><span class="p">.</span><span class="n">is_valid</span><span class="p">()</span> <span class="o">||</span> <span class="o">!</span><span class="n">view</span><span class="p">.</span><span class="n">file_info</span><span class="p">().</span><span class="n">is_file</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">args_fs_error</span><span class="p">(</span><span class="s">&quot;requested asset load on view that isn&#39;t a valid file.&quot;</span><span class="p">)));</span>
+
+            <span class="c1">// Get data from file and check validity.</span>
+            <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="n">view</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">common</span><span class="o">::</span><span class="n">valid</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">get_error</span><span class="p">()));</span>
+
+            <span class="c1">// Retrieve the correct converter to use.</span>
+            <span class="n">detail</span><span class="o">::</span><span class="n">resource_converter_base</span><span class="o">*</span> <span class="n">base</span> <span class="o">=</span> <span class="n">m_converters</span><span class="p">[</span><span class="n">nameHash</span><span class="p">(</span><span class="n">view</span><span class="p">.</span><span class="n">get_extension</span><span class="p">())];</span>
+            <span class="k">auto</span><span class="o">*</span> <span class="n">converter</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">resource_converter</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Settings</span><span class="p">...</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">base</span><span class="p">);</span>
+
+            <span class="c1">// Do a safety check if the cast was valid before we call any functions on it.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">==</span> <span class="n">converter</span><span class="o">-&gt;</span><span class="n">result_type</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="c1">// Attempt the conversion and return the result.</span>
+                <span class="k">auto</span> <span class="n">loadresult</span> <span class="o">=</span> <span class="n">converter</span><span class="o">-&gt;</span><span class="n">load</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Settings</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">)...);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">loadresult</span> <span class="o">==</span> <span class="n">common</span><span class="o">::</span><span class="n">valid</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Ok</span><span class="p">((</span><span class="n">T</span><span class="p">)</span><span class="n">loadresult</span><span class="p">));</span>
+
+                <span class="k">return</span> <span class="nf">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">loadresult</span><span class="p">.</span><span class="n">get_error</span><span class="p">()));</span>
+            <span class="p">}</span>
+
+            <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">args_fs_error</span><span class="p">(</span><span class="s">&quot;requested asset load on file that stores a different type of asset.&quot;</span><span class="p">)));</span>
+        <span class="p">}</span>
+
+    <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_assetimporter.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

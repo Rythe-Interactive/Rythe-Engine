@@ -58,9 +58,9 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_traits_8hpp_1af3b59ca2b22e0ea46dc8fe6d526f32e6`
-
 - :ref:`exhale_function_traits_8hpp_1a9de9de2ab449a056bf835fa925c2efaf`
+
+- :ref:`exhale_function_traits_8hpp_1af3b59ca2b22e0ea46dc8fe6d526f32e6`
 
 - :ref:`exhale_function_traits_8hpp_1a9136ea2b89d6f7f3744e623ad0dcf4bb`
 

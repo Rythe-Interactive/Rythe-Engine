@@ -1,0 +1,13 @@
+
+.. _namespace_std__literals__chrono_literals:
+
+Namespace std::literals::chrono_literals
+========================================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+

@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1rendering_1_1renderable:
+
+Struct renderable
+=================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_components_renderable.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::rendering::renderable
+   :members:
+   :protected-members:
+   :undoc-members:

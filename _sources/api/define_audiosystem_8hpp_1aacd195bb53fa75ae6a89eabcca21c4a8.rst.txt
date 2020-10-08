@@ -1,0 +1,13 @@
+.. _exhale_define_audiosystem_8hpp_1aacd195bb53fa75ae6a89eabcca21c4a8:
+
+Define AL_ALEXT_PROTOTYPES
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_systems_audiosystem.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: AL_ALEXT_PROTOTYPES

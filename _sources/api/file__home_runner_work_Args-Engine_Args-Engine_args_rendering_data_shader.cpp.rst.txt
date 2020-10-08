@@ -1,0 +1,46 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_shader.cpp:
+
+File shader.cpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_rendering_data>` (``/home/runner/work/Args-Engine/Args-Engine/args/rendering/data``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/rendering/data/shader.cpp``)
+-----------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_shader.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``algorithm``
+
+- ``rendering/data/shader.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_shader.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__rendering`
+

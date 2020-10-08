@@ -1,0 +1,13 @@
+.. _exhale_typedef_time__span_8hpp_1abda3cd7e4f5d8fa5248be1eda97431b6:
+
+Typedef args::core::time::span
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_time_time_span.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::core::time::span

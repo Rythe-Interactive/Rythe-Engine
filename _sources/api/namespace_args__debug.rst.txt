@@ -1,0 +1,34 @@
+
+.. _namespace_args__debug:
+
+Namespace args::debug
+=====================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__debug__detail`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1debug_1_1debug__line`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_debugrendering_8hpp_1a335f7e8a9aa0c9a1ea275bec8caf98ca`

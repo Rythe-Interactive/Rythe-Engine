@@ -29,11 +29,13 @@ Includes
 --------
 
 
+- ``core/math/color.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_color.hpp`)
+
 - ``core/math/constants.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_constants.hpp`)
 
-- ``core/math/trigonometry.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_trigonometry.hpp`)
+- ``core/math/glm/glm_include.hpp``
 
-- ``glm/glm.hpp``
+- ``core/math/trigonometry.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_trigonometry.hpp`)
 
 
 
@@ -43,18 +45,13 @@ Included By
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`
 
-- :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_systems_testsystem.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_importers_mesh_importers.cpp`
 
-- :ref:`file__home_runner_work_Args-Engine_Args-Engine_applications_test_game_module_testModule.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_mesh.hpp`
 
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_defaults_defaultcomponents.hpp`
 
-
-
-Namespaces
-----------
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`
 
 
-- :ref:`namespace_args__core__math`
-
-- :ref:`namespace_args__core__math__detail__glm`
 

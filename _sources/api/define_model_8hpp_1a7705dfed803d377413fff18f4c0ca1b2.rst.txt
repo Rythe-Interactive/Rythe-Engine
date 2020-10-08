@@ -1,0 +1,13 @@
+.. _exhale_define_model_8hpp_1a7705dfed803d377413fff18f4c0ca1b2:
+
+Define SV_NORMAL
+================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: SV_NORMAL

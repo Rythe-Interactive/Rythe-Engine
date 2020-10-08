@@ -1,0 +1,20 @@
+
+.. _namespace_args__debug__detail:
+
+Namespace args::debug::detail
+=============================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_debugrendering_8hpp_1ad777ac31d075ecabbc058d6554a6c9d8`

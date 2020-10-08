@@ -1,0 +1,13 @@
+.. _exhale_variable_mesh_8hpp_1a7e5fb68da7b0dfa4c41ec09a683396a1:
+
+Variable args::core::default_mesh_settings
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_mesh.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::core::default_mesh_settings

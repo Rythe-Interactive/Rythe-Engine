@@ -1,0 +1,13 @@
+.. _exhale_enum_precision_8hpp_1a58c94069dd39ee09479b3e5c3a47fe67:
+
+Enum data_precision
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_precision.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: args::core::math::data_precision

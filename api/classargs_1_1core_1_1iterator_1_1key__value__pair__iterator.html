@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Class key_value_pair_iterator &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Template Class keys_only" href="classargs_1_1core_1_1iterator_1_1keys__only.html" />
+    <link rel="prev" title="Template Class key_only_iterator" href="classargs_1_1core_1_1iterator_1_1key__only__iterator.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classargs_1_1core_1_1iterator_1_1keys__only.html" title="Template Class keys_only"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classargs_1_1core_1_1iterator_1_1key__only__iterator.html" title="Template Class key_only_iterator"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Template Class key_value_pair_iterator</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="template-class-key-value-pair-iterator">
+<span id="exhale-class-classargs-1-1core-1-1iterator-1-1key-value-pair-iterator"></span><h1>Template Class key_value_pair_iterator<a class="headerlink" href="#template-class-key-value-pair-iterator" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_iterator_tricks.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-containers-iterator-tricks-hpp"><span class="std std-ref">File iterator_tricks.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4I00EN4args4core8iterator23key_value_pair_iteratorE">
+<span id="_CPPv3I00EN4args4core8iterator23key_value_pair_iteratorE"></span><span id="_CPPv2I00EN4args4core8iterator23key_value_pair_iteratorE"></span>template&lt;class <code class="sig-name descname">KeysIterator</code>, class <code class="sig-name descname">ValuesIterator</code>&gt;<br /><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator"></span><em class="property">class </em><code class="sig-prename descclassname">args::core::iterator<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">key_value_pair_iterator</code><a class="headerlink" href="#_CPPv4I00EN4args4core8iterator23key_value_pair_iteratorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core8iterator23key_value_pair_iterator15keys_proxy_typeE">
+<span id="_CPPv3N4args4core8iterator23key_value_pair_iterator15keys_proxy_typeE"></span><span id="_CPPv2N4args4core8iterator23key_value_pair_iterator15keys_proxy_typeE"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1a1a98dce8ece8c77f6925880a4b4ae811"></span><em class="property">using </em><code class="sig-name descname">keys_proxy_type</code> = <a class="reference internal" href="#_CPPv4I00EN4args4core8iterator23key_value_pair_iteratorE" title="args::core::iterator::key_value_pair_iterator::KeysIterator">KeysIterator</a><a class="headerlink" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator15keys_proxy_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core8iterator23key_value_pair_iterator17values_proxy_typeE">
+<span id="_CPPv3N4args4core8iterator23key_value_pair_iterator17values_proxy_typeE"></span><span id="_CPPv2N4args4core8iterator23key_value_pair_iterator17values_proxy_typeE"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1a6212d75b63399b34aa535dec64b16998"></span><em class="property">using </em><code class="sig-name descname">values_proxy_type</code> = <a class="reference internal" href="#_CPPv4I00EN4args4core8iterator23key_value_pair_iteratorE" title="args::core::iterator::key_value_pair_iterator::ValuesIterator">ValuesIterator</a><a class="headerlink" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator17values_proxy_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core8iterator23key_value_pair_iterator8key_typeE">
+<span id="_CPPv3N4args4core8iterator23key_value_pair_iterator8key_typeE"></span><span id="_CPPv2N4args4core8iterator23key_value_pair_iterator8key_typeE"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1a77f40a72bf7fb614aa97cdddfe7d9ad2"></span><em class="property">using </em><code class="sig-name descname">key_type</code> = <em class="property">typename</em> <a class="reference internal" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator15keys_proxy_typeE" title="args::core::iterator::key_value_pair_iterator::keys_proxy_type">keys_proxy_type</a>::value_type<a class="headerlink" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator8key_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core8iterator23key_value_pair_iterator10value_typeE">
+<span id="_CPPv3N4args4core8iterator23key_value_pair_iterator10value_typeE"></span><span id="_CPPv2N4args4core8iterator23key_value_pair_iterator10value_typeE"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1a7b55c78c6587ab9f943ae351f98dab0c"></span><em class="property">using </em><code class="sig-name descname">value_type</code> = <em class="property">typename</em> <a class="reference internal" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator17values_proxy_typeE" title="args::core::iterator::key_value_pair_iterator::values_proxy_type">values_proxy_type</a>::value_type<a class="headerlink" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator10value_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core8iterator23key_value_pair_iterator9pair_typeE">
+<span id="_CPPv3N4args4core8iterator23key_value_pair_iterator9pair_typeE"></span><span id="_CPPv2N4args4core8iterator23key_value_pair_iterator9pair_typeE"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1a88b3dd9edfc2bcb74e887e0ba57c41f3"></span><em class="property">using </em><code class="sig-name descname">pair_type</code> = std::pair&lt;<a class="reference internal" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator8key_typeE" title="args::core::iterator::key_value_pair_iterator::key_type">key_type</a>&amp;, <a class="reference internal" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator10value_typeE" title="args::core::iterator::key_value_pair_iterator::value_type">value_type</a>&amp;&gt;<a class="headerlink" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator9pair_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core8iterator23key_value_pair_iterator15const_pair_typeE">
+<span id="_CPPv3N4args4core8iterator23key_value_pair_iterator15const_pair_typeE"></span><span id="_CPPv2N4args4core8iterator23key_value_pair_iterator15const_pair_typeE"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1a61d3bd5156b371c5a6d4b5a78d14ac9a"></span><em class="property">using </em><code class="sig-name descname">const_pair_type</code> = std::pair&lt;<em class="property">const</em> <a class="reference internal" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator8key_typeE" title="args::core::iterator::key_value_pair_iterator::key_type">key_type</a>&amp;, <em class="property">const</em> <a class="reference internal" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator10value_typeE" title="args::core::iterator::key_value_pair_iterator::value_type">value_type</a>&amp;&gt;<a class="headerlink" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator15const_pair_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core8iterator23key_value_pair_iterator23key_value_pair_iteratorE15keys_proxy_type17values_proxy_type">
+<span id="_CPPv3N4args4core8iterator23key_value_pair_iterator23key_value_pair_iteratorE15keys_proxy_type17values_proxy_type"></span><span id="_CPPv2N4args4core8iterator23key_value_pair_iterator23key_value_pair_iteratorE15keys_proxy_type17values_proxy_type"></span><span id="args::core::iterator::key_value_pair_iterator::key_value_pair_iterator__keys_proxy_type.values_proxy_type"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1ada15eba51d178cf2fa3ce5fbeb246764"></span><code class="sig-name descname">key_value_pair_iterator</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator15keys_proxy_typeE" title="args::core::iterator::key_value_pair_iterator::keys_proxy_type">keys_proxy_type</a> <em>keys</em>, <a class="reference internal" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator17values_proxy_typeE" title="args::core::iterator::key_value_pair_iterator::values_proxy_type">values_proxy_type</a> <em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator23key_value_pair_iteratorE15keys_proxy_type17values_proxy_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core8iterator23key_value_pair_iteratormlEv">
+<span id="_CPPv3N4args4core8iterator23key_value_pair_iteratormlEv"></span><span id="_CPPv2N4args4core8iterator23key_value_pair_iteratormlEv"></span><span id="args::core::iterator::key_value_pair_iterator::mul-operator"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1a443fab41705c3c0f4c2a8ed91f12d4c7"></span><a class="reference internal" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator9pair_typeE" title="args::core::iterator::key_value_pair_iterator::pair_type">pair_type</a> <code class="sig-name descname">operator*</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core8iterator23key_value_pair_iteratormlEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core8iterator23key_value_pair_iteratormlEv">
+<span id="_CPPv3NK4args4core8iterator23key_value_pair_iteratormlEv"></span><span id="_CPPv2NK4args4core8iterator23key_value_pair_iteratormlEv"></span><span id="args::core::iterator::key_value_pair_iterator::mul-operatorC"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1ab3d3070d8b4321f3e8dd2f37b8927830"></span><a class="reference internal" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator15const_pair_typeE" title="args::core::iterator::key_value_pair_iterator::const_pair_type">const_pair_type</a> <code class="sig-name descname">operator*</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core8iterator23key_value_pair_iteratormlEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core8iterator23key_value_pair_iteratorptEv">
+<span id="_CPPv3N4args4core8iterator23key_value_pair_iteratorptEv"></span><span id="_CPPv2N4args4core8iterator23key_value_pair_iteratorptEv"></span><span id="args::core::iterator::key_value_pair_iterator::pointer-operator"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1a0d08d679125376f87d0698f7bf800647"></span><a class="reference internal" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator9pair_typeE" title="args::core::iterator::key_value_pair_iterator::pair_type">pair_type</a> <code class="sig-name descname">operator-&gt;</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core8iterator23key_value_pair_iteratorptEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core8iterator23key_value_pair_iteratorptEv">
+<span id="_CPPv3NK4args4core8iterator23key_value_pair_iteratorptEv"></span><span id="_CPPv2NK4args4core8iterator23key_value_pair_iteratorptEv"></span><span id="args::core::iterator::key_value_pair_iterator::pointer-operatorC"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1ad3b95bfa1d73645c943851961a09e791"></span><a class="reference internal" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator15const_pair_typeE" title="args::core::iterator::key_value_pair_iterator::const_pair_type">const_pair_type</a> <code class="sig-name descname">operator-&gt;</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core8iterator23key_value_pair_iteratorptEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core8iterator23key_value_pair_iterator3keyEv">
+<span id="_CPPv3N4args4core8iterator23key_value_pair_iterator3keyEv"></span><span id="_CPPv2N4args4core8iterator23key_value_pair_iterator3keyEv"></span><span id="args::core::iterator::key_value_pair_iterator::key"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1ae0f4e706a3284ec8a272252dfd5d71e1"></span>auto &amp;<code class="sig-name descname">key</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator3keyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core8iterator23key_value_pair_iterator3keyEv">
+<span id="_CPPv3NK4args4core8iterator23key_value_pair_iterator3keyEv"></span><span id="_CPPv2NK4args4core8iterator23key_value_pair_iterator3keyEv"></span><span id="args::core::iterator::key_value_pair_iterator::keyC"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1a5df5fc35c7ed3f463eacca166c5ea9b2"></span><em class="property">const</em> auto &amp;<code class="sig-name descname">key</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core8iterator23key_value_pair_iterator3keyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core8iterator23key_value_pair_iterator5valueEv">
+<span id="_CPPv3N4args4core8iterator23key_value_pair_iterator5valueEv"></span><span id="_CPPv2N4args4core8iterator23key_value_pair_iterator5valueEv"></span><span id="args::core::iterator::key_value_pair_iterator::value"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1aeb9140c64645d87d9a69e3847046fbe6"></span>auto &amp;<code class="sig-name descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core8iterator23key_value_pair_iterator5valueEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core8iterator23key_value_pair_iterator5valueEv">
+<span id="_CPPv3NK4args4core8iterator23key_value_pair_iterator5valueEv"></span><span id="_CPPv2NK4args4core8iterator23key_value_pair_iterator5valueEv"></span><span id="args::core::iterator::key_value_pair_iterator::valueC"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1a3b460eb479696b7e5bc10fd8ec2e02b2"></span><em class="property">const</em> auto &amp;<code class="sig-name descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core8iterator23key_value_pair_iterator5valueEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core8iterator23key_value_pair_iteratorppEv">
+<span id="_CPPv3N4args4core8iterator23key_value_pair_iteratorppEv"></span><span id="_CPPv2N4args4core8iterator23key_value_pair_iteratorppEv"></span><span id="args::core::iterator::key_value_pair_iterator::inc-operator"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1a01e86fab1e4e31a9d94c5602bc7151e2"></span>auto <code class="sig-name descname">operator++</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core8iterator23key_value_pair_iteratorppEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core8iterator23key_value_pair_iteratorppEv">
+<span id="_CPPv3NK4args4core8iterator23key_value_pair_iteratorppEv"></span><span id="_CPPv2NK4args4core8iterator23key_value_pair_iteratorppEv"></span><span id="args::core::iterator::key_value_pair_iterator::inc-operatorC"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1a411819006eb7708a688eec2142f2ec8b"></span>auto <code class="sig-name descname">operator++</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core8iterator23key_value_pair_iteratorppEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Friends</p>
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core8iterator23key_value_pair_iteratoreqERK23key_value_pair_iteratorRK23key_value_pair_iterator">
+<span id="_CPPv3N4args4core8iterator23key_value_pair_iteratoreqERK23key_value_pair_iteratorRK23key_value_pair_iterator"></span><span id="_CPPv2N4args4core8iterator23key_value_pair_iteratoreqERK23key_value_pair_iteratorRK23key_value_pair_iterator"></span><span id="args::core::iterator::key_value_pair_iterator::eq-operator__key_value_pair_iteratorCR.key_value_pair_iteratorCR"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1a0415239816b76c60410b08dfacdd5534"></span><em class="property">friend</em> auto <code class="sig-name descname">operator==</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I00EN4args4core8iterator23key_value_pair_iteratorE" title="args::core::iterator::key_value_pair_iterator">key_value_pair_iterator</a> &amp;<em>rhs</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4I00EN4args4core8iterator23key_value_pair_iteratorE" title="args::core::iterator::key_value_pair_iterator">key_value_pair_iterator</a> &amp;<em>lhs</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core8iterator23key_value_pair_iteratoreqERK23key_value_pair_iteratorRK23key_value_pair_iterator" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core8iterator23key_value_pair_iteratorneERK23key_value_pair_iteratorRK23key_value_pair_iterator">
+<span id="_CPPv3N4args4core8iterator23key_value_pair_iteratorneERK23key_value_pair_iteratorRK23key_value_pair_iterator"></span><span id="_CPPv2N4args4core8iterator23key_value_pair_iteratorneERK23key_value_pair_iteratorRK23key_value_pair_iterator"></span><span id="args::core::iterator::key_value_pair_iterator::neq-operator__key_value_pair_iteratorCR.key_value_pair_iteratorCR"></span><span class="target" id="classargs_1_1core_1_1iterator_1_1key__value__pair__iterator_1ac620dd87edf77fa65bcd5779cc662d8b"></span><em class="property">friend</em> auto <code class="sig-name descname">operator!=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I00EN4args4core8iterator23key_value_pair_iteratorE" title="args::core::iterator::key_value_pair_iterator">key_value_pair_iterator</a> &amp;<em>rhs</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4I00EN4args4core8iterator23key_value_pair_iteratorE" title="args::core::iterator::key_value_pair_iterator">key_value_pair_iterator</a> &amp;<em>lhs</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core8iterator23key_value_pair_iteratorneERK23key_value_pair_iteratorRK23key_value_pair_iterator" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Template Class key_value_pair_iterator</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">ARGS API</a><ul>
+      <li>Previous: <a href="classargs_1_1core_1_1iterator_1_1key__only__iterator.html" title="previous chapter">Template Class key_only_iterator</a></li>
+      <li>Next: <a href="classargs_1_1core_1_1iterator_1_1keys__only.html" title="next chapter">Template Class keys_only</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classargs_1_1core_1_1iterator_1_1key__value__pair__iterator.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

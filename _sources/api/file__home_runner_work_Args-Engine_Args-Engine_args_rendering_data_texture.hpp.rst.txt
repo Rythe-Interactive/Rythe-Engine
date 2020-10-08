@@ -1,0 +1,99 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_texture.hpp:
+
+File texture.hpp
+================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_rendering_data>` (``/home/runner/work/Args-Engine/Args-Engine/args/rendering/data``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/rendering/data/texture.hpp``)
+------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_texture.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``application/application.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_application.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_importers_texture_importers.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_shader.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_texture.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__rendering`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1color`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1texture`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1texture__data`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1texture__handle`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1texture__import__settings`
+
+- :ref:`exhale_class_classargs_1_1rendering_1_1_texture_cache`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_texture_8hpp_1a68dcf1df927c9533cc4696b3ddce51b5`
+
+- :ref:`exhale_enum_texture_8hpp_1ad23721ebcd9658c59744a5dc1977f895`
+
+- :ref:`exhale_enum_texture_8hpp_1af6ed77971a6f9811618517b6dace3bef`
+
+- :ref:`exhale_enum_texture_8hpp_1aedda9c4590871c7e09bd12f87584d5af`
+
+- :ref:`exhale_enum_texture_8hpp_1a581fe46ca27ac9ba3b94003fc3aa49f5`
+
+- :ref:`exhale_enum_texture_8hpp_1a0e7e324325c8f5807752551beb021988`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_texture_8hpp_1a44d8c259b68a75a27a6b24f9715a22d8`
+
+- :ref:`exhale_variable_texture_8hpp_1afde8ce671317860b3c5d35d3fc52f84f`
+
+- :ref:`exhale_variable_texture_8hpp_1acc65506676b2256f807279a4432a46b0`
+

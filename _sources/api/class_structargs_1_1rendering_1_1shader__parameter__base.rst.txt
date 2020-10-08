@@ -1,0 +1,26 @@
+.. _exhale_class_structargs_1_1rendering_1_1shader__parameter__base:
+
+Class shader_parameter_base
+===========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_shader.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public args::rendering::attribute`` (:ref:`exhale_class_structargs_1_1rendering_1_1attribute`)
+- ``public args::rendering::uniform< T >`` (:ref:`exhale_class_structargs_1_1rendering_1_1uniform`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::rendering::shader_parameter_base
+   :members:
+   :protected-members:
+   :undoc-members:

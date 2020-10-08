@@ -1,0 +1,47 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_physics_manifold.hpp:
+
+Program Listing for File physics_manifold.hpp
+=============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_physics_manifold.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/physics/data/physics_manifold.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   #include <physics/colliders/physicscollider.hpp>
+   #include <core/core.hpp>
+   #include <physics/physics_contact.h>
+   #include <core/core.hpp>
+   #include <physics/components/physics_component.hpp>
+   
+   
+   namespace args::physics
+   {
+   
+       class PhysicsCollider;
+       class PenetrationQuery;
+   
+       struct physics_manifold
+       {
+           std::vector<physics_contact> contacts;
+   
+           math::mat4 transformA;
+           math::mat4 transformB;
+   
+           std::shared_ptr<PhysicsCollider> colliderA;
+           std::shared_ptr<PhysicsCollider> colliderB;
+   
+           ecs::component_handle<physics::physicsComponent> physicsCompA;
+           ecs::component_handle<physics::physicsComponent> physicsCompB;
+   
+           std::shared_ptr<PenetrationQuery> penetrationInformation;
+   
+           bool isColliding;
+   
+   
+       };
+   }

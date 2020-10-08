@@ -82,7 +82,7 @@
     <span class="p">}</span>
 <span class="cp">#pragma endregion</span>
 
-    <span class="k">template</span> <span class="o">&lt;</span><span class="n">precision</span> <span class="n">p</span> <span class="o">=</span> <span class="n">precision</span><span class="o">::</span><span class="n">bit32</span><span class="o">&gt;</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="n">data_precision</span> <span class="n">p</span> <span class="o">=</span> <span class="n">data_precision</span><span class="o">::</span><span class="n">bit32</span><span class="o">&gt;</span>
     <span class="k">class</span> <span class="nc">angle</span>
     <span class="p">{</span>
     <span class="k">public</span><span class="o">:</span>
@@ -123,76 +123,76 @@
         <span class="n">storage_type</span> <span class="n">m_angle_value</span><span class="p">;</span>
     <span class="p">};</span>
 
-    <span class="k">template</span> <span class="o">&lt;</span><span class="n">precision</span> <span class="n">p</span><span class="o">&gt;</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="n">data_precision</span> <span class="n">p</span><span class="o">&gt;</span>
     <span class="k">typename</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">storage_type</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">sin</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">sin</span><span class="p">(</span><span class="n">m_angle_value</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="k">template</span> <span class="o">&lt;</span><span class="n">precision</span> <span class="n">p</span><span class="o">&gt;</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="n">data_precision</span> <span class="n">p</span><span class="o">&gt;</span>
     <span class="k">typename</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">storage_type</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">cos</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">cos</span><span class="p">(</span><span class="n">m_angle_value</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="k">template</span> <span class="o">&lt;</span><span class="n">precision</span> <span class="n">p</span><span class="o">&gt;</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="n">data_precision</span> <span class="n">p</span><span class="o">&gt;</span>
     <span class="k">typename</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">storage_type</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">tan</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">tan</span><span class="p">(</span><span class="n">m_angle_value</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="k">template</span> <span class="o">&lt;</span><span class="n">precision</span> <span class="n">p</span><span class="o">&gt;</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="n">data_precision</span> <span class="n">p</span><span class="o">&gt;</span>
     <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">arcsin</span><span class="p">(</span><span class="n">storage_type</span> <span class="n">v</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">rad</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">asin</span><span class="p">(</span><span class="n">v</span><span class="p">));</span>
     <span class="p">}</span>
 
-    <span class="k">template</span> <span class="o">&lt;</span><span class="n">precision</span> <span class="n">p</span><span class="o">&gt;</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="n">data_precision</span> <span class="n">p</span><span class="o">&gt;</span>
     <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">arccos</span><span class="p">(</span><span class="n">storage_type</span> <span class="n">v</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">rad</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">acos</span><span class="p">(</span><span class="n">v</span><span class="p">));</span>
     <span class="p">}</span>
 
-    <span class="k">template</span> <span class="o">&lt;</span><span class="n">precision</span> <span class="n">p</span><span class="o">&gt;</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="n">data_precision</span> <span class="n">p</span><span class="o">&gt;</span>
     <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">arctan</span><span class="p">(</span><span class="n">storage_type</span> <span class="n">v</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">rad</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">atan</span><span class="p">(</span><span class="n">v</span><span class="p">));</span>
     <span class="p">}</span>
 
-    <span class="k">template</span> <span class="o">&lt;</span><span class="n">precision</span> <span class="n">p</span><span class="o">&gt;</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="n">data_precision</span> <span class="n">p</span><span class="o">&gt;</span>
     <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">arctan2</span><span class="p">(</span><span class="n">storage_type</span> <span class="n">y</span><span class="p">,</span> <span class="n">storage_type</span> <span class="n">x</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">rad</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">atan2</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">));</span>
     <span class="p">}</span>
 
 
-    <span class="k">template</span> <span class="o">&lt;</span><span class="n">precision</span> <span class="n">p</span><span class="o">&gt;</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="n">data_precision</span> <span class="n">p</span><span class="o">&gt;</span>
     <span class="k">constexpr</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">deg</span><span class="p">(</span><span class="n">storage_type</span> <span class="n">value</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">(</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">value</span><span class="p">));</span>
     <span class="p">}</span>
 
-    <span class="k">template</span> <span class="o">&lt;</span><span class="n">precision</span> <span class="n">p</span><span class="o">&gt;</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="n">data_precision</span> <span class="n">p</span><span class="o">&gt;</span>
     <span class="k">constexpr</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">rad</span><span class="p">(</span><span class="n">storage_type</span> <span class="n">value</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="k">template</span> <span class="o">&lt;</span><span class="n">precision</span> <span class="n">p</span><span class="o">&gt;</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="n">data_precision</span> <span class="n">p</span><span class="o">&gt;</span>
     <span class="k">constexpr</span> <span class="k">typename</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">storage_type</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">as_degrees</span><span class="p">()</span> <span class="k">const</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">rad2deg</span><span class="p">(</span><span class="n">m_angle_value</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="k">template</span> <span class="o">&lt;</span><span class="n">precision</span> <span class="n">p</span><span class="o">&gt;</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="n">data_precision</span> <span class="n">p</span><span class="o">&gt;</span>
     <span class="k">constexpr</span> <span class="k">typename</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">storage_type</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;::</span><span class="n">as_radians</span><span class="p">()</span> <span class="k">const</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">m_angle_value</span><span class="p">;</span>
     <span class="p">}</span>
 
     <span class="k">using</span> <span class="n">anglef</span> <span class="o">=</span> <span class="n">angle</span><span class="o">&lt;&gt;</span><span class="p">;</span>
-    <span class="k">using</span> <span class="n">angled</span> <span class="o">=</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">precision</span><span class="o">::</span><span class="n">bit64</span><span class="o">&gt;</span><span class="p">;</span>
-    <span class="k">using</span> <span class="n">angleld</span> <span class="o">=</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">precision</span><span class="o">::</span><span class="n">lots</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">angled</span> <span class="o">=</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">data_precision</span><span class="o">::</span><span class="n">bit64</span><span class="o">&gt;</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">angleld</span> <span class="o">=</span> <span class="n">angle</span><span class="o">&lt;</span><span class="n">data_precision</span><span class="o">::</span><span class="n">lots</span><span class="o">&gt;</span><span class="p">;</span>
 
 <span class="p">}</span>
 </pre></div>

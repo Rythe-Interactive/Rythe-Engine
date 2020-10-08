@@ -18,8 +18,8 @@
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Template Class mixed_multiguard" href="classargs_1_1core_1_1async_1_1mixed__multiguard.html" />
-    <link rel="prev" title="Class ContextHelper" href="classargs_1_1application_1_1_context_helper.html" />
+    <link rel="next" title="Class AudioModule" href="classargs_1_1audio_1_1_audio_module.html" />
+    <link rel="prev" title="Class InputSystem" href="classargs_1_1application_1_1_input_system.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -36,10 +36,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="classargs_1_1core_1_1async_1_1mixed__multiguard.html" title="Template Class mixed_multiguard"
+          <a href="classargs_1_1audio_1_1_audio_module.html" title="Class AudioModule"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="classargs_1_1application_1_1_context_helper.html" title="Class ContextHelper"
+          <a href="classargs_1_1application_1_1_input_system.html" title="Class InputSystem"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
@@ -71,8 +71,19 @@
 <dl class="cpp class">
 <dt id="_CPPv4N4args11application12WindowSystemE">
 <span id="_CPPv3N4args11application12WindowSystemE"></span><span id="_CPPv2N4args11application12WindowSystemE"></span><span id="args::application::WindowSystem"></span><span class="target" id="classargs_1_1application_1_1_window_system"></span><em class="property">class </em><code class="sig-prename descclassname">args::application<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">WindowSystem</code> : <em class="property">public</em> args::core::<a class="reference internal" href="classargs_1_1core_1_1_system.html#_CPPv4I0EN4args4core6SystemE" title="args::core::System">System</a>&lt;<a class="reference internal" href="#_CPPv4N4args11application12WindowSystemE" title="args::application::WindowSystem">WindowSystem</a>&gt;<a class="headerlink" href="#_CPPv4N4args11application12WindowSystemE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>The system that’s responsible for raising and polling all window events, swapping the buffers of the windows and creation and destruction of windows. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N4args11application12WindowSystem14showMainWindowEv">
+<span id="_CPPv3N4args11application12WindowSystem14showMainWindowEv"></span><span id="_CPPv2N4args11application12WindowSystem14showMainWindowEv"></span><span id="args::application::WindowSystem::showMainWindow"></span><span class="target" id="classargs_1_1application_1_1_window_system_1ac6bddbcf602c58c695fa1c6cdb98bfe2"></span>void <code class="sig-name descname">showMainWindow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application12WindowSystem14showMainWindowEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args11application12WindowSystem4exitEv">
+<span id="_CPPv3N4args11application12WindowSystem4exitEv"></span><span id="_CPPv2N4args11application12WindowSystem4exitEv"></span><span id="args::application::WindowSystem::exit"></span><span class="target" id="classargs_1_1application_1_1_window_system_1a0aa7d4edb4f3e8bbfd60d71c2446707d"></span>void <code class="sig-name descname">exit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application12WindowSystem4exitEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
 <dl class="cpp function">
 <dt id="_CPPv4N4args11application12WindowSystem5setupEv">
 <span id="_CPPv3N4args11application12WindowSystem5setupEv"></span><span id="_CPPv2N4args11application12WindowSystem5setupEv"></span><span id="args::application::WindowSystem::setup"></span><span class="target" id="classargs_1_1application_1_1_window_system_1ab422f10a704c74767051bf2db6f5780c"></span>void <code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application12WindowSystem5setupEv" title="Permalink to this definition">¶</a><br /></dt>
@@ -81,6 +92,11 @@
 <dl class="cpp function">
 <dt id="_CPPv4N4args11application12WindowSystem13createWindowsEv">
 <span id="_CPPv3N4args11application12WindowSystem13createWindowsEv"></span><span id="_CPPv2N4args11application12WindowSystem13createWindowsEv"></span><span id="args::application::WindowSystem::createWindows"></span><span class="target" id="classargs_1_1application_1_1_window_system_1a5dbec3e644e07f87fc8cdffc94c351a3"></span>void <code class="sig-name descname">createWindows</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application12WindowSystem13createWindowsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args11application12WindowSystem17fullscreenWindowsEv">
+<span id="_CPPv3N4args11application12WindowSystem17fullscreenWindowsEv"></span><span id="_CPPv2N4args11application12WindowSystem17fullscreenWindowsEv"></span><span id="args::application::WindowSystem::fullscreenWindows"></span><span class="target" id="classargs_1_1application_1_1_window_system_1a28eb6c8628f034ac16dda38e68416ce2"></span>void <code class="sig-name descname">fullscreenWindows</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args11application12WindowSystem17fullscreenWindowsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -121,8 +137,8 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">ARGS API</a><ul>
-      <li>Previous: <a href="classargs_1_1application_1_1_context_helper.html" title="previous chapter">Class ContextHelper</a></li>
-      <li>Next: <a href="classargs_1_1core_1_1async_1_1mixed__multiguard.html" title="next chapter">Template Class mixed_multiguard</a></li>
+      <li>Previous: <a href="classargs_1_1application_1_1_input_system.html" title="previous chapter">Class InputSystem</a></li>
+      <li>Next: <a href="classargs_1_1audio_1_1_audio_module.html" title="next chapter">Class AudioModule</a></li>
   </ul></li>
   </ul></li>
 </ul>

@@ -11,10 +11,19 @@ Directory rendering
 
 *Directory path:* ``/home/runner/work/Args-Engine/Args-Engine/args/rendering``
 
+Subdirectories
+--------------
+
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_rendering_components`
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_rendering_data`
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_rendering_module`
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_rendering_systems`
+
 
 Files
 -----
 
-- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_delete_this.cpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_debugrendering.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_rendering.hpp`
 
 

@@ -31,6 +31,8 @@ Includes
 
 - ``application/context/contexthelper.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_contexthelper.hpp`)
 
+- ``application/input/inputsystem.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_input_inputsystem.hpp`)
+
 - ``application/window/window.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_window_window.hpp`)
 
 - ``application/window/windowsystem.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_window_windowsystem.hpp`)

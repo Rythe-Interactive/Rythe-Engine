@@ -100,6 +100,8 @@ Functions
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a5a84141ac83e3bddbd5ba1533d0b4027`
 
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a4e92ca70d436d139214b8fa6dd67762c`
+
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a8f780bb8070c4459cd65a2a73d5811ed`
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1ace8c091ec78b5a64d02a54852c05645e`
@@ -112,17 +114,17 @@ Functions
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1ab2f898c9dd449bd03c07cd0905a82d93`
 
-- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1ad6772f27a1b0affa31eaf71087788400`
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a61f85c8da1bba830aa7538548c316a96`
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a0833a4bfefb89ce4e24381e3292cdc6a`
 
-- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a61f85c8da1bba830aa7538548c316a96`
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1ad6772f27a1b0affa31eaf71087788400`
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1aeae352974001b280179dbea000bc458c`
 
-- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1afa4b1a9718d911fed5c622171c9c099e`
-
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a4d69cb49f87794b99abbbfcca11f02ef`
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1afa4b1a9718d911fed5c622171c9c099e`
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1ae2b02031ccd69bf1d2921e2392c6499e`
 
@@ -140,9 +142,11 @@ Functions
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a4a4d827e2b5e95eb1bef9af3f00cd3cf`
 
-- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1ada9dd0f44b688ac9d2f35098a2b2cf42`
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1af023320b00372ecb921730621c7881e9`
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a669326fa267b170650664637d98dd441`
+
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1ada9dd0f44b688ac9d2f35098a2b2cf42`
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a00a0e0ddbf04c8f93ce7045adf2188a1`
 

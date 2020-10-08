@@ -18,6 +18,8 @@ Program Listing for File engine.hpp
    #include <core/ecs/ecsregistry.hpp>
    #include <core/scheduling/scheduler.hpp>
    #include <core/events/eventbus.hpp>
+   #include <core/defaults/coremodule.hpp>
+   #include <core/logging/logging.hpp>
    
    #include <map>
    #include <vector>
@@ -28,6 +30,7 @@ Program Listing for File engine.hpp
        class Engine
        {
        private:
+           std::vector<char*> m_cliargs;
            std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<>> m_modules;
    
            events::EventBus m_eventbus;
@@ -35,7 +38,15 @@ Program Listing for File engine.hpp
            scheduling::Scheduler m_scheduler;
    
        public:
-           Engine() : m_modules(), m_eventbus(), m_ecs(&m_eventbus), m_scheduler(&m_eventbus) {}
+           Engine(int argc, char** argv) : m_modules(), m_eventbus(), m_ecs(&m_eventbus), m_cliargs(argv, argv + argc),
+   #if defined(ARGS_LOW_POWER)
+               m_scheduler(&m_eventbus, true, LEGION_MIN_THREADS)
+   #else
+               m_scheduler(&m_eventbus, false, LEGION_MIN_THREADS)
+   #endif
+           {
+               reportModule<CoreModule>();
+           }
    
            ~Engine()
            {
@@ -56,6 +67,9 @@ Program Listing for File engine.hpp
    
            void init()
            {
+   
+               log::setup();
+   
                for (const auto& [priority, moduleList] : m_modules)
                    for (auto& module : moduleList)
                        module->setup();
@@ -69,5 +83,10 @@ Program Listing for File engine.hpp
            {
                m_scheduler.run();
            }
+   
+           std::vector<char*>& getCliArgs() {
+               return m_cliargs;
+           }
+   
        };
    }

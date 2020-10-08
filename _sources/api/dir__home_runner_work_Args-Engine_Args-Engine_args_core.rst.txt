@@ -16,13 +16,17 @@ Subdirectories
 
 - :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_async`
 - :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_common`
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_compute`
 - :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_containers`
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_data`
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_defaults`
 - :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_detail`
 - :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_ecs`
 - :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_engine`
 - :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_entry`
 - :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_events`
 - :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem`
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_logging`
 - :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_math`
 - :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_platform`
 - :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling`

@@ -47,75 +47,50 @@
 <span id="program-listing-file-home-runner-work-args-engine-args-engine-args-application-events-inputevents-hpp"></span><h1>Program Listing for File inputevents.hpp<a class="headerlink" href="#program-listing-for-file-inputevents-hpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_application_events_inputevents.hpp.html#file-home-runner-work-args-engine-args-engine-args-application-events-inputevents-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/application/events/inputevents.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
-<span class="cp">#pragma once</span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/events/event.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;application/window/window.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;application/input/inputmap.hpp&gt;</span><span class="cp"></span>
+
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">application</span>
 <span class="p">{</span>
-    <span class="k">struct</span> <span class="n">key_input</span> <span class="k">final</span> <span class="o">:</span> <span class="k">public</span> <span class="n">events</span><span class="o">::</span><span class="n">event</span><span class="o">&lt;</span><span class="n">key_input</span><span class="o">&gt;</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="nl">input_action</span> <span class="p">:</span> <span class="k">public</span> <span class="n">events</span><span class="o">::</span><span class="n">event</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
     <span class="p">{</span>
-        <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span> <span class="n">windowHandle</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">key</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">scancode</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">action</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">mods</span><span class="p">;</span>
 
-        <span class="n">key_input</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
-        <span class="n">key_input</span><span class="p">(</span><span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span> <span class="n">windowHandle</span><span class="p">,</span> <span class="kt">int</span> <span class="n">key</span><span class="p">,</span> <span class="kt">int</span> <span class="n">scancode</span><span class="p">,</span> <span class="kt">int</span> <span class="n">action</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mods</span><span class="p">)</span> <span class="o">:</span> <span class="n">windowHandle</span><span class="p">(</span><span class="n">windowHandle</span><span class="p">),</span> <span class="n">key</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="n">scancode</span><span class="p">(</span><span class="n">scancode</span><span class="p">),</span> <span class="n">action</span><span class="p">(</span><span class="n">action</span><span class="p">),</span> <span class="n">mods</span><span class="p">(</span><span class="n">mods</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="kt">void</span> <span class="n">set</span><span class="p">(</span><span class="kt">bool</span> <span class="n">v</span><span class="p">,</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">modifier_keys</span> <span class="n">m</span><span class="p">,</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">method</span> <span class="n">id</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span>
+            <span class="n">mods</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span>
+            <span class="n">identifier</span> <span class="o">=</span> <span class="n">id</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">persistent</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
-        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">unique</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
+        <span class="kt">float</span> <span class="n">input_delta</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">value</span><span class="p">{};</span>
+        <span class="n">inputmap</span><span class="o">::</span><span class="n">modifier_keys</span> <span class="n">mods</span><span class="p">{};</span>
+        <span class="n">inputmap</span><span class="o">::</span><span class="n">method</span> <span class="n">identifier</span><span class="p">{};</span>
+
+        <span class="k">virtual</span> <span class="kt">bool</span> <span class="nf">unique</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="n">A_NODISCARD</span> <span class="kt">bool</span> <span class="nf">pressed</span><span class="p">()</span>  <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">value</span> <span class="o">==</span> <span class="nb">true</span><span class="p">;</span>  <span class="p">}</span>
+        <span class="n">A_NODISCARD</span> <span class="kt">bool</span> <span class="nf">released</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">value</span> <span class="o">==</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
     <span class="p">};</span>
 
-    <span class="k">struct</span> <span class="n">char_input</span> <span class="k">final</span> <span class="o">:</span> <span class="k">public</span> <span class="n">events</span><span class="o">::</span><span class="n">event</span><span class="o">&lt;</span><span class="n">char_input</span><span class="o">&gt;</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="nl">input_axis</span> <span class="p">:</span> <span class="k">public</span> <span class="n">events</span><span class="o">::</span><span class="n">event</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
     <span class="p">{</span>
-        <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span> <span class="n">windowHandle</span><span class="p">;</span>
-        <span class="kt">char32_t</span> <span class="n">character</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="n">set</span><span class="p">(</span><span class="kt">float</span> <span class="n">v</span><span class="p">,</span><span class="n">inputmap</span><span class="o">::</span><span class="n">modifier_keys</span> <span class="n">m</span><span class="p">,</span><span class="n">inputmap</span><span class="o">::</span><span class="n">method</span> <span class="n">id</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span>
+            <span class="n">mods</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span>
+            <span class="n">identifier</span> <span class="o">=</span> <span class="n">id</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        <span class="n">char_input</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
-        <span class="n">char_input</span><span class="p">(</span><span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span> <span class="n">windowHandle</span><span class="p">,</span> <span class="kt">char32_t</span> <span class="n">character</span><span class="p">)</span> <span class="o">:</span> <span class="n">windowHandle</span><span class="p">(</span><span class="n">windowHandle</span><span class="p">),</span> <span class="n">character</span><span class="p">(</span><span class="n">character</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="kt">float</span> <span class="n">input_delta</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">value</span><span class="p">{};</span>
+        <span class="n">inputmap</span><span class="o">::</span><span class="n">modifier_keys</span> <span class="n">mods</span><span class="p">{};</span>
+        <span class="n">inputmap</span><span class="o">::</span><span class="n">method</span> <span class="n">identifier</span><span class="p">{};</span>
 
-        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">persistent</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
-        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">unique</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
-    <span class="p">};</span>
-
-    <span class="k">struct</span> <span class="n">mouse_moved</span> <span class="k">final</span> <span class="o">:</span> <span class="k">public</span> <span class="n">events</span><span class="o">::</span><span class="n">event</span><span class="o">&lt;</span><span class="n">mouse_moved</span><span class="o">&gt;</span>
-    <span class="p">{</span>
-        <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span> <span class="n">windowHandle</span><span class="p">;</span>
-        <span class="n">math</span><span class="o">::</span><span class="n">dvec2</span> <span class="n">position</span><span class="p">;</span>
-
-        <span class="n">mouse_moved</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
-        <span class="n">mouse_moved</span><span class="p">(</span><span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span> <span class="n">windowHandle</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">dvec2</span> <span class="n">position</span><span class="p">)</span> <span class="o">:</span> <span class="n">windowHandle</span><span class="p">(</span><span class="n">windowHandle</span><span class="p">),</span> <span class="n">position</span><span class="p">(</span><span class="n">position</span><span class="p">)</span> <span class="p">{}</span>
-
-        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">persistent</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
-        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">unique</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
-    <span class="p">};</span>
-
-    <span class="k">struct</span> <span class="n">mouse_button</span> <span class="k">final</span> <span class="o">:</span> <span class="k">public</span> <span class="n">events</span><span class="o">::</span><span class="n">event</span><span class="o">&lt;</span><span class="n">mouse_button</span><span class="o">&gt;</span>
-    <span class="p">{</span>
-        <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span> <span class="n">windowHandle</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">button</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">action</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">mods</span><span class="p">;</span>
-
-        <span class="n">mouse_button</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
-        <span class="n">mouse_button</span><span class="p">(</span><span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span> <span class="n">windowHandle</span><span class="p">,</span> <span class="kt">int</span> <span class="n">button</span><span class="p">,</span> <span class="kt">int</span> <span class="n">action</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mods</span><span class="p">)</span> <span class="o">:</span> <span class="n">windowHandle</span><span class="p">(</span><span class="n">windowHandle</span><span class="p">),</span> <span class="n">button</span><span class="p">(</span><span class="n">button</span><span class="p">),</span> <span class="n">action</span><span class="p">(</span><span class="n">action</span><span class="p">),</span> <span class="n">mods</span><span class="p">(</span><span class="n">mods</span><span class="p">)</span> <span class="p">{}</span>
-
-        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">persistent</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
-        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">unique</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
-    <span class="p">};</span>
-
-    <span class="k">struct</span> <span class="n">mouse_scrolled</span> <span class="k">final</span> <span class="o">:</span> <span class="k">public</span> <span class="n">events</span><span class="o">::</span><span class="n">event</span><span class="o">&lt;</span><span class="n">mouse_scrolled</span><span class="o">&gt;</span>
-    <span class="p">{</span>
-        <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span> <span class="n">windowHandle</span><span class="p">;</span>
-        <span class="n">math</span><span class="o">::</span><span class="n">dvec2</span> <span class="n">offset</span><span class="p">;</span>
-
-        <span class="n">mouse_scrolled</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
-        <span class="n">mouse_scrolled</span><span class="p">(</span><span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span> <span class="n">windowHandle</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">dvec2</span> <span class="n">offset</span><span class="p">)</span> <span class="o">:</span> <span class="n">windowHandle</span><span class="p">(</span><span class="n">windowHandle</span><span class="p">),</span> <span class="n">offset</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span> <span class="p">{}</span>
-
-        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">persistent</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
-        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">unique</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">virtual</span> <span class="kt">bool</span> <span class="nf">unique</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
     <span class="p">};</span>
 
 <span class="p">}</span>

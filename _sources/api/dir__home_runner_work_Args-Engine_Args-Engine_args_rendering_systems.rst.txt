@@ -1,0 +1,20 @@
+.. _dir__home_runner_work_Args-Engine_Args-Engine_args_rendering_systems:
+
+
+Directory systems
+=================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_rendering>` (``/home/runner/work/Args-Engine/Args-Engine/args/rendering``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Args-Engine/Args-Engine/args/rendering/systems``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_systems_renderer.hpp`
+
+

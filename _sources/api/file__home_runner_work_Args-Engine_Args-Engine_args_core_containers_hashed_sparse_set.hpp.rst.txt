@@ -55,6 +55,8 @@ Included By
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entityquery.cpp`
 
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entityquery.hpp`
+
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_eventbus.hpp`
 
 

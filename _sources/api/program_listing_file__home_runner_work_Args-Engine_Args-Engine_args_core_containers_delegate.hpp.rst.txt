@@ -31,6 +31,7 @@ Program Listing for File delegate.hpp
    
    #include <vector>
    #include <functional>
+   #include <utility>
    #include <core/types/primitives.hpp>
    
    namespace args::core
@@ -45,46 +46,104 @@ Program Listing for File delegate.hpp
    
            using stub_type = return_type(*)(void* this_ptr, parameter_types...);
    
+           using allocator = void* (*)(void*);
+           using deleter = void(*)(void*);
+   
            struct invocation_element
            {
                invocation_element() = default;
-               invocation_element(void* this_ptr, stub_type aStub) : object(this_ptr), stub(aStub) {}
-               invocation_element(const invocation_element&) = default;
+               invocation_element(void* this_ptr, stub_type aStub, allocator aCopy = nullptr, allocator aMove = nullptr, deleter aDelete = nullptr) : object(this_ptr), stub(aStub), copy(aCopy), move(aMove), del(aDelete) {}
+               invocation_element(const invocation_element& source)
+               {
+                   if (source.copy != nullptr)
+                   {
+                       object = source.copy(source.object);
+                   }
+                   else
+                       object = source.object;
+                   stub = source.stub;
+                   copy = source.copy;
+                   move = source.move;
+                   del = source.del;
+               }
                invocation_element(invocation_element&& source)
                {
-                   object = source.object;
+                   if (source.move != nullptr)
+                   {
+                       object = source.move(source.object);
+                   }
+                   else
+                       object = source.object;
                    stub = source.stub;
-                   source.object = nullptr;
-                   source.stub = nullptr;
+                   copy = source.copy;
+                   move = source.move;
+                   del = source.del;
                }
    
-               invocation_element& operator=(const invocation_element&) = default;
+               ~invocation_element()
+               {
+                   if (del != nullptr)
+                       del(object);
+               }
+   
+               invocation_element& operator=(const invocation_element& source)
+               {
+                   if (source.copy != nullptr)
+                   {
+                       object = source.copy(source.object);
+                   }
+                   else
+                       object = source.object;
+                   stub = source.stub;
+                   copy = source.copy;
+                   move = source.move;
+                   del = source.del;
+                   return *this;
+               }
+   
                invocation_element& operator=(invocation_element&& source)
                {
-                   object = source.object;
+                   if (source.move != nullptr)
+                   {
+                       object = source.move(source.object);
+                   }
+                   else
+                       object = source.object;
                    stub = source.stub;
-                   source.object = nullptr;
-                   source.stub = nullptr;
+                   copy = source.copy;
+                   move = source.move;
+                   del = source.del;
                    return *this;
                }
    
                void Clone(invocation_element& target) const
                {
+                   if (copy != nullptr)
+                   {
+                       target.object = copy(object);
+                   }
+                   else
+                       target.object = object;
                    target.stub = stub;
-                   target.object = object;
+                   target.copy = copy;
+                   target.move = move;
+                   target.del = del;
                }
    
                bool operator ==(const invocation_element& other) const
                {
-                   return other.stub == stub && other.object == object;
+                   return other.stub == stub && (object == other.object || (copy == other.copy && move == other.move && del == other.del));
                }
                bool operator !=(const invocation_element& other) const
                {
-                   return other.stub != stub || other.object != object;
+                   return other.stub != stub || (object != other.object || (copy != other.copy || move != other.move || del != other.del));
                }
    
                void* object = nullptr;
                stub_type stub = nullptr;
+               allocator copy = nullptr;
+               allocator move = nullptr;
+               deleter del = nullptr;
            };
        };
    
@@ -115,10 +174,40 @@ Program Listing for File delegate.hpp
                return (ptr != nullptr) || (!isNull());
            }
    
+           delegate(std::nullptr_t)
+           {
+           }
+   
+           delegate& operator=(std::nullptr_t)
+           {
+               m_invocation.stub = nullptr;
+               return *this;
+           }
+   
+           void clear()
+           {
+               m_invocation.stub = nullptr;
+           }
+   
            template <typename lambda_type>
            delegate(const lambda_type& lambda)
            {
-               assign((void*)(&lambda), lambda_stub<lambda_type>);
+               assign((void*)(new lambda_type(lambda)), lambda_stub<lambda_type>,
+                   [](void* ptr)
+                   {
+                       lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
+                       return (void*)(new lambda_type(*p));
+                   },
+                   [](void* ptr)
+                   {
+                       lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
+                       return (void*)(new lambda_type(std::move(*p)));
+                   },
+                   [](void* ptr)
+                   {
+                       lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
+                       delete p;
+                   });
            }
    
            delegate& operator =(const delegate& other)
@@ -130,7 +219,22 @@ Program Listing for File delegate.hpp
            template <typename lambda_type>
            delegate& operator =(const lambda_type& instance)
            {
-               assign((void*)(&instance), lambda_stub<lambda_type>);
+               assign((void*)(new lambda_type(instance)), lambda_stub<lambda_type>,
+                   [](void* ptr)
+                   {
+                       lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
+                       return (void*)(new lambda_type(*p));
+                   },
+                   [](void* ptr)
+                   {
+                       lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
+                       return (void*)(new lambda_type(std::move(*p)));
+                   },
+                       [](void* ptr)
+                   {
+                       lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
+                       delete p;
+                   });
                return *this;
            }
    
@@ -173,7 +277,7 @@ Program Listing for File delegate.hpp
            template <typename lambda_type>
            static delegate create(const lambda_type& instance)
            {
-               return delegate((void*)(&instance), lambda_stub<lambda_type>);
+               return delegate((void*)(new lambda_type(instance)), lambda_stub<lambda_type>);
            }
    
            return_type operator()(parameter_types... arguments) const
@@ -192,10 +296,16 @@ Program Listing for File delegate.hpp
                m_invocation.stub = aStub;
            }
    
-           void assign(void* anObject, typename delegate_base<return_type(parameter_types...)>::stub_type aStub)
+           void assign(void* anObject, typename delegate_base<return_type(parameter_types...)>::stub_type aStub,
+               typename delegate_base<return_type(parameter_types...)>::allocator aCopy = nullptr,
+               typename delegate_base<return_type(parameter_types...)>::allocator aMove = nullptr,
+               typename delegate_base<return_type(parameter_types...)>::deleter aDelete = nullptr)
            {
                m_invocation.object = anObject;
                m_invocation.stub = aStub;
+               m_invocation.copy = aCopy;
+               m_invocation.move = aMove;
+               m_invocation.del = aDelete;
            }
    
            template <class owner_type, return_type(owner_type::* func_type)(parameter_types...)>
@@ -343,7 +453,7 @@ Program Listing for File delegate.hpp
            template<typename return_handler>
            void operator()(parameter_types... arguments, return_handler handler) const
            {
-               size_t index = 0;
+               size_type index = 0;
                for (auto& item : m_invocationList)
                {
                    return_type value = (*(item.stub))(item.object, arguments...);
@@ -355,7 +465,7 @@ Program Listing for File delegate.hpp
            template<typename return_handler>
            void invoke(parameter_types... arguments, return_handler handler) const
            {
-               size_t index = 0;
+               size_type index = 0;
                for (auto& item : m_invocationList)
                {
                    return_type value = (*(item.stub))(item.object, arguments...);
@@ -364,22 +474,22 @@ Program Listing for File delegate.hpp
                }
            }
    
-           void operator()(parameter_types... arguments, delegate<void(size_t, return_type*)> handler) const
+           void operator()(parameter_types... arguments, delegate<void(size_type, return_type*)> handler) const
            {
                operator() < decltype(handler) > (arguments..., handler);
            }
    
-           void invoke(parameter_types... arguments, delegate<void(size_t, return_type*)> handler) const
+           void invoke(parameter_types... arguments, delegate<void(size_type, return_type*)> handler) const
            {
                operator() < decltype(handler) > (arguments..., handler);
            }
    
-           void operator()(parameter_types... arguments, std::function<void(size_t, return_type*)> handler) const
+           void operator()(parameter_types... arguments, std::function<void(size_type, return_type*)> handler) const
            {
                operator() < decltype(handler) > (arguments..., handler);
            }
    
-           void invoke(parameter_types... arguments, std::function<void(size_t, return_type*)> handler) const
+           void invoke(parameter_types... arguments, std::function<void(size_type, return_type*)> handler) const
            {
                operator() < decltype(handler) > (arguments..., handler);
            }

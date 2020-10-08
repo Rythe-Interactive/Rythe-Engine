@@ -1,0 +1,16 @@
+.. _exhale_class_structargs_1_1rendering_1_1model__handle:
+
+Class model_handle
+==================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::rendering::model_handle
+   :members:
+   :protected-members:
+   :undoc-members:

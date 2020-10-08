@@ -1,0 +1,13 @@
+.. _exhale_enum_texture_8hpp_1ad23721ebcd9658c59744a5dc1977f895:
+
+Enum texture_components
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_texture.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: args::rendering::texture_components

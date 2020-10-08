@@ -1,0 +1,13 @@
+.. _exhale_define_primitives_8hpp_1aa95d03c8fe4c7467a8e475748cbf67e1:
+
+Define PRIORITY_MAX
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: PRIORITY_MAX

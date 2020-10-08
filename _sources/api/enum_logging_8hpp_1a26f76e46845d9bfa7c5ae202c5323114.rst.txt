@@ -1,0 +1,13 @@
+.. _exhale_enum_logging_8hpp_1a26f76e46845d9bfa7c5ae202c5323114:
+
+Enum severity
+=============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: args::core::log::severity

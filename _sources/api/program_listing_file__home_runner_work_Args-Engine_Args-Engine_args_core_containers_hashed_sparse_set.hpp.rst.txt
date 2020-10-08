@@ -21,11 +21,11 @@ Program Listing for File hashed_sparse_set.hpp
    
    namespace args::core
    {
-       template <typename value_type, template<typename...> typename dense_type = std::vector, template<typename...> typename sparse_type = std::unordered_map>
+       template <typename value_type, typename hash_type = std::hash<value_type>, template<typename...> typename dense_type = std::vector, template<typename...> typename sparse_type = std::unordered_map>
        class hashed_sparse_set
        {
        public:
-           using self_type = hashed_sparse_set<value_type, dense_type, sparse_type>;
+           using self_type = hashed_sparse_set<value_type, hash_type, dense_type, sparse_type>;
            using self_reference = self_type&;
            using self_const_reference = const self_type&;
    
@@ -33,7 +33,7 @@ Program Listing for File hashed_sparse_set.hpp
            using value_const_reference = const value_type&;
            using value_pointer = value_type*;
    
-           using sparse_container = sparse_type<value_type, size_type>;
+           using sparse_container = sparse_type<value_type, size_type, hash_type>;
            using dense_container = dense_type<value_type>;
    
            using iterator = typename dense_container::iterator;
@@ -243,6 +243,37 @@ Program Listing for File hashed_sparse_set.hpp
            }
    
            A_NODISCARD value_const_reference operator[](const size_type& index) const
+           {
+               if (index < 0 || index > m_size)
+                   throw std::out_of_range("hashed_sparse_set subscript out of range");
+               return m_dense[index];
+           }
+   #pragma endregion
+   
+   #pragma region at
+   
+           A_NODISCARD value_reference at(size_type&& index)
+           {
+               if (index < 0 || index > m_size)
+                   throw std::out_of_range("hashed_sparse_set subscript out of range");
+               return m_dense[index];
+           }
+   
+           A_NODISCARD value_reference at(const size_type& index)
+           {
+               if (index < 0 || index > m_size)
+                   throw std::out_of_range("hashed_sparse_set subscript out of range");
+               return m_dense[index];
+           }
+   
+           A_NODISCARD value_const_reference at(size_type&& index) const
+           {
+               if (index < 0 || index > m_size)
+                   throw std::out_of_range("hashed_sparse_set subscript out of range");
+               return m_dense[index];
+           }
+   
+           A_NODISCARD value_const_reference at(const size_type& index) const
            {
                if (index < 0 || index > m_size)
                    throw std::out_of_range("hashed_sparse_set subscript out of range");

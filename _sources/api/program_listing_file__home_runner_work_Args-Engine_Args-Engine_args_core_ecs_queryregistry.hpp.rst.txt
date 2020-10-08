@@ -15,20 +15,21 @@ Program Listing for File queryregistry.hpp
    #include <core/containers/containers.hpp>
    #include <core/types/primitives.hpp>
    #include <core/ecs/entityquery.hpp>
-   #include <iostream>
    
    namespace args::core::ecs
    {
-       class ARGS_API EcsRegistry;
-       class ARGS_API entity_handle;
+       class EcsRegistry;
+       class entity_handle;
    
-       class ARGS_API QueryRegistry
+       using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
+   
+       class QueryRegistry
        {
            friend class EntityQuery;
        private:
            EcsRegistry& m_registry;
            async::readonly_rw_spinlock m_entityLock;
-           sparse_map<id_type, sparse_map<id_type, entity_handle>*> m_entityLists;
+           sparse_map<id_type, entity_set*> m_entityLists;
            async::readonly_rw_spinlock m_referenceLock;
            sparse_map<id_type, size_type> m_references;
            async::readonly_rw_spinlock m_componentLock;
@@ -47,7 +48,7 @@ Program Listing for File queryregistry.hpp
    
            ~QueryRegistry()
            {
-               for (auto* entityList : m_entityLists)
+               for (auto [_, entityList] : m_entityLists)
                    delete entityList;
    
                m_validRegistries.erase(this);
@@ -75,7 +76,7 @@ Program Listing for File queryregistry.hpp
    
            const hashed_sparse_set<id_type>& getComponentTypes(id_type queryId);
    
-           const sparse_map<id_type, entity_handle>& getEntities(id_type queryId);
+           const entity_set& getEntities(id_type queryId);
    
            void addReference(id_type queryId);
    

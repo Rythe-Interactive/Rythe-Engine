@@ -1,0 +1,13 @@
+.. _exhale_function_audiosystem_8hpp_1a09f8b2c43a89ad3f49e2c7f78fe12be2:
+
+Function args::audio::openal_error
+==================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_systems_audiosystem.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::audio::openal_error()

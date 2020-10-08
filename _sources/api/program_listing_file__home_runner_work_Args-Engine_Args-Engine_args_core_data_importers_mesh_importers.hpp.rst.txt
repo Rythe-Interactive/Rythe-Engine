@@ -1,0 +1,23 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_data_importers_mesh_importers.hpp:
+
+Program Listing for File mesh_importers.hpp
+===========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_data_importers_mesh_importers.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/data/importers/mesh_importers.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/filesystem/assetimporter.hpp>
+   #include <core/data/mesh.hpp>
+   
+   namespace args::core
+   {
+       struct obj_mesh_loader : public filesystem::resource_converter<mesh, mesh_import_settings>
+       {
+           virtual common::result_decay_more<mesh, fs_error> load(const filesystem::basic_resource& resource, mesh_import_settings&& settings) override;
+       };
+   }

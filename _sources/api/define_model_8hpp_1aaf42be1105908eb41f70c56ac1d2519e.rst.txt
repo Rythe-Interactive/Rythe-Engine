@@ -1,0 +1,13 @@
+.. _exhale_define_model_8hpp_1aaf42be1105908eb41f70c56ac1d2519e:
+
+Define SV_VIEW
+==============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: SV_VIEW

@@ -1,0 +1,71 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_physics_components_physics_component.hpp:
+
+File physics_component.hpp
+==========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_physics_components>` (``/home/runner/work/Args-Engine/Args-Engine/args/physics/components``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/physics/components/physics_component.hpp``)
+--------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_physics_components_physics_component.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``physics/colliders/physicscollider.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_colliders_physicscollider.hpp`)
+
+- ``physics/cube_collider_params.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_cube_collider_params.hpp`)
+
+- ``vector`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_vector_view.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_components_physics_component.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_components_rigidbody.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_physics_manifold.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_physics_manifold_precursor.h`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_physicsmodule.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_systems_physicssystem.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__physics`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1physics_1_1physics_component`
+

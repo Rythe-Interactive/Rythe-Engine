@@ -1,0 +1,46 @@
+
+.. _namespace_args__core__compute:
+
+Namespace args::core::compute
+=============================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1core_1_1compute_1_1_buffer`
+
+- :ref:`exhale_class_classargs_1_1core_1_1compute_1_1_context`
+
+- :ref:`exhale_class_classargs_1_1core_1_1compute_1_1_kernel`
+
+- :ref:`exhale_class_classargs_1_1core_1_1compute_1_1_program`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_kernel_8hpp_1a7341ccf9e8fc253af90c9b42bbb936b6`
+
+- :ref:`exhale_enum_buffer_8hpp_1a9adfe470aa7a2383c658b75ce0627a0a`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_buffer_8cpp_1a6febca01c035be3ff737ff925f1c92dc`
+
+- :ref:`exhale_function_buffer_8hpp_1a009f41aea023496ea13b8bd78979959c`
+
+- :ref:`exhale_function_buffer_8hpp_1a3dbffd51c5bcd679bb253d81e131b9d7`

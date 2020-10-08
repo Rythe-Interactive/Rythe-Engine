@@ -1,0 +1,13 @@
+.. _exhale_variable_physicsconstants_8h_1a79dce60c169e3dee62dee14f02fc1572:
+
+Variable args::physics::constants::frictionSolverIterationCount
+===============================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_physicsconstants.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::physics::constants::frictionSolverIterationCount

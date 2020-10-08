@@ -1,0 +1,96 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_data_mesh.hpp:
+
+File mesh.hpp
+=============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_data>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/data``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/data/mesh.hpp``)
+----------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_data_mesh.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/async/readonly_rw_spinlock.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_readonly_rw_spinlock.hpp`)
+
+- ``core/filesystem/resource.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_resource.hpp`)
+
+- ``core/filesystem/view.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_view.hpp`)
+
+- ``core/math/math.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_math.hpp`)
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`)
+
+- ``functional``
+
+- ``memory``
+
+- ``unordered_map``
+
+- ``utility``
+
+- ``vector`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_vector_view.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_data.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_importers_mesh_importers.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_mesh.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_structargs_1_1core_1_1mesh`
+
+- :ref:`exhale_class_structargs_1_1core_1_1mesh__handle`
+
+- :ref:`exhale_class_structargs_1_1core_1_1mesh__import__settings`
+
+- :ref:`exhale_class_classargs_1_1core_1_1_mesh_cache`
+
+- :ref:`exhale_class_structargs_1_1core_1_1sub__mesh`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_mesh_8hpp_1a7e5fb68da7b0dfa4c41ec09a683396a1`
+
+- :ref:`exhale_variable_mesh_8hpp_1a46310039450eca86e27496c6d8c8ca9c`
+

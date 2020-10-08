@@ -1,0 +1,22 @@
+.. _dir__home_runner_work_Args-Engine_Args-Engine_args_audio_systems:
+
+
+Directory systems
+=================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_audio>` (``/home/runner/work/Args-Engine/Args-Engine/args/audio``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Args-Engine/Args-Engine/args/audio/systems``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_systems_audiosystem.cpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_systems_audiosystem.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_systems_audiosystem.inl`
+
+

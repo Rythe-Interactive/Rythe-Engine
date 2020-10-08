@@ -3,7 +3,7 @@
 Struct mouse_moved
 ==================
 
-- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_events_inputevents.hpp`
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_events_windowinputevents.hpp`
 
 
 Inheritance Relationships

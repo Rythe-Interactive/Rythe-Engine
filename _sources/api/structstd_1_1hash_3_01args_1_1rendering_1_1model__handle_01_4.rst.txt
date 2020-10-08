@@ -1,0 +1,16 @@
+.. _exhale_struct_structstd_1_1hash_3_01args_1_1rendering_1_1model__handle_01_4:
+
+Template Struct hash< args::rendering::model_handle >
+=====================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: std::hash< args::rendering::model_handle >
+   :members:
+   :protected-members:
+   :undoc-members:

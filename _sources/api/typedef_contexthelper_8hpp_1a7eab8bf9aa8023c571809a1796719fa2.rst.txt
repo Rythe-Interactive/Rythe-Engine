@@ -1,0 +1,13 @@
+.. _exhale_typedef_contexthelper_8hpp_1a7eab8bf9aa8023c571809a1796719fa2:
+
+Typedef args::application::gl_id
+================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_contexthelper.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::application::gl_id

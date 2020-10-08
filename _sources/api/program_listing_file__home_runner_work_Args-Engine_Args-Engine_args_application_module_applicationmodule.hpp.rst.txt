@@ -14,6 +14,7 @@ Program Listing for File applicationmodule.hpp
    #include <application/context/contexthelper.hpp>
    #include <application/window/window.hpp>
    #include <application/window/windowsystem.hpp>
+   #include <application/input/inputsystem.hpp>
    
    namespace args::application
    {
@@ -26,11 +27,12 @@ Program Listing for File applicationmodule.hpp
                addProcessChain("Input");
                reportComponentType<window>();
                reportSystem<WindowSystem>();
+               reportSystem<InputSystem>();
            }
    
            virtual priority_type priority() override
            {
-               return 10;
+               return 100;
            }
    
        };

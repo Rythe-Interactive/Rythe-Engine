@@ -57,11 +57,11 @@
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span>
 <span class="p">{</span>
-    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">value_type</span><span class="p">,</span> <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="o">&gt;</span> <span class="k">typename</span> <span class="n">dense_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="p">,</span> <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="o">&gt;</span> <span class="k">typename</span> <span class="n">sparse_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&gt;</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">value_type</span><span class="p">,</span> <span class="k">typename</span> <span class="n">hash_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">hash</span><span class="o">&lt;</span><span class="n">value_type</span><span class="o">&gt;</span><span class="p">,</span> <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="o">&gt;</span> <span class="k">typename</span> <span class="n">dense_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="p">,</span> <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="o">&gt;</span> <span class="k">typename</span> <span class="n">sparse_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&gt;</span>
     <span class="k">class</span> <span class="nc">hashed_sparse_set</span>
     <span class="p">{</span>
     <span class="k">public</span><span class="o">:</span>
-        <span class="k">using</span> <span class="n">self_type</span> <span class="o">=</span> <span class="n">hashed_sparse_set</span><span class="o">&lt;</span><span class="n">value_type</span><span class="p">,</span> <span class="n">dense_type</span><span class="p">,</span> <span class="n">sparse_type</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">self_type</span> <span class="o">=</span> <span class="n">hashed_sparse_set</span><span class="o">&lt;</span><span class="n">value_type</span><span class="p">,</span> <span class="n">hash_type</span><span class="p">,</span> <span class="n">dense_type</span><span class="p">,</span> <span class="n">sparse_type</span><span class="o">&gt;</span><span class="p">;</span>
         <span class="k">using</span> <span class="n">self_reference</span> <span class="o">=</span> <span class="n">self_type</span><span class="o">&amp;</span><span class="p">;</span>
         <span class="k">using</span> <span class="n">self_const_reference</span> <span class="o">=</span> <span class="k">const</span> <span class="n">self_type</span><span class="o">&amp;</span><span class="p">;</span>
 
@@ -69,7 +69,7 @@
         <span class="k">using</span> <span class="n">value_const_reference</span> <span class="o">=</span> <span class="k">const</span> <span class="n">value_type</span><span class="o">&amp;</span><span class="p">;</span>
         <span class="k">using</span> <span class="n">value_pointer</span> <span class="o">=</span> <span class="n">value_type</span><span class="o">*</span><span class="p">;</span>
 
-        <span class="k">using</span> <span class="n">sparse_container</span> <span class="o">=</span> <span class="n">sparse_type</span><span class="o">&lt;</span><span class="n">value_type</span><span class="p">,</span> <span class="n">size_type</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">sparse_container</span> <span class="o">=</span> <span class="n">sparse_type</span><span class="o">&lt;</span><span class="n">value_type</span><span class="p">,</span> <span class="n">size_type</span><span class="p">,</span> <span class="n">hash_type</span><span class="o">&gt;</span><span class="p">;</span>
         <span class="k">using</span> <span class="n">dense_container</span> <span class="o">=</span> <span class="n">dense_type</span><span class="o">&lt;</span><span class="n">value_type</span><span class="o">&gt;</span><span class="p">;</span>
 
         <span class="k">using</span> <span class="n">iterator</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">dense_container</span><span class="o">::</span><span class="n">iterator</span><span class="p">;</span>
@@ -279,6 +279,37 @@
         <span class="p">}</span>
 
         <span class="n">A_NODISCARD</span> <span class="n">value_const_reference</span> <span class="k">operator</span><span class="p">[](</span><span class="k">const</span> <span class="n">size_type</span><span class="o">&amp;</span> <span class="n">index</span><span class="p">)</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">index</span> <span class="o">&gt;</span> <span class="n">m_size</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">out_of_range</span><span class="p">(</span><span class="s">&quot;hashed_sparse_set subscript out of range&quot;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">m_dense</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+        <span class="p">}</span>
+<span class="cp">#pragma endregion</span>
+
+<span class="cp">#pragma region at</span>
+
+        <span class="n">A_NODISCARD</span> <span class="n">value_reference</span> <span class="n">at</span><span class="p">(</span><span class="n">size_type</span><span class="o">&amp;&amp;</span> <span class="n">index</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">index</span> <span class="o">&gt;</span> <span class="n">m_size</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">out_of_range</span><span class="p">(</span><span class="s">&quot;hashed_sparse_set subscript out of range&quot;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">m_dense</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+        <span class="p">}</span>
+
+        <span class="n">A_NODISCARD</span> <span class="n">value_reference</span> <span class="n">at</span><span class="p">(</span><span class="k">const</span> <span class="n">size_type</span><span class="o">&amp;</span> <span class="n">index</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">index</span> <span class="o">&gt;</span> <span class="n">m_size</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">out_of_range</span><span class="p">(</span><span class="s">&quot;hashed_sparse_set subscript out of range&quot;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">m_dense</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+        <span class="p">}</span>
+
+        <span class="n">A_NODISCARD</span> <span class="n">value_const_reference</span> <span class="n">at</span><span class="p">(</span><span class="n">size_type</span><span class="o">&amp;&amp;</span> <span class="n">index</span><span class="p">)</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">index</span> <span class="o">&gt;</span> <span class="n">m_size</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">out_of_range</span><span class="p">(</span><span class="s">&quot;hashed_sparse_set subscript out of range&quot;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">m_dense</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+        <span class="p">}</span>
+
+        <span class="n">A_NODISCARD</span> <span class="n">value_const_reference</span> <span class="n">at</span><span class="p">(</span><span class="k">const</span> <span class="n">size_type</span><span class="o">&amp;</span> <span class="n">index</span><span class="p">)</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">index</span> <span class="o">&gt;</span> <span class="n">m_size</span><span class="p">)</span>
                 <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">out_of_range</span><span class="p">(</span><span class="s">&quot;hashed_sparse_set subscript out of range&quot;</span><span class="p">);</span>

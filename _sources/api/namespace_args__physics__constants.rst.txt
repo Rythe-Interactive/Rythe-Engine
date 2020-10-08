@@ -1,0 +1,24 @@
+
+.. _namespace_args__physics__constants:
+
+Namespace args::physics::constants
+==================================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_physicsconstants_8h_1ab859295255f9a46842915ef3fea28eeb`
+
+- :ref:`exhale_variable_physicsconstants_8h_1a79dce60c169e3dee62dee14f02fc1572`
+
+- :ref:`exhale_variable_physicsconstants_8h_1ad78ecd993139142adc8197f9581aa7d9`

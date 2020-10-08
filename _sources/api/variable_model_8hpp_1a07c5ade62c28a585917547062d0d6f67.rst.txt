@@ -1,0 +1,13 @@
+.. _exhale_variable_model_8hpp_1a07c5ade62c28a585917547062d0d6f67:
+
+Variable args::rendering::invalid_model_handle
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::rendering::invalid_model_handle

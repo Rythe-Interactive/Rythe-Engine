@@ -1,0 +1,108 @@
+
+.. _namespace_args__rendering:
+
+Namespace args::rendering
+=========================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1camera`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1color`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1material`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1material__handle`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1material__parameter`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1material__parameter__base`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1renderable`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1shader__handle`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1shader__import__settings`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1texture`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1texture__data`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1texture__handle`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1texture__import__settings`
+
+- :ref:`exhale_class_structargs_1_1rendering_1_1attribute`
+
+- :ref:`exhale_class_classargs_1_1rendering_1_1_material_cache`
+
+- :ref:`exhale_class_structargs_1_1rendering_1_1model`
+
+- :ref:`exhale_class_structargs_1_1rendering_1_1model__handle`
+
+- :ref:`exhale_class_classargs_1_1rendering_1_1_model_cache`
+
+- :ref:`exhale_class_classargs_1_1rendering_1_1_renderer`
+
+- :ref:`exhale_class_classargs_1_1rendering_1_1_rendering_module`
+
+- :ref:`exhale_class_structargs_1_1rendering_1_1shader`
+
+- :ref:`exhale_class_structargs_1_1rendering_1_1shader__parameter__base`
+
+- :ref:`exhale_class_classargs_1_1rendering_1_1_shader_cache`
+
+- :ref:`exhale_class_structargs_1_1rendering_1_1stbi__texture__loader`
+
+- :ref:`exhale_class_classargs_1_1rendering_1_1_texture_cache`
+
+- :ref:`exhale_class_structargs_1_1rendering_1_1uniform`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_texture_8hpp_1a68dcf1df927c9533cc4696b3ddce51b5`
+
+- :ref:`exhale_enum_texture_8hpp_1ad23721ebcd9658c59744a5dc1977f895`
+
+- :ref:`exhale_enum_texture_8hpp_1af6ed77971a6f9811618517b6dace3bef`
+
+- :ref:`exhale_enum_texture_8hpp_1aedda9c4590871c7e09bd12f87584d5af`
+
+- :ref:`exhale_enum_texture_8hpp_1a581fe46ca27ac9ba3b94003fc3aa49f5`
+
+- :ref:`exhale_enum_texture_8hpp_1a0e7e324325c8f5807752551beb021988`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_texture_8hpp_1a44d8c259b68a75a27a6b24f9715a22d8`
+
+- :ref:`exhale_variable_shader_8hpp_1a9e04ca5e9f27aa55c49a29ff4b3fe7fb`
+
+- :ref:`exhale_variable_texture_8hpp_1afde8ce671317860b3c5d35d3fc52f84f`
+
+- :ref:`exhale_variable_shader_8hpp_1a3b8a00ab52015d5e6f5d6ce526b41d91`
+
+- :ref:`exhale_variable_material_8hpp_1ab560833432b20be0aac7ef9ada8b5d53`
+
+- :ref:`exhale_variable_model_8hpp_1a07c5ade62c28a585917547062d0d6f67`
+
+- :ref:`exhale_variable_shader_8hpp_1a9f270ca83d0c735c781a8f591dffc826`
+
+- :ref:`exhale_variable_texture_8hpp_1acc65506676b2256f807279a4432a46b0`

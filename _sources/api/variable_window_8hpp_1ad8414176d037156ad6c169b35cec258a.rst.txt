@@ -1,0 +1,13 @@
+.. _exhale_variable_window_8hpp_1ad8414176d037156ad6c169b35cec258a:
+
+Variable args::application::invalid_window
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_window_window.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::application::invalid_window

@@ -1,0 +1,25 @@
+.. _exhale_class_structargs_1_1rendering_1_1uniform:
+
+Template Class uniform
+======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_shader.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public args::rendering::shader_parameter_base`` (:ref:`exhale_class_structargs_1_1rendering_1_1shader__parameter__base`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::rendering::uniform
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -35,6 +35,8 @@ Includes
 
 - ``detail/strpath_manip.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_detail_strpath_manip.hpp`)
 
+- ``filesystem`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_artifact_cache.cpp`)
+
 - ``navigator.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_navigator.hpp`)
 
 - ``provider_registry.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_provider_registry.hpp`)

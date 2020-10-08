@@ -29,11 +29,9 @@ Includes
 --------
 
 
-- ``application/context/detail/glad/glad.h`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail_glad_glad.h`)
+- ``application/context/detail/glad/glad.h``
 
 - ``core/core.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`)
-
-- ``core/platform/args_library.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_args_library.hpp`)
 
 - ``glfw/glfw3.h``
 
@@ -70,9 +68,11 @@ Classes
 - :ref:`exhale_class_classargs_1_1application_1_1_context_helper`
 
 
-Defines
--------
+Typedefs
+--------
 
 
-- :ref:`exhale_define_contexthelper_8hpp_1a1320e24345820f51b729f849939578a5`
+- :ref:`exhale_typedef_contexthelper_8hpp_1a7eab8bf9aa8023c571809a1796719fa2`
+
+- :ref:`exhale_typedef_contexthelper_8hpp_1a797146356e203926f0278fd8fbf2c686`
 

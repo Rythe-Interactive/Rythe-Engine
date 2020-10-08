@@ -1,0 +1,13 @@
+.. _exhale_define_model_8hpp_1a9b029c397244dbaab3d6e7114dd398d5:
+
+Define SV_TANGENT
+=================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: SV_TANGENT

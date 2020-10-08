@@ -1,0 +1,13 @@
+.. _exhale_variable_debugrendering_8hpp_1ad777ac31d075ecabbc058d6554a6c9d8:
+
+Variable args::debug::detail::eventBus
+======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_debugrendering.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::debug::detail::eventBus

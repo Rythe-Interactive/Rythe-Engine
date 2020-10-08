@@ -1,0 +1,32 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_physics_manifold_precursor.h:
+
+Program Listing for File physics_manifold_precursor.h
+=====================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_physics_manifold_precursor.h>` (``/home/runner/work/Args-Engine/Args-Engine/args/physics/data/physics_manifold_precursor.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/core.hpp>
+   #include <physics/components/physics_component.hpp>
+   
+   namespace args::physics
+   {
+       struct physics_manifold_precursor
+       {
+           math::mat4 worldTransform;
+           ecs::component_handle<physicsComponent> physicsComponentHandle;
+           int id;
+   
+           physics_manifold_precursor(math::mat4 pWorldTransform,ecs::component_handle<physicsComponent>& pPhysicsCompHandle,int precursorID) :
+               worldTransform(pWorldTransform), physicsComponentHandle(pPhysicsCompHandle),id(precursorID)
+           {
+   
+           }
+       };
+   
+   }

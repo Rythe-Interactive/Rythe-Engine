@@ -1,0 +1,13 @@
+.. _exhale_define_texture__importers_8cpp_1aeb08d34d1eaadcd2e6a05da5ff930c5e:
+
+Define STBI_NO_GIF
+==================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_importers_texture_importers.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: STBI_NO_GIF

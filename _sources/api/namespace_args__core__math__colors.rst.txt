@@ -1,0 +1,40 @@
+
+.. _namespace_args__core__math__colors:
+
+Namespace args::core::math::colors
+==================================
+
+
+Default colors in RGBA. 
+ 
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_namespaceargs_1_1core_1_1math_1_1colors_1a1e89ca94b1bc44e2ce676a4c5af6091e`
+
+- :ref:`exhale_variable_namespaceargs_1_1core_1_1math_1_1colors_1aad70a2536b3cd6ed2b9c5b250cea43cb`
+
+- :ref:`exhale_variable_namespaceargs_1_1core_1_1math_1_1colors_1a5ab49148ea602c1bdd0c4625f3774076`
+
+- :ref:`exhale_variable_namespaceargs_1_1core_1_1math_1_1colors_1a164d3ed9cbf9de6bca46ccf1f4f457f3`
+
+- :ref:`exhale_variable_namespaceargs_1_1core_1_1math_1_1colors_1a641ddee0bbb86b8bf4a1d7207a9fd455`
+
+- :ref:`exhale_variable_namespaceargs_1_1core_1_1math_1_1colors_1a4c55ad941eb523b9fe252566145df688`
+
+- :ref:`exhale_variable_namespaceargs_1_1core_1_1math_1_1colors_1a6b1c3ca01f8ab3146cd3557934adf0ca`
+
+- :ref:`exhale_variable_namespaceargs_1_1core_1_1math_1_1colors_1a13e5643f53c6728c461a1c1241418ae8`
+
+- :ref:`exhale_variable_namespaceargs_1_1core_1_1math_1_1colors_1afb71d720ca38d136958547388a316409`

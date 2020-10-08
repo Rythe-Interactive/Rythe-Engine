@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1core_1_1log_1_1impl:
+
+Struct impl
+===========
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::core::log::impl
+   :members:
+   :protected-members:
+   :undoc-members:

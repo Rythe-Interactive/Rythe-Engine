@@ -16,6 +16,7 @@ Subdirectories
 
 - :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_application_context`
 - :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_application_events`
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_application_input`
 - :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_application_module`
 - :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_application_window`
 

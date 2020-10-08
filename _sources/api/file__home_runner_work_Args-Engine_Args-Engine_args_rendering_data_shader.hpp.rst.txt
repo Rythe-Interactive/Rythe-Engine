@@ -1,0 +1,90 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_shader.hpp:
+
+File shader.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_rendering_data>` (``/home/runner/work/Args-Engine/Args-Engine/args/rendering/data``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/rendering/data/shader.hpp``)
+-----------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_shader.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``rendering/data/model.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.hpp`)
+
+- ``rendering/data/texture.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_texture.hpp`)
+
+- ``string`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_string_extra.hpp`)
+
+- ``vector`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_vector_view.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_material.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_shader.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_systems_renderer.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__rendering`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1shader__handle`
+
+- :ref:`exhale_struct_structargs_1_1rendering_1_1shader__import__settings`
+
+- :ref:`exhale_class_structargs_1_1rendering_1_1attribute`
+
+- :ref:`exhale_class_structargs_1_1rendering_1_1shader`
+
+- :ref:`exhale_class_structargs_1_1rendering_1_1shader__parameter__base`
+
+- :ref:`exhale_class_classargs_1_1rendering_1_1_shader_cache`
+
+- :ref:`exhale_class_structargs_1_1rendering_1_1uniform`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_shader_8hpp_1a9e04ca5e9f27aa55c49a29ff4b3fe7fb`
+
+- :ref:`exhale_variable_shader_8hpp_1a3b8a00ab52015d5e6f5d6ce526b41d91`
+
+- :ref:`exhale_variable_shader_8hpp_1a9f270ca83d0c735c781a8f591dffc826`
+

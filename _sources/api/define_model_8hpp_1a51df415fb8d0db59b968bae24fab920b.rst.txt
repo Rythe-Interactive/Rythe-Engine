@@ -1,0 +1,13 @@
+.. _exhale_define_model_8hpp_1a51df415fb8d0db59b968bae24fab920b:
+
+Define SV_TEXCOORD0
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: SV_TEXCOORD0

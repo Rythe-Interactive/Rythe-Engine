@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File mesh.cpp &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File mesh.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-mesh-cpp">
+<span id="program-listing-file-home-runner-work-args-engine-args-engine-args-core-data-mesh-cpp"></span><h1>Program Listing for File mesh.cpp<a class="headerlink" href="#program-listing-for-file-mesh-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_data_mesh.cpp.html#file-home-runner-work-args-engine-args-engine-args-core-data-mesh-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/data/mesh.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;core/data/mesh.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/data/importers/mesh_importers.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;&gt;&gt;</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshes</span><span class="p">;</span>
+    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshesLock</span><span class="p">;</span>
+
+    <span class="kt">void</span> <span class="n">mesh</span><span class="o">::</span><span class="n">to_resource</span><span class="p">(</span><span class="n">filesystem</span><span class="o">::</span><span class="n">basic_resource</span><span class="o">*</span> <span class="n">resource</span><span class="p">,</span> <span class="k">const</span> <span class="n">mesh</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Erase all previous data.</span>
+        <span class="n">resource</span><span class="o">-&gt;</span><span class="n">clear</span><span class="p">();</span>
+
+        <span class="c1">// Write new data.</span>
+        <span class="k">auto</span><span class="o">&amp;</span> <span class="n">data</span> <span class="o">=</span> <span class="n">resource</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">();</span>
+        <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">fileName</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+        <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+        <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">normals</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+        <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">uvs</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+        <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">tangents</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+        <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">indices</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+
+        <span class="c1">// Append each submesh data.</span>
+        <span class="n">uint64</span> <span class="n">submeshCount</span> <span class="o">=</span> <span class="n">value</span><span class="p">.</span><span class="n">submeshes</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">submeshCount</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">submesh</span> <span class="p">:</span> <span class="n">value</span><span class="p">.</span><span class="n">submeshes</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">submesh</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+            <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">submesh</span><span class="p">.</span><span class="n">indexCount</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+            <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">submesh</span><span class="p">.</span><span class="n">indexOffset</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">mesh</span><span class="o">::</span><span class="n">from_resource</span><span class="p">(</span><span class="n">mesh</span><span class="o">*</span> <span class="n">value</span><span class="p">,</span> <span class="k">const</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">resource</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="o">*</span><span class="n">value</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">{};</span>
+
+        <span class="c1">// Get point from which to start reading.</span>
+        <span class="n">byte_vec</span><span class="o">::</span><span class="n">const_iterator</span> <span class="n">start</span> <span class="o">=</span> <span class="n">resource</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+
+        <span class="c1">// Read data</span>
+        <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">fileName</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
+        <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">vertices</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
+        <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">normals</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
+        <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">uvs</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
+        <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">tangents</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
+        <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">indices</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
+
+        <span class="c1">// Read sub-mesh count</span>
+        <span class="n">uint64</span> <span class="n">submeshCount</span><span class="p">;</span>
+        <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">submeshCount</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
+
+        <span class="c1">// Read and append all sub-meshes</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">submeshCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">sub_mesh</span> <span class="n">submesh</span><span class="p">;</span>
+            <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">submesh</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
+            <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">submesh</span><span class="p">.</span><span class="n">indexCount</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
+            <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">submesh</span><span class="p">.</span><span class="n">indexOffset</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
+            <span class="n">value</span><span class="o">-&gt;</span><span class="n">submeshes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">submesh</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">mesh</span><span class="o">::</span><span class="n">calculate_tangents</span><span class="p">(</span><span class="n">mesh</span><span class="o">*</span> <span class="n">data</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// https://learnopengl.com/Advanced-Lighting/Normal-Mapping</span>
+        <span class="n">data</span><span class="o">-&gt;</span><span class="n">tangents</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">data</span><span class="o">-&gt;</span><span class="n">normals</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+
+        <span class="c1">// Iterate over all triangles of each sub-mesh.</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">submesh</span> <span class="p">:</span> <span class="n">data</span><span class="o">-&gt;</span><span class="n">submeshes</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="n">i</span> <span class="o">=</span> <span class="n">submesh</span><span class="p">.</span><span class="n">indexOffset</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">submesh</span><span class="p">.</span><span class="n">indexOffset</span> <span class="o">+</span> <span class="n">submesh</span><span class="p">.</span><span class="n">indexCount</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">// Get vertices of the triangle.</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">vtx0</span> <span class="o">=</span> <span class="n">data</span><span class="o">-&gt;</span><span class="n">vertices</span><span class="p">[</span><span class="n">data</span><span class="o">-&gt;</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">]];</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">vtx1</span> <span class="o">=</span> <span class="n">data</span><span class="o">-&gt;</span><span class="n">vertices</span><span class="p">[</span><span class="n">data</span><span class="o">-&gt;</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]];</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">vtx2</span> <span class="o">=</span> <span class="n">data</span><span class="o">-&gt;</span><span class="n">vertices</span><span class="p">[</span><span class="n">data</span><span class="o">-&gt;</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]];</span>
+
+                <span class="c1">// Get UVs of the triangle.</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec2</span> <span class="n">uv0</span> <span class="o">=</span> <span class="n">data</span><span class="o">-&gt;</span><span class="n">uvs</span><span class="p">[</span><span class="n">data</span><span class="o">-&gt;</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">]];</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec2</span> <span class="n">uv1</span> <span class="o">=</span> <span class="n">data</span><span class="o">-&gt;</span><span class="n">uvs</span><span class="p">[</span><span class="n">data</span><span class="o">-&gt;</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]];</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec2</span> <span class="n">uv2</span> <span class="o">=</span> <span class="n">data</span><span class="o">-&gt;</span><span class="n">uvs</span><span class="p">[</span><span class="n">data</span><span class="o">-&gt;</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]];</span>
+
+                <span class="c1">// Get primary edges</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">edge0</span> <span class="o">=</span> <span class="n">vtx1</span> <span class="o">-</span> <span class="n">vtx0</span><span class="p">;</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">edge1</span> <span class="o">=</span> <span class="n">vtx2</span> <span class="o">-</span> <span class="n">vtx0</span><span class="p">;</span>
+
+                <span class="c1">// Get difference in uv over the two primary edges.</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec2</span> <span class="n">deltaUV0</span> <span class="o">=</span> <span class="n">uv1</span> <span class="o">-</span> <span class="n">uv0</span><span class="p">;</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec2</span> <span class="n">deltaUV1</span> <span class="o">=</span> <span class="n">uv2</span> <span class="o">-</span> <span class="n">uv0</span><span class="p">;</span>
+
+                <span class="c1">// Get inverse of the determinant of the UV tangent matrix.</span>
+                <span class="kt">float</span> <span class="n">inverseUVDeterminant</span> <span class="o">=</span> <span class="mf">1.0f</span> <span class="o">/</span> <span class="p">(</span><span class="n">deltaUV0</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">deltaUV1</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">deltaUV1</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">deltaUV0</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+
+                <span class="c1">// T = tangent</span>
+                <span class="c1">// B = bi-tangent</span>
+                <span class="c1">// E0 = first primary edge</span>
+                <span class="c1">// E1 = second primary edge</span>
+                <span class="c1">// dU0 = delta of x texture coordinates of the first primary edge</span>
+                <span class="c1">// dV0 = delta of y texture coordinates of the first primary edge</span>
+                <span class="c1">// dU1 = delta of x texture coordinates of the second primary edge</span>
+                <span class="c1">// dV1 = delta of y texture coordinates of the second primary edge</span>
+                <span class="c1">// ┌          ┐          1        ┌           ┐ ┌             ┐</span>
+                <span class="c1">// │ Tx Ty Tz │ _ ─────────────── │  dV1 -dV0 │ │ E0x E0y E0z │</span>
+                <span class="c1">// │ Bx By Bz │ ─ dU0ΔV1 - dU1ΔV0 │ -dU1  dU0 │ │ E1x E1y E1z │</span>
+                <span class="c1">// └          ┘                   └           ┘ └             ┘</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">tangent</span><span class="p">;</span>
+                <span class="n">tangent</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">inverseUVDeterminant</span> <span class="o">*</span> <span class="p">((</span><span class="n">deltaUV1</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">edge0</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">deltaUV0</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">edge1</span><span class="p">.</span><span class="n">x</span><span class="p">));</span>
+                <span class="n">tangent</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">inverseUVDeterminant</span> <span class="o">*</span> <span class="p">((</span><span class="n">deltaUV1</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">edge0</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">deltaUV0</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">edge1</span><span class="p">.</span><span class="n">y</span><span class="p">));</span>
+                <span class="n">tangent</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">inverseUVDeterminant</span> <span class="o">*</span> <span class="p">((</span><span class="n">deltaUV1</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">edge0</span><span class="p">.</span><span class="n">z</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">deltaUV0</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">edge1</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
+
+                <span class="c1">// Check if the tangent is valid.</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">tangent</span> <span class="o">==</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">||</span> <span class="n">tangent</span> <span class="o">!=</span> <span class="n">tangent</span><span class="p">)</span>
+                    <span class="k">continue</span><span class="p">;</span>
+
+                <span class="c1">// Normalize the tangent.</span>
+                <span class="n">tangent</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">tangent</span><span class="p">);</span>
+
+                <span class="c1">// Accumulate the tangent in order to be able to smooth it later.</span>
+                <span class="n">data</span><span class="o">-&gt;</span><span class="n">tangents</span><span class="p">[</span><span class="n">data</span><span class="o">-&gt;</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">tangent</span><span class="p">;</span>
+                <span class="n">data</span><span class="o">-&gt;</span><span class="n">tangents</span><span class="p">[</span><span class="n">data</span><span class="o">-&gt;</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">tangent</span><span class="p">;</span>
+                <span class="n">data</span><span class="o">-&gt;</span><span class="n">tangents</span><span class="p">[</span><span class="n">data</span><span class="o">-&gt;</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">tangent</span><span class="p">;</span>
+            <span class="p">}</span>
+
+        <span class="c1">// Smooth all tangents.</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">data</span><span class="o">-&gt;</span><span class="n">tangents</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="o">-&gt;</span><span class="n">tangents</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+                <span class="n">data</span><span class="o">-&gt;</span><span class="n">tangents</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">data</span><span class="o">-&gt;</span><span class="n">tangents</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&amp;&gt;</span> <span class="n">mesh_handle</span><span class="o">::</span><span class="n">get</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshesLock</span><span class="p">);</span>
+        <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">mesh</span><span class="p">]</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshes</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get</span><span class="p">());</span>
+        <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">lock</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">mesh</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="n">mesh_handle</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">create_mesh</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">mesh_import_settings</span> <span class="n">settings</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Get ID.</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+
+        <span class="p">{</span> <span class="c1">// Check if the mesh already exists, and return that instead if it does.</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_meshesLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_meshes</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+                <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">file</span><span class="p">.</span><span class="n">is_valid</span><span class="p">()</span> <span class="o">||</span> <span class="o">!</span><span class="n">file</span><span class="p">.</span><span class="n">file_info</span><span class="p">().</span><span class="n">is_file</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">invalid_mesh_handle</span><span class="p">;</span>
+
+        <span class="c1">// Try to load the mesh.</span>
+        <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">AssetImporter</span><span class="o">::</span><span class="n">tryLoad</span><span class="o">&lt;</span><span class="n">mesh</span><span class="o">&gt;</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">settings</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">common</span><span class="o">::</span><span class="n">valid</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">.</span><span class="n">get_error</span><span class="p">());</span>
+            <span class="k">return</span> <span class="n">invalid_mesh_handle</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">mesh</span> <span class="n">data</span> <span class="o">=</span> <span class="n">result</span><span class="p">;</span>
+        <span class="n">data</span><span class="p">.</span><span class="n">fileName</span> <span class="o">=</span> <span class="n">file</span><span class="p">.</span><span class="n">get_filename</span><span class="p">();</span> <span class="c1">// Set the filename.</span>
+
+        <span class="p">{</span> <span class="c1">// Insert the mesh into the mesh list.</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_meshesLock</span><span class="p">);</span>
+            <span class="k">auto</span><span class="o">*</span> <span class="n">pair_ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;</span><span class="p">(</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">(),</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">data</span><span class="p">)));</span>
+            <span class="n">m_meshes</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">pair_ptr</span><span class="p">)));</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="n">mesh_handle</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">copy_mesh</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">newName</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span> <span class="c1">// Get the id of the original mesh.</span>
+        <span class="n">id_type</span> <span class="n">newId</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">newName</span><span class="p">);</span> <span class="c1">// Get the new id.</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_meshesLock</span><span class="p">);</span>
+            <span class="n">mesh</span> <span class="n">data</span> <span class="o">=</span> <span class="n">m_meshes</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span> <span class="c1">// Get a copy of the original mesh.</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_meshes</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">newId</span><span class="p">))</span>
+            <span class="p">{</span><span class="c1">// If the new mesh already exists, overwrite it.</span>
+                <span class="n">mesh</span><span class="o">&amp;</span> <span class="n">destination</span> <span class="o">=</span> <span class="n">m_meshes</span><span class="p">[</span><span class="n">newId</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">rwguard</span><span class="p">(</span><span class="n">m_meshes</span><span class="p">[</span><span class="n">newId</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">);</span>
+                <span class="n">destination</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="c1">// If the new mesh doesn&#39;t exist yet create it with the copy.</span>
+            <span class="p">{</span>
+                <span class="k">auto</span><span class="o">*</span> <span class="n">pair_ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">(),</span> <span class="n">data</span><span class="p">));</span>
+                <span class="n">m_meshes</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">newId</span><span class="p">,</span> <span class="n">pair_ptr</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span> <span class="n">newId</span> <span class="p">};</span> <span class="c1">// Return a handle to the new mesh.</span>
+    <span class="p">}</span>
+
+    <span class="n">mesh_handle</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">copy_mesh</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">newName</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">newId</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">newName</span><span class="p">);</span> <span class="c1">// Get the new id.</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_meshesLock</span><span class="p">);</span>
+            <span class="n">mesh</span> <span class="n">data</span> <span class="o">=</span> <span class="n">m_meshes</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span> <span class="c1">// Get a copy of the original mesh.</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_meshes</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">newId</span><span class="p">))</span>
+            <span class="p">{</span><span class="c1">// If the new mesh already exists, overwrite it.</span>
+                <span class="n">mesh</span><span class="o">&amp;</span> <span class="n">destination</span> <span class="o">=</span> <span class="n">m_meshes</span><span class="p">[</span><span class="n">newId</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">rwguard</span><span class="p">(</span><span class="n">m_meshes</span><span class="p">[</span><span class="n">newId</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">);</span>
+                <span class="n">destination</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="c1">// If the new mesh doesn&#39;t exist yet create it with the copy.</span>
+            <span class="p">{</span>
+                <span class="k">auto</span><span class="o">*</span> <span class="n">pair_ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">(),</span> <span class="n">data</span><span class="p">));</span>
+                <span class="n">m_meshes</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">newId</span><span class="p">,</span> <span class="n">pair_ptr</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span> <span class="n">newId</span> <span class="p">};</span> <span class="c1">// Return a handle to the new mesh.</span>
+    <span class="p">}</span>
+
+    <span class="n">mesh_handle</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshesLock</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshes</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+            <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+        <span class="k">return</span> <span class="n">invalid_mesh_handle</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">mesh_handle</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshesLock</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshes</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+            <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+        <span class="k">return</span> <span class="n">invalid_mesh_handle</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_data_mesh.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

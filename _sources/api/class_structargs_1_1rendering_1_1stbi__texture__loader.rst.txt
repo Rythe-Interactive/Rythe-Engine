@@ -1,0 +1,25 @@
+.. _exhale_class_structargs_1_1rendering_1_1stbi__texture__loader:
+
+Class stbi_texture_loader
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_importers_texture_importers.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public args::core::filesystem::resource_converter< texture, texture_import_settings >`` (:ref:`exhale_class_structargs_1_1core_1_1filesystem_1_1resource__converter`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::rendering::stbi_texture_loader
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1application_1_1inputmap:
+
+Struct inputmap
+===============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_input_inputmap.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::application::inputmap
+   :members:
+   :protected-members:
+   :undoc-members:

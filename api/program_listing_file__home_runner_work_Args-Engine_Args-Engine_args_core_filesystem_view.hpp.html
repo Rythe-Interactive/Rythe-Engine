@@ -59,7 +59,7 @@
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">filesystem</span>
 <span class="p">{</span>
-    <span class="k">class</span> <span class="nc">ARGS_API</span> <span class="n">view</span>
+    <span class="k">class</span> <span class="nc">view</span>
     <span class="p">{</span>
     <span class="k">public</span><span class="o">:</span>
 
@@ -76,13 +76,20 @@
 
         <span class="n">A_NODISCARD</span> <span class="kt">bool</span> <span class="nf">is_valid</span><span class="p">(</span> <span class="kt">bool</span> <span class="n">deep_check</span> <span class="o">=</span> <span class="nb">false</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
 
-        <span class="n">A_NODISCARD</span> <span class="n">file_traits</span> <span class="nf">file_info</span><span class="p">();</span>
+        <span class="n">A_NODISCARD</span> <span class="n">file_traits</span> <span class="nf">file_info</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
-        <span class="n">A_NODISCARD</span> <span class="n">filesystem_traits</span> <span class="nf">filesystem_info</span><span class="p">();</span>
+        <span class="n">A_NODISCARD</span> <span class="n">filesystem_traits</span> <span class="nf">filesystem_info</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
         <span class="n">A_NODISCARD</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">get_domain</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
+        <span class="n">A_NODISCARD</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">get_path</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+        <span class="n">A_NODISCARD</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">get_extension</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+        <span class="n">A_NODISCARD</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">get_filename</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
         <span class="n">A_NODISCARD</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">basic_resource</span><span class="p">,</span><span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">get</span><span class="p">();</span>
+        <span class="n">A_NODISCARD</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">basic_resource</span><span class="p">,</span><span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">get</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
 
         <span class="n">A_NODISCARD</span> <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span><span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">set</span><span class="p">(</span><span class="k">const</span> <span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">resource</span><span class="p">);</span>
@@ -93,6 +100,13 @@
 
 
         <span class="n">A_NODISCARD</span> <span class="n">view</span> <span class="k">operator</span><span class="p">[](</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">identifier</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+        <span class="k">auto</span> <span class="n">load_as</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="k">decltype</span><span class="p">(</span><span class="k">auto</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">get</span><span class="p">().</span><span class="n">decay</span><span class="p">().</span><span class="n">to</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="p">}</span>
+
 
 <span class="cp">#if  !defined( ARGS_DISABLE_POTENTIALLY_WEIRD_SYNTAX )</span>
 
@@ -107,8 +121,8 @@
         <span class="n">view</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">m_path</span><span class="p">;</span>
 
-        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">create_identifier</span><span class="p">(</span><span class="k">const</span> <span class="n">navigator</span><span class="o">::</span><span class="n">solution</span><span class="o">::</span><span class="n">iterator</span><span class="o">&amp;</span><span class="p">);</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">filesystem_resolver</span><span class="o">&gt;</span> <span class="n">build</span><span class="p">();</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">create_identifier</span><span class="p">(</span><span class="k">const</span> <span class="n">navigator</span><span class="o">::</span><span class="n">solution</span><span class="o">::</span><span class="n">iterator</span><span class="o">&amp;</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">filesystem_resolver</span><span class="o">&gt;</span> <span class="n">build</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
         <span class="k">struct</span> <span class="n">create_chain</span>
         <span class="p">{</span>
@@ -118,13 +132,13 @@
             <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">create_chain</span><span class="o">&gt;</span> <span class="n">next</span><span class="p">;</span> <span class="c1">//next in chain</span>
         <span class="p">};</span>
 
-        <span class="kt">void</span> <span class="nf">make_inheritance</span><span class="p">();</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">create_chain</span><span class="o">&gt;</span> <span class="n">translate_solution</span><span class="p">();</span>
+        <span class="kt">void</span> <span class="nf">make_inheritance</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">create_chain</span><span class="o">&gt;</span> <span class="n">translate_solution</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
 
-        <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span><span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">make_solution</span><span class="p">();</span>
+        <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span><span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">make_solution</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
-        <span class="n">navigator</span><span class="o">::</span><span class="n">solution</span> <span class="n">m_foundSolution</span><span class="p">{};</span>
+        <span class="k">mutable</span> <span class="n">navigator</span><span class="o">::</span><span class="n">solution</span> <span class="n">m_foundSolution</span><span class="p">{};</span>
     <span class="p">};</span>
 
 

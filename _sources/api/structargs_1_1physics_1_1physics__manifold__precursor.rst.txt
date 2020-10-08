@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1physics_1_1physics__manifold__precursor:
+
+Struct physics_manifold_precursor
+=================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_physics_manifold_precursor.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::physics::physics_manifold_precursor
+   :members:
+   :protected-members:
+   :undoc-members:

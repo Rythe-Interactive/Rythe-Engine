@@ -1,0 +1,13 @@
+.. _exhale_enum_buffer_8hpp_1a9adfe470aa7a2383c658b75ce0627a0a:
+
+Enum buffer_type
+================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_compute_buffer.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: args::core::compute::buffer_type

@@ -1,0 +1,84 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_physics_systems_physicssystem.hpp:
+
+File physicssystem.hpp
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_physics_systems>` (``/home/runner/work/Args-Engine/Args-Engine/args/physics/systems``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/physics/systems/physicssystem.hpp``)
+-------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_physics_systems_physicssystem.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`)
+
+- ``memory``
+
+- ``physics/components/physics_component.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_components_physics_component.hpp`)
+
+- ``physics/components/rigidbody.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_components_rigidbody.hpp`)
+
+- ``physics/data/physics_manifold.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_physics_manifold.hpp`)
+
+- ``physics/data/physics_manifold_precursor.h`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_physics_manifold_precursor.h`)
+
+- ``physics/physics_contact.h`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_physics_contact.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_colliders_convexcollider.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_convexconvexpenetrationquery.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_data_edgepenetrationquery.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_physicsmodule.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_systems_physicssystem.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__physics`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classargs_1_1physics_1_1_physics_system`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_physicssystem_8hpp_1ae8a937515f8011e01c8a338c4769bd8a`
+

@@ -17,7 +17,7 @@ Program Listing for File mem_filesystem_resolver.hpp
    
    namespace args::core::filesystem
    {
-       class ARGS_API mem_filesystem_resolver : public filesystem_resolver, public memory_resolver_common_base
+       class mem_filesystem_resolver : public filesystem_resolver, public memory_resolver_common_base
        {
        public:
            explicit mem_filesystem_resolver(std::shared_ptr<const byte_vec> target_data);
@@ -57,7 +57,7 @@ Program Listing for File mem_filesystem_resolver.hpp
    
            virtual void build_disk_representation(std::shared_ptr<const byte_vec> in, std::shared_ptr<byte_vec> out) const ARGS_IMPURE;
    
-           virtual std::size_t size_hint(std::shared_ptr<const byte_vec> in) const ARGS_IMPURE_RETURN(0)
+           virtual std::size_t size_hint(std::shared_ptr<const byte_vec> in) const ARGS_IMPURE_RETURN(0);
    
    
        private:

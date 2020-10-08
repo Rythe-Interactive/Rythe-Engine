@@ -13,9 +13,24 @@ Namespace args::core::ecs
 
 
 
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core__ecs__detail`
+
+
 Classes
 -------
 
+
+- :ref:`exhale_struct_structargs_1_1core_1_1ecs_1_1child__iterator`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1ecs_1_1child__iterator_1_1impl`
+
+- :ref:`exhale_class_structargs_1_1core_1_1ecs_1_1archetype`
+
+- :ref:`exhale_class_structargs_1_1core_1_1ecs_1_1archetype__base`
 
 - :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1component__container`
 
@@ -35,15 +50,16 @@ Classes
 
 - :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1_query_registry`
 
-- :ref:`exhale_class_classargs_1_1core_1_1ecs_1_1rw__component__buffer`
 
-
-Variables
+Functions
 ---------
 
 
-- :ref:`exhale_variable_component__container_8hpp_1ad125b4fe2ab031b4a43b9ab5e54fbeb9`
+- :ref:`exhale_function_entity__handle_8cpp_1a6b499bfc56372fcd8795a63d1b14c96c`
 
-- :ref:`exhale_variable_entityquery_8hpp_1a55d81d7290c164ff4dbb4ddff1af3b62`
 
-- :ref:`exhale_variable_entityquery_8hpp_1aa908909eb9338c3b0f3749e7d4cd0c1c`
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_entity__handle_8hpp_1a8b1e7fb4d0b1f7b15c2e01dc67f01dc8`

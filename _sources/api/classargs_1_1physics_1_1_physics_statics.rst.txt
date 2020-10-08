@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1physics_1_1_physics_statics:
+
+Class PhysicsStatics
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_physics_statics.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::physics::PhysicsStatics
+   :members:
+   :protected-members:
+   :undoc-members:

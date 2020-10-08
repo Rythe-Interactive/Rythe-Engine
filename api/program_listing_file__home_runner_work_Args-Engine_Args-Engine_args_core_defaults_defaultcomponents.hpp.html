@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File defaultcomponents.hpp &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File defaultcomponents.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-defaultcomponents-hpp">
+<span id="program-listing-file-home-runner-work-args-engine-args-engine-args-core-defaults-defaultcomponents-hpp"></span><h1>Program Listing for File defaultcomponents.hpp<a class="headerlink" href="#program-listing-for-file-defaultcomponents-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_defaults_defaultcomponents.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-defaults-defaultcomponents-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/defaults/defaultcomponents.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/math/math.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/ecs/archetype.hpp&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;core/logging/logging.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="nl">position</span> <span class="p">:</span> <span class="k">public</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span>
+    <span class="p">{</span>
+        <span class="n">position</span><span class="p">()</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">position</span><span class="p">(</span><span class="k">const</span> <span class="n">position</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">position</span><span class="p">(</span><span class="n">position</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">position</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">)</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">position</span><span class="p">(</span><span class="kt">float</span> <span class="n">x</span><span class="p">,</span> <span class="kt">float</span> <span class="n">y</span><span class="p">,</span> <span class="kt">float</span> <span class="n">z</span><span class="p">)</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">position</span><span class="p">(</span><span class="kt">float</span> <span class="n">v</span><span class="p">)</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">position</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">position</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">position</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">position</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">position</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">position</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;&amp;</span> <span class="n">src</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="nl">rotation</span> <span class="p">:</span> <span class="k">public</span> <span class="n">math</span><span class="o">::</span><span class="n">quat</span>
+    <span class="p">{</span>
+        <span class="n">rotation</span><span class="p">()</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="n">quat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">rotation</span><span class="p">(</span><span class="kt">float</span> <span class="n">w</span><span class="p">,</span> <span class="kt">float</span> <span class="n">x</span><span class="p">,</span> <span class="kt">float</span> <span class="n">y</span><span class="p">,</span> <span class="kt">float</span> <span class="n">z</span><span class="p">)</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="n">quat</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">rotation</span><span class="p">(</span><span class="k">const</span> <span class="n">rotation</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">rotation</span><span class="p">(</span><span class="n">rotation</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">rotation</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">quat</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">)</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="n">quat</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">rotation</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">rotation</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">rotation</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">rotation</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">rotation</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">quat</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">rotation</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">quat</span><span class="o">&amp;&amp;</span> <span class="n">src</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">right</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">toMat3</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.f</span><span class="p">,</span> <span class="mf">0.f</span><span class="p">,</span> <span class="mf">0.f</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">up</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">toMat3</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.f</span><span class="p">,</span> <span class="mf">1.f</span><span class="p">,</span> <span class="mf">0.f</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">forward</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">toMat3</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.f</span><span class="p">,</span> <span class="mf">0.f</span><span class="p">,</span> <span class="mf">1.f</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">matrix</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">toMat3</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="nl">scale</span> <span class="p">:</span> <span class="k">public</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span>
+    <span class="p">{</span>
+        <span class="n">scale</span><span class="p">()</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">scale</span><span class="p">(</span><span class="kt">float</span> <span class="n">x</span><span class="p">,</span> <span class="kt">float</span> <span class="n">y</span><span class="p">,</span> <span class="kt">float</span> <span class="n">z</span><span class="p">)</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">scale</span><span class="p">(</span><span class="kt">float</span> <span class="n">v</span><span class="p">)</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">scale</span><span class="p">(</span><span class="k">const</span> <span class="n">scale</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">scale</span><span class="p">(</span><span class="n">scale</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">scale</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">)</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">scale</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">scale</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">scale</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">scale</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">scale</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">scale</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;&amp;</span> <span class="n">src</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="nl">transform</span> <span class="p">:</span> <span class="k">public</span> <span class="n">ecs</span><span class="o">::</span><span class="n">archetype</span><span class="o">&lt;</span><span class="n">position</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">scale</span><span class="o">&gt;</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">base</span> <span class="o">=</span> <span class="n">ecs</span><span class="o">::</span><span class="n">archetype</span><span class="o">&lt;</span><span class="n">position</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">scale</span><span class="o">&gt;</span><span class="p">;</span>
+
+        <span class="n">transform</span><span class="p">(</span><span class="k">const</span> <span class="n">base</span><span class="o">::</span><span class="n">handleGroup</span><span class="o">&amp;</span> <span class="n">handles</span><span class="p">)</span> <span class="o">:</span> <span class="n">base</span><span class="p">(</span><span class="n">handles</span><span class="p">)</span> <span class="p">{}</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">position</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">scale</span><span class="o">&gt;</span> <span class="n">get_world_components</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">worldMatrix</span> <span class="o">=</span> <span class="n">get_world_to_local_matrix</span><span class="p">();</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">p</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">quat</span> <span class="n">r</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">s</span><span class="p">;</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">decompose</span><span class="p">(</span><span class="n">worldMatrix</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">p</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="o">&lt;</span><span class="n">position</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">scale</span><span class="o">&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">get_world_to_local_matrix</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">inverse</span><span class="p">(</span><span class="n">get_local_to_world_matrix</span><span class="p">());</span>
+        <span class="p">}</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">get_local_to_world_matrix</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">handles</span><span class="p">;</span>
+            <span class="k">auto</span> <span class="n">parent</span> <span class="o">=</span> <span class="n">positionH</span><span class="p">.</span><span class="n">entity</span><span class="p">.</span><span class="n">get_parent</span><span class="p">();</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">parent</span> <span class="o">&amp;&amp;</span> <span class="n">parent</span><span class="p">.</span><span class="n">has_components</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="n">transform</span> <span class="n">transf</span> <span class="o">=</span> <span class="n">parent</span><span class="p">.</span><span class="n">get_component_handles</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">();</span>
+                <span class="k">return</span> <span class="n">transf</span><span class="p">.</span><span class="n">get_local_to_world_matrix</span><span class="p">()</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">compose</span><span class="p">(</span><span class="n">scaleH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">rotationH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">positionH</span><span class="p">.</span><span class="n">read</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">compose</span><span class="p">(</span><span class="n">scaleH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">rotationH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">positionH</span><span class="p">.</span><span class="n">read</span><span class="p">());</span>
+        <span class="p">}</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">get_local_to_parent_matrix</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">handles</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">compose</span><span class="p">(</span><span class="n">scaleH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">rotationH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">positionH</span><span class="p">.</span><span class="n">read</span><span class="p">());</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="k">namespace</span> <span class="n">fmt</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="p">;</span>
+
+    <span class="k">template</span> <span class="o">&lt;&gt;</span>
+    <span class="k">struct</span> <span class="n">fmt</span><span class="o">::</span><span class="n">formatter</span><span class="o">&lt;</span><span class="n">position</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="kt">char</span> <span class="n">presentation</span> <span class="o">=</span> <span class="sc">&#39;f&#39;</span><span class="p">;</span>
+
+        <span class="k">constexpr</span> <span class="k">auto</span> <span class="nf">parse</span><span class="p">(</span><span class="n">format_parse_context</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">end</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">end</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">*</span><span class="n">it</span> <span class="o">==</span> <span class="sc">&#39;f&#39;</span> <span class="o">||</span> <span class="o">*</span><span class="n">it</span> <span class="o">==</span> <span class="sc">&#39;e&#39;</span><span class="p">))</span> <span class="n">presentation</span> <span class="o">=</span> <span class="o">*</span><span class="n">it</span><span class="o">++</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">it</span> <span class="o">!=</span> <span class="sc">&#39;}&#39;</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="n">format_error</span><span class="p">(</span><span class="s">&quot;invalid format&quot;</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">it</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">FormatContext</span><span class="o">&gt;</span>
+        <span class="k">auto</span> <span class="n">format</span><span class="p">(</span><span class="k">const</span> <span class="n">position</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">,</span> <span class="n">FormatContext</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">format_to</span><span class="p">(</span>
+                <span class="n">ctx</span><span class="p">.</span><span class="n">out</span><span class="p">(),</span>
+
+                <span class="n">presentation</span> <span class="o">==</span> <span class="sc">&#39;f&#39;</span> <span class="o">?</span> <span class="s">&quot;{:f}&quot;</span> <span class="o">:</span> <span class="s">&quot;{:e}&quot;</span><span class="p">,</span>
+                <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span> <span class="o">&lt;&gt;</span>
+    <span class="k">struct</span> <span class="n">fmt</span><span class="o">::</span><span class="n">formatter</span><span class="o">&lt;</span><span class="n">rotation</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="kt">char</span> <span class="n">presentation</span> <span class="o">=</span> <span class="sc">&#39;f&#39;</span><span class="p">;</span>
+
+        <span class="k">constexpr</span> <span class="k">auto</span> <span class="nf">parse</span><span class="p">(</span><span class="n">format_parse_context</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">end</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">end</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">*</span><span class="n">it</span> <span class="o">==</span> <span class="sc">&#39;f&#39;</span> <span class="o">||</span> <span class="o">*</span><span class="n">it</span> <span class="o">==</span> <span class="sc">&#39;e&#39;</span><span class="p">))</span> <span class="n">presentation</span> <span class="o">=</span> <span class="o">*</span><span class="n">it</span><span class="o">++</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">it</span> <span class="o">!=</span> <span class="sc">&#39;}&#39;</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="n">format_error</span><span class="p">(</span><span class="s">&quot;invalid format&quot;</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">it</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">FormatContext</span><span class="o">&gt;</span>
+        <span class="k">auto</span> <span class="n">format</span><span class="p">(</span><span class="k">const</span> <span class="n">rotation</span><span class="o">&amp;</span> <span class="n">r</span><span class="p">,</span> <span class="n">FormatContext</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">format_to</span><span class="p">(</span>
+                <span class="n">ctx</span><span class="p">.</span><span class="n">out</span><span class="p">(),</span>
+
+                <span class="n">presentation</span> <span class="o">==</span> <span class="sc">&#39;f&#39;</span> <span class="o">?</span> <span class="s">&quot;{:f}&quot;</span> <span class="o">:</span> <span class="s">&quot;{:e}&quot;</span><span class="p">,</span>
+                <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">quat</span><span class="o">&gt;</span><span class="p">(</span><span class="n">r</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span> <span class="o">&lt;&gt;</span>
+    <span class="k">struct</span> <span class="n">fmt</span><span class="o">::</span><span class="n">formatter</span><span class="o">&lt;</span><span class="n">scale</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="kt">char</span> <span class="n">presentation</span> <span class="o">=</span> <span class="sc">&#39;f&#39;</span><span class="p">;</span>
+
+        <span class="k">constexpr</span> <span class="k">auto</span> <span class="nf">parse</span><span class="p">(</span><span class="n">format_parse_context</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">end</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">end</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">*</span><span class="n">it</span> <span class="o">==</span> <span class="sc">&#39;f&#39;</span> <span class="o">||</span> <span class="o">*</span><span class="n">it</span> <span class="o">==</span> <span class="sc">&#39;e&#39;</span><span class="p">))</span> <span class="n">presentation</span> <span class="o">=</span> <span class="o">*</span><span class="n">it</span><span class="o">++</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">it</span> <span class="o">!=</span> <span class="sc">&#39;}&#39;</span><span class="p">)</span>
+                <span class="k">throw</span> <span class="n">format_error</span><span class="p">(</span><span class="s">&quot;invalid format&quot;</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">it</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">FormatContext</span><span class="o">&gt;</span>
+        <span class="k">auto</span> <span class="n">format</span><span class="p">(</span><span class="k">const</span> <span class="n">scale</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">,</span> <span class="n">FormatContext</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">format_to</span><span class="p">(</span>
+                <span class="n">ctx</span><span class="p">.</span><span class="n">out</span><span class="p">(),</span>
+
+                <span class="n">presentation</span> <span class="o">==</span> <span class="sc">&#39;f&#39;</span> <span class="o">?</span> <span class="s">&quot;{:f}&quot;</span> <span class="o">:</span> <span class="s">&quot;{:e}&quot;</span><span class="p">,</span>
+                <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">s</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_defaults_defaultcomponents.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

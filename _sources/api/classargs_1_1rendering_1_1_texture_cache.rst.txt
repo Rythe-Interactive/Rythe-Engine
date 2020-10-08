@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1rendering_1_1_texture_cache:
+
+Class TextureCache
+==================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_texture.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::rendering::TextureCache
+   :members:
+   :protected-members:
+   :undoc-members:

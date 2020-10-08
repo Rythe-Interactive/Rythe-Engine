@@ -29,7 +29,7 @@ Program Listing for File eventbus.hpp
        public:
            ~EventBus()
            {
-               for (auto& events : m_events)
+               for (auto [_, events] : m_events)
                {
                    for (auto* event : events)
                        delete event;
@@ -41,8 +41,6 @@ Program Listing for File eventbus.hpp
            template<typename event_type, typename... Args, typename = inherits_from<event_type, event<event_type>>>
            void raiseEvent(Args&&... arguments)
            {
-               //std::cout << "\n\n" << typeid(event_type).name() << "\n\n";
-   
                event_type* eventptr;
    
                event_type event(arguments...); // Create new event.
@@ -95,7 +93,7 @@ Program Listing for File eventbus.hpp
            {
                if (checkEvent<event_type>())
                {
-                   auto* event = m_events[event_type::id].dense()[index];
+                   auto* event = m_events[event_type::id][index];
                    m_events[event_type::id].erase(event);
                    delete event;
                }
@@ -106,7 +104,7 @@ Program Listing for File eventbus.hpp
            {
                if (checkEvent<event_type>())
                {
-                   auto* event = m_events[event_type::id].dense()[m_events[event_type::id].size() - 1];
+                   auto* event = m_events[event_type::id][m_events[event_type::id].size() - 1];
                    m_events[event_type::id].erase(event);
                    delete event;
                }

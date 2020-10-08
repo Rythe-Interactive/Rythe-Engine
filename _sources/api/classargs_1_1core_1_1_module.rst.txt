@@ -9,10 +9,14 @@ Class Module
 Inheritance Relationships
 -------------------------
 
-Derived Type
-************
+Derived Types
+*************
 
 - ``public args::application::ApplicationModule`` (:ref:`exhale_class_classargs_1_1application_1_1_application_module`)
+- ``public args::audio::AudioModule`` (:ref:`exhale_class_classargs_1_1audio_1_1_audio_module`)
+- ``public args::core::CoreModule`` (:ref:`exhale_class_classargs_1_1core_1_1_core_module`)
+- ``public args::physics::PhysicsModule`` (:ref:`exhale_class_classargs_1_1physics_1_1_physics_module`)
+- ``public args::rendering::RenderingModule`` (:ref:`exhale_class_classargs_1_1rendering_1_1_rendering_module`)
 
 
 Class Documentation

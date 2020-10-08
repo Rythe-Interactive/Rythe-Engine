@@ -1,0 +1,43 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_rendering_rendering.hpp:
+
+File rendering.hpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_rendering>` (``/home/runner/work/Args-Engine/Args-Engine/args/rendering``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/rendering/rendering.hpp``)
+---------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_rendering_rendering.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``rendering/data/model.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.hpp`)
+
+- ``rendering/debugrendering.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_debugrendering.hpp`)
+
+- ``rendering/module/renderingmodule.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_module_renderingmodule.hpp`)
+
+- ``rendering/systems/renderer.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_systems_renderer.hpp`)
+
+
+
+
+

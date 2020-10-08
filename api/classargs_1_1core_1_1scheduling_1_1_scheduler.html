@@ -62,6 +62,7 @@
 <div class="section" id="nested-types">
 <h3>Nested Types<a class="headerlink" href="#nested-types" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
+<li><p><a class="reference internal" href="structargs_1_1core_1_1scheduling_1_1_scheduler_1_1runnable.html#exhale-struct-structargs-1-1core-1-1scheduling-1-1-scheduler-1-1runnable"><span class="std std-ref">Struct Scheduler::runnable</span></a></p></li>
 <li><p><a class="reference internal" href="structargs_1_1core_1_1scheduling_1_1_scheduler_1_1thread__error.html#exhale-struct-structargs-1-1core-1-1scheduling-1-1-scheduler-1-1thread-error"><span class="std std-ref">Struct Scheduler::thread_error</span></a></p></li>
 </ul>
 </div>
@@ -80,8 +81,8 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
-<dt id="_CPPv4N4args4core10scheduling9Scheduler9SchedulerEPN6events8EventBusE">
-<span id="_CPPv3N4args4core10scheduling9Scheduler9SchedulerEPN6events8EventBusE"></span><span id="_CPPv2N4args4core10scheduling9Scheduler9SchedulerEPN6events8EventBusE"></span><span id="args::core::scheduling::Scheduler::Scheduler__events::EventBusP"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_scheduler_1a22ee73aa65c79ce4addd4edc3b1dc1d0"></span><code class="sig-name descname">Scheduler</code><span class="sig-paren">(</span>events::<a class="reference internal" href="classargs_1_1core_1_1events_1_1_event_bus.html#_CPPv4N4args4core6events8EventBusE" title="args::core::events::EventBus">EventBus</a> *<em>eventBus</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling9Scheduler9SchedulerEPN6events8EventBusE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N4args4core10scheduling9Scheduler9SchedulerEPN6events8EventBusEb4uint">
+<span id="_CPPv3N4args4core10scheduling9Scheduler9SchedulerEPN6events8EventBusEb4uint"></span><span id="_CPPv2N4args4core10scheduling9Scheduler9SchedulerEPN6events8EventBusEb4uint"></span><span id="args::core::scheduling::Scheduler::Scheduler__events::EventBusP.b.uint"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_scheduler_1acbe09ed14c2753dc2303bb2cbaf67b3f"></span><code class="sig-name descname">Scheduler</code><span class="sig-paren">(</span>events::<a class="reference internal" href="classargs_1_1core_1_1events_1_1_event_bus.html#_CPPv4N4args4core6events8EventBusE" title="args::core::events::EventBus">EventBus</a> *<em>eventBus</em>, bool <em>lowPower</em>, <a class="reference internal" href="typedef_primitives_8hpp_1a0501886f6a032eb2337c27d14e472874.html#_CPPv4N4args4core4uintE" title="args::core::uint">uint</a> <em>minThreads</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling9Scheduler9SchedulerEPN6events8EventBusEb4uint" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -124,6 +125,26 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt id="_CPPv4I_9size_typeEN4args4core10scheduling9Scheduler16getChainThreadIdENSt6thread2idERA5charc_Kc">
+<span id="_CPPv3I_9size_typeEN4args4core10scheduling9Scheduler16getChainThreadIdERA5charc_Kc"></span><span id="_CPPv2I_9size_typeEN4args4core10scheduling9Scheduler16getChainThreadIdERAcharc_Kc"></span>template&lt;<a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <code class="sig-name descname">charc</code>&gt;<br /><span class="target" id="classargs_1_1core_1_1scheduling_1_1_scheduler_1a0e6a83b3d96fe6e288be8ef27b26c343"></span>std::thread::id <code class="sig-name descname">getChainThreadId</code><span class="sig-paren">(</span><em class="property">const</em> char (&amp;<em>name</em>)[charc]<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_9size_typeEN4args4core10scheduling9Scheduler16getChainThreadIdENSt6thread2idERA5charc_Kc" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling9Scheduler16getChainThreadIdE7id_type">
+<span id="_CPPv3N4args4core10scheduling9Scheduler16getChainThreadIdE7id_type"></span><span id="_CPPv2N4args4core10scheduling9Scheduler16getChainThreadIdE7id_type"></span><span id="args::core::scheduling::Scheduler::getChainThreadId__id_type"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_scheduler_1a80f4cfb3aaa054dc64d83bbe83362366"></span>std::thread::id <code class="sig-name descname">getChainThreadId</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a> <em>chainId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling9Scheduler16getChainThreadIdE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling9Scheduler11sendCommandENSt6thread2idE8delegateIFvPvEEPv">
+<span id="_CPPv3N4args4core10scheduling9Scheduler11sendCommandENSt6thread2idE8delegateIFvPvEEPv"></span><span id="_CPPv2N4args4core10scheduling9Scheduler11sendCommandENSt6thread2idE8delegateIFvPvEEPv"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_scheduler_1a2ab19f8fb38747d54af2baea785808db"></span>void <code class="sig-name descname">sendCommand</code><span class="sig-paren">(</span>std::thread::id <em>id</em>, <a class="reference internal" href="classargs_1_1core_1_1delegate.html#_CPPv4I0EN4args4core8delegateE" title="args::core::delegate">delegate</a>&lt;void<span class="sig-paren">(</span>void*<span class="sig-paren">)</span>&gt; <em>command</em>, void *<em>parameter</em> = nullptr, <span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling9Scheduler11sendCommandENSt6thread2idE8delegateIFvPvEEPv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling9Scheduler8queueJobE8delegateIFvPvEEPv">
+<span id="_CPPv3N4args4core10scheduling9Scheduler8queueJobE8delegateIFvPvEEPv"></span><span id="_CPPv2N4args4core10scheduling9Scheduler8queueJobE8delegateIFvPvEEPv"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_scheduler_1acadf8a66d54cd0bcd37247702e848b8c"></span>void <code class="sig-name descname">queueJob</code><span class="sig-paren">(</span><a class="reference internal" href="classargs_1_1core_1_1delegate.html#_CPPv4I0EN4args4core8delegateE" title="args::core::delegate">delegate</a>&lt;void<span class="sig-paren">(</span>void*<span class="sig-paren">)</span>&gt; <em>job</em>, void *<em>parameter</em>, <span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling9Scheduler8queueJobE8delegateIFvPvEEPv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
 <dt id="_CPPv4N4args4core10scheduling9Scheduler13destroyThreadENSt6thread2idE">
 <span id="_CPPv3N4args4core10scheduling9Scheduler13destroyThreadENSt6thread2idE"></span><span id="_CPPv2N4args4core10scheduling9Scheduler13destroyThreadENSt6thread2idE"></span><span id="args::core::scheduling::Scheduler::destroyThread__std::thread::id"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_scheduler_1a20491e1c8fe83d683509c787bc726c0c"></span>void <code class="sig-name descname">destroyThread</code><span class="sig-paren">(</span>std::thread::id <em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling9Scheduler13destroyThreadENSt6thread2idE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Destroy a thread. </p>
@@ -163,6 +184,16 @@
 <span id="_CPPv3N4args4core10scheduling9Scheduler19reportExitWithErrorERKNSt6thread2idERKNSt9exceptionE"></span><span id="_CPPv2N4args4core10scheduling9Scheduler19reportExitWithErrorERKNSt6thread2idERKNSt9exceptionE"></span><span id="args::core::scheduling::Scheduler::reportExitWithError__std::thread::idCR.std::exceptionCR"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_scheduler_1ad75798026a48707ae43eb385d62738a5"></span>void <code class="sig-name descname">reportExitWithError</code><span class="sig-paren">(</span><em class="property">const</em> std::thread::id &amp;<em>id</em>, <em class="property">const</em> std::exception &amp;<em>exc</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling9Scheduler19reportExitWithErrorERKNSt6thread2idERKNSt9exceptionE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Report an unintentional exit from a thread. </p>
 </dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling9Scheduler15subscribeToSyncEv">
+<span id="_CPPv3N4args4core10scheduling9Scheduler15subscribeToSyncEv"></span><span id="_CPPv2N4args4core10scheduling9Scheduler15subscribeToSyncEv"></span><span id="args::core::scheduling::Scheduler::subscribeToSync"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_scheduler_1a40e998bc1b6cc9bab95921d8393a8130"></span>void <code class="sig-name descname">subscribeToSync</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling9Scheduler15subscribeToSyncEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling9Scheduler19unsubscribeFromSyncEv">
+<span id="_CPPv3N4args4core10scheduling9Scheduler19unsubscribeFromSyncEv"></span><span id="_CPPv2N4args4core10scheduling9Scheduler19unsubscribeFromSyncEv"></span><span id="args::core::scheduling::Scheduler::unsubscribeFromSync"></span><span class="target" id="classargs_1_1core_1_1scheduling_1_1_scheduler_1a424d2dfc432b186f27602a5e93340a8e"></span>void <code class="sig-name descname">unsubscribeFromSync</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling9Scheduler19unsubscribeFromSyncEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N4args4core10scheduling9Scheduler18waitForProcessSyncEv">
@@ -233,6 +264,42 @@
 </dd></dl>
 
 </div>
+<dl class="cpp struct">
+<dt id="_CPPv4N4args4core10scheduling9Scheduler8runnableE">
+<span id="_CPPv3N4args4core10scheduling9Scheduler8runnableE"></span><span id="_CPPv2N4args4core10scheduling9Scheduler8runnableE"></span><span id="args::core::scheduling::Scheduler::runnable"></span><span class="target" id="structargs_1_1core_1_1scheduling_1_1_scheduler_1_1runnable"></span><em class="property">struct </em><code class="sig-name descname">runnable</code><a class="headerlink" href="#_CPPv4N4args4core10scheduling9Scheduler8runnableE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling9Scheduler8runnable8runnableEv">
+<span id="_CPPv3N4args4core10scheduling9Scheduler8runnable8runnableEv"></span><span id="_CPPv2N4args4core10scheduling9Scheduler8runnable8runnableEv"></span><span id="args::core::scheduling::Scheduler::runnable::runnable"></span><span class="target" id="structargs_1_1core_1_1scheduling_1_1_scheduler_1_1runnable_1afa60962baffe99821282b19c00e71d0d"></span><code class="sig-name descname">runnable</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N4args4core10scheduling9Scheduler8runnable8runnableEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling9Scheduler8runnable8runnableERK8delegateIFvPvEEPv">
+<span id="_CPPv3N4args4core10scheduling9Scheduler8runnable8runnableERK8delegateIFvPvEEPv"></span><span id="_CPPv2N4args4core10scheduling9Scheduler8runnable8runnableERK8delegateIFvPvEEPv"></span><span class="target" id="structargs_1_1core_1_1scheduling_1_1_scheduler_1_1runnable_1a7a738d7990e67312719ccb5fc053404f"></span><code class="sig-name descname">runnable</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="classargs_1_1core_1_1delegate.html#_CPPv4I0EN4args4core8delegateE" title="args::core::delegate">delegate</a>&lt;void<span class="sig-paren">(</span>void*<span class="sig-paren">)</span>&gt; &amp;<em>func</em>, void *<em>param</em>, <span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling9Scheduler8runnable8runnableERK8delegateIFvPvEEPv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core10scheduling9Scheduler8runnableclEv">
+<span id="_CPPv3N4args4core10scheduling9Scheduler8runnableclEv"></span><span id="_CPPv2N4args4core10scheduling9Scheduler8runnableclEv"></span><span id="args::core::scheduling::Scheduler::runnable::call-operator__void"></span><span class="target" id="structargs_1_1core_1_1scheduling_1_1_scheduler_1_1runnable_1a8cc1a89a84ef7346f18dff4c2e717005"></span>void <code class="sig-name descname">operator()</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core10scheduling9Scheduler8runnableclEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="cpp var">
+<dt id="_CPPv4N4args4core10scheduling9Scheduler8runnable4funcE">
+<span id="_CPPv3N4args4core10scheduling9Scheduler8runnable4funcE"></span><span id="_CPPv2N4args4core10scheduling9Scheduler8runnable4funcE"></span><span class="target" id="structargs_1_1core_1_1scheduling_1_1_scheduler_1_1runnable_1a1ce392912a528fbae8fbc79524e43835"></span><a class="reference internal" href="classargs_1_1core_1_1delegate.html#_CPPv4I0EN4args4core8delegateE" title="args::core::delegate">delegate</a>&lt;void<span class="sig-paren">(</span>void*<span class="sig-paren">)</span>&gt; <code class="sig-name descname">func</code><a class="headerlink" href="#_CPPv4N4args4core10scheduling9Scheduler8runnable4funcE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args4core10scheduling9Scheduler8runnable5paramE">
+<span id="_CPPv3N4args4core10scheduling9Scheduler8runnable5paramE"></span><span id="_CPPv2N4args4core10scheduling9Scheduler8runnable5paramE"></span><span id="args::core::scheduling::Scheduler::runnable::param__voidP"></span><span class="target" id="structargs_1_1core_1_1scheduling_1_1_scheduler_1_1runnable_1a7deef1937de184731d88024ae17b3316"></span>void *<code class="sig-name descname">param</code><a class="headerlink" href="#_CPPv4N4args4core10scheduling9Scheduler8runnable5paramE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
 </dd></dl>
 
 </div>

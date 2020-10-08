@@ -53,6 +53,34 @@
 <span class="p">{</span>
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">derived_type</span><span class="p">,</span> <span class="k">typename</span> <span class="n">base_type</span><span class="o">&gt;</span>
     <span class="k">using</span> <span class="n">inherits_from</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_if</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of</span><span class="o">&lt;</span><span class="n">base_type</span><span class="p">,</span> <span class="n">derived_type</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">derived_type</span><span class="p">,</span> <span class="k">typename</span> <span class="n">base_type</span><span class="o">&gt;</span>
+    <span class="k">using</span> <span class="n">doesnt_inherit_from</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_if</span><span class="o">&lt;!</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of</span><span class="o">&lt;</span><span class="n">base_type</span><span class="p">,</span> <span class="n">derived_type</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="p">,</span> <span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="n">has_resize</span>
+    <span class="p">{</span>
+        <span class="k">static_assert</span><span class="p">(</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="nb">false</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span>
+            <span class="s">&quot;Second template param needs to be of function type.&quot;</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">C</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Ret</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="n">has_resize</span><span class="o">&lt;</span><span class="n">C</span><span class="p">,</span> <span class="n">Ret</span><span class="p">(</span><span class="n">Args</span><span class="p">...)</span><span class="o">&gt;</span>
+    <span class="p">{</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="k">static</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">check</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="p">)</span>
+            <span class="o">-&gt;</span> <span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">declval</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">().</span><span class="n">resize</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">declval</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">()...)),</span> <span class="n">Ret</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span><span class="o">&gt;</span>
+        <span class="k">static</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">check</span><span class="p">(...)</span>
+            <span class="o">-&gt;</span><span class="n">std</span><span class="o">::</span><span class="n">false_type</span><span class="p">;</span>
+
+        <span class="k">typedef</span> <span class="nf">decltype</span><span class="p">(</span><span class="n">check</span><span class="o">&lt;</span><span class="n">C</span><span class="o">&gt;</span><span class="p">(</span><span class="k">nullptr</span><span class="p">))</span> <span class="n">type</span><span class="p">;</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">bool</span> <span class="n">value</span> <span class="o">=</span> <span class="n">type</span><span class="o">::</span><span class="n">value</span><span class="p">;</span>
+    <span class="p">};</span>
 <span class="p">}</span>
 </pre></div>
 </div>

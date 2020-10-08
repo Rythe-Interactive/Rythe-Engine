@@ -31,6 +31,8 @@ Includes
 
 - ``core/common/exception.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_exception.hpp`)
 
+- ``core/logging/logging.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`)
+
 - ``core/scheduling/process.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_process.hpp`)
 
 - ``core/scheduling/processchain.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_processchain.hpp`)

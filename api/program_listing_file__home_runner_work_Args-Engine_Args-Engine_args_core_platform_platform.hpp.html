@@ -50,12 +50,17 @@
 
 <span class="cp">#define ARGS_CPP17V 201703L</span>
 
+<span class="cp">#define ARGS_DEBUG_VALUE 1</span>
+<span class="cp">#define ARGS_RELEASE_VALUE 2</span>
+
 <span class="cp">#if defined(_DEBUG) || defined(DEBUG)</span>
 
     <span class="cp">#define ARGS_DEBUG</span>
+    <span class="cp">#define ARGS_CONFIGURATION ARGS_DEBUG_VALUE</span>
 <span class="cp">#else</span>
 
     <span class="cp">#define ARGS_RELEASE</span>
+    <span class="cp">#define ARGS_CONFIGURATION ARGS_RELEASE_VALUE</span>
 <span class="cp">#endif</span>
 
 <span class="cp">#if (!defined(ARGS_LOW_POWER) &amp;&amp; !defined(ARGS_HIGH_PERFORMANCE))</span>
@@ -105,24 +110,9 @@
 
 <span class="cp">#define NO_MANGLING extern &quot;C&quot;</span>
 
-<span class="cp">#if defined(ARGS_WINDOWS) || defined(DOXY_INCLUDE)</span>
-    <span class="cp">#if (defined(ARGS_INTERNAL) &amp;&amp; !defined(ARGS_IMPORT)) || defined(DOXY_INCLUDE)</span>
+<span class="cp">#define ARGS_FUNC ARGS_CCONV</span>
 
-        <span class="cp">#define ARGS_API __declspec(dllexport)</span>
-    <span class="cp">#else</span>
-        <span class="cp">#define ARGS_API __declspec(dllimport)</span>
-    <span class="cp">#endif</span>
-<span class="cp">#else</span>
-    <span class="cp">#define ARGS_API __attribute__((visibility(&quot;default&quot;)))</span>
-<span class="cp">#endif</span>
-
-<span class="cp">#if defined(ARGS_IMPORT)</span>
-<span class="cp">#define ARGS_LIBRARY</span>
-<span class="cp">#endif</span>
-
-<span class="cp">#define ARGS_FUNC ARGS_API ARGS_CCONV</span>
-
-<span class="cp">#define ARGS_INTERFACE NO_MANGLING ARGS_API ARGS_CCONV</span>
+<span class="cp">#define ARGS_INTERFACE NO_MANGLING ARGS_CCONV</span>
 
 <span class="cp">#if defined(__has_cpp_attribute)|| defined(DOXY_INCLUDE)</span>
 
@@ -152,6 +142,10 @@
 <span class="cp">#define ARGS_IMPURE {}</span>
 
 <span class="cp">#define ARGS_IMPURE_RETURN(x) { return (x); }</span>
+
+<span class="cp">#if !defined(LEGION_MIN_THREADS)</span>
+<span class="cp">#define LEGION_MIN_THREADS 5</span>
+<span class="cp">#endif</span>
 </pre></div>
 </div>
 </div>

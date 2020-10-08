@@ -26,7 +26,7 @@ Program Listing for File strpath_manip.hpp
    
    namespace args::core::filesystem
    {
-       class ARGS_API strpath_manip
+       class strpath_manip
        {
        public:
            

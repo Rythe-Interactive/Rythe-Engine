@@ -1,0 +1,16 @@
+.. _exhale_class_structargs_1_1rendering_1_1shader:
+
+Class shader
+============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_shader.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::rendering::shader
+   :members:
+   :protected-members:
+   :undoc-members:

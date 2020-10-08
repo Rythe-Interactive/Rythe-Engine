@@ -1,0 +1,69 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_audio_components_audio_source.hpp:
+
+Program Listing for File audio_source.hpp
+=========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_audio_components_audio_source.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/audio/components/audio_source.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <AL/al.h>
+   #include <AL/alc.h>
+   #include <audio/data/audio_segment.hpp>
+   
+   namespace args::audio
+   {
+       struct audio_source
+       {
+           friend class AudioSystem;
+       public:
+           enum sound_properties
+           {
+               pitch = 1,
+               gain = 2,
+           };
+           void setPitch(const float pitch)
+           {
+               m_changes |= sound_properties::pitch; // set b0
+               m_pitch = args::math::max(0.0f, pitch);
+           }
+           float getPitch() const { return m_pitch; }
+           void setGain(const float gain)
+           {
+               m_changes |= sound_properties::gain; // set b1
+               m_gain = args::math::max(0.0f, gain);
+           }
+           float getGain() const { return m_gain; };
+   
+           void setAudioHandle(audio_segment_handle handle)
+           {
+               m_audio_handle = handle;
+           }
+   
+           audio_segment_handle getAudioHandle() const
+           {
+               return m_audio_handle;
+           }
+   
+       private:
+           void clearChanges()
+           {
+               m_changes ^= m_changes; // Reset
+           }
+   
+           ALuint m_sourceId;
+           audio_segment_handle m_audio_handle;
+   
+           float m_pitch = 1.0f;
+           float m_gain = 1.0f;
+   
+           // Byte to keep track of changes made to audio source
+           // b0 - pitch changed
+           // b1 - gain changed
+           byte m_changes = 0;
+       };
+   }

@@ -16,6 +16,7 @@ Files
 -----
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_async.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_readonly_rw_spinlock.cpp`
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_readonly_rw_spinlock.hpp`
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_ring_sync_lock.hpp`
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_transferable_atomic.hpp`

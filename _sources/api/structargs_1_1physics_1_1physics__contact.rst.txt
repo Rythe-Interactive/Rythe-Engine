@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1physics_1_1physics__contact:
+
+Struct physics_contact
+======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_physics_contact.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::physics::physics_contact
+   :members:
+   :protected-members:
+   :undoc-members:

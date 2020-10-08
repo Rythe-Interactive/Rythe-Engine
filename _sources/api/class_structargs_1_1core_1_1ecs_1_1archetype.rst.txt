@@ -1,0 +1,25 @@
+.. _exhale_class_structargs_1_1core_1_1ecs_1_1archetype:
+
+Template Class archetype
+========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_archetype.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public args::core::ecs::archetype_base`` (:ref:`exhale_class_structargs_1_1core_1_1ecs_1_1archetype__base`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::ecs::archetype
+   :members:
+   :protected-members:
+   :undoc-members:

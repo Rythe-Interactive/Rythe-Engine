@@ -48,6 +48,8 @@
 <p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_view.cpp.html#file-home-runner-work-args-engine-args-engine-args-core-filesystem-view-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/filesystem/view.cpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/view.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;filesystem&gt;</span><span class="cp"></span>
+
 <span class="cp">#include</span> <span class="cpf">&quot;navigator.hpp&quot;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&quot;provider_registry.hpp&quot;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&quot;detail/strpath_manip.hpp&quot;</span><span class="cp"></span>
@@ -68,7 +70,7 @@
 
         <span class="c1">//if deep checking also check if the path meets the requirements of the</span>
         <span class="c1">//navigator system</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">deep_check</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">deep_check</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">const</span> <span class="n">navigator</span> <span class="n">n</span><span class="p">(</span><span class="n">m_path</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">find_solution</span><span class="p">().</span><span class="n">has_err</span><span class="p">())</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
@@ -77,7 +79,7 @@
         <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="n">file_traits</span> <span class="n">view</span><span class="o">::</span><span class="n">file_info</span><span class="p">()</span>
+    <span class="n">file_traits</span> <span class="n">view</span><span class="o">::</span><span class="n">file_info</span><span class="p">()</span> <span class="k">const</span>
     <span class="p">{</span>
         <span class="c1">//get solution</span>
         <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="n">make_solution</span><span class="p">();</span>
@@ -95,7 +97,7 @@
 
     <span class="p">}</span>
 
-    <span class="n">filesystem_traits</span> <span class="n">view</span><span class="o">::</span><span class="n">filesystem_info</span><span class="p">()</span>
+    <span class="n">filesystem_traits</span> <span class="n">view</span><span class="o">::</span><span class="n">filesystem_info</span><span class="p">()</span> <span class="k">const</span>
     <span class="p">{</span>
         <span class="c1">//get solution</span>
         <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="n">make_solution</span><span class="p">();</span>
@@ -119,6 +121,39 @@
         <span class="k">return</span> <span class="n">m_path</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">strpath_manip</span><span class="o">::</span><span class="n">separator</span><span class="p">()</span> <span class="o">+</span> <span class="n">strpath_manip</span><span class="o">::</span><span class="n">separator</span><span class="p">();</span>
     <span class="p">}</span>
 
+    <span class="n">A_NODISCARD</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">view</span><span class="o">::</span><span class="n">get_path</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">m_path</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">A_NODISCARD</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">view</span><span class="o">::</span><span class="n">get_extension</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">common</span><span class="o">::</span><span class="n">Err</span><span class="p">,</span> <span class="n">common</span><span class="o">::</span><span class="n">Ok</span><span class="p">;</span>
+        <span class="c1">// decay overloads the operator of ok_type and operator== for valid_t.</span>
+        <span class="k">using</span> <span class="n">decay</span> <span class="o">=</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">file_info</span><span class="p">().</span><span class="n">is_file</span><span class="p">)</span> <span class="c1">// check if the view is a file.</span>
+            <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">args_fs_error</span><span class="p">(</span><span class="s">&quot;requested file extension on view that isn&#39;t a file.&quot;</span><span class="p">)));</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span> <span class="n">path</span><span class="p">(</span><span class="n">m_path</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="nf">decay</span><span class="p">(</span><span class="n">Ok</span><span class="p">(</span><span class="n">path</span><span class="p">.</span><span class="n">extension</span><span class="p">().</span><span class="n">string</span><span class="p">()));</span> <span class="c1">// wrap extension in decay.</span>
+    <span class="p">}</span>
+
+    <span class="n">A_NODISCARD</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">view</span><span class="o">::</span><span class="n">get_filename</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">common</span><span class="o">::</span><span class="n">Err</span><span class="p">,</span> <span class="n">common</span><span class="o">::</span><span class="n">Ok</span><span class="p">;</span>
+        <span class="c1">// decay overloads the operator of ok_type and operator== for valid_t.</span>
+        <span class="k">using</span> <span class="n">decay</span> <span class="o">=</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">file_info</span><span class="p">().</span><span class="n">is_file</span><span class="p">)</span> <span class="c1">// check if the view is a file.</span>
+            <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">args_fs_error</span><span class="p">(</span><span class="s">&quot;requested file name on view that isn&#39;t a file.&quot;</span><span class="p">)));</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span> <span class="n">path</span><span class="p">(</span><span class="n">m_path</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="nf">decay</span><span class="p">(</span><span class="n">Ok</span><span class="p">(</span><span class="n">path</span><span class="p">.</span><span class="n">filename</span><span class="p">().</span><span class="n">string</span><span class="p">()));</span> <span class="c1">// wrap extension in decay.</span>
+    <span class="p">}</span>
+
     <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">basic_resource</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">view</span><span class="o">::</span><span class="n">get</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="k">using</span> <span class="n">common</span><span class="o">::</span><span class="n">Err</span><span class="p">,</span> <span class="n">common</span><span class="o">::</span><span class="n">Ok</span><span class="p">;</span>
@@ -140,6 +175,31 @@
         <span class="p">{</span>
             <span class="c1">//wrap get in decay</span>
             <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">resolver</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">());</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">args_fs_error</span><span class="p">(</span><span class="s">&quot;invalid file traits: (not valid) or (does not exist) or (cannot be read)&quot;</span><span class="p">)));</span>
+    <span class="p">}</span>
+
+    <span class="n">A_NODISCARD</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">basic_resource</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">view</span><span class="o">::</span><span class="n">get</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">common</span><span class="o">::</span><span class="n">Err</span><span class="p">,</span> <span class="n">common</span><span class="o">::</span><span class="n">Ok</span><span class="p">;</span>
+
+        <span class="c1">//decay overloads the operator of ok_type and operator== for valid_t</span>
+        <span class="k">using</span> <span class="n">decay</span> <span class="o">=</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">basic_resource</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span><span class="p">;</span>
+
+        <span class="c1">//get solution</span>
+        <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="n">make_solution</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">has_err</span><span class="p">())</span> <span class="n">Err</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">get_error</span><span class="p">());</span>
+
+        <span class="c1">//get resolver of solution</span>
+        <span class="k">auto</span> <span class="n">resolver</span> <span class="o">=</span> <span class="n">build</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">resolver</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">args_fs_error</span><span class="p">(</span><span class="s">&quot;unable to get required filesystem to get resource!&quot;</span><span class="p">)));</span>
+
+        <span class="c1">//get &amp; check traits</span>
+        <span class="k">const</span> <span class="k">auto</span> <span class="n">traits</span> <span class="o">=</span> <span class="n">resolver</span><span class="o">-&gt;</span><span class="n">get_traits</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">traits</span><span class="p">.</span><span class="n">is_valid</span> <span class="o">&amp;&amp;</span> <span class="n">traits</span><span class="p">.</span><span class="n">exists</span> <span class="o">&amp;&amp;</span> <span class="n">traits</span><span class="p">.</span><span class="n">can_be_read</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//wrap get in decay</span>
+            <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">const_pointer_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">filesystem_resolver</span><span class="o">&gt;</span><span class="p">(</span><span class="n">resolver</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">());</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">args_fs_error</span><span class="p">(</span><span class="s">&quot;invalid file traits: (not valid) or (does not exist) or (cannot be read)&quot;</span><span class="p">)));</span>
     <span class="p">}</span>
@@ -194,7 +254,7 @@
         <span class="k">return</span> <span class="n">find</span><span class="p">(</span><span class="n">identifier</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">view</span><span class="o">::</span><span class="n">create_identifier</span><span class="p">(</span><span class="k">const</span> <span class="n">navigator</span><span class="o">::</span><span class="n">solution</span><span class="o">::</span><span class="n">iterator</span><span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">view</span><span class="o">::</span><span class="n">create_identifier</span><span class="p">(</span><span class="k">const</span> <span class="n">navigator</span><span class="o">::</span><span class="n">solution</span><span class="o">::</span><span class="n">iterator</span><span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span> <span class="k">const</span>
     <span class="p">{</span>
         <span class="c1">//iterate through path and create the ident for the provider</span>
         <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">result</span><span class="p">;</span>
@@ -207,7 +267,7 @@
 
     <span class="c1">//TODO(algo-ryth-mix): the navigator should probably return a more efficient</span>
     <span class="c1">//TODO(cont.)          representation to begin with</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">filesystem_resolver</span><span class="o">&gt;</span> <span class="n">view</span><span class="o">::</span><span class="n">build</span><span class="p">()</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">filesystem_resolver</span><span class="o">&gt;</span> <span class="n">view</span><span class="o">::</span><span class="n">build</span><span class="p">()</span> <span class="k">const</span>
     <span class="p">{</span>
         <span class="c1">//first check if a solution even exists</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">m_foundSolution</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
@@ -259,7 +319,7 @@
     <span class="p">}</span>
 
 
-    <span class="kt">void</span> <span class="n">view</span><span class="o">::</span><span class="n">make_inheritance</span><span class="p">()</span>
+    <span class="kt">void</span> <span class="n">view</span><span class="o">::</span><span class="n">make_inheritance</span><span class="p">()</span> <span class="k">const</span>
     <span class="p">{</span>
 
         <span class="c1">//make all higher level fs inherit the traits from the lower level</span>
@@ -269,7 +329,7 @@
         <span class="p">}</span>
     <span class="p">}</span>
 
-    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">view</span><span class="o">::</span><span class="n">create_chain</span><span class="o">&gt;</span> <span class="n">view</span><span class="o">::</span><span class="n">translate_solution</span><span class="p">()</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">view</span><span class="o">::</span><span class="n">create_chain</span><span class="o">&gt;</span> <span class="n">view</span><span class="o">::</span><span class="n">translate_solution</span><span class="p">()</span> <span class="k">const</span>
     <span class="p">{</span>
         <span class="c1">//this is a more approachable representation</span>
          <span class="c1">//of the solution</span>
@@ -335,7 +395,7 @@
         <span class="k">return</span> <span class="n">chain</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">view</span><span class="o">::</span><span class="n">make_solution</span><span class="p">()</span>
+    <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">view</span><span class="o">::</span><span class="n">make_solution</span><span class="p">()</span> <span class="k">const</span>
     <span class="p">{</span>
         <span class="k">using</span> <span class="n">common</span><span class="o">::</span><span class="n">Ok</span><span class="p">;</span>
 

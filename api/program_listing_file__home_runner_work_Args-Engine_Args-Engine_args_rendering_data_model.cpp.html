@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File model.cpp &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File model.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-model-cpp">
+<span id="program-listing-file-home-runner-work-args-engine-args-engine-args-rendering-data-model-cpp"></span><h1>Program Listing for File model.cpp<a class="headerlink" href="#program-listing-for-file-model-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.cpp.html#file-home-runner-work-args-engine-args-engine-args-rendering-data-model-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/rendering/data/model.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;rendering/data/model.hpp&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;map&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fstream&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">rendering</span>
+<span class="p">{</span>
+    <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">model</span><span class="o">&gt;</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">m_models</span><span class="p">;</span>
+    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">m_modelLock</span><span class="p">;</span>
+
+    <span class="kt">bool</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">is_buffered</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_model</span><span class="p">(</span><span class="n">id</span><span class="p">).</span><span class="n">buffered</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">buffer_data</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">matrixBuffer</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ModelCache</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">matrixBuffer</span><span class="p">);</span>
+    <span class="p">}</span>
+
+      <span class="n">mesh_handle</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">get_mesh</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_mesh</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+    <span class="p">}</span>
+
+      <span class="k">const</span> <span class="n">model</span><span class="o">&amp;</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">get_model</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_model</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+    <span class="p">}</span>
+
+      <span class="k">const</span> <span class="n">model</span><span class="o">&amp;</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_model</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">m_models</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">,</span> <span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">matrixBuffer</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">id</span> <span class="o">==</span> <span class="n">invalid_id</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">mesh</span><span class="p">]</span> <span class="o">=</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">id</span><span class="p">).</span><span class="n">get</span><span class="p">();</span>
+
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_multiguard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">,</span> <span class="n">lock</span><span class="p">);</span>
+        <span class="n">model</span><span class="o">&amp;</span> <span class="n">model</span> <span class="o">=</span> <span class="n">m_models</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
+
+        <span class="n">glGenVertexArrays</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">model</span><span class="p">.</span><span class="n">vertexArrayId</span><span class="p">);</span>
+        <span class="n">glBindVertexArray</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">vertexArrayId</span><span class="p">);</span>
+
+        <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">model</span><span class="p">.</span><span class="n">indexBufferId</span><span class="p">);</span>
+        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ELEMENT_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="n">indexBufferId</span><span class="p">);</span>
+        <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ELEMENT_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">indices</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">uint</span><span class="p">),</span> <span class="n">mesh</span><span class="p">.</span><span class="n">indices</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ELEMENT_ARRAY_BUFFER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+        <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">model</span><span class="p">.</span><span class="n">vertexBufferId</span><span class="p">);</span>
+        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="n">vertexBufferId</span><span class="p">);</span>
+        <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">),</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+        <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">SV_POSITION</span><span class="p">);</span>
+        <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">SV_POSITION</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+        <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">model</span><span class="p">.</span><span class="n">normalBufferId</span><span class="p">);</span>
+        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="n">normalBufferId</span><span class="p">);</span>
+        <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">normals</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">),</span> <span class="n">mesh</span><span class="p">.</span><span class="n">normals</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+        <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">SV_NORMAL</span><span class="p">);</span>
+        <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">SV_NORMAL</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+        <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">model</span><span class="p">.</span><span class="n">tangentBufferId</span><span class="p">);</span>
+        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="n">tangentBufferId</span><span class="p">);</span>
+        <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">tangents</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">),</span> <span class="n">mesh</span><span class="p">.</span><span class="n">tangents</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+        <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">SV_TANGENT</span><span class="p">);</span>
+        <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">SV_TANGENT</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+        <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">model</span><span class="p">.</span><span class="n">uvBufferId</span><span class="p">);</span>
+        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="n">uvBufferId</span><span class="p">);</span>
+        <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uvs</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec2</span><span class="p">),</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uvs</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+        <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">SV_TEXCOORD0</span><span class="p">);</span>
+        <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">SV_TEXCOORD0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">matrixBuffer</span><span class="p">);</span>
+        <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">2</span><span class="p">);</span>
+        <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">3</span><span class="p">);</span>
+
+        <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="p">),</span> <span class="p">(</span><span class="n">GLvoid</span><span class="o">*</span><span class="p">)(</span><span class="mi">0</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">::</span><span class="n">col_type</span><span class="p">)));</span>
+        <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="p">),</span> <span class="p">(</span><span class="n">GLvoid</span><span class="o">*</span><span class="p">)(</span><span class="mi">1</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">::</span><span class="n">col_type</span><span class="p">)));</span>
+        <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="p">),</span> <span class="p">(</span><span class="n">GLvoid</span><span class="o">*</span><span class="p">)(</span><span class="mi">2</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">::</span><span class="n">col_type</span><span class="p">)));</span>
+        <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="p">),</span> <span class="p">(</span><span class="n">GLvoid</span><span class="o">*</span><span class="p">)(</span><span class="mi">3</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">::</span><span class="n">col_type</span><span class="p">)));</span>
+
+        <span class="n">glVertexAttribDivisor</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">glVertexAttribDivisor</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">glVertexAttribDivisor</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">glVertexAttribDivisor</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="n">glBindVertexArray</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+        <span class="n">model</span><span class="p">.</span><span class="n">buffered</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">model_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">create_model</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">mesh_import_settings</span> <span class="n">settings</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+
+        <span class="p">{</span><span class="c1">// Check if the model already exists.</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_models</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+                <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Check if the file is valid to load.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">file</span><span class="p">.</span><span class="n">is_valid</span><span class="p">()</span> <span class="o">||</span> <span class="o">!</span><span class="n">file</span><span class="p">.</span><span class="n">file_info</span><span class="p">().</span><span class="n">is_file</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">invalid_model_handle</span><span class="p">;</span>
+
+        <span class="n">model</span> <span class="n">model</span><span class="p">{};</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">meshName</span><span class="p">;</span>
+
+        <span class="p">{</span><span class="c1">// Load the mesh if it wasn&#39;t already. (It&#39;s called MeshCache for a reason.)</span>
+            <span class="k">auto</span> <span class="n">handle</span> <span class="o">=</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">create_mesh</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">settings</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">handle</span> <span class="o">==</span> <span class="n">invalid_mesh_handle</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Failed to load model {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">invalid_model_handle</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c1">// Copy the sub-mesh data.</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="n">handle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+            <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">fileName</span><span class="p">;</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">submeshData</span> <span class="p">:</span> <span class="n">data</span><span class="p">.</span><span class="n">submeshes</span><span class="p">)</span>
+                <span class="n">model</span><span class="p">.</span><span class="n">submeshes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">submeshData</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">// The model still needs to be buffered on the rendering thread.</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">buffered</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="p">{</span> <span class="c1">// Insert the model into the model list.</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
+            <span class="n">m_models</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">model</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Created model {} with mesh: {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">meshName</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+    <span class="p">}</span>
+
+      <span class="n">model_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_models</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+            <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+        <span class="k">return</span> <span class="n">invalid_model_handle</span><span class="p">;</span>
+    <span class="p">}</span>
+
+      <span class="n">model_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_models</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+            <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+        <span class="k">return</span> <span class="n">invalid_model_handle</span><span class="p">;</span>
+    <span class="p">}</span>
+
+      <span class="n">mesh_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_mesh</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+    <span class="p">}</span>
+
+      <span class="n">mesh_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_mesh</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

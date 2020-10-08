@@ -1,0 +1,13 @@
+.. _exhale_variable_physicsconstants_8h_1ad78ecd993139142adc8197f9581aa7d9:
+
+Variable args::physics::constants::gravity
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_physicsconstants.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::physics::constants::gravity

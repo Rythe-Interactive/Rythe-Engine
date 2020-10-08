@@ -55,6 +55,7 @@
 <span class="cp">#include</span> <span class="cpf">&lt;core/ecs/queryregistry.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/ecs/entityquery.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/ecs/entity_handle.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/ecs/archetype.hpp&gt;</span><span class="cp"></span>
 
 <span class="cp">#include</span> <span class="cpf">&lt;utility&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp"></span>
@@ -71,11 +72,11 @@
     <span class="k">struct</span> <span class="n">entity_data</span>
     <span class="p">{</span>
         <span class="n">id_type</span> <span class="n">parent</span><span class="p">;</span>
-        <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">entity_handle</span><span class="o">&gt;</span> <span class="n">children</span><span class="p">;</span>
+        <span class="n">entity_set</span> <span class="n">children</span><span class="p">;</span>
         <span class="n">hashed_sparse_set</span><span class="o">&lt;</span><span class="n">id_type</span><span class="o">&gt;</span> <span class="n">components</span><span class="p">;</span>
     <span class="p">};</span>
 
-    <span class="k">class</span> <span class="nc">ARGS_API</span> <span class="n">EcsRegistry</span>
+    <span class="k">class</span> <span class="nc">EcsRegistry</span>
     <span class="p">{</span>
     <span class="k">private</span><span class="o">:</span>
         <span class="k">static</span> <span class="n">id_type</span> <span class="n">m_nextEntityId</span><span class="p">;</span>
@@ -87,7 +88,8 @@
         <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">entity_data</span><span class="o">&gt;</span> <span class="n">m_entityData</span><span class="p">;</span>
 
         <span class="k">mutable</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_entityLock</span><span class="p">;</span>
-        <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">entity_handle</span><span class="o">&gt;</span> <span class="n">m_entities</span><span class="p">;</span>
+        <span class="n">sparse_set</span><span class="o">&lt;</span><span class="n">id_type</span><span class="o">&gt;</span> <span class="n">m_containedEntities</span><span class="p">;</span>
+        <span class="n">entity_set</span> <span class="n">m_entities</span><span class="p">;</span>
 
         <span class="n">QueryRegistry</span> <span class="n">m_queryRegistry</span><span class="p">;</span>
         <span class="n">events</span><span class="o">::</span><span class="n">EventBus</span><span class="o">*</span> <span class="n">m_eventBus</span><span class="p">;</span>
@@ -108,40 +110,125 @@
         <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
-        <span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;*</span> <span class="n">getFamily</span><span class="p">()</span>
+        <span class="n">A_NODISCARD</span> <span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;*</span> <span class="n">getFamily</span><span class="p">()</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">getFamily</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()));</span>
         <span class="p">}</span>
 
-        <span class="n">component_container_base</span><span class="o">*</span> <span class="n">getFamily</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">);</span>
+        <span class="n">A_NODISCARD</span> <span class="n">component_container_base</span><span class="o">*</span> <span class="n">getFamily</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">);</span>
 
-        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
-        <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span> <span class="n">getComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
+        <span class="n">A_NODISCARD</span> <span class="kt">bool</span> <span class="nf">hasComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">doesnt_inherit_from</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
+        <span class="n">A_NODISCARD</span> <span class="kt">bool</span> <span class="n">hasComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="k">return</span> <span class="n">force_value_cast</span><span class="o">&lt;</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">getComponent</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()));</span>
+            <span class="k">return</span> <span class="n">hasComponent</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">());</span>
         <span class="p">}</span>
 
-        <span class="n">component_handle_base</span> <span class="n">getComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">);</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">doesnt_inherit_from</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
+        <span class="n">A_NODISCARD</span> <span class="kt">bool</span> <span class="n">hasComponents</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">hasComponent</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">entityId</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">hasComponent</span><span class="o">&lt;</span><span class="n">component_types</span><span class="o">&gt;</span><span class="p">(</span><span class="n">entityId</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">...);</span>
+        <span class="p">}</span>
 
-        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">archetype_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">archetype_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
+        <span class="n">A_NODISCARD</span> <span class="kt">bool</span> <span class="n">hasComponents</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">archetype_type</span><span class="o">::</span><span class="n">has</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">entityId</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">A_NODISCARD</span> <span class="n">component_handle_base</span> <span class="n">getComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">doesnt_inherit_from</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
+        <span class="n">A_NODISCARD</span> <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span> <span class="n">getComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">getComponent</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()).</span><span class="k">template</span> <span class="n">cast</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">doesnt_inherit_from</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
+        <span class="n">A_NODISCARD</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_types</span><span class="o">&gt;</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">getComponents</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="n">getComponent</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">entityId</span><span class="p">),</span> <span class="n">getComponent</span><span class="o">&lt;</span><span class="n">component_types</span><span class="o">&gt;</span><span class="p">(</span><span class="n">entityId</span><span class="p">)...);</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">archetype_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">archetype_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
+        <span class="n">A_NODISCARD</span> <span class="k">auto</span> <span class="n">getComponents</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">archetype_type</span><span class="o">::</span><span class="n">get</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">entityId</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">doesnt_inherit_from</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
         <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span> <span class="n">createComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="k">return</span> <span class="n">force_value_cast</span><span class="o">&lt;</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">createComponent</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()));</span>
+            <span class="k">return</span> <span class="n">createComponent</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()).</span><span class="k">template</span> <span class="n">cast</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">doesnt_inherit_from</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
+        <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span> <span class="n">createComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">component_type</span><span class="o">&amp;&amp;</span> <span class="n">component</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">component</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nf">createComponent</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">temp</span><span class="p">).</span><span class="k">template</span> <span class="n">cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">doesnt_inherit_from</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
+        <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span> <span class="n">createComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">component_type</span><span class="o">&amp;</span> <span class="n">component</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">component</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nf">createComponent</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">temp</span><span class="p">).</span><span class="k">template</span> <span class="n">cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">archetype_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">archetype_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
+        <span class="k">auto</span> <span class="n">createComponents</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">archetype_type</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">entityId</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">archetype_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">archetype_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
+        <span class="k">auto</span> <span class="n">createComponents</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">component_types</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">defaultValues</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">archetype_type</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">defaultValues</span><span class="p">)...);</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">doesnt_inherit_from</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_types</span><span class="o">&gt;</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">createComponents</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="n">createComponent</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">entityId</span><span class="p">),</span> <span class="n">createComponent</span><span class="o">&lt;</span><span class="n">component_types</span><span class="o">&gt;</span><span class="p">(</span><span class="n">entityId</span><span class="p">)...);</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">doesnt_inherit_from</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">,</span> <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_types</span><span class="o">&gt;&gt;</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">createComponents</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">component_type</span><span class="o">&amp;&amp;</span> <span class="n">defaultValue</span><span class="p">,</span> <span class="n">component_types</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">defaultValues</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="n">createComponent</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">defaultValue</span><span class="p">)),</span> <span class="n">createComponent</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_types</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">component_types</span><span class="o">&gt;</span><span class="p">(</span><span class="n">defaultValues</span><span class="p">))...);</span>
         <span class="p">}</span>
 
         <span class="n">component_handle_base</span> <span class="n">createComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">);</span>
 
-        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
+        <span class="n">component_handle_base</span> <span class="nf">createComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">value</span><span class="p">);</span>
+
+        <span class="kt">void</span> <span class="nf">destroyComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">doesnt_inherit_from</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
         <span class="kt">void</span> <span class="n">destroyComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">destroyComponent</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">());</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="n">destroyComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">);</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">doesnt_inherit_from</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
+        <span class="kt">void</span> <span class="n">destroyComponents</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">destroyComponent</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">());</span>
+            <span class="p">(</span><span class="n">destroyComponent</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_types</span><span class="o">&gt;</span><span class="p">()),</span> <span class="p">...);</span>
+        <span class="p">}</span>
 
-        <span class="n">A_NODISCARD</span> <span class="kt">bool</span> <span class="nf">validateEntity</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">);</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">archetype_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">archetype_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
+        <span class="kt">void</span> <span class="n">destroyComponents</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">archetype_type</span><span class="o">::</span><span class="n">destroy</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">entityId</span><span class="p">);</span>
+        <span class="p">}</span>
 
-        <span class="n">entity_handle</span> <span class="nf">createEntity</span><span class="p">();</span>
+        <span class="n">A_NODISCARD</span> <span class="kt">bool</span> <span class="n">validateEntity</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">);</span>
+
+        <span class="n">A_NODISCARD</span> <span class="n">entity_handle</span> <span class="nf">createEntity</span><span class="p">();</span>
 
         <span class="kt">void</span> <span class="nf">destroyEntity</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">recurse</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span>
 
@@ -149,7 +236,7 @@
 
         <span class="n">A_NODISCARD</span> <span class="n">entity_data</span><span class="o">&amp;</span> <span class="n">getEntityData</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">);</span>
 
-        <span class="n">A_NODISCARD</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">entity_handle</span><span class="o">&gt;&amp;</span><span class="p">,</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;&gt;</span>  <span class="n">getEntities</span><span class="p">();</span>
+        <span class="n">A_NODISCARD</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">entity_set</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;&gt;</span>  <span class="n">getEntities</span><span class="p">();</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="o">&gt;</span>
         <span class="n">A_NODISCARD</span> <span class="n">EntityQuery</span> <span class="n">createQuery</span><span class="p">()</span>
@@ -163,6 +250,9 @@
         <span class="p">}</span>
     <span class="p">};</span>
 <span class="p">}</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;core/ecs/entity_handle.inl&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/ecs/archetype.inl&gt;</span><span class="cp"></span>
 </pre></div>
 </div>
 </div>

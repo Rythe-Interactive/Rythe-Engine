@@ -1,0 +1,13 @@
+.. _exhale_function_debugrendering_8hpp_1a335f7e8a9aa0c9a1ea275bec8caf98ca:
+
+Function args::debug::drawLine
+==============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_debugrendering.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::debug::drawLine(math::vec3, math::vec3, math::color, float, float, bool)

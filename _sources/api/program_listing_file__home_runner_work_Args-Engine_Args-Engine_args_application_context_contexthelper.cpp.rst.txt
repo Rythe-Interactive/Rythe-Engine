@@ -17,22 +17,44 @@ Program Listing for File contexthelper.cpp
        std::atomic_bool ContextHelper::m_initialized;
        atomic_sparse_map<GLFWwindow*, bool> ContextHelper::m_windowInitialized;
    
+       async::readonly_rw_spinlock ContextHelper::m_initCallbackLock;
+       multicast_delegate<void()> ContextHelper::m_onInit;
+   
+       std::atomic<GLFWwindow*> ContextHelper::newFocus;
+   
        bool ContextHelper::initialized()
        {
            return m_initialized.load(std::memory_order_acquire);
        }
+   
        bool ContextHelper::init()
        {
            glfwSetErrorCallback([](int code, cstring desc)
                {
-                   std::cout << "GLFW ERROR " << code << ": " << desc << std::endl;
+                   log::error("GLFW ERROR {}: {}", code, desc);
                });
    
            bool success = glfwInit();
            if (success)
+           {
                m_initialized.store(true, std::memory_order_release);
+               async::readonly_guard guard(m_initCallbackLock);
+               m_onInit.invoke();
+           }
    
            return success;
+       }
+   
+       bool ContextHelper::addOnInitCallback(delegate<void()> callback)
+       {
+           if (initialized()) {
+               callback();
+               return false;
+           }
+   
+           async::readwrite_guard guard(m_initCallbackLock);
+           m_onInit += callback;
+           return true;
        }
    
        void ContextHelper::terminate()
@@ -49,6 +71,47 @@ Program Listing for File contexthelper.cpp
        GLFWmonitor* ContextHelper::getPrimaryMonitor()
        {
            return glfwGetPrimaryMonitor();
+       }
+   
+       GLFWmonitor* ContextHelper::getCurrentMonitor(GLFWwindow* window)
+       {
+           int nmonitors, i;
+           int wx, wy, ww, wh;
+           int mx, my, mw, mh;
+           int overlap, bestoverlap;
+           GLFWmonitor* bestmonitor;
+           GLFWmonitor** monitors;
+           const GLFWvidmode* mode;
+   
+           bestoverlap = 0;
+           bestmonitor = NULL;
+   
+           glfwGetWindowPos(window, &wx, &wy);
+           glfwGetWindowSize(window, &ww, &wh);
+           monitors = glfwGetMonitors(&nmonitors);
+   
+           for (i = 0; i < nmonitors; i++) {
+               mode = glfwGetVideoMode(monitors[i]);
+               glfwGetMonitorPos(monitors[i], &mx, &my);
+               mw = mode->width;
+               mh = mode->height;
+   
+               overlap =
+                   math::max(0, math::min(wx + ww, mx + mw) - math::max(wx, mx)) *
+                   math::max(0, math::min(wy + wh, my + mh) - math::max(wy, my));
+   
+               if (bestoverlap < overlap) {
+                   bestoverlap = overlap;
+                   bestmonitor = monitors[i];
+               }
+           }
+   
+           return bestmonitor;
+       }
+   
+       void ContextHelper::setWindowMonitor(GLFWwindow* window, GLFWmonitor* monitor, math::ivec2 pos, math::ivec2 size, int refreshRate)
+       {
+           glfwSetWindowMonitor(window, monitor, pos.x, pos.y, size.x, size.y, refreshRate);
        }
    
        const GLFWvidmode* ContextHelper::getPrimaryVideoMode()
@@ -68,42 +131,36 @@ Program Listing for File contexthelper.cpp
    
        GLFWwindow* ContextHelper::createWindow(math::ivec2 dim, const char* title, GLFWmonitor* monitor, GLFWwindow* share)
        {
-           GLFWwindow* window = glfwCreateWindow(dim.x, dim.y, title, monitor, share);
-   
-           auto* context = glfwGetCurrentContext();
-   
-           glfwMakeContextCurrent(window);
-   
-           if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-           {
-               std::cout << "Failed to load OpenGL" << std::endl;
-           }
-   
-           std::cout << "loaded OpenGL version: " << GLVersion.major << '.' << GLVersion.minor << std::endl;
-   
-           glfwMakeContextCurrent(context);
-   
-           return window;
+           return glfwCreateWindow(dim.x, dim.y, title, monitor, share);
        }
    
        GLFWwindow* ContextHelper::createWindow(int width, int height, const char* title, GLFWmonitor* monitor, GLFWwindow* share)
        {
-           GLFWwindow* window = glfwCreateWindow(width, height, title, monitor, share);
+           return glfwCreateWindow(width, height, title, monitor, share);
+       }
    
-           auto* context = glfwGetCurrentContext();
+       void ContextHelper::showWindow(GLFWwindow* window)
+       {
+           newFocus.store(window, std::memory_order_release);
+       }
    
-           glfwMakeContextCurrent(window);
+       void ContextHelper::updateWindowFocus()
+       {
+           GLFWwindow* focus = newFocus.load(std::memory_order_acquire);
+           if (!focus)
+               return;
    
-           if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-           {
-               std::cout << "Failed to load OpenGL" << std::endl;
-           }
+           while (!newFocus.compare_exchange_weak(focus, nullptr, std::memory_order_release, std::memory_order_relaxed))
+               ;
    
-           std::cout << "loaded OpenGL version: " << GLVersion.major << '.' << GLVersion.minor << std::endl;
+           glfwHideWindow(focus);
+           glfwShowWindow(focus);
+           glfwFocusWindow(focus);
+       }
    
-           glfwMakeContextCurrent(context);
-   
-           return window;
+       GLFWglproc ContextHelper::getProcAddress(cstring procname)
+       {
+           return glfwGetProcAddress(procname);
        }
    
        void ContextHelper::setWindowShouldClose(GLFWwindow* window, int value)
@@ -169,7 +226,8 @@ Program Listing for File contexthelper.cpp
    
        void ContextHelper::makeContextCurrent(GLFWwindow* window)
        {
-           glfwMakeContextCurrent(window);
+           if (initialized())
+               glfwMakeContextCurrent(window);
        }
    
        GLFWwindow* ContextHelper::getCurrentContext()
@@ -262,4 +320,25 @@ Program Listing for File contexthelper.cpp
            return glfwSetJoystickCallback(callback);
        }
    
+       int ContextHelper::getGamepadSate(int jid, GLFWgamepadstate* state)
+       {
+           if (initialized())
+               return glfwGetGamepadState(jid, state);
+           return 0;
+       }
+   
+       void ContextHelper::updateGamepadMappings(const char* name)
+       {
+           (void)glfwUpdateGamepadMappings(name);
+       }
+   
+       bool ContextHelper::joystickPresent(int jid)
+       {
+           return glfwJoystickPresent(jid);
+       }
+   
+       void ContextHelper::setInputMode(GLFWwindow* window, int mode, int value)
+       {
+           glfwSetInputMode(window, mode, value);
+       }
    }

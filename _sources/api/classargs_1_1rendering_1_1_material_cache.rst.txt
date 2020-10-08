@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1rendering_1_1_material_cache:
+
+Class MaterialCache
+===================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_material.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::rendering::MaterialCache
+   :members:
+   :protected-members:
+   :undoc-members:

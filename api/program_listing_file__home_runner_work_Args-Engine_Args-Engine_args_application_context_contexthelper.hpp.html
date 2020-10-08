@@ -47,21 +47,25 @@
 <span id="program-listing-file-home-runner-work-args-engine-args-engine-args-application-context-contexthelper-hpp"></span><h1>Program Listing for File contexthelper.hpp<a class="headerlink" href="#program-listing-for-file-contexthelper-hpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_application_context_contexthelper.hpp.html#file-home-runner-work-args-engine-args-engine-args-application-context-contexthelper-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/application/context/contexthelper.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
-<span class="cp">#define ARGS_IMPORT</span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/platform/args_library.hpp&gt;</span><span class="cp"></span>
-
 <span class="cp">#include</span> <span class="cpf">&lt;application/context/detail/glad/glad.h&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;glfw/glfw3.h&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">application</span>
 <span class="p">{</span>
-    <span class="k">class</span> <span class="nc">ARGS_API</span> <span class="n">ContextHelper</span>
+    <span class="k">using</span> <span class="n">gl_id</span> <span class="o">=</span> <span class="n">GLuint</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">gl_location</span> <span class="o">=</span> <span class="n">GLint</span><span class="p">;</span>
+
+    <span class="k">class</span> <span class="nc">ContextHelper</span>
     <span class="p">{</span>
     <span class="k">private</span><span class="o">:</span>
         <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">atomic_bool</span> <span class="n">m_initialized</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_initCallbackLock</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">multicast_delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span> <span class="n">m_onInit</span><span class="p">;</span>
 
         <span class="k">static</span> <span class="n">atomic_sparse_map</span><span class="o">&lt;</span><span class="n">GLFWwindow</span><span class="o">*</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">m_windowInitialized</span><span class="p">;</span>
+
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">GLFWwindow</span><span class="o">*&gt;</span> <span class="n">newFocus</span><span class="p">;</span>
 
     <span class="k">public</span><span class="o">:</span>
         <span class="n">ContextHelper</span><span class="p">()</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
@@ -69,14 +73,21 @@
 
         <span class="k">static</span> <span class="kt">bool</span> <span class="nf">initialized</span><span class="p">();</span>
         <span class="k">static</span> <span class="kt">bool</span> <span class="nf">init</span><span class="p">();</span>
+
+        <span class="k">static</span> <span class="kt">bool</span> <span class="nf">addOnInitCallback</span><span class="p">(</span><span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span> <span class="n">callback</span><span class="p">);</span>
         <span class="k">static</span> <span class="kt">void</span> <span class="nf">terminate</span><span class="p">();</span>
         <span class="k">static</span> <span class="kt">int</span> <span class="nf">getError</span><span class="p">(</span><span class="n">cstring</span><span class="o">*</span> <span class="n">desc</span><span class="p">);</span>
         <span class="k">static</span> <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="nf">getPrimaryMonitor</span><span class="p">();</span>
+        <span class="k">static</span> <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="nf">getCurrentMonitor</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">setWindowMonitor</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">pos</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">refreshRate</span><span class="p">);</span>
         <span class="k">static</span> <span class="k">const</span> <span class="n">GLFWvidmode</span><span class="o">*</span> <span class="nf">getPrimaryVideoMode</span><span class="p">();</span>
         <span class="k">static</span> <span class="k">const</span> <span class="n">GLFWvidmode</span><span class="o">*</span> <span class="nf">getVideoMode</span><span class="p">(</span><span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span><span class="p">);</span>
         <span class="k">static</span> <span class="kt">void</span> <span class="nf">windowHint</span><span class="p">(</span><span class="kt">int</span> <span class="n">hint</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value</span><span class="p">);</span>
         <span class="k">static</span> <span class="n">GLFWwindow</span><span class="o">*</span> <span class="nf">createWindow</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">dim</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">title</span><span class="p">,</span> <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">share</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">);</span>
         <span class="k">static</span> <span class="n">GLFWwindow</span><span class="o">*</span> <span class="nf">createWindow</span><span class="p">(</span><span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">title</span><span class="p">,</span> <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">share</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">showWindow</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">updateWindowFocus</span><span class="p">();</span>
+        <span class="k">static</span> <span class="n">GLFWglproc</span> <span class="nf">getProcAddress</span><span class="p">(</span><span class="n">cstring</span> <span class="n">procname</span><span class="p">);</span>
         <span class="k">static</span> <span class="kt">void</span> <span class="nf">setWindowShouldClose</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value</span><span class="p">);</span>
         <span class="k">static</span> <span class="kt">int</span> <span class="nf">windowShouldClose</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">);</span>
         <span class="k">static</span> <span class="kt">void</span> <span class="nf">setWindowAttrib</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">attrib</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value</span><span class="p">);</span>
@@ -107,6 +118,10 @@
         <span class="k">static</span> <span class="n">GLFWframebuffersizefun</span> <span class="nf">setFramebufferSizeCallback</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="n">GLFWframebuffersizefun</span> <span class="n">callback</span><span class="p">);</span>
         <span class="k">static</span> <span class="n">GLFWwindowcontentscalefun</span> <span class="nf">setWindowContentScaleCallback</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="n">GLFWwindowcontentscalefun</span> <span class="n">callback</span><span class="p">);</span>
         <span class="k">static</span> <span class="n">GLFWjoystickfun</span> <span class="nf">setJoystickCallback</span><span class="p">(</span><span class="n">GLFWjoystickfun</span> <span class="n">callback</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">int</span> <span class="nf">getGamepadSate</span><span class="p">(</span><span class="kt">int</span> <span class="n">jid</span><span class="p">,</span> <span class="n">GLFWgamepadstate</span><span class="o">*</span> <span class="n">state</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">updateGamepadMappings</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">bool</span> <span class="nf">joystickPresent</span><span class="p">(</span><span class="kt">int</span> <span class="n">jid</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">setInputMode</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value</span><span class="p">);</span>
     <span class="p">};</span>
 <span class="p">}</span>
 </pre></div>

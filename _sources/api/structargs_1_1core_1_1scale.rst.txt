@@ -1,0 +1,25 @@
+.. _exhale_struct_structargs_1_1core_1_1scale:
+
+Struct scale
+============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_defaults_defaultcomponents.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public vec3``
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::core::scale
+   :members:
+   :protected-members:
+   :undoc-members:

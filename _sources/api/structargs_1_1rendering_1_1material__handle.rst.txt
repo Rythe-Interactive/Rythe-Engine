@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1rendering_1_1material__handle:
+
+Struct material_handle
+======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_material.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::rendering::material_handle
+   :members:
+   :protected-members:
+   :undoc-members:

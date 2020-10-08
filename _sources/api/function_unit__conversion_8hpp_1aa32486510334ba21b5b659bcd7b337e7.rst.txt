@@ -1,0 +1,13 @@
+.. _exhale_function_unit__conversion_8hpp_1aa32486510334ba21b5b659bcd7b337e7:
+
+Function args::core::literals::operator""_kb
+============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_unit_conversion.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::literals::operator""_kb(unsigned long long)

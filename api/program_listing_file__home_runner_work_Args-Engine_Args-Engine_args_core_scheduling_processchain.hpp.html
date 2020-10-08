@@ -57,10 +57,10 @@
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">scheduling</span>
 <span class="p">{</span>
-    <span class="k">class</span> <span class="nc">ARGS_API</span> <span class="n">Scheduler</span><span class="p">;</span>
-    <span class="k">class</span> <span class="nc">ARGS_API</span> <span class="n">Process</span><span class="p">;</span>
+    <span class="k">class</span> <span class="nc">Scheduler</span><span class="p">;</span>
+    <span class="k">class</span> <span class="nc">Process</span><span class="p">;</span>
 
-    <span class="k">class</span> <span class="nc">ARGS_API</span> <span class="n">ProcessChain</span>
+    <span class="k">class</span> <span class="nc">ProcessChain</span>
     <span class="p">{</span>
     <span class="k">private</span><span class="o">:</span>
         <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">m_name</span><span class="p">;</span>
@@ -70,9 +70,11 @@
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_processesLock</span><span class="p">;</span>
         <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">Process</span><span class="o">*&gt;</span> <span class="n">m_processes</span><span class="p">;</span>
         <span class="n">async</span><span class="o">::</span><span class="n">transferable_atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="n">m_exit</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">m_low_power</span><span class="p">;</span>
 
-        <span class="k">static</span> <span class="kt">void</span> <span class="nf">threadedRun</span><span class="p">(</span><span class="n">ProcessChain</span><span class="o">*</span> <span class="n">chain</span><span class="p">);</span>
     <span class="k">public</span><span class="o">:</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="n">threadedRun</span><span class="p">(</span><span class="n">ProcessChain</span><span class="o">*</span> <span class="n">chain</span><span class="p">);</span>
+
         <span class="n">ProcessChain</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">ProcessChain</span><span class="p">(</span><span class="n">ProcessChain</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">ProcessChain</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">ProcessChain</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
@@ -80,7 +82,7 @@
         <span class="k">template</span><span class="o">&lt;</span><span class="n">size_type</span> <span class="n">charc</span><span class="o">&gt;</span>
         <span class="n">ProcessChain</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="p">(</span><span class="o">&amp;</span><span class="n">name</span><span class="p">)[</span><span class="n">charc</span><span class="p">],</span> <span class="n">Scheduler</span><span class="o">*</span> <span class="n">scheduler</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_name</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">m_nameHash</span><span class="p">(</span><span class="n">nameHash</span><span class="o">&lt;</span><span class="n">charc</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">)),</span> <span class="n">m_scheduler</span><span class="p">(</span><span class="n">scheduler</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
 
-        <span class="kt">bool</span> <span class="n">run</span><span class="p">();</span>
+        <span class="kt">bool</span> <span class="n">run</span><span class="p">(</span><span class="kt">bool</span> <span class="n">low_power</span><span class="p">);</span>
 
         <span class="n">id_type</span> <span class="nf">id</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_nameHash</span><span class="p">;</span> <span class="p">}</span>
 

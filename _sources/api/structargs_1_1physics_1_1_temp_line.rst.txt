@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1physics_1_1_temp_line:
+
+Struct TempLine
+===============
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_colliders_physicscollider.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::physics::TempLine
+   :members:
+   :protected-members:
+   :undoc-members:

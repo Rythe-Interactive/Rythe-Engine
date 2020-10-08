@@ -1,0 +1,16 @@
+.. _exhale_struct_structargs_1_1physics_1_1rigidbody:
+
+Struct rigidbody
+================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_physics_components_rigidbody.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::physics::rigidbody
+   :members:
+   :protected-members:
+   :undoc-members:

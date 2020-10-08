@@ -41,6 +41,8 @@ Included By
 -----------
 
 
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_application.hpp`
+
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_window_windowsystem.hpp`
 
 
@@ -80,4 +82,6 @@ Classes
 - :ref:`exhale_struct_structargs_1_1application_1_1window__request`
 
 - :ref:`exhale_struct_structargs_1_1application_1_1window__resize`
+
+- :ref:`exhale_struct_structargs_1_1application_1_1window__toggle__fullscreen__request`
 

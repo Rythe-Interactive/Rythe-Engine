@@ -1,0 +1,13 @@
+.. _exhale_variable_namespaceargs_1_1core_1_1math_1_1colors_1a4c55ad941eb523b9fe252566145df688:
+
+Variable args::core::math::colors::red
+======================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_color.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::core::math::colors::red

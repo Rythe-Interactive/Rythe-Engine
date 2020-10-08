@@ -60,16 +60,17 @@ Program Listing for File filesystem_resolver.hpp
    
            A_NODISCARD virtual std::set<std::string> ls() const noexcept ARGS_PURE;
    
-           A_NODISCARD common::result<basic_resource, fs_error> get() const noexcept;
-           virtual common::result<basic_resource, fs_error> get(interfaces::implement_signal_t) const noexcept ARGS_PURE;
+           A_NODISCARD common::result<basic_resource, fs_error> get() noexcept;
+           A_NODISCARD common::result<const basic_resource, fs_error> get() const noexcept;
+           virtual common::result<basic_resource, fs_error> get(interfaces::implement_signal_t) noexcept ARGS_PURE;
+           virtual common::result<const basic_resource, fs_error> get(interfaces::implement_signal_t) const noexcept ARGS_PURE;
    
            A_NODISCARD common::result<void, fs_error> set(const basic_resource& res);
            virtual common::result<void, fs_error> set(interfaces::implement_signal_t, const basic_resource& res) ARGS_PURE;
    
-           A_NODISCARD virtual char get_delimiter() const noexcept ARGS_IMPURE_RETURN(strpath_manip::separator())
+           A_NODISCARD virtual char get_delimiter() const noexcept ARGS_IMPURE_RETURN(strpath_manip::separator());
    
    
-           
            void erase() const noexcept;
            virtual void erase(interfaces::implement_signal_t) const noexcept ARGS_PURE;
    

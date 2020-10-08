@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class mesh_handle &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class mesh_import_settings" href="class_structargs_1_1core_1_1mesh__import__settings.html" />
+    <link rel="prev" title="Class mesh" href="class_structargs_1_1core_1_1mesh.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="class_structargs_1_1core_1_1mesh__import__settings.html" title="Class mesh_import_settings"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="class_structargs_1_1core_1_1mesh.html" title="Class mesh"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class mesh_handle</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-mesh-handle">
+<span id="exhale-class-structargs-1-1core-1-1mesh-handle"></span><h1>Class mesh_handle<a class="headerlink" href="#class-mesh-handle" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_data_mesh.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-data-mesh-hpp"><span class="std std-ref">File mesh.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N4args4core11mesh_handleE">
+<span id="_CPPv3N4args4core11mesh_handleE"></span><span id="_CPPv2N4args4core11mesh_handleE"></span><span id="args::core::mesh_handle"></span><span class="target" id="structargs_1_1core_1_1mesh__handle"></span><em class="property">class </em><code class="sig-prename descclassname">args::core<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">mesh_handle</code><a class="headerlink" href="#_CPPv4N4args4core11mesh_handleE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Save to pass around handle to a raw mesh in the mesh cache. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core11mesh_handle3getEv">
+<span id="_CPPv3N4args4core11mesh_handle3getEv"></span><span id="_CPPv2N4args4core11mesh_handle3getEv"></span><span id="args::core::mesh_handle::get"></span><span class="target" id="structargs_1_1core_1_1mesh__handle_1a154ed91eb9c93e86b22ec5cb0b5e7e7b"></span>std::pair&lt;async::<a class="reference internal" href="class_structargs_1_1core_1_1async_1_1readonly__rw__spinlock.html#_CPPv4N4args4core5async20readonly_rw_spinlockE" title="args::core::async::readonly_rw_spinlock">readonly_rw_spinlock</a>&amp;, <a class="reference internal" href="class_structargs_1_1core_1_1mesh.html#_CPPv4N4args4core4meshE" title="args::core::mesh">mesh</a>&amp;&gt; <code class="sig-name descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core11mesh_handle3getEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the mesh and the attached lock. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK4args4core11mesh_handleeqERK11mesh_handle">
+<span id="_CPPv3NK4args4core11mesh_handleeqERK11mesh_handle"></span><span id="_CPPv2NK4args4core11mesh_handleeqERK11mesh_handle"></span><span id="args::core::mesh_handle::eq-operator__mesh_handleCRC"></span><span class="target" id="structargs_1_1core_1_1mesh__handle_1ae547e9c7d99062d6575e29f09c740131"></span>bool <code class="sig-name descname">operator==</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N4args4core11mesh_handleE" title="args::core::mesh_handle">mesh_handle</a> &amp;<em>other</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4args4core11mesh_handleeqERK11mesh_handle" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core11mesh_handlecv7id_typeEv">
+<span id="_CPPv3N4args4core11mesh_handlecv7id_typeEv"></span><span id="_CPPv2N4args4core11mesh_handlecv7id_typeEv"></span><span id="args::core::mesh_handle::castto-id_type-operator"></span><span class="target" id="structargs_1_1core_1_1mesh__handle_1a12cf8e437cba052f37cdecf7daa4b7b6"></span><code class="sig-name descname">operator id_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core11mesh_handlecv7id_typeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="cpp var">
+<dt id="_CPPv4N4args4core11mesh_handle2idE">
+<span id="_CPPv3N4args4core11mesh_handle2idE"></span><span id="_CPPv2N4args4core11mesh_handle2idE"></span><span id="args::core::mesh_handle::id__id_type"></span><span class="target" id="structargs_1_1core_1_1mesh__handle_1a0286cf4290cae0b91ccfb280cf83b443"></span><a class="reference internal" href="typedef_primitives_8hpp_1abe32b453772474fdb4536ea14d40c990.html#_CPPv4N4args4core7id_typeE" title="args::core::id_type">id_type</a> <code class="sig-name descname">id</code><a class="headerlink" href="#_CPPv4N4args4core11mesh_handle2idE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class mesh_handle</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">ARGS API</a><ul>
+      <li>Previous: <a href="class_structargs_1_1core_1_1mesh.html" title="previous chapter">Class mesh</a></li>
+      <li>Next: <a href="class_structargs_1_1core_1_1mesh__import__settings.html" title="next chapter">Class mesh_import_settings</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/class_structargs_1_1core_1_1mesh__handle.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

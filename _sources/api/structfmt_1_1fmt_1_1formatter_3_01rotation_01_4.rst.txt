@@ -1,0 +1,16 @@
+.. _exhale_struct_structfmt_1_1fmt_1_1formatter_3_01rotation_01_4:
+
+Template Struct formatter< rotation >
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_defaults_defaultcomponents.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: fmt::fmt::formatter< rotation >
+   :members:
+   :protected-members:
+   :undoc-members:

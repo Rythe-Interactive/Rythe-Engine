@@ -1,0 +1,25 @@
+.. _exhale_struct_structargs_1_1core_1_1transform:
+
+Struct transform
+================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_defaults_defaultcomponents.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public args::core::ecs::archetype< position, rotation, scale >`` (:ref:`exhale_class_structargs_1_1core_1_1ecs_1_1archetype`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::core::transform
+   :members:
+   :protected-members:
+   :undoc-members:

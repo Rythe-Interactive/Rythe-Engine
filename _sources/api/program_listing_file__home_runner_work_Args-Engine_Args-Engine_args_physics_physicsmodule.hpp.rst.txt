@@ -1,0 +1,44 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_physics_physicsmodule.hpp:
+
+Program Listing for File physicsmodule.hpp
+==========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_physics_physicsmodule.hpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/physics/physicsmodule.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   #include <core/core.hpp>
+   #include <physics/systems/physicssystem.hpp>
+   #include <physics/components/physics_component.hpp>
+   #include <physics/components/rigidbody.hpp>
+   
+   namespace args::physics
+   {
+       class PhysicsModule : public Module
+       {
+       public:
+   
+           virtual void setup() override
+           {
+               addProcessChain("Physics");
+               reportSystem<PhysicsSystem>();
+               reportComponentType<physicsComponent>();
+               reportComponentType<rigidbody>();
+   
+           }
+   
+           virtual priority_type priority() override
+           {
+               return 20;
+           }
+   
+       };
+   
+   }
+   
+   

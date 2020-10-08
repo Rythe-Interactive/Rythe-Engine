@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Struct rigidbody &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Struct TempLine" href="structargs_1_1physics_1_1_temp_line.html" />
+    <link rel="prev" title="Struct physicsComponent" href="structargs_1_1physics_1_1physics_component.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="structargs_1_1physics_1_1_temp_line.html" title="Struct TempLine"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="structargs_1_1physics_1_1physics_component.html" title="Struct physicsComponent"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Struct rigidbody</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="struct-rigidbody">
+<span id="exhale-struct-structargs-1-1physics-1-1rigidbody"></span><h1>Struct rigidbody<a class="headerlink" href="#struct-rigidbody" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_physics_components_rigidbody.hpp.html#file-home-runner-work-args-engine-args-engine-args-physics-components-rigidbody-hpp"><span class="std std-ref">File rigidbody.hpp</span></a></p></li>
+</ul>
+<div class="section" id="struct-documentation">
+<h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp struct">
+<dt id="_CPPv4N4args7physics9rigidbodyE">
+<span id="_CPPv3N4args7physics9rigidbodyE"></span><span id="_CPPv2N4args7physics9rigidbodyE"></span><span id="args::physics::rigidbody"></span><span class="target" id="structargs_1_1physics_1_1rigidbody"></span><em class="property">struct </em><code class="sig-prename descclassname">args::physics<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">rigidbody</code><a class="headerlink" href="#_CPPv4N4args7physics9rigidbodyE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N4args7physics9rigidbody8addForceEN4math4vec3E">
+<span id="_CPPv3N4args7physics9rigidbody8addForceEN4math4vec3E"></span><span id="_CPPv2N4args7physics9rigidbody8addForceEN4math4vec3E"></span><span id="args::physics::rigidbody::addForce__math::vec3"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1ab0e47f39ba1297641abed0fb60b0ea34"></span>void <code class="sig-name descname">addForce</code><span class="sig-paren">(</span>math::vec3 <em>force</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args7physics9rigidbody8addForceEN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Pushes the rigidbody in the direction parallel to ‘force’ and equal to the length of ‘force’. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>This does NOT cause torque </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args7physics9rigidbody10addForceAtEN4math4vec3EN4math4vec3E">
+<span id="_CPPv3N4args7physics9rigidbody10addForceAtEN4math4vec3EN4math4vec3E"></span><span id="_CPPv2N4args7physics9rigidbody10addForceAtEN4math4vec3EN4math4vec3E"></span><span id="args::physics::rigidbody::addForceAt__math::vec3.math::vec3"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1a0cbc08774831d8526733848ed464e618"></span>void <code class="sig-name descname">addForceAt</code><span class="sig-paren">(</span>math::vec3 <em>worldForcePosition</em>, math::vec3 <em>force</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args7physics9rigidbody10addForceAtEN4math4vec3EN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Adds a force in the direction of ‘force’ and. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args7physics9rigidbody7setMassEf">
+<span id="_CPPv3N4args7physics9rigidbody7setMassEf"></span><span id="_CPPv2N4args7physics9rigidbody7setMassEf"></span><span id="args::physics::rigidbody::setMass__float"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1ab5af991975de6e00c7ee5aa5b5a15e28"></span>void <code class="sig-name descname">setMass</code><span class="sig-paren">(</span>float <em>mass</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args7physics9rigidbody7setMassEf" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args7physics9rigidbody14setRestitutionEf">
+<span id="_CPPv3N4args7physics9rigidbody14setRestitutionEf"></span><span id="_CPPv2N4args7physics9rigidbody14setRestitutionEf"></span><span id="args::physics::rigidbody::setRestitution__float"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1a0f41a785f3617059b22ff912f6528888"></span>void <code class="sig-name descname">setRestitution</code><span class="sig-paren">(</span>float <em>newRestitution</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args7physics9rigidbody14setRestitutionEf" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args7physics9rigidbody11setFrictionEf">
+<span id="_CPPv3N4args7physics9rigidbody11setFrictionEf"></span><span id="_CPPv2N4args7physics9rigidbody11setFrictionEf"></span><span id="args::physics::rigidbody::setFriction__float"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1a31074ab58479da521aae135492189bd9"></span>void <code class="sig-name descname">setFriction</code><span class="sig-paren">(</span>float <em>newFriction</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args7physics9rigidbody11setFrictionEf" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args7physics9rigidbody17resetAccumulatorsEv">
+<span id="_CPPv3N4args7physics9rigidbody17resetAccumulatorsEv"></span><span id="_CPPv2N4args7physics9rigidbody17resetAccumulatorsEv"></span><span id="args::physics::rigidbody::resetAccumulators"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1a546422fa1f1ff5a5486b4b8f839a2a9c"></span>void <code class="sig-name descname">resetAccumulators</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args7physics9rigidbody17resetAccumulatorsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="cpp var">
+<dt id="_CPPv4N4args7physics9rigidbody11inverseMassE">
+<span id="_CPPv3N4args7physics9rigidbody11inverseMassE"></span><span id="_CPPv2N4args7physics9rigidbody11inverseMassE"></span><span id="args::physics::rigidbody::inverseMass__float"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1aa6f5e1fdffcbe53ed9ec4253c697a114"></span>float <code class="sig-name descname">inverseMass</code> = 1.0f<a class="headerlink" href="#_CPPv4N4args7physics9rigidbody11inverseMassE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args7physics9rigidbody8velocityE">
+<span id="_CPPv3N4args7physics9rigidbody8velocityE"></span><span id="_CPPv2N4args7physics9rigidbody8velocityE"></span><span id="args::physics::rigidbody::velocity__math::vec3"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1a84a6b701845fa0bb0f4576182d3d533c"></span>math::vec3 <code class="sig-name descname">velocity</code><a class="headerlink" href="#_CPPv4N4args7physics9rigidbody8velocityE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args7physics9rigidbody3accE">
+<span id="_CPPv3N4args7physics9rigidbody3accE"></span><span id="_CPPv2N4args7physics9rigidbody3accE"></span><span id="args::physics::rigidbody::acc__math::vec3"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1aed6c75b11d9cab0b577ce28b082788d5"></span>math::vec3 <code class="sig-name descname">acc</code><a class="headerlink" href="#_CPPv4N4args7physics9rigidbody3accE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args7physics9rigidbody10linearDragE">
+<span id="_CPPv3N4args7physics9rigidbody10linearDragE"></span><span id="_CPPv2N4args7physics9rigidbody10linearDragE"></span><span id="args::physics::rigidbody::linearDrag__float"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1a8a41a163b21594a1ce0b84e33edce1da"></span>float <code class="sig-name descname">linearDrag</code><a class="headerlink" href="#_CPPv4N4args7physics9rigidbody10linearDragE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args7physics9rigidbody20inverseInertiaTensorE">
+<span id="_CPPv3N4args7physics9rigidbody20inverseInertiaTensorE"></span><span id="_CPPv2N4args7physics9rigidbody20inverseInertiaTensorE"></span><span id="args::physics::rigidbody::inverseInertiaTensor__math::mat3"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1a3df3519fff55e634d5f1dfe805bba50a"></span>math::mat3 <code class="sig-name descname">inverseInertiaTensor</code> = math::mat3(12.0f)<a class="headerlink" href="#_CPPv4N4args7physics9rigidbody20inverseInertiaTensorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args7physics9rigidbody10angularAccE">
+<span id="_CPPv3N4args7physics9rigidbody10angularAccE"></span><span id="_CPPv2N4args7physics9rigidbody10angularAccE"></span><span id="args::physics::rigidbody::angularAcc__math::vec3"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1aff0e3eef87fa3e487f6a5c4d61dc1ac7"></span>math::vec3 <code class="sig-name descname">angularAcc</code><a class="headerlink" href="#_CPPv4N4args7physics9rigidbody10angularAccE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args7physics9rigidbody15angularVelocityE">
+<span id="_CPPv3N4args7physics9rigidbody15angularVelocityE"></span><span id="_CPPv2N4args7physics9rigidbody15angularVelocityE"></span><span id="args::physics::rigidbody::angularVelocity__math::vec3"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1afb2d34e635a6d83ece658b684f196fd2"></span>math::vec3 <code class="sig-name descname">angularVelocity</code><a class="headerlink" href="#_CPPv4N4args7physics9rigidbody15angularVelocityE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args7physics9rigidbody11angularDragE">
+<span id="_CPPv3N4args7physics9rigidbody11angularDragE"></span><span id="_CPPv2N4args7physics9rigidbody11angularDragE"></span><span id="args::physics::rigidbody::angularDrag__float"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1aae0287ef77a3fe2994f1a00c0f5c2b38"></span>float <code class="sig-name descname">angularDrag</code> = 0.01f<a class="headerlink" href="#_CPPv4N4args7physics9rigidbody11angularDragE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args7physics9rigidbody18globalCentreOfMassE">
+<span id="_CPPv3N4args7physics9rigidbody18globalCentreOfMassE"></span><span id="_CPPv2N4args7physics9rigidbody18globalCentreOfMassE"></span><span id="args::physics::rigidbody::globalCentreOfMass__math::vec3"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1aee2654bc5e53da905654afa6bd0ef1d4"></span>math::vec3 <code class="sig-name descname">globalCentreOfMass</code><a class="headerlink" href="#_CPPv4N4args7physics9rigidbody18globalCentreOfMassE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args7physics9rigidbody16forceAccumulatorE">
+<span id="_CPPv3N4args7physics9rigidbody16forceAccumulatorE"></span><span id="_CPPv2N4args7physics9rigidbody16forceAccumulatorE"></span><span id="args::physics::rigidbody::forceAccumulator__math::vec3"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1a8ce1bd596334227dc5c9225874ab2859"></span>math::vec3 <code class="sig-name descname">forceAccumulator</code><a class="headerlink" href="#_CPPv4N4args7physics9rigidbody16forceAccumulatorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args7physics9rigidbody17torqueAccumulatorE">
+<span id="_CPPv3N4args7physics9rigidbody17torqueAccumulatorE"></span><span id="_CPPv2N4args7physics9rigidbody17torqueAccumulatorE"></span><span id="args::physics::rigidbody::torqueAccumulator__math::vec3"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1a248a185d3b7010f885c2ad76efe47947"></span>math::vec3 <code class="sig-name descname">torqueAccumulator</code><a class="headerlink" href="#_CPPv4N4args7physics9rigidbody17torqueAccumulatorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args7physics9rigidbody11restitutionE">
+<span id="_CPPv3N4args7physics9rigidbody11restitutionE"></span><span id="_CPPv2N4args7physics9rigidbody11restitutionE"></span><span id="args::physics::rigidbody::restitution__float"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1a9899d7145814c88c5b243d0155f090e4"></span>float <code class="sig-name descname">restitution</code><a class="headerlink" href="#_CPPv4N4args7physics9rigidbody11restitutionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args7physics9rigidbody8frictionE">
+<span id="_CPPv3N4args7physics9rigidbody8frictionE"></span><span id="_CPPv2N4args7physics9rigidbody8frictionE"></span><span id="args::physics::rigidbody::friction__float"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1a37e48382106ed5c1d092ef486c6daecc"></span>float <code class="sig-name descname">friction</code><a class="headerlink" href="#_CPPv4N4args7physics9rigidbody8frictionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args7physics9rigidbody8isAsleepE">
+<span id="_CPPv3N4args7physics9rigidbody8isAsleepE"></span><span id="_CPPv2N4args7physics9rigidbody8isAsleepE"></span><span id="args::physics::rigidbody::isAsleep__b"></span><span class="target" id="structargs_1_1physics_1_1rigidbody_1af19a3cb755508117bbaf96c3b2ea994d"></span>bool <code class="sig-name descname">isAsleep</code><a class="headerlink" href="#_CPPv4N4args7physics9rigidbody8isAsleepE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Struct rigidbody</a><ul>
+<li><a class="reference internal" href="#struct-documentation">Struct Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">ARGS API</a><ul>
+      <li>Previous: <a href="structargs_1_1physics_1_1physics_component.html" title="previous chapter">Struct physicsComponent</a></li>
+      <li>Next: <a href="structargs_1_1physics_1_1_temp_line.html" title="next chapter">Struct TempLine</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/structargs_1_1physics_1_1rigidbody.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

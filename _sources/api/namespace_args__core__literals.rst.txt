@@ -1,0 +1,31 @@
+
+.. _namespace_args__core__literals:
+
+Namespace args::core::literals
+==============================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_unit__conversion_8hpp_1ac945337215112eeb45342358b38cdbf3`
+
+- :ref:`exhale_function_unit__conversion_8hpp_1aa32486510334ba21b5b659bcd7b337e7`
+
+- :ref:`exhale_function_unit__conversion_8hpp_1a3ac2f3eb1855aa807b61e95324ffd2e1`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_unit__conversion_8hpp_1a236bb267dbdec5b0cd283815e0f3f501`

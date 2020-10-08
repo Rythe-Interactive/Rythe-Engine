@@ -1,0 +1,26 @@
+
+.. _namespace_args__core__ecs__detail:
+
+Namespace args::core::ecs::detail
+=================================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1core_1_1ecs_1_1detail_1_1has__destroy`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1ecs_1_1detail_1_1has__destroy_3_01_c_00_01_ret_07_args_8_8_8_08_4`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1ecs_1_1detail_1_1has__init`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1ecs_1_1detail_1_1has__init_3_01_c_00_01_ret_07_args_8_8_8_08_4`

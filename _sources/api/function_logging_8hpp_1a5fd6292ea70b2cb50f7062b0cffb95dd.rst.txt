@@ -1,0 +1,13 @@
+.. _exhale_function_logging_8hpp_1a5fd6292ea70b2cb50f7062b0cffb95dd:
+
+Function args::core::log::setup
+===============================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::log::setup()

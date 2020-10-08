@@ -67,6 +67,7 @@
 
 <span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;functional&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;utility&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/types/primitives.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span>
@@ -81,46 +82,104 @@
 
         <span class="k">using</span> <span class="n">stub_type</span> <span class="o">=</span> <span class="n">return_type</span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span> <span class="n">this_ptr</span><span class="p">,</span> <span class="n">parameter_types</span><span class="p">...);</span>
 
+        <span class="k">using</span> <span class="n">allocator</span> <span class="o">=</span> <span class="kt">void</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">);</span>
+        <span class="k">using</span> <span class="n">deleter</span> <span class="o">=</span> <span class="kt">void</span><span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">);</span>
+
         <span class="k">struct</span> <span class="n">invocation_element</span>
         <span class="p">{</span>
             <span class="n">invocation_element</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
-            <span class="n">invocation_element</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">this_ptr</span><span class="p">,</span> <span class="n">stub_type</span> <span class="n">aStub</span><span class="p">)</span> <span class="o">:</span> <span class="n">object</span><span class="p">(</span><span class="n">this_ptr</span><span class="p">),</span> <span class="n">stub</span><span class="p">(</span><span class="n">aStub</span><span class="p">)</span> <span class="p">{}</span>
-            <span class="n">invocation_element</span><span class="p">(</span><span class="k">const</span> <span class="n">invocation_element</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+            <span class="n">invocation_element</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">this_ptr</span><span class="p">,</span> <span class="n">stub_type</span> <span class="n">aStub</span><span class="p">,</span> <span class="n">allocator</span> <span class="n">aCopy</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">allocator</span> <span class="n">aMove</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">deleter</span> <span class="n">aDelete</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="o">:</span> <span class="n">object</span><span class="p">(</span><span class="n">this_ptr</span><span class="p">),</span> <span class="n">stub</span><span class="p">(</span><span class="n">aStub</span><span class="p">),</span> <span class="n">copy</span><span class="p">(</span><span class="n">aCopy</span><span class="p">),</span> <span class="n">move</span><span class="p">(</span><span class="n">aMove</span><span class="p">),</span> <span class="n">del</span><span class="p">(</span><span class="n">aDelete</span><span class="p">)</span> <span class="p">{}</span>
+            <span class="n">invocation_element</span><span class="p">(</span><span class="k">const</span> <span class="n">invocation_element</span><span class="o">&amp;</span> <span class="n">source</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">copy</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">object</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">object</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                    <span class="n">object</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">object</span><span class="p">;</span>
+                <span class="n">stub</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">stub</span><span class="p">;</span>
+                <span class="n">copy</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">copy</span><span class="p">;</span>
+                <span class="n">move</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">move</span><span class="p">;</span>
+                <span class="n">del</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">del</span><span class="p">;</span>
+            <span class="p">}</span>
             <span class="n">invocation_element</span><span class="p">(</span><span class="n">invocation_element</span><span class="o">&amp;&amp;</span> <span class="n">source</span><span class="p">)</span>
             <span class="p">{</span>
-                <span class="n">object</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">object</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">move</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">object</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">object</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                    <span class="n">object</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">object</span><span class="p">;</span>
                 <span class="n">stub</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">stub</span><span class="p">;</span>
-                <span class="n">source</span><span class="p">.</span><span class="n">object</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
-                <span class="n">source</span><span class="p">.</span><span class="n">stub</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+                <span class="n">copy</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">copy</span><span class="p">;</span>
+                <span class="n">move</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">move</span><span class="p">;</span>
+                <span class="n">del</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">del</span><span class="p">;</span>
             <span class="p">}</span>
 
-            <span class="n">invocation_element</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">invocation_element</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+            <span class="o">~</span><span class="n">invocation_element</span><span class="p">()</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">del</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+                    <span class="n">del</span><span class="p">(</span><span class="n">object</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="n">invocation_element</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">invocation_element</span><span class="o">&amp;</span> <span class="n">source</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">copy</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">object</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">object</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                    <span class="n">object</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">object</span><span class="p">;</span>
+                <span class="n">stub</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">stub</span><span class="p">;</span>
+                <span class="n">copy</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">copy</span><span class="p">;</span>
+                <span class="n">move</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">move</span><span class="p">;</span>
+                <span class="n">del</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">del</span><span class="p">;</span>
+                <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+            <span class="p">}</span>
+
             <span class="n">invocation_element</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">invocation_element</span><span class="o">&amp;&amp;</span> <span class="n">source</span><span class="p">)</span>
             <span class="p">{</span>
-                <span class="n">object</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">object</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">move</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">object</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">object</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                    <span class="n">object</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">object</span><span class="p">;</span>
                 <span class="n">stub</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">stub</span><span class="p">;</span>
-                <span class="n">source</span><span class="p">.</span><span class="n">object</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
-                <span class="n">source</span><span class="p">.</span><span class="n">stub</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+                <span class="n">copy</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">copy</span><span class="p">;</span>
+                <span class="n">move</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">move</span><span class="p">;</span>
+                <span class="n">del</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">del</span><span class="p">;</span>
                 <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
             <span class="p">}</span>
 
             <span class="kt">void</span> <span class="n">Clone</span><span class="p">(</span><span class="n">invocation_element</span><span class="o">&amp;</span> <span class="n">target</span><span class="p">)</span> <span class="k">const</span>
             <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">copy</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">target</span><span class="p">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">object</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                    <span class="n">target</span><span class="p">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">object</span><span class="p">;</span>
                 <span class="n">target</span><span class="p">.</span><span class="n">stub</span> <span class="o">=</span> <span class="n">stub</span><span class="p">;</span>
-                <span class="n">target</span><span class="p">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">object</span><span class="p">;</span>
+                <span class="n">target</span><span class="p">.</span><span class="n">copy</span> <span class="o">=</span> <span class="n">copy</span><span class="p">;</span>
+                <span class="n">target</span><span class="p">.</span><span class="n">move</span> <span class="o">=</span> <span class="n">move</span><span class="p">;</span>
+                <span class="n">target</span><span class="p">.</span><span class="n">del</span> <span class="o">=</span> <span class="n">del</span><span class="p">;</span>
             <span class="p">}</span>
 
             <span class="kt">bool</span> <span class="k">operator</span> <span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">invocation_element</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span>
             <span class="p">{</span>
-                <span class="k">return</span> <span class="n">other</span><span class="p">.</span><span class="n">stub</span> <span class="o">==</span> <span class="n">stub</span> <span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">.</span><span class="n">object</span> <span class="o">==</span> <span class="n">object</span><span class="p">;</span>
+                <span class="k">return</span> <span class="n">other</span><span class="p">.</span><span class="n">stub</span> <span class="o">==</span> <span class="n">stub</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">object</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">object</span> <span class="o">||</span> <span class="p">(</span><span class="n">copy</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">copy</span> <span class="o">&amp;&amp;</span> <span class="n">move</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">move</span> <span class="o">&amp;&amp;</span> <span class="n">del</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">del</span><span class="p">));</span>
             <span class="p">}</span>
             <span class="kt">bool</span> <span class="k">operator</span> <span class="o">!=</span><span class="p">(</span><span class="k">const</span> <span class="n">invocation_element</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span>
             <span class="p">{</span>
-                <span class="k">return</span> <span class="n">other</span><span class="p">.</span><span class="n">stub</span> <span class="o">!=</span> <span class="n">stub</span> <span class="o">||</span> <span class="n">other</span><span class="p">.</span><span class="n">object</span> <span class="o">!=</span> <span class="n">object</span><span class="p">;</span>
+                <span class="k">return</span> <span class="n">other</span><span class="p">.</span><span class="n">stub</span> <span class="o">!=</span> <span class="n">stub</span> <span class="o">||</span> <span class="p">(</span><span class="n">object</span> <span class="o">!=</span> <span class="n">other</span><span class="p">.</span><span class="n">object</span> <span class="o">||</span> <span class="p">(</span><span class="n">copy</span> <span class="o">!=</span> <span class="n">other</span><span class="p">.</span><span class="n">copy</span> <span class="o">||</span> <span class="n">move</span> <span class="o">!=</span> <span class="n">other</span><span class="p">.</span><span class="n">move</span> <span class="o">||</span> <span class="n">del</span> <span class="o">!=</span> <span class="n">other</span><span class="p">.</span><span class="n">del</span><span class="p">));</span>
             <span class="p">}</span>
 
             <span class="kt">void</span><span class="o">*</span> <span class="n">object</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
             <span class="n">stub_type</span> <span class="n">stub</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="n">allocator</span> <span class="n">copy</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="n">allocator</span> <span class="n">move</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="n">deleter</span> <span class="n">del</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
         <span class="p">};</span>
     <span class="p">};</span>
 
@@ -151,10 +210,40 @@
             <span class="k">return</span> <span class="p">(</span><span class="n">ptr</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="o">!</span><span class="n">isNull</span><span class="p">());</span>
         <span class="p">}</span>
 
+        <span class="n">delegate</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">nullptr_t</span><span class="p">)</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+
+        <span class="n">delegate</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">nullptr_t</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_invocation</span><span class="p">.</span><span class="n">stub</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">clear</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">m_invocation</span><span class="p">.</span><span class="n">stub</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="p">}</span>
+
         <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">lambda_type</span><span class="o">&gt;</span>
         <span class="n">delegate</span><span class="p">(</span><span class="k">const</span> <span class="n">lambda_type</span><span class="o">&amp;</span> <span class="n">lambda</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">assign</span><span class="p">((</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="o">&amp;</span><span class="n">lambda</span><span class="p">),</span> <span class="n">lambda_stub</span><span class="o">&lt;</span><span class="n">lambda_type</span><span class="o">&gt;</span><span class="p">);</span>
+            <span class="n">assign</span><span class="p">((</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="k">new</span> <span class="n">lambda_type</span><span class="p">(</span><span class="n">lambda</span><span class="p">)),</span> <span class="n">lambda_stub</span><span class="o">&lt;</span><span class="n">lambda_type</span><span class="o">&gt;</span><span class="p">,</span>
+                <span class="p">[](</span><span class="kt">void</span><span class="o">*</span> <span class="n">ptr</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">lambda_type</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">lambda_type</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
+                    <span class="k">return</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="k">new</span> <span class="n">lambda_type</span><span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">));</span>
+                <span class="p">},</span>
+                <span class="p">[](</span><span class="kt">void</span><span class="o">*</span> <span class="n">ptr</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">lambda_type</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">lambda_type</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
+                    <span class="k">return</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="k">new</span> <span class="n">lambda_type</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">)));</span>
+                <span class="p">},</span>
+                <span class="p">[](</span><span class="kt">void</span><span class="o">*</span> <span class="n">ptr</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">lambda_type</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">lambda_type</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
+                    <span class="k">delete</span> <span class="n">p</span><span class="p">;</span>
+                <span class="p">});</span>
         <span class="p">}</span>
 
         <span class="n">delegate</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">delegate</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
@@ -166,7 +255,22 @@
         <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">lambda_type</span><span class="o">&gt;</span>
         <span class="n">delegate</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">lambda_type</span><span class="o">&amp;</span> <span class="n">instance</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">assign</span><span class="p">((</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="o">&amp;</span><span class="n">instance</span><span class="p">),</span> <span class="n">lambda_stub</span><span class="o">&lt;</span><span class="n">lambda_type</span><span class="o">&gt;</span><span class="p">);</span>
+            <span class="n">assign</span><span class="p">((</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="k">new</span> <span class="n">lambda_type</span><span class="p">(</span><span class="n">instance</span><span class="p">)),</span> <span class="n">lambda_stub</span><span class="o">&lt;</span><span class="n">lambda_type</span><span class="o">&gt;</span><span class="p">,</span>
+                <span class="p">[](</span><span class="kt">void</span><span class="o">*</span> <span class="n">ptr</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">lambda_type</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">lambda_type</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
+                    <span class="k">return</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="k">new</span> <span class="n">lambda_type</span><span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">));</span>
+                <span class="p">},</span>
+                <span class="p">[](</span><span class="kt">void</span><span class="o">*</span> <span class="n">ptr</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">lambda_type</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">lambda_type</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
+                    <span class="k">return</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="k">new</span> <span class="n">lambda_type</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">)));</span>
+                <span class="p">},</span>
+                    <span class="p">[](</span><span class="kt">void</span><span class="o">*</span> <span class="n">ptr</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">lambda_type</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">lambda_type</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
+                    <span class="k">delete</span> <span class="n">p</span><span class="p">;</span>
+                <span class="p">});</span>
             <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
         <span class="p">}</span>
 
@@ -209,7 +313,7 @@
         <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">lambda_type</span><span class="o">&gt;</span>
         <span class="k">static</span> <span class="n">delegate</span> <span class="n">create</span><span class="p">(</span><span class="k">const</span> <span class="n">lambda_type</span><span class="o">&amp;</span> <span class="n">instance</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="k">return</span> <span class="n">delegate</span><span class="p">((</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="o">&amp;</span><span class="n">instance</span><span class="p">),</span> <span class="n">lambda_stub</span><span class="o">&lt;</span><span class="n">lambda_type</span><span class="o">&gt;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">delegate</span><span class="p">((</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="k">new</span> <span class="n">lambda_type</span><span class="p">(</span><span class="n">instance</span><span class="p">)),</span> <span class="n">lambda_stub</span><span class="o">&lt;</span><span class="n">lambda_type</span><span class="o">&gt;</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="n">return_type</span> <span class="k">operator</span><span class="p">()(</span><span class="n">parameter_types</span><span class="p">...</span> <span class="n">arguments</span><span class="p">)</span> <span class="k">const</span>
@@ -228,10 +332,16 @@
             <span class="n">m_invocation</span><span class="p">.</span><span class="n">stub</span> <span class="o">=</span> <span class="n">aStub</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="n">assign</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">anObject</span><span class="p">,</span> <span class="k">typename</span> <span class="n">delegate_base</span><span class="o">&lt;</span><span class="n">return_type</span><span class="p">(</span><span class="n">parameter_types</span><span class="p">...)</span><span class="o">&gt;::</span><span class="n">stub_type</span> <span class="n">aStub</span><span class="p">)</span>
+        <span class="kt">void</span> <span class="n">assign</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">anObject</span><span class="p">,</span> <span class="k">typename</span> <span class="n">delegate_base</span><span class="o">&lt;</span><span class="n">return_type</span><span class="p">(</span><span class="n">parameter_types</span><span class="p">...)</span><span class="o">&gt;::</span><span class="n">stub_type</span> <span class="n">aStub</span><span class="p">,</span>
+            <span class="k">typename</span> <span class="n">delegate_base</span><span class="o">&lt;</span><span class="n">return_type</span><span class="p">(</span><span class="n">parameter_types</span><span class="p">...)</span><span class="o">&gt;::</span><span class="n">allocator</span> <span class="n">aCopy</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span>
+            <span class="k">typename</span> <span class="n">delegate_base</span><span class="o">&lt;</span><span class="n">return_type</span><span class="p">(</span><span class="n">parameter_types</span><span class="p">...)</span><span class="o">&gt;::</span><span class="n">allocator</span> <span class="n">aMove</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span>
+            <span class="k">typename</span> <span class="n">delegate_base</span><span class="o">&lt;</span><span class="n">return_type</span><span class="p">(</span><span class="n">parameter_types</span><span class="p">...)</span><span class="o">&gt;::</span><span class="n">deleter</span> <span class="n">aDelete</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">m_invocation</span><span class="p">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">anObject</span><span class="p">;</span>
             <span class="n">m_invocation</span><span class="p">.</span><span class="n">stub</span> <span class="o">=</span> <span class="n">aStub</span><span class="p">;</span>
+            <span class="n">m_invocation</span><span class="p">.</span><span class="n">copy</span> <span class="o">=</span> <span class="n">aCopy</span><span class="p">;</span>
+            <span class="n">m_invocation</span><span class="p">.</span><span class="n">move</span> <span class="o">=</span> <span class="n">aMove</span><span class="p">;</span>
+            <span class="n">m_invocation</span><span class="p">.</span><span class="n">del</span> <span class="o">=</span> <span class="n">aDelete</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">owner_type</span><span class="p">,</span> <span class="n">return_type</span><span class="p">(</span><span class="n">owner_type</span><span class="o">::*</span> <span class="n">func_type</span><span class="p">)(</span><span class="n">parameter_types</span><span class="p">...)</span><span class="o">&gt;</span>
@@ -379,7 +489,7 @@
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">return_handler</span><span class="o">&gt;</span>
         <span class="kt">void</span> <span class="k">operator</span><span class="p">()(</span><span class="n">parameter_types</span><span class="p">...</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">return_handler</span> <span class="n">handler</span><span class="p">)</span> <span class="k">const</span>
         <span class="p">{</span>
-            <span class="kt">size_t</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">size_type</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
             <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">item</span> <span class="p">:</span> <span class="n">m_invocationList</span><span class="p">)</span>
             <span class="p">{</span>
                 <span class="n">return_type</span> <span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">item</span><span class="p">.</span><span class="n">stub</span><span class="p">))(</span><span class="n">item</span><span class="p">.</span><span class="n">object</span><span class="p">,</span> <span class="n">arguments</span><span class="p">...);</span>
@@ -391,7 +501,7 @@
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">return_handler</span><span class="o">&gt;</span>
         <span class="kt">void</span> <span class="n">invoke</span><span class="p">(</span><span class="n">parameter_types</span><span class="p">...</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">return_handler</span> <span class="n">handler</span><span class="p">)</span> <span class="k">const</span>
         <span class="p">{</span>
-            <span class="kt">size_t</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">size_type</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
             <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">item</span> <span class="p">:</span> <span class="n">m_invocationList</span><span class="p">)</span>
             <span class="p">{</span>
                 <span class="n">return_type</span> <span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">item</span><span class="p">.</span><span class="n">stub</span><span class="p">))(</span><span class="n">item</span><span class="p">.</span><span class="n">object</span><span class="p">,</span> <span class="n">arguments</span><span class="p">...);</span>
@@ -400,22 +510,22 @@
             <span class="p">}</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="k">operator</span><span class="p">()(</span><span class="n">parameter_types</span><span class="p">...</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">size_t</span><span class="p">,</span> <span class="n">return_type</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">handler</span><span class="p">)</span> <span class="k">const</span>
+        <span class="kt">void</span> <span class="k">operator</span><span class="p">()(</span><span class="n">parameter_types</span><span class="p">...</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">size_type</span><span class="p">,</span> <span class="n">return_type</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">handler</span><span class="p">)</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">operator</span><span class="p">()</span> <span class="o">&lt;</span> <span class="k">decltype</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">arguments</span><span class="p">...,</span> <span class="n">handler</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="n">invoke</span><span class="p">(</span><span class="n">parameter_types</span><span class="p">...</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">size_t</span><span class="p">,</span> <span class="n">return_type</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">handler</span><span class="p">)</span> <span class="k">const</span>
+        <span class="kt">void</span> <span class="n">invoke</span><span class="p">(</span><span class="n">parameter_types</span><span class="p">...</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">size_type</span><span class="p">,</span> <span class="n">return_type</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">handler</span><span class="p">)</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">operator</span><span class="p">()</span> <span class="o">&lt;</span> <span class="k">decltype</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">arguments</span><span class="p">...,</span> <span class="n">handler</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="k">operator</span><span class="p">()(</span><span class="n">parameter_types</span><span class="p">...</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">size_t</span><span class="p">,</span> <span class="n">return_type</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">handler</span><span class="p">)</span> <span class="k">const</span>
+        <span class="kt">void</span> <span class="k">operator</span><span class="p">()(</span><span class="n">parameter_types</span><span class="p">...</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">size_type</span><span class="p">,</span> <span class="n">return_type</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">handler</span><span class="p">)</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">operator</span><span class="p">()</span> <span class="o">&lt;</span> <span class="k">decltype</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">arguments</span><span class="p">...,</span> <span class="n">handler</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="n">invoke</span><span class="p">(</span><span class="n">parameter_types</span><span class="p">...</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">size_t</span><span class="p">,</span> <span class="n">return_type</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">handler</span><span class="p">)</span> <span class="k">const</span>
+        <span class="kt">void</span> <span class="n">invoke</span><span class="p">(</span><span class="n">parameter_types</span><span class="p">...</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">size_type</span><span class="p">,</span> <span class="n">return_type</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">handler</span><span class="p">)</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">operator</span><span class="p">()</span> <span class="o">&lt;</span> <span class="k">decltype</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">arguments</span><span class="p">...,</span> <span class="n">handler</span><span class="p">);</span>
         <span class="p">}</span>

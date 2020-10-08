@@ -1,0 +1,75 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_defaults_defaultcomponents.hpp:
+
+File defaultcomponents.hpp
+==========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_defaults>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/defaults``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/defaults/defaultcomponents.hpp``)
+---------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_defaults_defaultcomponents.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/ecs/archetype.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_archetype.hpp`)
+
+- ``core/logging/logging.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`)
+
+- ``core/math/math.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_math.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_defaults_coremodule.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core`
+
+- :ref:`namespace_fmt`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1core_1_1position`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1rotation`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1scale`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1transform`
+
+- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01position_01_4`
+
+- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01rotation_01_4`
+
+- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01scale_01_4`
+

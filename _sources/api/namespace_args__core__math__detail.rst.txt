@@ -13,13 +13,6 @@ Namespace args::core::math::detail
 
 
 
-Namespaces
-----------
-
-
-- :ref:`namespace_args__core__math__detail__glm`
-
-
 Variables
 ---------
 

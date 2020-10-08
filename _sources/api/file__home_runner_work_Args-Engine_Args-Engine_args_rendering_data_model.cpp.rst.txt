@@ -1,0 +1,50 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.cpp:
+
+File model.cpp
+==============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_rendering_data>` (``/home/runner/work/Args-Engine/Args-Engine/args/rendering/data``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/rendering/data/model.cpp``)
+----------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``fstream``
+
+- ``map`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_atomic_sparse_map.hpp`)
+
+- ``rendering/data/model.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.hpp`)
+
+- ``string`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_common_string_extra.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__rendering`
+

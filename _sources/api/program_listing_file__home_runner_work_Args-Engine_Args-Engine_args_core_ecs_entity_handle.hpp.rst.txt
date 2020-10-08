@@ -12,20 +12,50 @@ Program Listing for File entity_handle.hpp
 
    #pragma once
    #include <core/types/types.hpp>
-   #include <core/containers/sparse_set.hpp>
    #include <core/containers/sparse_map.hpp>
    #include <core/containers/hashed_sparse_set.hpp>
+   #include <core/platform/platform.hpp>
+   #include <core/ecs/archetype.hpp>
+   #include <memory>
    
    namespace args::core::ecs
    {
-       class ARGS_API EcsRegistry;
+       class EcsRegistry;
    
        class component_handle_base;
    
        template<typename component_type>
        class component_handle;
    
-       class ARGS_API entity_handle
+       class entity_handle;
+   
+       struct child_iterator
+       {
+       public:
+           struct impl;
+   
+       private:
+           std::shared_ptr<impl> m_pimpl;
+   
+       public:
+           child_iterator(impl* implptr);
+   
+           friend bool operator==(const child_iterator& lhs, const child_iterator& rhs);
+   
+           friend bool operator!=(const child_iterator& lhs, const child_iterator& rhs) { return !(lhs == rhs); }
+   
+           entity_handle& operator*();
+   
+           entity_handle* operator->();
+   
+           child_iterator& operator++();
+           child_iterator& operator--();
+           child_iterator operator++(int);
+           child_iterator operator--(int);
+   
+       };
+   
+       class entity_handle
        {
            friend class EcsRegistry;
        private:
@@ -47,9 +77,9 @@ Program Listing for File entity_handle.hpp
    
            A_NODISCARD id_type get_id() const;
    
-           A_NODISCARD sparse_map<id_type, entity_handle>::const_iterator begin() const;
+           A_NODISCARD child_iterator begin() const;
    
-           A_NODISCARD sparse_map<id_type, entity_handle>::const_iterator end() const;
+           A_NODISCARD child_iterator end() const;
    
            A_NODISCARD entity_handle get_parent() const;
    
@@ -68,23 +98,77 @@ Program Listing for File entity_handle.hpp
            template<typename component_type>
            A_NODISCARD bool has_component() const { return has_component(typeHash<component_type>()); }
    
+           template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+           A_NODISCARD bool has_components() const;
+   
+           template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
+           A_NODISCARD bool has_components() const;
+   
            A_NODISCARD bool has_component(id_type componentTypeId) const;
    
-           A_NODISCARD component_handle_base get_component(id_type componentTypeId) const;
+           A_NODISCARD component_handle_base get_component_handle(id_type componentTypeId) const;
    
            template<typename component_type>
-           A_NODISCARD component_handle<component_type> get_component() const
+           A_NODISCARD component_handle<component_type> get_component_handle() const
            {
-               return force_value_cast<component_handle<component_type>>(get_component(typeHash<component_type>()));
+               return force_value_cast<component_handle<component_type>>(get_component_handle(typeHash<component_type>()));
            }
    
+           template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+           A_NODISCARD auto get_component_handles() const;
+   
+           template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
+           A_NODISCARD auto get_component_handles() const;
+   
+           template<typename component_type>
+           A_NODISCARD component_type read_component() const
+           {
+               return get_component_handle<component_type>().read();
+           }
+   
+           template<typename component_type>
+           void write_component(component_type&& value)
+           {
+               get_component_handle<std::remove_reference_t<component_type>>().write(std::forward<component_type>(value));
+           }
+   
+   
            component_handle_base add_component(id_type componentTypeId) const;
+   
+           component_handle_base add_component(id_type componentTypeId, void* value) const;
    
            template<typename component_type>
            component_handle<component_type> add_component() const
            {
                return force_value_cast<component_handle<component_type>>(add_component(typeHash<component_type>()));
            }
+   
+           template<typename component_type>
+           component_handle<std::remove_reference_t<component_type>> add_component(component_type&& value) const
+           {
+               return force_value_cast<component_handle<std::remove_reference_t<component_type>>>(add_component(typeHash<std::remove_reference_t<component_type>>(), reinterpret_cast<void*>(&value)));
+           }
+   
+           template<typename component_type>
+           component_handle<std::remove_reference_t<component_type>> add_component(component_type& value) const
+           {
+               return add_component(typeHash<std::remove_reference_t<component_type>>(), reinterpret_cast<void*>(&value)).template cast<std::remove_reference_t<component_type>>();
+           }
+   
+           template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+           auto add_components() const;
+   
+           template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
+           auto add_components() const;
+   
+           template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+           auto add_components(component_type&& value, component_types&&... values) const;        
+   
+           template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+           auto add_components(component_type& value, component_types&... values) const;
+   
+           template<typename archetype_type, typename... component_types, typename = inherits_from<archetype_type, archetype_base>>
+           auto add_components(component_types&&... values) const;
    
            void remove_component(id_type componentTypeId) const;
    
@@ -94,8 +178,17 @@ Program Listing for File entity_handle.hpp
                remove_component(typeHash<component_type>());
            }
    
+           template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+           void remove_components() const;
+   
+           template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
+           void remove_components() const;
+   
+   
            void destroy(bool recurse = true) const;
    
            bool valid() const;
        };
+   
+       using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
    }

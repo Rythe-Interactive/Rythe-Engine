@@ -1,0 +1,25 @@
+.. _exhale_struct_structargs_1_1debug_1_1debug__line:
+
+Struct debug_line
+=================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_debugrendering.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public args::core::events::event< debug_line >`` (:ref:`exhale_class_structargs_1_1core_1_1events_1_1event`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::debug::debug_line
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -53,8 +53,6 @@ Included By
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entity_handle.hpp`
 
-- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_rw_component_buffer.hpp`
-
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_eventbus.hpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp`

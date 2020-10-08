@@ -59,3 +59,10 @@ Classes
 
 - :ref:`exhale_struct_structargs_1_1core_1_1time_1_1time__span`
 
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_time__span_8hpp_1abda3cd7e4f5d8fa5248be1eda97431b6`
+

@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File buffer.cpp &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File buffer.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-buffer-cpp">
+<span id="program-listing-file-home-runner-work-args-engine-args-engine-args-core-compute-buffer-cpp"></span><h1>Program Listing for File buffer.cpp<a class="headerlink" href="#program-listing-for-file-buffer-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_compute_buffer.cpp.html#file-home-runner-work-args-engine-args-engine-args-core-compute-buffer-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/compute/buffer.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;core/compute/buffer.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/logging/logging.hpp&gt;</span><span class="cp"></span>
+
+
+<span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">compute</span>
+<span class="p">{</span>
+    <span class="kt">bool</span> <span class="k">operator</span><span class="o">&amp;</span><span class="p">(</span><span class="k">const</span> <span class="n">buffer_type</span><span class="o">&amp;</span> <span class="n">lhs</span><span class="p">,</span> <span class="k">const</span> <span class="n">buffer_type</span><span class="o">&amp;</span> <span class="n">rhs</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">lhs</span><span class="p">)</span> <span class="o">&amp;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">rhs</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">Buffer</span><span class="o">::</span><span class="n">Buffer</span><span class="p">(</span><span class="n">cl_context</span> <span class="n">ctx</span><span class="p">,</span><span class="n">byte</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span><span class="kt">size_t</span> <span class="n">len</span><span class="p">,</span> <span class="n">buffer_type</span> <span class="n">type</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="p">,</span> <span class="n">m_size</span><span class="p">(</span><span class="n">len</span><span class="p">)</span> <span class="p">,</span> <span class="n">m_name</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="c1">//initialize new ref-counter</span>
+        <span class="n">m_ref_count</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">size_t</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+
+        <span class="c1">//convert buffer_type to cl_mem_flags</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">)</span>
+            <span class="n">m_type</span> <span class="o">=</span> <span class="n">CL_MEM_READ_ONLY</span><span class="p">;</span>
+        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="n">buffer_type</span><span class="o">::</span><span class="n">WRITE_BUFFER</span><span class="p">)</span>
+            <span class="n">m_type</span> <span class="o">=</span> <span class="n">CL_MEM_WRITE_ONLY</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">m_type</span> <span class="o">=</span> <span class="n">CL_MEM_READ_WRITE</span><span class="p">;</span>
+
+
+        <span class="n">cl_int</span> <span class="n">ret</span><span class="p">;</span>
+
+        <span class="c1">//create buffer</span>
+        <span class="n">m_memory_object</span> <span class="o">=</span> <span class="n">clCreateBuffer</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="n">m_type</span><span class="p">,</span><span class="n">m_size</span><span class="p">,</span><span class="k">nullptr</span><span class="p">,</span><span class="o">&amp;</span><span class="n">ret</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;clCreateBuffer failed for Buffer: {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Buffer</span><span class="o">::</span><span class="n">rename</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_name</span> <span class="o">=</span> <span class="n">name</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">Buffer</span><span class="o">::</span><span class="n">Buffer</span><span class="p">(</span><span class="n">Buffer</span><span class="o">&amp;&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">:</span>
+        <span class="n">m_name</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">m_name</span><span class="p">)),</span>
+        <span class="n">m_memory_object</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">m_memory_object</span><span class="p">),</span>
+        <span class="n">m_ref_count</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">m_ref_count</span><span class="p">),</span>
+        <span class="n">m_type</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">m_type</span><span class="p">),</span>
+        <span class="n">m_data</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">m_data</span><span class="p">),</span>
+        <span class="n">m_size</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">m_size</span><span class="p">)</span>
+    <span class="p">{</span>
+
+        <span class="c1">//Move Ctor needs to be explicitly defined</span>
+        <span class="c1">//to increase Reference Counter</span>
+        <span class="o">++*</span><span class="n">m_ref_count</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">Buffer</span><span class="o">::</span><span class="n">Buffer</span><span class="p">(</span><span class="k">const</span> <span class="n">Buffer</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="o">:</span>
+        <span class="n">m_name</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">m_name</span><span class="p">),</span>
+        <span class="n">m_memory_object</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">m_memory_object</span><span class="p">),</span>
+        <span class="n">m_ref_count</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">m_ref_count</span><span class="p">),</span>
+        <span class="n">m_type</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">m_type</span><span class="p">),</span>
+        <span class="n">m_data</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">m_data</span><span class="p">),</span>
+        <span class="n">m_size</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">m_size</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//Copy Ctor needs to be explicitly defined</span>
+        <span class="c1">//to increase Reference Counter</span>
+        <span class="o">++*</span><span class="n">m_ref_count</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
+
+
+    <span class="n">Buffer</span><span class="o">::~</span><span class="n">Buffer</span><span class="p">()</span>
+    <span class="p">{</span>
+
+        <span class="c1">//check if this is the last element</span>
+        <span class="c1">//TODO(algo-ryth-mix): make this thread-safe</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">--*</span><span class="n">m_ref_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//free ref-counter &amp; memory_object</span>
+            <span class="k">delete</span> <span class="n">m_ref_count</span><span class="p">;</span>
+            <span class="n">clReleaseMemObject</span><span class="p">(</span><span class="n">m_memory_object</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_compute_buffer.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

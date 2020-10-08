@@ -1,0 +1,13 @@
+.. _exhale_variable_mesh_8hpp_1a46310039450eca86e27496c6d8c8ca9c:
+
+Variable args::core::invalid_mesh_handle
+========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_mesh.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::core::invalid_mesh_handle

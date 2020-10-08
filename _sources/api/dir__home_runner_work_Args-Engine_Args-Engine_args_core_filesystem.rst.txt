@@ -22,7 +22,10 @@ Files
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_artifact_cache.cpp`
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_artifact_cache.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_assetimporter.cpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_assetimporter.hpp`
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_basic_resolver.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.cpp`
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filemanip.hpp`
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem.hpp`
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_filesystem_resolver.cpp`

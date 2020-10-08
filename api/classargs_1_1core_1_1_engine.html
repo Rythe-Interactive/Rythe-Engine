@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Class entity_exists_error" href="classargs_1_1core_1_1entity__exists__error.html" />
-    <link rel="prev" title="Template Class rw_component_buffer" href="classargs_1_1core_1_1ecs_1_1rw__component__buffer.html" />
+    <link rel="prev" title="Class QueryRegistry" href="classargs_1_1core_1_1ecs_1_1_query_registry.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -39,7 +39,7 @@
           <a href="classargs_1_1core_1_1entity__exists__error.html" title="Class entity_exists_error"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="classargs_1_1core_1_1ecs_1_1rw__component__buffer.html" title="Template Class rw_component_buffer"
+          <a href="classargs_1_1core_1_1ecs_1_1_query_registry.html" title="Class QueryRegistry"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
@@ -66,8 +66,8 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
-<dt id="_CPPv4N4args4core6Engine6EngineEv">
-<span id="_CPPv3N4args4core6Engine6EngineEv"></span><span id="_CPPv2N4args4core6Engine6EngineEv"></span><span id="args::core::Engine::Engine"></span><span class="target" id="classargs_1_1core_1_1_engine_1ad37576eaf6be27e4a032efee762fd2b6"></span><code class="sig-name descname">Engine</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core6Engine6EngineEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N4args4core6Engine6EngineEiPPc">
+<span id="_CPPv3N4args4core6Engine6EngineEiPPc"></span><span id="_CPPv2N4args4core6Engine6EngineEiPPc"></span><span id="args::core::Engine::Engine__i.cPP"></span><span class="target" id="classargs_1_1core_1_1_engine_1a02dd1cf1dfa5fe39e3d762aedbbfe4a3"></span><code class="sig-name descname">Engine</code><span class="sig-paren">(</span>int <em>argc</em>, char **<em>argv</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core6Engine6EngineEiPPc" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -98,7 +98,12 @@
 <span id="_CPPv3N4args4core6Engine4initEv"></span><span id="_CPPv2N4args4core6Engine4initEv"></span><span id="args::core::Engine::init"></span><span class="target" id="classargs_1_1core_1_1_engine_1a54b911d42d1b6e4f40a97fb7d65da64a"></span>void <code class="sig-name descname">init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core6Engine4initEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Calls init on all reported modules and thus engine internals. </p>
 <p><dl class="simple">
-<dt><strong>Note</strong></dt><dd><p>Needs to be called manually if ARGS_ENTRY was not used. <a class="reference internal" href="classargs_1_1core_1_1_module.html#classargs_1_1core_1_1_module"><span class="std std-ref">args::core::Module</span></a> </p>
+<dt><strong>Note</strong></dt><dd><p>Needs to be called manually if ARGS_ENTRY was not used. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">argc</span></code>: argc of main </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">argv</span></code>: argv of main <a class="reference internal" href="classargs_1_1core_1_1_module.html#classargs_1_1core_1_1_module"><span class="std std-ref">args::core::Module</span></a> </p></li>
+</ul>
 </dd>
 </dl>
 </p>
@@ -109,6 +114,11 @@
 <span id="_CPPv3N4args4core6Engine3runEv"></span><span id="_CPPv2N4args4core6Engine3runEv"></span><span id="args::core::Engine::run"></span><span class="target" id="classargs_1_1core_1_1_engine_1aed64b3a0d8ae774e78856afabebefd55"></span>void <code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core6Engine3runEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Runs engine loop. </p>
 </dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core6Engine10getCliArgsEv">
+<span id="_CPPv3N4args4core6Engine10getCliArgsEv"></span><span id="_CPPv2N4args4core6Engine10getCliArgsEv"></span><span id="args::core::Engine::getCliArgs"></span><span class="target" id="classargs_1_1core_1_1_engine_1aaeb68f2c5215cecc448d8ac637582446"></span>std::vector&lt;char*&gt; &amp;<code class="sig-name descname">getCliArgs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core6Engine10getCliArgsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 </div>
 </dd></dl>
@@ -134,7 +144,7 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">ARGS API</a><ul>
-      <li>Previous: <a href="classargs_1_1core_1_1ecs_1_1rw__component__buffer.html" title="previous chapter">Template Class rw_component_buffer</a></li>
+      <li>Previous: <a href="classargs_1_1core_1_1ecs_1_1_query_registry.html" title="previous chapter">Class QueryRegistry</a></li>
       <li>Next: <a href="classargs_1_1core_1_1entity__exists__error.html" title="next chapter">Class entity_exists_error</a></li>
   </ul></li>
   </ul></li>

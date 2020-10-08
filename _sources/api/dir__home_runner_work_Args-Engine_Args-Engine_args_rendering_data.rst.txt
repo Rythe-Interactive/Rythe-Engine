@@ -1,0 +1,32 @@
+.. _dir__home_runner_work_Args-Engine_Args-Engine_args_rendering_data:
+
+
+Directory data
+==============
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_rendering>` (``/home/runner/work/Args-Engine/Args-Engine/args/rendering``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Args-Engine/Args-Engine/args/rendering/data``
+
+Subdirectories
+--------------
+
+- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_importers`
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_material.cpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_material.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.cpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_model.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_shader.cpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_shader.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_texture.cpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_texture.hpp`
+
+

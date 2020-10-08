@@ -50,6 +50,7 @@
 <span class="cp">#include</span> <span class="cpf">&lt;application/context/contexthelper.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;application/window/window.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;application/window/windowsystem.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;application/input/inputsystem.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">application</span>
 <span class="p">{</span>
@@ -62,11 +63,12 @@
             <span class="n">addProcessChain</span><span class="p">(</span><span class="s">&quot;Input&quot;</span><span class="p">);</span>
             <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span><span class="p">();</span>
             <span class="n">reportSystem</span><span class="o">&lt;</span><span class="n">WindowSystem</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">reportSystem</span><span class="o">&lt;</span><span class="n">InputSystem</span><span class="o">&gt;</span><span class="p">();</span>
         <span class="p">}</span>
 
         <span class="k">virtual</span> <span class="n">priority_type</span> <span class="n">priority</span><span class="p">()</span> <span class="k">override</span>
         <span class="p">{</span>
-            <span class="k">return</span> <span class="mi">10</span><span class="p">;</span>
+            <span class="k">return</span> <span class="mi">100</span><span class="p">;</span>
         <span class="p">}</span>
 
     <span class="p">};</span>

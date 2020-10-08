@@ -1,0 +1,16 @@
+.. _exhale_class_classargs_1_1audio_1_1_audio_segment_cache:
+
+Class AudioSegmentCache
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_data_audio_segment.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::audio::AudioSegmentCache
+   :members:
+   :protected-members:
+   :undoc-members:

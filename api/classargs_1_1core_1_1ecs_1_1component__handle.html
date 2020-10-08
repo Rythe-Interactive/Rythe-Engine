@@ -55,7 +55,7 @@
   <div class="section" id="template-class-component-handle">
 <span id="exhale-class-classargs-1-1core-1-1ecs-1-1component-handle"></span><h1>Template Class component_handle<a class="headerlink" href="#template-class-component-handle" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_component_handle.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-ecs-component-handle-hpp"><span class="std std-ref">File component_handle.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_archetype.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-ecs-archetype-hpp"><span class="std std-ref">File archetype.hpp</span></a></p></li>
 </ul>
 <div class="section" id="inheritance-relationships">
 <h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
@@ -118,30 +118,25 @@
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N4args4core3ecs16component_handle4readENSt12memory_orderE">
-<span id="_CPPv3N4args4core3ecs16component_handle4readENSt12memory_orderE"></span><span id="_CPPv2N4args4core3ecs16component_handle4readENSt12memory_orderE"></span><span id="args::core::ecs::component_handle::read__std::memory_order"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1component__handle_1a4cc051556c712a6dda3068c663b8516f"></span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">read</code><span class="sig-paren">(</span>std::memory_order <em>order</em> = std::memory_order_acquire<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs16component_handle4readENSt12memory_orderE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Atomic read of component. </p>
+<dt id="_CPPv4N4args4core3ecs16component_handle4readEv">
+<span id="_CPPv3N4args4core3ecs16component_handle4readEv"></span><span id="_CPPv2N4args4core3ecs16component_handle4readEv"></span><span id="args::core::ecs::component_handle::read"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1component__handle_1a4f7d33de4fdbe59d17243aae9e759a55"></span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">read</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs16component_handle4readEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread-safe read of component. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>component_type Current value of component. </p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">order</span></code>: Memory order at which to load the component. </p></li>
-</ul>
 </dd>
 </dl>
 </p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N4args4core3ecs16component_handle5writeERR14component_typeNSt12memory_orderE">
-<span id="_CPPv3N4args4core3ecs16component_handle5writeERR14component_typeNSt12memory_orderE"></span><span id="_CPPv2N4args4core3ecs16component_handle5writeERR14component_typeNSt12memory_orderE"></span><span id="args::core::ecs::component_handle::write__component_typeRR.std::memory_order"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1component__handle_1abd0f344e8dde5e675916edbfb7f491db"></span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">write</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> &amp;&amp;<em>value</em>, std::memory_order <em>order</em> = std::memory_order_release<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs16component_handle5writeERR14component_typeNSt12memory_orderE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Atomic write of component. </p>
+<dt id="_CPPv4N4args4core3ecs16component_handle5writeERR14component_type">
+<span id="_CPPv3N4args4core3ecs16component_handle5writeERR14component_type"></span><span id="_CPPv2N4args4core3ecs16component_handle5writeERR14component_type"></span><span id="args::core::ecs::component_handle::write__component_typeRR"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1component__handle_1afea0d877ed3b88264801caf5376b6316"></span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">write</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> &amp;&amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs16component_handle5writeERR14component_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread-safe write of component. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>component_type Current value of component. </p>
 </dd>
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: Value you wish to write. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">order</span></code>: Memory order at which to write the component. </p></li>
 </ul>
 </dd>
 </dl>
@@ -149,15 +144,14 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N4args4core3ecs16component_handle5writeERK14component_typeNSt12memory_orderE">
-<span id="_CPPv3N4args4core3ecs16component_handle5writeERK14component_typeNSt12memory_orderE"></span><span id="_CPPv2N4args4core3ecs16component_handle5writeERK14component_typeNSt12memory_orderE"></span><span id="args::core::ecs::component_handle::write__component_typeCR.std::memory_order"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1component__handle_1aae1391bfcec8e344dec51b9b0c421cb6"></span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> &amp;<em>value</em>, std::memory_order <em>order</em> = std::memory_order_release<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs16component_handle5writeERK14component_typeNSt12memory_orderE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Atomic write of component. </p>
+<dt id="_CPPv4N4args4core3ecs16component_handle5writeERK14component_type">
+<span id="_CPPv3N4args4core3ecs16component_handle5writeERK14component_type"></span><span id="_CPPv2N4args4core3ecs16component_handle5writeERK14component_type"></span><span id="args::core::ecs::component_handle::write__component_typeCR"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1component__handle_1a9643cc90e7a942a880f96f2dbab4913b"></span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> &amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs16component_handle5writeERK14component_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread-safe write of component. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>component_type Current value of component. </p>
 </dd>
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: Value you wish to write. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">order</span></code>: Memory order at which to write the component. </p></li>
 </ul>
 </dd>
 </dl>
@@ -165,17 +159,14 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N4args4core3ecs16component_handle9fetch_addERR14component_typeNSt12memory_orderENSt12memory_orderENSt12memory_orderE">
-<span id="_CPPv3N4args4core3ecs16component_handle9fetch_addERR14component_typeNSt12memory_orderENSt12memory_orderENSt12memory_orderE"></span><span id="_CPPv2N4args4core3ecs16component_handle9fetch_addERR14component_typeNSt12memory_orderENSt12memory_orderENSt12memory_orderE"></span><span id="args::core::ecs::component_handle::fetch_add__component_typeRR.std::memory_order.std::memory_order.std::memory_order"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1component__handle_1ad2e9f83eae7f0c11331efdfc7e8c1dcf"></span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">fetch_add</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> &amp;&amp;<em>value</em>, std::memory_order <em>loadOrder</em> = std::memory_order_acquire, std::memory_order <em>successOrder</em> = std::memory_order_release, std::memory_order <em>failureOrder</em> = std::memory_order_relaxed<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs16component_handle9fetch_addERR14component_typeNSt12memory_orderENSt12memory_orderENSt12memory_orderE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Atomic read modify write with add modification on component. </p>
+<dt id="_CPPv4N4args4core3ecs16component_handle17read_modify_writeERR14component_typePF14component_typeRK14component_typeRR14component_typeE">
+<span id="_CPPv3N4args4core3ecs16component_handle17read_modify_writeERR14component_typePF14component_typeRK14component_typeRR14component_typeE"></span><span id="_CPPv2N4args4core3ecs16component_handle17read_modify_writeERR14component_typePF14component_typeRK14component_typeRR14component_typeE"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1component__handle_1a85c88cb1b3c5eb35a6610b1d3723cab2"></span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">read_modify_write</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> &amp;&amp;<em>value</em>, <a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> (*<em>modifier</em>)<span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a>&amp;, <a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a>&amp;&amp;<span class="sig-paren">)</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs16component_handle17read_modify_writeERR14component_typePF14component_typeRK14component_typeRR14component_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread-safe read modify write with a custom modification on component. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>component_type Current value of component. </p>
 </dd>
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: Value you wish to add. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">loadOrder</span></code>: Memory order at which to load the component. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">successOrder</span></code>: Memory order upon success of CAS-loop. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">failureOrder</span></code>: Memory order upon failure of CAS-loop. </p></li>
 </ul>
 </dd>
 </dl>
@@ -183,17 +174,14 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N4args4core3ecs16component_handle9fetch_addERK14component_typeNSt12memory_orderENSt12memory_orderENSt12memory_orderE">
-<span id="_CPPv3N4args4core3ecs16component_handle9fetch_addERK14component_typeNSt12memory_orderENSt12memory_orderENSt12memory_orderE"></span><span id="_CPPv2N4args4core3ecs16component_handle9fetch_addERK14component_typeNSt12memory_orderENSt12memory_orderENSt12memory_orderE"></span><span id="args::core::ecs::component_handle::fetch_add__component_typeCR.std::memory_order.std::memory_order.std::memory_order"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1component__handle_1aef50cbdf59d98acf95dfc3f7c831f46d"></span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">fetch_add</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> &amp;<em>value</em>, std::memory_order <em>loadOrder</em> = std::memory_order_acquire, std::memory_order <em>successOrder</em> = std::memory_order_release, std::memory_order <em>failureOrder</em> = std::memory_order_relaxed<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs16component_handle9fetch_addERK14component_typeNSt12memory_orderENSt12memory_orderENSt12memory_orderE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Atomic read modify write with add modification on component. </p>
+<dt id="_CPPv4N4args4core3ecs16component_handle9fetch_addERR14component_type">
+<span id="_CPPv3N4args4core3ecs16component_handle9fetch_addERR14component_type"></span><span id="_CPPv2N4args4core3ecs16component_handle9fetch_addERR14component_type"></span><span id="args::core::ecs::component_handle::fetch_add__component_typeRR"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1component__handle_1a966c717b8b5cd2b630b6cf01952a35ae"></span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">fetch_add</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> &amp;&amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs16component_handle9fetch_addERR14component_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread-safe read modify write with add modification on component. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>component_type Current value of component. </p>
 </dd>
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: Value you wish to add. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">loadOrder</span></code>: Memory order at which to load the component. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">successOrder</span></code>: Memory order upon success of CAS-loop. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">failureOrder</span></code>: Memory order upon failure of CAS-loop. </p></li>
 </ul>
 </dd>
 </dl>
@@ -201,17 +189,14 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N4args4core3ecs16component_handle14fetch_multiplyERR14component_typeNSt12memory_orderENSt12memory_orderENSt12memory_orderE">
-<span id="_CPPv3N4args4core3ecs16component_handle14fetch_multiplyERR14component_typeNSt12memory_orderENSt12memory_orderENSt12memory_orderE"></span><span id="_CPPv2N4args4core3ecs16component_handle14fetch_multiplyERR14component_typeNSt12memory_orderENSt12memory_orderENSt12memory_orderE"></span><span id="args::core::ecs::component_handle::fetch_multiply__component_typeRR.std::memory_order.std::memory_order.std::memory_order"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1component__handle_1a7f6298aabcaf8a8dc36e244010cdcc64"></span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">fetch_multiply</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> &amp;&amp;<em>value</em>, std::memory_order <em>loadOrder</em> = std::memory_order_acquire, std::memory_order <em>successOrder</em> = std::memory_order_release, std::memory_order <em>failureOrder</em> = std::memory_order_relaxed<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs16component_handle14fetch_multiplyERR14component_typeNSt12memory_orderENSt12memory_orderENSt12memory_orderE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Atomic read modify write with multiply modification on component. </p>
+<dt id="_CPPv4N4args4core3ecs16component_handle9fetch_addERK14component_type">
+<span id="_CPPv3N4args4core3ecs16component_handle9fetch_addERK14component_type"></span><span id="_CPPv2N4args4core3ecs16component_handle9fetch_addERK14component_type"></span><span id="args::core::ecs::component_handle::fetch_add__component_typeCR"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1component__handle_1a0748c7dbf8066e6151236e87fd2e00a4"></span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">fetch_add</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> &amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs16component_handle9fetch_addERK14component_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread-safe read modify write with add modification on component. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>component_type Current value of component. </p>
 </dd>
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: Value you wish to multiply by. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">loadOrder</span></code>: Memory order at which to load the component. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">successOrder</span></code>: Memory order upon success of CAS-loop. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">failureOrder</span></code>: Memory order upon failure of CAS-loop. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: Value you wish to add. </p></li>
 </ul>
 </dd>
 </dl>
@@ -219,17 +204,29 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N4args4core3ecs16component_handle14fetch_multiplyERK14component_typeNSt12memory_orderENSt12memory_orderENSt12memory_orderE">
-<span id="_CPPv3N4args4core3ecs16component_handle14fetch_multiplyERK14component_typeNSt12memory_orderENSt12memory_orderENSt12memory_orderE"></span><span id="_CPPv2N4args4core3ecs16component_handle14fetch_multiplyERK14component_typeNSt12memory_orderENSt12memory_orderENSt12memory_orderE"></span><span id="args::core::ecs::component_handle::fetch_multiply__component_typeCR.std::memory_order.std::memory_order.std::memory_order"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1component__handle_1a6e0459eb0d6da702da1806a84473524c"></span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">fetch_multiply</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> &amp;<em>value</em>, std::memory_order <em>loadOrder</em> = std::memory_order_acquire, std::memory_order <em>successOrder</em> = std::memory_order_release, std::memory_order <em>failureOrder</em> = std::memory_order_relaxed<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs16component_handle14fetch_multiplyERK14component_typeNSt12memory_orderENSt12memory_orderENSt12memory_orderE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Atomic read modify write with multiply modification on component. </p>
+<dt id="_CPPv4N4args4core3ecs16component_handle14fetch_multiplyERR14component_type">
+<span id="_CPPv3N4args4core3ecs16component_handle14fetch_multiplyERR14component_type"></span><span id="_CPPv2N4args4core3ecs16component_handle14fetch_multiplyERR14component_type"></span><span id="args::core::ecs::component_handle::fetch_multiply__component_typeRR"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1component__handle_1adf34687917b320115e312d1bed9275b4"></span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">fetch_multiply</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> &amp;&amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs16component_handle14fetch_multiplyERR14component_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread-safe read modify write with multiply modification on component. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>component_type Current value of component. </p>
 </dd>
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: Value you wish to multiply by. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">loadOrder</span></code>: Memory order at which to load the component. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">successOrder</span></code>: Memory order upon success of CAS-loop. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">failureOrder</span></code>: Memory order upon failure of CAS-loop. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core3ecs16component_handle14fetch_multiplyERK14component_type">
+<span id="_CPPv3N4args4core3ecs16component_handle14fetch_multiplyERK14component_type"></span><span id="_CPPv2N4args4core3ecs16component_handle14fetch_multiplyERK14component_type"></span><span id="args::core::ecs::component_handle::fetch_multiply__component_typeCR"></span><span class="target" id="classargs_1_1core_1_1ecs_1_1component__handle_1ae07ba1a489c5ca3fd0da9d5b52852276"></span><a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">fetch_multiply</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle::component_type">component_type</a> &amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs16component_handle14fetch_multiplyERK14component_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread-safe read modify write with multiply modification on component. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>component_type Current value of component. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: Value you wish to multiply by. </p></li>
 </ul>
 </dd>
 </dl>

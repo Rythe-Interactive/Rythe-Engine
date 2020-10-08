@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Class archetype &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class archetype_base" href="class_structargs_1_1core_1_1ecs_1_1archetype__base.html" />
+    <link rel="prev" title="Template Class delegate_base&lt; return_type(parameter_types…)&gt;" href="classargs_1_1core_1_1delegate__base_3_01return__type_07parameter__types_8_8_8_08_4.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="class_structargs_1_1core_1_1ecs_1_1archetype__base.html" title="Class archetype_base"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classargs_1_1core_1_1delegate__base_3_01return__type_07parameter__types_8_8_8_08_4.html" title="Template Class delegate_base&lt; return_type(parameter_types…)&gt;"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Template Class archetype</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="template-class-archetype">
+<span id="exhale-class-structargs-1-1core-1-1ecs-1-1archetype"></span><h1>Template Class archetype<a class="headerlink" href="#template-class-archetype" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_archetype.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-ecs-archetype-hpp"><span class="std std-ref">File archetype.hpp</span></a></p></li>
+</ul>
+<div class="section" id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="base-type">
+<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">args::core::ecs::archetype_base</span></code> (<a class="reference internal" href="class_structargs_1_1core_1_1ecs_1_1archetype__base.html#exhale-class-structargs-1-1core-1-1ecs-1-1archetype-base"><span class="std std-ref">Class archetype_base</span></a>)</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4I0DpEN4args4core3ecs9archetypeE">
+<span id="_CPPv3I0DpEN4args4core3ecs9archetypeE"></span><span id="_CPPv2I0DpEN4args4core3ecs9archetypeE"></span>template&lt;typename <code class="sig-name descname">component_type</code>, typename ...<code class="sig-name descname">component_types</code>&gt;<br /><span class="target" id="structargs_1_1core_1_1ecs_1_1archetype"></span><em class="property">class </em><code class="sig-prename descclassname">args::core::ecs<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">archetype</code> : <em class="property">public</em> args::core::ecs::<a class="reference internal" href="class_structargs_1_1core_1_1ecs_1_1archetype__base.html#_CPPv4N4args4core3ecs14archetype_baseE" title="args::core::ecs::archetype_base">archetype_base</a><a class="headerlink" href="#_CPPv4I0DpEN4args4core3ecs9archetypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>API object for grouping multiple component types together. <a class="reference internal" href="structargs_1_1core_1_1transform.html#structargs_1_1core_1_1transform"><span class="std std-ref">args::core::transform</span></a>. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="cpp type">
+<dt id="_CPPv4N4args4core3ecs9archetype11handleGroupE">
+<span id="_CPPv3N4args4core3ecs9archetype11handleGroupE"></span><span id="_CPPv2N4args4core3ecs9archetype11handleGroupE"></span><span class="target" id="structargs_1_1core_1_1ecs_1_1archetype_1a098b51c17b75540a2f684c5143c29170"></span><em class="property">using </em><code class="sig-name descname">handleGroup</code> = std::tuple&lt;<a class="reference internal" href="classargs_1_1core_1_1ecs_1_1component__handle.html#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle">component_handle</a>&lt;<a class="reference internal" href="#_CPPv4I0DpEN4args4core3ecs9archetypeE" title="args::core::ecs::archetype::component_type">component_type</a>&gt;, <a class="reference internal" href="classargs_1_1core_1_1ecs_1_1component__handle.html#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle">component_handle</a>&lt;<a class="reference internal" href="#_CPPv4I0DpEN4args4core3ecs9archetypeE" title="args::core::ecs::archetype::component_types">component_types</a>&gt;...&gt;<a class="headerlink" href="#_CPPv4N4args4core3ecs9archetype11handleGroupE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core3ecs9archetype9archetypeERK11handleGroup">
+<span id="_CPPv3N4args4core3ecs9archetype9archetypeERK11handleGroup"></span><span id="_CPPv2N4args4core3ecs9archetype9archetypeERK11handleGroup"></span><span id="args::core::ecs::archetype::archetype__handleGroupCR"></span><span class="target" id="structargs_1_1core_1_1ecs_1_1archetype_1a31dbbf91a167839cf859adeffaf37a8c"></span><code class="sig-name descname">archetype</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N4args4core3ecs9archetype11handleGroupE" title="args::core::ecs::archetype::handleGroup">handleGroup</a> &amp;<em>handles</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core3ecs9archetype9archetypeERK11handleGroup" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN4args4core3ecs9archetype3getE16component_handleI1TEv">
+<span id="_CPPv3I0EN4args4core3ecs9archetype3getEv"></span><span id="_CPPv2I0EN4args4core3ecs9archetype3getEv"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="structargs_1_1core_1_1ecs_1_1archetype_1a25e2a4738867922db9133d1e84ebc768"></span><a class="reference internal" href="classargs_1_1core_1_1ecs_1_1component__handle.html#_CPPv4I0EN4args4core3ecs16component_handleE" title="args::core::ecs::component_handle">component_handle</a>&lt;<a class="reference internal" href="#_CPPv4I0EN4args4core3ecs9archetype3getE16component_handleI1TEv" title="args::core::ecs::archetype::get::T">T</a>&gt; <code class="sig-name descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN4args4core3ecs9archetype3getE16component_handleI1TEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the handle to one of the components in the archetype. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="cpp var">
+<dt id="_CPPv4N4args4core3ecs9archetype7handlesE">
+<span id="_CPPv3N4args4core3ecs9archetype7handlesE"></span><span id="_CPPv2N4args4core3ecs9archetype7handlesE"></span><span id="args::core::ecs::archetype::handles__handleGroup"></span><span class="target" id="structargs_1_1core_1_1ecs_1_1archetype_1a2330bcc1bcb8ba32cadbd73c2c3ac207"></span><a class="reference internal" href="#_CPPv4N4args4core3ecs9archetype11handleGroupE" title="args::core::ecs::archetype::handleGroup">handleGroup</a> <code class="sig-name descname">handles</code><a class="headerlink" href="#_CPPv4N4args4core3ecs9archetype7handlesE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Friends</p>
+<dl class="friendclass">
+<dt>
+<em class="property">friend class</em> EcsRegistry</dt>
+</dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Template Class archetype</a><ul>
+<li><a class="reference internal" href="#inheritance-relationships">Inheritance Relationships</a><ul>
+<li><a class="reference internal" href="#base-type">Base Type</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">ARGS API</a><ul>
+      <li>Previous: <a href="classargs_1_1core_1_1delegate__base_3_01return__type_07parameter__types_8_8_8_08_4.html" title="previous chapter">Template Class delegate_base&lt; return_type(parameter_types…)&gt;</a></li>
+      <li>Next: <a href="class_structargs_1_1core_1_1ecs_1_1archetype__base.html" title="next chapter">Class archetype_base</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/class_structargs_1_1core_1_1ecs_1_1archetype.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

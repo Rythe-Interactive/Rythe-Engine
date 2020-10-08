@@ -1,0 +1,13 @@
+.. _exhale_function_logging_8hpp_1a760f381e8662026e2e6d32db424ad849:
+
+Template Function args::core::log::trace
+========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::log::trace(const FormatString&, Args&&...)

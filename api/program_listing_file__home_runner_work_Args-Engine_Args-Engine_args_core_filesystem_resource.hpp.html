@@ -124,6 +124,11 @@ class Test {
             return m_container.empty();
         }
 
+        void clear() noexcept
+        {
+            m_container.clear();
+        }
+
         A_NODISCARD byte_vec&amp; get() noexcept
         {
             return m_container;
@@ -159,15 +164,15 @@ class Test {
 
     #ifndef DOXY_EXCLUDE
 
-    template &lt;  typename T,
-                typename C1 = std::enable_if&lt;detail::has_to_resource&lt;T,void(basic_resource*,const T&amp;)&gt;::value&gt;&gt;
+    template&lt;typename T,
+             typename C1 = std::enable_if&lt;detail::has_to_resource&lt;T,void(basic_resource*,const T&amp;)&gt;::value&gt;&gt;
     void to_resource(basic_resource* resource,const T&amp; value)
     {
         T::to_resource(resource,value);
     }
 
-    template &lt;  typename T,
-                typename C1 = std::enable_if&lt;detail::has_to_resource&lt;T,void(basic_resource*,const T&amp;)&gt;::value&gt;&gt;
+    template&lt;typename T,
+             typename C1 = std::enable_if&lt;detail::has_to_resource&lt;T,void(basic_resource*,const T&amp;)&gt;::value&gt;&gt;
     basic_resource to_resource(const T&amp; value)
     {
         basic_resource res(nullptr);
@@ -175,27 +180,28 @@ class Test {
         return res;
     }
 
-
-    template &lt;  typename T,
-                typename C1 = std::enable_if&lt;detail::has_from_resource&lt;T,void(T*,const basic_resource&amp;)&gt;::value&gt;&gt;
+    template&lt;typename T,
+             typename C1 = std::enable_if&lt;detail::has_from_resource&lt;T,void(T*,const basic_resource&amp;)&gt;::value&gt;&gt;
     void from_resource(T* value, const basic_resource&amp; resource)
     {
-        T::from_resource(value,resource);
+        T::from_resource(value, resource);
     }
-    template &lt;  typename T,
-                typename C1 = std::enable_if&lt;detail::has_from_resource&lt;T,void(T*,const basic_resource&amp;)&gt;::value&gt;,
-                typename C2 = std::enable_if&lt;std::is_default_constructible&lt;T&gt;::value&gt;,
-                typename C3 = std::enable_if&lt;std::is_move_constructible&lt;T&gt;::value&gt;&gt;
+
+   template&lt;typename T,
+            typename C1 = std::enable_if&lt;detail::has_from_resource&lt;T,void(T*,const basic_resource&amp;)&gt;::value&gt;,
+            typename C2 = std::enable_if&lt;std::is_default_constructible&lt;T&gt;::value&gt;,
+            typename C3 = std::enable_if&lt;std::is_move_constructible&lt;T&gt;::value&gt;&gt;
     T from_resource(const basic_resource&amp; resource)
     {
         T value;
         T::from_resource(&amp;value,resource);
         return std::move(value);
     }
-        template &lt;  typename T,
-                typename C1 = std::enable_if&lt;detail::has_from_resource&lt;T,void(T*,const basic_resource&amp;)&gt;::value&gt;,
-                typename C2 = std::enable_if&lt;std::is_move_constructible&lt;T&gt;::value&gt;,
-                class ... Args&gt;
+
+   template&lt;typename T,
+            typename C1 = std::enable_if&lt;detail::has_from_resource&lt;T,void(T*,const basic_resource&amp;)&gt;::value&gt;,
+            typename C2 = std::enable_if&lt;std::is_move_constructible&lt;T&gt;::value&gt;,
+            class ... Args&gt;
     T from_resource(const basic_resource&amp; resource,Args&amp;&amp;... args)
     {
         T value(std::forward&lt;Args&gt;(args)...);
@@ -207,14 +213,13 @@ class Test {
     template &lt;class T,class... Args&gt;
     A_NODISCARD T basic_resource::to(Args&amp;&amp;...args)
     {
-        return std::move(from_resource(*this,std::forward&lt;Args&gt;(args)...));
+        return std::move(from_resource&lt;T&gt;(*this, std::forward&lt;Args&gt;(args)...));
     }
 
     template &lt;class T&gt;
     void basic_resource::from(const T&amp; v)
     {
         to_resource(this,v);
-
     }
     #endif
 }

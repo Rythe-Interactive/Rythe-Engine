@@ -18,7 +18,7 @@
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Namespace args::core" href="namespace_args__core.html" />
+    <link rel="next" title="Namespace args::audio" href="namespace_args__audio.html" />
     <link rel="prev" title="Namespace args" href="namespace_args.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -36,7 +36,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="namespace_args__core.html" title="Namespace args::core"
+          <a href="namespace_args__audio.html" title="Namespace args::audio"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="namespace_args.html" title="Namespace args"
@@ -58,12 +58,19 @@
 <p class="topic-title">Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#classes" id="id2">Classes</a></p></li>
+<li><p><a class="reference internal" href="#typedefs" id="id3">Typedefs</a></p></li>
+<li><p><a class="reference internal" href="#variables" id="id4">Variables</a></p></li>
 </ul>
 </div>
 <div class="section" id="classes">
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="structargs_1_1application_1_1char__input.html#exhale-struct-structargs-1-1application-1-1char-input"><span class="std std-ref">Struct char_input</span></a></p></li>
+<li><p><a class="reference internal" href="structargs_1_1application_1_1input__action.html#exhale-struct-structargs-1-1application-1-1input-action"><span class="std std-ref">Template Struct input_action</span></a></p></li>
+<li><p><a class="reference internal" href="structargs_1_1application_1_1input__axis.html#exhale-struct-structargs-1-1application-1-1input-axis"><span class="std std-ref">Template Struct input_axis</span></a></p></li>
+<li><p><a class="reference internal" href="structargs_1_1application_1_1inputmap.html#exhale-struct-structargs-1-1application-1-1inputmap"><span class="std std-ref">Struct inputmap</span></a></p></li>
+<li><p><a class="reference internal" href="structargs_1_1application_1_1_input_system_1_1action__data.html#exhale-struct-structargs-1-1application-1-1-input-system-1-1action-data"><span class="std std-ref">Struct InputSystem::action_data</span></a></p></li>
+<li><p><a class="reference internal" href="structargs_1_1application_1_1_input_system_1_1axis__data.html#exhale-struct-structargs-1-1application-1-1-input-system-1-1axis-data"><span class="std std-ref">Struct InputSystem::axis_data</span></a></p></li>
 <li><p><a class="reference internal" href="structargs_1_1application_1_1key__input.html#exhale-struct-structargs-1-1application-1-1key-input"><span class="std std-ref">Struct key_input</span></a></p></li>
 <li><p><a class="reference internal" href="structargs_1_1application_1_1mouse__button.html#exhale-struct-structargs-1-1application-1-1mouse-button"><span class="std std-ref">Struct mouse_button</span></a></p></li>
 <li><p><a class="reference internal" href="structargs_1_1application_1_1mouse__enter__window.html#exhale-struct-structargs-1-1application-1-1mouse-enter-window"><span class="std std-ref">Struct mouse_enter_window</span></a></p></li>
@@ -81,9 +88,24 @@
 <li><p><a class="reference internal" href="structargs_1_1application_1_1window__refresh.html#exhale-struct-structargs-1-1application-1-1window-refresh"><span class="std std-ref">Struct window_refresh</span></a></p></li>
 <li><p><a class="reference internal" href="structargs_1_1application_1_1window__request.html#exhale-struct-structargs-1-1application-1-1window-request"><span class="std std-ref">Struct window_request</span></a></p></li>
 <li><p><a class="reference internal" href="structargs_1_1application_1_1window__resize.html#exhale-struct-structargs-1-1application-1-1window-resize"><span class="std std-ref">Struct window_resize</span></a></p></li>
+<li><p><a class="reference internal" href="structargs_1_1application_1_1window__toggle__fullscreen__request.html#exhale-struct-structargs-1-1application-1-1window-toggle-fullscreen-request"><span class="std std-ref">Struct window_toggle_fullscreen_request</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1application_1_1_application_module.html#exhale-class-classargs-1-1application-1-1-application-module"><span class="std std-ref">Class ApplicationModule</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1application_1_1_context_helper.html#exhale-class-classargs-1-1application-1-1-context-helper"><span class="std std-ref">Class ContextHelper</span></a></p></li>
+<li><p><a class="reference internal" href="classargs_1_1application_1_1_input_system.html#exhale-class-classargs-1-1application-1-1-input-system"><span class="std std-ref">Class InputSystem</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1application_1_1_window_system.html#exhale-class-classargs-1-1application-1-1-window-system"><span class="std std-ref">Class WindowSystem</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="typedef_contexthelper_8hpp_1a7eab8bf9aa8023c571809a1796719fa2.html#exhale-typedef-contexthelper-8hpp-1a7eab8bf9aa8023c571809a1796719fa2"><span class="std std-ref">Typedef args::application::gl_id</span></a></p></li>
+<li><p><a class="reference internal" href="typedef_contexthelper_8hpp_1a797146356e203926f0278fd8fbf2c686.html#exhale-typedef-contexthelper-8hpp-1a797146356e203926f0278fd8fbf2c686"><span class="std std-ref">Typedef args::application::gl_location</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="variable_window_8hpp_1ad8414176d037156ad6c169b35cec258a.html#exhale-variable-window-8hpp-1ad8414176d037156ad6c169b35cec258a"><span class="std std-ref">Variable args::application::invalid_window</span></a></p></li>
 </ul>
 </div>
 </div>
@@ -99,6 +121,8 @@
   <ul>
 <li><a class="reference internal" href="#">Namespace args::application</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li><a class="reference internal" href="#variables">Variables</a></li>
 </ul>
 </li>
 </ul>
@@ -107,7 +131,7 @@
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">ARGS API</a><ul>
       <li>Previous: <a href="namespace_args.html" title="previous chapter">Namespace args</a></li>
-      <li>Next: <a href="namespace_args__core.html" title="next chapter">Namespace args::core</a></li>
+      <li>Next: <a href="namespace_args__audio.html" title="next chapter">Namespace args::audio</a></li>
   </ul></li>
   </ul></li>
 </ul>

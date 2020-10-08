@@ -43,9 +43,9 @@ Included By
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_application.hpp`
 
-- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_events_inputevents.hpp`
-
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_events_windowevents.hpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_events_windowinputevents.hpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_module_applicationmodule.hpp`
 
@@ -66,4 +66,11 @@ Classes
 
 
 - :ref:`exhale_struct_structargs_1_1application_1_1window`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_window_8hpp_1ad8414176d037156ad6c169b35cec258a`
 

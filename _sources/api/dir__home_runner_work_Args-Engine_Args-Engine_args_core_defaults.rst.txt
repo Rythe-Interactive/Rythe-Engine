@@ -1,0 +1,21 @@
+.. _dir__home_runner_work_Args-Engine_Args-Engine_args_core_defaults:
+
+
+Directory defaults
+==================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core>` (``/home/runner/work/Args-Engine/Args-Engine/args/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Args-Engine/Args-Engine/args/core/defaults``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_defaults_coremodule.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_defaults_defaultcomponents.hpp`
+
+

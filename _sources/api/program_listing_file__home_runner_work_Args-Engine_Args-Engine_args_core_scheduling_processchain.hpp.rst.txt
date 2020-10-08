@@ -21,10 +21,10 @@ Program Listing for File processchain.hpp
    
    namespace args::core::scheduling
    {
-       class ARGS_API Scheduler;
-       class ARGS_API Process;
+       class Scheduler;
+       class Process;
    
-       class ARGS_API ProcessChain
+       class ProcessChain
        {
        private:
            std::string m_name;
@@ -34,9 +34,11 @@ Program Listing for File processchain.hpp
            async::readonly_rw_spinlock m_processesLock;
            sparse_map<id_type, Process*> m_processes;
            async::transferable_atomic<bool> m_exit;
+           bool m_low_power;
    
-           static void threadedRun(ProcessChain* chain);
        public:
+           static void threadedRun(ProcessChain* chain);
+   
            ProcessChain() = default;
            ProcessChain(ProcessChain&&) = default;
            ProcessChain& operator=(ProcessChain&&) = default;
@@ -44,7 +46,7 @@ Program Listing for File processchain.hpp
            template<size_type charc>
            ProcessChain(const char(&name)[charc], Scheduler* scheduler) : m_name(name), m_nameHash(nameHash<charc>(name)), m_scheduler(scheduler) { }
    
-           bool run();
+           bool run(bool low_power);
    
            id_type id() { return m_nameHash; }
    

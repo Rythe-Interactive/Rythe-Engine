@@ -1,0 +1,13 @@
+.. _exhale_function_buffer_8hpp_1a3dbffd51c5bcd679bb253d81e131b9d7:
+
+Function args::core::compute::operator|=
+========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_compute_buffer.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::compute::operator|=(buffer_type&, const buffer_type&)

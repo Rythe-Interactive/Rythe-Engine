@@ -1,0 +1,13 @@
+.. _exhale_variable_scheduler_8cpp_1a788a3608739dadd0f457888153af07db:
+
+Variable args::core::scheduling::reserved_threads
+=================================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_scheduler.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::core::scheduling::reserved_threads

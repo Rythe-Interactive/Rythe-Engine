@@ -23,7 +23,7 @@ Program Listing for File view.hpp
    
    namespace args::core::filesystem
    {
-       class ARGS_API view
+       class view
        {
        public:
    
@@ -40,13 +40,20 @@ Program Listing for File view.hpp
    
            A_NODISCARD bool is_valid( bool deep_check = false) const;
    
-           A_NODISCARD file_traits file_info();
+           A_NODISCARD file_traits file_info() const;
    
-           A_NODISCARD filesystem_traits filesystem_info();
+           A_NODISCARD filesystem_traits filesystem_info() const;
    
            A_NODISCARD std::string get_domain() const;
    
+           A_NODISCARD const std::string& get_path() const;
+   
+           A_NODISCARD common::result_decay_more<std::string, fs_error> get_extension() const;
+   
+           A_NODISCARD common::result_decay_more<std::string, fs_error> get_filename() const;
+   
            A_NODISCARD common::result_decay_more<basic_resource,fs_error> get();
+           A_NODISCARD common::result_decay_more<const basic_resource,fs_error> get() const;
    
    
            A_NODISCARD common::result<void,fs_error> set(const basic_resource& resource);
@@ -57,6 +64,13 @@ Program Listing for File view.hpp
    
    
            A_NODISCARD view operator[](std::string_view identifier) const;
+   
+           template <class T>
+           auto load_as() -> decltype(auto)
+           {
+               return get().decay().to<T>();
+           }
+   
    
    #if  !defined( ARGS_DISABLE_POTENTIALLY_WEIRD_SYNTAX )
    
@@ -71,8 +85,8 @@ Program Listing for File view.hpp
            view() = default;
            std::string m_path;
    
-           std::string create_identifier(const navigator::solution::iterator&);
-           std::shared_ptr<filesystem_resolver> build();
+           std::string create_identifier(const navigator::solution::iterator&) const;
+           std::shared_ptr<filesystem_resolver> build() const;
    
            struct create_chain
            {
@@ -82,13 +96,13 @@ Program Listing for File view.hpp
                std::shared_ptr<create_chain> next; //next in chain
            };
    
-           void make_inheritance();
-           std::shared_ptr<create_chain> translate_solution();
+           void make_inheritance() const;
+           std::shared_ptr<create_chain> translate_solution() const;
    
    
-           common::result<void,fs_error> make_solution();
+           common::result<void,fs_error> make_solution() const;
    
-           navigator::solution m_foundSolution{};
+           mutable navigator::solution m_foundSolution{};
        };
    
    

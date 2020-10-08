@@ -21,6 +21,10 @@ Namespaces
 
 - :ref:`namespace_args__core__common`
 
+- :ref:`namespace_args__core__compute`
+
+- :ref:`namespace_args__core__detail`
+
 - :ref:`namespace_args__core__ecs`
 
 - :ref:`namespace_args__core__events`
@@ -30,6 +34,10 @@ Namespaces
 - :ref:`namespace_args__core__interfaces`
 
 - :ref:`namespace_args__core__iterator`
+
+- :ref:`namespace_args__core__literals`
+
+- :ref:`namespace_args__core__log`
 
 - :ref:`namespace_args__core__math`
 
@@ -44,11 +52,25 @@ Classes
 
 - :ref:`exhale_struct_structargs_1_1core_1_1delegate__base_3_01return__type_07parameter__types_8_8_8_08_4_1_1invocation__element`
 
+- :ref:`exhale_struct_structargs_1_1core_1_1has__resize`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1has__resize_3_01_c_00_01_ret_07_args_8_8_8_08_4`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1position`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1rotation`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1scale`
+
+- :ref:`exhale_struct_structargs_1_1core_1_1transform`
+
 - :ref:`exhale_class_classargs_1_1core_1_1atomic__sparse__map`
 
 - :ref:`exhale_class_classargs_1_1core_1_1component__destroyed__error`
 
 - :ref:`exhale_class_classargs_1_1core_1_1component__exists__error`
+
+- :ref:`exhale_class_classargs_1_1core_1_1_core_module`
 
 - :ref:`exhale_class_classargs_1_1core_1_1data__view`
 
@@ -82,15 +104,27 @@ Classes
 
 - :ref:`exhale_class_classargs_1_1core_1_1invalid__type__error`
 
+- :ref:`exhale_class_structargs_1_1core_1_1mesh`
+
+- :ref:`exhale_class_structargs_1_1core_1_1mesh__handle`
+
+- :ref:`exhale_class_structargs_1_1core_1_1mesh__import__settings`
+
+- :ref:`exhale_class_classargs_1_1core_1_1_mesh_cache`
+
 - :ref:`exhale_class_classargs_1_1core_1_1_module`
 
 - :ref:`exhale_class_classargs_1_1core_1_1multicast__delegate`
 
 - :ref:`exhale_class_classargs_1_1core_1_1multicast__delegate_3_01return__type_07parameter__types_8_8_8_08_4`
 
+- :ref:`exhale_class_structargs_1_1core_1_1obj__mesh__loader`
+
 - :ref:`exhale_class_classargs_1_1core_1_1sparse__map`
 
 - :ref:`exhale_class_classargs_1_1core_1_1sparse__set`
+
+- :ref:`exhale_class_structargs_1_1core_1_1sub__mesh`
 
 - :ref:`exhale_class_classargs_1_1core_1_1_system`
 
@@ -107,13 +141,25 @@ Functions
 ---------
 
 
+- :ref:`exhale_function_type__util_8hpp_1a1a2afb981820cf3e184df092c1174259`
+
+- :ref:`exhale_function_type__util_8hpp_1a039285431243c5a1071fe865f1015b24`
+
 - :ref:`exhale_function_type__util_8hpp_1aef7996e5e7a874b93744d7f2b583ac7b`
 
 - :ref:`exhale_function_type__util_8cpp_1a1fddf5a1042b1af111b6612d5d4f4212`
 
 - :ref:`exhale_function_type__util_8cpp_1a403570424ba5abb682d7fe4046a317d0`
 
+- :ref:`exhale_function_type__util_8cpp_1ae8289ddd6fbe5789a4b896e61dd2b523`
+
 - :ref:`exhale_function_type__util_8hpp_1a94f51b351b18c1a001e896051db58df0`
+
+- :ref:`exhale_function_type__util_8hpp_1ade524ded96c15dadf32aba9d35077294`
+
+- :ref:`exhale_function_type__util_8hpp_1a4fee05c5aa73ff07bd4297a3be98db70`
+
+- :ref:`exhale_function_type__util_8hpp_1a5f09163d626aaf72a2b5e5c2fbd4980e`
 
 - :ref:`exhale_function_type__util_8hpp_1a544d59e5fbfe271021385720ad13dbc6`
 
@@ -135,6 +181,8 @@ Typedefs
 - :ref:`exhale_typedef_primitives_8hpp_1a499c96eef2823c2ad4423a1cf0c1f62a`
 
 - :ref:`exhale_typedef_primitives_8hpp_1a971227bd505340c1fb73ac555d4854ff`
+
+- :ref:`exhale_typedef_types_2meta_8hpp_1afe0993f90e5c684616de2c792f0a98c7`
 
 - :ref:`exhale_typedef_primitives_8hpp_1a60e673407401ce50e9dd15fd85255ba6`
 
@@ -215,3 +263,12 @@ Typedefs
 - :ref:`exhale_typedef_primitives_8hpp_1a9ebc6f98af0ff2e5d9b15902525adffe`
 
 - :ref:`exhale_typedef_primitives_8hpp_1a39809ad7e5d007ca9eb005dd9d42c747`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_mesh_8hpp_1a7e5fb68da7b0dfa4c41ec09a683396a1`
+
+- :ref:`exhale_variable_mesh_8hpp_1a46310039450eca86e27496c6d8c8ca9c`

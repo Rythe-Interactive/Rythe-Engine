@@ -1,0 +1,24 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_application_input_inputsystem.cpp:
+
+Program Listing for File inputsystem.cpp
+========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_application_input_inputsystem.cpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/application/input/inputsystem.cpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include <application/input/inputsystem.hpp>
+   
+   namespace args::application
+   {
+       math::dvec2 InputSystem::m_mousePos;
+       math::dvec2 InputSystem::m_mouseDelta;
+   
+       std::set<int> InputSystem::m_presentGamepads;
+       sparse_map<inputmap::method, sparse_map<id_type, InputSystem::action_data>> InputSystem::m_actions;
+   
+       sparse_map<inputmap::method, sparse_map<id_type, InputSystem::axis_data>> InputSystem::m_axes;
+   }

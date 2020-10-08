@@ -18,7 +18,7 @@ Program Listing for File result.hpp
    #include <stdexcept>
    #include <utility>
    
-   #include "core/platform/platform.hpp"
+   #include <core/platform/platform.hpp>
    
    namespace args::core::common {
    
@@ -137,7 +137,7 @@ Program Listing for File result.hpp
        template <class... Args>
        inline typename result<Args...>::ok_type Ok_of(result<Args...>& res)
        {
-           return Err(res.get());
+           return Ok(res.get());
        }
        /********************************************************************************/
    
@@ -386,6 +386,11 @@ Program Listing for File result.hpp
                return m_r;
            }
    
+           auto decay() -> decltype(auto) 
+           {
+               return m_r.get();
+           }
+   
            err_type get_error()
            {
                return m_r.get_error();
@@ -397,8 +402,13 @@ Program Listing for File result.hpp
    
        };
    
+      
+   
        template <class...Args>
        using result_decay_more = result_decay<result<Args...>>;
+   
+       template <class T,class E>
+       auto decay(result_decay_more<T,E>& x) ->decltype(auto) { return x.get(); }
    
        constexpr valid_t valid{};
    

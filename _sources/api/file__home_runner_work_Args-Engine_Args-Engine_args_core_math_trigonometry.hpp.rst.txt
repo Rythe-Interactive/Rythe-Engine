@@ -79,9 +79,9 @@ Typedefs
 --------
 
 
-- :ref:`exhale_typedef_trigonometry_8hpp_1aafd82901bcd7d81efa600c9f83987efe`
+- :ref:`exhale_typedef_trigonometry_8hpp_1aa29471a0d95dfb6ae9ff9c10b7b78b2f`
 
 - :ref:`exhale_typedef_trigonometry_8hpp_1a03bd2d94f05614276b086cdea624e3cd`
 
-- :ref:`exhale_typedef_trigonometry_8hpp_1a29711f4b45baf5e391347946ef57f9ae`
+- :ref:`exhale_typedef_trigonometry_8hpp_1a7add0cb61fc6b209c1706e188e7b13af`
 

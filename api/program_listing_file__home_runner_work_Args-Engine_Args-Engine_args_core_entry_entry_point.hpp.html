@@ -120,11 +120,15 @@
             <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;=======================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="cp">#endif</span>
+    <span class="cp">#else</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;========================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;| Engine will start in low power mode. |&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;========================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
     <span class="cp">#endif</span>
 
-        <span class="k">try</span>
+        <span class="c1">//try</span>
         <span class="p">{</span>
-            <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">Engine</span> <span class="n">engine</span><span class="p">;</span>
+            <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">Engine</span> <span class="n">engine</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="n">argv</span><span class="p">);</span>
 
             <span class="n">reportModules</span><span class="p">(</span><span class="o">&amp;</span><span class="n">engine</span><span class="p">);</span>
             <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;==========================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
@@ -143,40 +147,40 @@
     <span class="cp">#endif</span>
 
         <span class="p">}</span>
-        <span class="k">catch</span> <span class="p">(</span><span class="k">const</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span>
-        <span class="p">{</span>
-    <span class="cp">#if (defined(ARGS_WINDOWS) &amp;&amp; !defined(ARGS_KEEP_CONSOLE))</span>
-            <span class="o">::</span><span class="n">ShowWindow</span><span class="p">(</span><span class="o">::</span><span class="n">GetConsoleWindow</span><span class="p">(),</span> <span class="n">SW_SHOW</span><span class="p">);</span>
-    <span class="cp">#endif</span>
+        <span class="cm">/*catch (const args::core::exception&amp; e)</span>
+<span class="cm">        {</span>
+<span class="cm">    #if (defined(ARGS_WINDOWS) &amp;&amp; !defined(ARGS_KEEP_CONSOLE))</span>
+<span class="cm">            ::ShowWindow(::GetConsoleWindow(), SW_SHOW);</span>
+<span class="cm">    #endif</span>
 
-            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Encountered exception:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;  msg:     </span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;  file:    </span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">e</span><span class="p">.</span><span class="n">file</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;  line:    </span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">e</span><span class="p">.</span><span class="n">line</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;  function:</span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">e</span><span class="p">.</span><span class="n">func</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="cm">            std::cout &lt;&lt; &quot;Encountered exception:&quot; &lt;&lt; std::endl;</span>
+<span class="cm">            std::cout &lt;&lt; &quot;  msg:     \t&quot; &lt;&lt; e.what() &lt;&lt; std::endl;</span>
+<span class="cm">            std::cout &lt;&lt; &quot;  file:    \t&quot; &lt;&lt; e.file() &lt;&lt; std::endl;</span>
+<span class="cm">            std::cout &lt;&lt; &quot;  line:    \t&quot; &lt;&lt; e.line() &lt;&lt; std::endl;</span>
+<span class="cm">            std::cout &lt;&lt; &quot;  function:\t&quot; &lt;&lt; e.func() &lt;&lt; std::endl;</span>
 
-    <span class="cp">#if defined(ARGS_DEBUG)</span>
-            <span class="k">throw</span> <span class="n">e</span><span class="p">;</span>
-    <span class="cp">#else</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Press any key to exit.&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">ignore</span><span class="p">();</span>
-    <span class="cp">#endif</span>
-        <span class="p">}</span>
-        <span class="k">catch</span> <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span>
-        <span class="p">{</span>
-    <span class="cp">#if (defined(ARGS_WINDOWS) &amp;&amp; !defined(ARGS_KEEP_CONSOLE))</span>
-            <span class="o">::</span><span class="n">ShowWindow</span><span class="p">(</span><span class="o">::</span><span class="n">GetConsoleWindow</span><span class="p">(),</span> <span class="n">SW_SHOW</span><span class="p">);</span>
-    <span class="cp">#endif</span>
+<span class="cm">    #if defined(ARGS_DEBUG)</span>
+<span class="cm">            throw e;</span>
+<span class="cm">    #else</span>
+<span class="cm">            std::cout &lt;&lt; &quot;Press any key to exit.&quot; &lt;&lt; std::endl;</span>
+<span class="cm">            std::cin.ignore();</span>
+<span class="cm">    #endif</span>
+<span class="cm">        }</span>
+<span class="cm">        catch (const std::exception&amp; e)</span>
+<span class="cm">        {</span>
+<span class="cm">    #if (defined(ARGS_WINDOWS) &amp;&amp; !defined(ARGS_KEEP_CONSOLE))</span>
+<span class="cm">            ::ShowWindow(::GetConsoleWindow(), SW_SHOW);</span>
+<span class="cm">    #endif</span>
 
-            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="cm">            std::cout &lt;&lt; e.what() &lt;&lt; std::endl;</span>
 
-    <span class="cp">#if defined(ARGS_DEBUG)</span>
-            <span class="k">throw</span> <span class="n">e</span><span class="p">;</span>
-    <span class="cp">#else</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Press any key to exit.&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">ignore</span><span class="p">();</span>
-    <span class="cp">#endif</span>
-        <span class="p">}</span>
+<span class="cm">    #if defined(ARGS_DEBUG)</span>
+<span class="cm">            throw e;</span>
+<span class="cm">    #else</span>
+<span class="cm">            std::cout &lt;&lt; &quot;Press any key to exit.&quot; &lt;&lt; std::endl;</span>
+<span class="cm">            std::cin.ignore();</span>
+<span class="cm">    #endif</span>
+<span class="cm">        }*/</span>
 
         <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
     <span class="p">}</span>

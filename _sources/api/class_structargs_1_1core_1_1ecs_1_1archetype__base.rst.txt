@@ -1,0 +1,26 @@
+.. _exhale_class_structargs_1_1core_1_1ecs_1_1archetype__base:
+
+Class archetype_base
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_archetype.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public args::core::ecs::archetype< position, rotation, scale >`` (:ref:`exhale_class_structargs_1_1core_1_1ecs_1_1archetype`)
+- ``public args::core::ecs::archetype< component_type, component_types >`` (:ref:`exhale_class_structargs_1_1core_1_1ecs_1_1archetype`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::core::ecs::archetype_base
+   :members:
+   :protected-members:
+   :undoc-members:

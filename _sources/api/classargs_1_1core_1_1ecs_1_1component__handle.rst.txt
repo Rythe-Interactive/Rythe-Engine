@@ -3,7 +3,7 @@
 Template Class component_handle
 ===============================
 
-- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_component_handle.hpp`
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_archetype.hpp`
 
 
 Inheritance Relationships

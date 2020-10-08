@@ -68,9 +68,11 @@
 <h2>Includes<a class="headerlink" href="#includes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">core/platform/platform.hpp</span></code> (<a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_platform_platform.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-platform-platform-hpp"><span class="std std-ref">File platform.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">core/types/meta.hpp</span></code> (<a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_meta.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-types-meta-hpp"><span class="std std-ref">File meta.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">core/types/primitives.hpp</span></code> (<a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-types-primitives-hpp"><span class="std std-ref">File primitives.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">cstring</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">string</span></code> (<a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_common_string_extra.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-common-string-extra-hpp"><span class="std std-ref">File string_extra.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">string_view</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">typeinfo</span></code></p></li>
 </ul>
 </div>
@@ -80,6 +82,7 @@
 <li><p><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_entityquery.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-ecs-entityquery-hpp"><span class="std std-ref">File entityquery.hpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_system.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-engine-system-hpp"><span class="std std-ref">File system.hpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_events_event.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-events-event-hpp"><span class="std std-ref">File event.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-logging-logging-hpp"><span class="std std-ref">File logging.hpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_scheduling_processchain.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-scheduling-processchain-hpp"><span class="std std-ref">File processchain.hpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_type_util.cpp.html#file-home-runner-work-args-engine-args-engine-args-core-types-type-util-cpp"><span class="std std-ref">File type_util.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_types_types.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-types-types-hpp"><span class="std std-ref">File types.hpp</span></a></p></li>
@@ -94,12 +97,17 @@
 <div class="section" id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
+<li><p><a class="reference internal" href="function_type__util_8hpp_1a1a2afb981820cf3e184df092c1174259.html#exhale-function-type-util-8hpp-1a1a2afb981820cf3e184df092c1174259"><span class="std std-ref">Template Function args::core::appendBinaryData(Iterator, Iterator, byte_vec&amp;)</span></a></p></li>
+<li><p><a class="reference internal" href="function_type__util_8hpp_1a039285431243c5a1071fe865f1015b24.html#exhale-function-type-util-8hpp-1a039285431243c5a1071fe865f1015b24"><span class="std std-ref">Template Function args::core::appendBinaryData(T *, byte_vec&amp;)</span></a></p></li>
 <li><p><a class="reference internal" href="function_type__util_8hpp_1aef7996e5e7a874b93744d7f2b583ac7b.html#exhale-function-type-util-8hpp-1aef7996e5e7a874b93744d7f2b583ac7b"><span class="std std-ref">Template Function args::core::force_value_cast</span></a></p></li>
 <li><p><a class="reference internal" href="function_type__util_8hpp_1a94f51b351b18c1a001e896051db58df0.html#exhale-function-type-util-8hpp-1a94f51b351b18c1a001e896051db58df0"><span class="std std-ref">Template Function args::core::nameHash(const char(&amp;))</span></a></p></li>
+<li><p><a class="reference internal" href="function_type__util_8hpp_1ade524ded96c15dadf32aba9d35077294.html#exhale-function-type-util-8hpp-1ade524ded96c15dadf32aba9d35077294"><span class="std std-ref">Template Function args::core::retrieveArraySize</span></a></p></li>
+<li><p><a class="reference internal" href="function_type__util_8hpp_1a4fee05c5aa73ff07bd4297a3be98db70.html#exhale-function-type-util-8hpp-1a4fee05c5aa73ff07bd4297a3be98db70"><span class="std std-ref">Template Function args::core::retrieveBinaryData(T&amp;, byte_vec::const_iterator&amp;)</span></a></p></li>
+<li><p><a class="reference internal" href="function_type__util_8hpp_1a5f09163d626aaf72a2b5e5c2fbd4980e.html#exhale-function-type-util-8hpp-1a5f09163d626aaf72a2b5e5c2fbd4980e"><span class="std std-ref">Template Function args::core::retrieveBinaryData(Iterator, Iterator, byte_vec::const_iterator&amp;)</span></a></p></li>
 <li><p><a class="reference internal" href="function_type__util_8hpp_1a544d59e5fbfe271021385720ad13dbc6.html#exhale-function-type-util-8hpp-1a544d59e5fbfe271021385720ad13dbc6"><span class="std std-ref">Template Function args::core::typeHash()</span></a></p></li>
 <li><p><a class="reference internal" href="function_type__util_8hpp_1a2fb26749a4216416b95b3c4c2728e8af.html#exhale-function-type-util-8hpp-1a2fb26749a4216416b95b3c4c2728e8af"><span class="std std-ref">Template Function args::core::typeHash(T)</span></a></p></li>
-<li><p><a class="reference internal" href="function_type__util_8hpp_1a4035cf7b740ef4518234c4b0b5ecb3d3.html#exhale-function-type-util-8hpp-1a4035cf7b740ef4518234c4b0b5ecb3d3"><span class="std std-ref">Template Function args::core::typeName(T)</span></a></p></li>
 <li><p><a class="reference internal" href="function_type__util_8hpp_1a411f45df69ab476f24027197bd72c878.html#exhale-function-type-util-8hpp-1a411f45df69ab476f24027197bd72c878"><span class="std std-ref">Template Function args::core::typeName()</span></a></p></li>
+<li><p><a class="reference internal" href="function_type__util_8hpp_1a4035cf7b740ef4518234c4b0b5ecb3d3.html#exhale-function-type-util-8hpp-1a4035cf7b740ef4518234c4b0b5ecb3d3"><span class="std std-ref">Template Function args::core::typeName(T)</span></a></p></li>
 <li><p><a class="reference internal" href="function_type__util_8hpp_1a62948713119b6c4f2d157513f06e1831.html#exhale-function-type-util-8hpp-1a62948713119b6c4f2d157513f06e1831"><span class="std std-ref">Template Function args::core::undecoratedTypeName</span></a></p></li>
 </ul>
 </div>

@@ -11,11 +11,6 @@ Directory context
 
 *Directory path:* ``/home/runner/work/Args-Engine/Args-Engine/args/application/context``
 
-Subdirectories
---------------
-
-- :ref:`dir__home_runner_work_Args-Engine_Args-Engine_args_application_context_detail`
-
 
 Files
 -----

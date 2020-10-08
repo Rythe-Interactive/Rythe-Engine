@@ -1,0 +1,52 @@
+
+.. _namespace_args__audio:
+
+Namespace args::audio
+=====================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structargs_1_1audio_1_1audio__import__settings`
+
+- :ref:`exhale_struct_structargs_1_1audio_1_1audio__listener`
+
+- :ref:`exhale_struct_structargs_1_1audio_1_1audio__segment`
+
+- :ref:`exhale_struct_structargs_1_1audio_1_1audio__segment__handle`
+
+- :ref:`exhale_struct_structargs_1_1audio_1_1audio__source`
+
+- :ref:`exhale_struct_structargs_1_1audio_1_1mp3__audio__loader`
+
+- :ref:`exhale_class_classargs_1_1audio_1_1_audio_module`
+
+- :ref:`exhale_class_classargs_1_1audio_1_1_audio_segment_cache`
+
+- :ref:`exhale_class_classargs_1_1audio_1_1_audio_system`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_audiosystem_8hpp_1a09f8b2c43a89ad3f49e2c7f78fe12be2`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_audio__segment_8hpp_1ac7c1a964b61c1dd72b72135230cfbae8`
+
+- :ref:`exhale_variable_audio__segment_8hpp_1acdfbca067ccb8e401154623899163623`

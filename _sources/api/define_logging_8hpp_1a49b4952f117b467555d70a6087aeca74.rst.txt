@@ -1,0 +1,13 @@
+.. _exhale_define_logging_8hpp_1a49b4952f117b467555d70a6087aeca74:
+
+Define SPDLOG_HEADER_ONLY
+=========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: SPDLOG_HEADER_ONLY
