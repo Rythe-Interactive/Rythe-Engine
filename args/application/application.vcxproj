@@ -19,10 +19,10 @@
   <ItemGroup>
     <ClInclude Include="application.hpp" />
     <ClInclude Include="context\contexthelper.hpp" />
-    <ClInclude Include="input\inputmap.hpp" />
-    <ClInclude Include="events\windowinputevents.hpp" />
     <ClInclude Include="context\detail\glad\glad.h" />
     <ClInclude Include="context\detail\KHR\khrplatform.h" />
+    <ClInclude Include="input\inputmap.hpp" />
+    <ClInclude Include="events\windowinputevents.hpp" />
     <ClInclude Include="events\inputevents.hpp" />
     <ClInclude Include="events\windowevents.hpp" />
     <ClInclude Include="input\inputsystem.hpp" />

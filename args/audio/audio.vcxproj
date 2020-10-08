@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -11,7 +11,22 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="data\audio_segment.cpp" />
+    <ClCompile Include="data\importers\audio_importers.cpp" />
     <ClCompile Include="delete_this.cpp" />
+    <ClCompile Include="systems\audiosystem.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="components\audio_listener.hpp" />
+    <ClInclude Include="components\audio_source.hpp" />
+    <ClInclude Include="data\audio_segment.hpp" />
+    <ClInclude Include="data\importers\audio_importers.hpp" />
+    <ClInclude Include="audio.hpp" />
+    <ClInclude Include="module\audiomodule.hpp" />
+    <ClInclude Include="systems\audiosystem.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="systems\audiosystem.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -53,6 +68,7 @@
     <TargetName>args-$(ProjectName)</TargetName>
     <IncludePath>$(SolutionDir)args;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
     <ClangTidyChecks>-c++17-extensions-*</ClangTidyChecks>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -61,6 +77,7 @@
     <TargetName>args-$(ProjectName)</TargetName>
     <IncludePath>$(SolutionDir)args;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
     <ClangTidyChecks>-c++17-extensions-*</ClangTidyChecks>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -70,15 +87,17 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>args-application.lib;args-core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>args-application.lib;args-core.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
+      <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"
+copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>
@@ -97,6 +116,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-flto=thin %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -105,10 +125,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>args-application.lib;args-core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>args-application.lib;args-core.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
+      <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"
+copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>
