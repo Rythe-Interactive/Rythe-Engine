@@ -69,6 +69,11 @@ namespace args::core
         }
 
     private:
+        void destroy()
+        {
+            delete[] m_pixels;
+        }
+
         id_type m_id;
         size_type m_dataSize;
         byte* m_pixels;
