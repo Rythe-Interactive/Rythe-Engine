@@ -30,7 +30,7 @@ namespace args::core
     /**@class mesh
      * @brief Raw mesh representation.
      */
-    struct ARGS_API mesh
+    struct mesh
     {
         std::string fileName;
         std::vector<math::vec3> vertices;
@@ -57,7 +57,7 @@ namespace args::core
     /**@class mesh_handle
      * @brief Save to pass around handle to a raw mesh in the mesh cache.
      */
-    struct ARGS_API mesh_handle
+    struct mesh_handle
     {
         id_type id;
 
@@ -66,6 +66,7 @@ namespace args::core
         std::pair<async::readonly_rw_spinlock&, mesh&> get();
 
         bool operator==(const mesh_handle& other) const { return id == other.id; }
+        operator id_type() { return id; }
     };
 
     /**@brief Default invalid mesh handle.
@@ -89,7 +90,7 @@ namespace args::core
     /**@class MeshCache
      * @brief Data cache for loading, storing and managing raw meshes.
      */
-    class ARGS_API MeshCache
+    class MeshCache
     {
         friend struct mesh_handle;
     private:

@@ -9,22 +9,22 @@ namespace args::core::scheduling
     async::readonly_rw_spinlock Scheduler::m_threadsLock;
     sparse_map<std::thread::id, std::unique_ptr<std::thread>> Scheduler::m_threads;
     std::queue<std::thread::id> Scheduler::m_unreservedThreads;
-    const uint Scheduler::m_maxThreadCount = (static_cast<int>(std::thread::hardware_concurrency()) - reserved_threads) <= 0 ? 4 : std::thread::hardware_concurrency();
+    const uint Scheduler::m_maxThreadCount = (static_cast<int>(std::thread::hardware_concurrency()) - reserved_threads) <= 0 ? reserved_threads : std::thread::hardware_concurrency();
     async::readonly_rw_spinlock Scheduler::m_availabilityLock;
-    uint Scheduler::m_availableThreads = m_maxThreadCount - reserved_threads; // subtract OS and this_thread.
+    uint Scheduler::m_availableThreads = static_cast<uint>(math::ceil((m_maxThreadCount - reserved_threads) * 0.8f) + math::epsilon<float>()); // subtract OS and this_thread, and then leave some extra for miscellaneous processes.
 
     async::readonly_rw_spinlock Scheduler::m_jobQueueLock;
     std::queue<Scheduler::runnable> Scheduler::m_jobs;
     sparse_map<std::thread::id, async::readonly_rw_spinlock> Scheduler::m_commandLocks;
     sparse_map<std::thread::id, std::queue<Scheduler::runnable>> Scheduler::m_commands;
 
-    void Scheduler::threadMain(bool* exit, bool* start, bool low_power)
+    void Scheduler::threadMain(bool* exit, bool* start, bool lowPower)
     {
         std::thread::id id = std::this_thread::get_id();
 
         while (!(*start))
         {
-            if (low_power)
+            if (lowPower)
                 std::this_thread::sleep_for(std::chrono::milliseconds(1));
             else
                 std::this_thread::yield();
@@ -57,22 +57,35 @@ namespace args::core::scheduling
             }
 
             instruction();
-            if (low_power)
-                std::this_thread::sleep_for(std::chrono::milliseconds(1));
-            else
-                std::this_thread::yield();
+
+            {
+                async::readonly_guard guard(m_jobQueueLock);
+
+                if (m_jobs.empty())
+                {
+                    if (lowPower)
+                    {
+                        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                    }
+                    else
+                    {
+                        std::this_thread::yield();
+                    }
+                }
+            }
         }
     }
 
-    Scheduler::Scheduler(events::EventBus* eventBus, bool low_power) : m_eventBus(eventBus), m_low_power(low_power)
+    Scheduler::Scheduler(events::EventBus* eventBus, bool lowPower, uint minThreads) : m_eventBus(eventBus), m_lowPower(lowPower)
     {
         args::core::log::impl::thread_names[std::this_thread::get_id()] = "Initialization";
-        async::readonly_rw_spinlock::reportThread(std::this_thread::get_id());
+
+        if (m_availableThreads < minThreads)
+            m_availableThreads = minThreads;
 
         std::thread::id id;
-        while ((id = createThread(threadMain, &m_threadsShouldTerminate, &m_threadsShouldStart, low_power)) != invalid_thread_id)
+        while ((id = createThread(threadMain, &m_threadsShouldTerminate, &m_threadsShouldStart, lowPower)) != invalid_thread_id)
         {
-            async::readonly_rw_spinlock::reportThread(id);
             m_commands[id];
             m_commandLocks[id];
         }
@@ -114,7 +127,7 @@ namespace args::core::scheduling
         { // Start threads of all the other chains.
             async::readonly_guard guard(m_processChainsLock);
             for (auto [_, chain] : m_processChains)
-                chain.run(m_low_power);
+                chain.run(m_lowPower);
         }
 
         args::core::log::impl::thread_names[std::this_thread::get_id()] = "Update";

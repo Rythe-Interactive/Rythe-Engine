@@ -161,6 +161,11 @@ namespace args::application
         return glfwWindowShouldClose(window);
     }
 
+    void ContextHelper::setWindowIcon(GLFWwindow* window, int count, const GLFWimage* images)
+    {
+        glfwSetWindowIcon(window, count, images);
+    }
+
     void ContextHelper::setWindowAttrib(GLFWwindow* window, int attrib, int value)
     {
         glfwSetWindowAttrib(window, attrib, value);

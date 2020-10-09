@@ -301,7 +301,7 @@ namespace args::rendering
         }
     };
 
-    struct ARGS_API shader_handle
+    struct shader_handle
     {
         using cache = ShaderCache;
         id_type id;
@@ -344,7 +344,7 @@ namespace args::rendering
 
     constexpr shader_import_settings default_shader_settings{};
 
-    class ARGS_API ShaderCache
+    class ShaderCache
     {
         friend class renderer;
         friend struct shader_handle;

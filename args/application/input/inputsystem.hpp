@@ -9,7 +9,7 @@ namespace args::application
 
     class InputSystem : public core::System<InputSystem>
     {
-        
+
         using action_callback = delegate<void(InputSystem*, bool, inputmap::modifier_keys, inputmap::method, float, float)>;
 
         struct action_data
@@ -60,7 +60,7 @@ namespace args::application
                     {
                         if (ContextHelper::joystickPresent(i))
                         {
-                            data::m_presentGamepads.insert(i);
+                            m_presentGamepads.insert(i);
                         }
                     }
                 }));
@@ -71,12 +71,12 @@ namespace args::application
 
         inline static math::dvec2 getMousePosition()
         {
-            return data::m_mousePos;
+            return m_mousePos;
         }
 
         inline static math::dvec2 getMouseDelta()
         {
-            return data::m_mouseDelta;
+            return m_mouseDelta;
         }
 
         /**
@@ -173,11 +173,11 @@ namespace args::application
                     {
                         if (inputmap::is_key(member))
                         {
-                            data::m_actions[member][typeHash<Event>()].callback.clear();
+                            m_actions[member][typeHash<Event>()].callback.clear();
                         }
                         if (inputmap::is_axis(member))
                         {
-                            data::m_axes[member][typeHash<Event>()].callback.clear();
+                            m_axes[member][typeHash<Event>()].callback.clear();
                         }
                     }
                 }
@@ -185,11 +185,11 @@ namespace args::application
                 {
                     if (inputmap::is_key(met))
                     {
-                        data::m_actions[met][typeHash<Event>()].callback.clear();
+                        m_actions[met][typeHash<Event>()].callback.clear();
                     }
                     if (inputmap::is_axis(met))
                     {
-                        data::m_axes[met][typeHash<Event>()].callback.clear();
+                        m_axes[met][typeHash<Event>()].callback.clear();
                     }
                 }
             }
@@ -201,11 +201,11 @@ namespace args::application
                     {
                         if (inputmap::is_key(member))
                         {
-                            data::m_actions[member][typeHash<Event>()].callback.clear();
+                            m_actions[member][typeHash<Event>()].callback.clear();
                         }
                         if (inputmap::is_axis(member))
                         {
-                            data::m_axes[member][typeHash<Event>()].callback.clear();
+                            m_axes[member][typeHash<Event>()].callback.clear();
                         }
                     }
                 }
@@ -213,11 +213,11 @@ namespace args::application
                 {
                     if (inputmap::is_key(met))
                     {
-                        data::m_actions[met][typeHash<Event>()].callback.clear();
+                        m_actions[met][typeHash<Event>()].callback.clear();
                     }
                     if (inputmap::is_axis(met))
                     {
-                        data::m_axes[met][typeHash<Event>()].callback.clear();
+                        m_axes[met][typeHash<Event>()].callback.clear();
                     }
                 }
             }
@@ -229,7 +229,7 @@ namespace args::application
         static void bindKeyToAction(inputmap::method m)
         {
             //creates a tuple with default value 0
-            auto& data = data::m_actions[m][typeHash<Event>()];
+            auto& data = m_actions[m][typeHash<Event>()];
 
             data.callback = action_callback::create(
                 [](InputSystem* self, bool state, inputmap::modifier_keys mods, inputmap::method method, float def, float delta)
@@ -249,7 +249,7 @@ namespace args::application
         template<class Event>
         static void bindKeyToAxis(inputmap::method m, float value)
         {
-            auto& data = data::m_actions[m][typeHash<Event>()];
+            auto& data = m_actions[m][typeHash<Event>()];
 
             data.callback = action_callback::create(
                 [](InputSystem* self, bool state, inputmap::modifier_keys mods, inputmap::method method, float def, float delta)
@@ -271,7 +271,7 @@ namespace args::application
         static void bindAxisToAction(inputmap::method m, float value)
         {
 
-            auto& data = data::m_axes[m][typeHash<Event>()];
+            auto& data = m_axes[m][typeHash<Event>()];
 
             data.callback = axis_callback::create(
                 [](InputSystem* self, float value, inputmap::modifier_keys mods, inputmap::method method, float delta)
@@ -292,7 +292,7 @@ namespace args::application
         static void bindAxisToAxis(inputmap::method m, float value)
         {
 
-            auto& data = data::m_axes[m][typeHash<Event>()];
+            auto& data = m_axes[m][typeHash<Event>()];
 
             data.callback = axis_callback::create(
                 [](InputSystem* self, float value, inputmap::modifier_keys mods, inputmap::method method, float delta)
@@ -313,9 +313,9 @@ namespace args::application
         static void onCheckGamepadPresence(int jid, int event)
         {
             if (event == GLFW_CONNECTED)
-                data::m_presentGamepads.insert(jid);
+                m_presentGamepads.insert(jid);
             else if (event == GLFW_DISCONNECTED)
-                data::m_presentGamepads.erase(jid);
+                m_presentGamepads.erase(jid);
         }
 
         void onUpdate(time::time_span<fast_time> deltaTime)
@@ -326,14 +326,14 @@ namespace args::application
 
             //update all axis with their current values
 
-            for (auto [_, inner_map] : data::m_axes)
+            for (auto [_, inner_map] : m_axes)
             {
                 for (auto [_, axis] : inner_map)
                 {
                     axis.callback(this, axis.last_value, axis.last_mods, axis.last_method, deltaTime);
                 }
             }
-            for (auto [_, inner_map] : data::m_actions)
+            for (auto [_, inner_map] : m_actions)
             {
                 for (auto [_, action] : inner_map)
                 {
@@ -351,7 +351,7 @@ namespace args::application
             const std::size_t glfw, inputmap::method m)
         {
             const float value = state.axes[glfw];
-            for (auto [_, axis] : data::m_axes[m])
+            for (auto [_, axis] : m_axes[m])
             {
                 axis.last_value = value;
                 axis.last_method = m;
@@ -362,13 +362,13 @@ namespace args::application
 
         void onMouseReset()
         {
-            for (auto [_, axis] : data::m_axes[inputmap::method::MOUSE_X])
+            for (auto [_, axis] : m_axes[inputmap::method::MOUSE_X])
             {
                 axis.last_value = 0.0f;
                 axis.last_mods = inputmap::modifier_keys::NONE;
                 axis.last_method = inputmap::method::MOUSE_X;
             }
-            for (auto [_, axis] : data::m_axes[inputmap::method::MOUSE_Y])
+            for (auto [_, axis] : m_axes[inputmap::method::MOUSE_Y])
             {
                 axis.last_value = 0.0f;
                 axis.last_mods = inputmap::modifier_keys::NONE;
@@ -378,7 +378,7 @@ namespace args::application
 
         void onJoystick(float dt)
         {
-            for (int glfw_joystick_id : data::m_presentGamepads)
+            for (int glfw_joystick_id : m_presentGamepads)
             {
                 using mods = inputmap::modifier_keys;
                 using method = inputmap::method;
@@ -388,34 +388,34 @@ namespace args::application
 
                 const auto joystick = mods::JOYSTICK0 + glfw_joystick_id;
 
-                for (auto [_, action] : data::m_actions[method::GAMEPAD_A])
-                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_A], joystick, method::GAMEPAD_A, action.trigger_value,dt);
-                for (auto [_, action] : data::m_actions[method::GAMEPAD_B])
-                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_B], joystick, method::GAMEPAD_B, action.trigger_value,dt);
-                for (auto [_, action] : data::m_actions[method::GAMEPAD_X])
-                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_X], joystick, method::GAMEPAD_X, action.trigger_value,dt);
-                for (auto [_, action] : data::m_actions[method::GAMEPAD_Y])
-                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_Y], joystick, method::GAMEPAD_Y, action.trigger_value,dt);
-                for (auto [_, action] : data::m_actions[method::GAMEPAD_LEFT_BUMPER])
-                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_LEFT_BUMPER], joystick, method::GAMEPAD_LEFT_BUMPER, action.trigger_value,dt);
-                for (auto [_, action] : data::m_actions[method::GAMEPAD_RIGHT_BUMPER])
-                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER], joystick, method::GAMEPAD_RIGHT_BUMPER, action.trigger_value,dt);
-                for (auto [_, action] : data::m_actions[method::GAMEPAD_BACK])
-                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_BACK], joystick, method::GAMEPAD_BACK, action.trigger_value,dt);
-                for (auto [_, action] : data::m_actions[method::GAMEPAD_START])
-                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_START], joystick, method::GAMEPAD_START, action.trigger_value,dt);
-                for (auto [_, action] : data::m_actions[method::GAMEPAD_DPAD_UP])
-                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_UP], joystick, method::GAMEPAD_DPAD_UP, action.trigger_value,dt);
-                for (auto [_, action] : data::m_actions[method::GAMEPAD_DPAD_RIGHT])
-                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_RIGHT], joystick, method::GAMEPAD_DPAD_RIGHT, action.trigger_value,dt);
-                for (auto [_, action] : data::m_actions[method::GAMEPAD_DPAD_LEFT])
-                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_LEFT], joystick, method::GAMEPAD_DPAD_LEFT, action.trigger_value,dt);
-                for (auto [_, action] : data::m_actions[method::GAMEPAD_DPAD_DOWN])
-                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_DOWN], joystick, method::GAMEPAD_DPAD_DOWN, action.trigger_value,dt);
-                for (auto [_, action] : data::m_actions[method::GAMEPAD_LEFT_THUMB])
-                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_LEFT_THUMB], joystick, method::GAMEPAD_LEFT_THUMB, action.trigger_value,dt);
-                for (auto [_, action] : data::m_actions[method::GAMEPAD_RIGHT_THUMB])
-                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_RIGHT_THUMB], joystick, method::GAMEPAD_RIGHT_THUMB, action.trigger_value,dt);
+                for (auto [_, action] : m_actions[method::GAMEPAD_A])
+                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_A], joystick, method::GAMEPAD_A, action.trigger_value, dt);
+                for (auto [_, action] : m_actions[method::GAMEPAD_B])
+                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_B], joystick, method::GAMEPAD_B, action.trigger_value, dt);
+                for (auto [_, action] : m_actions[method::GAMEPAD_X])
+                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_X], joystick, method::GAMEPAD_X, action.trigger_value, dt);
+                for (auto [_, action] : m_actions[method::GAMEPAD_Y])
+                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_Y], joystick, method::GAMEPAD_Y, action.trigger_value, dt);
+                for (auto [_, action] : m_actions[method::GAMEPAD_LEFT_BUMPER])
+                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_LEFT_BUMPER], joystick, method::GAMEPAD_LEFT_BUMPER, action.trigger_value, dt);
+                for (auto [_, action] : m_actions[method::GAMEPAD_RIGHT_BUMPER])
+                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER], joystick, method::GAMEPAD_RIGHT_BUMPER, action.trigger_value, dt);
+                for (auto [_, action] : m_actions[method::GAMEPAD_BACK])
+                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_BACK], joystick, method::GAMEPAD_BACK, action.trigger_value, dt);
+                for (auto [_, action] : m_actions[method::GAMEPAD_START])
+                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_START], joystick, method::GAMEPAD_START, action.trigger_value, dt);
+                for (auto [_, action] : m_actions[method::GAMEPAD_DPAD_UP])
+                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_UP], joystick, method::GAMEPAD_DPAD_UP, action.trigger_value, dt);
+                for (auto [_, action] : m_actions[method::GAMEPAD_DPAD_RIGHT])
+                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_RIGHT], joystick, method::GAMEPAD_DPAD_RIGHT, action.trigger_value, dt);
+                for (auto [_, action] : m_actions[method::GAMEPAD_DPAD_LEFT])
+                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_LEFT], joystick, method::GAMEPAD_DPAD_LEFT, action.trigger_value, dt);
+                for (auto [_, action] : m_actions[method::GAMEPAD_DPAD_DOWN])
+                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_DPAD_DOWN], joystick, method::GAMEPAD_DPAD_DOWN, action.trigger_value, dt);
+                for (auto [_, action] : m_actions[method::GAMEPAD_LEFT_THUMB])
+                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_LEFT_THUMB], joystick, method::GAMEPAD_LEFT_THUMB, action.trigger_value, dt);
+                for (auto [_, action] : m_actions[method::GAMEPAD_RIGHT_THUMB])
+                    action.callback(this, state.buttons[GLFW_GAMEPAD_BUTTON_RIGHT_THUMB], joystick, method::GAMEPAD_RIGHT_THUMB, action.trigger_value, dt);
 
                 matchGLFWAxisWithSignalAxis(state, joystick, GLFW_GAMEPAD_AXIS_LEFT_X, method::GAMEPAD_LEFT_X);
                 matchGLFWAxisWithSignalAxis(state, joystick, GLFW_GAMEPAD_AXIS_LEFT_Y, method::GAMEPAD_LEFT_Y);
@@ -446,36 +446,36 @@ namespace args::application
         void onKey(key_input* window_key_event)
         {
             const auto m = static_cast<inputmap::method>(window_key_event->key);
-            for (auto [_, action] : data::m_actions[m])
+            for (auto [_, action] : m_actions[m])
             {
                 action.last_state = window_key_event->action != GLFW_RELEASE;
                 action.last_mods = translateModifierKeys(window_key_event->mods);
                 action.last_method = m;
-                if(!action.repeat)
-                    action.callback(this, action.last_state, action.last_mods,action.last_method, action.trigger_value,0.0f);
-       
+                if (!action.repeat)
+                    action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, 0.0f);
+
             }
         }
 
         void onMouseMove(mouse_moved* window_mouse_event)
         {
-            data::m_mouseDelta = window_mouse_event->position - data::m_mousePos;
-            data::m_mousePos = window_mouse_event->position;
-            if (math::abs(data::m_mouseDelta.x) < 0.0001)
-                data::m_mouseDelta.x = 0.0;
+            m_mouseDelta = window_mouse_event->position - m_mousePos;
+            m_mousePos = window_mouse_event->position;
+            if (math::abs(m_mouseDelta.x) < 0.0001)
+                m_mouseDelta.x = 0.0;
 
-            if (math::abs(data::m_mouseDelta.y) < 0.0001)
-                data::m_mouseDelta.y = 0.0;
+            if (math::abs(m_mouseDelta.y) < 0.0001)
+                m_mouseDelta.y = 0.0;
 
-            for (auto [_, axis] : data::m_axes[inputmap::method::MOUSE_X])
+            for (auto [_, axis] : m_axes[inputmap::method::MOUSE_X])
             {
-                axis.last_value  = static_cast<float>(data::m_mouseDelta.x);
-                axis.last_mods   = inputmap::modifier_keys::NONE;
+                axis.last_value = static_cast<float>(m_mouseDelta.x);
+                axis.last_mods = inputmap::modifier_keys::NONE;
                 axis.last_method = inputmap::method::MOUSE_X;
             }
-            for (auto [_, axis] : data::m_axes[inputmap::method::MOUSE_Y])
+            for (auto [_, axis] : m_axes[inputmap::method::MOUSE_Y])
             {
-                axis.last_value = static_cast<float>(data::m_mouseDelta.y);
+                axis.last_value = static_cast<float>(m_mouseDelta.y);
                 axis.last_mods = inputmap::modifier_keys::NONE;
                 axis.last_method = inputmap::method::MOUSE_Y;
             }
@@ -486,35 +486,35 @@ namespace args::application
             switch (window_mouse_event->button)
             {
             case GLFW_MOUSE_BUTTON_LEFT: {
-                for (auto [_, action] : data::m_actions[inputmap::method::MOUSE_LEFT])
+                for (auto [_, action] : m_actions[inputmap::method::MOUSE_LEFT])
                 {
                     action.last_state = window_mouse_event->action != GLFW_RELEASE;
                     action.last_mods = translateModifierKeys(window_mouse_event->mods);
                     action.last_method = inputmap::method::MOUSE_LEFT;
-                    if(!action.repeat)
-                        action.callback(this, action.last_state, action.last_mods,action.last_method, action.trigger_value,0.0f);
+                    if (!action.repeat)
+                        action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, 0.0f);
                 }
                 break;
             }
             case GLFW_MOUSE_BUTTON_MIDDLE: {
-              for (auto [_, action] : data::m_actions[inputmap::method::MOUSE_MIDDLE])
+                for (auto [_, action] : m_actions[inputmap::method::MOUSE_MIDDLE])
                 {
                     action.last_state = window_mouse_event->action != GLFW_RELEASE;
                     action.last_mods = translateModifierKeys(window_mouse_event->mods);
                     action.last_method = inputmap::method::MOUSE_MIDDLE;
-                    if(!action.repeat)
-                        action.callback(this, action.last_state, action.last_mods,action.last_method, action.trigger_value,0.0f);
+                    if (!action.repeat)
+                        action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, 0.0f);
                 }
                 break;
             }
             case GLFW_MOUSE_BUTTON_RIGHT: {
-                 for (auto [_, action] : data::m_actions[inputmap::method::MOUSE_RIGHT])
+                for (auto [_, action] : m_actions[inputmap::method::MOUSE_RIGHT])
                 {
                     action.last_state = window_mouse_event->action != GLFW_RELEASE;
                     action.last_mods = translateModifierKeys(window_mouse_event->mods);
                     action.last_method = inputmap::method::MOUSE_RIGHT;
-                    if(!action.repeat)
-                        action.callback(this, action.last_state, action.last_mods,action.last_method, action.trigger_value,0.0f);
+                    if (!action.repeat)
+                        action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, 0.0f);
                 }
                 break;
             }
@@ -524,30 +524,27 @@ namespace args::application
         void onMouseScrolled(mouse_scrolled* window_mouse_event)
         {
             const auto pos = window_mouse_event->offset;
-            for (auto [_, axis] : data::m_axes[inputmap::method::HSCROLL])
+            for (auto [_, axis] : m_axes[inputmap::method::HSCROLL])
             {
-                axis.last_value  += static_cast<float>(pos.x);
-                axis.last_mods   = inputmap::modifier_keys::NONE;
+                axis.last_value += static_cast<float>(pos.x);
+                axis.last_mods = inputmap::modifier_keys::NONE;
                 axis.last_method = inputmap::method::HSCROLL;
             }
-            for (auto [_, axis] : data::m_axes[inputmap::method::VSCROLL])
+
+            for (auto [_, axis] : m_axes[inputmap::method::VSCROLL])
             {
-                axis.last_value  += static_cast<float>(pos.y);
-                axis.last_mods   = inputmap::modifier_keys::NONE;
+                axis.last_value += static_cast<float>(pos.y);
+                axis.last_mods = inputmap::modifier_keys::NONE;
                 axis.last_method = inputmap::method::VSCROLL;
             }
         }
 
-        struct ARGS_API data
-        {
-            static math::dvec2 m_mousePos;
-            static math::dvec2 m_mouseDelta;
+        static math::dvec2 m_mousePos;
+        static math::dvec2 m_mouseDelta;
 
-            static std::set<int> m_presentGamepads;
-            static sparse_map<inputmap::method, sparse_map<id_type, action_data>> m_actions;
+        static std::set<int> m_presentGamepads;
+        static sparse_map<inputmap::method, sparse_map<id_type, action_data>> m_actions;
 
-            static sparse_map<inputmap::method, sparse_map<id_type, axis_data>>  m_axes;
-        };
-
+        static sparse_map<inputmap::method, sparse_map<id_type, axis_data>>  m_axes;
     };
 }

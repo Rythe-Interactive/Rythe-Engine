@@ -18,13 +18,13 @@
     <ClCompile Include="context\contexthelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="context\detail\glad\glad.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="window\windowsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="input\inputsystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="context\detail\glad\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

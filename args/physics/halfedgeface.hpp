@@ -1,5 +1,5 @@
 #pragma once
-#include <physics/physicsimport.h>
+#include <core/core.hpp>
 
 namespace args::physics
 {
@@ -10,7 +10,8 @@ namespace args::physics
 		HalfEdgeEdge* startEdge;
 		math::vec3 normal;
 		math::vec3 centroid;
-        HalfEdgeFace() {};
+        std::string id;
+
 		HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
 
 		/** @brief given a function that takes in a HalfEdgeEdge*, 

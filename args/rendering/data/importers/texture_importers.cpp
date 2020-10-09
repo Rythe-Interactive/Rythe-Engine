@@ -1,6 +1,5 @@
 #define STBI_MAX_DIMENSIONS 16384
 #define STBI_NO_GIF
-#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
 #include <rendering/data/importers/texture_importers.hpp>
@@ -34,19 +33,19 @@ namespace args::rendering
         switch (settings.fileFormat)
         {
             default: [[fallthrough]];
-            case texture_channel_format::eight_bit:
+            case channel_format::eight_bit:
             {
-                imageData = stbi_load_from_memory(data.data(), data.size(), &texture.width, &texture.height, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
+                imageData = stbi_load_from_memory(data.data(), data.size(), &texture.size.x, &texture.size.y, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
                 break;
             }
-            case texture_channel_format::sixteen_bit:
+            case channel_format::sixteen_bit:
             {
-                imageData = stbi_load_16_from_memory(data.data(), data.size(), &texture.width, &texture.height, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
+                imageData = stbi_load_16_from_memory(data.data(), data.size(), &texture.size.x, &texture.size.y, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
                 break;
             }
-            case texture_channel_format::float_hdr:
+            case channel_format::float_hdr:
             {
-                imageData = stbi_loadf_from_memory(data.data(), data.size(), &texture.width, &texture.height, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
+                imageData = stbi_loadf_from_memory(data.data(), data.size(), &texture.size.x, &texture.size.y, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
                 break;
             }
         }
@@ -72,11 +71,11 @@ namespace args::rendering
             static_cast<GLenum>(settings.type),
             0,							
             static_cast<GLint>(settings.intendedFormat),
-            texture.width,
-            texture.height,
+            texture.size.x,
+            texture.size.y,
             0,							
             components_to_format[static_cast<int>(settings.components)],
-            static_cast<GLenum>(settings.fileFormat),
+            channels_to_glenum[static_cast<uint>(settings.fileFormat)],
             imageData);
 
         // Generate mips.

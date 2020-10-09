@@ -186,14 +186,14 @@ namespace args::rendering
             m_scheduler->sendCommand(m_scheduler->getChainThreadId("Rendering"), [](void* param)
                 {
                     Renderer* self = reinterpret_cast<Renderer*>(param);
-                    log::debug("Waiting on main window.");
+                    log::trace("Waiting on main window.");
 
                     while (!self->main_window_valid())
                         std::this_thread::yield();
 
                     app::window window = self->get_main_window();
 
-                    log::debug("Initializing context.");
+                    log::trace("Initializing context.");
 
                     async::readwrite_guard guard(*window.lock);
                     app::ContextHelper::makeContextCurrent(window);
@@ -302,10 +302,10 @@ namespace args::rendering
                             log::warn("[{}-{}] {}", s, t, message);
                             break;
                         case GL_DEBUG_SEVERITY_LOW:
-                            log::info("[{}-{}] {}", s, t, message);
+                            log::debug("[{}-{}] {}", s, t, message);
                             break;
                         case GL_DEBUG_SEVERITY_NOTIFICATION:
-                            log::debug("[{}-{}] {}", s, t, message);
+                            log::trace("[{}-{}] {}", s, t, message);
                             break;
                         default:
                             log::debug("[{}-{}] {}", s, t, message);
@@ -388,9 +388,8 @@ namespace args::rendering
                         continue;
                     }
 
-                    math::mat4 modelMatrix;
-                    math::compose(modelMatrix, ent.get_component_handle<scale>().read(), ent.get_component_handle<rotation>().read(), ent.get_component_handle<position>().read());
-                    batches[rend.model][rend.material].push_back(modelMatrix);
+                    transform transf = ent.get_component_handles<transform>();
+                    batches[rend.model][rend.material].push_back(transf.get_local_to_world_matrix());
                 }
 
                 for (auto [modelHandle, instancesPerMaterial] : batches)

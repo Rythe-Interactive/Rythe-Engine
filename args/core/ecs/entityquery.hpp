@@ -11,13 +11,13 @@
 
 namespace args::core::ecs
 {
-	class ARGS_API QueryRegistry;
-	class ARGS_API EcsRegistry;
+	class QueryRegistry;
+	class EcsRegistry;
 
 	/**@class EntityQuery
 	 * @brief Handle to an entity query. Allows you to acquire a list all of entities with a certain component combination.
 	 */
-	class ARGS_API EntityQuery
+	class EntityQuery
 	{
 	private:
 		QueryRegistry* m_registry;

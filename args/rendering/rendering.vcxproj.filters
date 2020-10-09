@@ -44,9 +44,6 @@
     <ClInclude Include="detail\tiny_obj_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="detail\engine_include.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="detail\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>

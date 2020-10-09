@@ -88,6 +88,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>-flto=thin %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -100,9 +101,7 @@
     <PostBuildEvent>
       <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
     </PostBuildEvent>
-    <Lib>
-      <AdditionalOptions>-flto=thin %(AdditionalOptions)</AdditionalOptions>
-    </Lib>
+    <Lib />
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -129,6 +128,8 @@
     <ClInclude Include="containers\vector_view.hpp" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="data\data.hpp" />
+    <ClInclude Include="data\image.hpp" />
+    <ClInclude Include="data\importers\image_importers.hpp" />
     <ClInclude Include="data\importers\mesh_importers.hpp" />
     <ClInclude Include="data\mesh.hpp" />
     <ClInclude Include="defaults\coremodule.hpp" />
@@ -457,7 +458,6 @@
     <ClInclude Include="math\math.hpp" />
     <ClInclude Include="math\precision.hpp" />
     <ClInclude Include="math\trigonometry.hpp" />
-    <ClInclude Include="platform\args_library.hpp" />
     <ClInclude Include="platform\platform.hpp" />
     <ClInclude Include="scheduling\process.hpp" />
     <ClInclude Include="scheduling\processchain.hpp" />
@@ -477,12 +477,17 @@
     <ClCompile Include="compute\buffer.cpp" />
     <ClCompile Include="compute\context.cpp" />
     <ClCompile Include="compute\kernel.cpp" />
+    <ClCompile Include="data\image.cpp" />
+    <ClCompile Include="data\importers\image_importers.cpp" />
     <ClCompile Include="data\importers\mesh_importers.cpp" />
     <ClCompile Include="data\mesh.cpp" />
     <ClCompile Include="ecs\ecsregistry.cpp" />
     <ClCompile Include="ecs\entity_handle.cpp" />
     <ClCompile Include="ecs\entityquery.cpp" />
     <ClCompile Include="ecs\queryregistry.cpp" />
+    <ClCompile Include="engine\module.cpp" />
+    <ClCompile Include="engine\system.cpp" />
+    <ClCompile Include="events\defaultevents.cpp" />
     <ClCompile Include="filesystem\artifact_cache.cpp" />
     <ClCompile Include="filesystem\assetimporter.cpp" />
     <ClCompile Include="filesystem\detail\strpath_manip.cpp" />

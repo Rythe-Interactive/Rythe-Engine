@@ -14,7 +14,7 @@
 
 namespace args::core::ecs
 {
-    class ARGS_API EcsRegistry;
+    class EcsRegistry;
 
     /**@class component_container_base
      * @brief Base class of args::core::ecs::component_container
@@ -116,7 +116,7 @@ namespace args::core::ecs
         {
             {
                 async::readwrite_guard guard(m_lock);
-                m_components.insert(entityId, *reinterpret_cast<component_type*>(value));
+                m_components[entityId] = *reinterpret_cast<component_type*>(value);
             }
 
             m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId, m_registry));

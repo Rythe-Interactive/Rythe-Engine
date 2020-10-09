@@ -71,7 +71,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>args-application.lib;args-audio.lib;args-core.lib;args-editor.lib;args-networking.lib;args-physics.lib;args-rendering.lib;args-scripting.lib;OpenCL.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>args-application.lib;args-audio.lib;args-core.lib;args-editor.lib;args-networking.lib;args-physics.lib;args-rendering.lib;args-scripting.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -91,19 +91,26 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>args-application.lib;args-audio.lib;args-core.lib;args-editor.lib;args-networking.lib;args-physics.lib;args-rendering.lib;args-scripting.lib;OpenCL.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>args-application.lib;args-audio.lib;args-core.lib;args-editor.lib;args-networking.lib;args-physics.lib;args-rendering.lib;args-scripting.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="test_filesystem.hpp" />
     <ClInclude Include="module\testmodule.hpp" />
     <ClInclude Include="systems\testsystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\kernels\vadd_kernel.cl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="sandbox.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="engine\resources\legion\icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

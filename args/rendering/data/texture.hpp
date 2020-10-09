@@ -1,5 +1,9 @@
 #pragma once
-#include <rendering/detail/engine_include.hpp>
+#include <application/application.hpp>
+
+/**
+ * @file texture.hpp
+ */
 
 namespace args::rendering
 {
@@ -38,22 +42,18 @@ namespace args::rendering
         bgra_int = GL_BGRA_INTEGER,
     };
 
-    enum struct texture_channel_format : GLenum
-    {
-        eight_bit = GL_UNSIGNED_BYTE,
-        sixteen_bit = GL_UNSIGNED_SHORT,
-        float_hdr = GL_FLOAT
-    };
+    /**@brief Internal channel layout of the colors.
+     * @ref args::core::image_components
+     */
+    using texture_components = image_components;
 
-    enum struct texture_components : int
-    {
-        grey = 1,
-        gray_alpha = 2,
-        rgb = 3,
-        rgba = 4
-    };
-
+    /**@brief Utility array for converting component count to GLenum. (components_to_format[4] = GL_RGBA)
+     */
     constexpr GLenum components_to_format[] = { 0, GL_RED, GL_RG, GL_RGB, GL_RGBA };
+
+    /**@brief Utility array for converting data size to GLenum. (channels_to_glenum[sizeof(byte)] = GL_UNSIGNED_BYTE)
+     */
+    constexpr GLenum channels_to_glenum[] = {0, GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT, 0, GL_FLOAT };
 
     enum struct texture_mipmap : GLint
     {
@@ -70,24 +70,25 @@ namespace args::rendering
         mirror_then_clamp = GL_MIRROR_CLAMP_TO_EDGE
     };
 
-    struct color : public math::vec4 { };
-
+    /**@class texture_data
+     * @brief Raw texture representation.
+     */
     struct texture_data
     {
-        int width;
-        int height;
-        texture_components channels;
+        math::ivec2 size;
         texture_type type;
 
-        std::vector<color> pixels;
+        std::vector<math::color> pixels;
     };
 
+    /**@class texture.hpp
+     * @brief Struct containing all the data needed for rendering.
+     */
     struct texture
     {
         app::gl_id textureId = invalid_id;
 
-        int width;
-        int height;
+        math::ivec2 size;
         texture_components channels;
         texture_type type;
 
@@ -95,20 +96,30 @@ namespace args::rendering
         static void from_resource(texture* value, const fs::basic_resource& resource);
     };
 
-    struct ARGS_API texture_handle
+    /**@class texture_handle
+     * @brief Save to pass around handle to a texture in the texture cache.
+     */
+    struct texture_handle
     {
         id_type id;
 
         texture_data get_data();
         const texture& get_texture();
+        bool operator==(const texture_handle& other) { return id == other.id; }
+        operator id_type() { return id; }
     };
 
+    /**@brief Default invalid texture handle.
+     */
     constexpr texture_handle invalid_texture_handle { invalid_id };
 
+    /**@class texture_import_settings
+     * @brief Data structure to parameterize the texture import process.
+     */
     struct texture_import_settings
     {
         texture_type type;
-        texture_channel_format fileFormat;
+        channel_format fileFormat;
         texture_format intendedFormat;
         texture_components components;
         bool flipVertical;
@@ -120,12 +131,17 @@ namespace args::rendering
         texture_wrap wrapT;
     };
 
+    /**@brief Default texture import settings.
+     */
     constexpr texture_import_settings default_texture_settings{
-        texture_type::two_dimensional, texture_channel_format::sixteen_bit, texture_format::rgba,
+        texture_type::two_dimensional, channel_format::eight_bit, texture_format::rgba,
         texture_components::rgba, true, true, texture_mipmap::linear, texture_mipmap::linear,
         texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat };
 
-    class ARGS_API TextureCache
+    /**@class TextureCache
+     * @brief Data cache for loading, storing and managing textures.
+     */
+    class TextureCache
     {
         friend class renderer;
         friend struct texture_handle;
@@ -137,8 +153,35 @@ namespace args::rendering
         static texture_data get_data(id_type id);
 
     public:
+        /**@brief Create a new texture and load it from a file if a texture with the same name doesn't exist yet.
+         * @param name Identifying name for the texture.
+         * @param file File to load from.
+         * @param settings Settings to pass on to the import pipeline.
+         * @return texture_handle A valid handle to the newly created texture if it succeeds, invalid_texture_handle if it fails.
+         */
         static texture_handle create_texture(const std::string& name, const fs::view& file, texture_import_settings settings = default_texture_settings);
+
+        /**@brief Create a new texture from an image if a texture with the same name doesn't exist yet.
+         * @param name Name of the image and identifying name for the texture.
+         * @param settings Settings to pass on to the import pipeline.
+         * @return texture_handle A valid handle to the newly created texture if it succeeds, invalid_texture_handle if it fails.
+         */
+        static texture_handle create_texture(const std::string& name, texture_import_settings settings = default_texture_settings);
+
+        /**@brief Create a new texture from an image if a texture with the same name doesn't exist yet.
+         * @param image_handle Image to load from. The identifying name for the texture will be the same as the name of the image.
+         * @param settings Settings to pass on to the import pipeline.
+         * @return texture_handle A valid handle to the newly created texture if it succeeds, invalid_texture_handle if it fails.
+         */
+        static texture_handle create_texture(image_handle image, texture_import_settings settings = default_texture_settings);
+
+        /**@brief Returns a handle to a texture with a certain name. Will return invalid_texture_handle if the requested texture doesn't exist.
+         */
         static texture_handle get_handle(const std::string& name);
+
+        /**@brief Returns a handle to a texture with a certain name. Will return invalid_texture_handle if the requested texture doesn't exist.
+         * @param id Name hash
+         */
         static texture_handle get_handle(id_type id);
     };
 }

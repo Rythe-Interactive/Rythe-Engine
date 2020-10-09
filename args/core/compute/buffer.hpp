@@ -1,7 +1,6 @@
 #pragma once
 #include <CL/cl.h> // cl_context , cl_mem , cl_mem_flags
 
-#include <core/platform/platform.hpp> // ARGS_API
 #include <core/types/primitives.hpp> // byte, size_t
 
 #include <tuple> // pair
@@ -50,7 +49,7 @@ namespace args::core::compute {
      *        You would normally obtain these via
      *        @ref Context::createBuffer()
      */
-    class ARGS_API Buffer
+    class Buffer
     {
     public:
         Buffer(cl_context,byte*,size_t,buffer_type,std::string);
