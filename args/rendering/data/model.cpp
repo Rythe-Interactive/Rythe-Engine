@@ -141,7 +141,7 @@ namespace args::rendering
             m_models.insert(id, model);
         }
 
-        log::debug("Created model {} with mesh: {}", name, meshName);
+        log::trace("Created model {} with mesh: {}", name, meshName);
 
         return { id };
     }

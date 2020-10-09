@@ -110,7 +110,7 @@
     <ResourceCompile Include="sandbox.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="assets\LegionIcon.ico" />
+    <Image Include="engine\resources\legion\icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

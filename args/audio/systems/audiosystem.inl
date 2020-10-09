@@ -76,8 +76,8 @@ namespace args::audio
 		const ALchar* ALCExtensions = alcGetString(alDevice, ALC_EXTENSIONS);
 		ALCint srate;
 		alcGetIntegerv(alDevice, ALC_FREQUENCY, 1, &srate);
-		log::info("OpenAL info:\n\n\t\t\tOpenAL information\n\tVendor: {}\n\tVersion: {}\n\tRenderer: {}\n\tOpenAl Extensions: {}\n\tALC Extensions: {}\n\tDevice samplerate: {}\n",
-			vendor, version, renderer, openALExtensions, ALCExtensions, srate);
+		log::info("Initialized OpenAL\n\tCONTEXT INFO\n\t----------------------------------\n\tVendor:\t\t\t{}\n\tVersion:\t\t{}\n\tRenderer:\t\t{}\n\tDevice samplerate:\t{}\n\tOpenAl Extensions:\n\t\t{}\n\n\tALC Extensions:\n\t\t{}\n\t----------------------------------\n",
+			vendor, version, renderer, srate, openALExtensions, ALCExtensions);
 	}
 
 	inline void AudioSystem::update(time::span deltatime)

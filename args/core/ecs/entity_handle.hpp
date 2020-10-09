@@ -23,14 +23,14 @@ namespace args::core::ecs
 
     struct child_iterator
     {
-    public:
+        friend class entity_handle;
+    private:
         struct impl;
 
-    private:
         std::shared_ptr<impl> m_pimpl;
+        child_iterator(impl* implptr);
 
     public:
-        child_iterator(impl* implptr);
 
         friend bool operator==(const child_iterator& lhs, const child_iterator& rhs);
 

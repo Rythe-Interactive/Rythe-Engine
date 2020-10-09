@@ -77,6 +77,11 @@ struct rewind_audio_source : public app::input_action<rewind_audio_source> {};
 class TestSystem final : public System<TestSystem>
 {
 public:
+    TestSystem()
+    {
+        app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
+    }
+
     ecs::entity_handle player;
     ecs::entity_handle sphere;
 
@@ -85,14 +90,14 @@ public:
 
     virtual void setup()
     {
-        filter(log::severity::debug);
+#pragma region OpenCL
+        compute::Program prog = fs::view("assets://kernels/vadd_kernel.cl").load_as<compute::Program>();
 
-        compute::Program prog =  fs::view("basic://kernels/vadd_kernel.cl").load_as<compute::Program>();
         prog.prewarm("vector_add");
 
         std::vector<int> ints;
 
-        auto res = fs::view("basic://bigint.txt").get();
+        auto res = fs::view("assets://bigint.txt").get();
         if (res == common::valid) {
 
             char* buf = new char[6];
@@ -130,19 +135,16 @@ public:
             .enqueue_buffer(C)
             .finish();
 
+        /* for (int& i : results)
+         {
+             log::info("got {}", i);
+         }*/
+#pragma endregion
 
-
-        for (int& i : results)
-        {
-            log::info("got {}", i);
-        }
-        log::info("Hello World");
-        log::warn("Hello World");
-        log::error("Hello World");
-        log::debug("Hello World");
-
+#pragma region Input binding
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::LEFT, -1.f);
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::RIGHT, 1.f);
+
         app::InputSystem::createBinding<player_move>(app::inputmap::method::W, 1.f);
         app::InputSystem::createBinding<player_move>(app::inputmap::method::S, -1.f);
         app::InputSystem::createBinding<player_strive>(app::inputmap::method::D, 1.f);
@@ -182,6 +184,7 @@ public:
         bindToEvent<fullscreen_action, &TestSystem::onFullscreen>();
         bindToEvent<escape_cursor_action, &TestSystem::onEscapeCursor>();
         bindToEvent<vsync_action, &TestSystem::onVSYNCSwap>();
+
         bindToEvent<physics_test_move, &TestSystem::onUnitPhysicsUnitTestMove>();
 
         bindToEvent<sphere_move, &TestSystem::onSphereAAMove>();
@@ -193,11 +196,13 @@ public:
         bindToEvent<pause_audio_source, &TestSystem::pauseAudioSource>();
         bindToEvent<stop_audio_source, &TestSystem::stopAudioSource>();
         bindToEvent<rewind_audio_source, &TestSystem::rewindAudioSource>();
+#pragma endregion
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
         window.enableCursor(false);
         window.show();
 
+#pragma region Model and material loading
         rendering::model_handle cubeH;
         rendering::model_handle sphereH;
         rendering::model_handle suzanneH;
@@ -237,50 +242,52 @@ public:
 
             app::ContextHelper::makeContextCurrent(nullptr);
         }
+#pragma endregion
+
+#pragma region Entities
+        {
+            auto ent = createEntity();
+            ent.add_component<rendering::renderable>({ cubeH, skyboxH });
+            ent.add_components<transform>(position(), rotation(), scale(500.f));
+        }
 
         {
-            auto ent = m_ecs->createEntity();
-            m_ecs->createComponent<rendering::renderable>(ent, { cubeH, skyboxH });
+            auto ent = createEntity();
+            ent.add_component<rendering::renderable>({ floorH, floorMH });
+            ent.add_components<transform>();
+        }
 
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            scaleH.write(math::vec3(500.f));
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ suzanneH, vertexH }, {});
+            ent.add_components<transform>(position(0, 3, 5.1f), rotation(), scale());
+
+            auto [positionH, rotationH, scaleH] = ent.get_component_handles<transform>();
+
+            log::trace("p {}, r {}, s {}, has {}", positionH.read(), rotationH.read(), scaleH.read(), ent.has_components<transform>());
+
+            ent.remove_components<transform>();
+
+            log::trace("p {}, r {}, s {}, has {}", positionH.read(), rotationH.read(), scaleH.read(), ent.has_components<position, rotation, scale>());
+            transform transf = ent.add_components<transform>(position(0, 3, 5.1f), rotation(), scale());
+
+            auto& [_, rotationH2, scaleH2] = transf.handles;
+            auto positionH2 = transf.get<position>();
+
+            log::trace("p {}, r {}, s {}, has {}", positionH2.read(), rotationH2.read(), scaleH2.read(), ent.has_components<position, rotation, scale>());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ suzanneH, wireframeH }, {});
+            ent.add_components<transform>(position(0, 3, 8.1f), rotation(), scale());
         }
 
         {
             auto ent = m_ecs->createEntity();
-            m_ecs->createComponent<rendering::renderable>(ent, { floorH, floorMH });
+            ent.add_components<rendering::renderable, sah>({ suzanneH, normalH }, {});
 
-            m_ecs->createComponents<transform>(ent);
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            ent.add_component<rendering::renderable>({ suzanneH, vertexH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, 3, 5.1f));
-            scaleH.write(math::vec3(1.f));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { suzanneH, wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, 3, 8.1f));
-            scaleH.write(math::vec3(1.f));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { suzanneH, normalH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, 3, 11.1f));
-            scaleH.write(math::vec3(1.f));
+            ent.add_components<transform>(position(0, 3, 11.1f), rotation(), scale());
         }
 
         /*   {
@@ -294,39 +301,27 @@ public:
            }*/
 
         {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { submeshtestH, normalH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, 10, 0));
-            scaleH.write(math::vec3(1.f));
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ submeshtestH, normalH }, {});
+            ent.add_components<transform>(position(0, 10, 0), rotation(), scale());
         }
 
         {
-            auto ent = m_ecs->createEntity();
-            m_ecs->createComponent<rendering::renderable>(ent, { axesH, normalH });
-            m_ecs->createComponents<transform>(ent);
+            auto ent = createEntity();
+            ent.add_component<rendering::renderable>({ axesH, normalH });
+            ent.add_components<transform>();
         }
 
         {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { cubeH, uvH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(5.1f, 3, 0));
-            scaleH.write(math::vec3(0.75f));
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ cubeH, uvH }, {});
+            ent.add_components<transform>(position(5.1f, 3, 0), rotation(), scale(0.75f));
         }
 
         {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { sphereH, normalH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, 3, -5.1f));
-            scaleH.write(math::vec3(2.5f));
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ sphereH, normalH }, {});
+            ent.add_components<transform>(position(0, 3, -5.1f), rotation(), scale(2.5f));
         }
 
         // Sphere setup (with audio source)
@@ -334,13 +329,20 @@ public:
             sphere = createEntity();
             sphere.add_components<rendering::renderable, sah>({ uvsphereH, wireframeH }, {});
             sphere.add_components<transform>(position(-5.1f, 3, 0), rotation(), scale(2.5f));
-            audio::audio_source source;
-            source.setAudioHandle(audio::AudioSegmentCache::createAudioSegment("waterfall", "assets://audio/02_Vampire_Killer_(Courtyard)_MONO.mp3"_view));
-            sphere.add_component<audio::audio_source>(source);
+
+            auto segment = audio::AudioSegmentCache::createAudioSegment("waterfall", "assets://audio/365921__inspectorj__waterfall-small-b[mono].mp3"_view);
+            if (segment)
+            {
+                audio::audio_source source;
+                source.setAudioHandle(segment);
+                sphere.add_component<audio::audio_source>(source);
+            }
 
         }
+#pragma endregion
 
         setupCameraEntity();
+
 
         //---------------------------------------------------------- Physics Collision Unit Test -------------------------------------------------------------------//
 
@@ -643,13 +645,11 @@ public:
         player = createEntity();
         rotation rot = math::conjugate(math::normalize(math::toQuat(math::lookAt(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0)))));
         player.add_components<transform>(position(0.f, 3.f, 0.f), rot, scale());
-        player.add_component<audio::audio_listener>();
+		player.add_component<audio::audio_listener>();
 
         rendering::camera cam;
-        player.add_component(cam);
         cam.set_projection(90.f, 0.1f, 1000.f);
-        auto camH = player.get_component_handle<rendering::camera>();
-        camH.write(cam);
+        player.add_component<rendering::camera>(cam);
     }
 
     void onExit(exit_action* action)
@@ -662,7 +662,7 @@ public:
     {
         if (action->released())
         {
-            raiseEvent<app::window_toggle_fullscreen_request>(world_entity_id, math::ivec2(100, 100), math::ivec2(1360, 768));
+            app::WindowSystem::requestFullscreenToggle(world_entity_id, math::ivec2(100, 100), math::ivec2(1360, 768));
         }
     }
 
@@ -802,6 +802,7 @@ public:
 
         }
     }
+    
     void playAudioSource(play_audio_source* action)
     {
         auto sourceH = sphere.get_component_handle<audio::audio_source>();
