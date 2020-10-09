@@ -50,6 +50,9 @@ struct fullscreen_action : public app::input_action<fullscreen_action> {};
 struct escape_cursor_action : public app::input_action<escape_cursor_action> {};
 struct vsync_action : public app::input_action<vsync_action> {};
 
+//some test stuff just so i can change things
+
+
 class TestSystem final : public System<TestSystem>
 {
 public:
@@ -57,7 +60,13 @@ public:
 
     virtual void setup()
     {
-        
+        int i = 1;
+        int j = 1;
+        int k = 1;
+
+        std::cout << i + j + k << std::endl;
+
+
         filter(log::severity::debug);
 
         compute::Program prog = fs::view("basic://kernels/vadd_kernel.cl").load_as<compute::Program>();
