@@ -1,5 +1,6 @@
-#include "artifact_cache.hpp"
+#include <core/filesystem/artifact_cache.hpp>
 #include <algorithm>
+#include <functional>
 #include <core/containers/iterator_tricks.hpp>
 
 namespace args::core::filesystem {

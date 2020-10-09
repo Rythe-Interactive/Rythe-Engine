@@ -274,9 +274,12 @@ namespace std
     {
         std::size_t operator()(args::core::ecs::component_handle<component_type> const& handle) const noexcept
         {
-            std::size_t h1 = std::hash<intptr_t>{}(handle.m_registry);
+            std::size_t hash;
+            std::size_t h1 = std::hash<intptr_t>{}(reinterpret_cast<intptr_t>(handle.m_registry));
             std::size_t h2 = std::hash<args::core::id_type>{}(handle.m_ownerId);
-            return h1 ^ (h2 << 1);
+            std::size_t h3 = args::core::typeHash<component_type>();
+            hash = h1 ^ (h2 << 1);
+            return hash ^ (h3 << 1);
         }
     };
 }

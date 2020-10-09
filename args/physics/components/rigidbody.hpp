@@ -1,4 +1,6 @@
 #pragma once
+
+
 #include <core/core.hpp>
 #include <physics/physicsconstants.h>
 #include <physics/components/physics_component.hpp>
@@ -7,23 +9,23 @@ namespace args::physics
 {
     struct rigidbody
     {
-        math::vec3 globalCentreOfMass;
-
-        math::mat3 inverseInertiaTensor = math::mat3(12.0f);
-
+        //linear motion component
+        float inverseMass = 1.0f;
         math::vec3 velocity;
         math::vec3 acc;
+        float linearDrag;
+
+        //angular motion component
+        math::mat3 inverseInertiaTensor = math::mat3(12.0f);
 
         math::vec3 angularAcc;
         math::vec3 angularVelocity;
+        float angularDrag = 0.01f;
 
+        //force application component
+        math::vec3 globalCentreOfMass;
         math::vec3 forceAccumulator;
         math::vec3 torqueAccumulator;
-
-        float angularDrag = 0.01f;
-        float linearDrag;
-
-        float inverseMass = 1.0f;
 
         float restitution;
         float friction;
