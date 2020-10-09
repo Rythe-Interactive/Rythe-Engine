@@ -96,23 +96,24 @@ namespace args::audio
 			previousP = p;
 			alSource3f(source.m_sourceId, AL_POSITION, p.x, p.y, p.z);
 			alSource3f(source.m_sourceId, AL_VELOCITY, vel.x, vel.y, vel.z);
-			if (source.m_changes & audio_source::sound_properties::pitch)
+
+			using change = audio_source::sound_properties;
+			if (source.m_changes & change::pitch)
 			{
 				// Pitch has changed
 				alSourcef(source.m_sourceId, AL_PITCH, source.getPitch());
 			}
-			if (source.m_changes & audio_source::sound_properties::gain)
+			if (source.m_changes & change::gain)
 			{
 				// Gain has changed
 				alSourcef(source.m_sourceId, AL_GAIN, source.getGain());
 			}
-			if (source.m_changes & audio_source::sound_properties::playState)
+			if (source.m_changes & change::playState)
 			{
 				using state = audio::audio_source::playstate;
 				// Playstate has changed
 				if (source.m_nextPlayState == state::playing)
 				{
-					log::debug("playing");
 					source.m_playState = state::playing;
 					alSourcePlay(source.m_sourceId);
 				}
@@ -126,6 +127,10 @@ namespace args::audio
 					source.m_playState = state::stopped;
 					alSourceStop(source.m_sourceId);
 				}
+			}
+			if (source.m_changes & change::doRewind)
+			{
+				alSourceRewind(source.m_sourceId);
 			}
 
 			source.clearChanges();

@@ -68,10 +68,10 @@ struct vsync_action : public app::input_action<vsync_action> {};
 
 struct physics_test_move : public app::input_axis<physics_test_move>{};
 
-
 struct play_audio_source : public app::input_action<play_audio_source> {};
 struct pause_audio_source : public app::input_action<pause_audio_source> {};
 struct stop_audio_source : public app::input_action<stop_audio_source> {};
+struct rewind_audio_source : public app::input_action<rewind_audio_source> {};
 
 
 class TestSystem final : public System<TestSystem>
@@ -171,6 +171,7 @@ public:
         app::InputSystem::createBinding<play_audio_source>(app::inputmap::method::P);
         app::InputSystem::createBinding<pause_audio_source>(app::inputmap::method::LEFT_BRACKET);
         app::InputSystem::createBinding<stop_audio_source>(app::inputmap::method::RIGHT_BRACKET);
+        app::InputSystem::createBinding<rewind_audio_source>(app::inputmap::method::BACKSPACE);
 
         bindToEvent<player_move, &TestSystem::onPlayerMove>();
         bindToEvent<player_strive, &TestSystem::onPlayerStrive>();
@@ -191,6 +192,7 @@ public:
         bindToEvent<play_audio_source, &TestSystem::playAudioSource>();
         bindToEvent<pause_audio_source, &TestSystem::pauseAudioSource>();
         bindToEvent<stop_audio_source, &TestSystem::stopAudioSource>();
+        bindToEvent<rewind_audio_source, &TestSystem::rewindAudioSource>();
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
         window.enableCursor(false);
@@ -333,7 +335,7 @@ public:
             sphere.add_components<rendering::renderable, sah>({ uvsphereH, wireframeH }, {});
             sphere.add_components<transform>(position(-5.1f, 3, 0), rotation(), scale(2.5f));
             audio::audio_source source;
-            source.setAudioHandle(audio::AudioSegmentCache::createAudioSegment("waterfall", "assets://audio/365921__inspectorj__waterfall-small-b[mono].mp3"_view));
+            source.setAudioHandle(audio::AudioSegmentCache::createAudioSegment("waterfall", "assets://audio/02_Vampire_Killer_(Courtyard)_MONO.mp3"_view));
             sphere.add_component<audio::audio_source>(source);
 
         }
@@ -821,6 +823,14 @@ public:
         auto sourceH = sphere.get_component_handle<audio::audio_source>();
         audio::audio_source source = sourceH.read();
         source.stop();
+        sourceH.write(source);
+    }
+
+    void rewindAudioSource(rewind_audio_source* action)
+    {
+        auto sourceH = sphere.get_component_handle<audio::audio_source>();
+        audio::audio_source source = sourceH.read();
+        source.rewind();
         sourceH.write(source);
     }
 
