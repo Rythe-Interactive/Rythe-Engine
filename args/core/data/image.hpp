@@ -68,11 +68,6 @@ namespace args::core
             return m_id == other.m_id;
         }
 
-        ~image()
-        {
-            delete[] m_pixels;
-        }
-
     private:
         id_type m_id;
         size_type m_dataSize;

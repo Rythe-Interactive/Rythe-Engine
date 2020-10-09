@@ -304,10 +304,14 @@ namespace args::core
     void ImageCache::destroy_image(const std::string& name)
     {
         id_type id = nameHash(name);
+
         {
             async::readwrite_guard guard(m_imagesLock);
             if (m_images.count(id))
+            {
+                delete[] m_images[id]->second.m_pixels;
                 m_images.erase(id);
+            }
         }
 
         {
@@ -322,7 +326,10 @@ namespace args::core
         {
             async::readwrite_guard guard(m_imagesLock);
             if (m_images.count(id))
+            {
+                delete[] m_images[id]->second.m_pixels;
                 m_images.erase(id);
+            }
         }
 
         {
