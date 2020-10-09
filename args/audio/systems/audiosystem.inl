@@ -106,6 +106,27 @@ namespace args::audio
 				// Gain has changed
 				alSourcef(source.m_sourceId, AL_GAIN, source.getGain());
 			}
+			if (source.m_changes & audio_source::sound_properties::playState)
+			{
+				using state = audio::audio_source::playstate;
+				// Playstate has changed
+				if (source.m_nextPlayState == state::playing)
+				{
+					log::debug("playing");
+					source.m_playState = state::playing;
+					alSourcePlay(source.m_sourceId);
+				}
+				else if (source.m_nextPlayState == state::paused)
+				{
+					source.m_playState = state::paused;
+					alSourcePause(source.m_sourceId);
+				}
+				else if (source.m_nextPlayState == state::stopped)
+				{
+					source.m_playState = state::stopped;
+					alSourceStop(source.m_sourceId);
+				}
+			}
 
 			source.clearChanges();
 			sourceHandle.write(source);
@@ -134,16 +155,6 @@ namespace args::audio
 
 		// do something with a.
 		initSource(a);
-
-		{
-			async::readwrite_guard guard(contextLock);
-			alcMakeContextCurrent(alcContext);
-			// NOTE TO SELF:
-			// REMOVE THE AUTO PLAY (TESTING PURPOSE)
-			log::debug("playing sound");
-			alSourcePlay(a.m_sourceId);
-			alcMakeContextCurrent(nullptr);
-		}
 
 		m_sourcePositions.emplace(handle, event->entity.read_component<position>());
 
