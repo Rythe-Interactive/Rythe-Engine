@@ -96,15 +96,41 @@ namespace args::audio
 			previousP = p;
 			alSource3f(source.m_sourceId, AL_POSITION, p.x, p.y, p.z);
 			alSource3f(source.m_sourceId, AL_VELOCITY, vel.x, vel.y, vel.z);
-			if (source.m_changes & audio_source::sound_properties::pitch)
+
+			using change = audio_source::sound_properties;
+			if (source.m_changes & change::pitch)
 			{
 				// Pitch has changed
 				alSourcef(source.m_sourceId, AL_PITCH, source.getPitch());
 			}
-			if (source.m_changes & audio_source::sound_properties::gain)
+			if (source.m_changes & change::gain)
 			{
 				// Gain has changed
 				alSourcef(source.m_sourceId, AL_GAIN, source.getGain());
+			}
+			if (source.m_changes & change::playState)
+			{
+				using state = audio::audio_source::playstate;
+				// Playstate has changed
+				if (source.m_nextPlayState == state::playing)
+				{
+					source.m_playState = state::playing;
+					alSourcePlay(source.m_sourceId);
+				}
+				else if (source.m_nextPlayState == state::paused)
+				{
+					source.m_playState = state::paused;
+					alSourcePause(source.m_sourceId);
+				}
+				else if (source.m_nextPlayState == state::stopped)
+				{
+					source.m_playState = state::stopped;
+					alSourceStop(source.m_sourceId);
+				}
+			}
+			if (source.m_changes & change::doRewind)
+			{
+				alSourceRewind(source.m_sourceId);
 			}
 
 			source.clearChanges();
@@ -134,16 +160,6 @@ namespace args::audio
 
 		// do something with a.
 		initSource(a);
-
-		{
-			async::readwrite_guard guard(contextLock);
-			alcMakeContextCurrent(alcContext);
-			// NOTE TO SELF:
-			// REMOVE THE AUTO PLAY (TESTING PURPOSE)
-			log::debug("playing sound");
-			alSourcePlay(a.m_sourceId);
-			alcMakeContextCurrent(nullptr);
-		}
 
 		m_sourcePositions.emplace(handle, event->entity.read_component<position>());
 
