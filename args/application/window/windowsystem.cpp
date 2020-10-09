@@ -317,7 +317,7 @@ namespace args::application
 
             window win = ContextHelper::createWindow(request.size, request.name.c_str(), request.monitor, request.share);
 
-            auto [lock, image] = request.icon.get_raw_image();
+            auto [lock, image] = icon.get_raw_image();
             {
                 async::readonly_guard guard(lock);
                 if (image.components == image_components::rgba && image.format == channel_format::eight_bit)
