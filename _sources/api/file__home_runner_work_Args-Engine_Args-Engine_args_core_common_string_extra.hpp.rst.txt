@@ -98,11 +98,11 @@ Functions
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1ab2f898c9dd449bd03c07cd0905a82d93`
 
-- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a61f85c8da1bba830aa7538548c316a96`
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1ad6772f27a1b0affa31eaf71087788400`
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a0833a4bfefb89ce4e24381e3292cdc6a`
 
-- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1ad6772f27a1b0affa31eaf71087788400`
+- :ref:`exhale_function_namespaceargs_1_1core_1_1common_1a61f85c8da1bba830aa7538548c316a96`
 
 - :ref:`exhale_function_namespaceargs_1_1core_1_1common_1aeae352974001b280179dbea000bc458c`
 

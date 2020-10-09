@@ -1,0 +1,13 @@
+.. _exhale_typedef_texture_8hpp_1ad0e631a5e4efe2dbd517fbd14ac29157:
+
+Typedef args::rendering::texture_components
+===========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_texture.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: args::rendering::texture_components

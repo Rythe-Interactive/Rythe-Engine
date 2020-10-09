@@ -61,7 +61,17 @@
         <span class="p">{</span>
             <span class="n">pitch</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
             <span class="n">gain</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="n">playState</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+            <span class="n">doRewind</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
         <span class="p">};</span>
+
+        <span class="k">enum</span> <span class="n">playstate</span>
+        <span class="p">{</span>
+            <span class="n">playing</span><span class="p">,</span>
+            <span class="n">paused</span><span class="p">,</span>
+            <span class="n">stopped</span><span class="p">,</span>
+        <span class="p">};</span>
+
         <span class="kt">void</span> <span class="nf">setPitch</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span> <span class="n">pitch</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">m_changes</span> <span class="o">|=</span> <span class="n">sound_properties</span><span class="o">::</span><span class="n">pitch</span><span class="p">;</span> <span class="c1">// set b0</span>
@@ -75,9 +85,56 @@
         <span class="p">}</span>
         <span class="kt">float</span> <span class="nf">getGain</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_gain</span><span class="p">;</span> <span class="p">};</span>
 
+        <span class="kt">void</span> <span class="nf">play</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="c1">// If the file is already playing or if the file will be played on next update &gt; return</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_nextPlayState</span> <span class="o">==</span> <span class="n">playstate</span><span class="o">::</span><span class="n">playing</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+            <span class="n">m_changes</span> <span class="o">|=</span> <span class="n">sound_properties</span><span class="o">::</span><span class="n">playState</span><span class="p">;</span>
+            <span class="n">m_nextPlayState</span> <span class="o">=</span> <span class="n">playstate</span><span class="o">::</span><span class="n">playing</span><span class="p">;</span>
+            <span class="c1">// Do not set playstate to playing - audiosystem will set it accordingly</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">pause</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="c1">// If the file is already playing or if the file will be played on next update &gt; return</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_nextPlayState</span> <span class="o">==</span> <span class="n">playstate</span><span class="o">::</span><span class="n">paused</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+            <span class="n">m_changes</span> <span class="o">|=</span> <span class="n">sound_properties</span><span class="o">::</span><span class="n">playState</span><span class="p">;</span>
+            <span class="n">m_nextPlayState</span> <span class="o">=</span> <span class="n">playstate</span><span class="o">::</span><span class="n">paused</span><span class="p">;</span>
+            <span class="c1">// Do not set playstate to paused - audiosystem will set it accordingly</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">stop</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="c1">// If the file is already playing or if the file will be played on next update &gt; return</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_nextPlayState</span> <span class="o">==</span> <span class="n">playstate</span><span class="o">::</span><span class="n">stopped</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+            <span class="n">m_changes</span> <span class="o">|=</span> <span class="n">sound_properties</span><span class="o">::</span><span class="n">playState</span><span class="p">;</span>
+            <span class="n">m_nextPlayState</span> <span class="o">=</span> <span class="n">playstate</span><span class="o">::</span><span class="n">stopped</span><span class="p">;</span>
+            <span class="c1">// Do not set playstate to stopped - audiosystem will set it accordingly</span>
+        <span class="p">}</span>
+
+        <span class="kt">bool</span> <span class="nf">isPlaying</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_playState</span> <span class="o">==</span> <span class="n">playstate</span><span class="o">::</span><span class="n">playing</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">bool</span> <span class="nf">isPaused</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_playState</span> <span class="o">==</span> <span class="n">playstate</span><span class="o">::</span><span class="n">paused</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">bool</span> <span class="nf">isStopped</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_playState</span> <span class="o">==</span> <span class="n">playstate</span><span class="o">::</span><span class="n">stopped</span><span class="p">;</span>
+        <span class="p">}</span>
+
         <span class="kt">void</span> <span class="nf">setAudioHandle</span><span class="p">(</span><span class="n">audio_segment_handle</span> <span class="n">handle</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">m_audio_handle</span> <span class="o">=</span> <span class="n">handle</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">rewind</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">m_changes</span> <span class="o">|=</span> <span class="n">sound_properties</span><span class="o">::</span><span class="n">doRewind</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="n">audio_segment_handle</span> <span class="nf">getAudioHandle</span><span class="p">()</span> <span class="k">const</span>
@@ -89,6 +146,8 @@
         <span class="kt">void</span> <span class="n">clearChanges</span><span class="p">()</span>
         <span class="p">{</span>
             <span class="n">m_changes</span> <span class="o">^=</span> <span class="n">m_changes</span><span class="p">;</span> <span class="c1">// Reset</span>
+            <span class="c1">// The next play state also needs to be reset to be able to properly switch play states</span>
+            <span class="n">m_nextPlayState</span> <span class="o">=</span> <span class="n">m_playState</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="n">ALuint</span> <span class="n">m_sourceId</span><span class="p">;</span>
@@ -97,9 +156,16 @@
         <span class="kt">float</span> <span class="n">m_pitch</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="p">;</span>
         <span class="kt">float</span> <span class="n">m_gain</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="p">;</span>
 
+        <span class="n">playstate</span> <span class="n">m_playState</span> <span class="o">=</span> <span class="n">playstate</span><span class="o">::</span><span class="n">stopped</span><span class="p">;</span>
+        <span class="n">playstate</span> <span class="n">m_nextPlayState</span> <span class="o">=</span> <span class="n">playstate</span><span class="o">::</span><span class="n">stopped</span><span class="p">;</span>
+
         <span class="c1">// Byte to keep track of changes made to audio source</span>
-        <span class="c1">// b0 - pitch changed</span>
-        <span class="c1">// b1 - gain changed</span>
+        <span class="c1">// For all the values &gt; see enum sound_properties</span>
+        <span class="c1">// b0 - pitch</span>
+        <span class="c1">// b1 - gain</span>
+        <span class="c1">// b2 - play state</span>
+        <span class="c1">// b3 - rewind (doRewind)</span>
+
         <span class="n">byte</span> <span class="n">m_changes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
     <span class="p">};</span>
 <span class="p">}</span>

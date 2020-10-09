@@ -67,14 +67,14 @@
 
     <span class="k">struct</span> <span class="n">child_iterator</span>
     <span class="p">{</span>
-    <span class="k">public</span><span class="o">:</span>
+        <span class="k">friend</span> <span class="k">class</span> <span class="nc">entity_handle</span><span class="p">;</span>
+    <span class="k">private</span><span class="o">:</span>
         <span class="k">struct</span> <span class="n">impl</span><span class="p">;</span>
 
-    <span class="k">private</span><span class="o">:</span>
         <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">impl</span><span class="o">&gt;</span> <span class="n">m_pimpl</span><span class="p">;</span>
+        <span class="n">child_iterator</span><span class="p">(</span><span class="n">impl</span><span class="o">*</span> <span class="n">implptr</span><span class="p">);</span>
 
     <span class="k">public</span><span class="o">:</span>
-        <span class="n">child_iterator</span><span class="p">(</span><span class="n">impl</span><span class="o">*</span> <span class="n">implptr</span><span class="p">);</span>
 
         <span class="k">friend</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">child_iterator</span><span class="o">&amp;</span> <span class="n">lhs</span><span class="p">,</span> <span class="k">const</span> <span class="n">child_iterator</span><span class="o">&amp;</span> <span class="n">rhs</span><span class="p">);</span>
 

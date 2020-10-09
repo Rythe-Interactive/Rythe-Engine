@@ -1,0 +1,16 @@
+.. _exhale_class_structargs_1_1rendering_1_1texture__handle:
+
+Class texture_handle
+====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_texture.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: args::rendering::texture_handle
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -245,7 +245,7 @@
                 <span class="n">child</span><span class="p">.</span><span class="n">set_parent</span><span class="p">(</span><span class="n">invalid_id</span><span class="p">);</span> <span class="c1">// Remove parent from children.</span>
     <span class="p">}</span>
 
-    <span class="n">A_NODISCARD</span>   <span class="n">entity_handle</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">getEntity</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
+    <span class="n">A_NODISCARD</span> <span class="n">entity_handle</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">getEntity</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
             <span class="k">return</span> <span class="n">entity_handle</span><span class="p">(</span><span class="n">invalid_id</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
@@ -253,7 +253,7 @@
         <span class="k">return</span> <span class="nf">entity_handle</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="k">this</span><span class="p">);;</span>
     <span class="p">}</span>
 
-    <span class="n">A_NODISCARD</span>   <span class="n">entity_data</span><span class="o">&amp;</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">getEntityData</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
+    <span class="n">A_NODISCARD</span> <span class="n">entity_data</span><span class="o">&amp;</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">getEntityData</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
             <span class="k">throw</span> <span class="n">args_entity_not_found_error</span><span class="p">;</span>
@@ -269,9 +269,9 @@
         <span class="k">return</span> <span class="n">data</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="n">A_NODISCARD</span>   <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">entity_set</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;&gt;</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">getEntities</span><span class="p">()</span>
+    <span class="n">A_NODISCARD</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">entity_set</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;&gt;</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">getEntities</span><span class="p">()</span>
     <span class="p">{</span>
-        <span class="k">return</span> <span class="p">{</span> <span class="n">m_entities</span><span class="p">,</span> <span class="n">m_entityLock</span> <span class="p">};</span>
+        <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">m_entities</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">m_entityLock</span><span class="p">));</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>

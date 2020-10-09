@@ -1,0 +1,13 @@
+.. _exhale_variable_image_8hpp_1ad5d246c33e6321d88da73ab5186bcbe5:
+
+Variable args::core::default_image_settings
+===========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_image.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::core::default_image_settings

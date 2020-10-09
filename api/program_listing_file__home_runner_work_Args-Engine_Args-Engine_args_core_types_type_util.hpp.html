@@ -58,7 +58,7 @@
 <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span>
 <span class="p">{</span>
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">U</span><span class="o">&gt;</span>
-    <span class="n">T</span> <span class="n">force_value_cast</span><span class="p">(</span><span class="n">U</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">constexpr</span> <span class="n">T</span> <span class="n">force_value_cast</span><span class="p">(</span><span class="n">U</span> <span class="n">value</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">static_assert</span><span class="p">(</span><span class="k">alignof</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="o">==</span> <span class="k">alignof</span><span class="p">(</span><span class="n">U</span><span class="p">),</span> <span class="s">&quot;Illegal cast of unaligned types.&quot;</span><span class="p">);</span>
         <span class="k">static_assert</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="o">==</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">U</span><span class="p">),</span> <span class="s">&quot;Illegal cast of non size similar types.&quot;</span><span class="p">);</span>

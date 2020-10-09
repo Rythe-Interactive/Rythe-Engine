@@ -176,6 +176,11 @@ Namespaces
 
    namespace_std__literals__chrono_literals.rst
 
+.. toctree::
+   :maxdepth: 5
+
+   namespace_texture.rst
+
 Classes and Structs
 *******************
 
@@ -288,17 +293,22 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
-   structargs_1_1application_1_1window__request.rst
-
-.. toctree::
-   :maxdepth: 5
-
    structargs_1_1application_1_1window__resize.rst
 
 .. toctree::
    :maxdepth: 5
 
-   structargs_1_1application_1_1window__toggle__fullscreen__request.rst
+   structargs_1_1application_1_1_window_system_1_1fullscreen__toggle__request.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structargs_1_1application_1_1_window_system_1_1icon__request.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structargs_1_1application_1_1_window_system_1_1window__request.rst
 
 .. toctree::
    :maxdepth: 5
@@ -513,6 +523,11 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   structargs_1_1core_1_1stb__image__loader.rst
+
+.. toctree::
+   :maxdepth: 5
+
    structargs_1_1core_1_1time_1_1time__span.rst
 
 .. toctree::
@@ -583,11 +598,6 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
-   structargs_1_1rendering_1_1color.rst
-
-.. toctree::
-   :maxdepth: 5
-
    structargs_1_1rendering_1_1material.rst
 
 .. toctree::
@@ -624,21 +634,6 @@ Classes and Structs
    :maxdepth: 5
 
    structargs_1_1rendering_1_1texture.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structargs_1_1rendering_1_1texture__data.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structargs_1_1rendering_1_1texture__handle.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structargs_1_1rendering_1_1texture__import__settings.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1168,6 +1163,26 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   class_structargs_1_1core_1_1image.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   class_structargs_1_1core_1_1image__handle.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   class_structargs_1_1core_1_1image__import__settings.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classargs_1_1core_1_1_image_cache.rst
+
+.. toctree::
+   :maxdepth: 5
+
    classargs_1_1core_1_1invalid__component__error.rst
 
 .. toctree::
@@ -1448,6 +1463,21 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   class_structargs_1_1rendering_1_1texture__data.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   class_structargs_1_1rendering_1_1texture__handle.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   class_structargs_1_1rendering_1_1texture__import__settings.rst
+
+.. toctree::
+   :maxdepth: 5
+
    classargs_1_1rendering_1_1_texture_cache.rst
 
 .. toctree::
@@ -1460,6 +1490,11 @@ Classes and Structs
 
    class_scheduler_1_1runnable.rst
 
+.. toctree::
+   :maxdepth: 5
+
+   classtexture_1_1hpp.rst
+
 Enums
 *****
 
@@ -1468,6 +1503,11 @@ Enums
    :maxdepth: 5
 
    enum_readonly__rw__spinlock_8hpp_1a8a92b7284527cbc4fa7de3ec628f025b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   enum_image_8hpp_1abb92aeb3adfe411845bbc09ad7918459.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1482,22 +1522,17 @@ Enums
 .. toctree::
    :maxdepth: 5
 
+   enum_image_8hpp_1a3575abaf066b483961343bd568a551a9.rst
+
+.. toctree::
+   :maxdepth: 5
+
    enum_logging_8hpp_1a26f76e46845d9bfa7c5ae202c5323114.rst
 
 .. toctree::
    :maxdepth: 5
 
    enum_precision_8hpp_1a58c94069dd39ee09479b3e5c3a47fe67.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   enum_texture_8hpp_1a68dcf1df927c9533cc4696b3ddce51b5.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   enum_texture_8hpp_1ad23721ebcd9658c59744a5dc1977f895.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1851,7 +1886,7 @@ Functions
 .. toctree::
    :maxdepth: 5
 
-   function_type__util_8hpp_1aef7996e5e7a874b93744d7f2b583ac7b.rst
+   function_type__util_8hpp_1a5740e35909c84f2d8918ff922d38daa3.rst
 
 .. toctree::
    :maxdepth: 5
@@ -2130,6 +2165,11 @@ Variables
 .. toctree::
    :maxdepth: 5
 
+   variable_image_8hpp_1ad5d246c33e6321d88da73ab5186bcbe5.rst
+
+.. toctree::
+   :maxdepth: 5
+
    variable_mesh_8hpp_1a7e5fb68da7b0dfa4c41ec09a683396a1.rst
 
 .. toctree::
@@ -2156,6 +2196,11 @@ Variables
    :maxdepth: 5
 
    variable_traits_8hpp_1a2ae5eac5def6f5cbab32318d65c257f7.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_image_8hpp_1aaa4a2b9479d116464995e17befba6387.rst
 
 .. toctree::
    :maxdepth: 5
@@ -2291,6 +2336,11 @@ Variables
    :maxdepth: 5
 
    variable_physicsconstants_8h_1ad78ecd993139142adc8197f9581aa7d9.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_texture_8hpp_1a09fdfae7a6e74a0d64927f6c2da35c3d.rst
 
 .. toctree::
    :maxdepth: 5
@@ -2624,12 +2674,22 @@ Defines
 .. toctree::
    :maxdepth: 5
 
-   define_texture__importers_8cpp_1a18372412ad2fc3ce1e3240b3cf0efe78.rst
+   define_image__importers_8cpp_1a18372412ad2fc3ce1e3240b3cf0efe78.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_image__importers_8cpp_1a932562b051c673b275eed62c69de839f.rst
 
 .. toctree::
    :maxdepth: 5
 
    define_texture__importers_8cpp_1a932562b051c673b275eed62c69de839f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_image__importers_8cpp_1aeb08d34d1eaadcd2e6a05da5ff930c5e.rst
 
 .. toctree::
    :maxdepth: 5
@@ -2964,3 +3024,8 @@ Typedefs
    :maxdepth: 5
 
    typedef_physicssystem_8hpp_1ae8a937515f8011e01c8a338c4769bd8a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_texture_8hpp_1ad0e631a5e4efe2dbd517fbd14ac29157.rst

@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Template Class uniform" href="class_structargs_1_1rendering_1_1uniform.html" />
-    <link rel="prev" title="Class stbi_texture_loader" href="class_structargs_1_1rendering_1_1stbi__texture__loader.html" />
+    <link rel="prev" title="Class texture_import_settings" href="class_structargs_1_1rendering_1_1texture__import__settings.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -39,7 +39,7 @@
           <a href="class_structargs_1_1rendering_1_1uniform.html" title="Template Class uniform"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="class_structargs_1_1rendering_1_1stbi__texture__loader.html" title="Class stbi_texture_loader"
+          <a href="class_structargs_1_1rendering_1_1texture__import__settings.html" title="Class texture_import_settings"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
@@ -62,22 +62,76 @@
 <dl class="cpp class">
 <dt id="_CPPv4N4args9rendering12TextureCacheE">
 <span id="_CPPv3N4args9rendering12TextureCacheE"></span><span id="_CPPv2N4args9rendering12TextureCacheE"></span><span id="args::rendering::TextureCache"></span><span class="target" id="classargs_1_1rendering_1_1_texture_cache"></span><em class="property">class </em><code class="sig-prename descclassname">args::rendering<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">TextureCache</code><a class="headerlink" href="#_CPPv4N4args9rendering12TextureCacheE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><div class="breathe-sectiondef docutils container">
+<dd><p>Data cache for loading, storing and managing textures. </p>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Functions</p>
 <dl class="cpp function">
 <dt id="_CPPv4N4args9rendering12TextureCache14create_textureERKNSt6stringERKN2fs4viewE23texture_import_settings">
-<span id="_CPPv3N4args9rendering12TextureCache14create_textureERKNSt6stringERKN2fs4viewE23texture_import_settings"></span><span id="_CPPv2N4args9rendering12TextureCache14create_textureERKNSt6stringERKN2fs4viewE23texture_import_settings"></span><span id="args::rendering::TextureCache::create_texture__ssCR.fs::viewCR.texture_import_settings"></span><span class="target" id="classargs_1_1rendering_1_1_texture_cache_1a19b6bd732e5ec301d54dfd17c9ba2ce3"></span><a class="reference internal" href="structargs_1_1rendering_1_1texture__handle.html#_CPPv4N4args9rendering14texture_handleE" title="args::rendering::texture_handle">texture_handle</a> <code class="sig-name descname">create_texture</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em>, <em class="property">const</em> fs::view &amp;<em>file</em>, <a class="reference internal" href="structargs_1_1rendering_1_1texture__import__settings.html#_CPPv4N4args9rendering23texture_import_settingsE" title="args::rendering::texture_import_settings">texture_import_settings</a> <em>settings</em> = <a class="reference internal" href="variable_texture_8hpp_1afde8ce671317860b3c5d35d3fc52f84f.html#_CPPv4N4args9rendering24default_texture_settingsE" title="args::rendering::default_texture_settings">default_texture_settings</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args9rendering12TextureCache14create_textureERKNSt6stringERKN2fs4viewE23texture_import_settings" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<span id="_CPPv3N4args9rendering12TextureCache14create_textureERKNSt6stringERKN2fs4viewE23texture_import_settings"></span><span id="_CPPv2N4args9rendering12TextureCache14create_textureERKNSt6stringERKN2fs4viewE23texture_import_settings"></span><span id="args::rendering::TextureCache::create_texture__ssCR.fs::viewCR.texture_import_settings"></span><span class="target" id="classargs_1_1rendering_1_1_texture_cache_1a19b6bd732e5ec301d54dfd17c9ba2ce3"></span><a class="reference internal" href="class_structargs_1_1rendering_1_1texture__handle.html#_CPPv4N4args9rendering14texture_handleE" title="args::rendering::texture_handle">texture_handle</a> <code class="sig-name descname">create_texture</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em>, <em class="property">const</em> fs::view &amp;<em>file</em>, <a class="reference internal" href="class_structargs_1_1rendering_1_1texture__import__settings.html#_CPPv4N4args9rendering23texture_import_settingsE" title="args::rendering::texture_import_settings">texture_import_settings</a> <em>settings</em> = <a class="reference internal" href="variable_texture_8hpp_1afde8ce671317860b3c5d35d3fc52f84f.html#_CPPv4N4args9rendering24default_texture_settingsE" title="args::rendering::default_texture_settings">default_texture_settings</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args9rendering12TextureCache14create_textureERKNSt6stringERKN2fs4viewE23texture_import_settings" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Create a new texture and load it from a file if a texture with the same name doesn’t exist yet. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="class_structargs_1_1rendering_1_1texture__handle.html#structargs_1_1rendering_1_1texture__handle"><span class="std std-ref">texture_handle</span></a> A valid handle to the newly created texture if it succeeds, invalid_texture_handle if it fails. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: Identifying name for the texture. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">file</span></code>: File to load from. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">settings</span></code>: Settings to pass on to the import pipeline. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args9rendering12TextureCache14create_textureERKNSt6stringE23texture_import_settings">
+<span id="_CPPv3N4args9rendering12TextureCache14create_textureERKNSt6stringE23texture_import_settings"></span><span id="_CPPv2N4args9rendering12TextureCache14create_textureERKNSt6stringE23texture_import_settings"></span><span id="args::rendering::TextureCache::create_texture__ssCR.texture_import_settings"></span><span class="target" id="classargs_1_1rendering_1_1_texture_cache_1a589141154275d97fb6518197f5b43316"></span><a class="reference internal" href="class_structargs_1_1rendering_1_1texture__handle.html#_CPPv4N4args9rendering14texture_handleE" title="args::rendering::texture_handle">texture_handle</a> <code class="sig-name descname">create_texture</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em>, <a class="reference internal" href="class_structargs_1_1rendering_1_1texture__import__settings.html#_CPPv4N4args9rendering23texture_import_settingsE" title="args::rendering::texture_import_settings">texture_import_settings</a> <em>settings</em> = <a class="reference internal" href="variable_texture_8hpp_1afde8ce671317860b3c5d35d3fc52f84f.html#_CPPv4N4args9rendering24default_texture_settingsE" title="args::rendering::default_texture_settings">default_texture_settings</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args9rendering12TextureCache14create_textureERKNSt6stringE23texture_import_settings" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Create a new texture from an image if a texture with the same name doesn’t exist yet. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="class_structargs_1_1rendering_1_1texture__handle.html#structargs_1_1rendering_1_1texture__handle"><span class="std std-ref">texture_handle</span></a> A valid handle to the newly created texture if it succeeds, invalid_texture_handle if it fails. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: Name of the image and identifying name for the texture. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">settings</span></code>: Settings to pass on to the import pipeline. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args9rendering12TextureCache14create_textureE12image_handle23texture_import_settings">
+<span id="_CPPv3N4args9rendering12TextureCache14create_textureE12image_handle23texture_import_settings"></span><span id="_CPPv2N4args9rendering12TextureCache14create_textureE12image_handle23texture_import_settings"></span><span id="args::rendering::TextureCache::create_texture__image_handle.texture_import_settings"></span><span class="target" id="classargs_1_1rendering_1_1_texture_cache_1a58490857dc3376e0a250019cd4eaf3ef"></span><a class="reference internal" href="class_structargs_1_1rendering_1_1texture__handle.html#_CPPv4N4args9rendering14texture_handleE" title="args::rendering::texture_handle">texture_handle</a> <code class="sig-name descname">create_texture</code><span class="sig-paren">(</span>image_handle <em>image</em>, <a class="reference internal" href="class_structargs_1_1rendering_1_1texture__import__settings.html#_CPPv4N4args9rendering23texture_import_settingsE" title="args::rendering::texture_import_settings">texture_import_settings</a> <em>settings</em> = <a class="reference internal" href="variable_texture_8hpp_1afde8ce671317860b3c5d35d3fc52f84f.html#_CPPv4N4args9rendering24default_texture_settingsE" title="args::rendering::default_texture_settings">default_texture_settings</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args9rendering12TextureCache14create_textureE12image_handle23texture_import_settings" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Create a new texture from an image if a texture with the same name doesn’t exist yet. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="class_structargs_1_1rendering_1_1texture__handle.html#structargs_1_1rendering_1_1texture__handle"><span class="std std-ref">texture_handle</span></a> A valid handle to the newly created texture if it succeeds, invalid_texture_handle if it fails. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">image_handle</span></code>: Image to load from. The identifying name for the texture will be the same as the name of the image. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">settings</span></code>: Settings to pass on to the import pipeline. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N4args9rendering12TextureCache10get_handleERKNSt6stringE">
-<span id="_CPPv3N4args9rendering12TextureCache10get_handleERKNSt6stringE"></span><span id="_CPPv2N4args9rendering12TextureCache10get_handleERKNSt6stringE"></span><span id="args::rendering::TextureCache::get_handle__ssCR"></span><span class="target" id="classargs_1_1rendering_1_1_texture_cache_1a73c266a7efb3d1abd36abd7e721c9765"></span><a class="reference internal" href="structargs_1_1rendering_1_1texture__handle.html#_CPPv4N4args9rendering14texture_handleE" title="args::rendering::texture_handle">texture_handle</a> <code class="sig-name descname">get_handle</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args9rendering12TextureCache10get_handleERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<span id="_CPPv3N4args9rendering12TextureCache10get_handleERKNSt6stringE"></span><span id="_CPPv2N4args9rendering12TextureCache10get_handleERKNSt6stringE"></span><span id="args::rendering::TextureCache::get_handle__ssCR"></span><span class="target" id="classargs_1_1rendering_1_1_texture_cache_1a73c266a7efb3d1abd36abd7e721c9765"></span><a class="reference internal" href="class_structargs_1_1rendering_1_1texture__handle.html#_CPPv4N4args9rendering14texture_handleE" title="args::rendering::texture_handle">texture_handle</a> <code class="sig-name descname">get_handle</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args9rendering12TextureCache10get_handleERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns a handle to a texture with a certain name. Will return invalid_texture_handle if the requested texture doesn’t exist. </p>
+</dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N4args9rendering12TextureCache10get_handleE7id_type">
-<span id="_CPPv3N4args9rendering12TextureCache10get_handleE7id_type"></span><span id="_CPPv2N4args9rendering12TextureCache10get_handleE7id_type"></span><span id="args::rendering::TextureCache::get_handle__id_type"></span><span class="target" id="classargs_1_1rendering_1_1_texture_cache_1aed451a81da27a4a4a1760d3ae3f69bdc"></span><a class="reference internal" href="structargs_1_1rendering_1_1texture__handle.html#_CPPv4N4args9rendering14texture_handleE" title="args::rendering::texture_handle">texture_handle</a> <code class="sig-name descname">get_handle</code><span class="sig-paren">(</span>id_type <em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args9rendering12TextureCache10get_handleE7id_type" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<span id="_CPPv3N4args9rendering12TextureCache10get_handleE7id_type"></span><span id="_CPPv2N4args9rendering12TextureCache10get_handleE7id_type"></span><span id="args::rendering::TextureCache::get_handle__id_type"></span><span class="target" id="classargs_1_1rendering_1_1_texture_cache_1aed451a81da27a4a4a1760d3ae3f69bdc"></span><a class="reference internal" href="class_structargs_1_1rendering_1_1texture__handle.html#_CPPv4N4args9rendering14texture_handleE" title="args::rendering::texture_handle">texture_handle</a> <code class="sig-name descname">get_handle</code><span class="sig-paren">(</span>id_type <em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args9rendering12TextureCache10get_handleE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns a handle to a texture with a certain name. Will return invalid_texture_handle if the requested texture doesn’t exist. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code>: Name hash </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
 
 </div>
 </dd></dl>
@@ -103,7 +157,7 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">ARGS API</a><ul>
-      <li>Previous: <a href="class_structargs_1_1rendering_1_1stbi__texture__loader.html" title="previous chapter">Class stbi_texture_loader</a></li>
+      <li>Previous: <a href="class_structargs_1_1rendering_1_1texture__import__settings.html" title="previous chapter">Class texture_import_settings</a></li>
       <li>Next: <a href="class_structargs_1_1rendering_1_1uniform.html" title="next chapter">Template Class uniform</a></li>
   </ul></li>
   </ul></li>

@@ -62,6 +62,8 @@ Classes
 
 - :ref:`exhale_struct_structargs_1_1core_1_1scale`
 
+- :ref:`exhale_struct_structargs_1_1core_1_1stb__image__loader`
+
 - :ref:`exhale_struct_structargs_1_1core_1_1transform`
 
 - :ref:`exhale_class_classargs_1_1core_1_1atomic__sparse__map`
@@ -93,6 +95,14 @@ Classes
 - :ref:`exhale_class_classargs_1_1core_1_1fs__error`
 
 - :ref:`exhale_class_classargs_1_1core_1_1hashed__sparse__set`
+
+- :ref:`exhale_class_structargs_1_1core_1_1image`
+
+- :ref:`exhale_class_structargs_1_1core_1_1image__handle`
+
+- :ref:`exhale_class_structargs_1_1core_1_1image__import__settings`
+
+- :ref:`exhale_class_classargs_1_1core_1_1_image_cache`
 
 - :ref:`exhale_class_classargs_1_1core_1_1invalid__component__error`
 
@@ -137,15 +147,24 @@ Classes
 - :ref:`exhale_class_classargs_1_1core_1_1vector__view`
 
 
+Enums
+-----
+
+
+- :ref:`exhale_enum_image_8hpp_1abb92aeb3adfe411845bbc09ad7918459`
+
+- :ref:`exhale_enum_image_8hpp_1a3575abaf066b483961343bd568a551a9`
+
+
 Functions
 ---------
 
 
-- :ref:`exhale_function_type__util_8hpp_1a1a2afb981820cf3e184df092c1174259`
-
 - :ref:`exhale_function_type__util_8hpp_1a039285431243c5a1071fe865f1015b24`
 
-- :ref:`exhale_function_type__util_8hpp_1aef7996e5e7a874b93744d7f2b583ac7b`
+- :ref:`exhale_function_type__util_8hpp_1a1a2afb981820cf3e184df092c1174259`
+
+- :ref:`exhale_function_type__util_8hpp_1a5740e35909c84f2d8918ff922d38daa3`
 
 - :ref:`exhale_function_type__util_8cpp_1a1fddf5a1042b1af111b6612d5d4f4212`
 
@@ -157,13 +176,13 @@ Functions
 
 - :ref:`exhale_function_type__util_8hpp_1ade524ded96c15dadf32aba9d35077294`
 
-- :ref:`exhale_function_type__util_8hpp_1a4fee05c5aa73ff07bd4297a3be98db70`
-
 - :ref:`exhale_function_type__util_8hpp_1a5f09163d626aaf72a2b5e5c2fbd4980e`
 
-- :ref:`exhale_function_type__util_8hpp_1a544d59e5fbfe271021385720ad13dbc6`
+- :ref:`exhale_function_type__util_8hpp_1a4fee05c5aa73ff07bd4297a3be98db70`
 
 - :ref:`exhale_function_type__util_8hpp_1a2fb26749a4216416b95b3c4c2728e8af`
+
+- :ref:`exhale_function_type__util_8hpp_1a544d59e5fbfe271021385720ad13dbc6`
 
 - :ref:`exhale_function_type__util_8hpp_1a411f45df69ab476f24027197bd72c878`
 
@@ -269,6 +288,10 @@ Variables
 ---------
 
 
+- :ref:`exhale_variable_image_8hpp_1ad5d246c33e6321d88da73ab5186bcbe5`
+
 - :ref:`exhale_variable_mesh_8hpp_1a7e5fb68da7b0dfa4c41ec09a683396a1`
+
+- :ref:`exhale_variable_image_8hpp_1aaa4a2b9479d116464995e17befba6387`
 
 - :ref:`exhale_variable_mesh_8hpp_1a46310039450eca86e27496c6d8c8ca9c`

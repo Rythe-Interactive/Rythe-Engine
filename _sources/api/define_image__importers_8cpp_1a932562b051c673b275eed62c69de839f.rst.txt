@@ -1,0 +1,13 @@
+.. _exhale_define_image__importers_8cpp_1a932562b051c673b275eed62c69de839f:
+
+Define STBI_MAX_DIMENSIONS
+==========================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_importers_image_importers.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: STBI_MAX_DIMENSIONS

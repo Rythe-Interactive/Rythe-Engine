@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class image &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class image_handle" href="class_structargs_1_1core_1_1image__handle.html" />
+    <link rel="prev" title="Template Class hashed_sparse_set" href="classargs_1_1core_1_1hashed__sparse__set.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="class_structargs_1_1core_1_1image__handle.html" title="Class image_handle"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classargs_1_1core_1_1hashed__sparse__set.html" title="Template Class hashed_sparse_set"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class image</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-image">
+<span id="exhale-class-structargs-1-1core-1-1image"></span><h1>Class image<a class="headerlink" href="#class-image" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_data_image.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-data-image-hpp"><span class="std std-ref">File image.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N4args4core5imageE">
+<span id="_CPPv3N4args4core5imageE"></span><span id="_CPPv2N4args4core5imageE"></span><span id="args::core::image"></span><span class="target" id="structargs_1_1core_1_1image"></span><em class="property">class </em><code class="sig-prename descclassname">args::core<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">image</code><a class="headerlink" href="#_CPPv4N4args4core5imageE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Object encapsulating the binary representation of an image. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4I0EN4args4core5image12get_raw_dataEP1Tv">
+<span id="_CPPv3I0EN4args4core5image12get_raw_dataEv"></span><span id="_CPPv2I0EN4args4core5image12get_raw_dataEv"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="structargs_1_1core_1_1image_1a6fae1f52e5c28bacdc00c3cef57cc8aa"></span><a class="reference internal" href="#_CPPv4I0EN4args4core5image12get_raw_dataEP1Tv" title="args::core::image::get_raw_data::T">T</a> *<code class="sig-name descname">get_raw_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN4args4core5image12get_raw_dataEP1Tv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the binary representation of the image with different pointer types. Each pointer type is only enabled if the channel format is the same. The void* type is always enabled. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core5image9apply_rawEb">
+<span id="_CPPv3N4args4core5image9apply_rawEb"></span><span id="_CPPv2N4args4core5image9apply_rawEb"></span><span id="args::core::image::apply_raw__b"></span><span class="target" id="structargs_1_1core_1_1image_1aa12dab50ef02ca79d99edaa439c6b7e8"></span>void <code class="sig-name descname">apply_raw</code><span class="sig-paren">(</span>bool <em>lazyApply</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core5image9apply_rawEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Apply changes made to the binary data gotten with <a class="reference internal" href="#structargs_1_1core_1_1image_1a6fae1f52e5c28bacdc00c3cef57cc8aa"><span class="std std-ref">get_raw_data()</span></a> to the colors read with <a class="reference internal" href="#structargs_1_1core_1_1image_1a021732058964a1b90aa4cc7dcef845fe"><span class="std std-ref">read_colors()</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">lazyApply</span></code>: Apply immediately if false, otherwise the changes will only actually be applied when <a class="reference internal" href="#structargs_1_1core_1_1image_1a021732058964a1b90aa4cc7dcef845fe"><span class="std std-ref">read_colors()</span></a> is called. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core5image11read_colorsEv">
+<span id="_CPPv3N4args4core5image11read_colorsEv"></span><span id="_CPPv2N4args4core5image11read_colorsEv"></span><span id="args::core::image::read_colors"></span><span class="target" id="structargs_1_1core_1_1image_1a021732058964a1b90aa4cc7dcef845fe"></span><em class="property">const</em> std::vector&lt;math::<a class="reference internal" href="class_structargs_1_1core_1_1math_1_1color.html#_CPPv4N4args4core4math5colorE" title="args::core::math::color">color</a>&gt; &amp;<code class="sig-name descname">read_colors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core5image11read_colorsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Convert the binary image representation to a more usable representation if it hasn’t been converted before and return the new representation. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>const std::vector&lt;math::color&gt;&amp; List with all the colors in the image. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core5image9data_sizeEv">
+<span id="_CPPv3N4args4core5image9data_sizeEv"></span><span id="_CPPv2N4args4core5image9data_sizeEv"></span><span id="args::core::image::data_size"></span><span class="target" id="structargs_1_1core_1_1image_1a6e29f5db664a46bedf85702ed84a2454"></span><a class="reference internal" href="typedef_primitives_8hpp_1a8cf827f509094ee682c30662176bd3b3.html#_CPPv4N4args4core9size_typeE" title="args::core::size_type">size_type</a> <code class="sig-name descname">data_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core5image9data_sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the data size of the binary data. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core5imageeqERK5image">
+<span id="_CPPv3N4args4core5imageeqERK5image"></span><span id="_CPPv2N4args4core5imageeqERK5image"></span><span id="args::core::image::eq-operator__imageCR"></span><span class="target" id="structargs_1_1core_1_1image_1af5f461d77f3bf9e78590600b1905684e"></span>bool <code class="sig-name descname">operator==</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N4args4core5imageE" title="args::core::image">image</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core5imageeqERK5image" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core5image5imageEv">
+<span id="_CPPv3N4args4core5image5imageEv"></span><span id="_CPPv2N4args4core5image5imageEv"></span><span id="args::core::image::image"></span><span class="target" id="structargs_1_1core_1_1image_1a861b3bae306e7dada870189442420973"></span><code class="sig-name descname">image</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N4args4core5image5imageEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core5image5imageERK5image">
+<span id="_CPPv3N4args4core5image5imageERK5image"></span><span id="_CPPv2N4args4core5image5imageERK5image"></span><span id="args::core::image::image__imageCR"></span><span class="target" id="structargs_1_1core_1_1image_1a4a040fa2823ef6e9200f046b088a46d2"></span><code class="sig-name descname">image</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N4args4core5image5imageERK5image" title="args::core::image::image">image</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core5image5imageERK5image" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core5image5imageERR5image">
+<span id="_CPPv3N4args4core5image5imageERR5image"></span><span id="_CPPv2N4args4core5image5imageERR5image"></span><span id="args::core::image::image__imageRR"></span><span class="target" id="structargs_1_1core_1_1image_1abfa97b1290fd7259ee81221d628096cb"></span><code class="sig-name descname">image</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core5image5imageERR5image" title="args::core::image::image">image</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core5image5imageERR5image" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core5imageaSERK5image">
+<span id="_CPPv3N4args4core5imageaSERK5image"></span><span id="_CPPv2N4args4core5imageaSERK5image"></span><span id="args::core::image::assign-operator__imageCR"></span><span class="target" id="structargs_1_1core_1_1image_1a06bdd5a109a7fa8c12e93ce525dcbfac"></span><a class="reference internal" href="#_CPPv4N4args4core5imageE" title="args::core::image">image</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N4args4core5imageE" title="args::core::image">image</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core5imageaSERK5image" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core5imageaSERR5image">
+<span id="_CPPv3N4args4core5imageaSERR5image"></span><span id="_CPPv2N4args4core5imageaSERR5image"></span><span id="args::core::image::assign-operator__imageRR"></span><span class="target" id="structargs_1_1core_1_1image_1ac4fd66728b240221cab9c85cf16df31b"></span><a class="reference internal" href="#_CPPv4N4args4core5imageE" title="args::core::image">image</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4args4core5imageE" title="args::core::image">image</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core5imageaSERR5image" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N4args4core5imageD0Ev">
+<span id="_CPPv3N4args4core5imageD0Ev"></span><span id="_CPPv2N4args4core5imageD0Ev"></span><span id="args::core::image::~image"></span><span class="target" id="structargs_1_1core_1_1image_1a0fe9eee68375d060ca701f18dc5e0e13"></span><code class="sig-name descname">~image</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4args4core5imageD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4IEN4args4core5image12get_raw_dataEPvv">
+<span id="_CPPv3IEN4args4core5image12get_raw_dataEv"></span><span id="_CPPv2IEN4args4core5image12get_raw_dataEv"></span>template&lt;&gt;<br /><span class="target" id="structargs_1_1core_1_1image_1a3774e2447620deb2adb344962a8fd38f"></span>void *<code class="sig-name descname">get_raw_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IEN4args4core5image12get_raw_dataEPvv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4IEN4args4core5image12get_raw_dataEP4bytev">
+<span id="_CPPv3IEN4args4core5image12get_raw_dataEv"></span>template&lt;&gt;<br /><span class="target" id="structargs_1_1core_1_1image_1a1c3f8d1c4fc72da792098c2ccc97d99f"></span><a class="reference internal" href="typedef_primitives_8hpp_1ad35a77c7c53f7774b26618ecb37281f2.html#_CPPv4N4args4core4byteE" title="args::core::byte">byte</a> *<code class="sig-name descname">get_raw_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IEN4args4core5image12get_raw_dataEP4bytev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4IEN4args4core5image12get_raw_dataEP6uint16v">
+template&lt;&gt;<br /><span class="target" id="structargs_1_1core_1_1image_1adfa1d9ffafa3d3395ea2656791735d31"></span><a class="reference internal" href="typedef_primitives_8hpp_1a226f62138abe024425ef58633a5bad70.html#_CPPv4N4args4core6uint16E" title="args::core::uint16">uint16</a> *<code class="sig-name descname">get_raw_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IEN4args4core5image12get_raw_dataEP6uint16v" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4IEN4args4core5image12get_raw_dataEPfv">
+template&lt;&gt;<br /><span class="target" id="structargs_1_1core_1_1image_1a329aa3db6fb10d4c57ffa0f8fb2f2c92"></span>float *<code class="sig-name descname">get_raw_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IEN4args4core5image12get_raw_dataEPfv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="cpp var">
+<dt id="_CPPv4N4args4core5image4sizeE">
+<span id="_CPPv3N4args4core5image4sizeE"></span><span id="_CPPv2N4args4core5image4sizeE"></span><span id="args::core::image::size__math::ivec2"></span><span class="target" id="structargs_1_1core_1_1image_1a11c63ecde3c5363588cb5bd1df226f5d"></span>math::ivec2 <code class="sig-name descname">size</code><a class="headerlink" href="#_CPPv4N4args4core5image4sizeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args4core5image6formatE">
+<span id="_CPPv3N4args4core5image6formatE"></span><span id="_CPPv2N4args4core5image6formatE"></span><span id="args::core::image::format__channel_format"></span><span class="target" id="structargs_1_1core_1_1image_1a7d82d6ff36e492e0c06cc8aa9a457477"></span><a class="reference internal" href="enum_image_8hpp_1abb92aeb3adfe411845bbc09ad7918459.html#_CPPv4N4args4core14channel_formatE" title="args::core::channel_format">channel_format</a> <code class="sig-name descname">format</code><a class="headerlink" href="#_CPPv4N4args4core5image6formatE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N4args4core5image10componentsE">
+<span id="_CPPv3N4args4core5image10componentsE"></span><span id="_CPPv2N4args4core5image10componentsE"></span><span id="args::core::image::components__image_components"></span><span class="target" id="structargs_1_1core_1_1image_1aebdfae5185c4083b50168f57d866c087"></span><a class="reference internal" href="enum_image_8hpp_1a3575abaf066b483961343bd568a551a9.html#_CPPv4N4args4core16image_componentsE" title="args::core::image_components">image_components</a> <code class="sig-name descname">components</code><a class="headerlink" href="#_CPPv4N4args4core5image10componentsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Friends</p>
+<dl class="friendclass">
+<dt>
+<em class="property">friend struct</em> stb_image_loader</dt>
+</dl>
+
+<dl class="friendclass">
+<dt>
+<em class="property">friend class</em> ImageCache</dt>
+</dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class image</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">ARGS API</a><ul>
+      <li>Previous: <a href="classargs_1_1core_1_1hashed__sparse__set.html" title="previous chapter">Template Class hashed_sparse_set</a></li>
+      <li>Next: <a href="class_structargs_1_1core_1_1image__handle.html" title="next chapter">Class image_handle</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/class_structargs_1_1core_1_1image.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

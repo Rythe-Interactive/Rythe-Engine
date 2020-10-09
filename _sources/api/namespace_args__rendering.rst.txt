@@ -19,8 +19,6 @@ Classes
 
 - :ref:`exhale_struct_structargs_1_1rendering_1_1camera`
 
-- :ref:`exhale_struct_structargs_1_1rendering_1_1color`
-
 - :ref:`exhale_struct_structargs_1_1rendering_1_1material`
 
 - :ref:`exhale_struct_structargs_1_1rendering_1_1material__handle`
@@ -36,12 +34,6 @@ Classes
 - :ref:`exhale_struct_structargs_1_1rendering_1_1shader__import__settings`
 
 - :ref:`exhale_struct_structargs_1_1rendering_1_1texture`
-
-- :ref:`exhale_struct_structargs_1_1rendering_1_1texture__data`
-
-- :ref:`exhale_struct_structargs_1_1rendering_1_1texture__handle`
-
-- :ref:`exhale_struct_structargs_1_1rendering_1_1texture__import__settings`
 
 - :ref:`exhale_class_structargs_1_1rendering_1_1attribute`
 
@@ -65,6 +57,12 @@ Classes
 
 - :ref:`exhale_class_structargs_1_1rendering_1_1stbi__texture__loader`
 
+- :ref:`exhale_class_structargs_1_1rendering_1_1texture__data`
+
+- :ref:`exhale_class_structargs_1_1rendering_1_1texture__handle`
+
+- :ref:`exhale_class_structargs_1_1rendering_1_1texture__import__settings`
+
 - :ref:`exhale_class_classargs_1_1rendering_1_1_texture_cache`
 
 - :ref:`exhale_class_structargs_1_1rendering_1_1uniform`
@@ -73,10 +71,6 @@ Classes
 Enums
 -----
 
-
-- :ref:`exhale_enum_texture_8hpp_1a68dcf1df927c9533cc4696b3ddce51b5`
-
-- :ref:`exhale_enum_texture_8hpp_1ad23721ebcd9658c59744a5dc1977f895`
 
 - :ref:`exhale_enum_texture_8hpp_1af6ed77971a6f9811618517b6dace3bef`
 
@@ -87,9 +81,18 @@ Enums
 - :ref:`exhale_enum_texture_8hpp_1a0e7e324325c8f5807752551beb021988`
 
 
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_texture_8hpp_1ad0e631a5e4efe2dbd517fbd14ac29157`
+
+
 Variables
 ---------
 
+
+- :ref:`exhale_variable_texture_8hpp_1a09fdfae7a6e74a0d64927f6c2da35c3d`
 
 - :ref:`exhale_variable_texture_8hpp_1a44d8c259b68a75a27a6b24f9715a22d8`
 

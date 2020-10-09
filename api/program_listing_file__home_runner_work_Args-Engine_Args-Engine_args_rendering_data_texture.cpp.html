@@ -54,8 +54,8 @@
     <span class="p">{</span>
         <span class="n">resource</span><span class="o">-&gt;</span><span class="n">clear</span><span class="p">();</span>
         <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">textureId</span><span class="p">,</span> <span class="n">resource</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">());</span>
-        <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="n">resource</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">());</span>
-        <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">height</span><span class="p">,</span> <span class="n">resource</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">());</span>
+        <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">resource</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">());</span>
+        <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">resource</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">());</span>
         <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">channels</span><span class="p">,</span> <span class="n">resource</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">());</span>
         <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">type</span><span class="p">,</span> <span class="n">resource</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">());</span>
     <span class="p">}</span>
@@ -64,8 +64,8 @@
     <span class="p">{</span>
         <span class="n">byte_vec</span><span class="o">::</span><span class="n">const_iterator</span> <span class="n">start</span> <span class="o">=</span> <span class="n">resource</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
         <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">textureId</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
-        <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
-        <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
+        <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
+        <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
         <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">channels</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
         <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
     <span class="p">}</span>
@@ -99,12 +99,11 @@
         <span class="p">}</span>
 
         <span class="n">texture_data</span> <span class="n">data</span><span class="p">{};</span>
-        <span class="n">data</span><span class="p">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">texture</span><span class="p">.</span><span class="n">width</span><span class="p">;</span>
-        <span class="n">data</span><span class="p">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">texture</span><span class="p">.</span><span class="n">height</span><span class="p">;</span>
-        <span class="n">data</span><span class="p">.</span><span class="n">channels</span> <span class="o">=</span> <span class="n">texture</span><span class="p">.</span><span class="n">channels</span><span class="p">;</span>
+        <span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">texture</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">texture</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
         <span class="n">data</span><span class="p">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">texture</span><span class="p">.</span><span class="n">type</span><span class="p">;</span>
-        <span class="n">data</span><span class="p">.</span><span class="n">pixels</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">data</span><span class="p">.</span><span class="n">height</span><span class="p">);</span>
-        <span class="n">glGetTexImage</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">type</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">components_to_format</span><span class="p">[</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">channels</span><span class="p">)],</span> <span class="n">GL_RGBA</span><span class="p">,</span> <span class="n">data</span><span class="p">.</span><span class="n">pixels</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+        <span class="n">data</span><span class="p">.</span><span class="n">pixels</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+        <span class="n">glGetTexImage</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">type</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">components_to_format</span><span class="p">[</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">texture</span><span class="p">.</span><span class="n">channels</span><span class="p">)],</span> <span class="n">GL_RGBA</span><span class="p">,</span> <span class="n">data</span><span class="p">.</span><span class="n">pixels</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
         <span class="k">return</span> <span class="n">data</span><span class="p">;</span>
     <span class="p">}</span>
 
@@ -129,6 +128,85 @@
         <span class="p">{</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_textureLock</span><span class="p">);</span>
             <span class="n">m_textures</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="n">texture_handle</span> <span class="n">TextureCache</span><span class="o">::</span><span class="n">create_texture</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">texture_import_settings</span> <span class="n">settings</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">image_handle</span> <span class="n">image</span> <span class="o">=</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">image</span> <span class="o">==</span> <span class="n">invalid_image_handle</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Image {} doesn&#39;t exist.&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">invalid_texture_handle</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">create_texture</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">settings</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">texture_handle</span> <span class="n">TextureCache</span><span class="o">::</span><span class="n">create_texture</span><span class="p">(</span><span class="n">image_handle</span> <span class="n">image</span><span class="p">,</span> <span class="n">texture_import_settings</span> <span class="n">settings</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">image</span> <span class="o">==</span> <span class="n">invalid_image_handle</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Tried to create a texture with an invalid image&quot;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">invalid_texture_handle</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">image</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_textureLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_textures</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+                <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+        <span class="p">}</span>
+
+        <span class="n">texture</span> <span class="n">texture</span><span class="p">{};</span>
+        <span class="n">texture</span><span class="p">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">type</span><span class="p">;</span>
+
+        <span class="c1">// Allocate and bind the texture.</span>
+        <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">texture</span><span class="p">.</span><span class="n">textureId</span><span class="p">);</span>
+        <span class="n">glBindTexture</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">type</span><span class="p">),</span> <span class="n">texture</span><span class="p">.</span><span class="n">textureId</span><span class="p">);</span>
+
+        <span class="c1">// Handle mips</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">generateMipmaps</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">glTexParameteri</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">type</span><span class="p">),</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLint</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">min</span><span class="p">));</span>
+            <span class="n">glTexParameteri</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">type</span><span class="p">),</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLint</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">mag</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Handle wrapping behavior.</span>
+        <span class="n">glTexParameteri</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">type</span><span class="p">),</span> <span class="n">GL_TEXTURE_WRAP_R</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLint</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">wrapR</span><span class="p">));</span>
+        <span class="n">glTexParameteri</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">type</span><span class="p">),</span> <span class="n">GL_TEXTURE_WRAP_S</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLint</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">wrapS</span><span class="p">));</span>
+        <span class="n">glTexParameteri</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">type</span><span class="p">),</span> <span class="n">GL_TEXTURE_WRAP_T</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLint</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">wrapT</span><span class="p">));</span>
+
+        <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">img</span><span class="p">]</span> <span class="o">=</span> <span class="n">image</span><span class="p">.</span><span class="n">get_raw_image</span><span class="p">();</span>
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+
+            <span class="n">texture</span><span class="p">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">img</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
+            <span class="n">texture</span><span class="p">.</span><span class="n">channels</span> <span class="o">=</span> <span class="n">img</span><span class="p">.</span><span class="n">components</span><span class="p">;</span>
+
+            <span class="c1">// Construct the texture using the loaded data.</span>
+            <span class="n">glTexImage2D</span><span class="p">(</span>
+                <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">type</span><span class="p">),</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLint</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">intendedFormat</span><span class="p">),</span>
+                <span class="n">texture</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">x</span><span class="p">,</span>
+                <span class="n">texture</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">y</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="n">components_to_format</span><span class="p">[</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">img</span><span class="p">.</span><span class="n">components</span><span class="p">)],</span>
+                <span class="n">channels_to_glenum</span><span class="p">[</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">uint</span><span class="o">&gt;</span><span class="p">(</span><span class="n">img</span><span class="p">.</span><span class="n">format</span><span class="p">)],</span>
+                <span class="n">img</span><span class="p">.</span><span class="n">get_raw_data</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">());</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Generate mips.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">generateMipmaps</span><span class="p">)</span>
+            <span class="n">glGenerateMipmap</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">type</span><span class="p">));</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_textureLock</span><span class="p">);</span>
+            <span class="n">m_textures</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">texture</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>

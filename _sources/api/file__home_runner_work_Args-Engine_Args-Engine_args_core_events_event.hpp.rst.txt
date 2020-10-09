@@ -41,8 +41,6 @@ Included By
 -----------
 
 
-- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_events_windowevents.hpp`
-
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_events_windowinputevents.hpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_defaultevents.hpp`

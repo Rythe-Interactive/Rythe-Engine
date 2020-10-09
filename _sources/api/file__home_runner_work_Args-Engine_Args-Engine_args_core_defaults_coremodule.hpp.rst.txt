@@ -31,6 +31,8 @@ Includes
 
 - ``core/compute/context.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_compute_context.hpp`)
 
+- ``core/data/importers/image_importers.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_importers_image_importers.hpp`)
+
 - ``core/data/importers/mesh_importers.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_importers_mesh_importers.hpp`)
 
 - ``core/defaults/defaultcomponents.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_defaults_defaultcomponents.hpp`)

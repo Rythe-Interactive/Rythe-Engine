@@ -21,6 +21,8 @@ Files
 -----
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_data.hpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_image.cpp`
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_image.hpp`
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_mesh.cpp`
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_mesh.hpp`
 

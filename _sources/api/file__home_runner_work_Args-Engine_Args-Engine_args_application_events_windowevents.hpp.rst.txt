@@ -31,7 +31,7 @@ Includes
 
 - ``application/window/window.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_window_window.hpp`)
 
-- ``core/events/event.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_events_event.hpp`)
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_core.hpp`)
 
 - ``vector`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_vector_view.hpp`)
 
@@ -79,9 +79,5 @@ Classes
 
 - :ref:`exhale_struct_structargs_1_1application_1_1window__refresh`
 
-- :ref:`exhale_struct_structargs_1_1application_1_1window__request`
-
 - :ref:`exhale_struct_structargs_1_1application_1_1window__resize`
-
-- :ref:`exhale_struct_structargs_1_1application_1_1window__toggle__fullscreen__request`
 

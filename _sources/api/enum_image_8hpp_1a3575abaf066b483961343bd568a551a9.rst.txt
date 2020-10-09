@@ -1,0 +1,13 @@
+.. _exhale_enum_image_8hpp_1a3575abaf066b483961343bd568a551a9:
+
+Enum image_components
+=====================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_image.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: args::core::image_components

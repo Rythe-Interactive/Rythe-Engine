@@ -124,8 +124,8 @@
         <span class="k">const</span> <span class="n">ALchar</span><span class="o">*</span> <span class="n">ALCExtensions</span> <span class="o">=</span> <span class="n">alcGetString</span><span class="p">(</span><span class="n">alDevice</span><span class="p">,</span> <span class="n">ALC_EXTENSIONS</span><span class="p">);</span>
         <span class="n">ALCint</span> <span class="n">srate</span><span class="p">;</span>
         <span class="n">alcGetIntegerv</span><span class="p">(</span><span class="n">alDevice</span><span class="p">,</span> <span class="n">ALC_FREQUENCY</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">srate</span><span class="p">);</span>
-        <span class="n">log</span><span class="o">::</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;OpenAL info:</span><span class="se">\n\n\t\t\t</span><span class="s">OpenAL information</span><span class="se">\n\t</span><span class="s">Vendor: {}</span><span class="se">\n\t</span><span class="s">Version: {}</span><span class="se">\n\t</span><span class="s">Renderer: {}</span><span class="se">\n\t</span><span class="s">OpenAl Extensions: {}</span><span class="se">\n\t</span><span class="s">ALC Extensions: {}</span><span class="se">\n\t</span><span class="s">Device samplerate: {}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
-            <span class="n">vendor</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="n">renderer</span><span class="p">,</span> <span class="n">openALExtensions</span><span class="p">,</span> <span class="n">ALCExtensions</span><span class="p">,</span> <span class="n">srate</span><span class="p">);</span>
+        <span class="n">log</span><span class="o">::</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Initialized OpenAL</span><span class="se">\n\t</span><span class="s">CONTEXT INFO</span><span class="se">\n\t</span><span class="s">----------------------------------</span><span class="se">\n\t</span><span class="s">Vendor:</span><span class="se">\t\t\t</span><span class="s">{}</span><span class="se">\n\t</span><span class="s">Version:</span><span class="se">\t\t</span><span class="s">{}</span><span class="se">\n\t</span><span class="s">Renderer:</span><span class="se">\t\t</span><span class="s">{}</span><span class="se">\n\t</span><span class="s">Device samplerate:</span><span class="se">\t</span><span class="s">{}</span><span class="se">\n\t</span><span class="s">OpenAl Extensions:</span><span class="se">\n\t\t</span><span class="s">{}</span><span class="se">\n\n\t</span><span class="s">ALC Extensions:</span><span class="se">\n\t\t</span><span class="s">{}</span><span class="se">\n\t</span><span class="s">----------------------------------</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+            <span class="n">vendor</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="n">renderer</span><span class="p">,</span> <span class="n">srate</span><span class="p">,</span> <span class="n">openALExtensions</span><span class="p">,</span> <span class="n">ALCExtensions</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="kr">inline</span> <span class="kt">void</span> <span class="n">AudioSystem</span><span class="o">::</span><span class="n">update</span><span class="p">(</span><span class="n">time</span><span class="o">::</span><span class="n">span</span> <span class="n">deltatime</span><span class="p">)</span>
@@ -144,15 +144,41 @@
             <span class="n">previousP</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
             <span class="n">alSource3f</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_sourceId</span><span class="p">,</span> <span class="n">AL_POSITION</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
             <span class="n">alSource3f</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_sourceId</span><span class="p">,</span> <span class="n">AL_VELOCITY</span><span class="p">,</span> <span class="n">vel</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">vel</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">vel</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_changes</span> <span class="o">&amp;</span> <span class="n">audio_source</span><span class="o">::</span><span class="n">sound_properties</span><span class="o">::</span><span class="n">pitch</span><span class="p">)</span>
+
+            <span class="k">using</span> <span class="n">change</span> <span class="o">=</span> <span class="n">audio_source</span><span class="o">::</span><span class="n">sound_properties</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_changes</span> <span class="o">&amp;</span> <span class="n">change</span><span class="o">::</span><span class="n">pitch</span><span class="p">)</span>
             <span class="p">{</span>
                 <span class="c1">// Pitch has changed</span>
                 <span class="n">alSourcef</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_sourceId</span><span class="p">,</span> <span class="n">AL_PITCH</span><span class="p">,</span> <span class="n">source</span><span class="p">.</span><span class="n">getPitch</span><span class="p">());</span>
             <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_changes</span> <span class="o">&amp;</span> <span class="n">audio_source</span><span class="o">::</span><span class="n">sound_properties</span><span class="o">::</span><span class="n">gain</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_changes</span> <span class="o">&amp;</span> <span class="n">change</span><span class="o">::</span><span class="n">gain</span><span class="p">)</span>
             <span class="p">{</span>
                 <span class="c1">// Gain has changed</span>
                 <span class="n">alSourcef</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_sourceId</span><span class="p">,</span> <span class="n">AL_GAIN</span><span class="p">,</span> <span class="n">source</span><span class="p">.</span><span class="n">getGain</span><span class="p">());</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_changes</span> <span class="o">&amp;</span> <span class="n">change</span><span class="o">::</span><span class="n">playState</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">using</span> <span class="n">state</span> <span class="o">=</span> <span class="n">audio</span><span class="o">::</span><span class="n">audio_source</span><span class="o">::</span><span class="n">playstate</span><span class="p">;</span>
+                <span class="c1">// Playstate has changed</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_nextPlayState</span> <span class="o">==</span> <span class="n">state</span><span class="o">::</span><span class="n">playing</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">source</span><span class="p">.</span><span class="n">m_playState</span> <span class="o">=</span> <span class="n">state</span><span class="o">::</span><span class="n">playing</span><span class="p">;</span>
+                    <span class="n">alSourcePlay</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_sourceId</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_nextPlayState</span> <span class="o">==</span> <span class="n">state</span><span class="o">::</span><span class="n">paused</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">source</span><span class="p">.</span><span class="n">m_playState</span> <span class="o">=</span> <span class="n">state</span><span class="o">::</span><span class="n">paused</span><span class="p">;</span>
+                    <span class="n">alSourcePause</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_sourceId</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_nextPlayState</span> <span class="o">==</span> <span class="n">state</span><span class="o">::</span><span class="n">stopped</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">source</span><span class="p">.</span><span class="n">m_playState</span> <span class="o">=</span> <span class="n">state</span><span class="o">::</span><span class="n">stopped</span><span class="p">;</span>
+                    <span class="n">alSourceStop</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_sourceId</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_changes</span> <span class="o">&amp;</span> <span class="n">change</span><span class="o">::</span><span class="n">doRewind</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">alSourceRewind</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">m_sourceId</span><span class="p">);</span>
             <span class="p">}</span>
 
             <span class="n">source</span><span class="p">.</span><span class="n">clearChanges</span><span class="p">();</span>
@@ -182,16 +208,6 @@
 
         <span class="c1">// do something with a.</span>
         <span class="n">initSource</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
-
-        <span class="p">{</span>
-            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">contextLock</span><span class="p">);</span>
-            <span class="n">alcMakeContextCurrent</span><span class="p">(</span><span class="n">alcContext</span><span class="p">);</span>
-            <span class="c1">// NOTE TO SELF:</span>
-            <span class="c1">// REMOVE THE AUTO PLAY (TESTING PURPOSE)</span>
-            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;playing sound&quot;</span><span class="p">);</span>
-            <span class="n">alSourcePlay</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">m_sourceId</span><span class="p">);</span>
-            <span class="n">alcMakeContextCurrent</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
-        <span class="p">}</span>
 
         <span class="n">m_sourcePositions</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">event</span><span class="o">-&gt;</span><span class="n">entity</span><span class="p">.</span><span class="n">read_component</span><span class="o">&lt;</span><span class="n">position</span><span class="o">&gt;</span><span class="p">());</span>
 

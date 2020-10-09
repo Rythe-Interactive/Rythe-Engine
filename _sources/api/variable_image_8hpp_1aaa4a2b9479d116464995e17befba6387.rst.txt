@@ -1,0 +1,13 @@
+.. _exhale_variable_image_8hpp_1aaa4a2b9479d116464995e17befba6387:
+
+Variable args::core::invalid_image_handle
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_image.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::core::invalid_image_handle

@@ -202,7 +202,7 @@
 
         <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">common</span><span class="o">::</span><span class="n">valid</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">.</span><span class="n">get_error</span><span class="p">());</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Error while loading file: {} {}&quot;</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">file</span><span class="p">.</span><span class="n">get_filename</span><span class="p">()),</span> <span class="n">result</span><span class="p">.</span><span class="n">get_error</span><span class="p">());</span>
             <span class="k">return</span> <span class="n">invalid_mesh_handle</span><span class="p">;</span>
         <span class="p">}</span>
 

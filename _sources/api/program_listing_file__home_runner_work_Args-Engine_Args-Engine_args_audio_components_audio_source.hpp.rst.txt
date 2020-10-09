@@ -25,7 +25,17 @@ Program Listing for File audio_source.hpp
            {
                pitch = 1,
                gain = 2,
+               playState = 4,
+               doRewind = 8,
            };
+   
+           enum playstate
+           {
+               playing,
+               paused,
+               stopped,
+           };
+   
            void setPitch(const float pitch)
            {
                m_changes |= sound_properties::pitch; // set b0
@@ -39,9 +49,56 @@ Program Listing for File audio_source.hpp
            }
            float getGain() const { return m_gain; };
    
+           void play()
+           {
+               // If the file is already playing or if the file will be played on next update > return
+               if (m_nextPlayState == playstate::playing) return;
+               m_changes |= sound_properties::playState;
+               m_nextPlayState = playstate::playing;
+               // Do not set playstate to playing - audiosystem will set it accordingly
+           }
+   
+           void pause()
+           {
+               // If the file is already playing or if the file will be played on next update > return
+               if (m_nextPlayState == playstate::paused) return;
+               m_changes |= sound_properties::playState;
+               m_nextPlayState = playstate::paused;
+               // Do not set playstate to paused - audiosystem will set it accordingly
+           }
+   
+           void stop()
+           {
+               // If the file is already playing or if the file will be played on next update > return
+               if (m_nextPlayState == playstate::stopped) return;
+               m_changes |= sound_properties::playState;
+               m_nextPlayState = playstate::stopped;
+               // Do not set playstate to stopped - audiosystem will set it accordingly
+           }
+   
+           bool isPlaying() const
+           {
+               return m_playState == playstate::playing;
+           }
+   
+           bool isPaused() const
+           {
+               return m_playState == playstate::paused;
+           }
+   
+           bool isStopped() const
+           {
+               return m_playState == playstate::stopped;
+           }
+   
            void setAudioHandle(audio_segment_handle handle)
            {
                m_audio_handle = handle;
+           }
+   
+           void rewind()
+           {
+               m_changes |= sound_properties::doRewind;
            }
    
            audio_segment_handle getAudioHandle() const
@@ -53,6 +110,8 @@ Program Listing for File audio_source.hpp
            void clearChanges()
            {
                m_changes ^= m_changes; // Reset
+               // The next play state also needs to be reset to be able to properly switch play states
+               m_nextPlayState = m_playState; 
            }
    
            ALuint m_sourceId;
@@ -61,9 +120,16 @@ Program Listing for File audio_source.hpp
            float m_pitch = 1.0f;
            float m_gain = 1.0f;
    
+           playstate m_playState = playstate::stopped;
+           playstate m_nextPlayState = playstate::stopped;
+   
            // Byte to keep track of changes made to audio source
-           // b0 - pitch changed
-           // b1 - gain changed
+           // For all the values > see enum sound_properties
+           // b0 - pitch
+           // b1 - gain
+           // b2 - play state
+           // b3 - rewind (doRewind)
+   
            byte m_changes = 0;
        };
    }

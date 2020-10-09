@@ -15,6 +15,7 @@ Derived Types
 - ``public args::core::filesystem::resource_converter< result, Settings >`` (:ref:`exhale_class_structargs_1_1core_1_1filesystem_1_1resource__converter`)
 - ``public args::core::filesystem::resource_converter< audio_segment, audio_import_settings >`` (:ref:`exhale_class_structargs_1_1core_1_1filesystem_1_1resource__converter`)
 - ``public args::core::filesystem::resource_converter< basic_resource >`` (:ref:`exhale_class_structargs_1_1core_1_1filesystem_1_1resource__converter`)
+- ``public args::core::filesystem::resource_converter< image, image_import_settings >`` (:ref:`exhale_class_structargs_1_1core_1_1filesystem_1_1resource__converter`)
 - ``public args::core::filesystem::resource_converter< mesh, mesh_import_settings >`` (:ref:`exhale_class_structargs_1_1core_1_1filesystem_1_1resource__converter`)
 - ``public args::core::filesystem::resource_converter< T >`` (:ref:`exhale_class_structargs_1_1core_1_1filesystem_1_1resource__converter`)
 - ``public args::core::filesystem::resource_converter< texture, texture_import_settings >`` (:ref:`exhale_class_structargs_1_1core_1_1filesystem_1_1resource__converter`)

@@ -62,10 +62,6 @@
     <span class="p">{</span>
         <span class="k">friend</span> <span class="k">class</span> <span class="nc">Engine</span><span class="p">;</span>
     <span class="k">private</span><span class="o">:</span>
-        <span class="n">ecs</span><span class="o">::</span><span class="n">EcsRegistry</span><span class="o">*</span> <span class="n">m_ecs</span><span class="p">;</span>
-        <span class="n">scheduling</span><span class="o">::</span><span class="n">Scheduler</span><span class="o">*</span> <span class="n">m_scheduler</span><span class="p">;</span>
-        <span class="n">events</span><span class="o">::</span><span class="n">EventBus</span><span class="o">*</span> <span class="n">m_eventBus</span><span class="p">;</span>
-
         <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">SystemBase</span><span class="o">&gt;&gt;</span> <span class="n">m_systems</span><span class="p">;</span>
 
         <span class="kt">void</span> <span class="nf">init</span><span class="p">()</span>
@@ -75,6 +71,10 @@
         <span class="p">};</span>
 
     <span class="k">protected</span><span class="o">:</span>
+        <span class="k">static</span> <span class="n">ecs</span><span class="o">::</span><span class="n">EcsRegistry</span><span class="o">*</span> <span class="n">m_ecs</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">scheduling</span><span class="o">::</span><span class="n">Scheduler</span><span class="o">*</span> <span class="n">m_scheduler</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">events</span><span class="o">::</span><span class="n">EventBus</span><span class="o">*</span> <span class="n">m_eventBus</span><span class="p">;</span>
+
         <span class="k">template</span><span class="o">&lt;</span><span class="n">size_type</span> <span class="n">charc</span><span class="o">&gt;</span>
         <span class="kt">void</span> <span class="n">addProcessChain</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="p">(</span><span class="o">&amp;</span><span class="n">name</span><span class="p">)[</span><span class="n">charc</span><span class="p">])</span>
         <span class="p">{</span>
@@ -84,12 +84,7 @@
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">SystemType</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Args</span><span class="p">,</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">SystemType</span><span class="p">,</span> <span class="n">System</span><span class="o">&lt;</span><span class="n">SystemType</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
         <span class="kt">void</span> <span class="n">reportSystem</span><span class="p">(</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">SystemBase</span><span class="o">&gt;</span> <span class="n">system</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">SystemType</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
-            <span class="n">system</span><span class="o">-&gt;</span><span class="n">m_ecs</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="p">;</span>
-            <span class="n">system</span><span class="o">-&gt;</span><span class="n">m_scheduler</span> <span class="o">=</span> <span class="n">m_scheduler</span><span class="p">;</span>
-            <span class="n">system</span><span class="o">-&gt;</span><span class="n">m_eventBus</span> <span class="o">=</span> <span class="n">m_eventBus</span><span class="p">;</span>
-
-            <span class="n">m_systems</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">SystemType</span><span class="o">&gt;</span><span class="p">(),</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">system</span><span class="p">));</span>
+            <span class="n">m_systems</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">SystemType</span><span class="o">&gt;</span><span class="p">(),</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">SystemType</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...));</span>
         <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>

@@ -209,6 +209,11 @@
         <span class="k">return</span> <span class="n">glfwWindowShouldClose</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
     <span class="p">}</span>
 
+    <span class="kt">void</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">count</span><span class="p">,</span> <span class="k">const</span> <span class="n">GLFWimage</span><span class="o">*</span> <span class="n">images</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">glfwSetWindowIcon</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">images</span><span class="p">);</span>
+    <span class="p">}</span>
+
     <span class="kt">void</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setWindowAttrib</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">attrib</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">glfwSetWindowAttrib</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">attrib</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>

@@ -59,14 +59,14 @@
 <ul class="simple">
 <li><p><a class="reference internal" href="#classes" id="id2">Classes</a></p></li>
 <li><p><a class="reference internal" href="#enums" id="id3">Enums</a></p></li>
-<li><p><a class="reference internal" href="#variables" id="id4">Variables</a></p></li>
+<li><p><a class="reference internal" href="#typedefs" id="id4">Typedefs</a></p></li>
+<li><p><a class="reference internal" href="#variables" id="id5">Variables</a></p></li>
 </ul>
 </div>
 <div class="section" id="classes">
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="structargs_1_1rendering_1_1camera.html#exhale-struct-structargs-1-1rendering-1-1camera"><span class="std std-ref">Struct camera</span></a></p></li>
-<li><p><a class="reference internal" href="structargs_1_1rendering_1_1color.html#exhale-struct-structargs-1-1rendering-1-1color"><span class="std std-ref">Struct color</span></a></p></li>
 <li><p><a class="reference internal" href="structargs_1_1rendering_1_1material.html#exhale-struct-structargs-1-1rendering-1-1material"><span class="std std-ref">Struct material</span></a></p></li>
 <li><p><a class="reference internal" href="structargs_1_1rendering_1_1material__handle.html#exhale-struct-structargs-1-1rendering-1-1material-handle"><span class="std std-ref">Struct material_handle</span></a></p></li>
 <li><p><a class="reference internal" href="structargs_1_1rendering_1_1material__parameter.html#exhale-struct-structargs-1-1rendering-1-1material-parameter"><span class="std std-ref">Template Struct material_parameter</span></a></p></li>
@@ -75,9 +75,6 @@
 <li><p><a class="reference internal" href="structargs_1_1rendering_1_1shader__handle.html#exhale-struct-structargs-1-1rendering-1-1shader-handle"><span class="std std-ref">Struct shader_handle</span></a></p></li>
 <li><p><a class="reference internal" href="structargs_1_1rendering_1_1shader__import__settings.html#exhale-struct-structargs-1-1rendering-1-1shader-import-settings"><span class="std std-ref">Struct shader_import_settings</span></a></p></li>
 <li><p><a class="reference internal" href="structargs_1_1rendering_1_1texture.html#exhale-struct-structargs-1-1rendering-1-1texture"><span class="std std-ref">Struct texture</span></a></p></li>
-<li><p><a class="reference internal" href="structargs_1_1rendering_1_1texture__data.html#exhale-struct-structargs-1-1rendering-1-1texture-data"><span class="std std-ref">Struct texture_data</span></a></p></li>
-<li><p><a class="reference internal" href="structargs_1_1rendering_1_1texture__handle.html#exhale-struct-structargs-1-1rendering-1-1texture-handle"><span class="std std-ref">Struct texture_handle</span></a></p></li>
-<li><p><a class="reference internal" href="structargs_1_1rendering_1_1texture__import__settings.html#exhale-struct-structargs-1-1rendering-1-1texture-import-settings"><span class="std std-ref">Struct texture_import_settings</span></a></p></li>
 <li><p><a class="reference internal" href="class_structargs_1_1rendering_1_1attribute.html#exhale-class-structargs-1-1rendering-1-1attribute"><span class="std std-ref">Class attribute</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1rendering_1_1_material_cache.html#exhale-class-classargs-1-1rendering-1-1-material-cache"><span class="std std-ref">Class MaterialCache</span></a></p></li>
 <li><p><a class="reference internal" href="class_structargs_1_1rendering_1_1model.html#exhale-class-structargs-1-1rendering-1-1model"><span class="std std-ref">Class model</span></a></p></li>
@@ -89,6 +86,9 @@
 <li><p><a class="reference internal" href="class_structargs_1_1rendering_1_1shader__parameter__base.html#exhale-class-structargs-1-1rendering-1-1shader-parameter-base"><span class="std std-ref">Class shader_parameter_base</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1rendering_1_1_shader_cache.html#exhale-class-classargs-1-1rendering-1-1-shader-cache"><span class="std std-ref">Class ShaderCache</span></a></p></li>
 <li><p><a class="reference internal" href="class_structargs_1_1rendering_1_1stbi__texture__loader.html#exhale-class-structargs-1-1rendering-1-1stbi-texture-loader"><span class="std std-ref">Class stbi_texture_loader</span></a></p></li>
+<li><p><a class="reference internal" href="class_structargs_1_1rendering_1_1texture__data.html#exhale-class-structargs-1-1rendering-1-1texture-data"><span class="std std-ref">Class texture_data</span></a></p></li>
+<li><p><a class="reference internal" href="class_structargs_1_1rendering_1_1texture__handle.html#exhale-class-structargs-1-1rendering-1-1texture-handle"><span class="std std-ref">Class texture_handle</span></a></p></li>
+<li><p><a class="reference internal" href="class_structargs_1_1rendering_1_1texture__import__settings.html#exhale-class-structargs-1-1rendering-1-1texture-import-settings"><span class="std std-ref">Class texture_import_settings</span></a></p></li>
 <li><p><a class="reference internal" href="classargs_1_1rendering_1_1_texture_cache.html#exhale-class-classargs-1-1rendering-1-1-texture-cache"><span class="std std-ref">Class TextureCache</span></a></p></li>
 <li><p><a class="reference internal" href="class_structargs_1_1rendering_1_1uniform.html#exhale-class-structargs-1-1rendering-1-1uniform"><span class="std std-ref">Template Class uniform</span></a></p></li>
 </ul>
@@ -96,17 +96,22 @@
 <div class="section" id="enums">
 <h2>Enums<a class="headerlink" href="#enums" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="enum_texture_8hpp_1a68dcf1df927c9533cc4696b3ddce51b5.html#exhale-enum-texture-8hpp-1a68dcf1df927c9533cc4696b3ddce51b5"><span class="std std-ref">Enum texture_channel_format</span></a></p></li>
-<li><p><a class="reference internal" href="enum_texture_8hpp_1ad23721ebcd9658c59744a5dc1977f895.html#exhale-enum-texture-8hpp-1ad23721ebcd9658c59744a5dc1977f895"><span class="std std-ref">Enum texture_components</span></a></p></li>
 <li><p><a class="reference internal" href="enum_texture_8hpp_1af6ed77971a6f9811618517b6dace3bef.html#exhale-enum-texture-8hpp-1af6ed77971a6f9811618517b6dace3bef"><span class="std std-ref">Enum texture_format</span></a></p></li>
 <li><p><a class="reference internal" href="enum_texture_8hpp_1aedda9c4590871c7e09bd12f87584d5af.html#exhale-enum-texture-8hpp-1aedda9c4590871c7e09bd12f87584d5af"><span class="std std-ref">Enum texture_mipmap</span></a></p></li>
 <li><p><a class="reference internal" href="enum_texture_8hpp_1a581fe46ca27ac9ba3b94003fc3aa49f5.html#exhale-enum-texture-8hpp-1a581fe46ca27ac9ba3b94003fc3aa49f5"><span class="std std-ref">Enum texture_type</span></a></p></li>
 <li><p><a class="reference internal" href="enum_texture_8hpp_1a0e7e324325c8f5807752551beb021988.html#exhale-enum-texture-8hpp-1a0e7e324325c8f5807752551beb021988"><span class="std std-ref">Enum texture_wrap</span></a></p></li>
 </ul>
 </div>
+<div class="section" id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="typedef_texture_8hpp_1ad0e631a5e4efe2dbd517fbd14ac29157.html#exhale-typedef-texture-8hpp-1ad0e631a5e4efe2dbd517fbd14ac29157"><span class="std std-ref">Typedef args::rendering::texture_components</span></a></p></li>
+</ul>
+</div>
 <div class="section" id="variables">
 <h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
+<li><p><a class="reference internal" href="variable_texture_8hpp_1a09fdfae7a6e74a0d64927f6c2da35c3d.html#exhale-variable-texture-8hpp-1a09fdfae7a6e74a0d64927f6c2da35c3d"><span class="std std-ref">Variable args::rendering::channels_to_glenum</span></a></p></li>
 <li><p><a class="reference internal" href="variable_texture_8hpp_1a44d8c259b68a75a27a6b24f9715a22d8.html#exhale-variable-texture-8hpp-1a44d8c259b68a75a27a6b24f9715a22d8"><span class="std std-ref">Variable args::rendering::components_to_format</span></a></p></li>
 <li><p><a class="reference internal" href="variable_shader_8hpp_1a9e04ca5e9f27aa55c49a29ff4b3fe7fb.html#exhale-variable-shader-8hpp-1a9e04ca5e9f27aa55c49a29ff4b3fe7fb"><span class="std std-ref">Variable args::rendering::default_shader_settings</span></a></p></li>
 <li><p><a class="reference internal" href="variable_texture_8hpp_1afde8ce671317860b3c5d35d3fc52f84f.html#exhale-variable-texture-8hpp-1afde8ce671317860b3c5d35d3fc52f84f"><span class="std std-ref">Variable args::rendering::default_texture_settings</span></a></p></li>
@@ -131,6 +136,7 @@
 <li><a class="reference internal" href="#">Namespace args::rendering</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#enums">Enums</a></li>
+<li><a class="reference internal" href="#typedefs">Typedefs</a></li>
 <li><a class="reference internal" href="#variables">Variables</a></li>
 </ul>
 </li>

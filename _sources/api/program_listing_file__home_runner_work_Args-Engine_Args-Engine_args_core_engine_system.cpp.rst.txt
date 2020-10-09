@@ -1,0 +1,20 @@
+
+.. _program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_system.cpp:
+
+Program Listing for File system.cpp
+===================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Args-Engine_Args-Engine_args_core_engine_system.cpp>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/engine/system.cpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include <core/engine/system.hpp>
+   
+   namespace args::core
+   {
+       ecs::EcsRegistry* SystemBase::m_ecs;
+       scheduling::Scheduler* SystemBase::m_scheduler;
+       events::EventBus* SystemBase::m_eventBus;
+   }

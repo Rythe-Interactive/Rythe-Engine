@@ -1,0 +1,25 @@
+.. _exhale_struct_structargs_1_1core_1_1stb__image__loader:
+
+Struct stb_image_loader
+=======================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_importers_image_importers.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public args::core::filesystem::resource_converter< image, image_import_settings >`` (:ref:`exhale_class_structargs_1_1core_1_1filesystem_1_1resource__converter`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::core::stb_image_loader
+   :members:
+   :protected-members:
+   :undoc-members:

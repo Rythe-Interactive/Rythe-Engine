@@ -1,0 +1,13 @@
+.. _exhale_variable_texture_8hpp_1a09fdfae7a6e74a0d64927f6c2da35c3d:
+
+Variable args::rendering::channels_to_glenum
+============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_texture.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: args::rendering::channels_to_glenum

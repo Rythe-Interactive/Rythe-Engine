@@ -1,0 +1,22 @@
+.. _exhale_struct_structargs_1_1application_1_1_window_system_1_1window__request:
+
+Struct WindowSystem::window_request
+===================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_window_windowsystem.hpp`
+
+
+Nested Relationships
+--------------------
+
+This struct is a nested type of :ref:`exhale_class_classargs_1_1application_1_1_window_system`.
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: args::application::WindowSystem::window_request
+   :members:
+   :protected-members:
+   :undoc-members:

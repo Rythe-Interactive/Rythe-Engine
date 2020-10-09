@@ -1,0 +1,13 @@
+.. _exhale_function_type__util_8hpp_1a5740e35909c84f2d8918ff922d38daa3:
+
+Template Function args::core::force_value_cast
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_type_util.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: args::core::force_value_cast(U)

@@ -1,0 +1,16 @@
+.. _exhale_class_classtexture_1_1hpp:
+
+Class hpp
+=========
+
+- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_rendering_data_texture.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: texture::hpp
+   :members:
+   :protected-members:
+   :undoc-members:

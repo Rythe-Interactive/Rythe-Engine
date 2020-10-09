@@ -231,14 +231,14 @@
             <span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">sendCommand</span><span class="p">(</span><span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">getChainThreadId</span><span class="p">(</span><span class="s">&quot;Rendering&quot;</span><span class="p">),</span> <span class="p">[](</span><span class="kt">void</span><span class="o">*</span> <span class="n">param</span><span class="p">)</span>
                 <span class="p">{</span>
                     <span class="n">Renderer</span><span class="o">*</span> <span class="n">self</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">Renderer</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">param</span><span class="p">);</span>
-                    <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Waiting on main window.&quot;</span><span class="p">);</span>
+                    <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;Waiting on main window.&quot;</span><span class="p">);</span>
 
                     <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">main_window_valid</span><span class="p">())</span>
                         <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span>
 
                     <span class="n">app</span><span class="o">::</span><span class="n">window</span> <span class="n">window</span> <span class="o">=</span> <span class="n">self</span><span class="o">-&gt;</span><span class="n">get_main_window</span><span class="p">();</span>
 
-                    <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Initializing context.&quot;</span><span class="p">);</span>
+                    <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;Initializing context.&quot;</span><span class="p">);</span>
 
                     <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="o">*</span><span class="n">window</span><span class="p">.</span><span class="n">lock</span><span class="p">);</span>
                     <span class="n">app</span><span class="o">::</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">makeContextCurrent</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
@@ -347,10 +347,10 @@
                             <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;[{}-{}] {}&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">message</span><span class="p">);</span>
                             <span class="k">break</span><span class="p">;</span>
                         <span class="k">case</span> <span class="nl">GL_DEBUG_SEVERITY_LOW</span><span class="p">:</span>
-                            <span class="n">log</span><span class="o">::</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;[{}-{}] {}&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">message</span><span class="p">);</span>
+                            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;[{}-{}] {}&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">message</span><span class="p">);</span>
                             <span class="k">break</span><span class="p">;</span>
                         <span class="k">case</span> <span class="nl">GL_DEBUG_SEVERITY_NOTIFICATION</span><span class="p">:</span>
-                            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;[{}-{}] {}&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">message</span><span class="p">);</span>
+                            <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;[{}-{}] {}&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">message</span><span class="p">);</span>
                             <span class="k">break</span><span class="p">;</span>
                         <span class="k">default</span><span class="o">:</span>
                             <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;[{}-{}] {}&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">message</span><span class="p">);</span>

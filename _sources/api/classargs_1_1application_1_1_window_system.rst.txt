@@ -6,6 +6,18 @@ Class WindowSystem
 - Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_application_window_windowsystem.hpp`
 
 
+Nested Relationships
+--------------------
+
+
+Nested Types
+************
+
+- :ref:`exhale_struct_structargs_1_1application_1_1_window_system_1_1fullscreen__toggle__request`
+- :ref:`exhale_struct_structargs_1_1application_1_1_window_system_1_1icon__request`
+- :ref:`exhale_struct_structargs_1_1application_1_1_window_system_1_1window__request`
+
+
 Inheritance Relationships
 -------------------------
 

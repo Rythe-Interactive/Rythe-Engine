@@ -1,0 +1,334 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File image.hpp &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File image.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-image-hpp">
+<span id="program-listing-file-home-runner-work-args-engine-args-engine-args-core-data-image-hpp"></span><h1>Program Listing for File image.hpp<a class="headerlink" href="#program-listing-for-file-image-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Args-Engine_Args-Engine_args_core_data_image.hpp.html#file-home-runner-work-args-engine-args-engine-args-core-data-image-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Args-Engine/Args-Engine/args/core/data/image.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/types/primitives.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/containers/sparse_map.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/math/color.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/async/readonly_rw_spinlock.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/view.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;mutex&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span>
+<span class="p">{</span>
+    <span class="k">enum</span> <span class="k">struct</span> <span class="nl">channel_format</span> <span class="p">:</span> <span class="n">uint</span>
+    <span class="p">{</span>
+        <span class="n">eight_bit</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">sixteen_bit</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">float_hdr</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="p">};</span>
+
+    <span class="k">enum</span> <span class="k">struct</span> <span class="nl">image_components</span> <span class="p">:</span> <span class="kt">int</span>
+    <span class="p">{</span>
+        <span class="n">grey</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">grey_alpha</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">rgb</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="n">rgba</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="n">image</span> <span class="k">final</span>
+    <span class="p">{</span>
+        <span class="k">friend</span> <span class="k">struct</span> <span class="n">stb_image_loader</span><span class="p">;</span>
+        <span class="k">friend</span> <span class="k">class</span> <span class="nc">ImageCache</span><span class="p">;</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">;</span>
+        <span class="n">channel_format</span> <span class="n">format</span><span class="p">;</span>
+        <span class="n">image_components</span> <span class="n">components</span><span class="p">;</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="n">T</span><span class="o">*</span> <span class="n">get_raw_data</span><span class="p">();</span>
+
+        <span class="kt">void</span> <span class="nf">apply_raw</span><span class="p">(</span><span class="kt">bool</span> <span class="n">lazyApply</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span>
+
+        <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&amp;</span> <span class="n">read_colors</span><span class="p">();</span>
+
+        <span class="n">size_type</span> <span class="nf">data_size</span><span class="p">();</span>
+
+        <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">image</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_id</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">m_id</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">image</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
+        <span class="n">image</span><span class="p">(</span><span class="k">const</span> <span class="n">image</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">:</span> <span class="n">size</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">size</span><span class="p">),</span> <span class="n">format</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">format</span><span class="p">),</span> <span class="n">components</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">components</span><span class="p">),</span> <span class="n">m_id</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_id</span><span class="p">),</span> <span class="n">m_dataSize</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_dataSize</span><span class="p">),</span> <span class="n">m_pixels</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_pixels</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_id</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_refsLock</span><span class="p">);</span>
+                <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">image</span><span class="p">(</span><span class="n">image</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">:</span> <span class="n">size</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">size</span><span class="p">),</span> <span class="n">format</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">format</span><span class="p">),</span> <span class="n">components</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">components</span><span class="p">),</span> <span class="n">m_id</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_id</span><span class="p">),</span> <span class="n">m_dataSize</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_dataSize</span><span class="p">),</span> <span class="n">m_pixels</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_pixels</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_id</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_refsLock</span><span class="p">);</span>
+                <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">image</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">image</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+        <span class="p">{</span>
+
+            <span class="p">{</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_refsLock</span><span class="p">);</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">m_id</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="k">delete</span><span class="p">[]</span> <span class="n">m_pixels</span><span class="p">;</span>
+                        <span class="n">m_pixels</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+                        <span class="n">m_refs</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+
+                <span class="n">m_id</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_id</span><span class="p">;</span>
+
+                <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">size</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
+            <span class="n">format</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">format</span><span class="p">;</span>
+            <span class="n">components</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">components</span><span class="p">;</span>
+            <span class="n">m_dataSize</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_dataSize</span><span class="p">;</span>
+            <span class="n">m_pixels</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_pixels</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">image</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">image</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="p">{</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_refsLock</span><span class="p">);</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">m_id</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="k">delete</span><span class="p">[]</span> <span class="n">m_pixels</span><span class="p">;</span>
+                        <span class="n">m_pixels</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+                        <span class="n">m_refs</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+
+                <span class="n">m_id</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_id</span><span class="p">;</span>
+
+                <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">size</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
+            <span class="n">format</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">format</span><span class="p">;</span>
+            <span class="n">components</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">components</span><span class="p">;</span>
+            <span class="n">m_dataSize</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_dataSize</span><span class="p">;</span>
+            <span class="n">m_pixels</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_pixels</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="o">~</span><span class="n">image</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_id</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_refsLock</span><span class="p">);</span>
+
+                <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">delete</span><span class="p">[]</span> <span class="n">m_pixels</span><span class="p">;</span>
+                    <span class="n">m_pixels</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+                    <span class="n">m_refs</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="k">private</span><span class="o">:</span>
+
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">uint</span><span class="o">&gt;</span> <span class="n">m_refs</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">m_refsLock</span><span class="p">;</span>
+
+        <span class="n">id_type</span> <span class="n">m_id</span><span class="p">;</span>
+        <span class="n">size_type</span> <span class="n">m_dataSize</span><span class="p">;</span>
+        <span class="n">byte</span><span class="o">*</span> <span class="n">m_pixels</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="n">T</span><span class="o">*</span> <span class="n">image</span><span class="o">::</span><span class="n">get_raw_data</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="kt">void</span><span class="o">*</span> <span class="n">image</span><span class="o">::</span><span class="n">get_raw_data</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">m_pixels</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="n">byte</span><span class="o">*</span> <span class="n">image</span><span class="o">::</span><span class="n">get_raw_data</span><span class="o">&lt;</span><span class="n">byte</span><span class="o">&gt;</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">format</span> <span class="o">==</span> <span class="n">channel_format</span><span class="o">::</span><span class="n">eight_bit</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">m_pixels</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="n">uint16</span><span class="o">*</span> <span class="n">image</span><span class="o">::</span><span class="n">get_raw_data</span><span class="o">&lt;</span><span class="n">uint16</span><span class="o">&gt;</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">format</span> <span class="o">==</span> <span class="n">channel_format</span><span class="o">::</span><span class="n">sixteen_bit</span><span class="p">)</span>
+            <span class="k">return</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">uint16</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">m_pixels</span><span class="p">);</span>
+        <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="kt">float</span><span class="o">*</span> <span class="n">image</span><span class="o">::</span><span class="n">get_raw_data</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">format</span> <span class="o">==</span> <span class="n">channel_format</span><span class="o">::</span><span class="n">float_hdr</span><span class="p">)</span>
+            <span class="k">return</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">m_pixels</span><span class="p">);</span>
+        <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">struct</span> <span class="n">image_handle</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span><span class="p">;</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">();</span>
+
+        <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&amp;</span> <span class="n">read_colors</span><span class="p">();</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">image</span><span class="o">&amp;&gt;</span> <span class="n">get_raw_image</span><span class="p">();</span>
+
+        <span class="kt">void</span> <span class="nf">destroy</span><span class="p">();</span>
+
+        <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">image_handle</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">id</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">operator</span> <span class="n">id_type</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">id</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">constexpr</span> <span class="n">image_handle</span> <span class="n">invalid_image_handle</span><span class="p">{</span> <span class="n">invalid_id</span> <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="n">image_import_settings</span>
+    <span class="p">{</span>
+        <span class="n">channel_format</span> <span class="n">fileFormat</span><span class="p">;</span>
+        <span class="n">image_components</span> <span class="n">components</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">flipVertical</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="k">constexpr</span> <span class="n">image_import_settings</span> <span class="n">default_image_settings</span><span class="p">{</span> <span class="n">channel_format</span><span class="o">::</span><span class="n">eight_bit</span><span class="p">,</span> <span class="n">image_components</span><span class="o">::</span><span class="n">rgba</span><span class="p">,</span> <span class="nb">true</span> <span class="p">};</span>
+
+    <span class="k">class</span> <span class="nc">ImageCache</span>
+    <span class="p">{</span>
+        <span class="k">friend</span> <span class="k">class</span> <span class="nc">renderer</span><span class="p">;</span>
+        <span class="k">friend</span> <span class="k">struct</span> <span class="n">image</span><span class="p">;</span>
+        <span class="k">friend</span> <span class="k">struct</span> <span class="n">image_handle</span><span class="p">;</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="k">static</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;</span> <span class="n">m_nullColors</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_nullLock</span><span class="p">;</span>
+
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">image</span><span class="o">&gt;&gt;&gt;</span> <span class="n">m_images</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_imagesLock</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&gt;&gt;</span> <span class="n">m_colors</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_colorsLock</span><span class="p">;</span>
+
+        <span class="k">static</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&amp;</span> <span class="n">process_raw</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&amp;</span> <span class="n">read_colors</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">image</span><span class="o">&amp;&gt;</span> <span class="n">get_raw_image</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
+
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">static</span> <span class="n">image_handle</span> <span class="n">create_image</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">image_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_image_settings</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="n">image_handle</span> <span class="nf">get_handle</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="n">image_handle</span> <span class="nf">get_handle</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">destroy_image</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">destroy_image</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_data_image.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

@@ -59,6 +59,8 @@ Included By
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_atomic_sparse_map.hpp`
 
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_image.hpp`
+
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_mesh.hpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_ecs_component_container.hpp`

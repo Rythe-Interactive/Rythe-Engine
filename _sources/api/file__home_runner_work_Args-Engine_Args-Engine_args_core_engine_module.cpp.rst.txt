@@ -35,3 +35,10 @@ Includes
 
 
 
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core`
+

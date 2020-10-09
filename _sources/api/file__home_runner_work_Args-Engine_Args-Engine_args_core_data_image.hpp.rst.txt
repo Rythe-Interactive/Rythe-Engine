@@ -1,0 +1,93 @@
+
+.. _file__home_runner_work_Args-Engine_Args-Engine_args_core_data_image.hpp:
+
+File image.hpp
+==============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Args-Engine_Args-Engine_args_core_data>` (``/home/runner/work/Args-Engine/Args-Engine/args/core/data``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Args-Engine/Args-Engine/args/core/data/image.hpp``)
+-----------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Args-Engine_Args-Engine_args_core_data_image.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/async/readonly_rw_spinlock.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_async_readonly_rw_spinlock.hpp`)
+
+- ``core/containers/sparse_map.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_containers_sparse_map.hpp`)
+
+- ``core/filesystem/view.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_view.hpp`)
+
+- ``core/math/color.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_math_color.hpp`)
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_types_primitives.hpp`)
+
+- ``mutex``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_image.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_importers_image_importers.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_args__core`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_structargs_1_1core_1_1image`
+
+- :ref:`exhale_class_structargs_1_1core_1_1image__handle`
+
+- :ref:`exhale_class_structargs_1_1core_1_1image__import__settings`
+
+- :ref:`exhale_class_classargs_1_1core_1_1_image_cache`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_image_8hpp_1abb92aeb3adfe411845bbc09ad7918459`
+
+- :ref:`exhale_enum_image_8hpp_1a3575abaf066b483961343bd568a551a9`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_image_8hpp_1ad5d246c33e6321d88da73ab5186bcbe5`
+
+- :ref:`exhale_variable_image_8hpp_1aaa4a2b9479d116464995e17befba6387`
+

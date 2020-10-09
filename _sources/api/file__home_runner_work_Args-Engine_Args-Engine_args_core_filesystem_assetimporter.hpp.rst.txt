@@ -43,6 +43,10 @@ Included By
 -----------
 
 
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_image.cpp`
+
+- :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_importers_image_importers.hpp`
+
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_data_importers_mesh_importers.hpp`
 
 - :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_filesystem_assetimporter.cpp`
