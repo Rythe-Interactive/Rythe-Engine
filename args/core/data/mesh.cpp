@@ -154,7 +154,7 @@ namespace args::core
 
         if (result != common::valid)
         {
-            log::error("{}", result.get_error());
+            log::error("Error while loading file: {} {}", static_cast<std::string>(file.get_filename()), result.get_error());
             return invalid_mesh_handle;
         }
 

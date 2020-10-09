@@ -22,10 +22,6 @@ namespace args::core
     {
         friend class Engine;
     private:
-        ecs::EcsRegistry* m_ecs;
-        scheduling::Scheduler* m_scheduler;
-        events::EventBus* m_eventBus;
-
         sparse_map<id_type, std::unique_ptr<SystemBase>> m_systems;
 
         void init()
@@ -35,6 +31,10 @@ namespace args::core
         };
 
     protected:
+        static ecs::EcsRegistry* m_ecs;
+        static scheduling::Scheduler* m_scheduler;
+        static events::EventBus* m_eventBus;
+
         template<size_type charc>
         void addProcessChain(const char(&name)[charc])
         {
@@ -44,12 +44,7 @@ namespace args::core
         template<typename SystemType, typename... Args, inherits_from<SystemType, System<SystemType>> = 0>
         void reportSystem(Args&&... args)
         {
-            std::unique_ptr<SystemBase> system = std::make_unique<SystemType>(std::forward<Args>(args)...);
-            system->m_ecs = m_ecs;
-            system->m_scheduler = m_scheduler;
-            system->m_eventBus = m_eventBus;
-
-            m_systems.insert(typeHash<SystemType>(), std::move(system));
+            m_systems.insert(typeHash<SystemType>(), std::make_unique<SystemType>(std::forward<Args>(args)...));
         }
 
         template<typename component_type>

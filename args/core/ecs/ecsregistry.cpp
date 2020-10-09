@@ -197,7 +197,7 @@ namespace args::core::ecs
                 child.set_parent(invalid_id); // Remove parent from children.
     }
 
-    A_NODISCARD   entity_handle EcsRegistry::getEntity(id_type entityId)
+    A_NODISCARD entity_handle EcsRegistry::getEntity(id_type entityId)
     {
         if (!validateEntity(entityId))
             return entity_handle(invalid_id, this);
@@ -205,7 +205,7 @@ namespace args::core::ecs
         return entity_handle(entityId, this);;
     }
 
-    A_NODISCARD   entity_data& EcsRegistry::getEntityData(id_type entityId)
+    A_NODISCARD entity_data& EcsRegistry::getEntityData(id_type entityId)
     {
         if (!validateEntity(entityId))
             throw args_entity_not_found_error;
@@ -221,8 +221,8 @@ namespace args::core::ecs
         return data;
     }
 
-    A_NODISCARD   std::pair<entity_set&, async::readonly_rw_spinlock&> EcsRegistry::getEntities()
+    A_NODISCARD std::pair<entity_set&, async::readonly_rw_spinlock&> EcsRegistry::getEntities()
     {
-        return { m_entities, m_entityLock };
+        return std::make_pair(std::ref(m_entities), std::ref(m_entityLock));
     }
 }

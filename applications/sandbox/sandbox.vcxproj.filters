@@ -42,7 +42,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="assets\LegionIcon.ico">
+    <Image Include="engine\resources\legion\icon.ico">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

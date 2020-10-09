@@ -16,7 +16,7 @@ namespace args::core
     /**@brief Forcefully casts non pointer/reference type value from one to another.
     */
     template<typename T, typename U>
-    T force_value_cast(U value)
+    constexpr T force_value_cast(U value)
     {
         static_assert(alignof(T) == alignof(U), "Illegal cast of unaligned types.");
         static_assert(sizeof(T) == sizeof(U), "Illegal cast of non size similar types.");

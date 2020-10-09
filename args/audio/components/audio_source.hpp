@@ -13,7 +13,17 @@ namespace args::audio
         {
             pitch = 1,
             gain = 2,
+            playState = 4,
+            doRewind = 8,
         };
+
+        enum playstate
+        {
+            playing,
+            paused,
+            stopped,
+        };
+
         /**
         * @brief Function to set the pitch for the audio source
         * @param const float pitch: new pitch value
@@ -41,9 +51,83 @@ namespace args::audio
         */
         float getGain() const { return m_gain; };
 
+        /**
+        * @brief Plays audio 
+        */
+        void play()
+        {
+            // If the file is already playing or if the file will be played on next update > return
+            if (m_nextPlayState == playstate::playing) return;
+            m_changes |= sound_properties::playState;
+            m_nextPlayState = playstate::playing;
+            // Do not set playstate to playing - audiosystem will set it accordingly
+        }
+
+        /**
+        * @brief Pauses audio
+        */
+        void pause()
+        {
+            // If the file is already playing or if the file will be played on next update > return
+            if (m_nextPlayState == playstate::paused) return;
+            m_changes |= sound_properties::playState;
+            m_nextPlayState = playstate::paused;
+            // Do not set playstate to paused - audiosystem will set it accordingly
+        }
+
+        /**
+        * @brief Stops audio
+        * @brief Stopping means that the audio will stop playing (pausing) and rewind
+        */
+        void stop()
+        {
+            // If the file is already playing or if the file will be played on next update > return
+            if (m_nextPlayState == playstate::stopped) return;
+            m_changes |= sound_properties::playState;
+            m_nextPlayState = playstate::stopped;
+            // Do not set playstate to stopped - audiosystem will set it accordingly
+        }
+
+        /**
+        * @brief Returns whether the audio is playing
+        * @brief If false the audio can be paused (isPaused()) or stopped (isStopped())
+        */
+        bool isPlaying() const
+        {
+            return m_playState == playstate::playing;
+        }
+
+        /**
+        * @brief Returns whether the audio is paused
+        * @brief If false the audio can be playing (isPlaying()) or stopped (isStopped())
+        */
+        bool isPaused() const
+        {
+            return m_playState == playstate::paused;
+        }
+
+        /**
+        * @brief Returns whether the audio is stopped
+        * @brief If false the audio can be playing (isPlaying()) or paused (isPaused())
+        */
+        bool isStopped() const
+        {
+            return m_playState == playstate::stopped;
+        }
+
         void setAudioHandle(audio_segment_handle handle)
         {
             m_audio_handle = handle;
+        }
+
+        /**
+        * @brief Rewinds the audio
+        * @brief If the audio is playing it will stop/pause
+        * @brief If the audio was playing the audio source needs to be stopped or paused before it can play
+        */
+        void rewind()
+        {
+            m_changes |= sound_properties::doRewind;
         }
 
         audio_segment_handle getAudioHandle() const
@@ -58,6 +142,8 @@ namespace args::audio
         void clearChanges()
         {
             m_changes ^= m_changes; // Reset
+            // The next play state also needs to be reset to be able to properly switch play states
+            m_nextPlayState = m_playState; 
         }
 
         ALuint m_sourceId;
@@ -66,9 +152,16 @@ namespace args::audio
         float m_pitch = 1.0f;
         float m_gain = 1.0f;
 
+        playstate m_playState = playstate::stopped;
+        playstate m_nextPlayState = playstate::stopped;
+
         // Byte to keep track of changes made to audio source
-        // b0 - pitch changed
-        // b1 - gain changed
+        // For all the values > see enum sound_properties
+        // b0 - pitch
+        // b1 - gain
+        // b2 - play state
+        // b3 - rewind (doRewind)
+
         byte m_changes = 0;
     };
 }
