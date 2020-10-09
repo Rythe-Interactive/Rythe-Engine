@@ -33,7 +33,7 @@ namespace args::core
     /**@class image
      * @brief Object encapsulating the binary representation of an image.
      */
-    struct image
+    struct image final
     {
         friend struct stb_image_loader;
         friend class ImageCache;
@@ -66,6 +66,11 @@ namespace args::core
         bool operator==(const image& other)
         {
             return m_id == other.m_id;
+        }
+
+        ~image()
+        {
+            delete[] m_pixels;
         }
 
     private:
@@ -132,6 +137,8 @@ namespace args::core
          */
         std::pair<async::readonly_rw_spinlock&, image&> get_raw_image();
 
+        void destroy();
+
         bool operator==(const image_handle& other) { return id == other.id; }
         operator id_type() { return id; }
     };
@@ -193,5 +200,9 @@ namespace args::core
          * @param id Name hash
          */
         static image_handle get_handle(id_type id);
+
+        static void destroy_image(const std::string& name);
+
+        static void destroy_image(id_type id);
     };
 }

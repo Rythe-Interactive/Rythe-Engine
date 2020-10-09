@@ -50,6 +50,11 @@ namespace args::core
         return ImageCache::get_raw_image(id);
     }
 
+    void image_handle::destroy()
+    {
+        ImageCache::destroy_image(id);
+    }
+
     const std::vector<math::color>& ImageCache::process_raw(id_type id)
     {
         auto [lock, image] = get_raw_image(id);
@@ -87,7 +92,7 @@ namespace args::core
                         float grayValue = (*colorPtr / 255.f);
                         color.r = grayValue;
                         color.g = grayValue;
-                        color.b = grayValue; 
+                        color.b = grayValue;
                         color.a = 1.f;
                         break;
                     }
@@ -96,7 +101,7 @@ namespace args::core
                         float grayValue = (*reinterpret_cast<uint16*>(colorPtr) / 65535.f);
                         color.r = grayValue;
                         color.g = grayValue;
-                        color.b = grayValue; 
+                        color.b = grayValue;
                         color.a = 1.f;
                         break;
                     }
@@ -105,7 +110,7 @@ namespace args::core
                         float grayValue = *reinterpret_cast<float*>(colorPtr);
                         color.r = grayValue;
                         color.g = grayValue;
-                        color.b = grayValue; 
+                        color.b = grayValue;
                         color.a = 1.f;
                         break;
                     }
@@ -124,7 +129,7 @@ namespace args::core
                         float grayValue = (*gPtr / 255.f);
                         color.r = grayValue;
                         color.g = grayValue;
-                        color.b = grayValue; 
+                        color.b = grayValue;
                         color.a = (*aPtr / 255.f);
                         break;
                     }
@@ -133,7 +138,7 @@ namespace args::core
                         float grayValue = (*reinterpret_cast<uint16*>(gPtr) / 65535.f);
                         color.r = grayValue;
                         color.g = grayValue;
-                        color.b = grayValue; 
+                        color.b = grayValue;
                         color.a = (*reinterpret_cast<uint16*>(aPtr) / 65535.f);
                         break;
                     }
@@ -142,7 +147,7 @@ namespace args::core
                         float grayValue = *reinterpret_cast<float*>(gPtr);
                         color.r = grayValue;
                         color.g = grayValue;
-                        color.b = grayValue; 
+                        color.b = grayValue;
                         color.a = *reinterpret_cast<float*>(aPtr);
                         break;
                     }
@@ -294,6 +299,37 @@ namespace args::core
         if (m_images.count(id))
             return { id };
         return invalid_image_handle;
+    }
+
+    void ImageCache::destroy_image(const std::string& name)
+    {
+        id_type id = nameHash(name);
+        {
+            async::readwrite_guard guard(m_imagesLock);
+            if (m_images.count(id))
+                m_images.erase(id);
+        }
+
+        {
+            async::readwrite_guard guard(m_colorsLock);
+            if (m_colors.count(id))
+                m_colors.erase(id);
+        }
+    }
+
+    void ImageCache::destroy_image(id_type id)
+    {
+        {
+            async::readwrite_guard guard(m_imagesLock);
+            if (m_images.count(id))
+                m_images.erase(id);
+        }
+
+        {
+            async::readwrite_guard guard(m_colorsLock);
+            if (m_colors.count(id))
+                m_colors.erase(id);
+        }
     }
 
 }
