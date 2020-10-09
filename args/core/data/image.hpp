@@ -4,6 +4,7 @@
 #include <core/math/color.hpp>
 #include <core/async/readonly_rw_spinlock.hpp>
 #include <core/filesystem/view.hpp>
+#include <mutex>
 
 /**
  * @file image.hpp
@@ -68,20 +69,110 @@ namespace args::core
             return m_id == other.m_id;
         }
 
-    private:
-        void destroy()
+        image() = default;
+
+        image(const image& other) : size(other.size), format(other.format), components(other.components), m_id(other.m_id), m_dataSize(other.m_dataSize), m_pixels(other.m_pixels)
         {
-            delete[] m_pixels;
+            if (m_id)
+            {
+                std::lock_guard guard(m_refsLock);
+                m_refs[m_id]++;
+            }
         }
+
+        image(image&& other) : size(other.size), format(other.format), components(other.components), m_id(other.m_id), m_dataSize(other.m_dataSize), m_pixels(other.m_pixels)
+        {
+            if (m_id)
+            {
+                std::lock_guard guard(m_refsLock);
+                m_refs[m_id]++;
+            }
+        }
+
+        image& operator=(const image& other)
+        {
+
+            {
+                std::lock_guard guard(m_refsLock);
+
+                if (m_id)
+                {
+                    m_refs[m_id]--;
+                    if (m_refs[m_id] == 0)
+                    {
+                        delete[] m_pixels;
+                        m_pixels = nullptr;
+                        m_refs.erase(m_id);
+                    }
+                }
+
+                m_id = other.m_id;
+
+                m_refs[m_id]++;
+            }
+
+            size = other.size;
+            format = other.format;
+            components = other.components;
+            m_dataSize = other.m_dataSize;
+            m_pixels = other.m_pixels;
+            return *this;
+        }
+
+        image& operator=(image&& other)
+        {
+            {
+                std::lock_guard guard(m_refsLock);
+
+                if (m_id)
+                {
+                    m_refs[m_id]--;
+                    if (m_refs[m_id] == 0)
+                    {
+                        delete[] m_pixels;
+                        m_pixels = nullptr;
+                        m_refs.erase(m_id);
+                    }
+                }
+
+                m_id = other.m_id;
+
+                m_refs[m_id]++;
+            }
+
+            size = other.size;
+            format = other.format;
+            components = other.components;
+            m_dataSize = other.m_dataSize;
+            m_pixels = other.m_pixels;
+            return *this;
+        }
+
+        ~image()
+        {
+            if (m_id)
+            {
+                std::lock_guard guard(m_refsLock);
+
+                m_refs[m_id]--;
+                if (m_refs[m_id] == 0)
+                {
+                    delete[] m_pixels;
+                    m_pixels = nullptr;
+                    m_refs.erase(m_id);
+                }
+            }
+        }
+
+    private:
+
+        static std::unordered_map<id_type, uint> m_refs;
+        static std::mutex m_refsLock;
 
         id_type m_id;
         size_type m_dataSize;
         byte* m_pixels;
     };
-
-    /**@brief Default invalid image.
-     */
-    inline static image invalid_image{};
 
     template<typename T>
     T* image::get_raw_data()
@@ -170,7 +261,7 @@ namespace args::core
         friend struct image;
         friend struct image_handle;
     private:
-        static std::vector<math::color> m_nullColors;
+        static const std::vector<math::color> m_nullColors;
         static async::readonly_rw_spinlock m_nullLock;
 
         static std::unordered_map<id_type, std::unique_ptr<std::pair<async::readonly_rw_spinlock, image>>> m_images;

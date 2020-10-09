@@ -3,7 +3,10 @@
 
 namespace args::core
 {
-    std::vector<math::color> ImageCache::m_nullColors;
+    std::unordered_map<id_type, uint> image::m_refs;
+    std::mutex image::m_refsLock;
+
+    const std::vector<math::color> ImageCache::m_nullColors;
     async::readonly_rw_spinlock ImageCache::m_nullLock;
 
     std::unordered_map<id_type, std::unique_ptr<std::pair<async::readonly_rw_spinlock, image>>> ImageCache::m_images;
@@ -35,8 +38,6 @@ namespace args::core
     {
         auto [lock, image] = ImageCache::get_raw_image(id);
         async::readonly_guard guard(lock);
-        if (image == invalid_image)
-            return math::ivec2(0, 0);
         return image.size;
     }
 
@@ -57,13 +58,13 @@ namespace args::core
 
     const std::vector<math::color>& ImageCache::process_raw(id_type id)
     {
-        auto [lock, image] = get_raw_image(id);
-
         {
-            async::readonly_guard guard(lock);
-            if (image == invalid_image)
+            async::readonly_guard guard(m_imagesLock);
+            if (!m_images.count(id))
                 return m_nullColors;
         }
+
+        auto [lock, image] = get_raw_image(id);
 
         std::vector<math::color>* ptr = new std::vector<math::color>();
         auto& output = *ptr;
@@ -250,8 +251,6 @@ namespace args::core
     std::pair<async::readonly_rw_spinlock&, image&> ImageCache::get_raw_image(id_type id)
     {
         async::readonly_guard guard(m_colorsLock);
-        if (!m_images.count(id))
-            return std::make_pair(std::ref(m_nullLock), std::ref(invalid_image));
         auto& [lock, image] = *m_images[id];
         return std::make_pair(std::ref(lock), std::ref(image));
     }
@@ -309,7 +308,6 @@ namespace args::core
             async::readwrite_guard guard(m_imagesLock);
             if (m_images.count(id))
             {
-                m_images[id]->second.destroy();
                 m_images.erase(id);
             }
         }
@@ -327,7 +325,6 @@ namespace args::core
             async::readwrite_guard guard(m_imagesLock);
             if (m_images.count(id))
             {
-                m_images[id]->second.destroy();
                 m_images.erase(id);
             }
         }

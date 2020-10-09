@@ -136,14 +136,6 @@ namespace args::rendering
         {
             async::readonly_guard guard(lock);
 
-            if(img == invalid_image)
-            {
-                glBindTexture(static_cast<GLenum>(settings.type), 0);
-                glDeleteTextures(0, &texture.textureId);
-                log::warn("Tried to create a texture with an invalid image");
-                return invalid_texture_handle;
-            }
-
             texture.size = img.size;
             texture.channels = img.components;
 
