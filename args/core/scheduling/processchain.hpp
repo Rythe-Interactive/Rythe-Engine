@@ -31,8 +31,44 @@ namespace args::core::scheduling
 		async::transferable_atomic<bool> m_exit;
         bool m_low_power;
 
+        static async::readonly_rw_spinlock m_callbackLock;
+        static multicast_delegate<void()> m_onFrameStart;
+        static multicast_delegate<void()> m_onFrameEnd;
+
 	public:
         static void threadedRun(ProcessChain* chain);
+
+        template<void(*func)()>
+        static void subscribeToChainStart()
+        {
+            async::readwrite_guard guard(m_callbackLock);
+
+            m_onFrameStart += delegate<void()>::template create<func>();
+        }
+        
+        template<void(*func)()>
+        static void subscribeToChainEnd()
+        {
+            async::readwrite_guard guard(m_callbackLock);
+
+            m_onFrameEnd += delegate<void()>::template create<func>();
+        }
+
+        template<void(*func)()>
+        static void unsubscribeFromChainStart()
+        {
+            async::readwrite_guard guard(m_callbackLock);
+
+            m_onFrameStart -= delegate<void()>::template create<func>();
+        }
+        
+        template<void(*func)()>
+        static void unsubscribeFromChainEnd()
+        {
+            async::readwrite_guard guard(m_callbackLock);
+
+            m_onFrameEnd -= delegate<void()>::template create<func>();
+        }
 
 		ProcessChain() = default;
 		ProcessChain(ProcessChain&&) = default;
@@ -40,6 +76,8 @@ namespace args::core::scheduling
 
 		template<size_type charc>
 		ProcessChain(const char(&name)[charc], Scheduler* scheduler) : m_name(name), m_nameHash(nameHash<charc>(name)), m_scheduler(scheduler) { }
+
+
 
 		/**@brief Creates a new thread and runs it's own program loop in it.
 		 * @return bool Scheduler::createThread()

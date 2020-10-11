@@ -8,6 +8,10 @@
 
 namespace args::core::scheduling
 {
+    async::readonly_rw_spinlock ProcessChain::m_callbackLock;
+    multicast_delegate<void()> ProcessChain::m_onFrameStart;
+    multicast_delegate<void()> ProcessChain::m_onFrameEnd;
+
     void ProcessChain::threadedRun(ProcessChain* chain)
     {
         log::info("Chain started.");
@@ -62,6 +66,11 @@ namespace args::core::scheduling
 
     void ProcessChain::runInCurrentThread()
     {
+        {
+            async::readonly_guard guard(m_callbackLock);
+            m_onFrameStart();
+        }
+
         hashed_sparse_set<id_type> finishedProcesses;
         async::readonly_guard guard(m_processesLock); // Hooking more processes whilst executing isn't allowed.
         do
@@ -72,6 +81,11 @@ namespace args::core::scheduling
                         finishedProcesses.insert(id);
 
         } while (finishedProcesses.size() != m_processes.size());
+
+        {
+            async::readonly_guard guard(m_callbackLock);
+            m_onFrameEnd();
+        }
     }
 
     void ProcessChain::addProcess(Process* process)
