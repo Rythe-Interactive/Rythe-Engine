@@ -50,6 +50,9 @@ namespace args::rendering
         {
             size_type size = localLines->size();
 
+            if (size == 0)
+                return;
+
             std::thread::id id = std::this_thread::get_id();
 
             {

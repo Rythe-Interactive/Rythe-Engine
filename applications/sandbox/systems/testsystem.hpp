@@ -356,7 +356,7 @@ public:
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::differentThread>("TestChain");
         createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
-        createProcess<&TestSystem::drawInterval>("Physics", 0.01);
+        createProcess<&TestSystem::drawInterval>("Physics");
 
     }
 
@@ -866,7 +866,7 @@ public:
 
             auto pos = entity.read_component<position>();
 
-            debug::drawLine(pos + math::vec3::up*2, pos + math::vec3::up*2 + rot.forward(), math::colors::magenta, 10);
+            debug::drawLine(pos, pos + rot.forward(), math::colors::magenta, 10);
         }
 
 
@@ -1063,12 +1063,12 @@ public:
         math::vec3 p1p2;
         math::vec3 p3p4;
 
-        debug::drawLine(p1, p2, math::color(1, 0, 0), 5.0f);
-        debug::drawLine(p3, p4, math::color(1, 0, 0), 5.0f);
+        debug::drawLine(p1, p2, math::colors::red, 5.0f);
+        debug::drawLine(p3, p4, math::colors::red, 5.0f);
 
         physics::PhysicsStatics::FindClosestPointsToLineSegment(p1, p2, p3, p4, p1p2, p3p4);
 
-        debug::drawLine(p1p2, p3p4, math::color(0, 1, 0), 5.0f);
+        debug::drawLine(p1p2, p3p4, math::colors::green, 5.0f);
 
         p1 = math::vec3(8, 0, 0);
         p2 = p1 + math::vec3(0, 1.0f, 0);
@@ -1076,12 +1076,12 @@ public:
         p3 = math::vec3(10, 0, 0) + math::vec3(1.0f);
         p4 = p3 - math::vec3(1.0f);
 
-        debug::drawLine(p1, p2, math::color(1, 0, 0), 5.0f);
-        debug::drawLine(p3, p4, math::color(1, 0, 0), 5.0f);
+        debug::drawLine(p1, p2, math::colors::red, 5.0f);
+        debug::drawLine(p3, p4, math::colors::red, 5.0f);
 
         physics::PhysicsStatics::FindClosestPointsToLineSegment(p1, p2, p3, p4, p1p2, p3p4);
 
-        debug::drawLine(p1p2, p3p4, math::color(0, 1, 0), 5.0f);
+        debug::drawLine(p1p2, p3p4, math::colors::green, 5.0f);
 
         //log::debug("{:.3f}", deltaTime);
     }
