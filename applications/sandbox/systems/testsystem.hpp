@@ -842,7 +842,7 @@ public:
         debug::drawLine(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::colors::blue, 10);
 
         //log::info("still alive! {}",deltaTime.seconds());
-        static auto query = createQuery<sah>();
+        static auto sahQuery = createQuery<sah, rotation, position>();
 
         //static time::span buffer;
         static int frameCount;
@@ -852,7 +852,7 @@ public:
         //accumulated += deltaTime;
         frameCount++;
 
-        for (auto entity : query)
+        for (auto entity : sahQuery)
         {
             auto comp = entity.get_component_handle<sah>();
 
@@ -863,6 +863,10 @@ public:
             entity.write_component(rot);
 
             comp.write({ frameCount });
+
+            auto pos = entity.read_component<position>();
+
+            debug::drawLine(pos + math::vec3::up*2, pos + math::vec3::up*2 + rot.forward(), math::colors::magenta, 10);
         }
 
 
