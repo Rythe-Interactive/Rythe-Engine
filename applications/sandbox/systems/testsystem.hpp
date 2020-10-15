@@ -645,7 +645,7 @@ public:
         player = createEntity();
         rotation rot = math::conjugate(math::normalize(math::toQuat(math::lookAt(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0)))));
         player.add_components<transform>(position(0.f, 3.f, 0.f), rot, scale());
-		player.add_component<audio::audio_listener>();
+        player.add_component<audio::audio_listener>();
 
         rendering::camera cam;
         cam.set_projection(90.f, 0.1f, 1000.f);

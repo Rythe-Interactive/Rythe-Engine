@@ -37,6 +37,7 @@
     <ClInclude Include="render_pipeline\base\pipeline.hpp" />
     <ClInclude Include="render_pipeline\base\renderstage.hpp" />
     <ClInclude Include="systems\renderer.hpp" />
+    <ClInclude Include="util\bindings.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

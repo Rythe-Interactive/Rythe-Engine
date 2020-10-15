@@ -1,0 +1,163 @@
+#pragma once
+#define ENUM uint
+
+#define point_light 0
+#define directional_light 1
+#define spot_light 2
+
+struct Light
+{
+	ENUM type;			// 4	0
+	float attenuation;	// 4	4
+	float intensity;	// 4	8
+	uint index;			// 4	12
+	vec3 direction;		// 12	16
+	float falloff;		// 4	28
+	vec3 position;		// 12	32
+	float angle;		// 4	44
+	vec3 colour;		// 12	48
+	float meta2;		// 4	60
+};
+
+struct Material
+{
+    vec4 albedo;
+ 	vec3 normal;
+ 	float metallic;
+	vec3 emissive;
+    float roughness;
+    float dielectric;
+ 	float ambientOcclusion;
+    float F0;
+}
+
+#include <math_ext.glsl>
+
+float Attenuation(vec3 worldPosition, vec3 lightPosition, float attenuationRadius, float lightIntensity)
+{
+	float sqrlightDistance = length2(lightPosition - fragmentPosition);
+	float attenuation = pow(max(1.0 - (sqrlightDistance / (attenuationRadius * attenuationRadius)), 0.0), 2);
+	return attenuation * lightIntensity;
+}
+
+vec3 fresnelSchlick(float halfwayDotView, vec3 F0)
+{
+    return F0 + (1.0 - F0) * pow(1.0 - halfwayDotView, 5.0);
+}
+
+vec3 Fresnel0(vec4 albedo, float metallic, float dielectric)
+{
+    return mix(dielectric.xxx, albedo, metallic.xxx)
+}
+
+vec3 Fresnel0(vec4 albedo, float metallic)
+{
+    return mix(vec3(0.04), albedo, metallic.xxx)
+}
+
+float DistributionGGX(float normalDotHalfway, float roughness)
+{
+    float r2      = roughness * roughness;
+    float r4     = r2 * r2;
+    float NdotH2 = normalDotHalfway * normalDotHalfway;
+
+    float num   = r4;
+    float denom = (NdotH2 * (r4 - 1.0) + 1.0);
+	denom = pi * denom * denom;
+
+    return num / denom;
+}
+
+float GeometrySchlickGGX(float cosTheta, float roughness)
+{
+    float k = (roughness * roughness) / 2.0;
+
+    float num   = cosTheta;
+    float denom = cosTheta * (1.0 - k) + k;
+
+    return num / denom;
+}
+
+float GeometrySmith(float normalDotView, float normalDotLight, float roughness)
+{
+    float ggx2  = GeometrySchlickGGX(normalDotView, roughness);
+    float ggx1  = GeometrySchlickGGX(normalDotLight, roughness);
+
+    return ggx1 * ggx2;
+}
+
+vec3 CookTorranceBRDF(float normalDistribution, vec3 fresnelReflection, float geometryShadowing, float normalDotLight, float normalDotView)
+{
+    return safeDiv(normalDistribution * fresnelReflection * geometryShadowing, 4.0  * normalDotLight * normalDotView);
+}
+
+vec3 LambertianDiffuse(vec3 kS, vec3 albedo, float metallic)
+{
+    vec3 kD = (vec3(1.0) - kS) * (1.0 - metallic);
+    return kD * (albedo / pi);
+}
+
+float ambientIntensity;
+
+vec3 CalculateLight(Light light, Camera camera, Material material, vec3 worldPosition, vec3 worldNormal)
+{
+    vec3 lightDirection;
+    float intensity;
+    switch(light.type)
+    {
+        case point_light:
+            lightDirection = normalize(light.position - surfacePosition);
+            intensity = light.intensity;
+            break;
+        case directional_light:
+            lightDirection = light.direction;
+            intensity = light.intensity;
+            break;
+        case spot_light:
+            lightDirection = normalize(light.position - surfacePosition);
+            intensity = pow(max((dot(normalize(light.direction), lightDirection) - cos(light.angle*0.5)) / (1.0 - cos(light.angle*0.5)), 0.0), light.falloff) * light.intensity;
+            break;
+        default:
+            lightDirection = vec3(0, 1, 0);
+            intensity = light.intensity;
+            break;
+    }
+
+    ambientIntensity += (light.intensity * 1.5) - (intensity * 0.5);
+
+    float attenuation = Attenuation(worldPosition, light.position, light.attenuation, intensity);
+    if(attenuation <= 0)
+            return vec3(0);
+
+    vec3 radiance = lightColor * attenuation;
+
+	// Microfacet normal that will reflect the incoming light into the viewing direction.
+	// Technically only applies if the nanogeometry is perfectly smooth, but due to the inherent
+	// inaccuracy of working with fragments as the smallest size of measurement we can ignore
+	// nanogeometry for now.
+	vec3 halfwayVector = normalize(lightDirection + camera.toView);
+
+    float halfwayDotView = dot01(halfwayVector, camera.toView);
+    float normalDotHalfway = dot01(worldNormal, halfwayVector);
+    float normalDotView = dot01(worldNormal, camera.toView);
+    float normalDotLight = dot01(worldNormal, lightDirection);
+
+	// cook-torrance brdf
+	vec3 fresnelReflection = fresnelSchlick(halfwayDotView, material.F0);
+	float normalDistribution = DistributionGGX(normalDotHalfway, material.roughness);
+	float geometryShadowing = GeometrySmith(normalDotView, normalDotLight, material.roughness);
+    vec3 specular = CookTorranceBRDF(normalDistribution, fresnelReflection, geometryShadowing, normalDotLight, normalDotView);
+
+    vec3 diffuse = LambertianDiffuse(fresnelReflection, material.albedo.rgb, material.metallic);
+
+    return (diffuse + specular) * radiance * normalDotLight;
+}
+
+vec3 GetAmbientLight(float ambientOcclusion, vec3 albedo)
+{
+    return (pow(ambientIntensity, 1.1) * 0.0001).xxx * ambientOcclusion.xxx * albedo;
+}
+
+#if !defined(NO_INPUT)
+    #include <lighting_input.glsl>
+#endif

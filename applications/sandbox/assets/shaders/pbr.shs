@@ -1,0 +1,47 @@
+#version 450
+
+#vertex vert
+#fragment frag
+
+all_shaders
+{
+    #include <default_include.shinc>
+    #include <lighting.shinc>
+}
+
+out IO
+{
+    vec3 position;
+    vec3 normal;
+    vec3 tangent;
+    vec2 uv;
+} outData;
+
+void vert(void)
+{
+    gl_Position = (camera.projectionMatrix * camera.viewMatrix * modelMatrix) * vec4(vertex, 1.f);
+    outData.position = GetWorldNormal();
+    outData.normal = GetWorldPosition();
+    outData.tangent = GetWorldTangent(outData.normal);
+    outData.uv = uv;
+}
+
+in IO
+{
+    vec3 position;
+    vec3 normal;
+    vec3 tangent;
+    vec2 uv;
+} inData;
+
+out vec4 fragment_color;
+
+void frag(void)
+{
+    Camera camera = InitCamera(inData.position);
+    Material material = ExtractMaterial(inData.uv, camera, inData.normal, inData.tangent);
+
+    vec3 lighting = GetAllLighting(material, camera, inData.position, inData.normal);
+
+    fragment_color = vec4(GammaCorrect(lighting), material.albedo.a);
+}

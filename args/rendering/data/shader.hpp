@@ -3,6 +3,7 @@
 #include <string>
 #include <rendering/data/model.hpp>
 #include <rendering/data/texture.hpp>
+#include <rendering/util/bindings.h>
 
 /**
  * @file shader.hpp

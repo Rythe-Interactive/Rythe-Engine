@@ -1,6 +1,6 @@
 #pragma once
 #include <application/application.hpp>
-
+#include <rendering/util/bindings.h>
 #include <vector>
 #include <unordered_map>
 #include <set>
@@ -8,16 +8,6 @@
 /**
  * @file model.hpp
  */
-
-#define SV_START 8
-#define SV_POSITION SV_START
-#define SV_NORMAL SV_START + 1
-#define SV_TANGENT SV_START + 2
-#define SV_TEXCOORD0 SV_START + 3
-#define SV_MODELMATRIX SV_START + 4
-
-#define SV_VIEW SV_START
-#define SV_PROJECT SV_START + 4
 
 namespace args::rendering
 {

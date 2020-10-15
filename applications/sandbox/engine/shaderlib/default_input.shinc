@@ -1,0 +1,105 @@
+#pragma once
+
+#if defined(VERTEX)
+layout(location = SV_POSITION)    in vec3 vertex;
+layout(location = SV_NORMAL)      in vec3 normal;
+layout(location = SV_TANGENT)     in vec3 tangent;
+layout(location = SV_TEXCOORD0)   in vec2 uv;
+layout(location = SV_MODELMATRIX) in mat4 modelMatrix;
+#endif
+
+struct Camera
+{
+    mat4 viewMatrix;
+    mat4 projectionMatrix;
+    vec3 position;
+    uint index;
+    vec3 viewDirection;
+    vec3 toView;
+}
+
+layout(std140, location = SV_VIEW) uniform CameraInput
+{
+    mat4 viewMatrix;
+    mat4 projectionMatrix;
+    vec3 position;
+    uint index;
+    vec3 viewDirection;
+} camera_input;
+
+Camera InitCamera(vec3 worldPosition)
+{
+    Camera camera;
+    camera.viewMatrix = camera_input.viewMatrix;
+    camera.projectionMatrix = camera_input.projectionMatrix;
+    camera.position = camera_input.position;
+    camera.index = camera_input.index;
+    camera.viewDirection = camera_input.viewDirection;
+    camera.toView = camera_input.position - worldPosition;
+}
+
+vec3 GetWorldPosition()
+{
+    return (modelMatrix * vec4(vertex, 1.0)).xyz
+}
+
+vec3 GetWorldNormal()
+{
+    return normalize((modelMatrix * vec4(normal, 0.0)).xyz);
+}
+
+vec3 GetWorldTangent()
+{
+    vec3 worldNormal = GetWorldNormal();
+    vec3 worldTangent = normalize((modelMatrix * vec4(tangent, 0.0)).xyz);
+    return normalize(worldTangent - dot(worldTangent, worldNormal) * worldNormal);
+}
+
+vec3 GetWorldTangent(vec3 worldNormal)
+{
+    vec3 worldTangent = normalize((modelMatrix * vec4(tangent, 0.0)).xyz);
+    return normalize(worldTangent - dot(worldTangent, worldNormal) * worldNormal);
+}
+
+vec3 GetWorldBitangent()
+{
+    vec3 worldNormal = GetWorldNormal();
+	vec3 worldTangent = GetWorldTangent(worldNormal);
+	return normalize(cross(worldNormal, worldTangent));
+}
+
+vec3 GetWorldBitangent(vec3 worldNormal)
+{
+	vec3 worldTangent = GetWorldTangent(worldNormal);
+	return normalize(cross(worldNormal, worldTangent));
+}
+
+vec3 GetWorldBitangent(vec3 worldNormal, vec3 worldTangent)
+{
+	return normalize(cross(worldNormal, worldTangent));
+}
+
+vec3 GetWorldDirection(vec3 dir)
+{
+    return normalize((modelMatrix * vec4(dir, 0.0)).xyz);
+}
+
+vec3 GetWorldPoint(vec3 p)
+{
+    return (modelMatrix * vec4(p, 1.0)).xyz
+}
+
+mat3 GetTBN()
+{
+    vec3 worldNormal = GetWorldNormal();
+	vec3 worldTangent = GetWorldTangent(worldNormal);
+	vec3 worldBitangent = GetWorldBitangent(worldNormal, worldTangent);
+	tbnMatrix = mat3(worldTangent, worldBitangent, worldNormal);
+}
+
+mat3 GetTBN(vec3 worldNormal, vec3 worldTangent)
+{
+    vec3 orthogonalizedTangent = normalize(worldTangent - dot(worldTangent, worldNormal) * worldNormal);
+	vec3 worldBitangent = GetWorldBitangent(worldNormal, orthogonalizedTangent);
+	tbnMatrix = mat3(orthogonalizedTangent, worldBitangent, worldNormal);
+}

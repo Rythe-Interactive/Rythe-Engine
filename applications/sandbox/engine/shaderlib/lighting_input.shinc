@@ -1,0 +1,47 @@
+#pragma once
+
+layout (std140) buffer LightsBuffer
+{
+	Light lights[];
+};
+
+layout(std140, location = SV_MATERIAL) in MaterialInput
+{
+    sampler2D albedo;
+    sampler2D normalHeight;
+    sampler2D MRDAo;
+    sampler2D emissive;
+    float heightScale;
+} material_input;
+
+#include <texturemaps.glsl>
+
+Material ExtractMaterial(vec2 uv, Camera camera, vec3 worldNormal, vec3 worldTangent)
+{
+    mat3 tbn = GetTBN(worldNormal, worldTangent);
+
+    vec2 texcoords = ParallaxMap(material_input.normalHeight, material_input.heightScale, uv, camera);
+
+    Material material;
+    material.albedo = AlbedoMap(material_input.albedo, texcoords);
+    material.normal = NormalMap(material_input.normalHeight, texcoords, tbn);
+    vec4 MRDAo = LightingData(material_input.MDRAo, texcoords);
+    material.metallic = MRDAo.r;
+    material.roughness = MRDAo.g;
+    material.dielectric = MRDAo.b;
+    material.ambientOcclusion = MRDAo.a;
+ 	material.emissive = EmissiveMap(material_input.emissive, texcoords);
+    material.F0 = Fresnel0(material.albedo, material.metallic, material.dielectric);
+
+    return material;
+}
+
+vec3 GetAllLighting(Material material, Camera camera, vec3 worldPosition, vec3 worldNormal)
+{
+    vec3 lighting = vec3(0.0);
+
+    for(int i = 0; i < lights.length(); i++)
+        lighting += CalculateLight(lights[i], camera, material, worldPosition, worldNormal);
+
+    return lighting + GetAmbientLight(material.ambientOcclusion, material.albedo.rgb) + material.emissive;
+}
