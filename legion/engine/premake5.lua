@@ -1,7 +1,7 @@
---! Args Central Build Script for Args-Engine
+--! Legion Central Build Script for Legion-Engine
 --[[
 author: Raphael Baier
-copyright: (c) 2020 Raphael Baier, The Args-Team
+copyright: (c) 2020 Raphael Baier, The Legion-Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
 software and associated documentation files (the "Software"), to deal in the Software
@@ -38,7 +38,7 @@ require "../tools/export-compile-commands"
 ]]--
 
 -- root workspace, all sub-project should be included
-workspace "args"
+workspace "legion"
     configurations { "Debug32", "Release32", "Debug64", "Release64" }
 
 -- core module, must not have any dependencies and should be first
