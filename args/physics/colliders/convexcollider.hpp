@@ -57,11 +57,11 @@ namespace args::physics
         //        math::vec3 worldStart = transform * math::vec4(*(edge->edgePositionPtr), 1);
         //        math::vec3 worldEnd = transform * math::vec4(*(edge->nextEdge->edgePositionPtr), 1);
 
-        //        debug::drawLine(worldStart, worldEnd, math::colors::green);
+        //        debug::drawLine(__FUNC__ , __LINE__, worldStart, worldEnd, math::colors::green);
 
         //    };
 
-        //    debug::drawLine(math::vec3(0, 0, 0), math::vec3(0, -1, 0), math::colors::blue);
+        //    debug::drawLine(__FUNC__ , __LINE__, math::vec3(0, 0, 0), math::vec3(0, -1, 0), math::colors::blue);
 
         //    for (auto face : halfEdgeFaces)
         //    {

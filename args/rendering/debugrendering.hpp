@@ -4,11 +4,6 @@
 
 namespace args::debug
 {
-    namespace detail
-    {
-        events::EventBus* eventBus = nullptr;
-    }
-
     struct debug_line final : public events::event<debug_line>
     {
         math::vec3 start;
@@ -35,6 +30,12 @@ namespace args::debug
         virtual bool unique() override { return false; }
     };
 
+#if defined(ARGS_ENTRY)
+    namespace detail
+    {
+        events::EventBus* eventBus = nullptr;
+    }
+
     void drawLine(math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false)
     {
         if (!detail::eventBus)
@@ -42,6 +43,16 @@ namespace args::debug
 
         detail::eventBus->raiseEvent<debug_line>(start, end, color, width, time, ignoreDepth);
     }
+
+    void setEventBus(events::EventBus* eventBus)
+    {
+        detail::eventBus = eventBus;
+    }
+#else
+    extern void drawLine(math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false);
+
+    extern void setEventBus(events::EventBus* eventBus);
+#endif
 }
 
 namespace std
