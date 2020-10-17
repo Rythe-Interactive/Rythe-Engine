@@ -22,7 +22,7 @@
 
 #include <audio/audio.hpp>
 
-using namespace args;
+using namespace legion;
 
 struct sah
 {
@@ -935,7 +935,7 @@ public:
          //{
          //	std::cout << "raising exit event" << std::endl;
          //	raiseEvent<events::exit>();
-         //	//throw args_exception_msg("hehehe fuck you >:D");
+         //	//throw legion_exception_msg("hehehe fuck you >:D");
          //}
     }
 

@@ -89,6 +89,7 @@ bld/
 
 # Args engine asset folder
 !**/assets/**
+!**/engine/resources/**
 
 # Word temporary files
 ~$*.*
@@ -99,11 +100,5 @@ bld/
 # Windows Preview files
 **/Thumbs.db
 *.xcf
-deps/lib/args-application.lib
-deps/lib/args-core.lib
-deps/lib/args-rendering.lib
-deps/lib/args-audio.lib
-deps/lib/args-editor.lib
-deps/lib/args-networking.lib
-deps/lib/args-physics.lib
-deps/lib/args-scripting.lib
+
+deps/lib/legion*
