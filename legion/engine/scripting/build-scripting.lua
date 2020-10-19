@@ -22,12 +22,13 @@ DEALINGS IN THE SOFTWARE.
 ]]--
 
 
-project "legion-core"
+project "legion-scripting"
     kind "StaticLib"
     language "C++"
     targetdir "../../bin/%{cfg.buildcfg}"
     cppdialect "C++17"
     includedirs { "../","./" }
+	dependson { "legion-core" }
 
     files {"**.h", "**.hpp" ,"**.c", "**.cpp"}
 

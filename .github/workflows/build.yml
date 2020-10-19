@@ -19,19 +19,17 @@ jobs:
        xargs -I"{}" sudo mv {} /usr/bin
        
     - name: generate Makefiles
-      run: premake5 --file=args/premake5.lua gmake
+      run: premake5 --file=premake5.lua gmake
 
 
       # TODO(algo-ryth-mix): there is an error here somewhere (sometimes old stuff is used)
       # the below two steps are here to aid in finding the bugs and should be removed when ironed out
-    - name: probe output
-      run: ls -la ./args && ls -la ./args/core || true
 
     - name: probe commit
       run: git log -p -2 || true
 
     - name: make
-      run: cd args && make CXX=clang++-9 config=debug64 all
+      run: make CXX=clang++-9 config=debug64 all
 
     
 

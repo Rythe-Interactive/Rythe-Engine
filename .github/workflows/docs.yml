@@ -20,7 +20,7 @@ jobs:
 
     - name: Commit documentation changes
       run: |
-        git clone https://github.com/Args-Engine/Args-Engine.git --branch gh-pages --single-branch gh-pages
+        git clone https://github.com/Legion-Engine/Legion-Engine.git --branch gh-pages --single-branch gh-pages
         cp -r docs/build/html/* gh-pages/
         cd gh-pages
         git config --local user.email "action@github.com"
@@ -59,9 +59,5 @@ jobs:
         key: ${{ secrets.DOCS_PRIVATE_KEY }}
         port: ${{ secrets.DOCS_PORT }}
         strip_components: 3
-  
-
-    # TODO(algo-ryth-mix,GlynLeine): here we need to insert the step that uploads to docs.args-engine.com
-    # we can either open an ssh-tunnel to upload directly via scp or instantiate a git-repository on the 
-    # hosting provider system and just push changes as if it were a fork.
+ 
 

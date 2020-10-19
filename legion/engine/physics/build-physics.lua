@@ -22,12 +22,13 @@ DEALINGS IN THE SOFTWARE.
 ]]--
 
 
-project "legion-core"
+project "legion-physics"
     kind "StaticLib"
     language "C++"
     targetdir "../../bin/%{cfg.buildcfg}"
     cppdialect "C++17"
     includedirs { "../","./" }
+	dependson { "legion-core" }
 
     files {"**.h", "**.hpp" ,"**.c", "**.cpp"}
 
@@ -38,6 +39,6 @@ project "legion-core"
     filter "configurations:Release*"
         defines {"NDEBUG"}
         optimize "On"
-
+		
     filter "configurations:*64"
        architecture "x86_64"

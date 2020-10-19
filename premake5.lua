@@ -38,14 +38,20 @@ require "../tools/export-compile-commands"
 ]]--
 
 -- root workspace, all sub-project should be included
-workspace "legion"
-    configurations { "Debug32", "Release32", "Debug64", "Release64" }
+workspace "legion-engine"
+    configurations { "Debug64", "Release64" }
 
 -- core module, must not have any dependencies and should be first
-include "core/build-core.lua"
+include "legion/engine/core/build-core.lua"
+include "legion/engine/physics/build-physics.lua"
+include "legion/engine/scripting/build-scripting.lua"
+include "legion/engine/networking/build-networking.lua"
+include "legion/engine/audio/build-audio.lua"
+include "legion/engine/application/build-application.lua"
+include "legion/engine/rendering/build-rendering.lua"
 
 project "*"
-    includedirs { "../deps/include/" }
+    includedirs { "deps/include/" }
 
 -- how to build:
 --[[
