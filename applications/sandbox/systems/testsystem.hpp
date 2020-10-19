@@ -645,8 +645,9 @@ public:
         player.add_components<transform>(position(0.f, 3.f, 0.f), rot, scale());
         player.add_component<audio::audio_listener>();
 
+        rendering::camera cam;
         cam.set_projection(90.f, 0.1f, 1000.f);
-        camH.write(cam);
+        player.add_component<rendering::camera>(cam);
     }
 
     void onExit(exit_action* action)
