@@ -18,12 +18,16 @@ namespace legion::core
         position& operator=(position&&) = default;
         position& operator=(const math::vec3& src)
         {
-            data = src.data;
+            x = src.x;
+            y = src.y;
+            z = src.z;
             return *this;
         }
         position& operator=(math::vec3&& src)
         {
-            data = src.data;
+            x = src.x;
+            y = src.y;
+            z = src.z;
             return *this;
         }
     };
@@ -39,12 +43,18 @@ namespace legion::core
         rotation& operator=(rotation&&) = default;
         rotation& operator=(const math::quat& src)
         {
-            data = src.data;
+            x = src.x;
+            y = src.y;
+            z = src.z;
+            w = src.w;
             return *this;
         }
         rotation& operator=(math::quat&& src)
         {
-            data = src.data;
+            x = src.x;
+            y = src.y;
+            z = src.z;
+            w = src.w;
             return *this;
         }
 
@@ -81,12 +91,16 @@ namespace legion::core
         scale& operator=(scale&&) = default;
         scale& operator=(const math::vec3& src)
         {
-            data = src.data;
+            x = src.x;
+            y = src.y;
+            z = src.z;
             return *this;
         }
         scale& operator=(math::vec3&& src)
         {
-            data = src.data;
+            x = src.x;
+            y = src.y;
+            z = src.z;
             return *this;
         }
     };

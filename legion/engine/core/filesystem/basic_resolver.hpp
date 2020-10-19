@@ -57,7 +57,7 @@ namespace legion::core::filesystem
                 if(full.find_first_of("<>\"|?*") != std::string::npos) return false;
                 if(full.back() == ' ' || full.back() == '.') return false;
                
-            #elif
+            #elif defined( LEGION_LINUX )
 
             //linux don't give a shit
 
@@ -129,7 +129,7 @@ namespace legion::core::filesystem
             return true;
 
             #else
-            return access(full.c_str(),R_OK) != -1)
+            return access(full.c_str(), R_OK) != -1);
             #endif
             
         }
