@@ -26,8 +26,9 @@ namespace args::rendering
         time::span totalTime;
         bool m_exit = false;
 
-        async::readonly_rw_spinlock debugLinesLock;
-        std::unordered_set<debug::debug_line> debugLines;
+        static async::readonly_rw_spinlock debugLinesLock;
+        static thread_local std::unordered_set<debug::debug_line>* localLines;
+        static std::unordered_map<std::thread::id, std::unordered_set<debug::debug_line>*> debugLines;
 
         bool main_window_valid()
         {
@@ -39,11 +40,48 @@ namespace args::rendering
             return m_ecs->world.get_component_handle<app::window>().read();
         }
 
+        static void startDebugDomain()
+        {
+            if (!localLines)
+                localLines = new std::unordered_set<debug::debug_line>();
+        }
+
+        static void endDebugDomain()
+        {
+            size_type size = localLines->size();
+
+            if (size == 0)
+                return;
+
+            std::thread::id id = std::this_thread::get_id();
+
+            {
+                async::readwrite_guard guard(debugLinesLock);
+
+                if (debugLines[id])
+                {
+                    for (auto& line : *(debugLines[id]))
+                    {
+                        if (line.time > 0 && !localLines->count(line))
+                            localLines->insert(line);
+                    }
+
+                    delete debugLines[id];
+                }
+
+                debugLines[id] = localLines;
+                localLines = nullptr;
+            }
+
+            localLines = new std::unordered_set<debug::debug_line>();
+            localLines->reserve(size);
+        }
+
         void drawLine(debug::debug_line* line)
         {
-            async::readwrite_guard guard(debugLinesLock);
-            if (!debugLines.count(*line))
-                debugLines.insert(*line);
+            if (localLines->count(*line))
+                localLines->erase(*line);
+            localLines->insert(*line);
         }
 
         void debugRenderPass(const math::mat4& view, const math::mat4& projection, time::time_span<fast_time> deltaTime)
@@ -55,20 +93,26 @@ namespace args::rendering
                 if (debugLines.size() == 0)
                     return;
 
-                lines.assign(debugLines.begin(), debugLines.end());
-
                 std::vector<debug::debug_line> toRemove;
-                for (auto& line : debugLines)
+                for (auto& [threadId, domain] : debugLines)
                 {
-                    line.timeBuffer += deltaTime;
+                    lines.insert(lines.end(), domain->begin(), domain->end());
 
-                    if (line.timeBuffer >= line.time)
-                        toRemove.push_back(line);
+                    for (auto& line : (*domain))
+                    {
+                        if (line.time == 0)
+                            continue;
+
+                        line.timeBuffer += deltaTime;
+
+                        if (line.timeBuffer >= line.time)
+                            toRemove.push_back(line);
+                    }
+
+                    for (auto line : toRemove)
+                        domain->erase(line);
                 }
-
-                for (auto line : toRemove)
-                    debugLines.erase(line);
-            }            
+            }
 
             static material_handle debugMaterial = MaterialCache::create_material("debug", "assets://shaders/debug.glsl"_view);
             static app::gl_id vertexBuffer = -1;
@@ -154,7 +198,7 @@ namespace args::rendering
 
                     glLineWidth(width + 1);
 
-                    if(ignoreDepth)
+                    if (ignoreDepth)
                         glDisable(GL_DEPTH_TEST);
 
                     glDrawArraysInstanced(GL_LINES, 0, vertices.size(), colors.size());
@@ -174,7 +218,9 @@ namespace args::rendering
 
         virtual void setup()
         {
-            debug::detail::eventBus = m_eventBus;
+            scheduling::ProcessChain::subscribeToChainStart<&Renderer::startDebugDomain>();
+            scheduling::ProcessChain::subscribeToChainEnd<&Renderer::endDebugDomain>();
+            debug::setEventBus(m_eventBus);
 
             bindToEvent<debug::debug_line, &Renderer::drawLine>();
 
@@ -186,14 +232,14 @@ namespace args::rendering
             m_scheduler->sendCommand(m_scheduler->getChainThreadId("Rendering"), [](void* param)
                 {
                     Renderer* self = reinterpret_cast<Renderer*>(param);
-                    log::debug("Waiting on main window.");
+                    log::trace("Waiting on main window.");
 
                     while (!self->main_window_valid())
                         std::this_thread::yield();
 
                     app::window window = self->get_main_window();
 
-                    log::debug("Initializing context.");
+                    log::trace("Initializing context.");
 
                     async::readwrite_guard guard(*window.lock);
                     app::ContextHelper::makeContextCurrent(window);
@@ -302,10 +348,10 @@ namespace args::rendering
                             log::warn("[{}-{}] {}", s, t, message);
                             break;
                         case GL_DEBUG_SEVERITY_LOW:
-                            log::info("[{}-{}] {}", s, t, message);
+                            log::debug("[{}-{}] {}", s, t, message);
                             break;
                         case GL_DEBUG_SEVERITY_NOTIFICATION:
-                            log::debug("[{}-{}] {}", s, t, message);
+                            log::trace("[{}-{}] {}", s, t, message);
                             break;
                         default:
                             log::debug("[{}-{}] {}", s, t, message);
@@ -435,17 +481,17 @@ namespace args::rendering
             app::ContextHelper::makeContextCurrent(nullptr);
             auto elapsed = renderClock.end();
 
-           /* if (temp < 3)
-            {
-                temp++;
-                log::debug("render took: {:.3f}ms\tdeltaTime: {:.3f}ms fps: {:.3f}", elapsed.milliseconds(), deltaTime.milliseconds(), 1.0 / deltaTime);
-            }
-            else
-            {
-                frameCount++;
-                totalTime += deltaTime;
-                log::debug("render took: {:.3f}ms\tdeltaTime: {:.3f}ms fps: {:.3f} average: {:.3f}", elapsed.milliseconds(), deltaTime.milliseconds(), 1.0 / deltaTime, 1.0 / (totalTime / frameCount));
-            }*/
+            /* if (temp < 3)
+             {
+                 temp++;
+                 log::debug("render took: {:.3f}ms\tdeltaTime: {:.3f}ms fps: {:.3f}", elapsed.milliseconds(), deltaTime.milliseconds(), 1.0 / deltaTime);
+             }
+             else
+             {
+                 frameCount++;
+                 totalTime += deltaTime;
+                 log::debug("render took: {:.3f}ms\tdeltaTime: {:.3f}ms fps: {:.3f} average: {:.3f}", elapsed.milliseconds(), deltaTime.milliseconds(), 1.0 / deltaTime, 1.0 / (totalTime / frameCount));
+             }*/
         }
     };
 }

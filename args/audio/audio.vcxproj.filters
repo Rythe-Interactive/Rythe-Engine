@@ -18,5 +18,42 @@
     <ClCompile Include="delete_this.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="systems\audiosystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="data\audio_segment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="data\importers\audio_importers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="systems\audiosystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="audio.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="module\audiomodule.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\audio_source.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\audio_listener.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\audio_segment.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\importers\audio_importers.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="systems\audiosystem.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

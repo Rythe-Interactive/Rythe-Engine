@@ -27,6 +27,11 @@
     <ClCompile Include="compute\Program.cpp" />
     <ClCompile Include="compute\kernel.cpp" />
     <ClCompile Include="compute\high_level\function.cpp" />
+    <ClCompile Include="data\image.cpp" />
+    <ClCompile Include="data\importers\image_importers.cpp" />
+    <ClCompile Include="engine\system.cpp" />
+    <ClCompile Include="engine\module.cpp" />
+    <ClCompile Include="events\defaultevents.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -378,7 +383,6 @@
     <ClInclude Include="math\glm\vec3.hpp" />
     <ClInclude Include="math\glm\vec4.hpp" />
     <ClInclude Include="math\glm\vector_relational.hpp" />
-    <ClInclude Include="platform\args_library.hpp" />
     <ClInclude Include="filesystem\assetimporter.hpp" />
     <ClInclude Include="defaults\coremodule.hpp" />
     <ClInclude Include="defaults\defaultcomponents.hpp" />
@@ -398,6 +402,8 @@
     <ClInclude Include="compute\high_level\buffer_name_pair.hpp" />
     <ClInclude Include="compute\detail\cl_include.hpp" />
     <ClInclude Include="compute\high_level\function.hpp" />
+    <ClInclude Include="data\image.hpp" />
+    <ClInclude Include="data\importers\image_importers.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">

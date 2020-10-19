@@ -5,7 +5,7 @@
 
 namespace args::core::filesystem
 {
-    class ARGS_API mem_filesystem_resolver : public filesystem_resolver, public memory_resolver_common_base
+    class mem_filesystem_resolver : public filesystem_resolver, public memory_resolver_common_base
     {
     public:
         /** Requires the raw data to be passed for internal building.

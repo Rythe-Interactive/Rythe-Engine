@@ -16,7 +16,7 @@ namespace args::core::filesystem
      *        can be used to do all kinds of fun stuff with,
      *        the underlying drivers.
      */
-    class ARGS_API view
+    class view
     {
     public:
 

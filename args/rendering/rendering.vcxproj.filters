@@ -30,6 +30,9 @@
     <ClCompile Include="data\material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="systems\renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\renderingmodule.hpp">
@@ -42,9 +45,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="detail\tiny_obj_loader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="detail\engine_include.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="detail\stb_image.h">

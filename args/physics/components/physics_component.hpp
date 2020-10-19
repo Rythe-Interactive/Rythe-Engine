@@ -1,12 +1,12 @@
 #pragma once
-#include <application/application.hpp>
+
 #include <physics/cube_collider_params.hpp>
 #include <vector>
 #include <physics/colliders/physicscollider.hpp>
 
 namespace args::physics
 {
-	struct ARGS_API physicsComponent
+	struct physicsComponent
 	{
         static void init(physicsComponent& comp)
         {

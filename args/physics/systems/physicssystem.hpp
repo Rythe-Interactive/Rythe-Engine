@@ -1,18 +1,13 @@
 #pragma once
 
-#ifndef ARGS_IMPORT
-#define ARGS_IMPORT
-#include <core/core.hpp>
-#include <core/platform/args_library.hpp>
-#else
-#include <core/core.hpp>
-#endif // !ARGS_IMPORT
 
+#include <core/core.hpp>
 #include <physics/components/rigidbody.hpp>
 #include <physics/data/physics_manifold_precursor.h>
 #include <physics/data/physics_manifold.hpp>
 #include <physics/physics_contact.h>
 #include <physics/components/physics_component.hpp>
+#include <memory>
 
 namespace args::physics
 {
@@ -21,6 +16,11 @@ namespace args::physics
     class PhysicsSystem final : public System<PhysicsSystem>
     {
     public:
+
+        static std::vector<std::shared_ptr<physics::PenetrationQuery>> penetrationQueries;
+        static std::vector<physics_contact> contactPoints;
+        static std::vector<math::vec3 > aPoint;
+        static std::vector<math::vec3> bPoint;
 
         ecs::EntityQuery  rigidbodyIntegrationQuery;
 
@@ -238,10 +238,8 @@ namespace args::physics
         * @note This should only be used for testing/debugging purposes
         */
         void bruteForceBroadPhase(std::vector<physics_manifold_precursor>& manifoldPrecursors,
-            std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping)
-        {
-            manifoldPrecursorGrouping.push_back(std::move(manifoldPrecursors));
-        }
+            std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping);
+
 
         /**@brief given 2 physics_manifold_precursors precursorA and precursorB, create a manifold for each collider in precursorA 
         * with every other collider in precursorB. The manifolds that involve rigidbodies are then pushed into the given manifold list
@@ -263,6 +261,13 @@ namespace args::physics
                 {
                     physics::physics_manifold m;
                     constructManifoldWithCollider(colliderA,colliderB,precursorA,precursorB,m);
+
+                    if (!m.isColliding)
+                    {
+                        continue;
+                    }
+
+                    colliderA->PopulateContactPoints(colliderB, m);
 
                     if (isRigidbodyInvolved)
                     {

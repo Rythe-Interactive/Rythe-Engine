@@ -41,11 +41,18 @@ namespace args::core
     public:
         Engine(int argc, char** argv) : m_modules(), m_eventbus(), m_ecs(&m_eventbus), m_cliargs(argv, argv + argc),
 #if defined(ARGS_LOW_POWER)
-            m_scheduler(&m_eventbus, true)
+            m_scheduler(&m_eventbus, true, LEGION_MIN_THREADS)
 #else
-            m_scheduler(&m_eventbus, false)
+            m_scheduler(&m_eventbus, false, LEGION_MIN_THREADS)
 #endif
         {
+            Module::m_eventBus = &m_eventbus;
+            Module::m_ecs = &m_ecs;
+            Module::m_scheduler = &m_scheduler;
+            SystemBase::m_eventBus = &m_eventbus;
+            SystemBase::m_ecs = &m_ecs;
+            SystemBase::m_scheduler = &m_scheduler;
+
             reportModule<CoreModule>();
         }
 

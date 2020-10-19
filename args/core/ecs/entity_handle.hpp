@@ -12,25 +12,25 @@
 
 namespace args::core::ecs
 {
-    class ARGS_API EcsRegistry;
+    class EcsRegistry;
 
     class component_handle_base;
 
     template<typename component_type>
     class component_handle;
 
-    class ARGS_API entity_handle;
+    class entity_handle;
 
-    struct ARGS_API child_iterator
+    struct child_iterator
     {
-    public:
+        friend class entity_handle;
+    private:
         struct impl;
 
-    private:
         std::shared_ptr<impl> m_pimpl;
+        child_iterator(impl* implptr);
 
     public:
-        child_iterator(impl* implptr);
 
         friend bool operator==(const child_iterator& lhs, const child_iterator& rhs);
 
@@ -51,7 +51,7 @@ namespace args::core::ecs
      * @brief Serializable handle for executing operations on entities.
      *		  This class only stores a reference to the registry and the id of the entity.
      */
-    class ARGS_API entity_handle
+    class entity_handle
     {
         friend class EcsRegistry;
     private:
@@ -305,9 +305,9 @@ namespace args::core::ecs
          * @returns component_handle<component_type> Valid component handle for the newly created component.
          */
         template<typename component_type>
-        component_handle<std::remove_reference_t<component_type>> add_component(const component_type& value) const
+        component_handle<std::remove_reference_t<component_type>> add_component(component_type& value) const
         {
-            return force_value_cast<component_handle<std::remove_reference_t<component_type>>>(add_component(typeHash<std::remove_reference_t<component_type>>(), reinterpret_cast<void*>(&value)));
+            return add_component(typeHash<std::remove_reference_t<component_type>>(), reinterpret_cast<void*>(&value)).template cast<std::remove_reference_t<component_type>>();
         }
 
         /**@brief Add multiple components to the entity.

@@ -8,12 +8,16 @@
 
 namespace args::core::scheduling
 {
+    async::readonly_rw_spinlock ProcessChain::m_callbackLock;
+    multicast_delegate<void()> ProcessChain::m_onFrameStart;
+    multicast_delegate<void()> ProcessChain::m_onFrameEnd;
+
     void ProcessChain::threadedRun(ProcessChain* chain)
     {
         log::info("Chain started.");
         chain->m_scheduler->subscribeToSync();
-        try
-        {
+       /* try
+        {*/
             while (!chain->m_exit->load(std::memory_order_acquire)) // Check for exit flag.
             {
                 chain->runInCurrentThread(); // Execute all processes.
@@ -26,17 +30,17 @@ namespace args::core::scheduling
             }
             chain->m_scheduler->unsubscribeFromSync();
             chain->m_scheduler->reportExit(chain->m_threadId); // Mark Exit.
-        }
-        catch (const args::core::exception& e)
-        {
-            chain->m_scheduler->unsubscribeFromSync();
-            chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e); // Mark error.
-        }
-        catch (const std::exception& e)
-        {
-            chain->m_scheduler->unsubscribeFromSync();
-            chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e); // Mark error.
-        }
+       ///* }
+       // catch (const args::core::exception& e)
+       // {*/
+       //     chain->m_scheduler->unsubscribeFromSync();
+       //     chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e); // Mark error.
+       ///* }
+       // catch (const std::exception& e)
+       // {*/
+       //     chain->m_scheduler->unsubscribeFromSync();
+       //     chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e); // Mark error.
+       // //}
     }
 
     bool ProcessChain::run(bool low_power)
@@ -62,6 +66,11 @@ namespace args::core::scheduling
 
     void ProcessChain::runInCurrentThread()
     {
+        {
+            async::readonly_guard guard(m_callbackLock);
+            m_onFrameStart();
+        }
+
         hashed_sparse_set<id_type> finishedProcesses;
         async::readonly_guard guard(m_processesLock); // Hooking more processes whilst executing isn't allowed.
         do
@@ -72,6 +81,11 @@ namespace args::core::scheduling
                         finishedProcesses.insert(id);
 
         } while (finishedProcesses.size() != m_processes.size());
+
+        {
+            async::readonly_guard guard(m_callbackLock);
+            m_onFrameEnd();
+        }
     }
 
     void ProcessChain::addProcess(Process* process)

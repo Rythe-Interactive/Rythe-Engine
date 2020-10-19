@@ -14,7 +14,7 @@
 
 namespace args::core::filesystem
 {
-	class ARGS_API strpath_manip
+	class strpath_manip
 	{
 	public:
 		

@@ -50,7 +50,7 @@ namespace args::core::compute {
      *        You would normally obtain these via
      *        @ref Context::createBuffer()
      */
-    class ARGS_API Buffer
+    class Buffer
     {
     public:
         Buffer(cl_context,byte*,size_t,buffer_type,std::string);

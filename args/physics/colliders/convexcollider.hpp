@@ -1,6 +1,6 @@
 #pragma once
 
-#include <physics/physicsimport.h>
+#include <core/core.hpp>
 #include <physics/colliders/physicscollider.hpp>
 #include <physics/cube_collider_params.hpp>
 #include <physics/halfedgeedge.hpp>
@@ -13,7 +13,7 @@ namespace args::physics
 
 
 
-	class ARGS_API ConvexCollider : public PhysicsCollider
+	class ConvexCollider : public PhysicsCollider
 	{
 	public:
 
@@ -36,6 +36,16 @@ namespace args::physics
         * of both ConvexColliders 
         */
         void CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) override;
+
+
+        void PopulateContactPoints(std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold& manifold) override
+        {
+            physicsCollider->PopulateContactPointsWith(this, manifold);
+        }
+
+        void PopulateContactPointsWith(ConvexCollider* convexCollider, physics_manifold& manifold) override;
+
+
        
 
         //inline void DrawColliderRepresentation(math::mat4 transform) override
@@ -47,11 +57,11 @@ namespace args::physics
         //        math::vec3 worldStart = transform * math::vec4(*(edge->edgePositionPtr), 1);
         //        math::vec3 worldEnd = transform * math::vec4(*(edge->nextEdge->edgePositionPtr), 1);
 
-        //        debug::drawLine(worldStart, worldEnd, math::colors::green);
+        //        debug::drawLine(__FUNC__ , __LINE__, worldStart, worldEnd, math::colors::green);
 
         //    };
 
-        //    debug::drawLine(math::vec3(0, 0, 0), math::vec3(0, -1, 0), math::colors::blue);
+        //    debug::drawLine(__FUNC__ , __LINE__, math::vec3(0, 0, 0), math::vec3(0, -1, 0), math::colors::blue);
 
         //    for (auto face : halfEdgeFaces)
         //    {
@@ -136,6 +146,8 @@ namespace args::physics
             //note: each edge carries adjacency information. (for example, an edge 'eg' must know its edge pair 'ge').
             //This is why each edge must be declared explicitly.
 
+            //each face also has an id. It is mostly used for debugging reasons and will be removed when it is no longer needed.
+
             //[1] create face eghf
 
             HalfEdgeEdge* eg = new HalfEdgeEdge(e);
@@ -150,6 +162,7 @@ namespace args::physics
 
             HalfEdgeFace* eghf = new HalfEdgeFace(eg, math::vec3(0, 1, 0));
             halfEdgeFaces.push_back(eghf);
+            eghf->id = " eghf";
 
             //[2] create face hgcd
 
@@ -165,6 +178,7 @@ namespace args::physics
 
             HalfEdgeFace* hgcd = new HalfEdgeFace(hg, math::vec3(0, 0, -1));
             halfEdgeFaces.push_back(hgcd);
+            hgcd->id = "hgcd";
 
             //[3] create face fhdb
 
@@ -180,6 +194,7 @@ namespace args::physics
 
             HalfEdgeFace* fhdb = new HalfEdgeFace(fh, math::vec3(1, 0, 0));
             halfEdgeFaces.push_back(fhdb);
+            fhdb->id = "fhdb";
 
             //[4] create face efba
 
@@ -195,6 +210,7 @@ namespace args::physics
 
             HalfEdgeFace* efba = new HalfEdgeFace(ef, math::vec3(0, 0, 1));
             halfEdgeFaces.push_back(efba);
+            efba->id = "efba";
 
             //[5] create face geac
 
@@ -210,6 +226,7 @@ namespace args::physics
 
             HalfEdgeFace* geac = new HalfEdgeFace(ge, math::vec3(-1, 0, 0));
             halfEdgeFaces.push_back(geac);
+            geac->id = "geac";
 
             //[6] create face abdc
 
@@ -225,7 +242,7 @@ namespace args::physics
 
             HalfEdgeFace* abdc = new HalfEdgeFace(ab, math::vec3(0, -1, 0));
             halfEdgeFaces.push_back(abdc);
-
+            abdc->id = "abdc";
 
 
             //manually connect each edge to its pair
@@ -248,20 +265,30 @@ namespace args::physics
             ac->pairingEdge = ca;   dc->pairingEdge = cd;
             cg->pairingEdge = gc;   ca->pairingEdge = ac;
 
+            
+            //initialize the ID of the edges, this is done mostly for debugging reasons and will be removed when it
+            //is no longer needed
+            
+            //eghf           //hgcd
+            eg->id = "eg";   hg->id = "hg";
+            gh->id = "gh";   gc->id = "gc";
+            hf->id = "hf";   cd->id = "cd";
+            fe->id = "fe";   dh->id = "dh";
+
+            //fhdb            //efba
+            fh->id = "fh";    ef->id = "ef";
+            hd->id = "hd";    fb->id = "fb";
+            db->id = "db";    ba->id = "ba";
+            bf->id = "bf";    ae->id = "ae";
+
+            //geac           //abdc
+            ge->id = "ge";   ab->id = "ab";
+            ea->id = "ea";   bd->id = "bd";
+            ac->id = "ac";   dc->id = "dc";
+            cg->id = "cg";   ca->id = "ca";
+          
             //check if halfEdge data structure was initialized correctly. this will be commented when I know it always works
-
-            auto assertFunc = [](HalfEdgeEdge* edge)
-            {
-                assert(edge->nextEdge);
-                assert(edge->prevEdge);
-                assert(edge->pairingEdge);
-                assert(edge->edgePositionPtr);
-            };
-
-            for (auto& face : halfEdgeFaces)
-            {
-                face->forEachEdge(assertFunc);
-            }
+            AssertEdgeValidity();
 
         }
 
@@ -275,7 +302,23 @@ namespace args::physics
             return vertices;
         }
 
-        
+        void AssertEdgeValidity()
+        {
+            auto assertFunc = [](HalfEdgeEdge* edge)
+            {
+                assert(edge->nextEdge);
+                assert(edge->prevEdge);
+                assert(edge->pairingEdge);
+                assert(edge->edgePositionPtr);
+
+                
+            };
+
+            for (auto& face : halfEdgeFaces)
+            {
+                face->forEachEdge(assertFunc);
+            }
+        }
         
 
 	private:

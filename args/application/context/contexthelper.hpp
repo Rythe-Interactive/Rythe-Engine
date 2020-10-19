@@ -1,14 +1,5 @@
 #pragma once
-#ifndef ARGS_IMPORT
-#define ARGS_IMPORT
 #include <core/core.hpp>
-#include <core/platform/args_library.hpp>
-#else
-#include <core/core.hpp>
-#endif // !ARGS_IMPORT
-
-#define GLAPI ARGS_API extern
-
 #include <application/context/detail/glad/glad.h>
 #include <glfw/glfw3.h>
 
@@ -25,7 +16,7 @@ namespace args::application
      * @brief Static helper class for calling functions on the GLFW context.
      * @ref https://www.glfw.org/docs/latest/pages.html
      */
-    class ARGS_API ContextHelper
+    class ContextHelper
     {
     private:
         static std::atomic_bool m_initialized;
@@ -68,6 +59,7 @@ namespace args::application
         static GLFWglproc getProcAddress(cstring procname);
         static void setWindowShouldClose(GLFWwindow* window, int value);
         static int windowShouldClose(GLFWwindow* window);
+        static void setWindowIcon(GLFWwindow* window, int count, const GLFWimage* images);
         static void setWindowAttrib(GLFWwindow* window, int attrib, int value);
         static void setWindowPos(GLFWwindow* window, int x, int y);
         static void setWindowPos(GLFWwindow* window, math::ivec2 pos);

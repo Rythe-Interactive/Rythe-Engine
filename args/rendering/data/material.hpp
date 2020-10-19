@@ -5,7 +5,7 @@ namespace args::rendering
 {
     struct material;
 
-    struct ARGS_API material_parameter_base
+    struct material_parameter_base
     {
     protected:
         std::string m_name;
@@ -84,7 +84,7 @@ namespace args::rendering
         }
     };
 
-    struct ARGS_API material_handle
+    struct material_handle
     {
         id_type id;
 
@@ -118,7 +118,7 @@ namespace args::rendering
 
     constexpr material_handle invalid_material_handle{ invalid_id };
 
-    class ARGS_API MaterialCache
+    class MaterialCache
     {
         friend struct material_handle;
     private:

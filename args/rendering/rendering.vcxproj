@@ -16,6 +16,7 @@
     <ClCompile Include="data\model.cpp" />
     <ClCompile Include="data\shader.cpp" />
     <ClCompile Include="data\texture.cpp" />
+    <ClCompile Include="systems\renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\camera.hpp" />
@@ -24,7 +25,6 @@
     <ClInclude Include="data\material.hpp" />
     <ClInclude Include="data\shader.hpp" />
     <ClInclude Include="debugrendering.hpp" />
-    <ClInclude Include="detail\engine_include.hpp" />
     <ClInclude Include="detail\stb_image.h" />
     <ClInclude Include="detail\tiny_obj_loader.h" />
     <ClInclude Include="data\model.hpp" />
