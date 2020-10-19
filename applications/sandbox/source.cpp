@@ -31,10 +31,9 @@ using namespace args;
 
 void ARGS_CCONV reportModules(Engine* engine)
 {
-    log::filter(log::severity::trace);
-    log::info("Hello Legion!");
+    log::filter(log::severity::debug);
 
-    test_filesystem();
+    //test_filesystem();
 
     engine->reportModule<TestModule>();
     engine->reportModule<app::ApplicationModule>();

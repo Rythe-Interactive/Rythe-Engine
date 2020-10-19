@@ -22,6 +22,13 @@ namespace args::core::math
 		typedef vec<3, T, Q> type;
 		typedef vec<3, bool, Q> bool_type;
 
+        static const type up;
+        static const type down;
+        static const type right;
+        static const type left;
+        static const type forward;
+        static const type backward;
+
 		// -- Data --
 
 #		if GLM_SILENT_WARNINGS == GLM_ENABLE

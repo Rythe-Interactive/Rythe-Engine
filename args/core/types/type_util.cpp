@@ -22,7 +22,7 @@ namespace args::core
     id_type ARGS_FUNC nameHash(const std::string& name)
     {
         static std::hash<std::string> hasher{};
-        if (name[name.size() - 1] == '\0')
+        if (!name.empty() && name[name.size() - 1] == '\0')
         {
             std::string temp = name;
             temp.resize(name.size() - 1);

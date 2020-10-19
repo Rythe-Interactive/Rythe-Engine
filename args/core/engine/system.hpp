@@ -4,20 +4,20 @@
 #include <core/types/type_util.hpp>
 #include <core/ecs/ecsregistry.hpp>
 #include <core/scheduling/scheduler.hpp>
-#include <core/events/eventbus.hpp>
-#include <core/time/time_span.hpp>
 #include <core/scheduling/process.hpp>
+#include <core/events/eventbus.hpp>
+#include <core/time/time.hpp>
 #include <memory>
 
 namespace args::core
 {
     class SystemBase
     {
-        friend class Module;
+        friend class Engine;
     protected:
-        ecs::EcsRegistry* m_ecs;
-        scheduling::Scheduler* m_scheduler;
-        events::EventBus* m_eventBus;
+        static ecs::EcsRegistry* m_ecs;
+        static scheduling::Scheduler* m_scheduler;
+        static events::EventBus* m_eventBus;
 
         sparse_map<id_type, std::unique_ptr<scheduling::Process>> m_processes;
 

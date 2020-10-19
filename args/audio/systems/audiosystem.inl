@@ -76,8 +76,8 @@ namespace args::audio
 		const ALchar* ALCExtensions = alcGetString(alDevice, ALC_EXTENSIONS);
 		ALCint srate;
 		alcGetIntegerv(alDevice, ALC_FREQUENCY, 1, &srate);
-		log::info("OpenAL info:\n\n\t\t\tOpenAL information\n\tVendor: {}\n\tVersion: {}\n\tRenderer: {}\n\tOpenAl Extensions: {}\n\tALC Extensions: {}\n\tDevice samplerate: {}\n",
-			vendor, version, renderer, openALExtensions, ALCExtensions, srate);
+		log::info("Initialized OpenAL\n\tCONTEXT INFO\n\t----------------------------------\n\tVendor:\t\t\t{}\n\tVersion:\t\t{}\n\tRenderer:\t\t{}\n\tDevice samplerate:\t{}\n\tOpenAl Extensions:\n\t\t{}\n\n\tALC Extensions:\n\t\t{}\n\t----------------------------------\n",
+			vendor, version, renderer, srate, openALExtensions, ALCExtensions);
 	}
 
 	inline void AudioSystem::update(time::span deltatime)
@@ -96,15 +96,41 @@ namespace args::audio
 			previousP = p;
 			alSource3f(source.m_sourceId, AL_POSITION, p.x, p.y, p.z);
 			alSource3f(source.m_sourceId, AL_VELOCITY, vel.x, vel.y, vel.z);
-			if (source.m_changes & audio_source::sound_properties::pitch)
+
+			using change = audio_source::sound_properties;
+			if (source.m_changes & change::pitch)
 			{
 				// Pitch has changed
 				alSourcef(source.m_sourceId, AL_PITCH, source.getPitch());
 			}
-			if (source.m_changes & audio_source::sound_properties::gain)
+			if (source.m_changes & change::gain)
 			{
 				// Gain has changed
 				alSourcef(source.m_sourceId, AL_GAIN, source.getGain());
+			}
+			if (source.m_changes & change::playState)
+			{
+				using state = audio::audio_source::playstate;
+				// Playstate has changed
+				if (source.m_nextPlayState == state::playing)
+				{
+					source.m_playState = state::playing;
+					alSourcePlay(source.m_sourceId);
+				}
+				else if (source.m_nextPlayState == state::paused)
+				{
+					source.m_playState = state::paused;
+					alSourcePause(source.m_sourceId);
+				}
+				else if (source.m_nextPlayState == state::stopped)
+				{
+					source.m_playState = state::stopped;
+					alSourceStop(source.m_sourceId);
+				}
+			}
+			if (source.m_changes & change::doRewind)
+			{
+				alSourceRewind(source.m_sourceId);
 			}
 
 			source.clearChanges();
@@ -134,16 +160,6 @@ namespace args::audio
 
 		// do something with a.
 		initSource(a);
-
-		{
-			async::readwrite_guard guard(contextLock);
-			alcMakeContextCurrent(alcContext);
-			// NOTE TO SELF:
-			// REMOVE THE AUTO PLAY (TESTING PURPOSE)
-			log::debug("playing sound");
-			alSourcePlay(a.m_sourceId);
-			alcMakeContextCurrent(nullptr);
-		}
 
 		m_sourcePositions.emplace(handle, event->entity.read_component<position>());
 

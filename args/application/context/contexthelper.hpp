@@ -59,6 +59,7 @@ namespace args::application
         static GLFWglproc getProcAddress(cstring procname);
         static void setWindowShouldClose(GLFWwindow* window, int value);
         static int windowShouldClose(GLFWwindow* window);
+        static void setWindowIcon(GLFWwindow* window, int count, const GLFWimage* images);
         static void setWindowAttrib(GLFWwindow* window, int attrib, int value);
         static void setWindowPos(GLFWwindow* window, int x, int y);
         static void setWindowPos(GLFWwindow* window, math::ivec2 pos);

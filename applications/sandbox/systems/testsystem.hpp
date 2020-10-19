@@ -67,15 +67,22 @@ struct vsync_action : public app::input_action<vsync_action> {};
 
 //some test stuff just so i can change things
 
-struct physics_test_move : public app::input_axis<physics_test_move>{};
+struct physics_test_move : public app::input_axis<physics_test_move> {};
 
-
-struct set_distance_model : public app::input_action<set_distance_model> {};
+struct play_audio_source : public app::input_action<play_audio_source> {};
+struct pause_audio_source : public app::input_action<pause_audio_source> {};
+struct stop_audio_source : public app::input_action<stop_audio_source> {};
+struct rewind_audio_source : public app::input_action<rewind_audio_source> {};
 
 
 class TestSystem final : public System<TestSystem>
 {
 public:
+    TestSystem()
+    {
+        app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
+    }
+
     ecs::entity_handle player;
     ecs::entity_handle sphere;
 
@@ -84,49 +91,42 @@ public:
 
     virtual void setup()
     {
-        int i = 1;
-        int j = 1;
-        int k = 1;
+#pragma region OpenCL
+        compute::Program prog = fs::view("assets://kernels/vadd_kernel.cl").load_as<compute::Program>();
 
-        std::cout << i + j + k << std::endl;
-
-
-        filter(log::severity::debug);
-
-        compute::Program prog =  fs::view("basic://kernels/vadd_kernel.cl").load_as<compute::Program>();
         prog.prewarm("vector_add");
 
         std::vector<int> ints;
 
-        auto res = fs::view("basic://bigint.txt").get();
+        auto res = fs::view("assets://bigint.txt").get();
         if (res == common::valid) {
 
             char* buf = new char[6];
-            memset(buf,0,6);
+            memset(buf, 0, 6);
             filesystem::basic_resource contents = res;
 
-            for (size_t i = 0; i < contents.size() && i < 5*2048; i += 5)
+            for (size_t i = 0; i < contents.size() && i < 5 * 2048; i += 5)
             {
-                memcpy(buf,contents.data()+ i,5);
+                memcpy(buf, contents.data() + i, 5);
                 ints.push_back(std::atol(buf));
             }
 
             delete[] buf;
         }
 
-        std::vector<int> first_ints (ints.begin(), ints.begin()+ints.size()/2);
-        std::vector<int> second_ints (ints.begin() + ints.size() /2 , ints.end());
+        std::vector<int> first_ints(ints.begin(), ints.begin() + ints.size() / 2);
+        std::vector<int> second_ints(ints.begin() + ints.size() / 2, ints.end());
 
-        size_t to_process = std::min(first_ints.size(),second_ints.size());
+        size_t to_process = std::min(first_ints.size(), second_ints.size());
 
         std::vector<int> results(to_process);
 
 
-        auto A = compute::Context::createBuffer(first_ints,compute::buffer_type::READ_BUFFER, "A");
-        auto B = compute::Context::createBuffer(second_ints,compute::buffer_type::READ_BUFFER, "B");
-        auto C = compute::Context::createBuffer(results,compute::buffer_type::WRITE_BUFFER, "C");
+        auto A = compute::Context::createBuffer(first_ints, compute::buffer_type::READ_BUFFER, "A");
+        auto B = compute::Context::createBuffer(second_ints, compute::buffer_type::READ_BUFFER, "B");
+        auto C = compute::Context::createBuffer(results, compute::buffer_type::WRITE_BUFFER, "C");
 
-         prog.kernelContext("vector_add")
+        prog.kernelContext("vector_add")
             .set_and_enqueue_buffer(A)
             .set_and_enqueue_buffer(B)
             .set_buffer(C)
@@ -136,19 +136,16 @@ public:
             .enqueue_buffer(C)
             .finish();
 
+        /* for (int& i : results)
+         {
+             log::info("got {}", i);
+         }*/
+#pragma endregion
 
-
-        for (int& i : results)
-        {
-            log::info("got {}", i);
-        }
-        log::info("Hello World");
-        log::warn("Hello World");
-        log::error("Hello World");
-        log::debug("Hello World");
-
+#pragma region Input binding
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::LEFT, -1.f);
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::RIGHT, 1.f);
+
         app::InputSystem::createBinding<player_move>(app::inputmap::method::W, 1.f);
         app::InputSystem::createBinding<player_move>(app::inputmap::method::S, -1.f);
         app::InputSystem::createBinding<player_strive>(app::inputmap::method::D, 1.f);
@@ -174,7 +171,10 @@ public:
         app::InputSystem::createBinding<pitch_change>(app::inputmap::method::APOSTROPHE, 1.0f);
         app::InputSystem::createBinding<pitch_change>(app::inputmap::method::SEMICOLON, -1.0f);
 
-        app::InputSystem::createBinding<set_distance_model>(app::inputmap::method::N);
+        app::InputSystem::createBinding<play_audio_source>(app::inputmap::method::P);
+        app::InputSystem::createBinding<pause_audio_source>(app::inputmap::method::LEFT_BRACKET);
+        app::InputSystem::createBinding<stop_audio_source>(app::inputmap::method::RIGHT_BRACKET);
+        app::InputSystem::createBinding<rewind_audio_source>(app::inputmap::method::BACKSPACE);
 
         bindToEvent<player_move, &TestSystem::onPlayerMove>();
         bindToEvent<player_strive, &TestSystem::onPlayerStrive>();
@@ -185,6 +185,7 @@ public:
         bindToEvent<fullscreen_action, &TestSystem::onFullscreen>();
         bindToEvent<escape_cursor_action, &TestSystem::onEscapeCursor>();
         bindToEvent<vsync_action, &TestSystem::onVSYNCSwap>();
+
         bindToEvent<physics_test_move, &TestSystem::onUnitPhysicsUnitTestMove>();
 
         bindToEvent<sphere_move, &TestSystem::onSphereAAMove>();
@@ -192,12 +193,17 @@ public:
         bindToEvent<gain_change, &TestSystem::onGainChange>();
         bindToEvent<pitch_change, &TestSystem::onPitchChange>();
 
-        bindToEvent<set_distance_model, &TestSystem::onDistanceModelSet>();
+        bindToEvent<play_audio_source, &TestSystem::playAudioSource>();
+        bindToEvent<pause_audio_source, &TestSystem::pauseAudioSource>();
+        bindToEvent<stop_audio_source, &TestSystem::stopAudioSource>();
+        bindToEvent<rewind_audio_source, &TestSystem::rewindAudioSource>();
+#pragma endregion
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
         window.enableCursor(false);
         window.show();
 
+#pragma region Model and material loading
         rendering::model_handle cubeH;
         rendering::model_handle sphereH;
         rendering::model_handle suzanneH;
@@ -237,50 +243,52 @@ public:
 
             app::ContextHelper::makeContextCurrent(nullptr);
         }
+#pragma endregion
+
+#pragma region Entities
+        {
+            auto ent = createEntity();
+            ent.add_component<rendering::renderable>({ cubeH, skyboxH });
+            ent.add_components<transform>(position(), rotation(), scale(500.f));
+        }
 
         {
-            auto ent = m_ecs->createEntity();
-            m_ecs->createComponent<rendering::renderable>(ent, { cubeH, skyboxH });
+            auto ent = createEntity();
+            ent.add_component<rendering::renderable>({ floorH, floorMH });
+            ent.add_components<transform>();
+        }
 
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            scaleH.write(math::vec3(500.f));
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ suzanneH, vertexH }, {});
+            ent.add_components<transform>(position(0, 3, 5.1f), rotation(), scale());
+
+            auto [positionH, rotationH, scaleH] = ent.get_component_handles<transform>();
+
+            log::trace("p {}, r {}, s {}, has {}", positionH.read(), rotationH.read(), scaleH.read(), ent.has_components<transform>());
+
+            ent.remove_components<transform>();
+
+            log::trace("p {}, r {}, s {}, has {}", positionH.read(), rotationH.read(), scaleH.read(), ent.has_components<position, rotation, scale>());
+            transform transf = ent.add_components<transform>(position(0, 3, 5.1f), rotation(), scale());
+
+            auto& [_, rotationH2, scaleH2] = transf.handles;
+            auto positionH2 = transf.get<position>();
+
+            log::trace("p {}, r {}, s {}, has {}", positionH2.read(), rotationH2.read(), scaleH2.read(), ent.has_components<position, rotation, scale>());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ suzanneH, wireframeH }, {});
+            ent.add_components<transform>(position(0, 3, 8.1f), rotation(), scale());
         }
 
         {
             auto ent = m_ecs->createEntity();
-            m_ecs->createComponent<rendering::renderable>(ent, { floorH, floorMH });
+            ent.add_components<rendering::renderable, sah>({ suzanneH, normalH }, {});
 
-            m_ecs->createComponents<transform>(ent);
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            ent.add_component<rendering::renderable>({ suzanneH, vertexH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, 3, 5.1f));
-            scaleH.write(math::vec3(1.f));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { suzanneH, wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, 3, 8.1f));
-            scaleH.write(math::vec3(1.f));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { suzanneH, normalH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, 3, 11.1f));
-            scaleH.write(math::vec3(1.f));
+            ent.add_components<transform>(position(0, 3, 11.1f), rotation(), scale());
         }
 
         /*   {
@@ -294,39 +302,27 @@ public:
            }*/
 
         {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { submeshtestH, normalH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, 10, 0));
-            scaleH.write(math::vec3(1.f));
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ submeshtestH, normalH }, {});
+            ent.add_components<transform>(position(0, 10, 0), rotation(), scale());
         }
 
         {
-            auto ent = m_ecs->createEntity();
-            m_ecs->createComponent<rendering::renderable>(ent, { axesH, normalH });
-            m_ecs->createComponents<transform>(ent);
+            auto ent = createEntity();
+            ent.add_component<rendering::renderable>({ axesH, normalH });
+            ent.add_components<transform>();
         }
 
         {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { cubeH, uvH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(5.1f, 3, 0));
-            scaleH.write(math::vec3(0.75f));
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ cubeH, uvH }, {});
+            ent.add_components<transform>(position(5.1f, 3, 0), rotation(), scale(0.75f));
         }
 
         {
-            auto ent = m_ecs->createEntity();
-            ent.add_component<sah>();
-            m_ecs->createComponent<rendering::renderable>(ent, { sphereH, normalH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, 3, -5.1f));
-            scaleH.write(math::vec3(2.5f));
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ sphereH, normalH }, {});
+            ent.add_components<transform>(position(0, 3, -5.1f), rotation(), scale(2.5f));
         }
 
         // Sphere setup (with audio source)
@@ -334,18 +330,25 @@ public:
             sphere = createEntity();
             sphere.add_components<rendering::renderable, sah>({ uvsphereH, wireframeH }, {});
             sphere.add_components<transform>(position(-5.1f, 3, 0), rotation(), scale(2.5f));
-            audio::audio_source source;
-            source.setAudioHandle(audio::AudioSegmentCache::createAudioSegment("waterfall", "assets://audio/365921__inspectorj__waterfall-small-b[mono].mp3"_view));
-            sphere.add_component<audio::audio_source>(source);
+
+            auto segment = audio::AudioSegmentCache::createAudioSegment("waterfall", "assets://audio/365921__inspectorj__waterfall-small-b[mono].mp3"_view);
+            if (segment)
+            {
+                audio::audio_source source;
+                source.setAudioHandle(segment);
+                sphere.add_component<audio::audio_source>(source);
+            }
 
         }
+#pragma endregion
 
         setupCameraEntity();
+
 
         //---------------------------------------------------------- Physics Collision Unit Test -------------------------------------------------------------------//
 
         setupPhysicsCDUnitTest(cubeH, wireframeH);
-      
+
         //----------- Rigidbody-Collider AABB Test------------//
 
         setupPhysicsCRUnitTest(cubeH, wireframeH);
@@ -354,7 +357,7 @@ public:
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::differentThread>("TestChain");
         createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
-        createProcess<&TestSystem::drawInterval>("Physics",0.01);
+        createProcess<&TestSystem::drawInterval>("Physics");
 
     }
 
@@ -415,7 +418,7 @@ public:
             scaleH.write(math::vec3(1.0f));
         }
 
-        
+
 
         //----------- AABB to AABB Test  ------------//
         //**
@@ -516,8 +519,8 @@ public:
 
             scaleH.write(math::vec3(1.0f));
         }
-        ////*/
-        ////----------- OBB to OBB Test  ------------//
+        //*/
+        //----------- OBB to OBB Test  ------------//
         //**
         {
             auto ent = m_ecs->createEntity();
@@ -660,7 +663,7 @@ public:
     {
         if (action->released())
         {
-            raiseEvent<app::window_toggle_fullscreen_request>(world_entity_id, math::ivec2(100, 100), math::ivec2(1360, 768));
+            app::WindowSystem::requestFullscreenToggle(world_entity_id, math::ivec2(100, 100), math::ivec2(1360, 768));
         }
     }
 
@@ -795,14 +798,42 @@ public:
             auto pos = posHandle.read();
             pos.x += 0.005 * action->value;
 
-     
+
             posHandle.write(pos);
 
         }
     }
-    void onDistanceModelSet(set_distance_model* action)
+
+    void playAudioSource(play_audio_source* action)
     {
-        audio::AudioSystem::setDistanceModel(AL_LINEAR_DISTANCE);
+        auto sourceH = sphere.get_component_handle<audio::audio_source>();
+        audio::audio_source source = sourceH.read();
+        source.play();
+        sourceH.write(source);
+    }
+
+    void pauseAudioSource(pause_audio_source* action)
+    {
+        auto sourceH = sphere.get_component_handle<audio::audio_source>();
+        audio::audio_source source = sourceH.read();
+        source.pause();
+        sourceH.write(source);
+    }
+
+    void stopAudioSource(stop_audio_source* action)
+    {
+        auto sourceH = sphere.get_component_handle<audio::audio_source>();
+        audio::audio_source source = sourceH.read();
+        source.stop();
+        sourceH.write(source);
+    }
+
+    void rewindAudioSource(rewind_audio_source* action)
+    {
+        auto sourceH = sphere.get_component_handle<audio::audio_source>();
+        audio::audio_source source = sourceH.read();
+        source.rewind();
+        sourceH.write(source);
     }
 
     void update(time::span deltaTime)
@@ -812,7 +843,7 @@ public:
         debug::drawLine(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::colors::blue, 10);
 
         //log::info("still alive! {}",deltaTime.seconds());
-        static auto query = createQuery<sah>();
+        static auto sahQuery = createQuery<sah, rotation, position>();
 
         //static time::span buffer;
         static int frameCount;
@@ -822,7 +853,7 @@ public:
         //accumulated += deltaTime;
         frameCount++;
 
-        for (auto entity : query)
+        for (auto entity : sahQuery)
         {
             auto comp = entity.get_component_handle<sah>();
 
@@ -833,9 +864,13 @@ public:
             entity.write_component(rot);
 
             comp.write({ frameCount });
+
+            auto pos = entity.read_component<position>();
+
+            debug::drawLine(pos, pos + rot.forward(), math::colors::magenta, 10);
         }
 
-       
+
 
         //if (buffer > 1.f)
         //{
@@ -908,7 +943,8 @@ public:
     void drawInterval(time::span deltaTime)
     {
         static auto physicsQuery = createQuery< physics::physicsComponent>();
-        int i = 0;
+        uint i = 0;
+
 
         for (auto penetration : physics::PhysicsSystem::penetrationQueries)
         {
@@ -917,36 +953,36 @@ public:
 
         }
 
-       //--------------------------------------- Draw contact points ---------------------------------------//
-
+        //--------------------------------------- Draw contact points ---------------------------------------//
+        i = 0;
         for (auto contact : physics::PhysicsSystem::contactPoints)
         {
             debug::drawLine(contact.worldContactInc
-                , contact.worldContactRef, math::vec4(1, 0, 0, 1), 5.0f,false);
+                , contact.worldContactRef, math::vec4(1, 0, 0, 1), 5.0f);
 
             debug::drawLine(contact.worldContactInc
-                , contact.worldContactInc + math::vec3(0, 0.1f,0), math::vec4(0.5, 0.5, 0.5, 1), 5.0f, true);
+                , contact.worldContactInc + math::vec3(0, 0.1f, 0), math::vec4(0.5, 0.5, 0.5, 1), 5.0f, 0, true);
 
             debug::drawLine(contact.worldContactRef
-                , contact.worldContactRef + math::vec3(0, 0.1f, 0), math::vec4(0, 0, 0, 1), 5.0f, true);
+                , contact.worldContactRef + math::vec3(0, 0.1f, 0), math::vec4(0, 0, 0, 1), 5.0f, 0, true);
 
         }
 
         //--------------------------------------- Draw extreme points ---------------------------------------//
-
-       /* for (auto penetration : physics::PhysicsSystem::aPoint)
+        i = 0;
+        for (auto penetration : physics::PhysicsSystem::aPoint)
         {
             debug::drawLine(penetration
-                , penetration + math::vec3(0,0.2,0), math::vec4(1, 0, 0, 1), 15.0f);
+                , penetration + math::vec3(0, 0.2, 0), math::vec4(1, 0, 0, 1), 15.0f);
 
         }
-
+        i = 0;
         for (auto penetration : physics::PhysicsSystem::bPoint)
         {
             debug::drawLine(penetration
                 , penetration + math::vec3(0, 0.2, 0), math::vec4(0, 0, 1, 1), 15.0f);
 
-        }*/
+        }
 
         physics::PhysicsSystem::penetrationQueries.clear();
         physics::PhysicsSystem::aPoint.clear();
@@ -976,6 +1012,7 @@ public:
 
                 auto physicsComponent = physicsComponentHandle.read();
 
+                i = 0;
                 for (auto physCollider : *physicsComponent.colliders)
                 {
                     //--------------------------------- Draw Collider Outlines ---------------------------------------------//
@@ -989,7 +1026,7 @@ public:
                         math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
                         math::vec3 faceEnd = faceStart + math::vec3((localTransform * math::vec4(face->normal, 0)));
 
-                       // debug::drawLine(faceStart, faceEnd, math::colors::green, 5.0f);
+                        debug::drawLine(faceStart, faceEnd, math::colors::green, 5.0f);
 
                         if (!currentEdge) { return; }
 
@@ -1003,8 +1040,7 @@ public:
                             math::vec3 worldStart = localTransform * math::vec4(*(edgeToExecuteOn->edgePositionPtr), 1);
                             math::vec3 worldEnd = localTransform * math::vec4(*(edgeToExecuteOn->nextEdge->edgePositionPtr), 1);
 
-                            debug::drawLine(worldStart, worldEnd, math::vec4(0, 1, 0, 1), 5.0f);
-                            i++;
+                            debug::drawLine(worldStart, worldEnd, math::colors::green, 5.0f);
                         } while (initialEdge != currentEdge && currentEdge != nullptr);
                     }
 
@@ -1019,34 +1055,34 @@ public:
         //FindClosestPointsToLineSegment unit test
 
 
-       /* math::vec3 p1(5,-0.5,0);
-        math::vec3 p2(5,0.5,0);
+        math::vec3 p1(5, -0.5, 0);
+        math::vec3 p2(5, 0.5, 0);
 
-        math::vec3 p3(6,0,-0.5);
-        math::vec3 p4(6,0,0.5);
+        math::vec3 p3(6, 0, -0.5);
+        math::vec3 p4(6, 0, 0.5);
 
         math::vec3 p1p2;
         math::vec3 p3p4;
 
-        debug::drawLine(p1, p2, math::color(1, 0, 0), 5.0f);
-        debug::drawLine(p3, p4, math::color(1, 0, 0), 5.0f);
+        debug::drawLine(p1, p2, math::colors::red, 5.0f);
+        debug::drawLine(p3, p4, math::colors::red, 5.0f);
 
         physics::PhysicsStatics::FindClosestPointsToLineSegment(p1, p2, p3, p4, p1p2, p3p4);
 
-        debug::drawLine(p1p2, p3p4, math::color(0, 1, 0), 5.0f);
+        debug::drawLine(p1p2, p3p4, math::colors::green, 5.0f);
 
         p1 = math::vec3(8, 0, 0);
-        p2 = p1 + math::vec3(0,1.0f,0);
+        p2 = p1 + math::vec3(0, 1.0f, 0);
 
         p3 = math::vec3(10, 0, 0) + math::vec3(1.0f);
         p4 = p3 - math::vec3(1.0f);
 
-        debug::drawLine(p1, p2, math::color(1, 0, 0), 5.0f);
-        debug::drawLine(p3, p4, math::color(1, 0, 0), 5.0f);
+        debug::drawLine(p1, p2, math::colors::red, 5.0f);
+        debug::drawLine(p3, p4, math::colors::red, 5.0f);
 
         physics::PhysicsStatics::FindClosestPointsToLineSegment(p1, p2, p3, p4, p1p2, p3p4);
 
-        debug::drawLine(p1p2, p3p4, math::color(0, 1, 0), 5.0f);*/
+        debug::drawLine(p1p2, p3p4, math::colors::green, 5.0f);
 
         //log::debug("{:.3f}", deltaTime);
     }

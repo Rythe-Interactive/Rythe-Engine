@@ -128,6 +128,8 @@
     <ClInclude Include="containers\vector_view.hpp" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="data\data.hpp" />
+    <ClInclude Include="data\image.hpp" />
+    <ClInclude Include="data\importers\image_importers.hpp" />
     <ClInclude Include="data\importers\mesh_importers.hpp" />
     <ClInclude Include="data\mesh.hpp" />
     <ClInclude Include="defaults\coremodule.hpp" />
@@ -479,6 +481,8 @@
     <ClCompile Include="compute\buffer.cpp" />
     <ClCompile Include="compute\context.cpp" />
     <ClCompile Include="compute\kernel.cpp" />
+    <ClCompile Include="data\image.cpp" />
+    <ClCompile Include="data\importers\image_importers.cpp" />
     <ClCompile Include="data\importers\mesh_importers.cpp" />
     <ClCompile Include="data\mesh.cpp" />
     <ClCompile Include="ecs\component_handle.cpp" />
@@ -486,6 +490,9 @@
     <ClCompile Include="ecs\entity_handle.cpp" />
     <ClCompile Include="ecs\entityquery.cpp" />
     <ClCompile Include="ecs\queryregistry.cpp" />
+    <ClCompile Include="engine\module.cpp" />
+    <ClCompile Include="engine\system.cpp" />
+    <ClCompile Include="events\defaultevents.cpp" />
     <ClCompile Include="filesystem\artifact_cache.cpp" />
     <ClCompile Include="filesystem\assetimporter.cpp" />
     <ClCompile Include="filesystem\detail\strpath_manip.cpp" />
