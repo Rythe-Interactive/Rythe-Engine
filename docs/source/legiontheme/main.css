@@ -22,12 +22,13 @@
      font-family: 'Roboto',sans-serif;
      margin: 0;
      padding: 0;
-     background-color: rgb(8, 8, 8);
+     background-color: #434C5E;
      font-size: 1.2em;
+     color:#ECEFF4;
  }
 
  h1, h2, h3, h4 {
-     color: #2a2730;
+     color: #ECEFF4;
      font-weight: 700;
      /* font-family: "Lora","Times",serif; */
      clear: both;
@@ -48,8 +49,8 @@
  }
 
  div.body {
-     background-color: rgba(10, 10, 10, 1);
-     color: #6f6f6f;
+     background-color: #4C566A;
+     color: #ECEFF4;
      padding: 0 30px 30px 30px;
  }
 
@@ -67,7 +68,7 @@
  }
 
  div.related {
-     background-color: black;
+     background-color: #2E3440;
      padding: 10px 10px;
      width: auto;
  }
@@ -88,7 +89,7 @@
 
  div.sphinxsidebar h3,
  div.sphinxsidebar h4 {
-     color: #52a1e4;
+     color: #ECEFF4;
      font-size: 24px;
      font-weight: normal;
      margin: 0 0 5px 0;
@@ -108,39 +109,39 @@
  }
 
  div.sphinxsidebar ul {
-     color: #6f6f6f;
+     color: #ECEFF4;
      margin: 10px 0 20px;
      padding: 0;
  }
 
  div.sphinxsidebar a:hover {
-     color: #8fcbff;
+     color: #D8DEE9;
  }
 
  div.sphinxsidebar input {
      border: 1px solid rgba(0,0,0,0);
      border-right-color: #c3c3c3;
      font-size: 1em;
-     background-color: #171717;
-     color: #c3c3c3;
+     background-color: #4C566A;
+     color: #ECEFF4;
  }
 
  div.sphinxsidebar input:nth-child(2) {
-     border-color: #c3c3c3
+     border-color: #c3c3c3;
  }
  /* -- body styles --------------------------------------------------------- */
 
  a {
-     color: #52a1e4;
+     color: #ECEFF4;
      text-decoration: none;
  }
 
  a:visited {
-     color: #3e74a2;
+     color: #D8DEE9;
  }
 
  a:hover {
-     color: #8fcbff;
+     color: #D8DEE9;
      text-decoration: underline;
  }
 
@@ -158,7 +159,7 @@
  div.body h1,
  div.body h2,
  div.body h3,
- div.body h4 {color: #52a1e4;}
+ div.body h4 {color: #ECEFF4;}
  div.body h5 { color: #000; }
  div.body h6 { color: #777; }
 
@@ -281,7 +282,7 @@
  }
 
  div.admonition {
-     background-color: rgb(23, 23, 23);
+     background-color: #2E3440;
      /* border: 1px solid #cdcdd1; */
      padding: 0px 12px 12px 12px;
      font-size: 0.9em;
@@ -301,20 +302,20 @@
 
  div.attention, div.caution, div.seealso {
      background-color: #fef9e9;
-     border: 1px solid #fbe091;
+     border: 1px solid #e67e22;
  }
 
  div.attention p.admonition-title,
  div.caution p.admonition-title,
  div.seealso p.admonition-title {
-     background-color: #fbe091;
+     background-color: #e67e22;
  }
 
  div.danger p.admonition-title,
  div.error p.admonition-title,
  div.warning p.admonition-title {
-     background-color: #bf2e2f;
-     color: #c3c3c3;
+     background-color: #e74c3c;
+     color: #ECEFF4;
  }
 
  div.note, div.important, div.hint, div.tip {
@@ -334,9 +335,9 @@
  }
 
  pre {
-     background-color: #f6f7f9;
+     background-color: #2E3440;
      border: 1px solid #9aa2ab;
-     color: #222;
+     color: #D8DEE9;
      font-size: 0.75em;
      line-height: 1.5em;
      margin: 1.5em 0 1.5em 0;
@@ -349,9 +350,9 @@
 
  tt, code, code.xref {
      padding: 2px;
-     background-color: #1f1f1f;
+     background-color: #2E3440;
      /* border: 1px solid #daebea; */
-     color: #577996;
+     color: #3498db;
      font-size: 0.75em;
  }
 
@@ -373,11 +374,16 @@
  dl.method > dt,
  dl.class > dt,
  dl.exception > dt {
-     background-color: #131313;
-     color: #c3c3c3;
+     background-color: #2E3440;
+     color: #D8DEE9;
      margin: 25px 0 10px 0;
      padding: 1px 10px;
  }
+
+dt .internal
+{
+    color: #8e44ad
+}
 
  dl.function code.descname,
  dl.attribute code.descname,
