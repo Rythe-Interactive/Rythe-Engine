@@ -129,7 +129,7 @@ namespace legion::core::filesystem
             return true;
 
             #else
-            return access(full.c_str(), R_OK) != -1);
+            return access(full.c_str(), R_OK) != -1;
             #endif
             
         }
