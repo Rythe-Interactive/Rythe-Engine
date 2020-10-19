@@ -1,6 +1,6 @@
 #pragma once
-#include <CL/cl.h> // cl_context , cl_mem , cl_mem_flags
 
+#include "detail/cl_include.hpp" // cl_context , cl_mem , cl_mem_flags
 #include <core/platform/platform.hpp> // ARGS_API
 #include <core/types/primitives.hpp> // byte, size_t
 
@@ -67,6 +67,13 @@ namespace args::core::compute {
         void rename(const std::string& name);
 
         ~Buffer();
+        bool has_name() const
+        {
+            return !m_name.empty(); 
+        }
+
+        bool is_readbuffer() const { return m_type == CL_MEM_READ_ONLY || m_type == CL_MEM_READ_WRITE; }
+        bool is_writebuffer()const  { return m_type == CL_MEM_WRITE_ONLY || m_type == CL_MEM_READ_WRITE; }
     private:
         friend class Program;
         friend class Kernel;

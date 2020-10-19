@@ -74,24 +74,6 @@ namespace args::core::compute
 
     Kernel& Kernel::enqueue_buffer(Buffer buffer, block_mode blocking)
     {
-        //get name from buffer
-        if (buffer.m_name.empty())
-            log::warn("Encountered unnamed buffer! binding to a Kernel-location will fail!");
-        return enqueue_buffer(buffer, buffer.m_name, blocking);
-    }
-
-    Kernel& Kernel::enqueue_buffer(Buffer buffer, const std::string& name, block_mode blocking)
-    {
-        //translate name to index
-        param_find([this, b = std::forward<Buffer>(buffer), blocking](cl_uint index)
-        {
-            this->enqueue_buffer(b, index, blocking);
-        }, name);
-        return *this;
-    }
-
-    Kernel& Kernel::enqueue_buffer(Buffer buffer, cl_uint index, block_mode blocking)
-    {
 
         /*
             we are writing to the device buffer
@@ -184,7 +166,7 @@ namespace args::core::compute
     {
         //set and ... enqueue_buffer
         //nothing fun to see here
-        enqueue_buffer(std::forward<Buffer>(buffer), index, blocking);
+        enqueue_buffer(std::forward<Buffer>(buffer), blocking);
         return set_buffer(std::forward<Buffer>(buffer), index);
     }
 
@@ -232,7 +214,6 @@ namespace args::core::compute
         m_global_size(0),
         m_local_size(64)
     {
-        cl_int ret;
         m_queue = program->make_cq();
     }
 

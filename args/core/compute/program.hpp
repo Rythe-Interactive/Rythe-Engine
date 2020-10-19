@@ -1,5 +1,5 @@
 #pragma once
-#include <CL/cl.h>
+#include "detail/cl_include.hpp"
 
 #include <core/filesystem/resource.hpp>
 #include <core/compute/kernel.hpp>
@@ -22,7 +22,7 @@ namespace args::core::compute {
     public:
 
 
-        Program(cl_context, cl_device_id, filesystem::basic_resource);
+        Program(cl_context, cl_device_id, filesystem::basic_resource /*, bool source_is_il = false*/);
         Program(const Program& other) = default;
         Program(Program&& other) noexcept = default;
         Program& operator=(const Program& other) = default;

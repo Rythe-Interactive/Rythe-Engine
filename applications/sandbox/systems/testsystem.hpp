@@ -14,6 +14,7 @@
 
 #include <core/compute/context.hpp>
 #include <core/compute/kernel.hpp>
+#include <core/compute/high_level/function.hpp>
 #include <rendering/debugrendering.hpp>
 
 using namespace args;
@@ -59,8 +60,7 @@ public:
     {
         filter(log::severity::debug);
 
-        compute::Program prog = fs::view("basic://kernels/vadd_kernel.cl").load_as<compute::Program>();
-        prog.prewarm("vector_add");
+
 
         std::vector<int> ints;
 
@@ -87,11 +87,24 @@ public:
 
         std::vector<int> results(to_process);
 
+        // ----------- vvv NEW vvv --------------------
 
+        using compute::in,compute::out;
+      
+        auto vector_add = fs::view("basic://kernels/vadd_kernel.cl").load_as<compute::function>("vector_add");
+
+        auto return_code = vector_add(1024,first_ints,second_ints,out(results));
+
+        // ============================================
+        
         auto A = compute::Context::createBuffer(first_ints, compute::buffer_type::READ_BUFFER, "A");
         auto B = compute::Context::createBuffer(second_ints, compute::buffer_type::READ_BUFFER, "B");
         auto C = compute::Context::createBuffer(results, compute::buffer_type::WRITE_BUFFER, "C");
 
+        compute::Program prog = fs::view("basic://kernels/vadd_kernel.cl").load_as<compute::Program>();
+        prog.prewarm("vector_add");
+
+        
         prog.kernelContext("vector_add")
             .set_and_enqueue_buffer(A)
             .set_and_enqueue_buffer(B)
@@ -102,10 +115,13 @@ public:
             .enqueue_buffer(C)
             .finish();
 
-        /* for (int& i : results)
+        // ----------- ^^^ OLD ^^^ --------------------
+
+
+         for (int& i : results)
          {
              log::info("got {}", i);
-         }*/
+         }
 
         log::info("Hello World");
         log::warn("Hello World");

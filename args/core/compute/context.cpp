@@ -34,7 +34,7 @@ namespace args::core::compute {
         ret = clGetDeviceIDs(m_platform_id, CL_DEVICE_TYPE_DEFAULT, 1, &m_device_id, &ret_num_devices);
 
     	//error checking for clGetDeviceIDs
-        if (ret != NULL)
+        if (ret != CL_SUCCESS)
         {
             std::string error = "Unknown Error";
             switch (ret)
@@ -57,7 +57,7 @@ namespace args::core::compute {
         m_context = clCreateContext(nullptr, 1, &m_device_id, nullptr, nullptr, &ret);
 
     	//error checking for clCreateContext
-        if (ret != NULL)
+        if (ret != CL_SUCCESS)
         {
             std::string error = "Unknown Error" + std::to_string(ret);
             switch (ret)

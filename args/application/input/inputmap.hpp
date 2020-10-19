@@ -47,7 +47,6 @@ namespace args::application
             return value(lhs) | value(rhs);
         }
 
-
         enum class method
         {
             KEY,
@@ -341,5 +340,4 @@ namespace args::application
             }
         }
     };
-
 }

@@ -1,5 +1,4 @@
 #pragma once
-#include <CL/cl.h>
 
 #include <core/platform/platform.hpp> // ARGS_API
 #include <core/compute/program.hpp> // Kernel, Buffer
@@ -33,11 +32,11 @@ public:
 
     /**
      * @brief Creates a Program from a basic resource (can be file or buffer).
-     * @param vec The Buffer you want to create the Program from
+     * @param resource The Buffer you want to create the Program from
      *         You can for instance use fs::view.get()
      * @return A Program Object that supports execution
      */
-    static Program createProgram(const filesystem::basic_resource& vec);
+    static Program createProgram(const filesystem::basic_resource& resource);
 
 
     /**
@@ -51,7 +50,7 @@ public:
      * @return a Native Buffer Object
     */
     template <class T>
-    static Buffer createBuffer(std::vector<T>& container,buffer_type type,std::string name = "Unnamed")
+    static Buffer createBuffer(std::vector<T>& container,buffer_type type,std::string name = "")
     {
         return Buffer(
             m_context,
@@ -60,6 +59,11 @@ public:
             type,
             std::forward<std::string>(name)
         );
+    }
+
+    static Buffer createBuffer(byte* data, size_type size, buffer_type type, std::string name = "")
+    {
+        return Buffer(m_context,data,size,type,std::forward<std::string>(name));
     }
 
 private:

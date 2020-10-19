@@ -168,7 +168,7 @@ class Test {
 		 * @return T Created from this resources data.
 		 */
 		template <class T,class... Args>
-		A_NODISCARD T to(Args&&...args);
+		A_NODISCARD T to(Args&&...args) const;
 
 		/**@brief Generic conversion from T.
 		 *
@@ -236,7 +236,7 @@ class Test {
 
 
 	template <class T,class... Args>
-	A_NODISCARD T basic_resource::to(Args&&...args)
+	A_NODISCARD T basic_resource::to(Args&&...args) const
 	{
 		return std::move(from_resource<T>(*this, std::forward<Args>(args)...));
 	}
