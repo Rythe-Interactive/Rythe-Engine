@@ -9,7 +9,10 @@ namespace args::physics
 {
     void ConvexCollider::CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) 
     {
+        auto compIDA = manifold.physicsCompA.entity.get_component_handle<identifier>();
+        auto compIDB = manifold.physicsCompB.entity.get_component_handle<identifier>();
 
+        //log::debug("CHECKING Collision between {} and {}!" , compIDA.read().id, compIDB.read().id);
         //--------------------- Check for a collision by going through the edges and faces of both polyhedrons  --------------//
         //'this' is colliderB and 'convexCollider' is colliderA
 
@@ -17,7 +20,7 @@ namespace args::physics
 
         float ARefSeperation;
         math::vec3 a;
-        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(this, convexCollider, manifold.transformB,manifold.transformA,  ARefFace, ARefSeperation, a))
+        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(this, convexCollider, manifold.transformB,manifold.transformA,  ARefFace, ARefSeperation, a) || !ARefFace.ptr)
         {
             manifold.isColliding = false;
             return;
@@ -27,12 +30,13 @@ namespace args::physics
       
         float BRefSeperation;
         math::vec3 b;
-        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider, this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation, b))
+        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider, this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation, b) || !BRefFace.ptr)
         {
             manifold.isColliding = false;
             return;
         }
 
+  
         PointerEncapsulator< HalfEdgeEdge> edgeRef;
         PointerEncapsulator< HalfEdgeEdge> edgeInc;
 
@@ -96,16 +100,43 @@ namespace args::physics
         PhysicsSystem::bPoint.push_back(b);
 
         collisionsFound.push_back(line);
+
+
+
+        //log::debug("Collision FOUND between {} and {}!" , compIDA.read().id, compIDB.read().id);
+   
     }
 
     void ConvexCollider::PopulateContactPointsWith(ConvexCollider* convexCollider, physics_manifold& manifold)
     {
         log::debug("ConvexCollider::PopulateContactPointsWith ");
 
+
         math::mat4& refTransform = manifold.penetrationInformation->isARef ? manifold.transformA : manifold.transformB;
         math::mat4& incTransform = manifold.penetrationInformation->isARef ? manifold.transformB : manifold.transformA;
 
         manifold.penetrationInformation->populateContactList(manifold,refTransform,incTransform);
+
+        auto refPhysicsCompHandle = manifold.penetrationInformation->isARef ? manifold.physicsCompA : manifold.physicsCompB;
+        auto incPhysicsCompHandle = manifold.penetrationInformation->isARef ? manifold.physicsCompB : manifold.physicsCompA;
+
+        ecs::component_handle<rigidbody> refRB = refPhysicsCompHandle.entity.get_component_handle<rigidbody>();
+        ecs::component_handle<rigidbody>  incRB = incPhysicsCompHandle.entity.get_component_handle<rigidbody>();
+
+        for ( auto& contact : manifold.contacts)
+        {
+            contact.incTransform = incTransform;
+            contact.refTransform = refTransform;
+
+            contact.rbInc = incRB;
+            contact.rbRef = refRB;
+           
+            contact.collisionNormal = manifold.penetrationInformation->normal;
+
+
+
+        }
+
 
     }
 

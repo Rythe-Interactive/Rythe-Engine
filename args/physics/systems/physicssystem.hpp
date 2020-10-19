@@ -7,6 +7,7 @@
 #include <physics/data/physics_manifold.hpp>
 #include <physics/physics_contact.h>
 #include <physics/components/physics_component.hpp>
+#include <physics/data/identifier.h>
 #include <memory>
 
 namespace args::physics
@@ -16,6 +17,8 @@ namespace args::physics
     class PhysicsSystem final : public System<PhysicsSystem>
     {
     public:
+        static bool IsPaused;
+        static bool oneTimeRunActive;
 
         static std::vector<std::shared_ptr<physics::PenetrationQuery>> penetrationQueries;
         static std::vector<physics_contact> contactPoints;
@@ -41,11 +44,25 @@ namespace args::physics
             
         }
 
+
+
         void fixedUpdate(time::time_span<fast_time> deltaTime)
         {
-            runPhysicsPipeline();
+            if (!IsPaused)
+            {
+                runPhysicsPipeline();
+                integrateRigidbodies(deltaTime);
+            }
 
-            integrateRigidbodies(deltaTime);
+            if (oneTimeRunActive)
+            {
+                oneTimeRunActive = false;
+                runPhysicsPipeline();
+                integrateRigidbodies(deltaTime);
+
+            }
+
+           
         }
 
         //The following function is public static so that it can be called by testSystem
@@ -130,6 +147,7 @@ namespace args::physics
         */
         void runPhysicsPipeline()
         {
+           
             //-------------------------------------------------Broadphase Optimization-----------------------------------------------//
             int initialColliderID = 0;
 
@@ -176,9 +194,12 @@ namespace args::physics
 
                         bool isBetween2Rigidbodies = (precursorRigidbodyA && precursorRigidbodyB);
 
+
                         
                         if (isBetweenTriggerAndNonTrigger || isBetweenRigidbodyAndNonTrigger || isBetween2Rigidbodies)
                         {
+                           
+
                             constructManifoldsWithPrecursors(manifoldPrecursors.at(i), manifoldPrecursors.at(j),
                                 manifoldsToSolve,
                                 precursorRigidbodyA || precursorRigidbodyB
@@ -324,18 +345,23 @@ namespace args::physics
             auto rbPos = posHandle.read();
             auto rbRot = rotHandle.read();
 
-            //-------------------- update position ------------------//
+            ////-------------------- update position ------------------//
             math::vec3 acc = rb.forceAccumulator * rb.inverseMass;
             rb.velocity += (acc + constants::gravity) * dt;
             rbPos += rb.velocity * dt;
 
-            //-------------------- update rotation ------------------//
+            ////-------------------- update rotation ------------------//
             math::vec3 angularAcc = rb.torqueAccumulator * rb.inverseInertiaTensor;
             rb.angularVelocity += (angularAcc);
 
-            //construct the rotation by using the direction of angularVelocity as the axis and its length as the angle
+            ////construct the rotation by using the direction of angularVelocity as the axis and its length as the angle
             float dtAngle = math::length(rb.angularVelocity) * dt;
-            rbRot *= math::angleAxis(math::deg2rad(dtAngle), math::normalize(rb.angularVelocity));
+
+            if (!math::epsilonEqual(dtAngle, 0.0f, math::epsilon<float>()))
+            {
+                rbRot *= math::angleAxis(math::deg2rad(dtAngle), math::normalize(rb.angularVelocity));
+            }
+            
 
             rb.resetAccumulators();
 
@@ -346,6 +372,11 @@ namespace args::physics
             posHandle.write(rbPos);
             rotHandle.write(rbRot);
 
+            log::debug("rb log");
+            math::vec3 pos = rbPos;
+            log::debug("rbPos {} ", math::to_string(pos));
+            //log::debug("rb angle {} " , dtAngle);
+            log::debug("-----------");
         }
 
 

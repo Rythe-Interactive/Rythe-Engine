@@ -7,6 +7,8 @@ namespace args::physics
     std::vector<math::vec3> PhysicsSystem::aPoint;
     std::vector<math::vec3> PhysicsSystem::bPoint;
     std::vector<physics_contact> PhysicsSystem::contactPoints;
+    bool PhysicsSystem::IsPaused = false;
+    bool PhysicsSystem::oneTimeRunActive = false;
 
     void PhysicsSystem::bruteForceBroadPhase(std::vector<physics_manifold_precursor>& manifoldPrecursors,
         std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping)

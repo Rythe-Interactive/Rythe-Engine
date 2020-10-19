@@ -84,8 +84,8 @@ namespace args::physics
                 }
             }
             //no seperating axis was found
-
             maximumSeperation = currentMaximumSeperation;
+
             return false;
         }
 

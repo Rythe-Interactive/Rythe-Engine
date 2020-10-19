@@ -29,6 +29,7 @@
     <ClInclude Include="colliders\convexcollider.hpp" />
     <ClInclude Include="data\convexconvexpenetrationquery.h" />
     <ClInclude Include="cube_collider_params.hpp" />
+    <ClInclude Include="data\identifier.h" />
     <ClInclude Include="data\physics_manifold_precursor.h" />
     <ClInclude Include="data\edgepenetrationquery.h" />
     <ClInclude Include="data\pointer_encapsulator.hpp" />

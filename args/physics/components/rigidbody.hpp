@@ -11,21 +11,21 @@ namespace args::physics
     {
         //linear motion component
         float inverseMass = 1.0f;
-        math::vec3 velocity;
-        math::vec3 acc;
+        math::vec3 velocity = math::vec3(0.0);
+        math::vec3 acc = math::vec3(0.0);
         float linearDrag;
 
         //angular motion component
         math::mat3 inverseInertiaTensor = math::mat3(12.0f);
 
-        math::vec3 angularAcc;
-        math::vec3 angularVelocity;
+        math::vec3 angularAcc = math::vec3(0.0);
+        math::vec3 angularVelocity = math::vec3(0.0);
         float angularDrag = 0.01f;
 
         //force application component
         math::vec3 globalCentreOfMass;
-        math::vec3 forceAccumulator;
-        math::vec3 torqueAccumulator;
+        math::vec3 forceAccumulator = math::vec3(0.0);
+        math::vec3 torqueAccumulator = math::vec3(0.0);
 
         float restitution;
         float friction;

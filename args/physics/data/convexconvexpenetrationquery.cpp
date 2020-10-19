@@ -60,8 +60,6 @@ namespace args::physics
                 math::vec3 referenceContact = incidentContact - normal * distanceToCollisionPlane;
 
                 physics_contact contact;
-                contact.incTransform = incTransform;
-                contact.refTransform = refTransform;
 
                 contact.worldContactInc = incidentContact;
                 contact.worldContactRef = referenceContact;

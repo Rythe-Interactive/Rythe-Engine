@@ -4,7 +4,7 @@
 #include <physics/systems/physicssystem.hpp>
 #include <physics/components/physics_component.hpp>
 #include <physics/components/rigidbody.hpp>
-
+#include <physics/data/identifier.h>
 namespace args::physics
 {
     class PhysicsModule : public Module
@@ -17,7 +17,7 @@ namespace args::physics
             reportSystem<PhysicsSystem>();
             reportComponentType<physicsComponent>();
             reportComponentType<rigidbody>();
-
+            reportComponentType<identifier>();
         }
 
         virtual priority_type priority() override
