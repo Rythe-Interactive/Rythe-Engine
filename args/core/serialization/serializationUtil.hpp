@@ -1,6 +1,6 @@
 #pragma once
 #include <core/platform/platform.hpp>
-#define CEREAL_RAPIDJSON_ENDIAN 0
+#define CEREAL_RAPIDJSON_ENDIAN 1
 #include <cereal/types/unordered_map.hpp>
 #include <cereal/types/memory.hpp>
 #include <cereal/archives/json.hpp>
