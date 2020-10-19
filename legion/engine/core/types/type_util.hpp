@@ -24,6 +24,12 @@ namespace legion::core
         return *reinterpret_cast<T*>(&value);
     }
 
+    template<typename T, typename U>
+    constexpr T* force_cast(U value)
+    {
+        return reinterpret_cast<T*>(&value);
+    }
+
     /**@brief Returns typeid(T).name().
      * @tparam T type of which you want the name.
      */
