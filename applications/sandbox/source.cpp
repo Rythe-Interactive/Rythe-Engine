@@ -6,7 +6,6 @@
 
 #include <chrono>
 #include <thread>
-
 #include <core/core.hpp>
 #include <application/application.hpp>
 #include <rendering/rendering.hpp>

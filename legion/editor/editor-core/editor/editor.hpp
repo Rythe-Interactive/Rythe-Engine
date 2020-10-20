@@ -1,0 +1,44 @@
+#pragma once
+#include <core/core.hpp>
+#include <editor-core/editor/editormodule.hpp>
+
+/**
+ * @file editor_impl.hpp
+ */
+
+namespace legion::editor
+{
+	/**@class Editor
+	 * @brief The editors main object that handles editor modules.
+	 * @ref legion::editor::EditorModule
+	 */
+	class Editor
+	{
+		/**@brief Reports an editor module.
+		 * @tparam ModuleType The module you want to report.
+		 * @note ModuleType must be default constructable.
+		 * @ref legion::editor::EditorModule
+		 */
+		template<class ModuleType, inherits_from<ModuleType, EditorModule> = 0>
+		void reportModule()
+		{
+		}
+
+		/**@brief Reports an editor module
+		 * @tparam ModuleType the module you want to report
+		 * @param s a signal that you want to pass arguments to the constructor of the Module
+		 * @param args the arguments you want to pass
+		 * @ref legion::editor::EditorModule
+		 */
+		template <class ModuleType, class... Args, inherits_from<ModuleType, EditorModule> = 0>
+		void reportModule(editor_module_initializer_t s, Args&&...args)
+		{
+		}
+	};
+}
+
+/**@brief Reports editor modules to the editor, must be implemented by you.
+ * @param [in] editor The editor object as ptr *
+ * @ref legion::core::Editor::reportModule<T,...>()
+ */
+extern void reportEditorModules(legion::editor::Editor* editor);
