@@ -27,6 +27,7 @@ Program Listing for File logging.hpp
    #include <core/math/math.hpp>
    #include <core/common/exception.hpp>
    
+   #if !defined(DOXY_EXCLUDE)
    namespace fmt
    {
        template <>
@@ -249,6 +250,7 @@ Program Listing for File logging.hpp
        };
    
    }
+   #endif
    
    
    namespace legion::core::log

@@ -78,30 +78,12 @@ Namespaces
 ----------
 
 
-- :ref:`namespace_fmt`
-
 - :ref:`namespace_legion__core__log`
 
 
 Classes
 -------
 
-
-- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1ivec2_01_4`
-
-- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1quat_01_4`
-
-- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1vec2_01_4`
-
-- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1vec3_01_4`
-
-- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1vec4_01_4`
-
-- :ref:`exhale_struct_structfmt_1_1formatter_3_01legion_1_1core_1_1exception_01_4`
-
-- :ref:`exhale_struct_structfmt_1_1formatter_3_01legion_1_1core_1_1fs__error_01_4`
-
-- :ref:`exhale_struct_structfmt_1_1formatter_3_01std_1_1thread_1_1id_01_4`
 
 - :ref:`exhale_struct_structlegion_1_1core_1_1log_1_1impl`
 

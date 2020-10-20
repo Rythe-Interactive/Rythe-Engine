@@ -33,8 +33,6 @@ Classes
 
 - :ref:`exhale_struct_structlegion_1_1rendering_1_1shader__import__settings`
 
-- :ref:`exhale_struct_structlegion_1_1rendering_1_1texture`
-
 - :ref:`exhale_class_structlegion_1_1rendering_1_1attribute`
 
 - :ref:`exhale_class_classlegion_1_1rendering_1_1_material_cache`
@@ -56,6 +54,8 @@ Classes
 - :ref:`exhale_class_classlegion_1_1rendering_1_1_shader_cache`
 
 - :ref:`exhale_class_structlegion_1_1rendering_1_1stbi__texture__loader`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1texture`
 
 - :ref:`exhale_class_structlegion_1_1rendering_1_1texture__data`
 

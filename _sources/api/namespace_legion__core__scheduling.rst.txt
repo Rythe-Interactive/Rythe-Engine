@@ -17,8 +17,6 @@ Classes
 -------
 
 
-- :ref:`exhale_struct_structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable`
-
 - :ref:`exhale_struct_structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1thread__error`
 
 - :ref:`exhale_class_classlegion_1_1core_1_1scheduling_1_1_process`
@@ -26,6 +24,8 @@ Classes
 - :ref:`exhale_class_classlegion_1_1core_1_1scheduling_1_1_process_chain`
 
 - :ref:`exhale_class_classlegion_1_1core_1_1scheduling_1_1_scheduler`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable`
 
 
 Variables

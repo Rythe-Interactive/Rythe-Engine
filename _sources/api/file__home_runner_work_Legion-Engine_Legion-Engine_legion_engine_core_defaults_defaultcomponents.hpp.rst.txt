@@ -50,20 +50,12 @@ Namespaces
 ----------
 
 
-- :ref:`namespace_fmt`
-
 - :ref:`namespace_legion__core`
 
 
 Classes
 -------
 
-
-- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01position_01_4`
-
-- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01rotation_01_4`
-
-- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01scale_01_4`
 
 - :ref:`exhale_struct_structlegion_1_1core_1_1position`
 

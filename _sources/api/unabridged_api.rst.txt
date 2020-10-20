@@ -9,16 +9,6 @@ Namespaces
 .. toctree::
    :maxdepth: 5
 
-   namespace_fmt.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   namespace_fmt__fmt.rst
-
-.. toctree::
-   :maxdepth: 5
-
    namespace_legion.rst
 
 .. toctree::
@@ -159,76 +149,11 @@ Namespaces
 .. toctree::
    :maxdepth: 5
 
-   namespace_Scheduler.rst
-
-.. toctree::
-   :maxdepth: 5
-
    namespace_std__literals__chrono_literals.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   namespace_texture.rst
 
 Classes and Structs
 *******************
 
-
-.. toctree::
-   :maxdepth: 5
-
-   structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1ivec2_01_4.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1quat_01_4.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1vec2_01_4.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1vec3_01_4.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1vec4_01_4.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structfmt_1_1fmt_1_1formatter_3_01position_01_4.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structfmt_1_1fmt_1_1formatter_3_01rotation_01_4.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structfmt_1_1fmt_1_1formatter_3_01scale_01_4.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structfmt_1_1formatter_3_01legion_1_1core_1_1exception_01_4.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structfmt_1_1formatter_3_01legion_1_1core_1_1fs__error_01_4.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structfmt_1_1formatter_3_01std_1_1thread_1_1id_01_4.rst
 
 .. toctree::
    :maxdepth: 5
@@ -558,11 +483,6 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
-   structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable.rst
-
-.. toctree::
-   :maxdepth: 5
-
    structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1thread__error.rst
 
 .. toctree::
@@ -674,11 +594,6 @@ Classes and Structs
    :maxdepth: 5
 
    structlegion_1_1rendering_1_1shader__import__settings.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structlegion_1_1rendering_1_1texture.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1268,6 +1183,11 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   class_structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable.rst
+
+.. toctree::
+   :maxdepth: 5
+
    classlegion_1_1core_1_1sparse__map.rst
 
 .. toctree::
@@ -1423,6 +1343,11 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   class_structlegion_1_1rendering_1_1texture.rst
+
+.. toctree::
+   :maxdepth: 5
+
    class_structlegion_1_1rendering_1_1texture__data.rst
 
 .. toctree::
@@ -1444,16 +1369,6 @@ Classes and Structs
    :maxdepth: 5
 
    class_structlegion_1_1rendering_1_1uniform.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   class_scheduler_1_1runnable.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   classtexture_1_1hpp.rst
 
 Enums
 *****

@@ -162,6 +162,7 @@ Program Listing for File defaultcomponents.hpp
        };
    }
    
+   #if !defined(DOXY_EXCLUDE)
    namespace fmt
    {
        using namespace legion::core;
@@ -241,3 +242,4 @@ Program Listing for File defaultcomponents.hpp
            }
        };
    }
+   #endif

@@ -57,7 +57,7 @@ Classes
 -------
 
 
-- :ref:`exhale_struct_structlegion_1_1rendering_1_1texture`
+- :ref:`exhale_class_structlegion_1_1rendering_1_1texture`
 
 - :ref:`exhale_class_structlegion_1_1rendering_1_1texture__data`
 
@@ -66,8 +66,6 @@ Classes
 - :ref:`exhale_class_structlegion_1_1rendering_1_1texture__import__settings`
 
 - :ref:`exhale_class_classlegion_1_1rendering_1_1_texture_cache`
-
-- :ref:`exhale_class_classtexture_1_1hpp`
 
 
 Enums
