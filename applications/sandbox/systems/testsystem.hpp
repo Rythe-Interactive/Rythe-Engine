@@ -330,7 +330,7 @@ public:
             sphere.add_components<rendering::renderable, sah>({ uvsphereH, wireframeH }, {});
             sphere.add_components<transform>(position(-5.1f, 3, 0), rotation(), scale(2.5f));
 
-            auto segment = audio::AudioSegmentCache::createAudioSegment("waterfall", "assets://audio/365921__inspectorj__waterfall-small-b[mono].mp3"_view);
+            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland.mp3"_view);
             if (segment)
             {
                 audio::audio_source source;
