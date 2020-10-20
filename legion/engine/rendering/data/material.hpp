@@ -98,18 +98,10 @@ namespace legion::rendering
         }
 
         template<typename T>
-        void set_param(const std::string& name, const T& value)
-        {
-            async::readonly_guard guard(MaterialCache::m_materialLock);
-            MaterialCache::m_materials[id].set_param<T>(name, value);
-        }
+        void set_param(const std::string& name, const T& value);
 
         template<typename T>
-        T get_param(const std::string& name, const T& value)
-        {
-            async::readonly_guard guard(MaterialCache::m_materialLock);
-            return MaterialCache::m_materials[id].get_param<T>(name);
-        }
+        T get_param(const std::string& name);
 
         attribute get_attribute(const std::string& name);
 
@@ -130,6 +122,20 @@ namespace legion::rendering
         static material_handle create_material(const std::string& name, const filesystem::view& shaderFile, shader_import_settings settings = default_shader_settings);
         static material_handle get_material(const std::string& name);
     };
+
+    template<typename T>
+    void material_handle::set_param(const std::string& name, const T& value)
+    {
+        async::readonly_guard guard(MaterialCache::m_materialLock);
+        MaterialCache::m_materials[id].set_param<T>(name, value);
+    }
+
+    template<typename T>
+    T material_handle::get_param(const std::string& name)
+    {
+        async::readonly_guard guard(MaterialCache::m_materialLock);
+        return MaterialCache::m_materials[id].get_param<T>(name);
+    }
 
 }
 

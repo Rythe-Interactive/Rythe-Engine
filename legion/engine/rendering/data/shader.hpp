@@ -313,16 +313,10 @@ namespace legion::rendering
         std::vector<std::pair<std::string, GLenum>> get_uniform_info() const;
 
         template<typename T>
-        uniform<T> get_uniform(const std::string& name)
-        {
-            return ShaderCache::get_shader(id)->get_uniform<T>(name);
-        }
+        uniform<T> get_uniform(const std::string& name);
 
         template<typename T>
-        uniform<T> get_uniform(id_type uniformId)
-        {
-            return ShaderCache::get_shader(id)->get_uniform<T>(uniformId);
-        }
+        uniform<T> get_uniform(id_type uniformId);
 
         attribute get_attribute(const std::string& name);
 
@@ -369,4 +363,16 @@ namespace legion::rendering
         static shader_handle get_handle(const std::string& name);
         static shader_handle get_handle(id_type id);
     };
+
+    template<typename T>
+    uniform<T> shader_handle::get_uniform(const std::string& name)
+    {
+        return ShaderCache::get_shader(id)->get_uniform<T>(name);
+    }
+
+    template<typename T>
+    uniform<T> shader_handle::get_uniform(id_type uniformId)
+    {
+        return ShaderCache::get_shader(id)->get_uniform<T>(uniformId);
+    }
 }
