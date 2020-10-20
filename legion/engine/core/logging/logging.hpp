@@ -16,7 +16,7 @@
 #include <core/common/exception.hpp>
 
 /** @file logging.hpp */
-
+#if !defined(DOXY_EXCLUDE)
 namespace fmt
 {
     template <>
@@ -239,6 +239,7 @@ namespace fmt
     };
 
 }
+#endif
 
 
 namespace legion::core::log

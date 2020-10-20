@@ -31,7 +31,7 @@ namespace legion::core::scheduling
     class Scheduler
     {
     public:
-        /**@class Scheduler::runnable
+        /**@class runnable
          * @brief A data structure encapsulating commands and jobs sent to any thread and it's parameters.
          */
         struct runnable

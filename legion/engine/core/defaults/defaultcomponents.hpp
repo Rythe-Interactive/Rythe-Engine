@@ -150,6 +150,7 @@ namespace legion::core
     };
 }
 
+#if !defined(DOXY_EXCLUDE)
 namespace fmt
 {
     using namespace legion::core;
@@ -229,3 +230,4 @@ namespace fmt
         }
     };
 }
+#endif
