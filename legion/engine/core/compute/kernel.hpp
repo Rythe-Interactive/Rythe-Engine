@@ -1,5 +1,7 @@
 #pragma once
+#if !defined(DOXY_EXCLUDE)
 #include <CL/cl.h>
+#endif
 
 #include <core/compute/buffer.hpp>
 #include <core/logging/logging.hpp>

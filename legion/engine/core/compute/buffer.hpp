@@ -1,5 +1,7 @@
 #pragma once
+#if !defined(DOXY_EXCLUDE)
 #include <CL/cl.h> // cl_context , cl_mem , cl_mem_flags
+#endif
 
 #include <core/types/primitives.hpp> // byte, size_t
 

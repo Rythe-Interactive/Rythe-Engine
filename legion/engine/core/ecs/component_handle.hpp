@@ -262,6 +262,7 @@ namespace legion::core::ecs
     }
 }
 
+#if !defined(DOXY_EXCLUDE)
 namespace std
 {
     template<typename component_type> struct hash<legion::core::ecs::component_handle<component_type>>
@@ -277,3 +278,4 @@ namespace std
         }
     };
 }
+#endif

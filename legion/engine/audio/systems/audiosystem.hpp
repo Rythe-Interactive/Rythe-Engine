@@ -2,7 +2,9 @@
 #include <audio/components/audio_source.hpp>
 #include <audio/components/audio_listener.hpp>
 #define AL_ALEXT_PROTOTYPES
+#if !defined(DOXY_EXCLUDE)
 #include <AL/alext.h>
+#endif
 #include <audio/data/importers/audio_importers.hpp>
 
 /**

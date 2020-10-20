@@ -46,6 +46,7 @@
 #	error "GLM_GTX_hash requires C++11 standard library support"
 #endif
 
+#if !defined(DOXY_EXCLUDE)
 namespace std
 {
     template<typename T, legion::core::math::qualifier Q>
@@ -138,5 +139,5 @@ namespace std
         GLM_FUNC_DECL size_t operator()(legion::core::math::mat<4, 4, T,Q> const& m) const;
     };
 } // namespace std
-
+#endif
 #include "hash.inl"

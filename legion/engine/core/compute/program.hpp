@@ -1,6 +1,7 @@
 #pragma once
+#if !defined(DOXY_EXCLUDE)
 #include <CL/cl.h>
-
+#endif
 #include <core/filesystem/resource.hpp>
 #include <core/compute/kernel.hpp>
 

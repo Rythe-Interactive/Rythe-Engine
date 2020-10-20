@@ -1,7 +1,9 @@
 #include <audio/data/importers/audio_importers.hpp>
+#if !defined(DOXY_EXCLUDE)
 #define MINIMP3_IMPLEMENTATION
 #include <minimp3.h>
 #include <minimp3_ex.h>
+#endif
 #include <audio/systems/audiosystem.hpp>
 
 namespace legion::audio

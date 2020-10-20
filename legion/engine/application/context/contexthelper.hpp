@@ -1,7 +1,10 @@
 #pragma once
 #include <core/core.hpp>
+
+#if !defined(DOXY_EXCLUDE)
 #include <application/context/detail/glad/glad.h>
 #include <glfw/glfw3.h>
+#endif
 
 /**
  * @file contexthelper.hpp

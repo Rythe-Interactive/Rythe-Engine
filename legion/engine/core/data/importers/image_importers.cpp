@@ -1,7 +1,9 @@
 #define STBI_MAX_DIMENSIONS 16384
 #define STBI_NO_GIF
 #define STB_IMAGE_IMPLEMENTATION
+#if !defined(DOXY_EXCLUDE)
 #include <stb_image.h>
+#endif
 
 #include <core/data/importers/image_importers.hpp>
 

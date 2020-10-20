@@ -1,5 +1,7 @@
+#if !defined(DOXY_EXCLUDE)
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
+#endif
 
 #include <core/data/importers/mesh_importers.hpp>
 #include <core/math/math.hpp>
@@ -34,6 +36,7 @@ namespace legion::core::detail
     };
 }
 
+#if !defined(DOXY_EXCLUDE)
 namespace std
 {
     template<>
@@ -45,6 +48,7 @@ namespace std
         }
     };
 }
+#endif
 
 namespace legion::core
 {

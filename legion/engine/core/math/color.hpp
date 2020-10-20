@@ -46,6 +46,7 @@ namespace legion::core::math
     }
 }
 
+#if !defined(DOXY_EXCLUDE)
 namespace std
 {
     template<>
@@ -63,3 +64,4 @@ namespace std
         }
     };
 }
+#endif

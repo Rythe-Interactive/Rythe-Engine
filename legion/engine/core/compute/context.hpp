@@ -1,5 +1,7 @@
 #pragma once
+#if !defined(DOXY_EXCLUDE)
 #include <CL/cl.h>
+#endif
 
 #include <core/compute/program.hpp> // Kernel, Buffer
 #include <core/filesystem/resource.hpp> // basic_resource

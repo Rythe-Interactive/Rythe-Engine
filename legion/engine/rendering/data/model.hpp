@@ -74,6 +74,7 @@ namespace legion::rendering
     };
 }
 
+#if !defined(DOXY_EXCLUDE)
 namespace std
 {
     template<>
@@ -85,3 +86,4 @@ namespace std
         }
     };
 }
+#endif

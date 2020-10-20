@@ -19,6 +19,7 @@ namespace detail
     }
 }}
 
+#if !defined(DOXY_EXCLUDE)
 namespace std
 {
     template<typename T, legion::core::math::qualifier Q>
@@ -182,3 +183,4 @@ namespace std
         return seed;
     }
 }
+#endif

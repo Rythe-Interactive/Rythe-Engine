@@ -1,8 +1,9 @@
 #pragma once
 #include <core/core.hpp>
+#if !defined(DOXY_EXCLUDE)
 #include <AL/al.h>
 #include <AL/alc.h>
-
+#endif
 namespace legion::audio
 {
 	struct audio_segment

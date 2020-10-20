@@ -1,6 +1,8 @@
 #pragma once
+#if !defined(DOXY_EXCLUDE)
 #include <AL/al.h>
 #include <AL/alc.h>
+#endif
 #include <audio/data/audio_segment.hpp>
 
 namespace legion::audio
