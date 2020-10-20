@@ -9,7 +9,7 @@ namespace legion::core::compute
         return static_cast<int>(lhs) & static_cast<int>(rhs);
     }
 
-    Buffer::Buffer(cl_context ctx, byte* data, size_t len, buffer_type type, std::string name) : m_name(std::move(name)), m_data(data), m_size(len)
+    Buffer::Buffer(cl_context ctx, byte* data, size_t len, buffer_type type, std::string name) :m_size(len), m_data(data), m_name(std::move(name))
     {
         //initialize new ref-counter
         m_ref_count = new size_t(1);
@@ -28,7 +28,7 @@ namespace legion::core::compute
 
         //create buffer
         m_memory_object = clCreateBuffer(ctx, m_type, m_size, nullptr, &ret);
-        if (ret != NULL)
+        if (ret != CL_SUCCESS)
         {
             log::error("clCreateBuffer failed for Buffer: {}", name);
         }

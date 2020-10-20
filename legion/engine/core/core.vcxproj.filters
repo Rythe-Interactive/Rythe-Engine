@@ -26,6 +26,7 @@
     <ClCompile Include="compute\context.cpp" />
     <ClCompile Include="compute\Program.cpp" />
     <ClCompile Include="compute\kernel.cpp" />
+    <ClCompile Include="compute\high_level\function.cpp" />
     <ClCompile Include="data\image.cpp" />
     <ClCompile Include="data\importers\image_importers.cpp" />
     <ClCompile Include="engine\system.cpp" />
@@ -398,6 +399,8 @@
     <ClInclude Include="compute\context.hpp" />
     <ClInclude Include="compute\Program.hpp" />
     <ClInclude Include="compute\kernel.hpp" />
+    <ClInclude Include="compute\detail\cl_include.hpp" />
+    <ClInclude Include="compute\high_level\function.hpp" />
     <ClInclude Include="data\image.hpp" />
     <ClInclude Include="data\importers\image_importers.hpp" />
   </ItemGroup>

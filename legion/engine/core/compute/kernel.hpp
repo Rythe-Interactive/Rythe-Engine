@@ -1,7 +1,5 @@
 #pragma once
-#if !defined(DOXY_EXCLUDE)
-#include <CL/cl.h>
-#endif
+#include "detail/cl_include.hpp"
 
 #include <core/compute/buffer.hpp>
 #include <core/logging/logging.hpp>
@@ -61,25 +59,6 @@ namespace legion::core::compute
              */
             Kernel& read_write_mode(buffer_type);
 
-
-            /**
-             * @brief Enqueues a Buffer in the command queue, write buffers need to be enqueued before
-             *         dispatching the kernel, read buffers afterwards
-             * @param buffer The buffer you want to enqueue.
-             * @param blocking Whether or not you want a blocking write/read (default=BLOCKING)
-             * @note This Overload requires that the buffer is named!
-             */
-            Kernel& enqueue_buffer(Buffer buffer, block_mode blocking = block_mode::BLOCKING);
-
-            /**
-             * @brief Enqueues a Buffer in the command queue, write buffers need to be enqueued before
-             *         dispatching the kernel, read buffers afterwards
-             * @param buffer The buffer you want to enqueue.
-             * @param name The name of the Buffer you want to enqueue to (this must match the kernel name)
-             * @param blocking Whether or not you want a blocking write/read (default=BLOCKING)
-             */
-            Kernel& enqueue_buffer(Buffer buffer, const std::string& name, block_mode blocking = block_mode::BLOCKING);
-
             /**
              * @brief Enqueues a Buffer in the command queue, write buffers need to be enqueued before
              *         dispatching the kernel, read buffers afterwards
@@ -87,7 +66,7 @@ namespace legion::core::compute
              * @param index The index of the Buffer you want to enqueue to (this must match the kernel index)
              * @param blocking Whether or not you want a blocking write/read (default=BLOCKING)
              */
-            Kernel& enqueue_buffer(Buffer buffer, cl_uint index, block_mode blocking = block_mode::BLOCKING);
+            Kernel& enqueue_buffer(Buffer buffer, block_mode blocking = block_mode::BLOCKING);
 
             /**
              * @brief Sets a Buffer as the Kernel Argument

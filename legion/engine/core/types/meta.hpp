@@ -33,4 +33,19 @@ namespace legion::core
     public:
         static constexpr bool value = type::value;
     };
+
+    template <class T>
+    struct is_vector
+    : public std::false_type
+    {
+    };
+
+    template <class T>
+    struct is_vector<std::vector<T>>
+    : public std::true_type
+    {
+    };
 }
+
+
+
