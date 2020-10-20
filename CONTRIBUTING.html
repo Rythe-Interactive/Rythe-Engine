@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REPO managment &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <title>REPO managment &#8212; LegionEngine v 0.2 alpha documentation</title>
     <link rel="stylesheet" href="_static/nameko.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/collapsible-lists/css/tree_view.css" />
@@ -18,8 +18,8 @@
     <script src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="ARGS API" href="api/library_root.html" />
-    <link rel="prev" title="Args-Engine" href="README.html" />
+    <link rel="next" title="Legion API" href="api/library_root.html" />
+    <link rel="prev" title="Legion-Engine" href="README.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -36,12 +36,12 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="api/library_root.html" title="ARGS API"
+          <a href="api/library_root.html" title="Legion API"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="README.html" title="Args-Engine"
+          <a href="README.html" title="Legion-Engine"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">REPO managment</a></li> 
       </ul>
     </div>  
@@ -95,9 +95,9 @@
 </div>
 <div class="section" id="namespacing">
 <h2>Namespacing<a class="headerlink" href="#namespacing" title="Permalink to this headline">¶</a></h2>
-<p>Everything needs to go into the namespace <code class="docutils literal notranslate"><span class="pre">args</span></code> and should be in it’s own general namespace within that. Also use that as an indication where to put your file.</p>
+<p>Everything needs to go into the namespace <code class="docutils literal notranslate"><span class="pre">legion</span></code> and should be in it’s own general namespace within that. Also use that as an indication where to put your file.</p>
 <p>i.e.: The file /core/math/vector.hpp uses
-<code class="docutils literal notranslate"><span class="pre">namespace</span> <span class="pre">args::core::math</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code></p>
+<code class="docutils literal notranslate"><span class="pre">namespace</span> <span class="pre">legion::core::math</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code></p>
 <p>Use the new c++17 convention for nested namespaces, namespace names may only have snake_case letters.</p>
 </div>
 <div class="section" id="class-struct-names">
@@ -129,9 +129,9 @@
 <span class="cp">#include</span> <span class="cpf">&lt;core/math/vector.hpp&gt; //alway include from the root,makes the file more readable</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;application/application.hpp&gt; //even if it is your own directory</span><span class="cp"></span>
 
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">core</span><span class="p">;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="p">;</span>
 
-<span class="k">namespace</span> <span class="n">args</span><span class="o">::</span><span class="n">application</span> <span class="c1">// in cpp files you may use using namespace if you so desire</span>
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">application</span> <span class="c1">// in cpp files you may use using namespace if you so desire</span>
 <span class="p">{</span>
 
   <span class="n">Application</span><span class="o">::</span><span class="n">Application</span><span class="p">()</span> <span class="o">:</span> <span class="n">m_OtherVector</span> <span class="p">{</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">2.0f</span> <span class="p">}</span> <span class="c1">// use this constructor syntax (it&#39;s faster)</span>
@@ -151,7 +151,7 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/** @brief Example for a function.</span>
 <span class="cm"> *  @tparam T A quick example of what the template param does.</span>
 <span class="cm"> *          (not when it can be inferred by a param)</span>
-<span class="cm"> *  @param a_parameter A quick description of what the param does.</span>
+<span class="cm"> *  @param bar_parameter A quick description of what the param does.</span>
 <span class="cm"> *         Additionally you might use [in] [out] [in/out] for</span>
 <span class="cm"> *         clarity.</span>
 <span class="cm"> *  @return int A quick explanation of what to expect from</span>
@@ -161,7 +161,7 @@
 <span class="cm"> *         throwing an exception.</span>
 <span class="cm"> */</span>
 <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
-<span class="kt">int</span> <span class="n">a_function</span><span class="p">(</span><span class="kt">int</span> <span class="n">a_parameter</span><span class="p">);</span>
+<span class="kt">int</span> <span class="n">foo_function</span><span class="p">(</span><span class="kt">int</span> <span class="n">bar_parameter</span><span class="p">);</span>
 </pre></div>
 </div>
 </li>
@@ -170,7 +170,7 @@ alone. for example:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/** @brief Gets the size of the container.</span>
 <span class="cm"> *  @return size_type The size of the container.</span>
 <span class="cm"> */</span>
-<span class="n">A_NODISCARD</span> <span class="k">auto</span> <span class="nf">size</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
+<span class="n">L_NODISCARD</span> <span class="k">auto</span> <span class="nf">size</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
 <span class="p">{</span>
   <span class="k">return</span> <span class="n">m_container</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
 <span class="p">}</span>
@@ -179,7 +179,7 @@ alone. for example:</p>
 <p>should really be</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/** @brief Gets the size of the container.</span>
 <span class="cm"> */</span>
-<span class="n">A_NODISCARD</span> <span class="k">auto</span> <span class="nf">size</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
+<span class="n">L_NODISCARD</span> <span class="k">auto</span> <span class="nf">size</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
 <span class="p">{</span>
   <span class="k">return</span> <span class="n">m_container</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
 <span class="p">}</span>
@@ -221,8 +221,8 @@ alone. for example:</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation index</a><ul>
-      <li>Previous: <a href="README.html" title="previous chapter">Args-Engine</a></li>
-      <li>Next: <a href="api/library_root.html" title="next chapter">ARGS API</a></li>
+      <li>Previous: <a href="README.html" title="previous chapter">Legion-Engine</a></li>
+      <li>Next: <a href="api/library_root.html" title="next chapter">Legion API</a></li>
   </ul></li>
 </ul>
   <div role="note" aria-label="source link">
