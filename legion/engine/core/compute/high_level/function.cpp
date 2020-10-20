@@ -1,8 +1,6 @@
 #include <core/compute/high_level/function.hpp>
 #include <core/compute/context.hpp>
 
-#include <inaddr.h>
-
 
 namespace legion::core::compute
 {
