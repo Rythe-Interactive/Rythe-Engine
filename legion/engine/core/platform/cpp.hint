@@ -1,0 +1,5 @@
+#define LEGION_CPP17V 201703L
+
+#define LEGION_WINDOWS
+#define L_HASCPPATTRIB(x) __has_cpp_attribute(x)
+#define L_NODISCARD [[nodiscard]]
