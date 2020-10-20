@@ -114,7 +114,7 @@ public:
             delete[] buf;
         }
 
-        std::cout << "I haet Life";
+        std::cout << "Yay";
 
         std::vector<int> first_ints(ints.begin(), ints.begin() + ints.size() / 2);
         std::vector<int> second_ints(ints.begin() + ints.size() / 2, ints.end());

@@ -16,37 +16,37 @@
 #define CEREAL_RAPIDJSON_CEREAL_RAPIDJSON_H_
 
 /*!\file rapidjson.h
-    \brief common definitions and configuration
-    
-    \see CEREAL_RAPIDJSON_CONFIG
+	\brief common definitions and configuration
+
+	\see CEREAL_RAPIDJSON_CONFIG
  */
 
-/*! \defgroup CEREAL_RAPIDJSON_CONFIG RapidJSON configuration
-    \brief Configuration macros for library features
+ /*! \defgroup CEREAL_RAPIDJSON_CONFIG RapidJSON configuration
+	 \brief Configuration macros for library features
 
-    Some RapidJSON features are configurable to adapt the library to a wide
-    variety of platforms, environments and usage scenarios.  Most of the
-    features can be configured in terms of overridden or predefined
-    preprocessor macros at compile-time.
+	 Some RapidJSON features are configurable to adapt the library to a wide
+	 variety of platforms, environments and usage scenarios.  Most of the
+	 features can be configured in terms of overridden or predefined
+	 preprocessor macros at compile-time.
 
-    Some additional customization is available in the \ref CEREAL_RAPIDJSON_ERRORS APIs.
+	 Some additional customization is available in the \ref CEREAL_RAPIDJSON_ERRORS APIs.
 
-    \note These macros should be given on the compiler command-line
-          (where applicable)  to avoid inconsistent values when compiling
-          different translation units of a single application.
- */
+	 \note These macros should be given on the compiler command-line
+		   (where applicable)  to avoid inconsistent values when compiling
+		   different translation units of a single application.
+  */
 
 #include <cstdlib>  // malloc(), realloc(), free(), size_t
 #include <cstring>  // memset(), memcpy(), memmove(), memcmp()
 
-///////////////////////////////////////////////////////////////////////////////
-// CEREAL_RAPIDJSON_VERSION_STRING
-//
-// ALWAYS synchronize the following 3 macros with corresponding variables in /CMakeLists.txt.
-//
+  ///////////////////////////////////////////////////////////////////////////////
+  // CEREAL_RAPIDJSON_VERSION_STRING
+  //
+  // ALWAYS synchronize the following 3 macros with corresponding variables in /CMakeLists.txt.
+  //
 
-//!@cond CEREAL_RAPIDJSON_HIDDEN_FROM_DOXYGEN
-// token stringification
+  //!@cond CEREAL_RAPIDJSON_HIDDEN_FROM_DOXYGEN
+  // token stringification
 #define CEREAL_RAPIDJSON_STRINGIFY(x) CEREAL_RAPIDJSON_DO_STRINGIFY(x)
 #define CEREAL_RAPIDJSON_DO_STRINGIFY(x) #x
 
@@ -57,20 +57,20 @@
 //!@endcond
 
 /*! \def CEREAL_RAPIDJSON_MAJOR_VERSION
-    \ingroup CEREAL_RAPIDJSON_CONFIG
-    \brief Major version of RapidJSON in integer.
+	\ingroup CEREAL_RAPIDJSON_CONFIG
+	\brief Major version of RapidJSON in integer.
 */
 /*! \def CEREAL_RAPIDJSON_MINOR_VERSION
-    \ingroup CEREAL_RAPIDJSON_CONFIG
-    \brief Minor version of RapidJSON in integer.
+	\ingroup CEREAL_RAPIDJSON_CONFIG
+	\brief Minor version of RapidJSON in integer.
 */
 /*! \def CEREAL_RAPIDJSON_PATCH_VERSION
-    \ingroup CEREAL_RAPIDJSON_CONFIG
-    \brief Patch version of RapidJSON in integer.
+	\ingroup CEREAL_RAPIDJSON_CONFIG
+	\brief Patch version of RapidJSON in integer.
 */
 /*! \def CEREAL_RAPIDJSON_VERSION_STRING
-    \ingroup CEREAL_RAPIDJSON_CONFIG
-    \brief Version of RapidJSON in "<major>.<minor>.<patch>" string format.
+	\ingroup CEREAL_RAPIDJSON_CONFIG
+	\brief Version of RapidJSON in "<major>.<minor>.<patch>" string format.
 */
 #define CEREAL_RAPIDJSON_MAJOR_VERSION 1
 #define CEREAL_RAPIDJSON_MINOR_VERSION 1
@@ -81,39 +81,39 @@
 ///////////////////////////////////////////////////////////////////////////////
 // CEREAL_RAPIDJSON_NAMESPACE_(BEGIN|END)
 /*! \def CEREAL_RAPIDJSON_NAMESPACE
-    \ingroup CEREAL_RAPIDJSON_CONFIG
-    \brief   provide custom rapidjson namespace
+	\ingroup CEREAL_RAPIDJSON_CONFIG
+	\brief   provide custom rapidjson namespace
 
-    In order to avoid symbol clashes and/or "One Definition Rule" errors
-    between multiple inclusions of (different versions of) RapidJSON in
-    a single binary, users can customize the name of the main RapidJSON
-    namespace.
+	In order to avoid symbol clashes and/or "One Definition Rule" errors
+	between multiple inclusions of (different versions of) RapidJSON in
+	a single binary, users can customize the name of the main RapidJSON
+	namespace.
 
-    In case of a single nesting level, defining \c CEREAL_RAPIDJSON_NAMESPACE
-    to a custom name (e.g. \c MyRapidJSON) is sufficient.  If multiple
-    levels are needed, both \ref CEREAL_RAPIDJSON_NAMESPACE_BEGIN and \ref
-    CEREAL_RAPIDJSON_NAMESPACE_END need to be defined as well:
+	In case of a single nesting level, defining \c CEREAL_RAPIDJSON_NAMESPACE
+	to a custom name (e.g. \c MyRapidJSON) is sufficient.  If multiple
+	levels are needed, both \ref CEREAL_RAPIDJSON_NAMESPACE_BEGIN and \ref
+	CEREAL_RAPIDJSON_NAMESPACE_END need to be defined as well:
 
-    \code
-    // in some .cpp file
-    #define CEREAL_RAPIDJSON_NAMESPACE my::rapidjson
-    #define CEREAL_RAPIDJSON_NAMESPACE_BEGIN namespace my { namespace rapidjson {
-    #define CEREAL_RAPIDJSON_NAMESPACE_END   } }
-    #include "rapidjson/..."
-    \endcode
+	\code
+	// in some .cpp file
+	#define CEREAL_RAPIDJSON_NAMESPACE my::rapidjson
+	#define CEREAL_RAPIDJSON_NAMESPACE_BEGIN namespace my { namespace rapidjson {
+	#define CEREAL_RAPIDJSON_NAMESPACE_END   } }
+	#include "rapidjson/..."
+	\endcode
 
-    \see rapidjson
+	\see rapidjson
  */
-/*! \def CEREAL_RAPIDJSON_NAMESPACE_BEGIN
-    \ingroup CEREAL_RAPIDJSON_CONFIG
-    \brief   provide custom rapidjson namespace (opening expression)
-    \see CEREAL_RAPIDJSON_NAMESPACE
-*/
-/*! \def CEREAL_RAPIDJSON_NAMESPACE_END
-    \ingroup CEREAL_RAPIDJSON_CONFIG
-    \brief   provide custom rapidjson namespace (closing expression)
-    \see CEREAL_RAPIDJSON_NAMESPACE
-*/
+ /*! \def CEREAL_RAPIDJSON_NAMESPACE_BEGIN
+	 \ingroup CEREAL_RAPIDJSON_CONFIG
+	 \brief   provide custom rapidjson namespace (opening expression)
+	 \see CEREAL_RAPIDJSON_NAMESPACE
+ */
+ /*! \def CEREAL_RAPIDJSON_NAMESPACE_END
+	 \ingroup CEREAL_RAPIDJSON_CONFIG
+	 \brief   provide custom rapidjson namespace (closing expression)
+	 \see CEREAL_RAPIDJSON_NAMESPACE
+ */
 #ifndef CEREAL_RAPIDJSON_NAMESPACE
 #define CEREAL_RAPIDJSON_NAMESPACE rapidjson
 #endif
@@ -124,8 +124,8 @@
 #define CEREAL_RAPIDJSON_NAMESPACE_END }
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// CEREAL_RAPIDJSON_HAS_STDSTRING
+ ///////////////////////////////////////////////////////////////////////////////
+ // CEREAL_RAPIDJSON_HAS_STDSTRING
 
 #ifndef CEREAL_RAPIDJSON_HAS_STDSTRING
 #ifdef CEREAL_RAPIDJSON_DOXYGEN_RUNNING
@@ -134,14 +134,14 @@
 #define CEREAL_RAPIDJSON_HAS_STDSTRING 0 // no std::string support by default
 #endif
 /*! \def CEREAL_RAPIDJSON_HAS_STDSTRING
-    \ingroup CEREAL_RAPIDJSON_CONFIG
-    \brief Enable RapidJSON support for \c std::string
+	\ingroup CEREAL_RAPIDJSON_CONFIG
+	\brief Enable RapidJSON support for \c std::string
 
-    By defining this preprocessor symbol to \c 1, several convenience functions for using
-    \ref rapidjson::GenericValue with \c std::string are enabled, especially
-    for construction and comparison.
+	By defining this preprocessor symbol to \c 1, several convenience functions for using
+	\ref rapidjson::GenericValue with \c std::string are enabled, especially
+	for construction and comparison.
 
-    \hideinitializer
+	\hideinitializer
 */
 #endif // !defined(CEREAL_RAPIDJSON_HAS_STDSTRING)
 
@@ -153,14 +153,14 @@
 // CEREAL_RAPIDJSON_NO_INT64DEFINE
 
 /*! \def CEREAL_RAPIDJSON_NO_INT64DEFINE
-    \ingroup CEREAL_RAPIDJSON_CONFIG
-    \brief Use external 64-bit integer types.
+	\ingroup CEREAL_RAPIDJSON_CONFIG
+	\brief Use external 64-bit integer types.
 
-    RapidJSON requires the 64-bit integer types \c int64_t and  \c uint64_t types
-    to be available at global scope.
+	RapidJSON requires the 64-bit integer types \c int64_t and  \c uint64_t types
+	to be available at global scope.
 
-    If users have their own definition, define CEREAL_RAPIDJSON_NO_INT64DEFINE to
-    prevent RapidJSON from defining its own types.
+	If users have their own definition, define CEREAL_RAPIDJSON_NO_INT64DEFINE to
+	prevent RapidJSON from defining its own types.
 */
 #ifndef CEREAL_RAPIDJSON_NO_INT64DEFINE
 //!@cond CEREAL_RAPIDJSON_HIDDEN_FROM_DOXYGEN
@@ -201,16 +201,16 @@
 
 //! Endianness of the machine.
 /*!
-    \def CEREAL_RAPIDJSON_ENDIAN
-    \ingroup CEREAL_RAPIDJSON_CONFIG
+	\def CEREAL_RAPIDJSON_ENDIAN
+	\ingroup CEREAL_RAPIDJSON_CONFIG
 
-    GCC 4.6 provided macro for detecting endianness of the target machine. But other
-    compilers may not have this. User can define CEREAL_RAPIDJSON_ENDIAN to either
-    \ref CEREAL_RAPIDJSON_LITTLEENDIAN or \ref CEREAL_RAPIDJSON_BIGENDIAN.
+	GCC 4.6 provided macro for detecting endianness of the target machine. But other
+	compilers may not have this. User can define CEREAL_RAPIDJSON_ENDIAN to either
+	\ref CEREAL_RAPIDJSON_LITTLEENDIAN or \ref CEREAL_RAPIDJSON_BIGENDIAN.
 
-    Default detection implemented with reference to
-    \li https://gcc.gnu.org/onlinedocs/gcc-4.6.0/cpp/Common-Predefined-Macros.html
-    \li http://www.boost.org/doc/libs/1_42_0/boost/detail/endian.hpp
+	Default detection implemented with reference to
+	\li https://gcc.gnu.org/onlinedocs/gcc-4.6.0/cpp/Common-Predefined-Macros.html
+	\li http://www.boost.org/doc/libs/1_42_0/boost/detail/endian.hpp
 */
 #ifndef CEREAL_RAPIDJSON_ENDIAN
 // Detect with GCC 4.6's macro
@@ -222,6 +222,7 @@
 #    else
 #      error Unknown machine endianness detected. User needs to define CEREAL_RAPIDJSON_ENDIAN.
 #    endif // __BYTE_ORDER__
+
 // Detect with GLIBC's endian.h
 #  elif defined(__GLIBC__)
 #    include <endian.h>
@@ -232,11 +233,13 @@
 #    else
 #      error Unknown machine endianness detected. User needs to define CEREAL_RAPIDJSON_ENDIAN.
 #   endif // __GLIBC__
+
 // Detect with _LITTLE_ENDIAN and _BIG_ENDIAN macro
 #  elif defined(_LITTLE_ENDIAN) && !defined(_BIG_ENDIAN)
 #    define CEREAL_RAPIDJSON_ENDIAN CEREAL_RAPIDJSON_LITTLEENDIAN
 #  elif defined(_BIG_ENDIAN) && !defined(_LITTLE_ENDIAN)
 #    define CEREAL_RAPIDJSON_ENDIAN CEREAL_RAPIDJSON_BIGENDIAN
+
 // Detect with architecture macros
 #  elif defined(__sparc) || defined(__sparc__) || defined(_POWER) || defined(__powerpc__) || defined(__ppc__) || defined(__hpux) || defined(__hppa) || defined(_MIPSEB) || defined(_POWER) || defined(__s390__)
 #    define CEREAL_RAPIDJSON_ENDIAN CEREAL_RAPIDJSON_BIGENDIAN
@@ -247,7 +250,7 @@
 #  elif defined(CEREAL_RAPIDJSON_DOXYGEN_RUNNING)
 #    define CEREAL_RAPIDJSON_ENDIAN
 #  else
-#    error Unknown machine endianness detected. User needs to define CEREAL_RAPIDJSON_ENDIAN.   
+#    define CEREAL_RAPIDJSON_ENDIAN CEREAL_RAPIDJSON_LITTLEENDIAN
 #  endif
 #endif // CEREAL_RAPIDJSON_ENDIAN
 
@@ -268,10 +271,10 @@
 
 //! Data alignment of the machine.
 /*! \ingroup CEREAL_RAPIDJSON_CONFIG
-    \param x pointer to align
+	\param x pointer to align
 
-    Some machines require strict data alignment. The default is 8 bytes.
-    User can customize by defining the CEREAL_RAPIDJSON_ALIGN function macro.
+	Some machines require strict data alignment. The default is 8 bytes.
+	User can customize by defining the CEREAL_RAPIDJSON_ALIGN function macro.
 */
 #ifndef CEREAL_RAPIDJSON_ALIGN
 #define CEREAL_RAPIDJSON_ALIGN(x) (((x) + static_cast<size_t>(7u)) & ~static_cast<size_t>(7u))
@@ -282,9 +285,9 @@
 
 //! Construct a 64-bit literal by a pair of 32-bit integer.
 /*!
-    64-bit literal with or without ULL suffix is prone to compiler warnings.
-    UINT64_C() is C macro which cause compilation problems.
-    Use this macro to define 64-bit constants by a pair of 32-bit integer.
+	64-bit literal with or without ULL suffix is prone to compiler warnings.
+	UINT64_C() is C macro which cause compilation problems.
+	Use this macro to define 64-bit constants by a pair of 32-bit integer.
 */
 #ifndef CEREAL_RAPIDJSON_UINT64_C2
 #define CEREAL_RAPIDJSON_UINT64_C2(high32, low32) ((static_cast<uint64_t>(high32) << 32) | static_cast<uint64_t>(low32))
@@ -295,11 +298,11 @@
 
 //! Use only lower 48-bit address for some pointers.
 /*!
-    \ingroup CEREAL_RAPIDJSON_CONFIG
+	\ingroup CEREAL_RAPIDJSON_CONFIG
 
-    This optimization uses the fact that current X86-64 architecture only implement lower 48-bit virtual address.
-    The higher 16-bit can be used for storing other data.
-    \c GenericValue uses this optimization to reduce its size form 24 bytes to 16 bytes in 64-bit architecture.
+	This optimization uses the fact that current X86-64 architecture only implement lower 48-bit virtual address.
+	The higher 16-bit can be used for storing other data.
+	\c GenericValue uses this optimization to reduce its size form 24 bytes to 16 bytes in 64-bit architecture.
 */
 #ifndef CEREAL_RAPIDJSON_48BITPOINTER_OPTIMIZATION
 #if defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__x86_64) || defined(_M_X64) || defined(_M_AMD64)
@@ -324,30 +327,30 @@
 // CEREAL_RAPIDJSON_SSE2/CEREAL_RAPIDJSON_SSE42/CEREAL_RAPIDJSON_NEON/CEREAL_RAPIDJSON_SIMD
 
 /*! \def CEREAL_RAPIDJSON_SIMD
-    \ingroup CEREAL_RAPIDJSON_CONFIG
-    \brief Enable SSE2/SSE4.2/Neon optimization.
+	\ingroup CEREAL_RAPIDJSON_CONFIG
+	\brief Enable SSE2/SSE4.2/Neon optimization.
 
-    RapidJSON supports optimized implementations for some parsing operations
-    based on the SSE2, SSE4.2 or NEon SIMD extensions on modern Intel
-    or ARM compatible processors.
+	RapidJSON supports optimized implementations for some parsing operations
+	based on the SSE2, SSE4.2 or NEon SIMD extensions on modern Intel
+	or ARM compatible processors.
 
-    To enable these optimizations, three different symbols can be defined;
-    \code
-    // Enable SSE2 optimization.
-    #define CEREAL_RAPIDJSON_SSE2
+	To enable these optimizations, three different symbols can be defined;
+	\code
+	// Enable SSE2 optimization.
+	#define CEREAL_RAPIDJSON_SSE2
 
-    // Enable SSE4.2 optimization.
-    #define CEREAL_RAPIDJSON_SSE42
-    \endcode
+	// Enable SSE4.2 optimization.
+	#define CEREAL_RAPIDJSON_SSE42
+	\endcode
 
-    // Enable ARM Neon optimization.
-    #define CEREAL_RAPIDJSON_NEON
-    \endcode
+	// Enable ARM Neon optimization.
+	#define CEREAL_RAPIDJSON_NEON
+	\endcode
 
-    \c CEREAL_RAPIDJSON_SSE42 takes precedence over SSE2, if both are defined.
+	\c CEREAL_RAPIDJSON_SSE42 takes precedence over SSE2, if both are defined.
 
-    If any of these symbols is defined, RapidJSON defines the macro
-    \c CEREAL_RAPIDJSON_SIMD to indicate the availability of the optimized code.
+	If any of these symbols is defined, RapidJSON defines the macro
+	\c CEREAL_RAPIDJSON_SIMD to indicate the availability of the optimized code.
 */
 #if defined(CEREAL_RAPIDJSON_SSE2) || defined(CEREAL_RAPIDJSON_SSE42) \
     || defined(CEREAL_RAPIDJSON_NEON) || defined(CEREAL_RAPIDJSON_DOXYGEN_RUNNING)
@@ -359,19 +362,19 @@
 
 #ifndef CEREAL_RAPIDJSON_NO_SIZETYPEDEFINE
 /*! \def CEREAL_RAPIDJSON_NO_SIZETYPEDEFINE
-    \ingroup CEREAL_RAPIDJSON_CONFIG
-    \brief User-provided \c SizeType definition.
+	\ingroup CEREAL_RAPIDJSON_CONFIG
+	\brief User-provided \c SizeType definition.
 
-    In order to avoid using 32-bit size types for indexing strings and arrays,
-    define this preprocessor symbol and provide the type rapidjson::SizeType
-    before including RapidJSON:
-    \code
-    #define CEREAL_RAPIDJSON_NO_SIZETYPEDEFINE
-    namespace rapidjson { typedef ::std::size_t SizeType; }
-    #include "rapidjson/..."
-    \endcode
+	In order to avoid using 32-bit size types for indexing strings and arrays,
+	define this preprocessor symbol and provide the type rapidjson::SizeType
+	before including RapidJSON:
+	\code
+	#define CEREAL_RAPIDJSON_NO_SIZETYPEDEFINE
+	namespace rapidjson { typedef ::std::size_t SizeType; }
+	#include "rapidjson/..."
+	\endcode
 
-    \see rapidjson::SizeType
+	\see rapidjson::SizeType
 */
 #ifdef CEREAL_RAPIDJSON_DOXYGEN_RUNNING
 #define CEREAL_RAPIDJSON_NO_SIZETYPEDEFINE
@@ -379,8 +382,8 @@
 CEREAL_RAPIDJSON_NAMESPACE_BEGIN
 //! Size type (for string lengths, array sizes, etc.)
 /*! RapidJSON uses 32-bit array/string indices even on 64-bit platforms,
-    instead of using \c size_t. Users may override the SizeType by defining
-    \ref CEREAL_RAPIDJSON_NO_SIZETYPEDEFINE.
+	instead of using \c size_t. Users may override the SizeType by defining
+	\ref CEREAL_RAPIDJSON_NO_SIZETYPEDEFINE.
 */
 typedef unsigned SizeType;
 CEREAL_RAPIDJSON_NAMESPACE_END
@@ -396,11 +399,11 @@ CEREAL_RAPIDJSON_NAMESPACE_END
 
 //! Assertion.
 /*! \ingroup CEREAL_RAPIDJSON_CONFIG
-    By default, rapidjson uses C \c assert() for internal assertions.
-    User can override it by defining CEREAL_RAPIDJSON_ASSERT(x) macro.
+	By default, rapidjson uses C \c assert() for internal assertions.
+	User can override it by defining CEREAL_RAPIDJSON_ASSERT(x) macro.
 
-    \note Parsing errors are handled and can be customized by the
-          \ref CEREAL_RAPIDJSON_ERRORS APIs.
+	\note Parsing errors are handled and can be customized by the
+		  \ref CEREAL_RAPIDJSON_ERRORS APIs.
 */
 #ifndef CEREAL_RAPIDJSON_ASSERT
 #include <cassert>
@@ -439,9 +442,9 @@ CEREAL_RAPIDJSON_NAMESPACE_END
 #endif
 
 /*! \def CEREAL_RAPIDJSON_STATIC_ASSERT
-    \brief (Internal) macro to check for conditions at compile-time
-    \param x compile-time condition
-    \hideinitializer
+	\brief (Internal) macro to check for conditions at compile-time
+	\param x compile-time condition
+	\hideinitializer
  */
 #define CEREAL_RAPIDJSON_STATIC_ASSERT(x) \
     typedef ::CEREAL_RAPIDJSON_NAMESPACE::StaticAssertTest< \
@@ -449,14 +452,14 @@ CEREAL_RAPIDJSON_NAMESPACE_END
     CEREAL_RAPIDJSON_JOIN(StaticAssertTypedef, __LINE__) CEREAL_RAPIDJSON_STATIC_ASSERT_UNUSED_ATTRIBUTE
 #endif // CEREAL_RAPIDJSON_STATIC_ASSERT
 
-///////////////////////////////////////////////////////////////////////////////
-// CEREAL_RAPIDJSON_LIKELY, CEREAL_RAPIDJSON_UNLIKELY
+ ///////////////////////////////////////////////////////////////////////////////
+ // CEREAL_RAPIDJSON_LIKELY, CEREAL_RAPIDJSON_UNLIKELY
 
-//! Compiler branching hint for expression with high probability to be true.
-/*!
-    \ingroup CEREAL_RAPIDJSON_CONFIG
-    \param x Boolean expression likely to be true.
-*/
+ //! Compiler branching hint for expression with high probability to be true.
+ /*!
+	 \ingroup CEREAL_RAPIDJSON_CONFIG
+	 \param x Boolean expression likely to be true.
+ */
 #ifndef CEREAL_RAPIDJSON_LIKELY
 #if defined(__GNUC__) || defined(__clang__)
 #define CEREAL_RAPIDJSON_LIKELY(x) __builtin_expect(!!(x), 1)
@@ -465,11 +468,11 @@ CEREAL_RAPIDJSON_NAMESPACE_END
 #endif
 #endif
 
-//! Compiler branching hint for expression with low probability to be true.
-/*!
-    \ingroup CEREAL_RAPIDJSON_CONFIG
-    \param x Boolean expression unlikely to be true.
-*/
+ //! Compiler branching hint for expression with low probability to be true.
+ /*!
+	 \ingroup CEREAL_RAPIDJSON_CONFIG
+	 \param x Boolean expression unlikely to be true.
+ */
 #ifndef CEREAL_RAPIDJSON_UNLIKELY
 #if defined(__GNUC__) || defined(__clang__)
 #define CEREAL_RAPIDJSON_UNLIKELY(x) __builtin_expect(!!(x), 0)
@@ -478,10 +481,10 @@ CEREAL_RAPIDJSON_NAMESPACE_END
 #endif
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// Helpers
+ ///////////////////////////////////////////////////////////////////////////////
+ // Helpers
 
-//!@cond CEREAL_RAPIDJSON_HIDDEN_FROM_DOXYGEN
+ //!@cond CEREAL_RAPIDJSON_HIDDEN_FROM_DOXYGEN
 
 #define CEREAL_RAPIDJSON_MULTILINEMACRO_BEGIN do {  
 #define CEREAL_RAPIDJSON_MULTILINEMACRO_END \
@@ -596,17 +599,17 @@ CEREAL_RAPIDJSON_NAMESPACE_END
 
 //! Assertion (in non-throwing contexts).
  /*! \ingroup CEREAL_RAPIDJSON_CONFIG
-    Some functions provide a \c noexcept guarantee, if the compiler supports it.
-    In these cases, the \ref CEREAL_RAPIDJSON_ASSERT macro cannot be overridden to
-    throw an exception.  This macro adds a separate customization point for
-    such cases.
+	Some functions provide a \c noexcept guarantee, if the compiler supports it.
+	In these cases, the \ref CEREAL_RAPIDJSON_ASSERT macro cannot be overridden to
+	throw an exception.  This macro adds a separate customization point for
+	such cases.
 
-    Defaults to C \c assert() (as \ref CEREAL_RAPIDJSON_ASSERT), if \c noexcept is
-    supported, and to \ref CEREAL_RAPIDJSON_ASSERT otherwise.
+	Defaults to C \c assert() (as \ref CEREAL_RAPIDJSON_ASSERT), if \c noexcept is
+	supported, and to \ref CEREAL_RAPIDJSON_ASSERT otherwise.
  */
 
-///////////////////////////////////////////////////////////////////////////////
-// CEREAL_RAPIDJSON_NOEXCEPT_ASSERT
+ ///////////////////////////////////////////////////////////////////////////////
+ // CEREAL_RAPIDJSON_NOEXCEPT_ASSERT
 
 #ifndef CEREAL_RAPIDJSON_NOEXCEPT_ASSERT
 #ifdef CEREAL_RAPIDJSON_ASSERT_THROWS
@@ -636,20 +639,20 @@ CEREAL_RAPIDJSON_NAMESPACE_END
 // Type
 
 /*! \namespace rapidjson
-    \brief main RapidJSON namespace
-    \see CEREAL_RAPIDJSON_NAMESPACE
+	\brief main RapidJSON namespace
+	\see CEREAL_RAPIDJSON_NAMESPACE
 */
 CEREAL_RAPIDJSON_NAMESPACE_BEGIN
 
 //! Type of JSON value
 enum Type {
-    kNullType = 0,      //!< null
-    kFalseType = 1,     //!< false
-    kTrueType = 2,      //!< true
-    kObjectType = 3,    //!< object
-    kArrayType = 4,     //!< array 
-    kStringType = 5,    //!< string
-    kNumberType = 6     //!< number
+	kNullType = 0,      //!< null
+	kFalseType = 1,     //!< false
+	kTrueType = 2,      //!< true
+	kObjectType = 3,    //!< object
+	kArrayType = 4,     //!< array 
+	kStringType = 5,    //!< string
+	kNumberType = 6     //!< number
 };
 
 CEREAL_RAPIDJSON_NAMESPACE_END
