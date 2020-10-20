@@ -261,8 +261,8 @@
 
 
  div.sidebar, div.topic {
-     background-color: #0a0a0a;
-     border: 1px solid #131313;
+     background-color: #2E3440;
+     border: 1px solid #3B4252;
      padding: 0;
      margin: 0 0 1em 1.5em;
  }
@@ -272,7 +272,7 @@
  }
 
  div.sidebar p.sidebar-title, div.topic p.topic-title {
-     background-color: #131313;
+     background-color: #3B4252;
      padding: 8px;
  }
 
