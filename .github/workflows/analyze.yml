@@ -18,19 +18,21 @@ jobs:
     - name: get cppcheck
       run: sudo apt-get update -yqq && sudo apt-get install -yqq cppcheck
 
+    - name: get dependencies
+      run: sudo apt-get install -yqq libopenal-dev build-essential libgl1-mesa-dev libglm-dev libglfw3-dev ocl-icd-opencl-dev
+
     - name: get intercept-build
       run: pip install scan-build
 
     - name: premake
       run: |
-       premake5 --file=args/premake5.lua gmake && \
-       premake5 --file=args/premake5.lua vs2019
+       premake5 --file=premake5.lua gmake && \
+       premake5 --file=premake5.lua vs2019
 
     - name: intercept-build & analyze-build
       run: |
-       cd args && \
        /home/runner/.local/bin/intercept-build make --dry-run CXX=clang++-9 config=debug64 all && \
        /home/runner/.local/bin/analyze-build --status-bugs
 
     - name: cppcheck
-      run: cd args && cppcheck --project=args.sln --suppress=syntaxError --xml --error-exitcode=1 2>&1 | python3 ../tools/cppcheck2github.py
+      run: cppcheck --project=legion-engine.sln --suppress=syntaxError --xml --error-exitcode=1 2>&1 | python3 tools/cppcheck2github.py

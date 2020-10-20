@@ -1,8 +1,8 @@
-#define ARGS_ENTRY
-#define ARGS_KEEP_CONSOLE
-#define ARGS_LOW_POWER
+#define LEGION_ENTRY
+#define LEGION_KEEP_CONSOLE
+#define LEGION_LOW_POWER
 #define LEGION_MIN_THREADS 6 // Update, Rendering, Input, Audio, Physics, TestChain
-//#define ARGS_LOW_POWER
+//#define LEGION_LOW_POWER
 
 #include <chrono>
 #include <thread>
@@ -20,9 +20,9 @@
 
 #include "test_filesystem.hpp"
 
-using namespace args;
+using namespace legion;
 
-void ARGS_CCONV reportModules(Engine* engine)
+void LEGION_CCONV reportModules(Engine* engine)
 {
     log::filter(log::severity::debug);
 
