@@ -128,13 +128,13 @@ Functions
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a069d1a8c8ea81826e68a83e719a664db`
 
-- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a0c6ac3ea533f88b37adaffda35607e95`
-
-- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1af1055ca707d9d1575ee97dd46a0bf61f`
-
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a1451c68d0b2574950e80faa43d17166a`
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a4d9bf40403bf5c074820eb6dad5ec144`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1af1055ca707d9d1575ee97dd46a0bf61f`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a0c6ac3ea533f88b37adaffda35607e95`
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a4678ff45114b533a8ca360baf9dd185b`
 
