@@ -2,7 +2,7 @@ Feedback
 ========
 
 Did you encounter any problems? Be sure to let us know via the form below
-or contact us via issues@args-engine.com
+or contact us via issues@legion-engine.com
 
 
 .. raw:: html

@@ -4,7 +4,7 @@
 
 #include <core/math/math.hpp>
 
-using namespace args;
+using namespace legion;
 
 class TestModule : public Module
 {

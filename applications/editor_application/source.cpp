@@ -1,12 +1,12 @@
 #include <core/core.hpp>
 #include <editor/editor.hpp>
 
-void ARGS_CCONV reportEditorModules(args::editor::Editor* editor)
+void LEGION_CCONV reportEditorModules(legion::editor::Editor* editor)
 {
 
 }
 
-void ARGS_CCONV reportModules(args::core::Engine* engine)
+void LEGION_CCONV reportModules(legion::core::Engine* engine)
 {
-	args::log::info("Hello Args!");
+	legion::log::info("Hello Legion!");
 }
