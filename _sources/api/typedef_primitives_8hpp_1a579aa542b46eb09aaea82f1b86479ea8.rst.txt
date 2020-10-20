@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1a579aa542b46eb09aaea82f1b86479ea8:
+
+Typedef legion::core::time32
+============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::time32

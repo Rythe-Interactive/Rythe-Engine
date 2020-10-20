@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class PhysicsStatics &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class PhysicsSystem" href="classlegion_1_1physics_1_1_physics_system.html" />
+    <link rel="prev" title="Class PhysicsModule" href="classlegion_1_1physics_1_1_physics_module.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classlegion_1_1physics_1_1_physics_system.html" title="Class PhysicsSystem"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classlegion_1_1physics_1_1_physics_module.html" title="Class PhysicsModule"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class PhysicsStatics</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-physicsstatics">
+<span id="exhale-class-classlegion-1-1physics-1-1-physics-statics"></span><h1>Class PhysicsStatics<a class="headerlink" href="#class-physicsstatics" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_statics.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-physics-statics-hpp"><span class="std std-ref">File physics_statics.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6legion7physics14PhysicsStaticsE">
+<span id="_CPPv3N6legion7physics14PhysicsStaticsE"></span><span id="_CPPv2N6legion7physics14PhysicsStaticsE"></span><span id="legion::physics::PhysicsStatics"></span><span class="target" id="classlegion_1_1physics_1_1_physics_statics"></span><em class="property">class </em><code class="sig-prename descclassname">legion::physics<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">PhysicsStatics</code><a class="headerlink" href="#_CPPv4N6legion7physics14PhysicsStaticsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14PhysicsStatics15GetSupportPointERKN4math4vec3ERKN4math4vec3EP14ConvexColliderRKN4math4mat4ERN4math4vec3E">
+<span id="_CPPv3N6legion7physics14PhysicsStatics15GetSupportPointERKN4math4vec3ERKN4math4vec3EP14ConvexColliderRKN4math4mat4ERN4math4vec3E"></span><span id="_CPPv2N6legion7physics14PhysicsStatics15GetSupportPointERKN4math4vec3ERKN4math4vec3EP14ConvexColliderRKN4math4mat4ERN4math4vec3E"></span><span id="legion::physics::PhysicsStatics::GetSupportPoint__math::vec3CR.math::vec3CR.ConvexColliderP.math::mat4CR.math::vec3R"></span><span class="target" id="classlegion_1_1physics_1_1_physics_statics_1ab2bc510dc775c8ab0059ebda51a5e965"></span>void <code class="sig-name descname">GetSupportPoint</code><span class="sig-paren">(</span><em class="property">const</em> math::vec3 &amp;<em>planePosition</em>, <em class="property">const</em> math::vec3 &amp;<em>direction</em>, <a class="reference internal" href="classlegion_1_1physics_1_1_convex_collider.html#_CPPv4N6legion7physics14ConvexColliderE" title="legion::physics::ConvexCollider">ConvexCollider</a> *<em>collider</em>, <em class="property">const</em> math::mat4 &amp;<em>colliderTransform</em>, math::vec3 &amp;<em>worldSupportPoint</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14PhysicsStatics15GetSupportPointERKN4math4vec3ERKN4math4vec3EP14ConvexColliderRKN4math4mat4ERN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given a transformed <a class="reference internal" href="classlegion_1_1physics_1_1_convex_collider.html#classlegion_1_1physics_1_1_convex_collider"><span class="std std-ref">ConvexCollider</span></a> and a direction, Gets the vertex furthest in the given direction. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>returns true if a seperating axis was found </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">planePosition</span></code>: The position of the support plane in world space </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">direction</span></code>: The direction we would like to know the support point of </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">collider</span></code>: The <a class="reference internal" href="classlegion_1_1physics_1_1_convex_collider.html#classlegion_1_1physics_1_1_convex_collider"><span class="std std-ref">ConvexCollider</span></a> in question </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">colliderTransform</span></code>: A mat4 describing the transform of the collider </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">worldSupportPoint</span></code>: [out] the resulting support point </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14PhysicsStatics42FindSeperatingAxisByExtremePointProjectionEP14ConvexColliderP14ConvexColliderRKN4math4mat4ERKN4math4mat4ER19PointerEncapsulatorI12HalfEdgeFaceERfRN4math4vec3E">
+<span id="_CPPv3N6legion7physics14PhysicsStatics42FindSeperatingAxisByExtremePointProjectionEP14ConvexColliderP14ConvexColliderRKN4math4mat4ERKN4math4mat4ER19PointerEncapsulatorI12HalfEdgeFaceERfRN4math4vec3E"></span><span id="_CPPv2N6legion7physics14PhysicsStatics42FindSeperatingAxisByExtremePointProjectionEP14ConvexColliderP14ConvexColliderRKN4math4mat4ERKN4math4mat4ER19PointerEncapsulatorI12HalfEdgeFaceERfRN4math4vec3E"></span><span id="legion::physics::PhysicsStatics::FindSeperatingAxisByExtremePointProjection__ConvexColliderP.ConvexColliderP.math::mat4CR.math::mat4CR.PointerEncapsulator:HalfEdgeFace:R.floatR.math::vec3R"></span><span class="target" id="classlegion_1_1physics_1_1_physics_statics_1a0b01b5ffe5a9891be5cb619f552bf7b7"></span>bool <code class="sig-name descname">FindSeperatingAxisByExtremePointProjection</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1physics_1_1_convex_collider.html#_CPPv4N6legion7physics14ConvexColliderE" title="legion::physics::ConvexCollider">ConvexCollider</a> *<em>convexA</em>, <a class="reference internal" href="classlegion_1_1physics_1_1_convex_collider.html#_CPPv4N6legion7physics14ConvexColliderE" title="legion::physics::ConvexCollider">ConvexCollider</a> *<em>convexB</em>, <em class="property">const</em> math::mat4 &amp;<em>transformA</em>, <em class="property">const</em> math::mat4 &amp;<em>transformB</em>, <a class="reference internal" href="classlegion_1_1physics_1_1_pointer_encapsulator.html#_CPPv4I0EN6legion7physics19PointerEncapsulatorE" title="legion::physics::PointerEncapsulator">PointerEncapsulator</a>&lt;<a class="reference internal" href="structlegion_1_1physics_1_1_half_edge_face.html#_CPPv4N6legion7physics12HalfEdgeFaceE" title="legion::physics::HalfEdgeFace">HalfEdgeFace</a>&gt; &amp;<em>refFace</em>, float &amp;<em>maximumSeperation</em>, math::vec3 &amp;<em>debugPoint</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14PhysicsStatics42FindSeperatingAxisByExtremePointProjectionEP14ConvexColliderP14ConvexColliderRKN4math4mat4ERKN4math4mat4ER19PointerEncapsulatorI12HalfEdgeFaceERfRN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given 2 ConvexColliders, convexA and convexB, checks if one of the faces of convexB creates a seperating axis that seperates the given convex shapes. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>returns true if a seperating axis was found </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">convexA</span></code>: the reference collider </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">convexB</span></code>: the collider that will create the seperating axes </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">transformA</span></code>: the transform of convexA </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">transformB</span></code>: the transform of convexB </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">refFace</span></code>: [out] a HalfEdgeEdge* that has a normal parallel to the seperating axis </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">maximumSeperation</span></code>: [out] the seperation on the given seperating axis </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14PhysicsStatics37FindSeperatingAxisByGaussMapEdgeCheckEP14ConvexColliderP14ConvexColliderRKN4math4mat4ERKN4math4mat4ER19PointerEncapsulatorI12HalfEdgeEdgeER19PointerEncapsulatorI12HalfEdgeEdgeERN4math4vec3ERf">
+<span id="_CPPv3N6legion7physics14PhysicsStatics37FindSeperatingAxisByGaussMapEdgeCheckEP14ConvexColliderP14ConvexColliderRKN4math4mat4ERKN4math4mat4ER19PointerEncapsulatorI12HalfEdgeEdgeER19PointerEncapsulatorI12HalfEdgeEdgeERN4math4vec3ERf"></span><span id="_CPPv2N6legion7physics14PhysicsStatics37FindSeperatingAxisByGaussMapEdgeCheckEP14ConvexColliderP14ConvexColliderRKN4math4mat4ERKN4math4mat4ER19PointerEncapsulatorI12HalfEdgeEdgeER19PointerEncapsulatorI12HalfEdgeEdgeERN4math4vec3ERf"></span><span id="legion::physics::PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck__ConvexColliderP.ConvexColliderP.math::mat4CR.math::mat4CR.PointerEncapsulator:HalfEdgeEdge:R.PointerEncapsulator:HalfEdgeEdge:R.math::vec3R.floatR"></span><span class="target" id="classlegion_1_1physics_1_1_physics_statics_1aac9c58dc22ad5cb1a6df02e0e7cd8ec3"></span>bool <code class="sig-name descname">FindSeperatingAxisByGaussMapEdgeCheck</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1physics_1_1_convex_collider.html#_CPPv4N6legion7physics14ConvexColliderE" title="legion::physics::ConvexCollider">ConvexCollider</a> *<em>convexA</em>, <a class="reference internal" href="classlegion_1_1physics_1_1_convex_collider.html#_CPPv4N6legion7physics14ConvexColliderE" title="legion::physics::ConvexCollider">ConvexCollider</a> *<em>convexB</em>, <em class="property">const</em> math::mat4 &amp;<em>transformA</em>, <em class="property">const</em> math::mat4 &amp;<em>transformB</em>, <a class="reference internal" href="classlegion_1_1physics_1_1_pointer_encapsulator.html#_CPPv4I0EN6legion7physics19PointerEncapsulatorE" title="legion::physics::PointerEncapsulator">PointerEncapsulator</a>&lt;<a class="reference internal" href="structlegion_1_1physics_1_1_half_edge_edge.html#_CPPv4N6legion7physics12HalfEdgeEdgeE" title="legion::physics::HalfEdgeEdge">HalfEdgeEdge</a>&gt; &amp;<em>refEdge</em>, <a class="reference internal" href="classlegion_1_1physics_1_1_pointer_encapsulator.html#_CPPv4I0EN6legion7physics19PointerEncapsulatorE" title="legion::physics::PointerEncapsulator">PointerEncapsulator</a>&lt;<a class="reference internal" href="structlegion_1_1physics_1_1_half_edge_edge.html#_CPPv4N6legion7physics12HalfEdgeEdgeE" title="legion::physics::HalfEdgeEdge">HalfEdgeEdge</a>&gt; &amp;<em>incEdge</em>, math::vec3 &amp;<em>seperatingAxisFound</em>, float &amp;<em>maximumSeperation</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14PhysicsStatics37FindSeperatingAxisByGaussMapEdgeCheckEP14ConvexColliderP14ConvexColliderRKN4math4mat4ERKN4math4mat4ER19PointerEncapsulatorI12HalfEdgeEdgeER19PointerEncapsulatorI12HalfEdgeEdgeERN4math4vec3ERf" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given 2 ConvexColliders, Goes through every single possible edge combination in order to check for a valid seperating axis. This is done by creating a minkowski face with each edge combination. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>returns true if a seperating axis was found </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">convexA</span></code>: the reference collider </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">convexB</span></code>: the incident collider </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">transformA</span></code>: the transform of convexA </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">transformB</span></code>: the transform of convexB </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">refEdge</span></code>: [out] the resulting reference Edge </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">incEdge</span></code>: [out] the resulting incident Edge </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seperatingAxisFound</span></code>: [out] the resulting seperating axis found </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">seperation</span></code>: [out] the amount of seperation </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14PhysicsStatics25SutherlandHodgmanFaceClipERN4math4vec3ERN4math4vec3ERNSt6vectorIN4math4vec3EEERNSt6vectorIN4math4vec3EEE">
+<span id="_CPPv3N6legion7physics14PhysicsStatics25SutherlandHodgmanFaceClipERN4math4vec3ERN4math4vec3ERNSt6vectorIN4math4vec3EEERNSt6vectorIN4math4vec3EEE"></span><span id="_CPPv2N6legion7physics14PhysicsStatics25SutherlandHodgmanFaceClipERN4math4vec3ERN4math4vec3ERNSt6vectorIN4math4vec3EEERNSt6vectorIN4math4vec3EEE"></span><span id="legion::physics::PhysicsStatics::SutherlandHodgmanFaceClip__math::vec3R.math::vec3R.std::vector:math::vec3:R.std::vector:math::vec3:R"></span><span class="target" id="classlegion_1_1physics_1_1_physics_statics_1a70e911140176c2bfa3ec09364ce1cf0a"></span>void <code class="sig-name descname">SutherlandHodgmanFaceClip</code><span class="sig-paren">(</span>math::vec3 &amp;<em>planeNormal</em>, math::vec3 &amp;<em>planePosition</em>, std::vector&lt;math::vec3&gt; &amp;<em>inputList</em>, std::vector&lt;math::vec3&gt; &amp;<em>outputList</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14PhysicsStatics25SutherlandHodgmanFaceClipERN4math4vec3ERN4math4vec3ERNSt6vectorIN4math4vec3EEERNSt6vectorIN4math4vec3EEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given a 3D plane, clips the vertices in the inputList and places the results in the output list. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14PhysicsStatics30FindClosestPointsToLineSegmentEN4math4vec3EN4math4vec3EN4math4vec3EN4math4vec3ERN4math4vec3ERN4math4vec3E">
+<span id="_CPPv3N6legion7physics14PhysicsStatics30FindClosestPointsToLineSegmentEN4math4vec3EN4math4vec3EN4math4vec3EN4math4vec3ERN4math4vec3ERN4math4vec3E"></span><span id="_CPPv2N6legion7physics14PhysicsStatics30FindClosestPointsToLineSegmentEN4math4vec3EN4math4vec3EN4math4vec3EN4math4vec3ERN4math4vec3ERN4math4vec3E"></span><span id="legion::physics::PhysicsStatics::FindClosestPointsToLineSegment__math::vec3.math::vec3.math::vec3.math::vec3.math::vec3R.math::vec3R"></span><span class="target" id="classlegion_1_1physics_1_1_physics_statics_1a35168581cfbd217e3deebc30f8b793fd"></span>void <code class="sig-name descname">FindClosestPointsToLineSegment</code><span class="sig-paren">(</span>math::vec3 <em>p1</em>, math::vec3 <em>p2</em>, math::vec3 <em>p3</em>, math::vec3 <em>p4</em>, math::vec3 &amp;<em>outp1p2</em>, math::vec3 &amp;<em>outp3p4</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14PhysicsStatics30FindClosestPointsToLineSegmentEN4math4vec3EN4math4vec3EN4math4vec3EN4math4vec3ERN4math4vec3ERN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given a set of points that represent 2 line segments, find a line segment that reperesents the closest points between the 2 lines. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">p1</span></code>: The start of the first line </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">p2</span></code>: The end of the second line </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">p3</span></code>: The start of the third line </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">p4</span></code>: The end of the fourth line </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14PhysicsStatics26LinearSystemCramerSolver2DEffffff">
+<span id="_CPPv3N6legion7physics14PhysicsStatics26LinearSystemCramerSolver2DEffffff"></span><span id="_CPPv2N6legion7physics14PhysicsStatics26LinearSystemCramerSolver2DEffffff"></span><span id="legion::physics::PhysicsStatics::LinearSystemCramerSolver2D__float.float.float.float.float.float"></span><span class="target" id="classlegion_1_1physics_1_1_physics_statics_1ad8c5ffc13c7c24c29dd059d2052f2510"></span>math::vec2 <code class="sig-name descname">LinearSystemCramerSolver2D</code><span class="sig-paren">(</span>float <em>a</em>, float <em>b</em>, float <em>c</em>, float <em>d</em>, float <em>e</em>, float <em>f</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14PhysicsStatics26LinearSystemCramerSolver2DEffffff" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Solves a linear system with 2 equations using cramers rule <dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>a,b,c,d is a column major matrix </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code>: The value at a11 of the matrix </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code>: The value at a21 of the matrix </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c</span></code>: The value at a12 of the matrix </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">d</span></code>: The value at a22 of the matrix </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">e</span></code>: The result of the linear transformation in the x axis </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">f</span></code>: The result of the linear transformation in the y axis </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14PhysicsStatics20PointDistanceToPlaneERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E">
+<span id="_CPPv3N6legion7physics14PhysicsStatics20PointDistanceToPlaneERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E"></span><span id="_CPPv2N6legion7physics14PhysicsStatics20PointDistanceToPlaneERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E"></span><span id="legion::physics::PhysicsStatics::PointDistanceToPlane__math::vec3CR.math::vec3CR.math::vec3CR"></span><span class="target" id="classlegion_1_1physics_1_1_physics_statics_1a61676b1a23d5424a0267b4f63734b734"></span>float <code class="sig-name descname">PointDistanceToPlane</code><span class="sig-paren">(</span><em class="property">const</em> math::vec3 &amp;<em>planeNormal</em>, <em class="property">const</em> math::vec3 &amp;<em>planePosition</em>, <em class="property">const</em> math::vec3 &amp;<em>point</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14PhysicsStatics20PointDistanceToPlaneERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Finds the distance of a point given a 3D plane. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14PhysicsStatics17IsPointAbovePlaneERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E">
+<span id="_CPPv3N6legion7physics14PhysicsStatics17IsPointAbovePlaneERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E"></span><span id="_CPPv2N6legion7physics14PhysicsStatics17IsPointAbovePlaneERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E"></span><span id="legion::physics::PhysicsStatics::IsPointAbovePlane__math::vec3CR.math::vec3CR.math::vec3CR"></span><span class="target" id="classlegion_1_1physics_1_1_physics_statics_1a0fedb2d3b7c9946058c1594a7b917150"></span>bool <code class="sig-name descname">IsPointAbovePlane</code><span class="sig-paren">(</span><em class="property">const</em> math::vec3 &amp;<em>planeNormal</em>, <em class="property">const</em> math::vec3 &amp;<em>planePosition</em>, <em class="property">const</em> math::vec3 &amp;<em>point</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14PhysicsStatics17IsPointAbovePlaneERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks if the distance of a point from a 3D plane is above zero. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14PhysicsStatics32FindLineToPlaneIntersectionPointERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERN4math4vec3E">
+<span id="_CPPv3N6legion7physics14PhysicsStatics32FindLineToPlaneIntersectionPointERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERN4math4vec3E"></span><span id="_CPPv2N6legion7physics14PhysicsStatics32FindLineToPlaneIntersectionPointERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERN4math4vec3E"></span><span id="legion::physics::PhysicsStatics::FindLineToPlaneIntersectionPoint__math::vec3CR.math::vec3CR.math::vec3CR.math::vec3CR.math::vec3R"></span><span class="target" id="classlegion_1_1physics_1_1_physics_statics_1a793dfcfff333ba863b1ca39b399b62bb"></span>bool <code class="sig-name descname">FindLineToPlaneIntersectionPoint</code><span class="sig-paren">(</span><em class="property">const</em> math::vec3 &amp;<em>planeNormal</em>, <em class="property">const</em> math::vec3 &amp;<em>planePosition</em>, <em class="property">const</em> math::vec3 &amp;<em>startPoint</em>, <em class="property">const</em> math::vec3 &amp;<em>endPoint</em>, math::vec3 &amp;<em>intersectionPoint</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14PhysicsStatics32FindLineToPlaneIntersectionPointERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given a line going from start point to end point finds the intersection point of the line to a given 3D plane. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>Returns true if an intersection is found </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14PhysicsStatics26FindLineToPointInterpolantERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E">
+<span id="_CPPv3N6legion7physics14PhysicsStatics26FindLineToPointInterpolantERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E"></span><span id="_CPPv2N6legion7physics14PhysicsStatics26FindLineToPointInterpolantERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E"></span><span id="legion::physics::PhysicsStatics::FindLineToPointInterpolant__math::vec3CR.math::vec3CR.math::vec3CR.math::vec3CR"></span><span class="target" id="classlegion_1_1physics_1_1_physics_statics_1a99e2b0256e10b983c29a9e119879452e"></span>float <code class="sig-name descname">FindLineToPointInterpolant</code><span class="sig-paren">(</span><em class="property">const</em> math::vec3 &amp;<em>startPoint</em>, <em class="property">const</em> math::vec3 &amp;<em>endPoint</em>, <em class="property">const</em> math::vec3 &amp;<em>planePosition</em>, <em class="property">const</em> math::vec3 &amp;<em>planeNormal</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14PhysicsStatics26FindLineToPointInterpolantERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given a line going from a startPoint to and endPoint, finds the interpolant required to intersect a given 3D plane </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class PhysicsStatics</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="classlegion_1_1physics_1_1_physics_module.html" title="previous chapter">Class PhysicsModule</a></li>
+      <li>Next: <a href="classlegion_1_1physics_1_1_physics_system.html" title="next chapter">Class PhysicsSystem</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classlegion_1_1physics_1_1_physics_statics.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

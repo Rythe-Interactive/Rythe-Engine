@@ -1,0 +1,54 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_context.hpp:
+
+Program Listing for File context.hpp
+====================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_context.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/compute/context.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #if !defined(DOXY_EXCLUDE)
+   #include <CL/cl.h>
+   #endif
+   
+   #include <core/compute/program.hpp> // Kernel, Buffer
+   #include <core/filesystem/resource.hpp> // basic_resource
+   
+   namespace legion::core::compute {
+   
+   
+   class Context
+   {
+   public:
+   
+       static void init();
+   
+       static bool initialized();
+   
+       static Program createProgram(const filesystem::basic_resource& vec);
+   
+   
+       template <class T>
+       static Buffer createBuffer(std::vector<T>& container,buffer_type type,std::string name = "Unnamed")
+       {
+           return Buffer(
+               m_context,
+               reinterpret_cast<byte*>(container.data()), // data as void-ptr
+               container.size() * sizeof( T ),  // size with data as void-ptr
+               type,
+               std::forward<std::string>(name)
+           );
+       }
+   
+   private:
+   
+       static bool m_initialized;
+       static cl_context m_context;
+       static cl_platform_id m_platform_id;
+       static cl_device_id m_device_id;
+   };
+   }

@@ -1,0 +1,13 @@
+.. _exhale_function_logging_8hpp_1ae5ef258fc7e4c526320d96f4c760d763:
+
+Template Function legion::core::log::debug
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::log::debug(const FormatString&, Args&&...)

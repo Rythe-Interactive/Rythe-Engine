@@ -1,0 +1,56 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_components_physics_component.hpp:
+
+Program Listing for File physics_component.hpp
+==============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_components_physics_component.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/components/physics_component.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   #include <physics/cube_collider_params.hpp>
+   #include <vector>
+   #include <physics/colliders/physicscollider.hpp>
+   
+   namespace legion::physics
+   {
+       struct physicsComponent
+       {
+           static void init(physicsComponent& comp)
+           {
+               comp.colliders = new std::vector<std::shared_ptr<PhysicsCollider>>();
+           }
+   
+           static void destroy(physicsComponent& comp)
+           {
+               delete comp.colliders;
+           }
+   
+           //physics material
+   
+           std::vector<std::shared_ptr<PhysicsCollider>>* colliders;
+   
+           bool isTrigger;
+   
+           math::vec3 localCenterOfMass{};
+   
+           //physics bitmask
+   
+           void calculateNewLocalCenterOfMass();
+   
+           void ConstructConvexHull(/*mesh*/);
+   
+           void ConstructBox(/*mesh*/);
+   
+           void AddBox(const cube_collider_params& cubeParams);
+   
+           void AddSphere(/*mesh*/);
+   
+       };
+   }
+   
+   

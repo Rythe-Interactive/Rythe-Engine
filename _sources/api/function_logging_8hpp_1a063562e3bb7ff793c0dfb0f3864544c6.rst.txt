@@ -1,0 +1,13 @@
+.. _exhale_function_logging_8hpp_1a063562e3bb7ff793c0dfb0f3864544c6:
+
+Template Function legion::core::log::info
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::log::info(const FormatString&, Args&&...)

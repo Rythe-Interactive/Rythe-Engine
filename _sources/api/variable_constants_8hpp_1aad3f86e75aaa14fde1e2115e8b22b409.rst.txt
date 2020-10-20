@@ -1,0 +1,13 @@
+.. _exhale_variable_constants_8hpp_1aad3f86e75aaa14fde1e2115e8b22b409:
+
+Variable legion::core::math::detail::very_precise_sqrt2
+=======================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_constants.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::math::detail::very_precise_sqrt2

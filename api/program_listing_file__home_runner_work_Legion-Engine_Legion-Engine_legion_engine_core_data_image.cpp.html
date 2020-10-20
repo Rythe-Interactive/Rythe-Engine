@@ -1,0 +1,426 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File image.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File image.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-image-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-data-image-cpp"></span><h1>Program Listing for File image.cpp<a class="headerlink" href="#program-listing-for-file-image-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_image.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-data-image-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/data/image.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;core/data/image.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/assetimporter.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">uint</span><span class="o">&gt;</span> <span class="n">image</span><span class="o">::</span><span class="n">m_refs</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">image</span><span class="o">::</span><span class="n">m_refsLock</span><span class="p">;</span>
+
+    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">m_nullColors</span><span class="p">;</span>
+    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">m_nullLock</span><span class="p">;</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">image</span><span class="o">&gt;&gt;&gt;</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">m_images</span><span class="p">;</span>
+    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">m_imagesLock</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&gt;&gt;</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">m_colors</span><span class="p">;</span>
+    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">m_colorsLock</span><span class="p">;</span>
+
+    <span class="kt">void</span> <span class="n">image</span><span class="o">::</span><span class="n">apply_raw</span><span class="p">(</span><span class="kt">bool</span> <span class="n">lazyApply</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">ImageCache</span><span class="o">::</span><span class="n">m_colorsLock</span><span class="p">);</span>
+            <span class="n">ImageCache</span><span class="o">::</span><span class="n">m_colors</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">lazyApply</span><span class="p">)</span>
+            <span class="n">ImageCache</span><span class="o">::</span><span class="n">process_raw</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&amp;</span> <span class="n">image</span><span class="o">::</span><span class="n">read_colors</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">read_colors</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">size_type</span> <span class="n">image</span><span class="o">::</span><span class="n">data_size</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">m_dataSize</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">image_handle</span><span class="o">::</span><span class="n">size</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">image</span><span class="p">]</span> <span class="o">=</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">get_raw_image</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">image</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&amp;</span> <span class="n">image_handle</span><span class="o">::</span><span class="n">read_colors</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">read_colors</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">image</span><span class="o">&amp;&gt;</span> <span class="n">image_handle</span><span class="o">::</span><span class="n">get_raw_image</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">get_raw_image</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">image_handle</span><span class="o">::</span><span class="n">destroy</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">ImageCache</span><span class="o">::</span><span class="n">destroy_image</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&amp;</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">process_raw</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_imagesLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_images</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">m_nullColors</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">image</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_raw_image</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="k">auto</span><span class="o">&amp;</span> <span class="n">output</span> <span class="o">=</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+
+            <span class="n">output</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">image</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+
+            <span class="n">byte</span><span class="o">*</span> <span class="n">start</span> <span class="o">=</span> <span class="n">image</span><span class="p">.</span><span class="n">m_pixels</span><span class="p">;</span>
+            <span class="n">byte</span><span class="o">*</span> <span class="n">end</span> <span class="o">=</span> <span class="n">image</span><span class="p">.</span><span class="n">m_pixels</span> <span class="o">+</span> <span class="n">image</span><span class="p">.</span><span class="n">m_dataSize</span><span class="p">;</span>
+            <span class="n">size_type</span> <span class="n">channelSize</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">uint</span><span class="o">&gt;</span><span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">format</span><span class="p">);</span>
+            <span class="n">size_type</span> <span class="n">colorSize</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">components</span><span class="p">)</span> <span class="o">*</span> <span class="n">channelSize</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">byte</span><span class="o">*</span> <span class="n">colorPtr</span> <span class="o">=</span> <span class="n">start</span><span class="p">;</span> <span class="n">colorPtr</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">;</span> <span class="n">colorPtr</span> <span class="o">+=</span> <span class="n">colorSize</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">color</span> <span class="n">color</span><span class="p">;</span>
+
+                <span class="k">switch</span> <span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">components</span><span class="p">)</span>
+                <span class="p">{</span>
+                <span class="k">case</span> <span class="n">image_components</span><span class="o">::</span><span class="nl">grey</span><span class="p">:</span>
+                <span class="p">{</span>
+                    <span class="k">switch</span> <span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">format</span><span class="p">)</span>
+                    <span class="p">{</span>
+                    <span class="k">case</span> <span class="n">channel_format</span><span class="o">::</span><span class="nl">eight_bit</span><span class="p">:</span>
+                    <span class="p">{</span>
+                        <span class="kt">float</span> <span class="n">grayValue</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">colorPtr</span> <span class="o">/</span> <span class="mf">255.f</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">grayValue</span><span class="p">;</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">g</span> <span class="o">=</span> <span class="n">grayValue</span><span class="p">;</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">grayValue</span><span class="p">;</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="mf">1.f</span><span class="p">;</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">case</span> <span class="n">channel_format</span><span class="o">::</span><span class="nl">sixteen_bit</span><span class="p">:</span>
+                    <span class="p">{</span>
+                        <span class="kt">float</span> <span class="n">grayValue</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">uint16</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">colorPtr</span><span class="p">)</span> <span class="o">/</span> <span class="mf">65535.f</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">grayValue</span><span class="p">;</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">g</span> <span class="o">=</span> <span class="n">grayValue</span><span class="p">;</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">grayValue</span><span class="p">;</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="mf">1.f</span><span class="p">;</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">case</span> <span class="n">channel_format</span><span class="o">::</span><span class="nl">float_hdr</span><span class="p">:</span>
+                    <span class="p">{</span>
+                        <span class="kt">float</span> <span class="n">grayValue</span> <span class="o">=</span> <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">colorPtr</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">grayValue</span><span class="p">;</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">g</span> <span class="o">=</span> <span class="n">grayValue</span><span class="p">;</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">grayValue</span><span class="p">;</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="mf">1.f</span><span class="p">;</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="p">}</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">case</span> <span class="n">image_components</span><span class="o">::</span><span class="nl">grey_alpha</span><span class="p">:</span>
+                <span class="p">{</span>
+                    <span class="n">byte</span><span class="o">*</span> <span class="n">gPtr</span> <span class="o">=</span> <span class="n">colorPtr</span> <span class="o">+</span> <span class="n">channelSize</span> <span class="o">*</span> <span class="mi">0</span><span class="p">;</span>
+                    <span class="n">byte</span><span class="o">*</span> <span class="n">aPtr</span> <span class="o">=</span> <span class="n">colorPtr</span> <span class="o">+</span> <span class="n">channelSize</span> <span class="o">*</span> <span class="mi">1</span><span class="p">;</span>
+
+                    <span class="k">switch</span> <span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">format</span><span class="p">)</span>
+                    <span class="p">{</span>
+                    <span class="k">case</span> <span class="n">channel_format</span><span class="o">::</span><span class="nl">eight_bit</span><span class="p">:</span>
+                    <span class="p">{</span>
+                        <span class="kt">float</span> <span class="n">grayValue</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">gPtr</span> <span class="o">/</span> <span class="mf">255.f</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">grayValue</span><span class="p">;</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">g</span> <span class="o">=</span> <span class="n">grayValue</span><span class="p">;</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">grayValue</span><span class="p">;</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">aPtr</span> <span class="o">/</span> <span class="mf">255.f</span><span class="p">);</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">case</span> <span class="n">channel_format</span><span class="o">::</span><span class="nl">sixteen_bit</span><span class="p">:</span>
+                    <span class="p">{</span>
+                        <span class="kt">float</span> <span class="n">grayValue</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">uint16</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">gPtr</span><span class="p">)</span> <span class="o">/</span> <span class="mf">65535.f</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">grayValue</span><span class="p">;</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">g</span> <span class="o">=</span> <span class="n">grayValue</span><span class="p">;</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">grayValue</span><span class="p">;</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">uint16</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">aPtr</span><span class="p">)</span> <span class="o">/</span> <span class="mf">65535.f</span><span class="p">);</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">case</span> <span class="n">channel_format</span><span class="o">::</span><span class="nl">float_hdr</span><span class="p">:</span>
+                    <span class="p">{</span>
+                        <span class="kt">float</span> <span class="n">grayValue</span> <span class="o">=</span> <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">gPtr</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">grayValue</span><span class="p">;</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">g</span> <span class="o">=</span> <span class="n">grayValue</span><span class="p">;</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">grayValue</span><span class="p">;</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">aPtr</span><span class="p">);</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="p">}</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">case</span> <span class="n">image_components</span><span class="o">::</span><span class="nl">rgb</span><span class="p">:</span>
+                <span class="p">{</span>
+                    <span class="n">byte</span><span class="o">*</span> <span class="n">rPtr</span> <span class="o">=</span> <span class="n">colorPtr</span> <span class="o">+</span> <span class="n">channelSize</span> <span class="o">*</span> <span class="mi">0</span><span class="p">;</span>
+                    <span class="n">byte</span><span class="o">*</span> <span class="n">gPtr</span> <span class="o">=</span> <span class="n">colorPtr</span> <span class="o">+</span> <span class="n">channelSize</span> <span class="o">*</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="n">byte</span><span class="o">*</span> <span class="n">bPtr</span> <span class="o">=</span> <span class="n">colorPtr</span> <span class="o">+</span> <span class="n">channelSize</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+
+                    <span class="k">switch</span> <span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">format</span><span class="p">)</span>
+                    <span class="p">{</span>
+                    <span class="k">case</span> <span class="n">channel_format</span><span class="o">::</span><span class="nl">eight_bit</span><span class="p">:</span>
+                    <span class="p">{</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">rPtr</span> <span class="o">/</span> <span class="mf">255.f</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">g</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">gPtr</span> <span class="o">/</span> <span class="mf">255.f</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">bPtr</span> <span class="o">/</span> <span class="mf">255.f</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="mf">1.f</span><span class="p">;</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">case</span> <span class="n">channel_format</span><span class="o">::</span><span class="nl">sixteen_bit</span><span class="p">:</span>
+                    <span class="p">{</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">uint16</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">rPtr</span><span class="p">)</span> <span class="o">/</span> <span class="mf">65535.f</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">g</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">uint16</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">gPtr</span><span class="p">)</span> <span class="o">/</span> <span class="mf">65535.f</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">uint16</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">bPtr</span><span class="p">)</span> <span class="o">/</span> <span class="mf">65535.f</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="mf">1.f</span><span class="p">;</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">case</span> <span class="n">channel_format</span><span class="o">::</span><span class="nl">float_hdr</span><span class="p">:</span>
+                    <span class="p">{</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">r</span> <span class="o">=</span> <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">rPtr</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">g</span> <span class="o">=</span> <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">gPtr</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">bPtr</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="mf">1.f</span><span class="p">;</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="p">}</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">case</span> <span class="n">image_components</span><span class="o">::</span><span class="nl">rgba</span><span class="p">:</span>
+                <span class="p">{</span>
+                    <span class="n">byte</span><span class="o">*</span> <span class="n">rPtr</span> <span class="o">=</span> <span class="n">colorPtr</span> <span class="o">+</span> <span class="n">channelSize</span> <span class="o">*</span> <span class="mi">0</span><span class="p">;</span>
+                    <span class="n">byte</span><span class="o">*</span> <span class="n">gPtr</span> <span class="o">=</span> <span class="n">colorPtr</span> <span class="o">+</span> <span class="n">channelSize</span> <span class="o">*</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="n">byte</span><span class="o">*</span> <span class="n">bPtr</span> <span class="o">=</span> <span class="n">colorPtr</span> <span class="o">+</span> <span class="n">channelSize</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+                    <span class="n">byte</span><span class="o">*</span> <span class="n">aPtr</span> <span class="o">=</span> <span class="n">colorPtr</span> <span class="o">+</span> <span class="n">channelSize</span> <span class="o">*</span> <span class="mi">3</span><span class="p">;</span>
+
+                    <span class="k">switch</span> <span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">format</span><span class="p">)</span>
+                    <span class="p">{</span>
+                    <span class="k">case</span> <span class="n">channel_format</span><span class="o">::</span><span class="nl">eight_bit</span><span class="p">:</span>
+                    <span class="p">{</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">rPtr</span> <span class="o">/</span> <span class="mf">255.f</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">g</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">gPtr</span> <span class="o">/</span> <span class="mf">255.f</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">bPtr</span> <span class="o">/</span> <span class="mf">255.f</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">aPtr</span> <span class="o">/</span> <span class="mf">255.f</span><span class="p">);</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">case</span> <span class="n">channel_format</span><span class="o">::</span><span class="nl">sixteen_bit</span><span class="p">:</span>
+                    <span class="p">{</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">uint16</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">rPtr</span><span class="p">)</span> <span class="o">/</span> <span class="mf">65535.f</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">g</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">uint16</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">gPtr</span><span class="p">)</span> <span class="o">/</span> <span class="mf">65535.f</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">uint16</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">bPtr</span><span class="p">)</span> <span class="o">/</span> <span class="mf">65535.f</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">uint16</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">aPtr</span><span class="p">)</span> <span class="o">/</span> <span class="mf">65535.f</span><span class="p">);</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">case</span> <span class="n">channel_format</span><span class="o">::</span><span class="nl">float_hdr</span><span class="p">:</span>
+                    <span class="p">{</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">r</span> <span class="o">=</span> <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">rPtr</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">g</span> <span class="o">=</span> <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">gPtr</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">bPtr</span><span class="p">);</span>
+                        <span class="n">color</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">aPtr</span><span class="p">);</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="p">}</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="p">}</span>
+
+                <span class="n">output</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">color</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_colorsLock</span><span class="p">);</span>
+            <span class="n">m_colors</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">ptr</span><span class="p">)));</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">output</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&amp;</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">read_colors</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_colorsLock</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_colors</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">process_raw</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">*</span><span class="n">m_colors</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">image</span><span class="o">&amp;&gt;</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">get_raw_image</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_colorsLock</span><span class="p">);</span>
+        <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">image</span><span class="p">]</span> <span class="o">=</span> <span class="o">*</span><span class="n">m_images</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
+        <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">lock</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">image</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="n">image_handle</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">create_image</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">image_import_settings</span> <span class="n">settings</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_imagesLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_images</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+                <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">file</span><span class="p">.</span><span class="n">is_valid</span><span class="p">()</span> <span class="o">||</span> <span class="o">!</span><span class="n">file</span><span class="p">.</span><span class="n">file_info</span><span class="p">().</span><span class="n">is_file</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">invalid_image_handle</span><span class="p">;</span>
+
+        <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">AssetImporter</span><span class="o">::</span><span class="n">tryLoad</span><span class="o">&lt;</span><span class="n">image</span><span class="o">&gt;</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">settings</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">common</span><span class="o">::</span><span class="n">valid</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">invalid_image_handle</span><span class="p">;</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_imagesLock</span><span class="p">);</span>
+            <span class="k">auto</span><span class="o">*</span> <span class="n">pair_ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">image</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">image</span><span class="o">&gt;</span><span class="p">(</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">(),</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">result</span><span class="p">)));</span>
+            <span class="n">pair_ptr</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">m_id</span> <span class="o">=</span> <span class="n">id</span><span class="p">;</span>
+            <span class="n">m_images</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">image</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">pair_ptr</span><span class="p">)));</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="n">image_handle</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_imagesLock</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_images</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+            <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+        <span class="k">return</span> <span class="n">invalid_image_handle</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">image_handle</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_imagesLock</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_images</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+            <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+        <span class="k">return</span> <span class="n">invalid_image_handle</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">destroy_image</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_imagesLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_images</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">m_images</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_colorsLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_colors</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+                <span class="n">m_colors</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">destroy_image</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_imagesLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_images</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">m_images</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_colorsLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_colors</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+                <span class="n">m_colors</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_image.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

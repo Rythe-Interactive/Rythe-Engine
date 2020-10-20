@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1physics_1_1_temp_line:
+
+Struct TempLine
+===============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_colliders_physicscollider.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::physics::TempLine
+   :members:
+   :protected-members:
+   :undoc-members:

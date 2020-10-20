@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1adfa0c169663ade27841c113701cf3ce5:
+
+Typedef legion::core::byte_vec
+==============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::byte_vec

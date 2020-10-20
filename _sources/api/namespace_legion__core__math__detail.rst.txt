@@ -1,0 +1,36 @@
+
+.. _namespace_legion__core__math__detail:
+
+Namespace legion::core::math::detail
+====================================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_constants_8hpp_1afa1df89074e5e8598f53426518c59dc9`
+
+- :ref:`exhale_variable_constants_8hpp_1abef6504fe9bc67854ea5fc56825c66d0`
+
+- :ref:`exhale_variable_constants_8hpp_1afa8bf5d4492046b87c79774f4f3ee1bf`
+
+- :ref:`exhale_variable_constants_8hpp_1ad9bbb5eb9b43d17f7d18e39271e81310`
+
+- :ref:`exhale_variable_constants_8hpp_1a4b6eb7e17dbfa89108620c8202a9009b`
+
+- :ref:`exhale_variable_constants_8hpp_1ac3876df177d6e80750d0751a5851f606`
+
+- :ref:`exhale_variable_constants_8hpp_1aad3f86e75aaa14fde1e2115e8b22b409`
+
+- :ref:`exhale_variable_constants_8hpp_1aec946c331ea85275e6fb72881c8e4a6a`
+
+- :ref:`exhale_variable_constants_8hpp_1a8c9711ee063e78929cc6b883de399b7c`

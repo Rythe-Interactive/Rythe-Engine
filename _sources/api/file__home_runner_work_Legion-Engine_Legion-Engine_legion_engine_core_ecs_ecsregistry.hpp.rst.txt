@@ -1,0 +1,108 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_ecsregistry.hpp:
+
+File ecsregistry.hpp
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/ecs``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/ecs/ecsregistry.hpp``)
+-----------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_ecsregistry.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/async/async.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_async.hpp`)
+
+- ``core/common/common.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_common.hpp`)
+
+- ``core/containers/containers.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_containers.hpp`)
+
+- ``core/ecs/archetype.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_archetype.hpp`)
+
+- ``core/ecs/archetype.inl`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_archetype.inl`)
+
+- ``core/ecs/component_container.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_container.hpp`)
+
+- ``core/ecs/entity_handle.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entity_handle.hpp`)
+
+- ``core/ecs/entity_handle.inl`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entity_handle.inl`)
+
+- ``core/ecs/entityquery.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entityquery.hpp`)
+
+- ``core/ecs/queryregistry.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_queryregistry.hpp`)
+
+- ``core/types/types.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_types.hpp`)
+
+- ``memory``
+
+- ``utility``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_handle.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_ecs.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_ecsregistry.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entity_handle.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entityquery.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_queryregistry.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_engine.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_module.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_system.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__ecs`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1component__handle`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1_ecs_registry`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1ecs_1_1entity__data`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_ecsregistry_8hpp_1aaeff79d2f483f572ac5b113eff52f2cc`
+

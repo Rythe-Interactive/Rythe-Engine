@@ -1,0 +1,36 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_halfedgeface.hpp:
+
+Program Listing for File halfedgeface.hpp
+=========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_halfedgeface.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/halfedgeface.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/core.hpp>
+   
+   namespace legion::physics
+   {
+       struct HalfEdgeEdge;
+   
+       struct HalfEdgeFace
+       {
+           HalfEdgeEdge* startEdge;
+           math::vec3 normal;
+           math::vec3 centroid;
+           std::string id;
+   
+           HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
+   
+           void forEachEdge(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute);
+           
+   
+           ~HalfEdgeFace();
+   
+   
+       };
+   }

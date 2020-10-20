@@ -1,0 +1,39 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_module_applicationmodule.hpp:
+
+Program Listing for File applicationmodule.hpp
+==============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_module_applicationmodule.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/application/module/applicationmodule.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <application/context/contexthelper.hpp>
+   #include <application/window/window.hpp>
+   #include <application/window/windowsystem.hpp>
+   #include <application/input/inputsystem.hpp>
+   
+   namespace legion::application
+   {
+       class ApplicationModule : public Module
+       {
+       public:
+           virtual void setup() override
+           {
+               addProcessChain("Rendering");
+               addProcessChain("Input");
+               reportComponentType<window>();
+               reportSystem<WindowSystem>();
+               reportSystem<InputSystem>();
+           }
+   
+           virtual priority_type priority() override
+           {
+               return 100;
+           }
+   
+       };
+   }

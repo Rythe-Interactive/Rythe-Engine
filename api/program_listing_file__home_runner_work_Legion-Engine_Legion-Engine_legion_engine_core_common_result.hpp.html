@@ -1,0 +1,490 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File result.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File result.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-result-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-common-result-hpp"></span><h1>Program Listing for File result.hpp<a class="headerlink" href="#program-listing-for-file-result-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_result.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-common-result-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/common/result.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;tuple&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;type_traits&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdexcept&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;utility&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;core/platform/platform.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">common</span> <span class="p">{</span>
+
+
+    <span class="k">class</span> <span class="nc">result_ident</span> <span class="p">{};</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="k">class</span> <span class="nc">result</span><span class="p">;</span>
+
+    <span class="k">class</span> <span class="nc">ok_ident</span> <span class="p">{};</span>
+    <span class="k">class</span> <span class="nc">err_ident</span> <span class="p">{};</span>
+    <span class="k">struct</span> <span class="n">tuple_create_helper</span> <span class="p">{};</span>
+    <span class="k">template</span><span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">Stuff</span><span class="o">&gt;</span> <span class="k">struct</span> <span class="n">many_t</span> <span class="p">{};</span>
+
+    <span class="k">using</span> <span class="n">empty_t</span> <span class="o">=</span> <span class="n">many_t</span><span class="o">&lt;&gt;</span><span class="p">;</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Original</span><span class="o">&gt;</span>   <span class="k">struct</span> <span class="n">try_static_cast_result</span><span class="p">;</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Original</span><span class="o">&gt;</span>           <span class="k">struct</span> <span class="n">try_static_cast_result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span> <span class="n">Original</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">using</span> <span class="n">type</span> <span class="o">=</span> <span class="n">Original</span><span class="p">;</span> <span class="p">};</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Original</span><span class="o">&gt;</span>   <span class="k">struct</span> <span class="n">try_static_cast_result</span> <span class="p">{</span> <span class="k">using</span> <span class="n">type</span> <span class="o">=</span> <span class="n">T</span><span class="p">;</span> <span class="p">};</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Original</span><span class="o">&gt;</span>
+    <span class="k">auto</span> <span class="n">try_static_cast</span><span class="p">(</span><span class="k">const</span> <span class="n">Original</span><span class="o">&amp;</span> <span class="n">o</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="k">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="kt">void</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">)</span> <span class="k">return</span> <span class="n">o</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">o</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="cm">/********************************************************************************/</span>
+    <span class="k">template</span><span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">Any</span><span class="o">&gt;</span>
+    <span class="k">class</span> <span class="nc">ok_proxy</span><span class="p">;</span>
+
+    <span class="k">template</span> <span class="o">&lt;&gt;</span>                         <span class="k">class</span> <span class="nc">ok_proxy</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="o">:</span> <span class="k">public</span> <span class="n">ok_ident</span>
+    <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">ok_proxy</span><span class="p">(</span><span class="n">ok_proxy</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">ok_proxy</span><span class="p">()</span> <span class="p">{}</span>
+        <span class="k">operator</span> <span class="n">ok_proxy</span><span class="o">&lt;&gt;</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="k">template</span> <span class="o">&lt;&gt;</span>                         <span class="k">class</span> <span class="nc">ok_proxy</span><span class="o">&lt;&gt;</span> <span class="o">:</span> <span class="k">public</span> <span class="n">ok_ident</span>
+    <span class="p">{</span>
+        <span class="k">operator</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>                  <span class="k">class</span> <span class="nc">ok_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">:</span> <span class="k">public</span> <span class="n">ok_ident</span>
+    <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">ok_proxy</span><span class="p">(</span><span class="n">ok_proxy</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">ok_proxy</span><span class="p">(</span><span class="n">T</span> <span class="n">val</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_val</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">val</span><span class="p">))</span> <span class="p">{}</span>
+        <span class="k">explicit</span> <span class="n">ok_proxy</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">tpl</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_val</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">tpl</span><span class="p">))</span> <span class="p">{}</span>
+        <span class="k">explicit</span> <span class="n">ok_proxy</span><span class="p">(</span><span class="n">tuple_create_helper</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">tpl</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_val</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">tpl</span><span class="p">))</span> <span class="p">{}</span>
+
+        <span class="k">operator</span> <span class="n">T</span><span class="o">&amp;</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_val</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">operator</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_val</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="n">T</span> <span class="n">m_val</span><span class="p">;</span>
+
+    <span class="p">};</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span> <span class="n">Any</span><span class="o">&gt;</span>    <span class="k">class</span> <span class="nc">ok_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span> <span class="o">:</span> <span class="k">public</span> <span class="n">ok_ident</span>
+    <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">using</span> <span class="n">tuple_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">ok_proxy</span><span class="p">(</span><span class="n">ok_proxy</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;!</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">tuple_create_helper</span><span class="o">&gt;::</span><span class="n">value</span><span class="o">&gt;&gt;</span>
+        <span class="n">ok_proxy</span><span class="p">(</span><span class="n">T</span> <span class="n">val</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="o">:</span> <span class="n">ok_proxy</span><span class="p">(</span><span class="n">tuple_create_helper</span><span class="p">{},</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">val</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">args</span><span class="p">)...))</span> <span class="p">{}</span>
+        <span class="k">explicit</span> <span class="n">ok_proxy</span><span class="p">(</span><span class="n">tuple_type</span>  <span class="n">tpl</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_values</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">tpl</span><span class="p">))</span> <span class="p">{}</span>
+        <span class="k">explicit</span> <span class="n">ok_proxy</span><span class="p">(</span><span class="n">tuple_create_helper</span><span class="p">,</span> <span class="n">tuple_type</span> <span class="n">tpl</span><span class="p">)</span> <span class="o">:</span><span class="n">m_values</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">tpl</span><span class="p">))</span> <span class="p">{}</span>
+
+        <span class="k">operator</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span> <span class="p">...</span><span class="o">&gt;</span><span class="p">()</span>  <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">m_values</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">operator</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;&amp;</span> <span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_values</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="n">tuple_type</span> <span class="n">m_values</span><span class="p">;</span>
+
+    <span class="p">};</span>
+
+    <span class="kr">inline</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;::</span><span class="k">operator</span> <span class="n">ok_proxy</span><span class="o">&lt;&gt;</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ok_proxy</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">Ok</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">{};</span>
+    <span class="p">}</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span><span class="n">Any</span><span class="p">,</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;!</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">result_ident</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;&amp;</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Any</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
+    <span class="kr">inline</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">Ok</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">,</span> <span class="n">Any</span><span class="o">&amp;&amp;</span> <span class="p">...</span> <span class="n">any</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="n">any</span><span class="p">)...);</span>
+    <span class="p">}</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span><span class="n">Any</span><span class="p">,</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;!</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">result_ident</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;&amp;</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Any</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
+    <span class="kr">inline</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">Ok</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">,</span> <span class="n">Any</span><span class="o">&amp;&amp;</span> <span class="p">...</span> <span class="n">any</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="n">any</span><span class="p">)...);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+    <span class="kr">inline</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">Ok</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">args</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">apply</span><span class="p">(</span><span class="n">Ok</span><span class="p">,</span> <span class="n">args</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+    <span class="kr">inline</span> <span class="k">typename</span> <span class="n">result</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;::</span><span class="n">ok_type</span> <span class="n">Ok_of</span><span class="p">(</span><span class="n">result</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;&amp;</span> <span class="n">res</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="n">res</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+    <span class="p">}</span>
+    <span class="cm">/********************************************************************************/</span>
+
+
+    <span class="cm">/********************************************************************************/</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">Any</span><span class="o">&gt;</span>
+    <span class="k">class</span> <span class="nc">err_proxy</span><span class="p">;</span>
+
+    <span class="k">template</span> <span class="o">&lt;&gt;</span>                         <span class="k">class</span> <span class="nc">err_proxy</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="o">:</span> <span class="k">public</span> <span class="n">err_ident</span>
+    <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">err_proxy</span><span class="p">()</span> <span class="p">{}</span>
+        <span class="k">operator</span> <span class="n">err_proxy</span><span class="o">&lt;&gt;</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="k">template</span> <span class="o">&lt;&gt;</span>                         <span class="k">class</span> <span class="nc">err_proxy</span><span class="o">&lt;&gt;</span> <span class="o">:</span> <span class="k">public</span> <span class="n">err_ident</span>
+    <span class="p">{</span>
+        <span class="k">operator</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>                  <span class="k">class</span> <span class="nc">err_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">:</span> <span class="k">public</span> <span class="n">err_ident</span>
+    <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">err_proxy</span><span class="p">(</span><span class="n">err_proxy</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">err_proxy</span><span class="p">(</span><span class="n">T</span>  <span class="n">val</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_val</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">val</span><span class="p">))</span> <span class="p">{}</span>
+        <span class="k">explicit</span> <span class="n">err_proxy</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">T</span> <span class="o">&gt;&amp;</span> <span class="n">tpl</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_val</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">tpl</span><span class="p">))</span> <span class="p">{}</span>
+        <span class="k">explicit</span> <span class="n">err_proxy</span><span class="p">(</span><span class="n">tuple_create_helper</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">T</span> <span class="o">&gt;&amp;</span> <span class="n">tpl</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_val</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">tpl</span><span class="p">))</span> <span class="p">{}</span>
+
+        <span class="k">operator</span> <span class="n">T</span><span class="o">&amp;</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_val</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">operator</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_val</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="n">T</span>  <span class="n">m_val</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span> <span class="n">Any</span><span class="o">&gt;</span>    <span class="k">class</span> <span class="nc">err_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span> <span class="o">:</span> <span class="k">public</span> <span class="n">err_ident</span>
+    <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">using</span> <span class="n">tuple_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span> <span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;!</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">tuple_create_helper</span><span class="o">&gt;::</span><span class="n">value</span><span class="o">&gt;&gt;</span>
+        <span class="n">err_proxy</span><span class="p">(</span><span class="n">T</span>  <span class="n">val</span><span class="p">,</span> <span class="n">Any</span> <span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="o">:</span> <span class="n">err_proxy</span><span class="p">(</span><span class="n">tuple_create_helper</span><span class="p">{},</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">val</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">args</span><span class="p">...)))</span> <span class="p">{}</span>
+        <span class="k">explicit</span> <span class="n">err_proxy</span><span class="p">(</span><span class="n">tuple_type</span>  <span class="n">tpl</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_values</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">tpl</span><span class="p">))</span> <span class="p">{}</span>
+        <span class="k">explicit</span> <span class="n">err_proxy</span><span class="p">(</span><span class="n">tuple_create_helper</span><span class="p">,</span> <span class="n">tuple_type</span>  <span class="n">tpl</span><span class="p">)</span> <span class="o">:</span><span class="n">m_values</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">tpl</span><span class="p">))</span> <span class="p">{}</span>
+
+        <span class="k">operator</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span> <span class="p">...</span><span class="o">&gt;&amp;</span> <span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_values</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">operator</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span> <span class="p">...</span><span class="o">&gt;&amp;</span> <span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_values</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="n">tuple_type</span> <span class="n">m_values</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="kr">inline</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;::</span><span class="k">operator</span> <span class="n">err_proxy</span><span class="o">&lt;&gt;</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">err_proxy</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">Err</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">{};</span>
+    <span class="p">}</span>
+
+
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span><span class="n">Any</span><span class="p">,</span>
+         <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;!</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">result_ident</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">remove_reference</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span> <span class="o">&amp;&amp;</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Any</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
+    <span class="kr">inline</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">Err</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">,</span> <span class="n">Any</span><span class="o">&amp;&amp;</span> <span class="p">...</span> <span class="n">any</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="n">any</span><span class="p">)...);</span>
+    <span class="p">}</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span><span class="n">Any</span><span class="p">,</span>
+       <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;!</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">result_ident</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">remove_reference</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span> <span class="o">&amp;&amp;</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Any</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
+    <span class="kr">inline</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">Err</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">,</span> <span class="n">Any</span><span class="o">&amp;&amp;</span> <span class="p">...</span> <span class="n">any</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="n">any</span><span class="p">)...);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+    <span class="kr">inline</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">Err</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">args</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">apply</span><span class="p">(</span><span class="n">Err</span><span class="p">,</span> <span class="n">args</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+    <span class="kr">inline</span> <span class="k">typename</span> <span class="n">result</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;::</span><span class="n">err_type</span> <span class="n">Err_of</span><span class="p">(</span><span class="n">result</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;&amp;</span> <span class="n">res</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="n">res</span><span class="p">.</span><span class="n">get_error</span><span class="p">());</span>
+    <span class="p">}</span>
+
+    <span class="cm">/********************************************************************************/</span>
+
+
+
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">Lots</span><span class="o">&gt;</span>
+    <span class="k">class</span> <span class="nc">result_impl</span><span class="p">;</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">OkType</span><span class="p">,</span> <span class="k">class</span> <span class="nc">ErrType</span><span class="p">,</span> <span class="k">class</span> <span class="nc">OkResultType</span><span class="p">,</span> <span class="k">class</span> <span class="nc">ErrResultType</span><span class="o">&gt;</span>
+    <span class="k">class</span> <span class="nc">result_impl</span><span class="o">&lt;</span><span class="n">OkType</span><span class="p">,</span> <span class="n">ErrType</span><span class="p">,</span> <span class="n">OkResultType</span><span class="p">,</span> <span class="n">ErrResultType</span><span class="o">&gt;</span>
+    <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">using</span> <span class="n">err_type</span> <span class="o">=</span> <span class="n">ErrType</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">ok_type</span> <span class="o">=</span> <span class="n">OkType</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">err_result_t</span> <span class="o">=</span> <span class="n">ErrResultType</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">ok_result_t</span> <span class="o">=</span> <span class="n">OkResultType</span><span class="p">;</span>
+
+        <span class="n">result_impl</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">ok_type</span><span class="o">&gt;</span>  <span class="n">ok</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">err_type</span><span class="o">&gt;</span>  <span class="n">err</span><span class="p">)</span> <span class="o">:</span>
+            <span class="n">m_err</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">err</span><span class="p">)),</span> <span class="n">m_ok</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">ok</span><span class="p">))</span> <span class="p">{}</span>
+        <span class="n">result_impl</span><span class="p">(</span><span class="k">const</span> <span class="n">result_impl</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+        <span class="n">result_impl</span><span class="p">(</span><span class="n">result_impl</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">result_impl</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">result_impl</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+        <span class="n">result_impl</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">result_impl</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
+        <span class="k">virtual</span> <span class="o">~</span><span class="n">result_impl</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
+        <span class="k">typename</span> <span class="n">try_static_cast_result</span><span class="o">&lt;</span><span class="n">ok_result_t</span><span class="p">,</span> <span class="n">ok_type</span><span class="o">&gt;::</span><span class="n">type</span>  <span class="n">get</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_ok</span><span class="p">)</span> <span class="k">return</span> <span class="n">try_static_cast</span><span class="o">&lt;</span><span class="n">ok_result_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="o">*</span><span class="n">m_ok</span><span class="p">.</span><span class="n">get</span><span class="p">()));</span>
+            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">m_err</span><span class="p">)</span> <span class="k">throw</span> <span class="n">try_static_cast</span><span class="o">&lt;</span><span class="n">err_result_t</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="n">m_err</span><span class="p">);</span>
+            <span class="k">else</span> <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">&quot;both ok and err were empty!&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">operator</span> <span class="k">typename</span> <span class="n">try_static_cast_result</span><span class="o">&lt;</span><span class="n">ok_result_t</span><span class="p">,</span> <span class="n">ok_type</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">get</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">operator</span> <span class="k">typename</span> <span class="n">try_static_cast_result</span><span class="o">&lt;</span><span class="n">ok_result_t</span><span class="p">,</span> <span class="n">ok_type</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">get</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="n">valid</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_ok</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">bool</span> <span class="n">has_err</span><span class="p">()</span> <span class="k">noexcept</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_err</span> <span class="o">!=</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">m_ok</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">L_NODISCARD</span> <span class="k">const</span> <span class="k">typename</span> <span class="n">try_static_cast_result</span><span class="o">&lt;</span><span class="n">err_result_t</span><span class="p">,</span> <span class="n">err_type</span><span class="o">&gt;::</span><span class="n">type</span><span class="o">&amp;</span> <span class="n">get_error</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_err</span><span class="p">)</span> <span class="k">return</span> <span class="n">try_static_cast</span><span class="o">&lt;</span><span class="n">err_result_t</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="n">m_err</span><span class="p">);</span>
+            <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">&quot;this result would have been valid!&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">L_NODISCARD</span> <span class="k">typename</span> <span class="n">try_static_cast_result</span><span class="o">&lt;</span><span class="n">err_result_t</span><span class="p">,</span> <span class="n">err_type</span><span class="o">&gt;::</span><span class="n">type</span> <span class="n">get_error</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_err</span><span class="p">)</span> <span class="k">return</span> <span class="n">try_static_cast</span><span class="o">&lt;</span><span class="n">err_result_t</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="n">m_err</span><span class="p">);</span>
+            <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">&quot;this result would have been valid!&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">L_NORETURN</span> <span class="kt">void</span> <span class="n">rethrow</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">throw</span> <span class="n">try_static_cast</span><span class="o">&lt;</span><span class="n">err_result_t</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="n">m_err</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="kt">void</span> <span class="n">maybe_rethrow</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">has_err</span><span class="p">())</span> <span class="n">rethrow</span><span class="p">();</span>
+        <span class="p">}</span>
+
+    <span class="k">protected</span><span class="o">:</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">err_type</span><span class="o">&gt;</span> <span class="n">m_err</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">ok_type</span><span class="o">&gt;</span> <span class="n">m_ok</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">OkArgs</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span> <span class="n">ErrArgs</span><span class="o">&gt;</span>
+    <span class="k">class</span> <span class="nc">result</span><span class="o">&lt;</span><span class="n">many_t</span><span class="o">&lt;</span><span class="n">OkArgs</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">many_t</span><span class="o">&lt;</span><span class="n">ErrArgs</span><span class="p">...</span><span class="o">&gt;&gt;</span> <span class="o">:</span>
+        <span class="k">public</span> <span class="n">result_impl</span><span class="o">&lt;</span><span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">OkArgs</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">ErrArgs</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">OkArgs</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">ErrArgs</span><span class="p">...</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+        <span class="k">public</span> <span class="n">result_ident</span> <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">using</span> <span class="n">rimpl</span> <span class="o">=</span> <span class="n">result_impl</span><span class="o">&lt;</span><span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">OkArgs</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">ErrArgs</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">OkArgs</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">ErrArgs</span><span class="p">...</span><span class="o">&gt;&gt;</span><span class="p">;</span>
+        <span class="n">result</span><span class="p">(</span><span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">OkArgs</span><span class="p">...</span><span class="o">&gt;</span>  <span class="n">ok</span><span class="p">)</span> <span class="o">:</span> <span class="n">rimpl</span><span class="p">((</span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">OkArgs</span><span class="p">...</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">ok</span><span class="p">))),</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{};</span>
+        <span class="n">result</span><span class="p">(</span><span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">ErrArgs</span><span class="p">...</span><span class="o">&gt;</span>  <span class="n">err</span><span class="p">)</span> <span class="o">:</span> <span class="n">rimpl</span><span class="p">(</span><span class="k">nullptr</span><span class="p">,</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">ErrArgs</span><span class="p">...</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">err</span><span class="p">))))</span> <span class="p">{};</span>
+        <span class="k">using</span> <span class="n">rimpl</span><span class="o">::</span><span class="k">operator</span> <span class="k">typename</span> <span class="n">try_static_cast_result</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">OkArgs</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">OkArgs</span><span class="p">...</span><span class="o">&gt;&gt;::</span><span class="n">type</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">ErrType</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+    <span class="k">class</span> <span class="nc">result</span><span class="o">&lt;</span><span class="n">many_t</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">ErrType</span><span class="o">&gt;</span> <span class="o">:</span>
+        <span class="k">public</span> <span class="n">result_impl</span><span class="o">&lt;</span><span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">ErrType</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">ErrType</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="k">public</span> <span class="n">result_ident</span> <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">using</span> <span class="n">rimpl</span> <span class="o">=</span> <span class="n">result_impl</span><span class="o">&lt;</span><span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">ErrType</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">ErrType</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">result</span><span class="p">(</span><span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span>  <span class="n">ok</span><span class="p">)</span> <span class="o">:</span> <span class="n">rimpl</span><span class="p">((</span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">ok</span><span class="p">))),</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{};</span>
+        <span class="n">result</span><span class="p">(</span><span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">ErrType</span><span class="o">&gt;</span>  <span class="n">err</span><span class="p">)</span> <span class="o">:</span> <span class="n">rimpl</span><span class="p">(</span><span class="k">nullptr</span><span class="p">,</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">ErrType</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">err</span><span class="p">))))</span> <span class="p">{};</span>
+        <span class="k">using</span> <span class="n">rimpl</span><span class="o">::</span><span class="k">operator</span> <span class="k">typename</span> <span class="n">try_static_cast_result</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;&gt;::</span><span class="n">type</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">OkType</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+    <span class="k">class</span> <span class="nc">result</span><span class="o">&lt;</span><span class="n">OkType</span><span class="p">,</span> <span class="n">many_t</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;&gt;</span> <span class="o">:</span>
+        <span class="k">public</span> <span class="n">result_impl</span><span class="o">&lt;</span><span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">OkType</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">OkType</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+        <span class="k">public</span> <span class="n">result_ident</span> <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">using</span> <span class="n">rimpl</span> <span class="o">=</span> <span class="n">result_impl</span><span class="o">&lt;</span><span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">OkType</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">OkType</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;&gt;</span><span class="p">;</span>
+        <span class="n">result</span><span class="p">(</span><span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">OkType</span><span class="o">&gt;</span>  <span class="n">ok</span><span class="p">)</span> <span class="o">:</span> <span class="n">rimpl</span><span class="p">((</span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">OkType</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">ok</span><span class="p">))),</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{};</span>
+        <span class="n">result</span><span class="p">(</span><span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span>  <span class="n">err</span><span class="p">)</span> <span class="o">:</span> <span class="n">rimpl</span><span class="p">(</span><span class="k">nullptr</span><span class="p">,</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">err</span><span class="p">))))</span> <span class="p">{};</span>
+        <span class="k">using</span> <span class="n">rimpl</span><span class="o">::</span><span class="k">operator</span> <span class="k">typename</span> <span class="n">try_static_cast_result</span><span class="o">&lt;</span><span class="n">OkType</span><span class="p">,</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">OkType</span><span class="o">&gt;&gt;::</span><span class="n">type</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">OkType</span><span class="p">,</span> <span class="k">class</span> <span class="nc">ErrType</span><span class="o">&gt;</span>
+    <span class="k">class</span> <span class="nc">result</span><span class="o">&lt;</span><span class="n">OkType</span><span class="p">,</span> <span class="n">ErrType</span><span class="o">&gt;</span> <span class="o">:</span>
+        <span class="k">public</span> <span class="n">result_impl</span><span class="o">&lt;</span><span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">OkType</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">ErrType</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">OkType</span><span class="p">,</span> <span class="n">ErrType</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="k">public</span> <span class="n">result_ident</span> <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">using</span> <span class="n">rimpl</span> <span class="o">=</span> <span class="n">result_impl</span><span class="o">&lt;</span><span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">OkType</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">ErrType</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">OkType</span><span class="p">,</span> <span class="n">ErrType</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">result</span><span class="p">(</span><span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">OkType</span><span class="o">&gt;</span>  <span class="n">ok</span><span class="p">)</span> <span class="o">:</span> <span class="n">rimpl</span><span class="p">((</span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">OkType</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">ok</span><span class="p">))),</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{};</span>
+        <span class="n">result</span><span class="p">(</span><span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">ErrType</span><span class="o">&gt;</span>  <span class="n">err</span><span class="p">)</span> <span class="o">:</span> <span class="n">rimpl</span><span class="p">(</span><span class="k">nullptr</span><span class="p">,</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">ErrType</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">err</span><span class="p">))))</span> <span class="p">{};</span>
+        <span class="k">using</span> <span class="n">rimpl</span><span class="o">::</span><span class="k">operator</span> <span class="k">typename</span> <span class="n">try_static_cast_result</span><span class="o">&lt;</span><span class="n">OkType</span><span class="p">,</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">OkType</span><span class="o">&gt;&gt;::</span><span class="n">type</span><span class="p">;</span>
+    <span class="p">};</span>
+
+
+    <span class="k">class</span> <span class="nc">valid_t</span> <span class="p">{};</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Result</span><span class="o">&gt;</span>
+    <span class="k">class</span> <span class="nc">result_decay</span>
+    <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">using</span> <span class="n">ok_type</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">Result</span><span class="o">::</span><span class="n">ok_result_t</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">err_type</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">Result</span><span class="o">::</span><span class="n">err_result_t</span><span class="p">;</span>
+
+        <span class="n">result_decay</span><span class="p">(</span><span class="n">Result</span> <span class="n">r</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_r</span><span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="p">}</span> <span class="p">{}</span>
+
+        <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="n">valid_t</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_r</span><span class="p">.</span><span class="n">valid</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="kt">bool</span> <span class="k">operator</span><span class="o">!=</span><span class="p">(</span><span class="n">valid_t</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_r</span><span class="p">.</span><span class="n">has_err</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">nullptr_t</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_r</span><span class="p">.</span><span class="n">has_err</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="kt">bool</span> <span class="k">operator</span><span class="o">!=</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">nullptr_t</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_r</span><span class="p">.</span><span class="n">valid</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">operator</span> <span class="n">ok_type</span> <span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_r</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">operator</span> <span class="n">Result</span> <span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_r</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">auto</span> <span class="n">decay</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="k">decltype</span><span class="p">(</span><span class="k">auto</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_r</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="n">err_type</span> <span class="n">get_error</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_r</span><span class="p">.</span><span class="n">get_error</span><span class="p">();</span>
+        <span class="p">}</span>
+
+
+    <span class="k">private</span><span class="o">:</span>
+        <span class="n">Result</span> <span class="n">m_r</span><span class="p">;</span>
+
+    <span class="p">};</span>
+
+
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="n">class</span><span class="p">...</span><span class="n">Args</span><span class="o">&gt;</span>
+    <span class="k">using</span> <span class="n">result_decay_more</span> <span class="o">=</span> <span class="n">result_decay</span><span class="o">&lt;</span><span class="n">result</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;&gt;</span><span class="p">;</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span><span class="k">class</span> <span class="nc">E</span><span class="o">&gt;</span>
+    <span class="k">auto</span> <span class="n">decay</span><span class="p">(</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="n">E</span><span class="o">&gt;&amp;</span> <span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span><span class="k">decltype</span><span class="p">(</span><span class="k">auto</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">x</span><span class="p">.</span><span class="n">get</span><span class="p">();</span> <span class="p">}</span>
+
+    <span class="k">constexpr</span> <span class="n">valid_t</span> <span class="n">valid</span><span class="p">{};</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_result.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

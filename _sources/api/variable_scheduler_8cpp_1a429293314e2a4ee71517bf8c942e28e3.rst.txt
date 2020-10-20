@@ -1,0 +1,13 @@
+.. _exhale_variable_scheduler_8cpp_1a429293314e2a4ee71517bf8c942e28e3:
+
+Variable legion::core::scheduling::reserved_threads
+===================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_scheduler.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::scheduling::reserved_threads

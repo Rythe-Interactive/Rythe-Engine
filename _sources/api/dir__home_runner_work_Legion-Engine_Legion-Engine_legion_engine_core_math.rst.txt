@@ -1,0 +1,24 @@
+.. _dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math:
+
+
+Directory math
+==============
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/math``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_color.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_constants.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_math.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_precision.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_trigonometry.hpp`
+
+

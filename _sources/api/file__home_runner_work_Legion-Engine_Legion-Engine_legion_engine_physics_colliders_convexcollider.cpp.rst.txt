@@ -1,0 +1,54 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_colliders_convexcollider.cpp:
+
+File convexcollider.cpp
+=======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_colliders>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/colliders``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/colliders/convexcollider.cpp``)
+-----------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_colliders_convexcollider.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``physics/colliders/convexcollider.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_colliders_convexcollider.hpp`)
+
+- ``physics/data/convexconvexpenetrationquery.h`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_convexconvexpenetrationquery.h`)
+
+- ``physics/data/edgepenetrationquery.h`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_edgepenetrationquery.h`)
+
+- ``physics/data/pointer_encapsulator.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_pointer_encapsulator.hpp`)
+
+- ``physics/physics_statics.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_statics.hpp`)
+
+- ``physics/systems/physicssystem.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_systems_physicssystem.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__physics`
+

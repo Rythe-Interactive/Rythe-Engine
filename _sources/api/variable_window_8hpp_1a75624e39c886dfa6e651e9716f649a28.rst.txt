@@ -1,0 +1,13 @@
+.. _exhale_variable_window_8hpp_1a75624e39c886dfa6e651e9716f649a28:
+
+Variable legion::application::invalid_window
+============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_window_window.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::application::invalid_window

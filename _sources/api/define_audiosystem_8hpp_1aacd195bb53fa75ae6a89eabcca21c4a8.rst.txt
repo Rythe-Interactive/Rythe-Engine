@@ -3,7 +3,7 @@
 Define AL_ALEXT_PROTOTYPES
 ==========================
 
-- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_audio_systems_audiosystem.hpp`
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_systems_audiosystem.hpp`
 
 
 Define Documentation

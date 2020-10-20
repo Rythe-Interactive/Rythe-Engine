@@ -1,0 +1,30 @@
+
+.. _namespace_legion__core__filesystem__literals:
+
+Namespace legion::core::filesystem::literals
+============================================
+
+
+Work the same as the above, but the path parameter is replaced by the string literal. 
+ 
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1filesystem_1_1literals_1a3932a7509c8fb974714f5209c374e9f1`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1filesystem_1_1literals_1adc374ddf6a3f6727d5f488611a476488`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1filesystem_1_1literals_1af86a45cc548f6951d8971f1ae9272675`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1filesystem_1_1literals_1ad9c9dd79e3c95860f6a215e04db59225`

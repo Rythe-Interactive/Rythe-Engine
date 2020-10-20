@@ -1,0 +1,50 @@
+
+.. _namespace_legion__core__async:
+
+Namespace legion::core::async
+=============================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classlegion_1_1core_1_1async_1_1mixed__multiguard`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1async_1_1readonly__guard`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1async_1_1readonly__multiguard`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1async_1_1readonly__rw__spinlock`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1async_1_1readwrite__guard`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1async_1_1readwrite__multiguard`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1async_1_1ring__sync__lock`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1async_1_1transferable__atomic`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_readonly__rw__spinlock_8hpp_1a7388d770ac6f90a39c06820935bc14c9`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_readonly__rw__spinlock_8hpp_1a89751c24fa6156877ab4556b15eb0ace`
+
+- :ref:`exhale_function_readonly__rw__spinlock_8hpp_1a882e9a409db10b6a954c63620d929ad7`

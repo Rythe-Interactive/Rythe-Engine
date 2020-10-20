@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1a9756c52cce62e7d61abb970ea027e732:
+
+Define legion_component_exists_error
+====================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: legion_component_exists_error

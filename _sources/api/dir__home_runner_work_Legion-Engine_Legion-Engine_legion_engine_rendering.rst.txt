@@ -1,0 +1,29 @@
+.. _dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering:
+
+
+Directory rendering
+===================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering``
+
+Subdirectories
+--------------
+
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_module`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems`
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_debugrendering.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_rendering.hpp`
+
+

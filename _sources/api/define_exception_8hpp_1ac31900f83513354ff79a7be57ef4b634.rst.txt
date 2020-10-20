@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1ac31900f83513354ff79a7be57ef4b634:
+
+Define legion_entity_exists_error
+=================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: legion_entity_exists_error

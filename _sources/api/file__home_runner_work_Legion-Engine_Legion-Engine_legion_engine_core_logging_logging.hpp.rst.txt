@@ -1,0 +1,161 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp:
+
+File logging.hpp
+================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/logging``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/logging/logging.hpp``)
+-----------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/common/exception.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`)
+
+- ``core/math/math.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_math.hpp`)
+
+- ``core/types/type_util.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.hpp`)
+
+- ``sstream``
+
+- ``thread``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_buffer.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_context.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_program.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_importers_mesh_importers.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults_defaultcomponents.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_engine.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_assetimporter.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_processchain.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_scheduler.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_scheduler.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_fmt`
+
+- :ref:`namespace_legion__core__log`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1ivec2_01_4`
+
+- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1quat_01_4`
+
+- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1vec2_01_4`
+
+- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1vec3_01_4`
+
+- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1vec4_01_4`
+
+- :ref:`exhale_struct_structfmt_1_1formatter_3_01legion_1_1core_1_1exception_01_4`
+
+- :ref:`exhale_struct_structfmt_1_1formatter_3_01legion_1_1core_1_1fs__error_01_4`
+
+- :ref:`exhale_struct_structfmt_1_1formatter_3_01std_1_1thread_1_1id_01_4`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1log_1_1impl`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1log_1_1genesis__formatter__flag`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1log_1_1thread__name__formatter__flag`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_logging_8hpp_1a592620764bd67e3790e122dabd6e6c90`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_logging_8hpp_1a0ab38b92fa73e8be4d115ea49f8f9933`
+
+- :ref:`exhale_function_logging_8hpp_1ae5ef258fc7e4c526320d96f4c760d763`
+
+- :ref:`exhale_function_logging_8hpp_1a40812bec682c10b0243e177749402b49`
+
+- :ref:`exhale_function_logging_8hpp_1af6bdbb0cae95777b8eff36aa57390bfa`
+
+- :ref:`exhale_function_logging_8hpp_1aa4009ea12a29f50e9290842ee5d1350c`
+
+- :ref:`exhale_function_logging_8hpp_1a063562e3bb7ff793c0dfb0f3864544c6`
+
+- :ref:`exhale_function_logging_8hpp_1abe0e85d380fb172533d537c70e04bb50`
+
+- :ref:`exhale_function_logging_8hpp_1af58b616f01d01b7b9e6b91c06107a8be`
+
+- :ref:`exhale_function_logging_8hpp_1a53f48f583b4910d55e5aeab12f7c41a0`
+
+- :ref:`exhale_function_logging_8hpp_1a09dbbe22a90101de3069deb359e7d325`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_logging_8hpp_1a69d4676733f5e850f451942b6d901382`
+
+- :ref:`exhale_define_logging_8hpp_1ab69de76884dab62f7806d8802f7f64e0`
+
+- :ref:`exhale_define_logging_8hpp_1a49b4952f117b467555d70a6087aeca74`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_logging_8hpp_1a85bcafb4c666bd69619ee0f06502aa28`
+

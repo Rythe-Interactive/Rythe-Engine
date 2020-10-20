@@ -1,0 +1,109 @@
+
+.. _namespace_legion__core__filesystem:
+
+Namespace legion::core::filesystem
+==================================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__filesystem__detail`
+
+- :ref:`namespace_legion__core__filesystem__literals`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1filesystem_1_1file__traits`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1filesystem_1_1filesystem__traits`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1filesystem_1_1provider__registry_1_1driver`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1filesystem_1_1view_1_1create__chain`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1artifact__cache`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1_asset_importer`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1filesystem_1_1basic__converter`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1basic__resolver`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1basic__resource`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1filesystem_1_1basic__resource__converter`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1filesystem__resolver`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1filesystem__resolver__common__base`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1mem__filesystem__resolver`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1memory__resolver__common__base`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1navigator`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1provider__registry`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1provider__registry_1_1resolver__sentinel`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1filesystem_1_1resource__converter`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1strpath__manip`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1_test`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1view`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_filemanip_8hpp_1a6208684a3eec7660e02244d6f0fd9848`
+
+- :ref:`exhale_function_traits_8hpp_1a52328aa3c70ec150dc49cbe92fb33b9e`
+
+- :ref:`exhale_function_traits_8hpp_1abf61dc52b48f2cba0b369c92d74bf71f`
+
+- :ref:`exhale_function_traits_8hpp_1a578966d8b76eefdb1f68fa9dd2c269f9`
+
+- :ref:`exhale_function_provider__registry_8cpp_1adf2df84103c5ca37cfb3817521c22ff4`
+
+- :ref:`exhale_function_traits_8hpp_1a99c56a54b3206ee327bf845432995552`
+
+- :ref:`exhale_function_provider__registry_8cpp_1a5415dcd5699bd1eebb1f15e32f5afca5`
+
+- :ref:`exhale_function_filemanip_8hpp_1a13d297ab40ca30c7c0b8c327e76b2d27`
+
+- :ref:`exhale_function_traits_8hpp_1a2484fe3d05cc184ffe2a0ad414e6f408`
+
+- :ref:`exhale_function_filemanip_8hpp_1ac76bffad89bd259e18a820ba36efc1fb`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_artifact__cache_8hpp_1a7a3bb5619fe349d9099e585686b956a3`
+
+- :ref:`exhale_variable_artifact__cache_8hpp_1a54c18805b6db6426b5e9243a5187294e`
+
+- :ref:`exhale_variable_artifact__cache_8hpp_1a4b61824ad20ea7e2ef384926c0e95406`
+
+- :ref:`exhale_variable_traits_8hpp_1a18f2ca0f1402d31f6a2649585dd28d94`
+
+- :ref:`exhale_variable_traits_8hpp_1a6cdaecf32f3edbcc05d9137af7003e7d`

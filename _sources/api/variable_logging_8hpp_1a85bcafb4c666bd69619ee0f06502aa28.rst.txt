@@ -1,0 +1,13 @@
+.. _exhale_variable_logging_8hpp_1a85bcafb4c666bd69619ee0f06502aa28:
+
+Variable legion::core::log::genesis
+===================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::log::genesis

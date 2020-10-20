@@ -1,0 +1,34 @@
+.. _dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs:
+
+
+Directory ecs
+=============
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/ecs``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_archetype.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_archetype.inl`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_container.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_handle.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_meta.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_ecs.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_ecsregistry.cpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_ecsregistry.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entity_handle.cpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entity_handle.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entity_handle.inl`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entityquery.cpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entityquery.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_queryregistry.cpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_queryregistry.hpp`
+
+

@@ -1,0 +1,28 @@
+.. _exhale_class_classlegion_1_1core_1_1ecs_1_1component__handle__base:
+
+Class component_handle_base
+===========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_handle.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public legion::core::ecs::component_handle< legion::application::window >`` (:ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1component__handle`)
+- ``public legion::core::ecs::component_handle< legion::physics::physicsComponent >`` (:ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1component__handle`)
+- ``public legion::core::ecs::component_handle< legion::physics::rigidbody >`` (:ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1component__handle`)
+- ``public legion::core::ecs::component_handle< component_type >`` (:ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1component__handle`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::ecs::component_handle_base
+   :members:
+   :protected-members:
+   :undoc-members:

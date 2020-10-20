@@ -24,8 +24,8 @@ Classes
 -------
 
 
-- :ref:`exhale_struct_structfmt_1_1formatter_3_01args_1_1core_1_1exception_01_4`
+- :ref:`exhale_struct_structfmt_1_1formatter_3_01legion_1_1core_1_1exception_01_4`
 
-- :ref:`exhale_struct_structfmt_1_1formatter_3_01args_1_1core_1_1fs__error_01_4`
+- :ref:`exhale_struct_structfmt_1_1formatter_3_01legion_1_1core_1_1fs__error_01_4`
 
 - :ref:`exhale_struct_structfmt_1_1formatter_3_01std_1_1thread_1_1id_01_4`

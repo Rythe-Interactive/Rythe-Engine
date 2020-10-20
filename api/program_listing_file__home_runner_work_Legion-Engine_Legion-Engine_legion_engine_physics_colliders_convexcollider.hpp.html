@@ -1,0 +1,438 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File convexcollider.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File convexcollider.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-convexcollider-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-colliders-convexcollider-hpp"></span><h1>Program Listing for File convexcollider.hpp<a class="headerlink" href="#program-listing-for-file-convexcollider-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_colliders_convexcollider.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-colliders-convexcollider-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/colliders/convexcollider.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/colliders/physicscollider.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/cube_collider_params.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/halfedgeedge.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/halfedgeface.hpp&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;physics/data/physics_manifold.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
+<span class="p">{</span>
+
+
+
+    <span class="k">class</span> <span class="nc">ConvexCollider</span> <span class="o">:</span> <span class="k">public</span> <span class="n">PhysicsCollider</span>
+    <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+
+        <span class="n">ConvexCollider</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
+        <span class="o">~</span><span class="n">ConvexCollider</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">face</span> <span class="p">:</span> <span class="n">halfEdgeFaces</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">delete</span> <span class="n">face</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">CheckCollision</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;</span> <span class="n">physicsCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="k">override</span>
+        <span class="p">{</span>
+            <span class="n">physicsCollider</span><span class="o">-&gt;</span><span class="n">CheckCollisionWith</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">manifold</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">CheckCollisionWith</span><span class="p">(</span><span class="n">ConvexCollider</span><span class="o">*</span> <span class="n">convexCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="k">override</span><span class="p">;</span>
+
+
+        <span class="kt">void</span> <span class="nf">PopulateContactPoints</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;</span> <span class="n">physicsCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="k">override</span>
+        <span class="p">{</span>
+            <span class="n">physicsCollider</span><span class="o">-&gt;</span><span class="n">PopulateContactPointsWith</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">manifold</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">PopulateContactPointsWith</span><span class="p">(</span><span class="n">ConvexCollider</span><span class="o">*</span> <span class="n">convexCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="k">override</span><span class="p">;</span>
+
+
+
+
+        <span class="c1">//inline void DrawColliderRepresentation(math::mat4 transform) override</span>
+        <span class="c1">//{</span>
+        <span class="c1">//    //draw edges</span>
+        <span class="c1">//    auto drawFunc = [transform](HalfEdgeEdge* edge)</span>
+        <span class="c1">//    {</span>
+        <span class="c1">//        //draw To Next Line</span>
+        <span class="c1">//        math::vec3 worldStart = transform * math::vec4(*(edge-&gt;edgePositionPtr), 1);</span>
+        <span class="c1">//        math::vec3 worldEnd = transform * math::vec4(*(edge-&gt;nextEdge-&gt;edgePositionPtr), 1);</span>
+
+        <span class="c1">//        debug::drawLine(__FUNC__ , __LINE__, worldStart, worldEnd, math::colors::green);</span>
+
+        <span class="c1">//    };</span>
+
+        <span class="c1">//    debug::drawLine(__FUNC__ , __LINE__, math::vec3(0, 0, 0), math::vec3(0, -1, 0), math::colors::blue);</span>
+
+        <span class="c1">//    for (auto face : halfEdgeFaces)</span>
+        <span class="c1">//    {</span>
+        <span class="c1">//        face-&gt;forEachEdge(drawFunc);</span>
+        <span class="c1">//    }</span>
+        <span class="c1">//}</span>
+
+        <span class="kt">void</span> <span class="nf">UpdateTightAABB</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">transform</span><span class="p">)</span>
+        <span class="p">{</span>
+
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">ConstructConvexHullWithMesh</span><span class="p">()</span>
+        <span class="p">{</span>
+
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">ConstructBoxWithMesh</span><span class="p">()</span>
+        <span class="p">{</span>
+
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">CreateBox</span><span class="p">(</span><span class="k">const</span> <span class="n">cube_collider_params</span><span class="o">&amp;</span> <span class="n">cubeParams</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//initialize box vertices</span>
+            <span class="kt">float</span> <span class="n">halfWidth</span> <span class="o">=</span> <span class="n">cubeParams</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="kt">float</span> <span class="n">halfBreath</span> <span class="o">=</span> <span class="n">cubeParams</span><span class="p">.</span><span class="n">breadth</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="kt">float</span> <span class="n">halfHeight</span> <span class="o">=</span> <span class="n">cubeParams</span><span class="p">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+
+            <span class="c1">// BOTTOM FACE          // TOP FACE</span>
+
+            <span class="c1">//a ----------- b       //e ----------- f</span>
+            <span class="c1">//||           ||       //||           ||</span>
+            <span class="c1">//||           ||       //||           ||</span>
+            <span class="c1">//||           ||       //||           ||</span>
+            <span class="c1">//||           ||       //||           ||</span>
+            <span class="c1">//c ----------- d       //g ----------- h</span>
+
+            <span class="cm">/*a*/</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">minVertexPlusBreadth</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="n">halfWidth</span><span class="p">,</span> <span class="o">-</span><span class="n">halfHeight</span><span class="p">,</span> <span class="n">halfBreath</span><span class="p">);</span>
+            <span class="cm">/*b*/</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">minVertexPlusWidthPlusBreadth</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">halfWidth</span><span class="p">,</span> <span class="o">-</span><span class="n">halfHeight</span><span class="p">,</span> <span class="n">halfBreath</span><span class="p">);</span>
+            <span class="cm">/*c*/</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">minVertex</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="n">halfWidth</span><span class="p">,</span> <span class="o">-</span><span class="n">halfHeight</span><span class="p">,</span> <span class="o">-</span><span class="n">halfBreath</span><span class="p">);</span>
+            <span class="cm">/*d*/</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">minVertexPlusWidth</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">halfWidth</span><span class="p">,</span> <span class="o">-</span><span class="n">halfHeight</span><span class="p">,</span> <span class="o">-</span><span class="n">halfBreath</span><span class="p">);</span>
+
+            <span class="cm">/*e*/</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">maxVertexMinusWidth</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="n">halfWidth</span><span class="p">,</span> <span class="n">halfHeight</span><span class="p">,</span> <span class="n">halfBreath</span><span class="p">);</span>
+            <span class="cm">/*f*/</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">maxVertex</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">halfWidth</span><span class="p">,</span> <span class="n">halfHeight</span><span class="p">,</span> <span class="n">halfBreath</span><span class="p">);</span>
+            <span class="cm">/*g*/</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">maxVertexMinusWidthMinusBreadth</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="n">halfWidth</span><span class="p">,</span> <span class="n">halfHeight</span><span class="p">,</span> <span class="o">-</span><span class="n">halfBreath</span><span class="p">);</span>
+            <span class="cm">/*h*/</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">maxVertexMinusBreadth</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">halfWidth</span><span class="p">,</span> <span class="n">halfHeight</span><span class="p">,</span> <span class="o">-</span><span class="n">halfBreath</span><span class="p">);</span>
+
+            <span class="c1">//the HalfEdgeEdge only needs a ptr to the vertex</span>
+            <span class="n">vertices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">minVertexPlusBreadth</span><span class="p">);</span>
+            <span class="n">vertices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">minVertexPlusWidthPlusBreadth</span><span class="p">);</span>
+            <span class="n">vertices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">minVertex</span><span class="p">);</span>
+            <span class="n">vertices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">minVertexPlusWidth</span><span class="p">);</span>
+            <span class="n">vertices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">maxVertexMinusWidth</span><span class="p">);</span>
+            <span class="n">vertices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">maxVertex</span><span class="p">);</span>
+            <span class="n">vertices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">maxVertexMinusWidthMinusBreadth</span><span class="p">);</span>
+            <span class="n">vertices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">maxVertexMinusBreadth</span><span class="p">);</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">*</span> <span class="n">a</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">*</span> <span class="n">b</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">*</span> <span class="n">c</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">*</span> <span class="n">d</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">*</span> <span class="n">e</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">*</span> <span class="n">f</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">*</span> <span class="n">g</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">*</span> <span class="n">h</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">vertex</span> <span class="p">:</span> <span class="n">vertices</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">vertex</span> <span class="o">+=</span> <span class="n">cubeParams</span><span class="p">.</span><span class="n">offset</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c1">//note: each edge carries adjacency information. (for example, an edge &#39;eg&#39; must know its edge pair &#39;ge&#39;).</span>
+            <span class="c1">//This is why each edge must be declared explicitly.</span>
+
+            <span class="c1">//each face also has an id. It is mostly used for debugging reasons and will be removed when it is no longer needed.</span>
+
+            <span class="c1">//[1] create face eghf</span>
+
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">eg</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">gh</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">g</span><span class="p">);</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">hf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">h</span><span class="p">);</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">fe</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+
+            <span class="n">eg</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">fe</span><span class="p">,</span> <span class="n">gh</span><span class="p">);</span>
+            <span class="n">gh</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">eg</span><span class="p">,</span> <span class="n">hf</span><span class="p">);</span>
+            <span class="n">hf</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">gh</span><span class="p">,</span> <span class="n">fe</span><span class="p">);</span>
+            <span class="n">fe</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">hf</span><span class="p">,</span> <span class="n">eg</span><span class="p">);</span>
+
+            <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">eghf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeFace</span><span class="p">(</span><span class="n">eg</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+            <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">eghf</span><span class="p">);</span>
+            <span class="n">eghf</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot; eghf&quot;</span><span class="p">;</span>
+
+            <span class="c1">//[2] create face hgcd</span>
+
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">hg</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">h</span><span class="p">);</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">gc</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">g</span><span class="p">);</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">cd</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">dh</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">d</span><span class="p">);</span>
+
+            <span class="n">hg</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">dh</span><span class="p">,</span> <span class="n">gc</span><span class="p">);</span>
+            <span class="n">gc</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">hg</span><span class="p">,</span> <span class="n">cd</span><span class="p">);</span>
+            <span class="n">cd</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">gc</span><span class="p">,</span> <span class="n">dh</span><span class="p">);</span>
+            <span class="n">dh</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">cd</span><span class="p">,</span> <span class="n">hg</span><span class="p">);</span>
+
+            <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">hgcd</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeFace</span><span class="p">(</span><span class="n">hg</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">));</span>
+            <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">hgcd</span><span class="p">);</span>
+            <span class="n">hgcd</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;hgcd&quot;</span><span class="p">;</span>
+
+            <span class="c1">//[3] create face fhdb</span>
+
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">fh</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">hd</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">h</span><span class="p">);</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">db</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">d</span><span class="p">);</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">bf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+
+            <span class="n">fh</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">bf</span><span class="p">,</span> <span class="n">hd</span><span class="p">);</span>
+            <span class="n">hd</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span> <span class="n">db</span><span class="p">);</span>
+            <span class="n">db</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">hd</span><span class="p">,</span> <span class="n">bf</span><span class="p">);</span>
+            <span class="n">bf</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">fh</span><span class="p">);</span>
+
+            <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">fhdb</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeFace</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+            <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">fhdb</span><span class="p">);</span>
+            <span class="n">fhdb</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;fhdb&quot;</span><span class="p">;</span>
+
+            <span class="c1">//[4] create face efba</span>
+
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">ef</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">fb</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">ba</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">ae</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+
+            <span class="n">ef</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">ae</span><span class="p">,</span> <span class="n">fb</span><span class="p">);</span>
+            <span class="n">fb</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">ef</span><span class="p">,</span> <span class="n">ba</span><span class="p">);</span>
+            <span class="n">ba</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">fb</span><span class="p">,</span> <span class="n">ae</span><span class="p">);</span>
+            <span class="n">ae</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">ba</span><span class="p">,</span> <span class="n">ef</span><span class="p">);</span>
+
+            <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">efba</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeFace</span><span class="p">(</span><span class="n">ef</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
+            <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">efba</span><span class="p">);</span>
+            <span class="n">efba</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;efba&quot;</span><span class="p">;</span>
+
+            <span class="c1">//[5] create face geac</span>
+
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">ge</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">g</span><span class="p">);</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">ea</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">ac</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">cg</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+
+            <span class="n">ge</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">cg</span><span class="p">,</span> <span class="n">ea</span><span class="p">);</span>
+            <span class="n">ea</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">ge</span><span class="p">,</span> <span class="n">ac</span><span class="p">);</span>
+            <span class="n">ac</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">ea</span><span class="p">,</span> <span class="n">cg</span><span class="p">);</span>
+            <span class="n">cg</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">ac</span><span class="p">,</span> <span class="n">ge</span><span class="p">);</span>
+
+            <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">geac</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeFace</span><span class="p">(</span><span class="n">ge</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+            <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">geac</span><span class="p">);</span>
+            <span class="n">geac</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;geac&quot;</span><span class="p">;</span>
+
+            <span class="c1">//[6] create face abdc</span>
+
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">ab</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">bd</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">dc</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">d</span><span class="p">);</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">ca</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+
+            <span class="n">ab</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">ca</span><span class="p">,</span> <span class="n">bd</span><span class="p">);</span>
+            <span class="n">bd</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">ab</span><span class="p">,</span> <span class="n">dc</span><span class="p">);</span>
+            <span class="n">dc</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">bd</span><span class="p">,</span> <span class="n">ca</span><span class="p">);</span>
+            <span class="n">ca</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">ab</span><span class="p">);</span>
+
+            <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">abdc</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeFace</span><span class="p">(</span><span class="n">ab</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+            <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">abdc</span><span class="p">);</span>
+            <span class="n">abdc</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;abdc&quot;</span><span class="p">;</span>
+
+
+            <span class="c1">//manually connect each edge to its pair</span>
+
+            <span class="c1">//eghf                  //hgcd</span>
+            <span class="n">eg</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">ge</span><span class="p">;</span>   <span class="n">hg</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">gh</span><span class="p">;</span>
+            <span class="n">gh</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">hg</span><span class="p">;</span>   <span class="n">gc</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">cg</span><span class="p">;</span>
+            <span class="n">hf</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">fh</span><span class="p">;</span>   <span class="n">cd</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">dc</span><span class="p">;</span>
+            <span class="n">fe</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">ef</span><span class="p">;</span>   <span class="n">dh</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">hd</span><span class="p">;</span>
+
+            <span class="c1">//fhdb                   //efba</span>
+            <span class="n">fh</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">hf</span><span class="p">;</span>    <span class="n">ef</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">fe</span><span class="p">;</span>
+            <span class="n">hd</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">dh</span><span class="p">;</span>    <span class="n">fb</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">bf</span><span class="p">;</span>
+            <span class="n">db</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">bd</span><span class="p">;</span>    <span class="n">ba</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">ab</span><span class="p">;</span>
+            <span class="n">bf</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">fb</span><span class="p">;</span>    <span class="n">ae</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">ea</span><span class="p">;</span>
+
+            <span class="c1">//geac                  //abdc</span>
+            <span class="n">ge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">eg</span><span class="p">;</span>   <span class="n">ab</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">ba</span><span class="p">;</span>
+            <span class="n">ea</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">ae</span><span class="p">;</span>   <span class="n">bd</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">db</span><span class="p">;</span>
+            <span class="n">ac</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">ca</span><span class="p">;</span>   <span class="n">dc</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">cd</span><span class="p">;</span>
+            <span class="n">cg</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">gc</span><span class="p">;</span>   <span class="n">ca</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">ac</span><span class="p">;</span>
+
+
+            <span class="c1">//initialize the ID of the edges, this is done mostly for debugging reasons and will be removed when it</span>
+            <span class="c1">//is no longer needed</span>
+
+            <span class="c1">//eghf           //hgcd</span>
+            <span class="n">eg</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;eg&quot;</span><span class="p">;</span>   <span class="n">hg</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;hg&quot;</span><span class="p">;</span>
+            <span class="n">gh</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;gh&quot;</span><span class="p">;</span>   <span class="n">gc</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;gc&quot;</span><span class="p">;</span>
+            <span class="n">hf</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;hf&quot;</span><span class="p">;</span>   <span class="n">cd</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;cd&quot;</span><span class="p">;</span>
+            <span class="n">fe</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;fe&quot;</span><span class="p">;</span>   <span class="n">dh</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;dh&quot;</span><span class="p">;</span>
+
+            <span class="c1">//fhdb            //efba</span>
+            <span class="n">fh</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;fh&quot;</span><span class="p">;</span>    <span class="n">ef</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;ef&quot;</span><span class="p">;</span>
+            <span class="n">hd</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;hd&quot;</span><span class="p">;</span>    <span class="n">fb</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;fb&quot;</span><span class="p">;</span>
+            <span class="n">db</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;db&quot;</span><span class="p">;</span>    <span class="n">ba</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;ba&quot;</span><span class="p">;</span>
+            <span class="n">bf</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;bf&quot;</span><span class="p">;</span>    <span class="n">ae</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;ae&quot;</span><span class="p">;</span>
+
+            <span class="c1">//geac           //abdc</span>
+            <span class="n">ge</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;ge&quot;</span><span class="p">;</span>   <span class="n">ab</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;ab&quot;</span><span class="p">;</span>
+            <span class="n">ea</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;ea&quot;</span><span class="p">;</span>   <span class="n">bd</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;bd&quot;</span><span class="p">;</span>
+            <span class="n">ac</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;ac&quot;</span><span class="p">;</span>   <span class="n">dc</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;dc&quot;</span><span class="p">;</span>
+            <span class="n">cg</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;cg&quot;</span><span class="p">;</span>   <span class="n">ca</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;ca&quot;</span><span class="p">;</span>
+
+            <span class="c1">//check if halfEdge data structure was initialized correctly. this will be commented when I know it always works</span>
+            <span class="n">AssertEdgeValidity</span><span class="p">();</span>
+
+        <span class="p">}</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">*&gt;&amp;</span> <span class="n">GetHalfEdgeFaces</span><span class="p">()</span> <span class="k">override</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">halfEdgeFaces</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;&amp;</span> <span class="n">GetVertices</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">vertices</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">AssertEdgeValidity</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">assertFunc</span> <span class="o">=</span> <span class="p">[](</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">assert</span><span class="p">(</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">);</span>
+                <span class="n">assert</span><span class="p">(</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">prevEdge</span><span class="p">);</span>
+                <span class="n">assert</span><span class="p">(</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">);</span>
+                <span class="n">assert</span><span class="p">(</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">edgePositionPtr</span><span class="p">);</span>
+
+
+            <span class="p">};</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">face</span> <span class="p">:</span> <span class="n">halfEdgeFaces</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">face</span><span class="o">-&gt;</span><span class="n">forEachEdge</span><span class="p">(</span><span class="n">assertFunc</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+
+    <span class="k">private</span><span class="o">:</span>
+
+        <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">instantiateMeshFace</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">*&gt;&amp;</span> <span class="n">vertices</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">faceNormal</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">vertices</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span> <span class="p">}</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">HalfEdgeEdge</span><span class="o">*&gt;</span> <span class="n">faceEdges</span><span class="p">;</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="nl">vert</span> <span class="p">:</span> <span class="n">vertices</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">faceEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">vert</span><span class="p">));</span>
+            <span class="p">}</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">faceEdges</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">prevIndex</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">?</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">:</span> <span class="n">faceEdges</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="kt">int</span> <span class="n">afterIndex</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">faceEdges</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">?</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+
+                <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">prevEdge</span> <span class="o">=</span> <span class="n">faceEdges</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">prevIndex</span><span class="p">);</span>
+                <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">nextEdge</span> <span class="o">=</span> <span class="n">faceEdges</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">afterIndex</span><span class="p">);</span>
+
+                <span class="n">faceEdges</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">prevEdge</span><span class="p">,</span> <span class="n">nextEdge</span><span class="p">);</span>
+
+            <span class="p">}</span>
+
+            <span class="k">return</span> <span class="k">new</span> <span class="n">HalfEdgeFace</span><span class="p">(</span><span class="n">faceEdges</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">faceNormal</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">vertices</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">*&gt;</span> <span class="n">halfEdgeFaces</span><span class="p">;</span>
+
+        <span class="c1">//feature id container</span>
+
+
+
+
+
+
+    <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_colliders_convexcollider.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

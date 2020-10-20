@@ -1,0 +1,16 @@
+.. _exhale_struct_structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1vec2_01_4:
+
+Template Struct formatter< legion::core::math::vec2 >
+=====================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: fmt::fmt::formatter< legion::core::math::vec2 >
+   :members:
+   :protected-members:
+   :undoc-members:

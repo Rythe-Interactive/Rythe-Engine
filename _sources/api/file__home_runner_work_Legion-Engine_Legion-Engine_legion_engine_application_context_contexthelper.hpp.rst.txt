@@ -1,0 +1,74 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_context_contexthelper.hpp:
+
+File contexthelper.hpp
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_context>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/application/context``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/application/context/contexthelper.hpp``)
+------------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_context_contexthelper.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_core.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_application.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_context_contexthelper.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_module_applicationmodule.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_window_window.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_window_windowsystem.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__application`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classlegion_1_1application_1_1_context_helper`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_contexthelper_8hpp_1ab38c621d468a27f47a5fbcd6430cf474`
+
+- :ref:`exhale_typedef_contexthelper_8hpp_1a750645534bf5d6d01e27886ae0f0ed15`
+

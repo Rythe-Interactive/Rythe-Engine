@@ -1,0 +1,13 @@
+.. _exhale_define_platform_8hpp_1acecfeef9c678e905611f71a6d27e74e3:
+
+Define LEGION_DEBUG_VALUE
+=========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: LEGION_DEBUG_VALUE

@@ -1,0 +1,87 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_trigonometry.hpp:
+
+File trigonometry.hpp
+=====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/math``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/math/trigonometry.hpp``)
+-------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_trigonometry.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cmath``
+
+- ``core/math/constants.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_constants.hpp`)
+
+- ``core/math/precision.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_precision.hpp`)
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_math.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__math`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classlegion_1_1core_1_1math_1_1angle`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_trigonometry_8hpp_1a29b6979c0eacd1bc3a381ad7d8a82c2a`
+
+- :ref:`exhale_function_trigonometry_8hpp_1ac3a9a8aeaebf10f39989a6f4e29e61aa`
+
+- :ref:`exhale_function_trigonometry_8hpp_1af946cb2ac55fd4c210a3570faf5c1e1b`
+
+- :ref:`exhale_function_trigonometry_8hpp_1a4d1c95cc7b687ab98b2796e8132af63c`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_trigonometry_8hpp_1ac5d8857089d5702ef9b21ee78c5908b2`
+
+- :ref:`exhale_typedef_trigonometry_8hpp_1a6a1991ad5d23fb2e238ee55d6ab06ae8`
+
+- :ref:`exhale_typedef_trigonometry_8hpp_1aaade6ddb5a868192aa6ce35c0c3f0bd2`
+

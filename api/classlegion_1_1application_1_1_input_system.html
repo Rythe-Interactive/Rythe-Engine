@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class InputSystem &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class WindowSystem" href="classlegion_1_1application_1_1_window_system.html" />
+    <link rel="prev" title="Class ContextHelper" href="classlegion_1_1application_1_1_context_helper.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classlegion_1_1application_1_1_window_system.html" title="Class WindowSystem"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classlegion_1_1application_1_1_context_helper.html" title="Class ContextHelper"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class InputSystem</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-inputsystem">
+<span id="exhale-class-classlegion-1-1application-1-1-input-system"></span><h1>Class InputSystem<a class="headerlink" href="#class-inputsystem" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_input_inputsystem.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-application-input-inputsystem-hpp"><span class="std std-ref">File inputsystem.hpp</span></a></p></li>
+</ul>
+<div class="section" id="nested-relationships">
+<h2>Nested Relationships<a class="headerlink" href="#nested-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="nested-types">
+<h3>Nested Types<a class="headerlink" href="#nested-types" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="structlegion_1_1application_1_1_input_system_1_1action__data.html#exhale-struct-structlegion-1-1application-1-1-input-system-1-1action-data"><span class="std std-ref">Struct InputSystem::action_data</span></a></p></li>
+<li><p><a class="reference internal" href="structlegion_1_1application_1_1_input_system_1_1axis__data.html#exhale-struct-structlegion-1-1application-1-1-input-system-1-1axis-data"><span class="std std-ref">Struct InputSystem::axis_data</span></a></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="base-type">
+<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::core::System&lt;</span> <span class="pre">InputSystem</span> <span class="pre">&gt;</span></code> (<a class="reference internal" href="classlegion_1_1core_1_1_system.html#exhale-class-classlegion-1-1core-1-1-system"><span class="std std-ref">Template Class System</span></a>)</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6legion11application11InputSystemE">
+<span id="_CPPv3N6legion11application11InputSystemE"></span><span id="_CPPv2N6legion11application11InputSystemE"></span><span id="legion::application::InputSystem"></span><span class="target" id="classlegion_1_1application_1_1_input_system"></span><em class="property">class </em><code class="sig-prename descclassname">legion::application<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">InputSystem</code> : <em class="property">public</em> legion::core::<a class="reference internal" href="classlegion_1_1core_1_1_system.html#_CPPv4I0EN6legion4core6SystemE" title="legion::core::System">System</a>&lt;<a class="reference internal" href="#_CPPv4N6legion11application11InputSystemE" title="legion::application::InputSystem">InputSystem</a>&gt;<a class="headerlink" href="#_CPPv4N6legion11application11InputSystemE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion11application11InputSystem5setupEv">
+<span id="_CPPv3N6legion11application11InputSystem5setupEv"></span><span id="_CPPv2N6legion11application11InputSystem5setupEv"></span><span id="legion::application::InputSystem::setup"></span><span class="target" id="classlegion_1_1application_1_1_input_system_1a1f22168269b21d59752d3d57c2e4cac6"></span>void <code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion11application11InputSystem5setupEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion11application11InputSystem16getMousePositionEv">
+<span id="_CPPv3N6legion11application11InputSystem16getMousePositionEv"></span><span id="_CPPv2N6legion11application11InputSystem16getMousePositionEv"></span><span id="legion::application::InputSystem::getMousePosition"></span><span class="target" id="classlegion_1_1application_1_1_input_system_1a7c634bf930110ef6ede3753cfbf7e7d6"></span>math::dvec2 <code class="sig-name descname">getMousePosition</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion11application11InputSystem16getMousePositionEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion11application11InputSystem13getMouseDeltaEv">
+<span id="_CPPv3N6legion11application11InputSystem13getMouseDeltaEv"></span><span id="_CPPv2N6legion11application11InputSystem13getMouseDeltaEv"></span><span id="legion::application::InputSystem::getMouseDelta"></span><span class="target" id="classlegion_1_1application_1_1_input_system_1a176b93367497a9fc4b855dc51ae0d583"></span>math::dvec2 <code class="sig-name descname">getMouseDelta</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion11application11InputSystem13getMouseDeltaEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion11application11InputSystem13createBindingEvN8inputmap6methodEf">
+<span id="_CPPv3I0EN6legion11application11InputSystem13createBindingEN8inputmap6methodEf"></span><span id="_CPPv2I0EN6legion11application11InputSystem13createBindingEN8inputmap6methodEf"></span>template&lt;class <code class="sig-name descname">Event</code>&gt;<br /><span class="target" id="classlegion_1_1application_1_1_input_system_1a4c5b96db01fb2d7bfb7a9dd0cf472e50"></span>void <code class="sig-name descname">createBinding</code><span class="sig-paren">(</span><a class="reference internal" href="structlegion_1_1application_1_1inputmap.html#_CPPv4N6legion11application8inputmapE" title="legion::application::inputmap">inputmap</a>::<a class="reference internal" href="structlegion_1_1application_1_1inputmap.html#_CPPv4N6legion11application8inputmap6methodE" title="legion::application::inputmap::method">method</a> <em>k</em>, float <em>value</em> = 1<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion11application11InputSystem13createBindingEvN8inputmap6methodEf" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates a Binding of a Key /Axis to the emission of an event in the event bus. </p>
+<p><dl class="simple">
+<dt><strong>See</strong></dt><dd><p>inputmap::method for options </p>
+</dd>
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Event</span></code>: The type of event you want to be emitted on the appearance of the action/axis. </p></li>
+</ul>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">k</span></code>: The axis/action you want to listen to. </p></li>
+</ul>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: The value you want to map to if your Event is an Axis but the event is a button/key. For instance if you want to map one axis to ‘W/S’ you can make ‘W’ emit 1 and ‘S’ -1. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion11application11InputSystem13removeBindingEvN8inputmap6methodE">
+<span id="_CPPv3I0EN6legion11application11InputSystem13removeBindingEN8inputmap6methodE"></span><span id="_CPPv2I0EN6legion11application11InputSystem13removeBindingEN8inputmap6methodE"></span>template&lt;class <code class="sig-name descname">Event</code>&gt;<br /><span class="target" id="classlegion_1_1application_1_1_input_system_1aa7940c34c8635486dda7f01f34b9d45a"></span>void <code class="sig-name descname">removeBinding</code><span class="sig-paren">(</span><a class="reference internal" href="structlegion_1_1application_1_1inputmap.html#_CPPv4N6legion11application8inputmapE" title="legion::application::inputmap">inputmap</a>::<a class="reference internal" href="structlegion_1_1application_1_1inputmap.html#_CPPv4N6legion11application8inputmap6methodE" title="legion::application::inputmap::method">method</a> <em>met</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion11application11InputSystem13removeBindingEvN8inputmap6methodE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>removes a Binding from a method </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Event</span></code>: the Event you want to unbind </p></li>
+</ul>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">met</span></code>: the method you want to unbind from </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class InputSystem</a><ul>
+<li><a class="reference internal" href="#nested-relationships">Nested Relationships</a><ul>
+<li><a class="reference internal" href="#nested-types">Nested Types</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inheritance-relationships">Inheritance Relationships</a><ul>
+<li><a class="reference internal" href="#base-type">Base Type</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="classlegion_1_1application_1_1_context_helper.html" title="previous chapter">Class ContextHelper</a></li>
+      <li>Next: <a href="classlegion_1_1application_1_1_window_system.html" title="next chapter">Class WindowSystem</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classlegion_1_1application_1_1_input_system.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

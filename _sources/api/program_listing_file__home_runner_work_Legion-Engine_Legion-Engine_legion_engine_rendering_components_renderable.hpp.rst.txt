@@ -1,0 +1,24 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_renderable.hpp:
+
+Program Listing for File renderable.hpp
+=======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_renderable.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/components/renderable.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <rendering/data/model.hpp>
+   #include <rendering/data/material.hpp>
+   
+   namespace legion::rendering
+   {
+       struct renderable
+       {
+           model_handle model;
+           material_handle material;
+       };
+   }

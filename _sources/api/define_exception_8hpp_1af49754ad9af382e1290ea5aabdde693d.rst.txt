@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1af49754ad9af382e1290ea5aabdde693d:
+
+Define legion_unknown_component_error
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: legion_unknown_component_error

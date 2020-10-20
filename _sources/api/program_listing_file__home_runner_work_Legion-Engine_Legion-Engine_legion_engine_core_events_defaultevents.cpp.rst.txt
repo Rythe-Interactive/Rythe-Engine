@@ -1,0 +1,22 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_defaultevents.cpp:
+
+Program Listing for File defaultevents.cpp
+==========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_defaultevents.cpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/events/defaultevents.cpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include <core/events/defaultevents.hpp>
+   #include <iostream>
+   
+   namespace legion::core::events
+   {
+       exit::exit(int exitcode) :exitcode(exitcode)
+       {
+           std::cout << "=========================\n| Shutting down engine. |\n=========================\n";
+       }
+   }

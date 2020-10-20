@@ -1,0 +1,13 @@
+.. _exhale_function_unit__conversion_8hpp_1a5226533761d0cc48aaf51e66290355f5:
+
+Function legion::core::literals::operator""_mb
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_unit_conversion.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::literals::operator""_mb(unsigned long long)

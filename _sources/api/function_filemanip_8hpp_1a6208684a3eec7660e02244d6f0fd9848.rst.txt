@@ -1,0 +1,13 @@
+.. _exhale_function_filemanip_8hpp_1a6208684a3eec7660e02244d6f0fd9848:
+
+Function legion::core::filesystem::exists
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filemanip.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::filesystem::exists(std::string_view)

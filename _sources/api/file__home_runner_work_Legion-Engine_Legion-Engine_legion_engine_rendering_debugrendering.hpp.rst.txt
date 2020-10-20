@@ -1,0 +1,68 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_debugrendering.hpp:
+
+File debugrendering.hpp
+=======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/debugrendering.hpp``)
+---------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_debugrendering.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_core.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_rendering.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_renderer.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__debug`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1debug_1_1debug__line`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_debugrendering_8hpp_1aa1e66b3bc468491c64d0bd74db002f8a`
+
+- :ref:`exhale_function_debugrendering_8hpp_1a16f43664217b0cd69ddd598711a62406`
+

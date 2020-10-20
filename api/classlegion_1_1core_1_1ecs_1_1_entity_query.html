@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class EntityQuery &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class QueryRegistry" href="classlegion_1_1core_1_1ecs_1_1_query_registry.html" />
+    <link rel="prev" title="Class entity_handle" href="classlegion_1_1core_1_1ecs_1_1entity__handle.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classlegion_1_1core_1_1ecs_1_1_query_registry.html" title="Class QueryRegistry"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classlegion_1_1core_1_1ecs_1_1entity__handle.html" title="Class entity_handle"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class EntityQuery</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-entityquery">
+<span id="exhale-class-classlegion-1-1core-1-1ecs-1-1-entity-query"></span><h1>Class EntityQuery<a class="headerlink" href="#class-entityquery" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entityquery.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-ecs-entityquery-hpp"><span class="std std-ref">File entityquery.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6legion4core3ecs11EntityQueryE">
+<span id="_CPPv3N6legion4core3ecs11EntityQueryE"></span><span id="_CPPv2N6legion4core3ecs11EntityQueryE"></span><span id="legion::core::ecs::EntityQuery"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_entity_query"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core::ecs<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">EntityQuery</code><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EntityQueryE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Handle to an entity query. Allows you to acquire a list all of entities with a certain component combination. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs11EntityQuery11EntityQueryE7id_typeP13QueryRegistryP11EcsRegistry">
+<span id="_CPPv3N6legion4core3ecs11EntityQuery11EntityQueryE7id_typeP13QueryRegistryP11EcsRegistry"></span><span id="_CPPv2N6legion4core3ecs11EntityQuery11EntityQueryE7id_typeP13QueryRegistryP11EcsRegistry"></span><span id="legion::core::ecs::EntityQuery::EntityQuery__id_type.QueryRegistryP.EcsRegistryP"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_entity_query_1a0ccbd91b9cf3a306c54e6dd0d1964b3f"></span><code class="sig-name descname">EntityQuery</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>id</em>, <a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1_query_registry.html#_CPPv4N6legion4core3ecs13QueryRegistryE" title="legion::core::ecs::QueryRegistry">QueryRegistry</a> *<em>registry</em>, <a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1_ecs_registry.html#_CPPv4N6legion4core3ecs11EcsRegistryE" title="legion::core::ecs::EcsRegistry">EcsRegistry</a> *<em>ecsRegistry</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EntityQuery11EntityQueryE7id_typeP13QueryRegistryP11EcsRegistry" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs11EntityQuery11EntityQueryEv">
+<span id="_CPPv3N6legion4core3ecs11EntityQuery11EntityQueryEv"></span><span id="_CPPv2N6legion4core3ecs11EntityQuery11EntityQueryEv"></span><span id="legion::core::ecs::EntityQuery::EntityQuery"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_entity_query_1a0b7c8afa623abe3bbef6f368530c12a3"></span><code class="sig-name descname">EntityQuery</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N6legion4core3ecs11EntityQuery11EntityQueryEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs11EntityQueryD0Ev">
+<span id="_CPPv3N6legion4core3ecs11EntityQueryD0Ev"></span><span id="_CPPv2N6legion4core3ecs11EntityQueryD0Ev"></span><span id="legion::core::ecs::EntityQuery::~EntityQuery"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_entity_query_1a4de6500d84263d53578f3e2c103db0b0"></span><code class="sig-name descname">~EntityQuery</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EntityQueryD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs11EntityQuery11EntityQueryERR11EntityQuery">
+<span id="_CPPv3N6legion4core3ecs11EntityQuery11EntityQueryERR11EntityQuery"></span><span id="_CPPv2N6legion4core3ecs11EntityQuery11EntityQueryERR11EntityQuery"></span><span id="legion::core::ecs::EntityQuery::EntityQuery__EntityQueryRR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_entity_query_1a02fb2970ab2440c410aa0d4e346c8466"></span><code class="sig-name descname">EntityQuery</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core3ecs11EntityQuery11EntityQueryERR11EntityQuery" title="legion::core::ecs::EntityQuery::EntityQuery">EntityQuery</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EntityQuery11EntityQueryERR11EntityQuery" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs11EntityQuery11EntityQueryERK11EntityQuery">
+<span id="_CPPv3N6legion4core3ecs11EntityQuery11EntityQueryERK11EntityQuery"></span><span id="_CPPv2N6legion4core3ecs11EntityQuery11EntityQueryERK11EntityQuery"></span><span id="legion::core::ecs::EntityQuery::EntityQuery__EntityQueryCR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_entity_query_1ab5496e387e536c1ae623fa5c70b5183e"></span><code class="sig-name descname">EntityQuery</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion4core3ecs11EntityQuery11EntityQueryERK11EntityQuery" title="legion::core::ecs::EntityQuery::EntityQuery">EntityQuery</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EntityQuery11EntityQueryERK11EntityQuery" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs11EntityQueryaSERR11EntityQuery">
+<span id="_CPPv3N6legion4core3ecs11EntityQueryaSERR11EntityQuery"></span><span id="_CPPv2N6legion4core3ecs11EntityQueryaSERR11EntityQuery"></span><span id="legion::core::ecs::EntityQuery::assign-operator__EntityQueryRR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_entity_query_1ab672293f8ba28fe18d3ec6ad0ba41f11"></span><a class="reference internal" href="#_CPPv4N6legion4core3ecs11EntityQueryE" title="legion::core::ecs::EntityQuery">EntityQuery</a> <code class="sig-name descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core3ecs11EntityQueryE" title="legion::core::ecs::EntityQuery">EntityQuery</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EntityQueryaSERR11EntityQuery" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs11EntityQueryaSERK11EntityQuery">
+<span id="_CPPv3N6legion4core3ecs11EntityQueryaSERK11EntityQuery"></span><span id="_CPPv2N6legion4core3ecs11EntityQueryaSERK11EntityQuery"></span><span id="legion::core::ecs::EntityQuery::assign-operator__EntityQueryCR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_entity_query_1afc6f1085e75bd1ea48fde457d2363ce6"></span><a class="reference internal" href="#_CPPv4N6legion4core3ecs11EntityQueryE" title="legion::core::ecs::EntityQuery">EntityQuery</a> <code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion4core3ecs11EntityQueryE" title="legion::core::ecs::EntityQuery">EntityQuery</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EntityQueryaSERK11EntityQuery" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core3ecs11EntityQuery5beginEv">
+<span id="_CPPv3NK6legion4core3ecs11EntityQuery5beginEv"></span><span id="_CPPv2NK6legion4core3ecs11EntityQuery5beginEv"></span><span id="legion::core::ecs::EntityQuery::beginC"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_entity_query_1a52a7e64d4be9827b3bbef1c6ee417360"></span><a class="reference internal" href="typedef_entity__handle_8hpp_1a5c3759a3e30a71a9145fa5af22cbe72e.html#_CPPv4N6legion4core3ecs10entity_setE" title="legion::core::ecs::entity_set">entity_set</a>::const_iterator <code class="sig-name descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core3ecs11EntityQuery5beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get begin iterator for entity handles to the queried entities. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core3ecs11EntityQuery3endEv">
+<span id="_CPPv3NK6legion4core3ecs11EntityQuery3endEv"></span><span id="_CPPv2NK6legion4core3ecs11EntityQuery3endEv"></span><span id="legion::core::ecs::EntityQuery::endC"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_entity_query_1a17839254f0970b172aa06233797e27e8"></span><a class="reference internal" href="typedef_entity__handle_8hpp_1a5c3759a3e30a71a9145fa5af22cbe72e.html#_CPPv4N6legion4core3ecs10entity_setE" title="legion::core::ecs::entity_set">entity_set</a>::const_iterator <code class="sig-name descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core3ecs11EntityQuery3endEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get end iterator for entity handles to the queried entities. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs11EntityQuery2idEv">
+<span id="_CPPv3N6legion4core3ecs11EntityQuery2idEv"></span><span id="_CPPv2N6legion4core3ecs11EntityQuery2idEv"></span><span id="legion::core::ecs::EntityQuery::id"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_entity_query_1a3e8c282fef216bd91f30e06757db3dc0"></span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <code class="sig-name descname">id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EntityQuery2idEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get query id. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion4core3ecs11EntityQuery16addComponentTypeEvv">
+<span id="_CPPv3I0EN6legion4core3ecs11EntityQuery16addComponentTypeEv"></span><span id="_CPPv2I0EN6legion4core3ecs11EntityQuery16addComponentTypeEv"></span>template&lt;typename <code class="sig-name descname">component_type</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_entity_query_1a1a3e3465f9a718c3b02d9189e9e3b8e4"></span>void <code class="sig-name descname">addComponentType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core3ecs11EntityQuery16addComponentTypeEvv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add component type to query for. </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">component_type</span></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs11EntityQuery16addComponentTypeE7id_type">
+<span id="_CPPv3N6legion4core3ecs11EntityQuery16addComponentTypeE7id_type"></span><span id="_CPPv2N6legion4core3ecs11EntityQuery16addComponentTypeE7id_type"></span><span id="legion::core::ecs::EntityQuery::addComponentType__id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_entity_query_1ac24eee0aebfaf9d476fbade918acb68d"></span>void <code class="sig-name descname">addComponentType</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>componentTypeId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EntityQuery16addComponentTypeE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Add component type to query for. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">componentTypeId</span></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion4core3ecs11EntityQuery19removeComponentTypeEvv">
+<span id="_CPPv3I0EN6legion4core3ecs11EntityQuery19removeComponentTypeEv"></span><span id="_CPPv2I0EN6legion4core3ecs11EntityQuery19removeComponentTypeEv"></span>template&lt;typename <code class="sig-name descname">component_type</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_entity_query_1afbbaae92bd8c4ac02666128300619fe4"></span>void <code class="sig-name descname">removeComponentType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core3ecs11EntityQuery19removeComponentTypeEvv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Remove component type to query for. </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">component_type</span></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs11EntityQuery19removeComponentTypeE7id_type">
+<span id="_CPPv3N6legion4core3ecs11EntityQuery19removeComponentTypeE7id_type"></span><span id="_CPPv2N6legion4core3ecs11EntityQuery19removeComponentTypeE7id_type"></span><span id="legion::core::ecs::EntityQuery::removeComponentType__id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_entity_query_1a9e5b45526bb61aa788183d83354504c9"></span>void <code class="sig-name descname">removeComponentType</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>componentTypeId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EntityQuery19removeComponentTypeE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Remove component type to query for. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">componentTypeId</span></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs11EntityQueryixE9size_type">
+<span id="_CPPv3N6legion4core3ecs11EntityQueryixE9size_type"></span><span id="_CPPv2N6legion4core3ecs11EntityQueryixE9size_type"></span><span id="legion::core::ecs::EntityQuery::subscript-operator__size_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_entity_query_1ac2c3420f035c389d9eac82ed17cddc02"></span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1entity__handle.html#_CPPv4N6legion4core3ecs13entity_handleE" title="legion::core::ecs::entity_handle">entity_handle</a> <code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EntityQueryixE9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get entity handle at a certain index in the entity list. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs11EntityQuery4sizeEv">
+<span id="_CPPv3N6legion4core3ecs11EntityQuery4sizeEv"></span><span id="_CPPv2N6legion4core3ecs11EntityQuery4sizeEv"></span><span id="legion::core::ecs::EntityQuery::size"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_entity_query_1a8abf2b14346e4b9f7bdcf7609d51461d"></span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EntityQuery4sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get amount of entities that were found with the queried component types. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class EntityQuery</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="classlegion_1_1core_1_1ecs_1_1entity__handle.html" title="previous chapter">Class entity_handle</a></li>
+      <li>Next: <a href="classlegion_1_1core_1_1ecs_1_1_query_registry.html" title="next chapter">Class QueryRegistry</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classlegion_1_1core_1_1ecs_1_1_entity_query.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

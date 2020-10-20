@@ -1,0 +1,111 @@
+
+.. _namespace_legion__rendering:
+
+Namespace legion::rendering
+===========================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1camera`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1material`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1material__handle`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1material__parameter`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1material__parameter__base`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1renderable`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1shader__handle`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1shader__import__settings`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1texture`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1attribute`
+
+- :ref:`exhale_class_classlegion_1_1rendering_1_1_material_cache`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1model`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1model__handle`
+
+- :ref:`exhale_class_classlegion_1_1rendering_1_1_model_cache`
+
+- :ref:`exhale_class_classlegion_1_1rendering_1_1_renderer`
+
+- :ref:`exhale_class_classlegion_1_1rendering_1_1_rendering_module`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1shader`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1shader__parameter__base`
+
+- :ref:`exhale_class_classlegion_1_1rendering_1_1_shader_cache`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1stbi__texture__loader`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1texture__data`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1texture__handle`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1texture__import__settings`
+
+- :ref:`exhale_class_classlegion_1_1rendering_1_1_texture_cache`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1uniform`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_texture_8hpp_1a4beac8f03a1a4607475602841e77f7ed`
+
+- :ref:`exhale_enum_texture_8hpp_1a43d96b8e8a767d15180b2dd2725dd1cc`
+
+- :ref:`exhale_enum_texture_8hpp_1a98302b4adcb004d184460c840a95b3e5`
+
+- :ref:`exhale_enum_texture_8hpp_1a4b31e32f4cfe64378c0cf415ab21c041`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_texture_8hpp_1afbdc6a96f7206745fb66dacca92fab0d`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_texture_8hpp_1addc25b0d5f17e632dd8eb2741adef7cf`
+
+- :ref:`exhale_variable_texture_8hpp_1ac5dabc4958ffda93c1c482bae067d36e`
+
+- :ref:`exhale_variable_shader_8hpp_1ad6311125d11e6bbdced24c8cb2f834d7`
+
+- :ref:`exhale_variable_texture_8hpp_1a69355df00001b5c499b2c9ba71c96d7a`
+
+- :ref:`exhale_variable_shader_8hpp_1aef80837f8dacffeb0c0ff05ff058c719`
+
+- :ref:`exhale_variable_material_8hpp_1a6b7a999738619c65ad248190946473a0`
+
+- :ref:`exhale_variable_model_8hpp_1a9a064bcb4fe6f43cb50806e55f5600f0`
+
+- :ref:`exhale_variable_shader_8hpp_1aaa70e21ea0dcb1e40d4f85245db89d5e`
+
+- :ref:`exhale_variable_texture_8hpp_1aa28a4cdf7598b164c5df824974bc5821`

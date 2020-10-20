@@ -1,0 +1,16 @@
+.. _exhale_class_classlegion_1_1core_1_1filesystem_1_1artifact__cache:
+
+Class artifact_cache
+====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_artifact_cache.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::filesystem::artifact_cache
+   :members:
+   :protected-members:
+   :undoc-members:

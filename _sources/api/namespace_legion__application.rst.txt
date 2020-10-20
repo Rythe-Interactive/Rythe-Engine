@@ -1,0 +1,92 @@
+
+.. _namespace_legion__application:
+
+Namespace legion::application
+=============================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1char__input`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1input__action`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1input__axis`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1inputmap`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1_input_system_1_1action__data`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1_input_system_1_1axis__data`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1key__input`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1mouse__button`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1mouse__enter__window`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1mouse__moved`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1mouse__scrolled`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1window`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1window__close`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1window__content__rescale`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1window__focus`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1window__framebuffer__resize`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1window__iconified`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1window__item__dropped`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1window__maximized`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1window__move`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1window__refresh`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1window__resize`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1_window_system_1_1fullscreen__toggle__request`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1_window_system_1_1icon__request`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1_window_system_1_1window__request`
+
+- :ref:`exhale_class_classlegion_1_1application_1_1_application_module`
+
+- :ref:`exhale_class_classlegion_1_1application_1_1_context_helper`
+
+- :ref:`exhale_class_classlegion_1_1application_1_1_input_system`
+
+- :ref:`exhale_class_classlegion_1_1application_1_1_window_system`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_contexthelper_8hpp_1ab38c621d468a27f47a5fbcd6430cf474`
+
+- :ref:`exhale_typedef_contexthelper_8hpp_1a750645534bf5d6d01e27886ae0f0ed15`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_window_8hpp_1a75624e39c886dfa6e651e9716f649a28`

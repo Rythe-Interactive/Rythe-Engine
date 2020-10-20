@@ -1,0 +1,68 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_entry_entry_point.hpp:
+
+File entry_point.hpp
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_entry>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/entry``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+When LEGION_ENTRY is defined, this file will create a function with signature main(int,char**) -> int implementing the common main function of a c++ program. 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/entry/entry_point.hpp``)
+-------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_entry_entry_point.hpp.rst
+
+
+
+Detailed Description
+--------------------
+
+When defining LEGION_ENTRY do no create your own CRT_STARTUP such as main()->int, main(int,char**)->int, wmain(), etc... 
+When using LEGION_ENTRY you must instead implement :ref:`exhale_function_entry__point_8hpp_1ab28098b1d77dd9b5db85476ec753097f`. 
+When not using LEGION_ENTRY you must call creation and initialization of the engine manually. 
+
+
+
+
+Includes
+--------
+
+
+- ``core/engine/engine.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_engine.hpp`)
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`)
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`)
+
+- ``iostream``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_core.hpp`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_entry__point_8hpp_1ab28098b1d77dd9b5db85476ec753097f`
+

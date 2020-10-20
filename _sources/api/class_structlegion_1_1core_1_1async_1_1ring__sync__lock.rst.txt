@@ -1,0 +1,16 @@
+.. _exhale_class_structlegion_1_1core_1_1async_1_1ring__sync__lock:
+
+Class ring_sync_lock
+====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_ring_sync_lock.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::async::ring_sync_lock
+   :members:
+   :protected-members:
+   :undoc-members:

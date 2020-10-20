@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1a5bf27dbe9a647c12e23964e75222c268:
+
+Typedef legion::core::time64
+============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::time64

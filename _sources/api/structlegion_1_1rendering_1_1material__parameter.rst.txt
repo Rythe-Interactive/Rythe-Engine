@@ -1,0 +1,25 @@
+.. _exhale_struct_structlegion_1_1rendering_1_1material__parameter:
+
+Template Struct material_parameter
+==================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_material.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::rendering::material_parameter_base`` (:ref:`exhale_struct_structlegion_1_1rendering_1_1material__parameter__base`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::rendering::material_parameter
+   :members:
+   :protected-members:
+   :undoc-members:

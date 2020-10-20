@@ -1,0 +1,13 @@
+.. _exhale_variable_texture_8hpp_1a69355df00001b5c499b2c9ba71c96d7a:
+
+Variable legion::rendering::default_texture_settings
+====================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_texture.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::rendering::default_texture_settings

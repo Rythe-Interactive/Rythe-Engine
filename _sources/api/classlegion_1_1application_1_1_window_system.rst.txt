@@ -1,0 +1,37 @@
+.. _exhale_class_classlegion_1_1application_1_1_window_system:
+
+Class WindowSystem
+==================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_window_windowsystem.hpp`
+
+
+Nested Relationships
+--------------------
+
+
+Nested Types
+************
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1_window_system_1_1fullscreen__toggle__request`
+- :ref:`exhale_struct_structlegion_1_1application_1_1_window_system_1_1icon__request`
+- :ref:`exhale_struct_structlegion_1_1application_1_1_window_system_1_1window__request`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::core::System< WindowSystem >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::application::WindowSystem
+   :members:
+   :protected-members:
+   :undoc-members:

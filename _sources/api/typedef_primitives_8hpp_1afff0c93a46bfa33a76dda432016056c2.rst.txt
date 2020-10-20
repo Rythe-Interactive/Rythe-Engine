@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1afff0c93a46bfa33a76dda432016056c2:
+
+Typedef legion::core::index_type
+================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::index_type

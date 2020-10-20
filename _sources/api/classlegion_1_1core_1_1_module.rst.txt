@@ -1,0 +1,29 @@
+.. _exhale_class_classlegion_1_1core_1_1_module:
+
+Class Module
+============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_module.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public legion::application::ApplicationModule`` (:ref:`exhale_class_classlegion_1_1application_1_1_application_module`)
+- ``public legion::audio::AudioModule`` (:ref:`exhale_class_classlegion_1_1audio_1_1_audio_module`)
+- ``public legion::core::CoreModule`` (:ref:`exhale_class_classlegion_1_1core_1_1_core_module`)
+- ``public legion::physics::PhysicsModule`` (:ref:`exhale_class_classlegion_1_1physics_1_1_physics_module`)
+- ``public legion::rendering::RenderingModule`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_rendering_module`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::Module
+   :members:
+   :protected-members:
+   :undoc-members:

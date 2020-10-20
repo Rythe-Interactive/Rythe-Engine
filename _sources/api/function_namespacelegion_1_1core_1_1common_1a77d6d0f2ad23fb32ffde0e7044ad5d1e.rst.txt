@@ -1,0 +1,13 @@
+.. _exhale_function_namespacelegion_1_1core_1_1common_1a77d6d0f2ad23fb32ffde0e7044ad5d1e:
+
+Template Function legion::core::common::join_strings_with(Range const&, char)
+=============================================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::common::join_strings_with(Range const&, char)

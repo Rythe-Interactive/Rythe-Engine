@@ -1,0 +1,314 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Kernel &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class Program" href="classlegion_1_1core_1_1compute_1_1_program.html" />
+    <link rel="prev" title="Class Context" href="classlegion_1_1core_1_1compute_1_1_context.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classlegion_1_1core_1_1compute_1_1_program.html" title="Class Program"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classlegion_1_1core_1_1compute_1_1_context.html" title="Class Context"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class Kernel</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-kernel">
+<span id="exhale-class-classlegion-1-1core-1-1compute-1-1-kernel"></span><h1>Class Kernel<a class="headerlink" href="#class-kernel" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-compute-kernel-hpp"><span class="std std-ref">File kernel.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6legion4core7compute6KernelE">
+<span id="_CPPv3N6legion4core7compute6KernelE"></span><span id="_CPPv2N6legion4core7compute6KernelE"></span><span id="legion::core::compute::Kernel"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core::compute<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">Kernel</code><a class="headerlink" href="#_CPPv4N6legion4core7compute6KernelE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Wraps a cl_kernel, allows you to parametrize an OpenCL kernel without worrying about the CommandQueue. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel6KernelEP7Program9cl_kernel">
+<span id="_CPPv3N6legion4core7compute6Kernel6KernelEP7Program9cl_kernel"></span><span id="_CPPv2N6legion4core7compute6Kernel6KernelEP7Program9cl_kernel"></span><span id="legion::core::compute::Kernel::Kernel__ProgramP.cl_kernel"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a6da983d938cff16305f3906f77d101fc"></span><code class="sig-name descname">Kernel</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_program.html#_CPPv4N6legion4core7compute7ProgramE" title="legion::core::compute::Program">Program</a>*, cl_kernel<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel6KernelEP7Program9cl_kernel" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel5localE9size_type">
+<span id="_CPPv3N6legion4core7compute6Kernel5localE9size_type"></span><span id="_CPPv2N6legion4core7compute6Kernel5localE9size_type"></span><span id="legion::core::compute::Kernel::local__size_type"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a4ebaf8826652ded874a6023735342002"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">local</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel5localE9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Determines the “Local Work Size”, aka how many Kernels should run in parallel This number should not exceed the amount of available cores, a good max is 1024. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel6globalE9size_type">
+<span id="_CPPv3N6legion4core7compute6Kernel6globalE9size_type"></span><span id="_CPPv2N6legion4core7compute6Kernel6globalE9size_type"></span><span id="legion::core::compute::Kernel::global__size_type"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1ad88940e05790ed9ab629427265b76d34"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">global</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel6globalE9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Determines the “Global Work Size”, aka how many Kernels should run in total This number should match your input arrays (but not exceed it!) </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel18build_buffer_namesEv">
+<span id="_CPPv3N6legion4core7compute6Kernel18build_buffer_namesEv"></span><span id="_CPPv2N6legion4core7compute6Kernel18build_buffer_namesEv"></span><span id="legion::core::compute::Kernel::build_buffer_names"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1aac52725edbcfb30bbe4e07ece6fd9f3e"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">build_buffer_names</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel18build_buffer_namesEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Maps Parameter Names to indices, for example: </p>
+<p><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">__kernel</span> <span class="kt">void</span> <span class="nf">do_something</span><span class="p">(</span><span class="n">__global</span> <span class="kt">int</span><span class="o">*</span> <span class="n">Parameter1</span><span class="p">,</span> <span class="n">__global</span> <span class="kt">int</span><span class="o">*</span> <span class="n">Parameter2</span><span class="p">)</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
+</pre></div>
+</div>
+ would be mapped to:<ul class="simple">
+<li><p>Parameter1 -&gt; 0</p></li>
+<li><p>Parameter2 -&gt; 1 </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel15read_write_modeE11buffer_type">
+<span id="_CPPv3N6legion4core7compute6Kernel15read_write_modeE11buffer_type"></span><span id="_CPPv2N6legion4core7compute6Kernel15read_write_modeE11buffer_type"></span><span id="legion::core::compute::Kernel::read_write_mode__buffer_type"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a040a206eccafb8126d2323a32571c273"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">read_write_mode</code><span class="sig-paren">(</span><a class="reference internal" href="enum_buffer_8hpp_1a7e33690cda6ca2c7eee105bf5e28a0b0.html#_CPPv4N6legion4core7compute11buffer_typeE" title="legion::core::compute::buffer_type">buffer_type</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel15read_write_modeE11buffer_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the modus operandi for Read-Write Buffers: </p>
+<p><ul class="simple">
+<li><p>if you set read_write_mode to READ_BUFFER the next Read-Write <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#classlegion_1_1core_1_1compute_1_1_buffer"><span class="std std-ref">Buffer</span></a> will be read</p></li>
+<li><p>if you set read_write_mode to WRITE_BUFFER the next Read-Writer <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#classlegion_1_1core_1_1compute_1_1_buffer"><span class="std std-ref">Buffer</span></a> will be written</p></li>
+<li><p>setting it to READ | WRITE does not work and will throw a logic_error exception when trying to enqueue </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel14enqueue_bufferE6Buffer10block_mode">
+<span id="_CPPv3N6legion4core7compute6Kernel14enqueue_bufferE6Buffer10block_mode"></span><span id="_CPPv2N6legion4core7compute6Kernel14enqueue_bufferE6Buffer10block_mode"></span><span id="legion::core::compute::Kernel::enqueue_buffer__Buffer.block_mode"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1ad98ebc2b759361246fef2ae2dd8118d5"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">enqueue_buffer</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a> <em>buffer</em>, <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a> <em>blocking</em> = <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a>::<a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_mode8BLOCKINGE" title="legion::core::compute::block_mode::BLOCKING">BLOCKING</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel14enqueue_bufferE6Buffer10block_mode" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Enqueues a <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#classlegion_1_1core_1_1compute_1_1_buffer"><span class="std std-ref">Buffer</span></a> in the command queue, write buffers need to be enqueued before dispatching the kernel, read buffers afterwards. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>This Overload requires that the buffer is named! </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">buffer</span></code>: The buffer you want to enqueue. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">blocking</span></code>: Whether or not you want a blocking write/read (default=BLOCKING) </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel14enqueue_bufferE6BufferRKNSt6stringE10block_mode">
+<span id="_CPPv3N6legion4core7compute6Kernel14enqueue_bufferE6BufferRKNSt6stringE10block_mode"></span><span id="_CPPv2N6legion4core7compute6Kernel14enqueue_bufferE6BufferRKNSt6stringE10block_mode"></span><span id="legion::core::compute::Kernel::enqueue_buffer__Buffer.ssCR.block_mode"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a5443ba3edb767adb03e33428330befa7"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">enqueue_buffer</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a> <em>buffer</em>, <em class="property">const</em> std::string &amp;<em>name</em>, <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a> <em>blocking</em> = <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a>::<a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_mode8BLOCKINGE" title="legion::core::compute::block_mode::BLOCKING">BLOCKING</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel14enqueue_bufferE6BufferRKNSt6stringE10block_mode" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Enqueues a <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#classlegion_1_1core_1_1compute_1_1_buffer"><span class="std std-ref">Buffer</span></a> in the command queue, write buffers need to be enqueued before dispatching the kernel, read buffers afterwards. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">buffer</span></code>: The buffer you want to enqueue. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: The name of the <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#classlegion_1_1core_1_1compute_1_1_buffer"><span class="std std-ref">Buffer</span></a> you want to enqueue to (this must match the kernel name) </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">blocking</span></code>: Whether or not you want a blocking write/read (default=BLOCKING) </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel14enqueue_bufferE6Buffer7cl_uint10block_mode">
+<span id="_CPPv3N6legion4core7compute6Kernel14enqueue_bufferE6Buffer7cl_uint10block_mode"></span><span id="_CPPv2N6legion4core7compute6Kernel14enqueue_bufferE6Buffer7cl_uint10block_mode"></span><span id="legion::core::compute::Kernel::enqueue_buffer__Buffer.cl_uint.block_mode"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1aa21025c781b2c396000b30aafc742ff1"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">enqueue_buffer</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a> <em>buffer</em>, cl_uint <em>index</em>, <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a> <em>blocking</em> = <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a>::<a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_mode8BLOCKINGE" title="legion::core::compute::block_mode::BLOCKING">BLOCKING</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel14enqueue_bufferE6Buffer7cl_uint10block_mode" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Enqueues a <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#classlegion_1_1core_1_1compute_1_1_buffer"><span class="std std-ref">Buffer</span></a> in the command queue, write buffers need to be enqueued before dispatching the kernel, read buffers afterwards. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">buffer</span></code>: The buffer you want to enqueue. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: The index of the <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#classlegion_1_1core_1_1compute_1_1_buffer"><span class="std std-ref">Buffer</span></a> you want to enqueue to (this must match the kernel index) </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">blocking</span></code>: Whether or not you want a blocking write/read (default=BLOCKING) </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel10set_bufferE6Buffer">
+<span id="_CPPv3N6legion4core7compute6Kernel10set_bufferE6Buffer"></span><span id="_CPPv2N6legion4core7compute6Kernel10set_bufferE6Buffer"></span><span id="legion::core::compute::Kernel::set_buffer__Buffer"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1aa18fff10a4d3e4a97c98de49b2fb2c53"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">set_buffer</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a> <em>buffer</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel10set_bufferE6Buffer" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets a <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#classlegion_1_1core_1_1compute_1_1_buffer"><span class="std std-ref">Buffer</span></a> as the <a class="reference internal" href="#classlegion_1_1core_1_1compute_1_1_kernel"><span class="std std-ref">Kernel</span></a> Argument. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>this is required for all <a class="reference internal" href="#classlegion_1_1core_1_1compute_1_1_kernel"><span class="std std-ref">Kernel</span></a> Arguments regardless of buffer direction </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>this needs to be done for all buffers before the kernel is dispatched </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>This Overload requires that the buffer is named </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">buffer</span></code>: The buffer you want to inform the kernel about </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel10set_bufferE6BufferRKNSt6stringE">
+<span id="_CPPv3N6legion4core7compute6Kernel10set_bufferE6BufferRKNSt6stringE"></span><span id="_CPPv2N6legion4core7compute6Kernel10set_bufferE6BufferRKNSt6stringE"></span><span id="legion::core::compute::Kernel::set_buffer__Buffer.ssCR"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1abeed82be8cdc22f543c9ab4e4b6efafb"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">set_buffer</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a> <em>buffer</em>, <em class="property">const</em> std::string &amp;<em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel10set_bufferE6BufferRKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets a <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#classlegion_1_1core_1_1compute_1_1_buffer"><span class="std std-ref">Buffer</span></a> as the <a class="reference internal" href="#classlegion_1_1core_1_1compute_1_1_kernel"><span class="std std-ref">Kernel</span></a> Argument. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>this is required for all <a class="reference internal" href="#classlegion_1_1core_1_1compute_1_1_kernel"><span class="std std-ref">Kernel</span></a> Arguments regardless of buffer direction </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>this needs to be done for all buffers before the kernel is dispatched </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">buffer</span></code>: The buffer you want to inform the kernel about </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: The name of the <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#classlegion_1_1core_1_1compute_1_1_buffer"><span class="std std-ref">Buffer</span></a> you want to inform the kernel about </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel10set_bufferE6Buffer7cl_uint">
+<span id="_CPPv3N6legion4core7compute6Kernel10set_bufferE6Buffer7cl_uint"></span><span id="_CPPv2N6legion4core7compute6Kernel10set_bufferE6Buffer7cl_uint"></span><span id="legion::core::compute::Kernel::set_buffer__Buffer.cl_uint"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1aa2c51de5cf0042f3fef7918c6a9887b2"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">set_buffer</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a> <em>buffer</em>, cl_uint <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel10set_bufferE6Buffer7cl_uint" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets a <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#classlegion_1_1core_1_1compute_1_1_buffer"><span class="std std-ref">Buffer</span></a> as the <a class="reference internal" href="#classlegion_1_1core_1_1compute_1_1_kernel"><span class="std std-ref">Kernel</span></a> Argument. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>this is required for all <a class="reference internal" href="#classlegion_1_1core_1_1compute_1_1_kernel"><span class="std std-ref">Kernel</span></a> Arguments regardless of buffer direction </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>this needs to be done for all buffers before the kernel is dispatched </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">buffer</span></code>: The buffer you want to inform the kernel about </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: The index of the <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#classlegion_1_1core_1_1compute_1_1_buffer"><span class="std std-ref">Buffer</span></a> you want to inform the kernel about </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel22set_and_enqueue_bufferE6Buffer10block_mode">
+<span id="_CPPv3N6legion4core7compute6Kernel22set_and_enqueue_bufferE6Buffer10block_mode"></span><span id="_CPPv2N6legion4core7compute6Kernel22set_and_enqueue_bufferE6Buffer10block_mode"></span><span id="legion::core::compute::Kernel::set_and_enqueue_buffer__Buffer.block_mode"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1ae794026553c3fe9a87075c893510e86d"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">set_and_enqueue_buffer</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a> <em>buffer</em>, <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a> <em>blocking</em> = <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a>::<a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_mode8BLOCKINGE" title="legion::core::compute::block_mode::BLOCKING">BLOCKING</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel22set_and_enqueue_bufferE6Buffer10block_mode" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>same as informing the kernel about a buffer and then enqueueing it </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel22set_and_enqueue_bufferE6BufferRKNSt6stringE10block_mode">
+<span id="_CPPv3N6legion4core7compute6Kernel22set_and_enqueue_bufferE6BufferRKNSt6stringE10block_mode"></span><span id="_CPPv2N6legion4core7compute6Kernel22set_and_enqueue_bufferE6BufferRKNSt6stringE10block_mode"></span><span id="legion::core::compute::Kernel::set_and_enqueue_buffer__Buffer.ssCR.block_mode"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a503261a5572621583910070012834c9a"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">set_and_enqueue_buffer</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a> <em>buffer</em>, <em class="property">const</em> std::string&amp;, <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a> <em>blocking</em> = <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a>::<a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_mode8BLOCKINGE" title="legion::core::compute::block_mode::BLOCKING">BLOCKING</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel22set_and_enqueue_bufferE6BufferRKNSt6stringE10block_mode" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>same as informing the kernel about a buffer and then enqueueing it </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel22set_and_enqueue_bufferE6Buffer7cl_uint10block_mode">
+<span id="_CPPv3N6legion4core7compute6Kernel22set_and_enqueue_bufferE6Buffer7cl_uint10block_mode"></span><span id="_CPPv2N6legion4core7compute6Kernel22set_and_enqueue_bufferE6Buffer7cl_uint10block_mode"></span><span id="legion::core::compute::Kernel::set_and_enqueue_buffer__Buffer.cl_uint.block_mode"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a3007c89ee8ac2127716c55970dd664e7"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">set_and_enqueue_buffer</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a> <em>buffer</em>, cl_uint <em>index</em>, <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a> <em>blocking</em> = <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a>::<a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_mode8BLOCKINGE" title="legion::core::compute::block_mode::BLOCKING">BLOCKING</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel22set_and_enqueue_bufferE6Buffer7cl_uint10block_mode" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>same as informing the kernel about a buffer and then enqueueing it </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel8dispatchEv">
+<span id="_CPPv3N6legion4core7compute6Kernel8dispatchEv"></span><span id="_CPPv2N6legion4core7compute6Kernel8dispatchEv"></span><span id="legion::core::compute::Kernel::dispatch"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a3b2fa64b563b1e6359766003cd1eecc3"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">dispatch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel8dispatchEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Dispatches the <a class="reference internal" href="#classlegion_1_1core_1_1compute_1_1_kernel"><span class="std std-ref">Kernel</span></a> to the command-queue. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>All <a class="reference internal" href="#classlegion_1_1core_1_1compute_1_1_kernel"><span class="std std-ref">Kernel</span></a> Parameters must be set before this can be called </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>global and local must be set before this can be called </p>
+</dd>
+<dt><strong>Pre</strong></dt><dd><p>set_buffer </p>
+</dd>
+<dt><strong>Pre</strong></dt><dd><p>set_and_enqueue_buffer </p>
+</dd>
+<dt><strong>Pre</strong></dt><dd><p>local </p>
+</dd>
+<dt><strong>Pre</strong></dt><dd><p>global </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core7compute6Kernel6finishEv">
+<span id="_CPPv3NK6legion4core7compute6Kernel6finishEv"></span><span id="_CPPv2NK6legion4core7compute6Kernel6finishEv"></span><span id="legion::core::compute::Kernel::finishC"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a2a1992d932c07918c68ccc37a52b6eb0"></span>void <code class="sig-name descname">finish</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core7compute6Kernel6finishEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Ensures that the command-queue is committed and finished executing. </p>
+<p><dl class="simple">
+<dt><strong>Pre</strong></dt><dd><p>dispatch </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class Kernel</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="classlegion_1_1core_1_1compute_1_1_context.html" title="previous chapter">Class Context</a></li>
+      <li>Next: <a href="classlegion_1_1core_1_1compute_1_1_program.html" title="next chapter">Class Program</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classlegion_1_1core_1_1compute_1_1_kernel.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

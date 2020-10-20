@@ -1,0 +1,25 @@
+.. _exhale_class_structlegion_1_1core_1_1ecs_1_1archetype:
+
+Template Class archetype
+========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_archetype.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::core::ecs::archetype_base`` (:ref:`exhale_class_structlegion_1_1core_1_1ecs_1_1archetype__base`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::ecs::archetype
+   :members:
+   :protected-members:
+   :undoc-members:

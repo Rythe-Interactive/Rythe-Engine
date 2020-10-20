@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File audio_segment.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File audio_segment.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-audio-segment-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-audio-data-audio-segment-cpp"></span><h1>Program Listing for File audio_segment.cpp<a class="headerlink" href="#program-listing-for-file-audio-segment-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_audio_segment.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-audio-data-audio-segment-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/audio/data/audio_segment.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;audio/data/audio_segment.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">audio</span>
+<span class="p">{</span>
+    <span class="n">audio_segment_handle</span> <span class="n">AudioSegmentCache</span><span class="o">::</span><span class="n">createAudioSegment</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">audio_import_settings</span> <span class="n">settings</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_segmentsLock</span><span class="p">);</span>
+            <span class="c1">// check if segment has been loaded before</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_segments</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+                <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Segment is loaded for the first time</span>
+        <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="n">fs</span><span class="o">::</span><span class="n">AssetImporter</span><span class="o">::</span><span class="n">tryLoad</span><span class="o">&lt;</span><span class="n">audio_segment</span><span class="o">&gt;</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">settings</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">common</span><span class="o">::</span><span class="n">valid</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//log::error(&quot;Audio file wrong!&quot;);</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Error while loading file: {}, {}&quot;</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">file</span><span class="p">.</span><span class="n">get_filename</span><span class="p">()),</span> <span class="n">result</span><span class="p">.</span><span class="n">get_error</span><span class="p">());</span>
+            <span class="k">return</span> <span class="n">invalid_audio_segment_handle</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Succesfully loaded audio segment</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_segmentsLock</span><span class="p">);</span>
+            <span class="k">auto</span><span class="o">*</span> <span class="n">pairPointer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">audio_segment</span><span class="o">&gt;</span><span class="p">(</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">audio_segment</span><span class="o">&gt;</span><span class="p">(</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">(),</span>
+                    <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">audio_segment</span><span class="o">&gt;</span><span class="p">(</span><span class="n">result</span><span class="p">)));</span>
+            <span class="n">m_segments</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">audio_segment</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">pairPointer</span><span class="p">)));</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">audio_segment</span><span class="o">&amp;&gt;</span> <span class="n">audio_segment_handle</span><span class="o">::</span><span class="n">get</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">AudioSegmentCache</span><span class="o">::</span><span class="n">m_segmentsLock</span><span class="p">);</span>
+
+        <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">segment</span><span class="p">]</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="n">AudioSegmentCache</span><span class="o">::</span><span class="n">m_segments</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get</span><span class="p">());</span>
+
+        <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">lock</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">segment</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span> <span class="o">&lt;</span> <span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">audio_segment</span><span class="o">&gt;&gt;&gt;</span> <span class="n">AudioSegmentCache</span><span class="o">::</span><span class="n">m_segments</span><span class="p">;</span>
+    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">AudioSegmentCache</span><span class="o">::</span><span class="n">m_segmentsLock</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_audio_segment.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

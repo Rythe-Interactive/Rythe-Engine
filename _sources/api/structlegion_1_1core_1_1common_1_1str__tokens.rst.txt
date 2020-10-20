@@ -1,0 +1,25 @@
+.. _exhale_struct_structlegion_1_1core_1_1common_1_1str__tokens:
+
+Template Struct str_tokens
+==========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public std::ctype< char >``
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::common::str_tokens
+   :members:
+   :protected-members:
+   :undoc-members:

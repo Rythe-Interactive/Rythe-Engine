@@ -1,0 +1,27 @@
+.. _exhale_class_classlegion_1_1core_1_1scheduling_1_1_scheduler:
+
+Class Scheduler
+===============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_scheduler.hpp`
+
+
+Nested Relationships
+--------------------
+
+
+Nested Types
+************
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable`
+- :ref:`exhale_struct_structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1thread__error`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::scheduling::Scheduler
+   :members:
+   :protected-members:
+   :undoc-members:

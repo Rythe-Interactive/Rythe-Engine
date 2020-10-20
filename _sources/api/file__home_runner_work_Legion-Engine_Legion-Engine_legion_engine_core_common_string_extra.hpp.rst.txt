@@ -1,0 +1,146 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp:
+
+File string_extra.hpp
+=====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/common``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/common/string_extra.hpp``)
+---------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``algorithm``
+
+- ``cctype``
+
+- ``cstring``
+
+- ``iterator`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_iterator_tricks.hpp`)
+
+- ``locale``
+
+- ``sstream``
+
+- ``string`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`)
+
+- ``vector`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_vector_view.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_common.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_importers_mesh_importers.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_basic_resolver.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_detail_strpath_manip.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_navigator.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__common`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1common_1_1is_chars`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1common_1_1str__tokens`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a324f315e4457bf17ffc7b623379711ff`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a694b6a6b7c55430a6d50502a229cb60f`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a74cc80b23f2a17ff531ff9be5a1d3201`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a23fff450dcf721c830cb9e3a36a5381e`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a20ad9ed4fa81e004d572a28e095d1594`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a4b80e5f32e486e733eb995bc908b1e9a`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a6637167f612315189c6b67f1220ec1e0`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a78d8db2b93f850e7fe7ee31f1218a062`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a5e685911322a09b0c414f7c6602799e6`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a77d6d0f2ad23fb32ffde0e7044ad5d1e`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a43b19facd7db54f0347734c06e835029`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a4f75447b2b14a0d7090cbc4bc5e1b193`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1adf4ea5d08e701ac4855ae592ad921810`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ae5f726b49a2dc922137c0c9c17ec7aec`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ab2edcca0424d1258f7f8164f74b51d66`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ab113b1bf7ffcb9541b570f782eed8cf5`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a7a032691bc843b65c9b3d0c90d7b0a0c`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ade252c5f972db8d2a929a300157083ec`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a92c9f197f8e27ebc88ed5c1878bde2f8`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1aa1847a96dd1755afdaef7c1ecd0642ff`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ab454b41ced6bdf3688357bfd7de52dd5`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a7cebc6d90cecb0173c2d0e6c7885c5bf`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ad5008f9b0fc90f8431f9552cf619e28b`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1adcbd10d6d406bbcc73e43ed867dc97d6`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a1df999ea992fd826b727683ec2359114`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a34257a94dbd637054a6634249b072bae`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a8d3d7865efc31c33b26e2060d3cc1def`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a56aed0be8cecb875c4927db1e0dcaf93`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ab888b105b685388605c20798aee44d9b`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a36743a3105fe1206a9a885ace2b0ed92`
+

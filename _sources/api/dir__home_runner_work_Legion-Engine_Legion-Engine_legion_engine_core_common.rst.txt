@@ -1,0 +1,25 @@
+.. _dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common:
+
+
+Directory common
+================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/common``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_common.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_inteface_traits.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_result.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_unit_conversion.hpp`
+
+

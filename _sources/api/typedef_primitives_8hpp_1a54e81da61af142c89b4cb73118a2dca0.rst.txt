@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1a54e81da61af142c89b4cb73118a2dca0:
+
+Typedef legion::core::hours
+===========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::hours

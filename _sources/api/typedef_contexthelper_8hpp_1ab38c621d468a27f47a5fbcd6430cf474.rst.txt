@@ -1,0 +1,13 @@
+.. _exhale_typedef_contexthelper_8hpp_1ab38c621d468a27f47a5fbcd6430cf474:
+
+Typedef legion::application::gl_id
+==================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_context_contexthelper.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::application::gl_id

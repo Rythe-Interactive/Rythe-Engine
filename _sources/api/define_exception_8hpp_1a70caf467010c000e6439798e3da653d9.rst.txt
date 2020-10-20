@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1a70caf467010c000e6439798e3da653d9:
+
+Define legion_invalid_fetch_msg
+===============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: legion_invalid_fetch_msg

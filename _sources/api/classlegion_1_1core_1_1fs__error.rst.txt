@@ -1,0 +1,25 @@
+.. _exhale_class_classlegion_1_1core_1_1fs__error:
+
+Class fs_error
+==============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::core::exception`` (:ref:`exhale_class_classlegion_1_1core_1_1exception`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::fs_error
+   :members:
+   :protected-members:
+   :undoc-members:

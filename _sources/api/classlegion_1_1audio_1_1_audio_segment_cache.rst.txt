@@ -1,0 +1,16 @@
+.. _exhale_class_classlegion_1_1audio_1_1_audio_segment_cache:
+
+Class AudioSegmentCache
+=======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_audio_segment.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::audio::AudioSegmentCache
+   :members:
+   :protected-members:
+   :undoc-members:

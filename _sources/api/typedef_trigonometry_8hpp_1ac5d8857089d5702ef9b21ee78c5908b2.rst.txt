@@ -1,0 +1,13 @@
+.. _exhale_typedef_trigonometry_8hpp_1ac5d8857089d5702ef9b21ee78c5908b2:
+
+Typedef legion::core::math::angled
+==================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_trigonometry.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::math::angled

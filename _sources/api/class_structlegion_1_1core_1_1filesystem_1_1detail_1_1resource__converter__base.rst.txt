@@ -1,0 +1,31 @@
+.. _exhale_class_structlegion_1_1core_1_1filesystem_1_1detail_1_1resource__converter__base:
+
+Class resource_converter_base
+=============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_assetimporter.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public legion::core::filesystem::resource_converter< result, Settings >`` (:ref:`exhale_class_structlegion_1_1core_1_1filesystem_1_1resource__converter`)
+- ``public legion::core::filesystem::resource_converter< audio_segment, audio_import_settings >`` (:ref:`exhale_class_structlegion_1_1core_1_1filesystem_1_1resource__converter`)
+- ``public legion::core::filesystem::resource_converter< basic_resource >`` (:ref:`exhale_class_structlegion_1_1core_1_1filesystem_1_1resource__converter`)
+- ``public legion::core::filesystem::resource_converter< image, image_import_settings >`` (:ref:`exhale_class_structlegion_1_1core_1_1filesystem_1_1resource__converter`)
+- ``public legion::core::filesystem::resource_converter< mesh, mesh_import_settings >`` (:ref:`exhale_class_structlegion_1_1core_1_1filesystem_1_1resource__converter`)
+- ``public legion::core::filesystem::resource_converter< T >`` (:ref:`exhale_class_structlegion_1_1core_1_1filesystem_1_1resource__converter`)
+- ``public legion::core::filesystem::resource_converter< texture, texture_import_settings >`` (:ref:`exhale_class_structlegion_1_1core_1_1filesystem_1_1resource__converter`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::filesystem::detail::resource_converter_base
+   :members:
+   :protected-members:
+   :undoc-members:

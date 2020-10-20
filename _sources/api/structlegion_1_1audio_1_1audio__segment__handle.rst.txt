@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1audio_1_1audio__segment__handle:
+
+Struct audio_segment_handle
+===========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_audio_segment.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::audio::audio_segment_handle
+   :members:
+   :protected-members:
+   :undoc-members:

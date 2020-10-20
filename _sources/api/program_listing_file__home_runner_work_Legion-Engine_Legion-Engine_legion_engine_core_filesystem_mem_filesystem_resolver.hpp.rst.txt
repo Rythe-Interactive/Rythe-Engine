@@ -1,0 +1,67 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_mem_filesystem_resolver.hpp:
+
+Program Listing for File mem_filesystem_resolver.hpp
+====================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_mem_filesystem_resolver.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/filesystem/mem_filesystem_resolver.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include "filesystem_resolver.hpp"
+   
+   
+   
+   namespace legion::core::filesystem
+   {
+       class mem_filesystem_resolver : public filesystem_resolver, public memory_resolver_common_base
+       {
+       public:
+           explicit mem_filesystem_resolver(std::shared_ptr<const byte_vec> target_data);
+   
+           bool prewarm() const;
+   
+           void set_disk_data(const byte_vec& target_data)
+           {
+               m_targetData = std::make_shared<const byte_vec>(target_data.begin(), target_data.end());
+           }
+           void set_disk_data(byte_vec&& target_data)
+           {
+               m_targetData = std::make_shared<const byte_vec>(std::move(target_data));
+           }
+           void set_disk_data(std::shared_ptr<const byte_vec> target_data)
+           {
+               m_targetData = target_data;
+           }
+   
+           L_NODISCARD filesystem_resolver* make() final override
+           {
+               mem_filesystem_resolver* x = make_higher();
+               x->set_disk_data(m_targetData);
+               return x;
+           }
+   
+           L_NODISCARD virtual mem_filesystem_resolver* make_higher() LEGION_PURE;
+   
+   
+       protected:
+   
+           L_NODISCARD const byte_vec& get_data() const;
+           L_NODISCARD byte_vec& get_data();
+   
+   
+           virtual void build_memory_representation(std::shared_ptr<const byte_vec> in, std::shared_ptr<byte_vec> out) const LEGION_PURE;
+   
+           virtual void build_disk_representation(std::shared_ptr<const byte_vec> in, std::shared_ptr<byte_vec> out) const LEGION_IMPURE;
+   
+           virtual std::size_t size_hint(std::shared_ptr<const byte_vec> in) const LEGION_IMPURE_RETURN(0);
+   
+   
+       private:
+           mutable std::shared_ptr<byte_vec> m_data;
+           std::shared_ptr<const byte_vec> m_targetData;
+       };
+   }

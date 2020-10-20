@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class filesystem_resolver &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class filesystem_resolver_common_base" href="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver__common__base.html" />
+    <link rel="prev" title="Class resource_converter_base" href="class_structlegion_1_1core_1_1filesystem_1_1detail_1_1resource__converter__base.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver__common__base.html" title="Class filesystem_resolver_common_base"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="class_structlegion_1_1core_1_1filesystem_1_1detail_1_1resource__converter__base.html" title="Class resource_converter_base"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class filesystem_resolver</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-filesystem-resolver">
+<span id="exhale-class-classlegion-1-1core-1-1filesystem-1-1filesystem-resolver"></span><h1>Class filesystem_resolver<a class="headerlink" href="#class-filesystem-resolver" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filesystem_resolver.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-filesystem-filesystem-resolver-hpp"><span class="std std-ref">File filesystem_resolver.hpp</span></a></p></li>
+</ul>
+<div class="section" id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="base-type">
+<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::core::filesystem::filesystem_resolver_common_base</span></code> (<a class="reference internal" href="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver__common__base.html#exhale-class-classlegion-1-1core-1-1filesystem-1-1filesystem-resolver-common-base"><span class="std std-ref">Class filesystem_resolver_common_base</span></a>)</p></li>
+</ul>
+</div>
+<div class="section" id="derived-types">
+<h3>Derived Types<a class="headerlink" href="#derived-types" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::core::filesystem::basic_resolver</span></code> (<a class="reference internal" href="classlegion_1_1core_1_1filesystem_1_1basic__resolver.html#exhale-class-classlegion-1-1core-1-1filesystem-1-1basic-resolver"><span class="std std-ref">Class basic_resolver</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::core::filesystem::mem_filesystem_resolver</span></code> (<a class="reference internal" href="classlegion_1_1core_1_1filesystem_1_1mem__filesystem__resolver.html#exhale-class-classlegion-1-1core-1-1filesystem-1-1mem-filesystem-resolver"><span class="std std-ref">Class mem_filesystem_resolver</span></a>)</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6legion4core10filesystem19filesystem_resolverE">
+<span id="_CPPv3N6legion4core10filesystem19filesystem_resolverE"></span><span id="_CPPv2N6legion4core10filesystem19filesystem_resolverE"></span><span id="legion::core::filesystem::filesystem_resolver"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core::filesystem<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">filesystem_resolver</code> : <em class="property">public</em> legion::core::filesystem::<a class="reference internal" href="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver__common__base.html#_CPPv4N6legion4core10filesystem31filesystem_resolver_common_baseE" title="legion::core::filesystem::filesystem_resolver_common_base">filesystem_resolver_common_base</a><a class="headerlink" href="#_CPPv4N6legion4core10filesystem19filesystem_resolverE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Abstract class that should represent and implement all functions of your filesystem, note in particular the pure virtual functions. </p>
+<p>Subclassed by <a class="reference internal" href="classlegion_1_1core_1_1filesystem_1_1basic__resolver.html#classlegion_1_1core_1_1filesystem_1_1basic__resolver"><span class="std std-ref">legion::core::filesystem::basic_resolver</span></a>, <a class="reference internal" href="classlegion_1_1core_1_1filesystem_1_1mem__filesystem__resolver.html#classlegion_1_1core_1_1filesystem_1_1mem__filesystem__resolver"><span class="std std-ref">legion::core::filesystem::mem_filesystem_resolver</span></a></p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core10filesystem19filesystem_resolver19filesystem_resolverEv">
+<span id="_CPPv3N6legion4core10filesystem19filesystem_resolver19filesystem_resolverEv"></span><span id="_CPPv2N6legion4core10filesystem19filesystem_resolver19filesystem_resolverEv"></span><span id="legion::core::filesystem::filesystem_resolver::filesystem_resolver"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1a590007159924d1f361d4bcf0e05ea2c8"></span><code class="sig-name descname">filesystem_resolver</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N6legion4core10filesystem19filesystem_resolver19filesystem_resolverEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core10filesystem19filesystem_resolver19filesystem_resolverERK19filesystem_resolver">
+<span id="_CPPv3N6legion4core10filesystem19filesystem_resolver19filesystem_resolverERK19filesystem_resolver"></span><span id="_CPPv2N6legion4core10filesystem19filesystem_resolver19filesystem_resolverERK19filesystem_resolver"></span><span id="legion::core::filesystem::filesystem_resolver::filesystem_resolver__filesystem_resolverCR"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1a23469bd3d07e79f65d4f6c6f71165173"></span><code class="sig-name descname">filesystem_resolver</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion4core10filesystem19filesystem_resolver19filesystem_resolverERK19filesystem_resolver" title="legion::core::filesystem::filesystem_resolver::filesystem_resolver">filesystem_resolver</a>&amp;<span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N6legion4core10filesystem19filesystem_resolver19filesystem_resolverERK19filesystem_resolver" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core10filesystem19filesystem_resolver19filesystem_resolverERR19filesystem_resolver">
+<span id="_CPPv3N6legion4core10filesystem19filesystem_resolver19filesystem_resolverERR19filesystem_resolver"></span><span id="_CPPv2N6legion4core10filesystem19filesystem_resolver19filesystem_resolverERR19filesystem_resolver"></span><span id="legion::core::filesystem::filesystem_resolver::filesystem_resolver__filesystem_resolverRR"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1a77d24185c88a18016ab81d921d88f486"></span><code class="sig-name descname">filesystem_resolver</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core10filesystem19filesystem_resolver19filesystem_resolverERR19filesystem_resolver" title="legion::core::filesystem::filesystem_resolver::filesystem_resolver">filesystem_resolver</a>&amp;&amp;<span class="sig-paren">)</span> <em class="property">noexcept</em> = default<a class="headerlink" href="#_CPPv4N6legion4core10filesystem19filesystem_resolver19filesystem_resolverERR19filesystem_resolver" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core10filesystem19filesystem_resolveraSERK19filesystem_resolver">
+<span id="_CPPv3N6legion4core10filesystem19filesystem_resolveraSERK19filesystem_resolver"></span><span id="_CPPv2N6legion4core10filesystem19filesystem_resolveraSERK19filesystem_resolver"></span><span id="legion::core::filesystem::filesystem_resolver::assign-operator__filesystem_resolverCR"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1a017a2ffca7adc0f177072d6497eca05e"></span><a class="reference internal" href="#_CPPv4N6legion4core10filesystem19filesystem_resolverE" title="legion::core::filesystem::filesystem_resolver">filesystem_resolver</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion4core10filesystem19filesystem_resolverE" title="legion::core::filesystem::filesystem_resolver">filesystem_resolver</a>&amp;<span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N6legion4core10filesystem19filesystem_resolveraSERK19filesystem_resolver" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core10filesystem19filesystem_resolveraSERR19filesystem_resolver">
+<span id="_CPPv3N6legion4core10filesystem19filesystem_resolveraSERR19filesystem_resolver"></span><span id="_CPPv2N6legion4core10filesystem19filesystem_resolveraSERR19filesystem_resolver"></span><span id="legion::core::filesystem::filesystem_resolver::assign-operator__filesystem_resolverRR"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1aacc308e5a7e961d88cf1578bf4b330f7"></span><a class="reference internal" href="#_CPPv4N6legion4core10filesystem19filesystem_resolverE" title="legion::core::filesystem::filesystem_resolver">filesystem_resolver</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core10filesystem19filesystem_resolverE" title="legion::core::filesystem::filesystem_resolver">filesystem_resolver</a>&amp;&amp;<span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N6legion4core10filesystem19filesystem_resolveraSERR19filesystem_resolver" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core10filesystem19filesystem_resolverD0Ev">
+<span id="_CPPv3N6legion4core10filesystem19filesystem_resolverD0Ev"></span><span id="_CPPv2N6legion4core10filesystem19filesystem_resolverD0Ev"></span><span id="legion::core::filesystem::filesystem_resolver::~filesystem_resolver"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1afa9e397beebb13c6580c7406b1a95571"></span><code class="sig-name descname">~filesystem_resolver</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N6legion4core10filesystem19filesystem_resolverD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core10filesystem19filesystem_resolver7resolveERKNSt6stringE">
+<span id="_CPPv3N6legion4core10filesystem19filesystem_resolver7resolveERKNSt6stringE"></span><span id="_CPPv2N6legion4core10filesystem19filesystem_resolver7resolveERKNSt6stringE"></span><span id="legion::core::filesystem::filesystem_resolver::resolve__ssCR"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1ae8d880e7bdadf7a32447d49f414aadc8"></span><a class="reference internal" href="structlegion_1_1core_1_1filesystem_1_1file__traits.html#_CPPv4N6legion4core10filesystem11file_traitsE" title="legion::core::filesystem::file_traits">file_traits</a> <code class="sig-name descname">resolve</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>path</em><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N6legion4core10filesystem19filesystem_resolver7resolveERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets all traits of a particular file. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Same as calling <a class="reference internal" href="#classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1aab3feddacbb2c975455951ecc1ac220e"><span class="std std-ref">set_target</span></a> and then calling all the individual traits manually. </p>
+</dd>
+<dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="structlegion_1_1core_1_1filesystem_1_1file__traits.html#structlegion_1_1core_1_1filesystem_1_1file__traits"><span class="std std-ref">file_traits</span></a> All traits of the file bunched together. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">path</span></code>: The location identifier to the resource. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core10filesystem19filesystem_resolver10get_traitsEv">
+<span id="_CPPv3N6legion4core10filesystem19filesystem_resolver10get_traitsEv"></span><span id="_CPPv2N6legion4core10filesystem19filesystem_resolver10get_traitsEv"></span><span id="legion::core::filesystem::filesystem_resolver::get_traits"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1aa9bfc76fe3010bb049e817da5f1fb45e"></span><a class="reference internal" href="structlegion_1_1core_1_1filesystem_1_1file__traits.html#_CPPv4N6legion4core10filesystem11file_traitsE" title="legion::core::filesystem::file_traits">file_traits</a> <code class="sig-name descname">get_traits</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N6legion4core10filesystem19filesystem_resolver10get_traitsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets all traits of a particular file. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Same as getting all the individual traits manually. </p>
+</dd>
+<dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="structlegion_1_1core_1_1filesystem_1_1file__traits.html#structlegion_1_1core_1_1filesystem_1_1file__traits"><span class="std std-ref">file_traits</span></a> All traits of the file bunched together. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core10filesystem19filesystem_resolver14set_identifierERKNSt6stringE">
+<span id="_CPPv3N6legion4core10filesystem19filesystem_resolver14set_identifierERKNSt6stringE"></span><span id="_CPPv2N6legion4core10filesystem19filesystem_resolver14set_identifierERKNSt6stringE"></span><span id="legion::core::filesystem::filesystem_resolver::set_identifier__ssCR"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1a6073f12528fb8ca4f94af5fdd920ee56"></span>void <code class="sig-name descname">set_identifier</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>ident</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core10filesystem19filesystem_resolver14set_identifierERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the identifier of the filesystem. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>If this filesystem is nested it should be the path to the root of the fs otherwise it can be arbitrary. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">ident</span></code>: The identifier of the filesystem. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core10filesystem19filesystem_resolver10set_targetERKNSt6stringE">
+<span id="_CPPv3N6legion4core10filesystem19filesystem_resolver10set_targetERKNSt6stringE"></span><span id="_CPPv2N6legion4core10filesystem19filesystem_resolver10set_targetERKNSt6stringE"></span><span id="legion::core::filesystem::filesystem_resolver::set_target__ssCR"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1aab3feddacbb2c975455951ecc1ac220e"></span>void <code class="sig-name descname">set_target</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core10filesystem19filesystem_resolver10set_targetERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the target path of the resolver. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">target</span></code>: The location identifier to the resource. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core10filesystem19filesystem_resolver7is_fileEv">
+<span id="_CPPv3NK6legion4core10filesystem19filesystem_resolver7is_fileEv"></span><span id="_CPPv2NK6legion4core10filesystem19filesystem_resolver7is_fileEv"></span><span id="legion::core::filesystem::filesystem_resolver::is_fileC"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1acbab00ae9beac511028ab23033acfd6e"></span>bool <code class="sig-name descname">is_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core10filesystem19filesystem_resolver7is_fileEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks if target points to a file. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>(implementation details) Certain traits obviously overrule others. The progression here works like this:<ul class="simple">
+<li><p>if is_file cannot be directory</p></li>
+<li><p>if is_directory cannot be written and cannot be read</p></li>
+<li><p>if exists cannot be created and is valid</p></li>
+<li><p>if exists and is file can be read </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core10filesystem19filesystem_resolver12is_directoryEv">
+<span id="_CPPv3NK6legion4core10filesystem19filesystem_resolver12is_directoryEv"></span><span id="_CPPv2NK6legion4core10filesystem19filesystem_resolver12is_directoryEv"></span><span id="legion::core::filesystem::filesystem_resolver::is_directoryC"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1a3d7596a5389b34eb662671e00b293f71"></span>bool <code class="sig-name descname">is_directory</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core10filesystem19filesystem_resolver12is_directoryEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks if target points to a directory. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core10filesystem19filesystem_resolver8is_validEv">
+<span id="_CPPv3NK6legion4core10filesystem19filesystem_resolver8is_validEv"></span><span id="_CPPv2NK6legion4core10filesystem19filesystem_resolver8is_validEv"></span><span id="legion::core::filesystem::filesystem_resolver::is_validC"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1a2f3edd8ee29bc05eec238a664302c2a4"></span>bool <code class="sig-name descname">is_valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core10filesystem19filesystem_resolver8is_validEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks if target points to a valid location. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core10filesystem19filesystem_resolver9writeableEv">
+<span id="_CPPv3NK6legion4core10filesystem19filesystem_resolver9writeableEv"></span><span id="_CPPv2NK6legion4core10filesystem19filesystem_resolver9writeableEv"></span><span id="legion::core::filesystem::filesystem_resolver::writeableC"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1a6feeebc1ea3ae43c25bca71bf359f30a"></span>bool <code class="sig-name descname">writeable</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core10filesystem19filesystem_resolver9writeableEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks if the target location can be written to. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core10filesystem19filesystem_resolver8readableEv">
+<span id="_CPPv3NK6legion4core10filesystem19filesystem_resolver8readableEv"></span><span id="_CPPv2NK6legion4core10filesystem19filesystem_resolver8readableEv"></span><span id="legion::core::filesystem::filesystem_resolver::readableC"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1af2bcd26fe675723a83a1cf50fe2714c0"></span>bool <code class="sig-name descname">readable</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core10filesystem19filesystem_resolver8readableEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks if the target location can be read from. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core10filesystem19filesystem_resolver9creatableEv">
+<span id="_CPPv3NK6legion4core10filesystem19filesystem_resolver9creatableEv"></span><span id="_CPPv2NK6legion4core10filesystem19filesystem_resolver9creatableEv"></span><span id="legion::core::filesystem::filesystem_resolver::creatableC"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1aa107f615d77324b1603c4a81c9cc2373"></span>bool <code class="sig-name descname">creatable</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core10filesystem19filesystem_resolver9creatableEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks if the target location can be created. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core10filesystem19filesystem_resolver6existsEv">
+<span id="_CPPv3NK6legion4core10filesystem19filesystem_resolver6existsEv"></span><span id="_CPPv2NK6legion4core10filesystem19filesystem_resolver6existsEv"></span><span id="legion::core::filesystem::filesystem_resolver::existsC"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1a42bf9ebb4f89245b1669ff77eb88d534"></span>bool <code class="sig-name descname">exists</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core10filesystem19filesystem_resolver6existsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks if the target location exists. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core10filesystem19filesystem_resolver2lsEv">
+<span id="_CPPv3NK6legion4core10filesystem19filesystem_resolver2lsEv"></span><span id="_CPPv2NK6legion4core10filesystem19filesystem_resolver2lsEv"></span><span id="legion::core::filesystem::filesystem_resolver::lsC"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1a4536b6f0c46db76510cca82428a71e13"></span>std::set&lt;std::string&gt; <code class="sig-name descname">ls</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core10filesystem19filesystem_resolver2lsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets all entries in a directory or similar concept (assume -a). </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>When not is_directory this should return an empty set. <a class="reference internal" href="#classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1aab3feddacbb2c975455951ecc1ac220e"><span class="std std-ref">set_target</span></a> </p>
+</dd>
+<dt><strong>Return</strong></dt><dd><p>A set of strings of entries at the current pointed at location. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core10filesystem19filesystem_resolver3getEv">
+<span id="_CPPv3N6legion4core10filesystem19filesystem_resolver3getEv"></span><span id="_CPPv2N6legion4core10filesystem19filesystem_resolver3getEv"></span><span id="legion::core::filesystem::filesystem_resolver::get"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1aeed1f024190c9d7c096f1bfa182f6f5e"></span>common::<a class="reference internal" href="classlegion_1_1core_1_1common_1_1result.html#_CPPv4IDpEN6legion4core6common6resultE" title="legion::core::common::result">result</a>&lt;<a class="reference internal" href="classlegion_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4N6legion4core10filesystem14basic_resourceE" title="legion::core::filesystem::basic_resource">basic_resource</a>, <a class="reference internal" href="classlegion_1_1core_1_1fs__error.html#_CPPv4N6legion4core8fs_errorE" title="legion::core::fs_error">fs_error</a>&gt; <code class="sig-name descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N6legion4core10filesystem19filesystem_resolver3getEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the contents of the file pointed at. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>When not readable this should return an <a class="reference internal" href="classlegion_1_1core_1_1fs__error.html#classlegion_1_1core_1_1fs__error"><span class="std std-ref">fs_error</span></a> using Err(). <a class="reference internal" href="#classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1aab3feddacbb2c975455951ecc1ac220e"><span class="std std-ref">set_target</span></a> </p>
+</dd>
+<dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="classlegion_1_1core_1_1filesystem_1_1basic__resource.html#classlegion_1_1core_1_1filesystem_1_1basic__resource"><span class="std std-ref">basic_resource</span></a> wrapped in Ok() or <a class="reference internal" href="classlegion_1_1core_1_1fs__error.html#classlegion_1_1core_1_1fs__error"><span class="std std-ref">fs_error</span></a> wrapped in Err(). </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core10filesystem19filesystem_resolver3getEv">
+<span id="_CPPv3NK6legion4core10filesystem19filesystem_resolver3getEv"></span><span id="_CPPv2NK6legion4core10filesystem19filesystem_resolver3getEv"></span><span id="legion::core::filesystem::filesystem_resolver::getC"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1ac4efa5f38c91bfae567020aaea7c46aa"></span>common::<a class="reference internal" href="classlegion_1_1core_1_1common_1_1result.html#_CPPv4IDpEN6legion4core6common6resultE" title="legion::core::common::result">result</a>&lt;<em class="property">const</em> <a class="reference internal" href="classlegion_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4N6legion4core10filesystem14basic_resourceE" title="legion::core::filesystem::basic_resource">basic_resource</a>, <a class="reference internal" href="classlegion_1_1core_1_1fs__error.html#_CPPv4N6legion4core8fs_errorE" title="legion::core::fs_error">fs_error</a>&gt; <code class="sig-name descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core10filesystem19filesystem_resolver3getEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core10filesystem19filesystem_resolver3getEN10interfaces18implement_signal_tE">
+<span id="_CPPv3N6legion4core10filesystem19filesystem_resolver3getEN10interfaces18implement_signal_tE"></span><span id="_CPPv2N6legion4core10filesystem19filesystem_resolver3getEN10interfaces18implement_signal_tE"></span><span id="legion::core::filesystem::filesystem_resolver::get__interfaces::implement_signal_t"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1a83ea8e2a759354dab81673bbd182efe2"></span>common::<a class="reference internal" href="classlegion_1_1core_1_1common_1_1result.html#_CPPv4IDpEN6legion4core6common6resultE" title="legion::core::common::result">result</a>&lt;<a class="reference internal" href="classlegion_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4N6legion4core10filesystem14basic_resourceE" title="legion::core::filesystem::basic_resource">basic_resource</a>, <a class="reference internal" href="classlegion_1_1core_1_1fs__error.html#_CPPv4N6legion4core8fs_errorE" title="legion::core::fs_error">fs_error</a>&gt; <code class="sig-name descname">get</code><span class="sig-paren">(</span>interfaces::<a class="reference internal" href="structlegion_1_1core_1_1interfaces_1_1implement__signal__t.html#_CPPv4N6legion4core10interfaces18implement_signal_tE" title="legion::core::interfaces::implement_signal_t">implement_signal_t</a><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N6legion4core10filesystem19filesystem_resolver3getEN10interfaces18implement_signal_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core10filesystem19filesystem_resolver3getEN10interfaces18implement_signal_tE">
+<span id="_CPPv3NK6legion4core10filesystem19filesystem_resolver3getEN10interfaces18implement_signal_tE"></span><span id="_CPPv2NK6legion4core10filesystem19filesystem_resolver3getEN10interfaces18implement_signal_tE"></span><span id="legion::core::filesystem::filesystem_resolver::get__interfaces::implement_signal_tC"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1a773af672ba805b7dd8b45cf6a8a1e881"></span>common::<a class="reference internal" href="classlegion_1_1core_1_1common_1_1result.html#_CPPv4IDpEN6legion4core6common6resultE" title="legion::core::common::result">result</a>&lt;<em class="property">const</em> <a class="reference internal" href="classlegion_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4N6legion4core10filesystem14basic_resourceE" title="legion::core::filesystem::basic_resource">basic_resource</a>, <a class="reference internal" href="classlegion_1_1core_1_1fs__error.html#_CPPv4N6legion4core8fs_errorE" title="legion::core::fs_error">fs_error</a>&gt; <code class="sig-name descname">get</code><span class="sig-paren">(</span>interfaces::<a class="reference internal" href="structlegion_1_1core_1_1interfaces_1_1implement__signal__t.html#_CPPv4N6legion4core10interfaces18implement_signal_tE" title="legion::core::interfaces::implement_signal_t">implement_signal_t</a><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core10filesystem19filesystem_resolver3getEN10interfaces18implement_signal_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core10filesystem19filesystem_resolver3setERK14basic_resource">
+<span id="_CPPv3N6legion4core10filesystem19filesystem_resolver3setERK14basic_resource"></span><span id="_CPPv2N6legion4core10filesystem19filesystem_resolver3setERK14basic_resource"></span><span id="legion::core::filesystem::filesystem_resolver::set__basic_resourceCR"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1a7e5507735dd26015a8a1ae51d24540f5"></span>common::<a class="reference internal" href="classlegion_1_1core_1_1common_1_1result.html#_CPPv4IDpEN6legion4core6common6resultE" title="legion::core::common::result">result</a>&lt;void, <a class="reference internal" href="classlegion_1_1core_1_1fs__error.html#_CPPv4N6legion4core8fs_errorE" title="legion::core::fs_error">fs_error</a>&gt; <code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="classlegion_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4N6legion4core10filesystem14basic_resourceE" title="legion::core::filesystem::basic_resource">basic_resource</a> &amp;<em>res</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core10filesystem19filesystem_resolver3setERK14basic_resource" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the contents of the file pointed at. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>When not writeable should do nothing and return false. </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>When attempting to create a directory res must be empty. </p>
+</dd>
+<dt><strong>Return</strong></dt><dd><p>result&lt;void,fs_error&gt;, has_error == true when the file could not be read. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">[in]</span> <span class="pre">res</span></code>: The resource you want to set at location. <a class="reference internal" href="#classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1aab3feddacbb2c975455951ecc1ac220e"><span class="std std-ref">set_target</span></a> </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core10filesystem19filesystem_resolver3setEN10interfaces18implement_signal_tERK14basic_resource">
+<span id="_CPPv3N6legion4core10filesystem19filesystem_resolver3setEN10interfaces18implement_signal_tERK14basic_resource"></span><span id="_CPPv2N6legion4core10filesystem19filesystem_resolver3setEN10interfaces18implement_signal_tERK14basic_resource"></span><span id="legion::core::filesystem::filesystem_resolver::set__interfaces::implement_signal_t.basic_resourceCR"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1af37c98927399fc22558e6687d52fbeb3"></span>common::<a class="reference internal" href="classlegion_1_1core_1_1common_1_1result.html#_CPPv4IDpEN6legion4core6common6resultE" title="legion::core::common::result">result</a>&lt;void, <a class="reference internal" href="classlegion_1_1core_1_1fs__error.html#_CPPv4N6legion4core8fs_errorE" title="legion::core::fs_error">fs_error</a>&gt; <code class="sig-name descname">set</code><span class="sig-paren">(</span>interfaces::<a class="reference internal" href="structlegion_1_1core_1_1interfaces_1_1implement__signal__t.html#_CPPv4N6legion4core10interfaces18implement_signal_tE" title="legion::core::interfaces::implement_signal_t">implement_signal_t</a>, <em class="property">const</em> <a class="reference internal" href="classlegion_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4N6legion4core10filesystem14basic_resourceE" title="legion::core::filesystem::basic_resource">basic_resource</a> &amp;<em>res</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core10filesystem19filesystem_resolver3setEN10interfaces18implement_signal_tERK14basic_resource" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core10filesystem19filesystem_resolver13get_delimiterEv">
+<span id="_CPPv3NK6legion4core10filesystem19filesystem_resolver13get_delimiterEv"></span><span id="_CPPv2NK6legion4core10filesystem19filesystem_resolver13get_delimiterEv"></span><span id="legion::core::filesystem::filesystem_resolver::get_delimiterC"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1a5b319f173e79956bee67c62e9188c467"></span>char <code class="sig-name descname">get_delimiter</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core10filesystem19filesystem_resolver13get_delimiterEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the delimiter of the filesystem. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>char single character for the delimiter of the filesystem (default: <a class="reference internal" href="classlegion_1_1core_1_1filesystem_1_1strpath__manip.html#classlegion_1_1core_1_1filesystem_1_1strpath__manip_1a0c8c031411dca85c50a7c866c16ae4ec"><span class="std std-ref">strpath_manip::separator()</span></a>). </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core10filesystem19filesystem_resolver5eraseEv">
+<span id="_CPPv3NK6legion4core10filesystem19filesystem_resolver5eraseEv"></span><span id="_CPPv2NK6legion4core10filesystem19filesystem_resolver5eraseEv"></span><span id="legion::core::filesystem::filesystem_resolver::eraseC"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1a803904b11f0ddc90f03f0d4d5631cdb1"></span>void <code class="sig-name descname">erase</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core10filesystem19filesystem_resolver5eraseEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Destroys the file pointed to. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>when the files does not exists (traits.valid = false) this has no effect. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core10filesystem19filesystem_resolver5eraseEN10interfaces18implement_signal_tE">
+<span id="_CPPv3NK6legion4core10filesystem19filesystem_resolver5eraseEN10interfaces18implement_signal_tE"></span><span id="_CPPv2NK6legion4core10filesystem19filesystem_resolver5eraseEN10interfaces18implement_signal_tE"></span><span id="legion::core::filesystem::filesystem_resolver::erase__interfaces::implement_signal_tC"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1a1b91e4a6d9f60463b2731a5d83d253b5"></span>void <code class="sig-name descname">erase</code><span class="sig-paren">(</span>interfaces::<a class="reference internal" href="structlegion_1_1core_1_1interfaces_1_1implement__signal__t.html#_CPPv4N6legion4core10interfaces18implement_signal_tE" title="legion::core::interfaces::implement_signal_t">implement_signal_t</a><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core10filesystem19filesystem_resolver5eraseEN10interfaces18implement_signal_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core10filesystem19filesystem_resolver13get_fs_traitsEv">
+<span id="_CPPv3NK6legion4core10filesystem19filesystem_resolver13get_fs_traitsEv"></span><span id="_CPPv2NK6legion4core10filesystem19filesystem_resolver13get_fs_traitsEv"></span><span id="legion::core::filesystem::filesystem_resolver::get_fs_traitsC"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1aa18c4f6fb2b6031d5b30f6dc4eadcb61"></span><em class="property">const</em> <a class="reference internal" href="structlegion_1_1core_1_1filesystem_1_1filesystem__traits.html#_CPPv4N6legion4core10filesystem17filesystem_traitsE" title="legion::core::filesystem::filesystem_traits">filesystem_traits</a> &amp;<code class="sig-name descname">get_fs_traits</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core10filesystem19filesystem_resolver13get_fs_traitsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core10filesystem19filesystem_resolver7inheritER19filesystem_resolver">
+<span id="_CPPv3N6legion4core10filesystem19filesystem_resolver7inheritER19filesystem_resolver"></span><span id="_CPPv2N6legion4core10filesystem19filesystem_resolver7inheritER19filesystem_resolver"></span><span id="legion::core::filesystem::filesystem_resolver::inherit__filesystem_resolverR"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1a8759b53d914b05e902db28435cab456b"></span>void <code class="sig-name descname">inherit</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core10filesystem19filesystem_resolverE" title="legion::core::filesystem::filesystem_resolver">filesystem_resolver</a> &amp;<em>outer</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core10filesystem19filesystem_resolver7inheritER19filesystem_resolver" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core10filesystem19filesystem_resolver4makeEv">
+<span id="_CPPv3N6legion4core10filesystem19filesystem_resolver4makeEv"></span><span id="_CPPv2N6legion4core10filesystem19filesystem_resolver4makeEv"></span><span id="legion::core::filesystem::filesystem_resolver::make"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1aeb30f1ba41f3f64205ef73ce247d7485"></span><a class="reference internal" href="#_CPPv4N6legion4core10filesystem19filesystem_resolverE" title="legion::core::filesystem::filesystem_resolver">filesystem_resolver</a> *<code class="sig-name descname">make</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core10filesystem19filesystem_resolver4makeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Required to create new instances of the provider, similar to a surrogate constructor if required arguments must be copied over. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core10filesystem19filesystem_resolver14get_identifierEv">
+<span id="_CPPv3NK6legion4core10filesystem19filesystem_resolver14get_identifierEv"></span><span id="_CPPv2NK6legion4core10filesystem19filesystem_resolver14get_identifierEv"></span><span id="legion::core::filesystem::filesystem_resolver::get_identifierC"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1a9dc0ffbbe14155f6b2eb7d0355f7448b"></span><em class="property">const</em> std::string &amp;<code class="sig-name descname">get_identifier</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core10filesystem19filesystem_resolver14get_identifierEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the identifier of the filesystem for tl resolvers this is the same as the root-domains. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core10filesystem19filesystem_resolver10get_targetEv">
+<span id="_CPPv3NK6legion4core10filesystem19filesystem_resolver10get_targetEv"></span><span id="_CPPv2NK6legion4core10filesystem19filesystem_resolver10get_targetEv"></span><span id="legion::core::filesystem::filesystem_resolver::get_targetC"></span><span class="target" id="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver_1ac5cb303ab84db69cb1a29b2785942d48"></span><em class="property">const</em> std::string &amp;<code class="sig-name descname">get_target</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core10filesystem19filesystem_resolver10get_targetEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the targeted file of the filesystem. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class filesystem_resolver</a><ul>
+<li><a class="reference internal" href="#inheritance-relationships">Inheritance Relationships</a><ul>
+<li><a class="reference internal" href="#base-type">Base Type</a></li>
+<li><a class="reference internal" href="#derived-types">Derived Types</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="class_structlegion_1_1core_1_1filesystem_1_1detail_1_1resource__converter__base.html" title="previous chapter">Class resource_converter_base</a></li>
+      <li>Next: <a href="classlegion_1_1core_1_1filesystem_1_1filesystem__resolver__common__base.html" title="next chapter">Class filesystem_resolver_common_base</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classlegion_1_1core_1_1filesystem_1_1filesystem__resolver.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

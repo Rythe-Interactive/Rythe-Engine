@@ -1,0 +1,86 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_view.hpp:
+
+File view.hpp
+=============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/filesystem``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/filesystem/view.hpp``)
+-----------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_view.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/common/exception.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`)
+
+- ``core/common/result.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_result.hpp`)
+
+- ``core/filesystem/resource.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_resource.hpp`)
+
+- ``detail/traits.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_detail_traits.hpp`)
+
+- ``mem_filesystem_resolver.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_mem_filesystem_resolver.hpp`)
+
+- ``navigator.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_navigator.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_image.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_mesh.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_assetimporter.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filesystem.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_view.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__filesystem`
+
+- :ref:`namespace_legion__core__filesystem__literals`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1filesystem_1_1view_1_1create__chain`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1view`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1filesystem_1_1literals_1af86a45cc548f6951d8971f1ae9272675`
+

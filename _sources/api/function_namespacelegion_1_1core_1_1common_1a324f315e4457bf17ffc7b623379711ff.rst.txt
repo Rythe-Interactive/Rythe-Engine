@@ -1,0 +1,13 @@
+.. _exhale_function_namespacelegion_1_1core_1_1common_1a324f315e4457bf17ffc7b623379711ff:
+
+Template Function legion::core::common::arr_length
+==================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::common::arr_length(T)

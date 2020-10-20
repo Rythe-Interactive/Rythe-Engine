@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1aff1741c7b4c268d2fa45616840fa7b37:
+
+Typedef legion::core::fast_nano_seconds
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::fast_nano_seconds

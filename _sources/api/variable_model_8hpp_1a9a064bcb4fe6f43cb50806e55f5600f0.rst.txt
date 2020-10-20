@@ -1,0 +1,13 @@
+.. _exhale_variable_model_8hpp_1a9a064bcb4fe6f43cb50806e55f5600f0:
+
+Variable legion::rendering::invalid_model_handle
+================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_model.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::rendering::invalid_model_handle

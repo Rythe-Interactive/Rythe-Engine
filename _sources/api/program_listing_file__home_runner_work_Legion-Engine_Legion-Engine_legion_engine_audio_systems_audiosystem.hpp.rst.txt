@@ -1,0 +1,73 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_systems_audiosystem.hpp:
+
+Program Listing for File audiosystem.hpp
+========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_systems_audiosystem.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/audio/systems/audiosystem.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <audio/components/audio_source.hpp>
+   #include <audio/components/audio_listener.hpp>
+   #define AL_ALEXT_PROTOTYPES
+   #if !defined(DOXY_EXCLUDE)
+   #include <AL/alext.h>
+   #endif
+   #include <audio/data/importers/audio_importers.hpp>
+   
+   namespace legion::audio
+   {
+       inline void openal_error()
+       {
+           ALCenum error;
+           error = alGetError();
+           if (error != AL_NO_ERROR)
+               legion::log::warn("ERROR: OpenAl error: {}", error);
+       }
+   
+       class AudioSystem final : public System<AudioSystem>
+       {
+       public:
+           ecs::EntityQuery sourceQuery;
+   
+           ~AudioSystem();
+   
+           virtual void setup();
+   
+           void onAudioSourceComponentCreate(events::component_creation<audio_source>* event);
+   
+           // NOTE TO SELF
+           // Make sure this releases the audio file and source
+           void onAudioSourceComponentDestroy(events::component_destruction<audio_source>* event);
+   
+           void onAudioListenerComponentCreate(events::component_creation<audio_listener>* event);
+   
+           void onAudioListenerComponentDestroy(events::component_destruction<audio_listener>* event);
+   
+           void update(time::span deltatime);
+   
+           static void setDistanceModel(ALenum distanceModel);
+   
+           static async::readonly_rw_spinlock contextLock;
+       private:
+           void initSource(audio_source& source);
+   
+           void queryInformation();
+           void setListener(position p, rotation r);
+           ecs::entity_handle m_listenerEnt;
+   
+           position m_listenerPosition;
+           std::unordered_map <ecs::component_handle<audio_source>, position > m_sourcePositions;
+   
+           static ALCdevice* alDevice;
+           static ALCcontext* alcContext;
+           static unsigned int sourceCount;
+           static unsigned int listenerCount;
+       };
+   }
+   
+   #include <audio/systems/audiosystem.inl>

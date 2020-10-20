@@ -1,0 +1,13 @@
+.. _exhale_variable_artifact__cache_8hpp_1a7a3bb5619fe349d9099e585686b956a3:
+
+Variable legion::core::filesystem::gc_hist
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_artifact_cache.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::filesystem::gc_hist

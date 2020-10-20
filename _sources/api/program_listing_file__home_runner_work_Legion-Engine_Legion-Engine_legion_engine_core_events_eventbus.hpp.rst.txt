@@ -1,0 +1,119 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_eventbus.hpp:
+
+Program Listing for File eventbus.hpp
+=====================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_eventbus.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/events/eventbus.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/containers/delegate.hpp>
+   #include <core/containers/sparse_map.hpp>
+   #include <core/containers/hashed_sparse_set.hpp>
+   #include <core/types/types.hpp>
+   #include <core/events/event.hpp>
+   
+   #include <memory>
+   
+   namespace legion::core::events
+   {
+       class EventBus
+       {
+           sparse_map<id_type, hashed_sparse_set<event_base*>> m_events;
+           sparse_map<id_type, multicast_delegate<void(event_base*)>> m_eventCallbacks;
+   
+       public:
+           ~EventBus()
+           {
+               for (auto [_, events] : m_events)
+               {
+                   for (auto* event : events)
+                       delete event;
+   
+                   events.clear();
+               }
+           }
+   
+           template<typename event_type, typename... Args, typename = inherits_from<event_type, event<event_type>>>
+           void raiseEvent(Args&&... arguments)
+           {
+               event_type* eventptr;
+   
+               event_type event(arguments...); // Create new event.
+               if (event.persistent() && !(event.unique() && m_events[event_type::id].size()))
+               {
+                   eventptr = new event_type(std::move(event));
+                   m_events[event_type::id].insert(eventptr); // If it's persistent keep the event stored. (Or at least keep it somewhere fetch able.)
+               }
+               else
+                   eventptr = &event;
+   
+               force_value_cast<multicast_delegate<void(event_type*)>>(m_eventCallbacks[event_type::id]).invoke(eventptr); // Notify.            
+           }
+   
+           template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
+           bool checkEvent() const
+           {
+               return m_events.contains(event_type::id) && m_events[event_type::id].size();
+           }
+   
+           template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
+           size_type getEventCount() const
+           {
+               if (m_events.contains(event_type::id))
+                   return m_events[event_type::id].size();
+               return 0;
+           }
+   
+           template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
+           const event_type& getEvent(index_type index = 0) const
+           {
+               if (checkEvent<event_type>())
+                   return *static_cast<event_type*>(m_events[event_type::id][index]); // Static cast because we already know that the types are the same.
+               return nullptr;
+           }
+   
+           template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
+           const event_type& getLastEvent() const
+           {
+               if (checkEvent<event_type>())
+               {
+                   size_type size = m_events[event_type::id].size();
+                   return *static_cast<event_type*>(m_events[event_type::id][size - 1]); // Static cast because we already know that the types are the same.
+               }
+               return nullptr;
+           }
+   
+           template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
+           void clearEvent(index_type index = 0)
+           {
+               if (checkEvent<event_type>())
+               {
+                   auto* event = m_events[event_type::id][index];
+                   m_events[event_type::id].erase(event);
+                   delete event;
+               }
+           }
+   
+           template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
+           void clearLastEvent()
+           {
+               if (checkEvent<event_type>())
+               {
+                   auto* event = m_events[event_type::id][m_events[event_type::id].size() - 1];
+                   m_events[event_type::id].erase(event);
+                   delete event;
+               }
+           }
+   
+           template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
+           void bindToEvent(delegate<void(event_type*)> callback)
+           {
+               m_eventCallbacks[event_type::id] += force_value_cast<delegate<void(event_base*)>>(callback);
+           }
+       };
+   }

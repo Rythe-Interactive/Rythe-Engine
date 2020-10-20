@@ -1,0 +1,13 @@
+.. _exhale_variable_constants_8hpp_1a8c9711ee063e78929cc6b883de399b7c:
+
+Variable legion::core::math::detail::vp_feigenbaum
+==================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_constants.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::math::detail::vp_feigenbaum

@@ -3,7 +3,7 @@
 Template Struct formatter< rotation >
 =====================================
 
-- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_defaults_defaultcomponents.hpp`
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults_defaultcomponents.hpp`
 
 
 Struct Documentation

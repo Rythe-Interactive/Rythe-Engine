@@ -3,7 +3,7 @@
 Define assert_msg
 =================
 
-- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_detail_internals.hpp`
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_detail_internals.hpp`
 
 
 Define Documentation

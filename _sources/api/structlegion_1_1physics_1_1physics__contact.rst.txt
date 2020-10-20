@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1physics_1_1physics__contact:
+
+Struct physics_contact
+======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_contact.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::physics::physics_contact
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,13 @@
+.. _exhale_function_logging_8hpp_1aa4009ea12a29f50e9290842ee5d1350c:
+
+Function legion::core::log::filter
+==================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::log::filter(severity)

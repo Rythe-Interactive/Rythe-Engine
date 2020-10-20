@@ -1,0 +1,25 @@
+.. _exhale_struct_structlegion_1_1application_1_1mouse__scrolled:
+
+Struct mouse_scrolled
+=====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_events_windowinputevents.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::core::events::event< mouse_scrolled >`` (:ref:`exhale_class_structlegion_1_1core_1_1events_1_1event`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::application::mouse_scrolled
+   :members:
+   :protected-members:
+   :undoc-members:

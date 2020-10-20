@@ -1,0 +1,34 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filemanip.cpp:
+
+Program Listing for File filemanip.cpp
+======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filemanip.cpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/filesystem/filemanip.cpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include <core/filesystem/filemanip.hpp>
+   
+   namespace legion::core::filesystem::literals
+   {
+       byte_vec LEGION_FUNC operator""_readfile(const char* str, std::size_t len)
+       {
+           return ::legion::core::filesystem::read_file(std::string_view(str, len));
+       }
+   
+       auto LEGION_FUNC operator""_writefile(const char* str, std::size_t len)
+       {
+           return[path = std::string_view(str, len)](const byte_vec& container)
+           {
+               ::legion::core::filesystem::write_file(path, container);
+           };
+       }
+   
+       bool LEGION_FUNC operator""_exists(const char* str, std::size_t len)
+       {
+           return ::legion::core::filesystem::exists(std::string_view(str, len));
+       }
+   }

@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1a9e6088e7f9df00e9903475ebcc22026b:
+
+Define legion_component_destroyed_error
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: legion_component_destroyed_error

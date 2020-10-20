@@ -1,0 +1,52 @@
+
+.. _namespace_legion__audio:
+
+Namespace legion::audio
+=======================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1audio_1_1audio__import__settings`
+
+- :ref:`exhale_struct_structlegion_1_1audio_1_1audio__listener`
+
+- :ref:`exhale_struct_structlegion_1_1audio_1_1audio__segment`
+
+- :ref:`exhale_struct_structlegion_1_1audio_1_1audio__segment__handle`
+
+- :ref:`exhale_struct_structlegion_1_1audio_1_1audio__source`
+
+- :ref:`exhale_struct_structlegion_1_1audio_1_1mp3__audio__loader`
+
+- :ref:`exhale_class_classlegion_1_1audio_1_1_audio_module`
+
+- :ref:`exhale_class_classlegion_1_1audio_1_1_audio_segment_cache`
+
+- :ref:`exhale_class_classlegion_1_1audio_1_1_audio_system`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_audiosystem_8hpp_1ab4159cd5f772a134d0447c772eda7a34`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_audio__segment_8hpp_1ae921676db641af7e9b8426b19329fff9`
+
+- :ref:`exhale_variable_audio__segment_8hpp_1a4eacb35efa9ab0f9dadb0566f2d346a8`

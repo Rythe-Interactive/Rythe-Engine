@@ -1,0 +1,13 @@
+.. _exhale_variable_audio__segment_8hpp_1ae921676db641af7e9b8426b19329fff9:
+
+Variable legion::audio::default_audio_import_settings
+=====================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_audio_segment.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::audio::default_audio_import_settings

@@ -1,0 +1,26 @@
+.. _dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor:
+
+
+Directory editor
+================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Legion-Engine/Legion-Engine/legion/editor``
+
+Subdirectories
+--------------
+
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_application`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_audio`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_networking`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_physics`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_rendering`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_scripting`
+
+
+

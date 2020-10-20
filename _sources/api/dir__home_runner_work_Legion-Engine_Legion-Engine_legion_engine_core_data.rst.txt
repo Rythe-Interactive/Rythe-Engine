@@ -1,0 +1,29 @@
+.. _dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data:
+
+
+Directory data
+==============
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/data``
+
+Subdirectories
+--------------
+
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_importers`
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_data.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_image.cpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_image.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_mesh.cpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_mesh.hpp`
+
+

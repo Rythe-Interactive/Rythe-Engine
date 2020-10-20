@@ -1,0 +1,140 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp:
+
+File platform.hpp
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/platform``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/platform/platform.hpp``)
+-------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor_editor_impl.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_readonly_rw_spinlock.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_result.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_atomic_sparse_map.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_data_view.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_hashed_sparse_set.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_iterator_tricks.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_sparse_map.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_sparse_set.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_vector_view.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_core.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_archetype.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_container.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_handle.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entity_handle.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entityquery.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_engine.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_module.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_system.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_entry_entry_point.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_event.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filemanip.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_detail_strpath_manip.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filesystem_resolver.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_resource.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_trigonometry.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_process.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_processchain.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_scheduler.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.hpp`
+
+
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_platform_8hpp_1a143f9211b91cb551daf5cfb28e321016`
+
+- :ref:`exhale_define_platform_8hpp_1a4e14578a41d311e647f3aee2b628d3dd`
+
+- :ref:`exhale_define_platform_8hpp_1a2acea82974982ff88014214aafd8d215`
+
+- :ref:`exhale_define_platform_8hpp_1a4ed25dd56aad296e044f27a33ef1c391`
+
+- :ref:`exhale_define_platform_8hpp_1a58c146a24e6a27380242e353366028e8`
+
+- :ref:`exhale_define_platform_8hpp_1aa225e81b803c1ee3cf610c7ea4726f30`
+
+- :ref:`exhale_define_platform_8hpp_1abfb61b7a0feba285b2f667b41d7d5824`
+
+- :ref:`exhale_define_platform_8hpp_1ae97d0d9454d081f9e27221148a080c21`
+
+- :ref:`exhale_define_platform_8hpp_1acecfeef9c678e905611f71a6d27e74e3`
+
+- :ref:`exhale_define_platform_8hpp_1a3eab8ce045ee92aa67c956160c680a5a`
+
+- :ref:`exhale_define_platform_8hpp_1acc7de71b1bcf3d615c5c6e162830b283`
+
+- :ref:`exhale_define_platform_8hpp_1aff2bad99a23ce8c2e9b6766c72940b92`
+
+- :ref:`exhale_define_platform_8hpp_1a9e1b74a95a9ab8cf840c8616de875e61`
+
+- :ref:`exhale_define_platform_8hpp_1a982775c4bd2dd69f3dfe65c7e4b59f26`
+
+- :ref:`exhale_define_platform_8hpp_1ab3c50cb2adb69516a6ac6d80e9a3d9c7`
+
+- :ref:`exhale_define_platform_8hpp_1a08fb6d3bac71936f9357710bc7520f45`
+
+- :ref:`exhale_define_platform_8hpp_1a81be054a235872ff760384525fe1ecd8`
+
+- :ref:`exhale_define_platform_8hpp_1a33684d6c743e29a93b949ce4599a5a48`
+
+- :ref:`exhale_define_platform_8hpp_1ac8c687223be2bdac90dfd02bf6bb4a9a`
+

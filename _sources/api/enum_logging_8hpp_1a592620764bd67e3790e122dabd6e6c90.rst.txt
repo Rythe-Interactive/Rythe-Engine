@@ -1,0 +1,13 @@
+.. _exhale_enum_logging_8hpp_1a592620764bd67e3790e122dabd6e6c90:
+
+Enum severity
+=============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: legion::core::log::severity

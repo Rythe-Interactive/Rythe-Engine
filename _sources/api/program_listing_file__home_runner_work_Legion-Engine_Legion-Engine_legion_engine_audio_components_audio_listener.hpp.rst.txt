@@ -1,0 +1,21 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_components_audio_listener.hpp:
+
+Program Listing for File audio_listener.hpp
+===========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_components_audio_listener.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/audio/components/audio_listener.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/core.hpp>
+   
+   namespace legion::audio
+   {
+       struct audio_listener
+       {
+       };
+   }

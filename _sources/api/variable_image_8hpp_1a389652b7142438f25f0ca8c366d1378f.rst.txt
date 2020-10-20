@@ -1,0 +1,13 @@
+.. _exhale_variable_image_8hpp_1a389652b7142438f25f0ca8c366d1378f:
+
+Variable legion::core::default_image_settings
+=============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_image.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::default_image_settings

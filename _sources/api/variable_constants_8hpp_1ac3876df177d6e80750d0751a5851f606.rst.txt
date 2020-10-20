@@ -1,0 +1,13 @@
+.. _exhale_variable_constants_8hpp_1ac3876df177d6e80750d0751a5851f606:
+
+Variable legion::core::math::detail::very_precise_pi
+====================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_constants.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::math::detail::very_precise_pi

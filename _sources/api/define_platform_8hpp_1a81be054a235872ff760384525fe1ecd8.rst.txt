@@ -1,0 +1,13 @@
+.. _exhale_define_platform_8hpp_1a81be054a235872ff760384525fe1ecd8:
+
+Define LEGION_RELEASE
+=====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: LEGION_RELEASE

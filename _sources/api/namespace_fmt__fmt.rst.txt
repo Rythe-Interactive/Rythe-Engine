@@ -17,15 +17,15 @@ Classes
 -------
 
 
-- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01args_1_1core_1_1math_1_1ivec2_01_4`
+- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1ivec2_01_4`
 
-- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01args_1_1core_1_1math_1_1quat_01_4`
+- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1quat_01_4`
 
-- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01args_1_1core_1_1math_1_1vec2_01_4`
+- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1vec2_01_4`
 
-- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01args_1_1core_1_1math_1_1vec3_01_4`
+- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1vec3_01_4`
 
-- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01args_1_1core_1_1math_1_1vec4_01_4`
+- :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01legion_1_1core_1_1math_1_1vec4_01_4`
 
 - :ref:`exhale_struct_structfmt_1_1fmt_1_1formatter_3_01position_01_4`
 

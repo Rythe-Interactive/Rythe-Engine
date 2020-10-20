@@ -1,0 +1,111 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_readonly_rw_spinlock.hpp:
+
+File readonly_rw_spinlock.hpp
+=============================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/async``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/async/readonly_rw_spinlock.hpp``)
+----------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_readonly_rw_spinlock.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``array``
+
+- ``atomic`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_atomic_sparse_map.hpp`)
+
+- ``core/containers/sparse_set.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_sparse_set.hpp`)
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`)
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`)
+
+- ``thread``
+
+- ``tuple``
+
+- ``unordered_map``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_async.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_readonly_rw_spinlock.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_transferable_atomic.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_atomic_sparse_map.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_image.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_mesh.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_container.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_artifact_cache.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__async`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classlegion_1_1core_1_1async_1_1mixed__multiguard`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1async_1_1readonly__guard`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1async_1_1readonly__multiguard`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1async_1_1readonly__rw__spinlock`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1async_1_1readwrite__guard`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1async_1_1readwrite__multiguard`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_readonly__rw__spinlock_8hpp_1a7388d770ac6f90a39c06820935bc14c9`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_readonly__rw__spinlock_8hpp_1a89751c24fa6156877ab4556b15eb0ace`
+
+- :ref:`exhale_function_readonly__rw__spinlock_8hpp_1a882e9a409db10b6a954c63620d929ad7`
+

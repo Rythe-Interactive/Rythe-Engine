@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1aee117e846634bf2fe4a3880967a25eb4:
+
+Define legion_invalid_entity_error
+==================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: legion_invalid_entity_error

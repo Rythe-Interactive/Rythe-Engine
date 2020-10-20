@@ -1,0 +1,13 @@
+.. _exhale_enum_precision_8hpp_1acc13e397d8c7884e8c3b622c1a1f3532:
+
+Enum data_precision
+===================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_precision.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: legion::core::math::data_precision

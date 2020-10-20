@@ -1,0 +1,74 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_material.hpp:
+
+File material.hpp
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data/material.hpp``)
+--------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_material.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``rendering/data/shader.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_shader.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_renderable.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_material.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__rendering`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1material`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1material__handle`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1material__parameter`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1material__parameter__base`
+
+- :ref:`exhale_class_classlegion_1_1rendering_1_1_material_cache`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_material_8hpp_1a6b7a999738619c65ad248190946473a0`
+

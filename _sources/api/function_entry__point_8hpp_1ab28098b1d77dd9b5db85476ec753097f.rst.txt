@@ -1,0 +1,13 @@
+.. _exhale_function_entry__point_8hpp_1ab28098b1d77dd9b5db85476ec753097f:
+
+Function reportModules
+======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_entry_entry_point.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: reportModules(legion::core::Engine *)

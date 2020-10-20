@@ -1,0 +1,627 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Class hashed_sparse_set &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class image" href="class_structlegion_1_1core_1_1image.html" />
+    <link rel="prev" title="Class fs_error" href="classlegion_1_1core_1_1fs__error.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="class_structlegion_1_1core_1_1image.html" title="Class image"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classlegion_1_1core_1_1fs__error.html" title="Class fs_error"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Template Class hashed_sparse_set</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="template-class-hashed-sparse-set">
+<span id="exhale-class-classlegion-1-1core-1-1hashed-sparse-set"></span><h1>Template Class hashed_sparse_set<a class="headerlink" href="#template-class-hashed-sparse-set" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_hashed_sparse_set.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-containers-hashed-sparse-set-hpp"><span class="std std-ref">File hashed_sparse_set.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE">
+<span id="_CPPv3I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE"></span><span id="_CPPv2I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE"></span>template&lt;typename <code class="sig-name descname">value_type</code>, typename <code class="sig-name descname">hash_type</code> = std::hash&lt;<a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set::value_type">value_type</a>&gt;, template&lt;typename...&gt; typename <code class="sig-name descname">dense_type</code> = std::vector, template&lt;typename...&gt; typename <code class="sig-name descname">sparse_type</code> = std::unordered_map&gt;<br /><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">hashed_sparse_set</code><a class="headerlink" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Quick lookup contiguous map. The map is based on the concept of a sparse set and thus inherits it’s lookup complexity and contiguous nature. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>With default container parameters iterators may be invalidated upon resize. See reference of std::vector. </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>Removing item might invalidate the iterator of the last item in the dense container. </p>
+</dd>
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value_type</span></code>: The type to be used as the value. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dense_type</span></code>: Container to be used to store the values. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sparse_type</span></code>: Container to be used to store the keys. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set9self_typeE">
+<span id="_CPPv3N6legion4core17hashed_sparse_set9self_typeE"></span><span id="_CPPv2N6legion4core17hashed_sparse_set9self_typeE"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a7df6c49914dad715c3ae5720abc54eb3"></span><em class="property">using </em><code class="sig-name descname">self_type</code> = <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set">hashed_sparse_set</a>&lt;<a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set::value_type">value_type</a>, <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set::hash_type">hash_type</a>, <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set::dense_type">dense_type</a>, <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set::sparse_type">sparse_type</a>&gt;<a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set9self_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set14self_referenceE">
+<span id="_CPPv3N6legion4core17hashed_sparse_set14self_referenceE"></span><span id="_CPPv2N6legion4core17hashed_sparse_set14self_referenceE"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a3998d2a8c7757812876fa2d8fb0a8ff5"></span><em class="property">using </em><code class="sig-name descname">self_reference</code> = <a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set9self_typeE" title="legion::core::hashed_sparse_set::self_type">self_type</a>&amp;<a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set14self_referenceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set20self_const_referenceE">
+<span id="_CPPv3N6legion4core17hashed_sparse_set20self_const_referenceE"></span><span id="_CPPv2N6legion4core17hashed_sparse_set20self_const_referenceE"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1ac9306905695eae3559e5a33aa86a8b4d"></span><em class="property">using </em><code class="sig-name descname">self_const_reference</code> = <em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set9self_typeE" title="legion::core::hashed_sparse_set::self_type">self_type</a>&amp;<a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set20self_const_referenceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set15value_referenceE">
+<span id="_CPPv3N6legion4core17hashed_sparse_set15value_referenceE"></span><span id="_CPPv2N6legion4core17hashed_sparse_set15value_referenceE"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1adae81d234c13f1e859d7628c756397d0"></span><em class="property">using </em><code class="sig-name descname">value_reference</code> = <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set::value_type">value_type</a>&amp;<a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set15value_referenceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set21value_const_referenceE">
+<span id="_CPPv3N6legion4core17hashed_sparse_set21value_const_referenceE"></span><span id="_CPPv2N6legion4core17hashed_sparse_set21value_const_referenceE"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1ad8a95f8f3229fc68cabec1e0fd3552fe"></span><em class="property">using </em><code class="sig-name descname">value_const_reference</code> = <em class="property">const</em> <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set::value_type">value_type</a>&amp;<a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set21value_const_referenceE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set13value_pointerE">
+<span id="_CPPv3N6legion4core17hashed_sparse_set13value_pointerE"></span><span id="_CPPv2N6legion4core17hashed_sparse_set13value_pointerE"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1aaceabdc5772a75d785c7069b93898b74"></span><em class="property">using </em><code class="sig-name descname">value_pointer</code> = <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set::value_type">value_type</a>*<a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set13value_pointerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set16sparse_containerE">
+<span id="_CPPv3N6legion4core17hashed_sparse_set16sparse_containerE"></span><span id="_CPPv2N6legion4core17hashed_sparse_set16sparse_containerE"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a97a1678a973555227d74a1f2a0ac187e"></span><em class="property">using </em><code class="sig-name descname">sparse_container</code> = <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set::sparse_type">sparse_type</a>&lt;<a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set::value_type">value_type</a>, <a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a>, <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set::hash_type">hash_type</a>&gt;<a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set16sparse_containerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set15dense_containerE">
+<span id="_CPPv3N6legion4core17hashed_sparse_set15dense_containerE"></span><span id="_CPPv2N6legion4core17hashed_sparse_set15dense_containerE"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1adc837ea7a46488b4da7cdcc1cd8c4717"></span><em class="property">using </em><code class="sig-name descname">dense_container</code> = <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set::dense_type">dense_type</a>&lt;<a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set::value_type">value_type</a>&gt;<a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set15dense_containerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set8iteratorE">
+<span id="_CPPv3N6legion4core17hashed_sparse_set8iteratorE"></span><span id="_CPPv2N6legion4core17hashed_sparse_set8iteratorE"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a27aef2fcd3bc28fa463b4ed5f5e357fa"></span><em class="property">using </em><code class="sig-name descname">iterator</code> = <em class="property">typename</em> <a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set15dense_containerE" title="legion::core::hashed_sparse_set::dense_container">dense_container</a>::iterator<a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set8iteratorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set14const_iteratorE">
+<span id="_CPPv3N6legion4core17hashed_sparse_set14const_iteratorE"></span><span id="_CPPv2N6legion4core17hashed_sparse_set14const_iteratorE"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1af31a6eccb957f13cc4b5818431a875e0"></span><em class="property">using </em><code class="sig-name descname">const_iterator</code> = <em class="property">typename</em> <a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set15dense_containerE" title="legion::core::hashed_sparse_set::dense_container">dense_container</a>::const_iterator<a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set14const_iteratorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set5denseEv">
+<span id="_CPPv3N6legion4core17hashed_sparse_set5denseEv"></span><span id="_CPPv2N6legion4core17hashed_sparse_set5denseEv"></span><span id="legion::core::hashed_sparse_set::dense"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1aec1c9e86ce7e3e4765330eb323bad1ec"></span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set15dense_containerE" title="legion::core::hashed_sparse_set::dense_container">dense_container</a> &amp;<code class="sig-name descname">dense</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set5denseEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_set5denseEv">
+<span id="_CPPv3NK6legion4core17hashed_sparse_set5denseEv"></span><span id="_CPPv2NK6legion4core17hashed_sparse_set5denseEv"></span><span id="legion::core::hashed_sparse_set::denseC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a7f729a58d7c1ed0d1ef271b850d825f6"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set15dense_containerE" title="legion::core::hashed_sparse_set::dense_container">dense_container</a> &amp;<code class="sig-name descname">dense</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_set5denseEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set5beginEv">
+<span id="_CPPv3N6legion4core17hashed_sparse_set5beginEv"></span><span id="_CPPv2N6legion4core17hashed_sparse_set5beginEv"></span><span id="legion::core::hashed_sparse_set::begin"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a5961bc3354ef01db4a02dd96063fb361"></span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set8iteratorE" title="legion::core::hashed_sparse_set::iterator">iterator</a> <code class="sig-name descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set5beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_set5beginEv">
+<span id="_CPPv3NK6legion4core17hashed_sparse_set5beginEv"></span><span id="_CPPv2NK6legion4core17hashed_sparse_set5beginEv"></span><span id="legion::core::hashed_sparse_set::beginC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a53d2cf39cdd87b8bbd1a49de37e5138c"></span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set14const_iteratorE" title="legion::core::hashed_sparse_set::const_iterator">const_iterator</a> <code class="sig-name descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_set5beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_set6cbeginEv">
+<span id="_CPPv3NK6legion4core17hashed_sparse_set6cbeginEv"></span><span id="_CPPv2NK6legion4core17hashed_sparse_set6cbeginEv"></span><span id="legion::core::hashed_sparse_set::cbeginC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1aea2dfca73a23a2767d320dd16a5ebdd4"></span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set14const_iteratorE" title="legion::core::hashed_sparse_set::const_iterator">const_iterator</a> <code class="sig-name descname">cbegin</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_set6cbeginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set3endEv">
+<span id="_CPPv3N6legion4core17hashed_sparse_set3endEv"></span><span id="_CPPv2N6legion4core17hashed_sparse_set3endEv"></span><span id="legion::core::hashed_sparse_set::end"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a55b637590a169b37cda5230febb44a8c"></span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set8iteratorE" title="legion::core::hashed_sparse_set::iterator">iterator</a> <code class="sig-name descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set3endEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_set3endEv">
+<span id="_CPPv3NK6legion4core17hashed_sparse_set3endEv"></span><span id="_CPPv2NK6legion4core17hashed_sparse_set3endEv"></span><span id="legion::core::hashed_sparse_set::endC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a6e1e7825a1ac3293e62f6ba57136315e"></span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set14const_iteratorE" title="legion::core::hashed_sparse_set::const_iterator">const_iterator</a> <code class="sig-name descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_set3endEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_set4cendEv">
+<span id="_CPPv3NK6legion4core17hashed_sparse_set4cendEv"></span><span id="_CPPv2NK6legion4core17hashed_sparse_set4cendEv"></span><span id="legion::core::hashed_sparse_set::cendC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a4004a192a433738d8c75c91aab60f8cc"></span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set14const_iteratorE" title="legion::core::hashed_sparse_set::const_iterator">const_iterator</a> <code class="sig-name descname">cend</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_set4cendEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_set4sizeEv">
+<span id="_CPPv3NK6legion4core17hashed_sparse_set4sizeEv"></span><span id="_CPPv2NK6legion4core17hashed_sparse_set4sizeEv"></span><span id="legion::core::hashed_sparse_set::sizeC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a4e4aa5911ffabd6ca53a2fc3b41e0385"></span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_set4sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the amount of items in the <a class="reference internal" href="classlegion_1_1core_1_1sparse__map.html#classlegion_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>size_type Current amount of items contained in <a class="reference internal" href="classlegion_1_1core_1_1sparse__map.html#classlegion_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_set8capacityEv">
+<span id="_CPPv3NK6legion4core17hashed_sparse_set8capacityEv"></span><span id="_CPPv2NK6legion4core17hashed_sparse_set8capacityEv"></span><span id="legion::core::hashed_sparse_set::capacityC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1acb42bfd5d4294eb63df1f22eb90dca94"></span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">capacity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_set8capacityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the capacity of items the <a class="reference internal" href="classlegion_1_1core_1_1sparse__map.html#classlegion_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a> could at least store without invalidating the iterators. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>size_type Current capacity of the dense container. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_set8max_sizeEv">
+<span id="_CPPv3NK6legion4core17hashed_sparse_set8max_sizeEv"></span><span id="_CPPv2NK6legion4core17hashed_sparse_set8max_sizeEv"></span><span id="legion::core::hashed_sparse_set::max_sizeC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a424f7669572a6bf82cd36ed14a7562ba"></span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">max_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_set8max_sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the maximum number of items the <a class="reference internal" href="#classlegion_1_1core_1_1hashed__sparse__set"><span class="std std-ref">hashed_sparse_set</span></a> could at most store without crashing. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>This value typically reflects the theoretical limit on the size of the container, at most std::numeric_limits&lt;difference_type&gt;::max(). At runtime, the size of the container may be limited to a value smaller than <a class="reference internal" href="#classlegion_1_1core_1_1hashed__sparse__set_1a424f7669572a6bf82cd36ed14a7562ba"><span class="std std-ref">max_size()</span></a> by the amount of RAM available. </p>
+</dd>
+<dt><strong>Return</strong></dt><dd><p>size_type </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_set5emptyEv">
+<span id="_CPPv3NK6legion4core17hashed_sparse_set5emptyEv"></span><span id="_CPPv2NK6legion4core17hashed_sparse_set5emptyEv"></span><span id="legion::core::hashed_sparse_set::emptyC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a0ce552aa6e0836bd2b315a6c067422e3"></span>bool <code class="sig-name descname">empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_set5emptyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns whether the <a class="reference internal" href="classlegion_1_1core_1_1sparse__map.html#classlegion_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a> is empty. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if the <a class="reference internal" href="classlegion_1_1core_1_1sparse__map.html#classlegion_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a> is empty, otherwise false. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set5clearEv">
+<span id="_CPPv3N6legion4core17hashed_sparse_set5clearEv"></span><span id="_CPPv2N6legion4core17hashed_sparse_set5clearEv"></span><span id="legion::core::hashed_sparse_set::clear"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a03e352252887d17e4dfea0fd03a2fee9"></span>void <code class="sig-name descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set5clearEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Clears <a class="reference internal" href="classlegion_1_1core_1_1sparse__map.html#classlegion_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Will not update capacity. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set7reserveE9size_type">
+<span id="_CPPv3N6legion4core17hashed_sparse_set7reserveE9size_type"></span><span id="_CPPv2N6legion4core17hashed_sparse_set7reserveE9size_type"></span><span id="legion::core::hashed_sparse_set::reserve__size_type"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1abe1c4055b39a42d79fb3031ebcd30794"></span>void <code class="sig-name descname">reserve</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <em>size</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set7reserveE9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reserves space in dense container for more items. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Will update capacity if resize happened. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">size</span></code>: Amount of items to reserve space for (would be the new capacity). </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_set5countE21value_const_reference">
+<span id="_CPPv3NK6legion4core17hashed_sparse_set5countE21value_const_reference"></span><span id="_CPPv2NK6legion4core17hashed_sparse_set5countE21value_const_reference"></span><span id="legion::core::hashed_sparse_set::count__value_const_referenceC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1ae90180b315230580cb80ca970a398240"></span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">count</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set21value_const_referenceE" title="legion::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <em>val</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_set5countE21value_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the amount of items of a certain value. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>size_type Amount of items of the same value (either 0 or 1). </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>Function is only available for compatibility reasons, it is advised to use contains instead. <a class="reference internal" href="classlegion_1_1core_1_1sparse__map.html#classlegion_1_1core_1_1sparse__map_1a65f1e95cce811f08ae2bf86ce0f17ec8"><span class="std std-ref">legion::core::sparse_map::contains</span></a> </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to look for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_set5countERR10value_type">
+<span id="_CPPv3NK6legion4core17hashed_sparse_set5countERR10value_type"></span><span id="_CPPv2NK6legion4core17hashed_sparse_set5countERR10value_type"></span><span id="legion::core::hashed_sparse_set::count__value_typeRRC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1af76e3e9b51124fe9218e3f0f9400c910"></span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">count</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set::value_type">value_type</a> &amp;&amp;<em>val</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_set5countERR10value_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the amount of items of a certain value. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>size_type Amount of items of the same value (either 0 or 1). </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>Function is only available for compatibility reasons, it is advised to use contains instead. <a class="reference internal" href="classlegion_1_1core_1_1sparse__map.html#classlegion_1_1core_1_1sparse__map_1a65f1e95cce811f08ae2bf86ce0f17ec8"><span class="std std-ref">legion::core::sparse_map::contains</span></a> </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to look for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set8containsE21value_const_reference">
+<span id="_CPPv3N6legion4core17hashed_sparse_set8containsE21value_const_reference"></span><span id="_CPPv2N6legion4core17hashed_sparse_set8containsE21value_const_reference"></span><span id="legion::core::hashed_sparse_set::contains__value_const_reference"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a2409701cfc07f464a896bf548cbe01b6"></span>bool <code class="sig-name descname">contains</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set21value_const_referenceE" title="legion::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set8containsE21value_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks whether a certain value is contained in the <a class="reference internal" href="classlegion_1_1core_1_1sparse__map.html#classlegion_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if the value was found, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to check for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set8containsERR10value_type">
+<span id="_CPPv3N6legion4core17hashed_sparse_set8containsERR10value_type"></span><span id="_CPPv2N6legion4core17hashed_sparse_set8containsERR10value_type"></span><span id="legion::core::hashed_sparse_set::contains__value_typeRR"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1aebb353756184737034408e50a5cd3464"></span>bool <code class="sig-name descname">contains</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set::value_type">value_type</a> &amp;&amp;<em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set8containsERR10value_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks whether a certain value is contained in the <a class="reference internal" href="classlegion_1_1core_1_1sparse__map.html#classlegion_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if the value was found, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to check for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_set8containsE21value_const_reference">
+<span id="_CPPv3NK6legion4core17hashed_sparse_set8containsE21value_const_reference"></span><span id="_CPPv2NK6legion4core17hashed_sparse_set8containsE21value_const_reference"></span><span id="legion::core::hashed_sparse_set::contains__value_const_referenceC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a4024ce15169aa7d050cfd5252ebdedaa"></span>bool <code class="sig-name descname">contains</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set21value_const_referenceE" title="legion::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <em>val</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_set8containsE21value_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks whether a certain value is contained in the <a class="reference internal" href="classlegion_1_1core_1_1sparse__map.html#classlegion_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if the value was found, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to check for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_set8containsERR10value_type">
+<span id="_CPPv3NK6legion4core17hashed_sparse_set8containsERR10value_type"></span><span id="_CPPv2NK6legion4core17hashed_sparse_set8containsERR10value_type"></span><span id="legion::core::hashed_sparse_set::contains__value_typeRRC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a87d566948958cde62723d61387f253bc"></span>bool <code class="sig-name descname">contains</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set::value_type">value_type</a> &amp;&amp;<em>val</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_set8containsERR10value_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks whether a certain value is contained in the <a class="reference internal" href="classlegion_1_1core_1_1sparse__map.html#classlegion_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if the value was found, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to check for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_set8containsERK17hashed_sparse_setI10value_typeE">
+<span id="_CPPv3NK6legion4core17hashed_sparse_set8containsERK17hashed_sparse_setI10value_typeE"></span><span id="_CPPv2NK6legion4core17hashed_sparse_set8containsERK17hashed_sparse_setI10value_typeE"></span><span id="legion::core::hashed_sparse_set::contains__hashed_sparse_set:value_type:CRC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a4e65c91e737f05845f0ede18d147419f"></span>bool <code class="sig-name descname">contains</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set">hashed_sparse_set</a>&lt;<a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set::value_type">value_type</a>&gt; &amp;<em>other</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_set8containsERK17hashed_sparse_setI10value_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks if all items in <a class="reference internal" href="#classlegion_1_1core_1_1hashed__sparse__set"><span class="std std-ref">hashed_sparse_set</span></a> are inside this set as well. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if all items in other are also in this <a class="reference internal" href="#classlegion_1_1core_1_1hashed__sparse__set"><span class="std std-ref">hashed_sparse_set</span></a>, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">other</span></code>: Other <a class="reference internal" href="#classlegion_1_1core_1_1hashed__sparse__set"><span class="std std-ref">hashed_sparse_set</span></a> to check against. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_set6equalsE20self_const_reference">
+<span id="_CPPv3NK6legion4core17hashed_sparse_set6equalsE20self_const_reference"></span><span id="_CPPv2NK6legion4core17hashed_sparse_set6equalsE20self_const_reference"></span><span id="legion::core::hashed_sparse_set::equals__self_const_referenceC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a62af66bae29f2b4ab0af275ec73807ba"></span>bool <code class="sig-name descname">equals</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set20self_const_referenceE" title="legion::core::hashed_sparse_set::self_const_reference">self_const_reference</a> <em>other</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_set6equalsE20self_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks if all items are the same for both hashed_sparse_sets. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if both sets are the same size and contain the same items, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">other</span></code>: Other <a class="reference internal" href="#classlegion_1_1core_1_1hashed__sparse__set"><span class="std std-ref">hashed_sparse_set</span></a> to check against. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_seteqE20self_const_reference">
+<span id="_CPPv3NK6legion4core17hashed_sparse_seteqE20self_const_reference"></span><span id="_CPPv2NK6legion4core17hashed_sparse_seteqE20self_const_reference"></span><span id="legion::core::hashed_sparse_set::eq-operator__self_const_referenceC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a61901c6d7e54a7babd949ff8cb09e913"></span>bool <code class="sig-name descname">operator==</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set20self_const_referenceE" title="legion::core::hashed_sparse_set::self_const_reference">self_const_reference</a> <em>other</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_seteqE20self_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks if all items are the same for both hashed_sparse_sets. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>bool True if both sets are the same size and contain the same items, otherwise false. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">other</span></code>: Other <a class="reference internal" href="#classlegion_1_1core_1_1hashed__sparse__set"><span class="std std-ref">hashed_sparse_set</span></a> to check against. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set4findE21value_const_reference">
+<span id="_CPPv3N6legion4core17hashed_sparse_set4findE21value_const_reference"></span><span id="_CPPv2N6legion4core17hashed_sparse_set4findE21value_const_reference"></span><span id="legion::core::hashed_sparse_set::find__value_const_reference"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a1d34514c383c5f1bcff13f46b130bcf8"></span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set8iteratorE" title="legion::core::hashed_sparse_set::iterator">iterator</a> <code class="sig-name descname">find</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set21value_const_referenceE" title="legion::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set4findE21value_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Finds the iterator of a value using std::find. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>Iterator to the value if found, otherwise end. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to find. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_set4findE21value_const_reference">
+<span id="_CPPv3NK6legion4core17hashed_sparse_set4findE21value_const_reference"></span><span id="_CPPv2NK6legion4core17hashed_sparse_set4findE21value_const_reference"></span><span id="legion::core::hashed_sparse_set::find__value_const_referenceC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a2446176107b41b0514d496c3276e9865"></span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set14const_iteratorE" title="legion::core::hashed_sparse_set::const_iterator">const_iterator</a> <code class="sig-name descname">find</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set21value_const_referenceE" title="legion::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <em>val</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_set4findE21value_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Finds the iterator of a value using std::find. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>Iterator to the value if found, otherwise end. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to find. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set6insertE21value_const_reference">
+<span id="_CPPv3N6legion4core17hashed_sparse_set6insertE21value_const_reference"></span><span id="_CPPv2N6legion4core17hashed_sparse_set6insertE21value_const_reference"></span><span id="legion::core::hashed_sparse_set::insert__value_const_reference"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a0be6fe8b0eb03a59b9d8a26561d5d647"></span>std::pair&lt;<a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set8iteratorE" title="legion::core::hashed_sparse_set::iterator">iterator</a>, bool&gt; <code class="sig-name descname">insert</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set21value_const_referenceE" title="legion::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set6insertE21value_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Inserts new item into <a class="reference internal" href="#classlegion_1_1core_1_1hashed__sparse__set"><span class="std std-ref">hashed_sparse_set</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>std::pair&lt;iterator, bool&gt; Iterator at the location of the val and true if succeeded, end and false if it didn’t succeed. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to insert. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set6insertERR10value_type">
+<span id="_CPPv3N6legion4core17hashed_sparse_set6insertERR10value_type"></span><span id="_CPPv2N6legion4core17hashed_sparse_set6insertERR10value_type"></span><span id="legion::core::hashed_sparse_set::insert__value_typeRR"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a6976f4acf4057c71dc30360bef888a80"></span>std::pair&lt;<a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set8iteratorE" title="legion::core::hashed_sparse_set::iterator">iterator</a>, bool&gt; <code class="sig-name descname">insert</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00IDpE0IDpE0EN6legion4core17hashed_sparse_setE" title="legion::core::hashed_sparse_set::value_type">value_type</a> &amp;&amp;<em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set6insertERR10value_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Inserts new item into <a class="reference internal" href="#classlegion_1_1core_1_1hashed__sparse__set"><span class="std std-ref">hashed_sparse_set</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>std::pair&lt;iterator, bool&gt; Iterator at the location of the val and true if succeeded, end and false if it didn’t succeed. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value to insert. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4IDpEN6legion4core17hashed_sparse_set7emplaceENSt4pairI8iteratorbEEDpRR9Arguments">
+<span id="_CPPv3IDpEN6legion4core17hashed_sparse_set7emplaceEDpRR9Arguments"></span><span id="_CPPv2IDpEN6legion4core17hashed_sparse_set7emplaceEDpRR9Arguments"></span>template&lt;typename ...<code class="sig-name descname">Arguments</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1ae54f8c0f1888427361774f742b269e10"></span>std::pair&lt;<a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set8iteratorE" title="legion::core::hashed_sparse_set::iterator">iterator</a>, bool&gt; <code class="sig-name descname">emplace</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4IDpEN6legion4core17hashed_sparse_set7emplaceENSt4pairI8iteratorbEEDpRR9Arguments" title="legion::core::hashed_sparse_set::emplace::Arguments">Arguments</a>&amp;&amp;... <em>arguments</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN6legion4core17hashed_sparse_set7emplaceENSt4pairI8iteratorbEEDpRR9Arguments" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct item in place. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">arguments</span></code>: Arguments to pass to the item constructor. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core17hashed_sparse_setixERR9size_type">
+<span id="_CPPv3N6legion4core17hashed_sparse_setixERR9size_type"></span><span id="_CPPv2N6legion4core17hashed_sparse_setixERR9size_type"></span><span id="legion::core::hashed_sparse_set::subscript-operator__size_typeRR"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a897ea7335c45e8a6cd8f7da0112f14db"></span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set15value_referenceE" title="legion::core::hashed_sparse_set::value_reference">value_reference</a> <code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> &amp;&amp;<em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_setixERR9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns item from dense container. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: Index of item in dense container. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core17hashed_sparse_setixERK9size_type">
+<span id="_CPPv3N6legion4core17hashed_sparse_setixERK9size_type"></span><span id="_CPPv2N6legion4core17hashed_sparse_setixERK9size_type"></span><span id="legion::core::hashed_sparse_set::subscript-operator__size_typeCR"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1adb169868291bf17401332f8cce8e50a2"></span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set15value_referenceE" title="legion::core::hashed_sparse_set::value_reference">value_reference</a> <code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> &amp;<em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_setixERK9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns item from dense container. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: Index of item in dense container. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_setixERR9size_type">
+<span id="_CPPv3NK6legion4core17hashed_sparse_setixERR9size_type"></span><span id="_CPPv2NK6legion4core17hashed_sparse_setixERR9size_type"></span><span id="legion::core::hashed_sparse_set::subscript-operator__size_typeRRC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a655ab11718adec9cd77607bff1f8ea85"></span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set21value_const_referenceE" title="legion::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> &amp;&amp;<em>index</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_setixERR9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns item from dense container. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: Index of item in dense container. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_setixERK9size_type">
+<span id="_CPPv3NK6legion4core17hashed_sparse_setixERK9size_type"></span><span id="_CPPv2NK6legion4core17hashed_sparse_setixERK9size_type"></span><span id="legion::core::hashed_sparse_set::subscript-operator__size_typeCRC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1ab44de9577303aa45c1cf646ad56c0782"></span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set21value_const_referenceE" title="legion::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> &amp;<em>index</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_setixERK9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns item from dense container. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: Index of item in dense container. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set2atERR9size_type">
+<span id="_CPPv3N6legion4core17hashed_sparse_set2atERR9size_type"></span><span id="_CPPv2N6legion4core17hashed_sparse_set2atERR9size_type"></span><span id="legion::core::hashed_sparse_set::at__size_typeRR"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a9d53304e155f6f8395e421b81b036df1"></span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set15value_referenceE" title="legion::core::hashed_sparse_set::value_reference">value_reference</a> <code class="sig-name descname">at</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> &amp;&amp;<em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set2atERR9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns item from dense container. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: Index of item in dense container. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set2atERK9size_type">
+<span id="_CPPv3N6legion4core17hashed_sparse_set2atERK9size_type"></span><span id="_CPPv2N6legion4core17hashed_sparse_set2atERK9size_type"></span><span id="legion::core::hashed_sparse_set::at__size_typeCR"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1ac498e75cc31e9b77fe77fb59d9adfd27"></span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set15value_referenceE" title="legion::core::hashed_sparse_set::value_reference">value_reference</a> <code class="sig-name descname">at</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> &amp;<em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set2atERK9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns item from dense container. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: Index of item in dense container. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_set2atERR9size_type">
+<span id="_CPPv3NK6legion4core17hashed_sparse_set2atERR9size_type"></span><span id="_CPPv2NK6legion4core17hashed_sparse_set2atERR9size_type"></span><span id="legion::core::hashed_sparse_set::at__size_typeRRC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a1ffc531935f68fce6ffc03eb0318b95b"></span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set21value_const_referenceE" title="legion::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <code class="sig-name descname">at</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> &amp;&amp;<em>index</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_set2atERR9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns item from dense container. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: Index of item in dense container. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core17hashed_sparse_set2atERK9size_type">
+<span id="_CPPv3NK6legion4core17hashed_sparse_set2atERK9size_type"></span><span id="_CPPv2NK6legion4core17hashed_sparse_set2atERK9size_type"></span><span id="legion::core::hashed_sparse_set::at__size_typeCRC"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1a9ef8469c4bfc885509a2d28cf4ec26ea"></span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set21value_const_referenceE" title="legion::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <code class="sig-name descname">at</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> &amp;<em>index</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core17hashed_sparse_set2atERK9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns item from dense container. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: Index of item in dense container. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core17hashed_sparse_set5eraseE21value_const_reference">
+<span id="_CPPv3N6legion4core17hashed_sparse_set5eraseE21value_const_reference"></span><span id="_CPPv2N6legion4core17hashed_sparse_set5eraseE21value_const_reference"></span><span id="legion::core::hashed_sparse_set::erase__value_const_reference"></span><span class="target" id="classlegion_1_1core_1_1hashed__sparse__set_1ade25c3a57137bec446b566c95afb7d08"></span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">erase</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core17hashed_sparse_set21value_const_referenceE" title="legion::core::hashed_sparse_set::value_const_reference">value_const_reference</a> <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core17hashed_sparse_set5eraseE21value_const_reference" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Erases item from <a class="reference internal" href="classlegion_1_1core_1_1sparse__map.html#classlegion_1_1core_1_1sparse__map"><span class="std std-ref">sparse_map</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">val</span></code>: Value that needs to be erased. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Template Class hashed_sparse_set</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="classlegion_1_1core_1_1fs__error.html" title="previous chapter">Class fs_error</a></li>
+      <li>Next: <a href="class_structlegion_1_1core_1_1image.html" title="next chapter">Class image</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classlegion_1_1core_1_1hashed__sparse__set.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

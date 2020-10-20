@@ -1,0 +1,20 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_renderer.cpp:
+
+Program Listing for File renderer.cpp
+=====================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_renderer.cpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/systems/renderer.cpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include <rendering/systems/renderer.hpp>
+   
+   namespace legion::rendering
+   {
+       async::readonly_rw_spinlock Renderer::debugLinesLock;
+       thread_local std::unordered_set<debug::debug_line>* Renderer::localLines;
+       std::unordered_map<std::thread::id, std::unordered_set<debug::debug_line>*> Renderer::debugLines;
+   }

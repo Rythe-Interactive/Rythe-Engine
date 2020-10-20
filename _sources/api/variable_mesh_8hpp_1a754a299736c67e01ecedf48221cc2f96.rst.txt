@@ -1,0 +1,13 @@
+.. _exhale_variable_mesh_8hpp_1a754a299736c67e01ecedf48221cc2f96:
+
+Variable legion::core::invalid_mesh_handle
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_mesh.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::invalid_mesh_handle

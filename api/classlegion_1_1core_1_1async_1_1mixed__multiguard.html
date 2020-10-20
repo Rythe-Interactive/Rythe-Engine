@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Class mixed_multiguard &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class readonly_guard" href="classlegion_1_1core_1_1async_1_1readonly__guard.html" />
+    <link rel="prev" title="Class AudioSystem" href="classlegion_1_1audio_1_1_audio_system.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classlegion_1_1core_1_1async_1_1readonly__guard.html" title="Class readonly_guard"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classlegion_1_1audio_1_1_audio_system.html" title="Class AudioSystem"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Template Class mixed_multiguard</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="template-class-mixed-multiguard">
+<span id="exhale-class-classlegion-1-1core-1-1async-1-1mixed-multiguard"></span><h1>Template Class mixed_multiguard<a class="headerlink" href="#template-class-mixed-multiguard" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_readonly_rw_spinlock.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-async-readonly-rw-spinlock-hpp"><span class="std std-ref">File readonly_rw_spinlock.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4I_9size_typeEN6legion4core5async16mixed_multiguardE">
+<span id="_CPPv3I_9size_typeEN6legion4core5async16mixed_multiguardE"></span><span id="_CPPv2I_9size_typeEN6legion4core5async16mixed_multiguardE"></span>template&lt;<a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">S</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1async_1_1mixed__multiguard"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core::async<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">mixed_multiguard</code><a class="headerlink" href="#_CPPv4I_9size_typeEN6legion4core5async16mixed_multiguardE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>RAII guard that uses multiple ::async::readonly_rw_spinlocks to lock them all for user specified permissions. (similar to std::lock) </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Read-only operations can happen simultaneously without waiting for each other. Read-only operations will only wait for Read-Write operations to be finished. </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>Read-Write operations cannot happen simultaneously and will wait for each other. Read-Write operations will also wait for any Read-only operations to be finished. <a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1readonly__rw__spinlock.html#structlegion_1_1core_1_1async_1_1readonly__rw__spinlock"><span class="std std-ref">legion::core::async::readonly_rw_spinlock</span></a> </p>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4IDpEN6legion4core5async16mixed_multiguard16mixed_multiguardEDpRR5types">
+<span id="_CPPv3IDpEN6legion4core5async16mixed_multiguard16mixed_multiguardEDpRR5types"></span><span id="_CPPv2IDpEN6legion4core5async16mixed_multiguard16mixed_multiguardEDpRR5types"></span>template&lt;typename ...<code class="sig-name descname">types</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1async_1_1mixed__multiguard_1a7de05091913321c796688bb9c737a019"></span><code class="sig-name descname">mixed_multiguard</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4IDpEN6legion4core5async16mixed_multiguard16mixed_multiguardEDpRR5types" title="legion::core::async::mixed_multiguard::mixed_multiguard::types">types</a>&amp;&amp;... <em>arguments</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN6legion4core5async16mixed_multiguard16mixed_multiguardEDpRR5types" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates readonly multi-guard and locks for specified permissions. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Argument order should be as follows: (<a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1readonly__rw__spinlock.html#structlegion_1_1core_1_1async_1_1readonly__rw__spinlock"><span class="std std-ref">readonly_rw_spinlock</span></a>&amp;, lock_state, <a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1readonly__rw__spinlock.html#structlegion_1_1core_1_1async_1_1readonly__rw__spinlock"><span class="std std-ref">readonly_rw_spinlock</span></a>&amp;, lock_state, …) </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async16mixed_multiguard16mixed_multiguardERK16mixed_multiguard">
+<span id="_CPPv3N6legion4core5async16mixed_multiguard16mixed_multiguardERK16mixed_multiguard"></span><span id="_CPPv2N6legion4core5async16mixed_multiguard16mixed_multiguardERK16mixed_multiguard"></span><span id="legion::core::async::mixed_multiguard::mixed_multiguard__mixed_multiguardCR"></span><span class="target" id="classlegion_1_1core_1_1async_1_1mixed__multiguard_1a36ebef9b7202f7584b3fc766522244e6"></span><code class="sig-name descname">mixed_multiguard</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion4core5async16mixed_multiguard16mixed_multiguardERK16mixed_multiguard" title="legion::core::async::mixed_multiguard::mixed_multiguard">mixed_multiguard</a>&amp;<span class="sig-paren">)</span> = delete<a class="headerlink" href="#_CPPv4N6legion4core5async16mixed_multiguard16mixed_multiguardERK16mixed_multiguard" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async16mixed_multiguard16mixed_multiguardERR16mixed_multiguard">
+<span id="_CPPv3N6legion4core5async16mixed_multiguard16mixed_multiguardERR16mixed_multiguard"></span><span id="_CPPv2N6legion4core5async16mixed_multiguard16mixed_multiguardERR16mixed_multiguard"></span><span id="legion::core::async::mixed_multiguard::mixed_multiguard__mixed_multiguardRR"></span><span class="target" id="classlegion_1_1core_1_1async_1_1mixed__multiguard_1a3fe2605afa00a5856c9c64d1e62ad9ab"></span><code class="sig-name descname">mixed_multiguard</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core5async16mixed_multiguard16mixed_multiguardERR16mixed_multiguard" title="legion::core::async::mixed_multiguard::mixed_multiguard">mixed_multiguard</a>&amp;&amp;<span class="sig-paren">)</span> = delete<a class="headerlink" href="#_CPPv4N6legion4core5async16mixed_multiguard16mixed_multiguardERR16mixed_multiguard" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async16mixed_multiguardD0Ev">
+<span id="_CPPv3N6legion4core5async16mixed_multiguardD0Ev"></span><span id="_CPPv2N6legion4core5async16mixed_multiguardD0Ev"></span><span id="legion::core::async::mixed_multiguard::~mixed_multiguard"></span><span class="target" id="classlegion_1_1core_1_1async_1_1mixed__multiguard_1a3eacfc045bd043ba9f617bbf42c5891c"></span><code class="sig-name descname">~mixed_multiguard</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5async16mixed_multiguardD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>RAII style unlocks lock from specified permissions. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async16mixed_multiguardaSERR16mixed_multiguard">
+<span id="_CPPv3N6legion4core5async16mixed_multiguardaSERR16mixed_multiguard"></span><span id="_CPPv2N6legion4core5async16mixed_multiguardaSERR16mixed_multiguard"></span><span id="legion::core::async::mixed_multiguard::assign-operator__mixed_multiguardRR"></span><span class="target" id="classlegion_1_1core_1_1async_1_1mixed__multiguard_1af8fa8fb1a69e84524392405adecc1ae3"></span><a class="reference internal" href="#_CPPv4I_9size_typeEN6legion4core5async16mixed_multiguardE" title="legion::core::async::mixed_multiguard">mixed_multiguard</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I_9size_typeEN6legion4core5async16mixed_multiguardE" title="legion::core::async::mixed_multiguard">mixed_multiguard</a>&amp;&amp;<span class="sig-paren">)</span> = delete<a class="headerlink" href="#_CPPv4N6legion4core5async16mixed_multiguardaSERR16mixed_multiguard" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async16mixed_multiguardaSERK16mixed_multiguard">
+<span id="_CPPv3N6legion4core5async16mixed_multiguardaSERK16mixed_multiguard"></span><span id="_CPPv2N6legion4core5async16mixed_multiguardaSERK16mixed_multiguard"></span><span id="legion::core::async::mixed_multiguard::assign-operator__mixed_multiguardCR"></span><span class="target" id="classlegion_1_1core_1_1async_1_1mixed__multiguard_1a3bccfef7d4b5a50bdb22243c228c44b1"></span><a class="reference internal" href="#_CPPv4I_9size_typeEN6legion4core5async16mixed_multiguardE" title="legion::core::async::mixed_multiguard">mixed_multiguard</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I_9size_typeEN6legion4core5async16mixed_multiguardE" title="legion::core::async::mixed_multiguard">mixed_multiguard</a>&amp;<span class="sig-paren">)</span> = delete<a class="headerlink" href="#_CPPv4N6legion4core5async16mixed_multiguardaSERK16mixed_multiguard" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Template Class mixed_multiguard</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="classlegion_1_1audio_1_1_audio_system.html" title="previous chapter">Class AudioSystem</a></li>
+      <li>Next: <a href="classlegion_1_1core_1_1async_1_1readonly__guard.html" title="next chapter">Class readonly_guard</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classlegion_1_1core_1_1async_1_1mixed__multiguard.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

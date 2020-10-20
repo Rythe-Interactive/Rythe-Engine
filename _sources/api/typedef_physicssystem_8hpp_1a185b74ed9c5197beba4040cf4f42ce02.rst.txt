@@ -1,0 +1,13 @@
+.. _exhale_typedef_physicssystem_8hpp_1a185b74ed9c5197beba4040cf4f42ce02:
+
+Typedef legion::physics::PhysicsColliderPtr
+===========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_systems_physicssystem.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::physics::PhysicsColliderPtr

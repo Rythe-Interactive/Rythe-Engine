@@ -1,0 +1,13 @@
+.. _exhale_variable_shader_8hpp_1aaa70e21ea0dcb1e40d4f85245db89d5e:
+
+Variable legion::rendering::invalid_shader_handle
+=================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_shader.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::rendering::invalid_shader_handle

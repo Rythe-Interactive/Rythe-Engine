@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1editor_1_1editor__module__initializer__t:
+
+Struct editor_module_initializer_t
+==================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor_editormodule.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::editor::editor_module_initializer_t
+   :members:
+   :protected-members:
+   :undoc-members:

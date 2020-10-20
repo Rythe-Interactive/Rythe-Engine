@@ -1,0 +1,13 @@
+.. _exhale_function_traits_8hpp_1abf61dc52b48f2cba0b369c92d74bf71f:
+
+Function legion::core::filesystem::inherit_traits(const filesystem_traits&, filesystem_traits&)
+===============================================================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_detail_traits.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::filesystem::inherit_traits(const filesystem_traits&, filesystem_traits&)

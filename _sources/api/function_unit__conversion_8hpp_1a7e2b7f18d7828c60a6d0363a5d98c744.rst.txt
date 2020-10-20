@@ -1,0 +1,13 @@
+.. _exhale_function_unit__conversion_8hpp_1a7e2b7f18d7828c60a6d0363a5d98c744:
+
+Function legion::core::literals::operator""_kb
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_unit_conversion.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::literals::operator""_kb(unsigned long long)

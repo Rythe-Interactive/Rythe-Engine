@@ -1,0 +1,13 @@
+.. _exhale_function_type__util_8cpp_1a216cabaf6d00a70dee4d790833485369:
+
+Function legion::core::nameHash(const std::string&)
+===================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::nameHash(const std::string&)

@@ -1,0 +1,107 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_processchain.hpp:
+
+Program Listing for File processchain.hpp
+=========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_processchain.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/scheduling/processchain.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/platform/platform.hpp>
+   #include <core/types/primitives.hpp>
+   #include <core/types/type_util.hpp>
+   #include <core/containers/containers.hpp>
+   #include <core/async/transferable_atomic.hpp>
+   
+   #include <thread>
+   
+   namespace legion::core::scheduling
+   {
+       class Scheduler;
+       class Process;
+   
+       class ProcessChain
+       {
+       private:
+           std::string m_name;
+           id_type m_nameHash = invalid_id;
+           std::thread::id m_threadId;
+           Scheduler* m_scheduler;
+           async::readonly_rw_spinlock m_processesLock;
+           sparse_map<id_type, Process*> m_processes;
+           async::transferable_atomic<bool> m_exit;
+           bool m_low_power;
+   
+           static async::readonly_rw_spinlock m_callbackLock;
+           static multicast_delegate<void()> m_onFrameStart;
+           static multicast_delegate<void()> m_onFrameEnd;
+   
+       public:
+           static void threadedRun(ProcessChain* chain);
+   
+           template<void(*func)()>
+           static void subscribeToChainStart()
+           {
+               async::readwrite_guard guard(m_callbackLock);
+   
+               m_onFrameStart += delegate<void()>::template create<func>();
+           }
+           
+           template<void(*func)()>
+           static void subscribeToChainEnd()
+           {
+               async::readwrite_guard guard(m_callbackLock);
+   
+               m_onFrameEnd += delegate<void()>::template create<func>();
+           }
+   
+           template<void(*func)()>
+           static void unsubscribeFromChainStart()
+           {
+               async::readwrite_guard guard(m_callbackLock);
+   
+               m_onFrameStart -= delegate<void()>::template create<func>();
+           }
+           
+           template<void(*func)()>
+           static void unsubscribeFromChainEnd()
+           {
+               async::readwrite_guard guard(m_callbackLock);
+   
+               m_onFrameEnd -= delegate<void()>::template create<func>();
+           }
+   
+           ProcessChain() = default;
+           ProcessChain(ProcessChain&&) = default;
+           ProcessChain& operator=(ProcessChain&&) = default;
+   
+           template<size_type charc>
+           ProcessChain(const char(&name)[charc], Scheduler* scheduler) : m_name(name), m_nameHash(nameHash<charc>(name)), m_scheduler(scheduler) { }
+   
+   
+   
+           bool run(bool low_power);
+   
+           id_type id() { return m_nameHash; }
+   
+   
+           std::thread::id threadId() 
+           {
+               if (m_threadId == std::thread::id())
+                   return std::this_thread::get_id();
+               return m_threadId; 
+           }
+   
+           void exit();
+   
+           void runInCurrentThread();
+   
+           void addProcess(Process* process);
+   
+           void removeProcess(Process* process);
+       };
+   }

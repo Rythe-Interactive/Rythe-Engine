@@ -1,0 +1,13 @@
+.. _exhale_variable_namespacelegion_1_1core_1_1common_1af45342b8671092a735b2d99185504347:
+
+Variable legion::core::common::valid
+====================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_result.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::common::valid

@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1a871e57fee7324d03141693ac303aab9d:
+
+Define legion_exception
+=======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: legion_exception

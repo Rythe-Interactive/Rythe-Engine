@@ -1,0 +1,13 @@
+.. _exhale_typedef_time__span_8hpp_1a980bd219f37eb91482a7952d6572eba1:
+
+Typedef legion::core::time::span
+================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_time_span.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::time::span

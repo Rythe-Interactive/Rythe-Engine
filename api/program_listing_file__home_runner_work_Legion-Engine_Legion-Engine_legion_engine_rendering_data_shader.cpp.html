@@ -1,0 +1,736 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File shader.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File shader.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-shader-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-shader-cpp"></span><h1>Program Listing for File shader.cpp<a class="headerlink" href="#program-listing-for-file-shader-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_shader.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-shader-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data/shader.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;rendering/data/shader.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
+<span class="p">{</span>
+    <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">shader</span><span class="o">&gt;</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">m_shaders</span><span class="p">;</span>
+    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">m_shaderLock</span><span class="p">;</span>
+
+    <span class="n">shader</span><span class="o">*</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_shader</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_shaderLock</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">&amp;</span><span class="n">m_shaders</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">process_includes</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">shaderSource</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// WIP</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">resolve_preprocess_features</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">shaderSource</span><span class="p">,</span> <span class="n">shader_state</span><span class="o">&amp;</span> <span class="n">state</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Replace all the attribute binding locations.</span>
+        <span class="n">common</span><span class="o">::</span><span class="n">replace_items</span><span class="p">(</span><span class="n">shaderSource</span><span class="p">,</span> <span class="s">&quot;SV_POSITION&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_POSITION</span><span class="p">));</span>
+        <span class="n">common</span><span class="o">::</span><span class="n">replace_items</span><span class="p">(</span><span class="n">shaderSource</span><span class="p">,</span> <span class="s">&quot;SV_NORMAL&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_NORMAL</span><span class="p">));</span>
+        <span class="n">common</span><span class="o">::</span><span class="n">replace_items</span><span class="p">(</span><span class="n">shaderSource</span><span class="p">,</span> <span class="s">&quot;SV_TANGENT&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_TANGENT</span><span class="p">));</span>
+        <span class="n">common</span><span class="o">::</span><span class="n">replace_items</span><span class="p">(</span><span class="n">shaderSource</span><span class="p">,</span> <span class="s">&quot;SV_TEXCOORD0&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_TEXCOORD0</span><span class="p">));</span>
+        <span class="n">common</span><span class="o">::</span><span class="n">replace_items</span><span class="p">(</span><span class="n">shaderSource</span><span class="p">,</span> <span class="s">&quot;SV_MODELMATRIX&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span><span class="p">));</span>
+
+        <span class="c1">// Replace all the uniform binding locations.</span>
+        <span class="n">common</span><span class="o">::</span><span class="n">replace_items</span><span class="p">(</span><span class="n">shaderSource</span><span class="p">,</span> <span class="s">&quot;SV_VIEW&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_VIEW</span><span class="p">));</span>
+        <span class="n">common</span><span class="o">::</span><span class="n">replace_items</span><span class="p">(</span><span class="n">shaderSource</span><span class="p">,</span> <span class="s">&quot;SV_PROJECT&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_PROJECT</span><span class="p">));</span>
+
+        <span class="c1">// Create lookup table for the OpenGL function types that can be changed by the shader state.</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;</span> <span class="n">funcTypes</span><span class="p">;</span>
+        <span class="k">static</span> <span class="kt">bool</span> <span class="n">funcTypesInitialized</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">funcTypesInitialized</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">funcTypesInitialized</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">funcTypes</span><span class="p">[</span><span class="s">&quot;DEPTH&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_DEPTH_TEST</span><span class="p">;</span>
+            <span class="n">funcTypes</span><span class="p">[</span><span class="s">&quot;CULL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_CULL_FACE</span><span class="p">;</span>
+            <span class="c1">//funcTypes[&quot;ALPHA&quot;] = GL_BLEND;</span>
+            <span class="c1">//funcTypes[&quot;DITHER&quot;] = GL_DITHER;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Default shader state in case nothing was specified by the shader.</span>
+        <span class="n">state</span><span class="p">[</span><span class="n">GL_DEPTH_TEST</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_GREATER</span><span class="p">;</span>
+        <span class="n">state</span><span class="p">[</span><span class="n">GL_CULL_FACE</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_BACK</span><span class="p">;</span>
+
+        <span class="n">size_type</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">((</span><span class="n">n</span> <span class="o">=</span> <span class="n">shaderSource</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;#state&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="o">!=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span> <span class="c1">// Look for any shader state tokens.</span>
+        <span class="p">{</span>
+            <span class="c1">// Split the line up in: &quot;#state&quot;, &quot;function_type&quot;, &quot;function_params...&quot;</span>
+            <span class="n">size_type</span> <span class="n">end</span> <span class="o">=</span> <span class="n">shaderSource</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="sc">&#39;\n&#39;</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">tokens</span> <span class="o">=</span> <span class="n">common</span><span class="o">::</span><span class="n">split_string_at</span><span class="o">&lt;</span><span class="sc">&#39; &#39;</span><span class="o">&gt;</span><span class="p">(</span><span class="n">shaderSource</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">n</span><span class="p">));</span>
+
+            <span class="c1">//for(auto&amp; token : tokens)</span>
+            <span class="c1">//    std::</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">tokens</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="c1">// There was some syntax error here because we should have at least 3 items. (1 parameter)</span>
+                <span class="k">continue</span><span class="p">;</span>          <span class="c1">// So in this case we want the shader to fail compilation in order to notify the programmer of his error.</span>
+                                   <span class="c1">// By not deleting the &quot;#enable...&quot; line we can guarantee that the shader won&#39;t compile properly and that</span>
+                                   <span class="c1">// the programmer will get to see his error.</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">funcTypes</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="c1">// If the function type is unsupported or unknown we also want to fail compilation.</span>
+                <span class="k">continue</span><span class="p">;</span>
+
+            <span class="n">GLenum</span> <span class="n">funcType</span> <span class="o">=</span> <span class="n">funcTypes</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span> <span class="c1">// Fetch the function type without risking editing the lookup table.</span>
+            <span class="n">GLenum</span> <span class="n">param</span> <span class="o">=</span> <span class="n">GL_FALSE</span><span class="p">;</span>
+
+            <span class="k">switch</span> <span class="p">(</span><span class="n">funcType</span><span class="p">)</span>
+            <span class="p">{</span>
+            <span class="k">case</span> <span class="nl">GL_DEPTH_TEST</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;</span> <span class="n">params</span><span class="p">;</span> <span class="c1">// Initialize parameter lookup table.</span>
+                <span class="k">static</span> <span class="kt">bool</span> <span class="n">initialized</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">initialized</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">initialized</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;NEVER&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_NEVER</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;LESS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_LESS</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;EQUAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_EQUAL</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;LEQUAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_LEQUAL</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;GREATER&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_GREATER</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;NOTEQUAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_NOTEQUAL</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;GEQUAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_GEQUAL</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ALWAYS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ALWAYS</span><span class="p">;</span>
+                <span class="p">}</span>
+
+                <span class="n">param</span> <span class="o">=</span> <span class="n">params</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_CULL_FACE</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;</span> <span class="n">params</span><span class="p">;</span> <span class="c1">// Initialize parameter lookup table.</span>
+                <span class="k">static</span> <span class="kt">bool</span> <span class="n">initialized</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">initialized</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">initialized</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;FRONT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_FRONT</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;BACK&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_BACK</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;FRONT_AND_BACK&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_FRONT_AND_BACK</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;OFF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_FALSE</span><span class="p">;</span>
+                <span class="p">}</span>
+
+                <span class="n">param</span> <span class="o">=</span> <span class="n">params</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_BLEND</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;</span> <span class="n">params</span><span class="p">;</span> <span class="c1">// Initialize parameter lookup table.</span>
+                <span class="k">static</span> <span class="kt">bool</span> <span class="n">initialized</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">initialized</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">initialized</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ZERO&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ZERO</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ONE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ONE</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;SRC_COLOR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_SRC_COLOR</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ONE_MINUS_SRC_COLOR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ONE_MINUS_SRC_COLOR</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;DST_COLOR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_DST_COLOR</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ONE_MINUS_DST_COLOR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ONE_MINUS_DST_COLOR</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;SRC_ALPHA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_SRC_ALPHA</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ONE_MINUS_SRC_ALPHA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ONE_MINUS_SRC_ALPHA</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;DST_ALPHA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_DST_ALPHA</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ONE_MINUS_DST_ALPHA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ONE_MINUS_DST_ALPHA</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;CONSTANT_COLOR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_CONSTANT_COLOR</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ONE_MINUS_CONSTANT_COLOR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ONE_MINUS_CONSTANT_COLOR</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;CONSTANT_ALPHA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_CONSTANT_ALPHA</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ONE_MINUS_CONSTANT_ALPHA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ONE_MINUS_CONSTANT_ALPHA</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;SRC_ALPHL_SATURATE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_SRC_ALPHL_SATURATE</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">param</span> <span class="o">=</span> <span class="n">GL_FALSE</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="o">:</span>
+                <span class="n">param</span> <span class="o">=</span> <span class="n">GL_FALSE</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">state</span><span class="p">[</span><span class="n">funcType</span><span class="p">]</span> <span class="o">=</span> <span class="n">param</span><span class="p">;</span>
+            <span class="n">shaderSource</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">n</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">ShaderCache</span><span class="o">::</span><span class="n">shader_ilo</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">seperate_shaders</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">shaderSource</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">shader_ilo</span> <span class="n">ilo</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">rest</span><span class="p">(</span><span class="n">shaderSource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">shaderSource</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+
+
+        <span class="c1">// Look for the &quot;#version 460&quot;.</span>
+        <span class="k">auto</span> <span class="n">versionOffset</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;#version&quot;</span><span class="p">);</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">versionTxt</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">versionOffset</span> <span class="o">!=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">rest</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(</span><span class="n">rest</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="n">versionOffset</span><span class="p">,</span> <span class="n">rest</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">versionOffset</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">versionEnd</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">find_first_of</span><span class="p">(</span><span class="sc">&#39;\n&#39;</span><span class="p">);</span>
+            <span class="n">versionTxt</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">rest</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">versionEnd</span><span class="p">);</span>
+            <span class="n">rest</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(</span><span class="n">rest</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="n">versionEnd</span><span class="p">,</span> <span class="n">rest</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">versionEnd</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">//  Extract the vertex shader.</span>
+        <span class="k">auto</span> <span class="n">vertOffset</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot; vert(&quot;</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">vertOffset</span> <span class="o">==</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{};</span>
+
+        <span class="k">auto</span> <span class="n">vertEnd</span> <span class="o">=</span> <span class="n">vertOffset</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(</span><span class="n">rest</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="n">vertOffset</span><span class="p">,</span> <span class="n">rest</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">vertOffset</span><span class="p">).</span><span class="n">find_first_of</span><span class="p">(</span><span class="sc">&#39;}&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="n">ilo</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="o">&lt;</span><span class="n">GLuint</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">GL_VERTEX_SHADER</span><span class="p">,</span> <span class="n">versionTxt</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">rest</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">vertEnd</span><span class="p">).</span><span class="n">replace</span><span class="p">(</span><span class="n">vertOffset</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&quot; main&quot;</span><span class="p">)));</span>
+        <span class="n">rest</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(</span><span class="n">rest</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="n">vertEnd</span><span class="p">,</span> <span class="n">rest</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">vertEnd</span><span class="p">);</span>
+
+        <span class="c1">//  Extract the geometry shader.</span>
+        <span class="k">auto</span> <span class="n">geomOffset</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot; geom(&quot;</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">geomOffset</span> <span class="o">!=</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">geomEnd</span> <span class="o">=</span> <span class="n">geomOffset</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(</span><span class="n">rest</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="n">geomOffset</span><span class="p">,</span> <span class="n">rest</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">geomOffset</span><span class="p">).</span><span class="n">find_first_of</span><span class="p">(</span><span class="sc">&#39;}&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+            <span class="n">ilo</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="o">&lt;</span><span class="n">GLuint</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">GL_GEOMETRY_SHADER</span><span class="p">,</span> <span class="n">versionTxt</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">rest</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">geomEnd</span><span class="p">).</span><span class="n">replace</span><span class="p">(</span><span class="n">geomOffset</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&quot; main&quot;</span><span class="p">)));</span>
+            <span class="n">rest</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(</span><span class="n">rest</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="n">geomEnd</span><span class="p">,</span> <span class="n">rest</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">geomEnd</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">//  Extract the fragment shader.</span>
+        <span class="k">auto</span> <span class="n">fragOffset</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot; frag(&quot;</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">fragOffset</span> <span class="o">==</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{};</span>
+
+        <span class="k">auto</span> <span class="n">fragEnd</span> <span class="o">=</span> <span class="n">fragOffset</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(</span><span class="n">rest</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="n">fragOffset</span><span class="p">,</span> <span class="n">rest</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">fragOffset</span><span class="p">).</span><span class="n">find_first_of</span><span class="p">(</span><span class="sc">&#39;}&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="n">ilo</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="o">&lt;</span><span class="n">GLuint</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">GL_FRAGMENT_SHADER</span><span class="p">,</span> <span class="n">versionTxt</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">rest</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">fragEnd</span><span class="p">).</span><span class="n">replace</span><span class="p">(</span><span class="n">fragOffset</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&quot; main&quot;</span><span class="p">)));</span>
+        <span class="c1">//rest = std::string_view(rest.data() + fragEnd, rest.size() - fragEnd);</span>
+
+        <span class="c1">// Return the found shaders.</span>
+        <span class="k">return</span> <span class="n">ilo</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">process_io</span><span class="p">(</span><span class="n">shader</span><span class="o">&amp;</span> <span class="n">shader</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Clear all values.</span>
+        <span class="n">shader</span><span class="p">.</span><span class="n">uniforms</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+        <span class="n">shader</span><span class="p">.</span><span class="n">attributes</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+
+<span class="cp">#pragma region uniforms</span>
+        <span class="c1">// Find the number of active uniforms.</span>
+        <span class="n">GLint</span> <span class="n">numActiveUniforms</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">glGetProgramiv</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">,</span> <span class="n">GL_ACTIVE_UNIFORMS</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numActiveUniforms</span><span class="p">);</span>
+
+        <span class="n">GLint</span> <span class="n">maxUniformNameLength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// Get name buffer length.</span>
+        <span class="n">glGetProgramiv</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">,</span> <span class="n">GL_ACTIVE_UNIFORM_MAX_LENGTH</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">maxUniformNameLength</span><span class="p">);</span>
+
+        <span class="n">GLchar</span><span class="o">*</span> <span class="n">uniformNameBuffer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GLchar</span><span class="p">[</span><span class="n">maxUniformNameLength</span><span class="p">];</span> <span class="c1">// Create buffer with the right length.</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">uniformId</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">uniformId</span> <span class="o">&lt;</span> <span class="n">numActiveUniforms</span><span class="p">;</span> <span class="n">uniformId</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">GLint</span> <span class="n">arraySize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// Use this later for uniform arrays.</span>
+            <span class="n">GLenum</span> <span class="n">type</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">GLsizei</span> <span class="n">nameLength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">glGetActiveUniform</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">,</span> <span class="n">uniformId</span><span class="p">,</span> <span class="p">(</span><span class="n">GLsizei</span><span class="p">)</span><span class="n">maxUniformNameLength</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">nameLength</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">arraySize</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">type</span><span class="p">,</span> <span class="n">uniformNameBuffer</span><span class="p">);</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">name</span><span class="p">(</span><span class="n">uniformNameBuffer</span><span class="p">,</span> <span class="n">nameLength</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// Get string_view of the actual name within the buffer.</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">name</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="sc">&#39;[&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span> <span class="c1">// We don&#39;t support uniform arrays yet.</span>
+                <span class="k">continue</span><span class="p">;</span>
+
+            <span class="c1">// Get location and create uniform object.</span>
+            <span class="n">app</span><span class="o">::</span><span class="n">gl_location</span> <span class="n">location</span> <span class="o">=</span> <span class="n">glGetUniformLocation</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">,</span> <span class="n">uniformNameBuffer</span><span class="p">);</span>
+            <span class="n">shader_parameter_base</span><span class="o">*</span> <span class="n">uniform</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="k">switch</span> <span class="p">(</span><span class="n">type</span><span class="p">)</span>
+            <span class="p">{</span>
+            <span class="k">case</span> <span class="nl">GL_SAMPLER_2D</span><span class="p">:</span>
+                <span class="n">uniform</span> <span class="o">=</span> <span class="k">new</span> <span class="n">rendering</span><span class="o">::</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">texture</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
+            <span class="k">case</span> <span class="nl">GL_FLOAT</span><span class="p">:</span>
+                <span class="n">uniform</span> <span class="o">=</span> <span class="k">new</span> <span class="n">rendering</span><span class="o">::</span><span class="n">uniform</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_FLOAT_VEC2</span><span class="p">:</span>
+                <span class="n">uniform</span> <span class="o">=</span> <span class="k">new</span> <span class="n">rendering</span><span class="o">::</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_FLOAT_VEC3</span><span class="p">:</span>
+                <span class="n">uniform</span> <span class="o">=</span> <span class="k">new</span> <span class="n">rendering</span><span class="o">::</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_FLOAT_VEC4</span><span class="p">:</span>
+                <span class="n">uniform</span> <span class="o">=</span> <span class="k">new</span> <span class="n">rendering</span><span class="o">::</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_INT</span><span class="p">:</span>
+                <span class="n">uniform</span> <span class="o">=</span> <span class="k">new</span> <span class="n">rendering</span><span class="o">::</span><span class="n">uniform</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_INT_VEC2</span><span class="p">:</span>
+                <span class="n">uniform</span> <span class="o">=</span> <span class="k">new</span> <span class="n">rendering</span><span class="o">::</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">ivec2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_INT_VEC3</span><span class="p">:</span>
+                <span class="n">uniform</span> <span class="o">=</span> <span class="k">new</span> <span class="n">rendering</span><span class="o">::</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">ivec3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_INT_VEC4</span><span class="p">:</span>
+                <span class="n">uniform</span> <span class="o">=</span> <span class="k">new</span> <span class="n">rendering</span><span class="o">::</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">ivec4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_BOOL</span><span class="p">:</span>
+                <span class="n">uniform</span> <span class="o">=</span> <span class="k">new</span> <span class="n">rendering</span><span class="o">::</span><span class="n">uniform</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_BOOL_VEC2</span><span class="p">:</span>
+                <span class="n">uniform</span> <span class="o">=</span> <span class="k">new</span> <span class="n">rendering</span><span class="o">::</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">bvec2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_BOOL_VEC3</span><span class="p">:</span>
+                <span class="n">uniform</span> <span class="o">=</span> <span class="k">new</span> <span class="n">rendering</span><span class="o">::</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">bvec3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_BOOL_VEC4</span><span class="p">:</span>
+                <span class="n">uniform</span> <span class="o">=</span> <span class="k">new</span> <span class="n">rendering</span><span class="o">::</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">bvec4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_FLOAT_MAT2</span><span class="p">:</span>
+                <span class="n">uniform</span> <span class="o">=</span> <span class="k">new</span> <span class="n">rendering</span><span class="o">::</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">mat2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_FLOAT_MAT3</span><span class="p">:</span>
+                <span class="n">uniform</span> <span class="o">=</span> <span class="k">new</span> <span class="n">rendering</span><span class="o">::</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_FLOAT_MAT4</span><span class="p">:</span>
+                <span class="n">uniform</span> <span class="o">=</span> <span class="k">new</span> <span class="n">rendering</span><span class="o">::</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="o">:</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c1">// Insert uniform into the uniform list.</span>
+            <span class="n">shader</span><span class="p">.</span><span class="n">uniforms</span><span class="p">[</span><span class="n">nameHash</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">name</span><span class="p">).</span><span class="n">c_str</span><span class="p">())]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">shader_parameter_base</span><span class="o">&gt;</span><span class="p">(</span><span class="n">uniform</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">uniformNameBuffer</span><span class="p">;</span> <span class="c1">// Delete name buffer</span>
+<span class="cp">#pragma endregion</span>
+<span class="cp">#pragma region attributes</span>
+        <span class="c1">// Find the number of active attributes.</span>
+        <span class="n">GLint</span> <span class="n">numActiveAttribs</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">glGetProgramiv</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">,</span> <span class="n">GL_ACTIVE_ATTRIBUTES</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numActiveAttribs</span><span class="p">);</span>
+
+        <span class="n">GLint</span> <span class="n">maxAttribNameLength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// Get name buffer length.</span>
+        <span class="n">glGetProgramiv</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">,</span> <span class="n">GL_ACTIVE_ATTRIBUTE_MAX_LENGTH</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">maxAttribNameLength</span><span class="p">);</span>
+
+        <span class="n">GLchar</span><span class="o">*</span> <span class="n">attribNameBuffer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GLchar</span><span class="p">[</span><span class="n">maxAttribNameLength</span><span class="p">];</span> <span class="c1">// Create buffer with the right length.</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">attrib</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">attrib</span> <span class="o">&lt;</span> <span class="n">numActiveAttribs</span><span class="p">;</span> <span class="o">++</span><span class="n">attrib</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">GLint</span> <span class="n">arraySize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// Use this later for attribute arrays.</span>
+            <span class="n">GLenum</span> <span class="n">type</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">GLsizei</span> <span class="n">nameLength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">glGetActiveAttrib</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">,</span> <span class="n">attrib</span><span class="p">,</span> <span class="p">(</span><span class="n">GLsizei</span><span class="p">)</span><span class="n">maxAttribNameLength</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">nameLength</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">arraySize</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">type</span><span class="p">,</span> <span class="n">attribNameBuffer</span><span class="p">);</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">name</span><span class="p">(</span><span class="n">attribNameBuffer</span><span class="p">,</span> <span class="n">nameLength</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// Get string_view of the actual name within the buffer.</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">name</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="sc">&#39;[&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span> <span class="c1">// We don&#39;t support attribute arrays yet.</span>
+                <span class="k">continue</span><span class="p">;</span>
+
+            <span class="c1">// Get location and create attribute object</span>
+            <span class="n">GLint</span> <span class="n">location</span> <span class="o">=</span> <span class="n">glGetAttribLocation</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">,</span> <span class="n">attribNameBuffer</span><span class="p">);</span>
+            <span class="n">shader</span><span class="p">.</span><span class="n">attributes</span><span class="p">[</span><span class="n">nameHash</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">name</span><span class="p">).</span><span class="n">c_str</span><span class="p">())]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">attribute</span><span class="o">&gt;</span><span class="p">(</span><span class="k">new</span> <span class="n">attribute</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">attribNameBuffer</span><span class="p">;</span>
+<span class="cp">#pragma endregion</span>
+    <span class="p">}</span>
+
+    <span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">compile_shader</span><span class="p">(</span><span class="n">GLuint</span> <span class="n">shaderType</span><span class="p">,</span> <span class="n">cstring</span> <span class="n">source</span><span class="p">,</span> <span class="n">GLint</span> <span class="n">sourceLength</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Create and compile shader.</span>
+        <span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">shaderId</span> <span class="o">=</span> <span class="n">glCreateShader</span><span class="p">(</span><span class="n">shaderType</span><span class="p">);</span>
+        <span class="n">glShaderSource</span><span class="p">(</span><span class="n">shaderId</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">source</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sourceLength</span><span class="p">);</span>
+        <span class="n">glCompileShader</span><span class="p">(</span><span class="n">shaderId</span><span class="p">);</span>
+
+        <span class="c1">// Fetch compile status.</span>
+        <span class="n">GLint</span> <span class="n">compilerResult</span> <span class="o">=</span> <span class="n">GL_FALSE</span><span class="p">;</span>
+        <span class="n">glGetShaderiv</span><span class="p">(</span><span class="n">shaderId</span><span class="p">,</span> <span class="n">GL_COMPILE_STATUS</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">compilerResult</span><span class="p">);</span>
+
+        <span class="c1">// Check for errors.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">compilerResult</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Create message buffer and fetch message.</span>
+            <span class="n">GLint</span> <span class="n">infoLogLength</span><span class="p">;</span>
+            <span class="n">glGetShaderiv</span><span class="p">(</span><span class="n">shaderId</span><span class="p">,</span> <span class="n">GL_INFO_LOG_LENGTH</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">infoLogLength</span><span class="p">);</span>
+            <span class="kt">char</span><span class="o">*</span> <span class="n">errorMessage</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">infoLogLength</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="n">glGetShaderInfoLog</span><span class="p">(</span><span class="n">shaderId</span><span class="p">,</span> <span class="n">infoLogLength</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">errorMessage</span><span class="p">);</span>
+
+            <span class="n">cstring</span> <span class="n">shaderTypename</span><span class="p">;</span>
+            <span class="k">switch</span> <span class="p">(</span><span class="n">shaderType</span><span class="p">)</span>
+            <span class="p">{</span>
+            <span class="k">case</span> <span class="nl">GL_FRAGMENT_SHADER</span><span class="p">:</span>
+                <span class="n">shaderTypename</span> <span class="o">=</span> <span class="s">&quot;fragment&quot;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_VERTEX_SHADER</span><span class="p">:</span>
+                <span class="n">shaderTypename</span> <span class="o">=</span> <span class="s">&quot;vertex&quot;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_GEOMETRY_SHADER</span><span class="p">:</span>
+                <span class="n">shaderTypename</span> <span class="o">=</span> <span class="s">&quot;geometry&quot;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_TESS_CONTROL_SHADER</span><span class="p">:</span>
+                <span class="n">shaderTypename</span> <span class="o">=</span> <span class="s">&quot;tessellation control&quot;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_TESS_EVALUATION_SHADER</span><span class="p">:</span>
+                <span class="n">shaderTypename</span> <span class="o">=</span> <span class="s">&quot;tessellation evaluation&quot;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_COMPUTE_SHADER</span><span class="p">:</span>
+                <span class="n">shaderTypename</span> <span class="o">=</span> <span class="s">&quot;compute&quot;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="o">:</span>
+                <span class="n">shaderTypename</span> <span class="o">=</span> <span class="s">&quot;unknown type&quot;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Error compiling {} shader:</span><span class="se">\n\t</span><span class="s">{}&quot;</span><span class="p">,</span> <span class="n">shaderTypename</span><span class="p">,</span> <span class="n">errorMessage</span><span class="p">);</span>
+            <span class="k">delete</span><span class="p">[]</span> <span class="n">errorMessage</span><span class="p">;</span> <span class="c1">// Delete message.</span>
+
+            <span class="n">glDeleteShader</span><span class="p">(</span><span class="n">shaderId</span><span class="p">);</span> <span class="c1">// Delete shader.</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">shaderId</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">shader_handle</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">create_shader</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">shader_import_settings</span> <span class="n">settings</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Get the id of the new shader.</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+
+        <span class="p">{</span> <span class="c1">// Check if the shader already exists.</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_shaderLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_shaders</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Shader {} already exists, existing shader will be returned instead.&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+                <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Check if the file is valid to read</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">file</span><span class="p">.</span><span class="n">is_valid</span><span class="p">()</span> <span class="o">||</span> <span class="o">!</span><span class="n">file</span><span class="p">.</span><span class="n">file_info</span><span class="p">().</span><span class="n">is_file</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">invalid_shader_handle</span><span class="p">;</span>
+
+        <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="n">file</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">common</span><span class="o">::</span><span class="n">valid</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">.</span><span class="n">get_error</span><span class="p">());</span>
+            <span class="k">return</span> <span class="n">invalid_shader_handle</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">source</span> <span class="o">=</span> <span class="p">((</span><span class="n">fs</span><span class="o">::</span><span class="n">basic_resource</span><span class="p">)</span><span class="n">result</span><span class="p">).</span><span class="n">to_string</span><span class="p">();</span>
+        <span class="n">shader_state</span> <span class="n">state</span><span class="p">;</span>
+
+        <span class="n">process_includes</span><span class="p">(</span><span class="n">source</span><span class="p">);</span>
+        <span class="n">resolve_preprocess_features</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">state</span><span class="p">);</span>
+
+        <span class="n">shader_ilo</span> <span class="n">shaders</span> <span class="o">=</span> <span class="n">seperate_shaders</span><span class="p">(</span><span class="n">source</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">shaders</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+            <span class="k">return</span> <span class="n">invalid_shader_handle</span><span class="p">;</span>
+
+        <span class="n">shader</span> <span class="n">shader</span><span class="p">;</span>
+        <span class="n">shader</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">;</span>
+        <span class="n">shader</span><span class="p">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">func</span><span class="p">,</span> <span class="n">param</span><span class="p">]</span> <span class="o">:</span> <span class="n">state</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">param</span> <span class="o">==</span> <span class="n">GL_FALSE</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">glDisable</span><span class="p">(</span><span class="n">func</span><span class="p">);</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">glEnable</span><span class="p">(</span><span class="n">func</span><span class="p">);</span>
+            <span class="k">switch</span> <span class="p">(</span><span class="n">func</span><span class="p">)</span>
+            <span class="p">{</span>
+            <span class="k">case</span> <span class="nl">GL_DEPTH_TEST</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="n">glDepthFunc</span><span class="p">(</span><span class="n">param</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_CULL_FACE</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="n">glCullFace</span><span class="p">(</span><span class="n">param</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_BLEND</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="n">glBlendFunc</span><span class="p">(</span><span class="n">GL_SRC_ALPHA</span><span class="p">,</span> <span class="n">GL_ONE_MINUS_SRC_ALPHA</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="o">:</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">shader</span><span class="p">.</span><span class="n">programId</span> <span class="o">=</span> <span class="n">glCreateProgram</span><span class="p">();</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">app</span><span class="o">::</span><span class="n">gl_id</span><span class="o">&gt;</span> <span class="n">shaderIds</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">shaderType</span><span class="p">,</span> <span class="n">shaderIL</span><span class="p">]</span> <span class="o">:</span> <span class="n">shaders</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">shaderId</span> <span class="o">=</span> <span class="n">compile_shader</span><span class="p">(</span><span class="n">shaderType</span><span class="p">,</span> <span class="n">shaderIL</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">shaderIL</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">shaderId</span> <span class="o">==</span> <span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">gl_id</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Error occurred in shader: {}</span><span class="se">\n</span><span class="s">{}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">shaderIL</span><span class="p">);</span>
+
+                <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">id</span> <span class="p">:</span> <span class="n">shaderIds</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">glDetachShader</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">,</span> <span class="n">id</span><span class="p">);</span>
+                    <span class="n">glDeleteShader</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="n">glDeleteProgram</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">invalid_shader_handle</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">glAttachShader</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">,</span> <span class="n">shaderId</span><span class="p">);</span>
+            <span class="n">shaderIds</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">shaderId</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">glLinkProgram</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">);</span>
+
+        <span class="n">GLint</span> <span class="n">linkStatus</span><span class="p">;</span>
+        <span class="n">glGetProgramiv</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">,</span> <span class="n">GL_LINK_STATUS</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">linkStatus</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">linkStatus</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">GLint</span> <span class="n">infoLogLength</span><span class="p">;</span>
+            <span class="n">glGetProgramiv</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">,</span> <span class="n">GL_INFO_LOG_LENGTH</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">infoLogLength</span><span class="p">);</span>
+
+            <span class="kt">char</span><span class="o">*</span> <span class="n">errorMessage</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">infoLogLength</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="n">glGetProgramInfoLog</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">,</span> <span class="n">infoLogLength</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">errorMessage</span><span class="p">);</span>
+
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Error linking {} shader:</span><span class="se">\n\t</span><span class="s">{}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">errorMessage</span><span class="p">);</span>
+            <span class="k">delete</span><span class="p">[]</span> <span class="n">errorMessage</span><span class="p">;</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">id</span> <span class="p">:</span> <span class="n">shaderIds</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">glDetachShader</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">,</span> <span class="n">id</span><span class="p">);</span>
+                <span class="n">glDeleteShader</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="n">glDeleteProgram</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">invalid_shader_handle</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">glValidateProgram</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">);</span>
+
+        <span class="n">GLint</span> <span class="n">validationStatus</span><span class="p">;</span>
+        <span class="n">glGetProgramiv</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">,</span> <span class="n">GL_VALIDATE_STATUS</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">validationStatus</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">validationStatus</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">GLint</span> <span class="n">infoLogLength</span><span class="p">;</span>
+            <span class="n">glGetProgramiv</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">,</span> <span class="n">GL_INFO_LOG_LENGTH</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">infoLogLength</span><span class="p">);</span>
+
+            <span class="kt">char</span><span class="o">*</span> <span class="n">errorMessage</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">infoLogLength</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="n">glGetProgramInfoLog</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">,</span> <span class="n">infoLogLength</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">errorMessage</span><span class="p">);</span>
+
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Error validating {} shader:</span><span class="se">\n\t</span><span class="s">{}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">errorMessage</span><span class="p">);</span>
+            <span class="k">delete</span><span class="p">[]</span> <span class="n">errorMessage</span><span class="p">;</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">shaderId</span> <span class="p">:</span> <span class="n">shaderIds</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">glDetachShader</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">,</span> <span class="n">shaderId</span><span class="p">);</span>
+                <span class="n">glDeleteShader</span><span class="p">(</span><span class="n">shaderId</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="n">glDeleteProgram</span><span class="p">(</span><span class="n">shader</span><span class="p">.</span><span class="n">programId</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">invalid_shader_handle</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">process_io</span><span class="p">(</span><span class="n">shader</span><span class="p">,</span> <span class="n">id</span><span class="p">);</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_shaderLock</span><span class="p">);</span>
+            <span class="n">m_shaders</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">shader</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="n">shader_handle</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">create_shader</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">shader_import_settings</span> <span class="n">settings</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">create_shader</span><span class="p">(</span><span class="n">file</span><span class="p">.</span><span class="n">get_filename</span><span class="p">(),</span> <span class="n">file</span><span class="p">,</span> <span class="n">settings</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">shader_handle</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_shaderLock</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_shaders</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">invalid_shader_handle</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="n">shader_handle</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_shaderLock</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_shaders</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">invalid_shader_handle</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="n">GLuint</span> <span class="n">shader_handle</span><span class="o">::</span><span class="n">get_uniform_block_index</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_shader</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">get_uniform_block_index</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">shader_handle</span><span class="o">::</span><span class="n">bind_uniform_block</span><span class="p">(</span><span class="n">GLuint</span> <span class="n">uniformBlockIndex</span><span class="p">,</span> <span class="n">GLuint</span> <span class="n">uniformBlockBinding</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_shader</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">bind_uniform_block</span><span class="p">(</span><span class="n">uniformBlockIndex</span><span class="p">,</span> <span class="n">uniformBlockBinding</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">shader_handle</span><span class="o">::</span><span class="n">get_name</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_shader</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;&gt;</span> <span class="n">shader_handle</span><span class="o">::</span><span class="n">get_uniform_info</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_shader</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">get_uniform_info</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="n">attribute</span> <span class="n">shader_handle</span><span class="o">::</span><span class="n">get_attribute</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_shader</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">get_attribute</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">attribute</span> <span class="n">shader_handle</span><span class="o">::</span><span class="n">get_attribute</span><span class="p">(</span><span class="n">id_type</span> <span class="n">attributeId</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_shader</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">get_attribute</span><span class="p">(</span><span class="n">attributeId</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">shader_handle</span><span class="o">::</span><span class="n">bind</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_shader</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">bind</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">shader_handle</span><span class="o">::</span><span class="n">release</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">glUseProgram</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">shader</span><span class="o">::</span><span class="n">bind</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">func</span><span class="p">,</span> <span class="n">param</span><span class="p">]</span> <span class="o">:</span> <span class="n">state</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">param</span> <span class="o">==</span> <span class="n">GL_FALSE</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">glDisable</span><span class="p">(</span><span class="n">func</span><span class="p">);</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">glEnable</span><span class="p">(</span><span class="n">func</span><span class="p">);</span>
+            <span class="k">switch</span> <span class="p">(</span><span class="n">func</span><span class="p">)</span>
+            <span class="p">{</span>
+            <span class="k">case</span> <span class="nl">GL_DEPTH_TEST</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="n">glDepthFunc</span><span class="p">(</span><span class="n">param</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_CULL_FACE</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="n">glCullFace</span><span class="p">(</span><span class="n">param</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_BLEND</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="n">glBlendFunc</span><span class="p">(</span><span class="n">GL_SRC_ALPHA</span><span class="p">,</span> <span class="n">GL_ONE_MINUS_SRC_ALPHA</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="o">:</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">glUseProgram</span><span class="p">(</span><span class="n">programId</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">shader</span><span class="o">::</span><span class="n">release</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">glUseProgram</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">GLuint</span> <span class="n">shader</span><span class="o">::</span><span class="n">get_uniform_block_index</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">glGetUniformBlockIndex</span><span class="p">(</span><span class="n">programId</span><span class="p">,</span> <span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">shader</span><span class="o">::</span><span class="n">bind_uniform_block</span><span class="p">(</span><span class="n">GLuint</span> <span class="n">uniformBlockIndex</span><span class="p">,</span> <span class="n">GLuint</span> <span class="n">uniformBlockBinding</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">glUniformBlockBinding</span><span class="p">(</span><span class="n">programId</span><span class="p">,</span> <span class="n">uniformBlockIndex</span><span class="p">,</span> <span class="n">uniformBlockBinding</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_shader.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

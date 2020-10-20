@@ -1,0 +1,22 @@
+.. _exhale_struct_structlegion_1_1core_1_1filesystem_1_1provider__registry_1_1driver:
+
+Struct provider_registry::driver
+================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_provider_registry.cpp`
+
+
+Nested Relationships
+--------------------
+
+This struct is a nested type of :ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1provider__registry`.
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::filesystem::provider_registry::driver
+   :members:
+   :protected-members:
+   :undoc-members:

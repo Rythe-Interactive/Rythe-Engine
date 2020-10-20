@@ -1,0 +1,73 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_window_windowsystem.hpp:
+
+File windowsystem.hpp
+=====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_window>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/application/window``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/application/window/windowsystem.hpp``)
+----------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_window_windowsystem.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``application/context/contexthelper.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_context_contexthelper.hpp`)
+
+- ``application/events/windowevents.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_events_windowevents.hpp`)
+
+- ``application/events/windowinputevents.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_events_windowinputevents.hpp`)
+
+- ``application/window/window.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_window_window.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_application.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_module_applicationmodule.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_window_windowsystem.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__application`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1_window_system_1_1fullscreen__toggle__request`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1_window_system_1_1icon__request`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1_window_system_1_1window__request`
+
+- :ref:`exhale_class_classlegion_1_1application_1_1_window_system`
+

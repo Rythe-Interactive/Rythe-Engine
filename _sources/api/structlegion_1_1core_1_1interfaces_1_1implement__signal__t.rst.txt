@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1core_1_1interfaces_1_1implement__signal__t:
+
+Struct implement_signal_t
+=========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_inteface_traits.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::interfaces::implement_signal_t
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,23 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor_editormodule.hpp:
+
+Program Listing for File editormodule.hpp
+=========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor_editormodule.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/editor/core/editor/editormodule.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   namespace legion::editor
+   {
+       class EditorModule
+       {
+       };
+   
+       struct editor_module_initializer_t {};
+   }
+   

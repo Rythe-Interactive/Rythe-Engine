@@ -1,0 +1,189 @@
+
+.. _namespace_legion__core__common:
+
+Namespace legion::core::common
+==============================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+Detailed Description
+--------------------
+
+Copyright 2020 Raphael Baier, The Args Team
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+ 
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1common_1_1is_chars`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1common_1_1many__t`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1common_1_1str__tokens`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1common_1_1try__static__cast__result`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1common_1_1try__static__cast__result_3_01void_00_01_original_01_4`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1common_1_1tuple__create__helper`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1err__ident`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1err__proxy`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1err__proxy_3_01_t_01_4`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1err__proxy_3_01_t_00_01_any_8_8_8_01_4`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1err__proxy_3_01void_01_4`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1err__proxy_3_4`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1ok__ident`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1ok__proxy`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1ok__proxy_3_01_t_01_4`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1ok__proxy_3_01_t_00_01_any_8_8_8_01_4`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1ok__proxy_3_01void_01_4`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1ok__proxy_3_4`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1result`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1result_3_01many__t_3_01_args_8_8_8_01_4_00_01_err_type_01_4`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1result_3_01many__t_3_01_ok_args_8_8_8_01_4_00_01many__t_3_01_err_args_8_8_8_01_4_01_4`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1result_3_01_ok_type_00_01_err_type_01_4`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1result_3_01_ok_type_00_01many__t_3_01_args_8_8_8_01_4_01_4`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1result__decay`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1result__ident`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1result__impl`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1result__impl_3_01_ok_type_00_01_err_type_00_01_ok_result_type_00_01_err_result_type_01_4`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1common_1_1valid__t`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a324f315e4457bf17ffc7b623379711ff`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a694b6a6b7c55430a6d50502a229cb60f`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a74cc80b23f2a17ff531ff9be5a1d3201`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a23fff450dcf721c830cb9e3a36a5381e`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a20ad9ed4fa81e004d572a28e095d1594`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a4b80e5f32e486e733eb995bc908b1e9a`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a069d1a8c8ea81826e68a83e719a664db`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a0c6ac3ea533f88b37adaffda35607e95`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1af1055ca707d9d1575ee97dd46a0bf61f`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a1451c68d0b2574950e80faa43d17166a`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a4d9bf40403bf5c074820eb6dad5ec144`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a4678ff45114b533a8ca360baf9dd185b`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a6637167f612315189c6b67f1220ec1e0`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a78d8db2b93f850e7fe7ee31f1218a062`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a5e685911322a09b0c414f7c6602799e6`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a77d6d0f2ad23fb32ffde0e7044ad5d1e`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a43b19facd7db54f0347734c06e835029`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a4f75447b2b14a0d7090cbc4bc5e1b193`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1adf4ea5d08e701ac4855ae592ad921810`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ae5f726b49a2dc922137c0c9c17ec7aec`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ab2edcca0424d1258f7f8164f74b51d66`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ab113b1bf7ffcb9541b570f782eed8cf5`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a39e2d7c22982936d53b6783c03a4565d`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a0decabe3d584ff7508ca20c0d633db9b`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1af71ae44f34d94a72cf14b6e31e4b5a34`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a12da6735c1622b040aa70f71f200dd05`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a54fffaf9335b3a2a566bdfa71938c392`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a7a032691bc843b65c9b3d0c90d7b0a0c`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ade252c5f972db8d2a929a300157083ec`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a92c9f197f8e27ebc88ed5c1878bde2f8`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1aa1847a96dd1755afdaef7c1ecd0642ff`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ab454b41ced6bdf3688357bfd7de52dd5`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a7cebc6d90cecb0173c2d0e6c7885c5bf`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ad5008f9b0fc90f8431f9552cf619e28b`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1adcbd10d6d406bbcc73e43ed867dc97d6`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a1df999ea992fd826b727683ec2359114`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a34257a94dbd637054a6634249b072bae`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a8d3d7865efc31c33b26e2060d3cc1def`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a56aed0be8cecb875c4927db1e0dcaf93`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ab888b105b685388605c20798aee44d9b`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a36743a3105fe1206a9a885ace2b0ed92`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ad221957b51568904b3103b5df59d9f9a`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_namespacelegion_1_1core_1_1common_1a8869e55040f2144919c668b24139d91e`
+
+- :ref:`exhale_typedef_namespacelegion_1_1core_1_1common_1a0328af8c758547afc055a33dc069093d`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_namespacelegion_1_1core_1_1common_1af45342b8671092a735b2d99185504347`

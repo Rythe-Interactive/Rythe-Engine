@@ -1,0 +1,13 @@
+.. _exhale_function_constants_8hpp_1a3fe56736f705ea2ede9feeefb05be16a:
+
+Template Function legion::core::math::sqrt3
+===========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_constants.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::math::sqrt3()

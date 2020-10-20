@@ -1,0 +1,13 @@
+.. _exhale_typedef_texture_8hpp_1afbdc6a96f7206745fb66dacca92fab0d:
+
+Typedef legion::rendering::texture_components
+=============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_texture.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::rendering::texture_components

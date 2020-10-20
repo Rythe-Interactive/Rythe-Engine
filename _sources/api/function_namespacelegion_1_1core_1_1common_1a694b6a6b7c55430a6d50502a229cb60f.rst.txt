@@ -1,0 +1,13 @@
+.. _exhale_function_namespacelegion_1_1core_1_1common_1a694b6a6b7c55430a6d50502a229cb60f:
+
+Template Function legion::core::common::count_delimiter
+=======================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::common::count_delimiter(const char *)

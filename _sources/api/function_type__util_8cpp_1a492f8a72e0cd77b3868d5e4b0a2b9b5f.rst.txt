@@ -1,0 +1,13 @@
+.. _exhale_function_type__util_8cpp_1a492f8a72e0cd77b3868d5e4b0a2b9b5f:
+
+Function legion::core::nameHash(cstring)
+========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::nameHash(cstring)

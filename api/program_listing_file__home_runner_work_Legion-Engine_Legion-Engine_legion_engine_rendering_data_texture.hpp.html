@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File texture.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File texture.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-texture-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-texture-hpp"></span><h1>Program Listing for File texture.hpp<a class="headerlink" href="#program-listing-for-file-texture-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_texture.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-texture-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data/texture.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;application/application.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
+<span class="p">{</span>
+    <span class="k">enum</span> <span class="k">struct</span> <span class="nl">texture_type</span> <span class="p">:</span> <span class="n">GLenum</span>
+    <span class="p">{</span>
+        <span class="n">one_dimensional</span> <span class="o">=</span> <span class="n">GL_TEXTURE_1D</span><span class="p">,</span>
+        <span class="n">two_dimensional</span> <span class="o">=</span> <span class="n">GL_TEXTURE_2D</span><span class="p">,</span>
+        <span class="n">three_dimensional</span> <span class="o">=</span> <span class="n">GL_TEXTURE_3D</span><span class="p">,</span>
+        <span class="n">array_1D</span> <span class="o">=</span> <span class="n">GL_TEXTURE_1D_ARRAY</span><span class="p">,</span>
+        <span class="n">array_2D</span> <span class="o">=</span> <span class="n">GL_TEXTURE_2D_ARRAY</span><span class="p">,</span>
+        <span class="n">rectangle</span> <span class="o">=</span> <span class="n">GL_TEXTURE_RECTANGLE</span><span class="p">,</span>
+        <span class="n">cube_map_positive_x</span> <span class="o">=</span> <span class="n">GL_TEXTURE_CUBE_MAP_POSITIVE_X</span><span class="p">,</span>
+        <span class="n">cube_map_negative_x</span> <span class="o">=</span> <span class="n">GL_TEXTURE_CUBE_MAP_NEGATIVE_X</span><span class="p">,</span>
+        <span class="n">cube_map_positive_y</span> <span class="o">=</span> <span class="n">GL_TEXTURE_CUBE_MAP_POSITIVE_Y</span><span class="p">,</span>
+        <span class="n">cube_map_negative_y</span> <span class="o">=</span> <span class="n">GL_TEXTURE_CUBE_MAP_NEGATIVE_Y</span><span class="p">,</span>
+        <span class="n">cube_map_positive_z</span> <span class="o">=</span> <span class="n">GL_TEXTURE_CUBE_MAP_POSITIVE_Z</span><span class="p">,</span>
+        <span class="n">cube_map_negative_z</span> <span class="o">=</span> <span class="n">GL_TEXTURE_CUBE_MAP_NEGATIVE_Z</span>
+    <span class="p">};</span>
+
+    <span class="k">enum</span> <span class="k">struct</span> <span class="nl">texture_format</span> <span class="p">:</span> <span class="n">GLint</span>
+    <span class="p">{</span>
+        <span class="n">depth</span> <span class="o">=</span> <span class="n">GL_DEPTH_COMPONENT</span><span class="p">,</span>
+        <span class="n">stencil</span> <span class="o">=</span> <span class="n">GL_STENCIL_INDEX</span><span class="p">,</span>
+        <span class="n">depth_stencil</span> <span class="o">=</span> <span class="n">GL_DEPTH_STENCIL</span><span class="p">,</span>
+        <span class="n">red</span> <span class="o">=</span> <span class="n">GL_RED</span><span class="p">,</span>
+        <span class="n">rg</span> <span class="o">=</span> <span class="n">GL_RG</span><span class="p">,</span>
+        <span class="n">rgb</span> <span class="o">=</span> <span class="n">GL_RGB</span><span class="p">,</span>
+        <span class="n">rgba</span> <span class="o">=</span> <span class="n">GL_RGBA</span><span class="p">,</span>
+        <span class="n">bgr</span> <span class="o">=</span> <span class="n">GL_BGR</span><span class="p">,</span>
+        <span class="n">bgra</span> <span class="o">=</span> <span class="n">GL_BGRA</span><span class="p">,</span>
+        <span class="n">red_int</span> <span class="o">=</span> <span class="n">GL_RED_INTEGER</span><span class="p">,</span>
+        <span class="n">rg_int</span> <span class="o">=</span> <span class="n">GL_RG_INTEGER</span><span class="p">,</span>
+        <span class="n">rgb_int</span> <span class="o">=</span> <span class="n">GL_RGB_INTEGER</span><span class="p">,</span>
+        <span class="n">rgba_int</span> <span class="o">=</span> <span class="n">GL_RGBL_INTEGER</span><span class="p">,</span>
+        <span class="n">bgr_int</span> <span class="o">=</span> <span class="n">GL_BGR_INTEGER</span><span class="p">,</span>
+        <span class="n">bgra_int</span> <span class="o">=</span> <span class="n">GL_BGRL_INTEGER</span><span class="p">,</span>
+    <span class="p">};</span>
+
+    <span class="k">using</span> <span class="n">texture_components</span> <span class="o">=</span> <span class="n">image_components</span><span class="p">;</span>
+
+    <span class="k">constexpr</span> <span class="n">GLenum</span> <span class="n">components_to_format</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RED</span><span class="p">,</span> <span class="n">GL_RG</span><span class="p">,</span> <span class="n">GL_RGB</span><span class="p">,</span> <span class="n">GL_RGBA</span> <span class="p">};</span>
+
+    <span class="k">constexpr</span> <span class="n">GLenum</span> <span class="n">channels_to_glenum</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">GL_UNSIGNED_SHORT</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_FLOAT</span> <span class="p">};</span>
+
+    <span class="k">enum</span> <span class="k">struct</span> <span class="nl">texture_mipmap</span> <span class="p">:</span> <span class="n">GLint</span>
+    <span class="p">{</span>
+        <span class="n">nearest</span> <span class="o">=</span> <span class="n">GL_NEAREST</span><span class="p">,</span>
+        <span class="n">linear</span> <span class="o">=</span> <span class="n">GL_LINEAR</span>
+    <span class="p">};</span>
+
+    <span class="k">enum</span> <span class="k">struct</span> <span class="nl">texture_wrap</span> <span class="p">:</span> <span class="n">GLint</span>
+    <span class="p">{</span>
+        <span class="n">edge_clamp</span> <span class="o">=</span> <span class="n">GL_CLAMP_TO_EDGE</span><span class="p">,</span>
+        <span class="n">border_clamp</span> <span class="o">=</span> <span class="n">GL_CLAMP_TO_BORDER</span><span class="p">,</span>
+        <span class="n">mirror</span> <span class="o">=</span> <span class="n">GL_MIRRORED_REPEAT</span><span class="p">,</span>
+        <span class="n">repeat</span> <span class="o">=</span> <span class="n">GL_REPEAT</span><span class="p">,</span>
+        <span class="n">mirror_then_clamp</span> <span class="o">=</span> <span class="n">GL_MIRROR_CLAMP_TO_EDGE</span>
+    <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="n">texture_data</span>
+    <span class="p">{</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">;</span>
+        <span class="n">texture_type</span> <span class="n">type</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;</span> <span class="n">pixels</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="n">texture</span>
+    <span class="p">{</span>
+        <span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">textureId</span> <span class="o">=</span> <span class="n">invalid_id</span><span class="p">;</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">;</span>
+        <span class="n">texture_components</span> <span class="n">channels</span><span class="p">;</span>
+        <span class="n">texture_type</span> <span class="n">type</span><span class="p">;</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">to_resource</span><span class="p">(</span><span class="n">fs</span><span class="o">::</span><span class="n">basic_resource</span><span class="o">*</span> <span class="n">resource</span><span class="p">,</span> <span class="k">const</span> <span class="n">texture</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">from_resource</span><span class="p">(</span><span class="n">texture</span><span class="o">*</span> <span class="n">value</span><span class="p">,</span> <span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">resource</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="n">texture_handle</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span><span class="p">;</span>
+
+        <span class="n">texture_data</span> <span class="nf">get_data</span><span class="p">();</span>
+        <span class="k">const</span> <span class="n">texture</span><span class="o">&amp;</span> <span class="n">get_texture</span><span class="p">();</span>
+        <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">texture_handle</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">id</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">operator</span> <span class="n">id_type</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">id</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">constexpr</span> <span class="n">texture_handle</span> <span class="n">invalid_texture_handle</span> <span class="p">{</span> <span class="n">invalid_id</span> <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="n">texture_import_settings</span>
+    <span class="p">{</span>
+        <span class="n">texture_type</span> <span class="n">type</span><span class="p">;</span>
+        <span class="n">channel_format</span> <span class="n">fileFormat</span><span class="p">;</span>
+        <span class="n">texture_format</span> <span class="n">intendedFormat</span><span class="p">;</span>
+        <span class="n">texture_components</span> <span class="n">components</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">flipVertical</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">generateMipmaps</span><span class="p">;</span>
+        <span class="n">texture_mipmap</span> <span class="n">min</span><span class="p">;</span>
+        <span class="n">texture_mipmap</span> <span class="n">mag</span><span class="p">;</span>
+        <span class="n">texture_wrap</span> <span class="n">wrapR</span><span class="p">;</span>
+        <span class="n">texture_wrap</span> <span class="n">wrapS</span><span class="p">;</span>
+        <span class="n">texture_wrap</span> <span class="n">wrapT</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="k">constexpr</span> <span class="n">texture_import_settings</span> <span class="n">default_texture_settings</span><span class="p">{</span>
+        <span class="n">texture_type</span><span class="o">::</span><span class="n">two_dimensional</span><span class="p">,</span> <span class="n">channel_format</span><span class="o">::</span><span class="n">eight_bit</span><span class="p">,</span> <span class="n">texture_format</span><span class="o">::</span><span class="n">rgba</span><span class="p">,</span>
+        <span class="n">texture_components</span><span class="o">::</span><span class="n">rgba</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="n">texture_mipmap</span><span class="o">::</span><span class="n">linear</span><span class="p">,</span> <span class="n">texture_mipmap</span><span class="o">::</span><span class="n">linear</span><span class="p">,</span>
+        <span class="n">texture_wrap</span><span class="o">::</span><span class="n">repeat</span><span class="p">,</span> <span class="n">texture_wrap</span><span class="o">::</span><span class="n">repeat</span><span class="p">,</span> <span class="n">texture_wrap</span><span class="o">::</span><span class="n">repeat</span> <span class="p">};</span>
+
+    <span class="k">class</span> <span class="nc">TextureCache</span>
+    <span class="p">{</span>
+        <span class="k">friend</span> <span class="k">class</span> <span class="nc">renderer</span><span class="p">;</span>
+        <span class="k">friend</span> <span class="k">struct</span> <span class="n">texture_handle</span><span class="p">;</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="k">static</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">texture</span><span class="o">&gt;</span> <span class="n">m_textures</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_textureLock</span><span class="p">;</span>
+
+        <span class="k">static</span> <span class="k">const</span> <span class="n">texture</span><span class="o">&amp;</span> <span class="n">get_texture</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">texture_data</span> <span class="nf">get_data</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
+
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">static</span> <span class="n">texture_handle</span> <span class="n">create_texture</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">texture_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_texture_settings</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="n">texture_handle</span> <span class="nf">create_texture</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">texture_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_texture_settings</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="n">texture_handle</span> <span class="nf">create_texture</span><span class="p">(</span><span class="n">image_handle</span> <span class="n">image</span><span class="p">,</span> <span class="n">texture_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_texture_settings</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="n">texture_handle</span> <span class="nf">get_handle</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="n">texture_handle</span> <span class="nf">get_handle</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_texture.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

@@ -1,0 +1,13 @@
+.. _exhale_function_namespacelegion_1_1core_1_1common_1a6637167f612315189c6b67f1220ec1e0:
+
+Function legion::core::common::find_and_remove_at
+=================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::common::find_and_remove_at(std::string&, const std::string&, size_t)

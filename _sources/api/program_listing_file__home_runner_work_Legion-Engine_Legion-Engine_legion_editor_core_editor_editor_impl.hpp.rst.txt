@@ -1,0 +1,34 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor_editor_impl.hpp:
+
+Program Listing for File editor_impl.hpp
+========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor_editor_impl.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/editor/core/editor/editor_impl.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/platform/platform.hpp>
+   #include <core/types/types.hpp>
+   #include <editor/editor/editormodule.hpp>
+   
+   namespace legion::editor
+   {
+       class Editor
+       {
+           template<class ModuleType, core::inherits_from<ModuleType, EditorModule> = 0>
+           void reportModule()
+           {
+           }
+   
+           template <class ModuleType, class... Args, core::inherits_from<ModuleType, EditorModule> = 0>
+           void reportModule(editor_module_initializer_t s, Args&&...args)
+           {
+           }
+       };
+   }
+   
+   extern void reportEditorModules(legion::editor::Editor* editor);

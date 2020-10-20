@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File program.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File program.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-program-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-compute-program-cpp"></span><h1>Program Listing for File program.cpp<a class="headerlink" href="#program-listing-for-file-program-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_program.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-compute-program-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/compute/program.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;core/compute/program.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/logging/logging.hpp&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/resource.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/compute/context.hpp&gt;</span><span class="cp"></span>
+
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">compute</span> <span class="p">{</span>
+
+    <span class="n">Program</span><span class="o">::</span><span class="n">Program</span><span class="p">(</span><span class="n">cl_context</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">cl_device_id</span> <span class="n">device</span><span class="p">,</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">basic_resource</span> <span class="n">container</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="c1">//bind command queue creation to surrogate</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">make_command_queue</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="p">([</span><span class="n">ctx</span><span class="p">,</span> <span class="n">device</span><span class="p">]()</span> <span class="o">-&gt;</span> <span class="n">cl_command_queue</span>
+        <span class="p">{</span>
+            <span class="n">cl_int</span> <span class="n">ret</span><span class="p">;</span>
+            <span class="c1">//creates a command queue and checks it for errors</span>
+            <span class="k">auto</span><span class="o">*</span> <span class="k">const</span> <span class="n">command_queue</span> <span class="o">=</span> <span class="n">clCreateCommandQueueWithProperties</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ret</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;clCreateCommandQueueWithProperties failed!&quot;</span><span class="p">);</span>
+                <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">command_queue</span><span class="p">;</span>
+        <span class="p">});</span>
+
+        <span class="n">cl_int</span> <span class="n">ret</span><span class="p">;</span>
+
+        <span class="c1">//convert to c-style array</span>
+        <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">data</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">container</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+        <span class="kt">size_t</span> <span class="n">size</span> <span class="o">=</span> <span class="n">container</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+
+        <span class="c1">//create program from source</span>
+        <span class="n">m_program</span> <span class="o">=</span> <span class="n">clCreateProgramWithSource</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">size</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ret</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;clCreateProgramWithSource failed!&quot;</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+
+        <span class="c1">// clBuildProgram parameters guide:</span>
+        <span class="c1">//</span>
+        <span class="c1">// -cl-std=2.0: We want OpenCL Standard 2.0 the driver reports 1.2 but it actually is 2.0 on most devices</span>
+        <span class="c1">// -cl-kernel-arg-info: We want kernel informations built into the binary so that we can query the kernel args by name instead of index</span>
+        <span class="c1">// -DLEGION_LIBRARY this is indicates to your kernel that it was built for use with the ARGS-Engine, it defines the macor LEGION_LIBRARY</span>
+        <span class="c1">// -DDEBUG if the Engine is built in debug mode, the kernel  will also receive the DEBUG define</span>
+        <span class="c1">// -DNDEBUG if the Engine is built in release mode, the kernel will receive the NDEBUG define</span>
+
+
+        <span class="c1">//check if we are running in debug and adjust build command accordingly</span>
+        <span class="k">if</span> <span class="k">constexpr</span> <span class="p">(</span><span class="n">LEGION_CONFIGURATION</span> <span class="o">==</span> <span class="n">LEGION_DEBUG_VALUE</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//DEBUG</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">clBuildProgram</span><span class="p">(</span><span class="n">m_program</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">device</span><span class="p">,</span> <span class="s">&quot;-cl-std=CL2.0 -cl-kernel-arg-info -DLEGION_LIBRARY -DDEBUG&quot;</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="c1">//NDEBUG</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">clBuildProgram</span><span class="p">(</span><span class="n">m_program</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">device</span><span class="p">,</span> <span class="s">&quot;-cl-std=CL2.0 -cl-kernel-arg-info -DLEGION_LIBRARY -DNDEBUG&quot;</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">//check if building was successful</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="n">CL_SUCCESS</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;clBuildProgram failed&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">Kernel</span> <span class="n">Program</span><span class="o">::</span><span class="n">kernelContext</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// check if we already have the kernel and create a context from it if we do, otherwise initialize it</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">m_kernelCache</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">name</span><span class="p">);</span> <span class="n">it</span> <span class="o">!=</span> <span class="n">m_kernelCache</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">Kernel</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">Kernel</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">prewarm</span><span class="p">(</span><span class="n">name</span><span class="p">));</span>
+        <span class="p">}</span>
+
+
+    <span class="p">}</span>
+
+    <span class="n">cl_kernel</span> <span class="n">Program</span><span class="o">::</span><span class="n">prewarm</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// create the kernel and push it into the cache</span>
+        <span class="c1">// do some error checking along the way</span>
+
+        <span class="n">cl_int</span> <span class="n">ret</span><span class="p">;</span>
+        <span class="n">cl_kernel</span> <span class="n">kernel</span> <span class="o">=</span> <span class="n">clCreateKernel</span><span class="p">(</span><span class="n">m_program</span><span class="p">,</span> <span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">ret</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;clCreateKernel failed&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+        <span class="n">m_kernelCache</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">kernel</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">kernel</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Program</span><span class="o">::</span><span class="n">from_resource</span><span class="p">(</span><span class="n">Program</span><span class="o">*</span> <span class="n">value</span><span class="p">,</span> <span class="k">const</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">resource</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="o">*</span><span class="n">value</span> <span class="o">=</span> <span class="n">Context</span><span class="o">::</span><span class="n">createProgram</span><span class="p">(</span><span class="n">resource</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_program.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

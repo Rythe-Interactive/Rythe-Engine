@@ -1,0 +1,34 @@
+.. _exhale_class_classlegion_1_1core_1_1exception:
+
+Class exception
+===============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public exception``
+
+
+Derived Types
+*************
+
+- ``public legion::core::fs_error`` (:ref:`exhale_class_classlegion_1_1core_1_1fs__error`)
+- ``public legion::core::invalid_creation_error`` (:ref:`exhale_class_classlegion_1_1core_1_1invalid__creation__error`)
+- ``public legion::core::invalid_fetch_error`` (:ref:`exhale_class_classlegion_1_1core_1_1invalid__fetch__error`)
+- ``public legion::core::invalid_type_error`` (:ref:`exhale_class_classlegion_1_1core_1_1invalid__type__error`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::exception
+   :members:
+   :protected-members:
+   :undoc-members:

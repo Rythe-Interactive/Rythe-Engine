@@ -1,0 +1,15 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor.hpp:
+
+Program Listing for File editor.hpp
+===================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/editor/core/editor.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <editor/editor/editor_impl.hpp>
+   #include <editor/editor/editormodule.hpp>

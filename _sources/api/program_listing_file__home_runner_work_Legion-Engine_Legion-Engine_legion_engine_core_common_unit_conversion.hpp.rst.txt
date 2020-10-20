@@ -1,0 +1,33 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_unit_conversion.hpp:
+
+Program Listing for File unit_conversion.hpp
+============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_unit_conversion.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/common/unit_conversion.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include <cstdint>
+   #include <cstddef>
+   
+   namespace legion::core {
+   namespace literals 
+   {
+       constexpr std:: uint64_t onek = 1024;
+   
+       constexpr std:: uint64_t operator""_kb(unsigned long long param) {
+           return param * onek;
+       }
+   
+       constexpr std:: uint64_t operator""_mb(unsigned long long param) {
+           return param * onek * onek;
+       }
+   
+       constexpr std:: uint64_t operator""_gb(unsigned long long param) {
+           return param * onek * onek * onek;
+       }
+   }
+   }

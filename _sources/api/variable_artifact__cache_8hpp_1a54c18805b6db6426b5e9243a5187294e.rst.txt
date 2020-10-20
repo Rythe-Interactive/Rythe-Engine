@@ -1,0 +1,13 @@
+.. _exhale_variable_artifact__cache_8hpp_1a54c18805b6db6426b5e9243a5187294e:
+
+Variable legion::core::filesystem::gc_interval
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_artifact_cache.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::filesystem::gc_interval

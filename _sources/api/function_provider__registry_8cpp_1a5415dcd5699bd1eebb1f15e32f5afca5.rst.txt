@@ -1,0 +1,13 @@
+.. _exhale_function_provider__registry_8cpp_1a5415dcd5699bd1eebb1f15e32f5afca5:
+
+Function legion::core::filesystem::operator==(const provider_registry::resolver_sentinel&, const provider_registry::resolver_sentinel&)
+=======================================================================================================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_provider_registry.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::filesystem::operator==(const provider_registry::resolver_sentinel&, const provider_registry::resolver_sentinel&)

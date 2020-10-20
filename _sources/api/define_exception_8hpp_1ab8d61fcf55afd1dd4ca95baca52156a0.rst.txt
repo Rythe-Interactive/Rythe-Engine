@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1ab8d61fcf55afd1dd4ca95baca52156a0:
+
+Define legion_invalid_fetch_error
+=================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: legion_invalid_fetch_error

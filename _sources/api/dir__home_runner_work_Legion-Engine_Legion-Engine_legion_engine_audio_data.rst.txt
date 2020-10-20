@@ -1,0 +1,26 @@
+.. _dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data:
+
+
+Directory data
+==============
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/audio``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/audio/data``
+
+Subdirectories
+--------------
+
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_importers`
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_audio_segment.cpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_audio_segment.hpp`
+
+

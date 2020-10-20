@@ -1,0 +1,13 @@
+.. _exhale_function_namespacelegion_1_1core_1_1common_1af71ae44f34d94a72cf14b6e31e4b5a34:
+
+Template Function legion::core::common::Ok(T&, Any&&...)
+========================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_result.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::common::Ok(T&, Any&&...)

@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1core_1_1filesystem_1_1file__traits:
+
+Struct file_traits
+==================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_detail_traits.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::filesystem::file_traits
+   :members:
+   :protected-members:
+   :undoc-members:

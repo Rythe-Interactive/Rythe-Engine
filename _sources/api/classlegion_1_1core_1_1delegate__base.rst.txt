@@ -1,0 +1,16 @@
+.. _exhale_class_classlegion_1_1core_1_1delegate__base:
+
+Template Class delegate_base
+============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_delegate.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::delegate_base
+   :members:
+   :protected-members:
+   :undoc-members:

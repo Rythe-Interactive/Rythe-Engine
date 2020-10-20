@@ -1,0 +1,63 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entityquery.hpp:
+
+Program Listing for File entityquery.hpp
+========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entityquery.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/ecs/entityquery.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/types/primitives.hpp>
+   #include <core/types/type_util.hpp>
+   #include <core/platform/platform.hpp>
+   #include <core/containers/hashed_sparse_set.hpp>
+   #include <core/ecs/entity_handle.hpp>
+   
+   namespace legion::core::ecs
+   {
+       class QueryRegistry;
+       class EcsRegistry;
+   
+       class EntityQuery
+       {
+       private:
+           QueryRegistry* m_registry;
+           EcsRegistry* m_ecsRegistry;
+           id_type m_id;
+   
+       public:
+           EntityQuery(id_type id, QueryRegistry* registry, EcsRegistry* ecsRegistry);
+           EntityQuery() = default;
+           ~EntityQuery();
+   
+           EntityQuery(EntityQuery&& other);
+           EntityQuery(const EntityQuery& other);
+   
+           EntityQuery operator=(EntityQuery&& other);
+           EntityQuery operator=(const EntityQuery& other);
+   
+           entity_set::const_iterator begin() const;
+   
+           entity_set::const_iterator end() const;
+   
+           L_NODISCARD id_type id() { return m_id; }
+   
+           template<typename component_type>
+           void addComponentType() { addComponentType(typeHash<component_type>()); }
+   
+           void addComponentType(id_type componentTypeId);
+   
+           template<typename component_type>
+           void removeComponentType() { removeComponentType(typeHash<component_type>()); }
+   
+           void removeComponentType(id_type componentTypeId);
+   
+           entity_handle operator[](size_type index);
+   
+           size_type size();
+       };
+   }

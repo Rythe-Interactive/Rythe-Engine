@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1core_1_1common_1_1tuple__create__helper:
+
+Struct tuple_create_helper
+==========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_result.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::common::tuple_create_helper
+   :members:
+   :protected-members:
+   :undoc-members:

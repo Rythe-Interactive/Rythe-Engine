@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1a441e9749035320e8dca84a4f76a1a8fe:
+
+Define legion_invalid_type_msg
+==============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: legion_invalid_type_msg

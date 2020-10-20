@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File entry_point.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File entry_point.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-entry-point-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-entry-entry-point-hpp"></span><h1>Program Listing for File entry_point.hpp<a class="headerlink" href="#program-listing-for-file-entry-point-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_entry_entry_point.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-entry-entry-point-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/entry/entry_point.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/engine/engine.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/platform/platform.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/types/primitives.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="k">extern</span> <span class="kt">void</span> <span class="nf">reportModules</span><span class="p">(</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">Engine</span><span class="o">*</span> <span class="n">engine</span><span class="p">);</span>
+
+<span class="cp">#if defined(LEGION_ENTRY)</span>
+
+    <span class="cp">#if (defined(LEGION_HIGH_PERFORMANCE) &amp;&amp; defined(LEGION_WINDOWS))</span>
+        <span class="kr">__declspec</span><span class="p">(</span><span class="n">dllexport</span><span class="p">)</span> <span class="n">DWORD</span> <span class="n">NvOptimusEnablement</span> <span class="o">=</span> <span class="mh">0x0000001</span><span class="p">;</span>
+        <span class="kr">__declspec</span><span class="p">(</span><span class="n">dllexport</span><span class="p">)</span> <span class="kt">int</span> <span class="n">AmdPowerXpressRequestHighPerformance</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="cp">#endif</span>
+
+    <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="cp">#if (!defined(LEGION_DEBUG) &amp;&amp; defined(LEGION_WINDOWS) &amp;&amp; !defined(LEGION_KEEP_CONSOLE))</span>
+        <span class="o">::</span><span class="n">ShowWindow</span><span class="p">(</span><span class="o">::</span><span class="n">GetConsoleWindow</span><span class="p">(),</span> <span class="n">SW_HIDE</span><span class="p">);</span>
+    <span class="cp">#endif</span>
+
+    <span class="cp">#if defined(LEGION_HIGH_PERFORMANCE)</span>
+        <span class="cp">#if defined(LEGION_WINDOWS)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">SetPriorityClass</span><span class="p">(</span><span class="n">GetCurrentProcess</span><span class="p">(),</span> <span class="n">REALTIME_PRIORITY_CLASS</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">DWORD</span> <span class="n">error</span> <span class="o">=</span> <span class="n">GetLastError</span><span class="p">();</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;==============================================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;| Failed to enter real-time performance mode, error: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">error</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; |&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;==============================================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;=======================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;| Entered real-time performance mode. |&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;=======================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="cp">#elif defined(LEGION_LINUX)</span>
+        <span class="kt">pid_t</span> <span class="n">pid</span> <span class="o">=</span> <span class="n">getpid</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">setpriority</span><span class="p">(</span><span class="n">PRIO_PROCESS</span><span class="p">,</span> <span class="n">pid</span><span class="p">,</span> <span class="n">sched_get_priority_max</span><span class="p">(</span><span class="n">sched_getscheduler</span><span class="p">(</span><span class="n">pid</span><span class="p">)))</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">errornum</span> <span class="o">=</span> <span class="n">errno</span><span class="p">;</span>
+            <span class="n">cstring</span> <span class="n">error</span><span class="p">;</span>
+
+            <span class="k">switch</span> <span class="p">(</span><span class="n">errornum</span><span class="p">)</span>
+            <span class="p">{</span>
+            <span class="k">case</span> <span class="nl">ESRCH</span><span class="p">:</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="s">&quot;ESRCH&quot;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">EINVAL</span><span class="p">:</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="s">&quot;EINVAL&quot;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">EPERM</span><span class="p">:</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="s">&quot;EPERM&quot;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">EACCES</span><span class="p">:</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="s">&quot;EACCES&quot;</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="o">:</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">errornum</span><span class="p">).</span><span class="n">c_str</span><span class="p">();</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;=============================================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;| Failed to enter real-time performance mode, error: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">error</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; |&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;=============================================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;=======================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;| Entered real-time performance mode. |&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;=======================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="cp">#endif</span>
+    <span class="cp">#else</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;========================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;| Engine will start in low power mode. |&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;========================================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="cp">#endif</span>
+
+        <span class="c1">//try</span>
+        <span class="p">{</span>
+            <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">Engine</span> <span class="n">engine</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="n">argv</span><span class="p">);</span>
+
+            <span class="n">reportModules</span><span class="p">(</span><span class="o">&amp;</span><span class="n">engine</span><span class="p">);</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;==========================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;| Initializing engine... |&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;==========================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">engine</span><span class="p">.</span><span class="n">init</span><span class="p">();</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;==============================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;| Entering main engine loop. |&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;==============================&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">engine</span><span class="p">.</span><span class="n">run</span><span class="p">();</span>
+
+    <span class="cp">#if defined(LEGION_DEBUG) || defined(LEGION_KEEP_CONSOLE)</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Press any key to exit.&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">.</span><span class="n">ignore</span><span class="p">();</span>
+    <span class="cp">#endif</span>
+
+        <span class="p">}</span>
+        <span class="cm">/*catch (const legion::core::exception&amp; e)</span>
+<span class="cm">        {</span>
+<span class="cm">    #if (defined(LEGION_WINDOWS) &amp;&amp; !defined(LEGION_KEEP_CONSOLE))</span>
+<span class="cm">            ::ShowWindow(::GetConsoleWindow(), SW_SHOW);</span>
+<span class="cm">    #endif</span>
+
+<span class="cm">            std::cout &lt;&lt; &quot;Encountered exception:&quot; &lt;&lt; std::endl;</span>
+<span class="cm">            std::cout &lt;&lt; &quot;  msg:     \t&quot; &lt;&lt; e.what() &lt;&lt; std::endl;</span>
+<span class="cm">            std::cout &lt;&lt; &quot;  file:    \t&quot; &lt;&lt; e.file() &lt;&lt; std::endl;</span>
+<span class="cm">            std::cout &lt;&lt; &quot;  line:    \t&quot; &lt;&lt; e.line() &lt;&lt; std::endl;</span>
+<span class="cm">            std::cout &lt;&lt; &quot;  function:\t&quot; &lt;&lt; e.func() &lt;&lt; std::endl;</span>
+
+<span class="cm">    #if defined(LEGION_DEBUG)</span>
+<span class="cm">            throw e;</span>
+<span class="cm">    #else</span>
+<span class="cm">            std::cout &lt;&lt; &quot;Press any key to exit.&quot; &lt;&lt; std::endl;</span>
+<span class="cm">            std::cin.ignore();</span>
+<span class="cm">    #endif</span>
+<span class="cm">        }</span>
+<span class="cm">        catch (const std::exception&amp; e)</span>
+<span class="cm">        {</span>
+<span class="cm">    #if (defined(LEGION_WINDOWS) &amp;&amp; !defined(LEGION_KEEP_CONSOLE))</span>
+<span class="cm">            ::ShowWindow(::GetConsoleWindow(), SW_SHOW);</span>
+<span class="cm">    #endif</span>
+
+<span class="cm">            std::cout &lt;&lt; e.what() &lt;&lt; std::endl;</span>
+
+<span class="cm">    #if defined(LEGION_DEBUG)</span>
+<span class="cm">            throw e;</span>
+<span class="cm">    #else</span>
+<span class="cm">            std::cout &lt;&lt; &quot;Press any key to exit.&quot; &lt;&lt; std::endl;</span>
+<span class="cm">            std::cin.ignore();</span>
+<span class="cm">    #endif</span>
+<span class="cm">        }*/</span>
+
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_entry_entry_point.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

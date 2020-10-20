@@ -1,0 +1,25 @@
+.. _exhale_class_classlegion_1_1audio_1_1_audio_module:
+
+Class AudioModule
+=================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_module_audiomodule.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::core::Module`` (:ref:`exhale_class_classlegion_1_1core_1_1_module`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::audio::AudioModule
+   :members:
+   :protected-members:
+   :undoc-members:

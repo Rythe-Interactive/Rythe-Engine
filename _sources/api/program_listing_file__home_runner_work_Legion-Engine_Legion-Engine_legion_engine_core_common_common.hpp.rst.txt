@@ -1,0 +1,17 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_common.hpp:
+
+Program Listing for File common.hpp
+===================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_common.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/common/common.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/common/exception.hpp>
+   #include <core/common/inteface_traits.hpp>
+   #include <core/common/result.hpp>
+   #include <core/common/string_extra.hpp>

@@ -1,0 +1,423 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File shader.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File shader.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-shader-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-shader-hpp"></span><h1>Program Listing for File shader.hpp<a class="headerlink" href="#program-listing-for-file-shader-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_shader.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-shader-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data/shader.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/data/model.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/data/texture.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">model</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">camera</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">shader</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">ShaderCache</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">shader_handle</span><span class="p">;</span>
+
+<span class="cp">#pragma region shader parameters</span>
+
+    <span class="k">struct</span> <span class="n">shader_parameter_base</span>
+    <span class="p">{</span>
+    <span class="k">protected</span><span class="o">:</span>
+        <span class="n">id_type</span> <span class="n">m_shaderId</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">m_name</span><span class="p">;</span>
+        <span class="n">GLenum</span> <span class="n">m_type</span><span class="p">;</span>
+        <span class="n">GLint</span> <span class="n">m_location</span><span class="p">;</span>
+
+        <span class="n">shader_parameter_base</span><span class="p">(</span><span class="n">id_type</span> <span class="n">shaderId</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">name</span><span class="p">,</span> <span class="n">GLenum</span> <span class="n">type</span><span class="p">,</span> <span class="n">GLint</span> <span class="n">location</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_shaderId</span><span class="p">(</span><span class="n">shaderId</span><span class="p">),</span> <span class="n">m_name</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">m_type</span><span class="p">(</span><span class="n">type</span><span class="p">),</span> <span class="n">m_location</span><span class="p">(</span><span class="n">location</span><span class="p">)</span> <span class="p">{};</span>
+
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">is_valid</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_location</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">m_shaderId</span> <span class="o">!=</span> <span class="n">invalid_id</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">virtual</span> <span class="n">GLenum</span> <span class="n">get_type</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_type</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">virtual</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">get_name</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_name</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">virtual</span> <span class="n">GLint</span> <span class="n">get_location</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_location</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">shader_parameter_base</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_shaderId</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">m_shaderId</span> <span class="o">&amp;&amp;</span> <span class="n">m_name</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">m_name</span> <span class="o">&amp;&amp;</span> <span class="n">m_type</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">m_type</span> <span class="o">&amp;&amp;</span> <span class="n">m_location</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">m_location</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">bool</span> <span class="k">operator</span><span class="o">!=</span><span class="p">(</span><span class="k">const</span> <span class="n">shader_parameter_base</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_shaderId</span> <span class="o">!=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_shaderId</span> <span class="o">||</span> <span class="n">m_name</span> <span class="o">!=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_name</span> <span class="o">||</span> <span class="n">m_type</span> <span class="o">!=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_type</span> <span class="o">||</span> <span class="n">m_location</span> <span class="o">!=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_location</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="nl">uniform</span> <span class="p">:</span> <span class="k">public</span> <span class="n">shader_parameter_base</span>
+    <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">uniform</span><span class="p">(</span><span class="n">id_type</span> <span class="n">shaderId</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">name</span><span class="p">,</span> <span class="n">GLenum</span> <span class="n">type</span><span class="p">,</span> <span class="n">GLint</span> <span class="n">location</span><span class="p">)</span> <span class="o">:</span> <span class="n">shader_parameter_base</span><span class="p">(</span><span class="n">shaderId</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">)</span> <span class="p">{}</span>
+
+        <span class="kt">void</span> <span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">texture</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">texture</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">())</span>
+            <span class="n">glUniform1f</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec2</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec2</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">())</span>
+            <span class="n">glUniform2fv</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">value</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">())</span>
+            <span class="n">glUniform3fv</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">value</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">())</span>
+            <span class="n">glUniform4fv</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">value</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">())</span>
+            <span class="n">glUniform1i</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">ivec2</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">())</span>
+            <span class="n">glUniform2iv</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">value</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">ivec3</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec3</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">())</span>
+            <span class="n">glUniform3iv</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">value</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">ivec4</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec4</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">())</span>
+            <span class="n">glUniform4iv</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">value</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="kt">bool</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">())</span>
+            <span class="n">glUniform1i</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">bvec2</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">bvec2</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">())</span>
+            <span class="n">glUniform2iv</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">ivec2</span><span class="p">(</span><span class="n">value</span><span class="p">)));</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">bvec3</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">bvec3</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">())</span>
+            <span class="n">glUniform3iv</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">ivec3</span><span class="p">(</span><span class="n">value</span><span class="p">)));</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">bvec4</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">bvec4</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">())</span>
+            <span class="n">glUniform4iv</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">ivec4</span><span class="p">(</span><span class="n">value</span><span class="p">)));</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">mat2</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat2</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">())</span>
+            <span class="n">glUniformMatrix2fv</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">value</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">())</span>
+            <span class="n">glUniformMatrix3fv</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">value</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">())</span>
+            <span class="n">glUniformMatrix4fv</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">value</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">struct</span> <span class="nl">attribute</span> <span class="p">:</span> <span class="k">public</span> <span class="n">shader_parameter_base</span>
+    <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">attribute</span><span class="p">(</span><span class="n">id_type</span> <span class="n">shaderId</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">name</span><span class="p">,</span> <span class="n">GLenum</span> <span class="n">type</span><span class="p">,</span> <span class="n">GLint</span> <span class="n">location</span><span class="p">)</span> <span class="o">:</span> <span class="n">shader_parameter_base</span><span class="p">(</span><span class="n">shaderId</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">)</span> <span class="p">{}</span>
+
+        <span class="kt">void</span> <span class="n">set_attribute_pointer</span><span class="p">(</span><span class="n">GLint</span> <span class="n">size</span><span class="p">,</span> <span class="n">GLenum</span> <span class="n">type</span><span class="p">,</span> <span class="n">GLboolean</span> <span class="n">normalized</span><span class="p">,</span> <span class="n">GLsizei</span> <span class="n">stride</span><span class="p">,</span> <span class="n">GLsizei</span> <span class="n">pointer</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">m_location</span><span class="p">);</span>
+            <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">normalized</span><span class="p">,</span> <span class="n">stride</span><span class="p">,</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">GLvoid</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">pointer</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">disable_attribute_pointer</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">glDisableVertexAttribArray</span><span class="p">(</span><span class="n">m_location</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">set_divisor</span><span class="p">(</span><span class="n">uint</span> <span class="n">offset</span><span class="p">,</span> <span class="n">uint</span> <span class="n">divisor</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">glVertexAttribDivisor</span><span class="p">(</span><span class="n">m_location</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="n">divisor</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">const</span> <span class="n">attribute</span> <span class="nf">invalid_attribute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+<span class="cp">#pragma endregion</span>
+
+    <span class="k">struct</span> <span class="n">shader</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">shader_state</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">GLint</span> <span class="n">programId</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">shader_parameter_base</span><span class="o">&gt;&gt;</span> <span class="n">uniforms</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">attribute</span><span class="o">&gt;&gt;</span> <span class="n">attributes</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
+        <span class="n">shader_state</span> <span class="n">state</span><span class="p">;</span>
+
+        <span class="c1">// Since copying would mean that the in-vram version of the actual shader would also need to be copied, we don&#39;t allow copying.</span>
+        <span class="n">shader</span><span class="p">(</span><span class="k">const</span> <span class="n">shader</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+        <span class="c1">// Moving should be fine though.</span>
+        <span class="n">shader</span><span class="p">(</span><span class="n">shader</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">shader</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
+        <span class="n">shader</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">shader</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">shader</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">shader</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+
+        <span class="kt">void</span> <span class="nf">bind</span><span class="p">();</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">release</span><span class="p">();</span>
+
+        <span class="n">GLuint</span> <span class="nf">get_uniform_block_index</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">bind_uniform_block</span><span class="p">(</span><span class="n">GLuint</span> <span class="n">uniformBlockIndex</span><span class="p">,</span> <span class="n">GLuint</span> <span class="n">uniformBlockBinding</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">get_uniform</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">dynamic_cast</span><span class="o">&lt;</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">uniforms</span><span class="p">[</span><span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">)].</span><span class="n">get</span><span class="p">());</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">get_uniform</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">dynamic_cast</span><span class="o">&lt;</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">uniforms</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get</span><span class="p">());</span>
+        <span class="p">}</span>
+
+        <span class="n">attribute</span> <span class="n">get_attribute</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">attributes</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+                <span class="k">return</span> <span class="o">*</span><span class="p">(</span><span class="n">attributes</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get</span><span class="p">());</span>
+
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Shader {} does not contain attribute {}&quot;</span><span class="p">,</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">invalid_attribute</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">attribute</span> <span class="n">get_attribute</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">attributes</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+                <span class="k">return</span> <span class="o">*</span><span class="p">(</span><span class="n">attributes</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get</span><span class="p">());</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Shader {} does not contain attribute with id {}&quot;</span><span class="p">,</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span> <span class="n">id</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">invalid_attribute</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;&gt;</span> <span class="n">get_uniform_info</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;&gt;</span> <span class="n">info</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">uniform</span><span class="p">]</span> <span class="o">:</span> <span class="n">uniforms</span><span class="p">)</span>
+                <span class="n">info</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">uniform</span><span class="o">-&gt;</span><span class="n">get_name</span><span class="p">(),</span> <span class="n">uniform</span><span class="o">-&gt;</span><span class="n">get_type</span><span class="p">()));</span>
+            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">info</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="n">shader_handle</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">cache</span> <span class="o">=</span> <span class="n">ShaderCache</span><span class="p">;</span>
+        <span class="n">id_type</span> <span class="n">id</span><span class="p">;</span>
+        <span class="n">GLuint</span> <span class="nf">get_uniform_block_index</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">bind_uniform_block</span><span class="p">(</span><span class="n">GLuint</span> <span class="n">uniformBlockIndex</span><span class="p">,</span> <span class="n">GLuint</span> <span class="n">uniformBlockBinding</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">get_name</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;&gt;</span> <span class="n">get_uniform_info</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">get_uniform</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">get_uniform</span><span class="p">(</span><span class="n">id_type</span> <span class="n">uniformId</span><span class="p">);</span>
+
+        <span class="n">attribute</span> <span class="nf">get_attribute</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+
+        <span class="n">attribute</span> <span class="nf">get_attribute</span><span class="p">(</span><span class="n">id_type</span> <span class="n">attributeId</span><span class="p">);</span>
+
+        <span class="kt">void</span> <span class="nf">bind</span><span class="p">();</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">release</span><span class="p">();</span>
+
+        <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">shader_handle</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">id</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">operator</span> <span class="kt">bool</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">id</span> <span class="o">!=</span> <span class="n">invalid_id</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">constexpr</span> <span class="n">shader_handle</span> <span class="n">invalid_shader_handle</span><span class="p">{</span> <span class="n">invalid_id</span> <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="n">shader_import_settings</span>
+    <span class="p">{</span>
+
+    <span class="p">};</span>
+
+    <span class="k">constexpr</span> <span class="n">shader_import_settings</span> <span class="n">default_shader_settings</span><span class="p">{};</span>
+
+    <span class="k">class</span> <span class="nc">ShaderCache</span>
+    <span class="p">{</span>
+        <span class="k">friend</span> <span class="k">class</span> <span class="nc">renderer</span><span class="p">;</span>
+        <span class="k">friend</span> <span class="k">struct</span> <span class="n">shader_handle</span><span class="p">;</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="k">using</span> <span class="n">shader_ilo</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">GLuint</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span><span class="p">;</span> <span class="c1">// Shader intermediate language object.</span>
+        <span class="k">using</span> <span class="n">shader_state</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;</span><span class="p">;</span>
+
+        <span class="k">static</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">shader</span><span class="o">&gt;</span> <span class="n">m_shaders</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_shaderLock</span><span class="p">;</span>
+
+        <span class="k">static</span> <span class="n">shader</span><span class="o">*</span> <span class="nf">get_shader</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">process_includes</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">shaderSource</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">resolve_preprocess_features</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">shaderSource</span><span class="p">,</span> <span class="n">shader_state</span><span class="o">&amp;</span> <span class="n">state</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">shader_ilo</span> <span class="nf">seperate_shaders</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">shaderSource</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">process_io</span><span class="p">(</span><span class="n">shader</span><span class="o">&amp;</span> <span class="n">shader</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">compile_shader</span><span class="p">(</span><span class="n">GLuint</span> <span class="n">shaderType</span><span class="p">,</span> <span class="n">cstring</span> <span class="n">source</span><span class="p">,</span> <span class="n">GLint</span> <span class="n">sourceLength</span><span class="p">);</span>
+
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">static</span> <span class="n">shader_handle</span> <span class="n">create_shader</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">shader_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_shader_settings</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">shader_handle</span> <span class="nf">create_shader</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">shader_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_shader_settings</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">shader_handle</span> <span class="nf">get_handle</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">shader_handle</span> <span class="nf">get_handle</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">shader_handle</span><span class="o">::</span><span class="n">get_uniform</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_shader</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">get_uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">shader_handle</span><span class="o">::</span><span class="n">get_uniform</span><span class="p">(</span><span class="n">id_type</span> <span class="n">uniformId</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_shader</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">get_uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">uniformId</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_shader.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

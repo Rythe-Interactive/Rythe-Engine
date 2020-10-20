@@ -1,0 +1,68 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_color.hpp:
+
+Program Listing for File color.hpp
+==================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_color.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/math/color.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/math/glm/glm_include.hpp>
+   
+   namespace legion::core::math
+   {
+       struct color : public vec4
+       {
+           color(const vec4& s) : vec4(s) {}
+           color(vec4&& s) :vec4(s) {}
+           color(float r, float g, float b, float a = 1.f) : vec4(r, g, b, a) {}
+           color() = default;
+   
+           bool operator==(const color& other) const
+           {
+               return r == other.x && g == other.g && b == other.b && a == other.a;
+           }
+   
+           bool operator==(const vec4& other) const
+           {
+               return r == other.x && g == other.g && b == other.b && a == other.a;
+           }
+       };
+   
+       namespace colors
+       {
+           const color black       { 0.f, 0.f, 0.f, 1.f };
+           const color transparent { 0.f, 0.f, 0.f, 0.f };
+           const color white       { 1.f, 1.f, 1.f, 1.f };
+           const color red         { 1.f, 0.f, 0.f, 1.f };
+           const color green       { 0.f, 1.f, 0.f, 1.f };
+           const color blue        { 0.f, 0.f, 1.f, 1.f };
+           const color yellow      { 1.f, 1.f, 0.f, 1.f };
+           const color cyan        { 0.f, 1.f, 1.f, 1.f };
+           const color magenta     { 1.f, 0.f, 1.f, 1.f };
+       }
+   }
+   
+   #if !defined(DOXY_EXCLUDE)
+   namespace std
+   {
+       template<>
+       struct hash<legion::core::math::color>
+       {
+           std::size_t operator()(legion::core::math::color const& color) const noexcept
+           {
+               size_t seed = 0;
+               hash<float> hasher;
+               legion::core::math::detail::hash_combine(seed, hasher(color.r));
+               legion::core::math::detail::hash_combine(seed, hasher(color.g));
+               legion::core::math::detail::hash_combine(seed, hasher(color.b));
+               legion::core::math::detail::hash_combine(seed, hasher(color.a));
+               return seed;
+           }
+       };
+   }
+   #endif

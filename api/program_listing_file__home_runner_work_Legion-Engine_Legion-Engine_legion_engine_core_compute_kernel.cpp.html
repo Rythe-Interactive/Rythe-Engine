@@ -1,0 +1,332 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File kernel.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File kernel.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-kernel-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-compute-kernel-cpp"></span><h1>Program Listing for File kernel.cpp<a class="headerlink" href="#program-listing-for-file-kernel-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-compute-kernel-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/compute/kernel.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;core/compute/kernel.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/compute/program.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/logging/logging.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">compute</span>
+<span class="p">{</span>
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">build_buffer_names</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">size_type</span> <span class="n">size</span><span class="p">;</span>
+        <span class="n">cl_uint</span> <span class="n">num_args</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">container</span><span class="p">;</span>
+
+        <span class="c1">//get the number of kernel arguments</span>
+        <span class="n">clGetKernelInfo</span><span class="p">(</span><span class="n">m_func</span><span class="p">,</span> <span class="n">CL_KERNEL_NUM_ARGS</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">cl_uint</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">num_args</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">);</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">cl_uint</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_args</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="c1">//get the length of the kernel argument</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">clGetKernelArgInfo</span><span class="p">(</span><span class="n">m_func</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">CL_KERNEL_ARG_NAME</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">size</span><span class="p">)</span> <span class="o">==</span> <span class="n">CL_KERNEL_ARG_INFO_NOT_AVAILABLE</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;cannot get Argument name! Was the kernel built with -cl-kernel-arg-info ? &quot;</span><span class="p">);</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c1">//get the kernel argument</span>
+            <span class="n">container</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="sc">&#39;\0&#39;</span><span class="p">);</span>
+            <span class="n">clGetKernelArgInfo</span><span class="p">(</span><span class="n">m_func</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">CL_KERNEL_ARG_NAME</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">container</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="k">nullptr</span><span class="p">);</span>
+
+            <span class="c1">//remove trailing &#39;\0&#39;</span>
+            <span class="n">container</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">container</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+
+            <span class="c1">//store it in the map</span>
+            <span class="n">m_paramsMap</span><span class="p">[</span><span class="n">container</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">read_write_mode</span><span class="p">(</span><span class="n">buffer_type</span> <span class="n">t</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_default_mode</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">set_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//get name from buffer</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">m_name</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Encountered unnamed buffer! binding to a Kernel-location will fail!&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nf">set_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_name</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">set_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//translate name to index</span>
+        <span class="n">param_find</span><span class="p">([</span><span class="k">this</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">buffer</span><span class="p">)](</span><span class="n">cl_uint</span> <span class="n">index</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">this</span><span class="o">-&gt;</span><span class="n">set_buffer</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">index</span><span class="p">);</span>
+        <span class="p">},</span> <span class="n">name</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">set_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">index</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//set kernel argument</span>
+        <span class="k">const</span> <span class="n">cl_int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">clSetKernelArg</span><span class="p">(</span><span class="n">m_func</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">cl_mem</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">buffer</span><span class="p">.</span><span class="n">m_memory_object</span><span class="p">);</span>
+
+        <span class="c1">//check clSetKernelArg</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="n">CL_SUCCESS</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;clSetKernelArg {}&quot;</span><span class="p">,</span> <span class="n">ret</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">enqueue_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//get name from buffer</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">m_name</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Encountered unnamed buffer! binding to a Kernel-location will fail!&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nf">enqueue_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_name</span><span class="p">,</span> <span class="n">blocking</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">enqueue_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//translate name to index</span>
+        <span class="n">param_find</span><span class="p">([</span><span class="k">this</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">blocking</span><span class="p">](</span><span class="n">cl_uint</span> <span class="n">index</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">this</span><span class="o">-&gt;</span><span class="n">enqueue_buffer</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">blocking</span><span class="p">);</span>
+        <span class="p">},</span> <span class="n">name</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">enqueue_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">index</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
+    <span class="p">{</span>
+
+        <span class="cm">/*</span>
+<span class="cm">            we are writing to the device buffer</span>
+
+<span class="cm">            even though the buffer was r/w on</span>
+<span class="cm">            the host it has now become read-only</span>
+<span class="cm">            on the device</span>
+
+<span class="cm">            |  HOST  | -&gt; write  -&gt;  | DEVICE |</span>
+<span class="cm">            | Buffer |               | Buffer |</span>
+
+<span class="cm">            the same happens in the other direction</span>
+
+<span class="cm">            |  HOST  |  &lt;- read &lt;-   | DEVICE |</span>
+<span class="cm">            | Buffer |               | Buffer |</span>
+
+<span class="cm">            Here we are reading from the device</span>
+<span class="cm">            so the buffer on the gpu was write-only</span>
+<span class="cm">            (aka it can only write to the host buffer)</span>
+<span class="cm">            but we still need to read it</span>
+
+<span class="cm">        */</span>
+        <span class="n">cl_int</span> <span class="n">ret</span><span class="p">;</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">m_type</span><span class="p">)</span>
+        <span class="p">{</span>
+
+            <span class="c1">//buffer was read only</span>
+        <span class="k">case</span> <span class="nl">CL_MEM_READ_ONLY</span><span class="p">:</span>
+            <span class="c1">//we &quot;write&quot; to a read only buffer because it is readonly for the kernel</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">clEnqueueWriteBuffer</span><span class="p">(</span><span class="n">m_queue</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_memory_object</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">cl_bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">blocking</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_size</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_data</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+
+            <span class="c1">//buffer was write only</span>
+        <span class="k">case</span> <span class="nl">CL_MEM_WRITE_ONLY</span><span class="p">:</span>
+            <span class="c1">//similarly we read from a buffer that was write-only for the kernel</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="n">clEnqueueReadBuffer</span><span class="p">(</span><span class="n">m_queue</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_memory_object</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">cl_bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">blocking</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_size</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_data</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+
+            <span class="c1">//buffer is read and write the default read/write mode needs to decide</span>
+        <span class="k">case</span> <span class="nl">CL_MEM_READ_WRITE</span><span class="p">:</span>
+            <span class="k">switch</span> <span class="p">(</span><span class="n">m_default_mode</span><span class="p">)</span>
+            <span class="p">{</span>
+            <span class="k">case</span> <span class="n">buffer_type</span><span class="o">::</span><span class="nl">READ_BUFFER</span><span class="p">:</span>
+                <span class="c1">//the mode was read on the host so we write to the kernel</span>
+                <span class="n">ret</span> <span class="o">=</span> <span class="n">clEnqueueWriteBuffer</span><span class="p">(</span><span class="n">m_queue</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_memory_object</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">cl_bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">blocking</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_size</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_data</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="k">case</span> <span class="n">buffer_type</span><span class="o">::</span><span class="nl">WRITE_BUFFER</span><span class="p">:</span>
+                <span class="c1">//again the mode was write on the host so we read from it</span>
+                <span class="n">ret</span> <span class="o">=</span> <span class="n">clEnqueueReadBuffer</span><span class="p">(</span><span class="n">m_queue</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_memory_object</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">cl_bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">blocking</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_size</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_data</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="k">default</span><span class="o">:</span>
+                <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">logic_error</span><span class="p">(</span><span class="s">&quot;Buffer enqueue type was neither read nor write ... I don&#39;t know what to do!&quot;</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">default</span><span class="o">:</span> <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">logic_error</span><span class="p">(</span><span class="s">&quot;Buffer was neither read nor write nor readwrite&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="n">CL_SUCCESS</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;clEnqueueXXXXBuffer {}&quot;</span><span class="p">,</span> <span class="n">ret</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">set_and_enqueue_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//get name from buffer</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">m_name</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Encountered unnamed buffer! binding to a Kernel-location will fail!&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nf">set_and_enqueue_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_name</span><span class="p">,</span> <span class="n">blocking</span><span class="p">);</span>
+    <span class="p">}</span>
+
+
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">set_and_enqueue_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//translate name to index</span>
+        <span class="n">param_find</span><span class="p">([</span><span class="k">this</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">blocking</span><span class="p">](</span><span class="n">cl_uint</span> <span class="n">index</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">set_and_enqueue_buffer</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">blocking</span><span class="p">);</span>
+        <span class="p">},</span> <span class="n">name</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">set_and_enqueue_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">index</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//set and ... enqueue_buffer</span>
+        <span class="c1">//nothing fun to see here</span>
+        <span class="n">enqueue_buffer</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">index</span><span class="p">,</span> <span class="n">blocking</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nf">set_buffer</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">index</span><span class="p">);</span>
+    <span class="p">}</span>
+
+
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">dispatch</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">//enqueue the Kernel in the command queue</span>
+        <span class="n">cl_int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">clEnqueueNDRangeKernel</span><span class="p">(</span>
+            <span class="n">m_queue</span><span class="p">,</span>
+            <span class="n">m_func</span><span class="p">,</span>
+            <span class="mi">1</span><span class="p">,</span>
+            <span class="k">nullptr</span><span class="p">,</span>
+            <span class="o">&amp;</span><span class="n">m_global_size</span><span class="p">,</span>
+            <span class="o">&amp;</span><span class="n">m_local_size</span><span class="p">,</span>
+            <span class="mi">0</span><span class="p">,</span>
+            <span class="k">nullptr</span><span class="p">,</span>
+            <span class="k">nullptr</span>
+        <span class="p">);</span>
+
+        <span class="c1">//check if the enqueue was successful</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="n">CL_SUCCESS</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;clEnqueueNDRangeKernel failed: {}&quot;</span><span class="p">,</span> <span class="n">ret</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">finish</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="c1">//execute all commands in the queue</span>
+        <span class="n">clFlush</span><span class="p">(</span><span class="n">m_queue</span><span class="p">);</span>
+
+        <span class="c1">//probably not necessarily necessary</span>
+        <span class="n">clFinish</span><span class="p">(</span><span class="n">m_queue</span><span class="p">);</span>
+
+        <span class="c1">//neccessary</span>
+        <span class="n">clReleaseCommandQueue</span><span class="p">(</span><span class="n">m_queue</span><span class="p">);</span>
+    <span class="p">}</span>
+
+
+    <span class="n">Kernel</span><span class="o">::</span><span class="n">Kernel</span><span class="p">(</span><span class="n">Program</span><span class="o">*</span> <span class="n">program</span><span class="p">,</span> <span class="n">cl_kernel</span> <span class="n">kernel</span><span class="p">)</span> <span class="o">:</span>
+        <span class="n">m_default_mode</span><span class="p">(</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">),</span>
+        <span class="n">m_prog</span><span class="p">(</span><span class="n">program</span><span class="p">),</span>
+        <span class="n">m_func</span><span class="p">(</span><span class="n">kernel</span><span class="p">),</span>
+        <span class="n">m_global_size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+        <span class="n">m_local_size</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_queue</span> <span class="o">=</span> <span class="n">program</span><span class="o">-&gt;</span><span class="n">make_cq</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">local</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">s</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_local_size</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">global</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">s</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_global_size</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

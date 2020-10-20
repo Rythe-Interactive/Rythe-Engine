@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Struct implement_signal_t &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Template Struct pair_range" href="structlegion_1_1core_1_1iterator_1_1pair__range.html" />
+    <link rel="prev" title="Template Struct has_resize&lt; C, Ret(Args…)&gt;" href="structlegion_1_1core_1_1has__resize_3_01_c_00_01_ret_07_args_8_8_8_08_4.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="structlegion_1_1core_1_1iterator_1_1pair__range.html" title="Template Struct pair_range"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="structlegion_1_1core_1_1has__resize_3_01_c_00_01_ret_07_args_8_8_8_08_4.html" title="Template Struct has_resize&lt; C, Ret(Args…)&gt;"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Struct implement_signal_t</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="struct-implement-signal-t">
+<span id="exhale-struct-structlegion-1-1core-1-1interfaces-1-1implement-signal-t"></span><h1>Struct implement_signal_t<a class="headerlink" href="#struct-implement-signal-t" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_inteface_traits.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-common-inteface-traits-hpp"><span class="std std-ref">File inteface_traits.hpp</span></a></p></li>
+</ul>
+<div class="section" id="struct-documentation">
+<h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp struct">
+<dt id="_CPPv4N6legion4core10interfaces18implement_signal_tE">
+<span id="_CPPv3N6legion4core10interfaces18implement_signal_tE"></span><span id="_CPPv2N6legion4core10interfaces18implement_signal_tE"></span><span id="legion::core::interfaces::implement_signal_t"></span><span class="target" id="structlegion_1_1core_1_1interfaces_1_1implement__signal__t"></span><em class="property">struct </em><code class="sig-name descname">implement_signal_t</code><a class="headerlink" href="#_CPPv4N6legion4core10interfaces18implement_signal_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>this signal signifies that there is a frontend and a backend function with the same name </p>
+<p><ul class="simple">
+<li><p>when you want to implement the backend interface override the function with <a class="reference internal" href="#structlegion_1_1core_1_1interfaces_1_1implement__signal__t"><span class="std std-ref">implement_signal_t</span></a> as it’s first parameter</p></li>
+<li><p>when you want to use the frontend interface call the function without <a class="reference internal" href="#structlegion_1_1core_1_1interfaces_1_1implement__signal__t"><span class="std std-ref">implement_signal_t</span></a></p></li>
+</ul>
+</p>
+<p>for instance <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="n">interface</span> <span class="p">{</span>
+    <span class="kt">void</span> <span class="n">erase</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">erase</span><span class="p">(</span><span class="n">implement_signal_t</span><span class="p">)</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span> <span class="nl">impl</span> <span class="p">:</span> <span class="n">interface</span> <span class="p">{</span>
+    <span class="c1">//implementation</span>
+    <span class="kt">void</span> <span class="n">erase</span><span class="p">(</span><span class="n">implement_signal_t</span><span class="p">)</span> <span class="k">override</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="p">{</span>
+        <span class="c1">//erase stuff</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">stuff</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">//usage</span>
+    <span class="n">interface</span><span class="o">*</span> <span class="n">i</span> <span class="o">=</span> <span class="k">new</span> <span class="n">impl</span><span class="p">;</span>
+    <span class="n">i</span><span class="o">-&gt;</span><span class="n">erase</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+ </p>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Struct implement_signal_t</a><ul>
+<li><a class="reference internal" href="#struct-documentation">Struct Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="structlegion_1_1core_1_1has__resize_3_01_c_00_01_ret_07_args_8_8_8_08_4.html" title="previous chapter">Template Struct has_resize&lt; C, Ret(Args…)&gt;</a></li>
+      <li>Next: <a href="structlegion_1_1core_1_1iterator_1_1pair__range.html" title="next chapter">Template Struct pair_range</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/structlegion_1_1core_1_1interfaces_1_1implement__signal__t.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

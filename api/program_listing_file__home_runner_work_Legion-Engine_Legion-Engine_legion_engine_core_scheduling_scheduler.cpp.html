@@ -1,0 +1,464 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File scheduler.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File scheduler.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-scheduler-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-scheduling-scheduler-cpp"></span><h1>Program Listing for File scheduler.cpp<a class="headerlink" href="#program-listing-for-file-scheduler-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_scheduler.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-scheduling-scheduler-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/scheduling/scheduler.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;core/scheduling/scheduler.hpp&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;core/logging/logging.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">scheduling</span>
+<span class="p">{</span>
+    <span class="k">constexpr</span> <span class="n">size_type</span> <span class="n">reserved_threads</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
+    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">m_threadsLock</span><span class="p">;</span>
+    <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;&gt;</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">m_threads</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="o">&gt;</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">m_unreservedThreads</span><span class="p">;</span>
+    <span class="k">const</span> <span class="n">uint</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">m_maxThreadCount</span> <span class="o">=</span> <span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">hardware_concurrency</span><span class="p">())</span> <span class="o">-</span> <span class="n">reserved_threads</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="o">?</span> <span class="nl">reserved_threads</span> <span class="p">:</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">hardware_concurrency</span><span class="p">();</span>
+    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">m_availabilityLock</span><span class="p">;</span>
+    <span class="n">uint</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">m_availableThreads</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">uint</span><span class="o">&gt;</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">ceil</span><span class="p">((</span><span class="n">m_maxThreadCount</span> <span class="o">-</span> <span class="n">reserved_threads</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.8f</span><span class="p">)</span> <span class="o">+</span> <span class="n">math</span><span class="o">::</span><span class="n">epsilon</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">());</span> <span class="c1">// subtract OS and this_thread, and then leave some extra for miscellaneous processes.</span>
+
+    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">m_jobQueueLock</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">Scheduler</span><span class="o">::</span><span class="n">runnable</span><span class="o">&gt;</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">m_jobs</span><span class="p">;</span>
+    <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="p">,</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&gt;</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">m_commandLocks</span><span class="p">;</span>
+    <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">Scheduler</span><span class="o">::</span><span class="n">runnable</span><span class="o">&gt;&gt;</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">m_commands</span><span class="p">;</span>
+
+    <span class="kt">void</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">threadMain</span><span class="p">(</span><span class="kt">bool</span><span class="o">*</span> <span class="n">exit</span><span class="p">,</span> <span class="kt">bool</span><span class="o">*</span> <span class="n">start</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">lowPower</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">id</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">();</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="o">*</span><span class="n">start</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">lowPower</span><span class="p">)</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+            <span class="k">else</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="o">*</span><span class="n">exit</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">Scheduler</span><span class="o">::</span><span class="n">runnable</span> <span class="n">instruction</span><span class="p">{};</span>
+
+            <span class="p">{</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_commandLocks</span><span class="p">[</span><span class="n">id</span><span class="p">]);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_commands</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">empty</span><span class="p">())</span>
+                <span class="p">{</span>
+                    <span class="n">instruction</span> <span class="o">=</span> <span class="n">m_commands</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">front</span><span class="p">();</span>
+                    <span class="n">m_commands</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">pop</span><span class="p">();</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="n">instruction</span><span class="p">();</span>
+            <span class="n">instruction</span> <span class="o">=</span> <span class="p">{};</span>
+
+            <span class="p">{</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_jobQueueLock</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_jobs</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+                <span class="p">{</span>
+                    <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Starting work on a job.&quot;</span><span class="p">);</span>
+                    <span class="n">instruction</span> <span class="o">=</span> <span class="n">m_jobs</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+                    <span class="n">m_jobs</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="n">instruction</span><span class="p">();</span>
+
+            <span class="p">{</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_jobQueueLock</span><span class="p">);</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">m_jobs</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">lowPower</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+                    <span class="p">}</span>
+                    <span class="k">else</span>
+                    <span class="p">{</span>
+                        <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">Scheduler</span><span class="o">::</span><span class="n">Scheduler</span><span class="p">(</span><span class="n">events</span><span class="o">::</span><span class="n">EventBus</span><span class="o">*</span> <span class="n">eventBus</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">lowPower</span><span class="p">,</span> <span class="n">uint</span> <span class="n">minThreads</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_eventBus</span><span class="p">(</span><span class="n">eventBus</span><span class="p">),</span> <span class="n">m_lowPower</span><span class="p">(</span><span class="n">lowPower</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">log</span><span class="o">::</span><span class="n">impl</span><span class="o">::</span><span class="n">thread_names</span><span class="p">[</span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()]</span> <span class="o">=</span> <span class="s">&quot;Initialization&quot;</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_availableThreads</span> <span class="o">&lt;</span> <span class="n">minThreads</span><span class="p">)</span>
+            <span class="n">m_availableThreads</span> <span class="o">=</span> <span class="n">minThreads</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">id</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">((</span><span class="n">id</span> <span class="o">=</span> <span class="n">createThread</span><span class="p">(</span><span class="n">threadMain</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m_threadsShouldTerminate</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m_threadsShouldStart</span><span class="p">,</span> <span class="n">lowPower</span><span class="p">))</span> <span class="o">!=</span> <span class="n">invalid_thread_id</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_commands</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
+            <span class="n">m_commandLocks</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
+        <span class="p">}</span>
+
+        <span class="n">m_threadsShouldStart</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
+        <span class="n">addProcessChain</span><span class="p">(</span><span class="s">&quot;Update&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">Scheduler</span><span class="o">::~</span><span class="n">Scheduler</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">processChain</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_processChains</span><span class="p">)</span>
+            <span class="n">processChain</span><span class="p">.</span><span class="n">exit</span><span class="p">();</span>
+
+        <span class="n">m_threadsShouldTerminate</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="kr">thread</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_threads</span><span class="p">)</span>
+            <span class="kr">thread</span><span class="o">-&gt;</span><span class="n">join</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">run</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">unreserved</span> <span class="o">=</span> <span class="n">m_unreservedThreads</span><span class="p">;</span>
+            <span class="n">uint</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">unreserved</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="k">auto</span> <span class="n">id</span> <span class="o">=</span> <span class="n">unreserved</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+                <span class="n">unreserved</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">log</span><span class="o">::</span><span class="n">impl</span><span class="o">::</span><span class="n">thread_names</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;Worker &quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">i</span><span class="o">++</span><span class="p">);</span>
+                <span class="n">sendCommand</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="p">[](</span><span class="kt">void</span><span class="o">*</span> <span class="n">param</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">param</span><span class="p">;</span>
+                        <span class="n">log</span><span class="o">::</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Thread {} assigned.&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">());</span>
+                    <span class="p">});</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="p">{</span> <span class="c1">// Start threads of all the other chains.</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_processChainsLock</span><span class="p">);</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">chain</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_processChains</span><span class="p">)</span>
+                <span class="n">chain</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">m_lowPower</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">log</span><span class="o">::</span><span class="n">impl</span><span class="o">::</span><span class="n">thread_names</span><span class="p">[</span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()]</span> <span class="o">=</span> <span class="s">&quot;Update&quot;</span><span class="p">;</span>
+
+
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">checkEvent</span><span class="o">&lt;</span><span class="n">events</span><span class="o">::</span><span class="n">exit</span><span class="o">&gt;</span><span class="p">())</span> <span class="c1">// Check for engine exit flag.</span>
+        <span class="p">{</span>
+            <span class="p">{</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_exitsLock</span><span class="p">);</span> <span class="c1">// Check for any intentionally exited threads and clean them up.</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">m_exits</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+                <span class="p">{</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">id</span> <span class="p">:</span> <span class="n">m_exits</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">destroyThread</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+                    <span class="p">}</span>
+
+                    <span class="n">m_exits</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="p">{</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_errorsLock</span><span class="p">);</span> <span class="c1">// Check for any unintentionally exited threads and clean them up.</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">m_errors</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+                <span class="p">{</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="n">thread_error</span><span class="o">&amp;</span> <span class="nl">error</span> <span class="p">:</span> <span class="n">m_errors</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span> <span class="n">error</span><span class="p">.</span><span class="n">message</span><span class="p">);</span>
+                        <span class="n">destroyThread</span><span class="p">(</span><span class="n">error</span><span class="p">.</span><span class="n">threadId</span><span class="p">);</span>
+                    <span class="p">}</span>
+
+                    <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">logic_error</span><span class="p">(</span><span class="n">m_errors</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">message</span><span class="p">);</span> <span class="c1">// Re-throw an empty error so that the normal error handling system can take care of the rest.</span>
+                    <span class="n">m_errors</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="p">{</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">id_type</span><span class="o">&gt;</span> <span class="n">toRemove</span><span class="p">;</span> <span class="c1">// Check for all the chains that have exited their threads and remove them from the chain list.</span>
+
+                <span class="p">{</span>
+                    <span class="n">async</span><span class="o">::</span><span class="n">readonly_multiguard</span> <span class="n">rmguard</span><span class="p">(</span><span class="n">m_processChainsLock</span><span class="p">,</span> <span class="n">m_threadsLock</span><span class="p">);</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">id</span><span class="p">,</span> <span class="n">chain</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_processChains</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">chain</span><span class="p">.</span><span class="n">threadId</span><span class="p">()</span> <span class="o">!=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">m_threads</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">chain</span><span class="p">.</span><span class="n">threadId</span><span class="p">()))</span>
+                            <span class="n">toRemove</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">wguard</span><span class="p">(</span><span class="n">m_processChainsLock</span><span class="p">);</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">id_type</span><span class="o">&amp;</span> <span class="nl">id</span> <span class="p">:</span> <span class="n">toRemove</span><span class="p">)</span>
+                    <span class="n">m_processChains</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_localChain</span><span class="p">.</span><span class="n">id</span><span class="p">())</span> <span class="c1">// If the local chain is valid run an iteration.</span>
+                <span class="n">m_localChain</span><span class="p">.</span><span class="n">runInCurrentThread</span><span class="p">();</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">syncRequested</span><span class="p">())</span> <span class="c1">// If a major engine sync was requested halt thread until all threads have reached a sync point and let them all continue.</span>
+                <span class="n">waitForProcessSync</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">processChain</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_processChains</span><span class="p">)</span>
+            <span class="n">processChain</span><span class="p">.</span><span class="n">exit</span><span class="p">();</span>
+
+        <span class="n">m_threadsShouldTerminate</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="n">m_syncLock</span><span class="p">.</span><span class="n">force_release</span><span class="p">();</span>
+
+        <span class="n">size_type</span> <span class="n">exits</span><span class="p">;</span>
+        <span class="n">size_type</span> <span class="n">chains</span><span class="p">;</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_multiguard</span> <span class="n">rmguard</span><span class="p">(</span><span class="n">m_exitsLock</span><span class="p">,</span> <span class="n">m_processChainsLock</span><span class="p">);</span>
+            <span class="n">exits</span> <span class="o">=</span> <span class="n">m_exits</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+            <span class="n">chains</span> <span class="o">=</span> <span class="n">m_processChains</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="n">size_type</span> <span class="n">prevExits</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">size_type</span> <span class="n">prevChains</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="n">exits</span> <span class="o">&lt;</span> <span class="n">chains</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_multiguard</span> <span class="n">rmguard</span><span class="p">(</span><span class="n">m_exitsLock</span><span class="p">,</span> <span class="n">m_processChainsLock</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">prevExits</span> <span class="o">!=</span> <span class="n">exits</span> <span class="o">||</span> <span class="n">prevChains</span> <span class="o">!=</span> <span class="n">chains</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">prevExits</span> <span class="o">=</span> <span class="n">exits</span><span class="p">;</span>
+                <span class="n">prevChains</span> <span class="o">=</span> <span class="n">chains</span><span class="p">;</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;waiting for threads to end. {} threads left&quot;</span><span class="p">,</span> <span class="n">chains</span> <span class="o">-</span> <span class="n">exits</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="n">exits</span> <span class="o">=</span> <span class="n">m_exits</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+            <span class="n">chains</span> <span class="o">=</span> <span class="n">m_processChains</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">id</span> <span class="p">:</span> <span class="n">m_exits</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">destroyThread</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">m_exits</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">sendCommand</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">id</span><span class="p">,</span> <span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">command</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">parameter</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_commandLocks</span><span class="p">[</span><span class="n">id</span><span class="p">]);</span>
+        <span class="n">m_commands</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">push</span><span class="p">({</span> <span class="n">command</span><span class="p">,</span> <span class="n">parameter</span> <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">queueJob</span><span class="p">(</span><span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">job</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">parameter</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_jobQueueLock</span><span class="p">);</span>
+        <span class="n">m_jobs</span><span class="p">.</span><span class="n">push</span><span class="p">({</span> <span class="n">job</span><span class="p">,</span> <span class="n">parameter</span> <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">destroyThread</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readwrite_multiguard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_availabilityLock</span><span class="p">,</span> <span class="n">m_threadsLock</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_threads</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">id</span><span class="p">))</span> <span class="c1">// Check if thread exists.</span>
+        <span class="p">{</span>
+            <span class="n">m_availableThreads</span><span class="o">++</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_threads</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">joinable</span><span class="p">())</span> <span class="c1">// If the thread is still running then we need to wait for it to finish.</span>
+                <span class="n">m_threads</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">join</span><span class="p">();</span>
+            <span class="n">m_threads</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">id</span><span class="p">);</span> <span class="c1">// Remove the thread.</span>
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">reportExit</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="o">&amp;</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_exitsLock</span><span class="p">);</span>
+        <span class="n">m_exits</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">reportExitWithError</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="o">&amp;</span> <span class="n">id</span><span class="p">,</span> <span class="k">const</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">exc</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_errorsLock</span><span class="p">);</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">stringstream</span> <span class="n">ss</span><span class="p">;</span>
+
+        <span class="n">ss</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Encountered cross thread exception:&quot;</span>
+            <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  thread id:</span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">id</span>
+            <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  thread name:</span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">name</span>
+            <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  message: </span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">exc</span><span class="p">.</span><span class="n">what</span><span class="p">()</span>
+            <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  file:    </span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">exc</span><span class="p">.</span><span class="n">file</span><span class="p">()</span>
+            <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  line:    </span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">exc</span><span class="p">.</span><span class="n">line</span><span class="p">()</span>
+            <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  function:</span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">exc</span><span class="p">.</span><span class="n">func</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+
+        <span class="n">m_errors</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span> <span class="n">ss</span><span class="p">.</span><span class="n">str</span><span class="p">(),</span> <span class="n">id</span> <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">reportExitWithError</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="o">&amp;</span> <span class="n">id</span><span class="p">,</span> <span class="k">const</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">exc</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_errorsLock</span><span class="p">);</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">stringstream</span> <span class="n">ss</span><span class="p">;</span>
+
+        <span class="n">ss</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Encountered cross thread exception:&quot;</span>
+            <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  thread id:</span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">id</span>
+            <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  message: </span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">exc</span><span class="p">.</span><span class="n">what</span><span class="p">()</span>
+            <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  file:    </span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">exc</span><span class="p">.</span><span class="n">file</span><span class="p">()</span>
+            <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  line:    </span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">exc</span><span class="p">.</span><span class="n">line</span><span class="p">()</span>
+            <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  function:</span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">exc</span><span class="p">.</span><span class="n">func</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+
+        <span class="n">m_errors</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span> <span class="n">ss</span><span class="p">.</span><span class="n">str</span><span class="p">(),</span> <span class="n">id</span> <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">reportExitWithError</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="o">&amp;</span> <span class="n">id</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">exc</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_errorsLock</span><span class="p">);</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">stringstream</span> <span class="n">ss</span><span class="p">;</span>
+
+        <span class="n">ss</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Encountered cross thread exception:&quot;</span>
+            <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  thread id:</span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">id</span>
+            <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  thread name:</span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">name</span>
+            <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  message: </span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">exc</span><span class="p">.</span><span class="n">what</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+
+        <span class="n">m_errors</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span> <span class="n">ss</span><span class="p">.</span><span class="n">str</span><span class="p">(),</span> <span class="n">id</span> <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">reportExitWithError</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="o">&amp;</span> <span class="n">id</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">exc</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_errorsLock</span><span class="p">);</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">stringstream</span> <span class="n">ss</span><span class="p">;</span>
+
+        <span class="n">ss</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Encountered cross thread exception:&quot;</span>
+            <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  thread id:</span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">id</span>
+            <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">  message: </span><span class="se">\t</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">exc</span><span class="p">.</span><span class="n">what</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+
+        <span class="n">m_errors</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span> <span class="n">ss</span><span class="p">.</span><span class="n">str</span><span class="p">(),</span> <span class="n">id</span> <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">waitForProcessSync</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">//log::debug(&quot;synchronizing thread: {}&quot;, log::impl::thread_names[std::this_thread::get_id()]);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span> <span class="o">!=</span> <span class="n">m_syncLock</span><span class="p">.</span><span class="n">ownerThread</span><span class="p">())</span> <span class="c1">// Check if this is the main thread or not.</span>
+        <span class="p">{</span>
+            <span class="n">m_requestSync</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span> <span class="c1">// Request a synchronization.</span>
+            <span class="n">m_syncLock</span><span class="p">.</span><span class="n">sync</span><span class="p">();</span> <span class="c1">// Wait for synchronization moment.</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="p">{</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_processChainsLock</span><span class="p">);</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">m_syncLock</span><span class="p">.</span><span class="n">waiterCount</span><span class="p">()</span> <span class="o">!=</span> <span class="n">m_processChains</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="c1">// Wait until all other threads have reached the synchronization moment.</span>
+                    <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span>
+            <span class="p">}</span>
+
+            <span class="n">m_requestSync</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">false</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+            <span class="n">m_syncLock</span><span class="p">.</span><span class="n">sync</span><span class="p">();</span> <span class="c1">// Release sync lock.</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">hookProcess</span><span class="p">(</span><span class="n">cstring</span> <span class="n">chainName</span><span class="p">,</span> <span class="n">Process</span><span class="o">*</span> <span class="n">process</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">chainId</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">chainName</span><span class="p">);</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_processChainsLock</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_processChains</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">chainId</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">m_processChains</span><span class="p">[</span><span class="n">chainId</span><span class="p">].</span><span class="n">addProcess</span><span class="p">(</span><span class="n">process</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">m_localChain</span><span class="p">.</span><span class="n">id</span><span class="p">()</span> <span class="o">==</span> <span class="n">chainId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_localChain</span><span class="p">.</span><span class="n">addProcess</span><span class="p">(</span><span class="n">process</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">unhookProcess</span><span class="p">(</span><span class="n">cstring</span> <span class="n">chainName</span><span class="p">,</span> <span class="n">Process</span><span class="o">*</span> <span class="n">process</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">chainId</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">chainName</span><span class="p">);</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_processChainsLock</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_processChains</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">chainId</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">m_processChains</span><span class="p">[</span><span class="n">chainId</span><span class="p">].</span><span class="n">removeProcess</span><span class="p">(</span><span class="n">process</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">m_localChain</span><span class="p">.</span><span class="n">id</span><span class="p">()</span> <span class="o">==</span> <span class="n">chainId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_localChain</span><span class="p">.</span><span class="n">removeProcess</span><span class="p">(</span><span class="n">process</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_scheduler.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

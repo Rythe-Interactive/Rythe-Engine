@@ -1,0 +1,46 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_importers_audio_importers.cpp:
+
+File audio_importers.cpp
+========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_importers>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/audio/data/importers``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/audio/data/importers/audio_importers.cpp``)
+---------------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_importers_audio_importers.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``audio/data/importers/audio_importers.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_importers_audio_importers.hpp`)
+
+- ``audio/systems/audiosystem.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_systems_audiosystem.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__audio`
+

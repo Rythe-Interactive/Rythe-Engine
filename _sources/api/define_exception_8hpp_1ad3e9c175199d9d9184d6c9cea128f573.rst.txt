@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1ad3e9c175199d9d9184d6c9cea128f573:
+
+Define legion_component_destroyed_msg
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: legion_component_destroyed_msg

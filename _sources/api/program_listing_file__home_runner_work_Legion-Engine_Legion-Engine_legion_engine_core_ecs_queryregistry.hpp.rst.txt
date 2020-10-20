@@ -1,0 +1,88 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_queryregistry.hpp:
+
+Program Listing for File queryregistry.hpp
+==========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_queryregistry.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/ecs/queryregistry.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/async/async.hpp>
+   #include <core/containers/containers.hpp>
+   #include <core/types/primitives.hpp>
+   #include <core/ecs/entityquery.hpp>
+   
+   namespace legion::core::ecs
+   {
+       class EcsRegistry;
+       class entity_handle;
+   
+       using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
+   
+       class QueryRegistry
+       {
+           friend class EntityQuery;
+       private:
+           EcsRegistry& m_registry;
+           async::readonly_rw_spinlock m_entityLock;
+           sparse_map<id_type, entity_set*> m_entityLists;
+           async::readonly_rw_spinlock m_referenceLock;
+           sparse_map<id_type, size_type> m_references;
+           async::readonly_rw_spinlock m_componentLock;
+           sparse_map<id_type, hashed_sparse_set<id_type>> m_componentTypes;
+   
+           id_type m_lastQueryId = 1;
+   
+           static hashed_sparse_set<QueryRegistry*> m_validRegistries;
+   
+           id_type addQuery(const hashed_sparse_set<id_type>& componentTypes);
+   
+       public:
+           static bool isValid(QueryRegistry* reg) { return m_validRegistries.contains(reg); }
+   
+           QueryRegistry(EcsRegistry& registry) : m_registry(registry), m_entityLists(), m_componentTypes() { m_validRegistries.insert(this); }
+   
+           ~QueryRegistry()
+           {
+               for (auto [_, entityList] : m_entityLists)
+                   delete entityList;
+   
+               m_validRegistries.erase(this);
+           }
+   
+           void addComponentType(id_type queryId, id_type componentTypeId);
+   
+           void removeComponentType(id_type queryId, id_type componentTypeId);
+   
+           void evaluateEntityChange(id_type entityId, id_type componentTypeId, bool removal);
+   
+           void markEntityDestruction(id_type entityId);
+   
+           id_type getQueryId(const hashed_sparse_set<id_type>& componentTypes);
+   
+           template<typename... component_types>
+           EntityQuery createQuery()
+           {
+               hashed_sparse_set<id_type> componentTypeIds;
+               (componentTypeIds.insert(typeHash<component_types>()), ...);
+               return createQuery(componentTypeIds);
+           }
+   
+           EntityQuery createQuery(const hashed_sparse_set<id_type>& componentTypes);
+   
+           const hashed_sparse_set<id_type>& getComponentTypes(id_type queryId);
+   
+           const entity_set& getEntities(id_type queryId);
+   
+           void addReference(id_type queryId);
+   
+           void removeReference(id_type queryId);
+   
+           size_type getReferenceCount(id_type queryId);
+       };
+   
+   }

@@ -1,0 +1,13 @@
+.. _exhale_function_unit__conversion_8hpp_1a844363bd19d203cf1fa998f8ae20c123:
+
+Function legion::core::literals::operator""_gb
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_unit_conversion.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::literals::operator""_gb(unsigned long long)

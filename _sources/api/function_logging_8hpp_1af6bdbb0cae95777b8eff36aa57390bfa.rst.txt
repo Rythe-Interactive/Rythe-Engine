@@ -1,0 +1,13 @@
+.. _exhale_function_logging_8hpp_1af6bdbb0cae95777b8eff36aa57390bfa:
+
+Template Function legion::core::log::fatal
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::log::fatal(const FormatString&, Args&&...)

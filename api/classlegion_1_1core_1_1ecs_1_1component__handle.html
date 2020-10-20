@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Class component_handle &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class component_handle_base" href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html" />
+    <link rel="prev" title="Class component_container_base" href="classlegion_1_1core_1_1ecs_1_1component__container__base.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html" title="Class component_handle_base"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classlegion_1_1core_1_1ecs_1_1component__container__base.html" title="Class component_container_base"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Template Class component_handle</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="template-class-component-handle">
+<span id="exhale-class-classlegion-1-1core-1-1ecs-1-1component-handle"></span><h1>Template Class component_handle<a class="headerlink" href="#template-class-component-handle" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_archetype.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-ecs-archetype-hpp"><span class="std std-ref">File archetype.hpp</span></a></p></li>
+</ul>
+<div class="section" id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="base-type">
+<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::core::ecs::component_handle_base</span></code> (<a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html#exhale-class-classlegion-1-1core-1-1ecs-1-1component-handle-base"><span class="std std-ref">Class component_handle_base</span></a>)</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4I0EN6legion4core3ecs16component_handleE">
+<span id="_CPPv3I0EN6legion4core3ecs16component_handleE"></span><span id="_CPPv2I0EN6legion4core3ecs16component_handleE"></span>template&lt;typename <code class="sig-name descname">component_type</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core::ecs<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">component_handle</code> : <em class="property">public</em> legion::core::ecs::<a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html#_CPPv4N6legion4core3ecs21component_handle_baseE" title="legion::core::ecs::component_handle_base">component_handle_base</a><a class="headerlink" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Handle to components that allow safe component loading and storing. </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">component_type</span></code>: Type of targeted component. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs16component_handle16component_handleEv">
+<span id="_CPPv3N6legion4core3ecs16component_handle16component_handleEv"></span><span id="_CPPv2N6legion4core3ecs16component_handle16component_handleEv"></span><span id="legion::core::ecs::component_handle::component_handle"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1af6ed6ca3ff8dae3666967c93ea6e1bf7"></span><code class="sig-name descname">component_handle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handle16component_handleEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs16component_handle16component_handleERK16component_handle">
+<span id="_CPPv3N6legion4core3ecs16component_handle16component_handleERK16component_handle"></span><span id="_CPPv2N6legion4core3ecs16component_handle16component_handleERK16component_handle"></span><span id="legion::core::ecs::component_handle::component_handle__component_handleCR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1a312fc1fecfa07860f9edf96288a828f3"></span><code class="sig-name descname">component_handle</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion4core3ecs16component_handle16component_handleERK16component_handle" title="legion::core::ecs::component_handle::component_handle">component_handle</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handle16component_handleERK16component_handle" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs16component_handle16component_handleERR16component_handle">
+<span id="_CPPv3N6legion4core3ecs16component_handle16component_handleERR16component_handle"></span><span id="_CPPv2N6legion4core3ecs16component_handle16component_handleERR16component_handle"></span><span id="legion::core::ecs::component_handle::component_handle__component_handleRR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1a0d2ebf136832d3b6f320b7cbaa14e1fd"></span><code class="sig-name descname">component_handle</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core3ecs16component_handle16component_handleERR16component_handle" title="legion::core::ecs::component_handle::component_handle">component_handle</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handle16component_handleERR16component_handle" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs16component_handle16component_handleE7id_typeP11EcsRegistry">
+<span id="_CPPv3N6legion4core3ecs16component_handle16component_handleE7id_typeP11EcsRegistry"></span><span id="_CPPv2N6legion4core3ecs16component_handle16component_handleE7id_typeP11EcsRegistry"></span><span id="legion::core::ecs::component_handle::component_handle__id_type.EcsRegistryP"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1a6a39f9541eb6944f66494461df0d29e8"></span><code class="sig-name descname">component_handle</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em>, <a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1_ecs_registry.html#_CPPv4N6legion4core3ecs11EcsRegistryE" title="legion::core::ecs::EcsRegistry">EcsRegistry</a> *<em>registry</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handle16component_handleE7id_typeP11EcsRegistry" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates component handle for the given entity. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs16component_handleaSERK16component_handle">
+<span id="_CPPv3N6legion4core3ecs16component_handleaSERK16component_handle"></span><span id="_CPPv2N6legion4core3ecs16component_handleaSERK16component_handle"></span><span id="legion::core::ecs::component_handle::assign-operator__component_handleCR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1a0826fd45a1e1041860318ba06ec10a73"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle">component_handle</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle">component_handle</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handleaSERK16component_handle" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs16component_handleaSERR16component_handle">
+<span id="_CPPv3N6legion4core3ecs16component_handleaSERR16component_handle"></span><span id="_CPPv2N6legion4core3ecs16component_handleaSERR16component_handle"></span><span id="legion::core::ecs::component_handle::assign-operator__component_handleRR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1a328f00d51011290a77a91828999d459c"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle">component_handle</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle">component_handle</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handleaSERR16component_handle" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core3ecs16component_handleeqERK16component_handleI14component_typeE">
+<span id="_CPPv3NK6legion4core3ecs16component_handleeqERK16component_handleI14component_typeE"></span><span id="_CPPv2NK6legion4core3ecs16component_handleeqERK16component_handleI14component_typeE"></span><span id="legion::core::ecs::component_handle::eq-operator__component_handle:component_type:CRC"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1a60ef970c8d9b435a9427f883d217a0b3"></span>bool <code class="sig-name descname">operator==</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle">component_handle</a>&lt;<a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a>&gt; &amp;<em>other</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core3ecs16component_handleeqERK16component_handleI14component_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs16component_handle4readEv">
+<span id="_CPPv3N6legion4core3ecs16component_handle4readEv"></span><span id="_CPPv2N6legion4core3ecs16component_handle4readEv"></span><span id="legion::core::ecs::component_handle::read"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1aa3eadd6b4d73a8733f96e1ab24e415c1"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">read</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handle4readEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread-safe read of component. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>component_type Current value of component. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs16component_handle5writeERR14component_type">
+<span id="_CPPv3N6legion4core3ecs16component_handle5writeERR14component_type"></span><span id="_CPPv2N6legion4core3ecs16component_handle5writeERR14component_type"></span><span id="legion::core::ecs::component_handle::write__component_typeRR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1aa8a698fffac417200676bc0c8e87c6c7"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">write</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> &amp;&amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handle5writeERR14component_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread-safe write of component. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>component_type Current value of component. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: Value you wish to write. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs16component_handle5writeERK14component_type">
+<span id="_CPPv3N6legion4core3ecs16component_handle5writeERK14component_type"></span><span id="_CPPv2N6legion4core3ecs16component_handle5writeERK14component_type"></span><span id="legion::core::ecs::component_handle::write__component_typeCR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1a3a5027b1ef416cab829f3b814d7aad3b"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> &amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handle5writeERK14component_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread-safe write of component. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>component_type Current value of component. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: Value you wish to write. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs16component_handle17read_modify_writeERR14component_typePF14component_typeRK14component_typeRR14component_typeE">
+<span id="_CPPv3N6legion4core3ecs16component_handle17read_modify_writeERR14component_typePF14component_typeRK14component_typeRR14component_typeE"></span><span id="_CPPv2N6legion4core3ecs16component_handle17read_modify_writeERR14component_typePF14component_typeRK14component_typeRR14component_typeE"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1a0d98db6ecca17970aa12c584fe157e9b"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">read_modify_write</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> &amp;&amp;<em>value</em>, <a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> (*<em>modifier</em>)<span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a>&amp;, <a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a>&amp;&amp;<span class="sig-paren">)</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handle17read_modify_writeERR14component_typePF14component_typeRK14component_typeRR14component_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread-safe read modify write with a custom modification on component. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>component_type Current value of component. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: Value you wish to add. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs16component_handle9fetch_addERR14component_type">
+<span id="_CPPv3N6legion4core3ecs16component_handle9fetch_addERR14component_type"></span><span id="_CPPv2N6legion4core3ecs16component_handle9fetch_addERR14component_type"></span><span id="legion::core::ecs::component_handle::fetch_add__component_typeRR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1a4e88c28d16389fae387df5b5a14df0ae"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">fetch_add</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> &amp;&amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handle9fetch_addERR14component_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread-safe read modify write with add modification on component. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>component_type Current value of component. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: Value you wish to add. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs16component_handle9fetch_addERK14component_type">
+<span id="_CPPv3N6legion4core3ecs16component_handle9fetch_addERK14component_type"></span><span id="_CPPv2N6legion4core3ecs16component_handle9fetch_addERK14component_type"></span><span id="legion::core::ecs::component_handle::fetch_add__component_typeCR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1a265ddaa9dcf5f157fa416c6054f84199"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">fetch_add</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> &amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handle9fetch_addERK14component_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread-safe read modify write with add modification on component. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>component_type Current value of component. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: Value you wish to add. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs16component_handle14fetch_multiplyERR14component_type">
+<span id="_CPPv3N6legion4core3ecs16component_handle14fetch_multiplyERR14component_type"></span><span id="_CPPv2N6legion4core3ecs16component_handle14fetch_multiplyERR14component_type"></span><span id="legion::core::ecs::component_handle::fetch_multiply__component_typeRR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1af41f8b268d2f9358d1f626334e7dd6e8"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">fetch_multiply</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> &amp;&amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handle14fetch_multiplyERR14component_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread-safe read modify write with multiply modification on component. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>component_type Current value of component. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: Value you wish to multiply by. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs16component_handle14fetch_multiplyERK14component_type">
+<span id="_CPPv3N6legion4core3ecs16component_handle14fetch_multiplyERK14component_type"></span><span id="_CPPv2N6legion4core3ecs16component_handle14fetch_multiplyERK14component_type"></span><span id="legion::core::ecs::component_handle::fetch_multiply__component_typeCR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1a7842d62ebe8c7acce78e6ae2fcc83456"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">fetch_multiply</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> &amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handle14fetch_multiplyERK14component_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread-safe read modify write with multiply modification on component. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>component_type Current value of component. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: Value you wish to multiply by. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs16component_handle7destroyEv">
+<span id="_CPPv3N6legion4core3ecs16component_handle7destroyEv"></span><span id="_CPPv2N6legion4core3ecs16component_handle7destroyEv"></span><span id="legion::core::ecs::component_handle::destroy"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1af80545628fae7d690cf6f25f333e576b"></span>void <code class="sig-name descname">destroy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handle7destroyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Locks component family and destroys component. <a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__container.html#classlegion_1_1core_1_1ecs_1_1component__container_1a964447c6412c229aef2e9b8890781f4b"><span class="std std-ref">legion::core::ecs::component_container::destroy_component</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs16component_handle5validEv">
+<span id="_CPPv3N6legion4core3ecs16component_handle5validEv"></span><span id="_CPPv2N6legion4core3ecs16component_handle5validEv"></span><span id="legion::core::ecs::component_handle::valid"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1a44e9f351058ed615baa9a3739e936970"></span>bool <code class="sig-name descname">valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handle5validEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks if handle still points to a valid component. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Friends</p>
+<dl class="friendclass">
+<dt>
+<em class="property">friend class</em> std::hash&lt; component_handle&lt; component_type &gt; &gt;</dt>
+</dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Template Class component_handle</a><ul>
+<li><a class="reference internal" href="#inheritance-relationships">Inheritance Relationships</a><ul>
+<li><a class="reference internal" href="#base-type">Base Type</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="classlegion_1_1core_1_1ecs_1_1component__container__base.html" title="previous chapter">Class component_container_base</a></li>
+      <li>Next: <a href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html" title="next chapter">Class component_handle_base</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classlegion_1_1core_1_1ecs_1_1component__handle.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

@@ -1,0 +1,16 @@
+.. _exhale_class_classlegion_1_1core_1_1filesystem_1_1navigator:
+
+Class navigator
+===============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_navigator.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::filesystem::navigator
+   :members:
+   :protected-members:
+   :undoc-members:

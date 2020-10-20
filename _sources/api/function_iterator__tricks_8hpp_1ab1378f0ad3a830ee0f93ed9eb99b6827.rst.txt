@@ -1,0 +1,13 @@
+.. _exhale_function_iterator__tricks_8hpp_1ab1378f0ad3a830ee0f93ed9eb99b6827:
+
+Template Function legion::core::iterator::checked_next
+======================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_iterator_tricks.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::iterator::checked_next(It&, It, std::size_t)

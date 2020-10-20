@@ -1,0 +1,13 @@
+.. _exhale_variable_artifact__cache_8hpp_1a4b61824ad20ea7e2ef384926c0e95406:
+
+Variable legion::core::filesystem::gc_keep
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_artifact_cache.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::filesystem::gc_keep

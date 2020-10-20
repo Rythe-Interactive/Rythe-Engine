@@ -1,0 +1,17 @@
+.. _dir__home_runner_work_Legion-Engine_Legion-Engine_legion:
+
+
+Directory legion
+================
+
+
+*Directory path:* ``/home/runner/work/Legion-Engine/Legion-Engine/legion``
+
+Subdirectories
+--------------
+
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine`
+
+
+

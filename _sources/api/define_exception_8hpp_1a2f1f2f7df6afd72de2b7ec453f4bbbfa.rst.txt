@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1a2f1f2f7df6afd72de2b7ec453f4bbbfa:
+
+Define legion_invalid_component_error
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: legion_invalid_component_error

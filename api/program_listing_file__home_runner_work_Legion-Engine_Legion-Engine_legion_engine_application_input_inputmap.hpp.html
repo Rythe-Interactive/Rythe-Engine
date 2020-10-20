@@ -1,0 +1,432 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File inputmap.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File inputmap.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-inputmap-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-application-input-inputmap-hpp"></span><h1>Program Listing for File inputmap.hpp<a class="headerlink" href="#program-listing-for-file-inputmap-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_input_inputmap.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-application-input-inputmap-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/application/input/inputmap.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;set&gt;</span><span class="cp"></span>
+
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">application</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">inputmap</span>
+    <span class="p">{</span>
+        <span class="k">enum</span> <span class="k">class</span> <span class="nc">modifier_keys</span> <span class="o">:</span> <span class="kt">uint8_t</span>
+        <span class="p">{</span>
+            <span class="n">NONE</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="n">CTRL</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="n">ALT</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="n">SHIFT</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+
+            <span class="n">JOYSTICK0</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="n">JOYSTICK1</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+            <span class="n">JOYSTICK2</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span>
+            <span class="n">JOYSTICK3</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
+            <span class="n">MAX_SIZE</span> <span class="o">=</span> <span class="mi">16</span> <span class="o">+</span> <span class="n">JOYSTICK0</span>
+        <span class="p">};</span>
+
+        <span class="k">static</span> <span class="kt">uint8_t</span> <span class="nf">value</span><span class="p">(</span><span class="n">modifier_keys</span> <span class="n">m</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">friend</span> <span class="kt">uint8_t</span> <span class="k">operator</span><span class="o">-</span><span class="p">(</span><span class="n">modifier_keys</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">modifier_keys</span> <span class="n">rhs</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">value</span><span class="p">(</span><span class="n">lhs</span><span class="p">)</span> <span class="o">-</span> <span class="n">value</span><span class="p">(</span><span class="n">rhs</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">friend</span> <span class="kt">uint8_t</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">modifier_keys</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">modifier_keys</span> <span class="n">rhs</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">value</span><span class="p">(</span><span class="n">lhs</span><span class="p">)</span> <span class="o">+</span> <span class="n">value</span><span class="p">(</span><span class="n">rhs</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">friend</span> <span class="n">modifier_keys</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">modifier_keys</span> <span class="n">lhs</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">rhs</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">modifier_keys</span><span class="o">&gt;</span><span class="p">(</span><span class="n">value</span><span class="p">(</span><span class="n">lhs</span><span class="p">)</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">friend</span> <span class="kt">uint8_t</span> <span class="k">operator</span><span class="o">&amp;</span><span class="p">(</span><span class="n">modifier_keys</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">modifier_keys</span> <span class="n">rhs</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">value</span><span class="p">(</span><span class="n">lhs</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">value</span><span class="p">(</span><span class="n">rhs</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">friend</span> <span class="kt">uint8_t</span> <span class="k">operator</span><span class="o">|</span><span class="p">(</span><span class="n">modifier_keys</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">modifier_keys</span> <span class="n">rhs</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">value</span><span class="p">(</span><span class="n">lhs</span><span class="p">)</span> <span class="o">|</span> <span class="n">value</span><span class="p">(</span><span class="n">rhs</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+        <span class="k">enum</span> <span class="k">class</span> <span class="nc">method</span>
+        <span class="p">{</span>
+            <span class="n">KEY</span><span class="p">,</span>
+            <span class="n">CHAR</span><span class="p">,</span>
+            <span class="n">MOUSE</span><span class="p">,</span>
+            <span class="n">JOY</span><span class="p">,</span>
+            <span class="n">SCROLL</span><span class="p">,</span>
+
+            <span class="n">GAMEPAD_A</span><span class="p">,</span>
+            <span class="n">GAMEPAD_B</span><span class="p">,</span>
+            <span class="n">GAMEPAD_X</span><span class="p">,</span>
+            <span class="n">GAMEPAD_Y</span><span class="p">,</span>
+            <span class="n">GAMEPAD_LEFT_BUMPER</span><span class="p">,</span>
+            <span class="n">GAMEPAD_RIGHT_BUMPER</span><span class="p">,</span>
+            <span class="n">GAMEPAD_BACK</span><span class="p">,</span>
+            <span class="n">GAMEPAD_START</span><span class="p">,</span>
+            <span class="n">GAMEPAD_GUIDE</span><span class="p">,</span>
+            <span class="n">GAMEPAD_LEFT_AXIS</span><span class="p">,</span>
+            <span class="n">GAMEPAD_RIGHT_AXIS</span><span class="p">,</span>
+            <span class="n">GAMEPAD_LEFT_THUMB</span><span class="p">,</span>
+            <span class="n">GAMEPAD_RIGHT_THUMB</span><span class="p">,</span>
+            <span class="n">GAMEPAD_DPAD_UP</span><span class="p">,</span>
+            <span class="n">GAMEPAD_DPAD_RIGHT</span><span class="p">,</span>
+            <span class="n">GAMEPAD_DPAD_DOWN</span><span class="p">,</span>
+            <span class="n">GAMEPAD_DPAD_LEFT</span><span class="p">,</span>
+
+            <span class="n">GAMEPAD_LEFT_X</span><span class="p">,</span>
+            <span class="n">GAMEPAD_LEFT_Y</span><span class="p">,</span>
+            <span class="n">GAMEPAD_RIGHT_X</span><span class="p">,</span>
+            <span class="n">GAMEPAD_RIGHT_Y</span><span class="p">,</span>
+            <span class="n">GAMEPAD_LEFT_TRIGGER</span><span class="p">,</span>
+            <span class="n">GAMEPAD_RIGHT_TRIGGER</span><span class="p">,</span>
+
+            <span class="cm">/* Printable keys */</span>
+            <span class="n">SPACE</span> <span class="o">=</span> <span class="mi">32</span><span class="p">,</span>
+            <span class="n">APOSTROPHE</span> <span class="o">=</span> <span class="mi">39</span><span class="p">,</span>
+            <span class="n">COMMA</span> <span class="o">=</span> <span class="mi">44</span><span class="p">,</span>
+            <span class="n">MINUS</span> <span class="o">=</span> <span class="mi">45</span><span class="p">,</span>
+            <span class="n">PERIOD</span> <span class="o">=</span> <span class="mi">46</span><span class="p">,</span>
+            <span class="n">SLASH</span> <span class="o">=</span> <span class="mi">47</span><span class="p">,</span>
+            <span class="n">NUM0</span> <span class="o">=</span> <span class="mi">48</span><span class="p">,</span>
+            <span class="n">NUM1</span> <span class="o">=</span> <span class="mi">49</span><span class="p">,</span>
+            <span class="n">NUM2</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+            <span class="n">NUM3</span> <span class="o">=</span> <span class="mi">51</span><span class="p">,</span>
+            <span class="n">NUM4</span> <span class="o">=</span> <span class="mi">52</span><span class="p">,</span>
+            <span class="n">NUM5</span> <span class="o">=</span> <span class="mi">53</span><span class="p">,</span>
+            <span class="n">NUM6</span> <span class="o">=</span> <span class="mi">54</span><span class="p">,</span>
+            <span class="n">NUM7</span> <span class="o">=</span> <span class="mi">55</span><span class="p">,</span>
+            <span class="n">NUM8</span> <span class="o">=</span> <span class="mi">56</span><span class="p">,</span>
+            <span class="n">NUM9</span> <span class="o">=</span> <span class="mi">57</span><span class="p">,</span>
+            <span class="n">SEMICOLON</span> <span class="o">=</span> <span class="mi">59</span><span class="p">,</span>
+            <span class="n">EQUAL</span> <span class="o">=</span> <span class="mi">61</span><span class="p">,</span>
+            <span class="n">A</span> <span class="o">=</span> <span class="mi">65</span><span class="p">,</span>
+            <span class="n">B</span> <span class="o">=</span> <span class="mi">66</span><span class="p">,</span>
+            <span class="n">C</span> <span class="o">=</span> <span class="mi">67</span><span class="p">,</span>
+            <span class="n">D</span> <span class="o">=</span> <span class="mi">68</span><span class="p">,</span>
+            <span class="n">E</span> <span class="o">=</span> <span class="mi">69</span><span class="p">,</span>
+            <span class="n">F</span> <span class="o">=</span> <span class="mi">70</span><span class="p">,</span>
+            <span class="n">G</span> <span class="o">=</span> <span class="mi">71</span><span class="p">,</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="mi">72</span><span class="p">,</span>
+            <span class="n">I</span> <span class="o">=</span> <span class="mi">73</span><span class="p">,</span>
+            <span class="n">J</span> <span class="o">=</span> <span class="mi">74</span><span class="p">,</span>
+            <span class="n">K</span> <span class="o">=</span> <span class="mi">75</span><span class="p">,</span>
+            <span class="n">L</span> <span class="o">=</span> <span class="mi">76</span><span class="p">,</span>
+            <span class="n">M</span> <span class="o">=</span> <span class="mi">77</span><span class="p">,</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="mi">78</span><span class="p">,</span>
+            <span class="n">O</span> <span class="o">=</span> <span class="mi">79</span><span class="p">,</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="mi">80</span><span class="p">,</span>
+            <span class="n">Q</span> <span class="o">=</span> <span class="mi">81</span><span class="p">,</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="mi">82</span><span class="p">,</span>
+            <span class="n">S</span> <span class="o">=</span> <span class="mi">83</span><span class="p">,</span>
+            <span class="n">T</span> <span class="o">=</span> <span class="mi">84</span><span class="p">,</span>
+            <span class="n">U</span> <span class="o">=</span> <span class="mi">85</span><span class="p">,</span>
+            <span class="n">V</span> <span class="o">=</span> <span class="mi">86</span><span class="p">,</span>
+            <span class="n">W</span> <span class="o">=</span> <span class="mi">87</span><span class="p">,</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="mi">88</span><span class="p">,</span>
+            <span class="n">Y</span> <span class="o">=</span> <span class="mi">89</span><span class="p">,</span>
+            <span class="n">Z</span> <span class="o">=</span> <span class="mi">90</span><span class="p">,</span>
+            <span class="n">LEFT_BRACKET</span> <span class="o">=</span> <span class="mi">91</span><span class="p">,</span>
+            <span class="n">BACKSLASH</span> <span class="o">=</span> <span class="mi">92</span><span class="p">,</span>
+            <span class="n">RIGHT_BRACKET</span> <span class="o">=</span> <span class="mi">93</span><span class="p">,</span>
+            <span class="n">GRAVE_ACCENT</span> <span class="o">=</span> <span class="mi">96</span><span class="p">,</span>
+            <span class="n">WORLD_1</span> <span class="o">=</span> <span class="mi">161</span><span class="p">,</span>
+            <span class="n">WORLD_2</span> <span class="o">=</span> <span class="mi">162</span><span class="p">,</span>
+
+            <span class="cm">/* Function keys */</span>
+            <span class="n">ESCAPE</span> <span class="o">=</span> <span class="mi">256</span><span class="p">,</span>
+            <span class="n">ENTER</span> <span class="o">=</span> <span class="mi">257</span><span class="p">,</span>
+            <span class="n">TAB</span> <span class="o">=</span> <span class="mi">258</span><span class="p">,</span>
+            <span class="n">BACKSPACE</span> <span class="o">=</span> <span class="mi">259</span><span class="p">,</span>
+            <span class="n">INSERT</span> <span class="o">=</span> <span class="mi">260</span><span class="p">,</span>
+            <span class="n">DEL</span> <span class="o">=</span> <span class="mi">261</span><span class="p">,</span>
+            <span class="n">RIGHT</span> <span class="o">=</span> <span class="mi">262</span><span class="p">,</span>
+            <span class="n">LEFT</span> <span class="o">=</span> <span class="mi">263</span><span class="p">,</span>
+            <span class="n">DOWN</span> <span class="o">=</span> <span class="mi">264</span><span class="p">,</span>
+            <span class="n">UP</span> <span class="o">=</span> <span class="mi">265</span><span class="p">,</span>
+            <span class="n">PAGE_UP</span> <span class="o">=</span> <span class="mi">266</span><span class="p">,</span>
+            <span class="n">PAGE_DOWN</span> <span class="o">=</span> <span class="mi">267</span><span class="p">,</span>
+            <span class="n">HOME</span> <span class="o">=</span> <span class="mi">268</span><span class="p">,</span>
+            <span class="n">END</span> <span class="o">=</span> <span class="mi">269</span><span class="p">,</span>
+            <span class="n">CAPS_LOCK</span> <span class="o">=</span> <span class="mi">280</span><span class="p">,</span>
+            <span class="n">SCROLL_LOCK</span> <span class="o">=</span> <span class="mi">281</span><span class="p">,</span>
+            <span class="n">NUM_LOCK</span> <span class="o">=</span> <span class="mi">282</span><span class="p">,</span>
+            <span class="n">PRINT_SCREEN</span> <span class="o">=</span> <span class="mi">283</span><span class="p">,</span>
+            <span class="n">PAUSE</span> <span class="o">=</span> <span class="mi">284</span><span class="p">,</span>
+            <span class="n">F1</span> <span class="o">=</span> <span class="mi">290</span><span class="p">,</span>
+            <span class="n">F2</span> <span class="o">=</span> <span class="mi">291</span><span class="p">,</span>
+            <span class="n">F3</span> <span class="o">=</span> <span class="mi">292</span><span class="p">,</span>
+            <span class="n">F4</span> <span class="o">=</span> <span class="mi">293</span><span class="p">,</span>
+            <span class="n">F5</span> <span class="o">=</span> <span class="mi">294</span><span class="p">,</span>
+            <span class="n">F6</span> <span class="o">=</span> <span class="mi">295</span><span class="p">,</span>
+            <span class="n">F7</span> <span class="o">=</span> <span class="mi">296</span><span class="p">,</span>
+            <span class="n">F8</span> <span class="o">=</span> <span class="mi">297</span><span class="p">,</span>
+            <span class="n">F9</span> <span class="o">=</span> <span class="mi">298</span><span class="p">,</span>
+            <span class="n">F10</span> <span class="o">=</span> <span class="mi">299</span><span class="p">,</span>
+            <span class="n">F11</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span>
+            <span class="n">F12</span> <span class="o">=</span> <span class="mi">301</span><span class="p">,</span>
+            <span class="n">F13</span> <span class="o">=</span> <span class="mi">302</span><span class="p">,</span>
+            <span class="n">F14</span> <span class="o">=</span> <span class="mi">303</span><span class="p">,</span>
+            <span class="n">F15</span> <span class="o">=</span> <span class="mi">304</span><span class="p">,</span>
+            <span class="n">F16</span> <span class="o">=</span> <span class="mi">305</span><span class="p">,</span>
+            <span class="n">F17</span> <span class="o">=</span> <span class="mi">306</span><span class="p">,</span>
+            <span class="n">F18</span> <span class="o">=</span> <span class="mi">307</span><span class="p">,</span>
+            <span class="n">F19</span> <span class="o">=</span> <span class="mi">308</span><span class="p">,</span>
+            <span class="n">F20</span> <span class="o">=</span> <span class="mi">309</span><span class="p">,</span>
+            <span class="n">F21</span> <span class="o">=</span> <span class="mi">310</span><span class="p">,</span>
+            <span class="n">F22</span> <span class="o">=</span> <span class="mi">311</span><span class="p">,</span>
+            <span class="n">F23</span> <span class="o">=</span> <span class="mi">312</span><span class="p">,</span>
+            <span class="n">F24</span> <span class="o">=</span> <span class="mi">313</span><span class="p">,</span>
+            <span class="n">F25</span> <span class="o">=</span> <span class="mi">314</span><span class="p">,</span>
+            <span class="n">KP_0</span> <span class="o">=</span> <span class="mi">320</span><span class="p">,</span>
+            <span class="n">KP_1</span> <span class="o">=</span> <span class="mi">321</span><span class="p">,</span>
+            <span class="n">KP_2</span> <span class="o">=</span> <span class="mi">322</span><span class="p">,</span>
+            <span class="n">KP_3</span> <span class="o">=</span> <span class="mi">323</span><span class="p">,</span>
+            <span class="n">KP_4</span> <span class="o">=</span> <span class="mi">324</span><span class="p">,</span>
+            <span class="n">KP_5</span> <span class="o">=</span> <span class="mi">325</span><span class="p">,</span>
+            <span class="n">KP_6</span> <span class="o">=</span> <span class="mi">326</span><span class="p">,</span>
+            <span class="n">KP_7</span> <span class="o">=</span> <span class="mi">327</span><span class="p">,</span>
+            <span class="n">KP_8</span> <span class="o">=</span> <span class="mi">328</span><span class="p">,</span>
+            <span class="n">KP_9</span> <span class="o">=</span> <span class="mi">329</span><span class="p">,</span>
+            <span class="n">KP_DECIMAL</span> <span class="o">=</span> <span class="mi">330</span><span class="p">,</span>
+            <span class="n">KP_DIVIDE</span> <span class="o">=</span> <span class="mi">331</span><span class="p">,</span>
+            <span class="n">KP_MULTIPLY</span> <span class="o">=</span> <span class="mi">332</span><span class="p">,</span>
+            <span class="n">KP_SUBTRACT</span> <span class="o">=</span> <span class="mi">333</span><span class="p">,</span>
+            <span class="n">KP_ADD</span> <span class="o">=</span> <span class="mi">334</span><span class="p">,</span>
+            <span class="n">KP_ENTER</span> <span class="o">=</span> <span class="mi">335</span><span class="p">,</span>
+            <span class="n">KP_EQUAL</span> <span class="o">=</span> <span class="mi">336</span><span class="p">,</span>
+            <span class="n">LEFT_SHIFT</span> <span class="o">=</span> <span class="mi">340</span><span class="p">,</span>
+            <span class="n">LEFT_CONTROL</span> <span class="o">=</span> <span class="mi">341</span><span class="p">,</span>
+            <span class="n">LEFT_ALT</span> <span class="o">=</span> <span class="mi">342</span><span class="p">,</span>
+            <span class="n">LEFT_SUPER</span> <span class="o">=</span> <span class="mi">343</span><span class="p">,</span>
+            <span class="n">RIGHT_SHIFT</span> <span class="o">=</span> <span class="mi">344</span><span class="p">,</span>
+            <span class="n">RIGHT_CONTROL</span> <span class="o">=</span> <span class="mi">345</span><span class="p">,</span>
+            <span class="n">RIGHT_ALT</span> <span class="o">=</span> <span class="mi">346</span><span class="p">,</span>
+            <span class="n">RIGHT_SUPER</span> <span class="o">=</span> <span class="mi">347</span><span class="p">,</span>
+            <span class="n">MENU</span> <span class="o">=</span> <span class="mi">348</span><span class="p">,</span>
+
+            <span class="n">HSCROLL</span><span class="p">,</span>
+            <span class="n">VSCROLL</span><span class="p">,</span>
+
+            <span class="n">MOUSE_LEFT</span><span class="p">,</span>
+            <span class="n">MOUSE_MIDDLE</span><span class="p">,</span>
+            <span class="n">MOUSE_RIGHT</span><span class="p">,</span>
+            <span class="n">MOUSE_X</span><span class="p">,</span>
+            <span class="n">MOUSE_Y</span>
+
+        <span class="p">};</span>
+
+
+        <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">bool</span> <span class="nf">is_axis</span><span class="p">(</span><span class="n">method</span> <span class="n">m</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">MOUSE</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">JOY</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">SCROLL</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_LEFT_TRIGGER</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_RIGHT_TRIGGER</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_LEFT_AXIS</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_RIGHT_AXIS</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_LEFT_X</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_LEFT_Y</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_RIGHT_X</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_RIGHT_Y</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">HSCROLL</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">VSCROLL</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">MOUSE_X</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">MOUSE_Y</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">bool</span> <span class="nf">is_key</span><span class="p">(</span><span class="n">method</span> <span class="n">m</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KEY</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">CHAR</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">JOY</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">MOUSE</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_A</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_B</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_X</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_Y</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_LEFT_BUMPER</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_RIGHT_BUMPER</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_BACK</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_START</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_GUIDE</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_DPAD_UP</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_DPAD_RIGHT</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_DPAD_DOWN</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_DPAD_LEFT</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">SPACE</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">APOSTROPHE</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">COMMA</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">MINUS</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">PERIOD</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">SLASH</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM0</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM1</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM2</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM3</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM4</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM5</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM6</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM7</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM8</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM9</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">SEMICOLON</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">EQUAL</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">A</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">B</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">C</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">D</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">E</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">G</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">H</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">I</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">J</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">K</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">L</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">M</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">N</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">O</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">P</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">Q</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">R</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">S</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">T</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">U</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">V</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">W</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">X</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">Y</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">Z</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">LEFT_BRACKET</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">BACKSLASH</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">RIGHT_BRACKET</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GRAVE_ACCENT</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">WORLD_1</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">WORLD_2</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">ESCAPE</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">ENTER</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">TAB</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">BACKSPACE</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">INSERT</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">DEL</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">RIGHT</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">LEFT</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">DOWN</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">UP</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">PAGE_UP</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">PAGE_DOWN</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">HOME</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">END</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">CAPS_LOCK</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">SCROLL_LOCK</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM_LOCK</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">PRINT_SCREEN</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">PAUSE</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F1</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F2</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F3</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F4</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F5</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F6</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F7</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F8</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F9</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F10</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F11</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F12</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F13</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F14</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F15</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F16</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F17</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F18</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F19</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F20</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F21</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F22</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F23</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F24</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">F25</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_0</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_1</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_2</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_3</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_4</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_5</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_6</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_7</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_8</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_9</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_DECIMAL</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_DIVIDE</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_MULTIPLY</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_SUBTRACT</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_ADD</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_ENTER</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_EQUAL</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">LEFT_SHIFT</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">LEFT_CONTROL</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">LEFT_ALT</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">LEFT_SUPER</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">RIGHT_SHIFT</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">RIGHT_CONTROL</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">RIGHT_ALT</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">RIGHT_SUPER</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">MENU</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">MOUSE_LEFT</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">MOUSE_MIDDLE</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">MOUSE_RIGHT</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_RIGHT_THUMB</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_LEFT_THUMB</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">bool</span> <span class="nf">has_keys_and_axis</span><span class="p">(</span><span class="n">method</span> <span class="n">m</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">is_key</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">is_axis</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">bool</span> <span class="nf">is_family</span><span class="p">(</span><span class="n">method</span> <span class="n">m</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">KEY</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">JOY</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">MOUSE</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">SCROLL</span> <span class="o">||</span>
+                <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_RIGHT_AXIS</span> <span class="o">||</span> <span class="n">m</span> <span class="o">==</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_LEFT_AXIS</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">&lt;</span><span class="n">method</span><span class="o">&gt;</span> <span class="n">get_family</span><span class="p">(</span><span class="n">method</span> <span class="n">family</span><span class="p">)</span>
+        <span class="p">{</span>
+
+            <span class="k">switch</span> <span class="p">(</span><span class="n">family</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">case</span> <span class="n">method</span><span class="o">::</span><span class="nl">KEY</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">&lt;</span><span class="n">method</span><span class="o">&gt;</span><span class="p">{</span>
+                    <span class="n">method</span><span class="o">::</span><span class="n">SPACE</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">APOSTROPHE</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">COMMA</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">MINUS</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">PERIOD</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">SLASH</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">NUM0</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM1</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM2</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM3</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM4</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM5</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM6</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">NUM7</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM8</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM9</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">SEMICOLON</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">EQUAL</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">A</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">B</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">C</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">D</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">E</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">G</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">H</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">I</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">J</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">K</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">L</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">M</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">N</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">O</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">P</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">Q</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">R</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">S</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">T</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">U</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">V</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">W</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">X</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">Y</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">Z</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">LEFT_BRACKET</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">BACKSLASH</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">RIGHT_BRACKET</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">GRAVE_ACCENT</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">WORLD_1</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">WORLD_2</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">ESCAPE</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">ENTER</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">TAB</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">BACKSPACE</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">INSERT</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">DEL</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">RIGHT</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">LEFT</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">DOWN</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">UP</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">PAGE_UP</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">PAGE_DOWN</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">HOME</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">END</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">CAPS_LOCK</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">SCROLL_LOCK</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">NUM_LOCK</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">PRINT_SCREEN</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">PAUSE</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F1</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F2</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F3</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F4</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F5</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">F6</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F7</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F8</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F9</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F10</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F11</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F12</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F13</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">F14</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F15</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F16</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F17</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F18</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F19</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F20</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">F21</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F22</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F23</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F24</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">F25</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_0</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_1</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">KP_2</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_3</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_4</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_5</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_6</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_7</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_8</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">KP_9</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_DECIMAL</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_DIVIDE</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_MULTIPLY</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_SUBTRACT</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">KP_ADD</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_ENTER</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">KP_EQUAL</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">LEFT_SHIFT</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">LEFT_CONTROL</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">LEFT_ALT</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">LEFT_SUPER</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">RIGHT_SHIFT</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">RIGHT_CONTROL</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">RIGHT_ALT</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">RIGHT_SUPER</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">MENU</span><span class="p">,</span>
+                <span class="p">};</span>
+            <span class="p">}</span>
+            <span class="k">case</span>  <span class="n">method</span><span class="o">::</span><span class="nl">JOY</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">&lt;</span><span class="n">method</span><span class="o">&gt;</span><span class="p">{</span>
+                    <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_A</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_B</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_X</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_Y</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_LEFT_BUMPER</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_RIGHT_BUMPER</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_BACK</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_START</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_GUIDE</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_DPAD_UP</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_DPAD_RIGHT</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_DPAD_DOWN</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_DPAD_LEFT</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_LEFT_X</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_LEFT_Y</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_RIGHT_X</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_RIGHT_Y</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_LEFT_TRIGGER</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_RIGHT_TRIGGER</span><span class="p">,</span>
+                        <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_RIGHT_THUMB</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_LEFT_THUMB</span>
+
+                <span class="p">};</span>
+            <span class="p">}</span>
+            <span class="k">case</span> <span class="n">method</span><span class="o">::</span><span class="nl">GAMEPAD_LEFT_AXIS</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">&lt;</span><span class="n">method</span><span class="o">&gt;</span><span class="p">{</span>
+                    <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_LEFT_X</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_LEFT_Y</span>
+                <span class="p">};</span>
+            <span class="p">}</span>
+            <span class="k">case</span> <span class="n">method</span><span class="o">::</span><span class="nl">GAMEPAD_RIGHT_AXIS</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">&lt;</span><span class="n">method</span><span class="o">&gt;</span> <span class="p">{</span>
+                    <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_RIGHT_X</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">GAMEPAD_RIGHT_Y</span>
+                <span class="p">};</span>
+            <span class="p">}</span>
+            <span class="k">case</span> <span class="n">method</span><span class="o">::</span><span class="nl">MOUSE</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">&lt;</span><span class="n">method</span><span class="o">&gt;</span><span class="p">{</span><span class="n">method</span><span class="o">::</span><span class="n">MOUSE_Y</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">MOUSE_X</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">MOUSE_LEFT</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">MOUSE_MIDDLE</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">MOUSE_RIGHT</span><span class="p">};</span>
+            <span class="p">}</span>
+
+            <span class="k">case</span> <span class="n">method</span><span class="o">::</span><span class="nl">SCROLL</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">&lt;</span><span class="n">method</span><span class="o">&gt;</span><span class="p">{</span><span class="n">method</span><span class="o">::</span><span class="n">HSCROLL</span><span class="p">,</span> <span class="n">method</span><span class="o">::</span><span class="n">VSCROLL</span><span class="p">};</span>
+            <span class="p">}</span>
+            <span class="k">default</span><span class="o">:</span> <span class="k">return</span> <span class="p">{};</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_input_inputmap.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

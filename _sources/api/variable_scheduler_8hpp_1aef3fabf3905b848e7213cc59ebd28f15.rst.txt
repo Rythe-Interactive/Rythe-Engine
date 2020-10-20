@@ -1,0 +1,13 @@
+.. _exhale_variable_scheduler_8hpp_1aef3fabf3905b848e7213cc59ebd28f15:
+
+Variable legion::core::scheduling::invalid_thread_id
+====================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_scheduler.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::scheduling::invalid_thread_id

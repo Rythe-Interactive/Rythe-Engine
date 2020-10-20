@@ -1,0 +1,55 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filemanip.cpp:
+
+File filemanip.cpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/filesystem``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/filesystem/filemanip.cpp``)
+----------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filemanip.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/filesystem/filemanip.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filemanip.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__filesystem__literals`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1filesystem_1_1literals_1a3932a7509c8fb974714f5209c374e9f1`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1filesystem_1_1literals_1adc374ddf6a3f6727d5f488611a476488`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1filesystem_1_1literals_1ad9c9dd79e3c95860f6a215e04db59225`
+

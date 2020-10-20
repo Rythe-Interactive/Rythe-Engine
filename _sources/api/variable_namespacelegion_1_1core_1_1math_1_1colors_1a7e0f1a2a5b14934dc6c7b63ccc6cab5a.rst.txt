@@ -1,0 +1,13 @@
+.. _exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1a7e0f1a2a5b14934dc6c7b63ccc6cab5a:
+
+Variable legion::core::math::colors::green
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_color.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::math::colors::green

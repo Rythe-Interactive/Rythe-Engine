@@ -1,0 +1,25 @@
+.. _exhale_struct_structlegion_1_1core_1_1position:
+
+Struct position
+===============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults_defaultcomponents.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public vec3``
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::position
+   :members:
+   :protected-members:
+   :undoc-members:

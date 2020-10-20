@@ -1,0 +1,24 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsconstants.h:
+
+Program Listing for File physicsconstants.h
+===========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsconstants.h>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/physicsconstants.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   #include <core/core.hpp>
+   
+   namespace legion::physics::constants
+   {
+       static math::vec3 gravity = math::vec3(0, -9.81, 0);
+   
+       static constexpr int contactSolverIterationCount = 10;
+   
+       static constexpr int frictionSolverIterationCount = 4;
+   }

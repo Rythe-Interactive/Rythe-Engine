@@ -1,0 +1,20 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_module.cpp:
+
+Program Listing for File module.cpp
+===================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_module.cpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/engine/module.cpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include <core/engine/module.hpp>
+   
+   namespace legion::core
+   {
+       ecs::EcsRegistry* Module::m_ecs;
+       scheduling::Scheduler* Module::m_scheduler;
+       events::EventBus* Module::m_eventBus;
+   }

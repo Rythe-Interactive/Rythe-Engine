@@ -1,0 +1,26 @@
+.. _exhale_class_classlegion_1_1physics_1_1_penetration_query:
+
+Class PenetrationQuery
+======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_penetrationquery.h`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public legion::physics::ConvexConvexPenetrationQuery`` (:ref:`exhale_class_classlegion_1_1physics_1_1_convex_convex_penetration_query`)
+- ``public legion::physics::EdgePenetrationQuery`` (:ref:`exhale_class_classlegion_1_1physics_1_1_edge_penetration_query`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::physics::PenetrationQuery
+   :members:
+   :protected-members:
+   :undoc-members:

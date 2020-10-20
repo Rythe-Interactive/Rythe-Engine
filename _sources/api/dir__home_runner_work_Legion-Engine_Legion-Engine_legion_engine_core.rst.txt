@@ -1,0 +1,42 @@
+.. _dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core:
+
+
+Directory core
+==============
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core``
+
+Subdirectories
+--------------
+
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_detail`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_entry`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types`
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_core.hpp`
+
+

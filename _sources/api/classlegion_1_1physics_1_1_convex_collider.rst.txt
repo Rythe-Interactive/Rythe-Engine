@@ -1,0 +1,25 @@
+.. _exhale_class_classlegion_1_1physics_1_1_convex_collider:
+
+Class ConvexCollider
+====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_colliders_convexcollider.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::physics::PhysicsCollider`` (:ref:`exhale_class_classlegion_1_1physics_1_1_physics_collider`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::physics::ConvexCollider
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,13 @@
+.. _exhale_function_trigonometry_8hpp_1ac3a9a8aeaebf10f39989a6f4e29e61aa:
+
+Template Function legion::core::math::deg2rad_c
+===============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_trigonometry.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::math::deg2rad_c()

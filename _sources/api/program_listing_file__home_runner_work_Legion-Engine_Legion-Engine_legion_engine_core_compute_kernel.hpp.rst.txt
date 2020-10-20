@@ -1,0 +1,104 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.hpp:
+
+Program Listing for File kernel.hpp
+===================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/compute/kernel.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #if !defined(DOXY_EXCLUDE)
+   #include <CL/cl.h>
+   #endif
+   
+   #include <core/compute/buffer.hpp>
+   #include <core/logging/logging.hpp>
+   
+   #include <map>
+   
+   
+   
+   namespace legion::core::compute
+   {
+       enum class block_mode : bool {
+           BLOCKING,
+           NON_BLOCKING
+       };
+   
+       class Program;
+   
+       class Kernel
+           {
+           public:
+               Kernel(Program*, cl_kernel);
+   
+               Kernel& local(size_type);
+   
+               Kernel& global(size_type);
+   
+               Kernel& build_buffer_names();
+   
+               Kernel& read_write_mode(buffer_type);
+   
+   
+               Kernel& enqueue_buffer(Buffer buffer, block_mode blocking = block_mode::BLOCKING);
+   
+               Kernel& enqueue_buffer(Buffer buffer, const std::string& name, block_mode blocking = block_mode::BLOCKING);
+   
+               Kernel& enqueue_buffer(Buffer buffer, cl_uint index, block_mode blocking = block_mode::BLOCKING);
+   
+               Kernel& set_buffer(Buffer buffer);
+   
+               Kernel& set_buffer(Buffer buffer, const std::string& name);
+   
+               Kernel& set_buffer(Buffer buffer, cl_uint index);
+   
+   
+               Kernel& set_and_enqueue_buffer(Buffer buffer, block_mode blocking = block_mode::BLOCKING);
+   
+               Kernel& set_and_enqueue_buffer(Buffer buffer, const std::string&, block_mode blocking = block_mode::BLOCKING);
+   
+               Kernel& set_and_enqueue_buffer(Buffer buffer, cl_uint index, block_mode blocking = block_mode::BLOCKING);
+   
+               Kernel& dispatch();
+   
+               void finish() const;
+   
+           private:
+   
+               buffer_type m_default_mode;
+               std::map<std::string, cl_uint> m_paramsMap;
+               Program* m_prog;
+               cl_kernel m_func;
+               cl_command_queue m_queue;
+               size_type m_global_size;
+               size_type m_local_size;
+   
+   
+               //helper function to wrap parameter checking 
+               template <class F,class... Args>
+               void param_find(F && func,std::string name)
+               {
+                   // lazy build buffer names
+                   if (m_paramsMap.empty())
+                   {
+                       build_buffer_names();
+                   }
+   
+                   //find and do thing, otherwise print warning
+                   if (const auto it = m_paramsMap.find(name); it != m_paramsMap.end())
+                   {
+                       std::invoke(func,it->second);
+                   }
+                   else
+                   {
+                       log::warn("Encountered buffer with name: \"{}\", which was not found as a kernel parameter", name);
+                   }
+               }
+   
+           };
+   }

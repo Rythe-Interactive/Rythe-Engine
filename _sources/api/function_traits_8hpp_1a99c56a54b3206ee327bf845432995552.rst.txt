@@ -1,0 +1,13 @@
+.. _exhale_function_traits_8hpp_1a99c56a54b3206ee327bf845432995552:
+
+Function legion::core::filesystem::operator==(const file_traits&, const file_traits&)
+=====================================================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_detail_traits.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::filesystem::operator==(const file_traits&, const file_traits&)

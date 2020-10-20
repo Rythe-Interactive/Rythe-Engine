@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File windowsystem.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File windowsystem.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-windowsystem-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-application-window-windowsystem-hpp"></span><h1>Program Listing for File windowsystem.hpp<a class="headerlink" href="#program-listing-for-file-windowsystem-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_window_windowsystem.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-application-window-windowsystem-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/application/window/windowsystem.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;application/window/window.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;application/context/contexthelper.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;application/events/windowevents.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;application/events/windowinputevents.hpp&quot;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">application</span>
+<span class="p">{</span>
+    <span class="k">class</span> <span class="nc">WindowSystem</span> <span class="k">final</span> <span class="o">:</span> <span class="k">public</span> <span class="n">System</span><span class="o">&lt;</span><span class="n">WindowSystem</span><span class="o">&gt;</span>
+    <span class="p">{</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="k">struct</span> <span class="n">window_request</span>
+        <span class="p">{</span>
+            <span class="n">id_type</span> <span class="n">entityId</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
+            <span class="n">image_handle</span> <span class="n">icon</span><span class="p">;</span>
+            <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span><span class="p">;</span>
+            <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">share</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">swapInterval</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">hints</span><span class="p">;</span>
+
+            <span class="n">window_request</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">image_handle</span> <span class="n">icon</span><span class="p">,</span> <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span><span class="p">,</span> <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">share</span><span class="p">,</span> <span class="kt">int</span> <span class="n">swapInterval</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">hints</span><span class="p">)</span>
+                <span class="o">:</span> <span class="n">entityId</span><span class="p">(</span><span class="n">entityId</span><span class="p">),</span> <span class="n">size</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="n">name</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">icon</span><span class="p">(</span><span class="n">icon</span><span class="p">),</span> <span class="n">monitor</span><span class="p">(</span><span class="n">monitor</span><span class="p">),</span> <span class="n">share</span><span class="p">(</span><span class="n">share</span><span class="p">),</span> <span class="n">swapInterval</span><span class="p">(</span><span class="n">swapInterval</span><span class="p">),</span> <span class="n">hints</span><span class="p">(</span><span class="n">hints</span><span class="p">)</span>
+            <span class="p">{}</span>
+            <span class="n">window_request</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">400</span> <span class="p">},</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;LEGION Engine&quot;</span><span class="p">,</span> <span class="n">image_handle</span> <span class="n">icon</span> <span class="o">=</span> <span class="n">invalid_image_handle</span><span class="p">,</span> <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">share</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">swapInterval</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="o">:</span> <span class="n">entityId</span><span class="p">(</span><span class="n">entityId</span><span class="p">),</span> <span class="n">size</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="n">name</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">icon</span><span class="p">(</span><span class="n">icon</span><span class="p">),</span> <span class="n">monitor</span><span class="p">(</span><span class="n">monitor</span><span class="p">),</span> <span class="n">share</span><span class="p">(</span><span class="n">share</span><span class="p">),</span> <span class="n">swapInterval</span><span class="p">(</span><span class="n">swapInterval</span><span class="p">)</span>
+            <span class="p">{}</span>
+
+            <span class="n">window_request</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">iconName</span><span class="p">,</span> <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span><span class="p">,</span> <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">share</span><span class="p">,</span> <span class="kt">int</span> <span class="n">swapInterval</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">hints</span><span class="p">)</span>
+                <span class="o">:</span> <span class="n">entityId</span><span class="p">(</span><span class="n">entityId</span><span class="p">),</span> <span class="n">size</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="n">name</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">icon</span><span class="p">(</span><span class="n">ImageCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">iconName</span><span class="p">)),</span> <span class="n">monitor</span><span class="p">(</span><span class="n">monitor</span><span class="p">),</span> <span class="n">share</span><span class="p">(</span><span class="n">share</span><span class="p">),</span> <span class="n">swapInterval</span><span class="p">(</span><span class="n">swapInterval</span><span class="p">),</span> <span class="n">hints</span><span class="p">(</span><span class="n">hints</span><span class="p">)</span>
+            <span class="p">{}</span>
+            <span class="n">window_request</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">iconName</span><span class="p">,</span> <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">share</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">swapInterval</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="o">:</span> <span class="n">entityId</span><span class="p">(</span><span class="n">entityId</span><span class="p">),</span> <span class="n">size</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="n">name</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">icon</span><span class="p">(</span><span class="n">ImageCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">iconName</span><span class="p">)),</span> <span class="n">monitor</span><span class="p">(</span><span class="n">monitor</span><span class="p">),</span> <span class="n">share</span><span class="p">(</span><span class="n">share</span><span class="p">),</span> <span class="n">swapInterval</span><span class="p">(</span><span class="n">swapInterval</span><span class="p">)</span>
+            <span class="p">{}</span>
+        <span class="p">};</span>
+
+        <span class="k">struct</span> <span class="n">fullscreen_toggle_request</span>
+        <span class="p">{</span>
+            <span class="n">id_type</span> <span class="n">entityId</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">position</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">;</span>
+
+            <span class="n">fullscreen_toggle_request</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">position</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">100</span> <span class="p">,</span><span class="mi">100</span> <span class="p">},</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">400</span> <span class="p">})</span> <span class="o">:</span> <span class="n">entityId</span><span class="p">(</span><span class="n">entityId</span><span class="p">),</span> <span class="n">position</span><span class="p">(</span><span class="n">position</span><span class="p">),</span> <span class="n">size</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="p">};</span>
+
+        <span class="k">struct</span> <span class="n">icon_request</span>
+        <span class="p">{</span>
+            <span class="n">id_type</span> <span class="n">entityId</span><span class="p">;</span>
+            <span class="n">image_handle</span> <span class="n">icon</span><span class="p">;</span>
+
+            <span class="n">icon_request</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">image_handle</span> <span class="n">icon</span><span class="p">)</span> <span class="o">:</span> <span class="n">entityId</span><span class="p">(</span><span class="n">entityId</span><span class="p">),</span> <span class="n">icon</span><span class="p">(</span><span class="n">icon</span><span class="p">)</span> <span class="p">{}</span>
+            <span class="n">icon_request</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">iconName</span><span class="p">)</span> <span class="o">:</span> <span class="n">entityId</span><span class="p">(</span><span class="n">entityId</span><span class="p">),</span> <span class="n">icon</span><span class="p">(</span><span class="n">ImageCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">iconName</span><span class="p">))</span> <span class="p">{}</span>
+        <span class="p">};</span>
+
+        <span class="k">static</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">GLFWwindow</span><span class="o">*</span><span class="p">,</span> <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;&gt;</span> <span class="n">m_windowComponents</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_creationLock</span><span class="p">;</span>
+
+        <span class="n">ecs</span><span class="o">::</span><span class="n">EntityQuery</span> <span class="n">m_windowQuery</span><span class="p">{};</span> <span class="c1">// Query with all the windows to update.</span>
+        <span class="kt">bool</span> <span class="n">m_exit</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span> <span class="c1">// Keep track of whether the exit event has been raised.</span>
+                             <span class="c1">// If any window requests happen after this boolean has been set then they will be denied.</span>
+
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_creationRequestLock</span><span class="p">;</span> <span class="c1">// Lock to keep the creation request list thread-safe.</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">window_request</span><span class="o">&gt;</span> <span class="n">m_creationRequests</span><span class="p">;</span> <span class="c1">// List of requests since the last creation loop.</span>
+
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_fullscreenRequestLock</span><span class="p">;</span> <span class="c1">// Lock to keep the fullscreen request list thread-safe.</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">fullscreen_toggle_request</span><span class="o">&gt;</span> <span class="n">m_fullscreenRequests</span><span class="p">;</span> <span class="c1">// List of requests since the last fullscreen update loop.</span>
+
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_iconRequestLock</span><span class="p">;</span> <span class="c1">// Lock to keep the icon request list thread-safe.</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">icon_request</span><span class="o">&gt;</span> <span class="n">m_iconRequests</span><span class="p">;</span> <span class="c1">// List of requests since the last icon update loop.</span>
+
+        <span class="c1">// Internal function for closing a window safely.</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">closeWindow</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">);</span>
+
+        <span class="n">image_handle</span> <span class="n">m_defaultIcon</span><span class="p">;</span>
+
+<span class="cp">#pragma region Callbacks</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">onWindowMoved</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">onWindowResize</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">onWindowRefresh</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">onWindowFocus</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">focused</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">onWindowIconify</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">iconified</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">onWindowMaximize</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">maximized</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">onWindowFrameBufferResize</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">onWindowContentRescale</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">float</span> <span class="n">xscale</span><span class="p">,</span> <span class="kt">float</span> <span class="n">yscale</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">onItemDroppedInWindow</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">count</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">**</span> <span class="n">paths</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">onMouseEnterWindow</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">entered</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">onKeyInput</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">key</span><span class="p">,</span> <span class="kt">int</span> <span class="n">scancode</span><span class="p">,</span> <span class="kt">int</span> <span class="n">action</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mods</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">onCharInput</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="n">uint</span> <span class="n">codepoint</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">onMouseMoved</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">double</span> <span class="n">xpos</span><span class="p">,</span> <span class="kt">double</span> <span class="n">ypos</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">onMouseButton</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">button</span><span class="p">,</span> <span class="kt">int</span> <span class="n">action</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mods</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">onMouseScroll</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">double</span> <span class="n">xoffset</span><span class="p">,</span> <span class="kt">double</span> <span class="n">yoffset</span><span class="p">);</span>
+
+        <span class="kt">void</span> <span class="nf">onExit</span><span class="p">(</span><span class="n">events</span><span class="o">::</span><span class="n">exit</span><span class="o">*</span> <span class="n">event</span><span class="p">);</span>
+<span class="cp">#pragma endregion</span>
+
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="n">requestIconChange</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">image_handle</span> <span class="n">icon</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">requestIconChange</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">iconName</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">requestFullscreenToggle</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">position</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">100</span> <span class="p">,</span><span class="mi">100</span> <span class="p">},</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">400</span> <span class="p">});</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">requestWindow</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">image_handle</span> <span class="n">icon</span><span class="p">,</span> <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span><span class="p">,</span> <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">share</span><span class="p">,</span> <span class="kt">int</span> <span class="n">swapInterval</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">hints</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">requestWindow</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">400</span> <span class="p">},</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;LEGION Engine&quot;</span><span class="p">,</span> <span class="n">image_handle</span> <span class="n">icon</span> <span class="o">=</span> <span class="n">invalid_image_handle</span><span class="p">,</span> <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">share</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">swapInterval</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">requestWindow</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">iconName</span><span class="p">,</span> <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span><span class="p">,</span> <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">share</span><span class="p">,</span> <span class="kt">int</span> <span class="n">swapInterval</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">hints</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">requestWindow</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">iconName</span><span class="p">,</span> <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">share</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">swapInterval</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+
+        <span class="kt">void</span> <span class="nf">showMainWindow</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">ContextHelper</span><span class="o">::</span><span class="n">showWindow</span><span class="p">(</span><span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">world</span><span class="p">.</span><span class="n">read_component</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span><span class="p">());</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">exit</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">events</span><span class="o">::</span><span class="n">exit</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">setup</span><span class="p">();</span>
+
+        <span class="kt">void</span> <span class="nf">createWindows</span><span class="p">();</span>
+
+        <span class="kt">void</span> <span class="nf">fullscreenWindows</span><span class="p">();</span>
+
+        <span class="kt">void</span> <span class="nf">updateWindowIcons</span><span class="p">();</span>
+
+        <span class="kt">void</span> <span class="nf">refreshWindows</span><span class="p">(</span><span class="n">time</span><span class="o">::</span><span class="n">time_span</span><span class="o">&lt;</span><span class="n">fast_time</span><span class="o">&gt;</span> <span class="n">deltaTime</span><span class="p">);</span>
+
+        <span class="kt">void</span> <span class="nf">handleWindowEvents</span><span class="p">(</span><span class="n">time</span><span class="o">::</span><span class="n">time_span</span><span class="o">&lt;</span><span class="n">fast_time</span><span class="o">&gt;</span> <span class="n">deltaTime</span><span class="p">);</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_window_windowsystem.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

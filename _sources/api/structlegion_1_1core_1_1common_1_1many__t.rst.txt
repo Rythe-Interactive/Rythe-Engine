@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1core_1_1common_1_1many__t:
+
+Template Struct many_t
+======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_result.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::common::many_t
+   :members:
+   :protected-members:
+   :undoc-members:

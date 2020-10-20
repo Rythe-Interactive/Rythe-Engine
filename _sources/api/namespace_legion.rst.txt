@@ -1,0 +1,32 @@
+
+.. _namespace_legion:
+
+Namespace legion
+================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__application`
+
+- :ref:`namespace_legion__audio`
+
+- :ref:`namespace_legion__core`
+
+- :ref:`namespace_legion__debug`
+
+- :ref:`namespace_legion__editor`
+
+- :ref:`namespace_legion__physics`
+
+- :ref:`namespace_legion__rendering`

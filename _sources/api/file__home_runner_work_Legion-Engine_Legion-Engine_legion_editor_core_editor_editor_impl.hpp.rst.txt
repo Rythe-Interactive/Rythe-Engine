@@ -1,0 +1,62 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor_editor_impl.hpp:
+
+File editor_impl.hpp
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/editor/core/editor``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/editor/core/editor/editor_impl.hpp``)
+--------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor_editor_impl.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`)
+
+- ``core/types/types.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_types.hpp`)
+
+- ``editor/editor/editormodule.hpp``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__editor`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classlegion_1_1editor_1_1_editor`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_editor__impl_8hpp_1a649040541d161ced8cbd98dc88308542`
+

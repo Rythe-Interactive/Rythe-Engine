@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1application_1_1inputmap:
+
+Struct inputmap
+===============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_input_inputmap.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::application::inputmap
+   :members:
+   :protected-members:
+   :undoc-members:

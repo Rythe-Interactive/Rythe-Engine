@@ -1,0 +1,63 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_events_inputevents.hpp:
+
+File inputevents.hpp
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_events>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/application/events``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/application/events/inputevents.hpp``)
+---------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_events_inputevents.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``application/input/inputmap.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_input_inputmap.hpp`)
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_core.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_application.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_input_inputsystem.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__application`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1input__action`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1input__axis`
+

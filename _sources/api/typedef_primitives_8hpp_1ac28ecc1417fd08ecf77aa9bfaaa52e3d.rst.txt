@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1ac28ecc1417fd08ecf77aa9bfaaa52e3d:
+
+Typedef legion::core::precise_time
+==================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::precise_time

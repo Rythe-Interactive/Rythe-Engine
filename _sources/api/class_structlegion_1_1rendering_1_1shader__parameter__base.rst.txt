@@ -1,0 +1,26 @@
+.. _exhale_class_structlegion_1_1rendering_1_1shader__parameter__base:
+
+Class shader_parameter_base
+===========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_shader.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public legion::rendering::attribute`` (:ref:`exhale_class_structlegion_1_1rendering_1_1attribute`)
+- ``public legion::rendering::uniform< T >`` (:ref:`exhale_class_structlegion_1_1rendering_1_1uniform`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::rendering::shader_parameter_base
+   :members:
+   :protected-members:
+   :undoc-members:

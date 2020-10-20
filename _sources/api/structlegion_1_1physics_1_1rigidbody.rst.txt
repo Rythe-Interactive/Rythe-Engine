@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1physics_1_1rigidbody:
+
+Struct rigidbody
+================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_components_rigidbody.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::physics::rigidbody
+   :members:
+   :protected-members:
+   :undoc-members:

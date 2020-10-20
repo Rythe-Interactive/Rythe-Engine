@@ -1,0 +1,13 @@
+.. _exhale_enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede:
+
+Enum block_mode
+===============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: legion::core::compute::block_mode

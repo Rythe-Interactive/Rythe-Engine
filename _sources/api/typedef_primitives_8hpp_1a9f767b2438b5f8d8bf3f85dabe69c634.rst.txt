@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1a9f767b2438b5f8d8bf3f85dabe69c634:
+
+Typedef legion::core::byte
+==========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::byte

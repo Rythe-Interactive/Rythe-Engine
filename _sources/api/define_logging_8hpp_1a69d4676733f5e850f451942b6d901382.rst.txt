@@ -3,7 +3,7 @@
 Define LOG_FILE
 ===============
 
-- Defined in :ref:`file__home_runner_work_Args-Engine_Args-Engine_args_core_logging_logging.hpp`
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`
 
 
 Define Documentation

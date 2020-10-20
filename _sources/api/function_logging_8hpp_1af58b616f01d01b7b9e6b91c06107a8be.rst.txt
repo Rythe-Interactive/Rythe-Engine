@@ -1,0 +1,13 @@
+.. _exhale_function_logging_8hpp_1af58b616f01d01b7b9e6b91c06107a8be:
+
+Function legion::core::log::setup
+=================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::log::setup()

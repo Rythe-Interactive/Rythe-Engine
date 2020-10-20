@@ -1,0 +1,56 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_detail_internals.hpp:
+
+File internals.hpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_detail>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/detail``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+collection of common utilities that don't fall into a specific category 
+ 
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/detail/internals.hpp``)
+------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_detail_internals.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cassert``
+
+- ``core/common/exception.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filemanip.hpp`
+
+
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_internals_8hpp_1ac6f96dc5c866e957c959c68549a9c140`
+

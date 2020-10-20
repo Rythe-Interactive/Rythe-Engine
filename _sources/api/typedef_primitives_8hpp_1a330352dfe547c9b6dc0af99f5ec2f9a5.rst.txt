@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1a330352dfe547c9b6dc0af99f5ec2f9a5:
+
+Typedef legion::core::int16
+===========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::int16

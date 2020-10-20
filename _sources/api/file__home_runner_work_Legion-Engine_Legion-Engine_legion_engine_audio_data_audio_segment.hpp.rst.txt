@@ -1,0 +1,76 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_audio_segment.hpp:
+
+File audio_segment.hpp
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/audio/data``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/audio/data/audio_segment.hpp``)
+---------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_audio_segment.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_core.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_components_audio_source.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_audio_segment.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_importers_audio_importers.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__audio`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1audio_1_1audio__import__settings`
+
+- :ref:`exhale_struct_structlegion_1_1audio_1_1audio__segment`
+
+- :ref:`exhale_struct_structlegion_1_1audio_1_1audio__segment__handle`
+
+- :ref:`exhale_class_classlegion_1_1audio_1_1_audio_segment_cache`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_audio__segment_8hpp_1ae921676db641af7e9b8426b19329fff9`
+
+- :ref:`exhale_variable_audio__segment_8hpp_1a4eacb35efa9ab0f9dadb0566f2d346a8`
+

@@ -1,0 +1,69 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults_coremodule.hpp:
+
+File coremodule.hpp
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/defaults``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/defaults/coremodule.hpp``)
+---------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults_coremodule.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/compute/context.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_context.hpp`)
+
+- ``core/data/importers/image_importers.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_importers_image_importers.hpp`)
+
+- ``core/data/importers/mesh_importers.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_importers_mesh_importers.hpp`)
+
+- ``core/defaults/defaultcomponents.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults_defaultcomponents.hpp`)
+
+- ``core/engine/module.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_module.hpp`)
+
+- ``core/filesystem/basic_resolver.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_basic_resolver.hpp`)
+
+- ``core/filesystem/provider_registry.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_provider_registry.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_engine.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classlegion_1_1core_1_1_core_module`
+

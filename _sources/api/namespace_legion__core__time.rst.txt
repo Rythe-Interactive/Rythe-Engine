@@ -1,0 +1,29 @@
+
+.. _namespace_legion__core__time:
+
+Namespace legion::core::time
+============================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1time_1_1time__span`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1time_1_1clock`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_time__span_8hpp_1a980bd219f37eb91482a7952d6572eba1`

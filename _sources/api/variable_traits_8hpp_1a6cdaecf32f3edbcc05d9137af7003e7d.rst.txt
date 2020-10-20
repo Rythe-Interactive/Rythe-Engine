@@ -1,0 +1,13 @@
+.. _exhale_variable_traits_8hpp_1a6cdaecf32f3edbcc05d9137af7003e7d:
+
+Variable legion::core::filesystem::invalid_filesystem_t
+=======================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_detail_traits.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::filesystem::invalid_filesystem_t

@@ -1,0 +1,13 @@
+.. _exhale_variable_physicsconstants_8h_1ae10a80b1cce2e044e15db3e198413b26:
+
+Variable legion::physics::constants::frictionSolverIterationCount
+=================================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsconstants.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::physics::constants::frictionSolverIterationCount

@@ -1,0 +1,299 @@
+
+.. _namespace_legion__core:
+
+Namespace legion::core
+======================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__async`
+
+- :ref:`namespace_legion__core__common`
+
+- :ref:`namespace_legion__core__compute`
+
+- :ref:`namespace_legion__core__detail`
+
+- :ref:`namespace_legion__core__ecs`
+
+- :ref:`namespace_legion__core__events`
+
+- :ref:`namespace_legion__core__filesystem`
+
+- :ref:`namespace_legion__core__interfaces`
+
+- :ref:`namespace_legion__core__iterator`
+
+- :ref:`namespace_legion__core__literals`
+
+- :ref:`namespace_legion__core__log`
+
+- :ref:`namespace_legion__core__math`
+
+- :ref:`namespace_legion__core__scheduling`
+
+- :ref:`namespace_legion__core__time`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1delegate__base_3_01return__type_07parameter__types_8_8_8_08_4_1_1invocation__element`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1has__resize`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1has__resize_3_01_c_00_01_ret_07_args_8_8_8_08_4`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1position`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1rotation`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1scale`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1stb__image__loader`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1transform`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1atomic__sparse__map`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1component__destroyed__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1component__exists__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1_core_module`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1data__view`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1delegate`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1delegate_3_01return__type_07parameter__types_8_8_8_08_4`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1delegate__base`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1delegate__base_3_01return__type_07parameter__types_8_8_8_08_4`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1_engine`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1entity__exists__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1entity__not__found__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1exception`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1fs__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1hashed__sparse__set`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1image`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1image__handle`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1image__import__settings`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1_image_cache`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1invalid__component__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1invalid__creation__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1invalid__entity__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1invalid__fetch__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1invalid__type__error`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1mesh`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1mesh__handle`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1mesh__import__settings`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1_mesh_cache`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1_module`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1multicast__delegate`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1multicast__delegate_3_01return__type_07parameter__types_8_8_8_08_4`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1obj__mesh__loader`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1sparse__map`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1sparse__set`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1sub__mesh`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1_system`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1_system_base`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1unknown__component__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1unknown__system__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1vector__view`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_image_8hpp_1a3e364bbd38785dcbde0cae02e92ea98a`
+
+- :ref:`exhale_enum_image_8hpp_1a480a32daf885423ee72ef389b3583395`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_type__util_8hpp_1a013fd7a27db68f4c183c1853154b7e40`
+
+- :ref:`exhale_function_type__util_8hpp_1a1058a65cb267418d824e1da828ecb984`
+
+- :ref:`exhale_function_type__util_8hpp_1ae0255795edc681238cd1b8044f59cc34`
+
+- :ref:`exhale_function_type__util_8hpp_1a1fe20cafef19940da5c6e26622c46581`
+
+- :ref:`exhale_function_type__util_8cpp_1a492f8a72e0cd77b3868d5e4b0a2b9b5f`
+
+- :ref:`exhale_function_type__util_8cpp_1a216cabaf6d00a70dee4d790833485369`
+
+- :ref:`exhale_function_type__util_8cpp_1a4e1c17350cceba4c3b7b06fa70498c6e`
+
+- :ref:`exhale_function_type__util_8hpp_1a22ddbf10ae207bd2a99666df70f9b695`
+
+- :ref:`exhale_function_type__util_8hpp_1a4b5630f47491ff5cef8787bff3baf775`
+
+- :ref:`exhale_function_type__util_8hpp_1a5f0b7826f171e09fc8bcdf8935e355e3`
+
+- :ref:`exhale_function_type__util_8hpp_1a2fff79d41d54927608eb5ac8afdb7c8b`
+
+- :ref:`exhale_function_type__util_8hpp_1a6b068e73b1f05b276d9296752b46130c`
+
+- :ref:`exhale_function_type__util_8hpp_1a07ea443aa6c76f3451a7288e20e918ac`
+
+- :ref:`exhale_function_type__util_8hpp_1a8137a94e71130c2464cf1a3a04164ddc`
+
+- :ref:`exhale_function_type__util_8hpp_1a03330ac971e875875af4215d3255d9af`
+
+- :ref:`exhale_function_type__util_8hpp_1aad310823b2ba291c47245a068b70c90a`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_primitives_8hpp_1a9f767b2438b5f8d8bf3f85dabe69c634`
+
+- :ref:`exhale_typedef_primitives_8hpp_1adfa0c169663ade27841c113701cf3ce5`
+
+- :ref:`exhale_typedef_primitives_8hpp_1abe7258f8958a4af909ef2fffdacfa706`
+
+- :ref:`exhale_typedef_types_2meta_8hpp_1ad0e7bc6cd5d3b9607b4b7ecd55305bde`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a2ed5e93a789471a2e681a46d5a71af8c`
+
+- :ref:`exhale_typedef_primitives_8hpp_1ae4c89bb19fc03c63b2781ec20998a273`
+
+- :ref:`exhale_typedef_primitives_8hpp_1aee4feb205d977f4e67c5275b8172f07f`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a27b70eae27e32436c9c6c685cba21f41`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a8d50aa073862ea27b522f409d7160f27`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a9b55318dc998cad862297399056ada6d`
+
+- :ref:`exhale_typedef_primitives_8hpp_1afeebf24597fb0e6b279a979a66493b5e`
+
+- :ref:`exhale_typedef_primitives_8hpp_1aff1741c7b4c268d2fa45616840fa7b37`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a703c39121c631740101262af8f503f18`
+
+- :ref:`exhale_typedef_primitives_8hpp_1afd44d23b5badf07e1597df08dd718416`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a54e81da61af142c89b4cb73118a2dca0`
+
+- :ref:`exhale_typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7`
+
+- :ref:`exhale_typedef_primitives_8hpp_1afff0c93a46bfa33a76dda432016056c2`
+
+- :ref:`exhale_typedef_types_2meta_8hpp_1adcd474bc5e8b1b7207b8465976de1422`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a330352dfe547c9b6dc0af99f5ec2f9a5`
+
+- :ref:`exhale_typedef_primitives_8hpp_1aa252dca08e4ae98b70c06cd705136878`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a1dc7f6fdb147fd0e0857ebb1020d9ec3`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a6d2a8d4d87316f5bb708444fba64965a`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a92c2cf9661453af5907807000cc530a5`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a163be3e1d67eec2f025c74ad2107b60f`
+
+- :ref:`exhale_typedef_primitives_8hpp_1ad3cd7b31bcb8e8d65edb385da071c692`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a92e79d8921a2ccf0b6c51a5a87b8b165`
+
+- :ref:`exhale_typedef_primitives_8hpp_1ac993eea0cc8925865767dc20e86224c1`
+
+- :ref:`exhale_typedef_primitives_8hpp_1af395c64fae20d5e60c5e784a1d77cffa`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a1bda5f20dc54c7a9c405641a2688f504`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a9ac494dcb86beaee3a660112e8fbc7d2`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a562ef1e3b928dc593aef3f9af604495f`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a99b1e7cc93d3aaff54a163e27deb9282`
+
+- :ref:`exhale_typedef_primitives_8hpp_1ac28ecc1417fd08ecf77aa9bfaaa52e3d`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a699bbd0458cd29aab4b11bfe6338ef3f`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a3182390078e86521f5e2389d47ce37d7`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a579aa542b46eb09aaea82f1b86479ea8`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a5bf27dbe9a647c12e23964e75222c268`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a7919102ac78dc9740c70029bcc564bdd`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a29542f5cf8153300c249e7f49c9f6f1f`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a86f47b677527fb12236ece4f6c2fecee`
+
+- :ref:`exhale_typedef_primitives_8hpp_1ab1314830f4b88f2e246556cef740acf0`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a66cbbe4c5ba5a443c8031589796193bb`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a70cc48df6c79b4717adba3ccd06a72aa`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_image_8hpp_1a389652b7142438f25f0ca8c366d1378f`
+
+- :ref:`exhale_variable_mesh_8hpp_1ad00317cc652357778ab1f92565603707`
+
+- :ref:`exhale_variable_image_8hpp_1aac55599dad798ccc81dee7fb5c58a25b`
+
+- :ref:`exhale_variable_mesh_8hpp_1a754a299736c67e01ecedf48221cc2f96`

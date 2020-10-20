@@ -1,0 +1,104 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_texture.hpp:
+
+File texture.hpp
+================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data/texture.hpp``)
+-------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_texture.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``application/application.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_application.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_importers_texture_importers.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_shader.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_texture.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__rendering`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1texture`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1texture__data`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1texture__handle`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1texture__import__settings`
+
+- :ref:`exhale_class_classlegion_1_1rendering_1_1_texture_cache`
+
+- :ref:`exhale_class_classtexture_1_1hpp`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_texture_8hpp_1a4beac8f03a1a4607475602841e77f7ed`
+
+- :ref:`exhale_enum_texture_8hpp_1a43d96b8e8a767d15180b2dd2725dd1cc`
+
+- :ref:`exhale_enum_texture_8hpp_1a98302b4adcb004d184460c840a95b3e5`
+
+- :ref:`exhale_enum_texture_8hpp_1a4b31e32f4cfe64378c0cf415ab21c041`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_texture_8hpp_1afbdc6a96f7206745fb66dacca92fab0d`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_texture_8hpp_1addc25b0d5f17e632dd8eb2741adef7cf`
+
+- :ref:`exhale_variable_texture_8hpp_1ac5dabc4958ffda93c1c482bae067d36e`
+
+- :ref:`exhale_variable_texture_8hpp_1a69355df00001b5c499b2c9ba71c96d7a`
+
+- :ref:`exhale_variable_texture_8hpp_1aa28a4cdf7598b164c5df824974bc5821`
+

@@ -1,0 +1,13 @@
+.. _exhale_function_editor__impl_8hpp_1a649040541d161ced8cbd98dc88308542:
+
+Function reportEditorModules
+============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor_editor_impl.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: reportEditorModules(legion::editor::Editor *)

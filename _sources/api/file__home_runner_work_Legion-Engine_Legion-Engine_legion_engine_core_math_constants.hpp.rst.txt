@@ -1,0 +1,110 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_constants.hpp:
+
+File constants.hpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/math``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/math/constants.hpp``)
+----------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_constants.hpp.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_math.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_trigonometry.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__math`
+
+- :ref:`namespace_legion__core__math__detail`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_constants_8hpp_1ad7f39d091c1b87fa5616d17fb827c4f9`
+
+- :ref:`exhale_function_constants_8hpp_1ac988e471088bf55ea91787d47824b7e7`
+
+- :ref:`exhale_function_constants_8hpp_1acc561f96d138c1757da6779c21872a23`
+
+- :ref:`exhale_function_constants_8hpp_1a5d616ec51272af1f6a5e9ce2109e7a72`
+
+- :ref:`exhale_function_constants_8hpp_1a99bda1bff6e43c9cc386b536514bb340`
+
+- :ref:`exhale_function_constants_8hpp_1a7d39cf277c04236dc21985c4d5c4deac`
+
+- :ref:`exhale_function_constants_8hpp_1a85adfee05b177583bc2405a52b8d4e49`
+
+- :ref:`exhale_function_constants_8hpp_1a5a62400db68efd1b4150b0f1ea3f2554`
+
+- :ref:`exhale_function_constants_8hpp_1af09753c3d9ade3ae45f3b2bc8fb5d1d2`
+
+- :ref:`exhale_function_constants_8hpp_1aeef4aa54ec822881d431680a167cb2f5`
+
+- :ref:`exhale_function_constants_8hpp_1a939153bf2d0f765b9794ec4882c08395`
+
+- :ref:`exhale_function_constants_8hpp_1ab12ea362e005f702f7f0af6cad4fba77`
+
+- :ref:`exhale_function_constants_8hpp_1af509ea53853e82df7137bbe2542e85bf`
+
+- :ref:`exhale_function_constants_8hpp_1a916beecf872ff0e82e74cd82703413ca`
+
+- :ref:`exhale_function_constants_8hpp_1ace10587db3e0a7edb5d5fd1b26018c55`
+
+- :ref:`exhale_function_constants_8hpp_1a3fe56736f705ea2ede9feeefb05be16a`
+
+- :ref:`exhale_function_constants_8hpp_1ab480eaa3b971466c36c2c0d35a0edeb6`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_constants_8hpp_1afa1df89074e5e8598f53426518c59dc9`
+
+- :ref:`exhale_variable_constants_8hpp_1abef6504fe9bc67854ea5fc56825c66d0`
+
+- :ref:`exhale_variable_constants_8hpp_1afa8bf5d4492046b87c79774f4f3ee1bf`
+
+- :ref:`exhale_variable_constants_8hpp_1ad9bbb5eb9b43d17f7d18e39271e81310`
+
+- :ref:`exhale_variable_constants_8hpp_1a4b6eb7e17dbfa89108620c8202a9009b`
+
+- :ref:`exhale_variable_constants_8hpp_1ac3876df177d6e80750d0751a5851f606`
+
+- :ref:`exhale_variable_constants_8hpp_1aad3f86e75aaa14fde1e2115e8b22b409`
+
+- :ref:`exhale_variable_constants_8hpp_1aec946c331ea85275e6fb72881c8e4a6a`
+
+- :ref:`exhale_variable_constants_8hpp_1a8c9711ee063e78929cc6b883de399b7c`
+

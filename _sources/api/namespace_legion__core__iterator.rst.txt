@@ -1,0 +1,37 @@
+
+.. _namespace_legion__core__iterator:
+
+Namespace legion::core::iterator
+================================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1iterator_1_1pair__range`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1iterator_1_1key__only__iterator`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1iterator_1_1key__value__pair__iterator`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1iterator_1_1keys__only`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1iterator_1_1value__only__iterator`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1iterator_1_1values__only`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_iterator__tricks_8hpp_1ab1378f0ad3a830ee0f93ed9eb99b6827`

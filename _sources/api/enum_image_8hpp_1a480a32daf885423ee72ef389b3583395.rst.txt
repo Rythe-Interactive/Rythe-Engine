@@ -1,0 +1,13 @@
+.. _exhale_enum_image_8hpp_1a480a32daf885423ee72ef389b3583395:
+
+Enum image_components
+=====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_image.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: legion::core::image_components

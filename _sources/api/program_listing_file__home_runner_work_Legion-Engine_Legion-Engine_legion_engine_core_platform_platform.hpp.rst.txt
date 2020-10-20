@@ -1,0 +1,112 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp:
+
+Program Listing for File platform.hpp
+=====================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/platform/platform.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   #define LEGION_CPP17V 201703L
+   
+   #define LEGION_DEBUG_VALUE 1
+   #define LEGION_RELEASE_VALUE 2
+   
+   #if defined(_DEBUG) || defined(DEBUG)
+   
+       #define LEGION_DEBUG
+       #define LEGION_CONFIGURATION LEGION_DEBUG_VALUE
+   #else
+   
+       #define LEGION_RELEASE 
+       #define LEGION_CONFIGURATION LEGION_RELEASE_VALUE
+   #endif
+   
+   #if (!defined(LEGION_LOW_POWER) && !defined(LEGION_HIGH_PERFORMANCE))
+   
+       #define LEGION_HIGH_PERFORMANCE
+   #endif
+   
+   
+   #if defined(_MSC_VER)
+   
+       #define LEGION_WINDOWS
+   
+       #define WIN32_LEAN_AND_MEAN
+       #define VC_EXTRALEAN
+       #define NOMINMAX
+       #include <Windows.h>
+   #elif defined(__linux__)
+   
+       #define LEGION_LINUX
+   
+       #include <sys/resource.h>
+       #include <sched.h>
+       #include <errno.h>
+   #endif
+   
+   #ifndef __FUNC__
+       #define __FUNC__ __func__ 
+   #endif
+   
+   #ifndef __FULL_FUNC__
+       #if defined(LEGION_WINDOWS)
+           #define __FULL_FUNC__ __FUNCSIG__
+       #elif defined(__linux__)
+           #define __FULL_FUNC__ __PRETTY_FUNCTION__
+       #else
+           #define __FULL_FUNC__ __func__
+       #endif
+   #endif
+   
+   
+   #if (defined(LEGION_WINDOWS) && !defined(LEGION_WINDOWS_USE_CDECL)) || defined (DOXY_INCLUDE)
+   
+       #define LEGION_CCONV __fastcall
+   #else
+       #define LEGION_CCONV __cdecl
+   #endif
+   
+   #define NO_MANGLING extern "C"
+   
+   #define LEGION_FUNC LEGION_CCONV
+   
+   #define LEGION_INTERFACE NO_MANGLING LEGION_CCONV 
+   
+   #if defined(__has_cpp_attribute)|| defined(DOXY_INCLUDE) 
+   
+   #  define L_HASCPPATTRIB(x) __has_cpp_attribute(x)
+   #else
+   #  define L_HASCPPATTRIB(x) 0
+   #endif
+   
+   
+   
+   #if __cplusplus >= LEGION_CPP17V || L_HASCPPATTRIB(nodiscard) || defined(DOXY_INCLUDE)
+   
+   #define L_NODISCARD [[nodiscard]]
+   #else
+   #define L_NODISCARD
+   #endif
+   
+   #if __cplusplus > LEGION_CPP17V || L_HASCPPATTRIB(noreturn) || defined(DOXY_INCLUDE)
+   
+   #define L_NORETURN [[noreturn]]
+   #else
+   #define L_NORETURN
+   #endif
+   
+   #define LEGION_PURE =0
+   
+   #define LEGION_IMPURE {}
+   
+   #define LEGION_IMPURE_RETURN(x) { return (x); }
+   
+   #if !defined(LEGION_MIN_THREADS)
+   #define LEGION_MIN_THREADS 5
+   #endif

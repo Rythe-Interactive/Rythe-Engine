@@ -1,0 +1,13 @@
+.. _exhale_function_constants_8hpp_1acc561f96d138c1757da6779c21872a23:
+
+Template Function legion::core::math::feigenbaum
+================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_constants.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::math::feigenbaum()

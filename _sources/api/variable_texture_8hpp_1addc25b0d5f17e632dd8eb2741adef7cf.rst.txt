@@ -1,0 +1,13 @@
+.. _exhale_variable_texture_8hpp_1addc25b0d5f17e632dd8eb2741adef7cf:
+
+Variable legion::rendering::channels_to_glenum
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_texture.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::rendering::channels_to_glenum

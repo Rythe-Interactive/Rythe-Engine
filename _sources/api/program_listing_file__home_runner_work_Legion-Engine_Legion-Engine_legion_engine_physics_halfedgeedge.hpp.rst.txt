@@ -1,0 +1,59 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_halfedgeedge.hpp:
+
+Program Listing for File halfedgeedge.hpp
+=========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_halfedgeedge.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/halfedgeedge.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/core.hpp>
+   #include <physics/halfedgeface.hpp>
+   
+   namespace legion::physics
+   {
+       struct HalfEdgeEdge
+       {
+           HalfEdgeEdge* pairingEdge = nullptr;
+           HalfEdgeEdge * nextEdge = nullptr;
+           HalfEdgeEdge* prevEdge = nullptr;
+   
+           HalfEdgeFace* face = nullptr;
+           
+           math::vec3* edgePositionPtr;
+           std::string id;
+   
+           HalfEdgeEdge() = default;
+   
+           ~HalfEdgeEdge()
+           {
+               log::debug("");
+           }
+   
+           HalfEdgeEdge(math::vec3* newEdgePositionPtr) : edgePositionPtr{ newEdgePositionPtr }
+           {
+   
+           }
+   
+           void setNextAndPrevEdge(HalfEdgeEdge* newPrevEdge,HalfEdgeEdge* newNextEdge)
+           {
+               nextEdge = newNextEdge;
+               prevEdge = newPrevEdge;
+           }
+   
+           math::vec3 getLocalNormal() const
+           {
+               return face->normal;
+           }
+   
+           math::vec3 getLocalEdgeDirection()  const
+           {
+               return *nextEdge->edgePositionPtr - *edgePositionPtr;
+           }
+       };
+   }
+   

@@ -1,0 +1,63 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_halfedgeface.hpp:
+
+File halfedgeface.hpp
+=====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/halfedgeface.hpp``)
+-----------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_halfedgeface.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_core.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_colliders_convexcollider.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_colliders_physicscollider.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_halfedgeedge.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_HalfEdgeFace.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__physics`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_half_edge_face`
+

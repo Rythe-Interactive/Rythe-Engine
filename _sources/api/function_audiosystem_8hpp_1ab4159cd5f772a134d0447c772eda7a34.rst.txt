@@ -1,0 +1,13 @@
+.. _exhale_function_audiosystem_8hpp_1ab4159cd5f772a134d0447c772eda7a34:
+
+Function legion::audio::openal_error
+====================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_systems_audiosystem.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::audio::openal_error()

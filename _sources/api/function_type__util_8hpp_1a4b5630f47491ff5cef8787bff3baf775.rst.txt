@@ -1,0 +1,13 @@
+.. _exhale_function_type__util_8hpp_1a4b5630f47491ff5cef8787bff3baf775:
+
+Template Function legion::core::retrieveArraySize
+=================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::retrieveArraySize(byte_vec::const_iterator)

@@ -1,0 +1,84 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_color.hpp:
+
+File color.hpp
+==============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/math``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/math/color.hpp``)
+------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_color.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/math/glm/glm_include.hpp``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_image.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_math.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__math`
+
+- :ref:`namespace_legion__core__math__colors`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_structlegion_1_1core_1_1math_1_1color`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1a82045d3feb04816660da61cb2815d6ee`
+
+- :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1a6ada5f52255df7235c4d4795d475f23b`
+
+- :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1a97bd0941e24898db2dfbb010e3370d03`
+
+- :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1a7e0f1a2a5b14934dc6c7b63ccc6cab5a`
+
+- :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1a5c881ba33f1e73ee458b601ac6c3e62c`
+
+- :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1a13ffab485f050238aeb5742500c8b9e0`
+
+- :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1a59beb234a1db1af8f8a42be74a37ea35`
+
+- :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1aa5e49812ec4eb0a1c8670c53e9e95b3d`
+
+- :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1a4da5411d4a7c43903fc912a2ffdea6e9`
+

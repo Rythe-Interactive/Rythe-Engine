@@ -1,0 +1,57 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.cpp:
+
+File type_util.cpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/types``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/types/type_util.cpp``)
+-----------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/types/type_util.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.hpp`)
+
+- ``functional``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_type__util_8cpp_1a216cabaf6d00a70dee4d790833485369`
+
+- :ref:`exhale_function_type__util_8cpp_1a4e1c17350cceba4c3b7b06fa70498c6e`
+
+- :ref:`exhale_function_type__util_8cpp_1a492f8a72e0cd77b3868d5e4b0a2b9b5f`
+

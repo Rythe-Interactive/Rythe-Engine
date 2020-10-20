@@ -1,0 +1,53 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_pointer_encapsulator.hpp:
+
+File pointer_encapsulator.hpp
+=============================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/data``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/data/pointer_encapsulator.hpp``)
+------------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_pointer_encapsulator.hpp.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_colliders_convexcollider.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_statics.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__physics`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classlegion_1_1physics_1_1_pointer_encapsulator`
+

@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File provider_registry.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File provider_registry.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-provider-registry-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-filesystem-provider-registry-cpp"></span><h1>Program Listing for File provider_registry.cpp<a class="headerlink" href="#program-listing-for-file-provider-registry-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_provider_registry.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-filesystem-provider-registry-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/filesystem/provider_registry.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;provider_registry.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/containers/iterator_tricks.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">filesystem</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">driver</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">unordered_multimap</span><span class="o">&lt;</span><span class="n">domain</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">resolver</span><span class="o">&gt;&gt;*</span> <span class="n">m_domain_resolver_map</span><span class="p">;</span>
+        <span class="n">driver</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="c1">//pointer to pointer to implementation ?</span>
+            <span class="n">m_domain_resolver_map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_multimap</span><span class="o">&lt;</span><span class="n">domain</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">resolver</span><span class="o">&gt;&gt;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="o">~</span><span class="n">driver</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">delete</span> <span class="n">m_domain_resolver_map</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="n">provider_registry</span><span class="o">::</span><span class="n">driver</span><span class="o">&amp;</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">get_driver</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">static</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">driver</span> <span class="n">registry</span><span class="p">;</span>
+
+        <span class="k">return</span> <span class="n">registry</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
+
+    <span class="n">std</span><span class="o">::</span><span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">provider_registry</span><span class="o">::</span><span class="n">domain</span><span class="o">&gt;</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">domains</span><span class="p">()</span>
+    <span class="p">{</span>
+
+        <span class="c1">//get map driver</span>
+        <span class="k">static</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">driver</span> <span class="o">=</span> <span class="n">get_driver</span><span class="p">();</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">domain</span><span class="o">&gt;</span> <span class="n">_domains</span><span class="p">;</span>
+
+        <span class="k">for</span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">key</span> <span class="p">:</span> <span class="n">iterator</span><span class="o">::</span><span class="n">keys_only</span><span class="p">(</span><span class="o">*</span><span class="n">driver</span><span class="p">.</span><span class="n">m_domain_resolver_map</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="c1">//unordered_sets are unique by default no need to worry about duplicates</span>
+            <span class="n">_domains</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">_domains</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">has_domain</span><span class="p">(</span><span class="n">domain</span> <span class="n">d</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//get map driver</span>
+        <span class="k">static</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">driver</span> <span class="o">=</span> <span class="n">get_driver</span><span class="p">();</span>
+
+        <span class="k">return</span> <span class="n">driver</span><span class="p">.</span><span class="n">m_domain_resolver_map</span><span class="o">-&gt;</span><span class="n">find</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">!=</span> <span class="n">driver</span><span class="p">.</span><span class="n">m_domain_resolver_map</span><span class="o">-&gt;</span><span class="n">end</span><span class="p">();</span>
+
+
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">domain_add_resolver</span><span class="p">(</span><span class="n">domain</span> <span class="n">d</span><span class="p">,</span> <span class="n">resolver_ptr</span> <span class="n">r</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//get map driver</span>
+        <span class="k">static</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">driver</span> <span class="o">=</span> <span class="n">get_driver</span><span class="p">();</span>
+
+        <span class="c1">//insert a resolver</span>
+        <span class="k">auto</span> <span class="n">itr</span> <span class="o">=</span> <span class="n">driver</span><span class="p">.</span><span class="n">m_domain_resolver_map</span><span class="o">-&gt;</span><span class="n">emplace</span><span class="p">(</span><span class="n">strpath_manip</span><span class="o">::</span><span class="n">localize</span><span class="p">(</span><span class="n">d</span><span class="p">),</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">resolver</span><span class="o">&gt;</span><span class="p">(</span><span class="n">r</span><span class="p">));</span>
+        <span class="n">itr</span><span class="o">-&gt;</span><span class="n">second</span><span class="o">-&gt;</span><span class="n">set_identifier</span><span class="p">(</span><span class="n">d</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_ptr</span><span class="o">&gt;</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">domain_get_resolvers</span><span class="p">(</span><span class="n">domain</span> <span class="n">d</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//get map driver</span>
+        <span class="k">static</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">driver</span> <span class="o">=</span> <span class="n">get_driver</span><span class="p">();</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">resolver_ptr</span><span class="o">&gt;</span> <span class="n">resolvers</span><span class="p">;</span>
+
+        <span class="c1">//get range for domains</span>
+        <span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">iterator_pair</span> <span class="o">=</span> <span class="n">driver</span><span class="p">.</span><span class="n">m_domain_resolver_map</span><span class="o">-&gt;</span><span class="n">equal_range</span><span class="p">(</span><span class="n">d</span><span class="p">);</span>
+
+        <span class="k">for</span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span><span class="n">value</span><span class="p">]</span> <span class="o">:</span> <span class="n">iterator</span><span class="o">::</span><span class="n">pair_range</span><span class="p">(</span><span class="n">iterator_pair</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">resolvers</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">value</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">resolvers</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_sentinel</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_sentinel</span><span class="o">::</span><span class="k">operator</span><span class="o">++</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">domain_get_next_resolver</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_sentinel</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_sentinel</span><span class="o">::</span><span class="k">operator</span><span class="o">--</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">domain_get_prev_resolver</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_ptr</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_sentinel</span><span class="o">::</span><span class="k">operator</span><span class="o">*</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">domain_get_resolver_at</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_ptr</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_sentinel</span><span class="o">::</span><span class="k">operator</span><span class="o">-&gt;</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">domain_get_resolver_at</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_sentinel</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">domain_get_first_resolver</span><span class="p">(</span><span class="n">domain</span> <span class="n">d</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">has_domain</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">resolver_sentinel</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="n">d</span><span class="p">};</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">resolver_sentinel</span><span class="p">{</span><span class="k">nullptr</span><span class="p">};</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_sentinel</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">domain_get_prev_resolver</span><span class="p">(</span><span class="k">const</span> <span class="n">resolver_sentinel</span><span class="o">&amp;</span> <span class="n">iterator</span><span class="p">)</span>
+    <span class="p">{</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">iterator</span><span class="p">.</span><span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+            <span class="k">return</span> <span class="n">resolver_sentinel</span><span class="p">{</span><span class="k">nullptr</span><span class="p">};</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">resolver_sentinel</span><span class="p">{</span><span class="n">iterator</span><span class="p">.</span><span class="n">index</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">iterator</span><span class="p">.</span><span class="n">inspected_domain</span><span class="p">};</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_sentinel</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">domain_get_next_resolver</span><span class="p">(</span><span class="k">const</span> <span class="n">resolver_sentinel</span><span class="o">&amp;</span> <span class="n">iterator</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//get map driver</span>
+        <span class="k">static</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">driver</span> <span class="o">=</span> <span class="n">get_driver</span><span class="p">();</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">iterator</span><span class="p">.</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="n">driver</span><span class="p">.</span><span class="n">m_domain_resolver_map</span><span class="o">-&gt;</span><span class="n">count</span><span class="p">(</span><span class="n">iterator</span><span class="p">.</span><span class="n">inspected_domain</span><span class="p">)){</span>
+            <span class="k">return</span> <span class="n">resolver_sentinel</span><span class="p">{</span><span class="k">nullptr</span><span class="p">};</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">resolver_sentinel</span><span class="p">{</span><span class="n">iterator</span><span class="p">.</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">iterator</span><span class="p">.</span><span class="n">inspected_domain</span><span class="p">};</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_sentinel</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">domain_get_resolver_end</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">resolver_sentinel</span><span class="p">{</span><span class="k">nullptr</span><span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_ptr</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">domain_get_resolver_at</span><span class="p">(</span><span class="k">const</span> <span class="n">resolver_sentinel</span><span class="o">&amp;</span> <span class="n">iterator</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//check against sentinel value</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">iterator</span> <span class="o">==</span> <span class="n">resolver_sentinel</span><span class="p">{</span><span class="k">nullptr</span><span class="p">})</span> <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
+
+        <span class="c1">//get map driver</span>
+        <span class="k">static</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">driver</span> <span class="o">=</span> <span class="n">get_driver</span><span class="p">();</span>
+
+        <span class="c1">//get range of domains</span>
+        <span class="k">auto</span> <span class="n">real_iterator</span> <span class="o">=</span> <span class="n">driver</span><span class="p">.</span><span class="n">m_domain_resolver_map</span><span class="o">-&gt;</span><span class="n">find</span><span class="p">(</span><span class="n">iterator</span><span class="p">.</span><span class="n">inspected_domain</span><span class="p">);</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">iterator</span><span class="o">::</span><span class="n">checked_next</span><span class="p">(</span><span class="n">real_iterator</span><span class="p">,</span><span class="n">driver</span><span class="p">.</span><span class="n">m_domain_resolver_map</span><span class="o">-&gt;</span><span class="n">end</span><span class="p">(),</span><span class="n">iterator</span><span class="p">.</span><span class="n">index</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">real_iterator</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+    <span class="p">}</span>
+
+
+
+
+    <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_sentinel</span><span class="o">&amp;</span> <span class="n">lhs</span><span class="p">,</span> <span class="k">const</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_sentinel</span><span class="o">&amp;</span> <span class="n">rhs</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">lhs</span><span class="p">.</span><span class="n">index</span> <span class="o">==</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_sentinel</span><span class="o">::</span><span class="n">sentinel_value</span> <span class="o">&amp;&amp;</span> <span class="n">rhs</span><span class="p">.</span><span class="n">index</span> <span class="o">==</span> <span class="n">provider_registry</span><span class="o">::</span>
+            <span class="n">resolver_sentinel</span><span class="o">::</span><span class="n">sentinel_value</span><span class="p">)</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">lhs</span><span class="p">.</span><span class="n">index</span> <span class="o">==</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_sentinel</span><span class="o">::</span><span class="n">sentinel_value</span> <span class="o">||</span> <span class="n">rhs</span><span class="p">.</span><span class="n">index</span> <span class="o">==</span> <span class="n">provider_registry</span><span class="o">::</span>
+            <span class="n">resolver_sentinel</span><span class="o">::</span><span class="n">sentinel_value</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">lhs</span><span class="p">.</span><span class="n">index</span> <span class="o">==</span> <span class="n">rhs</span><span class="p">.</span><span class="n">index</span> <span class="o">&amp;&amp;</span> <span class="n">rhs</span><span class="p">.</span><span class="n">inspected_domain</span> <span class="o">==</span> <span class="n">lhs</span><span class="p">.</span><span class="n">inspected_domain</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="k">operator</span><span class="o">!=</span><span class="p">(</span><span class="k">const</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_sentinel</span><span class="o">&amp;</span> <span class="n">lhs</span><span class="p">,</span> <span class="k">const</span> <span class="n">provider_registry</span><span class="o">::</span><span class="n">resolver_sentinel</span><span class="o">&amp;</span> <span class="n">rhs</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="o">!</span><span class="p">(</span><span class="n">lhs</span><span class="o">==</span><span class="n">rhs</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_provider_registry.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

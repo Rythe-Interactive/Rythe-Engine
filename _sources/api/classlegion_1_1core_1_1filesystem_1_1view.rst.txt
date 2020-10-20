@@ -1,0 +1,26 @@
+.. _exhale_class_classlegion_1_1core_1_1filesystem_1_1view:
+
+Class view
+==========
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_view.hpp`
+
+
+Nested Relationships
+--------------------
+
+
+Nested Types
+************
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1filesystem_1_1view_1_1create__chain`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::filesystem::view
+   :members:
+   :protected-members:
+   :undoc-members:

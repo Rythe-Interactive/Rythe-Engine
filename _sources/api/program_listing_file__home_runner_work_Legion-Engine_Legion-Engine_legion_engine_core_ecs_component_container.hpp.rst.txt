@@ -1,0 +1,114 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_container.hpp:
+
+Program Listing for File component_container.hpp
+================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_container.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/ecs/component_container.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/async/readonly_rw_spinlock.hpp>
+   #include <core/async/transferable_atomic.hpp>
+   #include <core/platform/platform.hpp>
+   #include <core/containers/atomic_sparse_map.hpp>
+   #include <core/types/types.hpp>
+   #include <core/events/eventbus.hpp>
+   #include <core/events/events.hpp>
+   #include <core/ecs/component_meta.hpp>
+   
+   namespace legion::core::ecs
+   {
+       class EcsRegistry;
+   
+       class component_container_base
+       {
+       public:
+           L_NODISCARD virtual bool has_component(id_type entityId) const LEGION_PURE;
+           virtual void create_component(id_type entityId) LEGION_PURE;
+           virtual void create_component(id_type entityId, void* value) LEGION_PURE;
+           virtual void destroy_component(id_type entityId) LEGION_PURE;
+           virtual ~component_container_base() = default;
+       };
+   
+       template<typename component_type>
+       class component_container : public component_container_base
+       {
+       private:
+           sparse_map<id_type, component_type> m_components;
+           mutable async::readonly_rw_spinlock m_lock;
+   
+           events::EventBus* m_eventBus;
+           EcsRegistry* m_registry;
+           component_type m_nullComp;
+       public:
+           component_container() = default;
+           component_container(EcsRegistry* registry, events::EventBus* eventBus) : m_registry(registry), m_eventBus(eventBus) {}
+   
+           async::readonly_rw_spinlock& get_lock() const
+           {
+               return m_lock;
+           }
+   
+           L_NODISCARD virtual bool has_component(id_type entityId) const override
+           {
+               async::readonly_guard guard(m_lock);
+               return m_components.contains(entityId);
+           }
+   
+           L_NODISCARD component_type& get_component(id_type entityId)
+           {
+               if (m_components.contains(entityId))
+                   return m_components[entityId];
+               return m_nullComp;
+           }
+   
+           L_NODISCARD const component_type& get_component(id_type entityId) const
+           {
+               if (m_components.contains(entityId))
+                   return m_components[entityId];
+               return m_nullComp;
+           }
+   
+           virtual void create_component(id_type entityId) override
+           {
+               component_type comp;
+               if constexpr (detail::has_init<component_type, void(component_type&)>::value)
+                   component_type::init(comp);
+   
+               {
+                   async::readwrite_guard guard(m_lock);
+                   m_components.insert(entityId, std::move(comp));
+               }
+   
+               m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId, m_registry));
+           }
+   
+           virtual void create_component(id_type entityId, void* value) override
+           {
+               {
+                   async::readwrite_guard guard(m_lock);
+                   m_components[entityId] = *reinterpret_cast<component_type*>(value);
+               }
+   
+               m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId, m_registry));
+           }
+   
+           virtual void destroy_component(id_type entityId) override
+           {
+               m_eventBus->raiseEvent<events::component_destruction<component_type>>(entity_handle(entityId, m_registry));
+   
+               if constexpr (detail::has_destroy<component_type, void(component_type&)>::value)
+               {
+                   async::readonly_guard rguard(m_lock);
+                   component_type::destroy(m_components[entityId]);
+               }
+   
+               async::readwrite_guard wguard(m_lock);
+               m_components.erase(entityId);
+           }
+       };
+   }

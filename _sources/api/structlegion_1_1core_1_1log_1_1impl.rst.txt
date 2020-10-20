@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1core_1_1log_1_1impl:
+
+Struct impl
+===========
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::log::impl
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,13 @@
+.. _exhale_function_traits_8hpp_1a2484fe3d05cc184ffe2a0ad414e6f408:
+
+Function legion::core::filesystem::sanitize_traits
+==================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_detail_traits.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::filesystem::sanitize_traits(file_traits&)

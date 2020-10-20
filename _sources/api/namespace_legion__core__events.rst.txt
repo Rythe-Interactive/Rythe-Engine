@@ -1,0 +1,30 @@
+
+.. _namespace_legion__core__events:
+
+Namespace legion::core::events
+==============================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1events_1_1component__creation`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1events_1_1component__destruction`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1events_1_1exit`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1events_1_1event`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1events_1_1event__base`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1events_1_1_event_bus`

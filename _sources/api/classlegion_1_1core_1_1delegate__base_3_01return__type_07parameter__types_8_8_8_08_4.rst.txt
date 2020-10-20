@@ -1,0 +1,36 @@
+.. _exhale_class_classlegion_1_1core_1_1delegate__base_3_01return__type_07parameter__types_8_8_8_08_4:
+
+Template Class delegate_base< return_type(parameter_types...)>
+==============================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_delegate.hpp`
+
+
+Nested Relationships
+--------------------
+
+
+Nested Types
+************
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1delegate__base_3_01return__type_07parameter__types_8_8_8_08_4_1_1invocation__element`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``private legion::core::delegate< return_type(parameter_types...)>`` (:ref:`exhale_class_classlegion_1_1core_1_1delegate_3_01return__type_07parameter__types_8_8_8_08_4`)
+- ``private legion::core::multicast_delegate< return_type(parameter_types...)>`` (:ref:`exhale_class_classlegion_1_1core_1_1multicast__delegate_3_01return__type_07parameter__types_8_8_8_08_4`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::delegate_base< return_type(parameter_types...)>
+   :members:
+   :protected-members:
+   :undoc-members:

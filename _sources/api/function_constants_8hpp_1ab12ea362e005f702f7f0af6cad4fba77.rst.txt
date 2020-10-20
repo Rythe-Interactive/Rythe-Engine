@@ -1,0 +1,13 @@
+.. _exhale_function_constants_8hpp_1ab12ea362e005f702f7f0af6cad4fba77:
+
+Template Function legion::core::math::phi
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_constants.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::math::phi()

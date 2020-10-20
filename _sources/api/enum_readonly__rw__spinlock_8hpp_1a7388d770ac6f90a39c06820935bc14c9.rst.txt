@@ -1,0 +1,13 @@
+.. _exhale_enum_readonly__rw__spinlock_8hpp_1a7388d770ac6f90a39c06820935bc14c9:
+
+Enum lock_state
+===============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_readonly_rw_spinlock.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: legion::core::async::lock_state

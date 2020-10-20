@@ -1,0 +1,233 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class EventBus &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class exception" href="classlegion_1_1core_1_1exception.html" />
+    <link rel="prev" title="Class event_base" href="class_structlegion_1_1core_1_1events_1_1event__base.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classlegion_1_1core_1_1exception.html" title="Class exception"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="class_structlegion_1_1core_1_1events_1_1event__base.html" title="Class event_base"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class EventBus</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-eventbus">
+<span id="exhale-class-classlegion-1-1core-1-1events-1-1-event-bus"></span><h1>Class EventBus<a class="headerlink" href="#class-eventbus" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_eventbus.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-events-eventbus-hpp"><span class="std std-ref">File eventbus.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6legion4core6events8EventBusE">
+<span id="_CPPv3N6legion4core6events8EventBusE"></span><span id="_CPPv2N6legion4core6events8EventBusE"></span><span id="legion::core::events::EventBus"></span><span class="target" id="classlegion_1_1core_1_1events_1_1_event_bus"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core::events<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">EventBus</code><a class="headerlink" href="#_CPPv4N6legion4core6events8EventBusE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Central communication channel for events and messages. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core6events8EventBusD0Ev">
+<span id="_CPPv3N6legion4core6events8EventBusD0Ev"></span><span id="_CPPv2N6legion4core6events8EventBusD0Ev"></span><span id="legion::core::events::EventBus::~EventBus"></span><span class="target" id="classlegion_1_1core_1_1events_1_1_event_bus_1a6ed404b1cdfccbc43f10ef09ce5030f6"></span><code class="sig-name descname">~EventBus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core6events8EventBusD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0Dp0EN6legion4core6events8EventBus10raiseEventEvDpRR4Args">
+<span id="_CPPv3I0Dp0EN6legion4core6events8EventBus10raiseEventEDpRR4Args"></span><span id="_CPPv2I0Dp0EN6legion4core6events8EventBus10raiseEventEDpRR4Args"></span>template&lt;typename <code class="sig-name descname">event_type</code>, typename ...<code class="sig-name descname">Args</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1adcd474bc5e8b1b7207b8465976de1422.html#_CPPv4N6legion4core13inherits_fromE" title="legion::core::inherits_from">inherits_from</a>&lt;<a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core6events8EventBus10raiseEventEvDpRR4Args" title="legion::core::events::EventBus::raiseEvent::event_type">event_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1events_1_1event.html#_CPPv4I0EN6legion4core6events5eventE" title="legion::core::events::event">event</a>&lt;<a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core6events8EventBus10raiseEventEvDpRR4Args" title="legion::core::events::EventBus::raiseEvent::event_type">event_type</a>&gt;&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1events_1_1_event_bus_1a275d8cea6f8ee208f0c2f1ffb9215b28"></span>void <code class="sig-name descname">raiseEvent</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core6events8EventBus10raiseEventEvDpRR4Args" title="legion::core::events::EventBus::raiseEvent::Args">Args</a>&amp;&amp;... <em>arguments</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0Dp0EN6legion4core6events8EventBus10raiseEventEvDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Insert event into bus and notify all subscribers. </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">event_type</span></code>: Event type to raise. </p></li>
+</ul>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">arguments</span></code>: Arguments to pass to the constructor of the event. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I00ENK6legion4core6events8EventBus10checkEventEbv">
+<span id="_CPPv3I00ENK6legion4core6events8EventBus10checkEventEv"></span><span id="_CPPv2I00ENK6legion4core6events8EventBus10checkEventEv"></span>template&lt;typename <code class="sig-name descname">event_type</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1adcd474bc5e8b1b7207b8465976de1422.html#_CPPv4N6legion4core13inherits_fromE" title="legion::core::inherits_from">inherits_from</a>&lt;<a class="reference internal" href="#_CPPv4I00ENK6legion4core6events8EventBus10checkEventEbv" title="legion::core::events::EventBus::checkEvent::event_type">event_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1events_1_1event.html#_CPPv4I0EN6legion4core6events5eventE" title="legion::core::events::event">event</a>&lt;<a class="reference internal" href="#_CPPv4I00ENK6legion4core6events8EventBus10checkEventEbv" title="legion::core::events::EventBus::checkEvent::event_type">event_type</a>&gt;&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1events_1_1_event_bus_1a4250d97ca19f7d552b9ff0f97b9bbf67"></span>bool <code class="sig-name descname">checkEvent</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I00ENK6legion4core6events8EventBus10checkEventEbv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if an event is active. </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">event_type</span></code>: Event type to check for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I00ENK6legion4core6events8EventBus13getEventCountE9size_typev">
+<span id="_CPPv3I00ENK6legion4core6events8EventBus13getEventCountEv"></span><span id="_CPPv2I00ENK6legion4core6events8EventBus13getEventCountEv"></span>template&lt;typename <code class="sig-name descname">event_type</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1adcd474bc5e8b1b7207b8465976de1422.html#_CPPv4N6legion4core13inherits_fromE" title="legion::core::inherits_from">inherits_from</a>&lt;<a class="reference internal" href="#_CPPv4I00ENK6legion4core6events8EventBus13getEventCountE9size_typev" title="legion::core::events::EventBus::getEventCount::event_type">event_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1events_1_1event.html#_CPPv4I0EN6legion4core6events5eventE" title="legion::core::events::event">event</a>&lt;<a class="reference internal" href="#_CPPv4I00ENK6legion4core6events8EventBus13getEventCountE9size_typev" title="legion::core::events::EventBus::getEventCount::event_type">event_type</a>&gt;&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1events_1_1_event_bus_1acdc915cf3b9b2b7c71ffadc31466e4d2"></span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">getEventCount</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I00ENK6legion4core6events8EventBus13getEventCountE9size_typev" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the amount of events/messages that are currently in the bus. </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">event_type</span></code>: Event type to get the amount of. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I00ENK6legion4core6events8EventBus8getEventERK10event_type10index_type">
+<span id="_CPPv3I00ENK6legion4core6events8EventBus8getEventE10index_type"></span><span id="_CPPv2I00ENK6legion4core6events8EventBus8getEventE10index_type"></span>template&lt;typename <code class="sig-name descname">event_type</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1adcd474bc5e8b1b7207b8465976de1422.html#_CPPv4N6legion4core13inherits_fromE" title="legion::core::inherits_from">inherits_from</a>&lt;<a class="reference internal" href="#_CPPv4I00ENK6legion4core6events8EventBus8getEventERK10event_type10index_type" title="legion::core::events::EventBus::getEvent::event_type">event_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1events_1_1event.html#_CPPv4I0EN6legion4core6events5eventE" title="legion::core::events::event">event</a>&lt;<a class="reference internal" href="#_CPPv4I00ENK6legion4core6events8EventBus8getEventERK10event_type10index_type" title="legion::core::events::EventBus::getEvent::event_type">event_type</a>&gt;&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1events_1_1_event_bus_1a57355dd99e72d1e7c832aeb237977dfe"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I00ENK6legion4core6events8EventBus8getEventERK10event_type10index_type" title="legion::core::events::EventBus::getEvent::event_type">event_type</a> &amp;<code class="sig-name descname">getEvent</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afff0c93a46bfa33a76dda432016056c2.html#_CPPv4N6legion4core10index_typeE" title="legion::core::index_type">index_type</a> <em>index</em> = 0<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I00ENK6legion4core6events8EventBus8getEventERK10event_type10index_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get a reference to an event/message of a certain index. </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">event_type</span></code>: Event type to fetch. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I00ENK6legion4core6events8EventBus12getLastEventERK10event_typev">
+<span id="_CPPv3I00ENK6legion4core6events8EventBus12getLastEventEv"></span><span id="_CPPv2I00ENK6legion4core6events8EventBus12getLastEventEv"></span>template&lt;typename <code class="sig-name descname">event_type</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1adcd474bc5e8b1b7207b8465976de1422.html#_CPPv4N6legion4core13inherits_fromE" title="legion::core::inherits_from">inherits_from</a>&lt;<a class="reference internal" href="#_CPPv4I00ENK6legion4core6events8EventBus12getLastEventERK10event_typev" title="legion::core::events::EventBus::getLastEvent::event_type">event_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1events_1_1event.html#_CPPv4I0EN6legion4core6events5eventE" title="legion::core::events::event">event</a>&lt;<a class="reference internal" href="#_CPPv4I00ENK6legion4core6events8EventBus12getLastEventERK10event_typev" title="legion::core::events::EventBus::getLastEvent::event_type">event_type</a>&gt;&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1events_1_1_event_bus_1af6490a784cf575e9d3f21b5511158cd8"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I00ENK6legion4core6events8EventBus12getLastEventERK10event_typev" title="legion::core::events::EventBus::getLastEvent::event_type">event_type</a> &amp;<code class="sig-name descname">getLastEvent</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I00ENK6legion4core6events8EventBus12getLastEventERK10event_typev" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get a reference to the most recently raised event of this type. </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">event_type</span></code>: Event type to fetch. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I00EN6legion4core6events8EventBus10clearEventEv10index_type">
+<span id="_CPPv3I00EN6legion4core6events8EventBus10clearEventE10index_type"></span><span id="_CPPv2I00EN6legion4core6events8EventBus10clearEventE10index_type"></span>template&lt;typename <code class="sig-name descname">event_type</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1adcd474bc5e8b1b7207b8465976de1422.html#_CPPv4N6legion4core13inherits_fromE" title="legion::core::inherits_from">inherits_from</a>&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core6events8EventBus10clearEventEv10index_type" title="legion::core::events::EventBus::clearEvent::event_type">event_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1events_1_1event.html#_CPPv4I0EN6legion4core6events5eventE" title="legion::core::events::event">event</a>&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core6events8EventBus10clearEventEv10index_type" title="legion::core::events::EventBus::clearEvent::event_type">event_type</a>&gt;&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1events_1_1_event_bus_1a3d986322642f8e6a981586595595bb23"></span>void <code class="sig-name descname">clearEvent</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afff0c93a46bfa33a76dda432016056c2.html#_CPPv4N6legion4core10index_typeE" title="legion::core::index_type">index_type</a> <em>index</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN6legion4core6events8EventBus10clearEventEv10index_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Removes a certain event from the bus. </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">event_type</span></code>: Event type to clear. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I00EN6legion4core6events8EventBus14clearLastEventEvv">
+<span id="_CPPv3I00EN6legion4core6events8EventBus14clearLastEventEv"></span><span id="_CPPv2I00EN6legion4core6events8EventBus14clearLastEventEv"></span>template&lt;typename <code class="sig-name descname">event_type</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1adcd474bc5e8b1b7207b8465976de1422.html#_CPPv4N6legion4core13inherits_fromE" title="legion::core::inherits_from">inherits_from</a>&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core6events8EventBus14clearLastEventEvv" title="legion::core::events::EventBus::clearLastEvent::event_type">event_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1events_1_1event.html#_CPPv4I0EN6legion4core6events5eventE" title="legion::core::events::event">event</a>&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core6events8EventBus14clearLastEventEvv" title="legion::core::events::EventBus::clearLastEvent::event_type">event_type</a>&gt;&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1events_1_1_event_bus_1a86a95e7d374f5939fdd34d0846f872e9"></span>void <code class="sig-name descname">clearLastEvent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN6legion4core6events8EventBus14clearLastEventEvv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Removes a the most recent event from the bus. </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">event_type</span></code>: Event type to clear. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I00EN6legion4core6events8EventBus11bindToEventEv8delegateIFvP10event_typeEE">
+<span id="_CPPv3I00EN6legion4core6events8EventBus11bindToEventE8delegateIFvP10event_typeEE"></span><span id="_CPPv2I00EN6legion4core6events8EventBus11bindToEventE8delegateIFvP10event_typeEE"></span>template&lt;typename <code class="sig-name descname">event_type</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1adcd474bc5e8b1b7207b8465976de1422.html#_CPPv4N6legion4core13inherits_fromE" title="legion::core::inherits_from">inherits_from</a>&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core6events8EventBus11bindToEventEv8delegateIFvP10event_typeEE" title="legion::core::events::EventBus::bindToEvent::event_type">event_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1events_1_1event.html#_CPPv4I0EN6legion4core6events5eventE" title="legion::core::events::event">event</a>&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core6events8EventBus11bindToEventEv8delegateIFvP10event_typeEE" title="legion::core::events::EventBus::bindToEvent::event_type">event_type</a>&gt;&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1events_1_1_event_bus_1a2489bb5a79f1402fabf8d0e314c02d3c"></span>void <code class="sig-name descname">bindToEvent</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1delegate.html#_CPPv4I0EN6legion4core8delegateE" title="legion::core::delegate">delegate</a>&lt;void<span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00EN6legion4core6events8EventBus11bindToEventEv8delegateIFvP10event_typeEE" title="legion::core::events::EventBus::bindToEvent::event_type">event_type</a>*<span class="sig-paren">)</span>&gt; <em>callback</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN6legion4core6events8EventBus11bindToEventEv8delegateIFvP10event_typeEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Link a callback to an event type in order to get notified whenever one gets raised. </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">event_type</span></code>: Event type to subscribe to. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class EventBus</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="class_structlegion_1_1core_1_1events_1_1event__base.html" title="previous chapter">Class event_base</a></li>
+      <li>Next: <a href="classlegion_1_1core_1_1exception.html" title="next chapter">Class exception</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classlegion_1_1core_1_1events_1_1_event_bus.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

@@ -1,0 +1,13 @@
+.. _exhale_function_namespacelegion_1_1core_1_1filesystem_1_1literals_1a3932a7509c8fb974714f5209c374e9f1:
+
+Function legion::core::filesystem::literals::operator""_exists
+==============================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filemanip.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::filesystem::literals::operator""_exists(const char *, std::size_t)

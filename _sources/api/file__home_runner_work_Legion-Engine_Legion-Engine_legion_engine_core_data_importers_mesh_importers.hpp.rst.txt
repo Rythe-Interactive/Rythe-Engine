@@ -1,0 +1,63 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_importers_mesh_importers.hpp:
+
+File mesh_importers.hpp
+=======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_importers>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/data/importers``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/data/importers/mesh_importers.hpp``)
+-------------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_importers_mesh_importers.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/data/mesh.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_mesh.hpp`)
+
+- ``core/filesystem/assetimporter.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_assetimporter.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_importers_mesh_importers.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_mesh.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults_coremodule.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_structlegion_1_1core_1_1obj__mesh__loader`
+

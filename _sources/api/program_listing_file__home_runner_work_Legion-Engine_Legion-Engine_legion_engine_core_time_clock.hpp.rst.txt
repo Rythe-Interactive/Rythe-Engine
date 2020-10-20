@@ -1,0 +1,53 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_clock.hpp:
+
+Program Listing for File clock.hpp
+==================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_clock.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/time/clock.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <chrono>
+   #include <core/time/time_span.hpp>
+   #include <core/types/primitives.hpp>
+   
+   namespace legion::core::time
+   {
+       template<typename time_type = time64>
+       class clock
+       {
+       private:
+           std::chrono::time_point<std::chrono::high_resolution_clock> m_start = std::chrono::high_resolution_clock::now();
+       public:
+           void start() {
+               m_start = std::chrono::high_resolution_clock::now();
+           }
+   
+           time_span<time_type> startPoint()
+           {
+               return m_start.time_since_epoch();
+           }
+   
+           time_span<time_type> elapsedTime()
+           {
+               return time_span<time_type>(std::chrono::high_resolution_clock::now() - m_start);
+           }
+   
+           time_span<time_type> end()
+           {
+               return time_span<time_type>(std::chrono::high_resolution_clock::now() - m_start);
+           }
+   
+           time_span<time_type> restart()
+           {
+               auto startTime = std::chrono::high_resolution_clock::now();
+               time_span<time_type> time(startTime - m_start);
+               m_start = startTime;
+               return time;
+           }
+       };
+   }

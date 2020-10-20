@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1core_1_1common_1_1is_chars:
+
+Struct isChars
+==============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::common::isChars
+   :members:
+   :protected-members:
+   :undoc-members:

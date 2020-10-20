@@ -1,0 +1,16 @@
+.. _exhale_class_structlegion_1_1core_1_1mesh__handle:
+
+Class mesh_handle
+=================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_mesh.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::mesh_handle
+   :members:
+   :protected-members:
+   :undoc-members:

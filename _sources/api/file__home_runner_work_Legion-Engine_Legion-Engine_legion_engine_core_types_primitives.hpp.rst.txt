@@ -1,0 +1,202 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp:
+
+File primitives.hpp
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/types``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/types/primitives.hpp``)
+------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cstdint``
+
+- ``vector`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_vector_view.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_readonly_rw_spinlock.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_ring_sync_lock.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_buffer.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_atomic_sparse_map.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_delegate.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_hashed_sparse_set.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_sparse_map.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_sparse_set.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_image.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_mesh.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_archetype.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entityquery.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_queryregistry.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_engine.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_module.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_system.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_entry_entry_point.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_event.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_artifact_cache.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_precision.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_processchain.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_clock.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_time_span.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_types.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_primitives_8hpp_1aec79566d72dfc3fc0a287cb81fa39ac8`
+
+- :ref:`exhale_define_primitives_8hpp_1a8989d6cd4cbbb9a9e0b1e241736281b7`
+
+- :ref:`exhale_define_primitives_8hpp_1aa95d03c8fe4c7467a8e475748cbf67e1`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_primitives_8hpp_1a9f767b2438b5f8d8bf3f85dabe69c634`
+
+- :ref:`exhale_typedef_primitives_8hpp_1adfa0c169663ade27841c113701cf3ce5`
+
+- :ref:`exhale_typedef_primitives_8hpp_1abe7258f8958a4af909ef2fffdacfa706`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a2ed5e93a789471a2e681a46d5a71af8c`
+
+- :ref:`exhale_typedef_primitives_8hpp_1ae4c89bb19fc03c63b2781ec20998a273`
+
+- :ref:`exhale_typedef_primitives_8hpp_1aee4feb205d977f4e67c5275b8172f07f`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a27b70eae27e32436c9c6c685cba21f41`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a8d50aa073862ea27b522f409d7160f27`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a9b55318dc998cad862297399056ada6d`
+
+- :ref:`exhale_typedef_primitives_8hpp_1afeebf24597fb0e6b279a979a66493b5e`
+
+- :ref:`exhale_typedef_primitives_8hpp_1aff1741c7b4c268d2fa45616840fa7b37`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a703c39121c631740101262af8f503f18`
+
+- :ref:`exhale_typedef_primitives_8hpp_1afd44d23b5badf07e1597df08dd718416`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a54e81da61af142c89b4cb73118a2dca0`
+
+- :ref:`exhale_typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7`
+
+- :ref:`exhale_typedef_primitives_8hpp_1afff0c93a46bfa33a76dda432016056c2`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a330352dfe547c9b6dc0af99f5ec2f9a5`
+
+- :ref:`exhale_typedef_primitives_8hpp_1aa252dca08e4ae98b70c06cd705136878`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a1dc7f6fdb147fd0e0857ebb1020d9ec3`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a6d2a8d4d87316f5bb708444fba64965a`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a92c2cf9661453af5907807000cc530a5`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a163be3e1d67eec2f025c74ad2107b60f`
+
+- :ref:`exhale_typedef_primitives_8hpp_1ad3cd7b31bcb8e8d65edb385da071c692`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a92e79d8921a2ccf0b6c51a5a87b8b165`
+
+- :ref:`exhale_typedef_primitives_8hpp_1ac993eea0cc8925865767dc20e86224c1`
+
+- :ref:`exhale_typedef_primitives_8hpp_1af395c64fae20d5e60c5e784a1d77cffa`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a1bda5f20dc54c7a9c405641a2688f504`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a9ac494dcb86beaee3a660112e8fbc7d2`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a562ef1e3b928dc593aef3f9af604495f`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a99b1e7cc93d3aaff54a163e27deb9282`
+
+- :ref:`exhale_typedef_primitives_8hpp_1ac28ecc1417fd08ecf77aa9bfaaa52e3d`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a699bbd0458cd29aab4b11bfe6338ef3f`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a3182390078e86521f5e2389d47ce37d7`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a579aa542b46eb09aaea82f1b86479ea8`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a5bf27dbe9a647c12e23964e75222c268`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a7919102ac78dc9740c70029bcc564bdd`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a29542f5cf8153300c249e7f49c9f6f1f`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a86f47b677527fb12236ece4f6c2fecee`
+
+- :ref:`exhale_typedef_primitives_8hpp_1ab1314830f4b88f2e246556cef740acf0`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a66cbbe4c5ba5a443c8031589796193bb`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a70cc48df6c79b4717adba3ccd06a72aa`
+

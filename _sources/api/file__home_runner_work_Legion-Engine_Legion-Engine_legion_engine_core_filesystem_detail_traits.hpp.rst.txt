@@ -1,0 +1,79 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_detail_traits.hpp:
+
+File traits.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_detail>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/filesystem/detail``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/filesystem/detail/traits.hpp``)
+--------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_detail_traits.hpp.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filesystem_resolver.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_view.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__filesystem`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1filesystem_1_1file__traits`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1filesystem_1_1filesystem__traits`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_traits_8hpp_1a52328aa3c70ec150dc49cbe92fb33b9e`
+
+- :ref:`exhale_function_traits_8hpp_1abf61dc52b48f2cba0b369c92d74bf71f`
+
+- :ref:`exhale_function_traits_8hpp_1a578966d8b76eefdb1f68fa9dd2c269f9`
+
+- :ref:`exhale_function_traits_8hpp_1a99c56a54b3206ee327bf845432995552`
+
+- :ref:`exhale_function_traits_8hpp_1a2484fe3d05cc184ffe2a0ad414e6f408`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_traits_8hpp_1a18f2ca0f1402d31f6a2649585dd28d94`
+
+- :ref:`exhale_variable_traits_8hpp_1a6cdaecf32f3edbcc05d9137af7003e7d`
+

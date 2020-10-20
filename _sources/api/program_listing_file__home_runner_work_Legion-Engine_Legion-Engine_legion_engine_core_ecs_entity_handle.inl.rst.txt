@@ -1,0 +1,82 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entity_handle.inl:
+
+Program Listing for File entity_handle.inl
+==========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entity_handle.inl>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/ecs/entity_handle.inl``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   namespace legion::core::ecs
+   {
+       template<typename component_type, typename... component_types, typename>
+       L_NODISCARD bool entity_handle::has_components() const
+       {
+           return m_registry->hasComponents<component_type, component_types...>(m_id);
+       }
+   
+       template<typename archetype_type, typename>
+       L_NODISCARD bool entity_handle::has_components() const
+       {
+           return m_registry->hasComponents<archetype_type>(m_id);
+       }
+   
+       template<typename component_type, typename... component_types, typename>
+       L_NODISCARD auto ecs::entity_handle::get_component_handles() const
+       {
+           return m_registry->getComponents<component_type, component_types...>(m_id);
+       }
+   
+       template<typename archetype_type, typename>
+       L_NODISCARD auto entity_handle::get_component_handles() const
+       {
+           return m_registry->getComponents<archetype_type>(m_id);
+       }
+   
+       template<typename component_type, typename... component_types, typename>
+       auto entity_handle::add_components() const
+       {
+           return m_registry->createComponents<component_type, component_types...>(m_id);
+       }
+   
+       template<typename archetype_type, typename>
+       auto entity_handle::add_components() const
+       {
+           return m_registry->createComponents<archetype_type>(m_id);
+       }
+   
+       template<typename component_type, typename... component_types, typename>
+       auto entity_handle::add_components(component_type&& value, component_types&&... values) const
+       {
+           return m_registry->createComponents(m_id, std::forward<component_type>(value), std::forward<component_types>(values)...);
+       }
+   
+       template<typename component_type, typename... component_types, typename>
+       auto entity_handle::add_components(component_type& value, component_types&... values) const
+       {
+           return m_registry->createComponents(m_id, value, values...);
+       }
+   
+       template<typename archetype_type, typename... component_types, typename>
+       auto entity_handle::add_components(component_types&&... values) const
+       {
+           return m_registry->createComponents<archetype_type>(m_id, std::forward<component_types>(values)...);
+       }
+   
+       template<typename component_type, typename... component_types, typename>
+       void entity_handle::remove_components() const
+       {
+           return m_registry->destroyComponents<component_type, component_types...>(m_id);
+       }
+   
+       template<typename archetype_type, typename>
+       void entity_handle::remove_components() const
+       {
+           return m_registry->destroyComponents<archetype_type>(m_id);
+       }
+   }

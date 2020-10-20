@@ -1,0 +1,105 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.hpp:
+
+File type_util.hpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/types``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/types/type_util.hpp``)
+-----------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`)
+
+- ``core/types/meta.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_meta.hpp`)
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`)
+
+- ``cstring``
+
+- ``string`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`)
+
+- ``string_view``
+
+- ``typeinfo``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entityquery.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_system.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_event.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_processchain.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_types.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_type__util_8hpp_1a013fd7a27db68f4c183c1853154b7e40`
+
+- :ref:`exhale_function_type__util_8hpp_1a1058a65cb267418d824e1da828ecb984`
+
+- :ref:`exhale_function_type__util_8hpp_1ae0255795edc681238cd1b8044f59cc34`
+
+- :ref:`exhale_function_type__util_8hpp_1a1fe20cafef19940da5c6e26622c46581`
+
+- :ref:`exhale_function_type__util_8hpp_1a22ddbf10ae207bd2a99666df70f9b695`
+
+- :ref:`exhale_function_type__util_8hpp_1a4b5630f47491ff5cef8787bff3baf775`
+
+- :ref:`exhale_function_type__util_8hpp_1a5f0b7826f171e09fc8bcdf8935e355e3`
+
+- :ref:`exhale_function_type__util_8hpp_1a2fff79d41d54927608eb5ac8afdb7c8b`
+
+- :ref:`exhale_function_type__util_8hpp_1a6b068e73b1f05b276d9296752b46130c`
+
+- :ref:`exhale_function_type__util_8hpp_1a07ea443aa6c76f3451a7288e20e918ac`
+
+- :ref:`exhale_function_type__util_8hpp_1a03330ac971e875875af4215d3255d9af`
+
+- :ref:`exhale_function_type__util_8hpp_1a8137a94e71130c2464cf1a3a04164ddc`
+
+- :ref:`exhale_function_type__util_8hpp_1aad310823b2ba291c47245a068b70c90a`
+

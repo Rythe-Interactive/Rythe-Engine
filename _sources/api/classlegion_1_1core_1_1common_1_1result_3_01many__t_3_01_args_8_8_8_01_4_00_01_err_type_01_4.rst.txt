@@ -1,0 +1,26 @@
+.. _exhale_class_classlegion_1_1core_1_1common_1_1result_3_01many__t_3_01_args_8_8_8_01_4_00_01_err_type_01_4:
+
+Template Class result< many_t< Args... >, ErrType >
+===================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_result.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Types
+**********
+
+- ``public legion::core::common::result_impl< ok_proxy< Args... >, err_proxy< ErrType >, std::tuple< Args... >, ErrType >`` (:ref:`exhale_class_classlegion_1_1core_1_1common_1_1result__impl`)
+- ``public legion::core::common::result_ident`` (:ref:`exhale_class_classlegion_1_1core_1_1common_1_1result__ident`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::common::result< many_t< Args... >, ErrType >
+   :members:
+   :protected-members:
+   :undoc-members:

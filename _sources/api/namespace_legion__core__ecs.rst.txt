@@ -1,0 +1,65 @@
+
+.. _namespace_legion__core__ecs:
+
+Namespace legion::core::ecs
+===========================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__ecs__detail`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1ecs_1_1child__iterator`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1ecs_1_1child__iterator_1_1impl`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1ecs_1_1archetype`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1ecs_1_1archetype__base`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1component__container`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1component__container__base`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1component__handle`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1component__handle__base`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1_ecs_registry`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1ecs_1_1entity__data`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1entity__handle`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1_entity_query`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1_query_registry`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_entity__handle_8cpp_1a08e3947c61ef1f6f2995c0f6a9358480`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_entity__handle_8hpp_1a5c3759a3e30a71a9145fa5af22cbe72e`

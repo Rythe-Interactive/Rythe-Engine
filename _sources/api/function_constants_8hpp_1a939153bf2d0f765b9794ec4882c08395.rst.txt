@@ -1,0 +1,13 @@
+.. _exhale_function_constants_8hpp_1a939153bf2d0f765b9794ec4882c08395:
+
+Template Function legion::core::math::pau
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_constants.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::math::pau()

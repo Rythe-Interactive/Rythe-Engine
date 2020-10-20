@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1core_1_1detail_1_1vertex__hash:
+
+Struct vertex_hash
+==================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_importers_mesh_importers.cpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::detail::vertex_hash
+   :members:
+   :protected-members:
+   :undoc-members:

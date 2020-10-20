@@ -1,0 +1,16 @@
+.. _exhale_class_structlegion_1_1core_1_1async_1_1transferable__atomic:
+
+Template Class transferable_atomic
+==================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_transferable_atomic.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::async::transferable_atomic
+   :members:
+   :protected-members:
+   :undoc-members:

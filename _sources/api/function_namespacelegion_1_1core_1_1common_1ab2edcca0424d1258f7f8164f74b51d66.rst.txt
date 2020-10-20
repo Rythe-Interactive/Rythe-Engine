@@ -1,0 +1,13 @@
+.. _exhale_function_namespacelegion_1_1core_1_1common_1ab2edcca0424d1258f7f8164f74b51d66:
+
+Template Function legion::core::common::ltrim_copy(std::string, Trimmer&&)
+==========================================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::common::ltrim_copy(std::string, Trimmer&&)

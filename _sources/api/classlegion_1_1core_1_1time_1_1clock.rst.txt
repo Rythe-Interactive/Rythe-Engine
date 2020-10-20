@@ -1,0 +1,16 @@
+.. _exhale_class_classlegion_1_1core_1_1time_1_1clock:
+
+Template Class clock
+====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_clock.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::time::clock
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,34 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_camera.hpp:
+
+Program Listing for File camera.hpp
+===================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_camera.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/components/camera.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <application/application.hpp>
+   
+   namespace legion::rendering
+   {
+       struct camera
+       {
+           float fov, nearz, farz;
+   
+           void set_projection(float fov, float nearz, float farz)
+           {
+               this->fov = fov;
+               this->nearz = nearz;
+               this->farz = farz;
+           }
+   
+           math::mat4 get_projection(float ratio)
+           {
+              return math::perspective(math::deg2rad(fov * ratio), ratio, farz, nearz);
+           }
+       };
+   }

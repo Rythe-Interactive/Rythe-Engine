@@ -1,0 +1,13 @@
+.. _exhale_variable_audio__segment_8hpp_1a4eacb35efa9ab0f9dadb0566f2d346a8:
+
+Variable legion::audio::invalid_audio_segment_handle
+====================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_audio_segment.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::audio::invalid_audio_segment_handle

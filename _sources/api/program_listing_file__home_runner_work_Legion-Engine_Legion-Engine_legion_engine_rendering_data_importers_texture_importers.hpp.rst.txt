@@ -1,0 +1,25 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_importers_texture_importers.hpp:
+
+Program Listing for File texture_importers.hpp
+==============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_importers_texture_importers.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data/importers/texture_importers.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <rendering/data/texture.hpp>
+   
+   namespace legion::rendering
+   {
+       struct stbi_texture_loader : public fs::resource_converter<texture, texture_import_settings>
+       {
+           // All file extensions supported by stb_image
+           constexpr static cstring extensions[] = { "", ".png", ".jpg", ".jpeg", ".jpe", ".jfif", ".jfi", ".jif", ".bmp", ".dib", ".raw", ".psd", ".psb", ".tga", ".icb", ".vda", ".vst", ".hdr", ".ppm", ".pgm" };
+   
+           virtual common::result_decay_more<texture, fs_error> load(const fs::basic_resource& resource, texture_import_settings&& settings) override;
+       };
+   }

@@ -1,0 +1,66 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_unit_conversion.hpp:
+
+File unit_conversion.hpp
+========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/common``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/common/unit_conversion.hpp``)
+------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_unit_conversion.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cstddef``
+
+- ``cstdint``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core`
+
+- :ref:`namespace_legion__core__literals`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_unit__conversion_8hpp_1a844363bd19d203cf1fa998f8ae20c123`
+
+- :ref:`exhale_function_unit__conversion_8hpp_1a7e2b7f18d7828c60a6d0363a5d98c744`
+
+- :ref:`exhale_function_unit__conversion_8hpp_1a5226533761d0cc48aaf51e66290355f5`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_unit__conversion_8hpp_1a9e261d583edcf1013419eeeea25fd5e8`
+

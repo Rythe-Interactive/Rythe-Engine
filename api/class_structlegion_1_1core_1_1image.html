@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class image &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class image_handle" href="class_structlegion_1_1core_1_1image__handle.html" />
+    <link rel="prev" title="Template Class hashed_sparse_set" href="classlegion_1_1core_1_1hashed__sparse__set.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="class_structlegion_1_1core_1_1image__handle.html" title="Class image_handle"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classlegion_1_1core_1_1hashed__sparse__set.html" title="Template Class hashed_sparse_set"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class image</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-image">
+<span id="exhale-class-structlegion-1-1core-1-1image"></span><h1>Class image<a class="headerlink" href="#class-image" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_image.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-data-image-hpp"><span class="std std-ref">File image.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6legion4core5imageE">
+<span id="_CPPv3N6legion4core5imageE"></span><span id="_CPPv2N6legion4core5imageE"></span><span id="legion::core::image"></span><span class="target" id="structlegion_1_1core_1_1image"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">image</code><a class="headerlink" href="#_CPPv4N6legion4core5imageE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Object encapsulating the binary representation of an image. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion4core5image12get_raw_dataEP1Tv">
+<span id="_CPPv3I0EN6legion4core5image12get_raw_dataEv"></span><span id="_CPPv2I0EN6legion4core5image12get_raw_dataEv"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="structlegion_1_1core_1_1image_1a5e38f624bee84ffc649574cfe09ceea6"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core5image12get_raw_dataEP1Tv" title="legion::core::image::get_raw_data::T">T</a> *<code class="sig-name descname">get_raw_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core5image12get_raw_dataEP1Tv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the binary representation of the image with different pointer types. Each pointer type is only enabled if the channel format is the same. The void* type is always enabled. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5image9apply_rawEb">
+<span id="_CPPv3N6legion4core5image9apply_rawEb"></span><span id="_CPPv2N6legion4core5image9apply_rawEb"></span><span id="legion::core::image::apply_raw__b"></span><span class="target" id="structlegion_1_1core_1_1image_1a01ac34978584b14f467cbd6a40031b86"></span>void <code class="sig-name descname">apply_raw</code><span class="sig-paren">(</span>bool <em>lazyApply</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5image9apply_rawEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Apply changes made to the binary data gotten with <a class="reference internal" href="#structlegion_1_1core_1_1image_1a5e38f624bee84ffc649574cfe09ceea6"><span class="std std-ref">get_raw_data()</span></a> to the colors read with <a class="reference internal" href="#structlegion_1_1core_1_1image_1afbcc4c14e6b71b22f3b13b9311257e6c"><span class="std std-ref">read_colors()</span></a>. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">lazyApply</span></code>: Apply immediately if false, otherwise the changes will only actually be applied when <a class="reference internal" href="#structlegion_1_1core_1_1image_1afbcc4c14e6b71b22f3b13b9311257e6c"><span class="std std-ref">read_colors()</span></a> is called. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5image11read_colorsEv">
+<span id="_CPPv3N6legion4core5image11read_colorsEv"></span><span id="_CPPv2N6legion4core5image11read_colorsEv"></span><span id="legion::core::image::read_colors"></span><span class="target" id="structlegion_1_1core_1_1image_1afbcc4c14e6b71b22f3b13b9311257e6c"></span><em class="property">const</em> std::vector&lt;math::<a class="reference internal" href="class_structlegion_1_1core_1_1math_1_1color.html#_CPPv4N6legion4core4math5colorE" title="legion::core::math::color">color</a>&gt; &amp;<code class="sig-name descname">read_colors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5image11read_colorsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Convert the binary image representation to a more usable representation if it hasn’t been converted before and return the new representation. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>const std::vector&lt;math::color&gt;&amp; List with all the colors in the image. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5image9data_sizeEv">
+<span id="_CPPv3N6legion4core5image9data_sizeEv"></span><span id="_CPPv2N6legion4core5image9data_sizeEv"></span><span id="legion::core::image::data_size"></span><span class="target" id="structlegion_1_1core_1_1image_1a8d614670dcb8fb643e2b8120be6e1b02"></span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">data_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5image9data_sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the data size of the binary data. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5imageeqERK5image">
+<span id="_CPPv3N6legion4core5imageeqERK5image"></span><span id="_CPPv2N6legion4core5imageeqERK5image"></span><span id="legion::core::image::eq-operator__imageCR"></span><span class="target" id="structlegion_1_1core_1_1image_1aec5528370805a6a797e5a9617f25c851"></span>bool <code class="sig-name descname">operator==</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion4core5imageE" title="legion::core::image">image</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5imageeqERK5image" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5image5imageEv">
+<span id="_CPPv3N6legion4core5image5imageEv"></span><span id="_CPPv2N6legion4core5image5imageEv"></span><span id="legion::core::image::image"></span><span class="target" id="structlegion_1_1core_1_1image_1a8e287fc720f3297ec1e09ff83d551570"></span><code class="sig-name descname">image</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N6legion4core5image5imageEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5image5imageERK5image">
+<span id="_CPPv3N6legion4core5image5imageERK5image"></span><span id="_CPPv2N6legion4core5image5imageERK5image"></span><span id="legion::core::image::image__imageCR"></span><span class="target" id="structlegion_1_1core_1_1image_1a5da61d8eaa80e7028d17da853655837d"></span><code class="sig-name descname">image</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion4core5image5imageERK5image" title="legion::core::image::image">image</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5image5imageERK5image" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5image5imageERR5image">
+<span id="_CPPv3N6legion4core5image5imageERR5image"></span><span id="_CPPv2N6legion4core5image5imageERR5image"></span><span id="legion::core::image::image__imageRR"></span><span class="target" id="structlegion_1_1core_1_1image_1aa3f41f0d54373decc14a18dfd9d764a2"></span><code class="sig-name descname">image</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core5image5imageERR5image" title="legion::core::image::image">image</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5image5imageERR5image" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5imageaSERK5image">
+<span id="_CPPv3N6legion4core5imageaSERK5image"></span><span id="_CPPv2N6legion4core5imageaSERK5image"></span><span id="legion::core::image::assign-operator__imageCR"></span><span class="target" id="structlegion_1_1core_1_1image_1ad4bdcd1b575f9a4ae6eca37ad5fa4f4b"></span><a class="reference internal" href="#_CPPv4N6legion4core5imageE" title="legion::core::image">image</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion4core5imageE" title="legion::core::image">image</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5imageaSERK5image" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5imageaSERR5image">
+<span id="_CPPv3N6legion4core5imageaSERR5image"></span><span id="_CPPv2N6legion4core5imageaSERR5image"></span><span id="legion::core::image::assign-operator__imageRR"></span><span class="target" id="structlegion_1_1core_1_1image_1a0b03dabb4b23c92889f7b518885fd9b9"></span><a class="reference internal" href="#_CPPv4N6legion4core5imageE" title="legion::core::image">image</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core5imageE" title="legion::core::image">image</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5imageaSERR5image" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5imageD0Ev">
+<span id="_CPPv3N6legion4core5imageD0Ev"></span><span id="_CPPv2N6legion4core5imageD0Ev"></span><span id="legion::core::image::~image"></span><span class="target" id="structlegion_1_1core_1_1image_1a967bc2c9d37178cb682bb9730683859f"></span><code class="sig-name descname">~image</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5imageD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4IEN6legion4core5image12get_raw_dataEPvv">
+<span id="_CPPv3IEN6legion4core5image12get_raw_dataEv"></span><span id="_CPPv2IEN6legion4core5image12get_raw_dataEv"></span>template&lt;&gt;<br /><span class="target" id="structlegion_1_1core_1_1image_1af10c60ffe591565577e708da4789ef6e"></span>void *<code class="sig-name descname">get_raw_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IEN6legion4core5image12get_raw_dataEPvv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4IEN6legion4core5image12get_raw_dataEP4bytev">
+<span id="_CPPv3IEN6legion4core5image12get_raw_dataEv"></span>template&lt;&gt;<br /><span class="target" id="structlegion_1_1core_1_1image_1a7ec24058c94e10d16e0571351121ee8e"></span><a class="reference internal" href="typedef_primitives_8hpp_1a9f767b2438b5f8d8bf3f85dabe69c634.html#_CPPv4N6legion4core4byteE" title="legion::core::byte">byte</a> *<code class="sig-name descname">get_raw_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IEN6legion4core5image12get_raw_dataEP4bytev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4IEN6legion4core5image12get_raw_dataEP6uint16v">
+template&lt;&gt;<br /><span class="target" id="structlegion_1_1core_1_1image_1a872299e4f53ff45bad1f57a7524a6c0b"></span><a class="reference internal" href="typedef_primitives_8hpp_1a29542f5cf8153300c249e7f49c9f6f1f.html#_CPPv4N6legion4core6uint16E" title="legion::core::uint16">uint16</a> *<code class="sig-name descname">get_raw_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IEN6legion4core5image12get_raw_dataEP6uint16v" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4IEN6legion4core5image12get_raw_dataEPfv">
+template&lt;&gt;<br /><span class="target" id="structlegion_1_1core_1_1image_1a875e31acde18bb7cdd2c7c1e5f003f69"></span>float *<code class="sig-name descname">get_raw_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IEN6legion4core5image12get_raw_dataEPfv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="cpp var">
+<dt id="_CPPv4N6legion4core5image4sizeE">
+<span id="_CPPv3N6legion4core5image4sizeE"></span><span id="_CPPv2N6legion4core5image4sizeE"></span><span id="legion::core::image::size__math::ivec2"></span><span class="target" id="structlegion_1_1core_1_1image_1a18964f76c680e101de608611dba63764"></span>math::ivec2 <code class="sig-name descname">size</code><a class="headerlink" href="#_CPPv4N6legion4core5image4sizeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion4core5image6formatE">
+<span id="_CPPv3N6legion4core5image6formatE"></span><span id="_CPPv2N6legion4core5image6formatE"></span><span id="legion::core::image::format__channel_format"></span><span class="target" id="structlegion_1_1core_1_1image_1ab3799e30b6d354c494d19a5dc7c57d9f"></span><a class="reference internal" href="enum_image_8hpp_1a3e364bbd38785dcbde0cae02e92ea98a.html#_CPPv4N6legion4core14channel_formatE" title="legion::core::channel_format">channel_format</a> <code class="sig-name descname">format</code><a class="headerlink" href="#_CPPv4N6legion4core5image6formatE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion4core5image10componentsE">
+<span id="_CPPv3N6legion4core5image10componentsE"></span><span id="_CPPv2N6legion4core5image10componentsE"></span><span id="legion::core::image::components__image_components"></span><span class="target" id="structlegion_1_1core_1_1image_1aaab7d27d651fef786de0beb177395111"></span><a class="reference internal" href="enum_image_8hpp_1a480a32daf885423ee72ef389b3583395.html#_CPPv4N6legion4core16image_componentsE" title="legion::core::image_components">image_components</a> <code class="sig-name descname">components</code><a class="headerlink" href="#_CPPv4N6legion4core5image10componentsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Friends</p>
+<dl class="friendclass">
+<dt>
+<em class="property">friend struct</em> stb_image_loader</dt>
+</dl>
+
+<dl class="friendclass">
+<dt>
+<em class="property">friend class</em> ImageCache</dt>
+</dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class image</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="classlegion_1_1core_1_1hashed__sparse__set.html" title="previous chapter">Template Class hashed_sparse_set</a></li>
+      <li>Next: <a href="class_structlegion_1_1core_1_1image__handle.html" title="next chapter">Class image_handle</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/class_structlegion_1_1core_1_1image.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

@@ -1,0 +1,13 @@
+.. _exhale_function_constants_8hpp_1af509ea53853e82df7137bbe2542e85bf:
+
+Template Function legion::core::math::pi
+========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_constants.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::math::pi()

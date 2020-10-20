@@ -1,0 +1,24 @@
+
+.. _namespace_legion__physics__constants:
+
+Namespace legion::physics::constants
+====================================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_physicsconstants_8h_1a6d05c48fca0fb42967fde1b95b5ff553`
+
+- :ref:`exhale_variable_physicsconstants_8h_1ae10a80b1cce2e044e15db3e198413b26`
+
+- :ref:`exhale_variable_physicsconstants_8h_1ada32b7c3e5dcbde045356fec3ba8e6c1`

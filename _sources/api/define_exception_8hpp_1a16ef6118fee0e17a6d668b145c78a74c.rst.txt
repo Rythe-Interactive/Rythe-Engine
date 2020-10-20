@@ -1,0 +1,13 @@
+.. _exhale_define_exception_8hpp_1a16ef6118fee0e17a6d668b145c78a74c:
+
+Define legion_entity_not_found_msg
+==================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: legion_entity_not_found_msg

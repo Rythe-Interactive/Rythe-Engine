@@ -1,0 +1,28 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filesystem.hpp:
+
+Program Listing for File filesystem.hpp
+=======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filesystem.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/filesystem/filesystem.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   #include <core/filesystem/resource.hpp>
+   
+   #include <core/filesystem/assetimporter.hpp>
+   #include <core/filesystem/filesystem_resolver.hpp>
+   #include <core/filesystem/mem_filesystem_resolver.hpp>
+   #include <core/filesystem/basic_resolver.hpp>
+   #include <core/filesystem/provider_registry.hpp>
+   
+   #include <core/filesystem/view.hpp>
+   
+   namespace legion::core
+   {
+       namespace fs = ::legion::core::filesystem;
+   }

@@ -1,0 +1,76 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_window_window.hpp:
+
+File window.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_window>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/application/window``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/application/window/window.hpp``)
+----------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_window_window.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``application/context/contexthelper.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_context_contexthelper.hpp`)
+
+- ``utility``
+
+- ``vector`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_vector_view.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_application.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_events_windowevents.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_events_windowinputevents.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_module_applicationmodule.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_window_windowsystem.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__application`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1window`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_window_8hpp_1a75624e39c886dfa6e651e9716f649a28`
+

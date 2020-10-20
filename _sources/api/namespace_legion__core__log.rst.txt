@@ -1,0 +1,63 @@
+
+.. _namespace_legion__core__log:
+
+Namespace legion::core::log
+===========================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1log_1_1impl`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1log_1_1genesis__formatter__flag`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1log_1_1thread__name__formatter__flag`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_logging_8hpp_1a592620764bd67e3790e122dabd6e6c90`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_logging_8hpp_1a0ab38b92fa73e8be4d115ea49f8f9933`
+
+- :ref:`exhale_function_logging_8hpp_1ae5ef258fc7e4c526320d96f4c760d763`
+
+- :ref:`exhale_function_logging_8hpp_1a40812bec682c10b0243e177749402b49`
+
+- :ref:`exhale_function_logging_8hpp_1af6bdbb0cae95777b8eff36aa57390bfa`
+
+- :ref:`exhale_function_logging_8hpp_1aa4009ea12a29f50e9290842ee5d1350c`
+
+- :ref:`exhale_function_logging_8hpp_1a063562e3bb7ff793c0dfb0f3864544c6`
+
+- :ref:`exhale_function_logging_8hpp_1abe0e85d380fb172533d537c70e04bb50`
+
+- :ref:`exhale_function_logging_8hpp_1af58b616f01d01b7b9e6b91c06107a8be`
+
+- :ref:`exhale_function_logging_8hpp_1a53f48f583b4910d55e5aeab12f7c41a0`
+
+- :ref:`exhale_function_logging_8hpp_1a09dbbe22a90101de3069deb359e7d325`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_logging_8hpp_1a85bcafb4c666bd69619ee0f06502aa28`

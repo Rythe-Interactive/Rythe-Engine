@@ -1,0 +1,84 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_iterator_tricks.hpp:
+
+File iterator_tricks.hpp
+========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/containers``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/containers/iterator_tricks.hpp``)
+----------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_iterator_tricks.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`)
+
+- ``functional``
+
+- ``utility``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_atomic_sparse_map.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_sparse_map.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_artifact_cache.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_provider_registry.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__iterator`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1iterator_1_1pair__range`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1iterator_1_1key__only__iterator`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1iterator_1_1key__value__pair__iterator`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1iterator_1_1keys__only`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1iterator_1_1value__only__iterator`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1iterator_1_1values__only`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_iterator__tricks_8hpp_1ab1378f0ad3a830ee0f93ed9eb99b6827`
+

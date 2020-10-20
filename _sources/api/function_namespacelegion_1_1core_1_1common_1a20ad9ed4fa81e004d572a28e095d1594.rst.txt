@@ -1,0 +1,13 @@
+.. _exhale_function_namespacelegion_1_1core_1_1common_1a20ad9ed4fa81e004d572a28e095d1594:
+
+Function legion::core::common::data_from_string_< std::string >
+===============================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::common::data_from_string_< std::string >(std::string)

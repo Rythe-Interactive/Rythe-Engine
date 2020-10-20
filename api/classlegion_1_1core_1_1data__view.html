@@ -1,0 +1,283 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Class data_view &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Template Class delegate" href="classlegion_1_1core_1_1delegate.html" />
+    <link rel="prev" title="Class CoreModule" href="classlegion_1_1core_1_1_core_module.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classlegion_1_1core_1_1delegate.html" title="Template Class delegate"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classlegion_1_1core_1_1_core_module.html" title="Class CoreModule"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Template Class data_view</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="template-class-data-view">
+<span id="exhale-class-classlegion-1-1core-1-1data-view"></span><h1>Template Class data_view<a class="headerlink" href="#template-class-data-view" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_data_view.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-containers-data-view-hpp"><span class="std std-ref">File data_view.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4I0EN6legion4core9data_viewE">
+<span id="_CPPv3I0EN6legion4core9data_viewE"></span><span id="_CPPv2I0EN6legion4core9data_viewE"></span>template&lt;class <code class="sig-name descname">DataType</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1data__view"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">data_view</code><a class="headerlink" href="#_CPPv4I0EN6legion4core9data_viewE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>implementation if lpe array-view is not available a reference-counting view into a raw array, implements most of the required things for a standard stl container </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DataType</span></code>: the value-type of the target_array </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core9data_view10value_typeE">
+<span id="_CPPv3N6legion4core9data_view10value_typeE"></span><span id="_CPPv2N6legion4core9data_view10value_typeE"></span><span class="target" id="classlegion_1_1core_1_1data__view_1a6166afc586f235b518a7532ad0cc9dc1"></span><em class="property">using </em><code class="sig-name descname">value_type</code> = <a class="reference internal" href="#_CPPv4I0EN6legion4core9data_viewE" title="legion::core::data_view::DataType">DataType</a><a class="headerlink" href="#_CPPv4N6legion4core9data_view10value_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core9data_view8iteratorE">
+<span id="_CPPv3N6legion4core9data_view8iteratorE"></span><span id="_CPPv2N6legion4core9data_view8iteratorE"></span><span class="target" id="classlegion_1_1core_1_1data__view_1a246fbcfc9484870dc1c5ac3dc1cd3b2b"></span><em class="property">using </em><code class="sig-name descname">iterator</code> = <a class="reference internal" href="#_CPPv4I0EN6legion4core9data_viewE" title="legion::core::data_view::DataType">DataType</a>*<a class="headerlink" href="#_CPPv4N6legion4core9data_view8iteratorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core9data_view8ptr_typeE">
+<span id="_CPPv3N6legion4core9data_view8ptr_typeE"></span><span id="_CPPv2N6legion4core9data_view8ptr_typeE"></span><span class="target" id="classlegion_1_1core_1_1data__view_1a5cd5338ae64f31d841f47e80580593d7"></span><em class="property">using </em><code class="sig-name descname">ptr_type</code> = <a class="reference internal" href="#_CPPv4I0EN6legion4core9data_viewE" title="legion::core::data_view::DataType">DataType</a>*<a class="headerlink" href="#_CPPv4N6legion4core9data_view8ptr_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core9data_view14const_ptr_typeE">
+<span id="_CPPv3N6legion4core9data_view14const_ptr_typeE"></span><span id="_CPPv2N6legion4core9data_view14const_ptr_typeE"></span><span class="target" id="classlegion_1_1core_1_1data__view_1a78001df66df48bd9ff15da4e5e4ca1d8"></span><em class="property">using </em><code class="sig-name descname">const_ptr_type</code> = <em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6legion4core9data_viewE" title="legion::core::data_view::DataType">DataType</a>*<a class="headerlink" href="#_CPPv4N6legion4core9data_view14const_ptr_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core9data_view9size_typeE">
+<span id="_CPPv3N6legion4core9data_view9size_typeE"></span><span id="_CPPv2N6legion4core9data_view9size_typeE"></span><span class="target" id="classlegion_1_1core_1_1data__view_1a8d696c643b2c06d7893515a164234b50"></span><em class="property">using </em><code class="sig-name descname">size_type</code> = std::size_t<a class="headerlink" href="#_CPPv4N6legion4core9data_view9size_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core9data_view16const_value_typeE">
+<span id="_CPPv3N6legion4core9data_view16const_value_typeE"></span><span id="_CPPv2N6legion4core9data_view16const_value_typeE"></span><span class="target" id="classlegion_1_1core_1_1data__view_1adec0c330f9db0502d3b5cd4f2f6294aa"></span><em class="property">using </em><code class="sig-name descname">const_value_type</code> = <em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6legion4core9data_viewE" title="legion::core::data_view::DataType">DataType</a><a class="headerlink" href="#_CPPv4N6legion4core9data_view16const_value_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core9data_view14const_iteratorE">
+<span id="_CPPv3N6legion4core9data_view14const_iteratorE"></span><span id="_CPPv2N6legion4core9data_view14const_iteratorE"></span><span class="target" id="classlegion_1_1core_1_1data__view_1ac579c735e60f7d0213ef8cbd9ca1c68a"></span><em class="property">using </em><code class="sig-name descname">const_iterator</code> = <em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6legion4core9data_viewE" title="legion::core::data_view::DataType">DataType</a>*<a class="headerlink" href="#_CPPv4N6legion4core9data_view14const_iteratorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core9data_view9data_viewE9nullptr_t">
+<span id="_CPPv3N6legion4core9data_view9data_viewE9nullptr_t"></span><span id="_CPPv2N6legion4core9data_view9data_viewE9nullptr_t"></span><span id="legion::core::data_view::data_view__nullptr_t"></span><span class="target" id="classlegion_1_1core_1_1data__view_1a927b717480529e8299c43c473b583570"></span><code class="sig-name descname">data_view</code><span class="sig-paren">(</span>nullptr_t<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core9data_view9data_viewE9nullptr_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core9data_view9data_viewE8ptr_type9size_type9size_typeb">
+<span id="_CPPv3N6legion4core9data_view9data_viewE8ptr_type9size_type9size_typeb"></span><span id="_CPPv2N6legion4core9data_view9data_viewE8ptr_type9size_type9size_typeb"></span><span id="legion::core::data_view::data_view__ptr_type.size_type.size_type.b"></span><span class="target" id="classlegion_1_1core_1_1data__view_1a232157c4215b5af55d48928d1621399f"></span><code class="sig-name descname">data_view</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core9data_view8ptr_typeE" title="legion::core::data_view::ptr_type">ptr_type</a> <em>ptr</em>, <a class="reference internal" href="#_CPPv4N6legion4core9data_view9size_typeE" title="legion::core::data_view::size_type">size_type</a> <em>size</em>, <a class="reference internal" href="#_CPPv4N6legion4core9data_view9size_typeE" title="legion::core::data_view::size_type">size_type</a> <em>offset</em> = 0, bool <em>take_ownership</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core9data_view9data_viewE8ptr_type9size_type9size_typeb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core9data_view9data_viewERK9data_view">
+<span id="_CPPv3N6legion4core9data_view9data_viewERK9data_view"></span><span id="_CPPv2N6legion4core9data_view9data_viewERK9data_view"></span><span id="legion::core::data_view::data_view__data_viewCR"></span><span class="target" id="classlegion_1_1core_1_1data__view_1a88f96f5e9febfd160826652ddf4e8325"></span><code class="sig-name descname">data_view</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion4core9data_view9data_viewERK9data_view" title="legion::core::data_view::data_view">data_view</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core9data_view9data_viewERK9data_view" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core9data_view9data_viewERR9data_view">
+<span id="_CPPv3N6legion4core9data_view9data_viewERR9data_view"></span><span id="_CPPv2N6legion4core9data_view9data_viewERR9data_view"></span><span id="legion::core::data_view::data_view__data_viewRR"></span><span class="target" id="classlegion_1_1core_1_1data__view_1a7a3782a83289923dd647d47a2df29a53"></span><code class="sig-name descname">data_view</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core9data_view9data_viewERR9data_view" title="legion::core::data_view::data_view">data_view</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N6legion4core9data_view9data_viewERR9data_view" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core9data_viewaSERK9data_view">
+<span id="_CPPv3N6legion4core9data_viewaSERK9data_view"></span><span id="_CPPv2N6legion4core9data_viewaSERK9data_view"></span><span id="legion::core::data_view::assign-operator__data_viewCR"></span><span class="target" id="classlegion_1_1core_1_1data__view_1ac1b95b3d8b325ec0fcee2fa7076be816"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core9data_viewE" title="legion::core::data_view">data_view</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6legion4core9data_viewE" title="legion::core::data_view">data_view</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core9data_viewaSERK9data_view" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core9data_viewaSERR9data_view">
+<span id="_CPPv3N6legion4core9data_viewaSERR9data_view"></span><span id="_CPPv2N6legion4core9data_viewaSERR9data_view"></span><span id="legion::core::data_view::assign-operator__data_viewRR"></span><span class="target" id="classlegion_1_1core_1_1data__view_1aa230d0eda1bb2af937f129ef7e1873a9"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core9data_viewE" title="legion::core::data_view">data_view</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN6legion4core9data_viewE" title="legion::core::data_view">data_view</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N6legion4core9data_viewaSERR9data_view" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core9data_viewD0Ev">
+<span id="_CPPv3N6legion4core9data_viewD0Ev"></span><span id="_CPPv2N6legion4core9data_viewD0Ev"></span><span id="legion::core::data_view::~data_view"></span><span class="target" id="classlegion_1_1core_1_1data__view_1a3474982002e073a64718c65bcb8261e5"></span><code class="sig-name descname">~data_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core9data_viewD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core9data_view2atE9size_type">
+<span id="_CPPv3NK6legion4core9data_view2atE9size_type"></span><span id="_CPPv2NK6legion4core9data_view2atE9size_type"></span><span id="legion::core::data_view::at__size_typeC"></span><span class="target" id="classlegion_1_1core_1_1data__view_1ac8ac2ed4f8d3f77b13d34bb631c52ada"></span><a class="reference internal" href="#_CPPv4N6legion4core9data_view10value_typeE" title="legion::core::data_view::value_type">value_type</a> <code class="sig-name descname">at</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core9data_view9size_typeE" title="legion::core::data_view::size_type">size_type</a> <em>idx</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core9data_view2atE9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>gets the value at index idx checks if the index is valid before returning and throws and std::out_of_range exception if it is not </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the value at idx </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">idx</span></code>: the index to query </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core9data_viewixE9size_type">
+<span id="_CPPv3N6legion4core9data_viewixE9size_type"></span><span id="_CPPv2N6legion4core9data_viewixE9size_type"></span><span id="legion::core::data_view::subscript-operator__size_type"></span><span class="target" id="classlegion_1_1core_1_1data__view_1a5752d973db090bead8c9eee50ba5dc10"></span><a class="reference internal" href="#_CPPv4N6legion4core9data_view10value_typeE" title="legion::core::data_view::value_type">value_type</a> &amp;<code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core9data_view9size_typeE" title="legion::core::data_view::size_type">size_type</a> <em>idx</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core9data_viewixE9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>gets the value at index idx </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the value at idx </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">idx</span></code>: the index to query </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core9data_viewixE9size_type">
+<span id="_CPPv3NK6legion4core9data_viewixE9size_type"></span><span id="_CPPv2NK6legion4core9data_viewixE9size_type"></span><span id="legion::core::data_view::subscript-operator__size_typeC"></span><span class="target" id="classlegion_1_1core_1_1data__view_1a229fb8e59683b2e22a92461cb57a88d8"></span><a class="reference internal" href="#_CPPv4N6legion4core9data_view10value_typeE" title="legion::core::data_view::value_type">value_type</a> <code class="sig-name descname">operator[]</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core9data_view9size_typeE" title="legion::core::data_view::size_type">size_type</a> <em>idx</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core9data_viewixE9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>const version of above </p>
+<p><dl class="simple">
+<dt><strong>See</strong></dt><dd><p>value_type&amp; <a class="reference internal" href="#classlegion_1_1core_1_1data__view_1a5752d973db090bead8c9eee50ba5dc10"><span class="std std-ref">operator[](size_type)</span></a> </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core9data_view5beginEv">
+<span id="_CPPv3N6legion4core9data_view5beginEv"></span><span id="_CPPv2N6legion4core9data_view5beginEv"></span><span id="legion::core::data_view::begin"></span><span class="target" id="classlegion_1_1core_1_1data__view_1ad6e5300dd80936419eed3f12cdb1f98c"></span><a class="reference internal" href="#_CPPv4N6legion4core9data_view8iteratorE" title="legion::core::data_view::iterator">iterator</a> <code class="sig-name descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core9data_view5beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core9data_view3endEv">
+<span id="_CPPv3N6legion4core9data_view3endEv"></span><span id="_CPPv2N6legion4core9data_view3endEv"></span><span id="legion::core::data_view::end"></span><span class="target" id="classlegion_1_1core_1_1data__view_1a646e1fe2b8863c0a9c264035a37b3527"></span><a class="reference internal" href="#_CPPv4N6legion4core9data_view8iteratorE" title="legion::core::data_view::iterator">iterator</a> <code class="sig-name descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core9data_view3endEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core9data_view4dataEv">
+<span id="_CPPv3N6legion4core9data_view4dataEv"></span><span id="_CPPv2N6legion4core9data_view4dataEv"></span><span id="legion::core::data_view::data"></span><span class="target" id="classlegion_1_1core_1_1data__view_1accd2731ecf310ae1621961d8d7b1d64c"></span><a class="reference internal" href="#_CPPv4N6legion4core9data_view8ptr_typeE" title="legion::core::data_view::ptr_type">ptr_type</a> <code class="sig-name descname">data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core9data_view4dataEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core9data_view5beginEv">
+<span id="_CPPv3NK6legion4core9data_view5beginEv"></span><span id="_CPPv2NK6legion4core9data_view5beginEv"></span><span id="legion::core::data_view::beginC"></span><span class="target" id="classlegion_1_1core_1_1data__view_1a60822516c241acfa0f184cd9e82186d1"></span><a class="reference internal" href="#_CPPv4N6legion4core9data_view14const_iteratorE" title="legion::core::data_view::const_iterator">const_iterator</a> <code class="sig-name descname">begin</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core9data_view5beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core9data_view3endEv">
+<span id="_CPPv3NK6legion4core9data_view3endEv"></span><span id="_CPPv2NK6legion4core9data_view3endEv"></span><span id="legion::core::data_view::endC"></span><span class="target" id="classlegion_1_1core_1_1data__view_1aa336e6434c1eb01a7287062aeb83430d"></span><a class="reference internal" href="#_CPPv4N6legion4core9data_view14const_iteratorE" title="legion::core::data_view::const_iterator">const_iterator</a> <code class="sig-name descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core9data_view3endEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core9data_view4dataEv">
+<span id="_CPPv3NK6legion4core9data_view4dataEv"></span><span id="_CPPv2NK6legion4core9data_view4dataEv"></span><span id="legion::core::data_view::dataC"></span><span class="target" id="classlegion_1_1core_1_1data__view_1af4b480f9cec0fb9bf9d0bb4c9a5037dc"></span><a class="reference internal" href="#_CPPv4N6legion4core9data_view14const_ptr_typeE" title="legion::core::data_view::const_ptr_type">const_ptr_type</a> <code class="sig-name descname">data</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core9data_view4dataEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core9data_view4sizeEv">
+<span id="_CPPv3NK6legion4core9data_view4sizeEv"></span><span id="_CPPv2NK6legion4core9data_view4sizeEv"></span><span id="legion::core::data_view::sizeC"></span><span class="target" id="classlegion_1_1core_1_1data__view_1a1dcdc436e35d244449c9b403023b2b64"></span><a class="reference internal" href="#_CPPv4N6legion4core9data_view9size_typeE" title="legion::core::data_view::size_type">size_type</a> <code class="sig-name descname">size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core9data_view4sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>gets the size of the target array-view </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core9data_view8max_sizeEv">
+<span id="_CPPv3NK6legion4core9data_view8max_sizeEv"></span><span id="_CPPv2NK6legion4core9data_view8max_sizeEv"></span><span id="legion::core::data_view::max_sizeC"></span><span class="target" id="classlegion_1_1core_1_1data__view_1a58c3ad44ccf52ff4a71904c3460be1f1"></span><a class="reference internal" href="#_CPPv4N6legion4core9data_view9size_typeE" title="legion::core::data_view::size_type">size_type</a> <code class="sig-name descname">max_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core9data_view8max_sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>gets the max size this container could grow to. since the container is non resizable same as <a class="reference internal" href="#classlegion_1_1core_1_1data__view_1a1dcdc436e35d244449c9b403023b2b64"><span class="std std-ref">size()</span></a> </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Template Class data_view</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="classlegion_1_1core_1_1_core_module.html" title="previous chapter">Class CoreModule</a></li>
+      <li>Next: <a href="classlegion_1_1core_1_1delegate.html" title="next chapter">Template Class delegate</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classlegion_1_1core_1_1data__view.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

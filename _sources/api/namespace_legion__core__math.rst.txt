@@ -1,0 +1,100 @@
+
+.. _namespace_legion__core__math:
+
+Namespace legion::core::math
+============================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__math__colors`
+
+- :ref:`namespace_legion__core__math__detail`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1math_1_1precision__chooser`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1math_1_1angle`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1math_1_1color`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_precision_8hpp_1acc13e397d8c7884e8c3b622c1a1f3532`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_trigonometry_8hpp_1a29b6979c0eacd1bc3a381ad7d8a82c2a`
+
+- :ref:`exhale_function_trigonometry_8hpp_1ac3a9a8aeaebf10f39989a6f4e29e61aa`
+
+- :ref:`exhale_function_constants_8hpp_1ad7f39d091c1b87fa5616d17fb827c4f9`
+
+- :ref:`exhale_function_constants_8hpp_1ac988e471088bf55ea91787d47824b7e7`
+
+- :ref:`exhale_function_constants_8hpp_1acc561f96d138c1757da6779c21872a23`
+
+- :ref:`exhale_function_constants_8hpp_1a5d616ec51272af1f6a5e9ce2109e7a72`
+
+- :ref:`exhale_function_constants_8hpp_1a99bda1bff6e43c9cc386b536514bb340`
+
+- :ref:`exhale_function_constants_8hpp_1a7d39cf277c04236dc21985c4d5c4deac`
+
+- :ref:`exhale_function_constants_8hpp_1a85adfee05b177583bc2405a52b8d4e49`
+
+- :ref:`exhale_function_constants_8hpp_1a5a62400db68efd1b4150b0f1ea3f2554`
+
+- :ref:`exhale_function_constants_8hpp_1af09753c3d9ade3ae45f3b2bc8fb5d1d2`
+
+- :ref:`exhale_function_constants_8hpp_1aeef4aa54ec822881d431680a167cb2f5`
+
+- :ref:`exhale_function_constants_8hpp_1a939153bf2d0f765b9794ec4882c08395`
+
+- :ref:`exhale_function_constants_8hpp_1ab12ea362e005f702f7f0af6cad4fba77`
+
+- :ref:`exhale_function_constants_8hpp_1af509ea53853e82df7137bbe2542e85bf`
+
+- :ref:`exhale_function_constants_8hpp_1a916beecf872ff0e82e74cd82703413ca`
+
+- :ref:`exhale_function_trigonometry_8hpp_1af946cb2ac55fd4c210a3570faf5c1e1b`
+
+- :ref:`exhale_function_trigonometry_8hpp_1a4d1c95cc7b687ab98b2796e8132af63c`
+
+- :ref:`exhale_function_constants_8hpp_1ace10587db3e0a7edb5d5fd1b26018c55`
+
+- :ref:`exhale_function_constants_8hpp_1a3fe56736f705ea2ede9feeefb05be16a`
+
+- :ref:`exhale_function_constants_8hpp_1ab480eaa3b971466c36c2c0d35a0edeb6`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_trigonometry_8hpp_1ac5d8857089d5702ef9b21ee78c5908b2`
+
+- :ref:`exhale_typedef_trigonometry_8hpp_1a6a1991ad5d23fb2e238ee55d6ab06ae8`
+
+- :ref:`exhale_typedef_trigonometry_8hpp_1aaade6ddb5a868192aa6ce35c0c3f0bd2`
+
+- :ref:`exhale_typedef_precision_8hpp_1a67d623335cd243607d056d780ab6bd4f`

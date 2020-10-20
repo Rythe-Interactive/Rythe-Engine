@@ -1,0 +1,13 @@
+.. _exhale_enum_buffer_8hpp_1a7e33690cda6ca2c7eee105bf5e28a0b0:
+
+Enum buffer_type
+================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_buffer.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: legion::core::compute::buffer_type

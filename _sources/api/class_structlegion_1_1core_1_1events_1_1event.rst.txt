@@ -1,0 +1,25 @@
+.. _exhale_class_structlegion_1_1core_1_1events_1_1event:
+
+Template Class event
+====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_event.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::core::events::event_base`` (:ref:`exhale_class_structlegion_1_1core_1_1events_1_1event__base`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::events::event
+   :members:
+   :protected-members:
+   :undoc-members:

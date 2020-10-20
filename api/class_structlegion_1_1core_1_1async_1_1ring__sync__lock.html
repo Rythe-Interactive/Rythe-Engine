@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class ring_sync_lock &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Template Class transferable_atomic" href="class_structlegion_1_1core_1_1async_1_1transferable__atomic.html" />
+    <link rel="prev" title="Template Class readwrite_multiguard" href="classlegion_1_1core_1_1async_1_1readwrite__multiguard.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="class_structlegion_1_1core_1_1async_1_1transferable__atomic.html" title="Template Class transferable_atomic"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classlegion_1_1core_1_1async_1_1readwrite__multiguard.html" title="Template Class readwrite_multiguard"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class ring_sync_lock</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-ring-sync-lock">
+<span id="exhale-class-structlegion-1-1core-1-1async-1-1ring-sync-lock"></span><h1>Class ring_sync_lock<a class="headerlink" href="#class-ring-sync-lock" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_ring_sync_lock.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-async-ring-sync-lock-hpp"><span class="std std-ref">File ring_sync_lock.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6legion4core5async14ring_sync_lockE">
+<span id="_CPPv3N6legion4core5async14ring_sync_lockE"></span><span id="_CPPv2N6legion4core5async14ring_sync_lockE"></span><span id="legion::core::async::ring_sync_lock"></span><span class="target" id="structlegion_1_1core_1_1async_1_1ring__sync__lock"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core::async<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">ring_sync_lock</code><a class="headerlink" href="#_CPPv4N6legion4core5async14ring_sync_lockE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Allows other threads to synchronize to the owning thread. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async14ring_sync_lock14ring_sync_lockE4uint">
+<span id="_CPPv3N6legion4core5async14ring_sync_lock14ring_sync_lockE4uint"></span><span id="_CPPv2N6legion4core5async14ring_sync_lock14ring_sync_lockE4uint"></span><span id="legion::core::async::ring_sync_lock::ring_sync_lock__uint"></span><span class="target" id="structlegion_1_1core_1_1async_1_1ring__sync__lock_1a8b29851073fd4641b99e6f9dea03b52a"></span><code class="sig-name descname">ring_sync_lock</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a7919102ac78dc9740c70029bcc564bdd.html#_CPPv4N6legion4core4uintE" title="legion::core::uint">uint</a> <em>maxRank</em> = UINT32_MAX<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5async14ring_sync_lock14ring_sync_lockE4uint" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async14ring_sync_lock14ring_sync_lockERK14ring_sync_lock">
+<span id="_CPPv3N6legion4core5async14ring_sync_lock14ring_sync_lockERK14ring_sync_lock"></span><span id="_CPPv2N6legion4core5async14ring_sync_lock14ring_sync_lockERK14ring_sync_lock"></span><span id="legion::core::async::ring_sync_lock::ring_sync_lock__ring_sync_lockCR"></span><span class="target" id="structlegion_1_1core_1_1async_1_1ring__sync__lock_1a0407dcdc1954ee904615021a65dc7f1a"></span><code class="sig-name descname">ring_sync_lock</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion4core5async14ring_sync_lock14ring_sync_lockERK14ring_sync_lock" title="legion::core::async::ring_sync_lock::ring_sync_lock">ring_sync_lock</a>&amp;<span class="sig-paren">)</span> = delete<a class="headerlink" href="#_CPPv4N6legion4core5async14ring_sync_lock14ring_sync_lockERK14ring_sync_lock" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async14ring_sync_lock14ring_sync_lockER14ring_sync_lock">
+<span id="_CPPv3N6legion4core5async14ring_sync_lock14ring_sync_lockER14ring_sync_lock"></span><span id="_CPPv2N6legion4core5async14ring_sync_lock14ring_sync_lockER14ring_sync_lock"></span><span id="legion::core::async::ring_sync_lock::ring_sync_lock__ring_sync_lockR"></span><span class="target" id="structlegion_1_1core_1_1async_1_1ring__sync__lock_1a008d94529882153838ab18bc0dd00dc9"></span><code class="sig-name descname">ring_sync_lock</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core5async14ring_sync_lock14ring_sync_lockER14ring_sync_lock" title="legion::core::async::ring_sync_lock::ring_sync_lock">ring_sync_lock</a>&amp;<span class="sig-paren">)</span> = delete<a class="headerlink" href="#_CPPv4N6legion4core5async14ring_sync_lock14ring_sync_lockER14ring_sync_lock" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async14ring_sync_lockaSERK14ring_sync_lock">
+<span id="_CPPv3N6legion4core5async14ring_sync_lockaSERK14ring_sync_lock"></span><span id="_CPPv2N6legion4core5async14ring_sync_lockaSERK14ring_sync_lock"></span><span id="legion::core::async::ring_sync_lock::assign-operator__ring_sync_lockCR"></span><span class="target" id="structlegion_1_1core_1_1async_1_1ring__sync__lock_1a98e71b668270f940965acc48873a7339"></span><a class="reference internal" href="#_CPPv4N6legion4core5async14ring_sync_lockE" title="legion::core::async::ring_sync_lock">ring_sync_lock</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion4core5async14ring_sync_lockE" title="legion::core::async::ring_sync_lock">ring_sync_lock</a>&amp;<span class="sig-paren">)</span> = delete<a class="headerlink" href="#_CPPv4N6legion4core5async14ring_sync_lockaSERK14ring_sync_lock" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async14ring_sync_lockaSERR14ring_sync_lock">
+<span id="_CPPv3N6legion4core5async14ring_sync_lockaSERR14ring_sync_lock"></span><span id="_CPPv2N6legion4core5async14ring_sync_lockaSERR14ring_sync_lock"></span><span id="legion::core::async::ring_sync_lock::assign-operator__ring_sync_lockRR"></span><span class="target" id="structlegion_1_1core_1_1async_1_1ring__sync__lock_1a0324beb9249f529b55515afafd722d20"></span><a class="reference internal" href="#_CPPv4N6legion4core5async14ring_sync_lockE" title="legion::core::async::ring_sync_lock">ring_sync_lock</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core5async14ring_sync_lockE" title="legion::core::async::ring_sync_lock">ring_sync_lock</a>&amp;&amp;<span class="sig-paren">)</span> = delete<a class="headerlink" href="#_CPPv4N6legion4core5async14ring_sync_lockaSERR14ring_sync_lock" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async14ring_sync_lock4syncEv">
+<span id="_CPPv3N6legion4core5async14ring_sync_lock4syncEv"></span><span id="_CPPv2N6legion4core5async14ring_sync_lock4syncEv"></span><span id="legion::core::async::ring_sync_lock::sync"></span><span class="target" id="structlegion_1_1core_1_1async_1_1ring__sync__lock_1aa3616b98de207a4ba825244272e50489"></span>void <code class="sig-name descname">sync</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5async14ring_sync_lock4syncEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async14ring_sync_lock13force_releaseEv">
+<span id="_CPPv3N6legion4core5async14ring_sync_lock13force_releaseEv"></span><span id="_CPPv2N6legion4core5async14ring_sync_lock13force_releaseEv"></span><span id="legion::core::async::ring_sync_lock::force_release"></span><span class="target" id="structlegion_1_1core_1_1async_1_1ring__sync__lock_1a6218c41d409a4768eaddf092b78f67f2"></span>void <code class="sig-name descname">force_release</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5async14ring_sync_lock13force_releaseEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async14ring_sync_lock9subscribeEv">
+<span id="_CPPv3N6legion4core5async14ring_sync_lock9subscribeEv"></span><span id="_CPPv2N6legion4core5async14ring_sync_lock9subscribeEv"></span><span id="legion::core::async::ring_sync_lock::subscribe"></span><span class="target" id="structlegion_1_1core_1_1async_1_1ring__sync__lock_1a5cb39abb11310d8a78634043dd41afde"></span>void <code class="sig-name descname">subscribe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5async14ring_sync_lock9subscribeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async14ring_sync_lock11unsubscribeEv">
+<span id="_CPPv3N6legion4core5async14ring_sync_lock11unsubscribeEv"></span><span id="_CPPv2N6legion4core5async14ring_sync_lock11unsubscribeEv"></span><span id="legion::core::async::ring_sync_lock::unsubscribe"></span><span class="target" id="structlegion_1_1core_1_1async_1_1ring__sync__lock_1a3a960858d6977b09bd183e8eeddcd2eb"></span>void <code class="sig-name descname">unsubscribe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5async14ring_sync_lock11unsubscribeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async14ring_sync_lock11waiterCountEv">
+<span id="_CPPv3N6legion4core5async14ring_sync_lock11waiterCountEv"></span><span id="_CPPv2N6legion4core5async14ring_sync_lock11waiterCountEv"></span><span id="legion::core::async::ring_sync_lock::waiterCount"></span><span class="target" id="structlegion_1_1core_1_1async_1_1ring__sync__lock_1adb9a95bfdc117898c18b96aca5332046"></span><a class="reference internal" href="typedef_primitives_8hpp_1a7919102ac78dc9740c70029bcc564bdd.html#_CPPv4N6legion4core4uintE" title="legion::core::uint">uint</a> <code class="sig-name descname">waiterCount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5async14ring_sync_lock11waiterCountEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async14ring_sync_lock11ownerThreadEv">
+<span id="_CPPv3N6legion4core5async14ring_sync_lock11ownerThreadEv"></span><span id="_CPPv2N6legion4core5async14ring_sync_lock11ownerThreadEv"></span><span id="legion::core::async::ring_sync_lock::ownerThread"></span><span class="target" id="structlegion_1_1core_1_1async_1_1ring__sync__lock_1a9a87631b089ecc2dbc00e2e5c988c0f1"></span>std::thread::id <code class="sig-name descname">ownerThread</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5async14ring_sync_lock11ownerThreadEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class ring_sync_lock</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="classlegion_1_1core_1_1async_1_1readwrite__multiguard.html" title="previous chapter">Template Class readwrite_multiguard</a></li>
+      <li>Next: <a href="class_structlegion_1_1core_1_1async_1_1transferable__atomic.html" title="next chapter">Template Class transferable_atomic</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/class_structlegion_1_1core_1_1async_1_1ring__sync__lock.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

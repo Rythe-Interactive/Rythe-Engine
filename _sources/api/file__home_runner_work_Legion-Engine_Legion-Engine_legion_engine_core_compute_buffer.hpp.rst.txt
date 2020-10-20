@@ -1,0 +1,79 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_buffer.hpp:
+
+File buffer.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/compute``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/compute/buffer.hpp``)
+----------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_buffer.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`)
+
+- ``string`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`)
+
+- ``tuple``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_buffer.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__compute`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classlegion_1_1core_1_1compute_1_1_buffer`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_buffer_8hpp_1a7e33690cda6ca2c7eee105bf5e28a0b0`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_buffer_8hpp_1a82a0d5cd18aa1549402dceebbdbed0b7`
+
+- :ref:`exhale_function_buffer_8hpp_1af327ae4b79c2f85f761673cff545eb80`
+

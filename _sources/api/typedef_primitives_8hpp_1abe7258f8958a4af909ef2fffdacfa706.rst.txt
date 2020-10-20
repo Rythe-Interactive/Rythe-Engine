@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1abe7258f8958a4af909ef2fffdacfa706:
+
+Typedef legion::core::cstring
+=============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::cstring

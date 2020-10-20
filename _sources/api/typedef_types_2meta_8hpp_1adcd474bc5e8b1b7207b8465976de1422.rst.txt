@@ -1,0 +1,13 @@
+.. _exhale_typedef_types_2meta_8hpp_1adcd474bc5e8b1b7207b8465976de1422:
+
+Typedef legion::core::inherits_from
+===================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_meta.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::inherits_from

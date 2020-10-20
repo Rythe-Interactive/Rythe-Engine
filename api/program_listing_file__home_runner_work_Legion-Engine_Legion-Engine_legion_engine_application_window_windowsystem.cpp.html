@@ -1,0 +1,608 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File windowsystem.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File windowsystem.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-windowsystem-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-application-window-windowsystem-cpp"></span><h1>Program Listing for File windowsystem.cpp<a class="headerlink" href="#program-listing-for-file-windowsystem-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_window_windowsystem.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-application-window-windowsystem-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/application/window/windowsystem.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;application/window/windowsystem.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">application</span>
+<span class="p">{</span>
+    <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">GLFWwindow</span><span class="o">*</span><span class="p">,</span> <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;&gt;</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">m_windowComponents</span><span class="p">;</span>
+    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">m_creationLock</span><span class="p">;</span>
+
+    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">m_creationRequestLock</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">window_request</span><span class="o">&gt;</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">m_creationRequests</span><span class="p">;</span>
+
+    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">m_fullscreenRequestLock</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">fullscreen_toggle_request</span><span class="o">&gt;</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">m_fullscreenRequests</span><span class="p">;</span>
+
+    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">m_iconRequestLock</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">icon_request</span><span class="o">&gt;</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">m_iconRequests</span><span class="p">;</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">closeWindow</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">initialized</span><span class="p">())</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_creationLock</span><span class="p">);</span> <span class="c1">// Lock all creation sensitive data.</span>
+
+            <span class="k">auto</span> <span class="n">handle</span> <span class="o">=</span> <span class="n">m_windowComponents</span><span class="p">[</span><span class="n">window</span><span class="p">];</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">handle</span><span class="p">.</span><span class="n">valid</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">window_close</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_windowComponents</span><span class="p">[</span><span class="n">window</span><span class="p">]);</span> <span class="c1">// Trigger any callbacks that want to know about any windows closing.</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">windowShouldClose</span><span class="p">(</span><span class="n">window</span><span class="p">))</span> <span class="c1">// If a callback cancelled the window destruction then we should cancel.</span>
+                    <span class="k">return</span><span class="p">;</span>
+
+                <span class="k">auto</span><span class="o">*</span> <span class="n">lock</span> <span class="o">=</span> <span class="n">handle</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">lock</span><span class="p">;</span>
+                <span class="p">{</span>
+                    <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="o">*</span><span class="n">lock</span><span class="p">);</span> <span class="c1">// &quot;deleting&quot; the window is technically writing, so we copy the pointer and use that to lock it.</span>
+                    <span class="n">handle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">invalid_window</span><span class="p">);</span> <span class="c1">// We mark the window as deleted without deleting it yet. It can cause users to find invalid windows,</span>
+                <span class="p">}</span>                                 <span class="c1">// but at least they won&#39;t use a destroyed component after the lock unlocks.</span>
+                <span class="k">delete</span> <span class="n">lock</span><span class="p">;</span>
+
+                <span class="n">id_type</span> <span class="n">ownerId</span> <span class="o">=</span> <span class="n">handle</span><span class="p">.</span><span class="n">entity</span><span class="p">;</span>
+
+                <span class="n">handle</span><span class="p">.</span><span class="n">destroy</span><span class="p">();</span>
+                <span class="n">m_windowComponents</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">ownerId</span> <span class="o">==</span> <span class="n">world_entity_id</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">events</span><span class="o">::</span><span class="n">exit</span><span class="o">&gt;</span><span class="p">();</span> <span class="c1">// If the current window we&#39;re closing is the main window we want to close the application.</span>
+                <span class="p">}</span>                                           <span class="c1">// (we might want to leave this up to the user at some point.)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">ContextHelper</span><span class="o">::</span><span class="n">destroyWindow</span><span class="p">(</span><span class="n">window</span><span class="p">);</span> <span class="c1">// After all traces of the window throughout the engine have been erased we actually close the window.</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">onWindowMoved</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_windowComponents</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">window</span><span class="p">))</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">window_move</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_windowComponents</span><span class="p">[</span><span class="n">window</span><span class="p">],</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">onWindowResize</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_windowComponents</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">window</span><span class="p">))</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">window_resize</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_windowComponents</span><span class="p">[</span><span class="n">window</span><span class="p">],</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">onWindowRefresh</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_windowComponents</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">window</span><span class="p">))</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">window_refresh</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_windowComponents</span><span class="p">[</span><span class="n">window</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">onWindowFocus</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">focused</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_windowComponents</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">window</span><span class="p">))</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">window_focus</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_windowComponents</span><span class="p">[</span><span class="n">window</span><span class="p">],</span> <span class="n">focused</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">onWindowIconify</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">iconified</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_windowComponents</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">window</span><span class="p">))</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">window_iconified</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_windowComponents</span><span class="p">[</span><span class="n">window</span><span class="p">],</span> <span class="n">iconified</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">onWindowMaximize</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">maximized</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_windowComponents</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">window</span><span class="p">))</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">window_maximized</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_windowComponents</span><span class="p">[</span><span class="n">window</span><span class="p">],</span> <span class="n">maximized</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">onWindowFrameBufferResize</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_windowComponents</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">window</span><span class="p">))</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">window_framebuffer_resize</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_windowComponents</span><span class="p">[</span><span class="n">window</span><span class="p">],</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">onWindowContentRescale</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">float</span> <span class="n">xscale</span><span class="p">,</span> <span class="kt">float</span> <span class="n">yscale</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_windowComponents</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">window</span><span class="p">))</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">window_content_rescale</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_windowComponents</span><span class="p">[</span><span class="n">window</span><span class="p">],</span> <span class="n">math</span><span class="o">::</span><span class="n">fvec2</span><span class="p">(</span><span class="n">xscale</span><span class="p">,</span> <span class="n">xscale</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">onItemDroppedInWindow</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">count</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">**</span> <span class="n">paths</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_windowComponents</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">window</span><span class="p">))</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">window_item_dropped</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_windowComponents</span><span class="p">[</span><span class="n">window</span><span class="p">],</span> <span class="n">count</span><span class="p">,</span> <span class="n">paths</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">onMouseEnterWindow</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">entered</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_windowComponents</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">window</span><span class="p">))</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">mouse_enter_window</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_windowComponents</span><span class="p">[</span><span class="n">window</span><span class="p">],</span> <span class="n">entered</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">onKeyInput</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">key</span><span class="p">,</span> <span class="kt">int</span> <span class="n">scancode</span><span class="p">,</span> <span class="kt">int</span> <span class="n">action</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mods</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_windowComponents</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">window</span><span class="p">))</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">key_input</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_windowComponents</span><span class="p">[</span><span class="n">window</span><span class="p">],</span> <span class="n">key</span><span class="p">,</span> <span class="n">scancode</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">mods</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">onCharInput</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="n">uint</span> <span class="n">codepoint</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_windowComponents</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">window</span><span class="p">))</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">char_input</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_windowComponents</span><span class="p">[</span><span class="n">window</span><span class="p">],</span> <span class="n">codepoint</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">onMouseMoved</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">double</span> <span class="n">xpos</span><span class="p">,</span> <span class="kt">double</span> <span class="n">ypos</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_windowComponents</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">window</span><span class="p">))</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">mouse_moved</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_windowComponents</span><span class="p">[</span><span class="n">window</span><span class="p">],</span> <span class="n">math</span><span class="o">::</span><span class="n">dvec2</span><span class="p">(</span><span class="n">xpos</span><span class="p">,</span> <span class="n">ypos</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">dvec2</span><span class="p">)</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">getFramebufferSize</span><span class="p">(</span><span class="n">window</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">onMouseButton</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">button</span><span class="p">,</span> <span class="kt">int</span> <span class="n">action</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mods</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_windowComponents</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">window</span><span class="p">))</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">mouse_button</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_windowComponents</span><span class="p">[</span><span class="n">window</span><span class="p">],</span> <span class="n">button</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">mods</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">onMouseScroll</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">double</span> <span class="n">xoffset</span><span class="p">,</span> <span class="kt">double</span> <span class="n">yoffset</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_windowComponents</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">window</span><span class="p">))</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">mouse_scrolled</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_windowComponents</span><span class="p">[</span><span class="n">window</span><span class="p">],</span> <span class="n">math</span><span class="o">::</span><span class="n">dvec2</span><span class="p">(</span><span class="n">xoffset</span><span class="p">,</span> <span class="n">yoffset</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">onExit</span><span class="p">(</span><span class="n">events</span><span class="o">::</span><span class="n">exit</span><span class="o">*</span> <span class="n">event</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_creationLock</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">entity</span> <span class="p">:</span> <span class="n">m_windowQuery</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setWindowShouldClose</span><span class="p">(</span><span class="n">entity</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span><span class="p">().</span><span class="n">read</span><span class="p">(),</span> <span class="nb">true</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">m_exit</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="n">ContextHelper</span><span class="o">::</span><span class="n">terminate</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">requestIconChange</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">image_handle</span> <span class="n">icon</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">entityId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_iconRequestLock</span><span class="p">);</span>
+            <span class="n">m_iconRequests</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">icon</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Icon change denied, invalid entity given.&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">requestIconChange</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">iconName</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">entityId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_iconRequestLock</span><span class="p">);</span>
+            <span class="n">m_iconRequests</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">iconName</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Icon change denied, invalid entity given.&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">requestFullscreenToggle</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">position</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">entityId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_fullscreenRequestLock</span><span class="p">);</span>
+            <span class="n">m_fullscreenRequests</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Fullscreen toggle denied, invalid entity given.&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">requestWindow</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">image_handle</span> <span class="n">icon</span><span class="p">,</span> <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span><span class="p">,</span> <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">share</span><span class="p">,</span> <span class="kt">int</span> <span class="n">swapInterval</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">hints</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">entityId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_creationRequestLock</span><span class="p">);</span>
+            <span class="n">m_creationRequests</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">icon</span><span class="p">,</span> <span class="n">monitor</span><span class="p">,</span> <span class="n">share</span><span class="p">,</span> <span class="n">swapInterval</span><span class="p">,</span> <span class="n">hints</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Window creation denied, invalid entity given.&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">requestWindow</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">image_handle</span> <span class="n">icon</span><span class="p">,</span> <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span><span class="p">,</span> <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">share</span><span class="p">,</span> <span class="kt">int</span> <span class="n">swapInterval</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">entityId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_creationRequestLock</span><span class="p">);</span>
+            <span class="n">m_creationRequests</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">icon</span><span class="p">,</span> <span class="n">monitor</span><span class="p">,</span> <span class="n">share</span><span class="p">,</span> <span class="n">swapInterval</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Window creation denied, invalid entity given.&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">requestWindow</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">iconName</span><span class="p">,</span> <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span><span class="p">,</span> <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">share</span><span class="p">,</span> <span class="kt">int</span> <span class="n">swapInterval</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;&amp;</span> <span class="n">hints</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">entityId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_creationRequestLock</span><span class="p">);</span>
+            <span class="n">m_creationRequests</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">iconName</span><span class="p">,</span> <span class="n">monitor</span><span class="p">,</span> <span class="n">share</span><span class="p">,</span> <span class="n">swapInterval</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Window creation denied, invalid entity given.&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">requestWindow</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">iconName</span><span class="p">,</span> <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span><span class="p">,</span> <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">share</span><span class="p">,</span> <span class="kt">int</span> <span class="n">swapInterval</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">entityId</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_creationRequestLock</span><span class="p">);</span>
+            <span class="n">m_creationRequests</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">iconName</span><span class="p">,</span> <span class="n">monitor</span><span class="p">,</span> <span class="n">share</span><span class="p">,</span> <span class="n">swapInterval</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Window creation denied, invalid entity given.&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">setup</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="k">namespace</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">literals</span><span class="p">;</span>
+        <span class="n">m_defaultIcon</span> <span class="o">=</span> <span class="n">ImageCache</span><span class="o">::</span><span class="n">create_image</span><span class="p">(</span><span class="s">&quot;Legion Icon&quot;</span><span class="p">,</span> <span class="s">&quot;engine://resources/legion/icon&quot;</span><span class="n">_view</span><span class="p">,</span> <span class="p">{</span> <span class="n">channel_format</span><span class="o">::</span><span class="n">eight_bit</span><span class="p">,</span> <span class="n">image_components</span><span class="o">::</span><span class="n">rgba</span><span class="p">,</span> <span class="nb">false</span> <span class="p">});</span>
+
+        <span class="n">m_windowQuery</span> <span class="o">=</span> <span class="n">createQuery</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="n">bindToEvent</span><span class="o">&lt;</span><span class="n">events</span><span class="o">::</span><span class="n">exit</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">onExit</span><span class="o">&gt;</span><span class="p">();</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_creationRequests</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">||</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">find_if</span><span class="p">(</span><span class="n">m_creationRequests</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">m_creationRequests</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[](</span><span class="n">window_request</span><span class="o">&amp;</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">r</span><span class="p">.</span><span class="n">entityId</span> <span class="o">==</span> <span class="n">world_entity_id</span><span class="p">;</span> <span class="p">})</span> <span class="o">==</span> <span class="n">m_creationRequests</span><span class="p">.</span><span class="n">end</span><span class="p">()))</span>
+            <span class="n">requestWindow</span><span class="p">(</span><span class="n">world_entity_id</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span><span class="p">(</span><span class="mi">1360</span><span class="p">,</span> <span class="mi">768</span><span class="p">),</span> <span class="s">&quot;LEGION Engine&quot;</span><span class="p">,</span> <span class="n">invalid_image_handle</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// Create the request for the main window.</span>
+
+        <span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">sendCommand</span><span class="p">(</span><span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">getChainThreadId</span><span class="p">(</span><span class="s">&quot;Input&quot;</span><span class="p">),</span> <span class="p">[](</span><span class="kt">void</span><span class="o">*</span> <span class="n">param</span><span class="p">)</span> <span class="c1">// We send a command to the input thread before the input process chain starts.</span>
+            <span class="p">{</span>                                                                            <span class="c1">// This way we can create the main window before the rest of the engine get initialised.</span>
+                <span class="n">WindowSystem</span><span class="o">*</span> <span class="n">self</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">WindowSystem</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">param</span><span class="p">);</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">initialized</span><span class="p">())</span> <span class="c1">// Initialize context.</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">init</span><span class="p">())</span>
+                    <span class="p">{</span>
+                        <span class="n">self</span><span class="o">-&gt;</span><span class="n">exit</span><span class="p">();</span>
+                        <span class="k">return</span><span class="p">;</span> <span class="c1">// If we can&#39;t initialize we can&#39;t create any windows, not creating the main window means the engine should shut down.</span>
+                    <span class="p">}</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;Creating main window.&quot;</span><span class="p">);</span>
+                <span class="n">self</span><span class="o">-&gt;</span><span class="n">createWindows</span><span class="p">();</span>
+                <span class="n">self</span><span class="o">-&gt;</span><span class="n">showMainWindow</span><span class="p">();</span>
+            <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
+
+        <span class="n">createProcess</span><span class="o">&lt;&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">refreshWindows</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;Rendering&quot;</span><span class="p">);</span>
+        <span class="n">createProcess</span><span class="o">&lt;&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">handleWindowEvents</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;Input&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">createWindows</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_exit</span><span class="p">)</span> <span class="c1">// If the engine is exiting then we can&#39;t create new windows.</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_creationRequestLock</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">request</span> <span class="p">:</span> <span class="n">m_creationRequests</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">entityId</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Window creation denied, entity {} doesn&#39;t exist.&quot;</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">entityId</span><span class="p">);</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;creating a window&quot;</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">hints</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">hint</span><span class="p">,</span> <span class="n">value</span><span class="p">]</span> <span class="o">:</span> <span class="n">request</span><span class="p">.</span><span class="n">hints</span><span class="p">)</span>
+                    <span class="n">ContextHelper</span><span class="o">::</span><span class="n">windowHint</span><span class="p">(</span><span class="n">hint</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="c1">// Default window hints.</span>
+            <span class="p">{</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">windowHint</span><span class="p">(</span><span class="n">GLFW_CONTEXT_VERSION_MAJOR</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">windowHint</span><span class="p">(</span><span class="n">GLFW_CONTEXT_VERSION_MINOR</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">windowHint</span><span class="p">(</span><span class="n">GLFW_OPENGL_FORWARD_COMPAT</span><span class="p">,</span> <span class="n">GLFW_FALSE</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">windowHint</span><span class="p">(</span><span class="n">GLFW_OPENGL_PROFILE</span><span class="p">,</span> <span class="n">GLFW_OPENGL_CORE_PROFILE</span><span class="p">);</span>
+
+                <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">monitor</span><span class="p">;</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">request</span><span class="p">.</span><span class="n">monitor</span><span class="p">)</span>
+                    <span class="n">monitor</span> <span class="o">=</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">getPrimaryMonitor</span><span class="p">();</span>
+
+                <span class="k">const</span> <span class="n">GLFWvidmode</span><span class="o">*</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">getVideoMode</span><span class="p">(</span><span class="n">monitor</span><span class="p">);</span>
+
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">windowHint</span><span class="p">(</span><span class="n">GLFW_RED_BITS</span><span class="p">,</span> <span class="n">mode</span><span class="o">-&gt;</span><span class="n">redBits</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">windowHint</span><span class="p">(</span><span class="n">GLFW_GREEN_BITS</span><span class="p">,</span> <span class="n">mode</span><span class="o">-&gt;</span><span class="n">greenBits</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">windowHint</span><span class="p">(</span><span class="n">GLFW_BLUE_BITS</span><span class="p">,</span> <span class="n">mode</span><span class="o">-&gt;</span><span class="n">blueBits</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">windowHint</span><span class="p">(</span><span class="n">GLFW_REFRESH_RATE</span><span class="p">,</span> <span class="n">mode</span><span class="o">-&gt;</span><span class="n">refreshRate</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="n">ContextHelper</span><span class="o">::</span><span class="n">windowHint</span><span class="p">(</span><span class="n">GLFW_SAMPLES</span><span class="p">,</span> <span class="mi">16</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+                <span class="n">request</span><span class="p">.</span><span class="n">size</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">400</span> <span class="p">};</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+                <span class="n">request</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;LEGION Engine&quot;</span><span class="p">;</span>
+
+            <span class="n">image_handle</span> <span class="n">icon</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">icon</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">icon</span> <span class="o">==</span> <span class="n">invalid_image_handle</span><span class="p">)</span>
+                <span class="n">icon</span> <span class="o">=</span> <span class="n">m_defaultIcon</span><span class="p">;</span>
+
+            <span class="n">window</span> <span class="n">win</span> <span class="o">=</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">createWindow</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">size</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">request</span><span class="p">.</span><span class="n">monitor</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">share</span><span class="p">);</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">image</span><span class="p">]</span> <span class="o">=</span> <span class="n">icon</span><span class="p">.</span><span class="n">get_raw_image</span><span class="p">();</span>
+            <span class="p">{</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">components</span> <span class="o">==</span> <span class="n">image_components</span><span class="o">::</span><span class="n">rgba</span> <span class="o">&amp;&amp;</span> <span class="n">image</span><span class="p">.</span><span class="n">format</span> <span class="o">==</span> <span class="n">channel_format</span><span class="o">::</span><span class="n">eight_bit</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">GLFWimage</span> <span class="n">icon</span><span class="p">{</span> <span class="n">image</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">image</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">image</span><span class="p">.</span><span class="n">get_raw_data</span><span class="o">&lt;</span><span class="n">byte</span><span class="o">&gt;</span><span class="p">()</span> <span class="p">};</span>
+
+                    <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">icon</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="n">win</span><span class="p">.</span><span class="n">m_title</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
+            <span class="n">win</span><span class="p">.</span><span class="n">m_isFullscreen</span> <span class="o">=</span> <span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">monitor</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">);</span>
+            <span class="n">win</span><span class="p">.</span><span class="n">m_swapInterval</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">swapInterval</span><span class="p">;</span>
+
+            <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span> <span class="n">handle</span><span class="p">;</span>
+
+            <span class="k">auto</span> <span class="n">setCallbacks</span> <span class="o">=</span> <span class="p">[](</span><span class="k">const</span> <span class="n">window</span><span class="o">&amp;</span> <span class="n">win</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">makeContextCurrent</span><span class="p">(</span><span class="n">win</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">swapInterval</span><span class="p">(</span><span class="n">win</span><span class="p">.</span><span class="n">m_swapInterval</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setWindowCloseCallback</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">closeWindow</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setWindowPosCallback</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">onWindowMoved</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setWindowSizeCallback</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">onWindowResize</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setWindowRefreshCallback</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">onWindowRefresh</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setWindowFocusCallback</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">onWindowFocus</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setWindowIconifyCallback</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">onWindowIconify</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setWindowMaximizeCallback</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">onWindowMaximize</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setFramebufferSizeCallback</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">onWindowFrameBufferResize</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setWindowContentScaleCallback</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">onWindowContentRescale</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setDropCallback</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">onItemDroppedInWindow</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setCursorEnterCallback</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">onMouseEnterWindow</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setKeyCallback</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">onKeyInput</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setCharCallback</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">onCharInput</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setCursorPosCallback</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">onMouseMoved</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setMouseButtonCallback</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">onMouseButton</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setScrollCallback</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">WindowSystem</span><span class="o">::</span><span class="n">onMouseScroll</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">makeContextCurrent</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
+            <span class="p">};</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">getEntityData</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">entityId</span><span class="p">).</span><span class="n">components</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span><span class="p">()))</span>
+            <span class="p">{</span>
+                <span class="n">win</span><span class="p">.</span><span class="n">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">();</span>
+
+                <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">wguard</span><span class="p">(</span><span class="o">*</span><span class="n">win</span><span class="p">.</span><span class="n">lock</span><span class="p">);</span>     <span class="c1">// This is the only code that has access to win.lock right now, so there&#39;s no deadlock risk.</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">cguard</span><span class="p">(</span><span class="n">m_creationLock</span><span class="p">);</span><span class="c1">// Locking them both separately is faster than using a multilock.</span>
+
+                <span class="n">handle</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponent</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">entityId</span><span class="p">,</span> <span class="n">win</span><span class="p">);</span>
+
+                <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;created window: {}&quot;</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
+
+                <span class="n">m_windowComponents</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="n">handle</span><span class="p">);</span>
+
+                <span class="c1">// Set all callbacks.</span>
+                <span class="n">setCallbacks</span><span class="p">(</span><span class="n">win</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">handle</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">getComponent</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">entityId</span><span class="p">);</span>
+                <span class="n">window</span> <span class="n">oldWindow</span> <span class="o">=</span> <span class="n">handle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+                <span class="n">async</span><span class="o">::</span><span class="n">readwrite_multiguard</span> <span class="n">wguard</span><span class="p">(</span><span class="o">*</span><span class="n">oldWindow</span><span class="p">.</span><span class="n">lock</span><span class="p">,</span> <span class="n">m_creationLock</span><span class="p">);</span>
+
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">destroyWindow</span><span class="p">(</span><span class="n">oldWindow</span><span class="p">);</span>
+                <span class="n">m_windowComponents</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">oldWindow</span><span class="p">);</span>
+
+                <span class="n">win</span><span class="p">.</span><span class="n">lock</span> <span class="o">=</span> <span class="n">oldWindow</span><span class="p">.</span><span class="n">lock</span><span class="p">;</span>
+                <span class="n">handle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">win</span><span class="p">);</span>
+
+                <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;replaced window: {}&quot;</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
+
+                <span class="n">m_windowComponents</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="n">handle</span><span class="p">);</span>
+
+                <span class="c1">// Set all callbacks.</span>
+                <span class="n">setCallbacks</span><span class="p">(</span><span class="n">win</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">m_creationRequests</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">fullscreenWindows</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_exit</span><span class="p">)</span> <span class="c1">// If the engine is exiting then we can&#39;t change any windows.</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_fullscreenRequestLock</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">request</span> <span class="p">:</span> <span class="n">m_fullscreenRequests</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">entityId</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Fullscreen toggle denied, entity {} doesn&#39;t exist.&quot;</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">entityId</span><span class="p">);</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">auto</span> <span class="n">handle</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">getComponent</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">entityId</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">handle</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Fullscreen toggle denied, entity {} doesn&#39;t have a window.&quot;</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">entityId</span><span class="p">);</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">window</span> <span class="n">win</span> <span class="o">=</span> <span class="n">handle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">wguard</span><span class="p">(</span><span class="o">*</span><span class="n">win</span><span class="p">.</span><span class="n">lock</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">win</span><span class="p">.</span><span class="n">m_isFullscreen</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span> <span class="o">=</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">getPrimaryMonitor</span><span class="p">();</span>
+                <span class="k">const</span> <span class="n">GLFWvidmode</span><span class="o">*</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">getVideoMode</span><span class="p">(</span><span class="n">monitor</span><span class="p">);</span>
+
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setWindowMonitor</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">position</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">size</span><span class="p">,</span> <span class="n">mode</span><span class="o">-&gt;</span><span class="n">refreshRate</span><span class="p">);</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;Set window {} to windowed.&quot;</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">entityId</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">GLFWmonitor</span><span class="o">*</span> <span class="n">monitor</span> <span class="o">=</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">getCurrentMonitor</span><span class="p">(</span><span class="n">win</span><span class="p">);</span>
+                <span class="k">const</span> <span class="n">GLFWvidmode</span><span class="o">*</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">getVideoMode</span><span class="p">(</span><span class="n">monitor</span><span class="p">);</span>
+
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setWindowMonitor</span><span class="p">(</span><span class="n">win</span><span class="p">,</span> <span class="n">monitor</span><span class="p">,</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">,</span><span class="mi">0</span> <span class="p">},</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span><span class="p">(</span><span class="n">mode</span><span class="o">-&gt;</span><span class="n">width</span><span class="p">,</span> <span class="n">mode</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">),</span> <span class="n">mode</span><span class="o">-&gt;</span><span class="n">refreshRate</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">makeContextCurrent</span><span class="p">(</span><span class="n">win</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">swapInterval</span><span class="p">(</span><span class="n">win</span><span class="p">.</span><span class="n">m_swapInterval</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">makeContextCurrent</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;Set window {} to fullscreen.&quot;</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">entityId</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="n">win</span><span class="p">.</span><span class="n">m_isFullscreen</span> <span class="o">=</span> <span class="o">!</span><span class="n">win</span><span class="p">.</span><span class="n">m_isFullscreen</span><span class="p">;</span>
+            <span class="n">handle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">win</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">m_fullscreenRequests</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">updateWindowIcons</span><span class="p">()</span>
+    <span class="p">{</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_exit</span><span class="p">)</span> <span class="c1">// If the engine is exiting then we can&#39;t change any windows.</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_iconRequestLock</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">request</span> <span class="p">:</span> <span class="n">m_iconRequests</span><span class="p">)</span>
+        <span class="p">{</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">entityId</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Icon change denied, entity {} doesn&#39;t exist.&quot;</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">entityId</span><span class="p">);</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">auto</span> <span class="n">handle</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">getComponent</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">entityId</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">handle</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Icon change denied, entity {} doesn&#39;t have a window.&quot;</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">entityId</span><span class="p">);</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">image</span><span class="p">]</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">icon</span><span class="p">.</span><span class="n">get_raw_image</span><span class="p">();</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">components</span> <span class="o">!=</span> <span class="n">image_components</span><span class="o">::</span><span class="n">rgba</span> <span class="o">||</span> <span class="n">image</span><span class="p">.</span><span class="n">format</span> <span class="o">!=</span> <span class="n">channel_format</span><span class="o">::</span><span class="n">eight_bit</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Icon change denied, image {} has the wrong format. The needed format is 4 channels with 8 bits per channel.&quot;</span><span class="p">,</span> <span class="n">request</span><span class="p">.</span><span class="n">icon</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">GLFWimage</span> <span class="n">icon</span><span class="p">{</span> <span class="n">image</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">image</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">image</span><span class="p">.</span><span class="n">get_raw_data</span><span class="o">&lt;</span><span class="n">byte</span><span class="o">&gt;</span><span class="p">()</span> <span class="p">};</span>
+
+            <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">handle</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">icon</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">m_iconRequests</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">refreshWindows</span><span class="p">(</span><span class="n">time</span><span class="o">::</span><span class="n">time_span</span><span class="o">&lt;</span><span class="n">fast_time</span><span class="o">&gt;</span> <span class="n">deltaTime</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">initialized</span><span class="p">())</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_creationLock</span><span class="p">);</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">entity</span> <span class="p">:</span> <span class="n">m_windowQuery</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">window</span> <span class="n">win</span> <span class="o">=</span> <span class="n">entity</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span><span class="p">().</span><span class="n">read</span><span class="p">();</span>
+            <span class="p">{</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="o">*</span><span class="n">win</span><span class="p">.</span><span class="n">lock</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">makeContextCurrent</span><span class="p">(</span><span class="n">win</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">swapBuffers</span><span class="p">(</span><span class="n">win</span><span class="p">);</span>
+                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">makeContextCurrent</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">WindowSystem</span><span class="o">::</span><span class="n">handleWindowEvents</span><span class="p">(</span><span class="n">time</span><span class="o">::</span><span class="n">time_span</span><span class="o">&lt;</span><span class="n">fast_time</span><span class="o">&gt;</span> <span class="n">deltaTime</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">createWindows</span><span class="p">();</span>
+        <span class="n">updateWindowIcons</span><span class="p">();</span>
+        <span class="n">fullscreenWindows</span><span class="p">();</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">initialized</span><span class="p">())</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="n">ContextHelper</span><span class="o">::</span><span class="n">pollEvents</span><span class="p">();</span>
+        <span class="n">ContextHelper</span><span class="o">::</span><span class="n">updateWindowFocus</span><span class="p">();</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_window_windowsystem.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

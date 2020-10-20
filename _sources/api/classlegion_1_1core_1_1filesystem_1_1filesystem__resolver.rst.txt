@@ -1,0 +1,32 @@
+.. _exhale_class_classlegion_1_1core_1_1filesystem_1_1filesystem__resolver:
+
+Class filesystem_resolver
+=========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filesystem_resolver.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::core::filesystem::filesystem_resolver_common_base`` (:ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1filesystem__resolver__common__base`)
+
+
+Derived Types
+*************
+
+- ``public legion::core::filesystem::basic_resolver`` (:ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1basic__resolver`)
+- ``public legion::core::filesystem::mem_filesystem_resolver`` (:ref:`exhale_class_classlegion_1_1core_1_1filesystem_1_1mem__filesystem__resolver`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::filesystem::filesystem_resolver
+   :members:
+   :protected-members:
+   :undoc-members:

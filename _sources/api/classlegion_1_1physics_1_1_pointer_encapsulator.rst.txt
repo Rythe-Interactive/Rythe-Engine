@@ -1,0 +1,16 @@
+.. _exhale_class_classlegion_1_1physics_1_1_pointer_encapsulator:
+
+Template Class PointerEncapsulator
+==================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_pointer_encapsulator.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::physics::PointerEncapsulator
+   :members:
+   :protected-members:
+   :undoc-members:

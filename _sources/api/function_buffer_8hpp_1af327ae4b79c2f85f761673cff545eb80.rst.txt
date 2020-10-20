@@ -1,0 +1,13 @@
+.. _exhale_function_buffer_8hpp_1af327ae4b79c2f85f761673cff545eb80:
+
+Function legion::core::compute::operator|=
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_buffer.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::compute::operator|=(buffer_type&, const buffer_type&)

@@ -1,0 +1,13 @@
+.. _exhale_variable_mesh_8hpp_1ad00317cc652357778ab1f92565603707:
+
+Variable legion::core::default_mesh_settings
+============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_mesh.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::default_mesh_settings

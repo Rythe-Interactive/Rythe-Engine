@@ -1,0 +1,24 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_importers_audio_importers.hpp:
+
+Program Listing for File audio_importers.hpp
+============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_importers_audio_importers.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/audio/data/importers/audio_importers.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/core.hpp>
+   #include <audio/data/audio_segment.hpp>
+   
+   namespace legion::audio
+   {
+       struct mp3_audio_loader : public fs::resource_converter<audio_segment, audio_import_settings>
+       {
+           virtual common::result_decay_more<audio_segment, fs_error> load(const fs::basic_resource& resource, audio_import_settings&& settings) override;
+           static ALCcontext* context;
+       };
+   }

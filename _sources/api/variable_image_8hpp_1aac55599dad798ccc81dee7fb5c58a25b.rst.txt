@@ -1,0 +1,13 @@
+.. _exhale_variable_image_8hpp_1aac55599dad798ccc81dee7fb5c58a25b:
+
+Variable legion::core::invalid_image_handle
+===========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_image.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::invalid_image_handle

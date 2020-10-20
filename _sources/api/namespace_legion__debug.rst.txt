@@ -1,0 +1,29 @@
+
+.. _namespace_legion__debug:
+
+Namespace legion::debug
+=======================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1debug_1_1debug__line`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_debugrendering_8hpp_1aa1e66b3bc468491c64d0bd74db002f8a`
+
+- :ref:`exhale_function_debugrendering_8hpp_1a16f43664217b0cd69ddd598711a62406`

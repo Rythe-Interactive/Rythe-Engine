@@ -1,0 +1,154 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp:
+
+File exception.hpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/common``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/common/exception.hpp``)
+------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`)
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`)
+
+- ``exception`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_common.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_detail_internals.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_handle.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filesystem_resolver.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_view.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_processchain.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_scheduler.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classlegion_1_1core_1_1component__destroyed__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1component__exists__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1entity__exists__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1entity__not__found__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1exception`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1fs__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1invalid__component__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1invalid__creation__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1invalid__entity__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1invalid__fetch__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1invalid__type__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1unknown__component__error`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1unknown__system__error`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_exception_8hpp_1a9e6088e7f9df00e9903475ebcc22026b`
+
+- :ref:`exhale_define_exception_8hpp_1ad3e9c175199d9d9184d6c9cea128f573`
+
+- :ref:`exhale_define_exception_8hpp_1a9756c52cce62e7d61abb970ea027e732`
+
+- :ref:`exhale_define_exception_8hpp_1a3e436e00c428f84a02f4b9c12ec092dd`
+
+- :ref:`exhale_define_exception_8hpp_1ac31900f83513354ff79a7be57ef4b634`
+
+- :ref:`exhale_define_exception_8hpp_1abd86a22e729b6ffb3606f127fbc8dcfc`
+
+- :ref:`exhale_define_exception_8hpp_1ade91e56615161e6b186b28c971aa6a21`
+
+- :ref:`exhale_define_exception_8hpp_1a16ef6118fee0e17a6d668b145c78a74c`
+
+- :ref:`exhale_define_exception_8hpp_1a871e57fee7324d03141693ac303aab9d`
+
+- :ref:`exhale_define_exception_8hpp_1a3709d7f8ac6b388a6302a01f78373ab1`
+
+- :ref:`exhale_define_exception_8hpp_1af560ff89dbc73f42ecf0e0f740d16e55`
+
+- :ref:`exhale_define_exception_8hpp_1a2f1f2f7df6afd72de2b7ec453f4bbbfa`
+
+- :ref:`exhale_define_exception_8hpp_1a7b1ef67f86492bc004339ff207df11ce`
+
+- :ref:`exhale_define_exception_8hpp_1aa97787ae5b1b3c10cd18e280660d9f30`
+
+- :ref:`exhale_define_exception_8hpp_1a4fd1a65337404a44317da6875c8049c0`
+
+- :ref:`exhale_define_exception_8hpp_1aee117e846634bf2fe4a3880967a25eb4`
+
+- :ref:`exhale_define_exception_8hpp_1aaa8ccec63f71b7e11d428f3c060fa961`
+
+- :ref:`exhale_define_exception_8hpp_1ab8d61fcf55afd1dd4ca95baca52156a0`
+
+- :ref:`exhale_define_exception_8hpp_1a70caf467010c000e6439798e3da653d9`
+
+- :ref:`exhale_define_exception_8hpp_1aca69b54e52eb492655e5a8335bdf057d`
+
+- :ref:`exhale_define_exception_8hpp_1a441e9749035320e8dca84a4f76a1a8fe`
+
+- :ref:`exhale_define_exception_8hpp_1af49754ad9af382e1290ea5aabdde693d`
+
+- :ref:`exhale_define_exception_8hpp_1ace9ab8dc88c8d1e3d34dbdcba8b390cf`
+
+- :ref:`exhale_define_exception_8hpp_1a1411473dd4530335c2bc6e8eaba96083`
+
+- :ref:`exhale_define_exception_8hpp_1adcaa2f91e00a1657dfc7e51de4fef92d`
+
