@@ -399,7 +399,6 @@
     <ClInclude Include="compute\context.hpp" />
     <ClInclude Include="compute\Program.hpp" />
     <ClInclude Include="compute\kernel.hpp" />
-    <ClInclude Include="compute\high_level\buffer_name_pair.hpp" />
     <ClInclude Include="compute\detail\cl_include.hpp" />
     <ClInclude Include="compute\high_level\function.hpp" />
     <ClInclude Include="data\image.hpp" />

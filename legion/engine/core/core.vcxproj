@@ -117,7 +117,6 @@
     <ClInclude Include="common\exception.hpp" />
     <ClInclude Include="common\unit_conversion.hpp" />
     <ClInclude Include="compute\detail\cl_include.hpp" />
-    <ClInclude Include="compute\high_level\buffer_name_pair.hpp" />
     <ClInclude Include="compute\high_level\function.hpp" />
     <ClInclude Include="compute\kernel.hpp" />
     <ClInclude Include="containers\atomic_sparse_map.hpp" />
