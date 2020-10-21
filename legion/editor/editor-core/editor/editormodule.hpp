@@ -1,4 +1,5 @@
 #pragma once
+#include <core/core.hpp>
 
 /**
  * @file editormodule.hpp
@@ -12,8 +13,14 @@ namespace legion::editor
 	 */
 	class EditorModule
 	{
+        friend class Editor;
+    public:
+        virtual void setup() LEGION_PURE;
 	};
 
-	struct editor_module_initializer_t {};
+    class CoreEditorModule : public EditorModule
+    {
+    public:
+        virtual void setup();
+    };
 }
-

@@ -1,11 +1,15 @@
+#define LEGION_ENTRY
+#define LEGION_KEEP_CONSOLE
+#define LEGION_LOW_POWER
+#define LEGION_MIN_THREADS 6 // Update, Rendering, Input, Audio, Physics, TestChain
+
 #include <editor-core/core.hpp>
 
-void LEGION_CCONV reportEditorModules(legion::editor::Editor* editor)
-{
 
-}
+using namespace legion;
+using namespace legion::editor;
 
-void LEGION_CCONV reportModules(legion::core::Engine* engine)
+void LEGION_CCONV reportEditorModules(Editor* editor)
 {
-	legion::log::info("Hello Legion!");
+    editor->reportModule<CoreEditorModule>();
 }

@@ -3,3 +3,7 @@
 /**
  * @file editormodule.cpp
  */
+
+void legion::editor::CoreEditorModule::setup()
+{
+}

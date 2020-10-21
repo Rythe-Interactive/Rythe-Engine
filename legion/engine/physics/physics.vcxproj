@@ -35,6 +35,7 @@
     <ClInclude Include="halfedgeface.hpp" />
     <ClInclude Include="colliders\physicscollider.hpp" />
     <ClInclude Include="data\penetrationquery.h" />
+    <ClInclude Include="physics.hpp" />
     <ClInclude Include="physicsconstants.h" />
     <ClInclude Include="physics_statics.hpp" />
     <ClInclude Include="physics_contact.h" />
