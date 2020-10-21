@@ -27,21 +27,23 @@ namespace legion::audio
             return decay(Err(legion_fs_error("Failed to load audio file")));
         }
 
-        audio_segment as{
-            fileInfo.buffer,
+        audio_segment as(
+            new int16[fileInfo.samples],
             0,
             fileInfo.samples,
             fileInfo.channels,
             fileInfo.hz,
             fileInfo.layer,
             fileInfo.avg_bitrate_kbps
-        };
+        );
+        memmove(as.getData(), fileInfo.buffer, as.samples * sizeof(int16));
+        free(fileInfo.buffer);
 
         async::readwrite_guard guard(AudioSystem::contextLock);
         alcMakeContextCurrent(context);
         //Generate openal buffer
         alGenBuffers((ALuint)1, &as.audioBufferId);
-        alBufferData(as.audioBufferId, AL_FORMAT_MONO16, as.data, as.samples * sizeof(int16), as.sampleRate);
+        alBufferData(as.audioBufferId, AL_FORMAT_MONO16, as.getData(), as.samples * sizeof(int16), as.sampleRate);
         alcMakeContextCurrent(nullptr);
 
         return decay(Ok(as));

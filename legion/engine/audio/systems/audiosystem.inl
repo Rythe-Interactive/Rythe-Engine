@@ -54,10 +54,27 @@ namespace legion::audio
 		bindToEvent<events::component_destruction<audio_source>, &AudioSystem::onAudioSourceComponentDestroy>();
 		bindToEvent<events::component_creation<audio_listener>, &AudioSystem::onAudioListenerComponentCreate>();
 		bindToEvent<events::component_destruction<audio_listener>, &AudioSystem::onAudioListenerComponentDestroy>();
+		bindToEvent<events::exit, &AudioSystem::onEngineExit>();
 
 		// Release context on this thread
 		alcMakeContextCurrent(nullptr);
 		mp3_audio_loader::context = alcContext;
+	}
+
+	inline void AudioSystem::onEngineExit(events::exit* event)
+	{
+		async::readwrite_guard guard(contextLock);
+		alcMakeContextCurrent(alcContext);
+
+		for (auto entity : sourceQuery)
+		{
+			auto sourceHandle = entity.get_component_handle<audio_source>();
+			sourceHandle.destroy();
+		}
+
+		alDevice = alcGetContextsDevice(alcContext);
+		alcMakeContextCurrent(nullptr);
+		alcCloseDevice(alDevice);
 	}
 
 	inline AudioSystem::~AudioSystem()
@@ -82,7 +99,7 @@ namespace legion::audio
 
 	inline void AudioSystem::update(time::span deltatime)
 	{
-		async::readonly_guard guard(contextLock);
+		async::readwrite_guard guard(contextLock);
 		alcMakeContextCurrent(alcContext);
 
 		for (auto entity : sourceQuery)
@@ -172,6 +189,8 @@ namespace legion::audio
 	{
 		auto handle = event->entity.get_component_handle<audio_source>();
 		m_sourcePositions.erase(handle);
+		audio_source a = handle.read();
+		alDeleteSources(1, &a.m_sourceId); // Clear source
 		--sourceCount;
 	}
 
