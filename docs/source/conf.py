@@ -17,8 +17,8 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'ArgsEngine'
-copyright = '2019, Raphael Baier, Args-Engine Team'
+project = 'LegionEngine'
+copyright = '2019, Raphael Baier, Legion-Engine Team'
 author = 'Raphael Baier'
 
 # The full version, including alpha/beta/rc tags
@@ -36,7 +36,7 @@ extensions = [
 ]
 
 breathe_projects = {
-    "ArgsEngine": "../xml/",
+    "LegionEngine": "../xml/",
 }
 
 source_suffix = {
@@ -50,7 +50,7 @@ exhale_args = {
 
     "containmentFolder": "./api",
     "rootFileName": "library_root.rst",
-    "rootFileTitle": "ARGS API",
+    "rootFileTitle": "Legion API",
     "doxygenStripFromPath": "..",
     "createTreeView": True,
 }
@@ -59,9 +59,9 @@ primary_domain = 'cpp'
 
 highlight_language = 'cpp'
 
-cpp_id_attributes = ["A_NODISCARD"]
+cpp_id_attributes = ["L_NODISCARD"]
 
-breathe_default_project = "ArgsEngine"
+breathe_default_project = "LegionEngine"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -85,6 +85,6 @@ sys.path.insert(0,here)
 html_theme = 'nameko'
 
 # now we can import our custom theme
-import argstheme
+import legiontheme
 
-html_theme_path = [argstheme.get_html_theme_path()]
+html_theme_path = [legiontheme.get_html_theme_path()]

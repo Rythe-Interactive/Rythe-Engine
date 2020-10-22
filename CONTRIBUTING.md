@@ -25,10 +25,10 @@ Furthermore the following rules are to be met when attempting to merge:
 
 ### Namespacing
 
-Everything needs to go into the namespace `args` and should be in it's own general namespace within that. Also use that as an indication where to put your file.
+Everything needs to go into the namespace `legion` and should be in it's own general namespace within that. Also use that as an indication where to put your file.
 
 i.e.: The file /core/math/vector.hpp uses
-`namespace args::core::math { ... }`
+`namespace legion::core::math { ... }`
 
 Use the new c++17 convention for nested namespaces, namespace names may only have snake_case letters.
 
@@ -62,9 +62,9 @@ When doing template-meta-programming make sure to use `constexpr` and `using` co
 #include <core/math/vector.hpp> //alway include from the root,makes the file more readable
 #include <application/application.hpp> //even if it is your own directory
 
-using namespace args::core;
+using namespace legion::core;
 
-namespace args::application // in cpp files you may use using namespace if you so desire
+namespace legion::application // in cpp files you may use using namespace if you so desire
 {
 
   Application::Application() : m_OtherVector { 1.0f, 2.0f } // use this constructor syntax (it's faster)
@@ -84,7 +84,7 @@ To ensure that your doxygen comments are in line with the rest of the code base 
   /** @brief Example for a function.
    *  @tparam T A quick example of what the template param does.
    *          (not when it can be inferred by a param)
-   *  @param a_parameter A quick description of what the param does.
+   *  @param bar_parameter A quick description of what the param does.
    *         Additionally you might use [in] [out] [in/out] for
    *         clarity.
    *  @return int A quick explanation of what to expect from
@@ -94,7 +94,7 @@ To ensure that your doxygen comments are in line with the rest of the code base 
    *         throwing an exception.
    */
   template <class T>
-  int a_function(int a_parameter);
+  int foo_function(int bar_parameter);
   ```
 
 - To keep the file small we encourage you to drop any commands, when the function is small enough to be explained by `@brief`
@@ -103,7 +103,7 @@ alone. for example:
   /** @brief Gets the size of the container.
    *  @return size_type The size of the container.
    */
-  A_NODISCARD auto size() const noexcept
+  L_NODISCARD auto size() const noexcept
   {
     return m_container.size();
   }
@@ -112,7 +112,7 @@ alone. for example:
   ```cpp
   /** @brief Gets the size of the container.
    */
-  A_NODISCARD auto size() const noexcept
+  L_NODISCARD auto size() const noexcept
   {
     return m_container.size();
   }

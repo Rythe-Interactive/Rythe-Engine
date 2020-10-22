@@ -1,7 +1,7 @@
-#define ARGS_ENTRY
-#define ARGS_KEEP_CONSOLE
-#define ARGS_LOW_POWER
-#define ARGS_ON_EXIT_QUIT
+#define LEGION_ENTRY
+#define LEGION_KEEP_CONSOLE
+#define LEGION_LOW_POWER
+#define LEGION_ON_EXIT_QUIT
 
 #include <core/core.hpp>
 #include <application/application.hpp>
@@ -15,7 +15,7 @@
 #include "doctest.h"
 #include "test_filesystem.hpp"
 
-using namespace args;
+using namespace legion;
 
 class Exitus : public Module {
 public:
@@ -42,7 +42,7 @@ TEST_CASE("[core:ut] sanity-check")
 }
 
 
-void ARGS_CCONV reportModules(Engine* engine)
+void LEGION_CCONV reportModules(Engine* engine)
 {
     doctest::Context ctx;
     ctx.applyCommandLine(engine->getCliArgs().size(),engine->getCliArgs().data());

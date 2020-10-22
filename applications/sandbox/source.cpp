@@ -1,8 +1,8 @@
-#define ARGS_ENTRY
-#define ARGS_KEEP_CONSOLE
-#define ARGS_LOW_POWER
+#define LEGION_ENTRY
+#define LEGION_KEEP_CONSOLE
+#define LEGION_LOW_POWER
 #define LEGION_MIN_THREADS 6 // Update, Rendering, Input, Audio, Physics, TestChain
-//#define ARGS_LOW_POWER
+//#define LEGION_LOW_POWER
 
 
 
@@ -25,11 +25,9 @@
 
 #include "test_filesystem.hpp"
 
-using namespace args;
+using namespace legion;
 
-
-
-void ARGS_CCONV reportModules(Engine* engine)
+void LEGION_CCONV reportModules(Engine* engine)
 {
     log::filter(log::severity::debug);
 
@@ -41,17 +39,4 @@ void ARGS_CCONV reportModules(Engine* engine)
     engine->reportModule<physics::PhysicsModule>();
     engine->reportModule<audio::AudioModule>();
     engine->reportModule<core::scenemanagement::SceneManagerModule>();
-   
-
-    try
-    {
-        throw args_component_destroyed_error;
-    }
-    catch (const exception& e)
-    {
-        std::cout << e.what() << std::endl;
-        std::cout << e.file() << std::endl;
-        std::cout << e.line() << std::endl;
-        std::cout << e.func() << std::endl;
-    }
 }
