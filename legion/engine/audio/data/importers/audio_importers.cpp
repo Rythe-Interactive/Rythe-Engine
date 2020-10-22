@@ -43,7 +43,10 @@ namespace legion::audio
         alcMakeContextCurrent(context);
         //Generate openal buffer
         alGenBuffers((ALuint)1, &as.audioBufferId);
-        alBufferData(as.audioBufferId, AL_FORMAT_MONO16, as.getData(), as.samples * sizeof(int16), as.sampleRate);
+        ALuint format = AL_FORMAT_MONO16;
+        if (as.channels == 2) format = AL_FORMAT_STEREO16;
+        alBufferData(as.audioBufferId, format, as.getData(), as.samples * sizeof(int16), as.sampleRate);
+
         alcMakeContextCurrent(nullptr);
 
         return decay(Ok(as));
