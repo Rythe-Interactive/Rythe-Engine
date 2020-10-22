@@ -2,7 +2,7 @@
 
 /**
  * @file core.hpp
- * @brief Single include header for Args-Core
+ * @brief Single include header for Legion-Core
  */
 
 #include <core/platform/platform.hpp>
