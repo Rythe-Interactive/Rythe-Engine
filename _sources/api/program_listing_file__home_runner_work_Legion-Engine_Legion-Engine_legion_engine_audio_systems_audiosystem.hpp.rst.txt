@@ -38,6 +38,8 @@ Program Listing for File audiosystem.hpp
    
            virtual void setup();
    
+           void onEngineExit(events::exit* event);
+   
            void onAudioSourceComponentCreate(events::component_creation<audio_source>* event);
    
            // NOTE TO SELF
@@ -53,6 +55,7 @@ Program Listing for File audiosystem.hpp
            static void setDistanceModel(ALenum distanceModel);
    
            static async::readonly_rw_spinlock contextLock;
+           static ALCcontext* alcContext;
        private:
            void initSource(audio_source& source);
    
@@ -64,7 +67,6 @@ Program Listing for File audiosystem.hpp
            std::unordered_map <ecs::component_handle<audio_source>, position > m_sourcePositions;
    
            static ALCdevice* alDevice;
-           static ALCcontext* alcContext;
            static unsigned int sourceCount;
            static unsigned int listenerCount;
        };

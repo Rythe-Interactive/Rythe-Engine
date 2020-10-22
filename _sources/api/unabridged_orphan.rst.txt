@@ -21,42 +21,42 @@ Directories
 .. toctree::
    :maxdepth: 5
 
-   dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_application.rst
+   dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-application.rst
 
 .. toctree::
    :maxdepth: 5
 
-   dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_audio.rst
+   dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-audio.rst
 
 .. toctree::
    :maxdepth: 5
 
-   dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core.rst
+   dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core.rst
 
 .. toctree::
    :maxdepth: 5
 
-   dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor.rst
+   dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_editor.rst
 
 .. toctree::
    :maxdepth: 5
 
-   dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_networking.rst
+   dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-networking.rst
 
 .. toctree::
    :maxdepth: 5
 
-   dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_physics.rst
+   dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-physics.rst
 
 .. toctree::
    :maxdepth: 5
 
-   dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_rendering.rst
+   dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-rendering.rst
 
 .. toctree::
    :maxdepth: 5
 
-   dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_scripting.rst
+   dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-scripting.rst
 
 .. toctree::
    :maxdepth: 5
@@ -142,6 +142,16 @@ Directories
    :maxdepth: 5
 
    dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_detail.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_high_level.rst
 
 .. toctree::
    :maxdepth: 5
@@ -425,6 +435,11 @@ Files
 .. toctree::
    :maxdepth: 5
 
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_detail_cl_include.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
    file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_clock.hpp.rst
 
 .. toctree::
@@ -505,6 +520,11 @@ Files
 .. toctree::
    :maxdepth: 5
 
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_core.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
    file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_core.hpp.rst
 
 .. toctree::
@@ -555,32 +575,32 @@ Files
 .. toctree::
    :maxdepth: 5
 
-   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_application_delete_this.cpp.rst
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-application_delete_this.cpp.rst
 
 .. toctree::
    :maxdepth: 5
 
-   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_audio_delete_this.cpp.rst
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-audio_delete_this.cpp.rst
 
 .. toctree::
    :maxdepth: 5
 
-   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_networking_delete_this.cpp.rst
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-networking_delete_this.cpp.rst
 
 .. toctree::
    :maxdepth: 5
 
-   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_physics_delete_this.cpp.rst
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-physics_delete_this.cpp.rst
 
 .. toctree::
    :maxdepth: 5
 
-   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_rendering_delete_this.cpp.rst
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-rendering_delete_this.cpp.rst
 
 .. toctree::
    :maxdepth: 5
 
-   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_scripting_delete_this.cpp.rst
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-scripting_delete_this.cpp.rst
 
 .. toctree::
    :maxdepth: 5
@@ -620,27 +640,22 @@ Files
 .. toctree::
    :maxdepth: 5
 
-   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor.hpp.rst
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_editor_editor.cpp.rst
 
 .. toctree::
    :maxdepth: 5
 
-   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor_editor_impl.cpp.rst
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_editor_editor.hpp.rst
 
 .. toctree::
    :maxdepth: 5
 
-   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor_editor_impl.hpp.rst
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_editor_editormodule.cpp.rst
 
 .. toctree::
    :maxdepth: 5
 
-   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor_editormodule.cpp.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor_editormodule.hpp.rst
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_editor_editormodule.hpp.rst
 
 .. toctree::
    :maxdepth: 5
@@ -721,6 +736,16 @@ Files
    :maxdepth: 5
 
    file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filesystem_resolver.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_high_level_function.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_high_level_function.hpp.rst
 
 .. toctree::
    :maxdepth: 5
@@ -906,6 +931,11 @@ Files
    :maxdepth: 5
 
    file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_penetrationquery.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics.hpp.rst
 
 .. toctree::
    :maxdepth: 5

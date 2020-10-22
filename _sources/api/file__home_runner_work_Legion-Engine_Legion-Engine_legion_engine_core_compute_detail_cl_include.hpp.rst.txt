@@ -1,0 +1,41 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_detail_cl_include.hpp:
+
+File cl_include.hpp
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_detail>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/compute/detail``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/compute/detail/cl_include.hpp``)
+---------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_detail_cl_include.hpp.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_buffer.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_program.hpp`
+
+
+

@@ -939,19 +939,25 @@
 </li>
       <li><a href="api/structlegion_1_1audio_1_1audio__segment.html#_CPPv4N6legion5audio13audio_segmentE">legion::audio::audio_segment (C++ struct)</a>
 </li>
+      <li><a href="api/structlegion_1_1audio_1_1audio__segment.html#_CPPv4N6legion5audio13audio_segment13audio_segmentEP5int166ALuint9size_typeiiii">legion::audio::audio_segment::audio_segment (C++ function)</a>, <a href="api/structlegion_1_1audio_1_1audio__segment.html#_CPPv4N6legion5audio13audio_segment13audio_segmentERK13audio_segment">[1]</a>, <a href="api/structlegion_1_1audio_1_1audio__segment.html#_CPPv4N6legion5audio13audio_segment13audio_segmentERR13audio_segment">[2]</a>, <a href="api/structlegion_1_1audio_1_1audio__segment.html#_CPPv4N6legion5audio13audio_segment13audio_segmentEv">[3]</a>
+</li>
       <li><a href="api/structlegion_1_1audio_1_1audio__segment.html#_CPPv4N6legion5audio13audio_segment13audioBufferIdE">legion::audio::audio_segment::audioBufferId (C++ member)</a>
 </li>
       <li><a href="api/structlegion_1_1audio_1_1audio__segment.html#_CPPv4N6legion5audio13audio_segment16avg_bitrate_kbpsE">legion::audio::audio_segment::avg_bitrate_kbps (C++ member)</a>
 </li>
       <li><a href="api/structlegion_1_1audio_1_1audio__segment.html#_CPPv4N6legion5audio13audio_segment8channelsE">legion::audio::audio_segment::channels (C++ member)</a>
 </li>
-      <li><a href="api/structlegion_1_1audio_1_1audio__segment.html#_CPPv4N6legion5audio13audio_segment4dataE">legion::audio::audio_segment::data (C++ member)</a>
+      <li><a href="api/structlegion_1_1audio_1_1audio__segment.html#_CPPv4N6legion5audio13audio_segment7getDataEv">legion::audio::audio_segment::getData (C++ function)</a>, <a href="api/structlegion_1_1audio_1_1audio__segment.html#_CPPv4NK6legion5audio13audio_segment7getDataEv">[1]</a>
 </li>
       <li><a href="api/structlegion_1_1audio_1_1audio__segment.html#_CPPv4N6legion5audio13audio_segment5layerE">legion::audio::audio_segment::layer (C++ member)</a>
+</li>
+      <li><a href="api/structlegion_1_1audio_1_1audio__segment.html#_CPPv4N6legion5audio13audio_segmentaSERK13audio_segment">legion::audio::audio_segment::operator= (C++ function)</a>, <a href="api/structlegion_1_1audio_1_1audio__segment.html#_CPPv4N6legion5audio13audio_segmentaSERR13audio_segment">[1]</a>
 </li>
       <li><a href="api/structlegion_1_1audio_1_1audio__segment.html#_CPPv4N6legion5audio13audio_segment10sampleRateE">legion::audio::audio_segment::sampleRate (C++ member)</a>
 </li>
       <li><a href="api/structlegion_1_1audio_1_1audio__segment.html#_CPPv4N6legion5audio13audio_segment7samplesE">legion::audio::audio_segment::samples (C++ member)</a>
+</li>
+      <li><a href="api/structlegion_1_1audio_1_1audio__segment.html#_CPPv4N6legion5audio13audio_segmentD0Ev">legion::audio::audio_segment::~audio_segment (C++ function)</a>
 </li>
       <li><a href="api/structlegion_1_1audio_1_1audio__segment__handle.html#_CPPv4N6legion5audio20audio_segment_handleE">legion::audio::audio_segment_handle (C++ struct)</a>
 </li>
@@ -1019,6 +1025,8 @@
 </li>
       <li><a href="api/classlegion_1_1audio_1_1_audio_system.html#_CPPv4N6legion5audio11AudioSystemE">legion::audio::AudioSystem (C++ class)</a>
 </li>
+      <li><a href="api/classlegion_1_1audio_1_1_audio_system.html#_CPPv4N6legion5audio11AudioSystem10alcContextE">legion::audio::AudioSystem::alcContext (C++ member)</a>
+</li>
       <li><a href="api/classlegion_1_1audio_1_1_audio_system.html#_CPPv4N6legion5audio11AudioSystem11contextLockE">legion::audio::AudioSystem::contextLock (C++ member)</a>
 </li>
       <li><a href="api/classlegion_1_1audio_1_1_audio_system.html#_CPPv4N6legion5audio11AudioSystem30onAudioListenerComponentCreateEPN6events18component_creationI14audio_listenerEE">legion::audio::AudioSystem::onAudioListenerComponentCreate (C++ function)</a>
@@ -1028,6 +1036,8 @@
       <li><a href="api/classlegion_1_1audio_1_1_audio_system.html#_CPPv4N6legion5audio11AudioSystem28onAudioSourceComponentCreateEPN6events18component_creationI12audio_sourceEE">legion::audio::AudioSystem::onAudioSourceComponentCreate (C++ function)</a>
 </li>
       <li><a href="api/classlegion_1_1audio_1_1_audio_system.html#_CPPv4N6legion5audio11AudioSystem29onAudioSourceComponentDestroyEPN6events21component_destructionI12audio_sourceEE">legion::audio::AudioSystem::onAudioSourceComponentDestroy (C++ function)</a>
+</li>
+      <li><a href="api/classlegion_1_1audio_1_1_audio_system.html#_CPPv4N6legion5audio11AudioSystem12onEngineExitEPN6events4exitE">legion::audio::AudioSystem::onEngineExit (C++ function)</a>
 </li>
       <li><a href="api/classlegion_1_1audio_1_1_audio_system.html#_CPPv4N6legion5audio11AudioSystem16setDistanceModelE6ALenum">legion::audio::AudioSystem::setDistanceModel (C++ function)</a>
 </li>
@@ -1471,11 +1481,29 @@
 </li>
       <li><a href="api/classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6Buffer6BufferE10cl_contextP4byte6size_t11buffer_typeNSt6stringE">legion::core::compute::Buffer::Buffer (C++ function)</a>, <a href="api/classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6Buffer6BufferERK6Buffer">[1]</a>, <a href="api/classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6Buffer6BufferERR6Buffer">[2]</a>
 </li>
+      <li><a href="api/classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4NK6legion4core7compute6Buffer8has_nameEv">legion::core::compute::Buffer::has_name (C++ function)</a>
+</li>
+      <li><a href="api/classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4NK6legion4core7compute6Buffer13is_readbufferEv">legion::core::compute::Buffer::is_readbuffer (C++ function)</a>
+</li>
+      <li><a href="api/classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4NK6legion4core7compute6Buffer14is_writebufferEv">legion::core::compute::Buffer::is_writebuffer (C++ function)</a>
+</li>
       <li><a href="api/classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferaSERK6Buffer">legion::core::compute::Buffer::operator= (C++ function)</a>, <a href="api/classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferaSERR6Buffer">[1]</a>
 </li>
       <li><a href="api/classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6Buffer6renameERKNSt6stringE">legion::core::compute::Buffer::rename (C++ function)</a>
 </li>
       <li><a href="api/classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferD0Ev">legion::core::compute::Buffer::~Buffer (C++ function)</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1buffer__base.html#_CPPv4N6legion4core7compute11buffer_baseE">legion::core::compute::buffer_base (C++ struct)</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1buffer__base.html#_CPPv4N6legion4core7compute11buffer_base11buffer_baseEP4byte6size_tNSt6stringE">legion::core::compute::buffer_base::buffer_base (C++ function)</a>, <a href="api/structlegion_1_1core_1_1compute_1_1buffer__base.html#_CPPv4N6legion4core7compute11buffer_base11buffer_baseERK11buffer_base">[1]</a>, <a href="api/structlegion_1_1core_1_1compute_1_1buffer__base.html#_CPPv4N6legion4core7compute11buffer_base11buffer_baseERR11buffer_base">[2]</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1buffer__base.html#_CPPv4N6legion4core7compute11buffer_base9containerE">legion::core::compute::buffer_base::container (C++ member)</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1buffer__base.html#_CPPv4N6legion4core7compute11buffer_base4nameE">legion::core::compute::buffer_base::name (C++ member)</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1buffer__base.html#_CPPv4N6legion4core7compute11buffer_baseaSERK11buffer_base">legion::core::compute::buffer_base::operator= (C++ function)</a>, <a href="api/structlegion_1_1core_1_1compute_1_1buffer__base.html#_CPPv4N6legion4core7compute11buffer_baseaSERR11buffer_base">[1]</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1buffer__base.html#_CPPv4N6legion4core7compute11buffer_baseD0Ev">legion::core::compute::buffer_base::~buffer_base (C++ function)</a>
 </li>
       <li><a href="api/enum_buffer_8hpp_1a7e33690cda6ca2c7eee105bf5e28a0b0.html#_CPPv4N6legion4core7compute11buffer_typeE">legion::core::compute::buffer_type (C++ enum)</a>
 </li>
@@ -1485,7 +1513,7 @@
 </li>
       <li><a href="api/classlegion_1_1core_1_1compute_1_1_context.html#_CPPv4N6legion4core7compute7ContextE">legion::core::compute::Context (C++ class)</a>
 </li>
-      <li><a href="api/classlegion_1_1core_1_1compute_1_1_context.html#_CPPv4I0EN6legion4core7compute7Context12createBufferE6BufferRNSt6vectorI1TEE11buffer_typeNSt6stringE">legion::core::compute::Context::createBuffer (C++ function)</a>
+      <li><a href="api/classlegion_1_1core_1_1compute_1_1_context.html#_CPPv4I0EN6legion4core7compute7Context12createBufferE6BufferRNSt6vectorI1TEE11buffer_typeNSt6stringE">legion::core::compute::Context::createBuffer (C++ function)</a>, <a href="api/classlegion_1_1core_1_1compute_1_1_context.html#_CPPv4N6legion4core7compute7Context12createBufferEP4byte9size_type11buffer_typeNSt6stringE">[1]</a>
 </li>
       <li><a href="api/classlegion_1_1core_1_1compute_1_1_context.html#_CPPv4N6legion4core7compute7Context13createProgramERKN10filesystem14basic_resourceE">legion::core::compute::Context::createProgram (C++ function)</a>
 </li>
@@ -1493,13 +1521,55 @@
 </li>
       <li><a href="api/classlegion_1_1core_1_1compute_1_1_context.html#_CPPv4N6legion4core7compute7Context11initializedEv">legion::core::compute::Context::initialized (C++ function)</a>
 </li>
+      <li><a href="api/classlegion_1_1core_1_1compute_1_1function.html#_CPPv4N6legion4core7compute8functionE">legion::core::compute::function (C++ class)</a>
+</li>
+      <li><a href="api/classlegion_1_1core_1_1compute_1_1function.html#_CPPv4N6legion4core7compute8function13from_resourceEP8functionRKN10filesystem14basic_resourceE">legion::core::compute::function::from_resource (C++ function)</a>
+</li>
+      <li><a href="api/classlegion_1_1core_1_1compute_1_1function.html#_CPPv4N6legion4core7compute8function8functionENSt6stringE">legion::core::compute::function::function (C++ function)</a>
+</li>
+      <li><a href="api/classlegion_1_1core_1_1compute_1_1function.html#_CPPv4IDpEN6legion4core7compute8functionclEN6common6resultIvvEE9size_typeDpRR4Args">legion::core::compute::function::operator() (C++ function)</a>
+</li>
+      <li><a href="api/classlegion_1_1core_1_1compute_1_1function.html#_CPPv4N6legion4core7compute8function10setProgramERR7Program">legion::core::compute::function::setProgram (C++ function)</a>
+</li>
+      <li><a href="api/classlegion_1_1core_1_1compute_1_1function__base.html#_CPPv4N6legion4core7compute13function_baseE">legion::core::compute::function_base (C++ class)</a>
+</li>
+      <li><a href="api/classlegion_1_1core_1_1compute_1_1function__base.html#_CPPv4NK6legion4core7compute13function_base6invokeE9size_typeRNSt6vectorINSt4pairIP11buffer_base11buffer_typeEEEE">legion::core::compute::function_base::invoke (C++ function)</a>
+</li>
+      <li><a href="api/classlegion_1_1core_1_1compute_1_1function__base.html#_CPPv4N6legion4core7compute13function_base8m_kernelE">legion::core::compute::function_base::m_kernel (C++ member)</a>
+</li>
+      <li><a href="api/classlegion_1_1core_1_1compute_1_1function__base.html#_CPPv4N6legion4core7compute13function_base9m_programE">legion::core::compute::function_base::m_program (C++ member)</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1in.html#_CPPv4I0EN6legion4core7compute2inE">legion::core::compute::in (C++ struct)</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1in.html#_CPPv4N6legion4core7compute2in2inER1TNSt6stringE">legion::core::compute::in::in (C++ function)</a>, <a href="api/structlegion_1_1core_1_1compute_1_1in.html#_CPPv4N6legion4core7compute2in2inERK2in">[1]</a>, <a href="api/structlegion_1_1core_1_1compute_1_1in.html#_CPPv4N6legion4core7compute2in2inERR2in">[2]</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1in.html#_CPPv4N6legion4core7compute2inaSERK2in">legion::core::compute::in::operator= (C++ function)</a>, <a href="api/structlegion_1_1core_1_1compute_1_1in.html#_CPPv4N6legion4core7compute2inaSERR2in">[1]</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1in.html#_CPPv4N6legion4core7compute2in10value_typeE">legion::core::compute::in::value_type (C++ type)</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1in.html#_CPPv4N6legion4core7compute2inD0Ev">legion::core::compute::in::~in (C++ function)</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1in__ident.html#_CPPv4N6legion4core7compute8in_identE">legion::core::compute::in_ident (C++ struct)</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1inout.html#_CPPv4I0EN6legion4core7compute5inoutE">legion::core::compute::inout (C++ struct)</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1inout.html#_CPPv4N6legion4core7compute5inout5inoutER1TNSt6stringE">legion::core::compute::inout::inout (C++ function)</a>, <a href="api/structlegion_1_1core_1_1compute_1_1inout.html#_CPPv4N6legion4core7compute5inout5inoutERK5inout">[1]</a>, <a href="api/structlegion_1_1core_1_1compute_1_1inout.html#_CPPv4N6legion4core7compute5inout5inoutERR5inout">[2]</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1inout.html#_CPPv4N6legion4core7compute5inoutaSERK5inout">legion::core::compute::inout::operator= (C++ function)</a>, <a href="api/structlegion_1_1core_1_1compute_1_1inout.html#_CPPv4N6legion4core7compute5inoutaSERR5inout">[1]</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1inout.html#_CPPv4N6legion4core7compute5inout10value_typeE">legion::core::compute::inout::value_type (C++ type)</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1inout.html#_CPPv4N6legion4core7compute5inoutD0Ev">legion::core::compute::inout::~inout (C++ function)</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1inout__ident.html#_CPPv4N6legion4core7compute11inout_identE">legion::core::compute::inout_ident (C++ struct)</a>
+</li>
       <li><a href="api/classlegion_1_1core_1_1compute_1_1_kernel.html#_CPPv4N6legion4core7compute6KernelE">legion::core::compute::Kernel (C++ class)</a>
 </li>
       <li><a href="api/classlegion_1_1core_1_1compute_1_1_kernel.html#_CPPv4N6legion4core7compute6Kernel18build_buffer_namesEv">legion::core::compute::Kernel::build_buffer_names (C++ function)</a>
 </li>
       <li><a href="api/classlegion_1_1core_1_1compute_1_1_kernel.html#_CPPv4N6legion4core7compute6Kernel8dispatchEv">legion::core::compute::Kernel::dispatch (C++ function)</a>
 </li>
-      <li><a href="api/classlegion_1_1core_1_1compute_1_1_kernel.html#_CPPv4N6legion4core7compute6Kernel14enqueue_bufferE6Buffer10block_mode">legion::core::compute::Kernel::enqueue_buffer (C++ function)</a>, <a href="api/classlegion_1_1core_1_1compute_1_1_kernel.html#_CPPv4N6legion4core7compute6Kernel14enqueue_bufferE6Buffer7cl_uint10block_mode">[1]</a>, <a href="api/classlegion_1_1core_1_1compute_1_1_kernel.html#_CPPv4N6legion4core7compute6Kernel14enqueue_bufferE6BufferRKNSt6stringE10block_mode">[2]</a>
+      <li><a href="api/classlegion_1_1core_1_1compute_1_1_kernel.html#_CPPv4N6legion4core7compute6Kernel14enqueue_bufferE6Buffer10block_mode">legion::core::compute::Kernel::enqueue_buffer (C++ function)</a>
 </li>
       <li><a href="api/classlegion_1_1core_1_1compute_1_1_kernel.html#_CPPv4NK6legion4core7compute6Kernel6finishEv">legion::core::compute::Kernel::finish (C++ function)</a>
 </li>
@@ -1520,6 +1590,18 @@
       <li><a href="api/function_buffer_8hpp_1a82a0d5cd18aa1549402dceebbdbed0b7.html#_CPPv4N6legion4core7computeorERK11buffer_typeRK11buffer_type">legion::core::compute::operator| (C++ function)</a>
 </li>
       <li><a href="api/function_buffer_8hpp_1af327ae4b79c2f85f761673cff545eb80.html#_CPPv4N6legion4core7computeoRER11buffer_typeRK11buffer_type">legion::core::compute::operator|= (C++ function)</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1out.html#_CPPv4I0EN6legion4core7compute3outE">legion::core::compute::out (C++ struct)</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1out.html#_CPPv4N6legion4core7compute3outaSERK3out">legion::core::compute::out::operator= (C++ function)</a>, <a href="api/structlegion_1_1core_1_1compute_1_1out.html#_CPPv4N6legion4core7compute3outaSERR3out">[1]</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1out.html#_CPPv4N6legion4core7compute3out3outER1TNSt6stringE">legion::core::compute::out::out (C++ function)</a>, <a href="api/structlegion_1_1core_1_1compute_1_1out.html#_CPPv4N6legion4core7compute3out3outERK3out">[1]</a>, <a href="api/structlegion_1_1core_1_1compute_1_1out.html#_CPPv4N6legion4core7compute3out3outERR3out">[2]</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1out.html#_CPPv4N6legion4core7compute3out10value_typeE">legion::core::compute::out::value_type (C++ type)</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1out.html#_CPPv4N6legion4core7compute3outD0Ev">legion::core::compute::out::~out (C++ function)</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1compute_1_1out__ident.html#_CPPv4N6legion4core7compute9out_identE">legion::core::compute::out_ident (C++ struct)</a>
 </li>
       <li><a href="api/classlegion_1_1core_1_1compute_1_1_program.html#_CPPv4N6legion4core7compute7ProgramE">legion::core::compute::Program (C++ class)</a>
 </li>
@@ -2107,7 +2189,7 @@
 </li>
       <li><a href="api/classlegion_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4NK6legion4core10filesystem14basic_resource4sizeEv">legion::core::filesystem::basic_resource::size (C++ function)</a>
 </li>
-      <li><a href="api/classlegion_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4I0DpEN6legion4core10filesystem14basic_resource2toE1TDpRR4Args">legion::core::filesystem::basic_resource::to (C++ function)</a>
+      <li><a href="api/classlegion_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4I0DpENK6legion4core10filesystem14basic_resource2toE1TDpRR4Args">legion::core::filesystem::basic_resource::to (C++ function)</a>
 </li>
       <li><a href="api/classlegion_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4NK6legion4core10filesystem14basic_resource9to_stringEv">legion::core::filesystem::basic_resource::to_string (C++ function)</a>
 </li>
@@ -2173,6 +2255,8 @@
 </li>
       <li><a href="api/classlegion_1_1core_1_1filesystem_1_1filesystem__resolver.html#_CPPv4N6legion4core10filesystem19filesystem_resolver7inheritER19filesystem_resolver">legion::core::filesystem::filesystem_resolver::inherit (C++ function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/classlegion_1_1core_1_1filesystem_1_1filesystem__resolver.html#_CPPv4NK6legion4core10filesystem19filesystem_resolver12is_directoryEv">legion::core::filesystem::filesystem_resolver::is_directory (C++ function)</a>
 </li>
       <li><a href="api/classlegion_1_1core_1_1filesystem_1_1filesystem__resolver.html#_CPPv4NK6legion4core10filesystem19filesystem_resolver7is_fileEv">legion::core::filesystem::filesystem_resolver::is_file (C++ function)</a>
@@ -2205,8 +2289,6 @@
 </li>
       <li><a href="api/structlegion_1_1core_1_1filesystem_1_1filesystem__traits.html#_CPPv4N6legion4core10filesystem17filesystem_traits11is_readonlyE">legion::core::filesystem::filesystem_traits::is_readonly (C++ member)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/structlegion_1_1core_1_1filesystem_1_1filesystem__traits.html#_CPPv4N6legion4core10filesystem17filesystem_traits8is_validE">legion::core::filesystem::filesystem_traits::is_valid (C++ member)</a>
 </li>
       <li><a href="api/variable_artifact__cache_8hpp_1a7a3bb5619fe349d9099e585686b956a3.html#_CPPv4N6legion4core10filesystem7gc_histE">legion::core::filesystem::gc_hist (C++ member)</a>
@@ -2365,7 +2447,7 @@
 </li>
       <li><a href="api/classlegion_1_1core_1_1filesystem_1_1view.html#_CPPv4NK6legion4core10filesystem4view8is_validEb">legion::core::filesystem::view::is_valid (C++ function)</a>
 </li>
-      <li><a href="api/classlegion_1_1core_1_1filesystem_1_1view.html#_CPPv4I0EN6legion4core10filesystem4view7load_asEDcv">legion::core::filesystem::view::load_as (C++ function)</a>
+      <li><a href="api/classlegion_1_1core_1_1filesystem_1_1view.html#_CPPv4I0DpEN6legion4core10filesystem4view7load_asEDcDpRR4Args">legion::core::filesystem::view::load_as (C++ function)</a>
 </li>
       <li><a href="api/classlegion_1_1core_1_1filesystem_1_1view.html#_CPPv4N6legion4core10filesystem4view15m_foundSolutionE">legion::core::filesystem::view::m_foundSolution (C++ member)</a>
 </li>
@@ -2582,6 +2664,10 @@
       <li><a href="api/classlegion_1_1core_1_1invalid__type__error.html#_CPPv4N6legion4core18invalid_type_errorE">legion::core::invalid_type_error (C++ class)</a>
 </li>
       <li><a href="api/classlegion_1_1core_1_1invalid__type__error.html#_CPPv4N6legion4core18invalid_type_error18invalid_type_errorE7cstring4uint7cstring">legion::core::invalid_type_error::invalid_type_error (C++ function)</a>, <a href="api/classlegion_1_1core_1_1invalid__type__error.html#_CPPv4N6legion4core18invalid_type_error18invalid_type_errorE7cstring7cstring4uint7cstring">[1]</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1is__vector.html#_CPPv4I0EN6legion4core9is_vectorE">legion::core::is_vector (C++ struct)</a>
+</li>
+      <li><a href="api/structlegion_1_1core_1_1is__vector_3_01std_1_1vector_3_01_t_01_4_01_4.html#_CPPv4I0EN6legion4core9is_vectorINSt6vectorI1TEEEE">legion::core::is_vector&lt;std::vector&lt;T&gt;&gt; (C++ struct)</a>
 </li>
       <li><a href="api/function_iterator__tricks_8hpp_1ab1378f0ad3a830ee0f93ed9eb99b6827.html#_CPPv4I0EN6legion4core8iterator12checked_nextEbR2It2ItNSt6size_tE">legion::core::iterator::checked_next (C++ function)</a>
 </li>
@@ -3469,11 +3555,23 @@
 </li>
       <li><a href="api/function_debugrendering_8hpp_1a16f43664217b0cd69ddd598711a62406.html#_CPPv4N6legion5debug11setEventBusEPN6events8EventBusE">legion::debug::setEventBus (C++ function)</a>
 </li>
+      <li><a href="api/classlegion_1_1editor_1_1_core_editor_module.html#_CPPv4N6legion6editor16CoreEditorModuleE">legion::editor::CoreEditorModule (C++ class)</a>
+</li>
+      <li><a href="api/classlegion_1_1editor_1_1_core_editor_module.html#_CPPv4N6legion6editor16CoreEditorModule5setupEv">legion::editor::CoreEditorModule::setup (C++ function)</a>
+</li>
+      <li><a href="api/classlegion_1_1editor_1_1detail_1_1_editor_engine_module.html#_CPPv4N6legion6editor6detail18EditorEngineModuleE">legion::editor::detail::EditorEngineModule (C++ class)</a>
+</li>
+      <li><a href="api/classlegion_1_1editor_1_1detail_1_1_editor_engine_module.html#_CPPv4N6legion6editor6detail18EditorEngineModule18EditorEngineModuleEP6Editor">legion::editor::detail::EditorEngineModule::EditorEngineModule (C++ function)</a>
+</li>
+      <li><a href="api/classlegion_1_1editor_1_1detail_1_1_editor_engine_module.html#_CPPv4N6legion6editor6detail18EditorEngineModule5setupEv">legion::editor::detail::EditorEngineModule::setup (C++ function)</a>
+</li>
       <li><a href="api/classlegion_1_1editor_1_1_editor.html#_CPPv4N6legion6editor6EditorE">legion::editor::Editor (C++ class)</a>
 </li>
-      <li><a href="api/structlegion_1_1editor_1_1editor__module__initializer__t.html#_CPPv4N6legion6editor27editor_module_initializer_tE">legion::editor::editor_module_initializer_t (C++ struct)</a>
+      <li><a href="api/classlegion_1_1editor_1_1_editor.html#_CPPv4I0Dp_13inherits_fromI10ModuleType12EditorModuleEEN6legion6editor6Editor12reportModuleEvDpRR4Args">legion::editor::Editor::reportModule (C++ function)</a>
 </li>
       <li><a href="api/classlegion_1_1editor_1_1_editor_module.html#_CPPv4N6legion6editor12EditorModuleE">legion::editor::EditorModule (C++ class)</a>
+</li>
+      <li><a href="api/classlegion_1_1editor_1_1_editor_module.html#_CPPv4N6legion6editor12EditorModule5setupEv">legion::editor::EditorModule::setup (C++ function)</a>
 </li>
       <li><a href="api/variable_physicsconstants_8h_1a6d05c48fca0fb42967fde1b95b5ff553.html#_CPPv4N6legion7physics9constants27contactSolverIterationCountE">legion::physics::constants::contactSolverIterationCount (C++ member)</a>
 </li>
@@ -4335,7 +4433,7 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/function_editor__impl_8hpp_1a649040541d161ced8cbd98dc88308542.html#_CPPv419reportEditorModulesPN6legion6editor6EditorE">reportEditorModules (C++ function)</a>
+      <li><a href="api/function_editor_8hpp_1a649040541d161ced8cbd98dc88308542.html#_CPPv419reportEditorModulesPN6legion6editor6EditorE">reportEditorModules (C++ function)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>

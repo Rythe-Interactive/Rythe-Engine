@@ -59,7 +59,6 @@ Program Listing for File inputmap.hpp
                return value(lhs) | value(rhs);
            }
    
-   
            enum class method
            {
                KEY,
@@ -353,5 +352,4 @@ Program Listing for File inputmap.hpp
                }
            }
        };
-   
    }

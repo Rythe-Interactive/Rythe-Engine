@@ -1,0 +1,25 @@
+.. _exhale_struct_structlegion_1_1core_1_1is__vector_3_01std_1_1vector_3_01_t_01_4_01_4:
+
+Template Struct is_vector< std::vector< T > >
+=============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_meta.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public true_type``
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::is_vector< std::vector< T > >
+   :members:
+   :protected-members:
+   :undoc-members:

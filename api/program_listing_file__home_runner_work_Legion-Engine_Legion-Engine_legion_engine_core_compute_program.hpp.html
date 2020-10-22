@@ -47,9 +47,8 @@
 <span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-compute-program-hpp"></span><h1>Program Listing for File program.hpp<a class="headerlink" href="#program-listing-for-file-program-hpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_program.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-compute-program-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/compute/program.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
-<span class="cp">#if !defined(DOXY_EXCLUDE)</span>
-<span class="cp">#include</span> <span class="cpf">&lt;CL/cl.h&gt;</span><span class="cp"></span>
-<span class="cp">#endif</span>
+<span class="cp">#include</span> <span class="cpf">&quot;detail/cl_include.hpp&quot;</span><span class="cp"></span>
+
 <span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/resource.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/compute/kernel.hpp&gt;</span><span class="cp"></span>
 
@@ -63,7 +62,7 @@
     <span class="k">public</span><span class="o">:</span>
 
 
-        <span class="n">Program</span><span class="p">(</span><span class="n">cl_context</span><span class="p">,</span> <span class="n">cl_device_id</span><span class="p">,</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">basic_resource</span><span class="p">);</span>
+        <span class="n">Program</span><span class="p">(</span><span class="n">cl_context</span><span class="p">,</span> <span class="n">cl_device_id</span><span class="p">,</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">basic_resource</span> <span class="cm">/*, bool source_is_il = false*/</span><span class="p">);</span>
         <span class="n">Program</span><span class="p">(</span><span class="k">const</span> <span class="n">Program</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">Program</span><span class="p">(</span><span class="n">Program</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">Program</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Program</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>

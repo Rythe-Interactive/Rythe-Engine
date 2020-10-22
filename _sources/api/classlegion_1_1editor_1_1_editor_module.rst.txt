@@ -3,7 +3,16 @@
 Class EditorModule
 ==================
 
-- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor_editormodule.hpp`
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_editor_editormodule.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Type
+************
+
+- ``public legion::editor::CoreEditorModule`` (:ref:`exhale_class_classlegion_1_1editor_1_1_core_editor_module`)
 
 
 Class Documentation

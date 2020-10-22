@@ -65,10 +65,10 @@ Program Listing for File view.hpp
    
            L_NODISCARD view operator[](std::string_view identifier) const;
    
-           template <class T>
-           auto load_as() -> decltype(auto)
+           template <class T,class... Args>
+           auto load_as(Args&&...args) -> decltype(auto)
            {
-               return get().decay().to<T>();
+               return get().decay().to<T>(std::forward<Args>(args)...);
            }
    
    

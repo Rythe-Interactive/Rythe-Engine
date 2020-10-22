@@ -153,7 +153,7 @@ class Test {
 
 
         template &lt;class T,class... Args&gt;
-        L_NODISCARD T to(Args&amp;&amp;...args);
+        L_NODISCARD T to(Args&amp;&amp;...args) const;
 
         template &lt;class T&gt;
         void from(const T&amp; v);
@@ -211,7 +211,7 @@ class Test {
 
 
     template &lt;class T,class... Args&gt;
-    L_NODISCARD T basic_resource::to(Args&amp;&amp;...args)
+    L_NODISCARD T basic_resource::to(Args&amp;&amp;...args) const
     {
         return std::move(from_resource&lt;T&gt;(*this, std::forward&lt;Args&gt;(args)...));
     }

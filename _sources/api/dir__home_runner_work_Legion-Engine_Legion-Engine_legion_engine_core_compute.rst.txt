@@ -11,6 +11,12 @@ Directory compute
 
 *Directory path:* ``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/compute``
 
+Subdirectories
+--------------
+
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_detail`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_high_level`
+
 
 Files
 -----

@@ -117,7 +117,7 @@ Program Listing for File resource.hpp
    
    
            template <class T,class... Args>
-           L_NODISCARD T to(Args&&...args);
+           L_NODISCARD T to(Args&&...args) const;
    
            template <class T>
            void from(const T& v);
@@ -175,7 +175,7 @@ Program Listing for File resource.hpp
    
    
        template <class T,class... Args>
-       L_NODISCARD T basic_resource::to(Args&&...args)
+       L_NODISCARD T basic_resource::to(Args&&...args) const
        {
            return std::move(from_resource<T>(*this, std::forward<Args>(args)...));
        }

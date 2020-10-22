@@ -31,13 +31,13 @@ Included By
 -----------
 
 
-- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor_editor_impl.hpp`
-
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_readonly_rw_spinlock.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_result.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_buffer.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_atomic_sparse_map.hpp`
 

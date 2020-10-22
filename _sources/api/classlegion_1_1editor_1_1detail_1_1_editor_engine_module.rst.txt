@@ -1,0 +1,25 @@
+.. _exhale_class_classlegion_1_1editor_1_1detail_1_1_editor_engine_module:
+
+Class EditorEngineModule
+========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_editor_editor.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::core::Module`` (:ref:`exhale_class_classlegion_1_1core_1_1_module`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::editor::detail::EditorEngineModule
+   :members:
+   :protected-members:
+   :undoc-members:

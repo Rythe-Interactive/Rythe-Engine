@@ -1,0 +1,17 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_detail_cl_include.hpp:
+
+Program Listing for File cl_include.hpp
+=======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_detail_cl_include.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/compute/detail/cl_include.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #if !defined(DOXY_EXCLUDE)
+   #define CL_TARGET_OPENCL_VERSION 200
+   #include <CL/cl.h>
+   #endif

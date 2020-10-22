@@ -29,7 +29,7 @@ Includes
 --------
 
 
-- ``core/core.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_core.hpp`)
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_core.hpp`)
 
 
 
@@ -38,6 +38,8 @@ Included By
 
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_components_rigidbody.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics.hpp`
 
 
 

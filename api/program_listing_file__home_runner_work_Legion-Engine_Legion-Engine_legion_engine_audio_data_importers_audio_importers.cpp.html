@@ -75,21 +75,23 @@
             <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">legion_fs_error</span><span class="p">(</span><span class="s">&quot;Failed to load audio file&quot;</span><span class="p">)));</span>
         <span class="p">}</span>
 
-        <span class="n">audio_segment</span> <span class="n">as</span><span class="p">{</span>
-            <span class="n">fileInfo</span><span class="p">.</span><span class="n">buffer</span><span class="p">,</span>
+        <span class="n">audio_segment</span> <span class="n">as</span><span class="p">(</span>
+            <span class="k">new</span> <span class="n">int16</span><span class="p">[</span><span class="n">fileInfo</span><span class="p">.</span><span class="n">samples</span><span class="p">],</span>
             <span class="mi">0</span><span class="p">,</span>
             <span class="n">fileInfo</span><span class="p">.</span><span class="n">samples</span><span class="p">,</span>
             <span class="n">fileInfo</span><span class="p">.</span><span class="n">channels</span><span class="p">,</span>
             <span class="n">fileInfo</span><span class="p">.</span><span class="n">hz</span><span class="p">,</span>
             <span class="n">fileInfo</span><span class="p">.</span><span class="n">layer</span><span class="p">,</span>
             <span class="n">fileInfo</span><span class="p">.</span><span class="n">avg_bitrate_kbps</span>
-        <span class="p">};</span>
+        <span class="p">);</span>
+        <span class="n">memmove</span><span class="p">(</span><span class="n">as</span><span class="p">.</span><span class="n">getData</span><span class="p">(),</span> <span class="n">fileInfo</span><span class="p">.</span><span class="n">buffer</span><span class="p">,</span> <span class="n">as</span><span class="p">.</span><span class="n">samples</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">int16</span><span class="p">));</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">fileInfo</span><span class="p">.</span><span class="n">buffer</span><span class="p">);</span>
 
         <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">AudioSystem</span><span class="o">::</span><span class="n">contextLock</span><span class="p">);</span>
         <span class="n">alcMakeContextCurrent</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
         <span class="c1">//Generate openal buffer</span>
         <span class="n">alGenBuffers</span><span class="p">((</span><span class="n">ALuint</span><span class="p">)</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">as</span><span class="p">.</span><span class="n">audioBufferId</span><span class="p">);</span>
-        <span class="n">alBufferData</span><span class="p">(</span><span class="n">as</span><span class="p">.</span><span class="n">audioBufferId</span><span class="p">,</span> <span class="n">AL_FORMAT_MONO16</span><span class="p">,</span> <span class="n">as</span><span class="p">.</span><span class="n">data</span><span class="p">,</span> <span class="n">as</span><span class="p">.</span><span class="n">samples</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">int16</span><span class="p">),</span> <span class="n">as</span><span class="p">.</span><span class="n">sampleRate</span><span class="p">);</span>
+        <span class="n">alBufferData</span><span class="p">(</span><span class="n">as</span><span class="p">.</span><span class="n">audioBufferId</span><span class="p">,</span> <span class="n">AL_FORMAT_MONO16</span><span class="p">,</span> <span class="n">as</span><span class="p">.</span><span class="n">getData</span><span class="p">(),</span> <span class="n">as</span><span class="p">.</span><span class="n">samples</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">int16</span><span class="p">),</span> <span class="n">as</span><span class="p">.</span><span class="n">sampleRate</span><span class="p">);</span>
         <span class="n">alcMakeContextCurrent</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
 
         <span class="k">return</span> <span class="nf">decay</span><span class="p">(</span><span class="n">Ok</span><span class="p">(</span><span class="n">as</span><span class="p">));</span>

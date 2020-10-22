@@ -13,11 +13,18 @@ Namespace legion::editor
 
 
 
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__editor__detail`
+
+
 Classes
 -------
 
 
-- :ref:`exhale_struct_structlegion_1_1editor_1_1editor__module__initializer__t`
+- :ref:`exhale_class_classlegion_1_1editor_1_1_core_editor_module`
 
 - :ref:`exhale_class_classlegion_1_1editor_1_1_editor`
 

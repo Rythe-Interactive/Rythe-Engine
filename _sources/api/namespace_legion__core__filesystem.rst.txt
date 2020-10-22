@@ -83,9 +83,9 @@ Functions
 
 - :ref:`exhale_function_traits_8hpp_1a578966d8b76eefdb1f68fa9dd2c269f9`
 
-- :ref:`exhale_function_traits_8hpp_1a99c56a54b3206ee327bf845432995552`
-
 - :ref:`exhale_function_provider__registry_8cpp_1a5415dcd5699bd1eebb1f15e32f5afca5`
+
+- :ref:`exhale_function_traits_8hpp_1a99c56a54b3206ee327bf845432995552`
 
 - :ref:`exhale_function_filemanip_8hpp_1a13d297ab40ca30c7c0b8c327e76b2d27`
 

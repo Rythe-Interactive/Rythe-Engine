@@ -1,0 +1,25 @@
+.. _exhale_class_classlegion_1_1core_1_1compute_1_1function__base:
+
+Class function_base
+===================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_high_level_function.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Type
+************
+
+- ``public legion::core::compute::function`` (:ref:`exhale_class_classlegion_1_1core_1_1compute_1_1function`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::compute::function_base
+   :members:
+   :protected-members:
+   :undoc-members:

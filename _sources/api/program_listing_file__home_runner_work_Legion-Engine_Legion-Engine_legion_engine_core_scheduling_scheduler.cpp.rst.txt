@@ -16,7 +16,7 @@ Program Listing for File scheduler.cpp
    
    namespace legion::core::scheduling
    {
-       constexpr size_type reserved_threads = 2;
+       constexpr size_type reserved_threads = 4;
             
        async::readonly_rw_spinlock Scheduler::m_threadsLock;
        sparse_map<std::thread::id, std::unique_ptr<std::thread>> Scheduler::m_threads;

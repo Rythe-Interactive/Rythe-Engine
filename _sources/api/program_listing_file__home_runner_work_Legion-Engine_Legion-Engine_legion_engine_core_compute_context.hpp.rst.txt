@@ -11,9 +11,6 @@ Program Listing for File context.hpp
 .. code-block:: cpp
 
    #pragma once
-   #if !defined(DOXY_EXCLUDE)
-   #include <CL/cl.h>
-   #endif
    
    #include <core/compute/program.hpp> // Kernel, Buffer
    #include <core/filesystem/resource.hpp> // basic_resource
@@ -29,11 +26,11 @@ Program Listing for File context.hpp
    
        static bool initialized();
    
-       static Program createProgram(const filesystem::basic_resource& vec);
+       static Program createProgram(const filesystem::basic_resource& resource);
    
    
        template <class T>
-       static Buffer createBuffer(std::vector<T>& container,buffer_type type,std::string name = "Unnamed")
+       static Buffer createBuffer(std::vector<T>& container,buffer_type type,std::string name = "")
        {
            return Buffer(
                m_context,
@@ -42,6 +39,11 @@ Program Listing for File context.hpp
                type,
                std::forward<std::string>(name)
            );
+       }
+   
+       static Buffer createBuffer(byte* data, size_type size, buffer_type type, std::string name = "")
+       {
+           return Buffer(m_context,data,size,type,std::forward<std::string>(name));
        }
    
    private:

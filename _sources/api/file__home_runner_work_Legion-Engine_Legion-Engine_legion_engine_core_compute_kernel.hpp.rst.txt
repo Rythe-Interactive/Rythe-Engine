@@ -33,6 +33,8 @@ Includes
 
 - ``core/logging/logging.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`)
 
+- ``detail/cl_include.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_detail_cl_include.hpp`)
+
 - ``map`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_atomic_sparse_map.hpp`)
 
 
@@ -40,6 +42,8 @@ Includes
 Included By
 -----------
 
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_high_level_function.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.cpp`
 

@@ -8,10 +8,6 @@ File core.hpp
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
-
-Single include header for Args-Core. 
- 
-
 .. contents:: Contents
    :local:
    :backlinks: none
@@ -66,6 +62,10 @@ Includes
 Included By
 -----------
 
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_editor_editor.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_editor_editormodule.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_context_contexthelper.hpp`
 

@@ -56,6 +56,10 @@ Classes
 
 - :ref:`exhale_struct_structlegion_1_1core_1_1has__resize_3_01_c_00_01_ret_07_args_8_8_8_08_4`
 
+- :ref:`exhale_struct_structlegion_1_1core_1_1is__vector`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1is__vector_3_01std_1_1vector_3_01_t_01_4_01_4`
+
 - :ref:`exhale_struct_structlegion_1_1core_1_1position`
 
 - :ref:`exhale_struct_structlegion_1_1core_1_1rotation`

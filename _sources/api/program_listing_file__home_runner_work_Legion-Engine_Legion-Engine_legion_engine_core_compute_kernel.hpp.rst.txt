@@ -11,9 +11,7 @@ Program Listing for File kernel.hpp
 .. code-block:: cpp
 
    #pragma once
-   #if !defined(DOXY_EXCLUDE)
-   #include <CL/cl.h>
-   #endif
+   #include "detail/cl_include.hpp"
    
    #include <core/compute/buffer.hpp>
    #include <core/logging/logging.hpp>
@@ -44,12 +42,7 @@ Program Listing for File kernel.hpp
    
                Kernel& read_write_mode(buffer_type);
    
-   
                Kernel& enqueue_buffer(Buffer buffer, block_mode blocking = block_mode::BLOCKING);
-   
-               Kernel& enqueue_buffer(Buffer buffer, const std::string& name, block_mode blocking = block_mode::BLOCKING);
-   
-               Kernel& enqueue_buffer(Buffer buffer, cl_uint index, block_mode blocking = block_mode::BLOCKING);
    
                Kernel& set_buffer(Buffer buffer);
    

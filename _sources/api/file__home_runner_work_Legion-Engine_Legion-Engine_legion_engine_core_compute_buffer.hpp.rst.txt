@@ -29,7 +29,11 @@ Includes
 --------
 
 
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`)
+
 - ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`)
+
+- ``detail/cl_include.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_detail_cl_include.hpp`)
 
 - ``string`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`)
 
@@ -42,6 +46,8 @@ Included By
 
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_buffer.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_high_level_function.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.hpp`
 

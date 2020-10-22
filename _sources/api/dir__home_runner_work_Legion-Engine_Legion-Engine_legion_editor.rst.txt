@@ -14,13 +14,13 @@ Directory editor
 Subdirectories
 --------------
 
-- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_application`
-- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_audio`
-- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core`
-- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_networking`
-- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_physics`
-- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_rendering`
-- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_scripting`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-application`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-audio`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-networking`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-physics`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-rendering`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-scripting`
 
 
 

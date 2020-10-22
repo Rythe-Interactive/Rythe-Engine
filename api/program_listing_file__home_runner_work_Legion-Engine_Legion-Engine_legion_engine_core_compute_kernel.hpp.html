@@ -47,9 +47,7 @@
 <span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-compute-kernel-hpp"></span><h1>Program Listing for File kernel.hpp<a class="headerlink" href="#program-listing-for-file-kernel-hpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-compute-kernel-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/compute/kernel.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
-<span class="cp">#if !defined(DOXY_EXCLUDE)</span>
-<span class="cp">#include</span> <span class="cpf">&lt;CL/cl.h&gt;</span><span class="cp"></span>
-<span class="cp">#endif</span>
+<span class="cp">#include</span> <span class="cpf">&quot;detail/cl_include.hpp&quot;</span><span class="cp"></span>
 
 <span class="cp">#include</span> <span class="cpf">&lt;core/compute/buffer.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/logging/logging.hpp&gt;</span><span class="cp"></span>
@@ -80,12 +78,7 @@
 
             <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">read_write_mode</span><span class="p">(</span><span class="n">buffer_type</span><span class="p">);</span>
 
-
             <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">enqueue_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span> <span class="o">=</span> <span class="n">block_mode</span><span class="o">::</span><span class="n">BLOCKING</span><span class="p">);</span>
-
-            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">enqueue_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span> <span class="o">=</span> <span class="n">block_mode</span><span class="o">::</span><span class="n">BLOCKING</span><span class="p">);</span>
-
-            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">enqueue_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">index</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span> <span class="o">=</span> <span class="n">block_mode</span><span class="o">::</span><span class="n">BLOCKING</span><span class="p">);</span>
 
             <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">set_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">);</span>
 

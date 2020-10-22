@@ -18,7 +18,7 @@
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class Kernel" href="classlegion_1_1core_1_1compute_1_1_kernel.html" />
+    <link rel="next" title="Class function" href="classlegion_1_1core_1_1compute_1_1function.html" />
     <link rel="prev" title="Class Buffer" href="classlegion_1_1core_1_1compute_1_1_buffer.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -36,7 +36,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="classlegion_1_1core_1_1compute_1_1_kernel.html" title="Class Kernel"
+          <a href="classlegion_1_1core_1_1compute_1_1function.html" title="Class function"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="classlegion_1_1core_1_1compute_1_1_buffer.html" title="Class Buffer"
@@ -84,13 +84,13 @@
 
 <dl class="cpp function">
 <dt id="_CPPv4N6legion4core7compute7Context13createProgramERKN10filesystem14basic_resourceE">
-<span id="_CPPv3N6legion4core7compute7Context13createProgramERKN10filesystem14basic_resourceE"></span><span id="_CPPv2N6legion4core7compute7Context13createProgramERKN10filesystem14basic_resourceE"></span><span id="legion::core::compute::Context::createProgram__filesystem::basic_resourceCR"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_context_1a766b207828e9499fd858115a362e2438"></span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_program.html#_CPPv4N6legion4core7compute7ProgramE" title="legion::core::compute::Program">Program</a> <code class="sig-name descname">createProgram</code><span class="sig-paren">(</span><em class="property">const</em> filesystem::<a class="reference internal" href="classlegion_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4N6legion4core10filesystem14basic_resourceE" title="legion::core::filesystem::basic_resource">basic_resource</a> &amp;<em>vec</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute7Context13createProgramERKN10filesystem14basic_resourceE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion4core7compute7Context13createProgramERKN10filesystem14basic_resourceE"></span><span id="_CPPv2N6legion4core7compute7Context13createProgramERKN10filesystem14basic_resourceE"></span><span id="legion::core::compute::Context::createProgram__filesystem::basic_resourceCR"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_context_1a29e72c68193f9a754b19cbeca1905d81"></span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_program.html#_CPPv4N6legion4core7compute7ProgramE" title="legion::core::compute::Program">Program</a> <code class="sig-name descname">createProgram</code><span class="sig-paren">(</span><em class="property">const</em> filesystem::<a class="reference internal" href="classlegion_1_1core_1_1filesystem_1_1basic__resource.html#_CPPv4N6legion4core10filesystem14basic_resourceE" title="legion::core::filesystem::basic_resource">basic_resource</a> &amp;<em>resource</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute7Context13createProgramERKN10filesystem14basic_resourceE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Creates a <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_program.html#classlegion_1_1core_1_1compute_1_1_program"><span class="std std-ref">Program</span></a> from a basic resource (can be file or buffer). </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>A <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_program.html#classlegion_1_1core_1_1compute_1_1_program"><span class="std std-ref">Program</span></a> Object that supports execution </p>
 </dd>
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">vec</span></code>: The <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#classlegion_1_1core_1_1compute_1_1_buffer"><span class="std std-ref">Buffer</span></a> you want to create the <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_program.html#classlegion_1_1core_1_1compute_1_1_program"><span class="std std-ref">Program</span></a> from You can for instance use <a class="reference internal" href="classlegion_1_1core_1_1filesystem_1_1view.html#classlegion_1_1core_1_1filesystem_1_1view_1adbb165ad723c8757bd7a5b8d82dfb5ac"><span class="std std-ref">fs::view.get()</span></a> </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">resource</span></code>: The <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#classlegion_1_1core_1_1compute_1_1_buffer"><span class="std std-ref">Buffer</span></a> you want to create the <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_program.html#classlegion_1_1core_1_1compute_1_1_program"><span class="std std-ref">Program</span></a> from You can for instance use <a class="reference internal" href="classlegion_1_1core_1_1filesystem_1_1view.html#classlegion_1_1core_1_1filesystem_1_1view_1adbb165ad723c8757bd7a5b8d82dfb5ac"><span class="std std-ref">fs::view.get()</span></a> </p></li>
 </ul>
 </dd>
 </dl>
@@ -99,7 +99,7 @@
 
 <dl class="cpp function">
 <dt id="_CPPv4I0EN6legion4core7compute7Context12createBufferE6BufferRNSt6vectorI1TEE11buffer_typeNSt6stringE">
-<span id="_CPPv3I0EN6legion4core7compute7Context12createBufferERNSt6vectorI1TEE11buffer_typeNSt6stringE"></span><span id="_CPPv2I0EN6legion4core7compute7Context12createBufferERNSt6vectorI1TEE11buffer_typeNSt6stringE"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1compute_1_1_context_1ae909f987524704a7a9cb7ddc4ebea585"></span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a> <code class="sig-name descname">createBuffer</code><span class="sig-paren">(</span>std::vector&lt;<a class="reference internal" href="#_CPPv4I0EN6legion4core7compute7Context12createBufferE6BufferRNSt6vectorI1TEE11buffer_typeNSt6stringE" title="legion::core::compute::Context::createBuffer::T">T</a>&gt; &amp;<em>container</em>, <a class="reference internal" href="enum_buffer_8hpp_1a7e33690cda6ca2c7eee105bf5e28a0b0.html#_CPPv4N6legion4core7compute11buffer_typeE" title="legion::core::compute::buffer_type">buffer_type</a> <em>type</em>, std::string <em>name</em> = &quot;Unnamed&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core7compute7Context12createBufferE6BufferRNSt6vectorI1TEE11buffer_typeNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN6legion4core7compute7Context12createBufferERNSt6vectorI1TEE11buffer_typeNSt6stringE"></span><span id="_CPPv2I0EN6legion4core7compute7Context12createBufferERNSt6vectorI1TEE11buffer_typeNSt6stringE"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1compute_1_1_context_1a7b5f533a2a083b9ce75017f70d66381f"></span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a> <code class="sig-name descname">createBuffer</code><span class="sig-paren">(</span>std::vector&lt;<a class="reference internal" href="#_CPPv4I0EN6legion4core7compute7Context12createBufferE6BufferRNSt6vectorI1TEE11buffer_typeNSt6stringE" title="legion::core::compute::Context::createBuffer::T">T</a>&gt; &amp;<em>container</em>, <a class="reference internal" href="enum_buffer_8hpp_1a7e33690cda6ca2c7eee105bf5e28a0b0.html#_CPPv4N6legion4core7compute11buffer_typeE" title="legion::core::compute::buffer_type">buffer_type</a> <em>type</em>, std::string <em>name</em> = &quot;&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core7compute7Context12createBufferE6BufferRNSt6vectorI1TEE11buffer_typeNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Creates an OpenCL Native <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#classlegion_1_1core_1_1compute_1_1_buffer"><span class="std std-ref">Buffer</span></a> (GPU or similar) with a host buffer. </p>
 <p><dl class="simple">
 <dt><strong>See</strong></dt><dd><p>buffer_type </p>
@@ -118,6 +118,11 @@
 </dl>
 </p>
 </dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute7Context12createBufferEP4byte9size_type11buffer_typeNSt6stringE">
+<span id="_CPPv3N6legion4core7compute7Context12createBufferEP4byte9size_type11buffer_typeNSt6stringE"></span><span id="_CPPv2N6legion4core7compute7Context12createBufferEP4byte9size_type11buffer_typeNSt6stringE"></span><span id="legion::core::compute::Context::createBuffer__byteP.size_type.buffer_type.ss"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_context_1a8ea8d928d65410c1686f0107ef249c84"></span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a> <code class="sig-name descname">createBuffer</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a9f767b2438b5f8d8bf3f85dabe69c634.html#_CPPv4N6legion4core4byteE" title="legion::core::byte">byte</a> *<em>data</em>, <a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <em>size</em>, <a class="reference internal" href="enum_buffer_8hpp_1a7e33690cda6ca2c7eee105bf5e28a0b0.html#_CPPv4N6legion4core7compute11buffer_typeE" title="legion::core::compute::buffer_type">buffer_type</a> <em>type</em>, std::string <em>name</em> = &quot;&quot;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute7Context12createBufferEP4byte9size_type11buffer_typeNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 </div>
 </dd></dl>
@@ -144,7 +149,7 @@
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
       <li>Previous: <a href="classlegion_1_1core_1_1compute_1_1_buffer.html" title="previous chapter">Class Buffer</a></li>
-      <li>Next: <a href="classlegion_1_1core_1_1compute_1_1_kernel.html" title="next chapter">Class Kernel</a></li>
+      <li>Next: <a href="classlegion_1_1core_1_1compute_1_1function.html" title="next chapter">Class function</a></li>
   </ul></li>
   </ul></li>
 </ul>

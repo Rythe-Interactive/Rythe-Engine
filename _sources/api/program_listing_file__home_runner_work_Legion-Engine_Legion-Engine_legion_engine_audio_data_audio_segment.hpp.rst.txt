@@ -12,6 +12,7 @@ Program Listing for File audio_segment.hpp
 
    #pragma once
    #include <core/core.hpp>
+   #include <mutex>
    #if !defined(DOXY_EXCLUDE)
    #include <AL/al.h>
    #include <AL/alc.h>
@@ -21,12 +22,44 @@ Program Listing for File audio_segment.hpp
        struct audio_segment
        {
        public:
-           int16* data;
            ALuint audioBufferId;
    
            /* Channels included, byte size = samples*sizeof(int16) */
            size_type samples; 
            int channels, sampleRate, layer, avg_bitrate_kbps;
+   
+           audio_segment() = default;
+   
+           audio_segment(int16* data, ALuint bufferId, size_type samples, int channels, int sampleRate, int layer, int avg_bitRate);
+   
+           audio_segment(const audio_segment& other);
+   
+           audio_segment(audio_segment&& other);
+   
+           audio_segment& operator=(const audio_segment& other);
+   
+           audio_segment& operator=(audio_segment&& other);
+   
+           ~audio_segment();
+   
+           // Read-Write
+           int16* getData()
+           {
+               return m_data;
+           }
+   
+           // Read only
+           const int16* getData() const
+           {
+               return m_data;
+           }
+   
+       private:
+           static std::unordered_map<id_type, uint> m_refs;
+           static std::mutex m_refsLock;
+           static id_type m_lastId;
+           id_type m_id;
+           int16* m_data;
        };
    
        struct audio_import_settings

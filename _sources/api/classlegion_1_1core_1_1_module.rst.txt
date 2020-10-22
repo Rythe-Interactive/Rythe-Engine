@@ -15,6 +15,7 @@ Derived Types
 - ``public legion::application::ApplicationModule`` (:ref:`exhale_class_classlegion_1_1application_1_1_application_module`)
 - ``public legion::audio::AudioModule`` (:ref:`exhale_class_classlegion_1_1audio_1_1_audio_module`)
 - ``public legion::core::CoreModule`` (:ref:`exhale_class_classlegion_1_1core_1_1_core_module`)
+- ``public legion::editor::detail::EditorEngineModule`` (:ref:`exhale_class_classlegion_1_1editor_1_1detail_1_1_editor_engine_module`)
 - ``public legion::physics::PhysicsModule`` (:ref:`exhale_class_classlegion_1_1physics_1_1_physics_module`)
 - ``public legion::rendering::RenderingModule`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_rendering_module`)
 

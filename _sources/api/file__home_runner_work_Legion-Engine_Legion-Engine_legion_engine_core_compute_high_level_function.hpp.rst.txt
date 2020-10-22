@@ -1,0 +1,87 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_high_level_function.hpp:
+
+File function.hpp
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_high_level>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/compute/high_level``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/compute/high_level/function.hpp``)
+-----------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_high_level_function.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/common/result.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_result.hpp`)
+
+- ``core/compute/buffer.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_buffer.hpp`)
+
+- ``core/compute/kernel.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.hpp`)
+
+- ``core/compute/program.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_program.hpp`)
+
+- ``core/filesystem/resource.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_resource.hpp`)
+
+- ``core/types/meta.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_meta.hpp`)
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`)
+
+- ``type_traits``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_high_level_function.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__compute`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1buffer__base`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1in`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1in__ident`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1inout`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1inout__ident`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1out`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1out__ident`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1compute_1_1function`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1compute_1_1function__base`
+

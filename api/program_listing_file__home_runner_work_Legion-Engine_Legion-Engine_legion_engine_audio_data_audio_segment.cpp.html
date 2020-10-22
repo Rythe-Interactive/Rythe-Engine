@@ -47,9 +47,128 @@
 <span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-audio-data-audio-segment-cpp"></span><h1>Program Listing for File audio_segment.cpp<a class="headerlink" href="#program-listing-for-file-audio-segment-cpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_audio_segment.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-audio-data-audio-segment-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/audio/data/audio_segment.cpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;audio/data/audio_segment.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;audio/systems/audiosystem.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">audio</span>
 <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">uint</span><span class="o">&gt;</span> <span class="n">audio_segment</span><span class="o">::</span><span class="n">m_refs</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">audio_segment</span><span class="o">::</span><span class="n">m_refsLock</span><span class="p">;</span>
+    <span class="n">id_type</span> <span class="n">audio_segment</span><span class="o">::</span><span class="n">m_lastId</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="n">audio_segment</span><span class="o">::</span><span class="n">audio_segment</span><span class="p">(</span><span class="n">int16</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="n">ALuint</span> <span class="n">bufferId</span><span class="p">,</span> <span class="n">size_type</span> <span class="n">samples</span><span class="p">,</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sampleRate</span><span class="p">,</span> <span class="kt">int</span> <span class="n">layer</span><span class="p">,</span> <span class="kt">int</span> <span class="n">avg_bitRate</span><span class="p">)</span> <span class="o">:</span>
+        <span class="n">audioBufferId</span><span class="p">(</span><span class="n">bufferId</span><span class="p">),</span> <span class="n">samples</span><span class="p">(</span><span class="n">samples</span><span class="p">),</span> <span class="n">channels</span><span class="p">(</span><span class="n">channels</span><span class="p">),</span> <span class="n">sampleRate</span><span class="p">(</span><span class="n">sampleRate</span><span class="p">),</span> <span class="n">layer</span><span class="p">(</span><span class="n">layer</span><span class="p">),</span> <span class="n">avg_bitrate_kbps</span><span class="p">(</span><span class="n">avg_bitRate</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_refsLock</span><span class="p">);</span>
+        <span class="n">m_id</span> <span class="o">=</span> <span class="n">m_lastId</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">this</span><span class="o">-&gt;</span><span class="n">m_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">audio_segment</span><span class="o">::</span><span class="n">audio_segment</span><span class="p">(</span><span class="k">const</span> <span class="n">audio_segment</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">:</span>
+        <span class="n">m_data</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_data</span><span class="p">),</span> <span class="n">audioBufferId</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">audioBufferId</span><span class="p">),</span> <span class="n">samples</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">samples</span><span class="p">),</span> <span class="n">channels</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">channels</span><span class="p">),</span> <span class="n">sampleRate</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">sampleRate</span><span class="p">),</span> <span class="n">layer</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">layer</span><span class="p">),</span> <span class="n">avg_bitrate_kbps</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">avg_bitrate_kbps</span><span class="p">),</span> <span class="n">m_id</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_id</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_refsLock</span><span class="p">);</span>
+            <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">audio_segment</span><span class="o">::</span><span class="n">audio_segment</span><span class="p">(</span><span class="n">audio_segment</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">:</span>
+        <span class="n">m_data</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_data</span><span class="p">),</span> <span class="n">audioBufferId</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">audioBufferId</span><span class="p">),</span> <span class="n">samples</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">samples</span><span class="p">),</span> <span class="n">channels</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">channels</span><span class="p">),</span> <span class="n">sampleRate</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">sampleRate</span><span class="p">),</span> <span class="n">layer</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">layer</span><span class="p">),</span> <span class="n">avg_bitrate_kbps</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">avg_bitrate_kbps</span><span class="p">),</span> <span class="n">m_id</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_id</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_refsLock</span><span class="p">);</span>
+            <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">audio_segment</span><span class="o">&amp;</span> <span class="n">audio_segment</span><span class="o">::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">audio_segment</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_refsLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_id</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="p">{</span>
+                        <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">AudioSystem</span><span class="o">::</span><span class="n">contextLock</span><span class="p">);</span>
+                        <span class="n">alcMakeContextCurrent</span><span class="p">(</span><span class="n">AudioSystem</span><span class="o">::</span><span class="n">alcContext</span><span class="p">);</span>
+                        <span class="n">alDeleteBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">audioBufferId</span><span class="p">);</span>
+                        <span class="n">alcMakeContextCurrent</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
+                    <span class="p">}</span>
+                    <span class="k">delete</span><span class="p">[]</span> <span class="n">m_data</span><span class="p">;</span>
+                    <span class="n">m_data</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+                    <span class="n">m_refs</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="n">m_id</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_id</span><span class="p">;</span>
+            <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">m_data</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_data</span><span class="p">;</span>
+        <span class="n">audioBufferId</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">audioBufferId</span><span class="p">;</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">samples</span><span class="p">;</span>
+        <span class="n">channels</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">channels</span><span class="p">;</span>
+        <span class="n">sampleRate</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">sampleRate</span><span class="p">;</span>
+        <span class="n">layer</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">layer</span><span class="p">;</span>
+        <span class="n">avg_bitrate_kbps</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">avg_bitrate_kbps</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">audio_segment</span><span class="o">&amp;</span> <span class="n">audio_segment</span><span class="o">::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">audio_segment</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_refsLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_id</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="p">{</span>
+                        <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">AudioSystem</span><span class="o">::</span><span class="n">contextLock</span><span class="p">);</span>
+                        <span class="n">alcMakeContextCurrent</span><span class="p">(</span><span class="n">AudioSystem</span><span class="o">::</span><span class="n">alcContext</span><span class="p">);</span>
+                        <span class="n">alDeleteBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">audioBufferId</span><span class="p">);</span>
+                        <span class="n">alcMakeContextCurrent</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
+                    <span class="p">}</span>
+                    <span class="k">delete</span><span class="p">[]</span> <span class="n">m_data</span><span class="p">;</span>
+                    <span class="n">m_data</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+                    <span class="n">m_refs</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="n">m_id</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_id</span><span class="p">;</span>
+            <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">m_data</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_data</span><span class="p">;</span>
+        <span class="n">audioBufferId</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">audioBufferId</span><span class="p">;</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">samples</span><span class="p">;</span>
+        <span class="n">channels</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">channels</span><span class="p">;</span>
+        <span class="n">sampleRate</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">sampleRate</span><span class="p">;</span>
+        <span class="n">layer</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">layer</span><span class="p">;</span>
+        <span class="n">avg_bitrate_kbps</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">avg_bitrate_kbps</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">audio_segment</span><span class="o">::~</span><span class="n">audio_segment</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_id</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_refsLock</span><span class="p">);</span>
+            <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="p">{</span>
+                    <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">AudioSystem</span><span class="o">::</span><span class="n">contextLock</span><span class="p">);</span>
+                    <span class="n">alcMakeContextCurrent</span><span class="p">(</span><span class="n">AudioSystem</span><span class="o">::</span><span class="n">alcContext</span><span class="p">);</span>
+                    <span class="n">alDeleteBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">audioBufferId</span><span class="p">);</span>
+                    <span class="n">alcMakeContextCurrent</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">delete</span><span class="p">[]</span> <span class="n">m_data</span><span class="p">;</span>
+                <span class="n">m_data</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+                <span class="n">m_refs</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
     <span class="n">audio_segment_handle</span> <span class="n">AudioSegmentCache</span><span class="o">::</span><span class="n">createAudioSegment</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">audio_import_settings</span> <span class="n">settings</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>

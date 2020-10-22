@@ -134,6 +134,11 @@ Namespaces
 .. toctree::
    :maxdepth: 5
 
+   namespace_legion__editor__detail.rst
+
+.. toctree::
+   :maxdepth: 5
+
    namespace_legion__physics.rst
 
 .. toctree::
@@ -343,6 +348,41 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   structlegion_1_1core_1_1compute_1_1buffer__base.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1core_1_1compute_1_1in.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1core_1_1compute_1_1in__ident.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1core_1_1compute_1_1inout.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1core_1_1compute_1_1inout__ident.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1core_1_1compute_1_1out.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1core_1_1compute_1_1out__ident.rst
+
+.. toctree::
+   :maxdepth: 5
+
    structlegion_1_1core_1_1delegate__base_3_01return__type_07parameter__types_8_8_8_08_4_1_1invocation__element.rst
 
 .. toctree::
@@ -453,6 +493,16 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   structlegion_1_1core_1_1is__vector.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1core_1_1is__vector_3_01std_1_1vector_3_01_t_01_4_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
    structlegion_1_1core_1_1iterator_1_1pair__range.rst
 
 .. toctree::
@@ -504,11 +554,6 @@ Classes and Structs
    :maxdepth: 5
 
    structlegion_1_1debug_1_1debug__line.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structlegion_1_1editor_1_1editor__module__initializer__t.rst
 
 .. toctree::
    :maxdepth: 5
@@ -804,6 +849,16 @@ Classes and Structs
    :maxdepth: 5
 
    classlegion_1_1core_1_1compute_1_1_context.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classlegion_1_1core_1_1compute_1_1function.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classlegion_1_1core_1_1compute_1_1function__base.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1229,6 +1284,16 @@ Classes and Structs
    :maxdepth: 5
 
    classlegion_1_1core_1_1vector__view.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classlegion_1_1editor_1_1_core_editor_module.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classlegion_1_1editor_1_1detail_1_1_editor_engine_module.rst
 
 .. toctree::
    :maxdepth: 5
@@ -2016,7 +2081,7 @@ Functions
 .. toctree::
    :maxdepth: 5
 
-   function_editor__impl_8hpp_1a649040541d161ced8cbd98dc88308542.rst
+   function_editor_8hpp_1a649040541d161ced8cbd98dc88308542.rst
 
 .. toctree::
    :maxdepth: 5

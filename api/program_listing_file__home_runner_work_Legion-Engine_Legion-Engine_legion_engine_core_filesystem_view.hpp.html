@@ -101,10 +101,10 @@
 
         <span class="n">L_NODISCARD</span> <span class="n">view</span> <span class="k">operator</span><span class="p">[](</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">identifier</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
 
-        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
-        <span class="k">auto</span> <span class="n">load_as</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="k">decltype</span><span class="p">(</span><span class="k">auto</span><span class="p">)</span>
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span><span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+        <span class="k">auto</span> <span class="n">load_as</span><span class="p">(</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">decltype</span><span class="p">(</span><span class="k">auto</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="k">return</span> <span class="n">get</span><span class="p">().</span><span class="n">decay</span><span class="p">().</span><span class="n">to</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="k">return</span> <span class="n">get</span><span class="p">().</span><span class="n">decay</span><span class="p">().</span><span class="n">to</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
         <span class="p">}</span>
 
 

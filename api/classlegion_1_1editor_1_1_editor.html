@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Class EditorModule" href="classlegion_1_1editor_1_1_editor_module.html" />
-    <link rel="prev" title="Template Class vector_view" href="classlegion_1_1core_1_1vector__view.html" />
+    <link rel="prev" title="Class EditorEngineModule" href="classlegion_1_1editor_1_1detail_1_1_editor_engine_module.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -39,7 +39,7 @@
           <a href="classlegion_1_1editor_1_1_editor_module.html" title="Class EditorModule"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="classlegion_1_1core_1_1vector__view.html" title="Template Class vector_view"
+          <a href="classlegion_1_1editor_1_1detail_1_1_editor_engine_module.html" title="Class EditorEngineModule"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
@@ -55,14 +55,34 @@
   <div class="section" id="class-editor">
 <span id="exhale-class-classlegion-1-1editor-1-1-editor"></span><h1>Class Editor<a class="headerlink" href="#class-editor" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_core_editor_editor_impl.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-editor-core-editor-editor-impl-hpp"><span class="std std-ref">File editor_impl.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_editor_editor.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-editor-editor-core-editor-editor-hpp"><span class="std std-ref">File editor.hpp</span></a></p></li>
 </ul>
 <div class="section" id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="cpp class">
 <dt id="_CPPv4N6legion6editor6EditorE">
-<span id="_CPPv3N6legion6editor6EditorE"></span><span id="_CPPv2N6legion6editor6EditorE"></span><span id="legion::editor::Editor"></span><span class="target" id="classlegion_1_1editor_1_1_editor"></span><em class="property">class </em><code class="sig-name descname">Editor</code><a class="headerlink" href="#_CPPv4N6legion6editor6EditorE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion6editor6EditorE"></span><span id="_CPPv2N6legion6editor6EditorE"></span><span id="legion::editor::Editor"></span><span class="target" id="classlegion_1_1editor_1_1_editor"></span><em class="property">class </em><code class="sig-prename descclassname">legion::editor<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">Editor</code><a class="headerlink" href="#_CPPv4N6legion6editor6EditorE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>The editors main object that handles editor modules. <a class="reference internal" href="classlegion_1_1editor_1_1_editor_module.html#classlegion_1_1editor_1_1_editor_module"><span class="std std-ref">legion::editor::EditorModule</span></a>. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4I0Dp_13inherits_fromI10ModuleType12EditorModuleEEN6legion6editor6Editor12reportModuleEvDpRR4Args">
+<span id="_CPPv3I0Dp_13inherits_fromI10ModuleType12EditorModuleEEN6legion6editor6Editor12reportModuleEDpRR4Args"></span><span id="_CPPv2I0Dp_13inherits_fromI10ModuleType12EditorModuleEEN6legion6editor6Editor12reportModuleEDpRR4Args"></span>template&lt;class <code class="sig-name descname">ModuleType</code>, class ...<code class="sig-name descname">Args</code>, inherits_from&lt;<a class="reference internal" href="#_CPPv4I0Dp_13inherits_fromI10ModuleType12EditorModuleEEN6legion6editor6Editor12reportModuleEvDpRR4Args" title="legion::editor::Editor::reportModule::ModuleType">ModuleType</a>, <a class="reference internal" href="classlegion_1_1editor_1_1_editor_module.html#_CPPv4N6legion6editor12EditorModuleE" title="legion::editor::EditorModule">EditorModule</a>&gt; = 0&gt;<br /><span class="target" id="classlegion_1_1editor_1_1_editor_1ad1ece449417c5d46bc9ca3d45bd83178"></span>void <code class="sig-name descname">reportModule</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0Dp_13inherits_fromI10ModuleType12EditorModuleEEN6legion6editor6Editor12reportModuleEvDpRR4Args" title="legion::editor::Editor::reportModule::Args">Args</a>&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0Dp_13inherits_fromI10ModuleType12EditorModuleEEN6legion6editor6Editor12reportModuleEvDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reports an editor module. </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ModuleType</span></code>: the module you want to report </p></li>
+</ul>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">args</span></code>: the arguments you want to pass <a class="reference internal" href="classlegion_1_1editor_1_1_editor_module.html#classlegion_1_1editor_1_1_editor_module"><span class="std std-ref">legion::editor::EditorModule</span></a> </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
 </dd></dl>
 
 </div>
@@ -86,7 +106,7 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
-      <li>Previous: <a href="classlegion_1_1core_1_1vector__view.html" title="previous chapter">Template Class vector_view</a></li>
+      <li>Previous: <a href="classlegion_1_1editor_1_1detail_1_1_editor_engine_module.html" title="previous chapter">Class EditorEngineModule</a></li>
       <li>Next: <a href="classlegion_1_1editor_1_1_editor_module.html" title="next chapter">Class EditorModule</a></li>
   </ul></li>
   </ul></li>
