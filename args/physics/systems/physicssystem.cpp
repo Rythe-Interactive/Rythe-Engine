@@ -10,6 +10,7 @@ namespace args::physics
     bool PhysicsSystem::IsPaused = false;
     bool PhysicsSystem::oneTimeRunActive = false;
 
+
     void PhysicsSystem::bruteForceBroadPhase(std::vector<physics_manifold_precursor>& manifoldPrecursors,
         std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping)
     {

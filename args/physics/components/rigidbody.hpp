@@ -16,16 +16,17 @@ namespace args::physics
         float linearDrag;
 
         //angular motion component
-        math::mat3 inverseInertiaTensor = math::mat3(12.0f);
+        math::mat3 localInverseInertiaTensor = math::mat3(6.0f);
+        math::mat3 globalInverseInertiaTensor = localInverseInertiaTensor;
 
         math::vec3 angularAcc = math::vec3(0.0);
         math::vec3 angularVelocity = math::vec3(0.0);
         float angularDrag = 0.01f;
 
         //force application component
-        math::vec3 globalCentreOfMass;
         math::vec3 forceAccumulator = math::vec3(0.0);
         math::vec3 torqueAccumulator = math::vec3(0.0);
+        math::vec3 globalCentreOfMass = math::vec3(0.0);
 
         float restitution;
         float friction;
@@ -71,6 +72,12 @@ namespace args::physics
         {
             forceAccumulator = math::vec3(0);
             torqueAccumulator = math::vec3(0);
+        }
+
+        void UpdateInertiaTensor(math::quat orientation)
+        {
+            math::mat3 mat3Rot = math::toMat3(orientation);
+            globalInverseInertiaTensor = math::inverse(mat3Rot) * localInverseInertiaTensor *  mat3Rot;
         }
 
 

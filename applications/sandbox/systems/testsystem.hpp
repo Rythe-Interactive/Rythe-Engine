@@ -76,6 +76,7 @@ struct pause_audio_source : public app::input_action<pause_audio_source> {};
 struct stop_audio_source : public app::input_action<stop_audio_source> {};
 struct rewind_audio_source : public app::input_action<rewind_audio_source> {};
 
+struct activate_CRtest0 : public app::input_action<activate_CRtest0> {};
 struct activate_CRtest1 : public app::input_action<activate_CRtest1> {};
 struct activate_CRtest2 : public app::input_action<activate_CRtest2> {};
 struct activate_CRtest3 : public app::input_action<activate_CRtest3> {};
@@ -97,7 +98,8 @@ public:
     std::vector< ecs::entity_handle > physicsUnitTestCD;
     std::vector< ecs::entity_handle > physicsUnitTestCR;
 
-    ecs::entity_handle staticToAABBEnt;
+    ecs::entity_handle staticToAABBEntLinear;
+    ecs::entity_handle staticToAABBEntRotation;
     ecs::entity_handle staticToOBBEnt;
     ecs::entity_handle staticToEdgeEnt;
     ecs::entity_handle staticTo2StackEnt;
@@ -193,6 +195,7 @@ public:
         app::InputSystem::createBinding<pause_audio_source>(app::inputmap::method::LEFT_BRACKET);
         app::InputSystem::createBinding<stop_audio_source>(app::inputmap::method::RIGHT_BRACKET);
         app::InputSystem::createBinding<rewind_audio_source>(app::inputmap::method::BACKSPACE);
+        app::InputSystem::createBinding< activate_CRtest0>(app::inputmap::method::KP_0);
         app::InputSystem::createBinding< activate_CRtest1>(app::inputmap::method::KP_1);
         app::InputSystem::createBinding< activate_CRtest2>(app::inputmap::method::KP_2);
         app::InputSystem::createBinding< activate_CRtest3>(app::inputmap::method::KP_3);
@@ -221,6 +224,7 @@ public:
         bindToEvent<stop_audio_source, &TestSystem::stopAudioSource>();
         bindToEvent<rewind_audio_source, &TestSystem::rewindAudioSource>();
 
+        bindToEvent< activate_CRtest0, &TestSystem::onActivateUnitTest0>();
         bindToEvent< activate_CRtest1, &TestSystem::onActivateUnitTest1>();
         bindToEvent< activate_CRtest2, &TestSystem::onActivateUnitTest2>();
         bindToEvent< activate_CRtest3, &TestSystem::onActivateUnitTest3>();
@@ -384,7 +388,7 @@ public:
 
         //----------- Rigidbody-Collider AABB Test------------//
 
-        setupPhysicsCRUnitTest(cubeH, wireframeH);
+        setupPhysicsCRUnitTest(cubeH, uvH);
 
 
         createProcess<&TestSystem::update>("Update");
@@ -674,9 +678,9 @@ public:
     void setupPhysicsCRUnitTest(rendering::model_handle cubeH, rendering::material_handle wireframeH)
     {
         physics::cube_collider_params cubeParams;
-        cubeParams.breadth = 2.0f;
-        cubeParams.width = 2.0f;
-        cubeParams.height = 2.0f;
+        cubeParams.breadth = 1.0f;
+        cubeParams.width = 1.0f;
+        cubeParams.height = 1.0f;
 
         physics::cube_collider_params staticBlockParams;
         staticBlockParams.breadth = 5.0f;
@@ -684,8 +688,18 @@ public:
         staticBlockParams.height = 2.0f;
 
         float testPos = 10.0f;
+        //----------- Static Block To AABB Body Stability Test ------------//
+        {
+            auto ent = m_ecs->createEntity();
 
-        //----------- Static Block To AABB Body ------------//
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
+            scaleH.write(math::vec3(2.5f,1.0f,2.5f));
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ cubeH, wireframeH });
+        }
+
         {
             auto ent = m_ecs->createEntity();
 
@@ -699,8 +713,77 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            //renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
+            scaleH.write(math::vec3(1.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto idComp = idHandle.read();
+            idComp.id = "AABBStaticStable";
+            idHandle.write(idComp);
+
+
+        }
+
+        {
+            staticToAABBEntLinear = m_ecs->createEntity();
+            physicsUnitTestCD.push_back(staticToAABBEntLinear);
+            auto entPhyHande = staticToAABBEntLinear.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+            entPhyHande.write(physicsComponent2);
+
+            //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
+            //auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
+
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToAABBEnt);
+            //renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToAABBEntLinear);
+            positionH.write(math::vec3(testPos, -0.0f, 15.0f));
+            scaleH.write(math::vec3(1.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(staticToAABBEntLinear);
+            auto id = idHandle.read();
+            id.id = "AABBRbStable";
+            idHandle.write(id);
+        }
+
+        //----------- Static Block To AABB Body Rotation Test------------//
+
+        {
+            auto ent = m_ecs->createEntity();
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos, -3.0f, 8.0f));
+            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
+
             auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
             renderableHandle.write({ cubeH, wireframeH });
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(staticBlockParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            //renderableHandle.write({ cubeH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(testPos, -3.0f, 8.0f));
@@ -715,35 +798,44 @@ public:
         }
 
         {
-            staticToAABBEnt = m_ecs->createEntity();
-           
-            auto entPhyHande = staticToAABBEnt.add_component<physics::physicsComponent>();
+            staticToAABBEntRotation = m_ecs->createEntity();
+            physicsUnitTestCD.push_back(staticToAABBEntRotation);
+            auto entPhyHande = staticToAABBEntRotation.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
             physics::physicsComponent::init(physicsComponent2);
 
-
             physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = true;
             entPhyHande.write(physicsComponent2);
 
             //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
             //auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
 
-            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToAABBEnt);
-            renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToAABBEnt);
+            //renderableHandle.write({ cubeH, wireframeH });
 
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToAABBEnt);
-            positionH.write(math::vec3(testPos, -0.0f, 8.0f));
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToAABBEntRotation);
+            positionH.write(math::vec3(testPos-2.7f, -0.0f, 8.0f));
             scaleH.write(math::vec3(1.0f));
 
-            auto idHandle = m_ecs->createComponent<physics::identifier>(staticToAABBEnt);
+            auto idHandle = m_ecs->createComponent<physics::identifier>(staticToAABBEntRotation);
             auto id = idHandle.read();
             id.id = "AABBRb";
             idHandle.write(id);
         }
 
         //----------- Static Block To Rotated Body ------------//
+
+        {
+            auto ent = m_ecs->createEntity();
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos, -3.0f, 2.0f));
+            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ cubeH, wireframeH });
+        }
 
         {
             auto ent = m_ecs->createEntity();
@@ -759,8 +851,8 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            //renderableHandle.write({ cubeH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(testPos, -3.0f, 2.0f));
@@ -782,20 +874,21 @@ public:
 
 
             physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = true;
+            physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
 
-            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToOBBEnt);
-            renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToOBBEnt);
+            //renderableHandle.write({ cubeH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToOBBEnt);
             positionH.write(math::vec3(testPos, -0.0f, 2.0f));
             scaleH.write(math::vec3(1.0f));
 
             auto rot = rotationH.read();
-            rot *= math::angleAxis(45.f, math::vec3(1, 0, 0));
-            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
+            rot *= math::angleAxis(math::radians(40.f), math::vec3(1, 0, 0));
+            rot *= math::angleAxis(math::radians(42.f), math::vec3(0, 1, 0));
+            //rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
             rotationH.write(rot);
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(staticToOBBEnt);
@@ -813,30 +906,13 @@ public:
         {
             auto ent = m_ecs->createEntity();
 
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-
-            physicsComponent2.AddBox(staticBlockParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos, -3.0f, -4.0f));
+            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
 
             auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
             renderableHandle.write({ cubeH, wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, -4.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto id = idHandle.read();
-            id.id = "OBBFoundationStaticEdge";
-            idHandle.write(id);
         }
-
 
         {
             auto ent = m_ecs->createEntity();
@@ -848,20 +924,20 @@ public:
 
 
 
-            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.AddBox(staticBlockParams);
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            //renderableHandle.write({ cubeH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -1.5f, -4.0f));
+            positionH.write(math::vec3(testPos, -3.0f, -4.0f));
             scaleH.write(math::vec3(1.0f));
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
             auto id = idHandle.read();
-            id.id = "OBBCollidingBlockStaticEdge";
+            id.id = "OBBFoundationStaticEdge";
             idHandle.write(id);
         }
 
@@ -878,11 +954,11 @@ public:
             entPhyHande.write(physicsComponent2);
 
 
-            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToEdgeEnt);
-            renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToEdgeEnt);
+            //renderableHandle.write({ cubeH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToEdgeEnt);
-            positionH.write(math::vec3(testPos + 1.0f, 2.0f, -4.0f));
+            positionH.write(math::vec3(testPos + 3.0f, 2.0f, -4.0f));
             scaleH.write(math::vec3(1.0f));
 
             auto rot = rotationH.read();
@@ -965,7 +1041,7 @@ public:
     void onPlayerHover(player_hover* action)
     {
         auto posH = player.get_component_handle<position>();
-        math::vec3 move = math::vec3(0, 1, 0) * action->value * 0.1f;
+        math::vec3 move = math::vec3(0, 1, 0) * action->value * 0.01f;
         posH.fetch_add(move);
     }
 
@@ -1214,45 +1290,60 @@ public:
         static auto physicsQuery = createQuery< physics::physicsComponent>();
         uint i = 0;
 
+        float duration = 0.02f;
 
-        for (auto penetration : physics::PhysicsSystem::penetrationQueries)
-        {
-            debug::drawLine(penetration->faceCentroid
-                , penetration->faceCentroid + penetration->normal, math::vec4(0, 0.5f, 0, 1), 15.0f,0.05f);
-
-        }
+        //for (auto penetration : physics::PhysicsSystem::penetrationQueries)
+        //{
+        //    debug::drawLine(penetration->faceCentroid
+        //        , penetration->faceCentroid + penetration->normal, math::vec4(1, 0, 1, 1), 15.0f, duration);
+        //    auto x = 1;
+        //}
 
 
         //--------------------------------------- Draw contact points ---------------------------------------//
+
        
+
         for(int i = 0; i < physics::PhysicsSystem::contactPoints.size();i++)
         {
-            debug::drawLine(physics::PhysicsSystem::contactPoints.at(i).worldContactInc
-                , physics::PhysicsSystem::contactPoints.at(i).worldContactRef, math::vec4(1, 0, 0, 1), 5.0f, 0.1f);
+            //ref is red
+            //inc is blue
 
-            debug::drawLine(physics::PhysicsSystem::contactPoints.at(i).worldContactInc
-                , physics::PhysicsSystem::contactPoints.at(i).worldContactInc + math::vec3(0, 0.1f, 0), math::vec4(0.5, 0.5, 0.5, 1),5.0f, 0.1f, true);
+            auto& contact = physics::PhysicsSystem::contactPoints.at(i);
 
-            debug::drawLine(physics::PhysicsSystem::contactPoints.at(i).worldContactRef
-                , physics::PhysicsSystem::contactPoints.at(i).worldContactRef + math::vec3(0, 0.1f, 0), math::vec4(0, 0, 0, 1), 5.0f, 0.1f, true);
+   /*         debug::drawLine(contact.IncWorldContact
+                , contact.IncWorldContact + contact.totaldebugAddedAngular, math::vec4(1, 0, 1, 1), 5.0f, duration);*/
+
+            debug::drawLine(contact.refRBCentroid
+                , contact.RefWorldContact, math::vec4(1, 0, 0, 1), 5.0f, duration,true);
+
+            debug::drawLine(contact.incRBCentroid
+                , contact.IncWorldContact, math::vec4(0, 0, 1, 1), 5.0f, duration,true);
+
+      /*      debug::drawLine(contact.IncWorldContact
+                , contact.IncWorldContact + math::vec3(0, 0.1f, 0), math::vec4(0.5, 0.5, 0.5, 1),5.0f, duration, true);
+
+            debug::drawLine(contact.refRBCentroid
+                , contact.refRBCentroid + math::vec3(0, 0.1f, 0), math::vec4(0, 0, 0, 1), 5.0f, duration, true);*/
 
         }
 
         //--------------------------------------- Draw extreme points ---------------------------------------//
-        i = 0;
-        for (auto penetration : physics::PhysicsSystem::aPoint)
-        {
-            debug::drawLine(penetration
-                , penetration + math::vec3(0, 0.2, 0), math::vec4(1, 0, 0, 1), 15.0f);
 
-        }
-        i = 0;
-        for (auto penetration : physics::PhysicsSystem::bPoint)
-        {
-            debug::drawLine(penetration
-                , penetration + math::vec3(0, 0.2, 0), math::vec4(0, 0, 1, 1), 15.0f);
+        //i = 0;
+        //for (auto penetration : physics::PhysicsSystem::aPoint)
+        //{
+        //    debug::drawLine(penetration
+        //        , penetration + math::vec3(0, 0.2, 0), math::vec4(1, 0, 0, 1), 15.0f);
 
-        }
+        //}
+        //i = 0;
+        //for (auto penetration : physics::PhysicsSystem::bPoint)
+        //{
+        //    debug::drawLine(penetration
+        //        , penetration + math::vec3(0, 0.2, 0), math::vec4(0, 0, 1, 1), 15.0f);
+
+        //}
 
         physics::PhysicsSystem::contactPoints.clear();
         physics::PhysicsSystem::penetrationQueries.clear();
@@ -1272,9 +1363,22 @@ public:
 
             if (hasNecessaryComponentsForPhysicsManifold)
             {
+                auto rbColor = math::color(0.0, 0.5, 0, 1);
+                auto statibBlockColor = math::color(0, 1, 0, 1);
+
                 rotation rot = rotationHandle.read();
                 position pos = positionHandle.read();
                 scale scale = scaleHandle.read();
+
+                auto usedColor = statibBlockColor;
+                bool useDepth = false;
+
+                if (entity.get_component_handle<physics::rigidbody>())
+                {
+                    usedColor = rbColor;
+                    useDepth = true;
+                }
+
 
                 //assemble the local transform matrix of the entity
                 math::mat4 localTransform;
@@ -1310,7 +1414,8 @@ public:
                             math::vec3 worldStart = localTransform * math::vec4(*(edgeToExecuteOn->edgePositionPtr), 1);
                             math::vec3 worldEnd = localTransform * math::vec4(*(edgeToExecuteOn->nextEdge->edgePositionPtr), 1);
 
-                            debug::drawLine(worldStart, worldEnd, math::colors::green, 5.0f);
+                            debug::drawLine(worldStart, worldEnd, usedColor, 2.0f,0.0f, useDepth);
+
                         } while (initialEdge != currentEdge && currentEdge != nullptr);
                     }
 
@@ -1370,7 +1475,7 @@ public:
         if (action->value && !activated)
         {
             activated = true;
-            auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
+            auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEntRotation);
             //auto rb = crb.read();
 
             //auto [positionH, rotationH, scaleH] = m_ecs->getComponents<transform>(staticToAABBEnt);
@@ -1379,6 +1484,28 @@ public:
         }
 
      
+    }
+
+    void onActivateUnitTest0(activate_CRtest0* action)
+    {
+        static bool activated = false;
+
+        //auto [qpositionH, qrotationH, qscaleH] = m_ecs->getComponents<transform>(staticToAABBEnt);
+        //math::vec3 qpos = qpositionH.read();
+        //log::debug("BEFORE ADD rbPos {} ", math::to_string(qpos));
+
+        if (action->value && !activated)
+        {
+            activated = true;
+            auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEntLinear);
+            //auto rb = crb.read();
+
+            //auto [positionH, rotationH, scaleH] = m_ecs->getComponents<transform>(staticToAABBEnt);
+            //math::vec3 pos = positionH.read();
+            //log::debug("ON ADD rbPos {} ", math::to_string(pos));
+        }
+
+
     }
 
     void onActivateUnitTest2(activate_CRtest2* action)

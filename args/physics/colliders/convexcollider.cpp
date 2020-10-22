@@ -1,9 +1,10 @@
 #include <physics/colliders/convexcollider.hpp>
 #include <physics/physics_statics.hpp>
-#include <physics/systems/physicssystem.hpp>
+#include <physics/data/identifier.h>
 #include <physics/data/convexconvexpenetrationquery.h>
 #include <physics/data/edgepenetrationquery.h>
 #include <physics/data/pointer_encapsulator.hpp>
+#include <physics/systems/physicssystem.hpp>
 
 namespace args::physics
 {
@@ -58,7 +59,7 @@ namespace args::physics
         //--------------------- A Collision has been found, find the most shallow penetration  ------------------------------------//
 
         //Get world position and normal of reference faces //
-
+        
         math::vec3 worldFaceCentroidA = manifold.transformA * math::vec4((ARefFace.ptr)->centroid, 1);
         math::vec3 worldFaceNormalA = manifold.transformA * math::vec4((ARefFace.ptr)->normal, 0);
         
@@ -66,8 +67,8 @@ namespace args::physics
         math::vec3 worldFaceNormalB = manifold.transformB * math::vec4((BRefFace.ptr)->normal, 0);
 
     
-        math::vec3 worldEdgeAPosition = edgeRef.ptr? manifold.transformA * math::vec4(*edgeRef.ptr->edgePositionPtr, 1) : math::vec3();
-        math::vec3 worldEdgeNormal = -edgeNormal;
+        math::vec3 worldEdgeAPosition = edgeRef.ptr? manifold.transformB * math::vec4(*edgeRef.ptr->edgePositionPtr, 1) : math::vec3();
+        math::vec3 worldEdgeNormal = edgeNormal;
 
         auto abPenetrationQuery =
             std::make_shared< ConvexConvexPenetrationQuery>(ARefFace.ptr,BRefFace.ptr, worldFaceCentroidA,worldFaceNormalA,ARefSeperation,true);
@@ -88,30 +89,50 @@ namespace args::physics
             }
         };
 
-        manifold.penetrationInformation = *std::max_element(penetrationQueryArray.begin(), penetrationQueryArray.end(),lessThan);
+        //manifold.penetrationInformation = *std::max_element(penetrationQueryArray.begin(), penetrationQueryArray.end(),lessThan);
+
+        if (abPenetrationQuery->penetration + physics::constants::faceToFacePenetrationBias >
+            baPenetrationQuery->penetration)
+        {
+            manifold.penetrationInformation = abPenetrationQuery;
+        }
+        else
+        {
+            manifold.penetrationInformation = baPenetrationQuery;
+        }
+
+
+        if (abEdgePenetrationQuery->penetration >
+            manifold.penetrationInformation->penetration + physics::constants::faceToEdgePenetrationBias)
+        {
+            manifold.penetrationInformation = abEdgePenetrationQuery;
+        }
 
         manifold.isColliding = true;
         TempLine line;
         line.start = manifold.transformA[3];
         line.end = manifold.transformB[3];
 
-        PhysicsSystem::penetrationQueries.push_back(manifold.penetrationInformation);
-        PhysicsSystem::aPoint.push_back(a);
-        PhysicsSystem::bPoint.push_back(b);
-
-        collisionsFound.push_back(line);
 
 
+        //collisionsFound.push_back(line);
+
+        //keeping this here so i can copy pasta when i need it again
+        //log::debug("---- PENETRATION INFO");
+
+        //log::debug("---- abPenetrationQuery {}",abPenetrationQuery->penetration);
+        //log::debug("---- baPenetrationQuery {}",baPenetrationQuery->penetration);
+        //log::debug("---- abEdgePenetrationQuery {}", abEdgePenetrationQuery->penetration);
+        //log::debug("---- chosen penetration {}", manifold.penetrationInformation->penetration);
 
         //log::debug("Collision FOUND between {} and {}!" , compIDA.read().id, compIDB.read().id);
+
+        physics::PhysicsSystem::penetrationQueries.push_back(manifold.penetrationInformation);
    
     }
 
     void ConvexCollider::PopulateContactPointsWith(ConvexCollider* convexCollider, physics_manifold& manifold)
     {
-        log::debug("ConvexCollider::PopulateContactPointsWith ");
-
-
         math::mat4& refTransform = manifold.penetrationInformation->isARef ? manifold.transformA : manifold.transformB;
         math::mat4& incTransform = manifold.penetrationInformation->isARef ? manifold.transformB : manifold.transformA;
 
@@ -120,24 +141,29 @@ namespace args::physics
         auto refPhysicsCompHandle = manifold.penetrationInformation->isARef ? manifold.physicsCompA : manifold.physicsCompB;
         auto incPhysicsCompHandle = manifold.penetrationInformation->isARef ? manifold.physicsCompB : manifold.physicsCompA;
 
+        auto refCollider = manifold.penetrationInformation->isARef ? manifold.colliderA : manifold.colliderB;
+        auto incCollider = manifold.penetrationInformation->isARef ? manifold.colliderB : manifold.colliderA;
+
         ecs::component_handle<rigidbody> refRB = refPhysicsCompHandle.entity.get_component_handle<rigidbody>();
         ecs::component_handle<rigidbody>  incRB = incPhysicsCompHandle.entity.get_component_handle<rigidbody>();
+
+        math::vec3 refWorldCentroid = refTransform * math::vec4(refPhysicsCompHandle.read().localCenterOfMass,1);
+        math::vec3 incWorldCentroid = incTransform * math::vec4(incPhysicsCompHandle.read().localCenterOfMass,1);
 
         for ( auto& contact : manifold.contacts)
         {
             contact.incTransform = incTransform;
             contact.refTransform = refTransform;
 
-            contact.rbInc = incRB;
-            contact.rbRef = refRB;
+            contact.rbIncHandle = incRB;
+            contact.rbRefHandle = refRB;
            
             contact.collisionNormal = manifold.penetrationInformation->normal;
 
-
+            contact.refRBCentroid = refWorldCentroid;
+            contact.incRBCentroid = incWorldCentroid;
 
         }
-
-
     }
 
 

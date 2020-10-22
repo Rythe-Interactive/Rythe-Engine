@@ -1,7 +1,6 @@
 
 #include <physics/data/convexconvexpenetrationquery.h>
 #include <physics/physics_statics.hpp>
-#include <physics/systems/physicssystem.hpp>
 #include <physics/physics_contact.h>
 
 namespace args::physics
@@ -61,13 +60,13 @@ namespace args::physics
 
                 physics_contact contact;
 
-                contact.worldContactInc = incidentContact;
-                contact.worldContactRef = referenceContact;
+                contact.IncWorldContact = incidentContact;
+                contact.RefWorldContact = referenceContact;
 
                 //log::debug("incidentContact {} ", math::to_string(incidentContact));
 
                 manifold.contacts.push_back(contact);
-                PhysicsSystem::contactPoints.push_back(contact);
+             
 
             }
         }

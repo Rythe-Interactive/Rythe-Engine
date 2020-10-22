@@ -1,7 +1,7 @@
 
 #include <physics/data/edgepenetrationquery.h>
 #include <physics/physics_statics.hpp>
-#include <physics/systems/physicssystem.hpp>
+
 
 
 namespace args::physics
@@ -29,14 +29,10 @@ namespace args::physics
 
         physics_contact contact;
 
-        contact.incTransform = incTransform;
-        contact.refTransform = refTransform;
-
-        contact.worldContactInc = incContactPoint;
-        contact.worldContactRef = refContactPoint;
+        contact.IncWorldContact = incContactPoint;
+        contact.RefWorldContact = refContactPoint;
 
         manifold.contacts.push_back(contact);
-        PhysicsSystem::contactPoints.push_back(contact);
 
     }
 
