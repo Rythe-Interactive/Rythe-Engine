@@ -7,20 +7,24 @@
 
 namespace legion::core::compute {
 
-    Program::Program(cl_context ctx, cl_device_id device, filesystem::basic_resource container) {
+
+    /**
+     * Sadly it seems at though the current nVidia driver does not support clCreateProgramWithIL
+     */
+    Program::Program(cl_context ctx, cl_device_id device, filesystem::basic_resource container /* , bool source_is_il */) {
 
         //bind command queue creation to surrogate
         this->make_command_queue = std::function([ctx, device]() -> cl_command_queue
-        {
-            cl_int ret;
-            //creates a command queue and checks it for errors
-            auto* const command_queue = clCreateCommandQueueWithProperties(ctx, device, nullptr, &ret);
-            if (ret != NULL) {
-                log::error("clCreateCommandQueueWithProperties failed!");
-                return nullptr;
-            }
-            return command_queue;
-        });
+            {
+                cl_int ret;
+                //creates a command queue and checks it for errors
+                auto* const command_queue = clCreateCommandQueueWithProperties(ctx, device, nullptr, &ret);
+                if (ret != CL_SUCCESS) {
+                    log::error("clCreateCommandQueueWithProperties failed!");
+                    return nullptr;
+                }
+                return command_queue;
+            });
 
         cl_int ret;
 
@@ -28,11 +32,20 @@ namespace legion::core::compute {
         const char* data = reinterpret_cast<const char*>(container.data());
         size_t size = container.size();
 
-        //create program from source
-        m_program = clCreateProgramWithSource(ctx, 1, &data, &size, &ret);
-        if (ret != NULL)
+        /*
+        if (source_is_il)
         {
-            log::error("clCreateProgramWithSource failed!");
+            //create program from il
+            m_program = clCreateProgramWithIL(ctx, data, size, &ret);
+        }
+        else { */
+
+            //create program from source
+            m_program = clCreateProgramWithSource(ctx, 1, &data, &size, &ret);
+        /* } */
+        if (ret != CL_SUCCESS)
+        {
+            log::error("clCreateProgramWithSource/IL failed!");
             return;
         }
 
@@ -45,6 +58,7 @@ namespace legion::core::compute {
         // -DDEBUG if the Engine is built in debug mode, the kernel  will also receive the DEBUG define
         // -DNDEBUG if the Engine is built in release mode, the kernel will receive the NDEBUG define
 
+        /*if (!source_is_il) {*/
 
         //check if we are running in debug and adjust build command accordingly
         if constexpr (LEGION_CONFIGURATION == LEGION_DEBUG_VALUE) {
@@ -60,6 +74,8 @@ namespace legion::core::compute {
         {
             log::error("clBuildProgram failed");
         }
+
+        /*}*/
     }
 
     Kernel Program::kernelContext(const std::string& name)
@@ -85,7 +101,7 @@ namespace legion::core::compute {
 
         cl_int ret;
         cl_kernel kernel = clCreateKernel(m_program, name.c_str(), &ret);
-        if (ret != NULL)
+        if (ret != CL_SUCCESS)
         {
             log::error("clCreateKernel failed");
         }

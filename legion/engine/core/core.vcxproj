@@ -116,6 +116,8 @@
     <ClInclude Include="common\string_extra.hpp" />
     <ClInclude Include="common\exception.hpp" />
     <ClInclude Include="common\unit_conversion.hpp" />
+    <ClInclude Include="compute\detail\cl_include.hpp" />
+    <ClInclude Include="compute\high_level\function.hpp" />
     <ClInclude Include="compute\kernel.hpp" />
     <ClInclude Include="containers\atomic_sparse_map.hpp" />
     <ClInclude Include="containers\containers.hpp" />
@@ -476,6 +478,7 @@
     <ClCompile Include="async\readonly_rw_spinlock.cpp" />
     <ClCompile Include="compute\buffer.cpp" />
     <ClCompile Include="compute\context.cpp" />
+    <ClCompile Include="compute\high_level\function.cpp" />
     <ClCompile Include="compute\kernel.cpp" />
     <ClCompile Include="data\image.cpp" />
     <ClCompile Include="data\importers\image_importers.cpp" />

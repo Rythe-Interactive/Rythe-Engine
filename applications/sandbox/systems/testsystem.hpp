@@ -15,6 +15,7 @@
 
 #include <core/compute/context.hpp>
 #include <core/compute/kernel.hpp>
+#include <core/compute/high_level/function.hpp>
 #include <rendering/debugrendering.hpp>
 #include <physics/systems/physicssystem.hpp>
 
@@ -91,9 +92,6 @@ public:
     virtual void setup()
     {
 #pragma region OpenCL
-        compute::Program prog = fs::view("assets://kernels/vadd_kernel.cl").load_as<compute::Program>();
-
-        prog.prewarm("vector_add");
 
         std::vector<int> ints;
 
@@ -120,11 +118,24 @@ public:
 
         std::vector<int> results(to_process);
 
+        // ----------- vvv NEW vvv --------------------
 
+        using compute::in,compute::out;
+      
+        auto vector_add = fs::view("assets://kernels/vadd_kernel.cl").load_as<compute::function>("vector_add");
+
+        auto return_code = vector_add(1024,first_ints,second_ints,out(results));
+
+        // ============================================
+        
         auto A = compute::Context::createBuffer(first_ints, compute::buffer_type::READ_BUFFER, "A");
         auto B = compute::Context::createBuffer(second_ints, compute::buffer_type::READ_BUFFER, "B");
         auto C = compute::Context::createBuffer(results, compute::buffer_type::WRITE_BUFFER, "C");
 
+        compute::Program prog = fs::view("assets://kernels/vadd_kernel.cl").load_as<compute::Program>();
+        prog.prewarm("vector_add");
+
+        
         prog.kernelContext("vector_add")
             .set_and_enqueue_buffer(A)
             .set_and_enqueue_buffer(B)
@@ -135,7 +146,10 @@ public:
             .enqueue_buffer(C)
             .finish();
 
-        /* for (int& i : results)
+        // ----------- ^^^ OLD ^^^ --------------------
+
+
+         /*for (int& i : results)
          {
              log::info("got {}", i);
          }*/
@@ -330,7 +344,7 @@ public:
             sphere.add_components<rendering::renderable, sah>({ uvsphereH, wireframeH }, {});
             sphere.add_components<transform>(position(-5.1f, 3, 0), rotation(), scale(2.5f));
 
-            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland.mp3"_view);
+            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_mono.mp3"_view);
             if (segment)
             {
                 audio::audio_source source;
@@ -508,7 +522,7 @@ public:
             renderableHandle.write({ cubeH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(1.5, -3.0f, -2.0f));
+            positionH.write(math::vec3(3.0, -3.0f, -2.0f));
 
             auto rot = rotationH.read();
             rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));

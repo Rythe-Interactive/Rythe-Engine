@@ -1,7 +1,6 @@
 #pragma once
-#if !defined(DOXY_EXCLUDE)
-#include <CL/cl.h>
-#endif
+#include "detail/cl_include.hpp"
+
 #include <core/filesystem/resource.hpp>
 #include <core/compute/kernel.hpp>
 
@@ -23,7 +22,7 @@ namespace legion::core::compute {
     public:
 
 
-        Program(cl_context, cl_device_id, filesystem::basic_resource);
+        Program(cl_context, cl_device_id, filesystem::basic_resource /*, bool source_is_il = false*/);
         Program(const Program& other) = default;
         Program(Program&& other) noexcept = default;
         Program& operator=(const Program& other) = default;
