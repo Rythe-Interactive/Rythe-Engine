@@ -2,7 +2,7 @@
 #include <core/engine/system.hpp>
 #include <core/ecs/component_handle.hpp>
 
-namespace args::core::scenemanagement
+namespace legion::core::scenemanagement
 {
     class scene;
 
@@ -12,7 +12,7 @@ namespace args::core::scenemanagement
         int sceneCount;
         static std::unordered_map < id_type, std::string> sceneNames;
         static std::unordered_map < id_type, ecs::component_handle <scene > > sceneList;
-        static args::core::ecs::EcsRegistry* registry;
+        static legion::core::ecs::EcsRegistry* registry;
 
         SceneManager() = default;
 

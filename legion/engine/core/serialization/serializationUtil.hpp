@@ -47,7 +47,7 @@ struct Records
 };
 
 
-namespace args::core::serialization
+namespace legion::core::serialization
 {
     template<class T>
     class SerializationUtil

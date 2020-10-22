@@ -1,7 +1,7 @@
 #pragma once
 #include <core/scenemanagement/scenemanager.hpp>
 
-namespace args::core::scenemanagement
+namespace legion::core::scenemanagement
 {
     struct scene
     {

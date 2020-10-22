@@ -1,7 +1,7 @@
 #pragma once
 #include <core/scenemanagement/scenemanager.hpp>
 
-namespace args::core::scenemanagement
+namespace legion::core::scenemanagement
 {
     class SceneManagerModule: public Module
     {
@@ -9,7 +9,7 @@ namespace args::core::scenemanagement
         virtual void setup() override
         {
             addProcessChain("SceneModule");
-            reportSystem<args::core::scenemanagement::SceneManager>();
+            reportSystem<legion::core::scenemanagement::SceneManager>();
         }
 
         virtual priority_type priority() override

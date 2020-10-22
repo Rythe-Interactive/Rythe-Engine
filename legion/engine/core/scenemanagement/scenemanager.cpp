@@ -1,6 +1,6 @@
 #include <core/scenemanagement/scenemanager.hpp>
 #include <core/scenemanagement/scene.hpp>
-namespace args::core::scenemanagement
+namespace legion::core::scenemanagement
 {
     std::unordered_map < id_type, std::string> SceneManager::sceneNames;
     std::unordered_map<id_type, ecs::component_handle<scene>> SceneManager::sceneList;

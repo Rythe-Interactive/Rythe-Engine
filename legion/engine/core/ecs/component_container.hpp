@@ -124,7 +124,7 @@ namespace legion::core::ecs
 
        /**@brief Serializes the component, into either JSON or Binary
         * @param template typenmae Archive oarchive
-        * @ref args::core::async::readonly_rw_spinlock
+        * @ref legion::core::async::readonly_rw_spinlock
         */
         template<typename Archive>
         void serialize(Archive& oarchvie)
