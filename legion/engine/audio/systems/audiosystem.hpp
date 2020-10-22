@@ -37,6 +37,8 @@ namespace legion::audio
          */
         virtual void setup();
 
+        void onEngineExit(events::exit* event);
+
         /**
         * @brief Function callback for audio_source component creation.
         * @brief Initiallizes sound source and sound file
@@ -66,6 +68,7 @@ namespace legion::audio
         static void setDistanceModel(ALenum distanceModel);
 
         static async::readonly_rw_spinlock contextLock;
+        static ALCcontext* alcContext;
     private:
         void initSource(audio_source& source);
 
@@ -83,7 +86,6 @@ namespace legion::audio
         std::unordered_map <ecs::component_handle<audio_source>, position > m_sourcePositions;
 
         static ALCdevice* alDevice;
-        static ALCcontext* alcContext;
         static unsigned int sourceCount;
         static unsigned int listenerCount;
     };
