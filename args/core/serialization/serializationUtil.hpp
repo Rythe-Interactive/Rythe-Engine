@@ -15,17 +15,19 @@
 struct MyRecord
 {
     uint8_t x, y;
-    float z;
+    float z,w,v;
     MyRecord()
     {
 
     }
 
-    MyRecord(uint8_t _x, uint8_t _y, float _z)
+    MyRecord(uint8_t _x, uint8_t _y, float _z, float _w,float _v)
     {
         x = _x;
         y = _y;
         z = _z;
+        w = _w;
+        v = _v;
     }
 
     template <class Archive>
@@ -98,6 +100,7 @@ namespace args::core::serialization
         {
             cereal::JSONInputArchive iarchive(is); // Create an input archive
             T t;
+            std::cout << "PLease just do something"<<std::endl;
             iarchive(t); // Read the data from the archive
             return t;
         }
