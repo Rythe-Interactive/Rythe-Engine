@@ -1,7 +1,7 @@
 #pragma once
-#include <rendering/detail/engine_include.hpp>
+#include <application/application.hpp>
 
-namespace args::rendering
+namespace legion::rendering
 {
 	struct renderbuffer
 	{

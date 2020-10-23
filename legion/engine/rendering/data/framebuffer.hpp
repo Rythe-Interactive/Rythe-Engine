@@ -1,9 +1,9 @@
 #pragma once
-#include <rendering/detail/engine_include.hpp>
+#include <application/application.hpp>
 #include <rendering/data/texture.hpp>
 #include <rendering/data/renderbuffer.h>
 
-namespace args::rendering
+namespace legion::rendering
 {
     struct framebuffer
     {

@@ -233,12 +233,12 @@ public:
             submeshtestH = rendering::ModelCache::create_model("submeshtest", "assets://models/submeshtest.obj"_view);
             floorH = rendering::ModelCache::create_model("floor", "assets://models/groundplane.obj"_view);
 
-            wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.glsl"_view);
-            vertexH = rendering::MaterialCache::create_material("vertex", "assets://shaders/position.glsl"_view);
-            uvH = rendering::MaterialCache::create_material("uv", "assets://shaders/uv.glsl"_view);
-            normalH = rendering::MaterialCache::create_material("normal", "assets://shaders/normal.glsl"_view);
-            skyboxH = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.glsl"_view);
-            floorMH = rendering::MaterialCache::create_material("floor", "assets://shaders/groundplane.glsl"_view);
+            wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.shs"_view);
+            vertexH = rendering::MaterialCache::create_material("vertex", "assets://shaders/position.shs"_view);
+            uvH = rendering::MaterialCache::create_material("uv", "assets://shaders/uv.shs"_view);
+            normalH = rendering::MaterialCache::create_material("normal", "assets://shaders/normal.shs"_view);
+            skyboxH = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.shs"_view);
+            floorMH = rendering::MaterialCache::create_material("floor", "assets://shaders/groundplane.shs"_view);
 
             app::ContextHelper::makeContextCurrent(nullptr);
         }
@@ -508,7 +508,7 @@ public:
             renderableHandle.write({ cubeH, wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(1.5, -3.0f, -2.0f));
+            positionH.write(math::vec3(3.0, -3.0f, -2.0f));
 
             auto rot = rotationH.read();
             rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));

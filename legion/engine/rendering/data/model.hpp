@@ -9,7 +9,7 @@
  * @file model.hpp
  */
 
-namespace args::rendering
+namespace legion::rendering
 {
     /**@class model
      * @brief Struct containing all the buffer ids and the VAO needed for rendering.

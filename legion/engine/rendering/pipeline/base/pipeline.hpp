@@ -8,7 +8,7 @@
 #include <map>
 #include <memory>
 
-namespace args::rendering
+namespace legion::rendering
 {
     class ARGS_API Pipeline
     {

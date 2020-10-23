@@ -1,6 +1,6 @@
 #pragma once
 
-namespace args::rendering
+namespace legion::rendering
 {
 	class RenderStage
 	{

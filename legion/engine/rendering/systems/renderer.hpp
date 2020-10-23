@@ -114,7 +114,7 @@ namespace legion::rendering
                 }
             }
 
-            static material_handle debugMaterial = MaterialCache::create_material("debug", "assets://shaders/debug.glsl"_view);
+            static material_handle debugMaterial = MaterialCache::create_material("debug", "assets://shaders/debug.shs"_view);
             static app::gl_id vertexBuffer = -1;
             static size_type vertexBufferSize = 0;
             static app::gl_id colorBuffer = -1;
