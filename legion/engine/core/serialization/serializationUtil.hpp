@@ -84,7 +84,7 @@ namespace legion::core::serialization
         static void JSONSerialize(std::ofstream& os, T serializable)
         {
             cereal::JSONOutputArchive archive(os);
-            if (std::is_same<T, ecs::component_handle<scenemanagement::scene>>::value)
+            if (std::is_same<T, scenemanagement::scene>::value)
             {
                 archive(cereal::make_nvp("SceneRoot", serializable));
             }

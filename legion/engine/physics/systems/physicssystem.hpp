@@ -147,9 +147,9 @@ namespace legion::physics
 
             for (auto& manifoldPrecursors : manifoldPrecursorGrouping)
             {
-                for (int i = 0; i < manifoldPrecursors.size()-1; i++)
+                for (int i = 0; i < manifoldPrecursors.size() - 1; i++)
                 {
-                    for (int j = i+1; j < manifoldPrecursors.size(); j++)
+                    for (int j = i + 1; j < manifoldPrecursors.size(); j++)
                     {
                         physics_manifold_precursor& precursorA = manifoldPrecursors.at(i);
                         physics_manifold_precursor& precursorB = manifoldPrecursors.at(j);
@@ -170,13 +170,13 @@ namespace legion::physics
 
                         bool isBetweenTriggerAndNonTrigger =
                             (precursorPhyCompA.isTrigger && !precursorPhyCompB.isTrigger) || (!precursorPhyCompA.isTrigger && precursorPhyCompB.isTrigger);
-                            
+
                         bool isBetweenRigidbodyAndNonTrigger =
                             (precursorRigidbodyA && !precursorPhyCompB.isTrigger) || (precursorRigidbodyB && !precursorPhyCompA.isTrigger);
 
                         bool isBetween2Rigidbodies = (precursorRigidbodyA && precursorRigidbodyB);
 
-                        
+
                         if (isBetweenTriggerAndNonTrigger || isBetweenRigidbodyAndNonTrigger || isBetween2Rigidbodies)
                         {
                             constructManifoldsWithPrecursors(manifoldPrecursors.at(i), manifoldPrecursors.at(j),

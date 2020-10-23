@@ -1,0 +1,450 @@
+{
+    "Entity": {
+        "ID": 1,
+        "COMPONENTS": [
+            {
+                "OWNER": 1
+            },
+            {
+                "OWNER": 1
+            }
+        ],
+        "CHILDREN": [
+            {
+                "ID": 2,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 2
+                    },
+                    {
+                        "OWNER": 2
+                    },
+                    {
+                        "OWNER": 2
+                    },
+                    {
+                        "OWNER": 2
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 3,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 3
+                    },
+                    {
+                        "OWNER": 3
+                    },
+                    {
+                        "OWNER": 3
+                    },
+                    {
+                        "OWNER": 3
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 4,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 4
+                    },
+                    {
+                        "OWNER": 4
+                    },
+                    {
+                        "OWNER": 4
+                    },
+                    {
+                        "OWNER": 4
+                    },
+                    {
+                        "OWNER": 4
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 5,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 5
+                    },
+                    {
+                        "OWNER": 5
+                    },
+                    {
+                        "OWNER": 5
+                    },
+                    {
+                        "OWNER": 5
+                    },
+                    {
+                        "OWNER": 5
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 6,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 6
+                    },
+                    {
+                        "OWNER": 6
+                    },
+                    {
+                        "OWNER": 6
+                    },
+                    {
+                        "OWNER": 6
+                    },
+                    {
+                        "OWNER": 6
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 7,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 7
+                    },
+                    {
+                        "OWNER": 7
+                    },
+                    {
+                        "OWNER": 7
+                    },
+                    {
+                        "OWNER": 7
+                    },
+                    {
+                        "OWNER": 7
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 8,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 8
+                    },
+                    {
+                        "OWNER": 8
+                    },
+                    {
+                        "OWNER": 8
+                    },
+                    {
+                        "OWNER": 8
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 9,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 9
+                    },
+                    {
+                        "OWNER": 9
+                    },
+                    {
+                        "OWNER": 9
+                    },
+                    {
+                        "OWNER": 9
+                    },
+                    {
+                        "OWNER": 9
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 10,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 10
+                    },
+                    {
+                        "OWNER": 10
+                    },
+                    {
+                        "OWNER": 10
+                    },
+                    {
+                        "OWNER": 10
+                    },
+                    {
+                        "OWNER": 10
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 11,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 11
+                    },
+                    {
+                        "OWNER": 11
+                    },
+                    {
+                        "OWNER": 11
+                    },
+                    {
+                        "OWNER": 11
+                    },
+                    {
+                        "OWNER": 11
+                    },
+                    {
+                        "OWNER": 11
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 12,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 12
+                    },
+                    {
+                        "OWNER": 12
+                    },
+                    {
+                        "OWNER": 12
+                    },
+                    {
+                        "OWNER": 12
+                    },
+                    {
+                        "OWNER": 12
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 13,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 13
+                    },
+                    {
+                        "OWNER": 13
+                    },
+                    {
+                        "OWNER": 13
+                    },
+                    {
+                        "OWNER": 13
+                    },
+                    {
+                        "OWNER": 13
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 14,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 14
+                    },
+                    {
+                        "OWNER": 14
+                    },
+                    {
+                        "OWNER": 14
+                    },
+                    {
+                        "OWNER": 14
+                    },
+                    {
+                        "OWNER": 14
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 15,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 15
+                    },
+                    {
+                        "OWNER": 15
+                    },
+                    {
+                        "OWNER": 15
+                    },
+                    {
+                        "OWNER": 15
+                    },
+                    {
+                        "OWNER": 15
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 16,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 16
+                    },
+                    {
+                        "OWNER": 16
+                    },
+                    {
+                        "OWNER": 16
+                    },
+                    {
+                        "OWNER": 16
+                    },
+                    {
+                        "OWNER": 16
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 17,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 17
+                    },
+                    {
+                        "OWNER": 17
+                    },
+                    {
+                        "OWNER": 17
+                    },
+                    {
+                        "OWNER": 17
+                    },
+                    {
+                        "OWNER": 17
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 18,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 18
+                    },
+                    {
+                        "OWNER": 18
+                    },
+                    {
+                        "OWNER": 18
+                    },
+                    {
+                        "OWNER": 18
+                    },
+                    {
+                        "OWNER": 18
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 19,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 19
+                    },
+                    {
+                        "OWNER": 19
+                    },
+                    {
+                        "OWNER": 19
+                    },
+                    {
+                        "OWNER": 19
+                    },
+                    {
+                        "OWNER": 19
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 20,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 20
+                    },
+                    {
+                        "OWNER": 20
+                    },
+                    {
+                        "OWNER": 20
+                    },
+                    {
+                        "OWNER": 20
+                    },
+                    {
+                        "OWNER": 20
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 21,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 21
+                    },
+                    {
+                        "OWNER": 21
+                    },
+                    {
+                        "OWNER": 21
+                    },
+                    {
+                        "OWNER": 21
+                    },
+                    {
+                        "OWNER": 21
+                    }
+                ],
+                "CHILDREN": []
+            },
+            {
+                "ID": 22,
+                "COMPONENTS": [
+                    {
+                        "OWNER": 22
+                    },
+                    {
+                        "OWNER": 22
+                    },
+                    {
+                        "OWNER": 22
+                    },
+                    {
+                        "OWNER": 22
+                    },
+                    {
+                        "OWNER": 22
+                    }
+                ],
+                "CHILDREN": []
+            }
+        ]
+    }
+}

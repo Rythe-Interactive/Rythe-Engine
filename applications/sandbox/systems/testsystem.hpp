@@ -367,6 +367,10 @@ public:
 
         setupPhysicsCRUnitTest(cubeH, wireframeH);
 
+        auto world = m_ecs->getEntity(world_entity_id);
+        scenemanagement::SceneManager::createScene("Main",world);
+        std::ofstream file("assets/scenes/Main.cereal");
+        serialization::SerializationUtil<ecs::entity_handle>::JSONSerialize(file,world);
 
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::differentThread>("TestChain");
