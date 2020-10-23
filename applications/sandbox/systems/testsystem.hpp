@@ -112,9 +112,6 @@ public:
             delete[] buf;
         }
 
-        std::cout << "Yay";
-        std::cout << "please run";
-
         std::vector<int> first_ints(ints.begin(), ints.begin() + ints.size() / 2);
         std::vector<int> second_ints(ints.begin() + ints.size() / 2, ints.end());
 

@@ -293,7 +293,6 @@ namespace legion::core::ecs
         {
             return force_value_cast<component_handle<component_type>>(add_component(typeHash<component_type>()));
         }
-
         /**@brief Add component to the entity.
          * @param value Starting value of the component.
          * @tparam component_type Type of component to add.
@@ -303,12 +302,9 @@ namespace legion::core::ecs
          * @returns component_handle<component_type> Valid component handle for the newly created component.
          */
         template<typename component_type>
-        component_handle<std::remove_reference_t<component_type>> add_component(component_type&& value, std::memory_order order = std::memory_order_release) const
+        component_handle<std::remove_reference_t<component_type>> add_component(component_type&& value) const
         {
-            using actual_type = std::remove_reference_t<component_type>;
-            component_handle<actual_type> handle = force_value_cast<component_handle<actual_type>>(add_component(typeHash<actual_type>()));
-            handle.write(value);
-            return handle;
+            return force_value_cast<component_handle<std::remove_reference_t<component_type>>>(add_component(typeHash<std::remove_reference_t<component_type>>(), reinterpret_cast<void*>(&value)));
         }
 
         /**@brief Add component to the entity.

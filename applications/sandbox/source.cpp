@@ -12,9 +12,6 @@
 
 #include "module/testModule.hpp"
 
-#include <core/scenemanagement/SceneManagerModule.hpp>
-#include <core/scenemanagement/scene.hpp>
-
 using namespace legion;
 
 void LEGION_CCONV reportModules(Engine* engine)
@@ -26,5 +23,5 @@ void LEGION_CCONV reportModules(Engine* engine)
     engine->reportModule<rendering::RenderingModule>();
     engine->reportModule<physics::PhysicsModule>();
     engine->reportModule<audio::AudioModule>();
-    engine->reportModule<core::scenemanagement::SceneManagerModule>();
+    //engine->reportModule<core::scenemanagement::SceneManagerModule>();
 }

@@ -47,7 +47,7 @@ namespace legion::core
 
             m_scheduler->hookProcess<charc>(processChainName, m_processes[id].get());
         }
-        /*
+
         void createProcess(cstring processChainName, delegate<void(time::time_span<fast_time>)>&& operation, time::time_span<fast_time> interval = 0)
         {
             std::string name = std::string(processChainName) + undecoratedTypeName<SelfType>() + std::to_string(interval);
@@ -60,7 +60,6 @@ namespace legion::core
             m_scheduler->hookProcess(processChainName, m_processes[id].get());
         }
 
-        */
         void destroyProcess(cstring processChainName, time::time_span<fast_time> interval = 0)
         {
             std::string name = std::string(processChainName) + undecoratedTypeName<SelfType>() + std::to_string(interval);

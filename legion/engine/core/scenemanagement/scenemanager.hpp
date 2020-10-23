@@ -12,13 +12,11 @@ namespace legion::core::scenemanagement
         int sceneCount;
         static std::unordered_map < id_type, std::string> sceneNames;
         static std::unordered_map < id_type, ecs::component_handle <scene > > sceneList;
-        static legion::core::ecs::EcsRegistry* registry;
 
         SceneManager() = default;
 
         virtual void setup()
         {
-            registry = m_ecs;
         }
 
         void update()
@@ -28,7 +26,8 @@ namespace legion::core::scenemanagement
             }
         }
 
-        static void createScene(const std::string& name);
+        static bool createScene(const std::string& name);
+        static bool createScene(const std::string& name,const ecs::entity_handle& ent);
 
 
         static ecs::component_handle<scene> getScene(std::string name);

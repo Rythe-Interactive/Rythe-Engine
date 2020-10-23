@@ -463,7 +463,6 @@
     <ClInclude Include="platform\platform.hpp" />
     <ClInclude Include="scenemanagement\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
-    <ClInclude Include="scenemanagement\SceneManagerModule.hpp" />
     <ClInclude Include="scheduling\process.hpp" />
     <ClInclude Include="scheduling\processchain.hpp" />
     <ClInclude Include="scheduling\scheduler.hpp" />

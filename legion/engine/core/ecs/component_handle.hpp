@@ -77,7 +77,7 @@ namespace legion::core::ecs
 
         bool operator==(const component_handle<component_type>& other) const { return m_registry == other.m_registry && m_ownerId == other.m_ownerId; }
 
-        /**@brief Atomic read of component.
+        /**@brief Thread-safe read of component.
          * @param order Memory order at which to load the component.
          * @returns component_type Current value of component.
          */
