@@ -15,6 +15,7 @@
 
 #include <core/compute/context.hpp>
 #include <core/compute/kernel.hpp>
+#include <core/compute/high_level/function.hpp>
 #include <rendering/debugrendering.hpp>
 #include <physics/systems/physicssystem.hpp>
 
@@ -22,7 +23,7 @@
 #include <physics/data/identifier.h>
 #include <audio/audio.hpp>
 
-using namespace args;
+using namespace legion;
 
 
 struct sah
@@ -108,9 +109,6 @@ public:
     virtual void setup()
     {
 #pragma region OpenCL
-        compute::Program prog = fs::view("assets://kernels/vadd_kernel.cl").load_as<compute::Program>();
-
-        prog.prewarm("vector_add");
 
         std::vector<int> ints;
 
@@ -137,11 +135,24 @@ public:
 
         std::vector<int> results(to_process);
 
+        // ----------- vvv NEW vvv --------------------
 
+        using compute::in,compute::out;
+      
+        auto vector_add = fs::view("assets://kernels/vadd_kernel.cl").load_as<compute::function>("vector_add");
+
+        auto return_code = vector_add(1024,first_ints,second_ints,out(results));
+
+        // ============================================
+        
         auto A = compute::Context::createBuffer(first_ints, compute::buffer_type::READ_BUFFER, "A");
         auto B = compute::Context::createBuffer(second_ints, compute::buffer_type::READ_BUFFER, "B");
         auto C = compute::Context::createBuffer(results, compute::buffer_type::WRITE_BUFFER, "C");
 
+        compute::Program prog = fs::view("assets://kernels/vadd_kernel.cl").load_as<compute::Program>();
+        prog.prewarm("vector_add");
+
+        
         prog.kernelContext("vector_add")
             .set_and_enqueue_buffer(A)
             .set_and_enqueue_buffer(B)
@@ -152,7 +163,10 @@ public:
             .enqueue_buffer(C)
             .finish();
 
-        /* for (int& i : results)
+        // ----------- ^^^ OLD ^^^ --------------------
+
+
+         /*for (int& i : results)
          {
              log::info("got {}", i);
          }*/
@@ -368,7 +382,7 @@ public:
             sphere.add_components<rendering::renderable, sah>({ uvsphereH, wireframeH }, {});
             sphere.add_components<transform>(position(-5.1f, 3, 0), rotation(), scale(2.5f));
 
-            auto segment = audio::AudioSegmentCache::createAudioSegment("waterfall", "assets://audio/365921__inspectorj__waterfall-small-b[mono].mp3"_view);
+            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_mono.mp3"_view);
             if (segment)
             {
                 audio::audio_source source;
@@ -1309,7 +1323,7 @@ public:
          //{
          //	std::cout << "raising exit event" << std::endl;
          //	raiseEvent<events::exit>();
-         //	//throw args_exception_msg("hehehe fuck you >:D");
+         //	//throw legion_exception_msg("hehehe fuck you >:D");
          //}
     }
 

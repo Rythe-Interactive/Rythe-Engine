@@ -5,8 +5,8 @@
 
 inline namespace {
 
-using namespace ::args::core;
-namespace fs = ::args::core::filesystem;
+using namespace ::legion::core;
+namespace fs = ::legion::core::filesystem;
 
 class mock_resolver final : public fs::mem_filesystem_resolver
 {
@@ -48,12 +48,12 @@ public:
         
         using common::Err, common::Ok;
 
-        if(!prewarm()) return Err(args_fs_error("was unable to cook the data!"));
+        if(!prewarm()) return Err(legion_fs_error("was unable to cook the data!"));
 
         const auto result = get_data();
 
         if(get_target() == "test.txt") return Ok(filesystem::basic_resource(result));
-        return Err(args_fs_error("this mock interface does not support file access"));
+        return Err(legion_fs_error("this mock interface does not support file access"));
     }
 
     common::result<const filesystem::basic_resource, fs_error>
@@ -62,18 +62,18 @@ public:
 
         using common::Err, common::Ok;
 
-        if (!prewarm()) return Err(args_fs_error("was unable to cook the data!"));
+        if (!prewarm()) return Err(legion_fs_error("was unable to cook the data!"));
 
         const auto result = get_data();
 
         if (get_target() == "test.txt") return Ok<const filesystem::basic_resource>(filesystem::basic_resource(result));
-        return Err(args_fs_error("this mock interface does not support file access"));
+        return Err(legion_fs_error("this mock interface does not support file access"));
     }
 
     common::result<void,fs_error> set(interfaces::implement_signal_t, const filesystem::basic_resource& res) override
     {
         (void) res;
-        return common::Err(args_fs_error("not implemented for the mock interface"));
+        return common::Err(legion_fs_error("not implemented for the mock interface"));
     }
     void erase(interfaces::implement_signal_t) const noexcept override
     {
@@ -108,11 +108,11 @@ inline void test_filesystem()
 
     fs::provider_registry::domain_create_resolver<fs::basic_resolver>("basic://","./assets");
     fs::provider_registry::domain_create_resolver<mock_resolver>("only_test_valid://",vector);
-    fs::provider_registry::domain_create_resolver<mock_resolver>(".args-test",nullptr);
+    fs::provider_registry::domain_create_resolver<mock_resolver>(".legion-test",nullptr);
 
 
 
-    auto nested_contents = fs::view("basic://config/test.args-test/test.txt").get();
+    auto nested_contents = fs::view("basic://config/test.legion-test/test.txt").get();
     if(nested_contents == common::valid)
     {
         std::cout << "[arm-fs] -> found file !" << std::endl;

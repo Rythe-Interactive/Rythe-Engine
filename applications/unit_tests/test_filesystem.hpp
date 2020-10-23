@@ -7,8 +7,8 @@
 
 inline namespace {
 
-    using namespace ::args::core;
-    namespace fs = ::args::core::filesystem;
+    using namespace ::legion::core;
+    namespace fs = ::legion::core::filesystem;
 
     class mock_resolver final : public fs::mem_filesystem_resolver
     {
@@ -50,12 +50,12 @@ inline namespace {
 
             using common::Err, common::Ok;
 
-            if (!prewarm()) return Err(args_fs_error("was unable to cook the data!"));
+            if (!prewarm()) return Err(legion_fs_error("was unable to cook the data!"));
 
             const auto result = get_data();
 
             if (get_target() == "test.txt") return Ok(filesystem::basic_resource(result));
-            return Err(args_fs_error("this mock interface does not support file access"));
+            return Err(legion_fs_error("this mock interface does not support file access"));
         }
 
         common::result<const filesystem::basic_resource, fs_error>
@@ -64,18 +64,18 @@ inline namespace {
 
             using common::Err, common::Ok;
 
-            if (!prewarm()) return Err(args_fs_error("was unable to cook the data!"));
+            if (!prewarm()) return Err(legion_fs_error("was unable to cook the data!"));
 
             const auto result = get_data();
 
             if (get_target() == "test.txt") return Ok<const filesystem::basic_resource>(filesystem::basic_resource(result));
-            return Err(args_fs_error("this mock interface does not support file access"));
+            return Err(legion_fs_error("this mock interface does not support file access"));
         }
 
         common::result<void, fs_error> set(interfaces::implement_signal_t, const filesystem::basic_resource& res) override
         {
             (void)res;
-            return common::Err(args_fs_error("not implemented for the mock interface"));
+            return common::Err(legion_fs_error("not implemented for the mock interface"));
         }
         void erase(interfaces::implement_signal_t) const noexcept override
         {
@@ -105,7 +105,7 @@ TEST_CASE("[fs] testing the filesystem")
 {
     //setup testing environment
     std::string x = "always has been!";
-    namespace fs = ::args::core::filesystem;
+    namespace fs = ::legion::core::filesystem;
 
     auto vector = std::make_shared<byte_vec>(x.begin(), x.end());
 
