@@ -50,7 +50,7 @@ namespace args::physics
          * @return returns true if a seperating axis was found
          */
         static bool FindSeperatingAxisByExtremePointProjection(ConvexCollider* convexA
-            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeFace>&refFace, float& maximumSeperation, math::vec3& debugPoint)
+            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeFace>&refFace, float& maximumSeperation)
         {
             float currentMaximumSeperation = std::numeric_limits<float>::lowest();
 
@@ -71,7 +71,6 @@ namespace args::physics
 
                 if (seperation > currentMaximumSeperation)
                 {
-                    debugPoint = worldSupportPoint;
                     currentMaximumSeperation = seperation;
                     refFace.ptr = face;
                 }

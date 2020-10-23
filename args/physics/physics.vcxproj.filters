@@ -86,12 +86,6 @@
     <ClInclude Include="halfedgeface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\convexconvexpenetrationquery.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\edgepenetrationquery.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="data\penetrationquery.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -102,6 +96,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\identifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\convexconvexpenetrationquery.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\edgepenetrationquery.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

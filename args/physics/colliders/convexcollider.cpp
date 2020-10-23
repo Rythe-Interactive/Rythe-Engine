@@ -1,8 +1,8 @@
 #include <physics/colliders/convexcollider.hpp>
 #include <physics/physics_statics.hpp>
 #include <physics/data/identifier.h>
-#include <physics/data/convexconvexpenetrationquery.h>
-#include <physics/data/edgepenetrationquery.h>
+#include <physics/data/convexconvexpenetrationquery.hpp>
+#include <physics/data/edgepenetrationquery.hpp>
 #include <physics/data/pointer_encapsulator.hpp>
 #include <physics/systems/physicssystem.hpp>
 
@@ -13,15 +13,13 @@ namespace args::physics
         auto compIDA = manifold.physicsCompA.entity.get_component_handle<identifier>();
         auto compIDB = manifold.physicsCompB.entity.get_component_handle<identifier>();
 
-        //log::debug("CHECKING Collision between {} and {}!" , compIDA.read().id, compIDB.read().id);
         //--------------------- Check for a collision by going through the edges and faces of both polyhedrons  --------------//
         //'this' is colliderB and 'convexCollider' is colliderA
 
         PointerEncapsulator < HalfEdgeFace> ARefFace;
 
         float ARefSeperation;
-        math::vec3 a;
-        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(this, convexCollider, manifold.transformB,manifold.transformA,  ARefFace, ARefSeperation, a) || !ARefFace.ptr)
+        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(this, convexCollider, manifold.transformB,manifold.transformA,  ARefFace, ARefSeperation) || !ARefFace.ptr)
         {
             manifold.isColliding = false;
             return;
@@ -30,8 +28,7 @@ namespace args::physics
         PointerEncapsulator < HalfEdgeFace> BRefFace;
       
         float BRefSeperation;
-        math::vec3 b;
-        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider, this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation, b) || !BRefFace.ptr)
+        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider, this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation) || !BRefFace.ptr)
         {
             manifold.isColliding = false;
             return;
@@ -40,8 +37,6 @@ namespace args::physics
   
         PointerEncapsulator< HalfEdgeEdge> edgeRef;
         PointerEncapsulator< HalfEdgeEdge> edgeInc;
-
-        //edgeRef.ptr = 
 
         math::vec3 edgeNormal;
         float aToBEdgeSeperation;
@@ -53,18 +48,15 @@ namespace args::physics
             return;
         }
 
-        //assert(*edgeRef);
-
-
         //--------------------- A Collision has been found, find the most shallow penetration  ------------------------------------//
 
         //Get world position and normal of reference faces //
         
-        math::vec3 worldFaceCentroidA = manifold.transformA * math::vec4((ARefFace.ptr)->centroid, 1);
-        math::vec3 worldFaceNormalA = manifold.transformA * math::vec4((ARefFace.ptr)->normal, 0);
+        math::vec3 worldFaceCentroidA = manifold.transformA * math::vec4(ARefFace.ptr->centroid, 1);
+        math::vec3 worldFaceNormalA = manifold.transformA * math::vec4(ARefFace.ptr->normal, 0);
         
-        math::vec3 worldFaceCentroidB = manifold.transformB * math::vec4((BRefFace.ptr)->centroid, 1);
-        math::vec3 worldFaceNormalB = manifold.transformB * math::vec4((BRefFace.ptr)->normal, 0);
+        math::vec3 worldFaceCentroidB = manifold.transformB * math::vec4(BRefFace.ptr->centroid, 1);
+        math::vec3 worldFaceNormalB = manifold.transformB * math::vec4(BRefFace.ptr->normal, 0);
 
     
         math::vec3 worldEdgeAPosition = edgeRef.ptr? manifold.transformB * math::vec4(*edgeRef.ptr->edgePositionPtr, 1) : math::vec3();
@@ -109,13 +101,6 @@ namespace args::physics
         }
 
         manifold.isColliding = true;
-        TempLine line;
-        line.start = manifold.transformA[3];
-        line.end = manifold.transformB[3];
-
-
-
-        //collisionsFound.push_back(line);
 
         //keeping this here so i can copy pasta when i need it again
         //log::debug("---- PENETRATION INFO");

@@ -65,8 +65,6 @@ namespace args::physics
                 integrateRigidbodyQueryPositionAndRotation(deltaTime);
               
             }
-
-           
         }
 
         //The following function is public static so that it can be called by testSystem
@@ -93,13 +91,7 @@ namespace args::physics
             bool hasNecessaryComponentsForPhysicsManifold = hasTransform && physicsComponentHandle;
 
             int colliderID = id;
-            /* log::debug("----------- recursiveRetrievePreManifoldData ------------------------");
-             log::debug("colliderID count {0} ", colliderID);
-
-             log::debug("colliderID hasTransform {0} ", hasTransform);
-
-             log::debug("colliderID hasNecessaryComponentsForPhysicsManifold {0} ", hasNecessaryComponentsForPhysicsManifold);*/
-
+        
              //if the entity has a physicsComponent and a transform
             if (hasNecessaryComponentsForPhysicsManifold)
             {
@@ -126,8 +118,6 @@ namespace args::physics
 
                 manifoldPrecursors.push_back(manifoldPrecursor);
             }
-
-            //log::debug("initialEntity.child_count() {} ", initialEntity.child_count());
 
             //call recursiveRetrievePreManifoldData on its children
             for (int i = 0; i < initialEntity.child_count(); i++)
@@ -369,7 +359,6 @@ namespace args::physics
         void integrateRigidbody(ecs::component_handle<position>& posHandle
             , ecs::component_handle<rotation>& rotHandle , ecs::component_handle<rigidbody>& rbHandle,float dt)
         {
-            log::debug("------integrateRigidbody-------------");
             auto rb = rbHandle.read();
             auto rbPos = posHandle.read();
             auto rbRot = rotHandle.read();
@@ -406,9 +395,6 @@ namespace args::physics
         void integrateRigidbodyPositionAndRotations(ecs::component_handle<position>& posHandle
             , ecs::component_handle<rotation>& rotHandle, ecs::component_handle<rigidbody>& rbHandle, float dt)
         {
-            assert(rotHandle);
-
-            log::debug("------integrateRigidbody-------------");
             auto rb = rbHandle.read();
             auto rbPos = posHandle.read();
             auto rbRot = rotHandle.read();
@@ -430,19 +416,14 @@ namespace args::physics
             { 
                
                 math::vec3 axis = math::normalize(rb.angularVelocity);
-                //log::debug("axis {} ", math::to_string(axis));
 
                 math::quat glmQuat = math::angleAxis(dtAngle, axis);
                 rbRot *= glmQuat;
                 rbRot = math::normalize(rbRot);
                 math::quat quat = rbRot;
-                //log::debug("rbRot {} ", math::to_string(quat));
-                //log::debug("rotation updated ");
             }
 
             math::quat afr = rbRot;
-            //log::debug("bfr rbRot {} ", math::to_string(bfr));
-            //log::debug("aft rbRot {} ", math::to_string(afr));
 
             //for now assume that there is no offset from bodyP
             rb.globalCentreOfMass = rbPos;

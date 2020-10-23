@@ -1,5 +1,5 @@
 
-#include <physics/data/edgepenetrationquery.h>
+#include <physics/data/edgepenetrationquery.hpp>
 #include <physics/physics_statics.hpp>
 
 

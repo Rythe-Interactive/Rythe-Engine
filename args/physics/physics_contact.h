@@ -7,8 +7,6 @@ namespace args::physics
 {
 	struct physics_contact
 	{
-		// these might change later so i wont comment them yet, dont @ me for this.
-
 		ecs::component_handle<rigidbody> rbRefHandle;
 		ecs::component_handle<rigidbody> rbIncHandle;
 
@@ -23,17 +21,17 @@ namespace args::physics
 
 		math::vec3 collisionNormal;
 
-		math::vec3 totaldebugAddedAngular;
-
 		float totalLambda = 0.0f;
 
 		float effectiveMass = 0.0f;
 
+		/* @brief Calculate a certain linear and angular impulse that will resolve the collision
+		*/
 		void resolveContactConstraint(float dt,int i)
 		{
-			//the idea behind this collision resolution strategy (Sequential Impulse) 
+			//the idea behind this collision resolution strategy (Sequential Impulses) 
 			//is we resolve the collision by giving an impulse towards both 
-			//rigidbodies so that the collision would resolve itself in the next frame.
+			//rigidbodies so that the collision would resolve itself in the next time step.
 
 			//We calculate this value by first getting the position constraint
 
@@ -69,6 +67,8 @@ namespace args::physics
 
 			// delta-V :  (J^T) * lambda
 
+			//Where lambda is a single value that represents the scalar value of the linear and angular impulse
+
 			//However, in order to keep this 'shift' in velocity physically based, we must keep in mind the
 			//mass and inertia of the rigidbodies involved, therefore we must multiply delta-V with the matrix M^-1
 
@@ -80,7 +80,10 @@ namespace args::physics
 			//[ 0	0	mb	0]
 			//[ 0	0	0  Ib]
 
-
+			//where ma is a 3x3 identity matrix scaled by the mass of the rigidbodyA,
+			//mb is a 3x3 identity matrix scaled by the mass of the rigidbodyB,
+			//where Ia is the 3x3 matrix inertia tensor of the rigidbodyA,
+			//where Ib is the 3x3 matrix inertia tensor of the rigidbodyB,
 
 			//calculate J.V + b
 			math::vec3 Ra, Rb, minRaCrossN, RbCrossN;
@@ -101,10 +104,12 @@ namespace args::physics
 			float JVz = math::dot(collisionNormal, vb);
 			float JVw = math::dot(RbCrossN, wb);
 
+			//resolve the position violation by adding it into the lambda
 			float penetration = math::dot(RefWorldContact - IncWorldContact, -collisionNormal);
-			float baumgarteConstraint = -penetration * 0.3f * 1/dt;
-
+			float baumgarteConstraint = -penetration * physics::constants::baumgarteCoefficient * 1 / dt;
+			
 			float biasFactor = baumgarteConstraint;
+			//resolve the velocity violation
 			float minJV = -(JVx + JVy + JVz + JVw) + biasFactor;
 			
 			float foundLambda = minJV / effectiveMass;
@@ -137,39 +142,36 @@ namespace args::physics
 
 			ApplyImpulse(collisionNormal, lambdaApplied,
 				Ra, Rb);
-			//calculate lambda 
-
-			//clamp lambda
 
 		}
 
+		/* @brief Given the equation to calculate lambda -(J.V)/(J * M^-1 * J^T),
+		* precalculates (J * M^-1 * J^T).
+		*/
 		void preCalculateEffectiveMass()
 		{
 			collisionNormal = math::normalize(collisionNormal);
-			//calculate J M^-1 J^T
-
-			//J: [-n(-Ra x n)	n	(Rb x n)]
-
-			//calculate Ra and Rb
 
 			math::vec3 Ra, Rb, minRaCrossN, RbCrossN;
 			calculateJacobianComponents(Ra, minRaCrossN, Rb, RbCrossN);
 
-			float maUnit = rbRefHandle ? rbRefHandle.read().inverseMass : 0.0f;
-			float mbUnit = rbIncHandle ? rbIncHandle.read().inverseMass : 0.0f;
+			auto rbRef = rbRefHandle.read();
+			auto incRef = rbIncHandle.read();
+
+			float maUnit = rbRefHandle ? rbRef.inverseMass : 0.0f;
+			float mbUnit = rbIncHandle ? incRef.inverseMass : 0.0f;
 
 			//calculate M-1
 			math::mat3 ma = math::mat3(maUnit);
-			math::mat3 Ia = rbRefHandle ? rbRefHandle.read().globalInverseInertiaTensor : math::mat3(0.0f);
+			math::mat3 Ia = rbRefHandle ? rbRef.globalInverseInertiaTensor : math::mat3(0.0f);
 			math::mat3 mb = math::mat3(mbUnit);
-			math::mat3 Ib = rbIncHandle ? rbIncHandle.read().globalInverseInertiaTensor : math::mat3(0.0f);
+			math::mat3 Ib = rbIncHandle ? incRef.globalInverseInertiaTensor : math::mat3(0.0f);
 
 			//calculate M^-1 J^T
 			math::vec3 jx = ma * -collisionNormal;
 			math::vec3 jy = Ia * minRaCrossN;
 			math::vec3 jz = mb * collisionNormal;
 			math::vec3 jw = Ib * RbCrossN;
-
 
 			//calculate effective mass
 			float efMx = math::dot(-collisionNormal, jx);
@@ -179,19 +181,14 @@ namespace args::physics
 
 			effectiveMass = efMx + efMy + efMz + efMw;
 
-			//assert(efMx >= 0.0f);
-			//assert(efMy >= 0.0f);
-			//assert(efMz >= 0.0f);
-			//assert(efMw >= 0.0f);
 		}
 
-		
-
+		/* @brief Given a normal indicating the impulse direction, the vectors ra and rb that indicate the contact vectors, 
+		* and a lambda that indicates the scalar value of the impulse, applies impulses to the colliding rigidbodies
+		*/
 		void ApplyImpulse(const math::vec3 normal, const float lambda, 
 			const math::vec3 ra, const math::vec3 rb)
 		{
-			/*log::debug("-----------ApplyImpulse------------------------");
-			log::debug("lambda applied {} ", lambda);*/
 
 			math::vec3 linearImpulse = normal * lambda;
 
@@ -219,28 +216,15 @@ namespace args::physics
 				incRb.velocity += linearImpulse * incRb.inverseMass;
 				auto addedAngular = incRb.globalInverseInertiaTensor * angularImpulseB;
 				incRb.angularVelocity += addedAngular;
-
-				//log::debug("-----------rbInc after collision -------------");
-				//log::debug("//////END OF CONSTRAINT////////////");
-				//log::debug("afr incRb.angularVelocity {} ", math::to_string(incRb.angularVelocity));
-				//log::debug("afr incRb.velocity {} ", math::to_string(incRb.velocity));
-				//log::debug("addedAngular {} ", math::to_string(incRb.angularVelocity));
-
-				totaldebugAddedAngular = incRb.globalInverseInertiaTensor * torqueDirectionB * totalLambda;
 				
 				rbIncHandle.write(incRb);
-
 			}
-
 		}
-
 
 		void resolveFrictionConstraint()
 		{
 
 		}
-
-
 
 		void calculateJacobianComponents(math::vec3& Ra, math::vec3& minRaCrossN, math::vec3& Rb, math::vec3& RbCrossN)
 		{

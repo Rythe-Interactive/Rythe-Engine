@@ -756,6 +756,34 @@ public:
             idHandle.write(id);
         }
 
+        {
+            auto ent = m_ecs->createEntity();
+            //physicsUnitTestCD.push_back(staticToAABBEntLinear);
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+            entPhyHande.write(physicsComponent2);
+
+            auto crb = m_ecs->createComponent<physics::rigidbody>(ent);
+            auto rbHandle = ent.add_component<physics::rigidbody>();
+
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToAABBEnt);
+            //renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos+0.5f, -1.0f, 15.0f));
+            scaleH.write(math::vec3(1.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto id = idHandle.read();
+            id.id = "AABBRbStable";
+            idHandle.write(id);
+        }
+
         //----------- Static Block To AABB Body Rotation Test------------//
 
         {

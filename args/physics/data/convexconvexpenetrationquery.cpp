@@ -1,5 +1,5 @@
 
-#include <physics/data/convexconvexpenetrationquery.h>
+#include <physics/data/convexconvexpenetrationquery.hpp>
 #include <physics/physics_statics.hpp>
 #include <physics/physics_contact.h>
 
@@ -14,11 +14,6 @@ namespace args::physics
 
     void ConvexConvexPenetrationQuery::populateContactList(physics_manifold& manifold, math::mat4& refTransform, math::mat4 incTransform)
     {
-        log::debug("ConvexConvexPenetrationQuery::populateContactList");
-
-        assert(refFace);
-        assert(incFace);
-
         //------------------------------- get all world vertex positions in incFace -------------------------------------------------//
         std::vector<math::vec3> outputContactPoints;
 
@@ -46,15 +41,13 @@ namespace args::physics
 
         refFace->forEachEdge(clipNeigboringFaceWithOutput);
 
-     
-
         //-------- get the contact points of the ref polyhedron by projecting the incident contacts to the collision plane ---------//
 
         for (const auto& incidentContact : outputContactPoints)
         {
             float distanceToCollisionPlane = PhysicsStatics::PointDistanceToPlane(normal, faceCentroid, incidentContact);
 
-            if (distanceToCollisionPlane < -0.005f)
+            if (distanceToCollisionPlane < 0.05f)
             {
                 math::vec3 referenceContact = incidentContact - normal * distanceToCollisionPlane;
 

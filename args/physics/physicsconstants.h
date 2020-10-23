@@ -14,5 +14,5 @@ namespace args::physics::constants
 
 	static constexpr float faceToEdgePenetrationBias = 0.01f;
 
-	static constexpr float baumgarteCoefficient = 0.35f;
+	static constexpr float baumgarteCoefficient = 0.25f;
 }
