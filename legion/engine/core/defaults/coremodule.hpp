@@ -32,7 +32,7 @@ namespace legion::core
             reportComponentType<rotation>();
             reportComponentType<scale>();
             reportComponentType<scenemanagement::scene>();
-            reportSystem < ::legion::core::scenemanagement::SceneManager > ();
+            reportSystem <scenemanagement::SceneManager>();
         }
 
         virtual priority_type priority() override
