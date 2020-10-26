@@ -7,8 +7,8 @@
 #include <physics/cube_collider_params.hpp>
 #include <physics/physicsconstants.h>
 #include <physics/physics_statics.hpp>
-#include <physics/data/convexconvexpenetrationquery.h>
-#include <physics/data/edgepenetrationquery.h>
+#include <physics/data/convexconvexpenetrationquery.hpp>
+#include <physics/data/edgepenetrationquery.hpp>
 #include <physics/data/penetrationquery.h>
 #include <physics/data/physics_manifold.hpp>
 #include <physics/data/physics_manifold_precursor.h>

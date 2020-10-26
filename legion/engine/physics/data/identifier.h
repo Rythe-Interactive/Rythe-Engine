@@ -1,7 +1,7 @@
 #pragma once
 #include <core/core.hpp>
 
-namespace args::physics
+namespace legion::physics
 {
     struct identifier
     {

@@ -3,7 +3,7 @@
 #include <physics/data/penetrationquery.h>
 #include <physics/halfedgeedge.hpp>
 
-namespace args::physics
+namespace legion::physics
 {
 	class EdgePenetrationQuery : public PenetrationQuery
 	{
