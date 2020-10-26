@@ -9,24 +9,21 @@ namespace legion::core
     inline bool ShellInvoke(const std::string& command)
     {
         std::string file;
-        std::string params;
 
         auto seperator = command.find_first_of(' ');
         if (seperator == std::string::npos)
         {
             file = command;
-            params = "";
         }
         else
         {
             file = command.substr(0, seperator);
-            params = command.substr(seperator);
         }
 
         SHELLEXECUTEINFOA shExecInfo{};
         shExecInfo.cbSize = sizeof(SHELLEXECUTEINFOA);
         shExecInfo.lpFile = file.c_str();
-        shExecInfo.lpParameters = params.c_str();
+        shExecInfo.lpParameters = command.c_str();
         shExecInfo.nShow = SW_SHOWNORMAL;
 
         CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
@@ -41,24 +38,26 @@ namespace legion::core
     inline bool ShellInvoke(const std::string& command)
     {
         std::string file;
-        std::string params;
-        std::vector<char> paramsvec;
 
         auto seperator = command.find_first_of(' ');
         if (seperator == std::string::npos)
         {
             file = command;
-            params = "";
         }
         else
         {
             file = command.substr(0, seperator);
-            params = command.substr(seperator);
         }
 
-        paramsvec.assign(params.begin(), params.end());
-        common::replace_items(paramsvec, " ", "\0");
-        paramsvec.push_back('\0');
+        auto strvec = common::split_string_at<' '>(command);
+        std::vector<const char*> paramsvec;
+
+        for (auto s : strvec)
+        {
+            paramsvec.push_back(s.c_str());
+        }
+
+        paramsvec.push_back(nullptr);
 
         return execvp(file.c_str(), paramsvec.data()) != -1;
     }
