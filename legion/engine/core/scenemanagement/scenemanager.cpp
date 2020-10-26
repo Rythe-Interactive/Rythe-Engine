@@ -39,4 +39,9 @@ namespace legion::core::scenemanagement
     {
         return SceneManager::sceneList[nameHash(name)];
     }
+
+    ecs::entity_handle SceneManager::getSceneEntity(std::string name)
+    {
+        return SceneManager::sceneList[nameHash(name)].entity;
+    }
 }

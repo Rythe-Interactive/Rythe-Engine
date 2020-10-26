@@ -467,6 +467,7 @@
     <ClInclude Include="scheduling\processchain.hpp" />
     <ClInclude Include="scheduling\scheduler.hpp" />
     <ClInclude Include="scheduling\scheduling.hpp" />
+    <ClInclude Include="serialization\serializationmeta.hpp" />
     <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="time\clock.hpp" />
     <ClInclude Include="time\time.hpp" />

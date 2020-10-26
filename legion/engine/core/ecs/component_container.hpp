@@ -8,6 +8,14 @@
 #include <core/events/events.hpp>
 #include <core/ecs/component_meta.hpp>
 
+#include <cereal/types/unordered_map.hpp>
+#include <cereal/types/memory.hpp>
+#include <cereal/archives/json.hpp>
+#include <cereal/archives/portable_binary.hpp>
+
+#include <core/serialization/serializationmeta.hpp>
+
+
 /**
  * @file component_container.hpp
  */
@@ -26,6 +34,13 @@ namespace legion::core::ecs
         virtual void create_component(id_type entityId) LEGION_PURE;
         virtual void create_component(id_type entityId, void* value) LEGION_PURE;
         virtual void destroy_component(id_type entityId) LEGION_PURE;
+
+        virtual void serialize(cereal::JSONOutputArchive& oarchive, id_type entityId) LEGION_PURE;
+        virtual void serialize(cereal::BinaryOutputArchive& oarchive, id_type entityId) LEGION_PURE;
+
+        virtual void serialize(cereal::JSONInputArchive& oarchive, id_type entityId) LEGION_PURE;
+        virtual void serialize(cereal::BinaryInputArchive& oarchive, id_type entityId) LEGION_PURE;
+
         virtual ~component_container_base() = default;
     };
 
@@ -46,6 +61,41 @@ namespace legion::core::ecs
     public:
         component_container() = default;
         component_container(EcsRegistry* registry, events::EventBus* eventBus) : m_registry(registry), m_eventBus(eventBus) {}
+
+        virtual void serialize(cereal::JSONOutputArchive& oarchive, id_type entityId) override
+        {
+            if constexpr (serialization::has_serialize<component_type, void(cereal::JSONOutputArchive&)>::value)
+            {
+                async::readonly_guard guard(m_lock);
+                oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
+                m_components[entityId].serialize(oarchive);
+            }
+            else
+            {
+                oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
+            }
+        }
+        virtual void serialize(cereal::BinaryOutputArchive& oarchive, id_type entityId) override
+        {
+            oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
+        }
+        virtual void serialize(cereal::JSONInputArchive& oarchive, id_type entityId) override
+        {
+            if constexpr (serialization::has_serialize<component_type, void(cereal::JSONOutputArchive&)>::value)
+            {
+                async::readonly_guard guard(m_lock);
+                oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
+                m_components[entityId].serialize(oarchive);
+            }
+            else
+            {
+                oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
+            }
+        }
+        virtual void serialize(cereal::BinaryInputArchive& oarchive, id_type entityId) override
+        {
+            oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
+        }
 
         /**@brief Get the readonly_rw_spinlock of this container.
          */
@@ -103,7 +153,7 @@ namespace legion::core::ecs
                 m_components.insert(entityId, std::move(comp));
             }
 
-            m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId, m_registry));
+            m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId));
         }
 
         /**@brief Creates component in a thread-safe way and initializes it with the given value.
@@ -119,17 +169,7 @@ namespace legion::core::ecs
                 m_components[entityId] = *reinterpret_cast<component_type*>(value);
             }
 
-            m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId, m_registry));
-        }
-
-       /**@brief Serializes the component, into either JSON or Binary
-        * @param template typenmae Archive oarchive
-        * @ref legion::core::async::readonly_rw_spinlock
-        */
-        template<typename Archive>
-        void serialize(Archive& oarchvie)
-        {
-            oarchive((component_type)*this);
+            m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId));
         }
 
 
@@ -140,7 +180,7 @@ namespace legion::core::ecs
          */
         virtual void destroy_component(id_type entityId) override
         {
-            m_eventBus->raiseEvent<events::component_destruction<component_type>>(entity_handle(entityId, m_registry));
+            m_eventBus->raiseEvent<events::component_destruction<component_type>>(entity_handle(entityId));
 
             if constexpr (detail::has_destroy<component_type, void(component_type&)>::value)
             {

@@ -30,9 +30,6 @@
     <ClCompile Include="colliders\convexcollider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="systems\physicssystem.hpp">
-      <Filter>systems</Filter>
-    </ClCompile>
     <ClCompile Include="halfedgeface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -99,6 +96,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="physics.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\physicssystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

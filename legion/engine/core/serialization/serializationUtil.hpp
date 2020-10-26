@@ -12,8 +12,12 @@
 #include <fstream>
 #include <string>
 
+
+//Some testing objects for serialization
+#pragma region TestObjects
 struct MyRecord
 {
+
     uint8_t x, y;
     float z;
     MyRecord()
@@ -35,6 +39,7 @@ struct MyRecord
     }
 };
 
+
 struct Records
 {
     MyRecord records[20];
@@ -45,6 +50,7 @@ struct Records
         ar(CEREAL_NVP(records));
     }
 };
+#pragma endregion
 
 
 namespace legion::core::serialization
@@ -53,65 +59,96 @@ namespace legion::core::serialization
     class SerializationUtil
     {
     public:
+        /**@brief JSON serialization from a stringstream
+           *@param os stringstream the ouput for the serialized object
+           *@param serializable template type that represents the object that needs to be serialized
+           */
         static void JSONSerialize(std::stringstream os, T serializable)
         {
-            cereal::JSONOutputArchive archive(os);
-            archive(CEREAL_NVP(serializable));
+            cereal::JSONOutputArchive archive(os); // Create an output archive, Output as outputing to a string stream
+            archive(CEREAL_NVP(serializable)); // Read the data into the archive
         }
 
+        /**@brief JSON deserialization from a stringstream
+           *@param is stringstream the input of a serialized object
+           *@returns the the deserialized object as type T
+           */
         static T JSONDeserialize(std::stringstream is)
         {
-            cereal::JSONInputArchive iarchive(is); // Create an input archive
+            cereal::JSONInputArchive iarchive(is); // Create an input archive, Input as inputing to memory
             T t;
             iarchive(t); // Read the data from the archive
             return t;
         }
 
+        /**@brief Binary serialization from a stringstream
+           *@param os stringstream the ouput for the serialized object
+           *@param serializable template type that represents the object that needs to be serialized
+           */
         static void BinarySerialize(std::stringstream os, T serializable)
         {
-            cereal::BinaryOutputArchive archive(os);
-            archive(CEREAL_NVP(serializable));
+            cereal::BinaryOutputArchive archive(os); // Create an output archive, Output as outputing to a string stream
+            archive(CEREAL_NVP(serializable)); // Read the data into the archive
         }
 
+        /**@brief Binary deserialization from a stringstream
+           *@param is stringstream the input of a serialized object
+           *@returns the the deserialized object as type T
+           */
         static T BinaryDeserialize(std::stringstream is)
         {
-            cereal::BinaryInputArchive iarchive(is); // Create an input archive
+            cereal::BinaryInputArchive iarchive(is);  // Create an input archive, Input as inputing to memory
             T t;
             iarchive(t); // Read the data from the archive
             return t;
         }
 
+        /**@brief JSON serialization from a filestream
+           *@param os filestream  the ouput for the serialized object
+           *@param serializable template type that represents the object that needs to be serialized
+           */
         static void JSONSerialize(std::ofstream& os, T serializable)
         {
-            cereal::JSONOutputArchive archive(os);
-            if (std::is_same<T, scenemanagement::scene>::value)
+            cereal::JSONOutputArchive archive(os);// Create an output archive, Output as outputing to a string stream
+            if constexpr (std::is_same<std::remove_reference_t<T>, scenemanagement::scene>::value)
             {
-                archive(cereal::make_nvp("SceneRoot", serializable));
+                archive(cereal::make_nvp("SceneRoot", serializable)); // Read the data to the archive
             }
             else
             {
-                archive(cereal::make_nvp("Entity", serializable));
+                archive(cereal::make_nvp("Entity", serializable)); // Read the data to the archive
             }
         }
 
+        /**@brief JSON deserialization from a filestream
+           *@param is filestream the input of a serialized object
+           *@returns the the deserialized object as type T
+           */
         static T JSONDeserialize(std::ifstream is)
         {
-            cereal::JSONInputArchive iarchive(is); // Create an input archive
+            cereal::JSONInputArchive iarchive(is);   // Create an input archive, Input as inputing to memory
             T t;
             iarchive(t); // Read the data from the archive
             return t;
         }
 
-
+        /**@brief Binary serialization from a filestream
+           *@param os filestream the ouput for the serialized object
+           *@param serializable template type that represents the object that needs to be serialized
+           */
         static void BinarySerialize(std::ofstream os, T serializable)
         {
-            cereal::BinaryOutputArchive archive(os);
-            archive(CEREAL_NVP(serializable));
+            cereal::BinaryOutputArchive archive(os);// Create an output archive, Output as outputing to a string stream
+            archive(CEREAL_NVP(serializable)); // Read the data to the archive
         }
 
+        /**@brief Binary deserialization from a filestream
+           *@param is filestream the input of a serialized object
+           *@returns the the deserialized object as type T
+           */
         static T BinaryDeserialize(std::ifstream is)
         {
-            cereal::BinaryInputArchive iarchive(is); // Create an input archive
+            cereal::BinaryInputArchive iarchive(is);  // Create an input archive, Input as inputing to memory
             T t;
             iarchive(t); // Read the data from the archive
             return t;

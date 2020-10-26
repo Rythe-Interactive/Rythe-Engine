@@ -17,7 +17,6 @@
     <ClCompile Include="halfedgeface.cpp" />
     <ClCompile Include="components\physics_component.cpp" />
     <ClCompile Include="systems\physicssystem.cpp" />
-    <ClCompile Include="systems\physicssystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core\core.vcxproj">
@@ -37,6 +36,7 @@
     <ClInclude Include="data\penetrationquery.h" />
     <ClInclude Include="physics.hpp" />
     <ClInclude Include="physicsconstants.h" />
+    <ClInclude Include="systems\physicssystem.hpp" />
     <ClInclude Include="physics_statics.hpp" />
     <ClInclude Include="physics_contact.h" />
     <ClInclude Include="data\physics_manifold.hpp" />
