@@ -20,7 +20,7 @@
 #include <physics/systems/physicssystem.hpp>
 
 #include <physics/physics_statics.hpp>
-#include <physics/data/identifier.h>
+#include <physics/data/identifier.hpp>
 #include <audio/audio.hpp>
 
 using namespace legion;

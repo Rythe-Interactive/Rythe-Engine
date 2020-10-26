@@ -1,6 +1,6 @@
 #include <physics/colliders/convexcollider.hpp>
 #include <physics/physics_statics.hpp>
-#include <physics/data/identifier.h>
+#include <physics/data/identifier.hpp>
 #include <physics/data/convexconvexpenetrationquery.hpp>
 #include <physics/data/edgepenetrationquery.hpp>
 #include <physics/data/pointer_encapsulator.hpp>

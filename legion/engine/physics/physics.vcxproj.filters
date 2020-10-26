@@ -92,9 +92,6 @@
     <ClInclude Include="data\pointer_encapsulator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\identifier.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="data\convexconvexpenetrationquery.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -102,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="physics.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\identifier.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

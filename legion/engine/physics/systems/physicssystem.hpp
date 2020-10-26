@@ -7,7 +7,7 @@
 #include <physics/data/physics_manifold.hpp>
 #include <physics/physics_contact.h>
 #include <physics/components/physics_component.hpp>
-#include <physics/data/identifier.h>
+#include <physics/data/identifier.hpp>
 #include <memory>
 
 namespace legion::physics
