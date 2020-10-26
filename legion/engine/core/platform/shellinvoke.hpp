@@ -49,17 +49,30 @@ namespace legion::core
             file = command.substr(0, seperator);
         }
 
-        auto strvec = common::split_string_at<' '>(command);
-        std::vector<const char*> paramsvec;
+        std::vector<char*> paramsvec;
 
-        for (auto s : strvec)
+        auto iss = std::stringstream(command);
+        auto str = std::string();
+
+        while (iss >> str)
         {
-            paramsvec.push_back(s.c_str());
+            const char* r = str.c_str();
+            char* x = new char[str.size()];
+            memcpy(x, r, str.size());
+            paramsvec.push_back(x);
         }
 
         paramsvec.push_back(nullptr);
 
-        return execvp(file.c_str(), paramsvec.data()) != -1;
+        bool ret = execvp(file.c_str(), paramsvec.data()) != -1;
+
+        for (auto ptr : paramsvec)
+        {
+            if (ptr)
+                delete[] ptr;
+        }
+
+        return ret;
     }
 #else
 #error "fuck you"
