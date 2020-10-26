@@ -18,7 +18,7 @@ namespace legion::audio
 
         audio_segment() = default;
 
-        audio_segment(int16* data, ALuint bufferId, size_type samples, int channels, int sampleRate, int layer, int avg_bitRate);
+        audio_segment(byte* data, ALuint bufferId, size_type samples, int channels, int sampleRate, int layer, int avg_bitRate);
 
         audio_segment(const audio_segment& other);
 
@@ -31,13 +31,13 @@ namespace legion::audio
         ~audio_segment();
 
         // Read-Write
-        int16* getData()
+        byte* getData()
         {
             return m_data;
         }
 
         // Read only
-        const int16* getData() const
+        const byte* getData() const
         {
             return m_data;
         }
@@ -47,7 +47,7 @@ namespace legion::audio
         static std::mutex m_refsLock;
         static id_type m_lastId;
         id_type m_id;
-        int16* m_data;
+        byte* m_data;
 	};
 
     struct audio_import_settings

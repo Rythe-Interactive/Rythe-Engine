@@ -58,7 +58,6 @@ namespace legion::audio
 
 		// Release context on this thread
 		alcMakeContextCurrent(nullptr);
-		mp3_audio_loader::context = alcContext;
 	}
 
 	inline void AudioSystem::onEngineExit(events::exit* event)
