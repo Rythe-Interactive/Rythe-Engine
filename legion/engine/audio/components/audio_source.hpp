@@ -137,6 +137,26 @@ namespace legion::audio
             return m_audio_handle;
         }
 
+        int getChannels()
+        {
+            int channels = 0;
+            {
+                async::readonly_guard guard(m_audio_handle.get().first);
+                channels = m_audio_handle.get().second.channels;
+            }
+            return channels;
+        }
+
+        bool isStereo()
+        {
+            return getChannels() == 2;
+        }
+
+        bool isMono()
+        {
+            return getChannels() == 1;
+        }
+
     private:
         /**
         * @brief Function to clear the changes that will be applied
@@ -163,7 +183,6 @@ namespace legion::audio
         // b1 - gain
         // b2 - play state
         // b3 - rewind (doRewind)
-
         byte m_changes = 0;
     };
 }

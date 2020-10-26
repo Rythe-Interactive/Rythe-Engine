@@ -7,7 +7,7 @@ namespace legion::audio
     std::mutex audio_segment::m_refsLock;
     id_type audio_segment::m_lastId = 1;
 
-    audio_segment::audio_segment(int16* data, ALuint bufferId, size_type samples, int channels, int sampleRate, int layer, int avg_bitRate) :
+    audio_segment::audio_segment(byte* data, ALuint bufferId, size_type samples, int channels, int sampleRate, int layer, int avg_bitRate) :
         audioBufferId(bufferId), samples(samples), channels(channels), sampleRate(sampleRate), layer(layer), avg_bitrate_kbps(avg_bitRate)
     {
         std::lock_guard guard(m_refsLock);
