@@ -45,6 +45,10 @@
 	#define VC_EXTRALEAN
 	#define NOMINMAX
 	#include <Windows.h>
+	#include <shellapi.h>
+    #include <shlobj.h>
+    #include <shlwapi.h>
+    #include <objbase.h>
 #elif defined(__linux__)
 	/**@def LEGION_LINUX
 	 * @brief Defined when compiling for Linux.
@@ -52,6 +56,7 @@
 	#define LEGION_LINUX
 
 	#include <sys/resource.h>
+    #include <unistd.h>
 	#include <sched.h>
 	#include <errno.h>
 #endif
