@@ -17,6 +17,7 @@ namespace legion::audio
             gain = 2,
             playState = 4,
             doRewind = 8,
+            audioHandle = 16,
         };
 
         enum playstate
@@ -119,6 +120,8 @@ namespace legion::audio
 
         void setAudioHandle(audio_segment_handle handle)
         {
+            if (handle == m_audio_handle) return;
+            m_changes |= sound_properties::audioHandle;
             m_audio_handle = handle;
         }
 
@@ -169,7 +172,7 @@ namespace legion::audio
         }
 
         ALuint m_sourceId;
-        audio_segment_handle m_audio_handle;
+        audio_segment_handle m_audio_handle = invalid_audio_segment_handle;
 
         float m_pitch = 1.0f;
         float m_gain = 1.0f;
@@ -183,6 +186,7 @@ namespace legion::audio
         // b1 - gain
         // b2 - play state
         // b3 - rewind (doRewind)
+        // b4 - audio handle
         byte m_changes = 0;
     };
 }

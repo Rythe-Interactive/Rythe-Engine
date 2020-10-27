@@ -18,8 +18,7 @@ namespace legion::audio
     inline void openal_error()
     {
         ALCenum error;
-        error = alGetError();
-        if (error != AL_NO_ERROR)
+        while ((error = alGetError()) != AL_NO_ERROR)
             legion::log::warn("ERROR: OpenAl error: {}", error);
     }
 
