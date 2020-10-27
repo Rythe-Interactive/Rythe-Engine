@@ -385,12 +385,12 @@ public:
 
         // Sphere setup (with audio source)
         {
-            sphere = createEntity();
+            sphere = createEntity(); 
             sphere.add_components<rendering::renderable, sah>({ uvsphereH, wireframeH }, {});
             sphere.add_components<transform>(position(-5.1f, 3, 0), rotation(), scale(2.5f));
 
-            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_mono16.wav"_view);
-            audio::AudioSegmentCache::createAudioSegment("other", "assets://audio/kilogram-of-scotland.wav"_view);
+            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo32.wav"_view, { true });
+            audio::AudioSegmentCache::createAudioSegment("other", "assets://audio/kilogram-of-scotland_stereo32.wav"_view, { false });
             
             audio::audio_source source;
             source.setAudioHandle(segment);

@@ -58,7 +58,7 @@ namespace legion::audio
         RIFF_Header header;
         WAVE_Data waveData;
 
-        memcpy(&header, resource.data() , sizeof(header)); // Copy header data into the header struct
+        memcpy(&header, resource.data(), sizeof(header)); // Copy header data into the header struct
 
         // Check if the loaded file has the correct header
 
@@ -99,15 +99,76 @@ namespace legion::audio
             return decay(Err(legion_fs_error("WAV File sample data does not start with word (data)")));
         }
 
-        const unsigned long sampleDataSize = resource.size() - sizeof(header) - sizeof(waveData);
-        byte* audioData = new byte[sampleDataSize];
-        memcpy(audioData, resource.data() + sizeof(header) + sizeof(waveData), sampleDataSize);
-        
+        uint metaSize = sizeof(header) + sizeof(waveData);
+
+        unsigned long sampleDataSize = resource.size() - metaSize;
+        byte* audioData;
+
+        uint channels = header.wave_format.channels;
+
+        if (settings.force_mono && header.wave_format.channels != 1)
+        {
+            // Convert to mono if not mono
+            uint bytesPerSample = header.wave_format.bitsPerSample / 8;
+            audioData = new byte[sampleDataSize / channels];
+            uint j = 0;
+            uint channelSize = channels * bytesPerSample;
+            for (uint i = 0; i < sampleDataSize; i += channelSize)
+            {
+                switch (bytesPerSample)
+                {
+                case 1:
+                {
+                    uint64 data = 0;
+                    for (uint c = 0; c < channelSize; c += bytesPerSample)
+                    {
+                        data += static_cast<uint64>(*(resource.data() + metaSize + i + c));
+                    }
+                    audioData[j] = data / channels;
+                    j += bytesPerSample;
+                }
+                    break;
+                case 2:
+                {
+                    int64 data = 0;
+                    for (uint c = 0; c < channelSize; c += bytesPerSample)
+                    {
+                        data += static_cast<const int64>(*reinterpret_cast<const int16*>(resource.data() + metaSize + i + c));
+                    }
+                    *reinterpret_cast<int16*>(audioData + j) = data / channels;
+                    j += bytesPerSample;
+                }
+                    break;
+                case 4:
+                {
+                    float data = 0;
+                    for (uint c = 0; c < channelSize; c += bytesPerSample)
+                    {
+                        data += *reinterpret_cast<const float*>(resource.data() + metaSize + i + c);
+                    }
+                    *reinterpret_cast<float*>(audioData + j) = data / channels;
+                    j += bytesPerSample;
+                }
+                    break;
+                default:
+                    break;
+                }
+            }
+            sampleDataSize /= channels;
+            channels = 1;
+        }
+        else
+        {
+            // Leave as is
+            audioData = new byte[sampleDataSize];
+            memcpy(audioData, resource.data() + sizeof(header) + sizeof(waveData), sampleDataSize);
+        }
+
         audio_segment as(
             audioData,
             0,
             -1, // Sample count, unknown for wav
-            header.wave_format.channels,
+            channels,
             (int)header.wave_format.sampleRate,
             -1, // Layer, does not exist in wav
             -1 // avg_biterate_kbps, unknown for wav
@@ -121,14 +182,20 @@ namespace legion::audio
         if (as.channels == 1)
         {
             if (header.wave_format.bitsPerSample == 8) format = AL_FORMAT_MONO8;
-            if (header.wave_format.bitsPerSample == 16) format = AL_FORMAT_MONO16;
-            if (header.wave_format.bitsPerSample == 32) format = AL_FORMAT_MONO_FLOAT32;
+            else if (header.wave_format.bitsPerSample == 16) format = AL_FORMAT_MONO16;
+            else if (header.wave_format.bitsPerSample == 32) format = AL_FORMAT_MONO_FLOAT32;
         }
         else if (as.channels == 2)
         {
             if (header.wave_format.bitsPerSample == 8) format = AL_FORMAT_STEREO8;
-            if (header.wave_format.bitsPerSample == 16) format = AL_FORMAT_STEREO16;
-            if (header.wave_format.bitsPerSample == 32) format = AL_FORMAT_STEREO_FLOAT32;
+            else if (header.wave_format.bitsPerSample == 16) format = AL_FORMAT_STEREO16;
+            else if (header.wave_format.bitsPerSample == 32) format = AL_FORMAT_STEREO_FLOAT32;
+        }
+        else if (as.channels == 4)
+        {
+            if (header.wave_format.bitsPerSample == 8) format = AL_FORMAT_QUAD8;
+            else if (header.wave_format.bitsPerSample == 16) format = AL_FORMAT_QUAD16;
+            else if (header.wave_format.bitsPerSample == 32) format = AL_FORMAT_QUAD32;
         }
         alBufferData(as.audioBufferId, format, as.getData(), sampleDataSize, as.sampleRate);
 
