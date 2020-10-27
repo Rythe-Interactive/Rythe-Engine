@@ -39,7 +39,7 @@
     <ClInclude Include="physics.hpp" />
     <ClInclude Include="physicsconstants.h" />
     <ClInclude Include="physics_statics.hpp" />
-    <ClInclude Include="physics_contact.h" />
+    <ClInclude Include="physics_contact.hpp" />
     <ClInclude Include="data\physics_manifold.hpp" />
     <ClInclude Include="components\physics_component.hpp" />
     <ClInclude Include="physicsmodule.hpp" />

@@ -59,9 +59,6 @@
     <ClInclude Include="data\physics_manifold_precursor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="physics_contact.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="components\physics_component.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -102,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\identifier.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="physics_contact.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

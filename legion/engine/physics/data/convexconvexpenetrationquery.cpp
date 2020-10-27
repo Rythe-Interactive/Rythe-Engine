@@ -1,7 +1,7 @@
 
 #include <physics/data/convexconvexpenetrationquery.hpp>
 #include <physics/physics_statics.hpp>
-#include <physics/physics_contact.h>
+#include <physics/physics_contact.hpp>
 
 namespace legion::physics
 {
