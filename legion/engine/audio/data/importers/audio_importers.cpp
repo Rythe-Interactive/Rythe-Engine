@@ -67,6 +67,7 @@ namespace legion::audio
             header.chunckId[2] != 'F' ||
             header.chunckId[3] != 'F')
         {
+            log::error("Found WAV header: '{}', exptected: 'RIFF'", (char)header.chunckId[0], (char)header.chunckId[1], (char)header.chunckId[2], (char)header.chunckId[3]);
             return decay(Err(legion_fs_error("WAV File invalid header, exptected RIFF")));
         }
 
@@ -75,6 +76,7 @@ namespace legion::audio
             header.format[2] != 'V' ||
             header.format[3] != 'E')
         {
+            log::error("Found WAV format: '{}{}{}{}', exptected: 'WAVE'", (char)header.format[0], (char)header.format[1], (char)header.format[2], (char)header.format[3]);
             return decay(Err(legion_fs_error("Loaded File is not of type WAV")));
         }
 
@@ -83,6 +85,7 @@ namespace legion::audio
             header.wave_format.subChunckId[2] != 't' ||
             header.wave_format.subChunckId[3] != ' ')
         {
+            log::error("Found WAV format sub chunck ID: '{}{}{}{}', exptected: 'fmt '", (char)header.wave_format.subChunckId[0], (char)header.wave_format.subChunckId[1], (char)header.wave_format.subChunckId[2], (char)header.wave_format.subChunckId[3]);
             return decay(Err(legion_fs_error("WAV File sub chunck id was not (fmt )")));
         }
 
@@ -92,6 +95,7 @@ namespace legion::audio
             waveData.subChunckId[2] != 't' ||
             waveData.subChunckId[3] != 'a')
         {
+            log::error("Found WAV data sub chunck ID: '{}{}{}{}', exptected: 'data'", (char)waveData.subChunckId[0], (char)waveData.subChunckId[1], (char)waveData.subChunckId[2], (char)waveData.subChunckId[3]);
             return decay(Err(legion_fs_error("WAV File sample data does not start with word (data)")));
         }
 
