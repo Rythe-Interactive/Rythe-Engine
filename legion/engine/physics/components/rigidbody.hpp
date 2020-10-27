@@ -2,7 +2,7 @@
 
 
 #include <core/core.hpp>
-#include <physics/physicsconstants.h>
+#include <physics/physicsconstants.hpp>
 #include <physics/components/physics_component.hpp>
 
 namespace legion::physics

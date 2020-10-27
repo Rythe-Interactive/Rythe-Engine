@@ -5,7 +5,7 @@
 #include <physics/colliders/convexcollider.hpp>
 #include <physics/colliders/physicscollider.hpp>
 #include <physics/cube_collider_params.hpp>
-#include <physics/physicsconstants.h>
+#include <physics/physicsconstants.hpp>
 #include <physics/physics_statics.hpp>
 #include <physics/data/convexconvexpenetrationquery.hpp>
 #include <physics/data/edgepenetrationquery.hpp>
