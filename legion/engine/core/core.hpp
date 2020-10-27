@@ -2,11 +2,11 @@
 
 /**
  * @file core.hpp
- * @brief Single include header for Args-Core
+ * @brief Single include header for Legion-Core
  */
 
 #include <core/platform/platform.hpp>
-
+#include <core/platform/shellinvoke.hpp>
 #include <core/math/math.hpp>
 #include <core/common/common.hpp>
 #include <core/types/types.hpp>

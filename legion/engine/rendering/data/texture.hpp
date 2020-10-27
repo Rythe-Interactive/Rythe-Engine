@@ -81,7 +81,7 @@ namespace legion::rendering
         std::vector<math::color> pixels;
     };
 
-    /**@class texture.hpp
+    /**@class texture
      * @brief Struct containing all the data needed for rendering.
      */
     struct texture

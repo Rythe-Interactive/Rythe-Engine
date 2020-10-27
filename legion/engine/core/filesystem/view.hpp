@@ -93,10 +93,10 @@ namespace legion::core::filesystem
 
         /** @brief same as get().decay().to<T>()
          */
-        template <class T>
-        auto load_as() -> decltype(auto)
+        template <class T,class... Args>
+        auto load_as(Args&&...args) -> decltype(auto)
         {
-            return get().decay().to<T>();
+            return get().decay().to<T>(std::forward<Args>(args)...);
         }
 
 
