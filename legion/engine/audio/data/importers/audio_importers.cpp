@@ -104,7 +104,7 @@ namespace legion::audio
         memcpy(audioData, resource.data() + sizeof(header) + sizeof(waveData), sampleDataSize);
         
         audio_segment as(
-            new byte[sampleDataSize],
+            audioData,
             0,
             -1, // Sample count, unknown for wav
             header.wave_format.channels,
@@ -112,8 +112,6 @@ namespace legion::audio
             -1, // Layer, does not exist in wav
             -1 // avg_biterate_kbps, unknown for wav
         );
-        memmove(as.getData(), audioData, sampleDataSize);
-        delete[] audioData; // Data has been moved, thus old data can be deleted
 
         async::readwrite_guard guard(AudioSystem::contextLock);
         alcMakeContextCurrent(AudioSystem::alcContext);
