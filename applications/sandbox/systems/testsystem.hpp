@@ -401,7 +401,6 @@ public:
 
         setupCameraEntity();
 
-
         //---------------------------------------------------------- Physics Collision Unit Test -------------------------------------------------------------------//
 
         //setupPhysicsCDUnitTest(cubeH, wireframeH);
@@ -415,8 +414,6 @@ public:
         createProcess<&TestSystem::differentThread>("TestChain");
         createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
         createProcess<&TestSystem::drawInterval>("TestChain");
-       
-
     }
 
     void setupPhysicsCDUnitTest(rendering::model_handle cubeH, rendering::material_handle wireframeH)
