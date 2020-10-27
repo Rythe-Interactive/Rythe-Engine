@@ -24,8 +24,8 @@ void LEGION_CCONV reportModules(Engine* engine)
     engine->reportModule<physics::PhysicsModule>();
     engine->reportModule<audio::AudioModule>();
 
-    /*if (ShellInvoke("winver"))
+    if (ShellInvoke("winver"))
         log::debug("yay");
     else
-        log::debug("nay");*/
+        log::debug("nay");
 }
