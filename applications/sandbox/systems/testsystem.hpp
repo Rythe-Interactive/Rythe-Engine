@@ -76,6 +76,8 @@ struct play_audio_source : public app::input_action<play_audio_source> {};
 struct pause_audio_source : public app::input_action<pause_audio_source> {};
 struct stop_audio_source : public app::input_action<stop_audio_source> {};
 struct rewind_audio_source : public app::input_action<rewind_audio_source> {};
+struct play_audio_segment_kilogram : public app::input_action<play_audio_segment_kilogram> {};
+struct play_audio_segment_other : public app::input_action<play_audio_segment_other> {};
 
 struct activate_CRtest0 : public app::input_action<activate_CRtest0> {};
 struct activate_CRtest1 : public app::input_action<activate_CRtest1> {};
@@ -209,6 +211,9 @@ public:
         app::InputSystem::createBinding<pause_audio_source>(app::inputmap::method::LEFT_BRACKET);
         app::InputSystem::createBinding<stop_audio_source>(app::inputmap::method::RIGHT_BRACKET);
         app::InputSystem::createBinding<rewind_audio_source>(app::inputmap::method::BACKSPACE);
+        app::InputSystem::createBinding<play_audio_segment_kilogram>(app::inputmap::method::KP_MULTIPLY);
+        app::InputSystem::createBinding<play_audio_segment_other>(app::inputmap::method::KP_SUBTRACT);
+
         app::InputSystem::createBinding< activate_CRtest0>(app::inputmap::method::KP_0);
         app::InputSystem::createBinding< activate_CRtest1>(app::inputmap::method::KP_1);
         app::InputSystem::createBinding< activate_CRtest2>(app::inputmap::method::KP_2);
@@ -237,6 +242,8 @@ public:
         bindToEvent<pause_audio_source, &TestSystem::pauseAudioSource>();
         bindToEvent<stop_audio_source, &TestSystem::stopAudioSource>();
         bindToEvent<rewind_audio_source, &TestSystem::rewindAudioSource>();
+        bindToEvent<play_audio_segment_kilogram, &TestSystem::playAudioSegmentKilogram>();
+        bindToEvent<play_audio_segment_other, &TestSystem::playAudioSegmentOther>();
 
         bindToEvent< activate_CRtest0, &TestSystem::onActivateUnitTest0>();
         bindToEvent< activate_CRtest1, &TestSystem::onActivateUnitTest1>();
@@ -382,13 +389,12 @@ public:
             sphere.add_components<rendering::renderable, sah>({ uvsphereH, wireframeH }, {});
             sphere.add_components<transform>(position(-5.1f, 3, 0), rotation(), scale(2.5f));
 
-            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland.wav"_view);
-            if (segment)
-            {
-                audio::audio_source source;
-                source.setAudioHandle(segment);
-                sphere.add_component<audio::audio_source>(source);
-            }
+            audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_mono16.wav"_view);
+            audio::AudioSegmentCache::createAudioSegment("other", "assets://kilogram-of-scotland.wav"_view);
+            
+            audio::audio_source source;
+            //source.setAudioHandle(segment);
+            sphere.add_component<audio::audio_source>(source);
 
         }
 #pragma endregion
@@ -402,7 +408,7 @@ public:
 
         //----------- Rigidbody-Collider AABB Test------------//
 
-        setupPhysicsCRUnitTest(cubeH, uvH);
+        //setupPhysicsCRUnitTest(cubeH, uvH);
 
 
         createProcess<&TestSystem::update>("Update");
@@ -1221,6 +1227,24 @@ public:
         audio::audio_source source = sourceH.read();
         source.rewind();
         sourceH.write(source);
+    }
+
+    void playAudioSegmentKilogram(play_audio_segment_kilogram* action)
+    {
+        auto sourceH = sphere.get_component_handle<audio::audio_source>();
+        auto segment = audio::AudioSegmentCache::getAudioSegment("kilogram");
+        auto a = sourceH.read();
+        a.setAudioHandle(segment);
+        sourceH.write(a);
+    }
+
+    void playAudioSegmentOther(play_audio_segment_other* action)
+    {
+        auto sourceH = sphere.get_component_handle<audio::audio_source>();
+        auto segment = audio::AudioSegmentCache::getAudioSegment("other");
+        auto a = sourceH.read();
+        a.setAudioHandle(segment);
+        sourceH.write(a);
     }
 
     void update(time::span deltaTime)

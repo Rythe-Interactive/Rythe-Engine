@@ -153,6 +153,24 @@ namespace legion::audio
         return { id };
     }
 
+    audio_segment_handle AudioSegmentCache::getAudioSegment(const std::string& name)
+    {
+        id_type id = nameHash(name);
+        {
+            async::readonly_guard guard(m_segmentsLock);
+            // check if segment has been loaded before
+            if (m_segments.count(id))
+                return { id };
+        }
+        return invalid_audio_segment_handle;
+    }
+
+    void AudioSegmentCache::unload()
+    {
+        async::readonly_guard guard(AudioSegmentCache::m_segmentsLock);
+        m_segments.clear();
+    }
+
     std::pair<async::readonly_rw_spinlock&, audio_segment&> audio_segment_handle::get()
     {
         async::readonly_guard guard(AudioSegmentCache::m_segmentsLock);
