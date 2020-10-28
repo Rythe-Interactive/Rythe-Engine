@@ -407,11 +407,11 @@ public:
 
         //---------------------------------------------------------- Physics Collision Unit Test -------------------------------------------------------------------//
 
-        //setupPhysicsCDUnitTest(cubeH, wireframeH);
+        setupPhysicsCDUnitTest(cubeH, wireframeH);
 
         //----------- Rigidbody-Collider AABB Test------------//
 
-        //setupPhysicsCRUnitTest(cubeH, uvH);
+       setupPhysicsCRUnitTest(cubeH, uvH);
 
 
         createProcess<&TestSystem::update>("Update");
