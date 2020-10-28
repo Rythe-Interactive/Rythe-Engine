@@ -72,6 +72,8 @@ namespace legion::audio
         friend struct audio_segment_handle;
     public:
         static audio_segment_handle createAudioSegment(const std::string& name, const fs::view& file, audio_import_settings settings = default_audio_import_settings);
+        static audio_segment_handle getAudioSegment(const std::string& name);
+        static void unload();
     private:
         // Unorderer map to store all unique audio segments
         // Each audio segment has a unique id using name hash
