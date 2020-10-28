@@ -1,5 +1,6 @@
 #include <core/scenemanagement/scenemanager.hpp>
 #include <core/scenemanagement/scene.hpp>
+
 namespace legion::core::scenemanagement
 {
     std::unordered_map < id_type, std::string> SceneManager::sceneNames;
@@ -26,6 +27,9 @@ namespace legion::core::scenemanagement
             sceneNames.emplace(s.id, name);
             auto sceneHandle = ent.add_component<scenemanagement::scene>(s);
             sceneList.emplace(nameHash(name), sceneHandle);
+
+            std::ofstream outFile("assets/scenes/"+name+".cornflake");
+            serialization::SerializationUtil::JSONSerialize<ecs::entity_handle>(outFile, ent);
             //true if entity does not have the scene component
             return true;
         }

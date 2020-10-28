@@ -55,7 +55,6 @@ struct Records
 
 namespace legion::core::serialization
 {
-    template<class T>
     class SerializationUtil
     {
     public:
@@ -63,6 +62,7 @@ namespace legion::core::serialization
            *@param os stringstream the ouput for the serialized object
            *@param serializable template type that represents the object that needs to be serialized
            */
+        template<class T>
         static void JSONSerialize(std::stringstream os, T serializable)
         {
             cereal::JSONOutputArchive archive(os); // Create an output archive, Output as outputing to a string stream
@@ -73,6 +73,7 @@ namespace legion::core::serialization
            *@param is stringstream the input of a serialized object
            *@returns the the deserialized object as type T
            */
+        template<class T>
         static T JSONDeserialize(std::stringstream is)
         {
             cereal::JSONInputArchive iarchive(is); // Create an input archive, Input as inputing to memory
@@ -85,6 +86,7 @@ namespace legion::core::serialization
            *@param os stringstream the ouput for the serialized object
            *@param serializable template type that represents the object that needs to be serialized
            */
+        template<class T>
         static void BinarySerialize(std::stringstream os, T serializable)
         {
             cereal::BinaryOutputArchive archive(os); // Create an output archive, Output as outputing to a string stream
@@ -95,6 +97,7 @@ namespace legion::core::serialization
            *@param is stringstream the input of a serialized object
            *@returns the the deserialized object as type T
            */
+        template<class T>
         static T BinaryDeserialize(std::stringstream is)
         {
             cereal::BinaryInputArchive iarchive(is);  // Create an input archive, Input as inputing to memory
@@ -107,6 +110,7 @@ namespace legion::core::serialization
            *@param os filestream  the ouput for the serialized object
            *@param serializable template type that represents the object that needs to be serialized
            */
+        template<class T>
         static void JSONSerialize(std::ofstream& os, T serializable)
         {
             cereal::JSONOutputArchive archive(os);// Create an output archive, Output as outputing to a string stream
@@ -124,7 +128,8 @@ namespace legion::core::serialization
            *@param is filestream the input of a serialized object
            *@returns the the deserialized object as type T
            */
-        static T JSONDeserialize(std::ifstream is)
+        template<class T>
+        static T JSONDeserialize(std::ifstream& is)
         {
             cereal::JSONInputArchive iarchive(is);   // Create an input archive, Input as inputing to memory
             T t;
@@ -136,7 +141,8 @@ namespace legion::core::serialization
            *@param os filestream the ouput for the serialized object
            *@param serializable template type that represents the object that needs to be serialized
            */
-        static void BinarySerialize(std::ofstream os, T serializable)
+        template<class T>
+        static void BinarySerialize(std::ofstream& os, T serializable)
         {
             cereal::BinaryOutputArchive archive(os);// Create an output archive, Output as outputing to a string stream
             archive(CEREAL_NVP(serializable)); // Read the data to the archive
@@ -146,7 +152,8 @@ namespace legion::core::serialization
            *@param is filestream the input of a serialized object
            *@returns the the deserialized object as type T
            */
-        static T BinaryDeserialize(std::ifstream is)
+        template<class T>
+        static T BinaryDeserialize(std::ifstream& is)
         {
             cereal::BinaryInputArchive iarchive(is);  // Create an input archive, Input as inputing to memory
             T t;

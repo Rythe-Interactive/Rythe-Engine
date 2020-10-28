@@ -9,6 +9,10 @@
 /**
  * @file component_handle.hpp
  */
+namespace legion::core
+{
+    class Engine;
+}
 
 namespace legion::core::ecs
 {
@@ -21,20 +25,21 @@ namespace legion::core::ecs
      */
     class component_handle_base
     {
+        friend class Engine;
     public:
         // Entity that owns this component.
         entity_handle entity;
 
     protected:
-        EcsRegistry* m_registry;
         id_type m_ownerId;
         id_type m_typeId;
+        static EcsRegistry* m_registry;
 
     public:
-        component_handle_base() : entity(), m_registry(nullptr), m_ownerId(invalid_id), m_typeId(invalid_id) {};
-        component_handle_base(const component_handle_base& other) : entity(other.entity), m_registry(other.m_registry), m_ownerId(other.m_ownerId), m_typeId(other.m_typeId) {};
-        component_handle_base(component_handle_base&& other) : entity(other.entity), m_registry(other.m_registry), m_ownerId(other.m_ownerId), m_typeId(other.m_typeId) {};
-        component_handle_base(id_type entityId, id_type typeId, EcsRegistry* registry) : entity(entityId), m_registry(registry), m_ownerId(entityId), m_typeId(typeId) {}
+        component_handle_base() : entity(), m_ownerId(invalid_id), m_typeId(invalid_id) {};
+        component_handle_base(const component_handle_base& other) : entity(other.entity), m_ownerId(other.m_ownerId), m_typeId(other.m_typeId) {};
+        component_handle_base(component_handle_base&& other) : entity(other.entity),m_ownerId(other.m_ownerId), m_typeId(other.m_typeId) {};
+        component_handle_base(id_type entityId, id_type typeId) : entity(entityId), m_ownerId(entityId), m_typeId(typeId) {}
 
         component_handle_base& operator=(const component_handle_base& other) { entity = other.entity; m_registry = other.m_registry; m_ownerId = other.m_ownerId; m_typeId = other.m_typeId; return *this; }
         component_handle_base& operator=(component_handle_base&& other) { entity = other.entity; m_registry = other.m_registry; m_ownerId = other.m_ownerId; m_typeId = other.m_typeId; return *this; }
@@ -75,12 +80,12 @@ namespace legion::core::ecs
 
         /**@brief Creates component handle for the given entity.
          */
-        component_handle(id_type entityId, EcsRegistry* registry) : component_handle_base(entityId,typeHash<component_type>(), registry) {}
+        component_handle(id_type entityId) : component_handle_base(entityId,typeHash<component_type>()) {}
 
-        component_handle& operator=(const component_handle& other) { entity = other.entity; m_registry = other.m_registry; m_ownerId = other.m_ownerId; m_typeId = other.m_typeId; return *this; }
-        component_handle& operator=(component_handle&& other) { entity = other.entity; m_registry = other.m_registry; m_ownerId = other.m_ownerId; m_typeId = other.m_typeId; return *this; }
+        component_handle& operator=(const component_handle& other) { entity = other.entity; /*m_registry = other.m_registry; */m_ownerId = other.m_ownerId; m_typeId = other.m_typeId; return *this; }
+        component_handle& operator=(component_handle&& other) { entity = other.entity;/* m_registry = other.m_registry;*/ m_ownerId = other.m_ownerId; m_typeId = other.m_typeId; return *this; }
 
-        bool operator==(const component_handle<component_type>& other) const { return m_registry == other.m_registry && m_ownerId == other.m_ownerId && m_typeId == other.m_typeId; }
+        bool operator==(const component_handle<component_type>& other) const { return /*m_registry == other.m_registry &&*/ m_ownerId == other.m_ownerId && m_typeId == other.m_typeId; }
 
         /**@brief Thread-safe read of component.
          * @param order Memory order at which to load the component.
@@ -271,7 +276,7 @@ namespace legion::core::ecs
     {
         if (typeHash<component_type>() == m_typeId)
         {
-            return component_handle<component_type>(m_ownerId, m_registry);
+            return component_handle<component_type>(m_ownerId);
         }
         else
         {

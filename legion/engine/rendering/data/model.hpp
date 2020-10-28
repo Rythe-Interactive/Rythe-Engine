@@ -49,7 +49,16 @@ namespace legion::rendering
         void buffer_data(app::gl_id matrixBuffer);
         mesh_handle get_mesh();
         const model& get_model();
+
+        template<typename Archive>
+        void serialize(Archive& archive);
     };
+
+    template<typename Archive>
+    void model_handle::serialize(Archive& archive)
+    {
+        archive(id);
+    }
 
     constexpr model_handle invalid_model_handle { invalid_id };
 

@@ -169,7 +169,7 @@ namespace legion::audio
         }
 
         ALuint m_sourceId;
-        audio_segment_handle m_audio_handle;
+        audio_segment_handle m_audio_handle = invalid_audio_segment_handle;
 
         float m_pitch = 1.0f;
         float m_gain = 1.0f;

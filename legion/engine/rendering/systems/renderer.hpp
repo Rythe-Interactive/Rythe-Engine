@@ -433,6 +433,11 @@ namespace legion::rendering
                         log::warn("Entity {} has an invalid material.", ent.get_id());
                         continue;
                     }
+                    if (rend.model == invalid_model_handle)
+                    {
+                        log::warn("Entity {} has an invalid model.", ent.get_id());
+                        continue;
+                    }
 
                     transform transf = ent.get_component_handles<transform>();
                     batches[rend.model][rend.material].push_back(transf.get_local_to_world_matrix());
@@ -445,7 +450,10 @@ namespace legion::rendering
 
                     model mesh = modelHandle.get_model();
                     if (mesh.submeshes.empty())
+                    {
+                        log::warn("Empty mesh found.");
                         continue;
+                    }
 
                     for (auto [material, instances] : instancesPerMaterial)
                     {

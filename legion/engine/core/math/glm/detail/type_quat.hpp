@@ -23,6 +23,9 @@ namespace legion::core::math
 		typedef qua<T, Q> type;
 		typedef T value_type;
 
+        template<typename Archive>
+        void serialize(Archive& archive);
+
 		// -- Data --
 
 #		if GLM_SILENT_WARNINGS == GLM_ENABLE

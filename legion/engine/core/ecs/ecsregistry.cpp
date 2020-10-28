@@ -76,7 +76,7 @@ namespace legion::core::ecs
         if (!validateEntity(entityId))
             throw legion_entity_not_found_error;
 
-        return component_handle_base(entityId, componentTypeId, this);
+        return component_handle_base(entityId, componentTypeId);
     }
 
     component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId)
@@ -93,7 +93,7 @@ namespace legion::core::ecs
 
         m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, false);
 
-        return component_handle_base(entityId, componentTypeId, this);
+        return component_handle_base(entityId, componentTypeId);
     }
 
     component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId, void* value)
@@ -110,7 +110,7 @@ namespace legion::core::ecs
 
         m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, false);
 
-        return component_handle_base(entityId, componentTypeId, this);
+        return component_handle_base(entityId, componentTypeId);
     }
 
     void EcsRegistry::destroyComponent(id_type entityId, id_type componentTypeId)
@@ -140,7 +140,10 @@ namespace legion::core::ecs
         if (!entityId)
             id = m_nextEntityId++;
         else
+        {
             id = entityId;
+            m_nextEntityId = entityId + 1;
+        }
 
         if (validateEntity(id))
             return createEntity(id++);

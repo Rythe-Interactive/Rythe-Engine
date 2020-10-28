@@ -1,6 +1,7 @@
 #pragma once
 #include <core/engine/system.hpp>
 #include <core/ecs/component_handle.hpp>
+#include <core/serialization/SERIALIZATIONUTIL.HPP>
 
 namespace legion::core::scenemanagement
 {
@@ -44,6 +45,17 @@ namespace legion::core::scenemanagement
           */
         static bool createScene(const std::string& name, const ecs::entity_handle& ent);
 
+        /**@brief Deserializes the scene from the disk
+         * @param name of the file to deserialize
+         * @note Not yet implemented
+         */
+        static bool loadScene(const std::string& name)
+        {
+            std::ifstream inFile("assets/scenes/"+name+".cornflake");
+            serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
+        }
+
+
         /**@brief Gets a scene
           * @param name string of the scenes name that you wish to get
           * @returns the component_handle<scene> for the scene
@@ -56,14 +68,7 @@ namespace legion::core::scenemanagement
          */
         static ecs::entity_handle getSceneEntity(std::string name);
 
-        /**@brief Deserializes the scene from the disk
-          * @param name of the file to deserialize
-          * @note Not yet implemented
-          */
-        void loadScene()
-        {
 
-        }
 
         /**@brief Serializes a scene to disk
           * @param .name of the file to save as, default is the scenes name

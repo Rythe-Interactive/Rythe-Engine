@@ -81,6 +81,7 @@ class TestSystem final : public System<TestSystem>
 public:
     TestSystem()
     {
+        log::filter(log::severity::trace);
         app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
     }
 
@@ -121,14 +122,14 @@ public:
 
         // ----------- vvv NEW vvv --------------------
 
-        using compute::in,compute::out;
-      
+        using compute::in, compute::out;
+
         auto vector_add = fs::view("assets://kernels/vadd_kernel.cl").load_as<compute::function>("vector_add");
 
-        auto return_code = vector_add(1024,first_ints,second_ints,out(results));
+        auto return_code = vector_add(1024, first_ints, second_ints, out(results));
 
         // ============================================
-        
+
         auto A = compute::Context::createBuffer(first_ints, compute::buffer_type::READ_BUFFER, "A");
         auto B = compute::Context::createBuffer(second_ints, compute::buffer_type::READ_BUFFER, "B");
         auto C = compute::Context::createBuffer(results, compute::buffer_type::WRITE_BUFFER, "C");
@@ -136,7 +137,7 @@ public:
         compute::Program prog = fs::view("assets://kernels/vadd_kernel.cl").load_as<compute::Program>();
         prog.prewarm("vector_add");
 
-        
+
         prog.kernelContext("vector_add")
             .set_and_enqueue_buffer(A)
             .set_and_enqueue_buffer(B)
@@ -200,17 +201,17 @@ public:
         bindToEvent<escape_cursor_action, &TestSystem::onEscapeCursor>();
         bindToEvent<vsync_action, &TestSystem::onVSYNCSwap>();
 
-        bindToEvent<physics_test_move, &TestSystem::onUnitPhysicsUnitTestMove>();
+        //bindToEvent<physics_test_move, &TestSystem::onUnitPhysicsUnitTestMove>();
 
-        bindToEvent<sphere_move, &TestSystem::onSphereAAMove>();
-        bindToEvent<sphere_strive, &TestSystem::onSphereAAStrive>();
-        bindToEvent<gain_change, &TestSystem::onGainChange>();
-        bindToEvent<pitch_change, &TestSystem::onPitchChange>();
+        //bindToEvent<sphere_move, &TestSystem::onSphereAAMove>();
+        //bindToEvent<sphere_strive, &TestSystem::onSphereAAStrive>();
+        //bindToEvent<gain_change, &TestSystem::onGainChange>();
+        //bindToEvent<pitch_change, &TestSystem::onPitchChange>();
 
-        bindToEvent<play_audio_source, &TestSystem::playAudioSource>();
-        bindToEvent<pause_audio_source, &TestSystem::pauseAudioSource>();
-        bindToEvent<stop_audio_source, &TestSystem::stopAudioSource>();
-        bindToEvent<rewind_audio_source, &TestSystem::rewindAudioSource>();
+        //bindToEvent<play_audio_source, &TestSystem::playAudioSource>();
+        //bindToEvent<pause_audio_source, &TestSystem::pauseAudioSource>();
+        //bindToEvent<stop_audio_source, &TestSystem::stopAudioSource>();
+        //bindToEvent<rewind_audio_source, &TestSystem::rewindAudioSource>();
 #pragma endregion
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
@@ -339,7 +340,7 @@ public:
             ent.add_components<transform>(position(0, 3, -5.1f), rotation(), scale(2.5f));
         }
 
-        // Sphere setup (with audio source)
+         //Sphere setup (with audio source)
         {
             sphere = createEntity();
             sphere.add_components<rendering::renderable, sah>({ uvsphereH, wireframeH }, {});
@@ -356,21 +357,41 @@ public:
         }
 #pragma endregion
 
+        
+
+
+        ////---------------------------------------------------------- Physics Collision Unit Test -------------------------------------------------------------------//
+
+        //setupPhysicsCDUnitTest(cubeH, wireframeH);
+
+        ////----------- Rigidbody-Collider AABB Test------------//
+
+        //setupPhysicsCRUnitTest(cubeH, wireframeH);
+
+
+        auto sceneEntity = createEntity();
+        std::vector<ecs::entity_handle> children;
+        for (int i=0;i<m_ecs->world.child_count();i++)
+        {
+            children.push_back(m_ecs->world.get_child(i));
+        }
+        for (auto child : children)
+        {
+            if (child != sceneEntity)
+            {
+                child.set_parent(sceneEntity);
+            }
+        }
+
+        //scenemanagement::SceneManager::createScene("Main", sceneEntity);
+  
+        sceneEntity.destroy();
+
+        scenemanagement::SceneManager::loadScene("Main");
+
         setupCameraEntity();
+        
 
-
-        //---------------------------------------------------------- Physics Collision Unit Test -------------------------------------------------------------------//
-
-        setupPhysicsCDUnitTest(cubeH, wireframeH);
-
-        //----------- Rigidbody-Collider AABB Test------------//
-
-        setupPhysicsCRUnitTest(cubeH, wireframeH);
-
-        auto world = m_ecs->getEntity(world_entity_id);
-        scenemanagement::SceneManager::createScene("Main",world);
-        std::ofstream file("assets/scenes/Main.cereal");
-        serialization::SerializationUtil<ecs::entity_handle>::JSONSerialize(file,scenemanagement::SceneManager::getSceneEntity("Main"));
 
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::differentThread>("TestChain");

@@ -4,6 +4,12 @@
 
 #include <core/logging/logging.hpp>
 
+#include <cereal/types/unordered_map.hpp>
+#include <cereal/types/memory.hpp>
+#include <cereal/archives/json.hpp>
+#include <cereal/archives/portable_binary.hpp>
+
+
 namespace legion::core
 {
     struct position : public math::vec3
@@ -30,16 +36,7 @@ namespace legion::core
             z = src.z;
             return *this;
         }
-        template<typename Archive>
-        void serialize(Archive& archive);
-        
     };
-    template<typename Archive>
-    void position::serialize(Archive& archive)
-    {
-        //We won't need to manually name all the components in the future
-        archive(x, y, z);
-    }
 
     struct rotation : public math::quat
     {
@@ -86,16 +83,8 @@ namespace legion::core
         {
             return math::toMat3(*this);
         }
-
-        template<typename Archive>
-        void serialize(Archive& archive);
     };
-    template<typename Archive>
-    void rotation::serialize(Archive& archive)
-    {
-        //We won't need to manually name all the components in the future
-        archive(x, y, z, w);
-    }
+
 
     struct scale : public math::vec3
     {
@@ -122,16 +111,7 @@ namespace legion::core
             return *this;
         }
 
-        template<typename Archive>
-        void serialize(Archive& archive);
-
     };
-    template<typename Archive>
-    void scale::serialize(Archive& archive)
-    {
-        //We won't need to manually name all the components in the future
-        archive(x, y, z);
-    }
 
 
     struct transform : public ecs::archetype<position, rotation, scale>

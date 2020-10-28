@@ -2,6 +2,7 @@
 #include "../exponential.hpp"
 #include "../ext/quaternion_geometric.hpp"
 #include <limits>
+#include <cereal/cereal.hpp>
 
 namespace legion::core::math{
 namespace detail
@@ -30,6 +31,8 @@ namespace detail
 			return qua<T, Q>(q.w + p.w, q.x + p.x, q.y + p.y, q.z + p.z);
 		}
 	};
+
+
 
 	template<typename T, qualifier Q, bool Aligned>
 	struct compute_quat_sub
@@ -147,6 +150,13 @@ namespace detail
 	{}
 
 	// -- Conversion constructors --
+
+	template<typename T, qualifier Q>
+	template<typename Archive>
+	void qua<T, Q>::serialize(Archive& archive)
+	{
+		archive(CEREAL_NVP(x), CEREAL_NVP(y), CEREAL_NVP(z), CEREAL_NVP(w));
+	}
 
 	template<typename T, qualifier Q>
 	template<typename U, qualifier P>
