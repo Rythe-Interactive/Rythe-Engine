@@ -1,7 +1,7 @@
 
-#include <physics/data/edgepenetrationquery.h>
+#include <physics/data/edgepenetrationquery.hpp>
 #include <physics/physics_statics.hpp>
-#include <physics/systems/physicssystem.hpp>
+
 
 
 namespace legion::physics
@@ -14,6 +14,7 @@ namespace legion::physics
     void EdgePenetrationQuery::populateContactList(physics_manifold& manifold, math::mat4& refTransform, math::mat4 incTransform)
     {
         //------------------- The contact points between 2 edges are the closest points between the 2 edges --------------------//
+        log::debug("EdgePenetrationQuery::populateContactList");
 
         math::vec3 p1 = refTransform * math::vec4(*refEdge->edgePositionPtr, 1);
         math::vec3 p2 = refTransform * math::vec4(*refEdge->nextEdge->edgePositionPtr, 1);
@@ -28,14 +29,10 @@ namespace legion::physics
 
         physics_contact contact;
 
-        contact.incTransform = incTransform;
-        contact.refTransform = refTransform;
-
-        contact.worldContactInc = incContactPoint;
-        contact.worldContactRef = refContactPoint;
+        contact.IncWorldContact = incContactPoint;
+        contact.RefWorldContact = refContactPoint;
 
         manifold.contacts.push_back(contact);
-        PhysicsSystem::contactPoints.push_back(contact);
 
     }
 

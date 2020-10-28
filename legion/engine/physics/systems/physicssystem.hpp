@@ -3,8 +3,9 @@
 #include <physics/components/rigidbody.hpp>
 #include <physics/data/physics_manifold_precursor.h>
 #include <physics/data/physics_manifold.hpp>
-#include <physics/physics_contact.h>
+#include <physics/physics_contact.hpp>
 #include <physics/components/physics_component.hpp>
+#include <physics/data/identifier.hpp>
 #include <memory>
 
 namespace legion::physics
@@ -14,6 +15,8 @@ namespace legion::physics
     class PhysicsSystem final : public System<PhysicsSystem>
     {
     public:
+        static bool IsPaused;
+        static bool oneTimeRunActive;
 
         static std::vector<std::shared_ptr<physics::PenetrationQuery>> penetrationQueries;
         static std::vector<physics_contact> contactPoints;
@@ -39,11 +42,27 @@ namespace legion::physics
 
         }
 
+
+
         void fixedUpdate(time::time_span<fast_time> deltaTime)
         {
-            runPhysicsPipeline();
+            if (!IsPaused)
+            {
+                integrateRigidbodies(deltaTime);
+                runPhysicsPipeline(deltaTime);
+                integrateRigidbodyQueryPositionAndRotation(deltaTime);
+                
+            }
 
-            integrateRigidbodies(deltaTime);
+            if (oneTimeRunActive)
+            {
+                oneTimeRunActive = false;
+
+                integrateRigidbodies(deltaTime);
+                runPhysicsPipeline(deltaTime);
+                integrateRigidbodyQueryPositionAndRotation(deltaTime);
+              
+            }
         }
 
         //The following function is public static so that it can be called by testSystem
@@ -70,13 +89,7 @@ namespace legion::physics
             bool hasNecessaryComponentsForPhysicsManifold = hasTransform && physicsComponentHandle;
 
             int colliderID = id;
-            /* log::debug("----------- recursiveRetrievePreManifoldData ------------------------");
-             log::debug("colliderID count {0} ", colliderID);
-
-             log::debug("colliderID hasTransform {0} ", hasTransform);
-
-             log::debug("colliderID hasNecessaryComponentsForPhysicsManifold {0} ", hasNecessaryComponentsForPhysicsManifold);*/
-
+        
              //if the entity has a physicsComponent and a transform
             if (hasNecessaryComponentsForPhysicsManifold)
             {
@@ -104,8 +117,6 @@ namespace legion::physics
                 manifoldPrecursors.push_back(manifoldPrecursor);
             }
 
-            //log::debug("initialEntity.child_count() {} ", initialEntity.child_count());
-
             //call recursiveRetrievePreManifoldData on its children
             for (int i = 0; i < initialEntity.child_count(); i++)
             {
@@ -126,8 +137,9 @@ namespace legion::physics
         /** @brief Performs the entire physics pipeline (
          * Broadphase Collision Detection, Narrowphase Collision Detection, and the Collision Resolution)
         */
-        void runPhysicsPipeline()
+        void runPhysicsPipeline(float dt)
         {
+           
             //-------------------------------------------------Broadphase Optimization-----------------------------------------------//
             int initialColliderID = 0;
 
@@ -177,6 +189,8 @@ namespace legion::physics
 
                         if (isBetweenTriggerAndNonTrigger || isBetweenRigidbodyAndNonTrigger || isBetween2Rigidbodies)
                         {
+                           
+
                             constructManifoldsWithPrecursors(manifoldPrecursors.at(i), manifoldPrecursors.at(j),
                                 manifoldsToSolve,
                                 precursorRigidbodyA || precursorRigidbodyB
@@ -203,18 +217,35 @@ namespace legion::physics
                 }
             }
 
+       
             //resolve contact constraint
             for (size_t i = 0; i < constants::contactSolverIterationCount; i++)
             {
                 for (auto& manifold : manifoldsToSolve)
                 {
+                    int j = 0;
                     for (auto& contact : manifold.contacts)
                     {
-                        contact.resolveContactConstraint();
+                        if (i == 0 && j ==0)
+                        {
+                            contact.logRigidbodyState();
+                            //log::debug("--------------- RESOLVE COLLISION START --------------------------------------");
+                        }
+
+                        contact.resolveContactConstraint(dt,i);
+
+                        if (i == constants::contactSolverIterationCount-1 && j == 0 )
+                        {
+                            contact.logRigidbodyState();
+                            //log::debug("--------------- RESOLVE COLLISION EMD --------------------------------------");
+                        }
+                        j++;
                     }
                 }
             }
 
+            
+            
             //resolve friction constraint
             for (size_t i = 0; i < constants::frictionSolverIterationCount; i++)
             {
@@ -227,6 +258,13 @@ namespace legion::physics
                 }
             }
 
+            for (auto& manifold : manifoldsToSolve)
+            {
+                for (auto& contact : manifold.contacts)
+                {
+                    PhysicsSystem::contactPoints.push_back(contact);
+                }
+            }
 
         }
 
@@ -267,9 +305,9 @@ namespace legion::physics
 
                     colliderA->PopulateContactPoints(colliderB, m);
 
-                    if (isRigidbodyInvolved)
+                    if (isRigidbodyInvolved && !isTriggerInvolved)
                     {
-                        //send it to 'manifoldsToSolve'
+                        manifoldsToSolve.push_back(m);
                     }
 
                     if (isTriggerInvolved)
@@ -322,29 +360,79 @@ namespace legion::physics
             auto rbPos = posHandle.read();
             auto rbRot = rotHandle.read();
 
-            //-------------------- update position ------------------//
+            ////-------------------- update position ------------------//
             math::vec3 acc = rb.forceAccumulator * rb.inverseMass;
             rb.velocity += (acc + constants::gravity) * dt;
-            rbPos += rb.velocity * dt;
 
-            //-------------------- update rotation ------------------//
-            math::vec3 angularAcc = rb.torqueAccumulator * rb.inverseInertiaTensor;
-            rb.angularVelocity += (angularAcc);
-
-            //construct the rotation by using the direction of angularVelocity as the axis and its length as the angle
-            float dtAngle = math::length(rb.angularVelocity) * dt;
-            rbRot *= math::angleAxis(math::deg2rad(dtAngle), math::normalize(rb.angularVelocity));
+            ////-------------------- update rotation ------------------//
+            math::vec3 angularAcc = rb.torqueAccumulator * rb.globalInverseInertiaTensor;
+            rb.angularVelocity += (angularAcc)* dt;
 
             rb.resetAccumulators();
-
-            //for now assume that there is no offset from bodyP
-            rb.globalCentreOfMass = rbPos;
 
             rbHandle.write(rb);
             posHandle.write(rbPos);
             rotHandle.write(rbRot);
 
         }
+
+        void integrateRigidbodyQueryPositionAndRotation(float deltaTime)
+        {
+            for (auto ent : rigidbodyIntegrationQuery)
+            {
+                auto rbPosHandle = ent.get_component_handle<position>();
+                auto rbRotHandle = ent.get_component_handle<rotation>();
+                auto rbRigidbodyHandle = ent.get_component_handle<rigidbody>();
+
+                integrateRigidbodyPositionAndRotations(rbPosHandle, rbRotHandle, rbRigidbodyHandle, deltaTime);
+
+            }
+        }
+
+        void integrateRigidbodyPositionAndRotations(ecs::component_handle<position>& posHandle
+            , ecs::component_handle<rotation>& rotHandle, ecs::component_handle<rigidbody>& rbHandle, float dt)
+        {
+            auto rb = rbHandle.read();
+            auto rbPos = posHandle.read();
+            auto rbRot = rotHandle.read();
+
+            ////-------------------- update position ------------------//
+            rbPos += rb.velocity * dt;
+
+            ////-------------------- update rotation ------------------//
+            float angle = math::clamp(math::length(rb.angularVelocity), 0.0f, 32.0f);
+            float dtAngle = angle * dt;
+
+            math::quat bfr = rbRot;
+
+            math::quat a = math::angleAxis(math::radians(2.0f), math::vec3(0, 1, 0));
+            a = math::normalize(a);
+            //log::debug("dtAngle {}", math::to_string(a));
+          
+            if (!math::epsilonEqual(dtAngle, 0.0f, math::epsilon<float>()))
+            { 
+               
+                math::vec3 axis = math::normalize(rb.angularVelocity);
+
+                math::quat glmQuat = math::angleAxis(dtAngle, axis);
+                rbRot *= glmQuat;
+                rbRot = math::normalize(rbRot);
+                math::quat quat = rbRot;
+            }
+
+            math::quat afr = rbRot;
+
+            //for now assume that there is no offset from bodyP
+            rb.globalCentreOfMass = rbPos;
+
+            rb.UpdateInertiaTensor(rbRot);
+
+            rbHandle.write(rb);
+            posHandle.write(rbPos);
+            rotHandle.write(rbRot);
+
+        }
+
 
 
     };

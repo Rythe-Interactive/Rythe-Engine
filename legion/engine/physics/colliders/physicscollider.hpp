@@ -66,6 +66,15 @@ namespace legion::physics
         // this is only here for debug reasons
         std::vector<TempLine> collisionsFound;
 
+        math::vec3 GetLocalCentroid()
+        {
+            return localColliderCentroid;
+        }
+
+    protected:
+
+        math::vec3 localColliderCentroid = math::vec3(0, 0, 0);
+
     private:
        //this is not used, its mostly for debug reasons
         std::vector<HalfEdgeFace*> dummyHalfEdges;
