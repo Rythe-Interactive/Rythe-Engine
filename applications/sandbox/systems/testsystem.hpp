@@ -427,9 +427,9 @@ public:
             }
         }
 
-        //scenemanagement::SceneManager::createScene("Main", sceneEntity);
+        scenemanagement::SceneManager::createScene("Main", sceneEntity);
   
-        sceneEntity.destroy();
+        //sceneEntity.destroy();
 
         scenemanagement::SceneManager::loadScene("Main");
 
