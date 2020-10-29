@@ -25,25 +25,44 @@ namespace legion::audio
             return decay(Err(legion_fs_error("Failed to load audio file")));
         }
 
+        byte* audioData;
+
+        // bitsPerSample is always 16 for mp3
+        int dataSize = fileInfo.samples * sizeof(int16);
+        int channels = fileInfo.channels;
+        int samples = fileInfo.samples;
+
+        if (settings.force_mono)
+        {
+            audioData = detail::convertToMono(reinterpret_cast<byte*>(fileInfo.buffer), dataSize, dataSize, channels, 16);
+            samples /= channels;
+        }
+        else
+        {
+            audioData = new byte[dataSize];
+            memmove(audioData, fileInfo.buffer, dataSize);
+        }
+        free(fileInfo.buffer);
+
         audio_segment as(
-            new byte[fileInfo.samples * 2], // fileInfo.samples is int16, therefore byte requires twice as much
+            audioData, // fileInfo.samples is int16, therefore byte requires twice as much
             0,
-            fileInfo.samples,
-            fileInfo.channels,
+            samples,
+            channels,
             fileInfo.hz,
             fileInfo.layer,
             fileInfo.avg_bitrate_kbps
         );
-        memmove(as.getData(), fileInfo.buffer, as.samples * sizeof(int16));
-        free(fileInfo.buffer);
 
         async::readwrite_guard guard(AudioSystem::contextLock);
         alcMakeContextCurrent(AudioSystem::alcContext);
         //Generate openal buffer
         alGenBuffers((ALuint)1, &as.audioBufferId);
+
         ALenum format = AL_FORMAT_MONO16;
         if (as.channels == 2) format = AL_FORMAT_STEREO16;
-        alBufferData(as.audioBufferId, format, as.getData(), as.samples * sizeof(int16), as.sampleRate);
+
+        alBufferData(as.audioBufferId, format, as.getData(), dataSize, as.sampleRate);
 
         alcMakeContextCurrent(nullptr);
 
@@ -58,7 +77,7 @@ namespace legion::audio
         RIFF_Header header;
         WAVE_Data waveData;
 
-        memcpy(&header, resource.data() , sizeof(header)); // Copy header data into the header struct
+        memcpy(&header, resource.data(), sizeof(header)); // Copy header data into the header struct
 
         // Check if the loaded file has the correct header
 
@@ -99,15 +118,29 @@ namespace legion::audio
             return decay(Err(legion_fs_error("WAV File sample data does not start with word (data)")));
         }
 
-        const unsigned long sampleDataSize = resource.size() - sizeof(header) - sizeof(waveData);
-        byte* audioData = new byte[sampleDataSize];
-        memcpy(audioData, resource.data() + sizeof(header) + sizeof(waveData), sampleDataSize);
-        
+        uint metaSize = sizeof(header) + sizeof(waveData);
+
+        int sampleDataSize = resource.size() - metaSize;
+        byte* audioData;
+
+        int channels = header.wave_format.channels;
+
+        if (settings.force_mono)
+        {
+            audioData = detail::convertToMono(resource.data() + metaSize, sampleDataSize, sampleDataSize, channels, header.wave_format.bitsPerSample);
+        }
+        else
+        {
+            // Leave as is
+            audioData = new byte[sampleDataSize];
+            memcpy(audioData, resource.data() + metaSize, sampleDataSize);
+        }
+
         audio_segment as(
             audioData,
             0,
-            -1, // Sample count, unknown for wav
-            header.wave_format.channels,
+            sampleDataSize / (header.wave_format.bitsPerSample/8), // Sample count, unknown for wav
+            channels,
             (int)header.wave_format.sampleRate,
             -1, // Layer, does not exist in wav
             -1 // avg_biterate_kbps, unknown for wav
@@ -121,19 +154,97 @@ namespace legion::audio
         if (as.channels == 1)
         {
             if (header.wave_format.bitsPerSample == 8) format = AL_FORMAT_MONO8;
-            if (header.wave_format.bitsPerSample == 16) format = AL_FORMAT_MONO16;
-            if (header.wave_format.bitsPerSample == 32) format = AL_FORMAT_MONO_FLOAT32;
+            else if (header.wave_format.bitsPerSample == 16) format = AL_FORMAT_MONO16;
+            else if (header.wave_format.bitsPerSample == 32) format = AL_FORMAT_MONO_FLOAT32;
         }
         else if (as.channels == 2)
         {
             if (header.wave_format.bitsPerSample == 8) format = AL_FORMAT_STEREO8;
-            if (header.wave_format.bitsPerSample == 16) format = AL_FORMAT_STEREO16;
-            if (header.wave_format.bitsPerSample == 32) format = AL_FORMAT_STEREO_FLOAT32;
+            else if (header.wave_format.bitsPerSample == 16) format = AL_FORMAT_STEREO16;
+            else if (header.wave_format.bitsPerSample == 32) format = AL_FORMAT_STEREO_FLOAT32;
+        }
+        else if (as.channels == 4)
+        {
+            if (header.wave_format.bitsPerSample == 8) format = AL_FORMAT_QUAD8;
+            else if (header.wave_format.bitsPerSample == 16) format = AL_FORMAT_QUAD16;
+            else if (header.wave_format.bitsPerSample == 32) format = AL_FORMAT_QUAD32;
         }
         alBufferData(as.audioBufferId, format, as.getData(), sampleDataSize, as.sampleRate);
 
         alcMakeContextCurrent(nullptr);
 
         return decay(Ok(as));
+    }
+
+    namespace detail
+    {
+        void convertToMono(const byte* inputData, int dataSize, byte* monoData, int channels, int bitsPerSample)
+        {
+            if (channels == 1)
+            {
+                memcpy(monoData, inputData, dataSize);
+                return;
+            }
+            uint bytesPerSample = bitsPerSample / 8;
+
+            uint j = 0;
+            uint channelSize = channels * bytesPerSample;
+            for (uint i = 0; i < dataSize; i += channelSize)
+            {
+                switch (bytesPerSample)
+                {
+                case 1:
+                {
+                    uint64 data = 0;
+                    for (uint c = 0; c < channelSize; c += bytesPerSample)
+                    {
+                        data += static_cast<uint64>(*(inputData + i + c));
+                    }
+                    monoData[j] = data / channels;
+                    j += bytesPerSample;
+                }
+                break;
+                case 2:
+                {
+                    int64 data = 0;
+                    for (uint c = 0; c < channelSize; c += bytesPerSample)
+                    {
+                        data += static_cast<const int64>(*reinterpret_cast<const int16*>(inputData + i + c));
+                    }
+                    *reinterpret_cast<int16*>(monoData + j) = data / channels;
+                    j += bytesPerSample;
+                }
+                break;
+                case 4:
+                {
+                    float data = 0;
+                    for (uint c = 0; c < channelSize; c += bytesPerSample)
+                    {
+                        data += *reinterpret_cast<const float*>(inputData + i + c);
+                    }
+                    *reinterpret_cast<float*>(monoData + j) = data / channels;
+                    j += bytesPerSample;
+                }
+                break;
+                default:
+                    break;
+                }
+            }
+        }
+
+        byte* convertToMono(const byte* inputData, int dataSize, int& monoSize, int& channels, int bitsPerSample)
+        {
+            monoSize = dataSize / channels;
+            byte* monoData = new byte[monoSize];
+            if (channels == 1)
+            {
+                memcpy(monoData, inputData, monoSize);
+                return monoData;
+            }
+            convertToMono(inputData, dataSize, monoData, channels, bitsPerSample);
+            channels = 1;
+            return monoData;
+        }
+
     }
 }

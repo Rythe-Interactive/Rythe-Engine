@@ -4,6 +4,12 @@
 
 namespace legion::audio
 {
+    namespace detail
+    {
+        void convertToMono(const byte* inputData, int dataSize, byte* monoData, int channels, int bitsPerSample);
+        byte* convertToMono(const byte* inputData, int dataSize, int& monoDataSize, int& channels, int bitsPerSample);
+    }
+
     struct mp3_audio_loader : public fs::resource_converter<audio_segment, audio_import_settings>
     {
         virtual common::result_decay_more<audio_segment, fs_error> load(const fs::basic_resource& resource, audio_import_settings&& settings) override;

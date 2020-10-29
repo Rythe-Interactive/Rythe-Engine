@@ -52,10 +52,10 @@ namespace legion::audio
 
     struct audio_import_settings
     {
-        
+        bool force_mono;
     };
 
-    const audio_import_settings default_audio_import_settings{};
+    const audio_import_settings default_audio_import_settings{ false };
 
     struct audio_segment_handle
     {

@@ -78,6 +78,7 @@ struct stop_audio_source : public app::input_action<stop_audio_source> {};
 struct rewind_audio_source : public app::input_action<rewind_audio_source> {};
 struct play_audio_segment_kilogram : public app::input_action<play_audio_segment_kilogram> {};
 struct play_audio_segment_other : public app::input_action<play_audio_segment_other> {};
+struct audio_test_input : public app::input_action<audio_test_input> {};
 
 struct activate_CRtest0 : public app::input_action<activate_CRtest0> {};
 struct activate_CRtest1 : public app::input_action<activate_CRtest1> {};
@@ -213,6 +214,7 @@ public:
         app::InputSystem::createBinding<rewind_audio_source>(app::inputmap::method::BACKSPACE);
         app::InputSystem::createBinding<play_audio_segment_kilogram>(app::inputmap::method::KP_MULTIPLY);
         app::InputSystem::createBinding<play_audio_segment_other>(app::inputmap::method::KP_SUBTRACT);
+        app::InputSystem::createBinding<audio_test_input>(app::inputmap::method::SLASH);
 
         app::InputSystem::createBinding< activate_CRtest0>(app::inputmap::method::KP_0);
         app::InputSystem::createBinding< activate_CRtest1>(app::inputmap::method::KP_1);
@@ -244,6 +246,7 @@ public:
         bindToEvent<rewind_audio_source, &TestSystem::rewindAudioSource>();
         bindToEvent<play_audio_segment_kilogram, &TestSystem::playAudioSegmentKilogram>();
         bindToEvent<play_audio_segment_other, &TestSystem::playAudioSegmentOther>();
+        bindToEvent<audio_test_input, &TestSystem::audioTestInput>();
 
         bindToEvent< activate_CRtest0, &TestSystem::onActivateUnitTest0>();
         bindToEvent< activate_CRtest1, &TestSystem::onActivateUnitTest1>();
@@ -385,12 +388,12 @@ public:
 
         // Sphere setup (with audio source)
         {
-            sphere = createEntity();
+            sphere = createEntity(); 
             sphere.add_components<rendering::renderable, sah>({ uvsphereH, wireframeH }, {});
             sphere.add_components<transform>(position(-5.1f, 3, 0), rotation(), scale(2.5f));
 
-            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_mono16.wav"_view);
-            audio::AudioSegmentCache::createAudioSegment("other", "assets://audio/kilogram-of-scotland.wav"_view);
+            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo.mp3"_view, { true });
+            audio::AudioSegmentCache::createAudioSegment("other", "assets://audio/kilogram-of-scotland_stereo.mp3"_view, { false });
             
             audio::audio_source source;
             source.setAudioHandle(segment);
@@ -403,11 +406,11 @@ public:
 
         //---------------------------------------------------------- Physics Collision Unit Test -------------------------------------------------------------------//
 
-        //setupPhysicsCDUnitTest(cubeH, wireframeH);
+        setupPhysicsCDUnitTest(cubeH, wireframeH);
 
         //----------- Rigidbody-Collider AABB Test------------//
 
-        //setupPhysicsCRUnitTest(cubeH, uvH);
+       setupPhysicsCRUnitTest(cubeH, uvH);
 
 
         createProcess<&TestSystem::update>("Update");
@@ -1134,6 +1137,15 @@ public:
         audio_source source = sourceH.read();
         const float p = source.getPitch() + action->value * action->input_delta * 10.0f;
         source.setPitch(p);
+        sourceH.write(source);
+    }
+
+    void audioTestInput(audio_test_input* action)
+    {
+        using namespace audio;
+        auto sourceH = sphere.get_component_handle<audio_source>();
+        audio_source source = sourceH.read();
+        source.disableSpatialAudio();
         sourceH.write(source);
     }
 
