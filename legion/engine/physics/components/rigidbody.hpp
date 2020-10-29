@@ -28,12 +28,20 @@ namespace legion::physics
         math::vec3 torqueAccumulator = math::vec3(0.0);
         math::vec3 globalCentreOfMass = math::vec3(0.0);
 
-        float restitution;
-        float friction;
+        float restitution = 0.5f;
+        float friction = 0.0f;
 
         bool isAsleep;
 
+        static float calculateRestitution(float restitutionA, float restitutionB)
+        {
+            return (restitutionA + restitutionB) / 2.0f;
+        }
 
+        static float calculateFriction(float frictionA, float frictionB)
+        {
+            return math::max(frictionA,frictionB);
+        }
 
         /** @brief Pushes the rigidbody in the direction parallel to 'force' and equal to the
         * length of 'force'.

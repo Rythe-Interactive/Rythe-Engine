@@ -85,6 +85,10 @@ struct activate_CRtest1 : public app::input_action<activate_CRtest1> {};
 struct activate_CRtest2 : public app::input_action<activate_CRtest2> {};
 struct activate_CRtest3 : public app::input_action<activate_CRtest3> {};
 
+struct activateFrictionTest : public app::input_action<activateFrictionTest> {};
+
+
+
 struct extendedPhysicsContinue : public app::input_action<extendedPhysicsContinue> {};
 struct nextPhysicsTimeStepContinue : public app::input_action<nextPhysicsTimeStepContinue> {};
 
@@ -102,12 +106,21 @@ public:
     std::vector< ecs::entity_handle > physicsUnitTestCD;
     std::vector< ecs::entity_handle > physicsUnitTestCR;
 
+    //Collision Resolution Tests
     ecs::entity_handle staticToAABBEntLinear;
     ecs::entity_handle staticToAABBEntRotation;
     ecs::entity_handle staticToOBBEnt;
     ecs::entity_handle staticToEdgeEnt;
     ecs::entity_handle staticTo2StackEnt;
 
+    //Friction Test
+    std::vector<ecs::entity_handle> physicsFrictionTestRotators;
+    bool rotate = false;
+
+    ecs::entity_handle NoFrictionBody;
+    ecs::entity_handle Point3FrictionBody;
+    ecs::entity_handle Point6FrictionBody;
+    ecs::entity_handle FullFrictionBody;
 
     virtual void setup()
     {
@@ -174,7 +187,7 @@ public:
              log::info("got {}", i);
          }*/
 #pragma endregion
-
+       
 #pragma region Input binding
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::LEFT, -1.f);
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::RIGHT, 1.f);
@@ -220,6 +233,10 @@ public:
         app::InputSystem::createBinding< activate_CRtest1>(app::inputmap::method::KP_1);
         app::InputSystem::createBinding< activate_CRtest2>(app::inputmap::method::KP_2);
         app::InputSystem::createBinding< activate_CRtest3>(app::inputmap::method::KP_3);
+
+        app::InputSystem::createBinding< activateFrictionTest >(app::inputmap::method::KP_4);
+
+        
         app::InputSystem::createBinding< extendedPhysicsContinue>(app::inputmap::method::M);
         app::InputSystem::createBinding<nextPhysicsTimeStepContinue>(app::inputmap::method::N);
 
@@ -248,16 +265,21 @@ public:
         bindToEvent<play_audio_segment_other, &TestSystem::playAudioSegmentOther>();
         bindToEvent<audio_test_input, &TestSystem::audioTestInput>();
 
+        //collision resolution test
         bindToEvent< activate_CRtest0, &TestSystem::onActivateUnitTest0>();
         bindToEvent< activate_CRtest1, &TestSystem::onActivateUnitTest1>();
         bindToEvent< activate_CRtest2, &TestSystem::onActivateUnitTest2>();
         bindToEvent< activate_CRtest3, &TestSystem::onActivateUnitTest3>();
 
+        //friction test
+        bindToEvent< activateFrictionTest, &TestSystem::FrictionTestActivate>();
+
+
         bindToEvent< extendedPhysicsContinue, &TestSystem::onExtendedPhysicsContinueRequest>();
         bindToEvent<nextPhysicsTimeStepContinue, &TestSystem::onNextPhysicsTimeStepRequest>();
         bindToEvent<player_hover, &TestSystem::onPlayerHover>();
 
-
+        
 #pragma endregion
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
@@ -412,6 +434,17 @@ public:
 
        setupPhysicsCRUnitTest(cubeH, uvH);
 
+        setupPhysicsFrictionUnitTest(cubeH, uvH);
+
+        setupPhysicsStackingUnitTest(cubeH, uvH);
+
+        physics::cube_collider_params cubeParams;
+        cubeParams.breadth = 1.0f;
+        cubeParams.width = 1.0f;
+        cubeParams.height = 1.0f;
+
+        //CreateCubeStack(3, 2, 2, math::vec3(0, -3.0f, 8.0f), math::vec3(1, 1, 1)
+        //    ,cubeParams, 0.1f, cubeH, wireframeH);
 
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::differentThread>("TestChain");
@@ -694,7 +727,7 @@ public:
         }
         //*/
     }
-
+    //10,0,15
     void setupPhysicsCRUnitTest(rendering::model_handle cubeH, rendering::material_handle wireframeH)
     {
         physics::cube_collider_params cubeParams;
@@ -776,33 +809,33 @@ public:
             idHandle.write(id);
         }
 
-        {
-            auto ent = m_ecs->createEntity();
-            //physicsUnitTestCD.push_back(staticToAABBEntLinear);
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+        //{
+        //    auto ent = m_ecs->createEntity();
+        //    //physicsUnitTestCD.push_back(staticToAABBEntLinear);
+        //    auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
+        //    physics::physicsComponent physicsComponent2;
+        //    physics::physicsComponent::init(physicsComponent2);
 
 
-            physicsComponent2.AddBox(cubeParams);
-            entPhyHande.write(physicsComponent2);
+        //    physicsComponent2.AddBox(cubeParams);
+        //    entPhyHande.write(physicsComponent2);
 
-            auto crb = m_ecs->createComponent<physics::rigidbody>(ent);
-            auto rbHandle = ent.add_component<physics::rigidbody>();
+        //    auto crb = m_ecs->createComponent<physics::rigidbody>(ent);
+        //    auto rbHandle = ent.add_component<physics::rigidbody>();
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToAABBEnt);
-            //renderableHandle.write({ cubeH, wireframeH });
+        //    //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToAABBEnt);
+        //    //renderableHandle.write({ cubeH, wireframeH });
 
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos+0.5f, -1.0f, 15.0f));
-            scaleH.write(math::vec3(1.0f));
+        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+        //    positionH.write(math::vec3(testPos+0.5f, -1.0f, 15.0f));
+        //    scaleH.write(math::vec3(1.0f));
 
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto id = idHandle.read();
-            id.id = "AABBRbStable";
-            idHandle.write(id);
-        }
+        //    auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+        //    auto id = idHandle.read();
+        //    id.id = "AABBRbStable";
+        //    idHandle.write(id);
+        //}
 
         //----------- Static Block To AABB Body Rotation Test------------//
 
@@ -934,6 +967,7 @@ public:
             scaleH.write(math::vec3(1.0f));
 
             auto rot = rotationH.read();
+            rot *= math::angleAxis(math::radians(90.f), math::vec3(0, 0, 1));
             rot *= math::angleAxis(math::radians(40.f), math::vec3(1, 0, 0));
             rot *= math::angleAxis(math::radians(42.f), math::vec3(0, 1, 0));
             //rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
@@ -1026,6 +1060,357 @@ public:
 
 
     }
+    //15,0,15
+    void setupPhysicsFrictionUnitTest(rendering::model_handle cubeH, rendering::material_handle wireframeH)
+    {
+        float testPos = 20.f;
+        physics::cube_collider_params cubeParams;
+        cubeParams.breadth = 1.0f;
+        cubeParams.width = 1.0f;
+        cubeParams.height = 1.0f;
+
+        physics::cube_collider_params staticBlockParams;
+        staticBlockParams.breadth = 5.0f;
+        staticBlockParams.width = 5.0f;
+        staticBlockParams.height = 2.0f;
+
+        //NO Friction
+        {
+            auto ent = m_ecs->createEntity();
+            physicsFrictionTestRotators.push_back(ent);
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
+            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ cubeH, wireframeH });
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+            physicsFrictionTestRotators.push_back(ent);
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(staticBlockParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            //renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
+            scaleH.write(math::vec3(1.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto idComp = idHandle.read();
+            idComp.id = "StaticNoFriction";
+            idHandle.write(idComp);
+
+
+        }
+
+        {
+            NoFrictionBody = m_ecs->createEntity();
+
+            auto entPhyHande = NoFrictionBody.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            //renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(NoFrictionBody);
+            positionH.write(math::vec3(testPos-1.0f, -1.5f, 15.0f));
+            scaleH.write(math::vec3(1.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(NoFrictionBody);
+            auto idComp = idHandle.read();
+            idComp.id = "NoFriction";
+            idHandle.write(idComp);
+
+        }
+
+        //0.3f Friction
+
+        {
+            auto ent = m_ecs->createEntity();
+            physicsFrictionTestRotators.push_back(ent);
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos, -3.0f, 8.0f));
+            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ cubeH, wireframeH });
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+            physicsFrictionTestRotators.push_back(ent);
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(staticBlockParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            //renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos, -3.0f, 8.0f));
+            scaleH.write(math::vec3(1.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto idComp = idHandle.read();
+            idComp.id = "StaticNoFriction";
+            idHandle.write(idComp);
+
+
+        }
+
+        {
+            Point3FrictionBody = m_ecs->createEntity();
+
+            auto entPhyHande = Point3FrictionBody.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            //renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(Point3FrictionBody);
+            positionH.write(math::vec3(testPos - 1.0f, -1.5f, 8.0f));
+            scaleH.write(math::vec3(1.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(Point3FrictionBody);
+            auto idComp = idHandle.read();
+            idComp.id = "Point3Friction";
+            idHandle.write(idComp);
+
+        }
+
+
+        //0.6f Friction
+
+        {
+            auto ent = m_ecs->createEntity();
+            physicsFrictionTestRotators.push_back(ent);
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos, -3.0f, 1.0f));
+            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ cubeH, wireframeH });
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+            physicsFrictionTestRotators.push_back(ent);
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(staticBlockParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            //renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos, -3.0f, 1.0f));
+            scaleH.write(math::vec3(1.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto idComp = idHandle.read();
+            idComp.id = "StaticNoFriction";
+            idHandle.write(idComp);
+
+
+        }
+
+        {
+            Point6FrictionBody = m_ecs->createEntity();
+
+            auto entPhyHande = Point6FrictionBody.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            //renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(Point6FrictionBody);
+            positionH.write(math::vec3(testPos - 1.0f, -1.5f, 1.0f));
+            scaleH.write(math::vec3(1.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(Point6FrictionBody);
+            auto idComp = idHandle.read();
+            idComp.id = "NoFriction";
+            idHandle.write(idComp);
+
+        }
+
+        //1.0f Friction
+
+        {
+            auto ent = m_ecs->createEntity();
+            physicsFrictionTestRotators.push_back(ent);
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos, -3.0f, -6.0f));
+            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ cubeH, wireframeH });
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+            physicsFrictionTestRotators.push_back(ent);
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(staticBlockParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            //renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos, -3.0f, -6.0f));
+            scaleH.write(math::vec3(1.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto idComp = idHandle.read();
+            idComp.id = "StaticNoFriction";
+            idHandle.write(idComp);
+
+
+        }
+
+        {
+            FullFrictionBody = m_ecs->createEntity();
+
+            auto entPhyHande = FullFrictionBody.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            //renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(FullFrictionBody);
+            positionH.write(math::vec3(testPos - 1.0f, -1.5f, -6.0f));
+            scaleH.write(math::vec3(1.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(FullFrictionBody);
+            auto idComp = idHandle.read();
+            idComp.id = "FullFrictionBody";
+            idHandle.write(idComp);
+
+        }
+
+        //
+
+
+    }
+    //20,0,15
+    void setupPhysicsStackingUnitTest(rendering::model_handle cubeH, rendering::material_handle wireframeH)
+    {
+        float testPos = 20.f;
+        physics::cube_collider_params cubeParams;
+        cubeParams.breadth = 1.0f;
+        cubeParams.width = 1.0f;
+        cubeParams.height = 1.0f;
+
+        physics::cube_collider_params staticBlockParams;
+        staticBlockParams.breadth = 5.0f;
+        staticBlockParams.width = 5.0f;
+        staticBlockParams.height = 2.0f;
+
+        //2 stack
+        {
+            auto ent = m_ecs->createEntity();
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(35, -3.0f, 15.0f));
+            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ cubeH, wireframeH });
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+         
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(staticBlockParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            //renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(35, -3.0f, 15.0f));
+            scaleH.write(math::vec3(1.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto idComp = idHandle.read();
+            idComp.id = "Stack";
+            idHandle.write(idComp);
+
+
+        }
+
+        CreateCubeStack(2, 1, 1, math::vec3(35, -1.5f, 15.0f), math::vec3(1, 1, 1)
+                ,cubeParams, 0.1f, cubeH, wireframeH);
+
+        //10 stactk
+
+        //Pyramid Stack
+    }
+
 
     void setupCameraEntity()
     {
@@ -1290,7 +1675,17 @@ public:
             debug::drawLine(pos, pos + rot.forward(), math::colors::magenta, 10);
         }
 
+        if (rotate && !physics::PhysicsSystem::IsPaused)
+        {
+            for (auto entity : physicsFrictionTestRotators)
+            {
+                auto rot = entity.read_component<rotation>();
 
+                rot *= math::angleAxis(math::deg2rad(-20.f * deltaTime), math::vec3(0, 0, 1));
+
+                entity.write_component(rot);
+            }
+        }
 
         //if (buffer > 1.f)
         //{
@@ -1625,5 +2020,104 @@ public:
         }
 
     }
+
+
+    void FrictionTestActivate(activateFrictionTest * action)
+    {
+        if (action->value)
+        {
+            rotate = true;
+            {
+                auto rbH = m_ecs->createComponent<physics::rigidbody>(NoFrictionBody);
+
+                auto rb = rbH.read();
+
+                rb.friction = 0.0f;
+
+                rbH.write(rb);
+            }
+            
+            {
+                auto rbH = m_ecs->createComponent<physics::rigidbody>(Point3FrictionBody);
+
+                auto rb = rbH.read();
+
+                rb.friction = 0.1f;
+
+                rbH.write(rb);
+            }
+
+            {
+                auto rbH = m_ecs->createComponent<physics::rigidbody>(Point6FrictionBody);
+
+                auto rb = rbH.read();
+
+                rb.friction = 0.4f;
+
+                rbH.write(rb);
+            }
+
+            {
+                auto rbH = m_ecs->createComponent<physics::rigidbody>(FullFrictionBody);
+
+                auto rb = rbH.read();
+
+                rb.friction = 1.0f;
+
+                rbH.write(rb);
+            }
+
+
+        }
+    }
+
+    void CreateCubeStack(int height, int width, int breadth, math::vec3 startPosition, math::vec3 offset,
+        physics::cube_collider_params cubeParams, float cubeFriction, rendering::model_handle cubeH, rendering::material_handle wireframeH, bool addRigidbody = true)
+    {
+        int l = 0;
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                for (int k = 0; k < breadth; k++)
+                {
+                    auto ent = m_ecs->createEntity();
+
+                    auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+                    physics::physicsComponent physicsComponent;
+                    physics::physicsComponent::init(physicsComponent);
+                    physicsComponent.AddBox(cubeParams);
+                    physicsComponent.isTrigger = false;
+                    entPhyHande.write(physicsComponent);
+
+                    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+                    positionH.write(startPosition + math::vec3(j * offset.x , i * offset.y , k * offset.z));
+                    scaleH.write(math::vec3(1.0f));
+
+                    if (addRigidbody)
+                    {
+                        auto rbH = m_ecs->createComponent<physics::rigidbody>(ent);
+
+                        auto rb = rbH.read();
+
+                        rb.friction = cubeFriction;
+
+                        rbH.write(rb);
+
+                    }
+
+                    auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+                    auto idComp = idHandle.read();
+                    idComp.id = "Stack" + std::to_string(l);
+                    l++;
+                    idHandle.write(idComp);
+
+                }
+            }
+        }
+    }
+
+
 
 };
