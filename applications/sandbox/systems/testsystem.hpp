@@ -392,8 +392,8 @@ public:
             sphere.add_components<rendering::renderable, sah>({ uvsphereH, wireframeH }, {});
             sphere.add_components<transform>(position(-5.1f, 3, 0), rotation(), scale(2.5f));
 
-            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo.mp3"_view, { true });
-            audio::AudioSegmentCache::createAudioSegment("other", "assets://audio/kilogram-of-scotland_stereo.mp3"_view, { false });
+            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo8.wav"_view, { audio::audio_import_settings::channel_processing_setting::split_channels });
+            //audio::AudioSegmentCache::createAudioSegment("other", "assets://audio/kilogram-of-scotland_stereo16.wav"_view, { });
             
             audio::audio_source source;
             source.setAudioHandle(segment);
@@ -1241,7 +1241,7 @@ public:
     void playAudioSegmentKilogram(play_audio_segment_kilogram* action)
     {
         auto sourceH = sphere.get_component_handle<audio::audio_source>();
-        auto segment = audio::AudioSegmentCache::getAudioSegment("kilogram");
+        auto segment = audio::AudioSegmentCache::getAudioSegment("kilogram_channel0");
         auto a = sourceH.read();
         a.setAudioHandle(segment);
         sourceH.write(a);
@@ -1250,7 +1250,7 @@ public:
     void playAudioSegmentOther(play_audio_segment_other* action)
     {
         auto sourceH = sphere.get_component_handle<audio::audio_source>();
-        auto segment = audio::AudioSegmentCache::getAudioSegment("other");
+        auto segment = audio::AudioSegmentCache::getAudioSegment("kilogram_channel1");
         auto a = sourceH.read();
         a.setAudioHandle(segment);
         sourceH.write(a);

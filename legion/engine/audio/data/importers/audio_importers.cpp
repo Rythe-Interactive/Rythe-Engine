@@ -32,7 +32,7 @@ namespace legion::audio
         int channels = fileInfo.channels;
         int samples = fileInfo.samples;
 
-        if (settings.force_mono)
+        if (settings.channel_processing == audio_import_settings::channel_processing_setting::force_mono)
         {
             audioData = detail::convertToMono(reinterpret_cast<byte*>(fileInfo.buffer), dataSize, dataSize, channels, 16);
             samples /= channels;
@@ -125,53 +125,90 @@ namespace legion::audio
 
         int channels = header.wave_format.channels;
 
-        if (settings.force_mono)
+        audio_segment as;
+
+        if (settings.channel_processing == audio_import_settings::channel_processing_setting::split_channels)
+        {
+            detail::channel_data* channelData = detail::extractChannels(resource.data() + metaSize, sampleDataSize, channels, header.wave_format.bitsPerSample);
+
+            sampleDataSize /= channels;
+
+            audioData = new byte[sampleDataSize];
+            memmove(audioData, channelData->dataPerChannel[0].data(), sampleDataSize);
+
+            int samplesPerChannel = sampleDataSize / (header.wave_format.bitsPerSample / 8);
+
+            as = audio_segment(
+                audioData,
+                0,
+                samplesPerChannel, // Sample count, unknown for wav
+                1,
+                (int)header.wave_format.sampleRate,
+                -1, // Layer, does not exist in wav
+                -1 // avg_biterate_kbps, unknown for wav
+            );
+
+            audio_segment* previous = &as;
+
+            if (channels > 1)
+            {
+                for (int i = 1; i < channels; ++i)
+                {
+                    byte* data = new byte[sampleDataSize];
+                    memmove(data, channelData->dataPerChannel[i].data(), sampleDataSize);
+
+                    audio_segment* channel_segment = new audio_segment(
+                        data,
+                        0,
+                        samplesPerChannel,
+                        1,
+                        (int)header.wave_format.sampleRate,
+                        -1,
+                        -1
+                    );
+
+                    detail::createAndBufferAudioData(&(channel_segment->audioBufferId), channel_segment->channels, header.wave_format.bitsPerSample, channel_segment->getData(), sampleDataSize, channel_segment->sampleRate);
+                    log::debug("Setting next audio segment");
+                    previous->setNextAudioSegment(*channel_segment);
+                    previous = channel_segment;
+                }
+            }
+
+
+            delete channelData;
+            channelData = nullptr;
+        }
+        else if (settings.channel_processing == audio_import_settings::channel_processing_setting::force_mono)
         {
             audioData = detail::convertToMono(resource.data() + metaSize, sampleDataSize, sampleDataSize, channels, header.wave_format.bitsPerSample);
+
+            as = audio_segment(
+                audioData,
+                0,
+                sampleDataSize / (header.wave_format.bitsPerSample / 8), // Sample count, unknown for wav
+                channels,
+                (int)header.wave_format.sampleRate,
+                -1, // Layer, does not exist in wav
+                -1 // avg_biterate_kbps, unknown for wav
+            );
         }
         else
         {
-            // Leave as is
             audioData = new byte[sampleDataSize];
             memcpy(audioData, resource.data() + metaSize, sampleDataSize);
+
+            as = audio_segment(
+                audioData,
+                0,
+                sampleDataSize / (header.wave_format.bitsPerSample / 8), // Sample count, unknown for wav
+                channels,
+                (int)header.wave_format.sampleRate,
+                -1, // Layer, does not exist in wav
+                -1 // avg_biterate_kbps, unknown for wav
+            );
         }
 
-        audio_segment as(
-            audioData,
-            0,
-            sampleDataSize / (header.wave_format.bitsPerSample/8), // Sample count, unknown for wav
-            channels,
-            (int)header.wave_format.sampleRate,
-            -1, // Layer, does not exist in wav
-            -1 // avg_biterate_kbps, unknown for wav
-        );
-
-        async::readwrite_guard guard(AudioSystem::contextLock);
-        alcMakeContextCurrent(AudioSystem::alcContext);
-        //Generate openal buffer
-        alGenBuffers((ALuint)1, &as.audioBufferId);
-        ALenum format = AL_FORMAT_MONO16;
-        if (as.channels == 1)
-        {
-            if (header.wave_format.bitsPerSample == 8) format = AL_FORMAT_MONO8;
-            else if (header.wave_format.bitsPerSample == 16) format = AL_FORMAT_MONO16;
-            else if (header.wave_format.bitsPerSample == 32) format = AL_FORMAT_MONO_FLOAT32;
-        }
-        else if (as.channels == 2)
-        {
-            if (header.wave_format.bitsPerSample == 8) format = AL_FORMAT_STEREO8;
-            else if (header.wave_format.bitsPerSample == 16) format = AL_FORMAT_STEREO16;
-            else if (header.wave_format.bitsPerSample == 32) format = AL_FORMAT_STEREO_FLOAT32;
-        }
-        else if (as.channels == 4)
-        {
-            if (header.wave_format.bitsPerSample == 8) format = AL_FORMAT_QUAD8;
-            else if (header.wave_format.bitsPerSample == 16) format = AL_FORMAT_QUAD16;
-            else if (header.wave_format.bitsPerSample == 32) format = AL_FORMAT_QUAD32;
-        }
-        alBufferData(as.audioBufferId, format, as.getData(), sampleDataSize, as.sampleRate);
-
-        alcMakeContextCurrent(nullptr);
+        detail::createAndBufferAudioData(&as.audioBufferId, as.channels, header.wave_format.bitsPerSample, as.getData(), sampleDataSize, as.sampleRate);
 
         return decay(Ok(as));
     }
@@ -180,6 +217,7 @@ namespace legion::audio
     {
         void convertToMono(const byte* inputData, int dataSize, byte* monoData, int channels, int bitsPerSample)
         {
+            assert_msg("0 was passed for channels", channels != 0);
             if (channels == 1)
             {
                 memcpy(monoData, inputData, dataSize);
@@ -246,5 +284,105 @@ namespace legion::audio
             return monoData;
         }
 
+        channel_data* extractChannels(const byte* inputData, int dataSize, int channels, int bitsPerSamples)
+        {
+            assert_msg("0 was passed for channels", channels != 0);
+            // channelData is a 2D array of [channels][channelData]
+            // channelData will hold the audio data per channel
+            channel_data* channelData = new channel_data(channels);
+            channelData->dataPerChannel.resize(channels);
+            if (channels == 1)
+            {
+                (*channelData)[0].resize(dataSize);
+                std::copy(inputData, inputData + dataSize, std::back_inserter(channelData->dataPerChannel[0]));
+                return channelData;
+            }
+
+            int bytesPerSample = bitsPerSamples / 8;
+
+            for (size_type c = 0; c < channels; ++c)
+            {
+                channelData->dataPerChannel[c].resize(dataSize/channels);
+            }
+
+            switch (bytesPerSample)
+            {
+            case 1:
+            {
+                uint j = 0;
+                for (size_type i = 0; i < dataSize; i += bytesPerSample * channels)
+                {
+                    for (size_type c = 0; c < channels; ++c)
+                    {
+                        channelData->dataPerChannel[c][j] = inputData[i + c];
+                    }
+                    ++j;
+                }
+            }
+                break;
+            case 2:
+            {
+                uint j = 0;
+                for (size_type i = 0; i < dataSize; i += bytesPerSample * channels)
+                {
+                    for (size_type c = 0; c < channels; ++c)
+                    {
+                        *reinterpret_cast<int16*>(channelData->dataPerChannel[c][j]) = *reinterpret_cast<const int16*>(inputData + i + c);
+                    }
+                    ++j;
+                }
+            }
+                break;
+            case 4:
+            {
+                for (size_type i = 0; i < dataSize; i += bytesPerSample * channels)
+                {
+                    for (size_type c = 0; c < channels; ++c)
+                    {
+                        *reinterpret_cast<float*>(channelData->dataPerChannel[c][i]) = *reinterpret_cast<const float*>(inputData + i + c);
+                    }
+                }
+            }
+                break;
+            default:
+                break;
+            }
+            return channelData;
+        }
+
+        ALenum getAudioFormat(int channels, int bitsPerSample)
+        {
+            if (channels == 1)
+            {
+                if (bitsPerSample == 8) return AL_FORMAT_MONO8;
+                else if (bitsPerSample == 16) return AL_FORMAT_MONO16;
+                else if (bitsPerSample == 32) return AL_FORMAT_MONO_FLOAT32;
+            }
+            else if (channels == 2)
+            {
+                if (bitsPerSample == 8) return AL_FORMAT_STEREO8;
+                else if (bitsPerSample == 16) return AL_FORMAT_STEREO16;
+                else if (bitsPerSample == 32) return AL_FORMAT_STEREO_FLOAT32;
+            }
+            else if (channels == 4)
+            {
+                if (bitsPerSample == 8) return AL_FORMAT_QUAD8;
+                else if (bitsPerSample == 16) return AL_FORMAT_QUAD16;
+                else if (bitsPerSample == 32) return AL_FORMAT_QUAD32;
+            }
+            return AL_FORMAT_STEREO16;
+        }
+
+        void createAndBufferAudioData(ALuint* bufferId, int channels, int bitsPerSample, byte* data, int dataSize, int sampleRate)
+        {
+            async::readwrite_guard guard(AudioSystem::contextLock);
+            alcMakeContextCurrent(AudioSystem::alcContext);
+            //Generate openal buffer
+            alGenBuffers((ALuint)1, bufferId);
+
+            alBufferData(*bufferId, detail::getAudioFormat(channels, bitsPerSample), data, dataSize, sampleRate);
+
+            alcMakeContextCurrent(nullptr);
+        }
     }
 }

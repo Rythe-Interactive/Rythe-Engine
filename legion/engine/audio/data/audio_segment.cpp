@@ -17,7 +17,7 @@ namespace legion::audio
     }
 
     audio_segment::audio_segment(const audio_segment& other) :
-        m_data(other.m_data), audioBufferId(other.audioBufferId), samples(other.samples), channels(other.channels), sampleRate(other.sampleRate), layer(other.layer), avg_bitrate_kbps(other.avg_bitrate_kbps), m_id(other.m_id)
+        m_data(other.m_data), audioBufferId(other.audioBufferId), samples(other.samples), channels(other.channels), sampleRate(other.sampleRate), layer(other.layer), avg_bitrate_kbps(other.avg_bitrate_kbps), m_id(other.m_id), m_next(other.m_next)
     {
         if (m_id)
         {
@@ -27,7 +27,7 @@ namespace legion::audio
     }
 
     audio_segment::audio_segment(audio_segment&& other) :
-        m_data(other.m_data), audioBufferId(other.audioBufferId), samples(other.samples), channels(other.channels), sampleRate(other.sampleRate), layer(other.layer), avg_bitrate_kbps(other.avg_bitrate_kbps), m_id(other.m_id)
+        m_data(other.m_data), audioBufferId(other.audioBufferId), samples(other.samples), channels(other.channels), sampleRate(other.sampleRate), layer(other.layer), avg_bitrate_kbps(other.avg_bitrate_kbps), m_id(other.m_id), m_next(other.m_next)
     {
         if (m_id)
         {
@@ -66,6 +66,9 @@ namespace legion::audio
         sampleRate = other.sampleRate;
         layer = other.layer;
         avg_bitrate_kbps = other.avg_bitrate_kbps;
+        m_next = other.m_next;
+
+        return *this;
     }
 
     audio_segment& audio_segment::operator=(audio_segment&& other)
@@ -98,6 +101,9 @@ namespace legion::audio
         sampleRate = other.sampleRate;
         layer = other.layer;
         avg_bitrate_kbps = other.avg_bitrate_kbps;
+        m_next = other.m_next;
+
+        return *this;
     }
 
     audio_segment::~audio_segment()
@@ -123,7 +129,10 @@ namespace legion::audio
 
     audio_segment_handle AudioSegmentCache::createAudioSegment(const std::string& name, const fs::view& file, audio_import_settings settings)
     {
-        id_type id = nameHash(name);
+        std::string nameForHash = name;
+        if (settings.channel_processing == audio_import_settings::channel_processing_setting::split_channels) nameForHash = name + "_channel0";
+        log::debug("Name: {}", nameForHash);
+        id_type id = nameHash(nameForHash);
         {
             async::readonly_guard guard(m_segmentsLock);
             // check if segment has been loaded before
@@ -141,9 +150,25 @@ namespace legion::audio
         }
 
         // Succesfully loaded audio segment
-
         {
             async::readwrite_guard guard(m_segmentsLock);
+
+            if (settings.channel_processing == audio_import_settings::channel_processing_setting::split_channels)
+            {
+                audio_segment as = static_cast<audio_segment>(result);
+                int amount = 1;
+                audio_segment* segment = &as;
+                log::debug("next is nullptr: {}", as.getNextAudioSegment() == nullptr);
+                while (segment->getNextAudioSegment() != nullptr)
+                {
+                    segment = segment->clearNextAudioSegment();
+                    std::string segmentName = name + "_channel" + std::to_string(amount);
+                    log::debug("segmentName: {}", segmentName);
+                    createAudioSegment(segmentName, segment);
+                    ++amount;
+                }
+            }
+
             auto* pairPointer = new std::pair<async::readonly_rw_spinlock, audio_segment>(
                 std::make_pair<async::readonly_rw_spinlock, audio_segment>(async::readonly_rw_spinlock(),
                     static_cast<audio_segment>(result)));
@@ -151,6 +176,21 @@ namespace legion::audio
         }
 
         return { id };
+    }
+
+    void AudioSegmentCache::createAudioSegment(const std::string& name, audio_segment* segment)
+    {
+        id_type id = nameHash(name);
+        {
+            async::readonly_guard guard(m_segmentsLock);
+            // check if segment has been loaded before
+            if (m_segments.count(id))
+                return;
+        }
+
+        auto* pairPointer = new std::pair<async::readonly_rw_spinlock, audio_segment>(
+            async::readonly_rw_spinlock(), *segment);
+        m_segments.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::readonly_rw_spinlock, audio_segment>>(pairPointer)));
     }
 
     audio_segment_handle AudioSegmentCache::getAudioSegment(const std::string& name)
