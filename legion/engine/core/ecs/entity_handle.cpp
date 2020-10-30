@@ -237,7 +237,7 @@ namespace legion::core::ecs
 
     bool operator==(const child_iterator& lhs, const child_iterator& rhs)
     {
-        return lhs.m_pimpl->iterator->get_id() == rhs.m_pimpl->iterator->get_id();
+        return lhs.m_pimpl->iterator == rhs.m_pimpl->iterator;
     }
 
     entity_handle& child_iterator::operator*()

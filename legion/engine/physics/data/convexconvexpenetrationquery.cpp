@@ -47,7 +47,7 @@ namespace legion::physics
         {
             float distanceToCollisionPlane = PhysicsStatics::PointDistanceToPlane(normal, faceCentroid, incidentContact);
 
-            if (distanceToCollisionPlane < 0.05f)
+            if (distanceToCollisionPlane < constants::contactOffset)
             {
                 math::vec3 referenceContact = incidentContact - normal * distanceToCollisionPlane;
 
@@ -60,7 +60,6 @@ namespace legion::physics
 
                 manifold.contacts.push_back(contact);
              
-
             }
         }
 

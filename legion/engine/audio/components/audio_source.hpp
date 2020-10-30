@@ -18,6 +18,7 @@ namespace legion::audio
             playState = 4,
             doRewind = 8,
             audioHandle = 16,
+            rollOffFactor = 32,
         };
 
         enum playstate
@@ -53,6 +54,34 @@ namespace legion::audio
         * @brief Function to get the current gain
         */
         float getGain() const { return m_gain; };
+
+        /**
+        * @brief Function to set the roll off factor for 3D audio
+        * @brief Rolloff factor only works for mono audio
+        */
+        void setRollOffFactor(float factor)
+        {
+            m_changes = sound_properties::rollOffFactor;
+            m_rolloffFactor = factor;
+        }
+
+        /**
+        * @brief Function to disable spatial (3D) 
+        * @brief Calls setRtollOffFactor(0.0f)
+        */
+        void disableSpatialAudio()
+        {
+            setRollOffFactor(0.0f);
+        }
+
+        /**
+        * @brief Function to enable spatial (3D)
+        * @brief Calls setRtollOffFactor(1.0f)
+        */
+        void enableSpatialAudio()
+        {
+            setRollOffFactor(1.0f);
+        }
 
         /**
         * @brief Plays audio 
@@ -180,6 +209,8 @@ namespace legion::audio
         playstate m_playState = playstate::stopped;
         playstate m_nextPlayState = playstate::stopped;
 
+        float m_rolloffFactor;
+
         // Byte to keep track of changes made to audio source
         // For all the values > see enum sound_properties
         // b0 - pitch
@@ -187,6 +218,7 @@ namespace legion::audio
         // b2 - play state
         // b3 - rewind (doRewind)
         // b4 - audio handle
+        // b5 - roll off factor 3D
         byte m_changes = 0;
     };
 }

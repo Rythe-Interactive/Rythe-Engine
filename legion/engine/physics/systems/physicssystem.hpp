@@ -84,7 +84,6 @@ namespace legion::physics
             auto scaleHandle = initialEntity.get_component_handle<scale>();
             auto physicsComponentHandle = initialEntity.get_component_handle<physicsComponent>();
 
-
             bool hasTransform = rotationHandle && positionHandle && scaleHandle;
             bool hasNecessaryComponentsForPhysicsManifold = hasTransform && physicsComponentHandle;
 
@@ -139,7 +138,6 @@ namespace legion::physics
         */
         void runPhysicsPipeline(float dt)
         {
-           
             //-------------------------------------------------Broadphase Optimization-----------------------------------------------//
             int initialColliderID = 0;
 
@@ -155,14 +153,20 @@ namespace legion::physics
             //------------------------------------------------------ Narrowphase -----------------------------------------------------//
             std::vector<physics_manifold> manifoldsToSolve;
 
-            for (auto& manifoldPrecursors : manifoldPrecursorGrouping)
+            
+
+            for (auto& manifoldPrecursor : manifoldPrecursorGrouping)
             {
-                for (int i = 0; i < manifoldPrecursors.size() - 1; i++)
+                if (manifoldPrecursor.size() == 0) { continue; }
+
+                for (int i = 0; i < manifoldPrecursor.size()-1; i++)
                 {
-                    for (int j = i + 1; j < manifoldPrecursors.size(); j++)
+                    for (int j = i+1; j < manifoldPrecursor.size(); j++)
                     {
-                        physics_manifold_precursor& precursorA = manifoldPrecursors.at(i);
-                        physics_manifold_precursor& precursorB = manifoldPrecursors.at(j);
+                        assert(j != manifoldPrecursor.size());
+
+                        physics_manifold_precursor& precursorA = manifoldPrecursor.at(i);
+                        physics_manifold_precursor& precursorB = manifoldPrecursor.at(j);
 
                         auto phyCompHandleA = precursorA.physicsComponentHandle;
                         auto phyCompHandleB = precursorB.physicsComponentHandle;
@@ -191,7 +195,7 @@ namespace legion::physics
                         {
                            
 
-                            constructManifoldsWithPrecursors(manifoldPrecursors.at(i), manifoldPrecursors.at(j),
+                            constructManifoldsWithPrecursors(manifoldPrecursor.at(i), manifoldPrecursor.at(j),
                                 manifoldsToSolve,
                                 precursorRigidbodyA || precursorRigidbodyB
                                 , precursorPhyCompA.isTrigger || precursorPhyCompB.isTrigger);
@@ -223,23 +227,9 @@ namespace legion::physics
             {
                 for (auto& manifold : manifoldsToSolve)
                 {
-                    int j = 0;
                     for (auto& contact : manifold.contacts)
                     {
-                        if (i == 0 && j ==0)
-                        {
-                            contact.logRigidbodyState();
-                            //log::debug("--------------- RESOLVE COLLISION START --------------------------------------");
-                        }
-
                         contact.resolveContactConstraint(dt,i);
-
-                        if (i == constants::contactSolverIterationCount-1 && j == 0 )
-                        {
-                            contact.logRigidbodyState();
-                            //log::debug("--------------- RESOLVE COLLISION EMD --------------------------------------");
-                        }
-                        j++;
                     }
                 }
             }
@@ -286,8 +276,6 @@ namespace legion::physics
         void constructManifoldsWithPrecursors(physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB,
             std::vector<physics_manifold>& manifoldsToSolve, bool isRigidbodyInvolved, bool isTriggerInvolved)
         {
-
-
             auto physicsComponentA = precursorA.physicsComponentHandle.read();
             auto physicsComponentB = precursorB.physicsComponentHandle.read();
 
@@ -405,19 +393,16 @@ namespace legion::physics
 
             math::quat bfr = rbRot;
 
-            math::quat a = math::angleAxis(math::radians(2.0f), math::vec3(0, 1, 0));
-            a = math::normalize(a);
-            //log::debug("dtAngle {}", math::to_string(a));
+
           
             if (!math::epsilonEqual(dtAngle, 0.0f, math::epsilon<float>()))
             { 
-               
                 math::vec3 axis = math::normalize(rb.angularVelocity);
 
                 math::quat glmQuat = math::angleAxis(dtAngle, axis);
-                rbRot *= glmQuat;
+                rbRot = glmQuat * rbRot;
                 rbRot = math::normalize(rbRot);
-                math::quat quat = rbRot;
+
             }
 
             math::quat afr = rbRot;

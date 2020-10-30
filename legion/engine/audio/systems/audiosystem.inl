@@ -179,6 +179,10 @@ namespace legion::audio
 			{
 				alSourceRewind(source.m_sourceId);
 			}
+			if (source.m_changes & change::rollOffFactor)
+			{
+				alSourcef(source.m_sourceId, AL_ROLLOFF_FACTOR, source.m_rolloffFactor);
+			}
 
 			source.clearChanges();
 			sourceHandle.write(source);
@@ -279,7 +283,7 @@ namespace legion::audio
 		alSourcef(source.m_sourceId, AL_LOOPING, AL_TRUE);
 
 		// 3D audio stuffs
-		alSourcef(source.m_sourceId, AL_ROLLOFF_FACTOR, 2.0f);
+		alSourcef(source.m_sourceId, AL_ROLLOFF_FACTOR, 1.0f);
 		alSourcef(source.m_sourceId, AL_REFERENCE_DISTANCE, 6);
 		alSourcef(source.m_sourceId, AL_MAX_DISTANCE, 15);
 

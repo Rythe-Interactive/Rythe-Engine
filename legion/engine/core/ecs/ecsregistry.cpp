@@ -224,7 +224,7 @@ namespace legion::core::ecs
         entity_data& data = m_entityData[entityId]; // Is fine because the lock only locks order changes in the container, not the values themselves.
 
 
-        if (!validateEntity(data.parent)) // Re-validate parent.
+        if (data.parent && !validateEntity(data.parent)) // Re-validate parent.
             data.parent = invalid_id;
 
         return data;
