@@ -37,6 +37,23 @@ namespace legion::core::scenemanagement
         return false;
     }
 
+    bool SceneManager::loadScene(const std::string& name)
+    {
+        if (SceneManager::getScene(name))
+        {
+            std::ifstream inFile("assets/scenes/" + name + ".cornflake");
+            serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
+        }
+        else
+        {
+            std::ifstream inFile("assets/scenes/" + name + ".cornflake");
+            serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
+            log::warn("Scene " + name + ".cornflake does not exist in our scenelist, but a file does");
+        }
+        return true;
+    }
+
+
 
 
     ecs::component_handle<scene> SceneManager::getScene(std::string name)

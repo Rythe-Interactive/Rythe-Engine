@@ -1,10 +1,10 @@
 {
     "Entity": {
-        "Id": 12,
+        "Id": 35,
         "Name": "Entity",
         "Components": [
             {
-                "Owner": 12,
+                "Owner": 35,
                 "Component Type": 9547123436134525643,
                 "Component Name": "struct legion::core::scenemanagement::scene",
                 "NAME": "Main"
@@ -477,6 +477,1084 @@
                         "Owner": 11,
                         "Component Type": 12879719932595839335,
                         "Component Name": "struct legion::audio::audio_source"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 12,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 12,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 12,
+                        "Component Type": 6208564340805693071,
+                        "Component Name": "struct legion::rendering::renderable",
+                        "value0": {
+                            "value0": 5503224543670688896
+                        },
+                        "value1": {
+                            "value0": 11132040061712174085
+                        }
+                    },
+                    {
+                        "Owner": 12,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 12,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 12,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 0.0,
+                        "y": -3.0,
+                        "z": 8.0
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 13,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 13,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 13,
+                        "Component Type": 6208564340805693071,
+                        "Component Name": "struct legion::rendering::renderable",
+                        "value0": {
+                            "value0": 5503224543670688896
+                        },
+                        "value1": {
+                            "value0": 11132040061712174085
+                        }
+                    },
+                    {
+                        "Owner": 13,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 13,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 13,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 3.0,
+                        "y": -3.0,
+                        "z": 8.0
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 14,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 14,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 14,
+                        "Component Type": 6208564340805693071,
+                        "Component Name": "struct legion::rendering::renderable",
+                        "value0": {
+                            "value0": 5503224543670688896
+                        },
+                        "value1": {
+                            "value0": 11132040061712174085
+                        }
+                    },
+                    {
+                        "Owner": 14,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 14,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 14,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 0.0,
+                        "y": -3.0,
+                        "z": 5.0
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 15,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 15,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 15,
+                        "Component Type": 6208564340805693071,
+                        "Component Name": "struct legion::rendering::renderable",
+                        "value0": {
+                            "value0": 5503224543670688896
+                        },
+                        "value1": {
+                            "value0": 11132040061712174085
+                        }
+                    },
+                    {
+                        "Owner": 15,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 15,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 15,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 3.0,
+                        "y": -2.0,
+                        "z": 4.0
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 16,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 16,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 16,
+                        "Component Type": 6208564340805693071,
+                        "Component Name": "struct legion::rendering::renderable",
+                        "value0": {
+                            "value0": 5503224543670688896
+                        },
+                        "value1": {
+                            "value0": 11132040061712174085
+                        }
+                    },
+                    {
+                        "Owner": 16,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 16,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 16,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 0.0,
+                        "y": -3.0,
+                        "z": -2.0
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 17,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 17,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 17,
+                        "Component Type": 6208564340805693071,
+                        "Component Name": "struct legion::rendering::renderable",
+                        "value0": {
+                            "value0": 5503224543670688896
+                        },
+                        "value1": {
+                            "value0": 11132040061712174085
+                        }
+                    },
+                    {
+                        "Owner": 17,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 17,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.23733900487422944,
+                        "y": 0.42545178532600405,
+                        "z": 0.42545178532600405,
+                        "w": 0.7626610398292542
+                    },
+                    {
+                        "Owner": 17,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 3.0,
+                        "y": -3.0,
+                        "z": -2.0
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 18,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 18,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 18,
+                        "Component Type": 6208564340805693071,
+                        "Component Name": "struct legion::rendering::renderable",
+                        "value0": {
+                            "value0": 5503224543670688896
+                        },
+                        "value1": {
+                            "value0": 11132040061712174085
+                        }
+                    },
+                    {
+                        "Owner": 18,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 18,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": -0.5440211296081543,
+                        "z": 0.0,
+                        "w": -0.83907151222229
+                    },
+                    {
+                        "Owner": 18,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 0.0,
+                        "y": -3.0,
+                        "z": -7.0
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 19,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 19,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 19,
+                        "Component Type": 6208564340805693071,
+                        "Component Name": "struct legion::rendering::renderable",
+                        "value0": {
+                            "value0": 5503224543670688896
+                        },
+                        "value1": {
+                            "value0": 11132040061712174085
+                        }
+                    },
+                    {
+                        "Owner": 19,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 19,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.23733900487422944,
+                        "y": 0.42545178532600405,
+                        "z": 0.42545178532600405,
+                        "w": 0.7626610398292542
+                    },
+                    {
+                        "Owner": 19,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 3.0,
+                        "y": -3.0,
+                        "z": -7.0
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 20,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 20,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 20,
+                        "Component Type": 6208564340805693071,
+                        "Component Name": "struct legion::rendering::renderable",
+                        "value0": {
+                            "value0": 5503224543670688896
+                        },
+                        "value1": {
+                            "value0": 11132040061712174085
+                        }
+                    },
+                    {
+                        "Owner": 20,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 20,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": -0.48717451095581057,
+                        "z": 0.0,
+                        "w": -0.8733046650886536
+                    },
+                    {
+                        "Owner": 20,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 0.0,
+                        "y": -3.0,
+                        "z": -12.0
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 21,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 21,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 21,
+                        "Component Type": 6208564340805693071,
+                        "Component Name": "struct legion::rendering::renderable",
+                        "value0": {
+                            "value0": 5503224543670688896
+                        },
+                        "value1": {
+                            "value0": 11132040061712174085
+                        }
+                    },
+                    {
+                        "Owner": 21,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 21,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.42545178532600405,
+                        "y": 0.42545178532600405,
+                        "z": 0.23733900487422944,
+                        "w": 0.7626610398292542
+                    },
+                    {
+                        "Owner": 21,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 3.0,
+                        "y": -3.0,
+                        "z": -13.0
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 22,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 22,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 2.5,
+                        "y": 1.0,
+                        "z": 2.5
+                    },
+                    {
+                        "Owner": 22,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 22,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 10.0,
+                        "y": -3.0,
+                        "z": 15.0
+                    },
+                    {
+                        "Owner": 22,
+                        "Component Type": 6208564340805693071,
+                        "Component Name": "struct legion::rendering::renderable",
+                        "value0": {
+                            "value0": 5503224543670688896
+                        },
+                        "value1": {
+                            "value0": 11132040061712174085
+                        }
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 23,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 23,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 23,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 23,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 23,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 10.0,
+                        "y": -3.0,
+                        "z": 15.0
+                    },
+                    {
+                        "Owner": 23,
+                        "Component Type": 330077082970471169,
+                        "Component Name": "struct legion::physics::identifier"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 24,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 24,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 24,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 24,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 24,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 10.0,
+                        "y": -0.0,
+                        "z": 15.0
+                    },
+                    {
+                        "Owner": 24,
+                        "Component Type": 330077082970471169,
+                        "Component Name": "struct legion::physics::identifier"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 25,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 25,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 25,
+                        "Component Type": 2672125980063885289,
+                        "Component Name": "struct legion::physics::rigidbody",
+                        "Name": "Rigidbody",
+                        "Inverse Mass": 1.0,
+                        "Velocity": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Acceleration": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Linear Drag": NaN,
+                        "Inverse Intertia Tensor": {},
+                        "Angular Acceleration": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Angular Velocity": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Angular Drag": 0.009999999776482582,
+                        "Global Centre of Mass": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Force Accumulator": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Torque Accumulator": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Restitution": -1.1848308639363748e-35,
+                        "Friction": 2.369355800876173e-38,
+                        "Is Asleep?": false
+                    },
+                    {
+                        "Owner": 25,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 25,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 25,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 10.5,
+                        "y": -1.0,
+                        "z": 15.0
+                    },
+                    {
+                        "Owner": 25,
+                        "Component Type": 330077082970471169,
+                        "Component Name": "struct legion::physics::identifier"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 26,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 26,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 2.5,
+                        "y": 1.0,
+                        "z": 2.5
+                    },
+                    {
+                        "Owner": 26,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 26,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 10.0,
+                        "y": -3.0,
+                        "z": 8.0
+                    },
+                    {
+                        "Owner": 26,
+                        "Component Type": 6208564340805693071,
+                        "Component Name": "struct legion::rendering::renderable",
+                        "value0": {
+                            "value0": 5503224543670688896
+                        },
+                        "value1": {
+                            "value0": 11132040061712174085
+                        }
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 27,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 27,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 27,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 27,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 27,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 10.0,
+                        "y": -3.0,
+                        "z": 8.0
+                    },
+                    {
+                        "Owner": 27,
+                        "Component Type": 330077082970471169,
+                        "Component Name": "struct legion::physics::identifier"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 28,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 28,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 28,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 28,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 28,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 7.300000190734863,
+                        "y": -0.0,
+                        "z": 8.0
+                    },
+                    {
+                        "Owner": 28,
+                        "Component Type": 330077082970471169,
+                        "Component Name": "struct legion::physics::identifier"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 29,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 29,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 2.5,
+                        "y": 1.0,
+                        "z": 2.5
+                    },
+                    {
+                        "Owner": 29,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 29,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 10.0,
+                        "y": -3.0,
+                        "z": 2.0
+                    },
+                    {
+                        "Owner": 29,
+                        "Component Type": 6208564340805693071,
+                        "Component Name": "struct legion::rendering::renderable",
+                        "value0": {
+                            "value0": 5503224543670688896
+                        },
+                        "value1": {
+                            "value0": 11132040061712174085
+                        }
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 30,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 30,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 30,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 30,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 30,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 10.0,
+                        "y": -3.0,
+                        "z": 2.0
+                    },
+                    {
+                        "Owner": 30,
+                        "Component Type": 330077082970471169,
+                        "Component Name": "struct legion::physics::identifier"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 31,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 31,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 31,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 31,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.3193032741546631,
+                        "y": 0.3367557227611542,
+                        "z": 0.12256905436515808,
+                        "w": 0.8772786259651184
+                    },
+                    {
+                        "Owner": 31,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 10.0,
+                        "y": -0.0,
+                        "z": 2.0
+                    },
+                    {
+                        "Owner": 31,
+                        "Component Type": 330077082970471169,
+                        "Component Name": "struct legion::physics::identifier"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 32,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 32,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 2.5,
+                        "y": 1.0,
+                        "z": 2.5
+                    },
+                    {
+                        "Owner": 32,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 32,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 10.0,
+                        "y": -3.0,
+                        "z": -4.0
+                    },
+                    {
+                        "Owner": 32,
+                        "Component Type": 6208564340805693071,
+                        "Component Name": "struct legion::rendering::renderable",
+                        "value0": {
+                            "value0": 5503224543670688896
+                        },
+                        "value1": {
+                            "value0": 11132040061712174085
+                        }
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 33,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 33,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 33,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 33,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 33,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 10.0,
+                        "y": -3.0,
+                        "z": -4.0
+                    },
+                    {
+                        "Owner": 33,
+                        "Component Type": 330077082970471169,
+                        "Component Name": "struct legion::physics::identifier"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 34,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 34,
+                        "Component Type": 17853874947922195038,
+                        "Component Name": "struct legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 34,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 34,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.42545178532600405,
+                        "y": 0.42545178532600405,
+                        "z": 0.23733900487422944,
+                        "w": 0.7626610398292542
+                    },
+                    {
+                        "Owner": 34,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 13.0,
+                        "y": 2.0,
+                        "z": -4.0
+                    },
+                    {
+                        "Owner": 34,
+                        "Component Type": 330077082970471169,
+                        "Component Name": "struct legion::physics::identifier"
                     }
                 ],
                 "Children": []

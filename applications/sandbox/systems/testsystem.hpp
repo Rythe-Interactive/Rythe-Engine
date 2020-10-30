@@ -233,12 +233,12 @@ public:
         bindToEvent<escape_cursor_action, &TestSystem::onEscapeCursor>();
         bindToEvent<vsync_action, &TestSystem::onVSYNCSwap>();
 
-        //bindToEvent<physics_test_move, &TestSystem::onUnitPhysicsUnitTestMove>();
+        bindToEvent<physics_test_move, &TestSystem::onUnitPhysicsUnitTestMove>();
 
-        //bindToEvent<sphere_move, &TestSystem::onSphereAAMove>();
-        //bindToEvent<sphere_strive, &TestSystem::onSphereAAStrive>();
-        //bindToEvent<gain_change, &TestSystem::onGainChange>();
-        //bindToEvent<pitch_change, &TestSystem::onPitchChange>();
+        bindToEvent<sphere_move, &TestSystem::onSphereAAMove>();
+        bindToEvent<sphere_strive, &TestSystem::onSphereAAStrive>();
+        bindToEvent<gain_change, &TestSystem::onGainChange>();
+        bindToEvent<pitch_change, &TestSystem::onPitchChange>();
 
         bindToEvent<play_audio_source, &TestSystem::playAudioSource>();
         bindToEvent<pause_audio_source, &TestSystem::pauseAudioSource>();
@@ -406,14 +406,14 @@ public:
 
         ////---------------------------------------------------------- Physics Collision Unit Test -------------------------------------------------------------------//
 
-        //setupPhysicsCDUnitTest(cubeH, wireframeH);
+        setupPhysicsCDUnitTest(cubeH, wireframeH);
 
-        ////----------- Rigidbody-Collider AABB Test------------//
+        //----------- Rigidbody-Collider AABB Test------------//
 
-        //setupPhysicsCRUnitTest(cubeH, wireframeH);
+        setupPhysicsCRUnitTest(cubeH, wireframeH);
 
 
-        auto sceneEntity = createEntity();
+     auto sceneEntity = createEntity();
         std::vector<ecs::entity_handle> children;
         for (int i=0;i<m_ecs->world.child_count();i++)
         {
@@ -431,7 +431,7 @@ public:
   
         //sceneEntity.destroy();
 
-        scenemanagement::SceneManager::loadScene("Main");
+        //scenemanagement::SceneManager::loadScene("ImposterFlake");
 
         setupCameraEntity();
         

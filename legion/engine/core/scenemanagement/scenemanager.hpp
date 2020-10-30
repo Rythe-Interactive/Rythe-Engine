@@ -49,11 +49,7 @@ namespace legion::core::scenemanagement
          * @param name of the file to deserialize
          * @note Not yet implemented
          */
-        static bool loadScene(const std::string& name)
-        {
-            std::ifstream inFile("assets/scenes/"+name+".cornflake");
-            serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
-        }
+        static bool loadScene(const std::string& name);
 
 
         /**@brief Gets a scene

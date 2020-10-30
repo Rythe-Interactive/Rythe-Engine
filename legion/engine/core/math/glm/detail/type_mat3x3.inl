@@ -1,4 +1,5 @@
 #include "../matrix.hpp"
+#include <cereal/cereal.hpp>
 
 namespace legion::core::math
 {
@@ -235,6 +236,13 @@ namespace legion::core::math
 #		endif
 	}
 
+
+	template<typename T, qualifier Q>
+	template<typename Archive>
+	inline void mat<3, 3, T, Q>::serialize(Archive& archive)
+	{
+		//archive(CEREAL_NVP(value[0]));
+	}
 	// -- Accesses --
 
 	template<typename T, qualifier Q>

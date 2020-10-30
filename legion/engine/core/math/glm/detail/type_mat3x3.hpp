@@ -18,6 +18,9 @@ namespace legion::core::math
 		typedef mat<3, 3, T, Q> transpose_type;
 		typedef T value_type;
 
+        template<typename Archive>
+        void serialize(Archive& archive);
+
 	private:
 		col_type value[3];
 
@@ -105,6 +108,7 @@ namespace legion::core::math
 		GLM_FUNC_DECL mat<3, 3, T, Q> operator++(int);
 		GLM_FUNC_DECL mat<3, 3, T, Q> operator--(int);
 	};
+
 
 	// -- Unary operators --
 
