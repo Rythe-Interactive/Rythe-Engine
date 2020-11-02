@@ -284,7 +284,7 @@ namespace legion::audio
 
 		// 3D audio stuffs
 		alSourcef(source.m_sourceId, AL_ROLLOFF_FACTOR, 1.0f);
-		alSourcef(source.m_sourceId, AL_REFERENCE_DISTANCE, 6);
+		alSourcef(source.m_sourceId, AL_REFERENCE_DISTANCE, 5);
 		alSourcef(source.m_sourceId, AL_MAX_DISTANCE, 15);
 
 		// NOTE TO SELF:

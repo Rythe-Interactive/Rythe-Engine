@@ -49,21 +49,29 @@ namespace legion::audio
                 return dataPerChannel[index].data();
             }
 
-            byte_vec& operator [] (size_type index)
+            byte* operator [] (size_type index)
             {
-                return dataPerChannel[index];
+                return dataPerChannel[index].data();
             }
 
-            const byte_vec& operator [] (size_type index) const
+            const byte* operator [] (size_type index) const
             {
-                return dataPerChannel[index];
+                return dataPerChannel[index].data();
             }
         };
 
+        /**
+        * @brief function to convert audio data to mono audio data
+        * @brief inputData is unedited audio data,
+        * @brief dataSize is the complete audio data size,
+        * @brief monoData is the out mono data, monoData is assumed to be resized with the correct size (dataSize/channelCount)
+        * @brief channels is the channelCount or amount of channels
+        * @brief bitsPerSample is the audio resolution (16 bit for mp3, and usually 16 bit for wav)
+        */
         void convertToMono(const byte* inputData, int dataSize, byte* monoData, int channels, int bitsPerSample);
         byte* convertToMono(const byte* inputData, int dataSize, int& monoDataSize, int& channels, int bitsPerSample);
 
-        channel_data* extractChannels(const byte* inputData, int dataSize, int channels, int bitsPerSamples);
+        channel_data extractChannels(const byte* inputData, int dataSize, int channels, int bitsPerSamples);
 
         ALenum getAudioFormat(int channels, int bitsPerSample);
 

@@ -129,12 +129,13 @@ namespace legion::audio
 
         if (settings.channel_processing == audio_import_settings::channel_processing_setting::split_channels)
         {
-            detail::channel_data* channelData = detail::extractChannels(resource.data() + metaSize, sampleDataSize, channels, header.wave_format.bitsPerSample);
+            detail::channel_data channelData = detail::extractChannels(resource.data() + metaSize, sampleDataSize, channels, header.wave_format.bitsPerSample);
 
             sampleDataSize /= channels;
 
             audioData = new byte[sampleDataSize];
-            memmove(audioData, channelData->dataPerChannel[0].data(), sampleDataSize);
+            memmove(audioData, channelData.dataPerChannel[0].data(), sampleDataSize);
+            //audioData = channelData.dataPerChannel[0].data();
 
             int samplesPerChannel = sampleDataSize / (header.wave_format.bitsPerSample / 8);
 
@@ -155,7 +156,7 @@ namespace legion::audio
                 for (int i = 1; i < channels; ++i)
                 {
                     byte* data = new byte[sampleDataSize];
-                    memmove(data, channelData->dataPerChannel[i].data(), sampleDataSize);
+                    memmove(data, channelData.dataPerChannel[i].data(), sampleDataSize);
 
                     audio_segment* channel_segment = new audio_segment(
                         data,
@@ -173,10 +174,6 @@ namespace legion::audio
                     previous = channel_segment;
                 }
             }
-
-
-            delete channelData;
-            channelData = nullptr;
         }
         else if (settings.channel_processing == audio_import_settings::channel_processing_setting::force_mono)
         {
@@ -284,17 +281,18 @@ namespace legion::audio
             return monoData;
         }
 
-        channel_data* extractChannels(const byte* inputData, int dataSize, int channels, int bitsPerSamples)
+        channel_data extractChannels(const byte* inputData, int dataSize, int channels, int bitsPerSamples)
         {
             assert_msg("0 was passed for channels", channels != 0);
             // channelData is a 2D array of [channels][channelData]
             // channelData will hold the audio data per channel
-            channel_data* channelData = new channel_data(channels);
-            channelData->dataPerChannel.resize(channels);
+            channel_data channelData(channels);
+            channelData.dataPerChannel.resize(channels);
             if (channels == 1)
             {
-                (*channelData)[0].resize(dataSize);
-                std::copy(inputData, inputData + dataSize, std::back_inserter(channelData->dataPerChannel[0]));
+                channelData.dataPerChannel[0].resize(dataSize);
+                std::copy(inputData, inputData + dataSize, std::back_inserter(channelData.dataPerChannel[0]));
+                //memcpy(channelData.dataPerChannel[0], inputData, dataSize);
                 return channelData;
             }
 
@@ -302,7 +300,7 @@ namespace legion::audio
 
             for (size_type c = 0; c < channels; ++c)
             {
-                channelData->dataPerChannel[c].resize(dataSize/channels);
+                channelData.dataPerChannel[c].resize(dataSize/channels);
             }
 
             switch (bytesPerSample)
@@ -314,7 +312,7 @@ namespace legion::audio
                 {
                     for (size_type c = 0; c < channels; ++c)
                     {
-                        channelData->dataPerChannel[c][j] = inputData[i + c];
+                        channelData.dataPerChannel[c][j] = inputData[i + c];
                     }
                     ++j;
                 }
@@ -323,24 +321,30 @@ namespace legion::audio
             case 2:
             {
                 uint j = 0;
+                int16 data = 0;
                 for (size_type i = 0; i < dataSize; i += bytesPerSample * channels)
                 {
                     for (size_type c = 0; c < channels; ++c)
                     {
-                        *reinterpret_cast<int16*>(channelData->dataPerChannel[c][j]) = *reinterpret_cast<const int16*>(inputData + i + c);
+                        data = *reinterpret_cast<const int16*>(inputData + i + (c*bytesPerSample));
+                        *reinterpret_cast<int16*>(channelData.dataPerChannel[c].data()+j) = data;
                     }
-                    ++j;
+                    j+=bytesPerSample;
                 }
             }
                 break;
             case 4:
             {
+                uint j = 0;
+                float data = 0;
                 for (size_type i = 0; i < dataSize; i += bytesPerSample * channels)
                 {
                     for (size_type c = 0; c < channels; ++c)
                     {
-                        *reinterpret_cast<float*>(channelData->dataPerChannel[c][i]) = *reinterpret_cast<const float*>(inputData + i + c);
+                        data = *reinterpret_cast<const float*>(inputData + i + (c * bytesPerSample));
+                        *reinterpret_cast<float*>(channelData.dataPerChannel[c].data() + j) = data;
                     }
+                    j += bytesPerSample;
                 }
             }
                 break;
