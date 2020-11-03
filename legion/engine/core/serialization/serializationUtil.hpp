@@ -6,7 +6,6 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
 
-#include <core/scenemanagement/scene.hpp>
 
 #include <sstream>
 #include <fstream>
@@ -114,14 +113,7 @@ namespace legion::core::serialization
         static void JSONSerialize(std::ofstream& os, T serializable)
         {
             cereal::JSONOutputArchive archive(os);// Create an output archive, Output as outputing to a string stream
-            if constexpr (std::is_same<std::remove_reference_t<T>, scenemanagement::scene>::value)
-            {
-                archive(cereal::make_nvp("SceneRoot", serializable)); // Read the data to the archive
-            }
-            else
-            {
-                archive(cereal::make_nvp("Entity", serializable)); // Read the data to the archive
-            }
+            archive(cereal::make_nvp("Entity", serializable)); // Read the data to the archive
         }
 
         /**@brief JSON deserialization from a filestream

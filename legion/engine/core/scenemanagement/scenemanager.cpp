@@ -1,5 +1,6 @@
-#include <core/scenemanagement/scenemanager.hpp>
 #include <core/scenemanagement/scene.hpp>
+#include <core/serialization/serializationUtil.hpp>
+
 
 namespace legion::core::scenemanagement
 {

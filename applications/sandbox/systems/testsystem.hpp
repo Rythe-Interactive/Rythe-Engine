@@ -444,7 +444,6 @@ public:
         cubeParams.width = 1.0f;
         cubeParams.height = 1.0f;
        setupPhysicsCRUnitTest(cubeH, uvH);
-        setupPhysicsCRUnitTest(cubeH, wireframeH);
 
 
      auto sceneEntity = createEntity();

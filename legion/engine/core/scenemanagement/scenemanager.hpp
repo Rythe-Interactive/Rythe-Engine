@@ -1,7 +1,6 @@
 #pragma once
 #include <core/engine/system.hpp>
 #include <core/ecs/component_handle.hpp>
-#include <core/serialization/serializationUtil.hpp>
 
 namespace legion::core::scenemanagement
 {

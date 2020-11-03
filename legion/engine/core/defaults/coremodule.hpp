@@ -7,7 +7,7 @@
 #include <core/filesystem/basic_resolver.hpp>
 
 #include <core/compute/context.hpp>
-#include <core/scenemanagement/scenemanager.hpp>
+#include <core/scenemanagement/scene.hpp>
 
 namespace legion::core
 {
