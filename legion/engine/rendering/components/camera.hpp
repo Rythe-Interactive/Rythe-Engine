@@ -14,16 +14,16 @@ namespace legion::rendering
 
             void bind(material_handle& materialHandle)
             {
-                if (materialHandle.has_param<math::mat4>("_L_cmr_in.view"))
-                    materialHandle.set_param("_L_cmr_in.view", view);
-                if (materialHandle.has_param<math::mat4>("_L_cmr_in.proj"))
-                    materialHandle.set_param("_L_cmr_in.proj", proj);
-                if (materialHandle.has_param<math::vec4>("_L_cmr_in.posmeta"))
-                    materialHandle.set_param("_L_cmr_in.posmeta", posmeta);
-                if (materialHandle.has_param<math::vec4>("_L_cmr_in.vdirmeta"))
-                    materialHandle.set_param("_L_cmr_in.vdirmeta", vdirmeta);
-                if (materialHandle.has_param<uint>("_L_cmr_in.idx"))
-                    materialHandle.set_param("_L_cmr_in.idx", idx);
+                if (materialHandle.has_param<math::mat4>(SV_VIEW))
+                    materialHandle.set_param(SV_VIEW, view);
+                if (materialHandle.has_param<math::mat4>(SV_PROJECT))
+                    materialHandle.set_param(SV_PROJECT, proj);
+                if (materialHandle.has_param<math::vec4>(SV_CAMPOS))
+                    materialHandle.set_param(SV_CAMPOS, posmeta);
+                if (materialHandle.has_param<math::vec4>(SV_VIEWDIR))
+                    materialHandle.set_param(SV_VIEWDIR, vdirmeta);
+                if (materialHandle.has_param<uint>(SV_CAMIDX))
+                    materialHandle.set_param(SV_CAMIDX, idx);
             }
 
             union

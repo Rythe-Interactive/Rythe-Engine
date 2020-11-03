@@ -5,9 +5,9 @@ generate(vertex, fragment)
 shader(vertex)
 {
     in vec4 color;
-    layout(location = SV_POSITION) in vec3 vertex;
-    layout(location = SV_VIEW)    uniform mat4 viewMatrix;
-    layout(location = SV_PROJECT) uniform mat4 projectionMatrix;
+    in vec3 vertex : SV_POSITION;
+    uniform mat4 viewMatrix : SV_VIEW;
+    uniform mat4 projectionMatrix : SV_PROJECT;
 
     out IO
     {

@@ -2,57 +2,57 @@
 
 namespace legion::rendering
 {
-    material_parameter_base* material_parameter_base::create_param(const std::pair<std::string, GLenum>& info)
+    material_parameter_base* material_parameter_base::create_param(const std::string& name,const GLint& location, const GLenum& type)
     {
-        switch (info.second)
+        switch (type)
         {
         case GL_FLOAT:
-            return new material_parameter<float>(info.first);
+            return new material_parameter<float>(name, location);
             break;
         case GL_FLOAT_VEC2:
-            return new material_parameter<math::vec2>(info.first);
+            return new material_parameter<math::vec2>(name, location);
             break;
         case GL_FLOAT_VEC3:
-            return new material_parameter<math::vec3>(info.first);
+            return new material_parameter<math::vec3>(name, location);
             break;
         case GL_FLOAT_VEC4:
-            return new material_parameter<math::vec4>(info.first);
+            return new material_parameter<math::vec4>(name, location);
             break;
         case GL_UNSIGNED_INT:
-            return new material_parameter<uint>(info.first);
+            return new material_parameter<uint>(name, location);
             break;
         case GL_INT:
-            return new material_parameter<int>(info.first);
+            return new material_parameter<int>(name, location);
             break;
         case GL_INT_VEC2:
-            return new material_parameter<math::ivec2>(info.first);
+            return new material_parameter<math::ivec2>(name, location);
             break;
         case GL_INT_VEC3:
-            return new material_parameter<math::ivec3>(info.first);
+            return new material_parameter<math::ivec3>(name, location);
             break;
         case GL_INT_VEC4:
-            return new material_parameter<math::ivec4>(info.first);
+            return new material_parameter<math::ivec4>(name, location);
             break;
         case GL_BOOL:
-            return new material_parameter<bool>(info.first);
+            return new material_parameter<bool>(name, location);
             break;
         case GL_BOOL_VEC2:
-            return new material_parameter<math::bvec2>(info.first);
+            return new material_parameter<math::bvec2>(name, location);
             break;
         case GL_BOOL_VEC3:
-            return new material_parameter<math::bvec3>(info.first);
+            return new material_parameter<math::bvec3>(name, location);
             break;
         case GL_BOOL_VEC4:
-            return new material_parameter<math::bvec4>(info.first);
+            return new material_parameter<math::bvec4>(name, location);
             break;
         case GL_FLOAT_MAT2:
-            return new material_parameter<math::mat2>(info.first);
+            return new material_parameter<math::mat2>(name, location);
             break;
         case GL_FLOAT_MAT3:
-            return new material_parameter<math::mat3>(info.first);
+            return new material_parameter<math::mat3>(name, location);
             break;
         case GL_FLOAT_MAT4:
-            return new material_parameter<math::mat4>(info.first);
+            return new material_parameter<math::mat4>(name, location);
             break;
         default:
             return nullptr;

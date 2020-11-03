@@ -303,11 +303,11 @@ namespace legion::rendering
             return invalid_attribute;
         }
 
-        std::vector<std::pair<std::string, GLenum>> get_uniform_info()
+        std::vector<std::tuple<std::string, GLint, GLenum>> get_uniform_info()
         {
-            std::vector<std::pair<std::string, GLenum>> info;
+            std::vector<std::tuple<std::string, GLint, GLenum>> info;
             for (auto& [_, uniform] : uniforms)
-                info.push_back(std::make_pair(uniform->get_name(), uniform->get_type()));
+                info.push_back(std::make_tuple(uniform->get_name(), uniform->get_location(), uniform->get_type()));
             return std::move(info);
         }
     };
@@ -321,7 +321,7 @@ namespace legion::rendering
 
         std::string get_name() const;
 
-        std::vector<std::pair<std::string, GLenum>> get_uniform_info() const;
+        std::vector<std::tuple<std::string, GLint, GLenum>> get_uniform_info() const;
 
         template<typename T>
         uniform<T> get_uniform(const std::string& name);

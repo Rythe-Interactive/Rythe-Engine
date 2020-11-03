@@ -474,7 +474,7 @@ namespace legion::rendering
         return ShaderCache::get_shader(id)->name;
     }
 
-    std::vector<std::pair<std::string, GLenum>> shader_handle::get_uniform_info() const
+    std::vector<std::tuple<std::string, GLint, GLenum>> shader_handle::get_uniform_info() const
     {
         return ShaderCache::get_shader(id)->get_uniform_info();
     }

@@ -23,10 +23,10 @@
 /* 11 */  #define SV_MATERIAL       SV_ALBEDO
 
 /* 0  */  #define SV_VIEW           SV_START
-/* 4  */  #define SV_PROJECT        SV_VIEW + 4
-/* 8  */  #define SV_CAMPOS         SV_PROJECT + 4
-/* 9  */  #define SV_VIEWDIR        SV_CAMPOS + 1
-/* 10 */  #define SV_CAMIDX         SV_VIEWDIR + 1
+/* 1  */  #define SV_PROJECT        SV_VIEW + 1
+/* 2  */  #define SV_CAMPOS         SV_PROJECT + 1
+/* 3  */  #define SV_VIEWDIR        SV_CAMPOS + 1
+/* 4 */  #define SV_CAMIDX         SV_VIEWDIR + 1
 
 /* 0  */  #define SV_CAMERA         SV_VIEW
 
