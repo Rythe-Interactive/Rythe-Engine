@@ -18,6 +18,9 @@ namespace legion::rendering
         case GL_FLOAT_VEC4:
             return new material_parameter<math::vec4>(info.first);
             break;
+        case GL_UNSIGNED_INT:
+            return new material_parameter<uint>(info.first);
+            break;
         case GL_INT:
             return new material_parameter<int>(info.first);
             break;
@@ -89,7 +92,7 @@ namespace legion::rendering
 
         if (shader == invalid_shader_handle)
         {
-            log::error("Tried to create a material named {} with an invalid shader file: {}.", name, shaderFile.get_path());
+            log::error("Tried to create a material named {} with an invalid shader file: {}.", name, shaderFile.get_virtual_path());
             return invalid_material_handle;
         }
 

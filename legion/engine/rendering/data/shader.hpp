@@ -3,7 +3,8 @@
 #include <string>
 #include <rendering/data/model.hpp>
 #include <rendering/data/texture.hpp>
-#include <rendering/util/bindings.h>
+#include <rendering/util/bindings.hpp>
+#include <rendering/util/settings.hpp>
 
 /**
  * @file shader.hpp
@@ -16,6 +17,9 @@ namespace legion::rendering
     struct shader;
     struct ShaderCache;
     struct shader_handle;
+
+    using shader_ilo = std::vector<std::pair<GLuint, std::string>>; // Shader intermediate language object.
+    using shader_state = std::unordered_map<GLenum, GLenum>;
 
 #pragma region shader parameters
     /**@class shader_parameter_base
@@ -83,6 +87,13 @@ namespace legion::rendering
     inline void uniform<texture>::set_value(const texture& value)
     {
 
+    }
+
+    template<>
+    inline void uniform<uint>::set_value(const uint& value)
+    {
+        if (is_valid())
+            glUniform1ui(m_location, value);
     }
 
     template<>
@@ -241,7 +252,6 @@ namespace legion::rendering
     {
         /**@brief Data-structure to hold mapping of context functions and parameters.
          */
-        using shader_state = std::unordered_map<GLenum, GLenum>;
         GLint programId;
         std::unordered_map<id_type, std::unique_ptr<shader_parameter_base>> uniforms;
         std::unordered_map<id_type, std::unique_ptr<attribute>> attributes;
@@ -332,29 +342,17 @@ namespace legion::rendering
 
     constexpr shader_handle invalid_shader_handle{ invalid_id };
 
-    struct shader_import_settings
-    {
-
-    };
-
-    constexpr shader_import_settings default_shader_settings{};
-
     class ShaderCache
     {
         friend class renderer;
         friend struct shader_handle;
     private:
-        using shader_ilo = std::vector<std::pair<GLuint, std::string>>; // Shader intermediate language object.
-        using shader_state = std::unordered_map<GLenum, GLenum>;
 
         static sparse_map<id_type, shader> m_shaders;
         static async::readonly_rw_spinlock m_shaderLock;
 
         static shader* get_shader(id_type id);
 
-        static void process_includes(std::string& shaderSource);
-        static void resolve_preprocess_features(std::string& shaderSource, shader_state& state);
-        static shader_ilo seperate_shaders(std::string& shaderSource);
         static void process_io(shader& shader, id_type id);
         static app::gl_id compile_shader(GLuint shaderType, cstring source, GLint sourceLength);
 

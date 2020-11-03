@@ -418,11 +418,16 @@ namespace legion::rendering
 
                 auto camEnt = cameraQuery[0];
 
+                position camPos = camEnt.get_component_handle<position>().read();
+                rotation camRot = camEnt.get_component_handle<rotation>().read();
+
                 math::mat4 view(1.f);
-                math::compose(view, camEnt.get_component_handle<scale>().read(), camEnt.get_component_handle<rotation>().read(), camEnt.get_component_handle<position>().read());
+                math::compose(view, camEnt.get_component_handle<scale>().read(), camRot, camPos);
                 view = math::inverse(view);
 
                 math::mat4 projection = camEnt.get_component_handle<camera>().read().get_projection(((float)viewportSize.x) / viewportSize.y);
+
+                camera::camera_input cam_input_data(view, projection, camPos, 0, camRot.forward());
 
                 for (auto ent : renderablesQuery)
                 {
@@ -453,11 +458,9 @@ namespace legion::rendering
                         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(math::mat4) * instances.size(), instances.data());
                         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+                        cam_input_data.bind(material);
                         material.bind();
                         material.prepare();
-
-                        glUniformMatrix4fv(SV_VIEW, 1, false, math::value_ptr(view));
-                        glUniformMatrix4fv(SV_PROJECT, 1, false, math::value_ptr(projection));
 
                         glBindVertexArray(mesh.vertexArrayId);
                         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);

@@ -1,30 +1,24 @@
 #version 450
 
-layout(location = SV_POSITION)    in vec3 vertex;
-layout(location = SV_MODELMATRIX) in mat4 modelMatrix;
-layout(location = SV_VIEW)    uniform mat4 viewMatrix;
-layout(location = SV_PROJECT) uniform mat4 projectionMatrix;
+generate(vertex, fragment)
 
-out IO
+#include <stdio.shinc>
+
+shader(vertex)
 {
-    vec3 position;
-} outData;
-
-void vert(void)
-{
-    outData.position = vertex;
-
-    gl_Position = (projectionMatrix * viewMatrix * modelMatrix) * vec4(vertex, 1.f);
+    void main(void)
+    {
+        gl_Position = ModelToScreenSpacePosition(position);
+        PropagateStdIO();
+    }
 }
 
-in IO
+shader(fragment)
 {
-    vec3 position;
-} inData;
+    out vec4 fragment_color;
 
-out vec4 fragment_color;
-
-void frag(void)
-{
-    fragment_color = vec4(inData.position, 1);
+    void main(void)
+    {
+        fragment_color = vec4(stdin(position), 1);
+    }
 }

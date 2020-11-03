@@ -1,5 +1,7 @@
 #include <rendering/data/shader.hpp>
+#include <rendering/util/bindings.hpp>
 #include <algorithm>
+#include <rendering/shadercompiler/shadercompiler.hpp>
 
 namespace legion::rendering
 {
@@ -12,186 +14,6 @@ namespace legion::rendering
         return &m_shaders[id];
     }
 
-    void ShaderCache::process_includes(std::string& shaderSource)
-    {
-        // WIP
-    }
-
-    void ShaderCache::resolve_preprocess_features(std::string& shaderSource, shader_state& state)
-    {
-        // Replace all the attribute binding locations.
-        common::replace_items(shaderSource, "SV_POSITION", std::to_string(SV_POSITION));
-        common::replace_items(shaderSource, "SV_NORMAL", std::to_string(SV_NORMAL));
-        common::replace_items(shaderSource, "SV_TANGENT", std::to_string(SV_TANGENT));
-        common::replace_items(shaderSource, "SV_TEXCOORD0", std::to_string(SV_TEXCOORD0));
-        common::replace_items(shaderSource, "SV_MODELMATRIX", std::to_string(SV_MODELMATRIX));
-
-        // Replace all the uniform binding locations.
-        common::replace_items(shaderSource, "SV_VIEW", std::to_string(SV_VIEW));
-        common::replace_items(shaderSource, "SV_PROJECT", std::to_string(SV_PROJECT));
-
-        // Create lookup table for the OpenGL function types that can be changed by the shader state.
-        static std::unordered_map<std::string, GLenum> funcTypes;
-        static bool funcTypesInitialized = false;
-        if (!funcTypesInitialized)
-        {
-            funcTypesInitialized = true;
-            funcTypes["DEPTH"] = GL_DEPTH_TEST;
-            funcTypes["CULL"] = GL_CULL_FACE;
-            //funcTypes["ALPHA"] = GL_BLEND;
-            //funcTypes["DITHER"] = GL_DITHER;
-        }
-
-        // Default shader state in case nothing was specified by the shader.
-        state[GL_DEPTH_TEST] = GL_GREATER;
-        state[GL_CULL_FACE] = GL_BACK;
-
-        size_type n = 0;
-        while ((n = shaderSource.find("#state", n)) != std::string::npos) // Look for any shader state tokens.
-        {
-            // Split the line up in: "#state", "function_type", "function_params..."
-            size_type end = shaderSource.find('\n', n);
-            auto tokens = common::split_string_at<' '>(shaderSource.substr(n, end - n));
-
-            //for(auto& token : tokens)
-            //    std::
-
-            if (tokens.size() < 3) // There was some syntax error here because we should have at least 3 items. (1 parameter)
-                continue;          // So in this case we want the shader to fail compilation in order to notify the programmer of his error.
-                                   // By not deleting the "#enable..." line we can guarantee that the shader won't compile properly and that
-                                   // the programmer will get to see his error.
-
-            if (!funcTypes.count(tokens[1])) // If the function type is unsupported or unknown we also want to fail compilation.
-                continue;
-
-            GLenum funcType = funcTypes.at(tokens[1]); // Fetch the function type without risking editing the lookup table.
-            GLenum param = GL_FALSE;
-
-            switch (funcType)
-            {
-            case GL_DEPTH_TEST:
-            {
-                static std::unordered_map<std::string, GLenum> params; // Initialize parameter lookup table.
-                static bool initialized = false;
-                if (!initialized)
-                {
-                    initialized = true;
-                    params["NEVER"] = GL_NEVER;
-                    params["LESS"] = GL_LESS;
-                    params["EQUAL"] = GL_EQUAL;
-                    params["LEQUAL"] = GL_LEQUAL;
-                    params["GREATER"] = GL_GREATER;
-                    params["NOTEQUAL"] = GL_NOTEQUAL;
-                    params["GEQUAL"] = GL_GEQUAL;
-                    params["ALWAYS"] = GL_ALWAYS;
-                }
-
-                param = params.at(tokens[2]);
-            }
-            break;
-            case GL_CULL_FACE:
-            {
-                static std::unordered_map<std::string, GLenum> params; // Initialize parameter lookup table.
-                static bool initialized = false;
-                if (!initialized)
-                {
-                    initialized = true;
-                    params["FRONT"] = GL_FRONT;
-                    params["BACK"] = GL_BACK;
-                    params["FRONT_AND_BACK"] = GL_FRONT_AND_BACK;
-                    params["OFF"] = GL_FALSE;
-                }
-
-                param = params.at(tokens[2]);
-            }
-            break;
-            case GL_BLEND:
-            {
-                static std::unordered_map<std::string, GLenum> params; // Initialize parameter lookup table.
-                static bool initialized = false;
-                if (!initialized)
-                {
-                    initialized = true;
-                    params["ZERO"] = GL_ZERO;
-                    params["ONE"] = GL_ONE;
-                    params["SRC_COLOR"] = GL_SRC_COLOR;
-                    params["ONE_MINUS_SRC_COLOR"] = GL_ONE_MINUS_SRC_COLOR;
-                    params["DST_COLOR"] = GL_DST_COLOR;
-                    params["ONE_MINUS_DST_COLOR"] = GL_ONE_MINUS_DST_COLOR;
-                    params["SRC_ALPHA"] = GL_SRC_ALPHA;
-                    params["ONE_MINUS_SRC_ALPHA"] = GL_ONE_MINUS_SRC_ALPHA;
-                    params["DST_ALPHA"] = GL_DST_ALPHA;
-                    params["ONE_MINUS_DST_ALPHA"] = GL_ONE_MINUS_DST_ALPHA;
-                    params["CONSTANT_COLOR"] = GL_CONSTANT_COLOR;
-                    params["ONE_MINUS_CONSTANT_COLOR"] = GL_ONE_MINUS_CONSTANT_COLOR;
-                    params["CONSTANT_ALPHA"] = GL_CONSTANT_ALPHA;
-                    params["ONE_MINUS_CONSTANT_ALPHA"] = GL_ONE_MINUS_CONSTANT_ALPHA;
-                    params["SRC_ALPHL_SATURATE"] = GL_SRC_ALPHL_SATURATE;
-                }
-                param = GL_FALSE;
-            }
-            break;
-            default:
-                param = GL_FALSE;
-                break;
-            }
-
-            state[funcType] = param;
-            shaderSource.replace(n, end - n, "");
-        }
-    }
-
-    ShaderCache::shader_ilo ShaderCache::seperate_shaders(std::string& shaderSource)
-    {
-        shader_ilo ilo;
-        std::string_view rest(shaderSource.data(), shaderSource.size());
-
-
-        // Look for the "#version 460".
-        auto versionOffset = rest.find("#version");
-        std::string versionTxt;
-
-        if (versionOffset != std::string::npos)
-        {
-            rest = std::string_view(rest.data() + versionOffset, rest.size() - versionOffset);
-            auto versionEnd = rest.find_first_of('\n');
-            versionTxt = std::string(rest.data(), versionEnd);
-            rest = std::string_view(rest.data() + versionEnd, rest.size() - versionEnd);
-        }
-
-        //  Extract the vertex shader.
-        auto vertOffset = rest.find(" vert(");
-        if (vertOffset == std::string_view::npos)
-            return {};
-
-        auto vertEnd = vertOffset + std::string_view(rest.data() + vertOffset, rest.size() - vertOffset).find_first_of('}') + 1;
-
-        ilo.push_back(std::make_pair<GLuint, std::string>(GL_VERTEX_SHADER, versionTxt + std::string(rest.data(), vertEnd).replace(vertOffset, 5, " main")));
-        rest = std::string_view(rest.data() + vertEnd, rest.size() - vertEnd);
-
-        //  Extract the geometry shader.
-        auto geomOffset = rest.find(" geom(");
-        if (geomOffset != std::string_view::npos)
-        {
-            auto geomEnd = geomOffset + std::string_view(rest.data() + geomOffset, rest.size() - geomOffset).find_first_of('}') + 1;
-
-            ilo.push_back(std::make_pair<GLuint, std::string>(GL_GEOMETRY_SHADER, versionTxt + std::string(rest.data(), geomEnd).replace(geomOffset, 5, " main")));
-            rest = std::string_view(rest.data() + geomEnd, rest.size() - geomEnd);
-        }
-
-        //  Extract the fragment shader.
-        auto fragOffset = rest.find(" frag(");
-        if (fragOffset == std::string_view::npos)
-            return {};
-
-        auto fragEnd = fragOffset + std::string_view(rest.data() + fragOffset, rest.size() - fragOffset).find_first_of('}') + 1;
-
-        ilo.push_back(std::make_pair<GLuint, std::string>(GL_FRAGMENT_SHADER, versionTxt + std::string(rest.data(), fragEnd).replace(fragOffset, 5, " main")));
-        //rest = std::string_view(rest.data() + fragEnd, rest.size() - fragEnd);
-
-        // Return the found shaders.
-        return ilo;
-    }
 
     void ShaderCache::process_io(shader& shader, id_type id)
     {
@@ -222,12 +44,14 @@ namespace legion::rendering
                 continue;
 
             // Get location and create uniform object.
-            app::gl_location location = glGetUniformLocation(shader.programId, uniformNameBuffer); 
+            app::gl_location location = glGetUniformLocation(shader.programId, uniformNameBuffer);
             shader_parameter_base* uniform = nullptr;
             switch (type)
             {
             case GL_SAMPLER_2D:
                 uniform = new rendering::uniform<texture>(id, name, type, location);
+            case GL_UNSIGNED_INT:
+                uniform = new rendering::uniform<uint>(id, name, type, location);
             case GL_FLOAT:
                 uniform = new rendering::uniform<float>(id, name, type, location);
                 break;
@@ -383,25 +207,37 @@ namespace legion::rendering
             }
         }
 
-        // Check if the file is valid to read
-        if (!file.is_valid() || !file.file_info().is_file)
+        shader_state state;
+        shader_ilo shaders;
+
+        auto result = file.get_extension();
+        if (result != common::valid)
             return invalid_shader_handle;
 
-        auto result = file.get();
-
-        if (result != common::valid)
+        if (result.decay() == ".shil")
         {
-            log::error("{}", result.get_error());
             return invalid_shader_handle;
         }
+        else if (!result.decay().empty())
+        {
+            ShaderCompiler::setErrorCallback([](const std::string& errormsg, log::severity severity)
+                {
+                    log::println(severity, errormsg);
+                });
 
-        std::string source = ((fs::basic_resource)result).to_string();
-        shader_state state;
+            byte compilerSettings = 0;
+            compilerSettings |= settings.api;
+            if (settings.debug)
+                compilerSettings |= shader_compiler_options::debug;
+            if (settings.low_power)
+                compilerSettings |= shader_compiler_options::low_power;
 
-        process_includes(source);
-        resolve_preprocess_features(source, state);
+            if (!ShaderCompiler::process(file, compilerSettings, shaders, state, detail::get_default_defines()))
+                return invalid_shader_handle;
+        }
+        else
+            return invalid_shader_handle;
 
-        shader_ilo shaders = seperate_shaders(source);
         if (shaders.empty())
             return invalid_shader_handle;
 
@@ -409,35 +245,71 @@ namespace legion::rendering
         shader.name = name;
         shader.state = state;
 
+        GLenum blendSrc = GL_SRC_ALPHA, blendDst = GL_ONE_MINUS_SRC_ALPHA;
+
         for (auto& [func, param] : state)
         {
-            if (param == GL_FALSE)
-            {
-                glDisable(func);
-                continue;
-            }
-
-            glEnable(func);
             switch (func)
             {
             case GL_DEPTH_TEST:
             {
+                if (param == GL_FALSE)
+                {
+                    glDisable(func);
+                    continue;
+                }
+
+                glEnable(func);
                 glDepthFunc(param);
             }
             break;
             case GL_CULL_FACE:
             {
+                if (param == GL_FALSE)
+                {
+                    glDisable(func);
+                    continue;
+                }
+
+                glEnable(func);
                 glCullFace(param);
             }
             break;
             case GL_BLEND:
             {
-                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                blendSrc = param;
+                blendDst = param;
+            }
+            case GL_BLEND_SRC:
+            {
+                blendSrc = param;
+            }
+            case GL_BLEND_DST:
+            {
+                blendDst = param;
+            }
+            break;
+            case GL_DITHER:
+            {
+                if (param == GL_TRUE)
+                    glEnable(GL_DITHER);
+                else
+                    glDisable(GL_DITHER);
             }
             break;
             default:
                 break;
             }
+        }
+
+        if (blendSrc == GL_FALSE || blendDst == GL_FALSE)
+        {
+            glDisable(GL_BLEND);
+        }
+        else
+        {
+            glEnable(GL_BLEND);
+            glBlendFunc(blendSrc, blendDst);
         }
 
         shader.programId = glCreateProgram();
@@ -481,6 +353,38 @@ namespace legion::rendering
 
             log::error("Error linking {} shader:\n\t{}", name, errorMessage);
             delete[] errorMessage;
+
+            for (auto& [shaderType, shaderIL] : shaders)
+            {
+                cstring shaderTypename;
+                switch (shaderType)
+                {
+                case GL_FRAGMENT_SHADER:
+                    shaderTypename = "fragment";
+                    break;
+                case GL_VERTEX_SHADER:
+                    shaderTypename = "vertex";
+                    break;
+                case GL_GEOMETRY_SHADER:
+                    shaderTypename = "geometry";
+                    break;
+                case GL_TESS_CONTROL_SHADER:
+                    shaderTypename = "tessellation control";
+                    break;
+                case GL_TESS_EVALUATION_SHADER:
+                    shaderTypename = "tessellation evaluation";
+                    break;
+                case GL_COMPUTE_SHADER:
+                    shaderTypename = "compute";
+                    break;
+                default:
+                    shaderTypename = "unknown type";
+                    break;
+                }
+
+                log::error("{}:\n\n{}\n\n", shaderTypename, shaderIL);
+
+            }
 
             for (auto& id : shaderIds)
             {
@@ -597,35 +501,71 @@ namespace legion::rendering
 
     void shader::bind()
     {
+        GLenum blendSrc = GL_SRC_ALPHA, blendDst = GL_ONE_MINUS_SRC_ALPHA;
+
         for (auto& [func, param] : state)
         {
-            if (param == GL_FALSE)
-            {
-                glDisable(func);
-                continue;
-            }
-
-            glEnable(func);
             switch (func)
             {
             case GL_DEPTH_TEST:
             {
+                if (param == GL_FALSE)
+                {
+                    glDisable(func);
+                    continue;
+                }
+
+                glEnable(func);
                 glDepthFunc(param);
             }
             break;
             case GL_CULL_FACE:
             {
+                if (param == GL_FALSE)
+                {
+                    glDisable(func);
+                    continue;
+                }
+
+                glEnable(func);
                 glCullFace(param);
             }
             break;
             case GL_BLEND:
             {
-                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                blendSrc = param;
+                blendDst = param;
+            }
+            case GL_BLEND_SRC:
+            {
+                blendSrc = param;
+            }
+            case GL_BLEND_DST:
+            {
+                blendDst = param;
+            }
+            break;
+            case GL_DITHER:
+            {
+                if (param == GL_TRUE)
+                    glEnable(GL_DITHER);
+                else
+                    glDisable(GL_DITHER);
             }
             break;
             default:
                 break;
             }
+        }
+
+        if (blendSrc == GL_FALSE || blendDst == GL_FALSE)
+        {
+            glDisable(GL_BLEND);
+        }
+        else
+        {
+            glEnable(GL_BLEND);
+            glBlendFunc(blendSrc, blendDst);
         }
 
         glUseProgram(programId);

@@ -1,14 +1,17 @@
-#pragma once
+///////////////////////
+//  Texture Mapping  //
+///////////////////////
 
 #include <math_ext.shinc>
 
+#if !defined(GEOMETRY_SHADER)
 vec2 ParallaxMap(sampler2D normalHeightMap, float scale, vec2 uv, Camera camera, mat3 tbn)
 {
 	vec3 tangentViewDir = tbn * camera.toView;
 
 	const float minLayers = 4.0;
 	const float maxLayers = 32.0;
-	float layerCount = mix(maxLayers, minLayers, dot01(vec3(0.0, 0.0, 1.0), viewDir));
+	float layerCount = round(mix(maxLayers, minLayers, dot01(vec3(0.0, 0.0, 1.0), viewDir)));
 
 	float layerDepth = 1.0 / layerCount;
 
@@ -49,6 +52,7 @@ vec2 ParallaxMap(float height, float scale, vec2 uv, Camera camera, mat3 tbn)
 	vec2 parallexOffset = (tangentViewDir.xy / tangentViewDir.z) * offset;
     return uv - parallexOffset;
 }
+#endif
 
 vec3 NormalMap(sampler2D map, vec2 uv, mat3 tbn)
 {

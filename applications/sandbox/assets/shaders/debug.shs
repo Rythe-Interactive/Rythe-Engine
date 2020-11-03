@@ -1,29 +1,37 @@
 #version 450
 
-in vec4 color;
-layout(location = SV_POSITION) in vec3 vertex;
-layout(location = SV_VIEW)    uniform mat4 viewMatrix;
-layout(location = SV_PROJECT) uniform mat4 projectionMatrix;
+generate(vertex, fragment)
 
-out IO
+shader(vertex)
 {
-    vec4 color;
-} outData;
+    in vec4 color;
+    layout(location = SV_POSITION) in vec3 vertex;
+    layout(location = SV_VIEW)    uniform mat4 viewMatrix;
+    layout(location = SV_PROJECT) uniform mat4 projectionMatrix;
 
-void vert(void)
-{
-    gl_Position = (projectionMatrix * viewMatrix) * vec4(vertex, 1.f);
-    outData.color = color;
+    out IO
+    {
+        vec4 color;
+    } outData;
+
+    void main(void)
+    {
+        gl_Position = (projectionMatrix * viewMatrix) * vec4(vertex, 1.f);
+        outData.color = color;
+    }
 }
 
-in IO
+shader(fragment)
 {
-    vec4 color;
-} inData;
+    in IO
+    {
+        vec4 color;
+    } inData;
 
-out vec4 fragment_color;
+    out vec4 fragment_color;
 
-void frag(void)
-{
-    fragment_color = inData.color;
+    void main(void)
+    {
+        fragment_color = inData.color;
+    }
 }

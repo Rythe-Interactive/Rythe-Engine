@@ -1,6 +1,8 @@
 #pragma once
 #include <rendering/data/shader.hpp>
 
+#include <memory>
+
 namespace legion::rendering
 {
     struct material;
@@ -50,21 +52,28 @@ namespace legion::rendering
         {
             m_shader = shader;
             for (auto& uniformInfo : m_shader.get_uniform_info())
-                m_parameters[nameHash(uniformInfo.first)] = material_parameter_base::create_param(uniformInfo);
+                m_parameters.emplace(std::make_pair(nameHash(uniformInfo.first), material_parameter_base::create_param(uniformInfo)));
         }
 
         std::string m_name;
 
-        std::unordered_map<id_type, material_parameter_base*> m_parameters;
+        std::unordered_map<id_type, std::unique_ptr<material_parameter_base>> m_parameters;
     public:
         template<typename T>
         void set_param(const std::string& name, const T& value)
         {
             id_type id = nameHash(name);
             if (m_parameters.count(id) && m_parameters[id]->type() == typeHash<T>())
-                static_cast<material_parameter<T>*>(m_parameters[id])->set_value(value);
+                static_cast<material_parameter<T>*>(m_parameters[id].get())->set_value(value);
             else
                 log::error("material {} does not have a parameter named {} of type {}", m_name, name, undecoratedTypeName<T>());
+        }
+
+        template<typename T>
+        bool has_param(const std::string& name)
+        {
+            id_type id = nameHash(name);
+            return m_parameters.count(id) && m_parameters[id]->type() == typeHash<T>();
         }
 
         template<typename T>
@@ -72,7 +81,7 @@ namespace legion::rendering
         {
             id_type id = nameHash(name);
             if (m_parameters.count(id) && m_parameters[id]->type() == typeHash<T>())
-                return static_cast<material_parameter<T>*>(m_parameters[id])->get_value();
+                return static_cast<material_parameter<T>*>(m_parameters[id].get())->get_value();
 
             log::error("material {} does not have a parameter named {} of type {}", m_name, name, undecoratedTypeName<T>());
             return T();
@@ -99,6 +108,9 @@ namespace legion::rendering
 
         template<typename T>
         void set_param(const std::string& name, const T& value);
+
+        template<typename T>
+        bool has_param(const std::string& name);
 
         template<typename T>
         T get_param(const std::string& name);
@@ -128,6 +140,13 @@ namespace legion::rendering
     {
         async::readonly_guard guard(MaterialCache::m_materialLock);
         MaterialCache::m_materials[id].set_param<T>(name, value);
+    }
+
+    template<typename T>
+    inline bool material_handle::has_param(const std::string& name)
+    {
+        async::readonly_guard guard(MaterialCache::m_materialLock);
+        return MaterialCache::m_materials[id].has_param<T>(name);
     }
 
     template<typename T>

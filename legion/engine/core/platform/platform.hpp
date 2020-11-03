@@ -28,8 +28,8 @@
 
 #if (!defined(LEGION_LOW_POWER) && !defined(LEGION_HIGH_PERFORMANCE))
 	/**@def LEGION_HIGH_PERFORMANCE
-	 * @brief Automatically defined if LEGION_LOW_POWER was not defined. It makes Args ask the hardware's full attention to run as fast as possible.
-	 * @note Define LEGION_LOW_POWER to run Args with minimal resources instead.
+	 * @brief Automatically defined if LEGION_LOW_POWER was not defined. It makes Legion ask the hardware's full attention to run as fast as possible.
+	 * @note Define LEGION_LOW_POWER to run Legion with minimal resources instead.
 	 */
 	#define LEGION_HIGH_PERFORMANCE
 #endif
@@ -111,7 +111,11 @@
 #  define L_HASCPPATTRIB(x) 0
 #endif
 
-
+#if L_HASCPPATTRIB(fallthrough)
+#define L_FALLTHROUGH [[fallthrough]]
+#else
+#define L_FALLTHROUGH
+#endif
 
 #if __cplusplus >= LEGION_CPP17V || L_HASCPPATTRIB(nodiscard) || defined(DOXY_INCLUDE)
 

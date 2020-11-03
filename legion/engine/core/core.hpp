@@ -26,3 +26,5 @@ namespace legion
 {
     using namespace core;
 }
+
+namespace lgn = legion;

@@ -1,69 +1,64 @@
 #version 450
 #state CULL OFF
 
-layout(location = SV_POSITION)    in vec3 vertex;
-layout(location = SV_MODELMATRIX) in mat4 modelMatrix;
+generate(vertex, geometry, fragment)
 
-layout(location = SV_VIEW)    uniform mat4 viewMatrix;
-layout(location = SV_PROJECT) uniform mat4 projectionMatrix;
+#include <stdio.shinc>
 
-out TOGEOM
+shader(vertex)
 {
-    vec3 position;
-} outData;
-
-void vert(void)
-{
-    gl_Position = (projectionMatrix * viewMatrix * modelMatrix) * vec4(vertex, 1.f);
-    outData.position = vertex;
+    void main(void)
+    {
+        gl_Position = ModelToScreenSpacePosition(position);
+        PropagateStdIO();
+    }
 }
 
-layout(triangles)in;
-layout(triangle_strip, max_vertices = 3)out;
-
-in TOGEOM
+shader(geometry)
 {
-    vec3 position;
-} inData[];
+    geometry_input(triangles)
+    geometry_output(triangle_strip, max_vertices = 3)
 
-out IO
-{
-    vec3 barycentricCoords;
-    vec3 position;
-} outData;
+    out IO
+    {
+        vec3 barycentricCoords;
+    } outData;
 
-void geom(void)
-{
-    gl_Position = gl_in[0].gl_Position;
-    outData.barycentricCoords = vec3(1, 0, 0);
-    outData.position = inData[0].position;
-    EmitVertex();
-    gl_Position = gl_in[1].gl_Position;
-    outData.barycentricCoords = vec3(0, 1, 0);
-    outData.position = inData[1].position;
-    EmitVertex();
-    gl_Position = gl_in[2].gl_Position;
-    outData.barycentricCoords = vec3(0, 0, 1);
-    outData.position = inData[2].position;
-    EmitVertex();
-    EndPrimitive();
+    void main(void)
+    {
+        gl_Position = gl_in[0].gl_Position;
+        outData.barycentricCoords = vec3(1, 0, 0);
+        PropagateStdIO(0);
+        EmitVertex();
+        gl_Position = gl_in[1].gl_Position;
+        outData.barycentricCoords = vec3(0, 1, 0);
+        PropagateStdIO(1);
+        EmitVertex();
+        gl_Position = gl_in[2].gl_Position;
+        outData.barycentricCoords = vec3(0, 0, 1);
+        PropagateStdIO(2);
+        EmitVertex();
+        EndPrimitive();
+    }
 }
 
-in IO
+shader(fragment)
 {
-    vec3 barycentricCoords;
-    vec3 position;
-} inData;
+    in IO
+    {
+        vec3 barycentricCoords;
+    } inData;
 
-out vec4 fragment_color;
+    out vec4 fragment_color;
 
-void frag(void)
-{
-    vec3 deltas = fwidth(inData.barycentricCoords);
-    vec3 adjustedCoords = smoothstep(deltas, 2* deltas, inData.barycentricCoords);
-    float linePresence = min(adjustedCoords.x, min(adjustedCoords.y, adjustedCoords.z));
-    if(linePresence > 0.9)
-        discard;
+    void main(void)
+    {
+        vec3 deltas = fwidth(inData.barycentricCoords);
+        vec3 adjustedCoords = smoothstep(deltas, 2* deltas, inData.barycentricCoords);
+        float linePresence = min(adjustedCoords.x, min(adjustedCoords.y, adjustedCoords.z));
+        if(linePresence > 0.9)
+            discard;
 
-    fragment_color = vec4(vec3(0), mix(1, 0, length(inData.position)/250.f));
+        fragment_color = vec4(vec3(0), mix(1, 0, length(stdin(position))/250.f));
+    }
 }

@@ -1,4 +1,6 @@
-#pragma once
+////////////////////////
+//  Color Correction  //
+////////////////////////
 
 vec3 GammaCorrect(vec3 color)
 {

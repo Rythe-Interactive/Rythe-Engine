@@ -52,9 +52,9 @@ namespace legion::core::filesystem
          */
         L_NODISCARD std::string get_domain() const;
 
-        /**@brief Gets full path.
+        /**@brief Gets full virtual path.
          */
-        L_NODISCARD const std::string& get_path() const;
+        L_NODISCARD const std::string& get_virtual_path() const;
 
         /**@brief Gets file extension if applicable.
          *  @note You can use legion::common::valid to check for validity.

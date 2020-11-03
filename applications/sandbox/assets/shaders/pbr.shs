@@ -1,47 +1,31 @@
 #version 450
 
-#vertex vert
-#fragment frag
+generate(fragment, vertex)
 
-all_shaders
+#include <stdio.shinc>
+#include <lighting.shinc>
+
+shader(vertex)
 {
-    #include <default_include.shinc>
-    #include <lighting.shinc>
+    void main(void)
+    {
+        gl_Position = ModelToScreenSpacePosition(position);
+        PropagateStdIO();
+    }
 }
 
-out IO
+shader(fragment)
 {
-    vec3 position;
-    vec3 normal;
-    vec3 tangent;
-    vec2 uv;
-} outData;
+    out vec4 fragment_color;
 
-void vert(void)
-{
-    gl_Position = (camera.projectionMatrix * camera.viewMatrix * modelMatrix) * vec4(vertex, 1.f);
-    outData.position = GetWorldNormal();
-    outData.normal = GetWorldPosition();
-    outData.tangent = GetWorldTangent(outData.normal);
-    outData.uv = uv;
-}
+    void main(void)
+    {
+        Camera camera = GetCamera();
+        vec3 worldNormal = GetWorldNormal();
+        Material material = ExtractMaterial(stdio(uv), camera, worldNormal, GetWorldTangent(worldNormal));
 
-in IO
-{
-    vec3 position;
-    vec3 normal;
-    vec3 tangent;
-    vec2 uv;
-} inData;
+        vec3 lighting = GetAllLighting(material, camera, GetWorldPosition(), worldNormal);
 
-out vec4 fragment_color;
-
-void frag(void)
-{
-    Camera camera = InitCamera(inData.position);
-    Material material = ExtractMaterial(inData.uv, camera, inData.normal, inData.tangent);
-
-    vec3 lighting = GetAllLighting(material, camera, inData.position, inData.normal);
-
-    fragment_color = vec4(GammaCorrect(lighting), material.albedo.a);
+        fragment_color = vec4(GammaCorrect(lighting), material.albedo.a);
+    }
 }

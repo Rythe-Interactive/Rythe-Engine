@@ -1,4 +1,7 @@
-#pragma once
+////////////////
+//  Lighting  //
+////////////////
+
 #define ENUM uint
 
 #define point_light 0
@@ -16,7 +19,7 @@ struct Light
 	vec3 position;		// 12	32
 	float angle;		// 4	44
 	vec3 colour;		// 12	48
-	float meta2;		// 4	60
+	float meta;		    // 4	60
 };
 
 struct Material
@@ -31,7 +34,7 @@ struct Material
     float F0;
 }
 
-#include <math_ext.glsl>
+#include <math_ext.shinc>
 
 float Attenuation(vec3 worldPosition, vec3 lightPosition, float attenuationRadius, float lightIntensity)
 {
@@ -159,5 +162,5 @@ vec3 GetAmbientLight(float ambientOcclusion, vec3 albedo)
 }
 
 #if !defined(NO_INPUT)
-    #include <lighting_input.glsl>
+    #include <lighting_input.shinc>
 #endif

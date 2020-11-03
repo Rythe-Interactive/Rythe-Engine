@@ -1,11 +1,13 @@
-#pragma once
+//////////////////////
+//  Lighting Input  //
+//////////////////////
 
-layout (std140) buffer LightsBuffer
+buffer LightsBuffer : auto, std140
 {
 	Light lights[];
 };
 
-layout(std140, location = SV_MATERIAL) in MaterialInput
+in MaterialInput : SV_MATERIAL, std140
 {
     sampler2D albedo;
     sampler2D normalHeight;
@@ -14,7 +16,7 @@ layout(std140, location = SV_MATERIAL) in MaterialInput
     float heightScale;
 } material_input;
 
-#include <texturemaps.glsl>
+#include <texturemaps.shinc>
 
 Material ExtractMaterial(vec2 uv, Camera camera, vec3 worldNormal, vec3 worldTangent)
 {

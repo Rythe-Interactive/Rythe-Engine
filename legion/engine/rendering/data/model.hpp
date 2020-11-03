@@ -1,6 +1,6 @@
 #pragma once
 #include <application/application.hpp>
-#include <rendering/util/bindings.h>
+#include <rendering/util/bindings.hpp>
 #include <vector>
 #include <unordered_map>
 #include <set>

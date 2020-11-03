@@ -1,4 +1,6 @@
-#pragma once
+//////////////////////
+//  Math Extension  //
+//////////////////////
 
 #define epsilon 0.00001
 #define pi 3.141592653589793
@@ -70,35 +72,35 @@ vec4 clamp01(vec4 v)
 
 float safeDiv(float a, float b)
 {
-    return a / max(b, epsilon);
+    return a / (sign(b) * max(abs(b), epsilon));
 }
 
 vec2 safeDiv(vec2 a, float b)
 {
-    return a / max(b, epsilon);
+    return a / (sign(b) * max(abs(b), epsilon));
 }
 
 vec3 safeDiv(vec3 a, float b)
 {
-    return a / max(b, epsilon);
+    return a / (sign(b) * max(abs(b), epsilon));
 }
 
 vec4 safeDiv(vec4 a, float b)
 {
-    return a / max(b, epsilon);
+    return a / (sign(b) * max(abs(b), epsilon));
 }
 
 vec2 safeDiv(vec2 a, vec2 b)
 {
-    return a / max(b, epsilon);
+    return a / (sign(b) * max(abs(b), epsilon));
 }
 
 vec3 safeDiv(vec3 a, vec3 b)
 {
-    return a / max(b, epsilon);
+    return a / (sign(b) * max(abs(b), epsilon));
 }
 
 vec4 safeDiv(vec4 a, vec4 b)
 {
-    return a / max(b, epsilon);
+    return a / (sign(b) * max(abs(b), epsilon));
 }

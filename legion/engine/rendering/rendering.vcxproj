@@ -16,6 +16,7 @@
     <ClCompile Include="data\model.cpp" />
     <ClCompile Include="data\shader.cpp" />
     <ClCompile Include="data\texture.cpp" />
+    <ClCompile Include="shadercompiler\shadercompiler.cpp" />
     <ClCompile Include="systems\renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -35,8 +36,10 @@
     <ClInclude Include="pipeline\base\pipeline.hpp" />
     <ClInclude Include="pipeline\base\renderstage.hpp" />
     <ClInclude Include="rendering.hpp" />
+    <ClInclude Include="shadercompiler\shadercompiler.hpp" />
     <ClInclude Include="systems\renderer.hpp" />
-    <ClInclude Include="util\bindings.h" />
+    <ClInclude Include="util\bindings.hpp" />
+    <ClInclude Include="util\settings.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

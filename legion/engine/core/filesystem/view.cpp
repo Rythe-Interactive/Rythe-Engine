@@ -73,7 +73,7 @@ namespace legion::core::filesystem
         return m_path.substr(0, idx + 1) + strpath_manip::separator() + strpath_manip::separator();
     }
 
-    L_NODISCARD const std::string& view::get_path() const
+    L_NODISCARD const std::string& view::get_virtual_path() const
     {
         return m_path;
     }
