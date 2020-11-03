@@ -56,6 +56,7 @@
 	#define LEGION_LINUX
 
 	#include <sys/resource.h>
+    #include <sys/types.h>
     #include <unistd.h>
 	#include <sched.h>
 	#include <errno.h>

@@ -7,12 +7,7 @@
 namespace legion::core
 {
 #if defined(LEGION_WINDOWS)
-    namespace detail
-    {
-
-    }
-
-    inline bool ShellInvoke(const std::string& command, std::string& out, std::string& err)
+ /*   inline bool ShellInvoke(const std::string& command, std::string& out, std::string& err)
     {
         if (command.empty())
             return false;
@@ -115,59 +110,85 @@ namespace legion::core
         return ShellInvoke(command, out, temp);
     }
 
-#elif defined(LEGION_LINUX)
-    inline bool ShellInvoke(const std::string& command)
+#elif defined(LEGION_LINUX)*/
+    inline bool ShellInvoke(const std::string& command, std::string& out, std::string& err)
     {
-        if (command.empty())
+        const int READ_END = 0;
+        const int WRITE_END = 1;
+
+        int outfd[2] = { 0, 0 };
+        int errfd[2] = { 0, 0 };
+
+        auto cleanup = [&]() {
+            close(outfd[READ_END]);
+            close(outfd[WRITE_END]);
+
+            close(errfd[READ_END]);
+            close(errfd[WRITE_END]);
+        };
+
+        auto rc = pipe(outfd);
+        if (rc < 0)
+        {
             return false;
-
-        std::string file;
-
-        auto seperator = command.find_first_of(' ');
-        if (seperator == std::string::npos)
-        {
-            file = command;
-        }
-        else
-        {
-            auto quote = command.find_first_of('\"');
-            if (quote != std::string::npos && seperator > quote)
-            {
-                quote = command.find_first_of('\"', quote + 1);
-
-                if (quote == std::string::npos || seperator > quote)
-                    return false;
-
-                seperator = quote + 1;
-            }
-
-            file = command.substr(0, seperator);
         }
 
-        std::vector<char*> paramsvec;
-
-        auto iss = std::stringstream(command);
-        auto str = std::string();
-
-        while (iss >> str)
+        rc = pipe(errfd);
+        if (rc < 0)
         {
-            const char* r = str.c_str();
-            char* x = new char[str.size()];
-            memcpy(x, r, str.size());
-            paramsvec.push_back(x);
+            close(outfd[READ_END]);
+            close(outfd[WRITE_END]);
+            return false;
         }
 
-        paramsvec.push_back(nullptr);
-
-        bool ret = execvp(file.c_str(), paramsvec.data()) != -1;
-
-        for (auto ptr : paramsvec)
+        auto pid = fork();
+        if (pid > 0) // PARENT
         {
-            if (ptr)
-                delete[] ptr;
+            close(outfd[WRITE_END]);  // Parent does not write to stdout
+            close(errfd[WRITE_END]);  // Parent does not write to stderr
+        }
+        else if (pid == 0) // CHILD
+        {
+            outfd[WRITE_END] = dup2(outfd[WRITE_END], STDOUT_FILENO);
+            errfd[WRITE_END] = dup2(errfd[WRITE_END], STDERR_FILENO);
+            if (outfd[WRITE_END] == -1 || errfd[WRITE_END] == -1)
+                exit(EXIT_FAILURE);
+
+            close(outfd[READ_END]);   // Child does not read from stdout
+            close(errfd[READ_END]);   // Child does not read from stderr
+
+            if (execl("/bin/bash", "bash", "-c", command.c_str(), nullptr) == -1)
+                exit(EXIT_FAILURE);
+            exit(EXIT_SUCCESS);
         }
 
-        return ret;
+        // PARENT
+        if (pid < 0)
+        {
+            cleanup();
+            return false;
+        }
+
+        int status = 0;
+        waitpid(pid, &status, 0);
+
+        std::array<char, 256> buffer;
+
+        ssize_t bytes = 0;
+        do
+        {
+            bytes = read(outfd[READ_END], buffer.data(), buffer.size());
+            out.append(buffer.data(), bytes);
+        } while (bytes > 0);
+
+        do
+        {
+            bytes = read(errfd[READ_END], buffer.data(), buffer.size());
+            err.append(buffer.data(), bytes);
+        } while (bytes > 0);
+
+        cleanup();
+        return WEXITSTATUS(status) == EXIT_SUCCESS;
     }
 #else
 #error "fuck you"
