@@ -5,7 +5,7 @@
 #include <physics/cube_collider_params.hpp>
 #include <physics/halfedgeedge.hpp>
 #include <physics/halfedgeface.hpp>
-
+#include <physics/data/convex_convergance_identifier.hpp>
 #include <physics/data/physics_manifold.hpp>
 
 namespace legion::physics
@@ -25,6 +25,16 @@ namespace legion::physics
             {
                 delete face;
             }
+        }
+
+        void AddConverganceIdentifier(const physics_contact& contact) override
+        {
+           /* converganceIdentifiers.push_back(
+                ConvexConverganceIdentifier(
+                    contact.label,
+                    contact.totalLambda,
+                    contact.tangent1Lambda,
+                    contact.tangent2Lambda,GetColliderID()));*/
         }
 
         void CheckCollision(std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold& manifold) override
@@ -162,7 +172,7 @@ namespace legion::physics
 
             HalfEdgeFace* eghf = new HalfEdgeFace(eg, math::vec3(0, 1, 0));
             halfEdgeFaces.push_back(eghf);
-            eghf->id = " eghf";
+            //eghf->id = " eghf";
 
             //[2] create face hgcd
 
@@ -178,7 +188,7 @@ namespace legion::physics
 
             HalfEdgeFace* hgcd = new HalfEdgeFace(hg, math::vec3(0, 0, -1));
             halfEdgeFaces.push_back(hgcd);
-            hgcd->id = "hgcd";
+            //hgcd->id = "hgcd";
 
             //[3] create face fhdb
 
@@ -194,7 +204,7 @@ namespace legion::physics
 
             HalfEdgeFace* fhdb = new HalfEdgeFace(fh, math::vec3(1, 0, 0));
             halfEdgeFaces.push_back(fhdb);
-            fhdb->id = "fhdb";
+            //fhdb->id = "fhdb";
 
             //[4] create face efba
 
@@ -210,7 +220,7 @@ namespace legion::physics
 
             HalfEdgeFace* efba = new HalfEdgeFace(ef, math::vec3(0, 0, 1));
             halfEdgeFaces.push_back(efba);
-            efba->id = "efba";
+            //efba->id = "efba";
 
             //[5] create face geac
 
@@ -226,7 +236,7 @@ namespace legion::physics
 
             HalfEdgeFace* geac = new HalfEdgeFace(ge, math::vec3(-1, 0, 0));
             halfEdgeFaces.push_back(geac);
-            geac->id = "geac";
+            //geac->id = "geac";
 
             //[6] create face abdc
 
@@ -242,7 +252,7 @@ namespace legion::physics
 
             HalfEdgeFace* abdc = new HalfEdgeFace(ab, math::vec3(0, -1, 0));
             halfEdgeFaces.push_back(abdc);
-            abdc->id = "abdc";
+            //abdc->id = "abdc";
 
 
             //manually connect each edge to its pair

@@ -428,11 +428,11 @@ public:
 
         //---------------------------------------------------------- Physics Collision Unit Test -------------------------------------------------------------------//
 
-        setupPhysicsCDUnitTest(cubeH, wireframeH);
+        //setupPhysicsCDUnitTest(cubeH, wireframeH);
 
         //----------- Rigidbody-Collider AABB Test------------//
 
-       setupPhysicsCRUnitTest(cubeH, uvH);
+        setupPhysicsCRUnitTest(cubeH, uvH);
 
         setupPhysicsFrictionUnitTest(cubeH, uvH);
 
@@ -1403,8 +1403,8 @@ public:
 
         }
 
-        CreateCubeStack(2, 1, 1, math::vec3(35, -1.5f, 15.0f), math::vec3(1, 1, 1)
-                ,cubeParams, 0.1f, cubeH, wireframeH);
+       /* CreateCubeStack(2, 1, 1, math::vec3(35, -1.5f, 15.0f), math::vec3(1, 1, 1)
+                ,cubeParams, 0.1f, cubeH, wireframeH);*/
 
         //10 stactk
 
@@ -1884,13 +1884,13 @@ public:
                             math::vec3 worldStart = localTransform * math::vec4(*(edgeToExecuteOn->edgePositionPtr), 1);
                             math::vec3 worldEnd = localTransform * math::vec4(*(edgeToExecuteOn->nextEdge->edgePositionPtr), 1);
 
-                            debug::drawLine(worldStart, worldEnd, usedColor, 2.0f,0.0f, useDepth);
+                            debug::drawLine(worldStart, worldEnd, usedColor, 2.0f,0.0f, false);
 
                         } while (initialEdge != currentEdge && currentEdge != nullptr);
                     }
 
 
-                    physCollider->collisionsFound.clear();
+                    //physCollider->collisionsFound.clear();
                 }
 
             }

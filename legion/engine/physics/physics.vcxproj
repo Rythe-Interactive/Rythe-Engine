@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -26,8 +26,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colliders\convexcollider.hpp" />
+    <ClInclude Include="data\contact_vertex.hpp" />
+    <ClInclude Include="data\convergance_identifier.hpp" />
     <ClInclude Include="data\convexconvexpenetrationquery.hpp" />
     <ClInclude Include="cube_collider_params.hpp" />
+    <ClInclude Include="data\convex_convergance_identifier.hpp" />
+    <ClInclude Include="data\edge_label.hpp" />
     <ClInclude Include="data\identifier.hpp" />
     <ClInclude Include="data\physics_manifold_precursor.h" />
     <ClInclude Include="data\edgepenetrationquery.hpp" />

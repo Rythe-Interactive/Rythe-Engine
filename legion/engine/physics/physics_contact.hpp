@@ -3,11 +3,20 @@
 #include <physics/components/rigidbody.hpp>
 #include <core/core.hpp>
 #include <physics/data/identifier.hpp>
+#include <physics/data/edge_label.hpp>
+
+
 
 namespace legion::physics
 {
+    class PhysicsCollider;
+
 	struct physics_contact
 	{
+        std::shared_ptr<PhysicsCollider> refCollider;
+
+        EdgeLabel label;
+
 		ecs::component_handle<rigidbody> rbRefHandle;
 		ecs::component_handle<rigidbody> rbIncHandle;
 
@@ -127,18 +136,18 @@ namespace legion::physics
 			float penetration = math::dot(RefWorldContact - IncWorldContact, -collisionNormal);
 
             //but allow some penetration for the sake of stability
-            penetration = math::min(penetration + physics::constants::baumgarteSlop, 0.0f);
+            penetration = math::min(penetration + physics::constants::baumgarteSlop, physics::constants::baumgarteSlop);
 
             float baumgarteConstraint = -penetration * physics::constants::baumgarteCoefficient * 1 / dt;
+
+            //-------------------------- Restitution Constraint ----------------------------------//
 
             //calculate restitution between the 2 bodies
             float restCoeff = rigidbody::calculateRestitution(RefRB.restitution, IncRB.restitution);
 
-            //-------------------------- Restitution Constraint ----------------------------------//
-
             math::vec3 minWaCrossRa = math::cross(-wa, Ra);
             math::vec3 WbCrossRb = math::cross(wb, Rb);
-
+            //restitution is based on the relative velocities of the 2 rigidbodies
             float restitutionConstraint = math::dot((-va + minWaCrossRa + vb + WbCrossRb),collisionNormal) * restCoeff;
             restitutionConstraint = math::max(restitutionConstraint - physics::constants::restitutionSlop, 0.0f);
 
@@ -368,6 +377,8 @@ namespace legion::physics
 			minRaCrossN = math::cross(-Ra, normal);
 			RbCrossN = math::cross(Rb, normal);
 		}
+
+
 
 		void logRigidbodyState()
 		{

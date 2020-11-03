@@ -14,12 +14,14 @@ namespace legion::physics::constants
 
 	static constexpr float faceToEdgePenetrationBias = 0.01f;
 
-	static constexpr float baumgarteCoefficient = 0.25f;
+	static constexpr float baumgarteCoefficient = 0.3f;
 
-    static constexpr float baumgarteSlop = 0.005f;
+    static constexpr float baumgarteSlop = 0.0025f;
 
     static constexpr float restitutionSlop = 0.5f;
 
-    static constexpr float contactOffset = 0.01f;
+    static constexpr float contactOffset = 0.005f;
+
+    static constexpr float sutherlandHodgmanClippingThreshold = 0.01f;
 
 }

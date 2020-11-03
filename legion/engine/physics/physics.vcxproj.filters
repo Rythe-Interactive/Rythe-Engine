@@ -104,5 +104,17 @@
     <ClInclude Include="physicsconstants.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="data\edge_label.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\contact_vertex.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\convergance_identifier.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\convex_convergance_identifier.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,19 +3,12 @@
 #include <core/core.hpp>
 #include <memory>
 #include <physics/halfedgeface.hpp>
-
+#include <physics/data/convergance_identifier.hpp>
+#include <physics/physics_contact.hpp>
 
 namespace legion::physics
 {
 
-    //for debugging purposes only
-    struct TempLine
-    {
-        math::vec3 start;
-        math::vec3 end;
-    };
-
-    struct physicsComponent;
     struct physics_manifold;
     class ConvexCollider;
 
@@ -24,7 +17,20 @@ namespace legion::physics
     {
     public:
 
-        PhysicsCollider() = default;
+        std::vector<std::unique_ptr<ConverganceIdentifier>> converganceIdentifiers;
+
+        PhysicsCollider()
+        {
+            static int colliderID = 0;
+
+            id = colliderID;
+
+            colliderID++;
+        }
+
+        virtual void AddConverganceIdentifier(const  physics_contact& contact) = 0;
+            
+      
 
         /** @brief given a PhysicsCollider, CheckCollision calls "CheckCollisionWith". Both colliders are then passed through
         * to the correct "CheckCollisionWith" function with double dispatch.
@@ -38,6 +44,13 @@ namespace legion::physics
         * the information is then passed to the manifold.
         */
         virtual void CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) {};
+
+        /** @brief Gets the unique id of this collider
+        */
+        int GetColliderID() const
+        {
+            return id;
+        }
 
         /** @brief given a PhysicsCollider, PopulateContactPoints calls PopulateContactPointsWith. Both colliders are then passed through
         * to the corrent FillManifoldWith function with double dispatch.
@@ -63,8 +76,7 @@ namespace legion::physics
             return dummyHalfEdges;
         }
 
-        // this is only here for debug reasons
-        std::vector<TempLine> collisionsFound;
+
 
         math::vec3 GetLocalCentroid()
         {
@@ -76,6 +88,8 @@ namespace legion::physics
         math::vec3 localColliderCentroid = math::vec3(0, 0, 0);
 
     private:
+
+        int id = -1;
        //this is not used, its mostly for debug reasons
         std::vector<HalfEdgeFace*> dummyHalfEdges;
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <core/core.hpp>
+#include <physics/data/edge_label.hpp>
 #include <physics/halfedgeface.hpp>
 
 namespace legion::physics
@@ -11,6 +12,8 @@ namespace legion::physics
 		HalfEdgeEdge* prevEdge = nullptr;
 
 		HalfEdgeFace* face = nullptr;
+
+        EdgeLabel label;
         
 		math::vec3* edgePositionPtr;
         std::string id;
