@@ -25,7 +25,7 @@ namespace legion::core::ecs
      */
     class component_handle_base
     {
-        friend class Engine;
+        friend class legion::core::Engine;
     public:
         // Entity that owns this component.
         entity_handle entity;
