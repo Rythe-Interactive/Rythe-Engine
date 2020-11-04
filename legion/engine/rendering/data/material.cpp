@@ -6,6 +6,8 @@ namespace legion::rendering
     {
         switch (type)
         {
+        case GL_SAMPLER_2D:
+            return new material_parameter<texture_handle>(name, location);
         case GL_FLOAT:
             return new material_parameter<float>(name, location);
             break;

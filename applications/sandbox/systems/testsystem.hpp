@@ -230,6 +230,7 @@ public:
         rendering::material_handle vertexH;
 
         rendering::material_handle uvH;
+        rendering::material_handle textureH;
         rendering::material_handle normalH;
         rendering::material_handle skyboxH;
         rendering::material_handle floorMH;
@@ -250,6 +251,10 @@ public:
             wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.shs"_view);
             vertexH = rendering::MaterialCache::create_material("vertex", "assets://shaders/position.shs"_view);
             uvH = rendering::MaterialCache::create_material("uv", "assets://shaders/uv.shs"_view);
+
+            textureH = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
+            textureH.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
+
             normalH = rendering::MaterialCache::create_material("normal", "assets://shaders/normal.shs"_view);
             skyboxH = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.shs"_view);
             floorMH = rendering::MaterialCache::create_material("floor", "assets://shaders/groundplane.shs"_view);
@@ -316,7 +321,7 @@ public:
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable, sah>({ submeshtestH, normalH }, {});
+            ent.add_components<rendering::renderable, sah>({ submeshtestH, textureH }, {});
             ent.add_components<transform>(position(0, 10, 0), rotation(), scale());
         }
 

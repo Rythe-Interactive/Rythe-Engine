@@ -49,9 +49,11 @@ namespace legion::rendering
             switch (type)
             {
             case GL_SAMPLER_2D:
-                uniform = new rendering::uniform<texture>(id, name, type, location);
+                uniform = new rendering::uniform<texture_handle>(id, name, type, location);
+                break;
             case GL_UNSIGNED_INT:
                 uniform = new rendering::uniform<uint>(id, name, type, location);
+                break;
             case GL_FLOAT:
                 uniform = new rendering::uniform<float>(id, name, type, location);
                 break;

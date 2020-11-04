@@ -7,7 +7,7 @@
 namespace legion::core
 {
 #if defined(LEGION_WINDOWS)
- /*   inline bool ShellInvoke(const std::string& command, std::string& out, std::string& err)
+    inline bool ShellInvoke(const std::string& command, std::string& out, std::string& err)
     {
         if (command.empty())
             return false;
@@ -110,7 +110,7 @@ namespace legion::core
         return ShellInvoke(command, out, temp);
     }
 
-#elif defined(LEGION_LINUX)*/
+#elif defined(LEGION_LINUX)
     inline bool ShellInvoke(const std::string& command, std::string& out, std::string& err)
     {
         const int READ_END = 0;

@@ -101,12 +101,12 @@ namespace legion::rendering
      */
     struct texture_handle
     {
-        id_type id;
+        id_type id = invalid_id;
 
-        texture_data get_data();
-        const texture& get_texture();
-        bool operator==(const texture_handle& other) { return id == other.id; }
-        operator id_type() { return id; }
+        texture_data get_data() const;
+        const texture& get_texture() const;
+        bool operator==(const texture_handle& other) const { return id == other.id; }
+        operator id_type() const { return id; }
     };
 
     /**@brief Default invalid texture handle.
@@ -151,7 +151,7 @@ namespace legion::rendering
 
         static const texture& get_texture(id_type id);
         static texture_data get_data(id_type id);
-
+        static texture_handle m_invalidTexture;
     public:
         /**@brief Create a new texture and load it from a file if a texture with the same name doesn't exist yet.
          * @param name Identifying name for the texture.
@@ -160,20 +160,21 @@ namespace legion::rendering
          * @return texture_handle A valid handle to the newly created texture if it succeeds, invalid_texture_handle if it fails.
          */
         static texture_handle create_texture(const std::string& name, const fs::view& file, texture_import_settings settings = default_texture_settings);
+        static texture_handle create_texture(const fs::view& file, texture_import_settings settings = default_texture_settings);
 
         /**@brief Create a new texture from an image if a texture with the same name doesn't exist yet.
          * @param name Name of the image and identifying name for the texture.
          * @param settings Settings to pass on to the import pipeline.
          * @return texture_handle A valid handle to the newly created texture if it succeeds, invalid_texture_handle if it fails.
          */
-        static texture_handle create_texture(const std::string& name, texture_import_settings settings = default_texture_settings);
+        static texture_handle create_texture_from_image(const std::string& name, texture_import_settings settings = default_texture_settings);
 
         /**@brief Create a new texture from an image if a texture with the same name doesn't exist yet.
          * @param image_handle Image to load from. The identifying name for the texture will be the same as the name of the image.
          * @param settings Settings to pass on to the import pipeline.
          * @return texture_handle A valid handle to the newly created texture if it succeeds, invalid_texture_handle if it fails.
          */
-        static texture_handle create_texture(image_handle image, texture_import_settings settings = default_texture_settings);
+        static texture_handle create_texture_from_image(image_handle image, texture_import_settings settings = default_texture_settings);
 
         /**@brief Returns a handle to a texture with a certain name. Will return invalid_texture_handle if the requested texture doesn't exist.
          */

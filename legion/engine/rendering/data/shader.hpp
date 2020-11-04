@@ -84,9 +84,15 @@ namespace legion::rendering
     }
 
     template<>
-    inline void uniform<texture>::set_value(const texture& value)
+    inline void uniform<texture_handle>::set_value(const texture_handle& value)
     {
-
+        if (is_valid())
+        {
+            auto texture = value.get_texture();
+            glActiveTexture(GL_TEXTURE0 + m_location);
+            glBindTexture(GL_TEXTURE_2D, texture.textureId);
+            glUniform1i(m_location, m_location);
+        }
     }
 
     template<>
