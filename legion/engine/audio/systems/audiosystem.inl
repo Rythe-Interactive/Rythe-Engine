@@ -54,10 +54,28 @@ namespace legion::audio
 		bindToEvent<events::component_destruction<audio_source>, &AudioSystem::onAudioSourceComponentDestroy>();
 		bindToEvent<events::component_creation<audio_listener>, &AudioSystem::onAudioListenerComponentCreate>();
 		bindToEvent<events::component_destruction<audio_listener>, &AudioSystem::onAudioListenerComponentDestroy>();
+		bindToEvent<events::exit, &AudioSystem::onEngineExit>();
 
 		// Release context on this thread
 		alcMakeContextCurrent(nullptr);
-		mp3_audio_loader::context = alcContext;
+	}
+
+	inline void AudioSystem::onEngineExit(events::exit* event)
+	{
+		async::readwrite_guard guard(contextLock);
+		alcMakeContextCurrent(alcContext);
+
+		for (auto entity : sourceQuery)
+		{
+			auto sourceHandle = entity.get_component_handle<audio_source>();
+			sourceHandle.destroy();
+		}
+
+		alDevice = alcGetContextsDevice(alcContext);
+		alcMakeContextCurrent(nullptr);
+		AudioSegmentCache::unload();
+		alcDestroyContext(alcContext);
+		alcCloseDevice(alDevice);
 	}
 
 	inline AudioSystem::~AudioSystem()
@@ -82,7 +100,7 @@ namespace legion::audio
 
 	inline void AudioSystem::update(time::span deltatime)
 	{
-		async::readonly_guard guard(contextLock);
+		async::readwrite_guard guard(contextLock);
 		alcMakeContextCurrent(alcContext);
 
 		for (auto entity : sourceQuery)
@@ -98,6 +116,28 @@ namespace legion::audio
 			alSource3f(source.m_sourceId, AL_VELOCITY, vel.x, vel.y, vel.z);
 
 			using change = audio_source::sound_properties;
+
+			if (source.m_changes & change::audioHandle)
+			{
+				using state = audio::audio_source::playstate;
+				if (source.m_playState != state::stopped)
+				{
+					alSourceStop(source.m_sourceId);
+					source.m_playState = state::stopped;
+				}
+				if (source.m_audio_handle) // audio has segment
+				{
+					auto [segmentLock, segment] = source.m_audio_handle.get();
+					async::readwrite_guard segmentGuard(segmentLock);
+					alSourcei(source.m_sourceId, AL_BUFFER, segment.audioBufferId);
+				}
+				else // audio has no segment
+				{
+					source.m_nextPlayState = state::stopped;
+					// Remove buffer from audio source
+					alSourcei(source.m_sourceId, AL_BUFFER, NULL);
+				}
+			}
 			if (source.m_changes & change::pitch)
 			{
 				// Pitch has changed
@@ -111,30 +151,43 @@ namespace legion::audio
 			if (source.m_changes & change::playState)
 			{
 				using state = audio::audio_source::playstate;
-				// Playstate has changed
-				if (source.m_nextPlayState == state::playing)
+				if (source.m_audio_handle)
 				{
-					source.m_playState = state::playing;
-					alSourcePlay(source.m_sourceId);
+					// Playstate has changed
+					if (source.m_nextPlayState == state::playing)
+					{
+						source.m_playState = state::playing;
+						alSourcePlay(source.m_sourceId);
+					}
+					else if (source.m_nextPlayState == state::paused)
+					{
+						source.m_playState = state::paused;
+						alSourcePause(source.m_sourceId);
+					}
+					else if (source.m_nextPlayState == state::stopped)
+					{
+						source.m_playState = state::stopped;
+						alSourceStop(source.m_sourceId);
+					}
 				}
-				else if (source.m_nextPlayState == state::paused)
+				else
 				{
-					source.m_playState = state::paused;
-					alSourcePause(source.m_sourceId);
-				}
-				else if (source.m_nextPlayState == state::stopped)
-				{
-					source.m_playState = state::stopped;
-					alSourceStop(source.m_sourceId);
+					source.m_nextPlayState = state::stopped;
 				}
 			}
 			if (source.m_changes & change::doRewind)
 			{
 				alSourceRewind(source.m_sourceId);
 			}
+			if (source.m_changes & change::rollOffFactor)
+			{
+				alSourcef(source.m_sourceId, AL_ROLLOFF_FACTOR, source.m_rolloffFactor);
+			}
 
 			source.clearChanges();
 			sourceHandle.write(source);
+
+			openal_error();
 		}
 
 		if (m_listenerEnt)
@@ -172,6 +225,10 @@ namespace legion::audio
 	{
 		auto handle = event->entity.get_component_handle<audio_source>();
 		m_sourcePositions.erase(handle);
+		audio_source a = handle.read();
+		if(a.m_playState != audio_source::playstate::stopped) alSourceStop(a.m_sourceId);
+		alSourcei(a.m_sourceId, AL_BUFFER, NULL);
+		alDeleteSources(1, &a.m_sourceId); // Clear source
 		--sourceCount;
 	}
 
@@ -226,7 +283,7 @@ namespace legion::audio
 		alSourcef(source.m_sourceId, AL_LOOPING, AL_TRUE);
 
 		// 3D audio stuffs
-		alSourcef(source.m_sourceId, AL_ROLLOFF_FACTOR, 2.0f);
+		alSourcef(source.m_sourceId, AL_ROLLOFF_FACTOR, 1.0f);
 		alSourcef(source.m_sourceId, AL_REFERENCE_DISTANCE, 6);
 		alSourcef(source.m_sourceId, AL_MAX_DISTANCE, 15);
 
@@ -235,18 +292,13 @@ namespace legion::audio
 		alSource3f(source.m_sourceId, AL_POSITION, 0, 0, 0);
 		alSource3f(source.m_sourceId, AL_VELOCITY, 0, 0, 0);
 
-		// Moved gen buffers to audio_importers.cpp
-		//alGenBuffers((ALuint)1, &source.m_audioBufferId);
-
-		auto [lock, segment] = source.m_audio_handle.get();
-
-		// Moved alBufferData to audio_importers.cpp
-		/*{
-			async::readonly_guard guard(lock);
-			alBufferData(source.m_audioBufferId, AL_FORMAT_MONO16, segment.buffer, segment.samples * sizeof(int16), segment.sampleRate);
-		}*/
-		
-		alSourcei(source.m_sourceId, AL_BUFFER, segment.audioBufferId);
+		if (source.m_audio_handle)
+		{
+			auto [segmentLock, segment] = source.m_audio_handle.get();
+			async::readwrite_guard segmentGuard(segmentLock);
+			alSourcei(source.m_sourceId, AL_BUFFER, segment.audioBufferId);
+		}
+		source.clearChanges();
 		alcMakeContextCurrent(nullptr);
 	}
 

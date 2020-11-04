@@ -53,13 +53,7 @@
     <ClInclude Include="physicsmodule.hpp">
       <Filter>module</Filter>
     </ClInclude>
-    <ClInclude Include="physicsconstants.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="data\physics_manifold_precursor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="physics_contact.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="components\physics_component.hpp">
@@ -83,12 +77,6 @@
     <ClInclude Include="halfedgeface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\convexconvexpenetrationquery.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\edgepenetrationquery.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="data\penetrationquery.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -96,6 +84,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\pointer_encapsulator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\convexconvexpenetrationquery.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\edgepenetrationquery.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="physics.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\identifier.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="physics_contact.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="physicsconstants.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

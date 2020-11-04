@@ -18,8 +18,7 @@ namespace legion::audio
     inline void openal_error()
     {
         ALCenum error;
-        error = alGetError();
-        if (error != AL_NO_ERROR)
+        while ((error = alGetError()) != AL_NO_ERROR)
             legion::log::warn("ERROR: OpenAl error: {}", error);
     }
 
@@ -36,6 +35,8 @@ namespace legion::audio
         /**@brief Function for initializing the system.
          */
         virtual void setup();
+
+        void onEngineExit(events::exit* event);
 
         /**
         * @brief Function callback for audio_source component creation.
@@ -66,6 +67,7 @@ namespace legion::audio
         static void setDistanceModel(ALenum distanceModel);
 
         static async::readonly_rw_spinlock contextLock;
+        static ALCcontext* alcContext;
     private:
         void initSource(audio_source& source);
 
@@ -83,7 +85,6 @@ namespace legion::audio
         std::unordered_map <ecs::component_handle<audio_source>, position > m_sourcePositions;
 
         static ALCdevice* alDevice;
-        static ALCcontext* alcContext;
         static unsigned int sourceCount;
         static unsigned int listenerCount;
     };

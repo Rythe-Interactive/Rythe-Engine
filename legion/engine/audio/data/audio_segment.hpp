@@ -1,5 +1,6 @@
 #pragma once
 #include <core/core.hpp>
+#include <mutex>
 #if !defined(DOXY_EXCLUDE)
 #include <AL/al.h>
 #include <AL/alc.h>
@@ -9,20 +10,52 @@ namespace legion::audio
 	struct audio_segment
 	{
 	public:
-        int16* data;
         ALuint audioBufferId;
 
         /* Channels included, byte size = samples*sizeof(int16) */
         size_type samples; 
         int channels, sampleRate, layer, avg_bitrate_kbps;
+
+        audio_segment() = default;
+
+        audio_segment(byte* data, ALuint bufferId, size_type samples, int channels, int sampleRate, int layer, int avg_bitRate);
+
+        audio_segment(const audio_segment& other);
+
+        audio_segment(audio_segment&& other);
+
+        audio_segment& operator=(const audio_segment& other);
+
+        audio_segment& operator=(audio_segment&& other);
+
+        ~audio_segment();
+
+        // Read-Write
+        byte* getData()
+        {
+            return m_data;
+        }
+
+        // Read only
+        const byte* getData() const
+        {
+            return m_data;
+        }
+
+    private:
+        static std::unordered_map<id_type, uint> m_refs;
+        static std::mutex m_refsLock;
+        static id_type m_lastId;
+        id_type m_id;
+        byte* m_data;
 	};
 
     struct audio_import_settings
     {
-        
+        bool force_mono;
     };
 
-    const audio_import_settings default_audio_import_settings{};
+    const audio_import_settings default_audio_import_settings{ false };
 
     struct audio_segment_handle
     {
@@ -39,6 +72,8 @@ namespace legion::audio
         friend struct audio_segment_handle;
     public:
         static audio_segment_handle createAudioSegment(const std::string& name, const fs::view& file, audio_import_settings settings = default_audio_import_settings);
+        static audio_segment_handle getAudioSegment(const std::string& name);
+        static void unload();
     private:
         // Unorderer map to store all unique audio segments
         // Each audio segment has a unique id using name hash
