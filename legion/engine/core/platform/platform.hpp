@@ -13,77 +13,78 @@
 #define LEGION_RELEASE_VALUE 2
 
 #if defined(_DEBUG) || defined(DEBUG)
-	/**@def LEGION_DEBUG
-	 * @brief Defined in debug mode.
-	 */
-	#define LEGION_DEBUG
+    /**@def LEGION_DEBUG
+     * @brief Defined in debug mode.
+     */
+    #define LEGION_DEBUG
     #define LEGION_CONFIGURATION LEGION_DEBUG_VALUE
 #else
-	/**@def LEGION_RELEASE
-	 * @brief Defined in release mode.
-	 */
-	#define LEGION_RELEASE 
+    /**@def LEGION_RELEASE
+     * @brief Defined in release mode.
+     */
+    #define LEGION_RELEASE 
     #define LEGION_CONFIGURATION LEGION_RELEASE_VALUE
 #endif
 
 #if (!defined(LEGION_LOW_POWER) && !defined(LEGION_HIGH_PERFORMANCE))
-	/**@def LEGION_HIGH_PERFORMANCE
-	 * @brief Automatically defined if LEGION_LOW_POWER was not defined. It makes Legion ask the hardware's full attention to run as fast as possible.
-	 * @note Define LEGION_LOW_POWER to run Legion with minimal resources instead.
-	 */
-	#define LEGION_HIGH_PERFORMANCE
+    /**@def LEGION_HIGH_PERFORMANCE
+     * @brief Automatically defined if LEGION_LOW_POWER was not defined. It makes Legion ask the hardware's full attention to run as fast as possible.
+     * @note Define LEGION_LOW_POWER to run Legion with minimal resources instead.
+     */
+    #define LEGION_HIGH_PERFORMANCE
 #endif
 
 
 #if defined(_MSC_VER)
-	/**@def LEGION_WINDOWS
-	 * @brief Defined when compiling for Windows.
-	 */
-	#define LEGION_WINDOWS
+    /**@def LEGION_WINDOWS
+     * @brief Defined when compiling for Windows.
+     */
+    #define LEGION_WINDOWS
 
-	#define WIN32_LEAN_AND_MEAN
-	#define VC_EXTRALEAN
-	#define NOMINMAX
-	#include <Windows.h>
-	#include <shellapi.h>
+    #define WIN32_LEAN_AND_MEAN
+    #define VC_EXTRALEAN
+    #define NOMINMAX
+    #include <Windows.h>
+    #include <shellapi.h>
     #include <shlobj.h>
     #include <shlwapi.h>
     #include <objbase.h>
 #elif defined(__linux__)
-	/**@def LEGION_LINUX
-	 * @brief Defined when compiling for Linux.
-	 */
-	#define LEGION_LINUX
+    /**@def LEGION_LINUX
+     * @brief Defined when compiling for Linux.
+     */
+    #define LEGION_LINUX
 
-	#include <sys/resource.h>
+    #include <sys/resource.h>
     #include <sys/types.h>
+    #include <sys/wait.h>
     #include <unistd.h>
-	#include <sched.h>
-	#include <errno.h>
+    #include <sched.h>
+    #include <errno.h>
 #endif
 
 #ifndef __FUNC__
-	#define __FUNC__ __func__ 
+    #define __FUNC__ __func__ 
 #endif
 
 #ifndef __FULL_FUNC__
-	#if defined(LEGION_WINDOWS)
-		#define __FULL_FUNC__ __FUNCSIG__
-	#elif defined(__linux__)
-		#define __FULL_FUNC__ __PRETTY_FUNCTION__
-	#else
-		#define __FULL_FUNC__ __func__
-	#endif
+    #if defined(LEGION_WINDOWS)
+        #define __FULL_FUNC__ __FUNCSIG__
+    #elif defined(__linux__)
+        #define __FULL_FUNC__ __PRETTY_FUNCTION__
+    #else
+        #define __FULL_FUNC__ __func__
+    #endif
 #endif
 
 
 #if (defined(LEGION_WINDOWS) && !defined(LEGION_WINDOWS_USE_CDECL)) || defined (DOXY_INCLUDE)
-	/**@def LEGION_CCONV
-	 * @brief the calling convention exported functions will use in the args engine
-	 */
-	#define LEGION_CCONV __fastcall
+    /**@def LEGION_CCONV
+     * @brief the calling convention exported functions will use in the args engine
+     */
+    #define LEGION_CCONV __fastcall
 #else
-	#define LEGION_CCONV __cdecl
+    #define LEGION_CCONV __cdecl
 #endif
 
 /**@def NO_MANGLING

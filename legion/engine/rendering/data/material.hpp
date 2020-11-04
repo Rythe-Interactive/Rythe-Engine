@@ -127,7 +127,7 @@ namespace legion::rendering
             if (m_parameters.count(id) && m_parameters[id]->type() == typeHash<T>())
                 return static_cast<material_parameter<T>*>(m_parameters[id].get())->get_value();
 
-            log::error("material {} does not have a parameter at location {} of type {}", m_name, name, undecoratedTypeName<T>());
+            log::error("material {} does not have a parameter at location {} of type {}", m_name, location, undecoratedTypeName<T>());
             return T();
         }
 
