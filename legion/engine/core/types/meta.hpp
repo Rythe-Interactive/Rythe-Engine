@@ -1,10 +1,16 @@
 #pragma once
+#include <deque>
+#include <vector>
+#include <list>
+#include <string>
+#include <array>
+#include <queue>
 #include <type_traits>
 
 namespace legion::core
 {
-	template<typename derived_type, typename base_type>
-	using inherits_from = typename std::enable_if<std::is_base_of<base_type, derived_type>::value, int>::type;
+    template<typename derived_type, typename base_type>
+    using inherits_from = typename std::enable_if<std::is_base_of<base_type, derived_type>::value, int>::type;
 
     template<typename derived_type, typename base_type>
     using doesnt_inherit_from = typename std::enable_if<!std::is_base_of<base_type, derived_type>::value, int>::type;
@@ -36,16 +42,49 @@ namespace legion::core
 
     template <class T>
     struct is_vector
-    : public std::false_type
+        : public std::false_type
     {
     };
 
     template <class T>
     struct is_vector<std::vector<T>>
-    : public std::true_type
+        : public std::true_type
     {
     };
+
+
+    template <class T>
+    struct is_container
+        : public std::false_type
+    {};
+
+    template <class T>
+    struct is_container<std::vector<T>>
+        : public std::true_type
+    {};
+
+    template <class T>
+    struct is_container<std::basic_string<T>>
+        :public std::true_type
+    {};
+
+    template <class T>
+    struct is_container<std::deque<T>>
+        :public std::true_type
+    {};
+
+    template <class T>
+    struct is_container<std::list<T>>
+        :public std::true_type
+    {};
+
+    template <class T,size_t N>
+    struct is_container<std::array<T,N>>
+        :public std::true_type
+    {};
+
+    template <class T>
+    struct is_container<std::queue<T>>
+        :public std::true_type
+    {};
 }
-
-
-

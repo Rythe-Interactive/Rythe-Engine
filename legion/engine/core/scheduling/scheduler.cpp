@@ -2,6 +2,8 @@
 
 #include <core/logging/logging.hpp>
 
+#include <optick/optick.h>
+
 namespace legion::core::scheduling
 {
     constexpr size_type reserved_threads = 4;
@@ -32,6 +34,7 @@ namespace legion::core::scheduling
 
         while (!(*exit))
         {
+            OPTICK_FRAME("Worker");
             Scheduler::runnable instruction{};
 
             {
@@ -78,6 +81,7 @@ namespace legion::core::scheduling
 
     Scheduler::Scheduler(events::EventBus* eventBus, bool lowPower, uint minThreads) : m_eventBus(eventBus), m_lowPower(lowPower)
     {
+        OPTICK_APP("Legion");
         legion::core::log::impl::thread_names[std::this_thread::get_id()] = "Initialization";
 
         if (m_availableThreads < minThreads)
@@ -97,6 +101,8 @@ namespace legion::core::scheduling
 
     Scheduler::~Scheduler()
     {
+        OPTICK_SHUTDOWN();
+
         for (auto [_, processChain] : m_processChains)
             processChain.exit();
 

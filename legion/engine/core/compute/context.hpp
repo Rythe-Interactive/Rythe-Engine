@@ -65,6 +65,15 @@ public:
         return Buffer(m_context,data,size,type,std::forward<std::string>(name));
     }
 
+
+    /**
+     * @brief Returns the OpenCL device-id associated with this context
+     */
+    static cl_device_id getDeviceId()
+    {
+        return m_device_id;
+    }
+
 private:
 
     static bool m_initialized;
