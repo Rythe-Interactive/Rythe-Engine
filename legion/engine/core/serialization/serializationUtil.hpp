@@ -58,9 +58,9 @@ namespace legion::core::serialization
     {
     public:
         /**@brief JSON serialization from a stringstream
-           *@param os stringstream the ouput for the serialized object
-           *@param serializable template type that represents the object that needs to be serialized
-           */
+         * @param os stringstream the ouput for the serialized object
+         * @param serializable template type that represents the object that needs to be serialized
+         */
         template<class T>
         static void JSONSerialize(std::stringstream os, T serializable)
         {
@@ -69,9 +69,9 @@ namespace legion::core::serialization
         }
 
         /**@brief JSON deserialization from a stringstream
-           *@param is stringstream the input of a serialized object
-           *@returns the the deserialized object as type T
-           */
+         * @param is stringstream the input of a serialized object
+         * @returns the the deserialized object as type T
+         */
         template<class T>
         static T JSONDeserialize(std::stringstream is)
         {
@@ -82,9 +82,9 @@ namespace legion::core::serialization
         }
 
         /**@brief Binary serialization from a stringstream
-           *@param os stringstream the ouput for the serialized object
-           *@param serializable template type that represents the object that needs to be serialized
-           */
+         * @param os stringstream the ouput for the serialized object
+         * @param serializable template type that represents the object that needs to be serialized
+         */
         template<class T>
         static void BinarySerialize(std::stringstream os, T serializable)
         {
@@ -93,9 +93,9 @@ namespace legion::core::serialization
         }
 
         /**@brief Binary deserialization from a stringstream
-           *@param is stringstream the input of a serialized object
-           *@returns the the deserialized object as type T
-           */
+         * @param is stringstream the input of a serialized object
+         * @returns the the deserialized object as type T
+         */
         template<class T>
         static T BinaryDeserialize(std::stringstream is)
         {
@@ -106,9 +106,9 @@ namespace legion::core::serialization
         }
 
         /**@brief JSON serialization from a filestream
-           *@param os filestream  the ouput for the serialized object
-           *@param serializable template type that represents the object that needs to be serialized
-           */
+         * @param os filestream  the ouput for the serialized object
+         * @param serializable template type that represents the object that needs to be serialized
+         */
         template<class T>
         static void JSONSerialize(std::ofstream& os, T serializable)
         {
@@ -117,9 +117,9 @@ namespace legion::core::serialization
         }
 
         /**@brief JSON deserialization from a filestream
-           *@param is filestream the input of a serialized object
-           *@returns the the deserialized object as type T
-           */
+         * @param is filestream the input of a serialized object
+         * @returns the the deserialized object as type T
+         */
         template<class T>
         static T JSONDeserialize(std::ifstream& is)
         {
@@ -130,9 +130,9 @@ namespace legion::core::serialization
         }
 
         /**@brief Binary serialization from a filestream
-           *@param os filestream the ouput for the serialized object
-           *@param serializable template type that represents the object that needs to be serialized
-           */
+         * @param os filestream the ouput for the serialized object
+         * @param serializable template type that represents the object that needs to be serialized
+         */
         template<class T>
         static void BinarySerialize(std::ofstream& os, T serializable)
         {
@@ -141,9 +141,9 @@ namespace legion::core::serialization
         }
 
         /**@brief Binary deserialization from a filestream
-           *@param is filestream the input of a serialized object
-           *@returns the the deserialized object as type T
-           */
+         * @param is filestream the input of a serialized object
+         * @returns the the deserialized object as type T
+         */
         template<class T>
         static T BinaryDeserialize(std::ifstream& is)
         {

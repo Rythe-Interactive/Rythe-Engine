@@ -4,7 +4,7 @@
 
 namespace legion::core::scenemanagement
 {
-    class scene;
+    struct scene;
 
     class SceneManager final : public core::System<SceneManager>
     {

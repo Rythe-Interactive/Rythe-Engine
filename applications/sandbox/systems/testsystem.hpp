@@ -416,7 +416,7 @@ public:
             sphere.add_components<rendering::renderable, sah>({ uvsphereH, wireframeH }, {});
             sphere.add_components<transform>(position(-5.1f, 3, 0), rotation(), scale(2.5f));
 
-            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo.mp3"_view, { true });
+            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo.mp3"_view, { false });
             audio::AudioSegmentCache::createAudioSegment("other", "assets://audio/kilogram-of-scotland_stereo.mp3"_view, { false });
             
             audio::audio_source source;
@@ -448,7 +448,7 @@ public:
 
      auto sceneEntity = createEntity();
         std::vector<ecs::entity_handle> children;
-        for (int i=0;i<m_ecs->world.child_count();i++)
+        for (size_type i = 0;i < m_ecs->world.child_count();i++)
         {
             children.push_back(m_ecs->world.get_child(i));
         }
