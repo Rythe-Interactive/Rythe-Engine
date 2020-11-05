@@ -37,17 +37,17 @@ float length2(vec4 v)
 
 float dot01(vec2 a, vec2 b)
 {
-    return max(dot(a, b), 0.0)
+    return max(dot(a, b), 0.0);
 }
 
 float dot01(vec3 a, vec3 b)
 {
-    return max(dot(a, b), 0.0)
+    return max(dot(a, b), 0.0);
 }
 
 float dot01(vec4 a, vec4 b)
 {
-    return max(dot(a, b), 0.0)
+    return max(dot(a, b), 0.0);
 }
 
 float clamp01(float v)

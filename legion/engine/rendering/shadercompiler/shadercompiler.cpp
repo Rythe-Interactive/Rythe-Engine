@@ -364,7 +364,7 @@ namespace legion::rendering
     {
         using severity = log::severity;                
 
-        log::info("compiling shader: {}", file.get_virtual_path());
+        log::info("Compiling shader: {}", file.get_virtual_path());
 
         auto result = invoke_compiler(file, compilerSettings, defines, additionalIncludes);
 

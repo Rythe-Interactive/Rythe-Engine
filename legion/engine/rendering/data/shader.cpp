@@ -197,7 +197,7 @@ namespace legion::rendering
 
     bool ShaderCache::load_precompiled(const std::string& name, const fs::view& file, shader_ilo& ilo, shader_state& state)
     {
-        log::debug("Loading precompiled shader: {}", file.get_virtual_path());
+        log::info("Loading precompiled shader: {}", file.get_virtual_path());
         auto result = file.get();
         if (result != common::valid)
             return false;
@@ -317,6 +317,8 @@ namespace legion::rendering
         if (result != common::valid)
             return invalid_shader_handle;
 
+        bool compiledFromScratch = false;
+
         if (result.decay().empty() || result.decay() == ".shil")
         {
             if (!load_precompiled(name, file, shaders, state))
@@ -357,9 +359,9 @@ namespace legion::rendering
                 if (!ShaderCompiler::process(file, compilerSettings, shaders, state, detail::get_default_defines()))
                     return invalid_shader_handle;
 
-                if (settings.storePrecompiled)
-                    store_precompiled(file, shaders, state);
+                compiledFromScratch = true;
             }
+            break;
             }
         }
 
@@ -555,6 +557,9 @@ namespace legion::rendering
             async::readwrite_guard guard(m_shaderLock);
             m_shaders.insert(id, std::move(shader));
         }
+
+        if (compiledFromScratch && settings.storePrecompiled)
+            store_precompiled(file, shaders, state);
 
         return { id };
     }

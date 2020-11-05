@@ -18,7 +18,7 @@ struct Light
 	float falloff;		// 4	28
 	vec3 position;		// 12	32
 	float angle;		// 4	44
-	vec3 colour;		// 12	48
+	vec3 color;		// 12	48
 	float meta;		    // 4	60
 };
 
@@ -31,14 +31,14 @@ struct Material
     float roughness;
     float dielectric;
  	float ambientOcclusion;
-    float F0;
-}
+    vec3 F0;
+};
 
 #include <math_ext.shinc>
 
 float Attenuation(vec3 worldPosition, vec3 lightPosition, float attenuationRadius, float lightIntensity)
 {
-	float sqrlightDistance = length2(lightPosition - fragmentPosition);
+	float sqrlightDistance = length2(lightPosition - worldPosition);
 	float attenuation = pow(max(1.0 - (sqrlightDistance / (attenuationRadius * attenuationRadius)), 0.0), 2);
 	return attenuation * lightIntensity;
 }
@@ -50,12 +50,12 @@ vec3 fresnelSchlick(float halfwayDotView, vec3 F0)
 
 vec3 Fresnel0(vec4 albedo, float metallic, float dielectric)
 {
-    return mix(dielectric.xxx, albedo, metallic.xxx)
+    return mix(dielectric.xxx, albedo.rgb, metallic.xxx);
 }
 
 vec3 Fresnel0(vec4 albedo, float metallic)
 {
-    return mix(vec3(0.04), albedo, metallic.xxx)
+    return mix(vec3(0.04), albedo.rgb, metallic.xxx);
 }
 
 float DistributionGGX(float normalDotHalfway, float roughness)
@@ -109,7 +109,7 @@ vec3 CalculateLight(Light light, Camera camera, Material material, vec3 worldPos
     switch(light.type)
     {
         case point_light:
-            lightDirection = normalize(light.position - surfacePosition);
+            lightDirection = normalize(light.position - worldPosition);
             intensity = light.intensity;
             break;
         case directional_light:
@@ -117,7 +117,7 @@ vec3 CalculateLight(Light light, Camera camera, Material material, vec3 worldPos
             intensity = light.intensity;
             break;
         case spot_light:
-            lightDirection = normalize(light.position - surfacePosition);
+            lightDirection = normalize(light.position - worldPosition);
             intensity = pow(max((dot(normalize(light.direction), lightDirection) - cos(light.angle*0.5)) / (1.0 - cos(light.angle*0.5)), 0.0), light.falloff) * light.intensity;
             break;
         default:
@@ -132,7 +132,7 @@ vec3 CalculateLight(Light light, Camera camera, Material material, vec3 worldPos
     if(attenuation <= 0)
             return vec3(0);
 
-    vec3 radiance = lightColor * attenuation;
+    vec3 radiance = light.color * attenuation;
 
 	// Microfacet normal that will reflect the incoming light into the viewing direction.
 	// Technically only applies if the nanogeometry is perfectly smooth, but due to the inherent

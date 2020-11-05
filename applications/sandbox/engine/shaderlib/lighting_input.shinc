@@ -2,19 +2,20 @@
 //  Lighting Input  //
 //////////////////////
 
-buffer LightsBuffer : auto, std140
+layout(std140) buffer LightsBuffer
 {
 	Light lights[];
 };
 
-in MaterialInput : SV_MATERIAL, std140
+struct MaterialInput
 {
     sampler2D albedo;
     sampler2D normalHeight;
     sampler2D MRDAo;
     sampler2D emissive;
     float heightScale;
-} material_input;
+};
+uniform MaterialInput material_input : SV_MATERIAL;
 
 #include <texturemaps.shinc>
 
@@ -22,12 +23,12 @@ Material ExtractMaterial(vec2 uv, Camera camera, vec3 worldNormal, vec3 worldTan
 {
     mat3 tbn = GetTBNMatrix(worldNormal, worldTangent);
 
-    vec2 texcoords = ParallaxMap(material_input.normalHeight, material_input.heightScale, uv, camera);
+    vec2 texcoords = ParallaxMap(material_input.normalHeight, material_input.heightScale, uv, camera, tbn);
 
     Material material;
     material.albedo = AlbedoMap(material_input.albedo, texcoords);
     material.normal = NormalMap(material_input.normalHeight, texcoords, tbn);
-    vec4 MRDAo = LightingData(material_input.MDRAo, texcoords);
+    vec4 MRDAo = LightingData(material_input.MRDAo, texcoords);
     material.metallic = MRDAo.r;
     material.roughness = MRDAo.g;
     material.dielectric = MRDAo.b;

@@ -4,6 +4,7 @@ generate(fragment, vertex)
 
 #include <stdio.shinc>
 #include <lighting.shinc>
+#include <color_correction.shinc>
 
 shader(vertex)
 {

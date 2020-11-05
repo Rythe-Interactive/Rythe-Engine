@@ -11,7 +11,7 @@ vec2 ParallaxMap(sampler2D normalHeightMap, float scale, vec2 uv, Camera camera,
 
 	const float minLayers = 4.0;
 	const float maxLayers = 32.0;
-	float layerCount = round(mix(maxLayers, minLayers, dot01(vec3(0.0, 0.0, 1.0), viewDir)));
+	float layerCount = round(mix(maxLayers, minLayers, dot01(vec3(0.0, 0.0, 1.0), camera.viewDirection)));
 
 	float layerDepth = 1.0 / layerCount;
 
@@ -23,7 +23,7 @@ vec2 ParallaxMap(sampler2D normalHeightMap, float scale, vec2 uv, Camera camera,
 
 	vec2 currentUV = uv;
 	vec2 prevUV = currentUV;
-	float currentDepthMapValue = texture(map, currentUV).a;
+	float currentDepthMapValue = texture(normalHeightMap, currentUV).a;
 	float prevDepthMapValue = currentDepthMapValue;
 
 	while(currentDepth < currentDepthMapValue)
@@ -32,7 +32,7 @@ vec2 ParallaxMap(sampler2D normalHeightMap, float scale, vec2 uv, Camera camera,
 		currentUV -= deltaUV;
 
 		prevDepthMapValue = currentDepthMapValue;
-		currentDepthMapValue = texture(map, currentUV).a;
+		currentDepthMapValue = texture(normalHeightMap, currentUV).a;
 
 		prevDepth = currentDepth;
 		currentDepth += layerDepth;
