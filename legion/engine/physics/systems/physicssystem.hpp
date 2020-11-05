@@ -8,6 +8,7 @@
 #include <physics/physics_contact.hpp>
 #include <physics/components/physics_component.hpp>
 #include <physics/data/identifier.hpp>
+#include <physics/events/trigger_event.hpp>
 #include <memory>
 
 namespace legion::physics
@@ -303,6 +304,7 @@ namespace legion::physics
 
                     if (isTriggerInvolved)
                     {
+                        raiseEvent<TriggerEvent>(m,1.0f);
                         //notify both the trigger and triggerer
                     }
 
