@@ -1,10 +1,8 @@
 #pragma once
 
 #include "detail/cl_include.hpp" // cl_context , cl_mem , cl_mem_flags
-#include <core/platform/platform.hpp> // ARGS_API
 #include <core/types/primitives.hpp> // byte, size_t
 
-#include <tuple> // pair
 #include <string> // string
 
 /** 
@@ -67,13 +65,25 @@ namespace legion::core::compute {
         void rename(const std::string& name);
 
         ~Buffer();
-        bool has_name() const
+
+
+        /**
+         * @brief Checks if the buffer is named.
+         */
+        bool hasName() const
         {
             return !m_name.empty(); 
         }
 
-        bool is_readbuffer() const { return m_type == CL_MEM_READ_ONLY || m_type == CL_MEM_READ_WRITE; }
-        bool is_writebuffer()const  { return m_type == CL_MEM_WRITE_ONLY || m_type == CL_MEM_READ_WRITE; }
+        /**
+         * @brief Checks if OpenCL can read from this buffer. 
+         */
+        bool isReadBuffer() const { return m_type == CL_MEM_READ_ONLY || m_type == CL_MEM_READ_WRITE; }
+
+        /**
+         * @brief Checks if OpenCL can write to this buffer.
+         */
+        bool isWriteBuffer()const  { return m_type == CL_MEM_WRITE_ONLY || m_type == CL_MEM_READ_WRITE; }
     private:
         friend class Program;
         friend class Kernel;

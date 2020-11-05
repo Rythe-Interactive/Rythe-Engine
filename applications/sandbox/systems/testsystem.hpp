@@ -126,66 +126,141 @@ public:
     {
 #pragma region OpenCL
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         std::vector<int> ints;
 
+
+        // load a file with tons of numbers
         auto res = fs::view("assets://bigint.txt").get();
         if (res == common::valid) {
 
-            char* buf = new char[6];
-            memset(buf, 0, 6);
             filesystem::basic_resource contents = res;
 
+            char* buf = new char[6]{0};
+
+            // get a lot of integers from the data
             for (size_t i = 0; i < contents.size() && i < 5 * 2048; i += 5)
             {
                 memcpy(buf, contents.data() + i, 5);
-                ints.push_back(std::atol(buf));
+                ints.push_back(std::strtol(buf,nullptr,10));
             }
 
             delete[] buf;
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+        // split the integers into two datasets
         std::vector<int> first_ints(ints.begin(), ints.begin() + ints.size() / 2);
         std::vector<int> second_ints(ints.begin() + ints.size() / 2, ints.end());
 
+        // check how many things we need to process
         size_t to_process = std::min(first_ints.size(), second_ints.size());
 
+        // get an appropriately sized output buffer
         std::vector<int> results(to_process);
 
-        // ----------- vvv NEW vvv --------------------
 
+
+
+
+
+
+
+
+
+
+        // import some names
         using compute::in,compute::out;
-      
+
+        log::debug("Loading OpenCL kernel");
+
+        // create opencl-"function"
         auto vector_add = fs::view("assets://kernels/vadd_kernel.cl").load_as<compute::function>("vector_add");
 
-        auto return_code = vector_add(1024,first_ints,second_ints,out(results));
+        log::debug ("Done loading OpenCL kernel");
 
-        // ============================================
-        
-        auto A = compute::Context::createBuffer(first_ints, compute::buffer_type::READ_BUFFER, "A");
-        auto B = compute::Context::createBuffer(second_ints, compute::buffer_type::READ_BUFFER, "B");
-        auto C = compute::Context::createBuffer(results, compute::buffer_type::WRITE_BUFFER, "C");
+        #if 0
 
-        compute::Program prog = fs::view("assets://kernels/vadd_kernel.cl").load_as<compute::Program>();
-        prog.prewarm("vector_add");
+        // invoke "function"
+        auto code1 = vector_add(to_process,first_ints,second_ints,out(results));
 
-        
-        prog.kernelContext("vector_add")
-            .set_and_enqueue_buffer(A)
-            .set_and_enqueue_buffer(B)
-            .set_buffer(C)
-            .global(1024)
-            .local(64)
-            .dispatch()
-            .enqueue_buffer(C)
-            .finish();
-
-        // ----------- ^^^ OLD ^^^ --------------------
+        // output results
+        if (code1.valid())
+            for (int& i : results)
+            {
+                log::info("got {}", i);
+            }
+        #endif
 
 
-         /*for (int& i : results)
-         {
-             log::info("got {}", i);
-         }*/
+
+
+
+
+
+
+
+
+        log::debug("Creating hardware buffers");
+
+        // If we need to reuse the function it is more efficient to keep the buffers around.
+        // This way we do not allocate resources on our computation device every-time.
+        auto A = compute::Context::createBuffer(first_ints,     compute::buffer_type::READ_BUFFER,  "A");
+        auto B = compute::Context::createBuffer(second_ints,    compute::buffer_type::READ_BUFFER,  "B");
+        auto C = compute::Context::createBuffer(results,        compute::buffer_type::WRITE_BUFFER, "C");
+
+        log::debug("Done creating hardware buffers");
+
+        log::debug("Executing kernel");
+        // the invocation is otherwise exactly the same
+        auto code2 = vector_add(to_process,A,B,C);
+
+        log::debug("Done executing kernel");
+
+        // output results
+        if (code2.valid())
+            for (int& i : results)
+            {
+                log::info("got {}", i);
+            }
+
+
+
+
+
+
+
+
+
+
 #pragma endregion
        
 #pragma region Input binding
