@@ -104,5 +104,8 @@
     <ClInclude Include="physicsconstants.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="events\trigger_event.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
