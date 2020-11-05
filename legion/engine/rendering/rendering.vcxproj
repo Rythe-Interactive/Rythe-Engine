@@ -22,7 +22,6 @@
   <ItemGroup>
     <ClInclude Include="components\camera.hpp" />
     <ClInclude Include="components\renderable.hpp" />
-    <ClInclude Include="data\framebuffer.hpp" />
     <ClInclude Include="data\importers\texture_importers.hpp" />
     <ClInclude Include="data\material.hpp" />
     <ClInclude Include="data\renderbuffer.h" />

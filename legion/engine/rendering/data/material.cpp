@@ -118,14 +118,7 @@ namespace legion::rendering
     void material_handle::bind()
     {
         async::readonly_guard guard(MaterialCache::m_materialLock);
-        MaterialCache::m_materials[id].m_shader.bind();
-    }
-
-    void material_handle::prepare()
-    {
-        async::readonly_guard guard(MaterialCache::m_materialLock);
-        for (auto& [_, param] : MaterialCache::m_materials[id].m_parameters)
-            param->apply(MaterialCache::m_materials[id].m_shader);
+        MaterialCache::m_materials[id].bind();
     }
 
     attribute material_handle::get_attribute(const std::string& name)
@@ -133,4 +126,10 @@ namespace legion::rendering
         return MaterialCache::m_materials[id].m_shader.get_attribute(name);
     }
 
+    void material::bind()
+    {
+        m_shader.bind();
+        for (auto& [_, param] : m_parameters)
+            param->apply(m_shader);
+    }
 }

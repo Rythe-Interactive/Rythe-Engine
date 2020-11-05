@@ -1,10 +1,22 @@
 #pragma once
 #include <application/application.hpp>
 #include <rendering/data/material.hpp>
+
+/**
+ * @file camera.hpp 
+ */
+
 namespace legion::rendering
 {
+    class Renderer;
+
+    /**@class camera
+     * @brief Camera component
+     */
     struct camera
     {
+        friend class Renderer;
+    private:
         struct camera_input
         {
             camera_input(math::mat4 view, math::mat4 proj, math::vec3 pos, uint idx, math::vec3 vdir) :
@@ -56,8 +68,14 @@ namespace legion::rendering
             };
         };
 
+    public:
         float fov, nearz, farz;
 
+        /**@brief Set the projection variables of the camera.
+         * @param fov Horizontal field of view in degrees.
+         * @param nearz Near plane distance from the camera.
+         * @param farz Far plane distance from the camera.
+         */
         void set_projection(float fov, float nearz, float farz)
         {
             this->fov = fov;
@@ -65,6 +83,9 @@ namespace legion::rendering
             this->farz = farz;
         }
 
+        /**@brief Get the projection matrix for a certain aspect ratio
+         * @param ratio Aspect ratio (width / height)
+         */
         math::mat4 get_projection(float ratio)
         {
             return math::perspective(math::deg2rad(fov * ratio), ratio, farz, nearz);

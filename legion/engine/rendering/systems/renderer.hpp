@@ -146,7 +146,6 @@ namespace legion::rendering
             }
 
             debugMaterial.bind();
-            debugMaterial.prepare();
 
             glEnable(GL_LINE_SMOOTH);
             glBindVertexArray(vao);
@@ -460,7 +459,6 @@ namespace legion::rendering
 
                         cam_input_data.bind(material);
                         material.bind();
-                        material.prepare();
 
                         glBindVertexArray(mesh.vertexArrayId);
                         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);

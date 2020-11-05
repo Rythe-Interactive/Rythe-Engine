@@ -341,7 +341,7 @@ public:
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable, sah>({ cubeH, uvH }, {});
+            ent.add_components<rendering::renderable, sah>({ cubeH, textureH }, {});
             ent.add_components<transform>(position(5.1f, 3, 0), rotation(), scale(0.75f));
         }
 
