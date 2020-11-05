@@ -4,6 +4,8 @@
 
 namespace legion::core::ecs
 {
+    EcsRegistry* entity_handle::m_registry = nullptr;
+
     struct child_iterator::impl
     {
         entity_set::iterator iterator;
@@ -16,7 +18,6 @@ namespace legion::core::ecs
     entity_handle& entity_handle::operator=(const entity_handle& other)
     {
         m_id = other.m_id;
-        m_registry = other.m_registry;
         return *this;
     }
 
@@ -72,6 +73,70 @@ namespace legion::core::ecs
         }
         else
             data.parent = invalid_id;
+    }
+
+    void entity_handle::serialize(cereal::JSONOutputArchive& oarchive)
+    {
+        std::vector <ecs::component_handle_base> components;
+        std::vector <ecs::entity_handle> children;
+        auto composition = component_composition();
+        for (int i = 0; i < composition.size(); i++)
+        {
+            components.push_back(m_registry->getComponent(m_id, composition[i]));
+        }
+        for (auto child : m_registry->getEntityData(m_id).children)
+        {
+            children.push_back(child);
+        }
+        oarchive(cereal::make_nvp("Id", m_id), cereal::make_nvp("Name", std::string("Entity")));
+        oarchive(cereal::make_nvp("Components", components), cereal::make_nvp("Children", children));
+    }
+
+    void entity_handle::serialize(cereal::BinaryOutputArchive& oarchive)
+    {
+        std::vector <ecs::component_handle_base> components;
+        std::vector <ecs::entity_handle> children;
+        for (int i = 0; i < m_registry->getEntity(m_id).component_composition().size(); i++)
+        {
+            components.push_back(m_registry->getComponent(m_id, m_registry->getEntity(m_id).component_composition()[i]));
+        }
+        for (auto child : m_registry->getEntityData(m_id).children)
+        {
+            children.push_back(child);
+        }
+        oarchive(cereal::make_nvp("ID", m_id), cereal::make_nvp("NAME", std::string("ENTITY")));
+        oarchive(cereal::make_nvp("COMPONENTS", components), cereal::make_nvp("CHILDREN", children));
+    }
+
+    void entity_handle::serialize(cereal::JSONInputArchive& oarchive)
+    {
+        std::vector <ecs::component_handle_base> components;
+        std::vector <ecs::entity_handle> children;
+        oarchive(cereal::make_nvp("Id", m_id),cereal::make_nvp("Name", std::string("Entity")));
+        entity_handle ent;
+        if (!m_registry->validateEntity(m_id))
+            ent = m_registry->createEntity(m_id);
+        else
+            ent = m_registry->getEntity(m_id);
+
+        oarchive(cereal::make_nvp("Components", components), cereal::make_nvp("Children", children));
+        for (auto child : children)
+        {
+            child.set_parent(m_id);
+        }
+    }
+
+    void entity_handle::serialize(cereal::BinaryInputArchive& oarchive)
+    {
+        std::vector <ecs::component_handle_base> components;
+        std::vector <ecs::entity_handle> children;
+        oarchive(cereal::make_nvp("ID", m_id), cereal::make_nvp("NAME", std::string("ENTITY")));
+        auto ent = m_registry->createEntity(m_id);
+        oarchive(cereal::make_nvp("COMPONENTS", components), cereal::make_nvp("CHILDREN", children));
+        for (auto child : children)
+        {
+            child.set_parent(m_id);
+        }
     }
 
     L_NODISCARD   entity_handle entity_handle::operator[](index_type index) const

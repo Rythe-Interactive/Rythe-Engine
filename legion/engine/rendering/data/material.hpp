@@ -106,7 +106,15 @@ namespace legion::rendering
         attribute get_attribute(const std::string& name);
 
         bool operator==(const material_handle& other) const { return id == other.id; }
+
+        template<typename Archive>
+        void serialize(Archive& archive);
     };
+    template<typename Archive>
+    void material_handle::serialize(Archive& archive)
+    {
+        archive(id);
+    }
 
     constexpr material_handle invalid_material_handle{ invalid_id };
 

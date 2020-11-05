@@ -5,6 +5,9 @@
 #include <core/platform/platform.hpp>
 #include <core/ecs/archetype.hpp>
 #include <memory>
+#include <cereal/types/vector.hpp>
+#include <cereal/archives/binary.hpp>
+#include <cereal/archives/json.hpp>
 
 /**
  * @file entity_handle.hpp
@@ -56,22 +59,22 @@ namespace legion::core::ecs
         friend class EcsRegistry;
     private:
         id_type m_id;
-        EcsRegistry* m_registry;
+        static EcsRegistry* m_registry;
 
     public:
         /**@brief Main constructor for constructing a valid entity handle.
          */
-        entity_handle(id_type id, EcsRegistry* registry) : m_id(id) { m_registry = registry; }
+        entity_handle(id_type id) : m_id(id) {  }
 
         /**@brief Constructor for constructing an invalid entity handle.
          * @note Should only be used to create temporary handles. Allows use of entity handle in containers together with copy constructor.
          */
-        entity_handle() : m_id(invalid_id) { m_registry = nullptr; }
+        entity_handle() : m_id(invalid_id) {  }
 
         /**@brief Copy constructor (DOES NOT CREATE NEW ENTITY, both handles will reference the same entity).
          * @note Allows use of entity handle in containers together with default invalid entity constructor.
          */
-        entity_handle(const entity_handle& other) : m_id(other.m_id) { m_registry = other.m_registry; }
+        entity_handle(const entity_handle& other) : m_id(other.m_id) {  }
 
         /**@brief Copy assignment. Exists for the same reasons as the copy constructor.
          * @ref legion::core::ecs::entity_handle::entity_handle(const legion::core::ecs::entity& other)
@@ -121,6 +124,15 @@ namespace legion::core::ecs
          * @throws legion_entity_not_found_error Thrown when handle's id is invalid.
          */
         void set_parent(id_type newParent) const;
+
+        /**@brief serializes the entity depending on its archive
+         * @param oarchive template<typename Archive>
+         * @note Will only be called when said entity is serializes through an archive.
+         */
+        void serialize(cereal::JSONOutputArchive& oarchive);
+        void serialize(cereal::BinaryOutputArchive& oarchive);
+        void serialize(cereal::JSONInputArchive& oarchive);
+        void serialize(cereal::BinaryInputArchive& oarchive);
 
         /**@brief Get child of the entity at a certain index.
          * @throws std::out_of_range Thrown when index is more than or equal to the child count.
@@ -281,7 +293,6 @@ namespace legion::core::ecs
         {
             return force_value_cast<component_handle<component_type>>(add_component(typeHash<component_type>()));
         }
-
         /**@brief Add component to the entity.
          * @param value Starting value of the component.
          * @tparam component_type Type of component to add.
@@ -342,7 +353,7 @@ namespace legion::core::ecs
          * @returns Tuple with all the handles.
          */
         template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
-        auto add_components(component_type&& value, component_types&&... values) const;        
+        auto add_components(component_type&& value, component_types&&... values) const;
 
         /**@brief Add multiple components to the entity.
          * @tparam component_type First type of component to add.
@@ -422,6 +433,7 @@ namespace legion::core::ecs
          */
         bool valid() const;
     };
+
 
     using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
 }

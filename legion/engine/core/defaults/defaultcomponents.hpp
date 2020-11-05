@@ -4,6 +4,12 @@
 
 #include <core/logging/logging.hpp>
 
+#include <cereal/types/unordered_map.hpp>
+#include <cereal/types/memory.hpp>
+#include <cereal/archives/json.hpp>
+#include <cereal/archives/portable_binary.hpp>
+
+
 namespace legion::core
 {
     struct position : public math::vec3
@@ -79,6 +85,7 @@ namespace legion::core
         }
     };
 
+
     struct scale : public math::vec3
     {
         scale() : math::vec3(1, 1, 1) {}
@@ -103,7 +110,9 @@ namespace legion::core
             z = src.z;
             return *this;
         }
+
     };
+
 
     struct transform : public ecs::archetype<position, rotation, scale>
     {

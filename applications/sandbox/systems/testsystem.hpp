@@ -69,6 +69,7 @@ struct fullscreen_action : public app::input_action<fullscreen_action> {};
 struct escape_cursor_action : public app::input_action<escape_cursor_action> {};
 struct vsync_action : public app::input_action<vsync_action> {};
 
+//some test stuff just so i can change things
 
 struct physics_test_move : public app::input_axis<physics_test_move> {};
 
@@ -97,6 +98,7 @@ class TestSystem final : public System<TestSystem>
 public:
     TestSystem()
     {
+        log::filter(log::severity::trace);
         app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
     }
 
@@ -486,13 +488,13 @@ public:
             ent.add_components<transform>(position(0, 3, -5.1f), rotation(), scale(2.5f));
         }
 
-        // Sphere setup (with audio source)
+         //Sphere setup (with audio source)
         {
             sphere = createEntity(); 
             sphere.add_components<rendering::renderable, sah>({ uvsphereH, wireframeH }, {});
             sphere.add_components<transform>(position(-5.1f, 3, 0), rotation(), scale(2.5f));
 
-            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo.mp3"_view, { true });
+            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo.mp3"_view, { false });
             audio::AudioSegmentCache::createAudioSegment("other", "assets://audio/kilogram-of-scotland_stereo.mp3"_view, { false });
             
             audio::audio_source source;
@@ -502,7 +504,7 @@ public:
         }
 #pragma endregion
 
-        setupCameraEntity();
+        
 
         //---------------------------------------------------------- Physics Collision Unit Test -------------------------------------------------------------------//
 
@@ -510,7 +512,6 @@ public:
 
         //----------- Rigidbody-Collider AABB Test------------//
 
-       setupPhysicsCRUnitTest(cubeH, uvH);
 
         setupPhysicsFrictionUnitTest(cubeH, uvH);
 
@@ -520,6 +521,31 @@ public:
         cubeParams.breadth = 1.0f;
         cubeParams.width = 1.0f;
         cubeParams.height = 1.0f;
+       setupPhysicsCRUnitTest(cubeH, uvH);
+
+
+     auto sceneEntity = createEntity();
+        std::vector<ecs::entity_handle> children;
+        for (size_type i = 0;i < m_ecs->world.child_count();i++)
+        {
+            children.push_back(m_ecs->world.get_child(i));
+        }
+        for (auto child : children)
+        {
+            if (child != sceneEntity)
+            {
+                child.set_parent(sceneEntity);
+            }
+        }
+
+        scenemanagement::SceneManager::createScene("Main", sceneEntity);
+  
+        //sceneEntity.destroy();
+
+        //scenemanagement::SceneManager::loadScene("ImposterFlake");
+
+        setupCameraEntity();
+        
 
         //CreateCubeStack(3, 2, 2, math::vec3(0, -3.0f, 8.0f), math::vec3(1, 1, 1)
         //    ,cubeParams, 0.1f, cubeH, wireframeH);

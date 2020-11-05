@@ -7,6 +7,7 @@
 #include <core/filesystem/basic_resolver.hpp>
 
 #include <core/compute/context.hpp>
+#include <core/scenemanagement/scene.hpp>
 
 namespace legion::core
 {
@@ -30,6 +31,8 @@ namespace legion::core
             reportComponentType<position>();
             reportComponentType<rotation>();
             reportComponentType<scale>();
+            reportComponentType<scenemanagement::scene>();
+            reportSystem <scenemanagement::SceneManager>();
         }
 
         virtual priority_type priority() override
