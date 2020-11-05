@@ -2,9 +2,11 @@
 #include <core/compute/program.hpp>
 #include <core/logging/logging.hpp>
 
+#include "context.hpp"
+
 namespace legion::core::compute
 {
-    Kernel& Kernel::build_buffer_names()
+    Kernel& Kernel::buildBufferNames()
     {
         size_type size;
         cl_uint num_args;
@@ -35,31 +37,31 @@ namespace legion::core::compute
         return *this;
     }
 
-    Kernel& Kernel::read_write_mode(buffer_type t)
+    Kernel& Kernel::readWriteMode(buffer_type t)
     {
         m_default_mode = t;
         return *this;
     }
 
-    Kernel& Kernel::set_buffer(Buffer buffer)
+    Kernel& Kernel::setBuffer(Buffer buffer)
     {
         //get name from buffer
         if (buffer.m_name.empty())
             log::warn("Encountered unnamed buffer! binding to a Kernel-location will fail!");
-        return set_buffer(buffer, buffer.m_name);
+        return setBuffer(buffer, buffer.m_name);
     }
 
-    Kernel& Kernel::set_buffer(Buffer buffer, const std::string& name)
+    Kernel& Kernel::setBuffer(Buffer buffer, const std::string& name)
     {
         //translate name to index
         param_find([this, b = std::forward<Buffer>(buffer)](cl_uint index)
         {
-            this->set_buffer(b, index);
+            this->setBuffer(b, index);
         }, name);
         return *this;
     }
 
-    Kernel& Kernel::set_buffer(Buffer buffer, cl_uint index)
+    Kernel& Kernel::setBuffer(Buffer buffer, cl_uint index)
     {
         //set kernel argument
         const cl_int ret = clSetKernelArg(m_func, index, sizeof(cl_mem), &buffer.m_memory_object);
@@ -72,7 +74,7 @@ namespace legion::core::compute
         return *this;
     }
 
-    Kernel& Kernel::enqueue_buffer(Buffer buffer, block_mode blocking)
+    Kernel& Kernel::enqueueBuffer(Buffer buffer, block_mode blocking)
     {
 
         /*
@@ -143,31 +145,31 @@ namespace legion::core::compute
         return *this;
     }
 
-    Kernel& Kernel::set_and_enqueue_buffer(Buffer buffer, block_mode blocking)
+    Kernel& Kernel::setAndEnqueBuffer(Buffer buffer, block_mode blocking)
     {
         //get name from buffer
         if (buffer.m_name.empty())
             log::warn("Encountered unnamed buffer! binding to a Kernel-location will fail!");
-        return set_and_enqueue_buffer(buffer, buffer.m_name, blocking);
+        return setAndEnqueBuffer(buffer, buffer.m_name, blocking);
     }
 
 
-    Kernel& Kernel::set_and_enqueue_buffer(Buffer buffer, const std::string& name, block_mode blocking)
+    Kernel& Kernel::setAndEnqueBuffer(Buffer buffer, const std::string& name, block_mode blocking)
     {
         //translate name to index
         param_find([this, b = std::forward<Buffer>(buffer), blocking](cl_uint index)
         {
-            set_and_enqueue_buffer(b, index, blocking);
+            setAndEnqueBuffer(b, index, blocking);
         }, name);
         return *this;
     }
 
-    Kernel& Kernel::set_and_enqueue_buffer(Buffer buffer, cl_uint index, block_mode blocking)
+    Kernel& Kernel::setAndEnqueBuffer(Buffer buffer, cl_uint index, block_mode blocking)
     {
         //set and ... enqueue_buffer
         //nothing fun to see here
-        enqueue_buffer(std::forward<Buffer>(buffer), blocking);
-        return set_buffer(std::forward<Buffer>(buffer), index);
+        enqueueBuffer(std::forward<Buffer>(buffer), blocking);
+        return setBuffer(std::forward<Buffer>(buffer), index);
     }
 
 
@@ -206,6 +208,17 @@ namespace legion::core::compute
         clReleaseCommandQueue(m_queue);
     }
 
+    size_t Kernel::getMaxWorkSize() const
+    {
+        size_t value;
+
+        cl_int ret = clGetKernelWorkGroupInfo(m_func, Context::getDeviceId(), CL_KERNEL_WORK_GROUP_SIZE, sizeof(size_t), &value, NULL);
+        if (ret != CL_SUCCESS) {
+            return 0;
+        }
+        return value;
+    }
+
 
     Kernel::Kernel(Program* program, cl_kernel kernel) :
         m_default_mode(buffer_type::READ_BUFFER),
@@ -219,6 +232,8 @@ namespace legion::core::compute
 
     Kernel& Kernel::local(size_t s)
     {
+
+        //TODO(algo-ryth-mix) This should cap at CL_KERNEL_WORK_GROUP_SIZE 
         m_local_size = s;
         return *this;
     }
