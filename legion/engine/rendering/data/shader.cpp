@@ -327,39 +327,39 @@ namespace legion::rendering
             switch (settings.usePrecompiledIfAvailable)
             {
             case true:
-                {
-                    auto precompiled = file / ".." / (file.get_filestem().decay() + ".shil");
+            {
+                auto precompiled = file / ".." / (file.get_filestem().decay() + ".shil");
 
-                    if (precompiled.is_valid(true))
+                if (precompiled.is_valid(true))
+                {
+                    auto traits = precompiled.file_info();
+                    if (traits.is_file && traits.can_be_read)
                     {
-                        auto traits = precompiled.file_info();
-                        if (traits.is_file && traits.can_be_read)
-                        {
-                            if (load_precompiled(name, precompiled, shaders, state))
-                                break;
-                        }
+                        if (load_precompiled(name, precompiled, shaders, state))
+                            break;
                     }
                 }
+            }
             default:
-                {
-                    ShaderCompiler::setErrorCallback([](const std::string& errormsg, log::severity severity)
-                        {
-                            log::println(severity, errormsg);
-                        });
+            {
+                ShaderCompiler::setErrorCallback([](const std::string& errormsg, log::severity severity)
+                    {
+                        log::println(severity, errormsg);
+                    });
 
-                    byte compilerSettings = 0;
-                    compilerSettings |= settings.api;
-                    if (settings.debug)
-                        compilerSettings |= shader_compiler_options::debug;
-                    if (settings.low_power)
-                        compilerSettings |= shader_compiler_options::low_power;
+                byte compilerSettings = 0;
+                compilerSettings |= settings.api;
+                if (settings.debug)
+                    compilerSettings |= shader_compiler_options::debug;
+                if (settings.low_power)
+                    compilerSettings |= shader_compiler_options::low_power;
 
-                    if (!ShaderCompiler::process(file, compilerSettings, shaders, state, detail::get_default_defines()))
-                        return invalid_shader_handle;
+                if (!ShaderCompiler::process(file, compilerSettings, shaders, state, detail::get_default_defines()))
+                    return invalid_shader_handle;
 
-                    if (settings.storePrecompiled)
-                        store_precompiled(file, shaders, state);
-                }
+                if (settings.storePrecompiled)
+                    store_precompiled(file, shaders, state);
+            }
             }
         }
 

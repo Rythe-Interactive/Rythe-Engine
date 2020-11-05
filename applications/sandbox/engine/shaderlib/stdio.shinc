@@ -186,7 +186,7 @@ vec3 GetWorldPoint(vec3 p)
     return (stdin(0, modelMatrix) * vec4(p, 1.0)).xyz;
 }
 
-mat3 GetTBN(int index)
+mat3 GetTBNMatrix(int index)
 {
     vec3 worldNormal = GetWorldNormal(index);
 	vec3 worldTangent = GetWorldTangent(index, worldNormal);
@@ -194,7 +194,7 @@ mat3 GetTBN(int index)
 	return mat3(worldTangent, worldBitangent, worldNormal);
 }
 
-mat3 GetTBN(vec3 worldNormal, vec3 worldTangent)
+mat3 GetTBNMatrix(vec3 worldNormal, vec3 worldTangent)
 {
     vec3 orthogonalizedTangent = normalize(worldTangent - dot(worldTangent, worldNormal) * worldNormal);
 	vec3 worldBitangent = GetWorldBitangent(worldNormal, orthogonalizedTangent);
@@ -269,7 +269,7 @@ vec3 GetWorldPoint(vec3 p)
     return (stdio(modelMatrix) * vec4(p, 1.0)).xyz;
 }
 
-mat3 GetTBN()
+mat3 GetTBNMatrix()
 {
     vec3 worldNormal = GetWorldNormal();
 	vec3 worldTangent = GetWorldTangent(worldNormal);
@@ -277,7 +277,7 @@ mat3 GetTBN()
 	return mat3(worldTangent, worldBitangent, worldNormal);
 }
 
-mat3 GetTBN(vec3 worldNormal, vec3 worldTangent)
+mat3 GetTBNMatrix(vec3 worldNormal, vec3 worldTangent)
 {
     vec3 orthogonalizedTangent = normalize(worldTangent - dot(worldTangent, worldNormal) * worldNormal);
 	vec3 worldBitangent = GetWorldBitangent(worldNormal, orthogonalizedTangent);
