@@ -263,6 +263,9 @@ public:
         bindToEvent<pause_audio_source, &TestSystem::pauseAudioSource>();
         bindToEvent<stop_audio_source, &TestSystem::stopAudioSource>();
         bindToEvent<rewind_audio_source, &TestSystem::rewindAudioSource>();
+
+        bindToEvent<physics::TriggerEvent,&TestSystem::testPhysicsEvent>();
+
         bindToEvent<play_audio_segment_kilogram, &TestSystem::playAudioSegmentKilogram>();
         bindToEvent<play_audio_segment_other, &TestSystem::playAudioSegmentOther>();
         bindToEvent<audio_test_input, &TestSystem::audioTestInput>();
@@ -476,6 +479,11 @@ public:
         createProcess<&TestSystem::differentThread>("TestChain");
         createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
         createProcess<&TestSystem::drawInterval>("TestChain");
+    }
+
+    void testPhysicsEvent(physics::TriggerEvent* evnt)
+    {
+        log::debug("received trigger event {}",evnt->manifold.isColliding);
     }
 
     void setupPhysicsCDUnitTest(rendering::model_handle cubeH, rendering::material_handle wireframeH)
