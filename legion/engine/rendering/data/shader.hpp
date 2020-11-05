@@ -343,6 +343,7 @@ namespace legion::rendering
         static void release();
 
         bool operator==(const shader_handle& other) const { return id == other.id; }
+        bool operator!=(const shader_handle& other) const { return id != other.id; }
         operator bool() { return id != invalid_id; }
     };
 
@@ -362,6 +363,8 @@ namespace legion::rendering
         static void process_io(shader& shader, id_type id);
         static app::gl_id compile_shader(GLuint shaderType, cstring source, GLint sourceLength);
 
+        static bool load_precompiled(const std::string& name, const fs::view& file, shader_ilo& ilo, shader_state& state);
+        static void store_precompiled(const fs::view& file, const shader_ilo& ilo, const shader_state& state);
     public:
         static shader_handle create_shader(const std::string& name, const fs::view& file, shader_import_settings settings = default_shader_settings);
         static shader_handle create_shader(const fs::view& file, shader_import_settings settings = default_shader_settings);

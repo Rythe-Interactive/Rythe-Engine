@@ -66,6 +66,11 @@ namespace legion::core::filesystem
          */
         L_NODISCARD common::result_decay_more<std::string, fs_error> get_filename() const;
 
+        /**@brief Gets file name if applicable.
+         *  @note You can use legion::common::valid to check for validity.
+         */
+        L_NODISCARD common::result_decay_more<std::string, fs_error> get_filestem() const;
+
         /** @brief Gets the contents of the resource pointed to.
          *  @note You can use legion::common::valid to check for validity.
          */

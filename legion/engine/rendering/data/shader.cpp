@@ -195,6 +195,107 @@ namespace legion::rendering
         return shaderId;
     }
 
+    bool ShaderCache::load_precompiled(const std::string& name, const fs::view& file, shader_ilo& ilo, shader_state& state)
+    {
+        log::debug("Loading precompiled shader: {}", file.get_virtual_path());
+        auto result = file.get();
+        if (result != common::valid)
+            return false;
+
+        auto resource = result.decay();
+
+        if (resource.size() <= 22)
+            return false;
+
+        byte_vec data = resource.get();
+
+        std::string_view magic(reinterpret_cast<char*>(data.data()), 19);
+        if (magic != "\xabLEGION SHADER\xbb\r\n\x13\n")
+            return false;
+
+        auto start = data.cbegin() + 19;
+        auto end = data.cend();
+
+        while (start != end)
+        {
+            GLenum shaderType;
+            retrieveBinaryData(shaderType, start);
+
+            switch (shaderType)
+            {
+            case 0:
+            {
+                std::vector<GLenum> rawState;
+                retrieveBinaryData(rawState, start);
+                if (rawState.size() % 2 != 0)
+                    return false;
+
+                for (int i = 0; i < rawState.size(); i += 2)
+                {
+                    state[rawState[i]] = rawState[i + 1];
+                }
+            }
+            break;
+            case GL_VERTEX_SHADER:
+            case GL_FRAGMENT_SHADER:
+            case GL_GEOMETRY_SHADER:
+            {
+                std::string source;
+                retrieveBinaryData(source, start);
+                ilo.push_back(std::make_pair(shaderType, source));
+            }
+            break;
+            default:
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void ShaderCache::store_precompiled(const fs::view& file, const shader_ilo& ilo, const shader_state& state)
+    {
+        auto result = file.get_extension();
+        if (result != common::valid)
+            return;
+
+        fs::view precompiled("");
+        if (result.decay() == ".shil" || result.decay().empty())
+            precompiled = file;
+        else
+            precompiled = file / ".." / (file.get_filestem().decay() + ".shil");
+
+        if (precompiled.is_valid(true) && precompiled.file_info().can_be_written)
+        {
+            fs::basic_resource resource(nullptr);
+            byte_vec& data = resource.get();
+
+            std::string magic = "\xabLEGION SHADER\xbb\r\n\x13\n";
+            for (auto item : magic)
+                data.push_back(item);
+
+            GLenum stateType = 0;
+            appendBinaryData(&stateType, data);
+
+            std::vector<GLenum> rawState;
+            for (auto& [key, value] : state)
+            {
+                rawState.push_back(key);
+                rawState.push_back(value);
+            }
+
+            appendBinaryData(&rawState, data);
+
+            for (auto& [shaderType, source] : ilo)
+            {
+                appendBinaryData(&shaderType, data);
+                appendBinaryData(&source, data);
+            }
+
+            auto garbage = precompiled.set(resource);
+        }
+
+    }
+
     shader_handle ShaderCache::create_shader(const std::string& name, const fs::view& file, shader_import_settings settings)
     {
         // Get the id of the new shader.
@@ -216,29 +317,51 @@ namespace legion::rendering
         if (result != common::valid)
             return invalid_shader_handle;
 
-        if (result.decay() == ".shil")
+        if (result.decay().empty() || result.decay() == ".shil")
         {
-            return invalid_shader_handle;
-        }
-        else if (!result.decay().empty())
-        {
-            ShaderCompiler::setErrorCallback([](const std::string& errormsg, log::severity severity)
-                {
-                    log::println(severity, errormsg);
-                });
-
-            byte compilerSettings = 0;
-            compilerSettings |= settings.api;
-            if (settings.debug)
-                compilerSettings |= shader_compiler_options::debug;
-            if (settings.low_power)
-                compilerSettings |= shader_compiler_options::low_power;
-
-            if (!ShaderCompiler::process(file, compilerSettings, shaders, state, detail::get_default_defines()))
+            if (!load_precompiled(name, file, shaders, state))
                 return invalid_shader_handle;
         }
         else
-            return invalid_shader_handle;
+        {
+            switch (settings.usePrecompiledIfAvailable)
+            {
+            case true:
+                {
+                    auto precompiled = file / ".." / (file.get_filestem().decay() + ".shil");
+
+                    if (precompiled.is_valid(true))
+                    {
+                        auto traits = precompiled.file_info();
+                        if (traits.is_file && traits.can_be_read)
+                        {
+                            if (load_precompiled(name, precompiled, shaders, state))
+                                break;
+                        }
+                    }
+                }
+            default:
+                {
+                    ShaderCompiler::setErrorCallback([](const std::string& errormsg, log::severity severity)
+                        {
+                            log::println(severity, errormsg);
+                        });
+
+                    byte compilerSettings = 0;
+                    compilerSettings |= settings.api;
+                    if (settings.debug)
+                        compilerSettings |= shader_compiler_options::debug;
+                    if (settings.low_power)
+                        compilerSettings |= shader_compiler_options::low_power;
+
+                    if (!ShaderCompiler::process(file, compilerSettings, shaders, state, detail::get_default_defines()))
+                        return invalid_shader_handle;
+
+                    if (settings.storePrecompiled)
+                        store_precompiled(file, shaders, state);
+                }
+            }
+        }
 
         if (shaders.empty())
             return invalid_shader_handle;

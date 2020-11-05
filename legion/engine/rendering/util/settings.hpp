@@ -21,10 +21,12 @@ namespace legion::rendering
 
     struct shader_import_settings
     {
+        bool usePrecompiledIfAvailable;
+        bool storePrecompiled;
         bitfield8 api;
         bool debug;
         bool low_power;
     };
 
-    constexpr shader_import_settings default_shader_settings{ rendering_api::opengl, false, false };
+    constexpr shader_import_settings default_shader_settings{ true, true, rendering_api::opengl, false, false };
 }
