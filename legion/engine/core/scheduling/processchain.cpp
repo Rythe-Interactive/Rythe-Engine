@@ -80,7 +80,7 @@ namespace legion::core::scheduling
                     if (process->execute(m_scheduler->getTimeScale())) // If the process wasn't finished then execute it and check if it's finished now.
                         finishedProcesses.insert(id);
 
-        } while (finishedProcesses.size() != m_processes.size());
+        } while (finishedProcesses.size() != m_processes.size() && !m_exit->load(std::memory_order_acquire));
 
         {
             async::readonly_guard guard(m_callbackLock);

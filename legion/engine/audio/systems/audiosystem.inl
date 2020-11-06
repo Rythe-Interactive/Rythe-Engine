@@ -35,7 +35,7 @@ namespace legion::audio
 		alListener3f(AL_VELOCITY, 0, 0, 0);
 		ALfloat ori[] = { 0, 0, 1.0f, 0, 1.0f, 0 };
 		alListenerfv(AL_ORIENTATION, ori);
-		m_listenerPosition = position(0,0,0);
+		m_listenerPosition = position(0, 0, 0);
 		log::info("initialized listener!");
 
 		alDopplerFactor(1.0f);
@@ -254,7 +254,7 @@ namespace legion::audio
 	{
 		log::debug("Destroying Audio Listener...");
 
-		listenerCount = math::max((int)(listenerCount-1), 0);
+		listenerCount = math::max((int)(listenerCount - 1), 0);
 		if (listenerCount == 0)
 		{
 			log::debug("No Listeners left, resetting listener");

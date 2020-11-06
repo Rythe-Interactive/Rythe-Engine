@@ -8,6 +8,7 @@
 #include <core/events/eventbus.hpp>
 #include <core/defaults/coremodule.hpp>
 #include <core/logging/logging.hpp>
+#include <core/ecs/component_handle.hpp>
 
 #include <map>
 #include <vector>
@@ -52,6 +53,7 @@ namespace legion::core
             SystemBase::m_eventBus = &m_eventbus;
             SystemBase::m_ecs = &m_ecs;
             SystemBase::m_scheduler = &m_scheduler;
+            ecs::component_handle_base::m_registry = &m_ecs;
 
             reportModule<CoreModule>();
         }
