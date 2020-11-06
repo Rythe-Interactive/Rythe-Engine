@@ -96,7 +96,7 @@ class TestSystem final : public System<TestSystem>
 public:
     TestSystem()
     {
-        log::filter(log::severity::trace);
+        log::filter(log::severity::debug);
         app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
     }
 
@@ -381,8 +381,6 @@ public:
         rendering::material_handle skyboxH;
         rendering::material_handle floorMH;
 
-        rendering::model_handle speaker;
-
         {
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
@@ -413,8 +411,6 @@ public:
             normalH = rendering::MaterialCache::create_material("normal", "assets://shaders/normal.shs"_view);
             skyboxH = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.shs"_view);
             floorMH = rendering::MaterialCache::create_material("floor", "assets://shaders/groundplane.shs"_view);
-
-            speaker = rendering::ModelCache::create_model("speaker", "assets://models/speaker.obj"_view);
 
             app::ContextHelper::makeContextCurrent(nullptr);
         }
@@ -504,7 +500,7 @@ public:
         //audioSphereLeft setup
         {
             audioSphereLeft = createEntity(); 
-            audioSphereLeft.add_component<rendering::renderable>({ speaker, normalH });
+            audioSphereLeft.add_component<rendering::renderable>({ cubeH, normalH });
             audioSphereLeft.add_components<transform>(position(-5, 0, 10), rotation(rotMatrix), scale(0.5));
 
             auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo32.wav"_view, { audio::audio_import_settings::channel_processing_setting::split_channels });
@@ -516,7 +512,7 @@ public:
         //audioSphereRight setup
         {
             audioSphereRight = createEntity();
-            audioSphereRight.add_component<rendering::renderable>({ speaker, normalH });
+            audioSphereRight.add_component<rendering::renderable>({ cubeH, normalH });
             audioSphereRight.add_components<transform>(position(5, 0, 10), rotation(rotMatrix), scale(0.5));
 
             auto segment = audio::AudioSegmentCache::getAudioSegment("kilogram_channel1");
