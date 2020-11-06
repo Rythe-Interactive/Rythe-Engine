@@ -14,7 +14,7 @@
 
 namespace legion::core::async
 {
-    enum lock_state { idle = 0, read = 1, write = 2 };
+    enum lock_state { idle = 0, read = 1, write = 2 };    
 
     /**@class readonly_rw_spinlock
      * @brief Lock used with ::async::readonly_guard and ::async::readwrite_guard.
@@ -28,14 +28,18 @@ namespace legion::core::async
      * @ref legion::core::async::readwrite_multiguard
      * @ref legion::core::async::mixed_multiguard
      */
-    struct readonly_rw_spinlock
+    struct readonly_rw_spinlock final
     {
     private:
         static std::atomic_uint m_lastId;
 
-        static thread_local std::unordered_map<uint, int> m_localWriters;
-        static thread_local std::unordered_map<uint, int> m_localReaders;
-        static thread_local std::unordered_map<uint, lock_state> m_localState;
+        static thread_local std::unordered_map<uint, int>* m_localWritersPtr;
+        static thread_local std::unordered_map<uint, int>* m_localReadersPtr;
+        static thread_local std::unordered_map<uint, lock_state>* m_localStatePtr;
+
+        static thread_local std::unordered_map<uint, int>& m_localWriters;
+        static thread_local std::unordered_map<uint, int>& m_localReaders;
+        static thread_local std::unordered_map<uint, lock_state>& m_localState;
 
         uint m_id;
         std::atomic_int m_lockState = 0;
@@ -226,11 +230,8 @@ namespace legion::core::async
             return *this;
         }
 
-
         readonly_rw_spinlock(const readonly_rw_spinlock&) = delete;
         readonly_rw_spinlock& operator=(const readonly_rw_spinlock&) = delete;
-
-
 
         /**@brief Lock for a certain permission level. (locking for idle does nothing)
          * @note Locking stacks, locking for readonly multiple times will remain readonly.
@@ -288,8 +289,6 @@ namespace legion::core::async
             }
         }
     };
-
-
 
     /**@class readonly_guard
      * @brief RAII guard that uses ::async::readonly_rw_spinlock to lock for read-only.
