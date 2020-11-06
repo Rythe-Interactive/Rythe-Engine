@@ -1,0 +1,60 @@
+#version 450
+#state CULL OFF
+
+generate(vertex, geometry, fragment)
+
+#include <stdio.shinc>
+
+shader(vertex)
+{
+    void main(void)
+    {
+        gl_Position = ModelToScreenSpacePosition(position);
+    }
+}
+
+shader(geometry)
+{
+    geometry_input(triangles)
+    geometry_output(triangle_strip, max_vertices = 3)
+
+    out IO
+    {
+        vec3 barycentricCoords;
+    } outData;
+
+    void main(void)
+    {
+        gl_Position = gl_in[0].gl_Position;
+        outData.barycentricCoords = vec3(1, 0, 0);
+        EmitVertex();
+        gl_Position = gl_in[1].gl_Position;
+        outData.barycentricCoords = vec3(0, 1, 0);
+        EmitVertex();
+        gl_Position = gl_in[2].gl_Position;
+        outData.barycentricCoords = vec3(0, 0, 1);
+        EmitVertex();
+        EndPrimitive();
+    }
+}
+
+shader(fragment)
+{
+    io IO
+    {
+        vec3 barycentricCoords;
+    } inData;
+
+    out vec4 fragment_color;
+
+    void main(void)
+    {
+        vec3 deltas = fwidth(inData.barycentricCoords);
+        vec3 adjustedCoords = smoothstep(deltas, 2* deltas, inData.barycentricCoords);
+        float linePresence = min(adjustedCoords.x, min(adjustedCoords.y, adjustedCoords.z));
+        if(linePresence > 0.9)
+            discard;
+
+        fragment_color = vec4(vec3(0), 1);
+    }
+}
