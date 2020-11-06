@@ -1,0 +1,32 @@
+#version 450
+
+generate(fragment, vertex)
+
+#include <stdio.shinc>
+#include <lighting.shinc>
+#include <color_correction.shinc>
+
+shader(vertex)
+{
+    void main(void)
+    {
+        gl_Position = ModelToScreenSpacePosition(position);
+        PropagateStdIO();
+    }
+}
+
+shader(fragment)
+{
+    out vec4 fragment_color;
+
+    void main(void)
+    {
+        Camera camera = GetCamera();
+        vec3 worldNormal = GetWorldNormal();
+        Material material = ExtractMaterial(stdio(uv), camera, worldNormal, GetWorldTangent(worldNormal));
+
+        vec3 lighting = GetAllLighting(material, camera, GetWorldPosition(), worldNormal);
+
+        fragment_color = vec4(GammaCorrect(lighting), material.albedo.a);
+    }
+}

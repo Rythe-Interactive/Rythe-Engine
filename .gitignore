@@ -103,3 +103,4 @@ bld/
 
 deps/lib/legion*
 *.shil
+!**/applications/**/engine/**
