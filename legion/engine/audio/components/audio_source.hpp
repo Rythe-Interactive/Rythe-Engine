@@ -23,9 +23,9 @@ namespace legion::audio
 
         enum playstate
         {
+            stopped,
             playing,
             paused,
-            stopped,
         };
 
         /**

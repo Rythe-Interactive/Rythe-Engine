@@ -57,11 +57,16 @@ struct player_hover : public app::input_axis< player_hover> {};
 
 // Move and strive for the wireframe sphere (which holds the only audio source)
 // For testing the movement of audio sources (Spatial audio/doppler)
-struct sphere_move : public app::input_axis<sphere_move> {};
-struct sphere_strive : public app::input_axis<sphere_strive> {};
+struct audio_move : public app::input_axis<audio_move> {};
+struct audio_strive : public app::input_axis<audio_strive> {};
 // Gain and Pitch knob
 struct gain_change : public app::input_axis<gain_change> {};
 struct pitch_change : public app::input_axis<pitch_change> {};
+struct play_audio_source : public app::input_action<play_audio_source> {};
+struct pause_audio_source : public app::input_action<pause_audio_source> {};
+struct stop_audio_source : public app::input_action<stop_audio_source> {};
+struct rewind_audio_source : public app::input_action<rewind_audio_source> {};
+struct audio_test_input : public app::input_action<audio_test_input> {};
 
 struct exit_action : public app::input_action<exit_action> {};
 
@@ -73,13 +78,6 @@ struct vsync_action : public app::input_action<vsync_action> {};
 
 struct physics_test_move : public app::input_axis<physics_test_move> {};
 
-struct play_audio_source : public app::input_action<play_audio_source> {};
-struct pause_audio_source : public app::input_action<pause_audio_source> {};
-struct stop_audio_source : public app::input_action<stop_audio_source> {};
-struct rewind_audio_source : public app::input_action<rewind_audio_source> {};
-struct play_audio_segment_kilogram : public app::input_action<play_audio_segment_kilogram> {};
-struct play_audio_segment_other : public app::input_action<play_audio_segment_other> {};
-struct audio_test_input : public app::input_action<audio_test_input> {};
 
 struct activate_CRtest0 : public app::input_action<activate_CRtest0> {};
 struct activate_CRtest1 : public app::input_action<activate_CRtest1> {};
@@ -98,12 +96,13 @@ class TestSystem final : public System<TestSystem>
 public:
     TestSystem()
     {
-        log::filter(log::severity::trace);
+        log::filter(log::severity::debug);
         app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
     }
 
     ecs::entity_handle player;
-    ecs::entity_handle sphere;
+    ecs::entity_handle audioSphereLeft;
+    ecs::entity_handle audioSphereRight;
 
     std::vector< ecs::entity_handle > physicsUnitTestCD;
     std::vector< ecs::entity_handle > physicsUnitTestCR;
@@ -286,12 +285,12 @@ public:
         app::InputSystem::createBinding<escape_cursor_action>(app::inputmap::method::TAB);
         app::InputSystem::createBinding<vsync_action>(app::inputmap::method::F1);
 
-        app::InputSystem::createBinding<sphere_move>(app::inputmap::method::I, 1.f);
-        app::InputSystem::createBinding<sphere_move>(app::inputmap::method::K, -1.f);
-        app::InputSystem::createBinding<sphere_strive>(app::inputmap::method::J, 1.f);
-        app::InputSystem::createBinding<sphere_strive>(app::inputmap::method::U, 10.f); // Power mode of J
-        app::InputSystem::createBinding<sphere_strive>(app::inputmap::method::L, -1.f);
-        app::InputSystem::createBinding<sphere_strive>(app::inputmap::method::O, -10.f); // Power mode of O
+        app::InputSystem::createBinding<audio_move>(app::inputmap::method::I, 1.f);
+        app::InputSystem::createBinding<audio_move>(app::inputmap::method::K, -1.f);
+        app::InputSystem::createBinding<audio_strive>(app::inputmap::method::J, 1.f);
+        app::InputSystem::createBinding<audio_strive>(app::inputmap::method::U, 10.f); // Power mode of J
+        app::InputSystem::createBinding<audio_strive>(app::inputmap::method::L, -1.f);
+        app::InputSystem::createBinding<audio_strive>(app::inputmap::method::O, -10.f); // Power mode of O
 
         app::InputSystem::createBinding<gain_change>(app::inputmap::method::F10, 0.05f);
         app::InputSystem::createBinding<gain_change>(app::inputmap::method::F9, -0.05f);
@@ -302,8 +301,6 @@ public:
         app::InputSystem::createBinding<pause_audio_source>(app::inputmap::method::LEFT_BRACKET);
         app::InputSystem::createBinding<stop_audio_source>(app::inputmap::method::RIGHT_BRACKET);
         app::InputSystem::createBinding<rewind_audio_source>(app::inputmap::method::BACKSPACE);
-        app::InputSystem::createBinding<play_audio_segment_kilogram>(app::inputmap::method::KP_MULTIPLY);
-        app::InputSystem::createBinding<play_audio_segment_other>(app::inputmap::method::KP_SUBTRACT);
         app::InputSystem::createBinding<audio_test_input>(app::inputmap::method::SLASH);
 
         app::InputSystem::createBinding< activate_CRtest0>(app::inputmap::method::KP_0);
@@ -329,8 +326,8 @@ public:
 
         bindToEvent<physics_test_move, &TestSystem::onUnitPhysicsUnitTestMove>();
 
-        bindToEvent<sphere_move, &TestSystem::onSphereAAMove>();
-        bindToEvent<sphere_strive, &TestSystem::onSphereAAStrive>();
+        bindToEvent<audio_move, &TestSystem::onSphereAAMove>();
+        bindToEvent<audio_strive, &TestSystem::onSphereAAStrive>();
         bindToEvent<gain_change, &TestSystem::onGainChange>();
         bindToEvent<pitch_change, &TestSystem::onPitchChange>();
 
@@ -341,8 +338,6 @@ public:
 
         bindToEvent<physics::TriggerEvent,&TestSystem::testPhysicsEvent>();
 
-        bindToEvent<play_audio_segment_kilogram, &TestSystem::playAudioSegmentKilogram>();
-        bindToEvent<play_audio_segment_other, &TestSystem::playAudioSegmentOther>();
         bindToEvent<audio_test_input, &TestSystem::audioTestInput>();
 
         //collision resolution test
@@ -501,19 +496,30 @@ public:
             ent.add_components<transform>(position(0, 3, -5.1f), rotation(), scale(2.5f));
         }
 
-         //Sphere setup (with audio source)
+        math::mat4 rotMatrix = math::rotate(1.5f * 3.14159265f, math::vec3(0,1,0));
+        //audioSphereLeft setup
         {
-            sphere = createEntity(); 
-            sphere.add_components<rendering::renderable, sah>({ uvsphereH, wireframeH }, {});
-            sphere.add_components<transform>(position(-5.1f, 3, 0), rotation(), scale(2.5f));
+            audioSphereLeft = createEntity(); 
+            audioSphereLeft.add_component<rendering::renderable>({ cubeH, normalH });
+            audioSphereLeft.add_components<transform>(position(-5, 0, 10), rotation(rotMatrix), scale(0.5));
 
-            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo.mp3"_view, { false });
-            audio::AudioSegmentCache::createAudioSegment("other", "assets://audio/kilogram-of-scotland_stereo.mp3"_view, { false });
+            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo32.wav"_view, { audio::audio_import_settings::channel_processing_setting::split_channels });
             
             audio::audio_source source;
             source.setAudioHandle(segment);
-            sphere.add_component<audio::audio_source>(source);
+            audioSphereLeft.add_component<audio::audio_source>(source);
+        }
+        //audioSphereRight setup
+        {
+            audioSphereRight = createEntity();
+            audioSphereRight.add_component<rendering::renderable>({ cubeH, normalH });
+            audioSphereRight.add_components<transform>(position(5, 0, 10), rotation(rotMatrix), scale(0.5));
 
+            auto segment = audio::AudioSegmentCache::getAudioSegment("kilogram_channel1");
+
+            audio::audio_source source;
+            source.setAudioHandle(segment);
+            audioSphereRight.add_component<audio::audio_source>(source);
         }
 #pragma endregion
 
@@ -1609,17 +1615,17 @@ public:
         posH.fetch_add(move);
     }
 
-    void onSphereAAMove(sphere_move* action)
+    void onSphereAAMove(audio_move* action)
     {
-        auto posH = sphere.get_component_handle<position>();
+        auto posH = audioSphereLeft.get_component_handle<position>();
         math::vec3 move = math::vec3(0.f, 0.f, 1.f);
         move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 10.f;
         posH.fetch_add(move);
     }
 
-    void onSphereAAStrive(sphere_strive* action)
+    void onSphereAAStrive(audio_strive* action)
     {
-        auto posH = sphere.get_component_handle<position>();
+        auto posH = audioSphereLeft.get_component_handle<position>();
         math::vec3 move = math::vec3(1.f, 0.f, 0.f);
         move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 10.f;
         posH.fetch_add(move);
@@ -1629,7 +1635,7 @@ public:
     {
         if (action->value == 0) return;
         using namespace audio;
-        auto sourceH = sphere.get_component_handle<audio_source>();
+        auto sourceH = audioSphereLeft.get_component_handle<audio_source>();
         audio_source source = sourceH.read();
         const float g = source.getGain() + action->value * action->input_delta * 10.0f;
         source.setGain(g);
@@ -1640,7 +1646,7 @@ public:
     {
         if (action->value == 0) return;
         using namespace audio;
-        auto sourceH = sphere.get_component_handle<audio_source>();
+        auto sourceH = audioSphereLeft.get_component_handle<audio_source>();
         audio_source source = sourceH.read();
         const float p = source.getPitch() + action->value * action->input_delta * 10.0f;
         source.setPitch(p);
@@ -1650,7 +1656,7 @@ public:
     void audioTestInput(audio_test_input* action)
     {
         using namespace audio;
-        auto sourceH = sphere.get_component_handle<audio_source>();
+        auto sourceH = audioSphereLeft.get_component_handle<audio_source>();
         audio_source source = sourceH.read();
         source.disableSpatialAudio();
         sourceH.write(source);
@@ -1715,52 +1721,58 @@ public:
 
     void playAudioSource(play_audio_source* action)
     {
-        auto sourceH = sphere.get_component_handle<audio::audio_source>();
-        audio::audio_source source = sourceH.read();
-        source.play();
-        sourceH.write(source);
+        {
+            auto sourceH = audioSphereLeft.get_component_handle<audio::audio_source>();
+            audio::audio_source source = sourceH.read();
+            source.play();
+            sourceH.write(source);
+        }
+        {
+            auto sourceH = audioSphereRight.get_component_handle<audio::audio_source>();
+            audio::audio_source source = sourceH.read();
+            source.play();
+            sourceH.write(source);
+        }
     }
 
     void pauseAudioSource(pause_audio_source* action)
     {
-        auto sourceH = sphere.get_component_handle<audio::audio_source>();
-        audio::audio_source source = sourceH.read();
-        source.pause();
-        sourceH.write(source);
+        {
+            auto sourceH = audioSphereLeft.get_component_handle<audio::audio_source>();
+            audio::audio_source source = sourceH.read();
+            source.pause();
+            sourceH.write(source);
+        }
+        {
+            auto sourceH = audioSphereRight.get_component_handle<audio::audio_source>();
+            audio::audio_source source = sourceH.read();
+            source.pause();
+            sourceH.write(source);
+        }
     }
 
     void stopAudioSource(stop_audio_source* action)
     {
-        auto sourceH = sphere.get_component_handle<audio::audio_source>();
-        audio::audio_source source = sourceH.read();
-        source.stop();
-        sourceH.write(source);
+        {
+            auto sourceH = audioSphereLeft.get_component_handle<audio::audio_source>();
+            audio::audio_source source = sourceH.read();
+            source.stop();
+            sourceH.write(source);
+        }
+        {
+            auto sourceH = audioSphereRight.get_component_handle<audio::audio_source>();
+            audio::audio_source source = sourceH.read();
+            source.stop();
+            sourceH.write(source);
+        }
     }
 
     void rewindAudioSource(rewind_audio_source* action)
     {
-        auto sourceH = sphere.get_component_handle<audio::audio_source>();
+        auto sourceH = audioSphereLeft.get_component_handle<audio::audio_source>();
         audio::audio_source source = sourceH.read();
         source.rewind();
         sourceH.write(source);
-    }
-
-    void playAudioSegmentKilogram(play_audio_segment_kilogram* action)
-    {
-        auto sourceH = sphere.get_component_handle<audio::audio_source>();
-        auto segment = audio::AudioSegmentCache::getAudioSegment("kilogram");
-        auto a = sourceH.read();
-        a.setAudioHandle(segment);
-        sourceH.write(a);
-    }
-
-    void playAudioSegmentOther(play_audio_segment_other* action)
-    {
-        auto sourceH = sphere.get_component_handle<audio::audio_source>();
-        auto segment = audio::AudioSegmentCache::getAudioSegment("other");
-        auto a = sourceH.read();
-        a.setAudioHandle(segment);
-        sourceH.write(a);
     }
 
     void update(time::span deltaTime)
