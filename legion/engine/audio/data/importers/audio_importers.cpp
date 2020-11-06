@@ -118,6 +118,8 @@ namespace legion::audio
             return decay(Err(legion_fs_error("WAV File sample data does not start with word (data)")));
         }
 
+        assert_msg("Audio file channels were 0", header.wave_format.channels != 0);
+
         uint metaSize = sizeof(header) + sizeof(waveData);
 
         int sampleDataSize = resource.size() - metaSize;
