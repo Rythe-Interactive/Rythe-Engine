@@ -44,6 +44,11 @@ namespace legion::core
 	using byte = uint8;
     using byte_vec = std::vector<byte>;
 
+    using bitfield8 = byte;
+    using bitfield16 = uint16;
+    using bitfield32 = uint32;
+    using bitfield64 = uint64;
+
 	using priority_type = uint8;
 #define default_priority 0
 #define PRIORITY_MAX UCHAR_MAX

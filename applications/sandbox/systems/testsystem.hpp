@@ -380,6 +380,8 @@ public:
         rendering::material_handle vertexH;
 
         rendering::material_handle uvH;
+        rendering::material_handle textureH;
+        rendering::material_handle pbrH;
         rendering::material_handle normalH;
         rendering::material_handle skyboxH;
         rendering::material_handle floorMH;
@@ -397,12 +399,23 @@ public:
             submeshtestH = rendering::ModelCache::create_model("submeshtest", "assets://models/submeshtest.obj"_view);
             floorH = rendering::ModelCache::create_model("floor", "assets://models/groundplane.obj"_view);
 
-            wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.glsl"_view);
-            vertexH = rendering::MaterialCache::create_material("vertex", "assets://shaders/position.glsl"_view);
-            uvH = rendering::MaterialCache::create_material("uv", "assets://shaders/uv.glsl"_view);
-            normalH = rendering::MaterialCache::create_material("normal", "assets://shaders/normal.glsl"_view);
-            skyboxH = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.glsl"_view);
-            floorMH = rendering::MaterialCache::create_material("floor", "assets://shaders/groundplane.glsl"_view);
+            wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.shs"_view);
+            vertexH = rendering::MaterialCache::create_material("vertex", "assets://shaders/position.shs"_view);
+            uvH = rendering::MaterialCache::create_material("uv", "assets://shaders/uv.shs"_view);
+
+            textureH = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
+            textureH.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
+
+            pbrH = rendering::MaterialCache::create_material("pbr", "assets://shaders/pbr.shs"_view);
+            pbrH.set_param("material_input.albedo", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
+            pbrH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("engine://resources/default/normalHeight"_view));
+            pbrH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("engine://resources/default/MRDAo"_view));
+            pbrH.set_param("material_input.emissive", rendering::TextureCache::create_texture("engine://resources/default/emissive"_view));
+            pbrH.set_param("material_input.heightScale", 1.f);
+
+            normalH = rendering::MaterialCache::create_material("normal", "assets://shaders/normal.shs"_view);
+            skyboxH = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.shs"_view);
+            floorMH = rendering::MaterialCache::create_material("floor", "assets://shaders/groundplane.shs"_view);
 
             app::ContextHelper::makeContextCurrent(nullptr);
         }
@@ -466,7 +479,7 @@ public:
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable, sah>({ submeshtestH, normalH }, {});
+            ent.add_components<rendering::renderable, sah>({ submeshtestH, pbrH }, {});
             ent.add_components<transform>(position(0, 10, 0), rotation(), scale());
         }
 
@@ -478,7 +491,7 @@ public:
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable, sah>({ cubeH, uvH }, {});
+            ent.add_components<rendering::renderable, sah>({ cubeH, textureH }, {});
             ent.add_components<transform>(position(5.1f, 3, 0), rotation(), scale(0.75f));
         }
 

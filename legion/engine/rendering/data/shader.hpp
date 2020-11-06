@@ -3,6 +3,8 @@
 #include <string>
 #include <rendering/data/model.hpp>
 #include <rendering/data/texture.hpp>
+#include <rendering/util/bindings.hpp>
+#include <rendering/util/settings.hpp>
 
 /**
  * @file shader.hpp
@@ -15,6 +17,9 @@ namespace legion::rendering
     struct shader;
     struct ShaderCache;
     struct shader_handle;
+
+    using shader_ilo = std::vector<std::pair<GLuint, std::string>>; // Shader intermediate language object.
+    using shader_state = std::unordered_map<GLenum, GLenum>;
 
 #pragma region shader parameters
     /**@class shader_parameter_base
@@ -79,9 +84,22 @@ namespace legion::rendering
     }
 
     template<>
-    inline void uniform<texture>::set_value(const texture& value)
+    inline void uniform<texture_handle>::set_value(const texture_handle& value)
     {
+        if (is_valid())
+        {
+            auto texture = value.get_texture();
+            glActiveTexture(GL_TEXTURE0 + m_location);
+            glBindTexture(GL_TEXTURE_2D, texture.textureId);
+            glUniform1i(m_location, m_location);
+        }
+    }
 
+    template<>
+    inline void uniform<uint>::set_value(const uint& value)
+    {
+        if (is_valid())
+            glUniform1ui(m_location, value);
     }
 
     template<>
@@ -240,7 +258,6 @@ namespace legion::rendering
     {
         /**@brief Data-structure to hold mapping of context functions and parameters.
          */
-        using shader_state = std::unordered_map<GLenum, GLenum>;
         GLint programId;
         std::unordered_map<id_type, std::unique_ptr<shader_parameter_base>> uniforms;
         std::unordered_map<id_type, std::unique_ptr<attribute>> attributes;
@@ -292,11 +309,11 @@ namespace legion::rendering
             return invalid_attribute;
         }
 
-        std::vector<std::pair<std::string, GLenum>> get_uniform_info()
+        std::vector<std::tuple<std::string, GLint, GLenum>> get_uniform_info()
         {
-            std::vector<std::pair<std::string, GLenum>> info;
+            std::vector<std::tuple<std::string, GLint, GLenum>> info;
             for (auto& [_, uniform] : uniforms)
-                info.push_back(std::make_pair(uniform->get_name(), uniform->get_type()));
+                info.push_back(std::make_tuple(uniform->get_name(), uniform->get_location(), uniform->get_type()));
             return std::move(info);
         }
     };
@@ -310,7 +327,7 @@ namespace legion::rendering
 
         std::string get_name() const;
 
-        std::vector<std::pair<std::string, GLenum>> get_uniform_info() const;
+        std::vector<std::tuple<std::string, GLint, GLenum>> get_uniform_info() const;
 
         template<typename T>
         uniform<T> get_uniform(const std::string& name);
@@ -326,37 +343,28 @@ namespace legion::rendering
         static void release();
 
         bool operator==(const shader_handle& other) const { return id == other.id; }
+        bool operator!=(const shader_handle& other) const { return id != other.id; }
         operator bool() { return id != invalid_id; }
     };
 
     constexpr shader_handle invalid_shader_handle{ invalid_id };
-
-    struct shader_import_settings
-    {
-
-    };
-
-    constexpr shader_import_settings default_shader_settings{};
 
     class ShaderCache
     {
         friend class renderer;
         friend struct shader_handle;
     private:
-        using shader_ilo = std::vector<std::pair<GLuint, std::string>>; // Shader intermediate language object.
-        using shader_state = std::unordered_map<GLenum, GLenum>;
 
         static sparse_map<id_type, shader> m_shaders;
         static async::readonly_rw_spinlock m_shaderLock;
 
         static shader* get_shader(id_type id);
 
-        static void process_includes(std::string& shaderSource);
-        static void resolve_preprocess_features(std::string& shaderSource, shader_state& state);
-        static shader_ilo seperate_shaders(std::string& shaderSource);
         static void process_io(shader& shader, id_type id);
         static app::gl_id compile_shader(GLuint shaderType, cstring source, GLint sourceLength);
 
+        static bool load_precompiled(const std::string& name, const fs::view& file, shader_ilo& ilo, shader_state& state);
+        static void store_precompiled(const fs::view& file, const shader_ilo& ilo, const shader_state& state);
     public:
         static shader_handle create_shader(const std::string& name, const fs::view& file, shader_import_settings settings = default_shader_settings);
         static shader_handle create_shader(const fs::view& file, shader_import_settings settings = default_shader_settings);
