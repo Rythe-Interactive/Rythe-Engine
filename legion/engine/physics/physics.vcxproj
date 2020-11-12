@@ -17,7 +17,6 @@
     <ClCompile Include="halfedgeface.cpp" />
     <ClCompile Include="components\physics_component.cpp" />
     <ClCompile Include="systems\physicssystem.cpp" />
-    <ClCompile Include="systems\physicssystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core\core.vcxproj">
@@ -31,12 +30,14 @@
     <ClInclude Include="data\physics_manifold_precursor.h" />
     <ClInclude Include="data\edgepenetrationquery.h" />
     <ClInclude Include="data\pointer_encapsulator.hpp" />
+    <ClInclude Include="events\trigger_event.hpp" />
     <ClInclude Include="halfedgeedge.hpp" />
     <ClInclude Include="halfedgeface.hpp" />
     <ClInclude Include="colliders\physicscollider.hpp" />
     <ClInclude Include="data\penetrationquery.h" />
     <ClInclude Include="physics.hpp" />
     <ClInclude Include="physicsconstants.h" />
+    <ClInclude Include="systems\physicssystem.hpp" />
     <ClInclude Include="physics_statics.hpp" />
     <ClInclude Include="physics_contact.h" />
     <ClInclude Include="data\physics_manifold.hpp" />

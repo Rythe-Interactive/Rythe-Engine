@@ -79,7 +79,7 @@ namespace legion::core::ecs
 
     void QueryRegistry::evaluateEntityChange(id_type entityId, id_type componentTypeId, bool removal)
     {
-        entity_handle entity(entityId, &m_registry);
+        entity_handle entity(entityId);
 
         async::mixed_multiguard mmguard(m_entityLock, async::write, m_componentLock, async::read); // We lock now so that we don't need to reacquire the locks every iteration.
 
@@ -105,7 +105,7 @@ namespace legion::core::ecs
 
     void QueryRegistry::markEntityDestruction(id_type entityId)
     {
-        entity_handle entity(entityId, &m_registry);
+        entity_handle entity(entityId);
 
         async::readwrite_guard guard(m_entityLock);
         for (int i = 0; i < m_entityLists.size(); i++) // Iterate over all query tracking lists.

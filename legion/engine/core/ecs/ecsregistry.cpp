@@ -20,7 +20,7 @@ namespace legion::core::ecs
         {
             async::readwrite_guard guard(m_entityLock); // Request read-write permission for the entity list.
             // If you wonder why we don't remove our parent, our parent is the one calling this function so it'll be destroyed anyways.
-            m_entities.erase(entity_handle(entityId, this)); // Erase the entity from the entity list first, invalidating the entity and stopping any other function from being called on this entity.
+            m_entities.erase(entity_handle(entityId)); // Erase the entity from the entity list first, invalidating the entity and stopping any other function from being called on this entity.
         }
 
         entity_data data = {};
@@ -45,11 +45,12 @@ namespace legion::core::ecs
 
     EcsRegistry::EcsRegistry(events::EventBus* eventBus) : m_families(), m_entityData(), m_containedEntities(), m_entities(), m_queryRegistry(*this), m_eventBus(eventBus)
     {
+        entity_handle::m_registry = this;
         // Create world entity.
         m_entityData.emplace(world_entity_id);
         m_containedEntities.insert(world_entity_id);
-        m_entities.emplace(world_entity_id, this);
-        world = entity_handle(world_entity_id, this);
+        m_entities.emplace(world_entity_id);
+        world = entity_handle(world_entity_id);
     }
 
     component_container_base* EcsRegistry::getFamily(id_type componentTypeId)
@@ -75,7 +76,7 @@ namespace legion::core::ecs
         if (!validateEntity(entityId))
             throw legion_entity_not_found_error;
 
-        return component_handle_base(entityId, this);
+        return component_handle_base(entityId, componentTypeId);
     }
 
     component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId)
@@ -92,7 +93,7 @@ namespace legion::core::ecs
 
         m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, false);
 
-        return component_handle_base(entityId, this);
+        return component_handle_base(entityId, componentTypeId);
     }
 
     component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId, void* value)
@@ -109,7 +110,7 @@ namespace legion::core::ecs
 
         m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, false);
 
-        return component_handle_base(entityId, this);
+        return component_handle_base(entityId, componentTypeId);
     }
 
     void EcsRegistry::destroyComponent(id_type entityId, id_type componentTypeId)
@@ -132,12 +133,20 @@ namespace legion::core::ecs
         return entityId && m_containedEntities.contains(entityId);
     }
 
-    entity_handle EcsRegistry::createEntity()
+    entity_handle EcsRegistry::createEntity(id_type entityId)
     {
-        id_type id = m_nextEntityId++;
+
+        id_type id;
+        if (!entityId)
+            id = m_nextEntityId++;
+        else
+        {
+            id = entityId;
+            m_nextEntityId = entityId + 1;
+        }
 
         if (validateEntity(id))
-            throw legion_entity_exists_error;
+            return createEntity(id++);
 
         {
             async::readwrite_guard guard(m_entityDataLock);  // We need write permission now because we hope to insert a new item.
@@ -145,12 +154,12 @@ namespace legion::core::ecs
         }
 
         async::readwrite_guard guard(m_entityLock); // No scope needed because we also need read permission in the return line.
-        m_entities.emplace(id, this);
+        m_entities.emplace(id);
         m_containedEntities.insert(id);
 
-        entity_handle(id, this).set_parent(world_entity_id);
+        entity_handle(id).set_parent(world_entity_id);
 
-        return entity_handle(id, this);
+        return entity_handle(id);
     }
 
     void EcsRegistry::destroyEntity(id_type entityId, bool recurse)
@@ -160,7 +169,7 @@ namespace legion::core::ecs
 
         m_queryRegistry.markEntityDestruction(entityId); // Remove entity from any queries.
 
-        entity_handle entity(entityId, this);
+        entity_handle entity(entityId);
 
         for (auto child : entity)
         {
@@ -200,9 +209,9 @@ namespace legion::core::ecs
     L_NODISCARD entity_handle EcsRegistry::getEntity(id_type entityId)
     {
         if (!validateEntity(entityId))
-            return entity_handle(invalid_id, this);
+            return entity_handle(invalid_id);
 
-        return entity_handle(entityId, this);;
+        return entity_handle(entityId);;
     }
 
     L_NODISCARD entity_data& EcsRegistry::getEntityData(id_type entityId)
@@ -215,7 +224,7 @@ namespace legion::core::ecs
         entity_data& data = m_entityData[entityId]; // Is fine because the lock only locks order changes in the container, not the values themselves.
 
 
-        if (!validateEntity(data.parent)) // Re-validate parent.
+        if (data.parent && !validateEntity(data.parent)) // Re-validate parent.
             data.parent = invalid_id;
 
         return data;

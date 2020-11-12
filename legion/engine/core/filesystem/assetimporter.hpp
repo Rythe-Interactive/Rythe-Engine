@@ -17,8 +17,7 @@ namespace legion::core::filesystem
          */
         struct resource_converter_base
         {
-        protected:
-            virtual void dont_call() LEGION_PURE;
+            virtual id_type result_type() LEGION_PURE;
         };
     }
 
@@ -30,12 +29,9 @@ namespace legion::core::filesystem
     template<typename result, typename... Settings>
     struct resource_converter : public detail::resource_converter_base
     {
-        id_type result_type() { return typeHash<result>(); }
+        virtual id_type result_type() override { return typeHash<result>(); }
 
         virtual common::result_decay_more<result, fs_error> load(const basic_resource& resource, Settings&&...) LEGION_PURE;
-
-    protected:
-        virtual void dont_call() override {};
     };
 
     /**@class basic_resource_converter
@@ -62,7 +58,7 @@ namespace legion::core::filesystem
     class AssetImporter
     {
     private:
-        static sparse_map<id_type, detail::resource_converter_base*> m_converters;
+        static sparse_map<id_type, std::vector<detail::resource_converter_base*>> m_converters;
 
     public:
         /**@brief Reports a converter type to the importer and allows converting from the given extension to the given object type.
@@ -72,7 +68,7 @@ namespace legion::core::filesystem
         template<typename T>
         static void reportConverter(cstring extension)
         {
-            m_converters.insert(nameHash(extension), new T());
+            m_converters[nameHash(extension)].push_back(new T());
         }
 
         /**@brief Attempt to load an object from a file using the pre-reported converters.
@@ -105,19 +101,21 @@ namespace legion::core::filesystem
             if (result != common::valid)
                 return decay(Err(result.get_error()));
 
-            // Retrieve the correct converter to use.
-            detail::resource_converter_base* base = m_converters[nameHash(view.get_extension())];
-            auto* converter = reinterpret_cast<resource_converter<T, Settings...>*>(base);
-
-            // Do a safety check if the cast was valid before we call any functions on it.
-            if (typeHash<T>() == converter->result_type())
+            for (detail::resource_converter_base* base : m_converters[nameHash(view.get_extension())])
             {
-                // Attempt the conversion and return the result.
-                auto loadresult = converter->load(result, std::forward<Settings>(settings)...);
-                if (loadresult == common::valid)
-                    return decay(Ok((T)loadresult));
+                // Do a safety check if the cast was valid before we call any functions on it.
+                if (typeHash<T>() == base->result_type())
+                {
+                    // Retrieve the correct converter to use.
+                    auto* converter = reinterpret_cast<resource_converter<T, Settings...>*>(base);
 
-                return decay(Err(loadresult.get_error()));
+                    // Attempt the conversion and return the result.
+                    auto loadresult = converter->load(result, std::forward<Settings>(settings)...);
+                    if (loadresult == common::valid)
+                        return decay(Ok((T)loadresult));
+
+                    return decay(Err(loadresult.get_error()));
+                }
             }
 
             return decay(Err(legion_fs_error("requested asset load on file that stores a different type of asset.")));

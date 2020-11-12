@@ -6,7 +6,7 @@
  */
 
 #include <core/platform/platform.hpp>
-
+#include <core/platform/shellinvoke.hpp>
 #include <core/math/math.hpp>
 #include <core/common/common.hpp>
 #include <core/types/types.hpp>
@@ -18,6 +18,7 @@
 #include <core/events/events.hpp>
 #include <core/entry/entry_point.hpp>
 #include <core/engine/engine.hpp>
+#include <core/serialization/serializationUtil.hpp>
 
 #include <core/filesystem/filesystem.hpp>
 #include <core/data/data.hpp>
@@ -26,3 +27,5 @@ namespace legion
 {
     using namespace core;
 }
+
+namespace lgn = legion;

@@ -461,10 +461,14 @@
     <ClInclude Include="math\precision.hpp" />
     <ClInclude Include="math\trigonometry.hpp" />
     <ClInclude Include="platform\platform.hpp" />
+    <ClInclude Include="scenemanagement\scene.hpp" />
+    <ClInclude Include="scenemanagement\scenemanager.hpp" />
     <ClInclude Include="scheduling\process.hpp" />
     <ClInclude Include="scheduling\processchain.hpp" />
     <ClInclude Include="scheduling\scheduler.hpp" />
     <ClInclude Include="scheduling\scheduling.hpp" />
+    <ClInclude Include="serialization\serializationmeta.hpp" />
+    <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="time\clock.hpp" />
     <ClInclude Include="time\time.hpp" />
     <ClInclude Include="time\time_span.hpp" />
@@ -484,6 +488,7 @@
     <ClCompile Include="data\importers\image_importers.cpp" />
     <ClCompile Include="data\importers\mesh_importers.cpp" />
     <ClCompile Include="data\mesh.cpp" />
+    <ClCompile Include="ecs\component_handle.cpp" />
     <ClCompile Include="ecs\ecsregistry.cpp" />
     <ClCompile Include="ecs\entity_handle.cpp" />
     <ClCompile Include="ecs\entityquery.cpp" />
@@ -503,6 +508,7 @@
     <ClCompile Include="compute\program.cpp" />
     <ClCompile Include="logging\logging.cpp" />
     <ClCompile Include="math\glm\detail\glm.cpp" />
+    <ClCompile Include="scenemanagement\scenemanager.cpp" />
     <ClCompile Include="scheduling\processchain.cpp" />
     <ClCompile Include="scheduling\scheduler.cpp" />
     <ClCompile Include="types\type_util.cpp" />

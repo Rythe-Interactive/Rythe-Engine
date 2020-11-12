@@ -19,17 +19,17 @@ namespace legion::rendering
         ModelCache::buffer(id, matrixBuffer);
     }
 
-      mesh_handle model_handle::get_mesh()
+    mesh_handle model_handle::get_mesh()
     {
         return ModelCache::get_mesh(id);
     }
 
-      const model& model_handle::get_model()
+    const model& model_handle::get_model()
     {
         return ModelCache::get_model(id);
     }
 
-      const model& ModelCache::get_model(id_type id)
+    const model& ModelCache::get_model(id_type id)
     {
         async::readonly_guard guard(m_modelLock);
         return m_models[id];
@@ -40,7 +40,10 @@ namespace legion::rendering
         if (id == invalid_id)
             return;
 
-        auto [lock, mesh] = MeshCache::get_handle(id).get();
+        auto mesh_handle = MeshCache::get_handle(id);
+        if (!mesh_handle)
+            return;
+        auto [lock, mesh] = mesh_handle.get();
 
         async::readonly_multiguard guard(m_modelLock, lock);
         model& model = m_models[id];
@@ -146,7 +149,7 @@ namespace legion::rendering
         return { id };
     }
 
-      model_handle ModelCache::get_handle(const std::string& name)
+    model_handle ModelCache::get_handle(const std::string& name)
     {
         id_type id = nameHash(name);
         async::readonly_guard guard(m_modelLock);
@@ -155,7 +158,7 @@ namespace legion::rendering
         return invalid_model_handle;
     }
 
-      model_handle ModelCache::get_handle(id_type id)
+    model_handle ModelCache::get_handle(id_type id)
     {
         async::readonly_guard guard(m_modelLock);
         if (m_models.contains(id))
@@ -163,12 +166,12 @@ namespace legion::rendering
         return invalid_model_handle;
     }
 
-      mesh_handle ModelCache::get_mesh(id_type id)
+    mesh_handle ModelCache::get_mesh(id_type id)
     {
         return MeshCache::get_handle(id);
     }
 
-      mesh_handle ModelCache::get_mesh(const std::string& name)
+    mesh_handle ModelCache::get_mesh(const std::string& name)
     {
         id_type id = nameHash(name);
         return MeshCache::get_handle(id);

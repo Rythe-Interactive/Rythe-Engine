@@ -1,6 +1,7 @@
 /// @ref core
 
 #include "compute_vector_relational.hpp"
+#include "type_vec3.hpp"
 
 namespace legion::core::math
 {
@@ -60,6 +61,13 @@ namespace legion::core::math
 		, y(static_cast<T>(v.x))
 		, z(static_cast<T>(v.x))
 	{}
+
+	template<typename T, qualifier Q>
+	template<typename Archive>
+	inline void vec<3, T, Q>::serialize(Archive& archive)
+	{
+		archive(CEREAL_NVP(x), CEREAL_NVP(y), CEREAL_NVP(z));
+	}
 
 	template<typename T, qualifier Q>
 	template<typename X, typename Y, typename Z>
