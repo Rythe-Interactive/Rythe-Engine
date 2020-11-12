@@ -50,9 +50,11 @@
 <span class="cp">#include</span> <span class="cpf">&lt;core/compute/program.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/logging/logging.hpp&gt;</span><span class="cp"></span>
 
+<span class="cp">#include</span> <span class="cpf">&quot;context.hpp&quot;</span><span class="cp"></span>
+
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">compute</span>
 <span class="p">{</span>
-    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">build_buffer_names</span><span class="p">()</span>
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">buildBufferNames</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="n">size_type</span> <span class="n">size</span><span class="p">;</span>
         <span class="n">cl_uint</span> <span class="n">num_args</span><span class="p">;</span>
@@ -83,31 +85,31 @@
         <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">read_write_mode</span><span class="p">(</span><span class="n">buffer_type</span> <span class="n">t</span><span class="p">)</span>
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">readWriteMode</span><span class="p">(</span><span class="n">buffer_type</span> <span class="n">t</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">m_default_mode</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
         <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">set_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">)</span>
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">setBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="c1">//get name from buffer</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">m_name</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
             <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Encountered unnamed buffer! binding to a Kernel-location will fail!&quot;</span><span class="p">);</span>
-        <span class="k">return</span> <span class="nf">set_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_name</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nf">setBuffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_name</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">set_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">setBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="c1">//translate name to index</span>
         <span class="n">param_find</span><span class="p">([</span><span class="k">this</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">buffer</span><span class="p">)](</span><span class="n">cl_uint</span> <span class="n">index</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="k">this</span><span class="o">-&gt;</span><span class="n">set_buffer</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">index</span><span class="p">);</span>
+            <span class="k">this</span><span class="o">-&gt;</span><span class="n">setBuffer</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">index</span><span class="p">);</span>
         <span class="p">},</span> <span class="n">name</span><span class="p">);</span>
         <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">set_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">index</span><span class="p">)</span>
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">setBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">index</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="c1">//set kernel argument</span>
         <span class="k">const</span> <span class="n">cl_int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">clSetKernelArg</span><span class="p">(</span><span class="n">m_func</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">cl_mem</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">buffer</span><span class="p">.</span><span class="n">m_memory_object</span><span class="p">);</span>
@@ -120,7 +122,7 @@
         <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">enqueue_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">enqueueBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
     <span class="p">{</span>
 
         <span class="cm">/*</span>
@@ -187,31 +189,31 @@
         <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">set_and_enqueue_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">setAndEnqueBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="c1">//get name from buffer</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">m_name</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
             <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Encountered unnamed buffer! binding to a Kernel-location will fail!&quot;</span><span class="p">);</span>
-        <span class="k">return</span> <span class="nf">set_and_enqueue_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_name</span><span class="p">,</span> <span class="n">blocking</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nf">setAndEnqueBuffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_name</span><span class="p">,</span> <span class="n">blocking</span><span class="p">);</span>
     <span class="p">}</span>
 
 
-    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">set_and_enqueue_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">setAndEnqueBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="c1">//translate name to index</span>
         <span class="n">param_find</span><span class="p">([</span><span class="k">this</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">blocking</span><span class="p">](</span><span class="n">cl_uint</span> <span class="n">index</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">set_and_enqueue_buffer</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">blocking</span><span class="p">);</span>
+            <span class="n">setAndEnqueBuffer</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">blocking</span><span class="p">);</span>
         <span class="p">},</span> <span class="n">name</span><span class="p">);</span>
         <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">set_and_enqueue_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">index</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">setAndEnqueBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">index</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="c1">//set and ... enqueue_buffer</span>
         <span class="c1">//nothing fun to see here</span>
-        <span class="n">enqueue_buffer</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">blocking</span><span class="p">);</span>
-        <span class="k">return</span> <span class="nf">set_buffer</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">index</span><span class="p">);</span>
+        <span class="n">enqueueBuffer</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">blocking</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nf">setBuffer</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">index</span><span class="p">);</span>
     <span class="p">}</span>
 
 
@@ -250,6 +252,17 @@
         <span class="n">clReleaseCommandQueue</span><span class="p">(</span><span class="n">m_queue</span><span class="p">);</span>
     <span class="p">}</span>
 
+    <span class="kt">size_t</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">getMaxWorkSize</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="kt">size_t</span> <span class="n">value</span><span class="p">;</span>
+
+        <span class="n">cl_int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">clGetKernelWorkGroupInfo</span><span class="p">(</span><span class="n">m_func</span><span class="p">,</span> <span class="n">Context</span><span class="o">::</span><span class="n">getDeviceId</span><span class="p">(),</span> <span class="n">CL_KERNEL_WORK_GROUP_SIZE</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">size_t</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="n">CL_SUCCESS</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">value</span><span class="p">;</span>
+    <span class="p">}</span>
+
 
     <span class="n">Kernel</span><span class="o">::</span><span class="n">Kernel</span><span class="p">(</span><span class="n">Program</span><span class="o">*</span> <span class="n">program</span><span class="p">,</span> <span class="n">cl_kernel</span> <span class="n">kernel</span><span class="p">)</span> <span class="o">:</span>
         <span class="n">m_default_mode</span><span class="p">(</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">),</span>
@@ -263,6 +276,8 @@
 
     <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">local</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">s</span><span class="p">)</span>
     <span class="p">{</span>
+
+        <span class="c1">//TODO(algo-ryth-mix) This should cap at CL_KERNEL_WORK_GROUP_SIZE</span>
         <span class="n">m_local_size</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span>
         <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
     <span class="p">}</span>

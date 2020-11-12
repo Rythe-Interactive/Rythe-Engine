@@ -56,8 +56,6 @@
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">audio</span>
 <span class="p">{</span>
-    <span class="n">ALCcontext</span><span class="o">*</span> <span class="n">mp3_audio_loader</span><span class="o">::</span><span class="n">context</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
-
     <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">audio_segment</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">mp3_audio_loader</span><span class="o">::</span><span class="n">load</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">resource</span><span class="p">,</span> <span class="n">audio_import_settings</span><span class="o">&amp;&amp;</span> <span class="n">settings</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">using</span> <span class="n">common</span><span class="o">::</span><span class="n">Err</span><span class="p">,</span> <span class="n">common</span><span class="o">::</span><span class="n">Ok</span><span class="p">;</span>
@@ -75,26 +73,371 @@
             <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">legion_fs_error</span><span class="p">(</span><span class="s">&quot;Failed to load audio file&quot;</span><span class="p">)));</span>
         <span class="p">}</span>
 
-        <span class="n">audio_segment</span> <span class="n">as</span><span class="p">(</span>
-            <span class="k">new</span> <span class="n">int16</span><span class="p">[</span><span class="n">fileInfo</span><span class="p">.</span><span class="n">samples</span><span class="p">],</span>
+        <span class="n">byte</span><span class="o">*</span> <span class="n">audioData</span><span class="p">;</span>
+
+        <span class="c1">// bitsPerSample is always 16 for mp3</span>
+        <span class="kt">int</span> <span class="n">dataSize</span> <span class="o">=</span> <span class="n">fileInfo</span><span class="p">.</span><span class="n">samples</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">int16</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">channels</span> <span class="o">=</span> <span class="n">fileInfo</span><span class="p">.</span><span class="n">channels</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">samples</span> <span class="o">=</span> <span class="n">fileInfo</span><span class="p">.</span><span class="n">samples</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">channel_processing</span> <span class="o">==</span> <span class="n">audio_import_settings</span><span class="o">::</span><span class="n">channel_processing_setting</span><span class="o">::</span><span class="n">force_mono</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">audioData</span> <span class="o">=</span> <span class="n">detail</span><span class="o">::</span><span class="n">convertToMono</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">byte</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">fileInfo</span><span class="p">.</span><span class="n">buffer</span><span class="p">),</span> <span class="n">dataSize</span><span class="p">,</span> <span class="n">dataSize</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="mi">16</span><span class="p">);</span>
+            <span class="n">samples</span> <span class="o">/=</span> <span class="n">channels</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">audioData</span> <span class="o">=</span> <span class="k">new</span> <span class="n">byte</span><span class="p">[</span><span class="n">dataSize</span><span class="p">];</span>
+            <span class="n">memmove</span><span class="p">(</span><span class="n">audioData</span><span class="p">,</span> <span class="n">fileInfo</span><span class="p">.</span><span class="n">buffer</span><span class="p">,</span> <span class="n">dataSize</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">fileInfo</span><span class="p">.</span><span class="n">buffer</span><span class="p">);</span>
+
+        <span class="n">audio_segment</span> <span class="nf">as</span><span class="p">(</span>
+            <span class="n">audioData</span><span class="p">,</span> <span class="c1">// fileInfo.samples is int16, therefore byte requires twice as much</span>
             <span class="mi">0</span><span class="p">,</span>
-            <span class="n">fileInfo</span><span class="p">.</span><span class="n">samples</span><span class="p">,</span>
-            <span class="n">fileInfo</span><span class="p">.</span><span class="n">channels</span><span class="p">,</span>
+            <span class="n">samples</span><span class="p">,</span>
+            <span class="n">channels</span><span class="p">,</span>
             <span class="n">fileInfo</span><span class="p">.</span><span class="n">hz</span><span class="p">,</span>
             <span class="n">fileInfo</span><span class="p">.</span><span class="n">layer</span><span class="p">,</span>
             <span class="n">fileInfo</span><span class="p">.</span><span class="n">avg_bitrate_kbps</span>
         <span class="p">);</span>
-        <span class="n">memmove</span><span class="p">(</span><span class="n">as</span><span class="p">.</span><span class="n">getData</span><span class="p">(),</span> <span class="n">fileInfo</span><span class="p">.</span><span class="n">buffer</span><span class="p">,</span> <span class="n">as</span><span class="p">.</span><span class="n">samples</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">int16</span><span class="p">));</span>
-        <span class="n">free</span><span class="p">(</span><span class="n">fileInfo</span><span class="p">.</span><span class="n">buffer</span><span class="p">);</span>
 
         <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">AudioSystem</span><span class="o">::</span><span class="n">contextLock</span><span class="p">);</span>
-        <span class="n">alcMakeContextCurrent</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+        <span class="n">alcMakeContextCurrent</span><span class="p">(</span><span class="n">AudioSystem</span><span class="o">::</span><span class="n">alcContext</span><span class="p">);</span>
         <span class="c1">//Generate openal buffer</span>
         <span class="n">alGenBuffers</span><span class="p">((</span><span class="n">ALuint</span><span class="p">)</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">as</span><span class="p">.</span><span class="n">audioBufferId</span><span class="p">);</span>
-        <span class="n">alBufferData</span><span class="p">(</span><span class="n">as</span><span class="p">.</span><span class="n">audioBufferId</span><span class="p">,</span> <span class="n">AL_FORMAT_MONO16</span><span class="p">,</span> <span class="n">as</span><span class="p">.</span><span class="n">getData</span><span class="p">(),</span> <span class="n">as</span><span class="p">.</span><span class="n">samples</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">int16</span><span class="p">),</span> <span class="n">as</span><span class="p">.</span><span class="n">sampleRate</span><span class="p">);</span>
+
+        <span class="n">ALenum</span> <span class="n">format</span> <span class="o">=</span> <span class="n">AL_FORMAT_MONO16</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">as</span><span class="p">.</span><span class="n">channels</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="n">format</span> <span class="o">=</span> <span class="n">AL_FORMAT_STEREO16</span><span class="p">;</span>
+
+        <span class="n">alBufferData</span><span class="p">(</span><span class="n">as</span><span class="p">.</span><span class="n">audioBufferId</span><span class="p">,</span> <span class="n">format</span><span class="p">,</span> <span class="n">as</span><span class="p">.</span><span class="n">getData</span><span class="p">(),</span> <span class="n">dataSize</span><span class="p">,</span> <span class="n">as</span><span class="p">.</span><span class="n">sampleRate</span><span class="p">);</span>
+
         <span class="n">alcMakeContextCurrent</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
 
         <span class="k">return</span> <span class="nf">decay</span><span class="p">(</span><span class="n">Ok</span><span class="p">(</span><span class="n">as</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">audio_segment</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">wav_audio_loader</span><span class="o">::</span><span class="n">load</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">resource</span><span class="p">,</span> <span class="n">audio_import_settings</span><span class="o">&amp;&amp;</span> <span class="n">settings</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">common</span><span class="o">::</span><span class="n">Err</span><span class="p">,</span> <span class="n">common</span><span class="o">::</span><span class="n">Ok</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">decay</span> <span class="o">=</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">audio_segment</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span><span class="p">;</span>
+
+        <span class="n">RIFF_Header</span> <span class="n">header</span><span class="p">;</span>
+        <span class="n">WAVE_Data</span> <span class="n">waveData</span><span class="p">;</span>
+
+        <span class="n">memcpy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">header</span><span class="p">,</span> <span class="n">resource</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">header</span><span class="p">));</span> <span class="c1">// Copy header data into the header struct</span>
+
+        <span class="c1">// Check if the loaded file has the correct header</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">header</span><span class="p">.</span><span class="n">chunckId</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;R&#39;</span> <span class="o">||</span>
+            <span class="n">header</span><span class="p">.</span><span class="n">chunckId</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;I&#39;</span> <span class="o">||</span>
+            <span class="n">header</span><span class="p">.</span><span class="n">chunckId</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;F&#39;</span> <span class="o">||</span>
+            <span class="n">header</span><span class="p">.</span><span class="n">chunckId</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;F&#39;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Found WAV header: &#39;{}&#39;, exptected: &#39;RIFF&#39;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">header</span><span class="p">.</span><span class="n">chunckId</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">header</span><span class="p">.</span><span class="n">chunckId</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">header</span><span class="p">.</span><span class="n">chunckId</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">header</span><span class="p">.</span><span class="n">chunckId</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+            <span class="k">return</span> <span class="nf">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">legion_fs_error</span><span class="p">(</span><span class="s">&quot;WAV File invalid header, exptected RIFF&quot;</span><span class="p">)));</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">header</span><span class="p">.</span><span class="n">format</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;W&#39;</span> <span class="o">||</span>
+            <span class="n">header</span><span class="p">.</span><span class="n">format</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;A&#39;</span> <span class="o">||</span>
+            <span class="n">header</span><span class="p">.</span><span class="n">format</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;V&#39;</span> <span class="o">||</span>
+            <span class="n">header</span><span class="p">.</span><span class="n">format</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;E&#39;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Found WAV format: &#39;{}{}{}{}&#39;, exptected: &#39;WAVE&#39;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">header</span><span class="p">.</span><span class="n">format</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">header</span><span class="p">.</span><span class="n">format</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">header</span><span class="p">.</span><span class="n">format</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">header</span><span class="p">.</span><span class="n">format</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+            <span class="k">return</span> <span class="nf">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">legion_fs_error</span><span class="p">(</span><span class="s">&quot;Loaded File is not of type WAV&quot;</span><span class="p">)));</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">subChunckId</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;f&#39;</span> <span class="o">||</span>
+            <span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">subChunckId</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;m&#39;</span> <span class="o">||</span>
+            <span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">subChunckId</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;t&#39;</span> <span class="o">||</span>
+            <span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">subChunckId</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39; &#39;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Found WAV format sub chunck ID: &#39;{}{}{}{}&#39;, exptected: &#39;fmt &#39;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">subChunckId</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">subChunckId</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">subChunckId</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">subChunckId</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+            <span class="k">return</span> <span class="nf">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">legion_fs_error</span><span class="p">(</span><span class="s">&quot;WAV File sub chunck id was not (fmt )&quot;)))</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">memcpy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">waveData</span><span class="p">,</span> <span class="n">resource</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">header</span><span class="p">),</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">waveData</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">waveData</span><span class="p">.</span><span class="n">subChunckId</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;d&#39;</span> <span class="o">||</span>
+            <span class="n">waveData</span><span class="p">.</span><span class="n">subChunckId</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;a&#39;</span> <span class="o">||</span>
+            <span class="n">waveData</span><span class="p">.</span><span class="n">subChunckId</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;t&#39;</span> <span class="o">||</span>
+            <span class="n">waveData</span><span class="p">.</span><span class="n">subChunckId</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;a&#39;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Found WAV data sub chunck ID: &#39;{}{}{}{}&#39;, exptected: &#39;data&#39;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">waveData</span><span class="p">.</span><span class="n">subChunckId</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">waveData</span><span class="p">.</span><span class="n">subChunckId</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">waveData</span><span class="p">.</span><span class="n">subChunckId</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">(</span><span class="kt">char</span><span class="p">)</span><span class="n">waveData</span><span class="p">.</span><span class="n">subChunckId</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+            <span class="k">return</span> <span class="nf">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">legion_fs_error</span><span class="p">(</span><span class="s">&quot;WAV File sample data does not start with word (data)&quot;)))</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">assert_msg</span><span class="p">(</span><span class="s">&quot;Audio file channels were 0&quot;</span><span class="p">,</span> <span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">channels</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">);</span>
+
+        <span class="n">uint</span> <span class="n">metaSize</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">header</span><span class="p">)</span> <span class="o">+</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">waveData</span><span class="p">);</span>
+
+        <span class="kt">int</span> <span class="n">sampleDataSize</span> <span class="o">=</span> <span class="n">resource</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">metaSize</span><span class="p">;</span>
+        <span class="n">byte</span><span class="o">*</span> <span class="n">audioData</span><span class="p">;</span>
+
+        <span class="kt">int</span> <span class="n">channels</span> <span class="o">=</span> <span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">channels</span><span class="p">;</span>
+
+        <span class="n">audio_segment</span> <span class="n">as</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">channel_processing</span> <span class="o">==</span> <span class="n">audio_import_settings</span><span class="o">::</span><span class="n">channel_processing_setting</span><span class="o">::</span><span class="n">split_channels</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">detail</span><span class="o">::</span><span class="n">channel_data</span> <span class="n">channelData</span> <span class="o">=</span> <span class="n">detail</span><span class="o">::</span><span class="n">extractChannels</span><span class="p">(</span><span class="n">resource</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="n">metaSize</span><span class="p">,</span> <span class="n">sampleDataSize</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">bitsPerSample</span><span class="p">);</span>
+
+            <span class="n">sampleDataSize</span> <span class="o">/=</span> <span class="n">channels</span><span class="p">;</span>
+
+            <span class="n">audioData</span> <span class="o">=</span> <span class="k">new</span> <span class="n">byte</span><span class="p">[</span><span class="n">sampleDataSize</span><span class="p">];</span>
+            <span class="n">memmove</span><span class="p">(</span><span class="n">audioData</span><span class="p">,</span> <span class="n">channelData</span><span class="p">.</span><span class="n">dataPerChannel</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">data</span><span class="p">(),</span> <span class="n">sampleDataSize</span><span class="p">);</span>
+            <span class="c1">//audioData = channelData.dataPerChannel[0].data();</span>
+
+            <span class="kt">int</span> <span class="n">samplesPerChannel</span> <span class="o">=</span> <span class="n">sampleDataSize</span> <span class="o">/</span> <span class="p">(</span><span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">bitsPerSample</span> <span class="o">/</span> <span class="mi">8</span><span class="p">);</span>
+
+            <span class="n">as</span> <span class="o">=</span> <span class="n">audio_segment</span><span class="p">(</span>
+                <span class="n">audioData</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="n">samplesPerChannel</span><span class="p">,</span> <span class="c1">// Sample count, unknown for wav</span>
+                <span class="mi">1</span><span class="p">,</span>
+                <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">sampleRate</span><span class="p">,</span>
+                <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="c1">// Layer, does not exist in wav</span>
+                <span class="o">-</span><span class="mi">1</span> <span class="c1">// avg_biterate_kbps, unknown for wav</span>
+            <span class="p">);</span>
+
+            <span class="n">audio_segment</span><span class="o">*</span> <span class="n">previous</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">as</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">channels</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">channels</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">byte</span><span class="o">*</span> <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">byte</span><span class="p">[</span><span class="n">sampleDataSize</span><span class="p">];</span>
+                    <span class="n">memmove</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">channelData</span><span class="p">.</span><span class="n">dataPerChannel</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">(),</span> <span class="n">sampleDataSize</span><span class="p">);</span>
+
+                    <span class="n">audio_segment</span><span class="o">*</span> <span class="n">channel_segment</span> <span class="o">=</span> <span class="k">new</span> <span class="n">audio_segment</span><span class="p">(</span>
+                        <span class="n">data</span><span class="p">,</span>
+                        <span class="mi">0</span><span class="p">,</span>
+                        <span class="n">samplesPerChannel</span><span class="p">,</span>
+                        <span class="mi">1</span><span class="p">,</span>
+                        <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">sampleRate</span><span class="p">,</span>
+                        <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="o">-</span><span class="mi">1</span>
+                    <span class="p">);</span>
+
+                    <span class="n">detail</span><span class="o">::</span><span class="n">createAndBufferAudioData</span><span class="p">(</span><span class="o">&amp;</span><span class="p">(</span><span class="n">channel_segment</span><span class="o">-&gt;</span><span class="n">audioBufferId</span><span class="p">),</span> <span class="n">channel_segment</span><span class="o">-&gt;</span><span class="n">channels</span><span class="p">,</span> <span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">bitsPerSample</span><span class="p">,</span> <span class="n">channel_segment</span><span class="o">-&gt;</span><span class="n">getData</span><span class="p">(),</span> <span class="n">sampleDataSize</span><span class="p">,</span> <span class="n">channel_segment</span><span class="o">-&gt;</span><span class="n">sampleRate</span><span class="p">);</span>
+                    <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Setting next audio segment&quot;</span><span class="p">);</span>
+                    <span class="n">previous</span><span class="o">-&gt;</span><span class="n">setNextAudioSegment</span><span class="p">(</span><span class="o">*</span><span class="n">channel_segment</span><span class="p">);</span>
+                    <span class="n">previous</span> <span class="o">=</span> <span class="n">channel_segment</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">channel_processing</span> <span class="o">==</span> <span class="n">audio_import_settings</span><span class="o">::</span><span class="n">channel_processing_setting</span><span class="o">::</span><span class="n">force_mono</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">audioData</span> <span class="o">=</span> <span class="n">detail</span><span class="o">::</span><span class="n">convertToMono</span><span class="p">(</span><span class="n">resource</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="n">metaSize</span><span class="p">,</span> <span class="n">sampleDataSize</span><span class="p">,</span> <span class="n">sampleDataSize</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">bitsPerSample</span><span class="p">);</span>
+
+            <span class="n">as</span> <span class="o">=</span> <span class="n">audio_segment</span><span class="p">(</span>
+                <span class="n">audioData</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="n">sampleDataSize</span> <span class="o">/</span> <span class="p">(</span><span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">bitsPerSample</span> <span class="o">/</span> <span class="mi">8</span><span class="p">),</span> <span class="c1">// Sample count, unknown for wav</span>
+                <span class="n">channels</span><span class="p">,</span>
+                <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">sampleRate</span><span class="p">,</span>
+                <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="c1">// Layer, does not exist in wav</span>
+                <span class="o">-</span><span class="mi">1</span> <span class="c1">// avg_biterate_kbps, unknown for wav</span>
+            <span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">audioData</span> <span class="o">=</span> <span class="k">new</span> <span class="n">byte</span><span class="p">[</span><span class="n">sampleDataSize</span><span class="p">];</span>
+            <span class="n">memcpy</span><span class="p">(</span><span class="n">audioData</span><span class="p">,</span> <span class="n">resource</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="n">metaSize</span><span class="p">,</span> <span class="n">sampleDataSize</span><span class="p">);</span>
+
+            <span class="n">as</span> <span class="o">=</span> <span class="n">audio_segment</span><span class="p">(</span>
+                <span class="n">audioData</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="n">sampleDataSize</span> <span class="o">/</span> <span class="p">(</span><span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">bitsPerSample</span> <span class="o">/</span> <span class="mi">8</span><span class="p">),</span> <span class="c1">// Sample count, unknown for wav</span>
+                <span class="n">channels</span><span class="p">,</span>
+                <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">sampleRate</span><span class="p">,</span>
+                <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="c1">// Layer, does not exist in wav</span>
+                <span class="o">-</span><span class="mi">1</span> <span class="c1">// avg_biterate_kbps, unknown for wav</span>
+            <span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">detail</span><span class="o">::</span><span class="n">createAndBufferAudioData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">as</span><span class="p">.</span><span class="n">audioBufferId</span><span class="p">,</span> <span class="n">as</span><span class="p">.</span><span class="n">channels</span><span class="p">,</span> <span class="n">header</span><span class="p">.</span><span class="n">wave_format</span><span class="p">.</span><span class="n">bitsPerSample</span><span class="p">,</span> <span class="n">as</span><span class="p">.</span><span class="n">getData</span><span class="p">(),</span> <span class="n">sampleDataSize</span><span class="p">,</span> <span class="n">as</span><span class="p">.</span><span class="n">sampleRate</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="nf">decay</span><span class="p">(</span><span class="n">Ok</span><span class="p">(</span><span class="n">as</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">namespace</span> <span class="n">detail</span>
+    <span class="p">{</span>
+        <span class="kt">void</span> <span class="n">convertToMono</span><span class="p">(</span><span class="k">const</span> <span class="n">byte</span><span class="o">*</span> <span class="n">inputData</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dataSize</span><span class="p">,</span> <span class="n">byte</span><span class="o">*</span> <span class="n">monoData</span><span class="p">,</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bitsPerSample</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">assert_msg</span><span class="p">(</span><span class="s">&quot;0 was passed for channels&quot;</span><span class="p">,</span> <span class="n">channels</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">channels</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">memcpy</span><span class="p">(</span><span class="n">monoData</span><span class="p">,</span> <span class="n">inputData</span><span class="p">,</span> <span class="n">dataSize</span><span class="p">);</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">uint</span> <span class="n">bytesPerSample</span> <span class="o">=</span> <span class="n">bitsPerSample</span> <span class="o">/</span> <span class="mi">8</span><span class="p">;</span>
+
+            <span class="n">uint</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">uint</span> <span class="n">channelSize</span> <span class="o">=</span> <span class="n">channels</span> <span class="o">*</span> <span class="n">bytesPerSample</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">uint</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">dataSize</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">channelSize</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">switch</span> <span class="p">(</span><span class="n">bytesPerSample</span><span class="p">)</span>
+                <span class="p">{</span>
+                <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+                <span class="p">{</span>
+                    <span class="n">uint64</span> <span class="n">data</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="n">uint</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">channelSize</span><span class="p">;</span> <span class="n">c</span> <span class="o">+=</span> <span class="n">bytesPerSample</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">data</span> <span class="o">+=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">uint64</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">inputData</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="n">c</span><span class="p">));</span>
+                    <span class="p">}</span>
+                    <span class="n">monoData</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span> <span class="o">/</span> <span class="n">channels</span><span class="p">;</span>
+                    <span class="n">j</span> <span class="o">+=</span> <span class="n">bytesPerSample</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
+                <span class="p">{</span>
+                    <span class="n">int64</span> <span class="n">data</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="n">uint</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">channelSize</span><span class="p">;</span> <span class="n">c</span> <span class="o">+=</span> <span class="n">bytesPerSample</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">data</span> <span class="o">+=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">int64</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">int16</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">inputData</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="n">c</span><span class="p">));</span>
+                    <span class="p">}</span>
+                    <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">int16</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">monoData</span> <span class="o">+</span> <span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">data</span> <span class="o">/</span> <span class="n">channels</span><span class="p">;</span>
+                    <span class="n">j</span> <span class="o">+=</span> <span class="n">bytesPerSample</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="mi">4</span><span class="o">:</span>
+                <span class="p">{</span>
+                    <span class="kt">float</span> <span class="n">data</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="n">uint</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">channelSize</span><span class="p">;</span> <span class="n">c</span> <span class="o">+=</span> <span class="n">bytesPerSample</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">data</span> <span class="o">+=</span> <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">inputData</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="n">c</span><span class="p">);</span>
+                    <span class="p">}</span>
+                    <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">monoData</span> <span class="o">+</span> <span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">data</span> <span class="o">/</span> <span class="n">channels</span><span class="p">;</span>
+                    <span class="n">j</span> <span class="o">+=</span> <span class="n">bytesPerSample</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+                <span class="k">default</span><span class="o">:</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">byte</span><span class="o">*</span> <span class="n">convertToMono</span><span class="p">(</span><span class="k">const</span> <span class="n">byte</span><span class="o">*</span> <span class="n">inputData</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dataSize</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">monoSize</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">channels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bitsPerSample</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">monoSize</span> <span class="o">=</span> <span class="n">dataSize</span> <span class="o">/</span> <span class="n">channels</span><span class="p">;</span>
+            <span class="n">byte</span><span class="o">*</span> <span class="n">monoData</span> <span class="o">=</span> <span class="k">new</span> <span class="n">byte</span><span class="p">[</span><span class="n">monoSize</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">channels</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">memcpy</span><span class="p">(</span><span class="n">monoData</span><span class="p">,</span> <span class="n">inputData</span><span class="p">,</span> <span class="n">monoSize</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">monoData</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">convertToMono</span><span class="p">(</span><span class="n">inputData</span><span class="p">,</span> <span class="n">dataSize</span><span class="p">,</span> <span class="n">monoData</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">bitsPerSample</span><span class="p">);</span>
+            <span class="n">channels</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">monoData</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">channel_data</span> <span class="n">extractChannels</span><span class="p">(</span><span class="k">const</span> <span class="n">byte</span><span class="o">*</span> <span class="n">inputData</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dataSize</span><span class="p">,</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bitsPerSamples</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">assert_msg</span><span class="p">(</span><span class="s">&quot;0 was passed for channels&quot;</span><span class="p">,</span> <span class="n">channels</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="c1">// channelData is a 2D array of [channels][channelData]</span>
+            <span class="c1">// channelData will hold the audio data per channel</span>
+            <span class="n">channel_data</span> <span class="nf">channelData</span><span class="p">(</span><span class="n">channels</span><span class="p">);</span>
+            <span class="n">channelData</span><span class="p">.</span><span class="n">dataPerChannel</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">channels</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">channels</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">channelData</span><span class="p">.</span><span class="n">dataPerChannel</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">resize</span><span class="p">(</span><span class="n">dataSize</span><span class="p">);</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">inputData</span><span class="p">,</span> <span class="n">inputData</span> <span class="o">+</span> <span class="n">dataSize</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">back_inserter</span><span class="p">(</span><span class="n">channelData</span><span class="p">.</span><span class="n">dataPerChannel</span><span class="p">[</span><span class="mi">0</span><span class="p">]));</span>
+                <span class="c1">//memcpy(channelData.dataPerChannel[0], inputData, dataSize);</span>
+                <span class="k">return</span> <span class="n">channelData</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="kt">int</span> <span class="n">bytesPerSample</span> <span class="o">=</span> <span class="n">bitsPerSamples</span> <span class="o">/</span> <span class="mi">8</span><span class="p">;</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="n">size_type</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">channels</span><span class="p">;</span> <span class="o">++</span><span class="n">c</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">channelData</span><span class="p">.</span><span class="n">dataPerChannel</span><span class="p">[</span><span class="n">c</span><span class="p">].</span><span class="n">resize</span><span class="p">(</span><span class="n">dataSize</span><span class="o">/</span><span class="n">channels</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">switch</span> <span class="p">(</span><span class="n">bytesPerSample</span><span class="p">)</span>
+            <span class="p">{</span>
+            <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+            <span class="p">{</span>
+                <span class="n">uint</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">size_type</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">dataSize</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">bytesPerSample</span> <span class="o">*</span> <span class="n">channels</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="n">size_type</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">channels</span><span class="p">;</span> <span class="o">++</span><span class="n">c</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">channelData</span><span class="p">.</span><span class="n">dataPerChannel</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">inputData</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">c</span><span class="p">];</span>
+                    <span class="p">}</span>
+                    <span class="o">++</span><span class="n">j</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
+            <span class="p">{</span>
+                <span class="n">uint</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="n">int16</span> <span class="n">data</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">size_type</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">dataSize</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">bytesPerSample</span> <span class="o">*</span> <span class="n">channels</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="n">size_type</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">channels</span><span class="p">;</span> <span class="o">++</span><span class="n">c</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">int16</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">inputData</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="p">(</span><span class="n">c</span><span class="o">*</span><span class="n">bytesPerSample</span><span class="p">));</span>
+                        <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">int16</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">channelData</span><span class="p">.</span><span class="n">dataPerChannel</span><span class="p">[</span><span class="n">c</span><span class="p">].</span><span class="n">data</span><span class="p">()</span><span class="o">+</span><span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="n">j</span><span class="o">+=</span><span class="n">bytesPerSample</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="mi">4</span><span class="o">:</span>
+            <span class="p">{</span>
+                <span class="n">uint</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="kt">float</span> <span class="n">data</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">size_type</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">dataSize</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">bytesPerSample</span> <span class="o">*</span> <span class="n">channels</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="n">size_type</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">channels</span><span class="p">;</span> <span class="o">++</span><span class="n">c</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">inputData</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="p">(</span><span class="n">c</span> <span class="o">*</span> <span class="n">bytesPerSample</span><span class="p">));</span>
+                        <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">channelData</span><span class="p">.</span><span class="n">dataPerChannel</span><span class="p">[</span><span class="n">c</span><span class="p">].</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="n">j</span> <span class="o">+=</span> <span class="n">bytesPerSample</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="o">:</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">channelData</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">ALenum</span> <span class="n">getAudioFormat</span><span class="p">(</span><span class="kt">int</span> <span class="n">channels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bitsPerSample</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">channels</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">bitsPerSample</span> <span class="o">==</span> <span class="mi">8</span><span class="p">)</span> <span class="k">return</span> <span class="n">AL_FORMAT_MONO8</span><span class="p">;</span>
+                <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">bitsPerSample</span> <span class="o">==</span> <span class="mi">16</span><span class="p">)</span> <span class="k">return</span> <span class="n">AL_FORMAT_MONO16</span><span class="p">;</span>
+                <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">bitsPerSample</span> <span class="o">==</span> <span class="mi">32</span><span class="p">)</span> <span class="k">return</span> <span class="n">AL_FORMAT_MONO_FLOAT32</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">channels</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">bitsPerSample</span> <span class="o">==</span> <span class="mi">8</span><span class="p">)</span> <span class="k">return</span> <span class="n">AL_FORMAT_STEREO8</span><span class="p">;</span>
+                <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">bitsPerSample</span> <span class="o">==</span> <span class="mi">16</span><span class="p">)</span> <span class="k">return</span> <span class="n">AL_FORMAT_STEREO16</span><span class="p">;</span>
+                <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">bitsPerSample</span> <span class="o">==</span> <span class="mi">32</span><span class="p">)</span> <span class="k">return</span> <span class="n">AL_FORMAT_STEREO_FLOAT32</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">channels</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">bitsPerSample</span> <span class="o">==</span> <span class="mi">8</span><span class="p">)</span> <span class="k">return</span> <span class="n">AL_FORMAT_QUAD8</span><span class="p">;</span>
+                <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">bitsPerSample</span> <span class="o">==</span> <span class="mi">16</span><span class="p">)</span> <span class="k">return</span> <span class="n">AL_FORMAT_QUAD16</span><span class="p">;</span>
+                <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">bitsPerSample</span> <span class="o">==</span> <span class="mi">32</span><span class="p">)</span> <span class="k">return</span> <span class="n">AL_FORMAT_QUAD32</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">AL_FORMAT_STEREO16</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">createAndBufferAudioData</span><span class="p">(</span><span class="n">ALuint</span><span class="o">*</span> <span class="n">bufferId</span><span class="p">,</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bitsPerSample</span><span class="p">,</span> <span class="n">byte</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dataSize</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sampleRate</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">AudioSystem</span><span class="o">::</span><span class="n">contextLock</span><span class="p">);</span>
+            <span class="n">alcMakeContextCurrent</span><span class="p">(</span><span class="n">AudioSystem</span><span class="o">::</span><span class="n">alcContext</span><span class="p">);</span>
+            <span class="c1">//Generate openal buffer</span>
+            <span class="n">alGenBuffers</span><span class="p">((</span><span class="n">ALuint</span><span class="p">)</span><span class="mi">1</span><span class="p">,</span> <span class="n">bufferId</span><span class="p">);</span>
+
+            <span class="n">alBufferData</span><span class="p">(</span><span class="o">*</span><span class="n">bufferId</span><span class="p">,</span> <span class="n">detail</span><span class="o">::</span><span class="n">getAudioFormat</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">bitsPerSample</span><span class="p">),</span> <span class="n">data</span><span class="p">,</span> <span class="n">dataSize</span><span class="p">,</span> <span class="n">sampleRate</span><span class="p">);</span>
+
+            <span class="n">alcMakeContextCurrent</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
+        <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>

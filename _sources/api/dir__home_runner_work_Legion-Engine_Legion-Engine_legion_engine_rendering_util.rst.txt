@@ -1,0 +1,21 @@
+.. _dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util:
+
+
+Directory util
+==============
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/util``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_bindings.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_settings.hpp`
+
+

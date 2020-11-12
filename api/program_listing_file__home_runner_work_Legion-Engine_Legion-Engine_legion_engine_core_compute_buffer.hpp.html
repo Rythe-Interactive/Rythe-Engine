@@ -49,10 +49,8 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
 <span class="cp">#include</span> <span class="cpf">&quot;detail/cl_include.hpp&quot; // cl_context , cl_mem , cl_mem_flags</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/platform/platform.hpp&gt; // ARGS_API</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/types/primitives.hpp&gt; // byte, size_t</span><span class="cp"></span>
 
-<span class="cp">#include</span> <span class="cpf">&lt;tuple&gt; // pair</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;string&gt; // string</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">compute</span> <span class="p">{</span>
@@ -92,13 +90,16 @@
         <span class="kt">void</span> <span class="nf">rename</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
 
         <span class="o">~</span><span class="n">Buffer</span><span class="p">();</span>
-        <span class="kt">bool</span> <span class="nf">has_name</span><span class="p">()</span> <span class="k">const</span>
+
+
+        <span class="kt">bool</span> <span class="nf">hasName</span><span class="p">()</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="o">!</span><span class="n">m_name</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
         <span class="p">}</span>
 
-        <span class="kt">bool</span> <span class="nf">is_readbuffer</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_type</span> <span class="o">==</span> <span class="n">CL_MEM_READ_ONLY</span> <span class="o">||</span> <span class="n">m_type</span> <span class="o">==</span> <span class="n">CL_MEM_READ_WRITE</span><span class="p">;</span> <span class="p">}</span>
-        <span class="kt">bool</span> <span class="nf">is_writebuffer</span><span class="p">()</span><span class="k">const</span>  <span class="p">{</span> <span class="k">return</span> <span class="n">m_type</span> <span class="o">==</span> <span class="n">CL_MEM_WRITE_ONLY</span> <span class="o">||</span> <span class="n">m_type</span> <span class="o">==</span> <span class="n">CL_MEM_READ_WRITE</span><span class="p">;</span> <span class="p">}</span>
+        <span class="kt">bool</span> <span class="nf">isReadBuffer</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_type</span> <span class="o">==</span> <span class="n">CL_MEM_READ_ONLY</span> <span class="o">||</span> <span class="n">m_type</span> <span class="o">==</span> <span class="n">CL_MEM_READ_WRITE</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="kt">bool</span> <span class="nf">isWriteBuffer</span><span class="p">()</span><span class="k">const</span>  <span class="p">{</span> <span class="k">return</span> <span class="n">m_type</span> <span class="o">==</span> <span class="n">CL_MEM_WRITE_ONLY</span> <span class="o">||</span> <span class="n">m_type</span> <span class="o">==</span> <span class="n">CL_MEM_READ_WRITE</span><span class="p">;</span> <span class="p">}</span>
     <span class="k">private</span><span class="o">:</span>
         <span class="k">friend</span> <span class="k">class</span> <span class="nc">Program</span><span class="p">;</span>
         <span class="k">friend</span> <span class="k">class</span> <span class="nc">Kernel</span><span class="p">;</span>

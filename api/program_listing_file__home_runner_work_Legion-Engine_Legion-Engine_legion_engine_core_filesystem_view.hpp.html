@@ -82,11 +82,13 @@
 
         <span class="n">L_NODISCARD</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">get_domain</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
-        <span class="n">L_NODISCARD</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">get_path</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+        <span class="n">L_NODISCARD</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">get_virtual_path</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
         <span class="n">L_NODISCARD</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">get_extension</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
         <span class="n">L_NODISCARD</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">get_filename</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+        <span class="n">L_NODISCARD</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">get_filestem</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
         <span class="n">L_NODISCARD</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">basic_resource</span><span class="p">,</span><span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">get</span><span class="p">();</span>
         <span class="n">L_NODISCARD</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">basic_resource</span><span class="p">,</span><span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">get</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>

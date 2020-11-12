@@ -33,6 +33,8 @@ Includes
 
 - ``core/core.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_core.hpp`)
 
+- ``vector`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_vector_view.hpp`)
+
 
 
 Included By
@@ -54,10 +56,22 @@ Namespaces
 
 - :ref:`namespace_legion__audio`
 
+- :ref:`namespace_legion__audio__detail`
+
 
 Classes
 -------
 
 
+- :ref:`exhale_struct_structlegion_1_1audio_1_1detail_1_1channel__data`
+
 - :ref:`exhale_struct_structlegion_1_1audio_1_1mp3__audio__loader`
+
+- :ref:`exhale_struct_structlegion_1_1audio_1_1wav__audio__loader`
+
+- :ref:`exhale_struct_structlegion_1_1audio_1_1wav__audio__loader_1_1_r_i_f_f___header`
+
+- :ref:`exhale_struct_structlegion_1_1audio_1_1wav__audio__loader_1_1_r_i_f_f___header_1_1_w_a_v_e___format`
+
+- :ref:`exhale_struct_structlegion_1_1audio_1_1wav__audio__loader_1_1_w_a_v_e___data`
 

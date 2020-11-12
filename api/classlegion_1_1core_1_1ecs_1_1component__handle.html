@@ -97,8 +97,8 @@
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N6legion4core3ecs16component_handle16component_handleE7id_typeP11EcsRegistry">
-<span id="_CPPv3N6legion4core3ecs16component_handle16component_handleE7id_typeP11EcsRegistry"></span><span id="_CPPv2N6legion4core3ecs16component_handle16component_handleE7id_typeP11EcsRegistry"></span><span id="legion::core::ecs::component_handle::component_handle__id_type.EcsRegistryP"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1a6a39f9541eb6944f66494461df0d29e8"></span><code class="sig-name descname">component_handle</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em>, <a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1_ecs_registry.html#_CPPv4N6legion4core3ecs11EcsRegistryE" title="legion::core::ecs::EcsRegistry">EcsRegistry</a> *<em>registry</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handle16component_handleE7id_typeP11EcsRegistry" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N6legion4core3ecs16component_handle16component_handleE7id_type">
+<span id="_CPPv3N6legion4core3ecs16component_handle16component_handleE7id_type"></span><span id="_CPPv2N6legion4core3ecs16component_handle16component_handleE7id_type"></span><span id="legion::core::ecs::component_handle::component_handle__id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1ac8a147dfe5a3fa0ef1b1e813f84e549f"></span><code class="sig-name descname">component_handle</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handle16component_handleE7id_type" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Creates component handle for the given entity. </p>
 </dd></dl>
 
@@ -123,6 +123,10 @@
 <dd><p>Thread-safe read of component. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>component_type Current value of component. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">order</span></code>: Memory order at which to load the component. </p></li>
+</ul>
 </dd>
 </dl>
 </p>

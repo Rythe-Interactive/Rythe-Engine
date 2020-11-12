@@ -22,16 +22,20 @@ Program Listing for File readonly_rw_spinlock.hpp
    
    namespace legion::core::async
    {
-       enum lock_state { idle = 0, read = 1, write = 2 };
+       enum lock_state { idle = 0, read = 1, write = 2 };    
    
-       struct readonly_rw_spinlock
+       struct readonly_rw_spinlock final
        {
        private:
            static std::atomic_uint m_lastId;
    
-           static thread_local std::unordered_map<uint, int> m_localWriters;
-           static thread_local std::unordered_map<uint, int> m_localReaders;
-           static thread_local std::unordered_map<uint, lock_state> m_localState;
+           static thread_local std::unordered_map<uint, int>* m_localWritersPtr;
+           static thread_local std::unordered_map<uint, int>* m_localReadersPtr;
+           static thread_local std::unordered_map<uint, lock_state>* m_localStatePtr;
+   
+           static thread_local std::unordered_map<uint, int>& m_localWriters;
+           static thread_local std::unordered_map<uint, int>& m_localReaders;
+           static thread_local std::unordered_map<uint, lock_state>& m_localState;
    
            uint m_id;
            std::atomic_int m_lockState = 0;
@@ -222,11 +226,8 @@ Program Listing for File readonly_rw_spinlock.hpp
                return *this;
            }
    
-   
            readonly_rw_spinlock(const readonly_rw_spinlock&) = delete;
            readonly_rw_spinlock& operator=(const readonly_rw_spinlock&) = delete;
-   
-   
    
            void lock(lock_state permissionLevel)
            {
@@ -267,8 +268,6 @@ Program Listing for File readonly_rw_spinlock.hpp
                }
            }
        };
-   
-   
    
        class readonly_guard final
        {

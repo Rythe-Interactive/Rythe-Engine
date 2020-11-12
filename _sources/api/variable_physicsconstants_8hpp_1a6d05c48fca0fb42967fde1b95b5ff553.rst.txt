@@ -1,0 +1,13 @@
+.. _exhale_variable_physicsconstants_8hpp_1a6d05c48fca0fb42967fde1b95b5ff553:
+
+Variable legion::physics::constants::contactSolverIterationCount
+================================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsconstants.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::physics::constants::contactSolverIterationCount

@@ -29,13 +29,15 @@ Program Listing for File audio_source.hpp
                gain = 2,
                playState = 4,
                doRewind = 8,
+               audioHandle = 16,
+               rollOffFactor = 32,
            };
    
            enum playstate
            {
+               stopped,
                playing,
                paused,
-               stopped,
            };
    
            void setPitch(const float pitch)
@@ -50,6 +52,22 @@ Program Listing for File audio_source.hpp
                m_gain = legion::math::max(0.0f, gain);
            }
            float getGain() const { return m_gain; };
+   
+           void setRollOffFactor(float factor)
+           {
+               m_changes = sound_properties::rollOffFactor;
+               m_rolloffFactor = factor;
+           }
+   
+           void disableSpatialAudio()
+           {
+               setRollOffFactor(0.0f);
+           }
+   
+           void enableSpatialAudio()
+           {
+               setRollOffFactor(1.0f);
+           }
    
            void play()
            {
@@ -95,6 +113,8 @@ Program Listing for File audio_source.hpp
    
            void setAudioHandle(audio_segment_handle handle)
            {
+               if (handle == m_audio_handle) return;
+               m_changes |= sound_properties::audioHandle;
                m_audio_handle = handle;
            }
    
@@ -108,6 +128,26 @@ Program Listing for File audio_source.hpp
                return m_audio_handle;
            }
    
+           int getChannels()
+           {
+               int channels = 0;
+               {
+                   async::readonly_guard guard(m_audio_handle.get().first);
+                   channels = m_audio_handle.get().second.channels;
+               }
+               return channels;
+           }
+   
+           bool isStereo()
+           {
+               return getChannels() == 2;
+           }
+   
+           bool isMono()
+           {
+               return getChannels() == 1;
+           }
+   
        private:
            void clearChanges()
            {
@@ -117,7 +157,7 @@ Program Listing for File audio_source.hpp
            }
    
            ALuint m_sourceId;
-           audio_segment_handle m_audio_handle;
+           audio_segment_handle m_audio_handle = invalid_audio_segment_handle;
    
            float m_pitch = 1.0f;
            float m_gain = 1.0f;
@@ -125,13 +165,16 @@ Program Listing for File audio_source.hpp
            playstate m_playState = playstate::stopped;
            playstate m_nextPlayState = playstate::stopped;
    
+           float m_rolloffFactor;
+   
            // Byte to keep track of changes made to audio source
            // For all the values > see enum sound_properties
            // b0 - pitch
            // b1 - gain
            // b2 - play state
            // b3 - rewind (doRewind)
-   
+           // b4 - audio handle
+           // b5 - roll off factor 3D
            byte m_changes = 0;
        };
    }

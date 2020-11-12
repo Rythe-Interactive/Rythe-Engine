@@ -29,7 +29,9 @@ Subdirectories
 - :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging`
 - :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math`
 - :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scenemanagement`
 - :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_serialization`
 - :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time`
 - :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types`
 

@@ -1,0 +1,29 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_pipeline.hpp:
+
+Program Listing for File pipeline.hpp
+=====================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_pipeline.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/base/pipeline.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <rendering/data/model.hpp>
+   #include <rendering/data/shader.hpp>
+   #include <rendering/components/renderable.hpp>
+   #include <rendering/components/camera.hpp>
+   #include <rendering/pipeline/base/renderstage.hpp>
+   
+   #include <map>
+   #include <memory>
+   
+   namespace legion::rendering
+   {
+       class ARGS_API Pipeline
+       {
+           std::map<priority_type, std::unique_ptr<RenderStage>> m_stages;
+       };
+   }

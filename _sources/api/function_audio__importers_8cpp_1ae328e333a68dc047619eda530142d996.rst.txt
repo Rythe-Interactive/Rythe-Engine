@@ -1,0 +1,13 @@
+.. _exhale_function_audio__importers_8cpp_1ae328e333a68dc047619eda530142d996:
+
+Function legion::audio::detail::createAndBufferAudioData
+========================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_importers_audio_importers.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::audio::detail::createAndBufferAudioData(ALuint *, int, int, byte *, int, int)

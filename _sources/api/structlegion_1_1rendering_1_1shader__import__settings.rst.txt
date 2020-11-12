@@ -3,7 +3,7 @@
 Struct shader_import_settings
 =============================
 
-- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_shader.hpp`
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_settings.hpp`
 
 
 Struct Documentation

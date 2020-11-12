@@ -61,6 +61,8 @@ Included By
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_navigator.cpp`
 
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_shellinvoke.hpp`
+
 
 
 
@@ -116,11 +118,11 @@ Functions
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ab113b1bf7ffcb9541b570f782eed8cf5`
 
-- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a7a032691bc843b65c9b3d0c90d7b0a0c`
-
-- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a92c9f197f8e27ebc88ed5c1878bde2f8`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a667ea9c796a356f92da9c5f2142bd80e`
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ade252c5f972db8d2a929a300157083ec`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a92c9f197f8e27ebc88ed5c1878bde2f8`
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1aa1847a96dd1755afdaef7c1ecd0642ff`
 
@@ -136,9 +138,9 @@ Functions
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a34257a94dbd637054a6634249b072bae`
 
-- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a56aed0be8cecb875c4927db1e0dcaf93`
-
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a8d3d7865efc31c33b26e2060d3cc1def`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a56aed0be8cecb875c4927db1e0dcaf93`
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ab888b105b685388605c20798aee44d9b`
 

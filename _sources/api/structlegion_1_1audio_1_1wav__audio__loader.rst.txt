@@ -1,0 +1,37 @@
+.. _exhale_struct_structlegion_1_1audio_1_1wav__audio__loader:
+
+Struct wav_audio_loader
+=======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_importers_audio_importers.hpp`
+
+
+Nested Relationships
+--------------------
+
+
+Nested Types
+************
+
+- :ref:`exhale_struct_structlegion_1_1audio_1_1wav__audio__loader_1_1_r_i_f_f___header`
+- :ref:`exhale_struct_structlegion_1_1audio_1_1wav__audio__loader_1_1_r_i_f_f___header_1_1_w_a_v_e___format`
+- :ref:`exhale_struct_structlegion_1_1audio_1_1wav__audio__loader_1_1_w_a_v_e___data`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::core::filesystem::resource_converter< audio_segment, audio_import_settings >`` (:ref:`exhale_class_structlegion_1_1core_1_1filesystem_1_1resource__converter`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::audio::wav_audio_loader
+   :members:
+   :protected-members:
+   :undoc-members:

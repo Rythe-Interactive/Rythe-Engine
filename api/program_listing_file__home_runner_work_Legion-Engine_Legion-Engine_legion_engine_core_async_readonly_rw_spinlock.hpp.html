@@ -60,14 +60,18 @@
 <span class="p">{</span>
     <span class="k">enum</span> <span class="n">lock_state</span> <span class="p">{</span> <span class="n">idle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">read</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">write</span> <span class="o">=</span> <span class="mi">2</span> <span class="p">};</span>
 
-    <span class="k">struct</span> <span class="n">readonly_rw_spinlock</span>
+    <span class="k">struct</span> <span class="n">readonly_rw_spinlock</span> <span class="k">final</span>
     <span class="p">{</span>
     <span class="k">private</span><span class="o">:</span>
         <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">atomic_uint</span> <span class="n">m_lastId</span><span class="p">;</span>
 
-        <span class="k">static</span> <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">m_localWriters</span><span class="p">;</span>
-        <span class="k">static</span> <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">m_localReaders</span><span class="p">;</span>
-        <span class="k">static</span> <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="n">lock_state</span><span class="o">&gt;</span> <span class="n">m_localState</span><span class="p">;</span>
+        <span class="k">static</span> <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;*</span> <span class="n">m_localWritersPtr</span><span class="p">;</span>
+        <span class="k">static</span> <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;*</span> <span class="n">m_localReadersPtr</span><span class="p">;</span>
+        <span class="k">static</span> <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="n">lock_state</span><span class="o">&gt;*</span> <span class="n">m_localStatePtr</span><span class="p">;</span>
+
+        <span class="k">static</span> <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">m_localWriters</span><span class="p">;</span>
+        <span class="k">static</span> <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">m_localReaders</span><span class="p">;</span>
+        <span class="k">static</span> <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="n">lock_state</span><span class="o">&gt;&amp;</span> <span class="n">m_localState</span><span class="p">;</span>
 
         <span class="n">uint</span> <span class="n">m_id</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">atomic_int</span> <span class="n">m_lockState</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -258,11 +262,8 @@
             <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
         <span class="p">}</span>
 
-
         <span class="n">readonly_rw_spinlock</span><span class="p">(</span><span class="k">const</span> <span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
         <span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
-
-
 
         <span class="kt">void</span> <span class="nf">lock</span><span class="p">(</span><span class="n">lock_state</span> <span class="n">permissionLevel</span><span class="p">)</span>
         <span class="p">{</span>
@@ -303,8 +304,6 @@
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">};</span>
-
-
 
     <span class="k">class</span> <span class="nc">readonly_guard</span> <span class="k">final</span>
     <span class="p">{</span>

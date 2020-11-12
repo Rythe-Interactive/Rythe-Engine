@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Class RenderingModule" href="classlegion_1_1rendering_1_1_rendering_module.html" />
-    <link rel="prev" title="Class ModelCache" href="classlegion_1_1rendering_1_1_model_cache.html" />
+    <link rel="prev" title="Class Pipeline" href="classlegion_1_1rendering_1_1_pipeline.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -39,7 +39,7 @@
           <a href="classlegion_1_1rendering_1_1_rendering_module.html" title="Class RenderingModule"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="classlegion_1_1rendering_1_1_model_cache.html" title="Class ModelCache"
+          <a href="classlegion_1_1rendering_1_1_pipeline.html" title="Class Pipeline"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
@@ -85,7 +85,7 @@
 
 <dl class="cpp function">
 <dt id="_CPPv4N6legion9rendering8Renderer8drawLineEPN5debug10debug_lineE">
-<span id="_CPPv3N6legion9rendering8Renderer8drawLineEPN5debug10debug_lineE"></span><span id="_CPPv2N6legion9rendering8Renderer8drawLineEPN5debug10debug_lineE"></span><span id="legion::rendering::Renderer::drawLine__debug::debug_lineP"></span><span class="target" id="classlegion_1_1rendering_1_1_renderer_1ad1b3b2a033168d3a1a2114022c97970e"></span>void <code class="sig-name descname">drawLine</code><span class="sig-paren">(</span>debug::<a class="reference internal" href="structlegion_1_1debug_1_1debug__line.html#_CPPv4N6legion5debug10debug_lineE" title="legion::debug::debug_line">debug_line</a> *<em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering8Renderer8drawLineEPN5debug10debug_lineE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion9rendering8Renderer8drawLineEPN5debug10debug_lineE"></span><span id="_CPPv2N6legion9rendering8Renderer8drawLineEPN5debug10debug_lineE"></span><span id="legion::rendering::Renderer::drawLine__debug::debug_lineP"></span><span class="target" id="classlegion_1_1rendering_1_1_renderer_1ad1b3b2a033168d3a1a2114022c97970e"></span>void <code class="sig-name descname">drawLine</code><span class="sig-paren">(</span><a class="reference internal" href="enum_settings_8hpp_1a5d36ae1dcd274777342306852a004312.html#_CPPv4N6legion9rendering23shader_compiler_options5debugE" title="legion::rendering::debug">debug</a>::debug_line *<em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering8Renderer8drawLineEPN5debug10debug_lineE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -118,7 +118,7 @@
 <p class="breathe-sectiondef-title rubric">Public Members</p>
 <dl class="cpp var">
 <dt id="_CPPv4N6legion9rendering8Renderer7batchesE">
-<span id="_CPPv3N6legion9rendering8Renderer7batchesE"></span><span id="_CPPv2N6legion9rendering8Renderer7batchesE"></span><span id="legion::rendering::Renderer::batches__sparse_map:model_handle.sparse_map:material_handle.std::vector:math::mat4:::"></span><span class="target" id="classlegion_1_1rendering_1_1_renderer_1a5047d79e0a109e985c238939d664eea3"></span>sparse_map&lt;<a class="reference internal" href="class_structlegion_1_1rendering_1_1model__handle.html#_CPPv4N6legion9rendering12model_handleE" title="legion::rendering::model_handle">model_handle</a>, sparse_map&lt;<a class="reference internal" href="structlegion_1_1rendering_1_1material__handle.html#_CPPv4N6legion9rendering15material_handleE" title="legion::rendering::material_handle">material_handle</a>, std::vector&lt;math::mat4&gt;&gt;&gt; <code class="sig-name descname">batches</code><a class="headerlink" href="#_CPPv4N6legion9rendering8Renderer7batchesE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion9rendering8Renderer7batchesE"></span><span id="_CPPv2N6legion9rendering8Renderer7batchesE"></span><span id="legion::rendering::Renderer::batches__sparse_map:model_handle.sparse_map:material_handle.std::vector:math::mat4:::"></span><span class="target" id="classlegion_1_1rendering_1_1_renderer_1a5047d79e0a109e985c238939d664eea3"></span>sparse_map&lt;<a class="reference internal" href="class_structlegion_1_1rendering_1_1model__handle.html#_CPPv4N6legion9rendering12model_handleE" title="legion::rendering::model_handle">model_handle</a>, sparse_map&lt;<a class="reference internal" href="class_structlegion_1_1rendering_1_1material__handle.html#_CPPv4N6legion9rendering15material_handleE" title="legion::rendering::material_handle">material_handle</a>, std::vector&lt;math::mat4&gt;&gt;&gt; <code class="sig-name descname">batches</code><a class="headerlink" href="#_CPPv4N6legion9rendering8Renderer7batchesE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp var">
@@ -184,12 +184,12 @@
 
 <dl class="cpp var">
 <dt id="_CPPv4N6legion9rendering8Renderer10localLinesE">
-<span id="_CPPv3N6legion9rendering8Renderer10localLinesE"></span><span id="_CPPv2N6legion9rendering8Renderer10localLinesE"></span><span id="legion::rendering::Renderer::localLines__std::unordered_set:debug::debug_line:P"></span><span class="target" id="classlegion_1_1rendering_1_1_renderer_1a9c29541f4dc1fa66c4144f8d7c511b1f"></span><em class="property">thread_local</em> std::unordered_set&lt;debug::<a class="reference internal" href="structlegion_1_1debug_1_1debug__line.html#_CPPv4N6legion5debug10debug_lineE" title="legion::debug::debug_line">debug_line</a>&gt; *<code class="sig-name descname">localLines</code><a class="headerlink" href="#_CPPv4N6legion9rendering8Renderer10localLinesE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion9rendering8Renderer10localLinesE"></span><span id="_CPPv2N6legion9rendering8Renderer10localLinesE"></span><span id="legion::rendering::Renderer::localLines__std::unordered_set:debug::debug_line:P"></span><span class="target" id="classlegion_1_1rendering_1_1_renderer_1a9c29541f4dc1fa66c4144f8d7c511b1f"></span><em class="property">thread_local</em> std::unordered_set&lt;<a class="reference internal" href="enum_settings_8hpp_1a5d36ae1dcd274777342306852a004312.html#_CPPv4N6legion9rendering23shader_compiler_options5debugE" title="legion::rendering::debug">debug</a>::debug_line&gt; *<code class="sig-name descname">localLines</code><a class="headerlink" href="#_CPPv4N6legion9rendering8Renderer10localLinesE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp var">
 <dt id="_CPPv4N6legion9rendering8Renderer10debugLinesE">
-<span id="_CPPv3N6legion9rendering8Renderer10debugLinesE"></span><span id="_CPPv2N6legion9rendering8Renderer10debugLinesE"></span><span id="legion::rendering::Renderer::debugLines__std::unordered_map:std::thread::id.std::unordered_set:debug::debug_line:P:"></span><span class="target" id="classlegion_1_1rendering_1_1_renderer_1a85f808820dd15a0d2d07b20a2d4de3c7"></span>std::unordered_map&lt;std::thread::id, std::unordered_set&lt;debug::<a class="reference internal" href="structlegion_1_1debug_1_1debug__line.html#_CPPv4N6legion5debug10debug_lineE" title="legion::debug::debug_line">debug_line</a>&gt;*&gt; <code class="sig-name descname">debugLines</code><a class="headerlink" href="#_CPPv4N6legion9rendering8Renderer10debugLinesE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion9rendering8Renderer10debugLinesE"></span><span id="_CPPv2N6legion9rendering8Renderer10debugLinesE"></span><span id="legion::rendering::Renderer::debugLines__std::unordered_map:std::thread::id.std::unordered_set:debug::debug_line:P:"></span><span class="target" id="classlegion_1_1rendering_1_1_renderer_1a85f808820dd15a0d2d07b20a2d4de3c7"></span>std::unordered_map&lt;std::thread::id, std::unordered_set&lt;<a class="reference internal" href="enum_settings_8hpp_1a5d36ae1dcd274777342306852a004312.html#_CPPv4N6legion9rendering23shader_compiler_options5debugE" title="legion::rendering::debug">debug</a>::debug_line&gt;*&gt; <code class="sig-name descname">debugLines</code><a class="headerlink" href="#_CPPv4N6legion9rendering8Renderer10debugLinesE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>
@@ -220,7 +220,7 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
-      <li>Previous: <a href="classlegion_1_1rendering_1_1_model_cache.html" title="previous chapter">Class ModelCache</a></li>
+      <li>Previous: <a href="classlegion_1_1rendering_1_1_pipeline.html" title="previous chapter">Class Pipeline</a></li>
       <li>Next: <a href="classlegion_1_1rendering_1_1_rendering_module.html" title="next chapter">Class RenderingModule</a></li>
   </ul></li>
   </ul></li>

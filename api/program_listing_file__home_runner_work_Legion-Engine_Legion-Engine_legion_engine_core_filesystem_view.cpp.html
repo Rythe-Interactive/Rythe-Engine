@@ -121,7 +121,7 @@
         <span class="k">return</span> <span class="n">m_path</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">strpath_manip</span><span class="o">::</span><span class="n">separator</span><span class="p">()</span> <span class="o">+</span> <span class="n">strpath_manip</span><span class="o">::</span><span class="n">separator</span><span class="p">();</span>
     <span class="p">}</span>
 
-    <span class="n">L_NODISCARD</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">view</span><span class="o">::</span><span class="n">get_path</span><span class="p">()</span> <span class="k">const</span>
+    <span class="n">L_NODISCARD</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">view</span><span class="o">::</span><span class="n">get_virtual_path</span><span class="p">()</span> <span class="k">const</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">m_path</span><span class="p">;</span>
     <span class="p">}</span>
@@ -152,6 +152,20 @@
         <span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span> <span class="n">path</span><span class="p">(</span><span class="n">m_path</span><span class="p">);</span>
 
         <span class="k">return</span> <span class="nf">decay</span><span class="p">(</span><span class="n">Ok</span><span class="p">(</span><span class="n">path</span><span class="p">.</span><span class="n">filename</span><span class="p">().</span><span class="n">string</span><span class="p">()));</span> <span class="c1">// wrap extension in decay.</span>
+    <span class="p">}</span>
+
+    <span class="n">L_NODISCARD</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">view</span><span class="o">::</span><span class="n">get_filestem</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">common</span><span class="o">::</span><span class="n">Err</span><span class="p">,</span> <span class="n">common</span><span class="o">::</span><span class="n">Ok</span><span class="p">;</span>
+        <span class="c1">// decay overloads the operator of ok_type and operator== for valid_t.</span>
+        <span class="k">using</span> <span class="n">decay</span> <span class="o">=</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">file_info</span><span class="p">().</span><span class="n">is_file</span><span class="p">)</span> <span class="c1">// check if the view is a file.</span>
+            <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">legion_fs_error</span><span class="p">(</span><span class="s">&quot;requested file name on view that isn&#39;t a file.&quot;</span><span class="p">)));</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span> <span class="n">path</span><span class="p">(</span><span class="n">m_path</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="nf">decay</span><span class="p">(</span><span class="n">Ok</span><span class="p">(</span><span class="n">path</span><span class="p">.</span><span class="n">stem</span><span class="p">().</span><span class="n">string</span><span class="p">()));</span> <span class="c1">// wrap extension in decay.</span>
     <span class="p">}</span>
 
     <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">basic_resource</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">view</span><span class="o">::</span><span class="n">get</span><span class="p">()</span>

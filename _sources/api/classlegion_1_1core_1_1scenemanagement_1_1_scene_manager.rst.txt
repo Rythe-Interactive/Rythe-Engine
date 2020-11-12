@@ -1,0 +1,25 @@
+.. _exhale_class_classlegion_1_1core_1_1scenemanagement_1_1_scene_manager:
+
+Class SceneManager
+==================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scenemanagement_scenemanager.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::core::System< SceneManager >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::scenemanagement::SceneManager
+   :members:
+   :protected-members:
+   :undoc-members:

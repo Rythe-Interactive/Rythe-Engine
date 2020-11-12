@@ -18,6 +18,7 @@ Files
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_archetype.hpp`
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_archetype.inl`
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_container.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_handle.cpp`
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_handle.hpp`
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_meta.hpp`
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_ecs.hpp`

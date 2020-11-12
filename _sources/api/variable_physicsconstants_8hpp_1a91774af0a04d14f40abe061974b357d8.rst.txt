@@ -1,0 +1,13 @@
+.. _exhale_variable_physicsconstants_8hpp_1a91774af0a04d14f40abe061974b357d8:
+
+Variable legion::physics::constants::baumgarteCoefficient
+=========================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsconstants.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::physics::constants::baumgarteCoefficient

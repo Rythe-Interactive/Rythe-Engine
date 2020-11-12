@@ -1,0 +1,23 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_identifier.hpp:
+
+Program Listing for File identifier.hpp
+=======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_identifier.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/data/identifier.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/core.hpp>
+   
+   namespace legion::physics
+   {
+       struct identifier
+       {
+           std::string id = "";
+       };
+   
+   }

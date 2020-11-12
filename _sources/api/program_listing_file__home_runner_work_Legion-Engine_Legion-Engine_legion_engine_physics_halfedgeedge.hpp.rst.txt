@@ -29,11 +29,6 @@ Program Listing for File halfedgeedge.hpp
    
            HalfEdgeEdge() = default;
    
-           ~HalfEdgeEdge()
-           {
-               log::debug("");
-           }
-   
            HalfEdgeEdge(math::vec3* newEdgePositionPtr) : edgePositionPtr{ newEdgePositionPtr }
            {
    

@@ -129,12 +129,12 @@
 
     <span class="k">struct</span> <span class="n">texture_handle</span>
     <span class="p">{</span>
-        <span class="n">id_type</span> <span class="n">id</span><span class="p">;</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">invalid_id</span><span class="p">;</span>
 
-        <span class="n">texture_data</span> <span class="nf">get_data</span><span class="p">();</span>
-        <span class="k">const</span> <span class="n">texture</span><span class="o">&amp;</span> <span class="n">get_texture</span><span class="p">();</span>
-        <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">texture_handle</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">id</span><span class="p">;</span> <span class="p">}</span>
-        <span class="k">operator</span> <span class="n">id_type</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">id</span><span class="p">;</span> <span class="p">}</span>
+        <span class="n">texture_data</span> <span class="nf">get_data</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+        <span class="k">const</span> <span class="n">texture</span><span class="o">&amp;</span> <span class="n">get_texture</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">texture_handle</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">id</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">operator</span> <span class="n">id_type</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">id</span><span class="p">;</span> <span class="p">}</span>
     <span class="p">};</span>
 
     <span class="k">constexpr</span> <span class="n">texture_handle</span> <span class="n">invalid_texture_handle</span> <span class="p">{</span> <span class="n">invalid_id</span> <span class="p">};</span>
@@ -169,13 +169,14 @@
 
         <span class="k">static</span> <span class="k">const</span> <span class="n">texture</span><span class="o">&amp;</span> <span class="n">get_texture</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
         <span class="k">static</span> <span class="n">texture_data</span> <span class="nf">get_data</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
-
+        <span class="k">static</span> <span class="n">texture_handle</span> <span class="n">m_invalidTexture</span><span class="p">;</span>
     <span class="k">public</span><span class="o">:</span>
         <span class="k">static</span> <span class="n">texture_handle</span> <span class="n">create_texture</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">texture_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_texture_settings</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">texture_handle</span> <span class="nf">create_texture</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">texture_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_texture_settings</span><span class="p">);</span>
 
-        <span class="k">static</span> <span class="n">texture_handle</span> <span class="nf">create_texture</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">texture_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_texture_settings</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">texture_handle</span> <span class="nf">create_texture_from_image</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">texture_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_texture_settings</span><span class="p">);</span>
 
-        <span class="k">static</span> <span class="n">texture_handle</span> <span class="nf">create_texture</span><span class="p">(</span><span class="n">image_handle</span> <span class="n">image</span><span class="p">,</span> <span class="n">texture_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_texture_settings</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">texture_handle</span> <span class="nf">create_texture_from_image</span><span class="p">(</span><span class="n">image_handle</span> <span class="n">image</span><span class="p">,</span> <span class="n">texture_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_texture_settings</span><span class="p">);</span>
 
         <span class="k">static</span> <span class="n">texture_handle</span> <span class="nf">get_handle</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
 

@@ -11,14 +11,14 @@ Program Listing for File physicssystem.hpp
 .. code-block:: cpp
 
    #pragma once
-   
-   
    #include <core/core.hpp>
    #include <physics/components/rigidbody.hpp>
    #include <physics/data/physics_manifold_precursor.h>
    #include <physics/data/physics_manifold.hpp>
-   #include <physics/physics_contact.h>
+   #include <physics/physics_contact.hpp>
    #include <physics/components/physics_component.hpp>
+   #include <physics/data/identifier.hpp>
+   #include <physics/events/trigger_event.hpp>
    #include <memory>
    
    namespace legion::physics
@@ -28,6 +28,8 @@ Program Listing for File physicssystem.hpp
        class PhysicsSystem final : public System<PhysicsSystem>
        {
        public:
+           static bool IsPaused;
+           static bool oneTimeRunActive;
    
            static std::vector<std::shared_ptr<physics::PenetrationQuery>> penetrationQueries;
            static std::vector<physics_contact> contactPoints;
@@ -40,7 +42,7 @@ Program Listing for File physicssystem.hpp
            {
                createProcess<&PhysicsSystem::fixedUpdate>("Physics", m_timeStep);
    
-               rigidbodyIntegrationQuery = createQuery<rigidbody,position,rotation>();
+               rigidbodyIntegrationQuery = createQuery<rigidbody, position, rotation>();
    
                auto broadPhaseLambda = [this]
                (std::vector<physics_manifold_precursor>& manifoldPrecursors
@@ -48,16 +50,32 @@ Program Listing for File physicssystem.hpp
                {
                    bruteForceBroadPhase(manifoldPrecursors, manifoldPrecursorGrouping);
                };
-               
+   
                m_optimizeBroadPhase = broadPhaseLambda;
-               
+   
            }
+   
+   
    
            void fixedUpdate(time::time_span<fast_time> deltaTime)
            {
-               runPhysicsPipeline();
+               if (!IsPaused)
+               {
+                   integrateRigidbodies(deltaTime);
+                   runPhysicsPipeline(deltaTime);
+                   integrateRigidbodyQueryPositionAndRotation(deltaTime);
+                   
+               }
    
-               integrateRigidbodies(deltaTime);
+               if (oneTimeRunActive)
+               {
+                   oneTimeRunActive = false;
+   
+                   integrateRigidbodies(deltaTime);
+                   runPhysicsPipeline(deltaTime);
+                   integrateRigidbodyQueryPositionAndRotation(deltaTime);
+                 
+               }
            }
    
            //The following function is public static so that it can be called by testSystem
@@ -72,18 +90,11 @@ Program Listing for File physicssystem.hpp
                auto scaleHandle = initialEntity.get_component_handle<scale>();
                auto physicsComponentHandle = initialEntity.get_component_handle<physicsComponent>();
    
-   
                bool hasTransform = rotationHandle && positionHandle && scaleHandle;
                bool hasNecessaryComponentsForPhysicsManifold = hasTransform && physicsComponentHandle;
    
                int colliderID = id;
-               /* log::debug("----------- recursiveRetrievePreManifoldData ------------------------");
-                log::debug("colliderID count {0} ", colliderID);
-   
-                log::debug("colliderID hasTransform {0} ", hasTransform);
-   
-                log::debug("colliderID hasNecessaryComponentsForPhysicsManifold {0} ", hasNecessaryComponentsForPhysicsManifold);*/
-   
+           
                 //if the entity has a physicsComponent and a transform
                if (hasNecessaryComponentsForPhysicsManifold)
                {
@@ -111,8 +122,6 @@ Program Listing for File physicssystem.hpp
                    manifoldPrecursors.push_back(manifoldPrecursor);
                }
    
-               //log::debug("initialEntity.child_count() {} ", initialEntity.child_count());
-   
                //call recursiveRetrievePreManifoldData on its children
                for (int i = 0; i < initialEntity.child_count(); i++)
                {
@@ -130,31 +139,37 @@ Program Listing for File physicssystem.hpp
            legion::delegate<void(std::vector<physics_manifold_precursor>&, std::vector<std::vector<physics_manifold_precursor>>&)> m_optimizeBroadPhase;
            const float m_timeStep = 0.02f;
    
-           void runPhysicsPipeline()
+           void runPhysicsPipeline(float dt)
            {
                //-------------------------------------------------Broadphase Optimization-----------------------------------------------//
                int initialColliderID = 0;
    
                //recursively get all physics components from the world
                std::vector<physics_manifold_precursor> manifoldPrecursors;
-               recursiveRetrievePreManifoldData(manifoldPrecursors, ecs::entity_handle(world_entity_id, m_ecs), math::mat4(1.0f), initialColliderID);
+               recursiveRetrievePreManifoldData(manifoldPrecursors, ecs::entity_handle(world_entity_id), math::mat4(1.0f), initialColliderID);
    
                //log::debug(" manifold precursor {}", manifoldPrecursors.size());
    
                std::vector<std::vector<physics_manifold_precursor>> manifoldPrecursorGrouping;
                m_optimizeBroadPhase(manifoldPrecursors, manifoldPrecursorGrouping);
-               
+   
                //------------------------------------------------------ Narrowphase -----------------------------------------------------//
                std::vector<physics_manifold> manifoldsToSolve;
    
-               for (auto& manifoldPrecursors : manifoldPrecursorGrouping)
+               
+   
+               for (auto& manifoldPrecursor : manifoldPrecursorGrouping)
                {
-                   for (int i = 0; i < manifoldPrecursors.size()-1; i++)
+                   if (manifoldPrecursor.size() == 0) { continue; }
+   
+                   for (int i = 0; i < manifoldPrecursor.size()-1; i++)
                    {
-                       for (int j = i+1; j < manifoldPrecursors.size(); j++)
+                       for (int j = i+1; j < manifoldPrecursor.size(); j++)
                        {
-                           physics_manifold_precursor& precursorA = manifoldPrecursors.at(i);
-                           physics_manifold_precursor& precursorB = manifoldPrecursors.at(j);
+                           assert(j != manifoldPrecursor.size());
+   
+                           physics_manifold_precursor& precursorA = manifoldPrecursor.at(i);
+                           physics_manifold_precursor& precursorB = manifoldPrecursor.at(j);
    
                            auto phyCompHandleA = precursorA.physicsComponentHandle;
                            auto phyCompHandleB = precursorB.physicsComponentHandle;
@@ -172,16 +187,18 @@ Program Listing for File physicssystem.hpp
    
                            bool isBetweenTriggerAndNonTrigger =
                                (precursorPhyCompA.isTrigger && !precursorPhyCompB.isTrigger) || (!precursorPhyCompA.isTrigger && precursorPhyCompB.isTrigger);
-                               
+   
                            bool isBetweenRigidbodyAndNonTrigger =
                                (precursorRigidbodyA && !precursorPhyCompB.isTrigger) || (precursorRigidbodyB && !precursorPhyCompA.isTrigger);
    
                            bool isBetween2Rigidbodies = (precursorRigidbodyA && precursorRigidbodyB);
    
-                           
+   
                            if (isBetweenTriggerAndNonTrigger || isBetweenRigidbodyAndNonTrigger || isBetween2Rigidbodies)
                            {
-                               constructManifoldsWithPrecursors(manifoldPrecursors.at(i), manifoldPrecursors.at(j),
+                              
+   
+                               constructManifoldsWithPrecursors(manifoldPrecursor.at(i), manifoldPrecursor.at(j),
                                    manifoldsToSolve,
                                    precursorRigidbodyA || precursorRigidbodyB
                                    , precursorPhyCompA.isTrigger || precursorPhyCompB.isTrigger);
@@ -207,6 +224,7 @@ Program Listing for File physicssystem.hpp
                    }
                }
    
+          
                //resolve contact constraint
                for (size_t i = 0; i < constants::contactSolverIterationCount; i++)
                {
@@ -214,11 +232,13 @@ Program Listing for File physicssystem.hpp
                    {
                        for (auto& contact : manifold.contacts)
                        {
-                           contact.resolveContactConstraint();
+                           contact.resolveContactConstraint(dt,i);
                        }
                    }
                }
    
+               
+               
                //resolve friction constraint
                for (size_t i = 0; i < constants::frictionSolverIterationCount; i++)
                {
@@ -231,20 +251,25 @@ Program Listing for File physicssystem.hpp
                    }
                }
    
+               for (auto& manifold : manifoldsToSolve)
+               {
+                   for (auto& contact : manifold.contacts)
+                   {
+                       PhysicsSystem::contactPoints.push_back(contact);
+                   }
+               }
    
            }
    
    
-          
+   
            void bruteForceBroadPhase(std::vector<physics_manifold_precursor>& manifoldPrecursors,
                std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping);
    
    
            void constructManifoldsWithPrecursors(physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB,
-               std::vector<physics_manifold>& manifoldsToSolve,bool isRigidbodyInvolved,bool isTriggerInvolved)
+               std::vector<physics_manifold>& manifoldsToSolve, bool isRigidbodyInvolved, bool isTriggerInvolved)
            {
-               
-   
                auto physicsComponentA = precursorA.physicsComponentHandle.read();
                auto physicsComponentB = precursorB.physicsComponentHandle.read();
    
@@ -253,7 +278,7 @@ Program Listing for File physicssystem.hpp
                    for (auto colliderB : *physicsComponentB.colliders)
                    {
                        physics::physics_manifold m;
-                       constructManifoldWithCollider(colliderA,colliderB,precursorA,precursorB,m);
+                       constructManifoldWithCollider(colliderA, colliderB, precursorA, precursorB, m);
    
                        if (!m.isColliding)
                        {
@@ -262,14 +287,25 @@ Program Listing for File physicssystem.hpp
    
                        colliderA->PopulateContactPoints(colliderB, m);
    
-                       if (isRigidbodyInvolved)
+                       if (isRigidbodyInvolved && !isTriggerInvolved)
                        {
-                           //send it to 'manifoldsToSolve'
+                           manifoldsToSolve.push_back(m);
                        }
    
                        if (isTriggerInvolved)
                        {
+   
+                           //TODO:(algo-ryth-mix,Developer-The-Great):
+                           //TODO:(cont.) The second paramenter here is supposed to be the delta-time of the physics-system
+                           //TODO:(cont.) A: do we need that? and B: it currently is not.
+                           //
+   
+                           //notify the event-bus
+                           raiseEvent<TriggerEvent>(m,1.0f);
                            //notify both the trigger and triggerer
+                           //TODO:(Developer-The-Great): the triggerer and trigger should probably received this event
+                           //TODO:(cont.) through the event bus, we should probably create a filterable system here to
+                           //TODO:(cont.) uniquely identify involved objects and then redirect only required messages
                        }
    
                    }
@@ -278,7 +314,7 @@ Program Listing for File physicssystem.hpp
    
            void constructManifoldWithCollider(
                PhysicsColliderPtr colliderA, PhysicsColliderPtr colliderB
-               , physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB,physics_manifold& manifold)
+               , physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB, physics_manifold& manifold)
            {
                manifold.colliderA = colliderA;
                manifold.colliderB = colliderB;
@@ -289,7 +325,7 @@ Program Listing for File physicssystem.hpp
                manifold.transformA = precursorA.worldTransform;
                manifold.transformB = precursorB.worldTransform;
    
-              // log::debug("colliderA->CheckCollision(colliderB, manifold)");
+               // log::debug("colliderA->CheckCollision(colliderB, manifold)");
                colliderA->CheckCollision(colliderB, manifold);
    
            }
@@ -307,29 +343,71 @@ Program Listing for File physicssystem.hpp
            }
    
            void integrateRigidbody(ecs::component_handle<position>& posHandle
-               , ecs::component_handle<rotation>& rotHandle , ecs::component_handle<rigidbody>& rbHandle,float dt)
+               , ecs::component_handle<rotation>& rotHandle, ecs::component_handle<rigidbody>& rbHandle, float dt)
            {
                auto rb = rbHandle.read();
                auto rbPos = posHandle.read();
                auto rbRot = rotHandle.read();
    
-               //-------------------- update position ------------------//
                math::vec3 acc = rb.forceAccumulator * rb.inverseMass;
                rb.velocity += (acc + constants::gravity) * dt;
-               rbPos += rb.velocity * dt;
    
-               //-------------------- update rotation ------------------//
-               math::vec3 angularAcc = rb.torqueAccumulator * rb.inverseInertiaTensor;
-               rb.angularVelocity += (angularAcc);
-   
-               //construct the rotation by using the direction of angularVelocity as the axis and its length as the angle
-               float dtAngle = math::length(rb.angularVelocity) * dt;
-               rbRot *= math::angleAxis(math::deg2rad(dtAngle), math::normalize(rb.angularVelocity));
+               math::vec3 angularAcc = rb.torqueAccumulator * rb.globalInverseInertiaTensor;
+               rb.angularVelocity += (angularAcc)* dt;
    
                rb.resetAccumulators();
    
+               rbHandle.write(rb);
+               posHandle.write(rbPos);
+               rotHandle.write(rbRot);
+   
+           }
+   
+           void integrateRigidbodyQueryPositionAndRotation(float deltaTime)
+           {
+               for (auto ent : rigidbodyIntegrationQuery)
+               {
+                   auto rbPosHandle = ent.get_component_handle<position>();
+                   auto rbRotHandle = ent.get_component_handle<rotation>();
+                   auto rbRigidbodyHandle = ent.get_component_handle<rigidbody>();
+   
+                   integrateRigidbodyPositionAndRotations(rbPosHandle, rbRotHandle, rbRigidbodyHandle, deltaTime);
+   
+               }
+           }
+   
+           void integrateRigidbodyPositionAndRotations(ecs::component_handle<position>& posHandle
+               , ecs::component_handle<rotation>& rotHandle, ecs::component_handle<rigidbody>& rbHandle, float dt)
+           {
+               auto rb = rbHandle.read();
+               auto rbPos = posHandle.read();
+               auto rbRot = rotHandle.read();
+   
+               rbPos += rb.velocity * dt;
+   
+               float angle = math::clamp(math::length(rb.angularVelocity), 0.0f, 32.0f);
+               float dtAngle = angle * dt;
+   
+               math::quat bfr = rbRot;
+   
+   
+             
+               if (!math::epsilonEqual(dtAngle, 0.0f, math::epsilon<float>()))
+               { 
+                   math::vec3 axis = math::normalize(rb.angularVelocity);
+   
+                   math::quat glmQuat = math::angleAxis(dtAngle, axis);
+                   rbRot = glmQuat * rbRot;
+                   rbRot = math::normalize(rbRot);
+   
+               }
+   
+               math::quat afr = rbRot;
+   
                //for now assume that there is no offset from bodyP
                rb.globalCentreOfMass = rbPos;
+   
+               rb.UpdateInertiaTensor(rbRot);
    
                rbHandle.write(rb);
                posHandle.write(rbPos);
@@ -338,5 +416,7 @@ Program Listing for File physicssystem.hpp
            }
    
    
+   
        };
    }
+   

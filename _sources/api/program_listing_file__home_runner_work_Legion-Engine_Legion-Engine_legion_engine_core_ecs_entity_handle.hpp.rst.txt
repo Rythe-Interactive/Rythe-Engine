@@ -17,6 +17,9 @@ Program Listing for File entity_handle.hpp
    #include <core/platform/platform.hpp>
    #include <core/ecs/archetype.hpp>
    #include <memory>
+   #include <cereal/types/vector.hpp>
+   #include <cereal/archives/binary.hpp>
+   #include <cereal/archives/json.hpp>
    
    namespace legion::core::ecs
    {
@@ -60,14 +63,14 @@ Program Listing for File entity_handle.hpp
            friend class EcsRegistry;
        private:
            id_type m_id;
-           EcsRegistry* m_registry;
+           static EcsRegistry* m_registry;
    
        public:
-           entity_handle(id_type id, EcsRegistry* registry) : m_id(id) { m_registry = registry; }
+           entity_handle(id_type id) : m_id(id) {  }
    
-           entity_handle() : m_id(invalid_id) { m_registry = nullptr; }
+           entity_handle() : m_id(invalid_id) {  }
    
-           entity_handle(const entity_handle& other) : m_id(other.m_id) { m_registry = other.m_registry; }
+           entity_handle(const entity_handle& other) : m_id(other.m_id) {  }
    
            entity_handle& operator=(const entity_handle& other);
    
@@ -84,6 +87,11 @@ Program Listing for File entity_handle.hpp
            L_NODISCARD entity_handle get_parent() const;
    
            void set_parent(id_type newParent) const;
+   
+           void serialize(cereal::JSONOutputArchive& oarchive);
+           void serialize(cereal::BinaryOutputArchive& oarchive);
+           void serialize(cereal::JSONInputArchive& oarchive);
+           void serialize(cereal::BinaryInputArchive& oarchive);
    
            L_NODISCARD entity_handle operator[] (index_type index) const;
    
@@ -142,7 +150,6 @@ Program Listing for File entity_handle.hpp
            {
                return force_value_cast<component_handle<component_type>>(add_component(typeHash<component_type>()));
            }
-   
            template<typename component_type>
            component_handle<std::remove_reference_t<component_type>> add_component(component_type&& value) const
            {
@@ -162,7 +169,7 @@ Program Listing for File entity_handle.hpp
            auto add_components() const;
    
            template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
-           auto add_components(component_type&& value, component_types&&... values) const;        
+           auto add_components(component_type&& value, component_types&&... values) const;
    
            template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
            auto add_components(component_type& value, component_types&... values) const;
@@ -189,6 +196,7 @@ Program Listing for File entity_handle.hpp
    
            bool valid() const;
        };
+   
    
        using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
    }

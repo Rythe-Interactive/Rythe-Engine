@@ -52,6 +52,12 @@
 
 <span class="cp">#include</span> <span class="cpf">&lt;core/logging/logging.hpp&gt;</span><span class="cp"></span>
 
+<span class="cp">#include</span> <span class="cpf">&lt;cereal/types/unordered_map.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cereal/types/memory.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cereal/archives/json.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cereal/archives/portable_binary.hpp&gt;</span><span class="cp"></span>
+
+
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span>
 <span class="p">{</span>
     <span class="k">struct</span> <span class="nl">position</span> <span class="p">:</span> <span class="k">public</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span>
@@ -127,6 +133,7 @@
         <span class="p">}</span>
     <span class="p">};</span>
 
+
     <span class="k">struct</span> <span class="nl">scale</span> <span class="p">:</span> <span class="k">public</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span>
     <span class="p">{</span>
         <span class="n">scale</span><span class="p">()</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{}</span>
@@ -151,7 +158,9 @@
             <span class="n">z</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">z</span><span class="p">;</span>
             <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
         <span class="p">}</span>
+
     <span class="p">};</span>
+
 
     <span class="k">struct</span> <span class="nl">transform</span> <span class="p">:</span> <span class="k">public</span> <span class="n">ecs</span><span class="o">::</span><span class="n">archetype</span><span class="o">&lt;</span><span class="n">position</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">scale</span><span class="o">&gt;</span>
     <span class="p">{</span>

@@ -1,0 +1,24 @@
+
+.. _namespace_legion__core__serialization:
+
+Namespace legion::core::serialization
+=====================================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1serialization_1_1has__serialize`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1serialization_1_1has__serialize_3_01_c_00_01_ret_07_args_8_8_8_08_4`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1serialization_1_1_serialization_util`

@@ -47,11 +47,19 @@ Included By
 -----------
 
 
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_handle.cpp`
+
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_ecs.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_ecsregistry.cpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entity_handle.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_engine.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scenemanagement_scene.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scenemanagement_scenemanager.hpp`
 
 
 
@@ -59,6 +67,8 @@ Included By
 Namespaces
 ----------
 
+
+- :ref:`namespace_legion__core`
 
 - :ref:`namespace_legion__core__ecs`
 

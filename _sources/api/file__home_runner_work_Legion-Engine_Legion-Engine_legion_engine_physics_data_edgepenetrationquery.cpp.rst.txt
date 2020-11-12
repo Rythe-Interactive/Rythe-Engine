@@ -29,11 +29,9 @@ Includes
 --------
 
 
-- ``physics/data/edgepenetrationquery.h`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_edgepenetrationquery.h`)
+- ``physics/data/edgepenetrationquery.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_edgepenetrationquery.hpp`)
 
 - ``physics/physics_statics.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_statics.hpp`)
-
-- ``physics/systems/physicssystem.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_systems_physicssystem.hpp`)
 
 
 

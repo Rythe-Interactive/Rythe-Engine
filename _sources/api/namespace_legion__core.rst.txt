@@ -41,7 +41,11 @@ Namespaces
 
 - :ref:`namespace_legion__core__math`
 
+- :ref:`namespace_legion__core__scenemanagement`
+
 - :ref:`namespace_legion__core__scheduling`
+
+- :ref:`namespace_legion__core__serialization`
 
 - :ref:`namespace_legion__core__time`
 
@@ -55,6 +59,20 @@ Classes
 - :ref:`exhale_struct_structlegion_1_1core_1_1has__resize`
 
 - :ref:`exhale_struct_structlegion_1_1core_1_1has__resize_3_01_c_00_01_ret_07_args_8_8_8_08_4`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1is__container`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1is__container_3_01std_1_1array_3_01_t_00_01_n_01_4_01_4`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1is__container_3_01std_1_1basic__string_3_01_t_01_4_01_4`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1is__container_3_01std_1_1deque_3_01_t_01_4_01_4`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1is__container_3_01std_1_1list_3_01_t_01_4_01_4`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1is__container_3_01std_1_1queue_3_01_t_01_4_01_4`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1is__container_3_01std_1_1vector_3_01_t_01_4_01_4`
 
 - :ref:`exhale_struct_structlegion_1_1core_1_1is__vector`
 
@@ -172,13 +190,13 @@ Functions
 
 - :ref:`exhale_function_type__util_8hpp_1a1fe20cafef19940da5c6e26622c46581`
 
-- :ref:`exhale_function_type__util_8cpp_1a492f8a72e0cd77b3868d5e4b0a2b9b5f`
-
 - :ref:`exhale_function_type__util_8cpp_1a216cabaf6d00a70dee4d790833485369`
+
+- :ref:`exhale_function_type__util_8hpp_1a22ddbf10ae207bd2a99666df70f9b695`
 
 - :ref:`exhale_function_type__util_8cpp_1a4e1c17350cceba4c3b7b06fa70498c6e`
 
-- :ref:`exhale_function_type__util_8hpp_1a22ddbf10ae207bd2a99666df70f9b695`
+- :ref:`exhale_function_type__util_8cpp_1a492f8a72e0cd77b3868d5e4b0a2b9b5f`
 
 - :ref:`exhale_function_type__util_8hpp_1a4b5630f47491ff5cef8787bff3baf775`
 
@@ -200,6 +218,14 @@ Functions
 Typedefs
 --------
 
+
+- :ref:`exhale_typedef_primitives_8hpp_1acdfa04b1a6b3539ba4dd2711414a252c`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a0b7eb86c5d12a813833e7aa1e188428c`
+
+- :ref:`exhale_typedef_primitives_8hpp_1a4ff298445d9ac12cb240106aef26cbde`
+
+- :ref:`exhale_typedef_primitives_8hpp_1ac978f6020b958380bf34ab85004aaed7`
 
 - :ref:`exhale_typedef_primitives_8hpp_1a9f767b2438b5f8d8bf3f85dabe69c634`
 

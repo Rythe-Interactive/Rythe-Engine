@@ -43,6 +43,8 @@ Includes
 
 - ``core/filesystem/provider_registry.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_provider_registry.hpp`)
 
+- ``core/scenemanagement/scene.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scenemanagement_scene.hpp`)
+
 
 
 Included By

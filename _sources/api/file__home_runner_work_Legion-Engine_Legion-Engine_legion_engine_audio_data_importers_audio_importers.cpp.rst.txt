@@ -44,3 +44,20 @@ Namespaces
 
 - :ref:`namespace_legion__audio`
 
+- :ref:`namespace_legion__audio__detail`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_audio__importers_8cpp_1a95eafeb1b00f533f6eb714d90c039b0b`
+
+- :ref:`exhale_function_audio__importers_8cpp_1ae996ec805a9a71a82884dbf707a7712e`
+
+- :ref:`exhale_function_audio__importers_8cpp_1ae328e333a68dc047619eda530142d996`
+
+- :ref:`exhale_function_audio__importers_8cpp_1ab50021802c394b363a1b5061d06759d0`
+
+- :ref:`exhale_function_audio__importers_8cpp_1ac0ba23479044e0e3102ffcac0ca58b95`
+

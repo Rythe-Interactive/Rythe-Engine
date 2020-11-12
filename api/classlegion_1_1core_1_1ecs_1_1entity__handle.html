@@ -66,8 +66,8 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
-<dt id="_CPPv4N6legion4core3ecs13entity_handle13entity_handleE7id_typeP11EcsRegistry">
-<span id="_CPPv3N6legion4core3ecs13entity_handle13entity_handleE7id_typeP11EcsRegistry"></span><span id="_CPPv2N6legion4core3ecs13entity_handle13entity_handleE7id_typeP11EcsRegistry"></span><span id="legion::core::ecs::entity_handle::entity_handle__id_type.EcsRegistryP"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1entity__handle_1a47f76b6b22500b239429d0ffda4aa0cb"></span><code class="sig-name descname">entity_handle</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>id</em>, <a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1_ecs_registry.html#_CPPv4N6legion4core3ecs11EcsRegistryE" title="legion::core::ecs::EcsRegistry">EcsRegistry</a> *<em>registry</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs13entity_handle13entity_handleE7id_typeP11EcsRegistry" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N6legion4core3ecs13entity_handle13entity_handleE7id_type">
+<span id="_CPPv3N6legion4core3ecs13entity_handle13entity_handleE7id_type"></span><span id="_CPPv2N6legion4core3ecs13entity_handle13entity_handleE7id_type"></span><span id="legion::core::ecs::entity_handle::entity_handle__id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1entity__handle_1a280e38daf0d49c30a0eccabeaca450c0"></span><code class="sig-name descname">entity_handle</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs13entity_handle13entity_handleE7id_type" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Main constructor for constructing a valid entity handle. </p>
 </dd></dl>
 
@@ -200,6 +200,36 @@
 </dl>
 </p>
 </dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs13entity_handle9serializeERN6cereal17JSONOutputArchiveE">
+<span id="_CPPv3N6legion4core3ecs13entity_handle9serializeERN6cereal17JSONOutputArchiveE"></span><span id="_CPPv2N6legion4core3ecs13entity_handle9serializeERN6cereal17JSONOutputArchiveE"></span><span id="legion::core::ecs::entity_handle::serialize__cereal::JSONOutputArchiveR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1entity__handle_1aabc5e3be46820f5f9888ff91782afdb4"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span>cereal::JSONOutputArchive &amp;<em>oarchive</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs13entity_handle9serializeERN6cereal17JSONOutputArchiveE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>serializes the entity depending on its archive </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Will only be called when said entity is serializes through an archive. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">oarchive</span></code>: template&lt;typename Archive&gt; </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs13entity_handle9serializeERN6cereal19BinaryOutputArchiveE">
+<span id="_CPPv3N6legion4core3ecs13entity_handle9serializeERN6cereal19BinaryOutputArchiveE"></span><span id="_CPPv2N6legion4core3ecs13entity_handle9serializeERN6cereal19BinaryOutputArchiveE"></span><span id="legion::core::ecs::entity_handle::serialize__cereal::BinaryOutputArchiveR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1entity__handle_1a3b511e0640ef86aa22c314125a296023"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span>cereal::BinaryOutputArchive &amp;<em>oarchive</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs13entity_handle9serializeERN6cereal19BinaryOutputArchiveE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs13entity_handle9serializeERN6cereal16JSONInputArchiveE">
+<span id="_CPPv3N6legion4core3ecs13entity_handle9serializeERN6cereal16JSONInputArchiveE"></span><span id="_CPPv2N6legion4core3ecs13entity_handle9serializeERN6cereal16JSONInputArchiveE"></span><span id="legion::core::ecs::entity_handle::serialize__cereal::JSONInputArchiveR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1entity__handle_1a564571239b25b7722ea38377a5bca17e"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span>cereal::JSONInputArchive &amp;<em>oarchive</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs13entity_handle9serializeERN6cereal16JSONInputArchiveE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs13entity_handle9serializeERN6cereal18BinaryInputArchiveE">
+<span id="_CPPv3N6legion4core3ecs13entity_handle9serializeERN6cereal18BinaryInputArchiveE"></span><span id="_CPPv2N6legion4core3ecs13entity_handle9serializeERN6cereal18BinaryInputArchiveE"></span><span id="legion::core::ecs::entity_handle::serialize__cereal::BinaryInputArchiveR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1entity__handle_1ab2b11129ce5f2cdbb8b6575fc36a3225"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span>cereal::BinaryInputArchive &amp;<em>oarchive</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs13entity_handle9serializeERN6cereal18BinaryInputArchiveE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4NK6legion4core3ecs13entity_handleixE10index_type">

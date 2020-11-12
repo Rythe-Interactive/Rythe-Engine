@@ -1,0 +1,56 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_shellinvoke.hpp:
+
+File shellinvoke.hpp
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/platform``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/platform/shellinvoke.hpp``)
+----------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_shellinvoke.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/common/string_extra.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`)
+
+- ``core/logging/logging.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`)
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`)
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_core.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core`
+

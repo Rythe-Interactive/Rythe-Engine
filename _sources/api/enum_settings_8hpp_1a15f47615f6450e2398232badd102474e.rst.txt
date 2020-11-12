@@ -1,0 +1,13 @@
+.. _exhale_enum_settings_8hpp_1a15f47615f6450e2398232badd102474e:
+
+Enum rendering_api
+==================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_settings.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: legion::rendering::rendering_api

@@ -1,0 +1,26 @@
+.. _exhale_class_structlegion_1_1core_1_1compute_1_1in:
+
+Template Class in
+=================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_high_level_function.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Types
+**********
+
+- ``public legion::core::compute::in_ident`` (:ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1in__ident`)
+- ``public legion::core::compute::detail::buffer_base`` (:ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1detail_1_1buffer__base`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::compute::in
+   :members:
+   :protected-members:
+   :undoc-members:

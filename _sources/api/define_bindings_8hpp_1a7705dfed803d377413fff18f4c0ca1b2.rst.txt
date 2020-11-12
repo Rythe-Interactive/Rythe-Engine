@@ -1,0 +1,13 @@
+.. _exhale_define_bindings_8hpp_1a7705dfed803d377413fff18f4c0ca1b2:
+
+Define SV_NORMAL
+================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_bindings.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: SV_NORMAL

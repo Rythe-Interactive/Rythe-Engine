@@ -74,28 +74,31 @@
 
             <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">global</span><span class="p">(</span><span class="n">size_type</span><span class="p">);</span>
 
-            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">build_buffer_names</span><span class="p">();</span>
+            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">buildBufferNames</span><span class="p">();</span>
 
-            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">read_write_mode</span><span class="p">(</span><span class="n">buffer_type</span><span class="p">);</span>
+            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">readWriteMode</span><span class="p">(</span><span class="n">buffer_type</span><span class="p">);</span>
 
-            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">enqueue_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span> <span class="o">=</span> <span class="n">block_mode</span><span class="o">::</span><span class="n">BLOCKING</span><span class="p">);</span>
+            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">enqueueBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span> <span class="o">=</span> <span class="n">block_mode</span><span class="o">::</span><span class="n">BLOCKING</span><span class="p">);</span>
 
-            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">set_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">);</span>
+            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">setBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">);</span>
 
-            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">set_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">setBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
 
-            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">set_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">index</span><span class="p">);</span>
+            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">setBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">index</span><span class="p">);</span>
 
 
-            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">set_and_enqueue_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span> <span class="o">=</span> <span class="n">block_mode</span><span class="o">::</span><span class="n">BLOCKING</span><span class="p">);</span>
+            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">setAndEnqueBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span> <span class="o">=</span> <span class="n">block_mode</span><span class="o">::</span><span class="n">BLOCKING</span><span class="p">);</span>
 
-            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">set_and_enqueue_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span> <span class="o">=</span> <span class="n">block_mode</span><span class="o">::</span><span class="n">BLOCKING</span><span class="p">);</span>
+            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">setAndEnqueBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span> <span class="o">=</span> <span class="n">block_mode</span><span class="o">::</span><span class="n">BLOCKING</span><span class="p">);</span>
 
-            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">set_and_enqueue_buffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">index</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span> <span class="o">=</span> <span class="n">block_mode</span><span class="o">::</span><span class="n">BLOCKING</span><span class="p">);</span>
+            <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">setAndEnqueBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">index</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span> <span class="o">=</span> <span class="n">block_mode</span><span class="o">::</span><span class="n">BLOCKING</span><span class="p">);</span>
 
             <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">dispatch</span><span class="p">();</span>
 
             <span class="kt">void</span> <span class="nf">finish</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+
+            <span class="kt">size_t</span> <span class="nf">getMaxWorkSize</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
         <span class="k">private</span><span class="o">:</span>
 
@@ -115,7 +118,7 @@
                 <span class="c1">// lazy build buffer names</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">m_paramsMap</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
                 <span class="p">{</span>
-                    <span class="n">build_buffer_names</span><span class="p">();</span>
+                    <span class="n">buildBufferNames</span><span class="p">();</span>
                 <span class="p">}</span>
 
                 <span class="c1">//find and do thing, otherwise print warning</span>

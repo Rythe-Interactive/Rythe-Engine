@@ -41,11 +41,18 @@ Program Listing for File platform.hpp
        #define VC_EXTRALEAN
        #define NOMINMAX
        #include <Windows.h>
+       #include <shellapi.h>
+       #include <shlobj.h>
+       #include <shlwapi.h>
+       #include <objbase.h>
    #elif defined(__linux__)
    
        #define LEGION_LINUX
    
        #include <sys/resource.h>
+       #include <sys/types.h>
+       #include <sys/wait.h>
+       #include <unistd.h>
        #include <sched.h>
        #include <errno.h>
    #endif
@@ -85,7 +92,11 @@ Program Listing for File platform.hpp
    #  define L_HASCPPATTRIB(x) 0
    #endif
    
-   
+   #if L_HASCPPATTRIB(fallthrough)
+   #define L_FALLTHROUGH [[fallthrough]]
+   #else
+   #define L_FALLTHROUGH
+   #endif
    
    #if __cplusplus >= LEGION_CPP17V || L_HASCPPATTRIB(nodiscard) || defined(DOXY_INCLUDE)
    

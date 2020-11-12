@@ -1,0 +1,517 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File shadercompiler.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File shadercompiler.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-shadercompiler-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-shadercompiler-shadercompiler-cpp"></span><h1>Program Listing for File shadercompiler.cpp<a class="headerlink" href="#program-listing-for-file-shadercompiler-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_shadercompiler_shadercompiler.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-shadercompiler-shadercompiler-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/shadercompiler/shadercompiler.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;rendering/shadercompiler/shadercompiler.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/util/settings.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;lgnspre/gl_consts.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;application/application.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
+<span class="p">{</span>
+    <span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">log</span><span class="o">::</span><span class="n">severity</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">ShaderCompiler</span><span class="o">::</span><span class="n">m_callback</span><span class="p">;</span>
+
+
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">ShaderCompiler</span><span class="o">::</span><span class="n">get_view_path</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">view</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">mustBeFile</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">severity</span> <span class="o">=</span> <span class="n">log</span><span class="o">::</span><span class="n">severity</span><span class="p">;</span>
+
+        <span class="n">fs</span><span class="o">::</span><span class="n">navigator</span> <span class="n">navigator</span><span class="p">(</span><span class="n">view</span><span class="p">.</span><span class="n">get_virtual_path</span><span class="p">());</span>
+        <span class="k">auto</span> <span class="n">solution</span> <span class="o">=</span> <span class="n">navigator</span><span class="p">.</span><span class="n">find_solution</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">solution</span><span class="p">.</span><span class="n">has_err</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">m_callback</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;Shader processor error: &quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">solution</span><span class="p">.</span><span class="n">get_error</span><span class="p">().</span><span class="n">what</span><span class="p">(),</span> <span class="n">severity</span><span class="o">::</span><span class="n">error</span><span class="p">);</span>
+            <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">auto</span> <span class="n">s</span> <span class="o">=</span> <span class="n">solution</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_callback</span><span class="p">(</span><span class="s">&quot;Shader processor error: invalid file, fs::view was not fully local&quot;</span><span class="p">,</span> <span class="n">severity</span><span class="o">::</span><span class="n">error</span><span class="p">);</span>
+            <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">fs</span><span class="o">::</span><span class="n">basic_resolver</span><span class="o">*</span> <span class="n">resolver</span> <span class="o">=</span> <span class="k">dynamic_cast</span><span class="o">&lt;</span><span class="n">fs</span><span class="o">::</span><span class="n">basic_resolver</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">first</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">resolver</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_callback</span><span class="p">(</span><span class="s">&quot;Shader processor error: invalid file, fs::view was not local&quot;</span><span class="p">,</span> <span class="n">severity</span><span class="o">::</span><span class="n">error</span><span class="p">);</span>
+            <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">resolver</span><span class="o">-&gt;</span><span class="n">set_target</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">second</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">resolver</span><span class="o">-&gt;</span><span class="n">is_valid</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">m_callback</span><span class="p">(</span><span class="s">&quot;Shader processor error: invalid path&quot;</span><span class="p">,</span> <span class="n">severity</span><span class="o">::</span><span class="n">error</span><span class="p">);</span>
+            <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">mustBeFile</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">resolver</span><span class="o">-&gt;</span><span class="n">is_file</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">m_callback</span><span class="p">(</span><span class="s">&quot;Shader processor error: not a file&quot;</span><span class="p">,</span> <span class="n">severity</span><span class="o">::</span><span class="n">error</span><span class="p">);</span>
+            <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">resolver</span><span class="o">-&gt;</span><span class="n">get_absolute_path</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">ShaderCompiler</span><span class="o">::</span><span class="n">get_shaderlib_path</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">libPath</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">libPath</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+            <span class="n">libPath</span> <span class="o">=</span> <span class="n">get_view_path</span><span class="p">(</span><span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="p">(</span><span class="s">&quot;engine://shaderlib&quot;</span><span class="p">),</span> <span class="nb">false</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">libPath</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">ShaderCompiler</span><span class="o">::</span><span class="n">get_compiler_path</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">compPath</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">compPath</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+            <span class="n">compPath</span> <span class="o">=</span> <span class="n">get_view_path</span><span class="p">(</span><span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="p">(</span><span class="s">&quot;engine://tools&quot;</span><span class="p">),</span> <span class="nb">false</span><span class="p">)</span> <span class="o">+</span> <span class="n">fs</span><span class="o">::</span><span class="n">strpath_manip</span><span class="o">::</span><span class="n">separator</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot;lgnspre&quot;</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">compPath</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">ShaderCompiler</span><span class="o">::</span><span class="n">extract_state</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">source</span><span class="p">,</span> <span class="n">shader_state</span><span class="o">&amp;</span> <span class="n">state</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">rest</span> <span class="o">=</span> <span class="n">source</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">stateInput</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">rest</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">seperator</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">find_first_not_of</span><span class="p">(</span><span class="sc">&#39;\n&#39;</span><span class="p">);</span>
+            <span class="n">seperator</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">find_first_of</span><span class="p">(</span><span class="sc">&#39;\n&#39;</span><span class="p">,</span> <span class="n">seperator</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">seperator</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">seperator</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="n">line</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">seperator</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">space</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="sc">&#39; &#39;</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">space</span> <span class="o">!=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span>
+                <span class="n">stateInput</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">space</span><span class="p">)),</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">space</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))));</span>
+            <span class="k">else</span>
+                <span class="n">stateInput</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">space</span><span class="p">)),</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">()));</span>
+
+            <span class="n">rest</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">seperator</span><span class="p">);</span>
+            <span class="n">seperator</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">find_first_not_of</span><span class="p">(</span><span class="sc">&#39;\n&#39;</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">seperator</span> <span class="o">==</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Create lookup table for the OpenGL function types that can be changed by the shader state.</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;</span> <span class="n">funcTypes</span><span class="p">;</span>
+        <span class="k">static</span> <span class="kt">bool</span> <span class="n">funcTypesInitialized</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">funcTypesInitialized</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">funcTypesInitialized</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">funcTypes</span><span class="p">[</span><span class="s">&quot;DEPTH&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_DEPTH_TEST</span><span class="p">;</span>
+            <span class="n">funcTypes</span><span class="p">[</span><span class="s">&quot;CULL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_CULL_FACE</span><span class="p">;</span>
+            <span class="n">funcTypes</span><span class="p">[</span><span class="s">&quot;ALPHA_SOURCE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_BLEND_SRC</span><span class="p">;</span>
+            <span class="n">funcTypes</span><span class="p">[</span><span class="s">&quot;ALPHA_DEST&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_BLEND_DST</span><span class="p">;</span>
+            <span class="n">funcTypes</span><span class="p">[</span><span class="s">&quot;ALPHA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_BLEND</span><span class="p">;</span>
+            <span class="n">funcTypes</span><span class="p">[</span><span class="s">&quot;DITHER&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_DITHER</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Default shader state in case nothing was specified by the shader.</span>
+        <span class="n">state</span><span class="p">[</span><span class="n">GL_DEPTH_TEST</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_GREATER</span><span class="p">;</span>
+        <span class="n">state</span><span class="p">[</span><span class="n">GL_CULL_FACE</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_BACK</span><span class="p">;</span>
+        <span class="n">state</span><span class="p">[</span><span class="n">GL_BLEND_SRC</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_SRC_ALPHA</span><span class="p">;</span>
+        <span class="n">state</span><span class="p">[</span><span class="n">GL_BLEND_DST</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ONE_MINUS_SRC_ALPHA</span><span class="p">;</span>
+        <span class="n">state</span><span class="p">[</span><span class="n">GL_DITHER</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_FALSE</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">func</span><span class="p">,</span> <span class="n">par</span><span class="p">]</span> <span class="o">:</span> <span class="n">stateInput</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">funcTypes</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">func</span><span class="p">))</span> <span class="c1">// If the function type is unsupported or unknown we also want to fail compilation.</span>
+                <span class="k">continue</span><span class="p">;</span>
+
+            <span class="n">GLenum</span> <span class="n">funcType</span> <span class="o">=</span> <span class="n">funcTypes</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">func</span><span class="p">);</span> <span class="c1">// Fetch the function type without risking editing the lookup table.</span>
+            <span class="n">GLenum</span> <span class="n">param</span> <span class="o">=</span> <span class="n">GL_FALSE</span><span class="p">;</span>
+
+            <span class="k">switch</span> <span class="p">(</span><span class="n">funcType</span><span class="p">)</span>
+            <span class="p">{</span>
+            <span class="k">case</span> <span class="nl">GL_DEPTH_TEST</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;</span> <span class="n">params</span><span class="p">;</span> <span class="c1">// Initialize parameter lookup table.</span>
+                <span class="k">static</span> <span class="kt">bool</span> <span class="n">initialized</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">initialized</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">initialized</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;OFF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_FALSE</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;NEVER&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_NEVER</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;LESS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_LESS</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;EQUAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_EQUAL</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;LEQUAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_LEQUAL</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;GREATER&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_GREATER</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;NOTEQUAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_NOTEQUAL</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;GEQUAL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_GEQUAL</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ALWAYS&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ALWAYS</span><span class="p">;</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">params</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">par</span><span class="p">))</span>
+                    <span class="k">continue</span><span class="p">;</span>
+
+                <span class="n">param</span> <span class="o">=</span> <span class="n">params</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">par</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_CULL_FACE</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;</span> <span class="n">params</span><span class="p">;</span> <span class="c1">// Initialize parameter lookup table.</span>
+                <span class="k">static</span> <span class="kt">bool</span> <span class="n">initialized</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">initialized</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">initialized</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;FRONT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_FRONT</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;BACK&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_BACK</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;FRONT_AND_BACK&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_FRONT_AND_BACK</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;OFF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_FALSE</span><span class="p">;</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">params</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">par</span><span class="p">))</span>
+                    <span class="k">continue</span><span class="p">;</span>
+
+                <span class="n">param</span> <span class="o">=</span> <span class="n">params</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">par</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_BLEND</span><span class="p">:</span>
+            <span class="k">case</span> <span class="nl">GL_BLEND_SRC</span><span class="p">:</span>
+            <span class="k">case</span> <span class="nl">GL_BLEND_DST</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;</span> <span class="n">params</span><span class="p">;</span> <span class="c1">// Initialize parameter lookup table.</span>
+                <span class="k">static</span> <span class="kt">bool</span> <span class="n">initialized</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">initialized</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">initialized</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ZERO&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ZERO</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ONE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ONE</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;SRC_COLOR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_SRC_COLOR</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ONE_MINUS_SRC_COLOR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ONE_MINUS_SRC_COLOR</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;DST_COLOR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_DST_COLOR</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ONE_MINUS_DST_COLOR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ONE_MINUS_DST_COLOR</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;SRC_ALPHA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_SRC_ALPHA</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ONE_MINUS_SRC_ALPHA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ONE_MINUS_SRC_ALPHA</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;DST_ALPHA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_DST_ALPHA</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ONE_MINUS_DST_ALPHA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ONE_MINUS_DST_ALPHA</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;CONSTANT_COLOR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_CONSTANT_COLOR</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ONE_MINUS_CONSTANT_COLOR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ONE_MINUS_CONSTANT_COLOR</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;CONSTANT_ALPHA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_CONSTANT_ALPHA</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ONE_MINUS_CONSTANT_ALPHA&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_ONE_MINUS_CONSTANT_ALPHA</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;SRC_ALPHL_SATURATE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_SRC_ALPHL_SATURATE</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;OFF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_FALSE</span><span class="p">;</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">params</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">par</span><span class="p">))</span>
+                    <span class="k">continue</span><span class="p">;</span>
+
+                <span class="n">param</span> <span class="o">=</span> <span class="n">params</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">par</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_DITHER</span><span class="p">:</span>
+            <span class="p">{</span>
+                <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;</span> <span class="n">params</span><span class="p">;</span> <span class="c1">// Initialize parameter lookup table.</span>
+                <span class="k">static</span> <span class="kt">bool</span> <span class="n">initialized</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">initialized</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">initialized</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;OFF&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_FALSE</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;ON&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_TRUE</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;FALSE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_FALSE</span><span class="p">;</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s">&quot;TRUE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GL_TRUE</span><span class="p">;</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">params</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">par</span><span class="p">))</span>
+                    <span class="k">continue</span><span class="p">;</span>
+
+                <span class="n">param</span> <span class="o">=</span> <span class="n">params</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">par</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="o">:</span>
+                <span class="n">param</span> <span class="o">=</span> <span class="n">GL_FALSE</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">state</span><span class="p">[</span><span class="n">funcType</span><span class="p">]</span> <span class="o">=</span> <span class="n">param</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">ShaderCompiler</span><span class="o">::</span><span class="n">extract_ilo</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">source</span><span class="p">,</span> <span class="n">uint64</span> <span class="n">shaderType</span><span class="p">,</span> <span class="n">shader_ilo</span><span class="o">&amp;</span> <span class="n">ilo</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">severity</span> <span class="o">=</span> <span class="n">log</span><span class="o">::</span><span class="n">severity</span><span class="p">;</span>
+
+        <span class="n">GLuint</span> <span class="n">glShaderType</span> <span class="o">=</span> <span class="n">detail</span><span class="o">::</span><span class="n">get_gl_type</span><span class="p">(</span><span class="n">shaderType</span><span class="p">);</span>
+        <span class="k">auto</span> <span class="n">lgnShaderType</span> <span class="o">=</span> <span class="n">detail</span><span class="o">::</span><span class="n">get_lgn_type</span><span class="p">(</span><span class="n">shaderType</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">shaderType</span> <span class="o">!=</span> <span class="n">GL_LGN_VERTEX_SHADER</span> <span class="o">&amp;&amp;</span>
+            <span class="n">shaderType</span> <span class="o">!=</span> <span class="n">GL_LGN_FRAGMENT_SHADER</span> <span class="o">&amp;&amp;</span>
+            <span class="n">shaderType</span> <span class="o">!=</span> <span class="n">GL_LGN_GEOMETRY_SHADER</span> <span class="o">&amp;&amp;</span>
+            <span class="n">shaderType</span> <span class="o">!=</span> <span class="n">GL_LGN_TESS_EVALUATION_SHADER</span> <span class="o">&amp;&amp;</span>
+            <span class="n">shaderType</span> <span class="o">!=</span> <span class="n">GL_LGN_TESS_CONTROL_SHADER</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">switch</span> <span class="p">(</span><span class="n">lgnShaderType</span><span class="p">)</span>
+            <span class="p">{</span>
+            <span class="k">case</span> <span class="nl">LGN_VERTEX_SHADER</span><span class="p">:</span>
+                <span class="n">glShaderType</span> <span class="o">=</span> <span class="n">GL_VERTEX_SHADER</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">LGN_FRAGMENT_SHADER</span><span class="p">:</span>
+                <span class="n">glShaderType</span> <span class="o">=</span> <span class="n">GL_FRAGMENT_SHADER</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">LGN_GEOMETRY_SHADER</span><span class="p">:</span>
+                <span class="n">glShaderType</span> <span class="o">=</span> <span class="n">GL_GEOMETRY_SHADER</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">LGN_TESS_EVALUATION_SHADER</span><span class="p">:</span>
+                <span class="n">glShaderType</span> <span class="o">=</span> <span class="n">GL_TESS_EVALUATION_SHADER</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">LGN_TESS_CONTROL_SHADER</span><span class="p">:</span>
+                <span class="n">glShaderType</span> <span class="o">=</span> <span class="n">GL_TESS_CONTROL_SHADER</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="o">:</span>
+                <span class="n">m_callback</span><span class="p">(</span><span class="s">&quot;Shader processor error: unkown shader type&quot;</span><span class="p">,</span> <span class="n">severity</span><span class="o">::</span><span class="n">error</span><span class="p">);</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">auto</span> <span class="n">shadercode</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">source</span><span class="p">);</span>
+        <span class="n">ilo</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">glShaderType</span><span class="p">,</span> <span class="n">shadercode</span><span class="p">));</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">ShaderCompiler</span><span class="o">::</span><span class="n">invoke_compiler</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">bitfield8</span> <span class="n">compilerSettings</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">defines</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">additionalIncludes</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">severity</span> <span class="o">=</span> <span class="n">log</span><span class="o">::</span><span class="n">severity</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">filepath</span> <span class="o">=</span> <span class="n">get_view_path</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">filepath</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+            <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+
+        <span class="k">auto</span> <span class="n">folderEnd</span> <span class="o">=</span> <span class="n">filepath</span><span class="p">.</span><span class="n">find_last_of</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">/&quot;</span><span class="p">);</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">folderPath</span><span class="p">(</span><span class="n">filepath</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">folderEnd</span><span class="p">);</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">definesString</span> <span class="o">=</span> <span class="s">&quot; -D LEGION&quot;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">compilerSettings</span> <span class="o">&amp;</span> <span class="n">shader_compiler_options</span><span class="o">::</span><span class="n">debug</span><span class="p">)</span>
+            <span class="n">definesString</span> <span class="o">+=</span> <span class="s">&quot; -D DEBUG&quot;</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">definesString</span> <span class="o">+=</span> <span class="s">&quot; -D RELEASE&quot;</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">compilerSettings</span> <span class="o">&amp;</span> <span class="n">shader_compiler_options</span><span class="o">::</span><span class="n">low_power</span><span class="p">)</span>
+            <span class="n">definesString</span> <span class="o">+=</span> <span class="s">&quot; -D LOW_POWER&quot;</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">definesString</span> <span class="o">+=</span> <span class="s">&quot; -D HIGH_PERFORMANCE&quot;</span><span class="p">;</span>
+
+        <span class="n">bitfield8</span> <span class="n">apiSet</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">compilerSettings</span> <span class="o">&amp;</span> <span class="n">shader_compiler_options</span><span class="o">::</span><span class="n">api_opengl</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">apiSet</span> <span class="o">|=</span> <span class="n">rendering_api</span><span class="o">::</span><span class="n">opengl</span><span class="p">;</span>
+            <span class="n">definesString</span> <span class="o">+=</span> <span class="s">&quot; -D API_OPENGL&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">compilerSettings</span> <span class="o">&amp;</span> <span class="n">shader_compiler_options</span><span class="o">::</span><span class="n">api_vulkan</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">apiSet</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">apiSet</span> <span class="o">&amp;</span> <span class="n">rendering_api</span><span class="o">::</span><span class="n">opengl</span><span class="p">)</span>
+                    <span class="n">m_callback</span><span class="p">(</span><span class="s">&quot;Shader processor warning: both OpenGL and Vulkan were set as graphics api, OpenGL is assumed&quot;</span><span class="p">,</span> <span class="n">severity</span><span class="o">::</span><span class="n">warn</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">apiSet</span> <span class="o">|=</span> <span class="n">rendering_api</span><span class="o">::</span><span class="n">vulkan</span><span class="p">;</span>
+                <span class="n">definesString</span> <span class="o">+=</span> <span class="s">&quot; -D API_VULKAN&quot;</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">apiSet</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_callback</span><span class="p">(</span><span class="s">&quot;Shader processor warning: no api was set, OpenGL is assumed&quot;</span><span class="p">,</span> <span class="n">severity</span><span class="o">::</span><span class="n">warn</span><span class="p">);</span>
+            <span class="n">definesString</span> <span class="o">+=</span> <span class="s">&quot; -D API_UNKNOWN -D API_OPENGL&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">def</span> <span class="p">:</span> <span class="n">defines</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">definesString</span> <span class="o">+=</span> <span class="s">&quot; -D &quot;</span> <span class="o">+</span> <span class="n">def</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">includeString</span> <span class="o">=</span> <span class="s">&quot; -I </span><span class="se">\&quot;</span><span class="s">&quot;</span> <span class="o">+</span> <span class="n">folderPath</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\&quot;</span><span class="s"> -I </span><span class="se">\&quot;</span><span class="s">&quot;</span> <span class="o">+</span> <span class="n">get_shaderlib_path</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\&quot;</span><span class="s">&quot;</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">incl</span> <span class="p">:</span> <span class="n">additionalIncludes</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">includeString</span> <span class="o">+=</span> <span class="s">&quot; -I </span><span class="se">\&quot;</span><span class="s">&quot;</span> <span class="o">+</span> <span class="n">incl</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\&quot;</span><span class="s">&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">command</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\&quot;</span><span class="s">&quot;</span> <span class="o">+</span> <span class="n">get_compiler_path</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\&quot;</span><span class="s"> </span><span class="se">\&quot;</span><span class="s">&quot;</span> <span class="o">+</span> <span class="n">filepath</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\&quot;</span><span class="s">&quot;</span> <span class="o">+</span> <span class="n">definesString</span> <span class="o">+</span> <span class="n">includeString</span> <span class="o">+</span> <span class="s">&quot; -f 1file -o stdout&quot;</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">out</span><span class="p">,</span> <span class="n">err</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ShellInvoke</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">err</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">m_callback</span><span class="p">(</span><span class="s">&quot;Shader processor error: &quot;</span> <span class="o">+</span> <span class="n">err</span><span class="p">,</span> <span class="n">severity</span><span class="o">::</span><span class="n">error</span><span class="p">);</span>
+            <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">err</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+            <span class="n">m_callback</span><span class="p">(</span><span class="s">&quot;Shader processor warning: &quot;</span> <span class="o">+</span> <span class="n">err</span><span class="p">,</span> <span class="n">severity</span><span class="o">::</span><span class="n">warn</span><span class="p">);</span>
+
+        <span class="n">out</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">remove</span><span class="p">(</span><span class="n">out</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">out</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="sc">&#39;\r&#39;</span><span class="p">),</span> <span class="n">out</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+
+        <span class="k">return</span> <span class="n">out</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">ShaderCompiler</span><span class="o">::</span><span class="n">process</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">bitfield8</span> <span class="n">compilerSettings</span><span class="p">,</span> <span class="n">shader_ilo</span><span class="o">&amp;</span> <span class="n">ilo</span><span class="p">,</span> <span class="n">shader_state</span><span class="o">&amp;</span> <span class="n">state</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nf">process</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">compilerSettings</span><span class="p">,</span> <span class="n">ilo</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">temp</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">ShaderCompiler</span><span class="o">::</span><span class="n">process</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">bitfield8</span> <span class="n">compilerSettings</span><span class="p">,</span> <span class="n">shader_ilo</span><span class="o">&amp;</span> <span class="n">ilo</span><span class="p">,</span> <span class="n">shader_state</span><span class="o">&amp;</span> <span class="n">state</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">defines</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nf">process</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">compilerSettings</span><span class="p">,</span> <span class="n">ilo</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">defines</span><span class="p">,</span> <span class="n">temp</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">ShaderCompiler</span><span class="o">::</span><span class="n">process</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">bitfield8</span> <span class="n">compilerSettings</span><span class="p">,</span> <span class="n">shader_ilo</span><span class="o">&amp;</span> <span class="n">ilo</span><span class="p">,</span> <span class="n">shader_state</span><span class="o">&amp;</span> <span class="n">state</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">defines</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">additionalIncludes</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">severity</span> <span class="o">=</span> <span class="n">log</span><span class="o">::</span><span class="n">severity</span><span class="p">;</span>
+
+        <span class="n">log</span><span class="o">::</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Compiling shader: {}&quot;</span><span class="p">,</span> <span class="n">file</span><span class="p">.</span><span class="n">get_virtual_path</span><span class="p">());</span>
+
+        <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="n">invoke_compiler</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">compilerSettings</span><span class="p">,</span> <span class="n">defines</span><span class="p">,</span> <span class="n">additionalIncludes</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="k">auto</span> <span class="n">start</span> <span class="o">=</span> <span class="n">result</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;=========== BEGIN SHADER CODE ===========</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">42</span><span class="p">;</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">result</span><span class="p">.</span><span class="n">find_first_not_of</span><span class="p">(</span><span class="sc">&#39;\n&#39;</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
+        <span class="k">auto</span> <span class="n">end</span> <span class="o">=</span> <span class="n">result</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;============ END SHADER CODE ============&quot;</span><span class="p">);</span>
+
+        <span class="k">auto</span> <span class="n">rest</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">);</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">rest</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">seperator</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">find_first_not_of</span><span class="p">(</span><span class="sc">&#39;\n&#39;</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">seperator</span> <span class="o">==</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="n">seperator</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">find_first_of</span><span class="p">(</span><span class="sc">&#39;\n&#39;</span><span class="p">,</span> <span class="n">seperator</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">rest</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">auto</span> <span class="n">shaderType</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">stoull</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">rest</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">seperator</span><span class="p">)));</span>
+            <span class="n">rest</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">seperator</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">rest</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="n">seperator</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">find_first_of</span><span class="p">(</span><span class="sc">&#39;\n&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">auto</span> <span class="n">sourceLength</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">stoull</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">rest</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">seperator</span><span class="p">)));</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">sourceLength</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">continue</span><span class="p">;</span>
+
+            <span class="n">rest</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">seperator</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">rest</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="n">seperator</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sourceLength</span><span class="p">).</span><span class="n">find_last_of</span><span class="p">(</span><span class="sc">&#39;\n&#39;</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">source</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">seperator</span><span class="p">);</span>
+            <span class="n">rest</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">seperator</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">shaderType</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">extract_state</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">state</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">extract_ilo</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">shaderType</span><span class="p">,</span> <span class="n">ilo</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">rest</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+                <span class="k">break</span><span class="p">;</span>
+
+            <span class="n">seperator</span> <span class="o">=</span> <span class="n">rest</span><span class="p">.</span><span class="n">find_first_not_of</span><span class="p">(</span><span class="sc">&#39;\n&#39;</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">seperator</span> <span class="o">==</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">ilo</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">m_callback</span><span class="p">(</span><span class="s">&quot;Shader processor error: shader was empty&quot;</span><span class="p">,</span> <span class="n">severity</span><span class="o">::</span><span class="n">error</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_shadercompiler_shadercompiler.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

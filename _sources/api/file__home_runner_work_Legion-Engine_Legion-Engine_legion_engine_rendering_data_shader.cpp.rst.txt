@@ -33,6 +33,10 @@ Includes
 
 - ``rendering/data/shader.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_shader.hpp`)
 
+- ``rendering/shadercompiler/shadercompiler.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_shadercompiler_shadercompiler.hpp`)
+
+- ``rendering/util/bindings.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_bindings.hpp`)
+
 
 
 

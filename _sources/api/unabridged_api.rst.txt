@@ -24,6 +24,11 @@ Namespaces
 .. toctree::
    :maxdepth: 5
 
+   namespace_legion__audio__detail.rst
+
+.. toctree::
+   :maxdepth: 5
+
    namespace_legion__core.rst
 
 .. toctree::
@@ -40,6 +45,11 @@ Namespaces
    :maxdepth: 5
 
    namespace_legion__core__compute.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_legion__core__compute__detail.rst
 
 .. toctree::
    :maxdepth: 5
@@ -114,7 +124,17 @@ Namespaces
 .. toctree::
    :maxdepth: 5
 
+   namespace_legion__core__scenemanagement.rst
+
+.. toctree::
+   :maxdepth: 5
+
    namespace_legion__core__scheduling.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_legion__core__serialization.rst
 
 .. toctree::
    :maxdepth: 5
@@ -150,6 +170,11 @@ Namespaces
    :maxdepth: 5
 
    namespace_legion__rendering.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_legion__rendering__detail.rst
 
 .. toctree::
    :maxdepth: 5
@@ -313,7 +338,32 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   structlegion_1_1audio_1_1detail_1_1channel__data.rst
+
+.. toctree::
+   :maxdepth: 5
+
    structlegion_1_1audio_1_1mp3__audio__loader.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1audio_1_1wav__audio__loader.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1audio_1_1wav__audio__loader_1_1_r_i_f_f___header.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1audio_1_1wav__audio__loader_1_1_r_i_f_f___header_1_1_w_a_v_e___format.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1audio_1_1wav__audio__loader_1_1_w_a_v_e___data.rst
 
 .. toctree::
    :maxdepth: 5
@@ -348,12 +398,7 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
-   structlegion_1_1core_1_1compute_1_1buffer__base.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structlegion_1_1core_1_1compute_1_1in.rst
+   structlegion_1_1core_1_1compute_1_1detail_1_1buffer__base.rst
 
 .. toctree::
    :maxdepth: 5
@@ -369,11 +414,6 @@ Classes and Structs
    :maxdepth: 5
 
    structlegion_1_1core_1_1compute_1_1inout__ident.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structlegion_1_1core_1_1compute_1_1out.rst
 
 .. toctree::
    :maxdepth: 5
@@ -493,6 +533,41 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   structlegion_1_1core_1_1is__container.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1core_1_1is__container_3_01std_1_1array_3_01_t_00_01_n_01_4_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1core_1_1is__container_3_01std_1_1basic__string_3_01_t_01_4_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1core_1_1is__container_3_01std_1_1deque_3_01_t_01_4_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1core_1_1is__container_3_01std_1_1list_3_01_t_01_4_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1core_1_1is__container_3_01std_1_1queue_3_01_t_01_4_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1core_1_1is__container_3_01std_1_1vector_3_01_t_01_4_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
    structlegion_1_1core_1_1is__vector.rst
 
 .. toctree::
@@ -533,7 +608,22 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   structlegion_1_1core_1_1scenemanagement_1_1scene.rst
+
+.. toctree::
+   :maxdepth: 5
+
    structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1thread__error.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1core_1_1serialization_1_1has__serialize.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1core_1_1serialization_1_1has__serialize_3_01_c_00_01_ret_07_args_8_8_8_08_4.rst
 
 .. toctree::
    :maxdepth: 5
@@ -573,6 +663,11 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   structlegion_1_1physics_1_1identifier.rst
+
+.. toctree::
+   :maxdepth: 5
+
    structlegion_1_1physics_1_1physics__contact.rst
 
 .. toctree::
@@ -603,27 +698,7 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
-   structlegion_1_1rendering_1_1camera.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structlegion_1_1rendering_1_1material.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structlegion_1_1rendering_1_1material__handle.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structlegion_1_1rendering_1_1material__parameter.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   structlegion_1_1rendering_1_1material__parameter__base.rst
+   structlegion_1_1rendering_1_1camera_1_1camera__input.rst
 
 .. toctree::
    :maxdepth: 5
@@ -639,6 +714,16 @@ Classes and Structs
    :maxdepth: 5
 
    structlegion_1_1rendering_1_1shader__import__settings.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   struct_my_record.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   struct_records.rst
 
 .. toctree::
    :maxdepth: 5
@@ -863,7 +948,17 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   class_structlegion_1_1core_1_1compute_1_1in.rst
+
+.. toctree::
+   :maxdepth: 5
+
    classlegion_1_1core_1_1compute_1_1_kernel.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   class_structlegion_1_1core_1_1compute_1_1out.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1223,6 +1318,11 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   classlegion_1_1core_1_1scenemanagement_1_1_scene_manager.rst
+
+.. toctree::
+   :maxdepth: 5
+
    classlegion_1_1core_1_1scheduling_1_1_process.rst
 
 .. toctree::
@@ -1239,6 +1339,11 @@ Classes and Structs
    :maxdepth: 5
 
    class_structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classlegion_1_1core_1_1serialization_1_1_serialization_util.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1353,7 +1458,37 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   classlegion_1_1physics_1_1_trigger_event.rst
+
+.. toctree::
+   :maxdepth: 5
+
    class_structlegion_1_1rendering_1_1attribute.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   class_structlegion_1_1rendering_1_1camera.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   class_structlegion_1_1rendering_1_1material.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   class_structlegion_1_1rendering_1_1material__handle.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   class_structlegion_1_1rendering_1_1material__parameter.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   class_structlegion_1_1rendering_1_1material__parameter__base.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1378,12 +1513,22 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   classlegion_1_1rendering_1_1_pipeline.rst
+
+.. toctree::
+   :maxdepth: 5
+
    classlegion_1_1rendering_1_1_renderer.rst
 
 .. toctree::
    :maxdepth: 5
 
    classlegion_1_1rendering_1_1_rendering_module.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classlegion_1_1rendering_1_1_render_stage.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1399,6 +1544,11 @@ Classes and Structs
    :maxdepth: 5
 
    classlegion_1_1rendering_1_1_shader_cache.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classlegion_1_1rendering_1_1_shader_compiler.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1477,6 +1627,16 @@ Enums
 .. toctree::
    :maxdepth: 5
 
+   enum_settings_8hpp_1a15f47615f6450e2398232badd102474e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   enum_settings_8hpp_1a5d36ae1dcd274777342306852a004312.rst
+
+.. toctree::
+   :maxdepth: 5
+
    enum_texture_8hpp_1a4beac8f03a1a4607475602841e77f7ed.rst
 
 .. toctree::
@@ -1497,6 +1657,31 @@ Enums
 Functions
 *********
 
+
+.. toctree::
+   :maxdepth: 5
+
+   function_audio__importers_8cpp_1ae996ec805a9a71a82884dbf707a7712e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_audio__importers_8cpp_1a95eafeb1b00f533f6eb714d90c039b0b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_audio__importers_8cpp_1ae328e333a68dc047619eda530142d996.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_audio__importers_8cpp_1ab50021802c394b363a1b5061d06759d0.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_audio__importers_8cpp_1ac0ba23479044e0e3102ffcac0ca58b95.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1661,7 +1846,7 @@ Functions
 .. toctree::
    :maxdepth: 5
 
-   function_namespacelegion_1_1core_1_1common_1a7a032691bc843b65c9b3d0c90d7b0a0c.rst
+   function_namespacelegion_1_1core_1_1common_1a667ea9c796a356f92da9c5f2142bd80e.rst
 
 .. toctree::
    :maxdepth: 5
@@ -2081,6 +2266,11 @@ Functions
 .. toctree::
    :maxdepth: 5
 
+   function_bindings_8hpp_1af9379b17e6b591c44e649b28a7506a90.rst
+
+.. toctree::
+   :maxdepth: 5
+
    function_editor_8hpp_1a649040541d161ced8cbd98dc88308542.rst
 
 .. toctree::
@@ -2270,17 +2460,47 @@ Variables
 .. toctree::
    :maxdepth: 5
 
-   variable_physicsconstants_8h_1a6d05c48fca0fb42967fde1b95b5ff553.rst
+   variable_physicsconstants_8hpp_1a91774af0a04d14f40abe061974b357d8.rst
 
 .. toctree::
    :maxdepth: 5
 
-   variable_physicsconstants_8h_1ae10a80b1cce2e044e15db3e198413b26.rst
+   variable_physicsconstants_8hpp_1aa39d989f1b60db156cadfe91938b2b16.rst
 
 .. toctree::
    :maxdepth: 5
 
-   variable_physicsconstants_8h_1ada32b7c3e5dcbde045356fec3ba8e6c1.rst
+   variable_physicsconstants_8hpp_1a6f36cb59fadbc821bcef773d2d7dce14.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_physicsconstants_8hpp_1a6d05c48fca0fb42967fde1b95b5ff553.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_physicsconstants_8hpp_1a3077d942c60749212f05d6e299ea6ad1.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_physicsconstants_8hpp_1a0ed998584025f8673deb410587fab588.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_physicsconstants_8hpp_1ae10a80b1cce2e044e15db3e198413b26.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_physicsconstants_8hpp_1ada32b7c3e5dcbde045356fec3ba8e6c1.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_physicsconstants_8hpp_1a8df162550b263fed25f776bc3d226895.rst
 
 .. toctree::
    :maxdepth: 5
@@ -2295,7 +2515,12 @@ Variables
 .. toctree::
    :maxdepth: 5
 
-   variable_shader_8hpp_1ad6311125d11e6bbdced24c8cb2f834d7.rst
+   variable_settings_8hpp_1aeee1d39215cb51286c44160b18105e99.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_settings_8hpp_1ad6311125d11e6bbdced24c8cb2f834d7.rst
 
 .. toctree::
    :maxdepth: 5
@@ -2365,6 +2590,11 @@ Defines
    :maxdepth: 5
 
    define_primitives_8hpp_1a8989d6cd4cbbb9a9e0b1e241736281b7.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_platform_8hpp_1a047e130061d8c7493b1224c08eadb4f5.rst
 
 .. toctree::
    :maxdepth: 5
@@ -2639,42 +2869,107 @@ Defines
 .. toctree::
    :maxdepth: 5
 
-   define_model_8hpp_1a49878cd27ca0a45c5122677d484bc9b3.rst
+   define_bindings_8hpp_1a41f9a9dc512c257a6813e79ce7006405.rst
 
 .. toctree::
    :maxdepth: 5
 
-   define_model_8hpp_1a7705dfed803d377413fff18f4c0ca1b2.rst
+   define_bindings_8hpp_1abcfb0103b823dedade18b2129f88cffc.rst
 
 .. toctree::
    :maxdepth: 5
 
-   define_model_8hpp_1a75e330b4c664e88eff45319b5e8ca1fe.rst
+   define_bindings_8hpp_1ad5e0c526a003ddd6bbd48e289757b28c.rst
 
 .. toctree::
    :maxdepth: 5
 
-   define_model_8hpp_1a9e73a0b1f0ae6c28111bff100fd9a154.rst
+   define_bindings_8hpp_1aab2ebcde137852fcb57144e4f1366625.rst
 
 .. toctree::
    :maxdepth: 5
 
-   define_model_8hpp_1aa776123367fa4dbd736e826118154708.rst
+   define_bindings_8hpp_1a3f101ebd8715307dfec2c2bf31ab053d.rst
 
 .. toctree::
    :maxdepth: 5
 
-   define_model_8hpp_1a9b029c397244dbaab3d6e7114dd398d5.rst
+   define_bindings_8hpp_1a5b33e82b6781d083386299874530a74f.rst
 
 .. toctree::
    :maxdepth: 5
 
-   define_model_8hpp_1a51df415fb8d0db59b968bae24fab920b.rst
+   define_bindings_8hpp_1a055dc1ac974678157edad1f27996a2e5.rst
 
 .. toctree::
    :maxdepth: 5
 
-   define_model_8hpp_1aaf42be1105908eb41f70c56ac1d2519e.rst
+   define_bindings_8hpp_1a49878cd27ca0a45c5122677d484bc9b3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_bindings_8hpp_1a109ded45e652142f12e1058fb548c50d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_bindings_8hpp_1a7705dfed803d377413fff18f4c0ca1b2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_bindings_8hpp_1abdfa9205ec1d640a84cbc10e2ab96947.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_bindings_8hpp_1a75e330b4c664e88eff45319b5e8ca1fe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_bindings_8hpp_1a9e73a0b1f0ae6c28111bff100fd9a154.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_bindings_8hpp_1aa776123367fa4dbd736e826118154708.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_bindings_8hpp_1a9b029c397244dbaab3d6e7114dd398d5.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_bindings_8hpp_1a51df415fb8d0db59b968bae24fab920b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_bindings_8hpp_1aefadfd860224e8595fbfe11bcd65c8fa.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_bindings_8hpp_1a0fae7080e69611477f699007c28b4629.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_bindings_8hpp_1aaf8e3dbcb598623fb3b37ae1f57b972e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_bindings_8hpp_1aaf42be1105908eb41f70c56ac1d2519e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_bindings_8hpp_1ad0b54c78079a259ac65644978b587f12.rst
 
 .. toctree::
    :maxdepth: 5
@@ -2694,6 +2989,26 @@ Typedefs
    :maxdepth: 5
 
    typedef_contexthelper_8hpp_1a750645534bf5d6d01e27886ae0f0ed15.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1acdfa04b1a6b3539ba4dd2711414a252c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a0b7eb86c5d12a813833e7aa1e188428c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1a4ff298445d9ac12cb240106aef26cbde.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_primitives_8hpp_1ac978f6020b958380bf34ab85004aaed7.rst
 
 .. toctree::
    :maxdepth: 5
@@ -2959,6 +3274,16 @@ Typedefs
    :maxdepth: 5
 
    typedef_physicssystem_8hpp_1a185b74ed9c5197beba4040cf4f42ce02.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_shader_8hpp_1a83b5ac17e74d34eda59690b8d430982d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_shader_8hpp_1af23ef4f8dd58d8149bbe092b0ddd0796.rst
 
 .. toctree::
    :maxdepth: 5

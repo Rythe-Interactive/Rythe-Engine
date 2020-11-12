@@ -49,13 +49,107 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;audio/data/audio_segment.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">audio</span>
 <span class="p">{</span>
+    <span class="k">namespace</span> <span class="n">detail</span>
+    <span class="p">{</span>
+        <span class="k">struct</span> <span class="n">channel_data</span>
+        <span class="p">{</span>
+            <span class="n">channel_data</span><span class="p">(</span><span class="kt">int</span> <span class="n">channels</span><span class="p">)</span>
+                <span class="o">:</span> <span class="n">channels</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span>
+            <span class="p">{</span>
+
+            <span class="p">}</span>
+
+            <span class="kt">int</span> <span class="n">channels</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">byte_vec</span><span class="o">&gt;</span> <span class="n">dataPerChannel</span><span class="p">;</span>
+
+            <span class="n">byte</span><span class="o">*</span> <span class="nf">getLeft</span><span class="p">()</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">getChannelData</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="n">byte</span><span class="o">*</span> <span class="nf">getRight</span><span class="p">()</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">getChannelData</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="n">byte</span><span class="o">*</span> <span class="nf">getCenter</span><span class="p">()</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">getChannelData</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="n">byte</span><span class="o">*</span> <span class="nf">getLeftRear</span><span class="p">()</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">getChannelData</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="n">byte</span><span class="o">*</span> <span class="nf">getRightRear</span><span class="p">()</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">getChannelData</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="n">byte</span><span class="o">*</span> <span class="nf">getChannelData</span><span class="p">(</span><span class="n">size_type</span> <span class="n">index</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">channels</span> <span class="o">&lt;</span> <span class="n">index</span><span class="p">)</span> <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
+                <span class="k">return</span> <span class="n">dataPerChannel</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">data</span><span class="p">();</span>
+            <span class="p">}</span>
+
+            <span class="n">byte</span><span class="o">*</span> <span class="k">operator</span> <span class="p">[]</span> <span class="p">(</span><span class="n">size_type</span> <span class="n">index</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">dataPerChannel</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">data</span><span class="p">();</span>
+            <span class="p">}</span>
+
+            <span class="k">const</span> <span class="n">byte</span><span class="o">*</span> <span class="k">operator</span> <span class="p">[]</span> <span class="p">(</span><span class="n">size_type</span> <span class="n">index</span><span class="p">)</span> <span class="k">const</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">dataPerChannel</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">data</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+
+        <span class="kt">void</span> <span class="nf">convertToMono</span><span class="p">(</span><span class="k">const</span> <span class="n">byte</span><span class="o">*</span> <span class="n">inputData</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dataSize</span><span class="p">,</span> <span class="n">byte</span><span class="o">*</span> <span class="n">monoData</span><span class="p">,</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bitsPerSample</span><span class="p">);</span>
+        <span class="n">byte</span><span class="o">*</span> <span class="nf">convertToMono</span><span class="p">(</span><span class="k">const</span> <span class="n">byte</span><span class="o">*</span> <span class="n">inputData</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dataSize</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">monoDataSize</span><span class="p">,</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">channels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bitsPerSample</span><span class="p">);</span>
+
+        <span class="n">channel_data</span> <span class="nf">extractChannels</span><span class="p">(</span><span class="k">const</span> <span class="n">byte</span><span class="o">*</span> <span class="n">inputData</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dataSize</span><span class="p">,</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bitsPerSamples</span><span class="p">);</span>
+
+        <span class="n">ALenum</span> <span class="nf">getAudioFormat</span><span class="p">(</span><span class="kt">int</span> <span class="n">channels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bitsPerSample</span><span class="p">);</span>
+
+        <span class="kt">void</span> <span class="nf">createAndBufferAudioData</span><span class="p">(</span><span class="n">ALuint</span><span class="o">*</span> <span class="n">bufferId</span><span class="p">,</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bitsPerSample</span><span class="p">,</span> <span class="n">byte</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dataSize</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sampleRate</span><span class="p">);</span>
+    <span class="p">}</span>
+
     <span class="k">struct</span> <span class="nl">mp3_audio_loader</span> <span class="p">:</span> <span class="k">public</span> <span class="n">fs</span><span class="o">::</span><span class="n">resource_converter</span><span class="o">&lt;</span><span class="n">audio_segment</span><span class="p">,</span> <span class="n">audio_import_settings</span><span class="o">&gt;</span>
     <span class="p">{</span>
         <span class="k">virtual</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">audio_segment</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">load</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">resource</span><span class="p">,</span> <span class="n">audio_import_settings</span><span class="o">&amp;&amp;</span> <span class="n">settings</span><span class="p">)</span> <span class="k">override</span><span class="p">;</span>
-        <span class="k">static</span> <span class="n">ALCcontext</span><span class="o">*</span> <span class="n">context</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="nl">wav_audio_loader</span> <span class="p">:</span> <span class="k">public</span> <span class="n">fs</span><span class="o">::</span><span class="n">resource_converter</span><span class="o">&lt;</span><span class="n">audio_segment</span><span class="p">,</span> <span class="n">audio_import_settings</span><span class="o">&gt;</span>
+    <span class="p">{</span>
+        <span class="k">virtual</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">audio_segment</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">load</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">resource</span><span class="p">,</span> <span class="n">audio_import_settings</span><span class="o">&amp;&amp;</span> <span class="n">settings</span><span class="p">)</span> <span class="k">override</span><span class="p">;</span>
+
+        <span class="k">struct</span> <span class="n">RIFF_Header</span> <span class="c1">// 36 Bytes of data for WAV header</span>
+        <span class="p">{</span>
+            <span class="n">uint8</span> <span class="n">chunckId</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span> <span class="c1">// Contains the chars &quot;RIFF&quot;</span>
+            <span class="n">int32</span> <span class="n">chunckSize</span><span class="p">;</span>
+            <span class="n">uint8</span> <span class="n">format</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span> <span class="c1">// Contains the chars &quot;WAVE&quot;</span>
+            <span class="k">struct</span> <span class="n">WAVE_Format</span>
+            <span class="p">{</span>
+                <span class="n">uint8</span> <span class="n">subChunckId</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span> <span class="c1">// Contains the chars &quot;fmt &quot;</span>
+                <span class="n">int32</span> <span class="n">subchunckSize</span><span class="p">;</span>
+                <span class="n">int16</span> <span class="n">audioFormat</span><span class="p">;</span>
+                <span class="n">int16</span> <span class="n">channels</span><span class="p">;</span> <span class="c1">// Stereo or mono</span>
+                <span class="n">int32</span> <span class="n">sampleRate</span><span class="p">;</span> <span class="c1">// Sample rate / frequency</span>
+                <span class="n">int32</span> <span class="n">byteRate</span><span class="p">;</span>
+                <span class="n">int16</span> <span class="n">blockAlign</span><span class="p">;</span>
+                <span class="n">int16</span> <span class="n">bitsPerSample</span><span class="p">;</span> <span class="c1">// Audio resolution</span>
+            <span class="p">}</span> <span class="n">wave_format</span><span class="p">;</span>
+        <span class="p">};</span>
+
+        <span class="k">struct</span> <span class="n">WAVE_Data</span>
+        <span class="p">{</span>
+            <span class="n">uint8</span> <span class="n">subChunckId</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span> <span class="c1">// Contains the chars &quot;data&quot;</span>
+            <span class="n">int32</span> <span class="n">subChunck2Size</span><span class="p">;</span> <span class="c1">// Sample data</span>
+        <span class="p">};</span>
     <span class="p">};</span>
 <span class="p">}</span>
 </pre></div>

@@ -29,6 +29,7 @@ Program Listing for File physicsmodule.hpp
                reportSystem<PhysicsSystem>();
                reportComponentType<physicsComponent>();
                reportComponentType<rigidbody>();
+               reportComponentType<identifier>();
    
            }
    

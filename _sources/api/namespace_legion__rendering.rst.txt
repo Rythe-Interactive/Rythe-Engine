@@ -13,19 +13,18 @@ Namespace legion::rendering
 
 
 
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__rendering__detail`
+
+
 Classes
 -------
 
 
-- :ref:`exhale_struct_structlegion_1_1rendering_1_1camera`
-
-- :ref:`exhale_struct_structlegion_1_1rendering_1_1material`
-
-- :ref:`exhale_struct_structlegion_1_1rendering_1_1material__handle`
-
-- :ref:`exhale_struct_structlegion_1_1rendering_1_1material__parameter`
-
-- :ref:`exhale_struct_structlegion_1_1rendering_1_1material__parameter__base`
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1camera_1_1camera__input`
 
 - :ref:`exhale_struct_structlegion_1_1rendering_1_1renderable`
 
@@ -35,6 +34,16 @@ Classes
 
 - :ref:`exhale_class_structlegion_1_1rendering_1_1attribute`
 
+- :ref:`exhale_class_structlegion_1_1rendering_1_1camera`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1material`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1material__handle`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1material__parameter`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1material__parameter__base`
+
 - :ref:`exhale_class_classlegion_1_1rendering_1_1_material_cache`
 
 - :ref:`exhale_class_structlegion_1_1rendering_1_1model`
@@ -43,15 +52,21 @@ Classes
 
 - :ref:`exhale_class_classlegion_1_1rendering_1_1_model_cache`
 
+- :ref:`exhale_class_classlegion_1_1rendering_1_1_pipeline`
+
 - :ref:`exhale_class_classlegion_1_1rendering_1_1_renderer`
 
 - :ref:`exhale_class_classlegion_1_1rendering_1_1_rendering_module`
+
+- :ref:`exhale_class_classlegion_1_1rendering_1_1_render_stage`
 
 - :ref:`exhale_class_structlegion_1_1rendering_1_1shader`
 
 - :ref:`exhale_class_structlegion_1_1rendering_1_1shader__parameter__base`
 
 - :ref:`exhale_class_classlegion_1_1rendering_1_1_shader_cache`
+
+- :ref:`exhale_class_classlegion_1_1rendering_1_1_shader_compiler`
 
 - :ref:`exhale_class_structlegion_1_1rendering_1_1stbi__texture__loader`
 
@@ -72,6 +87,10 @@ Enums
 -----
 
 
+- :ref:`exhale_enum_settings_8hpp_1a15f47615f6450e2398232badd102474e`
+
+- :ref:`exhale_enum_settings_8hpp_1a5d36ae1dcd274777342306852a004312`
+
 - :ref:`exhale_enum_texture_8hpp_1a4beac8f03a1a4607475602841e77f7ed`
 
 - :ref:`exhale_enum_texture_8hpp_1a43d96b8e8a767d15180b2dd2725dd1cc`
@@ -85,6 +104,10 @@ Typedefs
 --------
 
 
+- :ref:`exhale_typedef_shader_8hpp_1a83b5ac17e74d34eda59690b8d430982d`
+
+- :ref:`exhale_typedef_shader_8hpp_1af23ef4f8dd58d8149bbe092b0ddd0796`
+
 - :ref:`exhale_typedef_texture_8hpp_1afbdc6a96f7206745fb66dacca92fab0d`
 
 
@@ -96,7 +119,9 @@ Variables
 
 - :ref:`exhale_variable_texture_8hpp_1ac5dabc4958ffda93c1c482bae067d36e`
 
-- :ref:`exhale_variable_shader_8hpp_1ad6311125d11e6bbdced24c8cb2f834d7`
+- :ref:`exhale_variable_settings_8hpp_1aeee1d39215cb51286c44160b18105e99`
+
+- :ref:`exhale_variable_settings_8hpp_1ad6311125d11e6bbdced24c8cb2f834d7`
 
 - :ref:`exhale_variable_texture_8hpp_1a69355df00001b5c499b2c9ba71c96d7a`
 

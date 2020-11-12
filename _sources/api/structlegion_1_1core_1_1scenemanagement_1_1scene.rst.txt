@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1core_1_1scenemanagement_1_1scene:
+
+Struct scene
+============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scenemanagement_scene.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::scenemanagement::scene
+   :members:
+   :protected-members:
+   :undoc-members:

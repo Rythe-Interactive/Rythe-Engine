@@ -29,6 +29,8 @@ Includes
 --------
 
 
+- ``context.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_context.hpp`)
+
 - ``core/compute/kernel.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.hpp`)
 
 - ``core/compute/program.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_program.hpp`)

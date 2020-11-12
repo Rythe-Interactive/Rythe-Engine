@@ -33,7 +33,7 @@ Includes
 
 - ``physics/components/physics_component.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_components_physics_component.hpp`)
 
-- ``physics/physicsconstants.h`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsconstants.h`)
+- ``physics/physicsconstants.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsconstants.hpp`)
 
 
 
@@ -43,7 +43,7 @@ Included By
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics.hpp`
 
-- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_contact.h`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_contact.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsmodule.hpp`
 

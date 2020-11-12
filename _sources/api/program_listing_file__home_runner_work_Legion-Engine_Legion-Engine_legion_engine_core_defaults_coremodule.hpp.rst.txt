@@ -19,6 +19,7 @@ Program Listing for File coremodule.hpp
    #include <core/filesystem/basic_resolver.hpp>
    
    #include <core/compute/context.hpp>
+   #include <core/scenemanagement/scene.hpp>
    
    namespace legion::core
    {
@@ -42,6 +43,8 @@ Program Listing for File coremodule.hpp
                reportComponentType<position>();
                reportComponentType<rotation>();
                reportComponentType<scale>();
+               reportComponentType<scenemanagement::scene>();
+               reportSystem <scenemanagement::SceneManager>();
            }
    
            virtual priority_type priority() override

@@ -86,7 +86,7 @@ Program Listing for File mesh_importers.cpp
                d 1\n\
                illum 2\n\0";
    
-           if (settings.materialFile.get_path() != std::string(""))
+           if (settings.materialFile.get_virtual_path() != std::string(""))
            {
                auto result = settings.materialFile.get();
                if (result != common::valid)

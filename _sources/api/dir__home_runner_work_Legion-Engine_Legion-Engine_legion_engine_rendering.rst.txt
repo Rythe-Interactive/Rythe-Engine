@@ -17,7 +17,10 @@ Subdirectories
 - :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components`
 - :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data`
 - :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_module`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_shadercompiler`
 - :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util`
 
 
 Files

@@ -93,12 +93,12 @@ Program Listing for File texture.hpp
    
        struct texture_handle
        {
-           id_type id;
+           id_type id = invalid_id;
    
-           texture_data get_data();
-           const texture& get_texture();
-           bool operator==(const texture_handle& other) { return id == other.id; }
-           operator id_type() { return id; }
+           texture_data get_data() const;
+           const texture& get_texture() const;
+           bool operator==(const texture_handle& other) const { return id == other.id; }
+           operator id_type() const { return id; }
        };
    
        constexpr texture_handle invalid_texture_handle { invalid_id };
@@ -133,13 +133,14 @@ Program Listing for File texture.hpp
    
            static const texture& get_texture(id_type id);
            static texture_data get_data(id_type id);
-   
+           static texture_handle m_invalidTexture;
        public:
            static texture_handle create_texture(const std::string& name, const fs::view& file, texture_import_settings settings = default_texture_settings);
+           static texture_handle create_texture(const fs::view& file, texture_import_settings settings = default_texture_settings);
    
-           static texture_handle create_texture(const std::string& name, texture_import_settings settings = default_texture_settings);
+           static texture_handle create_texture_from_image(const std::string& name, texture_import_settings settings = default_texture_settings);
    
-           static texture_handle create_texture(image_handle image, texture_import_settings settings = default_texture_settings);
+           static texture_handle create_texture_from_image(image_handle image, texture_import_settings settings = default_texture_settings);
    
            static texture_handle get_handle(const std::string& name);
    

@@ -82,6 +82,12 @@
         <span class="k">return</span> <span class="n">Buffer</span><span class="p">(</span><span class="n">m_context</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">size</span><span class="p">,</span><span class="n">type</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">));</span>
     <span class="p">}</span>
 
+
+    <span class="k">static</span> <span class="n">cl_device_id</span> <span class="n">getDeviceId</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">m_device_id</span><span class="p">;</span>
+    <span class="p">}</span>
+
 <span class="k">private</span><span class="o">:</span>
 
     <span class="k">static</span> <span class="kt">bool</span> <span class="n">m_initialized</span><span class="p">;</span>

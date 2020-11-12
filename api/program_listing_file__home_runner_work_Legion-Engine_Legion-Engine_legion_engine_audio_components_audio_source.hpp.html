@@ -65,13 +65,15 @@
             <span class="n">gain</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
             <span class="n">playState</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
             <span class="n">doRewind</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
+            <span class="n">audioHandle</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span>
+            <span class="n">rollOffFactor</span> <span class="o">=</span> <span class="mi">32</span><span class="p">,</span>
         <span class="p">};</span>
 
         <span class="k">enum</span> <span class="n">playstate</span>
         <span class="p">{</span>
+            <span class="n">stopped</span><span class="p">,</span>
             <span class="n">playing</span><span class="p">,</span>
             <span class="n">paused</span><span class="p">,</span>
-            <span class="n">stopped</span><span class="p">,</span>
         <span class="p">};</span>
 
         <span class="kt">void</span> <span class="nf">setPitch</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span> <span class="n">pitch</span><span class="p">)</span>
@@ -86,6 +88,22 @@
             <span class="n">m_gain</span> <span class="o">=</span> <span class="n">legion</span><span class="o">::</span><span class="n">math</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span> <span class="n">gain</span><span class="p">);</span>
         <span class="p">}</span>
         <span class="kt">float</span> <span class="nf">getGain</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_gain</span><span class="p">;</span> <span class="p">};</span>
+
+        <span class="kt">void</span> <span class="nf">setRollOffFactor</span><span class="p">(</span><span class="kt">float</span> <span class="n">factor</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_changes</span> <span class="o">=</span> <span class="n">sound_properties</span><span class="o">::</span><span class="n">rollOffFactor</span><span class="p">;</span>
+            <span class="n">m_rolloffFactor</span> <span class="o">=</span> <span class="n">factor</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">disableSpatialAudio</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">setRollOffFactor</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">enableSpatialAudio</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">setRollOffFactor</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">);</span>
+        <span class="p">}</span>
 
         <span class="kt">void</span> <span class="nf">play</span><span class="p">()</span>
         <span class="p">{</span>
@@ -131,6 +149,8 @@
 
         <span class="kt">void</span> <span class="nf">setAudioHandle</span><span class="p">(</span><span class="n">audio_segment_handle</span> <span class="n">handle</span><span class="p">)</span>
         <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">handle</span> <span class="o">==</span> <span class="n">m_audio_handle</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+            <span class="n">m_changes</span> <span class="o">|=</span> <span class="n">sound_properties</span><span class="o">::</span><span class="n">audioHandle</span><span class="p">;</span>
             <span class="n">m_audio_handle</span> <span class="o">=</span> <span class="n">handle</span><span class="p">;</span>
         <span class="p">}</span>
 
@@ -144,6 +164,26 @@
             <span class="k">return</span> <span class="n">m_audio_handle</span><span class="p">;</span>
         <span class="p">}</span>
 
+        <span class="kt">int</span> <span class="nf">getChannels</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">channels</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">{</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_audio_handle</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">first</span><span class="p">);</span>
+                <span class="n">channels</span> <span class="o">=</span> <span class="n">m_audio_handle</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">second</span><span class="p">.</span><span class="n">channels</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">channels</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">bool</span> <span class="nf">isStereo</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">getChannels</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">bool</span> <span class="nf">isMono</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">getChannels</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+
     <span class="k">private</span><span class="o">:</span>
         <span class="kt">void</span> <span class="n">clearChanges</span><span class="p">()</span>
         <span class="p">{</span>
@@ -153,7 +193,7 @@
         <span class="p">}</span>
 
         <span class="n">ALuint</span> <span class="n">m_sourceId</span><span class="p">;</span>
-        <span class="n">audio_segment_handle</span> <span class="n">m_audio_handle</span><span class="p">;</span>
+        <span class="n">audio_segment_handle</span> <span class="n">m_audio_handle</span> <span class="o">=</span> <span class="n">invalid_audio_segment_handle</span><span class="p">;</span>
 
         <span class="kt">float</span> <span class="n">m_pitch</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="p">;</span>
         <span class="kt">float</span> <span class="n">m_gain</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="p">;</span>
@@ -161,13 +201,16 @@
         <span class="n">playstate</span> <span class="n">m_playState</span> <span class="o">=</span> <span class="n">playstate</span><span class="o">::</span><span class="n">stopped</span><span class="p">;</span>
         <span class="n">playstate</span> <span class="n">m_nextPlayState</span> <span class="o">=</span> <span class="n">playstate</span><span class="o">::</span><span class="n">stopped</span><span class="p">;</span>
 
+        <span class="kt">float</span> <span class="n">m_rolloffFactor</span><span class="p">;</span>
+
         <span class="c1">// Byte to keep track of changes made to audio source</span>
         <span class="c1">// For all the values &gt; see enum sound_properties</span>
         <span class="c1">// b0 - pitch</span>
         <span class="c1">// b1 - gain</span>
         <span class="c1">// b2 - play state</span>
         <span class="c1">// b3 - rewind (doRewind)</span>
-
+        <span class="c1">// b4 - audio handle</span>
+        <span class="c1">// b5 - roll off factor 3D</span>
         <span class="n">byte</span> <span class="n">m_changes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
     <span class="p">};</span>
 <span class="p">}</span>

@@ -1,0 +1,13 @@
+.. _exhale_define_bindings_8hpp_1a0fae7080e69611477f699007c28b4629:
+
+Define SV_TEXCOORD2
+===================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_bindings.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: SV_TEXCOORD2

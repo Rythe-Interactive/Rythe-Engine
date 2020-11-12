@@ -48,20 +48,10 @@
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_model.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-model-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data/model.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span> <span class="cpf">&lt;application/application.hpp&gt;</span><span class="cp"></span>
-
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/util/bindings.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;unordered_map&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;set&gt;</span><span class="cp"></span>
-
-<span class="cp">#define SV_START 8</span>
-<span class="cp">#define SV_POSITION SV_START</span>
-<span class="cp">#define SV_NORMAL SV_START + 1</span>
-<span class="cp">#define SV_TANGENT SV_START + 2</span>
-<span class="cp">#define SV_TEXCOORD0 SV_START + 3</span>
-<span class="cp">#define SV_MODELMATRIX SV_START + 4</span>
-
-<span class="cp">#define SV_VIEW SV_START</span>
-<span class="cp">#define SV_PROJECT SV_START + 4</span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
 <span class="p">{</span>
@@ -87,7 +77,16 @@
         <span class="kt">void</span> <span class="nf">buffer_data</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">matrixBuffer</span><span class="p">);</span>
         <span class="n">mesh_handle</span> <span class="nf">get_mesh</span><span class="p">();</span>
         <span class="k">const</span> <span class="n">model</span><span class="o">&amp;</span> <span class="n">get_model</span><span class="p">();</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Archive</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">archive</span><span class="p">);</span>
     <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Archive</span><span class="o">&gt;</span>
+    <span class="kt">void</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">serialize</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">archive</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">archive</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+    <span class="p">}</span>
 
     <span class="k">constexpr</span> <span class="n">model_handle</span> <span class="n">invalid_model_handle</span> <span class="p">{</span> <span class="n">invalid_id</span> <span class="p">};</span>
 

@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class SerializationUtil &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Template Class sparse_map" href="classlegion_1_1core_1_1sparse__map.html" />
+    <link rel="prev" title="Class Scheduler::runnable" href="class_structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classlegion_1_1core_1_1sparse__map.html" title="Template Class sparse_map"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="class_structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable.html" title="Class Scheduler::runnable"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class SerializationUtil</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-serializationutil">
+<span id="exhale-class-classlegion-1-1core-1-1serialization-1-1-serialization-util"></span><h1>Class SerializationUtil<a class="headerlink" href="#class-serializationutil" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_serialization_serializationUtil.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-serialization-serializationutil-hpp"><span class="std std-ref">File serializationUtil.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6legion4core13serialization17SerializationUtilE">
+<span id="_CPPv3N6legion4core13serialization17SerializationUtilE"></span><span id="_CPPv2N6legion4core13serialization17SerializationUtilE"></span><span id="legion::core::serialization::SerializationUtil"></span><span class="target" id="classlegion_1_1core_1_1serialization_1_1_serialization_util"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core::serialization<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">SerializationUtil</code><a class="headerlink" href="#_CPPv4N6legion4core13serialization17SerializationUtilE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion4core13serialization17SerializationUtil13JSONSerializeEvNSt12stringstreamE1T">
+<span id="_CPPv3I0EN6legion4core13serialization17SerializationUtil13JSONSerializeENSt12stringstreamE1T"></span><span id="_CPPv2I0EN6legion4core13serialization17SerializationUtil13JSONSerializeENSt12stringstreamE1T"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1serialization_1_1_serialization_util_1a0264c1dca63a701e8fa6fbd69f6c17ba"></span>void <code class="sig-name descname">JSONSerialize</code><span class="sig-paren">(</span>std::stringstream <em>os</em>, <a class="reference internal" href="#_CPPv4I0EN6legion4core13serialization17SerializationUtil13JSONSerializeEvNSt12stringstreamE1T" title="legion::core::serialization::SerializationUtil::JSONSerialize::T">T</a> <em>serializable</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core13serialization17SerializationUtil13JSONSerializeEvNSt12stringstreamE1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>JSON serialization from a stringstream. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">os</span></code>: stringstream the ouput for the serialized object </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">serializable</span></code>: template type that represents the object that needs to be serialized </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion4core13serialization17SerializationUtil15JSONDeserializeE1TNSt12stringstreamE">
+<span id="_CPPv3I0EN6legion4core13serialization17SerializationUtil15JSONDeserializeENSt12stringstreamE"></span><span id="_CPPv2I0EN6legion4core13serialization17SerializationUtil15JSONDeserializeENSt12stringstreamE"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1serialization_1_1_serialization_util_1a7bd9b00247e54cd1facd3f7f770e9509"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core13serialization17SerializationUtil15JSONDeserializeE1TNSt12stringstreamE" title="legion::core::serialization::SerializationUtil::JSONDeserialize::T">T</a> <code class="sig-name descname">JSONDeserialize</code><span class="sig-paren">(</span>std::stringstream <em>is</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core13serialization17SerializationUtil15JSONDeserializeE1TNSt12stringstreamE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>JSON deserialization from a stringstream. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the the deserialized object as type T </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">is</span></code>: stringstream the input of a serialized object </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion4core13serialization17SerializationUtil15BinarySerializeEvNSt12stringstreamE1T">
+<span id="_CPPv3I0EN6legion4core13serialization17SerializationUtil15BinarySerializeENSt12stringstreamE1T"></span><span id="_CPPv2I0EN6legion4core13serialization17SerializationUtil15BinarySerializeENSt12stringstreamE1T"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1serialization_1_1_serialization_util_1abcdd1c848ad5ee3c7df1f97d52a100c6"></span>void <code class="sig-name descname">BinarySerialize</code><span class="sig-paren">(</span>std::stringstream <em>os</em>, <a class="reference internal" href="#_CPPv4I0EN6legion4core13serialization17SerializationUtil15BinarySerializeEvNSt12stringstreamE1T" title="legion::core::serialization::SerializationUtil::BinarySerialize::T">T</a> <em>serializable</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core13serialization17SerializationUtil15BinarySerializeEvNSt12stringstreamE1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Binary serialization from a stringstream. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">os</span></code>: stringstream the ouput for the serialized object </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">serializable</span></code>: template type that represents the object that needs to be serialized </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion4core13serialization17SerializationUtil17BinaryDeserializeE1TNSt12stringstreamE">
+<span id="_CPPv3I0EN6legion4core13serialization17SerializationUtil17BinaryDeserializeENSt12stringstreamE"></span><span id="_CPPv2I0EN6legion4core13serialization17SerializationUtil17BinaryDeserializeENSt12stringstreamE"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1serialization_1_1_serialization_util_1a33e2e7cc31774d81cb533d6ab866b2e8"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core13serialization17SerializationUtil17BinaryDeserializeE1TNSt12stringstreamE" title="legion::core::serialization::SerializationUtil::BinaryDeserialize::T">T</a> <code class="sig-name descname">BinaryDeserialize</code><span class="sig-paren">(</span>std::stringstream <em>is</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core13serialization17SerializationUtil17BinaryDeserializeE1TNSt12stringstreamE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Binary deserialization from a stringstream. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the the deserialized object as type T </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">is</span></code>: stringstream the input of a serialized object </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion4core13serialization17SerializationUtil13JSONSerializeEvRNSt8ofstreamE1T">
+<span id="_CPPv3I0EN6legion4core13serialization17SerializationUtil13JSONSerializeERNSt8ofstreamE1T"></span><span id="_CPPv2I0EN6legion4core13serialization17SerializationUtil13JSONSerializeERNSt8ofstreamE1T"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1serialization_1_1_serialization_util_1a5d6958bef4624709940b52f034f2cd0c"></span>void <code class="sig-name descname">JSONSerialize</code><span class="sig-paren">(</span>std::ofstream &amp;<em>os</em>, <a class="reference internal" href="#_CPPv4I0EN6legion4core13serialization17SerializationUtil13JSONSerializeEvRNSt8ofstreamE1T" title="legion::core::serialization::SerializationUtil::JSONSerialize::T">T</a> <em>serializable</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core13serialization17SerializationUtil13JSONSerializeEvRNSt8ofstreamE1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>JSON serialization from a filestream. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">os</span></code>: filestream the ouput for the serialized object </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">serializable</span></code>: template type that represents the object that needs to be serialized </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion4core13serialization17SerializationUtil15JSONDeserializeE1TRNSt8ifstreamE">
+<span id="_CPPv3I0EN6legion4core13serialization17SerializationUtil15JSONDeserializeERNSt8ifstreamE"></span><span id="_CPPv2I0EN6legion4core13serialization17SerializationUtil15JSONDeserializeERNSt8ifstreamE"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1serialization_1_1_serialization_util_1aa217cffa5c8944ced484f0a798b668ca"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core13serialization17SerializationUtil15JSONDeserializeE1TRNSt8ifstreamE" title="legion::core::serialization::SerializationUtil::JSONDeserialize::T">T</a> <code class="sig-name descname">JSONDeserialize</code><span class="sig-paren">(</span>std::ifstream &amp;<em>is</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core13serialization17SerializationUtil15JSONDeserializeE1TRNSt8ifstreamE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>JSON deserialization from a filestream. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the the deserialized object as type T </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">is</span></code>: filestream the input of a serialized object </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion4core13serialization17SerializationUtil15BinarySerializeEvRNSt8ofstreamE1T">
+<span id="_CPPv3I0EN6legion4core13serialization17SerializationUtil15BinarySerializeERNSt8ofstreamE1T"></span><span id="_CPPv2I0EN6legion4core13serialization17SerializationUtil15BinarySerializeERNSt8ofstreamE1T"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1serialization_1_1_serialization_util_1a19325f0423d9352af1d904607260edf7"></span>void <code class="sig-name descname">BinarySerialize</code><span class="sig-paren">(</span>std::ofstream &amp;<em>os</em>, <a class="reference internal" href="#_CPPv4I0EN6legion4core13serialization17SerializationUtil15BinarySerializeEvRNSt8ofstreamE1T" title="legion::core::serialization::SerializationUtil::BinarySerialize::T">T</a> <em>serializable</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core13serialization17SerializationUtil15BinarySerializeEvRNSt8ofstreamE1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Binary serialization from a filestream. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">os</span></code>: filestream the ouput for the serialized object </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">serializable</span></code>: template type that represents the object that needs to be serialized </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion4core13serialization17SerializationUtil17BinaryDeserializeE1TRNSt8ifstreamE">
+<span id="_CPPv3I0EN6legion4core13serialization17SerializationUtil17BinaryDeserializeERNSt8ifstreamE"></span><span id="_CPPv2I0EN6legion4core13serialization17SerializationUtil17BinaryDeserializeERNSt8ifstreamE"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1serialization_1_1_serialization_util_1a322890b921bc72126fd5cc3b4f390100"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core13serialization17SerializationUtil17BinaryDeserializeE1TRNSt8ifstreamE" title="legion::core::serialization::SerializationUtil::BinaryDeserialize::T">T</a> <code class="sig-name descname">BinaryDeserialize</code><span class="sig-paren">(</span>std::ifstream &amp;<em>is</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core13serialization17SerializationUtil17BinaryDeserializeE1TRNSt8ifstreamE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Binary deserialization from a filestream. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>the the deserialized object as type T </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">is</span></code>: filestream the input of a serialized object </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class SerializationUtil</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="class_structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable.html" title="previous chapter">Class Scheduler::runnable</a></li>
+      <li>Next: <a href="classlegion_1_1core_1_1sparse__map.html" title="next chapter">Template Class sparse_map</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classlegion_1_1core_1_1serialization_1_1_serialization_util.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

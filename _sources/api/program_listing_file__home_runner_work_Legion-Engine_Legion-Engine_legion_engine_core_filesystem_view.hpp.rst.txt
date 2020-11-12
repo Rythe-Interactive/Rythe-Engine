@@ -46,11 +46,13 @@ Program Listing for File view.hpp
    
            L_NODISCARD std::string get_domain() const;
    
-           L_NODISCARD const std::string& get_path() const;
+           L_NODISCARD const std::string& get_virtual_path() const;
    
            L_NODISCARD common::result_decay_more<std::string, fs_error> get_extension() const;
    
            L_NODISCARD common::result_decay_more<std::string, fs_error> get_filename() const;
+   
+           L_NODISCARD common::result_decay_more<std::string, fs_error> get_filestem() const;
    
            L_NODISCARD common::result_decay_more<basic_resource,fs_error> get();
            L_NODISCARD common::result_decay_more<const basic_resource,fs_error> get() const;

@@ -13,7 +13,7 @@ Base Types
 **********
 
 - ``public legion::core::compute::inout_ident`` (:ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1inout__ident`)
-- ``public legion::core::compute::buffer_base`` (:ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1buffer__base`)
+- ``public legion::core::compute::detail::buffer_base`` (:ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1detail_1_1buffer__base`)
 
 
 Struct Documentation

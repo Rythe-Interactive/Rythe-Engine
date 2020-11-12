@@ -48,6 +48,7 @@
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_material.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-material-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data/material.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span> <span class="cpf">&lt;rendering/data/shader.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
 <span class="p">{</span>
@@ -55,36 +56,39 @@
 
     <span class="k">struct</span> <span class="n">material_parameter_base</span>
     <span class="p">{</span>
+        <span class="k">friend</span> <span class="k">struct</span> <span class="n">material</span><span class="p">;</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="k">static</span> <span class="n">material_parameter_base</span><span class="o">*</span> <span class="n">create_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">GLint</span><span class="o">&amp;</span> <span class="n">location</span><span class="p">,</span> <span class="k">const</span> <span class="n">GLenum</span><span class="o">&amp;</span> <span class="n">type</span><span class="p">);</span>
     <span class="k">protected</span><span class="o">:</span>
         <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">m_name</span><span class="p">;</span>
         <span class="n">id_type</span> <span class="n">m_id</span><span class="p">;</span>
         <span class="n">id_type</span> <span class="n">m_typeId</span><span class="p">;</span>
+        <span class="n">GLint</span> <span class="n">m_location</span><span class="p">;</span>
 
-        <span class="n">material_parameter_base</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">typeId</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_name</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">m_id</span><span class="p">(</span><span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">)),</span> <span class="n">m_typeId</span><span class="p">(</span><span class="n">typeId</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">material_parameter_base</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">GLint</span> <span class="n">location</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">typeId</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_name</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">m_id</span><span class="p">(</span><span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">)),</span> <span class="n">m_typeId</span><span class="p">(</span><span class="n">typeId</span><span class="p">),</span> <span class="n">m_location</span><span class="p">(</span><span class="n">location</span><span class="p">)</span> <span class="p">{}</span>
 
     <span class="k">public</span><span class="o">:</span>
         <span class="n">id_type</span> <span class="n">type</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_typeId</span><span class="p">;</span> <span class="p">}</span>
 
         <span class="k">virtual</span> <span class="kt">void</span> <span class="n">apply</span><span class="p">(</span><span class="n">shader_handle</span><span class="o">&amp;</span> <span class="n">shader</span><span class="p">)</span> <span class="n">LEGION_PURE</span><span class="p">;</span>
-
-        <span class="k">static</span> <span class="n">material_parameter_base</span><span class="o">*</span> <span class="nf">create_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;&amp;</span> <span class="n">info</span><span class="p">);</span>
     <span class="p">};</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
     <span class="k">struct</span> <span class="nl">material_parameter</span> <span class="p">:</span> <span class="k">public</span> <span class="n">material_parameter_base</span>
     <span class="p">{</span>
+        <span class="k">friend</span> <span class="k">struct</span> <span class="n">material</span><span class="p">;</span>
     <span class="k">private</span><span class="o">:</span>
         <span class="n">T</span> <span class="n">m_value</span><span class="p">;</span>
-    <span class="k">public</span><span class="o">:</span>
-        <span class="n">material_parameter</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="o">:</span> <span class="n">material_parameter_base</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">())</span> <span class="p">{}</span>
 
-        <span class="kt">void</span> <span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span> <span class="n">m_value</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span> <span class="p">}</span>
-        <span class="n">T</span> <span class="n">get_value</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_value</span><span class="p">;</span> <span class="p">}</span>
-
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">apply</span><span class="p">(</span><span class="n">shader_handle</span><span class="o">&amp;</span> <span class="n">shader</span><span class="p">)</span> <span class="k">override</span>
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">apply</span><span class="p">(</span><span class="n">shader_handle</span><span class="o">&amp;</span> <span class="n">shader</span><span class="p">)</span> <span class="k">override</span>
         <span class="p">{</span>
             <span class="n">shader</span><span class="p">.</span><span class="n">get_uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_id</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">m_value</span><span class="p">);</span>
         <span class="p">}</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">material_parameter</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">GLint</span> <span class="n">location</span><span class="p">)</span> <span class="o">:</span> <span class="n">material_parameter_base</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">())</span> <span class="p">{}</span>
+
+        <span class="kt">void</span> <span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span> <span class="n">m_value</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span> <span class="p">}</span>
+        <span class="n">T</span> <span class="n">get_value</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_value</span><span class="p">;</span> <span class="p">}</span>
     <span class="p">};</span>
 
     <span class="k">struct</span> <span class="n">material</span>
@@ -97,36 +101,45 @@
         <span class="kt">void</span> <span class="nf">init</span><span class="p">(</span><span class="k">const</span> <span class="n">shader_handle</span><span class="o">&amp;</span> <span class="n">shader</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">m_shader</span> <span class="o">=</span> <span class="n">shader</span><span class="p">;</span>
-            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">uniformInfo</span> <span class="p">:</span> <span class="n">m_shader</span><span class="p">.</span><span class="n">get_uniform_info</span><span class="p">())</span>
-                <span class="n">m_parameters</span><span class="p">[</span><span class="n">nameHash</span><span class="p">(</span><span class="n">uniformInfo</span><span class="p">.</span><span class="n">first</span><span class="p">)]</span> <span class="o">=</span> <span class="n">material_parameter_base</span><span class="o">::</span><span class="n">create_param</span><span class="p">(</span><span class="n">uniformInfo</span><span class="p">);</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">type</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_shader</span><span class="p">.</span><span class="n">get_uniform_info</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="n">id_type</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+                <span class="n">m_parameters</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">hash</span><span class="p">,</span> <span class="n">material_parameter_base</span><span class="o">::</span><span class="n">create_param</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">type</span><span class="p">)));</span>
+                <span class="n">m_idOfLocation</span><span class="p">[</span><span class="n">location</span><span class="p">]</span> <span class="o">=</span> <span class="n">hash</span><span class="p">;</span>
+            <span class="p">}</span>
         <span class="p">}</span>
 
         <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">m_name</span><span class="p">;</span>
 
-        <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">material_parameter_base</span><span class="o">*&gt;</span> <span class="n">m_parameters</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">material_parameter_base</span><span class="o">&gt;&gt;</span> <span class="n">m_parameters</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">GLint</span><span class="p">,</span> <span class="n">id_type</span><span class="o">&gt;</span> <span class="n">m_idOfLocation</span><span class="p">;</span>
     <span class="k">public</span><span class="o">:</span>
-        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-        <span class="kt">void</span> <span class="n">set_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+        <span class="kt">void</span> <span class="n">bind</span><span class="p">();</span>
+
+        <span class="kt">void</span> <span class="nf">release</span><span class="p">()</span>
         <span class="p">{</span>
-            <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">m_parameters</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">m_parameters</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">())</span>
-                <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">m_parameters</span><span class="p">[</span><span class="n">id</span><span class="p">])</span><span class="o">-&gt;</span><span class="n">set_value</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
-            <span class="k">else</span>
-                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;material {} does not have a parameter named {} of type {}&quot;</span><span class="p">,</span> <span class="n">m_name</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">undecoratedTypeName</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">());</span>
+            <span class="n">shader_handle</span><span class="o">::</span><span class="n">release</span><span class="p">();</span>
         <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-        <span class="n">T</span> <span class="n">get_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">m_parameters</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">m_parameters</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">())</span>
-                <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">m_parameters</span><span class="p">[</span><span class="n">id</span><span class="p">])</span><span class="o">-&gt;</span><span class="n">get_value</span><span class="p">();</span>
+        <span class="kt">void</span> <span class="n">set_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">);</span>
 
-            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;material {} does not have a parameter named {} of type {}&quot;</span><span class="p">,</span> <span class="n">m_name</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">undecoratedTypeName</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">());</span>
-            <span class="k">return</span> <span class="nf">T</span><span class="p">();</span>
-        <span class="p">}</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="n">has_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
 
-        <span class="n">attribute</span> <span class="n">get_attribute</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="n">L_NODISCARD</span> <span class="n">T</span> <span class="n">get_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">set_param</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="n">has_param</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="n">L_NODISCARD</span> <span class="n">T</span> <span class="n">get_param</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">);</span>
+
+        <span class="n">L_NODISCARD</span> <span class="n">attribute</span> <span class="nf">get_attribute</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">m_shader</span><span class="p">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">));</span>
         <span class="p">}</span>
@@ -138,8 +151,6 @@
 
         <span class="kt">void</span> <span class="nf">bind</span><span class="p">();</span>
 
-        <span class="kt">void</span> <span class="nf">prepare</span><span class="p">();</span>
-
         <span class="kt">void</span> <span class="nf">release</span><span class="p">()</span>
         <span class="p">{</span>
             <span class="n">shader_handle</span><span class="o">::</span><span class="n">release</span><span class="p">();</span>
@@ -149,12 +160,32 @@
         <span class="kt">void</span> <span class="n">set_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">);</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-        <span class="n">T</span> <span class="n">get_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+        <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="n">has_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="n">L_NODISCARD</span> <span class="n">T</span> <span class="n">get_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">set_param</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="n">has_param</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="n">L_NODISCARD</span> <span class="n">T</span> <span class="n">get_param</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">);</span>
 
         <span class="n">attribute</span> <span class="nf">get_attribute</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
 
         <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">material_handle</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">id</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Archive</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">archive</span><span class="p">);</span>
     <span class="p">};</span>
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Archive</span><span class="o">&gt;</span>
+    <span class="kt">void</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">serialize</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">archive</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">archive</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+    <span class="p">}</span>
 
     <span class="k">constexpr</span> <span class="n">material_handle</span> <span class="n">invalid_material_handle</span><span class="p">{</span> <span class="n">invalid_id</span> <span class="p">};</span>
 
@@ -167,10 +198,13 @@
 
     <span class="k">public</span><span class="o">:</span>
         <span class="k">static</span> <span class="n">material_handle</span> <span class="n">create_material</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">shader_handle</span><span class="o">&amp;</span> <span class="n">shader</span><span class="p">);</span>
+
         <span class="k">static</span> <span class="n">material_handle</span> <span class="nf">create_material</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">shaderFile</span><span class="p">,</span> <span class="n">shader_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_shader_settings</span><span class="p">);</span>
+
         <span class="k">static</span> <span class="n">material_handle</span> <span class="nf">get_material</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
     <span class="p">};</span>
 
+<span class="cp">#pragma region implementations</span>
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
     <span class="kt">void</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">set_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
     <span class="p">{</span>
@@ -179,13 +213,108 @@
     <span class="p">}</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-    <span class="n">T</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">get_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="kt">void</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">set_param</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materialLock</span><span class="p">);</span>
+        <span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materials</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">set_param</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">has_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materialLock</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materials</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">has_param</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">has_param</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materialLock</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materials</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">has_param</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">location</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="n">L_NODISCARD</span> <span class="n">T</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">get_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materialLock</span><span class="p">);</span>
         <span class="k">return</span> <span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materials</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get_param</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
     <span class="p">}</span>
 
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="n">L_NODISCARD</span> <span class="n">T</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">get_param</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materialLock</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materials</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get_param</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">location</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="kt">void</span> <span class="n">material</span><span class="o">::</span><span class="n">set_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_parameters</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">m_parameters</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">())</span>
+            <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">m_parameters</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get</span><span class="p">())</span><span class="o">-&gt;</span><span class="n">set_value</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+        <span class="k">else</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;material {} does not have a parameter named {} of type {}&quot;</span><span class="p">,</span> <span class="n">m_name</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">undecoratedTypeName</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">());</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="n">material</span><span class="o">::</span><span class="n">has_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">m_parameters</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">m_parameters</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="n">L_NODISCARD</span> <span class="n">T</span> <span class="n">material</span><span class="o">::</span><span class="n">get_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_parameters</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">m_parameters</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">())</span>
+            <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">m_parameters</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get</span><span class="p">())</span><span class="o">-&gt;</span><span class="n">get_value</span><span class="p">();</span>
+
+        <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;material {} does not have a parameter named {} of type {}&quot;</span><span class="p">,</span> <span class="n">m_name</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">undecoratedTypeName</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">());</span>
+        <span class="k">return</span> <span class="nf">T</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="kt">void</span> <span class="n">material</span><span class="o">::</span><span class="n">set_param</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_idOfLocation</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">location</span><span class="p">))</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;material {} does not have a parameter at location {} of type {}&quot;</span><span class="p">,</span> <span class="n">m_name</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">undecoratedTypeName</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">());</span>
+
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">m_idOfLocation</span><span class="p">[</span><span class="n">location</span><span class="p">];</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_parameters</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">m_parameters</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">())</span>
+            <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">m_parameters</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get</span><span class="p">())</span><span class="o">-&gt;</span><span class="n">set_value</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+        <span class="k">else</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;material {} does not have a parameter at location {} of type {}&quot;</span><span class="p">,</span> <span class="n">m_name</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">undecoratedTypeName</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">());</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="n">L_NODISCARD</span> <span class="n">T</span> <span class="n">material</span><span class="o">::</span><span class="n">get_param</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_idOfLocation</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">location</span><span class="p">))</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;material {} does not have a parameter at location {} of type {}&quot;</span><span class="p">,</span> <span class="n">m_name</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">undecoratedTypeName</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">());</span>
+
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">m_idOfLocation</span><span class="p">[</span><span class="n">location</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_parameters</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">m_parameters</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">())</span>
+            <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">m_parameters</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get</span><span class="p">())</span><span class="o">-&gt;</span><span class="n">get_value</span><span class="p">();</span>
+
+        <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;material {} does not have a parameter at location {} of type {}&quot;</span><span class="p">,</span> <span class="n">m_name</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">undecoratedTypeName</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">());</span>
+        <span class="k">return</span> <span class="nf">T</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="n">material</span><span class="o">::</span><span class="n">has_param</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_idOfLocation</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">location</span><span class="p">))</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">m_idOfLocation</span><span class="p">[</span><span class="n">location</span><span class="p">];</span>
+        <span class="k">return</span> <span class="n">m_parameters</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">m_parameters</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="cp">#pragma endregion</span>
 <span class="p">}</span>
+
 
 <span class="cp">#if !defined(DOXY_EXCLUDE)</span>
 <span class="k">namespace</span> <span class="n">std</span>

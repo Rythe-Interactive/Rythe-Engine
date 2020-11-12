@@ -1,0 +1,13 @@
+.. _exhale_define_bindings_8hpp_1a41f9a9dc512c257a6813e79ce7006405:
+
+Define SV_ALBEDO
+================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_bindings.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: SV_ALBEDO

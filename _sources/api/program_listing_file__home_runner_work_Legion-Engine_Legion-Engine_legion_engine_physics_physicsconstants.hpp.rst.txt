@@ -1,0 +1,37 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsconstants.hpp:
+
+Program Listing for File physicsconstants.hpp
+=============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsconstants.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/physicsconstants.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   #include <core/core.hpp>
+   
+   namespace legion::physics::constants
+   {
+       static math::vec3 gravity = math::vec3(0, -9.81, 0);
+   
+       static constexpr int contactSolverIterationCount = 6;
+   
+       static constexpr int frictionSolverIterationCount = 4;
+   
+       static constexpr float faceToFacePenetrationBias = 0.005f;
+   
+       static constexpr float faceToEdgePenetrationBias = 0.01f;
+   
+       static constexpr float baumgarteCoefficient = 0.25f;
+   
+       static constexpr float baumgarteSlop = 0.005f;
+   
+       static constexpr float restitutionSlop = 0.5f;
+   
+       static constexpr float contactOffset = 0.01f;
+   
+   }

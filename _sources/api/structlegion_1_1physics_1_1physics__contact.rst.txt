@@ -3,7 +3,7 @@
 Struct physics_contact
 ======================
 
-- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_contact.h`
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_contact.hpp`
 
 
 Struct Documentation

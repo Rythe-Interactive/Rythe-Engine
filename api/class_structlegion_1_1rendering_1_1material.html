@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class material &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class material_handle" href="class_structlegion_1_1rendering_1_1material__handle.html" />
+    <link rel="prev" title="Class camera" href="class_structlegion_1_1rendering_1_1camera.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="class_structlegion_1_1rendering_1_1material__handle.html" title="Class material_handle"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="class_structlegion_1_1rendering_1_1camera.html" title="Class camera"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class material</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-material">
+<span id="exhale-class-structlegion-1-1rendering-1-1material"></span><h1>Class material<a class="headerlink" href="#class-material" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_material.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-material-hpp"><span class="std std-ref">File material.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6legion9rendering8materialE">
+<span id="_CPPv3N6legion9rendering8materialE"></span><span id="_CPPv2N6legion9rendering8materialE"></span><span id="legion::rendering::material"></span><span class="target" id="structlegion_1_1rendering_1_1material"></span><em class="property">class </em><code class="sig-prename descclassname">legion::rendering<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">material</code><a class="headerlink" href="#_CPPv4N6legion9rendering8materialE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Structure that keeps track of the parameterization of a certain shader. Multiple material instances can use the same shader but use different parameter values. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering8material4bindEv">
+<span id="_CPPv3N6legion9rendering8material4bindEv"></span><span id="_CPPv2N6legion9rendering8material4bindEv"></span><span id="legion::rendering::material::bind"></span><span class="target" id="structlegion_1_1rendering_1_1material_1ad43ff1f75c214e47f6309dacfb2e8524"></span>void <code class="sig-name descname">bind</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering8material4bindEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Bind the material to the rendering context and prepare for use. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering8material7releaseEv">
+<span id="_CPPv3N6legion9rendering8material7releaseEv"></span><span id="_CPPv2N6legion9rendering8material7releaseEv"></span><span id="legion::rendering::material::release"></span><span class="target" id="structlegion_1_1rendering_1_1material_1aaddc9332241305e000738e948a18182a"></span>void <code class="sig-name descname">release</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering8material7releaseEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Release the material from the rendering context. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering8material9set_paramEvRKNSt6stringERK1T">
+<span id="_CPPv3I0EN6legion9rendering8material9set_paramERKNSt6stringERK1T"></span><span id="_CPPv2I0EN6legion9rendering8material9set_paramERKNSt6stringERK1T"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="structlegion_1_1rendering_1_1material_1acb0398422ae5dc196652035c7ed6ef8d"></span>void <code class="sig-name descname">set_param</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6legion9rendering8material9set_paramEvRKNSt6stringERK1T" title="legion::rendering::material::set_param::T">T</a> &amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering8material9set_paramEvRKNSt6stringERK1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the value of a parameter by name. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering8material9has_paramEbRKNSt6stringE">
+<span id="_CPPv3I0EN6legion9rendering8material9has_paramERKNSt6stringE"></span><span id="_CPPv2I0EN6legion9rendering8material9has_paramERKNSt6stringE"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="structlegion_1_1rendering_1_1material_1a45a5eeed3c1fe181f5bc22b1c0d4c6c3"></span>bool <code class="sig-name descname">has_param</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering8material9has_paramEbRKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if the material has a parameter by name. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering8material9get_paramE1TRKNSt6stringE">
+<span id="_CPPv3I0EN6legion9rendering8material9get_paramERKNSt6stringE"></span><span id="_CPPv2I0EN6legion9rendering8material9get_paramERKNSt6stringE"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="structlegion_1_1rendering_1_1material_1a0a88f8a13366faed711ed0cc2624815d"></span><a class="reference internal" href="#_CPPv4I0EN6legion9rendering8material9get_paramE1TRKNSt6stringE" title="legion::rendering::material::get_param::T">T</a> <code class="sig-name descname">get_param</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering8material9get_paramE1TRKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the value of a parameter by name. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering8material9set_paramEv5GLintRK1T">
+<span id="_CPPv3I0EN6legion9rendering8material9set_paramE5GLintRK1T"></span><span id="_CPPv2I0EN6legion9rendering8material9set_paramE5GLintRK1T"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="structlegion_1_1rendering_1_1material_1a792f5a6921b6c09a07ae4aa1b13418f6"></span>void <code class="sig-name descname">set_param</code><span class="sig-paren">(</span>GLint <em>location</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6legion9rendering8material9set_paramEv5GLintRK1T" title="legion::rendering::material::set_param::T">T</a> &amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering8material9set_paramEv5GLintRK1T" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the value of a parameter by location. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering8material9has_paramEb5GLint">
+<span id="_CPPv3I0EN6legion9rendering8material9has_paramE5GLint"></span><span id="_CPPv2I0EN6legion9rendering8material9has_paramE5GLint"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="structlegion_1_1rendering_1_1material_1a52c32e0de27d883d37109ed60840a6cc"></span>bool <code class="sig-name descname">has_param</code><span class="sig-paren">(</span>GLint <em>location</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering8material9has_paramEb5GLint" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if the material has a parameter by location. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering8material9get_paramE1T5GLint">
+<span id="_CPPv3I0EN6legion9rendering8material9get_paramE5GLint"></span><span id="_CPPv2I0EN6legion9rendering8material9get_paramE5GLint"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="structlegion_1_1rendering_1_1material_1a737f2b45bc6261a1893f43192a42098f"></span><a class="reference internal" href="#_CPPv4I0EN6legion9rendering8material9get_paramE1T5GLint" title="legion::rendering::material::get_param::T">T</a> <code class="sig-name descname">get_param</code><span class="sig-paren">(</span>GLint <em>location</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering8material9get_paramE1T5GLint" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the value of a parameter by location. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering8material13get_attributeERKNSt6stringE">
+<span id="_CPPv3N6legion9rendering8material13get_attributeERKNSt6stringE"></span><span id="_CPPv2N6legion9rendering8material13get_attributeERKNSt6stringE"></span><span id="legion::rendering::material::get_attribute__ssCR"></span><span class="target" id="structlegion_1_1rendering_1_1material_1a97b66196572c9b4b2bb8677326ae961d"></span><a class="reference internal" href="class_structlegion_1_1rendering_1_1attribute.html#_CPPv4N6legion9rendering9attributeE" title="legion::rendering::attribute">attribute</a> <code class="sig-name descname">get_attribute</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering8material13get_attributeERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get attribute bound to a certain name. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Friends</p>
+<dl class="friendclass">
+<dt>
+<em class="property">friend class</em> MaterialCache</dt>
+</dl>
+
+<dl class="friendclass">
+<dt>
+<em class="property">friend struct</em> material_handle</dt>
+</dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class material</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="class_structlegion_1_1rendering_1_1camera.html" title="previous chapter">Class camera</a></li>
+      <li>Next: <a href="class_structlegion_1_1rendering_1_1material__handle.html" title="next chapter">Class material_handle</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/class_structlegion_1_1rendering_1_1material.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

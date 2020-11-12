@@ -29,6 +29,12 @@ Includes
 --------
 
 
+- ``cereal/archives/binary.hpp``
+
+- ``cereal/archives/json.hpp``
+
+- ``cereal/types/vector.hpp``
+
 - ``core/containers/hashed_sparse_set.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_hashed_sparse_set.hpp`)
 
 - ``core/containers/sparse_map.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_sparse_map.hpp`)

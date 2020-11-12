@@ -1,0 +1,13 @@
+.. _exhale_function_namespacelegion_1_1core_1_1common_1a667ea9c796a356f92da9c5f2142bd80e:
+
+Template Function legion::core::common::replace_items
+=====================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::common::replace_items(StringType&, const std::string&, const std::string&)

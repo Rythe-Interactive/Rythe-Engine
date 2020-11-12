@@ -53,6 +53,8 @@
 <span class="cp">#include</span> <span class="cpf">&lt;cstddef&gt; //msc   std::(u)int(8-64)_t</span><span class="cp"></span>
 <span class="cp">#endif</span>
 <span class="cp">#include</span> <span class="cpf">&lt;vector&gt;  //      std::vector&lt;T&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string_view&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span>
 <span class="p">{</span>
@@ -85,6 +87,11 @@
 
     <span class="k">using</span> <span class="n">byte</span> <span class="o">=</span> <span class="n">uint8</span><span class="p">;</span>
     <span class="k">using</span> <span class="n">byte_vec</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">byte</span><span class="o">&gt;</span><span class="p">;</span>
+
+    <span class="k">using</span> <span class="n">bitfield8</span> <span class="o">=</span> <span class="n">byte</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">bitfield16</span> <span class="o">=</span> <span class="n">uint16</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">bitfield32</span> <span class="o">=</span> <span class="n">uint32</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">bitfield64</span> <span class="o">=</span> <span class="n">uint64</span><span class="p">;</span>
 
     <span class="k">using</span> <span class="n">priority_type</span> <span class="o">=</span> <span class="n">uint8</span><span class="p">;</span>
 <span class="cp">#define default_priority 0</span>

@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1audio_1_1detail_1_1channel__data:
+
+Struct channel_data
+===================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_importers_audio_importers.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::audio::detail::channel_data
+   :members:
+   :protected-members:
+   :undoc-members:

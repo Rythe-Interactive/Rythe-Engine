@@ -1,0 +1,77 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_settings.hpp:
+
+File settings.hpp
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/util``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/util/settings.hpp``)
+--------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_settings.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_core.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_shader.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_shadercompiler_shadercompiler.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__rendering`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1shader__import__settings`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_settings_8hpp_1a15f47615f6450e2398232badd102474e`
+
+- :ref:`exhale_enum_settings_8hpp_1a5d36ae1dcd274777342306852a004312`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_settings_8hpp_1aeee1d39215cb51286c44160b18105e99`
+
+- :ref:`exhale_variable_settings_8hpp_1ad6311125d11e6bbdced24c8cb2f834d7`
+

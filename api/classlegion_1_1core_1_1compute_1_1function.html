@@ -81,12 +81,24 @@
 <dl class="cpp function">
 <dt id="_CPPv4N6legion4core7compute8function10setProgramERR7Program">
 <span id="_CPPv3N6legion4core7compute8function10setProgramERR7Program"></span><span id="_CPPv2N6legion4core7compute8function10setProgramERR7Program"></span><span id="legion::core::compute::function::setProgram__ProgramRR"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1function_1af463e25aa70b55c139260cedb08e091f"></span>void <code class="sig-name descname">setProgram</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_program.html#_CPPv4N6legion4core7compute7ProgramE" title="legion::core::compute::Program">Program</a> &amp;&amp;<em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute8function10setProgramERR7Program" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<dd><p>Sets the program from which to create the wrapped kernel. </p>
+</dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4IDpEN6legion4core7compute8functionclEN6common6resultIvvEE9size_typeDpRR4Args">
-<span id="_CPPv3IDpEN6legion4core7compute8functionclE9size_typeDpRR4Args"></span><span id="_CPPv2IDpEN6legion4core7compute8functionclE9size_typeDpRR4Args"></span>template&lt;typename ...<code class="sig-name descname">Args</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1compute_1_1function_1aa938062912804cedfbbe336fd923eeb5"></span>common::<a class="reference internal" href="classlegion_1_1core_1_1common_1_1result.html#_CPPv4IDpEN6legion4core6common6resultE" title="legion::core::common::result">result</a>&lt;void, void&gt; <code class="sig-name descname">operator()</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <em>dispatch_size</em>, <a class="reference internal" href="#_CPPv4IDpEN6legion4core7compute8functionclEN6common6resultIvvEE9size_typeDpRR4Args" title="legion::core::compute::function::operator()::Args">Args</a>&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN6legion4core7compute8functionclEN6common6resultIvvEE9size_typeDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<span id="_CPPv3IDpEN6legion4core7compute8functionclE9size_typeDpRR4Args"></span><span id="_CPPv2IDpEN6legion4core7compute8functionclE9size_typeDpRR4Args"></span>template&lt;typename ...<code class="sig-name descname">Args</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1compute_1_1function_1a8078ae227bd9d42261ca0eb8340b9436"></span>common::<a class="reference internal" href="classlegion_1_1core_1_1common_1_1result.html#_CPPv4IDpEN6legion4core6common6resultE" title="legion::core::common::result">result</a>&lt;void, void&gt; <code class="sig-name descname">operator()</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <em>dispatch_size</em>, <a class="reference internal" href="#_CPPv4IDpEN6legion4core7compute8functionclEN6common6resultIvvEE9size_typeDpRR4Args" title="legion::core::compute::function::operator()::Args">Args</a>&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN6legion4core7compute8functionclEN6common6resultIvvEE9size_typeDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Invokes the wrapped kernel with the passed buffers. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>Ok() if the kernel succeeded or Err() otherwise </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dispatch_size</span></code>: How many items to process. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args</span></code>: a collection of either vectors and wrapped vectors or compute::Buffers </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">

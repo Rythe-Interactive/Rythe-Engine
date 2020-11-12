@@ -29,6 +29,14 @@ Includes
 --------
 
 
+- ``cereal/archives/json.hpp``
+
+- ``cereal/archives/portable_binary.hpp``
+
+- ``cereal/types/memory.hpp``
+
+- ``cereal/types/unordered_map.hpp``
+
 - ``core/ecs/archetype.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_archetype.hpp`)
 
 - ``core/logging/logging.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`)

@@ -1,0 +1,13 @@
+.. _exhale_define_bindings_8hpp_1ad0b54c78079a259ac65644978b587f12:
+
+Define SV_VIEWDIR
+=================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_bindings.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: SV_VIEWDIR

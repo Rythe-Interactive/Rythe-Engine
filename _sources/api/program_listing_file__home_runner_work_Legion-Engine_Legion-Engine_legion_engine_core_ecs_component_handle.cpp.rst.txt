@@ -1,0 +1,43 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_handle.cpp:
+
+Program Listing for File component_handle.cpp
+=============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_handle.cpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/ecs/component_handle.cpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include "component_handle.hpp"
+   
+   namespace legion::core::ecs
+   {
+       EcsRegistry* component_handle_base::m_registry = nullptr;
+   
+       void legion::core::ecs::component_handle_base::serialize(cereal::JSONOutputArchive& oarchive)
+       {
+           oarchive(cereal::make_nvp("Owner", m_ownerId), cereal::make_nvp("Component Type", m_typeId));
+           m_registry->getFamily(m_typeId)->serialize(oarchive, m_ownerId);
+       }
+       void legion::core::ecs::component_handle_base::serialize(cereal::BinaryOutputArchive& oarchive)
+       {
+           oarchive(cereal::make_nvp("Owner", m_ownerId), cereal::make_nvp("Component Type", m_typeId));
+           m_registry->getFamily(m_typeId)->serialize(oarchive, m_ownerId);
+   
+       }
+       void legion::core::ecs::component_handle_base::serialize(cereal::JSONInputArchive& oarchive)
+       {
+           oarchive(cereal::make_nvp("Owner", m_ownerId), cereal::make_nvp("Component Type", m_typeId));
+           m_registry->createComponent(m_ownerId, m_typeId);
+           m_registry->getFamily(m_typeId)->serialize(oarchive, m_ownerId);
+   
+       }
+       void legion::core::ecs::component_handle_base::serialize(cereal::BinaryInputArchive& oarchive)
+       {
+           oarchive(cereal::make_nvp("Owner", m_ownerId), cereal::make_nvp("Component Type", m_typeId));
+           m_registry->createComponent(m_ownerId, m_typeId);
+           m_registry->getFamily(m_typeId)->serialize(oarchive, m_ownerId);
+       }
+   }

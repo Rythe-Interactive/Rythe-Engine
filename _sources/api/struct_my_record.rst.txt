@@ -1,0 +1,16 @@
+.. _exhale_struct_struct_my_record:
+
+Struct MyRecord
+===============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_serialization_serializationUtil.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: MyRecord
+   :members:
+   :protected-members:
+   :undoc-members:

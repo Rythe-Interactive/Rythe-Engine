@@ -1,0 +1,21 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_renderstage.hpp:
+
+Program Listing for File renderstage.hpp
+========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_renderstage.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/base/renderstage.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   namespace legion::rendering
+   {
+       class RenderStage
+       {
+   
+       };
+   }

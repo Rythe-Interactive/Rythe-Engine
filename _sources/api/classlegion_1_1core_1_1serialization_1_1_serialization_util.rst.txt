@@ -1,0 +1,16 @@
+.. _exhale_class_classlegion_1_1core_1_1serialization_1_1_serialization_util:
+
+Class SerializationUtil
+=======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_serialization_serializationUtil.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::serialization::SerializationUtil
+   :members:
+   :protected-members:
+   :undoc-members:

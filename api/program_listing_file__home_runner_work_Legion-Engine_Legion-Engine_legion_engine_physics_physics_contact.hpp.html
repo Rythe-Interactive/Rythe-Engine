@@ -1,0 +1,475 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File physics_contact.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File physics_contact.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-physics-contact-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-physics-contact-hpp"></span><h1>Program Listing for File physics_contact.hpp<a class="headerlink" href="#program-listing-for-file-physics-contact-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_contact.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-physics-contact-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/physics_contact.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;physics/components/rigidbody.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/data/identifier.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">physics_contact</span>
+    <span class="p">{</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">rigidbody</span><span class="o">&gt;</span> <span class="n">rbRefHandle</span><span class="p">;</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">rigidbody</span><span class="o">&gt;</span> <span class="n">rbIncHandle</span><span class="p">;</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">RefWorldContact</span><span class="p">;</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">IncWorldContact</span><span class="p">;</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">refRBCentroid</span><span class="p">;</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">incRBCentroid</span><span class="p">;</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">refTransform</span><span class="p">;</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">incTransform</span><span class="p">;</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">collisionNormal</span><span class="p">;</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">tangentNormal1</span><span class="p">;</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">tangentNormal2</span><span class="p">;</span>
+
+        <span class="kt">float</span> <span class="n">totalLambda</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">tangent1Lambda</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">tangent2Lambda</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span>
+
+        <span class="kt">float</span> <span class="n">effectiveMass</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span>
+
+        <span class="kt">float</span> <span class="n">tangent1EffectiveMass</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">tangent2EffectiveMass</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span>
+
+        <span class="kt">int</span> <span class="n">contactCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="kt">void</span> <span class="nf">ApplyWarmStarting</span><span class="p">(</span><span class="kt">float</span> <span class="n">lambda</span><span class="p">)</span>
+        <span class="p">{</span>
+
+        <span class="p">}</span>
+
+        <span class="cm">/* @brief Calculate a certain linear and angular impulse that will resolve the collision</span>
+<span class="cm">        */</span>
+        <span class="kt">void</span> <span class="nf">resolveContactConstraint</span><span class="p">(</span><span class="kt">float</span> <span class="n">dt</span><span class="p">,</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//the idea behind this collision resolution strategy (Sequential Impulses)</span>
+            <span class="c1">//is we resolve the collision by giving an impulse towards both</span>
+            <span class="c1">//rigidbodies so that the collision would resolve itself in the next time step.</span>
+
+            <span class="c1">//We calculate this value by first getting the position constraint</span>
+
+            <span class="c1">// C : (Pa - Pb).n = 0</span>
+
+            <span class="c1">//Pa is the vector from the centroid of rigidbodyA to the contact point of rigidbodyA</span>
+            <span class="c1">//and Pb is the vector from the centroid of rigidbodyB to the contact point of rigidbodyB</span>
+            <span class="c1">//and n is the collision normal</span>
+
+            <span class="c1">//Next, in order to apply the aformentioned impulse.We must get the velocity constraint. In order to do so,</span>
+            <span class="c1">//we must find the time deriavative of our position constraint using the product rule of differentiation.</span>
+
+            <span class="c1">//Cdot: [(Vb + Wb x Rb - (Va + Wa x Ra))] .n + (Pb - Pa) .[Na x Wa]</span>
+
+            <span class="c1">//where Ra is the vector from the center of rigidbodyA towards Pa and Rb</span>
+            <span class="c1">//is the vector from the center of rigidbodyB towards Pb. Where every &#39;V&#39; stands for velocity and every</span>
+            <span class="c1">//&#39;W&#39; stands for angular velocity</span>
+
+            <span class="c1">//the position part of this constraint can be ignored so we get:</span>
+            <span class="c1">//Cdot: [(Vb + Wb x Rb - (Va + Wa x Ra))] .n</span>
+
+            <span class="c1">//Using the triple product identity, we can isolate the angular and linear velocities so we get</span>
+
+            <span class="c1">//Cdot: J.V</span>
+
+            <span class="c1">//where J is a 1x12 matrix [ -n     (-Ra x n)   n   (Rb x n) ]</span>
+            <span class="c1">//and V is a 12x1 matrix  ([ -Va    (-Wa)       Vb  (Wb)     ])^T</span>
+
+            <span class="c1">//By changing the form of the constraint we now see that J dictates the rate of change of V</span>
+            <span class="c1">//(similar to how the function of a line is y = mx + b)</span>
+            <span class="c1">//In other words, J is the jacobian matrix of V. This means that if we are looking for a certain delta-V</span>
+            <span class="c1">//that would resolve the collision it would be equal to:</span>
+
+            <span class="c1">// delta-V :  (J^T) * lambda</span>
+
+            <span class="c1">//Where lambda is a single value that represents the scalar value of the linear and angular impulse</span>
+
+            <span class="c1">//However, in order to keep this &#39;shift&#39; in velocity physically based, we must keep in mind the</span>
+            <span class="c1">//mass and inertia of the rigidbodies involved, therefore we must multiply delta-V with the matrix M^-1</span>
+
+            <span class="c1">// delta-V :  M^-1 * (J^T) * lambda</span>
+
+            <span class="c1">//where M is the 12x12 matrix</span>
+            <span class="c1">//[ ma  0   0   0]</span>
+            <span class="c1">//[ 0   Ia  0   0]</span>
+            <span class="c1">//[ 0   0   mb  0]</span>
+            <span class="c1">//[ 0   0   0  Ib]</span>
+
+            <span class="c1">//where ma is a 3x3 identity matrix scaled by the mass of the rigidbodyA,</span>
+            <span class="c1">//mb is a 3x3 identity matrix scaled by the mass of the rigidbodyB,</span>
+            <span class="c1">//where Ia is the 3x3 matrix inertia tensor of the rigidbodyA,</span>
+            <span class="c1">//where Ib is the 3x3 matrix inertia tensor of the rigidbodyB,</span>
+
+            <span class="c1">//calculate J.V + b</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">Ra</span><span class="p">,</span> <span class="n">Rb</span><span class="p">,</span> <span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">RbCrossN</span><span class="p">;</span>
+            <span class="n">calculateJacobianComponents</span><span class="p">(</span><span class="n">collisionNormal</span><span class="p">,</span><span class="n">Ra</span><span class="p">,</span> <span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">Rb</span><span class="p">,</span> <span class="n">RbCrossN</span><span class="p">);</span>
+
+            <span class="k">auto</span> <span class="n">RefRB</span> <span class="o">=</span> <span class="n">rbRefHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="k">auto</span> <span class="n">IncRB</span> <span class="o">=</span> <span class="n">rbIncHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">va</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">vb</span><span class="p">,</span> <span class="n">wb</span><span class="p">;</span>
+
+            <span class="n">va</span> <span class="o">=</span> <span class="n">RefRB</span><span class="p">.</span><span class="n">velocity</span><span class="p">;</span>
+            <span class="n">wa</span> <span class="o">=</span> <span class="n">RefRB</span><span class="p">.</span><span class="n">angularVelocity</span><span class="p">;</span>
+            <span class="n">vb</span> <span class="o">=</span> <span class="n">IncRB</span><span class="p">.</span><span class="n">velocity</span><span class="p">;</span>
+            <span class="n">wb</span> <span class="o">=</span> <span class="n">IncRB</span><span class="p">.</span><span class="n">angularVelocity</span><span class="p">;</span>
+
+            <span class="kt">float</span> <span class="n">JVx</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="o">-</span><span class="n">collisionNormal</span><span class="p">,</span> <span class="n">va</span><span class="p">);</span>
+            <span class="kt">float</span> <span class="n">JVy</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">wa</span><span class="p">);</span>
+            <span class="kt">float</span> <span class="n">JVz</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">collisionNormal</span><span class="p">,</span> <span class="n">vb</span><span class="p">);</span>
+            <span class="kt">float</span> <span class="n">JVw</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">RbCrossN</span><span class="p">,</span> <span class="n">wb</span><span class="p">);</span>
+
+            <span class="kt">float</span> <span class="n">minJV</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">JVx</span> <span class="o">+</span> <span class="n">JVy</span> <span class="o">+</span> <span class="n">JVz</span> <span class="o">+</span> <span class="n">JVw</span><span class="p">);</span>
+
+            <span class="c1">//-------------------------- Positional Constraint ----------------------------------//</span>
+
+            <span class="c1">//resolve the position violation by adding it into the lambda</span>
+            <span class="kt">float</span> <span class="n">penetration</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">RefWorldContact</span> <span class="o">-</span> <span class="n">IncWorldContact</span><span class="p">,</span> <span class="o">-</span><span class="n">collisionNormal</span><span class="p">);</span>
+
+            <span class="c1">//but allow some penetration for the sake of stability</span>
+            <span class="n">penetration</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">min</span><span class="p">(</span><span class="n">penetration</span> <span class="o">+</span> <span class="n">physics</span><span class="o">::</span><span class="n">constants</span><span class="o">::</span><span class="n">baumgarteSlop</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">);</span>
+
+            <span class="kt">float</span> <span class="n">baumgarteConstraint</span> <span class="o">=</span> <span class="o">-</span><span class="n">penetration</span> <span class="o">*</span> <span class="n">physics</span><span class="o">::</span><span class="n">constants</span><span class="o">::</span><span class="n">baumgarteCoefficient</span> <span class="o">*</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">dt</span><span class="p">;</span>
+
+            <span class="c1">//calculate restitution between the 2 bodies</span>
+            <span class="kt">float</span> <span class="n">restCoeff</span> <span class="o">=</span> <span class="n">rigidbody</span><span class="o">::</span><span class="n">calculateRestitution</span><span class="p">(</span><span class="n">RefRB</span><span class="p">.</span><span class="n">restitution</span><span class="p">,</span> <span class="n">IncRB</span><span class="p">.</span><span class="n">restitution</span><span class="p">);</span>
+
+            <span class="c1">//-------------------------- Restitution Constraint ----------------------------------//</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">minWaCrossRa</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="o">-</span><span class="n">wa</span><span class="p">,</span> <span class="n">Ra</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">WbCrossRb</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">wb</span><span class="p">,</span> <span class="n">Rb</span><span class="p">);</span>
+
+            <span class="kt">float</span> <span class="n">restitutionConstraint</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">((</span><span class="o">-</span><span class="n">va</span> <span class="o">+</span> <span class="n">minWaCrossRa</span> <span class="o">+</span> <span class="n">vb</span> <span class="o">+</span> <span class="n">WbCrossRb</span><span class="p">),</span><span class="n">collisionNormal</span><span class="p">)</span> <span class="o">*</span> <span class="n">restCoeff</span><span class="p">;</span>
+            <span class="n">restitutionConstraint</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">restitutionConstraint</span> <span class="o">-</span> <span class="n">physics</span><span class="o">::</span><span class="n">constants</span><span class="o">::</span><span class="n">restitutionSlop</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">);</span>
+
+            <span class="c1">//-------------------------- Velocity Constraint ----------------------------------//</span>
+            <span class="kt">float</span> <span class="n">biasFactor</span> <span class="o">=</span> <span class="n">baumgarteConstraint</span> <span class="o">+</span> <span class="n">restitutionConstraint</span><span class="p">;</span>
+
+            <span class="kt">float</span> <span class="n">foundLambda</span> <span class="o">=</span> <span class="p">(</span><span class="n">minJV</span> <span class="o">+</span> <span class="n">biasFactor</span> <span class="p">)</span> <span class="o">/</span> <span class="n">effectiveMass</span><span class="p">;</span>
+
+            <span class="kt">float</span> <span class="n">oldTotalLambda</span> <span class="o">=</span> <span class="n">totalLambda</span><span class="p">;</span>
+            <span class="n">totalLambda</span> <span class="o">+=</span> <span class="n">foundLambda</span><span class="p">;</span>
+
+            <span class="n">totalLambda</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">clamp</span><span class="p">(</span><span class="n">totalLambda</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;::</span><span class="n">max</span><span class="p">());</span>
+
+            <span class="kt">float</span> <span class="n">lambdaApplied</span> <span class="o">=</span> <span class="n">totalLambda</span> <span class="o">-</span> <span class="n">oldTotalLambda</span><span class="p">;</span>
+
+            <span class="k">auto</span> <span class="n">idHandleRef</span> <span class="o">=</span> <span class="n">rbRefHandle</span><span class="p">.</span><span class="n">entity</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="k">auto</span> <span class="n">idHandleInc</span> <span class="o">=</span> <span class="n">rbIncHandle</span><span class="p">.</span><span class="n">entity</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">idHandleInc</span> <span class="o">&amp;&amp;</span>
+                <span class="n">idHandleRef</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//log::debug(&quot;/idHandle.read().id {} &quot;, idHandle.read().id);</span>
+               <span class="cm">/* if (idHandleInc.read().id == &quot;Stack1&quot; &amp;&amp; idHandleRef.read().id == &quot;Stack0&quot;)</span>
+<span class="cm">                {</span>
+<span class="cm">                    log::debug(&quot;/////lambda calculation/////&quot;);</span>
+<span class="cm">                    log::debug(&quot;JVX {}&quot;, JVx);</span>
+<span class="cm">                    log::debug(&quot;JVY {}&quot;, JVy);</span>
+<span class="cm">                    log::debug(&quot;JVZ {}&quot;, JVz);</span>
+<span class="cm">                    log::debug(&quot;JVW {}&quot;, JVw);</span>
+<span class="cm">                    log::debug(&quot;/////JV found/////&quot;);</span>
+<span class="cm">                    log::debug(&quot;-jv found {} &quot;, minJV);</span>
+<span class="cm">                    log::debug(&quot;baumgarteConstraint {} &quot;, baumgarteConstraint);</span>
+<span class="cm">                    log::debug(&quot;restitutionConstraint {} &quot;, restitutionConstraint);</span>
+<span class="cm">                    log::debug(&quot;effective mass {} &quot;, effectiveMass);</span>
+<span class="cm">                    log::debug(&quot;/////lambda found/////&quot;);</span>
+<span class="cm">                    log::debug(&quot;lambda found {} &quot;, foundLambda);</span>
+<span class="cm">                    log::debug(&quot;lambda applied {} &quot;, lambdaApplied);</span>
+<span class="cm">                    log::debug(&quot;totalLambda {} &quot;, totalLambda);</span>
+<span class="cm">                    log::debug(&quot;/////current velocities/////&quot;);</span>
+<span class="cm">                    log::debug(&quot;VA {}&quot;, math::to_string(va));</span>
+<span class="cm">                    log::debug(&quot;WA {}&quot;, math::to_string(wa));</span>
+<span class="cm">                    log::debug(&quot;------------------------&quot;);</span>
+<span class="cm">                    log::debug(&quot;VB {}&quot;, math::to_string(vb));</span>
+<span class="cm">                    log::debug(&quot;WB {}&quot;, math::to_string(wb));</span>
+<span class="cm">                }*/</span>
+
+            <span class="p">}</span>
+
+
+            <span class="n">ApplyImpulse</span><span class="p">(</span><span class="n">collisionNormal</span><span class="p">,</span> <span class="n">lambdaApplied</span><span class="p">,</span>
+                <span class="n">Ra</span><span class="p">,</span> <span class="n">Rb</span><span class="p">);</span>
+
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">resolveFrictionConstraint</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">RefRB</span> <span class="o">=</span> <span class="n">rbRefHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="k">auto</span> <span class="n">IncRB</span> <span class="o">=</span> <span class="n">rbIncHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+            <span class="kt">float</span> <span class="n">frictionCoeff</span> <span class="o">=</span> <span class="n">rigidbody</span><span class="o">::</span><span class="n">calculateFriction</span><span class="p">(</span><span class="n">RefRB</span><span class="p">.</span><span class="n">friction</span><span class="p">,</span><span class="n">IncRB</span><span class="p">.</span><span class="n">friction</span><span class="p">);</span>
+            <span class="kt">float</span> <span class="n">frictionConstraint</span> <span class="o">=</span> <span class="n">totalLambda</span> <span class="o">*</span> <span class="n">frictionCoeff</span><span class="p">;</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">Ra</span> <span class="o">=</span> <span class="n">RefWorldContact</span> <span class="o">-</span> <span class="n">refRBCentroid</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">Rb</span> <span class="o">=</span> <span class="n">IncWorldContact</span> <span class="o">-</span> <span class="n">incRBCentroid</span><span class="p">;</span>
+
+            <span class="c1">//calculate friction constraint for tangent1</span>
+            <span class="p">{</span>
+                <span class="kt">float</span> <span class="n">tangent1MinJV</span> <span class="o">=</span> <span class="n">calculateJVConstraint</span><span class="p">(</span><span class="n">tangentNormal1</span><span class="p">);</span>
+
+                <span class="kt">float</span> <span class="n">foundLambda</span> <span class="o">=</span> <span class="n">tangent1MinJV</span> <span class="o">/</span> <span class="n">tangent1EffectiveMass</span><span class="p">;</span>
+
+                <span class="kt">float</span> <span class="n">oldTotalLambda</span> <span class="o">=</span> <span class="n">tangent1Lambda</span><span class="p">;</span>
+                <span class="n">tangent1Lambda</span> <span class="o">+=</span> <span class="n">foundLambda</span><span class="p">;</span>
+
+                <span class="n">tangent1Lambda</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">clamp</span><span class="p">(</span><span class="n">tangent1Lambda</span><span class="p">,</span> <span class="o">-</span><span class="n">frictionConstraint</span><span class="p">,</span> <span class="n">frictionConstraint</span><span class="p">);</span>
+
+                <span class="kt">float</span> <span class="n">lambdaApplied</span> <span class="o">=</span> <span class="n">tangent1Lambda</span> <span class="o">-</span> <span class="n">oldTotalLambda</span><span class="p">;</span>
+
+                <span class="n">ApplyImpulse</span><span class="p">(</span><span class="n">tangentNormal1</span><span class="p">,</span> <span class="n">lambdaApplied</span><span class="p">,</span>
+                    <span class="n">Ra</span><span class="p">,</span> <span class="n">Rb</span><span class="p">);</span>
+
+            <span class="p">}</span>
+
+            <span class="c1">//calculate friction constraint for tangent1</span>
+            <span class="p">{</span>
+                <span class="kt">float</span> <span class="n">tangent2MinJV</span> <span class="o">=</span> <span class="n">calculateJVConstraint</span><span class="p">(</span><span class="n">tangentNormal2</span><span class="p">);</span>
+
+                <span class="kt">float</span> <span class="n">foundLambda</span> <span class="o">=</span> <span class="n">tangent2MinJV</span> <span class="o">/</span> <span class="n">tangent2EffectiveMass</span><span class="p">;</span>
+
+                <span class="kt">float</span> <span class="n">oldTotalLambda</span> <span class="o">=</span> <span class="n">tangent2Lambda</span><span class="p">;</span>
+                <span class="n">tangent2Lambda</span> <span class="o">+=</span> <span class="n">foundLambda</span><span class="p">;</span>
+
+                <span class="n">tangent2Lambda</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">clamp</span><span class="p">(</span><span class="n">tangent2Lambda</span><span class="p">,</span> <span class="o">-</span><span class="n">frictionConstraint</span><span class="p">,</span> <span class="n">frictionConstraint</span><span class="p">);</span>
+
+                <span class="kt">float</span> <span class="n">lambdaApplied</span> <span class="o">=</span> <span class="n">tangent2Lambda</span> <span class="o">-</span> <span class="n">oldTotalLambda</span><span class="p">;</span>
+
+                <span class="n">ApplyImpulse</span><span class="p">(</span><span class="n">tangentNormal2</span><span class="p">,</span> <span class="n">lambdaApplied</span><span class="p">,</span>
+                    <span class="n">Ra</span><span class="p">,</span> <span class="n">Rb</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="cm">/* @brief Given the equation to calculate lambda -(J.V)/(J * M^-1 * J^T),</span>
+<span class="cm">        * precalculates (J * M^-1 * J^T).</span>
+<span class="cm">        */</span>
+        <span class="kt">void</span> <span class="nf">preCalculateEffectiveMass</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="c1">//calculate tangent vectors</span>
+
+            <span class="c1">//--------------------------- pre calculate contact constraint effective mass -----------------------------------//</span>
+
+            <span class="n">tangentNormal1</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">collisionNormal</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">epsilonEqual</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">length</span><span class="p">(</span><span class="n">tangentNormal1</span><span class="p">),</span><span class="mf">0.0f</span><span class="p">,</span><span class="mf">0.01f</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">tangentNormal1</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">collisionNormal</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+            <span class="p">}</span>
+
+            <span class="n">tangentNormal1</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">tangentNormal1</span><span class="p">);</span>
+
+            <span class="n">tangentNormal2</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">collisionNormal</span><span class="p">,</span> <span class="n">tangentNormal1</span><span class="p">));</span>
+
+            <span class="n">effectiveMass</span> <span class="o">=</span> <span class="n">calculateEffectiveMassOnNormal</span><span class="p">(</span><span class="n">collisionNormal</span><span class="p">);</span>
+            <span class="n">tangent1EffectiveMass</span> <span class="o">=</span> <span class="n">calculateEffectiveMassOnNormal</span><span class="p">(</span><span class="n">tangentNormal1</span><span class="p">);</span>
+            <span class="n">tangent2EffectiveMass</span> <span class="o">=</span> <span class="n">calculateEffectiveMassOnNormal</span><span class="p">(</span><span class="n">tangentNormal2</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kt">float</span> <span class="nf">calculateJVConstraint</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">normal</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">Ra</span><span class="p">,</span> <span class="n">Rb</span><span class="p">,</span> <span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">RbCrossN</span><span class="p">;</span>
+            <span class="n">calculateJacobianComponents</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">Ra</span><span class="p">,</span> <span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">Rb</span><span class="p">,</span> <span class="n">RbCrossN</span><span class="p">);</span>
+
+            <span class="k">auto</span> <span class="n">RefRB</span> <span class="o">=</span> <span class="n">rbRefHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="k">auto</span> <span class="n">IncRB</span> <span class="o">=</span> <span class="n">rbIncHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">va</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">vb</span><span class="p">,</span> <span class="n">wb</span><span class="p">;</span>
+
+            <span class="n">va</span> <span class="o">=</span> <span class="n">RefRB</span><span class="p">.</span><span class="n">velocity</span><span class="p">;</span>
+            <span class="n">wa</span> <span class="o">=</span> <span class="n">RefRB</span><span class="p">.</span><span class="n">angularVelocity</span><span class="p">;</span>
+            <span class="n">vb</span> <span class="o">=</span> <span class="n">IncRB</span><span class="p">.</span><span class="n">velocity</span><span class="p">;</span>
+            <span class="n">wb</span> <span class="o">=</span> <span class="n">IncRB</span><span class="p">.</span><span class="n">angularVelocity</span><span class="p">;</span>
+
+            <span class="kt">float</span> <span class="n">JVx</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="o">-</span><span class="n">normal</span><span class="p">,</span> <span class="n">va</span><span class="p">);</span>
+            <span class="kt">float</span> <span class="n">JVy</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">wa</span><span class="p">);</span>
+            <span class="kt">float</span> <span class="n">JVz</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">vb</span><span class="p">);</span>
+            <span class="kt">float</span> <span class="n">JVw</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">RbCrossN</span><span class="p">,</span> <span class="n">wb</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="o">-</span><span class="p">(</span><span class="n">JVx</span> <span class="o">+</span> <span class="n">JVy</span> <span class="o">+</span> <span class="n">JVz</span> <span class="o">+</span> <span class="n">JVw</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kt">float</span> <span class="nf">calculateEffectiveMassOnNormal</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">normal</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">Ra</span><span class="p">,</span> <span class="n">Rb</span><span class="p">,</span> <span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">RbCrossN</span><span class="p">;</span>
+            <span class="n">calculateJacobianComponents</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">Ra</span><span class="p">,</span> <span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">Rb</span><span class="p">,</span> <span class="n">RbCrossN</span><span class="p">);</span>
+
+            <span class="k">auto</span> <span class="n">rbRef</span> <span class="o">=</span> <span class="n">rbRefHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="k">auto</span> <span class="n">incRef</span> <span class="o">=</span> <span class="n">rbIncHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+            <span class="kt">float</span> <span class="n">maUnit</span> <span class="o">=</span> <span class="n">rbRefHandle</span> <span class="o">?</span> <span class="n">rbRef</span><span class="p">.</span><span class="nl">inverseMass</span> <span class="p">:</span> <span class="mf">0.0f</span><span class="p">;</span>
+            <span class="kt">float</span> <span class="n">mbUnit</span> <span class="o">=</span> <span class="n">rbIncHandle</span> <span class="o">?</span> <span class="n">incRef</span><span class="p">.</span><span class="nl">inverseMass</span> <span class="p">:</span> <span class="mf">0.0f</span><span class="p">;</span>
+
+            <span class="c1">//calculate M-1</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">ma</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="p">(</span><span class="n">maUnit</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">Ia</span> <span class="o">=</span> <span class="n">rbRefHandle</span> <span class="o">?</span> <span class="n">rbRef</span><span class="p">.</span><span class="nl">globalInverseInertiaTensor</span> <span class="p">:</span> <span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">mb</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="p">(</span><span class="n">mbUnit</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">Ib</span> <span class="o">=</span> <span class="n">rbIncHandle</span> <span class="o">?</span> <span class="n">incRef</span><span class="p">.</span><span class="nl">globalInverseInertiaTensor</span> <span class="p">:</span> <span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">);</span>
+
+            <span class="c1">//calculate M^-1 J^T</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">jx</span> <span class="o">=</span> <span class="n">ma</span> <span class="o">*</span> <span class="o">-</span><span class="n">normal</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">jy</span> <span class="o">=</span> <span class="n">Ia</span> <span class="o">*</span> <span class="n">minRaCrossN</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">jz</span> <span class="o">=</span> <span class="n">mb</span> <span class="o">*</span> <span class="n">normal</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">jw</span> <span class="o">=</span> <span class="n">Ib</span> <span class="o">*</span> <span class="n">RbCrossN</span><span class="p">;</span>
+
+            <span class="c1">//calculate effective mass</span>
+            <span class="kt">float</span> <span class="n">efMx</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="o">-</span><span class="n">normal</span><span class="p">,</span> <span class="n">jx</span><span class="p">);</span>
+            <span class="kt">float</span> <span class="n">efMy</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">jy</span><span class="p">);</span>
+            <span class="kt">float</span> <span class="n">efMz</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">jz</span><span class="p">);</span>
+            <span class="kt">float</span> <span class="n">efMw</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">RbCrossN</span><span class="p">,</span> <span class="n">jw</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">efMx</span> <span class="o">+</span> <span class="n">efMy</span> <span class="o">+</span> <span class="n">efMz</span> <span class="o">+</span> <span class="n">efMw</span><span class="p">;</span>
+
+        <span class="p">}</span>
+
+        <span class="cm">/* @brief Given a normal indicating the impulse direction, the vectors ra and rb that indicate the contact vectors,</span>
+<span class="cm">        * and a lambda that indicates the scalar value of the impulse, applies impulses to the colliding rigidbodies</span>
+<span class="cm">        */</span>
+        <span class="kt">void</span> <span class="nf">ApplyImpulse</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">normal</span><span class="p">,</span> <span class="k">const</span> <span class="kt">float</span> <span class="n">lambda</span><span class="p">,</span>
+            <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">ra</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">rb</span><span class="p">)</span>
+        <span class="p">{</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">linearImpulse</span> <span class="o">=</span> <span class="n">normal</span> <span class="o">*</span> <span class="n">lambda</span><span class="p">;</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">torqueDirectionA</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="o">-</span><span class="n">ra</span><span class="p">,</span> <span class="n">normal</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">torqueDirectionB</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">rb</span><span class="p">,</span> <span class="n">normal</span><span class="p">);</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">angularImpulseA</span> <span class="o">=</span> <span class="n">torqueDirectionA</span> <span class="o">*</span> <span class="n">lambda</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">angularImpulseB</span> <span class="o">=</span> <span class="n">torqueDirectionB</span> <span class="o">*</span> <span class="n">lambda</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">rbRefHandle</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">auto</span> <span class="n">refRb</span> <span class="o">=</span> <span class="n">rbRefHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+                <span class="n">refRb</span><span class="p">.</span><span class="n">velocity</span> <span class="o">+=</span> <span class="o">-</span><span class="n">linearImpulse</span> <span class="o">*</span> <span class="n">refRb</span><span class="p">.</span><span class="n">inverseMass</span><span class="p">;</span>
+                <span class="n">refRb</span><span class="p">.</span><span class="n">angularVelocity</span> <span class="o">+=</span> <span class="n">refRb</span><span class="p">.</span><span class="n">globalInverseInertiaTensor</span> <span class="o">*</span> <span class="n">angularImpulseA</span><span class="p">;</span>
+
+                <span class="n">rbRefHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">refRb</span><span class="p">);</span>
+
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">rbIncHandle</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">auto</span> <span class="n">incRb</span> <span class="o">=</span> <span class="n">rbIncHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+                <span class="n">incRb</span><span class="p">.</span><span class="n">velocity</span> <span class="o">+=</span> <span class="n">linearImpulse</span> <span class="o">*</span> <span class="n">incRb</span><span class="p">.</span><span class="n">inverseMass</span><span class="p">;</span>
+                <span class="k">auto</span> <span class="n">addedAngular</span> <span class="o">=</span> <span class="n">incRb</span><span class="p">.</span><span class="n">globalInverseInertiaTensor</span> <span class="o">*</span> <span class="n">angularImpulseB</span><span class="p">;</span>
+                <span class="n">incRb</span><span class="p">.</span><span class="n">angularVelocity</span> <span class="o">+=</span> <span class="n">addedAngular</span><span class="p">;</span>
+
+                <span class="n">rbIncHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">incRb</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">calculateJacobianComponents</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">normal</span><span class="p">,</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">Ra</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">Rb</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">RbCrossN</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Ra</span> <span class="o">=</span> <span class="n">RefWorldContact</span> <span class="o">-</span> <span class="n">refRBCentroid</span><span class="p">;</span>
+            <span class="n">Rb</span> <span class="o">=</span> <span class="n">IncWorldContact</span> <span class="o">-</span> <span class="n">incRBCentroid</span><span class="p">;</span>
+
+            <span class="n">minRaCrossN</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="o">-</span><span class="n">Ra</span><span class="p">,</span> <span class="n">normal</span><span class="p">);</span>
+            <span class="n">RbCrossN</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">Rb</span><span class="p">,</span> <span class="n">normal</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">logRigidbodyState</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="c1">//log::debug(&quot;//--------logRigidbodyState----------//&quot;);</span>
+            <span class="k">auto</span> <span class="n">incRb</span> <span class="o">=</span> <span class="n">rbIncHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="k">auto</span> <span class="n">refRb</span> <span class="o">=</span> <span class="n">rbRefHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;incRb.velocity {} &quot;</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">incRb</span><span class="p">.</span><span class="n">velocity</span><span class="p">));</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;incRb.angularVelocity {} &quot;</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">incRb</span><span class="p">.</span><span class="n">angularVelocity</span><span class="p">));</span>
+
+            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;collisionNormal {} &quot;</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">collisionNormal</span><span class="p">));</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;lambda {} &quot;</span><span class="p">,</span> <span class="n">totalLambda</span><span class="p">);</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;////////////////////////////&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_contact.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

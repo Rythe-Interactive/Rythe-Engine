@@ -55,6 +55,7 @@
 <span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/basic_resolver.hpp&gt;</span><span class="cp"></span>
 
 <span class="cp">#include</span> <span class="cpf">&lt;core/compute/context.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/scenemanagement/scene.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span>
 <span class="p">{</span>
@@ -78,6 +79,8 @@
             <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">position</span><span class="o">&gt;</span><span class="p">();</span>
             <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">rotation</span><span class="o">&gt;</span><span class="p">();</span>
             <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">scale</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">scenemanagement</span><span class="o">::</span><span class="n">scene</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">reportSystem</span> <span class="o">&lt;</span><span class="n">scenemanagement</span><span class="o">::</span><span class="n">SceneManager</span><span class="o">&gt;</span><span class="p">();</span>
         <span class="p">}</span>
 
         <span class="k">virtual</span> <span class="n">priority_type</span> <span class="n">priority</span><span class="p">()</span> <span class="k">override</span>

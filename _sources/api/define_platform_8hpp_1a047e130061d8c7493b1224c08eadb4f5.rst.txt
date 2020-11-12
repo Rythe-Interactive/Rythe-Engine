@@ -1,0 +1,13 @@
+.. _exhale_define_platform_8hpp_1a047e130061d8c7493b1224c08eadb4f5:
+
+Define L_FALLTHROUGH
+====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: L_FALLTHROUGH

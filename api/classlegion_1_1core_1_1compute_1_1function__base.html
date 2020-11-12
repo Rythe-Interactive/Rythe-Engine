@@ -18,7 +18,7 @@
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class Kernel" href="classlegion_1_1core_1_1compute_1_1_kernel.html" />
+    <link rel="next" title="Template Class in" href="class_structlegion_1_1core_1_1compute_1_1in.html" />
     <link rel="prev" title="Class function" href="classlegion_1_1core_1_1compute_1_1function.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -36,7 +36,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="classlegion_1_1core_1_1compute_1_1_kernel.html" title="Class Kernel"
+          <a href="class_structlegion_1_1core_1_1compute_1_1in.html" title="Template Class in"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="classlegion_1_1core_1_1compute_1_1function.html" title="Class function"
@@ -73,10 +73,41 @@
 <span id="_CPPv3N6legion4core7compute13function_baseE"></span><span id="_CPPv2N6legion4core7compute13function_baseE"></span><span id="legion::core::compute::function_base"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1function__base"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core::compute<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">function_base</code><a class="headerlink" href="#_CPPv4N6legion4core7compute13function_baseE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Subclassed by <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1function.html#classlegion_1_1core_1_1compute_1_1function"><span class="std std-ref">legion::core::compute::function</span></a></p>
 <div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute13function_base12setLocalSizeE6size_t">
+<span id="_CPPv3N6legion4core7compute13function_base12setLocalSizeE6size_t"></span><span id="_CPPv2N6legion4core7compute13function_base12setLocalSizeE6size_t"></span><span id="legion::core::compute::function_base::setLocalSize__s"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1function__base_1ae7dec438bd277abe2fc06e9a1c2139b3"></span>size_t <code class="sig-name descname">setLocalSize</code><span class="sig-paren">(</span>size_t <em>locals</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute13function_base12setLocalSizeE6size_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets how many work-elements should be processed concurrently. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>How many parallel processes are going to be used. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">locals</span></code>: Number of parallel processes or 0, when 0 the measured max will be used. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Protected Types</p>
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core7compute13function_base23invoke_buffer_containerE">
+<span id="_CPPv3N6legion4core7compute13function_base23invoke_buffer_containerE"></span><span id="_CPPv2N6legion4core7compute13function_base23invoke_buffer_containerE"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1function__base_1a6fd2568ef69fbc7bc22743b30d4bba47"></span><em class="property">using </em><code class="sig-name descname">invoke_buffer_container</code> = std::vector&lt;std::pair&lt;detail::<a class="reference internal" href="structlegion_1_1core_1_1compute_1_1detail_1_1buffer__base.html#_CPPv4N6legion4core7compute6detail11buffer_baseE" title="legion::core::compute::detail::buffer_base">buffer_base</a>*, <a class="reference internal" href="enum_buffer_8hpp_1a7e33690cda6ca2c7eee105bf5e28a0b0.html#_CPPv4N6legion4core7compute11buffer_typeE" title="legion::core::compute::buffer_type">buffer_type</a>&gt;&gt;<a class="headerlink" href="#_CPPv4N6legion4core7compute13function_base23invoke_buffer_containerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Protected Functions</p>
 <dl class="cpp function">
-<dt id="_CPPv4NK6legion4core7compute13function_base6invokeE9size_typeRNSt6vectorINSt4pairIP11buffer_base11buffer_typeEEEE">
-<span id="_CPPv3NK6legion4core7compute13function_base6invokeE9size_typeRNSt6vectorINSt4pairIP11buffer_base11buffer_typeEEEE"></span><span id="_CPPv2NK6legion4core7compute13function_base6invokeE9size_typeRNSt6vectorINSt4pairIP11buffer_base11buffer_typeEEEE"></span><span id="legion::core::compute::function_base::invoke__size_type.std::vector:std::pair:buffer_baseP.buffer_type::RC"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1function__base_1af163199f5b9a49b44ecdd5a5febfcb6a"></span>common::<a class="reference internal" href="classlegion_1_1core_1_1common_1_1result.html#_CPPv4IDpEN6legion4core6common6resultE" title="legion::core::common::result">result</a>&lt;void, void&gt; <code class="sig-name descname">invoke</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <em>global</em>, std::vector&lt;std::pair&lt;<a class="reference internal" href="structlegion_1_1core_1_1compute_1_1buffer__base.html#_CPPv4N6legion4core7compute11buffer_baseE" title="legion::core::compute::buffer_base">buffer_base</a>*, <a class="reference internal" href="enum_buffer_8hpp_1a7e33690cda6ca2c7eee105bf5e28a0b0.html#_CPPv4N6legion4core7compute11buffer_typeE" title="legion::core::compute::buffer_type">buffer_type</a>&gt;&gt; &amp;<em>parameters</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core7compute13function_base6invokeE9size_typeRNSt6vectorINSt4pairIP11buffer_base11buffer_typeEEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4NK6legion4core7compute13function_base6invokeE9size_typeR23invoke_buffer_container">
+<span id="_CPPv3NK6legion4core7compute13function_base6invokeE9size_typeR23invoke_buffer_container"></span><span id="_CPPv2NK6legion4core7compute13function_base6invokeE9size_typeR23invoke_buffer_container"></span><span id="legion::core::compute::function_base::invoke__size_type.invoke_buffer_containerRC"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1function__base_1a3b7f3ad80e5c1420d04e4ad8511fa69a"></span>common::<a class="reference internal" href="classlegion_1_1core_1_1common_1_1result.html#_CPPv4IDpEN6legion4core6common6resultE" title="legion::core::common::result">result</a>&lt;void, void&gt; <code class="sig-name descname">invoke</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <em>global</em>, <a class="reference internal" href="#_CPPv4N6legion4core7compute13function_base23invoke_buffer_containerE" title="legion::core::compute::function_base::invoke_buffer_container">invoke_buffer_container</a> &amp;<em>parameters</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core7compute13function_base6invokeE9size_typeR23invoke_buffer_container" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core7compute13function_base7invoke2E9size_typeNSt6vectorI6BufferEE">
+<span id="_CPPv3NK6legion4core7compute13function_base7invoke2E9size_typeNSt6vectorI6BufferEE"></span><span id="_CPPv2NK6legion4core7compute13function_base7invoke2E9size_typeNSt6vectorI6BufferEE"></span><span id="legion::core::compute::function_base::invoke2__size_type.std::vector:Buffer:C"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1function__base_1a8f9d9964fe2c8e9ac1c2028c70fbe8f7"></span>common::<a class="reference internal" href="classlegion_1_1core_1_1common_1_1result.html#_CPPv4IDpEN6legion4core6common6resultE" title="legion::core::common::result">result</a>&lt;void, void&gt; <code class="sig-name descname">invoke2</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <em>global</em>, std::vector&lt;<a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a>&gt; <em>buffers</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core7compute13function_base7invoke2E9size_typeNSt6vectorI6BufferEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>
@@ -90,6 +121,11 @@
 <dl class="cpp var">
 <dt id="_CPPv4N6legion4core7compute13function_base9m_programE">
 <span id="_CPPv3N6legion4core7compute13function_base9m_programE"></span><span id="_CPPv2N6legion4core7compute13function_base9m_programE"></span><span id="legion::core::compute::function_base::m_program__std::unique_ptr:Program:"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1function__base_1a5f7af31c40e2fb13de70d5a79ea9da31"></span>std::unique_ptr&lt;<a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_program.html#_CPPv4N6legion4core7compute7ProgramE" title="legion::core::compute::Program">Program</a>&gt; <code class="sig-name descname">m_program</code><a class="headerlink" href="#_CPPv4N6legion4core7compute13function_base9m_programE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion4core7compute13function_base8m_localsE">
+<span id="_CPPv3N6legion4core7compute13function_base8m_localsE"></span><span id="_CPPv2N6legion4core7compute13function_base8m_localsE"></span><span id="legion::core::compute::function_base::m_locals__s"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1function__base_1a39dbd7621827b7d819699085cf959037"></span>size_t <code class="sig-name descname">m_locals</code> = 512<a class="headerlink" href="#_CPPv4N6legion4core7compute13function_base8m_localsE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>
@@ -121,7 +157,7 @@
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
       <li>Previous: <a href="classlegion_1_1core_1_1compute_1_1function.html" title="previous chapter">Class function</a></li>
-      <li>Next: <a href="classlegion_1_1core_1_1compute_1_1_kernel.html" title="next chapter">Class Kernel</a></li>
+      <li>Next: <a href="class_structlegion_1_1core_1_1compute_1_1in.html" title="next chapter">Template Class in</a></li>
   </ul></li>
   </ul></li>
 </ul>

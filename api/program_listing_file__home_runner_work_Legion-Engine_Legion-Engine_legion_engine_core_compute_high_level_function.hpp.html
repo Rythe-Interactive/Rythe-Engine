@@ -62,7 +62,8 @@
     <span class="k">struct</span> <span class="n">out_ident</span> <span class="p">{};</span>
     <span class="k">struct</span> <span class="n">inout_ident</span> <span class="p">{};</span>
 
-    <span class="k">struct</span> <span class="n">buffer_base</span>
+    <span class="k">namespace</span> <span class="n">detail</span> <span class="p">{</span>
+        <span class="k">struct</span> <span class="n">buffer_base</span>
     <span class="p">{</span>
         <span class="n">buffer_base</span><span class="p">(</span><span class="n">byte</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">n</span><span class="p">)</span> <span class="o">:</span> <span class="n">container</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">size</span><span class="p">)),</span> <span class="n">name</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="p">{}</span>
         <span class="n">buffer_base</span><span class="p">(</span><span class="k">const</span> <span class="n">buffer_base</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
@@ -74,14 +75,17 @@
         <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">byte</span><span class="o">*</span><span class="p">,</span> <span class="kt">size_t</span><span class="o">&gt;</span> <span class="n">container</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
     <span class="p">};</span>
+    <span class="p">}</span>
 
 
     <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
-    <span class="k">struct</span> <span class="nl">in</span> <span class="p">:</span> <span class="k">public</span> <span class="n">in_ident</span><span class="p">,</span> <span class="k">public</span> <span class="n">buffer_base</span>
+    <span class="k">struct</span> <span class="nl">in</span> <span class="p">:</span> <span class="k">public</span> <span class="n">in_ident</span><span class="p">,</span> <span class="k">public</span> <span class="n">detail</span><span class="o">::</span><span class="n">buffer_base</span>
     <span class="p">{</span>
-        <span class="k">static_assert</span><span class="p">(</span><span class="n">is_vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span><span class="s">&quot;T needs to be a vector&quot;</span><span class="p">);</span>
+        <span class="k">static_assert</span><span class="p">(</span><span class="n">is_vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;T needs to be a vector&quot;</span><span class="p">);</span>
 
-        <span class="n">in</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">vec</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">)</span> <span class="o">:</span> <span class="n">buffer_base</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">byte</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">vec</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value_type</span><span class="p">)</span><span class="o">*</span> <span class="n">vec</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">name</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">in</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">vec</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">)</span> <span class="o">:</span>
+            <span class="n">buffer_base</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">byte</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">vec</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span>
+                <span class="k">sizeof</span><span class="p">(</span><span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value_type</span><span class="p">)</span><span class="o">*</span> <span class="n">vec</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">name</span><span class="p">)</span> <span class="p">{}</span>
         <span class="o">~</span><span class="n">in</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">in</span><span class="p">(</span><span class="k">const</span> <span class="n">in</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">in</span><span class="p">(</span><span class="n">in</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
@@ -91,11 +95,13 @@
     <span class="p">};</span>
 
     <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
-    <span class="k">struct</span> <span class="nl">out</span> <span class="p">:</span> <span class="k">public</span> <span class="n">out_ident</span><span class="p">,</span> <span class="k">public</span> <span class="n">buffer_base</span>
+    <span class="k">struct</span> <span class="nl">out</span> <span class="p">:</span> <span class="k">public</span> <span class="n">out_ident</span><span class="p">,</span> <span class="k">public</span> <span class="n">detail</span><span class="o">::</span><span class="n">buffer_base</span>
     <span class="p">{</span>
-        <span class="k">static_assert</span><span class="p">(</span><span class="n">is_vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span><span class="s">&quot;T needs to be a vector&quot;</span><span class="p">);</span>
+        <span class="k">static_assert</span><span class="p">(</span><span class="n">is_vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;T needs to be a vector&quot;</span><span class="p">);</span>
 
-        <span class="n">out</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">vec</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">)</span> <span class="o">:</span> <span class="n">buffer_base</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">byte</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">vec</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value_type</span><span class="p">)</span><span class="o">*</span> <span class="n">vec</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">name</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">out</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">vec</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">)</span> <span class="o">:</span>
+            <span class="n">buffer_base</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">byte</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">vec</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span>
+                <span class="k">sizeof</span><span class="p">(</span><span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value_type</span><span class="p">)</span><span class="o">*</span> <span class="n">vec</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">name</span><span class="p">)</span> <span class="p">{}</span>
         <span class="o">~</span><span class="n">out</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">out</span><span class="p">(</span><span class="k">const</span> <span class="n">out</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">out</span><span class="p">(</span><span class="n">out</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
@@ -105,11 +111,13 @@
     <span class="p">};</span>
 
     <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
-    <span class="k">struct</span> <span class="nl">inout</span> <span class="p">:</span> <span class="k">public</span> <span class="n">inout_ident</span><span class="p">,</span> <span class="k">public</span> <span class="n">buffer_base</span>
+    <span class="k">struct</span> <span class="nl">inout</span> <span class="p">:</span> <span class="k">public</span> <span class="n">inout_ident</span><span class="p">,</span> <span class="k">public</span> <span class="n">detail</span><span class="o">::</span><span class="n">buffer_base</span>
     <span class="p">{</span>
-        <span class="k">static_assert</span><span class="p">(</span><span class="n">is_vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span><span class="s">&quot;T needs to be a vector&quot;</span><span class="p">);</span>
+        <span class="k">static_assert</span><span class="p">(</span><span class="n">is_vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;T needs to be a vector&quot;</span><span class="p">);</span>
 
-        <span class="n">inout</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">vec</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">)</span> <span class="o">:</span> <span class="n">buffer_base</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">byte</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">vec</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">T</span><span class="o">::</span><span class="n">value_type</span><span class="p">)</span><span class="o">*</span> <span class="n">vec</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">name</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">inout</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">vec</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">)</span> <span class="o">:</span>
+            <span class="n">buffer_base</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">byte</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">vec</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span>
+                <span class="k">sizeof</span><span class="p">(</span><span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value_type</span><span class="p">)</span><span class="o">*</span> <span class="n">vec</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">name</span><span class="p">)</span> <span class="p">{}</span>
         <span class="o">~</span><span class="n">inout</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">inout</span><span class="p">(</span><span class="k">const</span> <span class="n">inout</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">inout</span><span class="p">(</span><span class="n">inout</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
@@ -120,49 +128,66 @@
 
     <span class="k">class</span> <span class="nc">function_base</span>
     <span class="p">{</span>
+
     <span class="k">protected</span><span class="o">:</span>
-        <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">invoke</span><span class="p">(</span><span class="n">size_type</span> <span class="n">global</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">buffer_base</span><span class="o">*</span><span class="p">,</span><span class="n">buffer_type</span><span class="o">&gt;&gt;&amp;</span> <span class="n">parameters</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+         <span class="k">using</span> <span class="n">invoke_buffer_container</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">detail</span><span class="o">::</span><span class="n">buffer_base</span><span class="o">*</span><span class="p">,</span> <span class="n">buffer_type</span><span class="o">&gt;&gt;</span><span class="p">;</span>
+
+
+        <span class="c1">//invokes the NdRangeKernel</span>
+        <span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span> <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span> <span class="kt">void</span><span class="o">&gt;</span> <span class="n">invoke</span> <span class="p">(</span><span class="n">size_type</span> <span class="n">global</span><span class="p">,</span> <span class="n">invoke_buffer_container</span> <span class="o">&amp;</span> <span class="n">parameters</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span> <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span> <span class="kt">void</span><span class="o">&gt;</span> <span class="n">invoke2</span><span class="p">(</span><span class="n">size_type</span> <span class="n">global</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span> <span class="n">buffers</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+
         <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Kernel</span><span class="o">&gt;</span> <span class="n">m_kernel</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Program</span><span class="o">&gt;</span> <span class="n">m_program</span><span class="p">;</span>
-
-    <span class="p">};</span>
-
-    <span class="k">class</span> <span class="nc">function</span> <span class="o">:</span> <span class="k">public</span> <span class="n">function_base</span>
-    <span class="p">{</span>
+        <span class="kt">size_t</span> <span class="n">m_locals</span> <span class="o">=</span> <span class="mi">512</span><span class="p">;</span>
     <span class="k">public</span><span class="o">:</span>
 
-        <span class="n">function</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_name</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">name</span><span class="p">)){}</span>
+
+        <span class="kt">size_t</span> <span class="n">setLocalSize</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">locals</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">const</span> <span class="kt">size_t</span> <span class="n">max</span> <span class="o">=</span> <span class="n">m_kernel</span><span class="o">-&gt;</span><span class="n">getMaxWorkSize</span><span class="p">();</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">locals</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">m_locals</span> <span class="o">=</span> <span class="n">max</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+                <span class="n">m_locals</span> <span class="o">=</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">min</span><span class="p">)(</span><span class="n">locals</span><span class="p">,</span><span class="n">max</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">m_locals</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">class</span> <span class="nc">function</span> <span class="k">final</span> <span class="o">:</span> <span class="k">public</span> <span class="n">function_base</span>
+    <span class="p">{</span>
+
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">using</span> <span class="n">function_base</span><span class="o">::</span><span class="n">setLocalSize</span><span class="p">;</span>
+        <span class="n">function</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_name</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">name</span><span class="p">))</span> <span class="p">{}</span>
+
 
         <span class="kt">void</span> <span class="n">setProgram</span><span class="p">(</span><span class="n">Program</span><span class="o">&amp;&amp;</span> <span class="n">p</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">m_program</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Program</span><span class="o">&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
             <span class="n">m_kernel</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Kernel</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_program</span><span class="o">-&gt;</span><span class="n">kernelContext</span><span class="p">(</span><span class="n">m_name</span><span class="p">));</span>
+            <span class="n">m_locals</span> <span class="o">=</span> <span class="n">m_kernel</span><span class="o">-&gt;</span><span class="n">getMaxWorkSize</span><span class="p">();</span>
         <span class="p">}</span>
 
         <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
-        <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span> <span class="kt">void</span><span class="o">&gt;</span> <span class="k">operator</span><span class="p">()(</span><span class="n">size_type</span> <span class="n">dispatch_size</span><span class="p">,</span><span class="n">Args</span><span class="o">&amp;&amp;</span> <span class="p">...</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span><span class="kt">void</span><span class="o">&gt;</span> <span class="k">operator</span><span class="p">()(</span><span class="n">size_type</span> <span class="n">dispatch_size</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span>
         <span class="p">{</span>
-
-            <span class="c1">//do some sanity checking args either need to be in(vector) out(vector) inout(vector) or vector</span>
-            <span class="k">static_assert</span><span class="p">(((</span>
-                <span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">buffer_base</span><span class="p">,</span> <span class="n">Args</span><span class="o">&gt;</span> <span class="o">||</span>
-                <span class="n">is_vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">...),</span> <span class="s">&quot;Type passed to operator() must be vector or in,out,inout&quot;</span><span class="p">);</span>
-
-
-            <span class="c1">//promote vector to in(vector) leave the rest alone</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">tuple</span> <span class="n">container</span> <span class="o">=</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">conditional_t</span><span class="o">&lt;</span><span class="n">is_vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span><span class="n">in</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">,</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...</span> <span class="p">};</span>
-
-            <span class="c1">//transform from tuple(in,out,inout,...) to vector(pair(buffer,&quot;in&quot;),pair(buffer,&quot;out&quot;), ...)</span>
-            <span class="k">auto</span> <span class="n">vector</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">apply</span><span class="p">(</span>
-                <span class="p">[](</span><span class="k">auto</span><span class="p">...</span><span class="n">x</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">buffer_base</span><span class="o">*</span><span class="p">,</span><span class="n">buffer_type</span><span class="o">&gt;&gt;</span> <span class="p">{</span> <span class="n">function</span><span class="o">::</span><span class="n">transform_to_pairs</span><span class="p">(</span><span class="n">x</span><span class="p">)...</span> <span class="p">};</span>
-                <span class="p">},</span><span class="n">container</span><span class="p">);</span>
-
-
-            <span class="c1">//we finally transformed it into a way that the non-templated function can use</span>
-            <span class="k">return</span> <span class="nf">invoke</span><span class="p">(</span><span class="n">dispatch_size</span><span class="p">,</span> <span class="n">vector</span><span class="p">);</span>
+            <span class="c1">//check if we are dealing with a list of buffers or a list of vectors</span>
+            <span class="k">if</span> <span class="k">constexpr</span> <span class="p">((</span><span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">compute</span><span class="o">::</span><span class="n">Buffer</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;&gt;</span> <span class="o">&amp;&amp;</span> <span class="p">...))</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">invoke_helper_buffers</span><span class="p">(</span><span class="n">dispatch_size</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">invoke_helper_raw</span><span class="p">(</span><span class="n">dispatch_size</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
+            <span class="p">}</span>
         <span class="p">}</span>
+
 
         <span class="k">static</span> <span class="kt">void</span> <span class="n">from_resource</span><span class="p">(</span><span class="n">function</span><span class="o">*</span> <span class="n">value</span><span class="p">,</span> <span class="k">const</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">resource</span><span class="p">)</span>
         <span class="p">{</span>
@@ -174,30 +199,60 @@
 
         <span class="c1">//transformation from in / out / inout to pair(buffer,&quot;in&quot;) / pair(buffer,&quot;out&quot;) / pair(buffer,&quot;inout&quot;)</span>
         <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
-        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">buffer_base</span><span class="o">*</span><span class="p">,</span><span class="n">buffer_type</span><span class="o">&gt;</span>  <span class="n">transform_to_pairs</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">buffer_container</span><span class="p">)</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">detail</span><span class="o">::</span><span class="n">buffer_base</span><span class="o">*</span><span class="p">,</span> <span class="n">buffer_type</span><span class="o">&gt;</span>  <span class="n">transform_to_pairs</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">buffer_container</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="k">if</span> <span class="k">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">in_ident</span><span class="p">,</span><span class="n">T</span><span class="o">&gt;</span><span class="p">)</span>
+            <span class="k">using</span> <span class="n">detail</span><span class="o">::</span><span class="n">buffer_base</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">in_ident</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span><span class="p">)</span>
             <span class="p">{</span>
-                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">buffer_base</span><span class="o">*</span><span class="p">,</span><span class="n">buffer_type</span><span class="o">&gt;</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">buffer_base</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer_container</span><span class="p">),</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">buffer_base</span><span class="o">*</span><span class="p">,</span> <span class="n">buffer_type</span><span class="o">&gt;</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">buffer_base</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer_container</span><span class="p">),</span> <span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">);</span>
             <span class="p">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="k">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">out_ident</span><span class="p">,</span><span class="n">T</span><span class="o">&gt;</span><span class="p">)</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">out_ident</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span><span class="p">)</span>
             <span class="p">{</span>
-                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">buffer_base</span><span class="o">*</span><span class="p">,</span><span class="n">buffer_type</span><span class="o">&gt;</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">buffer_base</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer_container</span><span class="p">),</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">WRITE_BUFFER</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">buffer_base</span><span class="o">*</span><span class="p">,</span> <span class="n">buffer_type</span><span class="o">&gt;</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">buffer_base</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer_container</span><span class="p">),</span> <span class="n">buffer_type</span><span class="o">::</span><span class="n">WRITE_BUFFER</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">else</span>
             <span class="p">{</span>
-                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">buffer_base</span><span class="o">*</span><span class="p">,</span><span class="n">buffer_type</span><span class="o">&gt;</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">buffer_base</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer_container</span><span class="p">),</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span> <span class="o">|</span> <span class="n">buffer_type</span><span class="o">::</span><span class="n">WRITE_BUFFER</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">buffer_base</span><span class="o">*</span><span class="p">,</span> <span class="n">buffer_type</span><span class="o">&gt;</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">buffer_base</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer_container</span><span class="p">),</span> <span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span> <span class="o">|</span> <span class="n">buffer_type</span><span class="o">::</span><span class="n">WRITE_BUFFER</span><span class="p">);</span>
             <span class="p">}</span>
+        <span class="p">}</span>
+
+           <span class="k">private</span><span class="o">:</span>
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+        <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span> <span class="kt">void</span><span class="o">&gt;</span> <span class="n">invoke_helper_raw</span><span class="p">(</span><span class="n">size_type</span> <span class="n">dispatch_size</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span> <span class="p">...</span> <span class="n">args</span><span class="p">)</span>
+        <span class="p">{</span>
+
+            <span class="c1">//do some sanity checking args either need to be in(vector) out(vector) inout(vector) or vector</span>
+            <span class="k">static_assert</span><span class="p">(((</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">detail</span><span class="o">::</span><span class="n">buffer_base</span><span class="p">,</span> <span class="n">Args</span><span class="o">&gt;</span> <span class="o">||</span>
+                <span class="n">is_vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">...),</span> <span class="s">&quot;Types passed to operator() must be vector or in,out,inout&quot;</span><span class="p">);</span>
+
+
+            <span class="c1">//promote vector to in(vector) leave the rest alone</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">tuple</span> <span class="n">container</span> <span class="o">=</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">conditional_t</span><span class="o">&lt;</span><span class="n">is_vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span><span class="n">in</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">,</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...</span> <span class="p">};</span>
+
+            <span class="c1">//transform from tuple(in,out,inout,...) to vector(pair(buffer,&quot;in&quot;),pair(buffer,&quot;out&quot;), ...)</span>
+            <span class="k">auto</span> <span class="n">vector</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">apply</span><span class="p">(</span>
+                <span class="p">[](</span><span class="k">auto</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="n">x</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">return</span> <span class="n">invoke_buffer_container</span> <span class="p">{</span> <span class="n">function</span><span class="o">::</span><span class="n">transform_to_pairs</span><span class="p">(</span><span class="n">x</span><span class="p">)...</span> <span class="p">};</span>
+                <span class="p">},</span> <span class="n">container</span><span class="p">);</span>
+
+
+            <span class="c1">//we finally transformed it into a way that the non-templated function can use</span>
+            <span class="k">return</span> <span class="nf">invoke</span><span class="p">(</span><span class="n">dispatch_size</span><span class="p">,</span> <span class="n">vector</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+        <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">invoke_helper_buffers</span><span class="p">(</span><span class="n">size_type</span> <span class="n">dispatch_size</span><span class="p">,</span><span class="n">Args</span> <span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">static_assert</span><span class="p">((</span><span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">compute</span><span class="o">::</span><span class="n">Buffer</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;&gt;</span> <span class="o">&amp;&amp;</span> <span class="p">...),</span>
+                <span class="s">&quot;Types passed to operator must be Buffer&quot;</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="nf">invoke2</span><span class="p">(</span><span class="n">dispatch_size</span><span class="p">,{</span><span class="n">args</span><span class="p">...});</span>
         <span class="p">}</span>
     <span class="p">};</span>
 <span class="p">}</span>
-
-<span class="c1">//</span>
-<span class="c1">// function vector_add = fs::view(&quot;path_to_kernel.cl&quot;).load_as&lt;function&gt;(&quot;vector_add&quot;);</span>
-<span class="c1">// result = vector_add(a,b,out(ret));</span>
-<span class="c1">// 0~~~~~~~~~~~~~~~~~~~^ ^ ^</span>
-<span class="c1">//</span>
-<span class="c1">//</span>
 </pre></div>
 </div>
 </div>

@@ -16,5 +16,6 @@ Files
 -----
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_shellinvoke.hpp`
 
 

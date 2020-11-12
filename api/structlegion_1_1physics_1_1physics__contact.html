@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Struct physics_manifold" href="structlegion_1_1physics_1_1physics__manifold.html" />
-    <link rel="prev" title="Struct HalfEdgeFace" href="structlegion_1_1physics_1_1_half_edge_face.html" />
+    <link rel="prev" title="Struct identifier" href="structlegion_1_1physics_1_1identifier.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -39,7 +39,7 @@
           <a href="structlegion_1_1physics_1_1physics__manifold.html" title="Struct physics_manifold"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="structlegion_1_1physics_1_1_half_edge_face.html" title="Struct HalfEdgeFace"
+          <a href="structlegion_1_1physics_1_1identifier.html" title="Struct identifier"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
@@ -55,7 +55,7 @@
   <div class="section" id="struct-physics-contact">
 <span id="exhale-struct-structlegion-1-1physics-1-1physics-contact"></span><h1>Struct physics_contact<a class="headerlink" href="#struct-physics-contact" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_contact.h.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-physics-contact-h"><span class="std std-ref">File physics_contact.h</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_contact.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-physics-contact-hpp"><span class="std std-ref">File physics_contact.hpp</span></a></p></li>
 </ul>
 <div class="section" id="struct-documentation">
 <h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Permalink to this headline">¶</a></h2>
@@ -65,13 +65,13 @@
 <dd><div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
-<dt id="_CPPv4N6legion7physics15physics_contact25preCalculateEffectiveMassEv">
-<span id="_CPPv3N6legion7physics15physics_contact25preCalculateEffectiveMassEv"></span><span id="_CPPv2N6legion7physics15physics_contact25preCalculateEffectiveMassEv"></span><span id="legion::physics::physics_contact::preCalculateEffectiveMass"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1ad3ee313c672d33c6de9a528900c9c3ad"></span>void <code class="sig-name descname">preCalculateEffectiveMass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact25preCalculateEffectiveMassEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N6legion7physics15physics_contact17ApplyWarmStartingEf">
+<span id="_CPPv3N6legion7physics15physics_contact17ApplyWarmStartingEf"></span><span id="_CPPv2N6legion7physics15physics_contact17ApplyWarmStartingEf"></span><span id="legion::physics::physics_contact::ApplyWarmStarting__float"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a95dd50aa19e8fef2742539ddc8f1e902"></span>void <code class="sig-name descname">ApplyWarmStarting</code><span class="sig-paren">(</span>float <em>lambda</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact17ApplyWarmStartingEf" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N6legion7physics15physics_contact24resolveContactConstraintEv">
-<span id="_CPPv3N6legion7physics15physics_contact24resolveContactConstraintEv"></span><span id="_CPPv2N6legion7physics15physics_contact24resolveContactConstraintEv"></span><span id="legion::physics::physics_contact::resolveContactConstraint"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a1e963b874cedb90bfbc37c93f834e1d5"></span>void <code class="sig-name descname">resolveContactConstraint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact24resolveContactConstraintEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N6legion7physics15physics_contact24resolveContactConstraintEfi">
+<span id="_CPPv3N6legion7physics15physics_contact24resolveContactConstraintEfi"></span><span id="_CPPv2N6legion7physics15physics_contact24resolveContactConstraintEfi"></span><span id="legion::physics::physics_contact::resolveContactConstraint__float.i"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a24e5604a93051be975aba9488a07f224"></span>void <code class="sig-name descname">resolveContactConstraint</code><span class="sig-paren">(</span>float <em>dt</em>, int <em>i</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact24resolveContactConstraintEfi" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -79,27 +79,67 @@
 <span id="_CPPv3N6legion7physics15physics_contact25resolveFrictionConstraintEv"></span><span id="_CPPv2N6legion7physics15physics_contact25resolveFrictionConstraintEv"></span><span id="legion::physics::physics_contact::resolveFrictionConstraint"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a429bf10795d4766485526915f47baef4"></span>void <code class="sig-name descname">resolveFrictionConstraint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact25resolveFrictionConstraintEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics15physics_contact25preCalculateEffectiveMassEv">
+<span id="_CPPv3N6legion7physics15physics_contact25preCalculateEffectiveMassEv"></span><span id="_CPPv2N6legion7physics15physics_contact25preCalculateEffectiveMassEv"></span><span id="legion::physics::physics_contact::preCalculateEffectiveMass"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1ad3ee313c672d33c6de9a528900c9c3ad"></span>void <code class="sig-name descname">preCalculateEffectiveMass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact25preCalculateEffectiveMassEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics15physics_contact21calculateJVConstraintERKN4math4vec3E">
+<span id="_CPPv3N6legion7physics15physics_contact21calculateJVConstraintERKN4math4vec3E"></span><span id="_CPPv2N6legion7physics15physics_contact21calculateJVConstraintERKN4math4vec3E"></span><span id="legion::physics::physics_contact::calculateJVConstraint__math::vec3CR"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1aa9f0d31b74b04bd704f54506d549cbd4"></span>float <code class="sig-name descname">calculateJVConstraint</code><span class="sig-paren">(</span><em class="property">const</em> math::vec3 &amp;<em>normal</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact21calculateJVConstraintERKN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics15physics_contact30calculateEffectiveMassOnNormalERN4math4vec3E">
+<span id="_CPPv3N6legion7physics15physics_contact30calculateEffectiveMassOnNormalERN4math4vec3E"></span><span id="_CPPv2N6legion7physics15physics_contact30calculateEffectiveMassOnNormalERN4math4vec3E"></span><span id="legion::physics::physics_contact::calculateEffectiveMassOnNormal__math::vec3R"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a2edd31c8df27fc1454acfae74d5ec4b0"></span>float <code class="sig-name descname">calculateEffectiveMassOnNormal</code><span class="sig-paren">(</span>math::vec3 &amp;<em>normal</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact30calculateEffectiveMassOnNormalERN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics15physics_contact12ApplyImpulseERKN4math4vec3EKfRKN4math4vec3ERKN4math4vec3E">
+<span id="_CPPv3N6legion7physics15physics_contact12ApplyImpulseERKN4math4vec3EKfRKN4math4vec3ERKN4math4vec3E"></span><span id="_CPPv2N6legion7physics15physics_contact12ApplyImpulseERKN4math4vec3EKfRKN4math4vec3ERKN4math4vec3E"></span><span id="legion::physics::physics_contact::ApplyImpulse__math::vec3CR.floatC.math::vec3CR.math::vec3CR"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a39bfc2e959e9154cd7eade6c46627a88"></span>void <code class="sig-name descname">ApplyImpulse</code><span class="sig-paren">(</span><em class="property">const</em> math::vec3 &amp;<em>normal</em>, <em class="property">const</em> float <em>lambda</em>, <em class="property">const</em> math::vec3 &amp;<em>ra</em>, <em class="property">const</em> math::vec3 &amp;<em>rb</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact12ApplyImpulseERKN4math4vec3EKfRKN4math4vec3ERKN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics15physics_contact27calculateJacobianComponentsEKN4math4vec3ERN4math4vec3ERN4math4vec3ERN4math4vec3ERN4math4vec3E">
+<span id="_CPPv3N6legion7physics15physics_contact27calculateJacobianComponentsEKN4math4vec3ERN4math4vec3ERN4math4vec3ERN4math4vec3ERN4math4vec3E"></span><span id="_CPPv2N6legion7physics15physics_contact27calculateJacobianComponentsEKN4math4vec3ERN4math4vec3ERN4math4vec3ERN4math4vec3ERN4math4vec3E"></span><span id="legion::physics::physics_contact::calculateJacobianComponents__math::vec3C.math::vec3R.math::vec3R.math::vec3R.math::vec3R"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a09cd058c578d14a0e67828c2b0ce3682"></span>void <code class="sig-name descname">calculateJacobianComponents</code><span class="sig-paren">(</span><em class="property">const</em> math::vec3 <em>normal</em>, math::vec3 &amp;<em>Ra</em>, math::vec3 &amp;<em>minRaCrossN</em>, math::vec3 &amp;<em>Rb</em>, math::vec3 &amp;<em>RbCrossN</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact27calculateJacobianComponentsEKN4math4vec3ERN4math4vec3ERN4math4vec3ERN4math4vec3ERN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics15physics_contact17logRigidbodyStateEv">
+<span id="_CPPv3N6legion7physics15physics_contact17logRigidbodyStateEv"></span><span id="_CPPv2N6legion7physics15physics_contact17logRigidbodyStateEv"></span><span id="legion::physics::physics_contact::logRigidbodyState"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1aa3c89d9e010993a3b73bdb742a7d271d"></span>void <code class="sig-name descname">logRigidbodyState</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact17logRigidbodyStateEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Members</p>
 <dl class="cpp var">
-<dt id="_CPPv4N6legion7physics15physics_contact5rbRefE">
-<span id="_CPPv3N6legion7physics15physics_contact5rbRefE"></span><span id="_CPPv2N6legion7physics15physics_contact5rbRefE"></span><span id="legion::physics::physics_contact::rbRef__ecs::component_handle:rigidbody:"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a5100d5fc676b807aff0d3fef662d39a4"></span>ecs::component_handle&lt;<a class="reference internal" href="structlegion_1_1physics_1_1rigidbody.html#_CPPv4N6legion7physics9rigidbodyE" title="legion::physics::rigidbody">rigidbody</a>&gt; <code class="sig-name descname">rbRef</code><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact5rbRefE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N6legion7physics15physics_contact11rbRefHandleE">
+<span id="_CPPv3N6legion7physics15physics_contact11rbRefHandleE"></span><span id="_CPPv2N6legion7physics15physics_contact11rbRefHandleE"></span><span id="legion::physics::physics_contact::rbRefHandle__ecs::component_handle:rigidbody:"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a7896a14f66fd0f4749e52fda6747d286"></span>ecs::component_handle&lt;<a class="reference internal" href="structlegion_1_1physics_1_1rigidbody.html#_CPPv4N6legion7physics9rigidbodyE" title="legion::physics::rigidbody">rigidbody</a>&gt; <code class="sig-name descname">rbRefHandle</code><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact11rbRefHandleE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp var">
-<dt id="_CPPv4N6legion7physics15physics_contact5rbIncE">
-<span id="_CPPv3N6legion7physics15physics_contact5rbIncE"></span><span id="_CPPv2N6legion7physics15physics_contact5rbIncE"></span><span id="legion::physics::physics_contact::rbInc__ecs::component_handle:rigidbody:"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a79d05dab6a15bf1fc06b7d279666de71"></span>ecs::component_handle&lt;<a class="reference internal" href="structlegion_1_1physics_1_1rigidbody.html#_CPPv4N6legion7physics9rigidbodyE" title="legion::physics::rigidbody">rigidbody</a>&gt; <code class="sig-name descname">rbInc</code><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact5rbIncE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N6legion7physics15physics_contact11rbIncHandleE">
+<span id="_CPPv3N6legion7physics15physics_contact11rbIncHandleE"></span><span id="_CPPv2N6legion7physics15physics_contact11rbIncHandleE"></span><span id="legion::physics::physics_contact::rbIncHandle__ecs::component_handle:rigidbody:"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a27a3558060c37fa27569e91560cc8546"></span>ecs::component_handle&lt;<a class="reference internal" href="structlegion_1_1physics_1_1rigidbody.html#_CPPv4N6legion7physics9rigidbodyE" title="legion::physics::rigidbody">rigidbody</a>&gt; <code class="sig-name descname">rbIncHandle</code><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact11rbIncHandleE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp var">
-<dt id="_CPPv4N6legion7physics15physics_contact15worldContactRefE">
-<span id="_CPPv3N6legion7physics15physics_contact15worldContactRefE"></span><span id="_CPPv2N6legion7physics15physics_contact15worldContactRefE"></span><span id="legion::physics::physics_contact::worldContactRef__math::vec3"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1acd43d3f7981dd74141be77eaa31bddc1"></span>math::vec3 <code class="sig-name descname">worldContactRef</code><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact15worldContactRefE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N6legion7physics15physics_contact15RefWorldContactE">
+<span id="_CPPv3N6legion7physics15physics_contact15RefWorldContactE"></span><span id="_CPPv2N6legion7physics15physics_contact15RefWorldContactE"></span><span id="legion::physics::physics_contact::RefWorldContact__math::vec3"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a30363c243e5876b3c4ac97a33547b84b"></span>math::vec3 <code class="sig-name descname">RefWorldContact</code><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact15RefWorldContactE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp var">
-<dt id="_CPPv4N6legion7physics15physics_contact15worldContactIncE">
-<span id="_CPPv3N6legion7physics15physics_contact15worldContactIncE"></span><span id="_CPPv2N6legion7physics15physics_contact15worldContactIncE"></span><span id="legion::physics::physics_contact::worldContactInc__math::vec3"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a658986bd92e1108ec141b6b9ffee346b"></span>math::vec3 <code class="sig-name descname">worldContactInc</code><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact15worldContactIncE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N6legion7physics15physics_contact15IncWorldContactE">
+<span id="_CPPv3N6legion7physics15physics_contact15IncWorldContactE"></span><span id="_CPPv2N6legion7physics15physics_contact15IncWorldContactE"></span><span id="legion::physics::physics_contact::IncWorldContact__math::vec3"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a0dc573fe354d21967b8a2d051c1eaf85"></span>math::vec3 <code class="sig-name descname">IncWorldContact</code><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact15IncWorldContactE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics15physics_contact13refRBCentroidE">
+<span id="_CPPv3N6legion7physics15physics_contact13refRBCentroidE"></span><span id="_CPPv2N6legion7physics15physics_contact13refRBCentroidE"></span><span id="legion::physics::physics_contact::refRBCentroid__math::vec3"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1ac5c379e3f04e3eee01d45fca1a005b76"></span>math::vec3 <code class="sig-name descname">refRBCentroid</code><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact13refRBCentroidE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics15physics_contact13incRBCentroidE">
+<span id="_CPPv3N6legion7physics15physics_contact13incRBCentroidE"></span><span id="_CPPv2N6legion7physics15physics_contact13incRBCentroidE"></span><span id="legion::physics::physics_contact::incRBCentroid__math::vec3"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a87c2a8377c0990f71ff01b8a5352a335"></span>math::vec3 <code class="sig-name descname">incRBCentroid</code><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact13incRBCentroidE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp var">
@@ -110,6 +150,56 @@
 <dl class="cpp var">
 <dt id="_CPPv4N6legion7physics15physics_contact12incTransformE">
 <span id="_CPPv3N6legion7physics15physics_contact12incTransformE"></span><span id="_CPPv2N6legion7physics15physics_contact12incTransformE"></span><span id="legion::physics::physics_contact::incTransform__math::mat4"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a70b088890263e4168301c25187cae64b"></span>math::mat4 <code class="sig-name descname">incTransform</code><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact12incTransformE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics15physics_contact15collisionNormalE">
+<span id="_CPPv3N6legion7physics15physics_contact15collisionNormalE"></span><span id="_CPPv2N6legion7physics15physics_contact15collisionNormalE"></span><span id="legion::physics::physics_contact::collisionNormal__math::vec3"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1af93857f55c4f3f4d1206422839a5f477"></span>math::vec3 <code class="sig-name descname">collisionNormal</code><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact15collisionNormalE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics15physics_contact14tangentNormal1E">
+<span id="_CPPv3N6legion7physics15physics_contact14tangentNormal1E"></span><span id="_CPPv2N6legion7physics15physics_contact14tangentNormal1E"></span><span id="legion::physics::physics_contact::tangentNormal1__math::vec3"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a675f21f7830f0d809f1335cc04309e8a"></span>math::vec3 <code class="sig-name descname">tangentNormal1</code><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact14tangentNormal1E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics15physics_contact14tangentNormal2E">
+<span id="_CPPv3N6legion7physics15physics_contact14tangentNormal2E"></span><span id="_CPPv2N6legion7physics15physics_contact14tangentNormal2E"></span><span id="legion::physics::physics_contact::tangentNormal2__math::vec3"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a25a160e2b070c859a9c0fc5cdc1badaf"></span>math::vec3 <code class="sig-name descname">tangentNormal2</code><a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact14tangentNormal2E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics15physics_contact11totalLambdaE">
+<span id="_CPPv3N6legion7physics15physics_contact11totalLambdaE"></span><span id="_CPPv2N6legion7physics15physics_contact11totalLambdaE"></span><span id="legion::physics::physics_contact::totalLambda__float"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a09ff291a73010658b7adf02a89bc21cf"></span>float <code class="sig-name descname">totalLambda</code> = 0.0f<a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact11totalLambdaE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics15physics_contact14tangent1LambdaE">
+<span id="_CPPv3N6legion7physics15physics_contact14tangent1LambdaE"></span><span id="_CPPv2N6legion7physics15physics_contact14tangent1LambdaE"></span><span id="legion::physics::physics_contact::tangent1Lambda__float"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1aee9af9c23509f0acf3599fc5d92f4620"></span>float <code class="sig-name descname">tangent1Lambda</code> = 0.0f<a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact14tangent1LambdaE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics15physics_contact14tangent2LambdaE">
+<span id="_CPPv3N6legion7physics15physics_contact14tangent2LambdaE"></span><span id="_CPPv2N6legion7physics15physics_contact14tangent2LambdaE"></span><span id="legion::physics::physics_contact::tangent2Lambda__float"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a5c168279e0d4841331fd58681177fb4a"></span>float <code class="sig-name descname">tangent2Lambda</code> = 0.0f<a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact14tangent2LambdaE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics15physics_contact13effectiveMassE">
+<span id="_CPPv3N6legion7physics15physics_contact13effectiveMassE"></span><span id="_CPPv2N6legion7physics15physics_contact13effectiveMassE"></span><span id="legion::physics::physics_contact::effectiveMass__float"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a8a9d3f5c822cc802892d72baafc0f468"></span>float <code class="sig-name descname">effectiveMass</code> = 0.0f<a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact13effectiveMassE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics15physics_contact21tangent1EffectiveMassE">
+<span id="_CPPv3N6legion7physics15physics_contact21tangent1EffectiveMassE"></span><span id="_CPPv2N6legion7physics15physics_contact21tangent1EffectiveMassE"></span><span id="legion::physics::physics_contact::tangent1EffectiveMass__float"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a612f31aed87fc6b32eaa97bb813c3485"></span>float <code class="sig-name descname">tangent1EffectiveMass</code> = 0.0f<a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact21tangent1EffectiveMassE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics15physics_contact21tangent2EffectiveMassE">
+<span id="_CPPv3N6legion7physics15physics_contact21tangent2EffectiveMassE"></span><span id="_CPPv2N6legion7physics15physics_contact21tangent2EffectiveMassE"></span><span id="legion::physics::physics_contact::tangent2EffectiveMass__float"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1ac4f0cc14220c12ea9bd555d715dba55c"></span>float <code class="sig-name descname">tangent2EffectiveMass</code> = 0.0f<a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact21tangent2EffectiveMassE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics15physics_contact12contactCountE">
+<span id="_CPPv3N6legion7physics15physics_contact12contactCountE"></span><span id="_CPPv2N6legion7physics15physics_contact12contactCountE"></span><span id="legion::physics::physics_contact::contactCount__i"></span><span class="target" id="structlegion_1_1physics_1_1physics__contact_1a89504f1139e089fe8f0c3f8a1d2b17c2"></span>int <code class="sig-name descname">contactCount</code> = 0<a class="headerlink" href="#_CPPv4N6legion7physics15physics_contact12contactCountE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>
@@ -136,7 +226,7 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
-      <li>Previous: <a href="structlegion_1_1physics_1_1_half_edge_face.html" title="previous chapter">Struct HalfEdgeFace</a></li>
+      <li>Previous: <a href="structlegion_1_1physics_1_1identifier.html" title="previous chapter">Struct identifier</a></li>
       <li>Next: <a href="structlegion_1_1physics_1_1physics__manifold.html" title="next chapter">Struct physics_manifold</a></li>
   </ul></li>
   </ul></li>

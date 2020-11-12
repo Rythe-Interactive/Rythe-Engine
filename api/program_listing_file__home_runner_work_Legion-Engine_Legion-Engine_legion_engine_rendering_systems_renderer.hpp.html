@@ -162,7 +162,7 @@
                 <span class="p">}</span>
             <span class="p">}</span>
 
-            <span class="k">static</span> <span class="n">material_handle</span> <span class="n">debugMaterial</span> <span class="o">=</span> <span class="n">MaterialCache</span><span class="o">::</span><span class="n">create_material</span><span class="p">(</span><span class="s">&quot;debug&quot;</span><span class="p">,</span> <span class="s">&quot;assets://shaders/debug.glsl&quot;</span><span class="n">_view</span><span class="p">);</span>
+            <span class="k">static</span> <span class="n">material_handle</span> <span class="n">debugMaterial</span> <span class="o">=</span> <span class="n">MaterialCache</span><span class="o">::</span><span class="n">create_material</span><span class="p">(</span><span class="s">&quot;debug&quot;</span><span class="p">,</span> <span class="s">&quot;assets://shaders/debug.shs&quot;</span><span class="n">_view</span><span class="p">);</span>
             <span class="k">static</span> <span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">vertexBuffer</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
             <span class="k">static</span> <span class="n">size_type</span> <span class="n">vertexBufferSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
             <span class="k">static</span> <span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">colorBuffer</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
@@ -194,7 +194,6 @@
             <span class="p">}</span>
 
             <span class="n">debugMaterial</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
-            <span class="n">debugMaterial</span><span class="p">.</span><span class="n">prepare</span><span class="p">();</span>
 
             <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_LINE_SMOOTH</span><span class="p">);</span>
             <span class="n">glBindVertexArray</span><span class="p">(</span><span class="n">vao</span><span class="p">);</span>
@@ -463,11 +462,16 @@
 
                 <span class="k">auto</span> <span class="n">camEnt</span> <span class="o">=</span> <span class="n">cameraQuery</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
 
+                <span class="n">position</span> <span class="n">camPos</span> <span class="o">=</span> <span class="n">camEnt</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">position</span><span class="o">&gt;</span><span class="p">().</span><span class="n">read</span><span class="p">();</span>
+                <span class="n">rotation</span> <span class="n">camRot</span> <span class="o">=</span> <span class="n">camEnt</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">rotation</span><span class="o">&gt;</span><span class="p">().</span><span class="n">read</span><span class="p">();</span>
+
                 <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">view</span><span class="p">(</span><span class="mf">1.f</span><span class="p">);</span>
-                <span class="n">math</span><span class="o">::</span><span class="n">compose</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">camEnt</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">scale</span><span class="o">&gt;</span><span class="p">().</span><span class="n">read</span><span class="p">(),</span> <span class="n">camEnt</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">rotation</span><span class="o">&gt;</span><span class="p">().</span><span class="n">read</span><span class="p">(),</span> <span class="n">camEnt</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">position</span><span class="o">&gt;</span><span class="p">().</span><span class="n">read</span><span class="p">());</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">compose</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">camEnt</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">scale</span><span class="o">&gt;</span><span class="p">().</span><span class="n">read</span><span class="p">(),</span> <span class="n">camRot</span><span class="p">,</span> <span class="n">camPos</span><span class="p">);</span>
                 <span class="n">view</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">inverse</span><span class="p">(</span><span class="n">view</span><span class="p">);</span>
 
                 <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">projection</span> <span class="o">=</span> <span class="n">camEnt</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">camera</span><span class="o">&gt;</span><span class="p">().</span><span class="n">read</span><span class="p">().</span><span class="n">get_projection</span><span class="p">(((</span><span class="kt">float</span><span class="p">)</span><span class="n">viewportSize</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="n">viewportSize</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+
+                <span class="n">camera</span><span class="o">::</span><span class="n">camera_input</span> <span class="n">cam_input_data</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">projection</span><span class="p">,</span> <span class="n">camPos</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">camRot</span><span class="p">.</span><span class="n">forward</span><span class="p">());</span>
 
                 <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">ent</span> <span class="p">:</span> <span class="n">renderablesQuery</span><span class="p">)</span>
                 <span class="p">{</span>
@@ -476,6 +480,11 @@
                     <span class="k">if</span> <span class="p">(</span><span class="n">rend</span><span class="p">.</span><span class="n">material</span> <span class="o">==</span> <span class="n">invalid_material_handle</span><span class="p">)</span>
                     <span class="p">{</span>
                         <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Entity {} has an invalid material.&quot;</span><span class="p">,</span> <span class="n">ent</span><span class="p">.</span><span class="n">get_id</span><span class="p">());</span>
+                        <span class="k">continue</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">rend</span><span class="p">.</span><span class="n">model</span> <span class="o">==</span> <span class="n">invalid_model_handle</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Entity {} has an invalid model.&quot;</span><span class="p">,</span> <span class="n">ent</span><span class="p">.</span><span class="n">get_id</span><span class="p">());</span>
                         <span class="k">continue</span><span class="p">;</span>
                     <span class="p">}</span>
 
@@ -490,7 +499,10 @@
 
                     <span class="n">model</span> <span class="n">mesh</span> <span class="o">=</span> <span class="n">modelHandle</span><span class="p">.</span><span class="n">get_model</span><span class="p">();</span>
                     <span class="k">if</span> <span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">submeshes</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+                    <span class="p">{</span>
+                        <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Empty mesh found.&quot;</span><span class="p">);</span>
                         <span class="k">continue</span><span class="p">;</span>
+                    <span class="p">}</span>
 
                     <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">material</span><span class="p">,</span> <span class="n">instances</span><span class="p">]</span> <span class="o">:</span> <span class="n">instancesPerMaterial</span><span class="p">)</span>
                     <span class="p">{</span>
@@ -498,11 +510,8 @@
                         <span class="n">glBufferSubData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="p">)</span> <span class="o">*</span> <span class="n">instances</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">instances</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
                         <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 
+                        <span class="n">cam_input_data</span><span class="p">.</span><span class="n">bind</span><span class="p">(</span><span class="n">material</span><span class="p">);</span>
                         <span class="n">material</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
-                        <span class="n">material</span><span class="p">.</span><span class="n">prepare</span><span class="p">();</span>
-
-                        <span class="n">glUniformMatrix4fv</span><span class="p">(</span><span class="n">SV_VIEW</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">view</span><span class="p">));</span>
-                        <span class="n">glUniformMatrix4fv</span><span class="p">(</span><span class="n">SV_PROJECT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">projection</span><span class="p">));</span>
 
                         <span class="n">glBindVertexArray</span><span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertexArrayId</span><span class="p">);</span>
                         <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ELEMENT_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">indexBufferId</span><span class="p">);</span>

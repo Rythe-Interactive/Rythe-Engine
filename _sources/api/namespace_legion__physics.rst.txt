@@ -30,6 +30,8 @@ Classes
 
 - :ref:`exhale_struct_structlegion_1_1physics_1_1_half_edge_face`
 
+- :ref:`exhale_struct_structlegion_1_1physics_1_1identifier`
+
 - :ref:`exhale_struct_structlegion_1_1physics_1_1physics__contact`
 
 - :ref:`exhale_struct_structlegion_1_1physics_1_1physics__manifold`
@@ -59,6 +61,8 @@ Classes
 - :ref:`exhale_class_classlegion_1_1physics_1_1_physics_system`
 
 - :ref:`exhale_class_classlegion_1_1physics_1_1_pointer_encapsulator`
+
+- :ref:`exhale_class_classlegion_1_1physics_1_1_trigger_event`
 
 
 Typedefs

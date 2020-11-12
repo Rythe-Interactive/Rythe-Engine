@@ -52,7 +52,7 @@
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">compute</span>
 <span class="p">{</span>
-    <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span> <span class="kt">void</span><span class="o">&gt;</span> <span class="n">function_base</span><span class="o">::</span><span class="n">invoke</span><span class="p">(</span><span class="n">size_type</span> <span class="n">global</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">buffer_base</span><span class="o">*</span><span class="p">,</span> <span class="n">buffer_type</span><span class="o">&gt;&gt;&amp;</span> <span class="n">parameters</span><span class="p">)</span> <span class="k">const</span>
+    <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span> <span class="kt">void</span><span class="o">&gt;</span> <span class="n">function_base</span><span class="o">::</span><span class="n">invoke</span><span class="p">(</span><span class="n">size_type</span> <span class="n">global</span><span class="p">,</span> <span class="n">invoke_buffer_container</span><span class="o">&amp;</span> <span class="n">parameters</span><span class="p">)</span> <span class="k">const</span>
     <span class="p">{</span>
         <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span> <span class="n">buffers</span><span class="p">;</span>
         <span class="n">buffers</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">parameters</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
@@ -61,38 +61,43 @@
         <span class="p">{</span>
             <span class="n">buffers</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">Context</span><span class="o">::</span><span class="n">createBuffer</span><span class="p">(</span><span class="n">base</span><span class="o">-&gt;</span><span class="n">container</span><span class="p">.</span><span class="n">first</span><span class="p">,</span> <span class="n">base</span><span class="o">-&gt;</span><span class="n">container</span><span class="p">.</span><span class="n">second</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">base</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">));</span>
         <span class="p">}</span>
-        <span class="n">m_kernel</span><span class="o">-&gt;</span><span class="n">local</span><span class="p">(</span><span class="mi">512</span><span class="p">).</span><span class="n">global</span><span class="p">(</span><span class="n">global</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">invoke2</span><span class="p">(</span><span class="n">global</span><span class="p">,</span><span class="n">buffers</span><span class="p">);</span>
+    <span class="p">}</span>
 
-        <span class="n">m_kernel</span><span class="o">-&gt;</span><span class="n">read_write_mode</span><span class="p">(</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">);</span>
+    <span class="n">common</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span> <span class="kt">void</span><span class="o">&gt;</span> <span class="n">function_base</span><span class="o">::</span><span class="n">invoke2</span><span class="p">(</span><span class="n">size_type</span> <span class="n">global</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span> <span class="n">buffers</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">m_kernel</span><span class="o">-&gt;</span><span class="n">local</span><span class="p">(</span><span class="n">m_locals</span><span class="p">).</span><span class="n">global</span><span class="p">(</span><span class="n">global</span><span class="p">);</span>
+
+        <span class="n">m_kernel</span><span class="o">-&gt;</span><span class="n">readWriteMode</span><span class="p">(</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">);</span>
 
         <span class="n">cl_uint</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
         <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">buffer</span> <span class="p">:</span> <span class="n">buffers</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">has_name</span><span class="p">())</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">hasName</span><span class="p">())</span>
             <span class="p">{</span>
-                <span class="n">m_kernel</span><span class="o">-&gt;</span><span class="n">set_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
+                <span class="n">m_kernel</span><span class="o">-&gt;</span><span class="n">setBuffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">else</span> <span class="p">{</span>
-                <span class="n">m_kernel</span><span class="o">-&gt;</span><span class="n">set_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+                <span class="n">m_kernel</span><span class="o">-&gt;</span><span class="n">setBuffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
                 <span class="n">i</span><span class="o">++</span><span class="p">;</span>
             <span class="p">}</span>
 
-            <span class="k">if</span> <span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">is_readbuffer</span><span class="p">())</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">isReadBuffer</span><span class="p">())</span>
             <span class="p">{</span>
-                <span class="n">m_kernel</span><span class="o">-&gt;</span><span class="n">enqueue_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
+                <span class="n">m_kernel</span><span class="o">-&gt;</span><span class="n">enqueueBuffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
             <span class="p">}</span>
 
         <span class="p">}</span>
 
         <span class="n">m_kernel</span><span class="o">-&gt;</span><span class="n">dispatch</span><span class="p">();</span>
 
-        <span class="n">m_kernel</span><span class="o">-&gt;</span><span class="n">read_write_mode</span><span class="p">(</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">WRITE_BUFFER</span><span class="p">);</span>
+        <span class="n">m_kernel</span><span class="o">-&gt;</span><span class="n">readWriteMode</span><span class="p">(</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">WRITE_BUFFER</span><span class="p">);</span>
 
-        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">buffer</span> <span class="p">:</span> <span class="n">buffers</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="nl">buffer</span> <span class="p">:</span> <span class="n">buffers</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">is_writebuffer</span><span class="p">())</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">isWriteBuffer</span><span class="p">())</span>
             <span class="p">{</span>
-                <span class="n">m_kernel</span><span class="o">-&gt;</span><span class="n">enqueue_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
+                <span class="n">m_kernel</span><span class="o">-&gt;</span><span class="n">enqueueBuffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
             <span class="p">}</span>
 
         <span class="p">}</span>

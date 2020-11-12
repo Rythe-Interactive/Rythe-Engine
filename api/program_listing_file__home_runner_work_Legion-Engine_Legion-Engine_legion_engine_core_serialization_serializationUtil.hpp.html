@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File serializationUtil.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File serializationUtil.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-serializationutil-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-serialization-serializationutil-hpp"></span><h1>Program Listing for File serializationUtil.hpp<a class="headerlink" href="#program-listing-for-file-serializationutil-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_serialization_serializationUtil.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-serialization-serializationutil-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/serialization/serializationUtil.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/platform/platform.hpp&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;cereal/types/unordered_map.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cereal/types/memory.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cereal/archives/json.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cereal/archives/portable_binary.hpp&gt;</span><span class="cp"></span>
+
+
+<span class="cp">#include</span> <span class="cpf">&lt;sstream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fstream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+
+
+<span class="c1">//Some testing objects for serialization</span>
+<span class="cp">#pragma region TestObjects</span>
+<span class="k">struct</span> <span class="n">MyRecord</span>
+<span class="p">{</span>
+
+    <span class="kt">uint8_t</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">z</span><span class="p">;</span>
+    <span class="n">MyRecord</span><span class="p">()</span>
+    <span class="p">{</span>
+
+    <span class="p">}</span>
+
+    <span class="n">MyRecord</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">_x</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">_y</span><span class="p">,</span> <span class="kt">float</span> <span class="n">_z</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">_x</span><span class="p">;</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">_y</span><span class="p">;</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">_z</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Archive</span><span class="o">&gt;</span>
+    <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">ar</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ar</span><span class="p">(</span><span class="n">CEREAL_NVP</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">CEREAL_NVP</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">CEREAL_NVP</span><span class="p">(</span><span class="n">z</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+
+<span class="k">struct</span> <span class="n">Records</span>
+<span class="p">{</span>
+    <span class="n">MyRecord</span> <span class="n">records</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Archive</span><span class="o">&gt;</span>
+    <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">ar</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ar</span><span class="p">(</span><span class="n">CEREAL_NVP</span><span class="p">(</span><span class="n">records</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+<span class="cp">#pragma endregion</span>
+
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">serialization</span>
+<span class="p">{</span>
+    <span class="k">class</span> <span class="nc">SerializationUtil</span>
+    <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="n">JSONSerialize</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">stringstream</span> <span class="n">os</span><span class="p">,</span> <span class="n">T</span> <span class="n">serializable</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cereal</span><span class="o">::</span><span class="n">JSONOutputArchive</span> <span class="n">archive</span><span class="p">(</span><span class="n">os</span><span class="p">);</span> <span class="c1">// Create an output archive, Output as outputing to a string stream</span>
+            <span class="n">archive</span><span class="p">(</span><span class="n">CEREAL_NVP</span><span class="p">(</span><span class="n">serializable</span><span class="p">));</span> <span class="c1">// Read the data into the archive</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+        <span class="k">static</span> <span class="n">T</span> <span class="n">JSONDeserialize</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">stringstream</span> <span class="n">is</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cereal</span><span class="o">::</span><span class="n">JSONInputArchive</span> <span class="n">iarchive</span><span class="p">(</span><span class="n">is</span><span class="p">);</span> <span class="c1">// Create an input archive, Input as inputing to memory</span>
+            <span class="n">T</span> <span class="n">t</span><span class="p">;</span>
+            <span class="n">iarchive</span><span class="p">(</span><span class="n">t</span><span class="p">);</span> <span class="c1">// Read the data from the archive</span>
+            <span class="k">return</span> <span class="n">t</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="n">BinarySerialize</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">stringstream</span> <span class="n">os</span><span class="p">,</span> <span class="n">T</span> <span class="n">serializable</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cereal</span><span class="o">::</span><span class="n">BinaryOutputArchive</span> <span class="n">archive</span><span class="p">(</span><span class="n">os</span><span class="p">);</span> <span class="c1">// Create an output archive, Output as outputing to a string stream</span>
+            <span class="n">archive</span><span class="p">(</span><span class="n">CEREAL_NVP</span><span class="p">(</span><span class="n">serializable</span><span class="p">));</span> <span class="c1">// Read the data into the archive</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+        <span class="k">static</span> <span class="n">T</span> <span class="n">BinaryDeserialize</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">stringstream</span> <span class="n">is</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cereal</span><span class="o">::</span><span class="n">BinaryInputArchive</span> <span class="n">iarchive</span><span class="p">(</span><span class="n">is</span><span class="p">);</span>  <span class="c1">// Create an input archive, Input as inputing to memory</span>
+            <span class="n">T</span> <span class="n">t</span><span class="p">;</span>
+            <span class="n">iarchive</span><span class="p">(</span><span class="n">t</span><span class="p">);</span> <span class="c1">// Read the data from the archive</span>
+            <span class="k">return</span> <span class="n">t</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="n">JSONSerialize</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ofstream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="n">T</span> <span class="n">serializable</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cereal</span><span class="o">::</span><span class="n">JSONOutputArchive</span> <span class="n">archive</span><span class="p">(</span><span class="n">os</span><span class="p">);</span><span class="c1">// Create an output archive, Output as outputing to a string stream</span>
+            <span class="n">archive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Entity&quot;</span><span class="p">,</span> <span class="n">serializable</span><span class="p">));</span> <span class="c1">// Read the data to the archive</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+        <span class="k">static</span> <span class="n">T</span> <span class="n">JSONDeserialize</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ifstream</span><span class="o">&amp;</span> <span class="n">is</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cereal</span><span class="o">::</span><span class="n">JSONInputArchive</span> <span class="n">iarchive</span><span class="p">(</span><span class="n">is</span><span class="p">);</span>   <span class="c1">// Create an input archive, Input as inputing to memory</span>
+            <span class="n">T</span> <span class="n">t</span><span class="p">;</span>
+            <span class="n">iarchive</span><span class="p">(</span><span class="n">t</span><span class="p">);</span> <span class="c1">// Read the data from the archive</span>
+            <span class="k">return</span> <span class="n">t</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="n">BinarySerialize</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ofstream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="n">T</span> <span class="n">serializable</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cereal</span><span class="o">::</span><span class="n">BinaryOutputArchive</span> <span class="n">archive</span><span class="p">(</span><span class="n">os</span><span class="p">);</span><span class="c1">// Create an output archive, Output as outputing to a string stream</span>
+            <span class="n">archive</span><span class="p">(</span><span class="n">CEREAL_NVP</span><span class="p">(</span><span class="n">serializable</span><span class="p">));</span> <span class="c1">// Read the data to the archive</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+        <span class="k">static</span> <span class="n">T</span> <span class="n">BinaryDeserialize</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ifstream</span><span class="o">&amp;</span> <span class="n">is</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cereal</span><span class="o">::</span><span class="n">BinaryInputArchive</span> <span class="n">iarchive</span><span class="p">(</span><span class="n">is</span><span class="p">);</span>  <span class="c1">// Create an input archive, Input as inputing to memory</span>
+            <span class="n">T</span> <span class="n">t</span><span class="p">;</span>
+            <span class="n">iarchive</span><span class="p">(</span><span class="n">t</span><span class="p">);</span> <span class="c1">// Read the data from the archive</span>
+            <span class="k">return</span> <span class="n">t</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_serialization_serializationUtil.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

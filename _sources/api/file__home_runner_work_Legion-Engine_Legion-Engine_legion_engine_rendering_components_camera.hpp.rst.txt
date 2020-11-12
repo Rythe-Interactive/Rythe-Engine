@@ -31,11 +31,15 @@ Includes
 
 - ``application/application.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_application.hpp`)
 
+- ``rendering/data/material.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_material.hpp`)
+
 
 
 Included By
 -----------
 
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_pipeline.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_renderer.hpp`
 
@@ -53,5 +57,7 @@ Classes
 -------
 
 
-- :ref:`exhale_struct_structlegion_1_1rendering_1_1camera`
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1camera_1_1camera__input`
+
+- :ref:`exhale_class_structlegion_1_1rendering_1_1camera`
 

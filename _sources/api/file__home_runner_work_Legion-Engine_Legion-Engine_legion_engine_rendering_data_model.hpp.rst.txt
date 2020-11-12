@@ -31,6 +31,8 @@ Includes
 
 - ``application/application.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_application.hpp`)
 
+- ``rendering/util/bindings.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_bindings.hpp`)
+
 - ``set`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_assetimporter.cpp`)
 
 - ``unordered_map``
@@ -48,6 +50,8 @@ Included By
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_model.cpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_shader.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_pipeline.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_rendering.hpp`
 
@@ -72,27 +76,6 @@ Classes
 - :ref:`exhale_class_structlegion_1_1rendering_1_1model__handle`
 
 - :ref:`exhale_class_classlegion_1_1rendering_1_1_model_cache`
-
-
-Defines
--------
-
-
-- :ref:`exhale_define_model_8hpp_1a49878cd27ca0a45c5122677d484bc9b3`
-
-- :ref:`exhale_define_model_8hpp_1a7705dfed803d377413fff18f4c0ca1b2`
-
-- :ref:`exhale_define_model_8hpp_1a75e330b4c664e88eff45319b5e8ca1fe`
-
-- :ref:`exhale_define_model_8hpp_1a9e73a0b1f0ae6c28111bff100fd9a154`
-
-- :ref:`exhale_define_model_8hpp_1aa776123367fa4dbd736e826118154708`
-
-- :ref:`exhale_define_model_8hpp_1a9b029c397244dbaab3d6e7114dd398d5`
-
-- :ref:`exhale_define_model_8hpp_1a51df415fb8d0db59b968bae24fab920b`
-
-- :ref:`exhale_define_model_8hpp_1aaf42be1105908eb41f70c56ac1d2519e`
 
 
 Variables

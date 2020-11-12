@@ -1,0 +1,13 @@
+.. _exhale_function_audio__importers_8cpp_1ac0ba23479044e0e3102ffcac0ca58b95:
+
+Function legion::audio::detail::getAudioFormat
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_importers_audio_importers.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::audio::detail::getAudioFormat(int, int)

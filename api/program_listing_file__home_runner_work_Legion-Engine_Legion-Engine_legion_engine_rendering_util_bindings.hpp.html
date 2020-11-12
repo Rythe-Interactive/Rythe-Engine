@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File bindings.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File bindings.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-bindings-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-util-bindings-hpp"></span><h1>Program Listing for File bindings.hpp<a class="headerlink" href="#program-listing-for-file-bindings-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_bindings.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-util-bindings-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/util/bindings.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+
+<span class="cp">#define SV_START 0</span>
+
+<span class="cm">/* 0  */</span>  <span class="cp">#define SV_TEXCOORD0      SV_START</span>
+<span class="cm">/* 1  */</span>  <span class="cp">#define SV_TEXCOORD1      SV_TEXCOORD0 + 1</span>
+<span class="cm">/* 2  */</span>  <span class="cp">#define SV_TEXCOORD2      SV_TEXCOORD1 + 1</span>
+<span class="cm">/* 3  */</span>  <span class="cp">#define SV_TEXCOORD3      SV_TEXCOORD2 + 1</span>
+
+<span class="cm">/* 4  */</span>  <span class="cp">#define SV_POSITION       SV_TEXCOORD3 + 1</span>
+<span class="cm">/* 5  */</span>  <span class="cp">#define SV_NORMAL         SV_POSITION + 1</span>
+<span class="cm">/* 6  */</span>  <span class="cp">#define SV_TANGENT        SV_NORMAL + 1</span>
+<span class="cm">/* 7  */</span>  <span class="cp">#define SV_MODELMATRIX    SV_TANGENT + 1</span>
+
+<span class="cm">/* 11 */</span>  <span class="cp">#define SV_ALBEDO         SV_MODELMATRIX + 4</span>
+<span class="cm">/* 12 */</span>  <span class="cp">#define SV_NORMALHEIGHT   SV_ALBEDO + 1</span>
+<span class="cm">/* 13 */</span>  <span class="cp">#define SV_MRDAO          SV_NORMALHEIGHT + 1</span>
+<span class="cm">/* 14 */</span>  <span class="cp">#define SV_EMISSIVE       SV_MRDAO + 1</span>
+<span class="cm">/* 15 */</span>  <span class="cp">#define SV_HEIGHTSCALE    SV_EMISSIVE + 1</span>
+
+<span class="cm">/* 11 */</span>  <span class="cp">#define SV_MATERIAL       SV_ALBEDO</span>
+
+<span class="cm">/* 0  */</span>  <span class="cp">#define SV_VIEW           SV_START</span>
+<span class="cm">/* 1  */</span>  <span class="cp">#define SV_PROJECT        SV_VIEW + 1</span>
+<span class="cm">/* 2  */</span>  <span class="cp">#define SV_CAMPOS         SV_PROJECT + 1</span>
+<span class="cm">/* 3  */</span>  <span class="cp">#define SV_VIEWDIR        SV_CAMPOS + 1</span>
+<span class="cm">/* 4 */</span>  <span class="cp">#define SV_CAMIDX         SV_VIEWDIR + 1</span>
+
+<span class="cm">/* 0  */</span>  <span class="cp">#define SV_CAMERA         SV_VIEW</span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span><span class="o">::</span><span class="n">detail</span>
+<span class="p">{</span>
+    <span class="kr">inline</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&amp;</span> <span class="n">get_default_defines</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">defines</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">defines</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_TEXCOORD0=&quot;</span> <span class="o">+</span>    <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_TEXCOORD0</span><span class="p">));</span>
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_TEXCOORD1=&quot;</span> <span class="o">+</span>    <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_TEXCOORD1</span><span class="p">));</span>
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_TEXCOORD2=&quot;</span> <span class="o">+</span>    <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_TEXCOORD2</span><span class="p">));</span>
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_TEXCOORD3=&quot;</span> <span class="o">+</span>    <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_TEXCOORD3</span><span class="p">));</span>
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_POSITION=&quot;</span> <span class="o">+</span>     <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_POSITION</span><span class="p">));</span>
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_NORMAL=&quot;</span> <span class="o">+</span>       <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_NORMAL</span><span class="p">));</span>
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_TANGENT=&quot;</span> <span class="o">+</span>      <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_TANGENT</span><span class="p">));</span>
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_MODELMATRIX=&quot;</span> <span class="o">+</span>  <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span><span class="p">));</span>
+
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_ALBEDO=&quot;</span> <span class="o">+</span>       <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_ALBEDO</span><span class="p">));</span>
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_NORMALHEIGHT=&quot;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_NORMALHEIGHT</span><span class="p">));</span>
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_MRDAO=&quot;</span> <span class="o">+</span>        <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_MRDAO</span><span class="p">));</span>
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_EMISSIVE=&quot;</span> <span class="o">+</span>     <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_EMISSIVE</span><span class="p">));</span>
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_HEIGHTSCALE=&quot;</span> <span class="o">+</span>  <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_HEIGHTSCALE</span><span class="p">));</span>
+
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_MATERIAL=&quot;</span> <span class="o">+</span>     <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_MATERIAL</span><span class="p">));</span>
+
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_VIEW=&quot;</span> <span class="o">+</span>         <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_VIEW</span><span class="p">));</span>
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_PROJECT=&quot;</span> <span class="o">+</span>      <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_PROJECT</span><span class="p">));</span>
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_CAMPOS=&quot;</span> <span class="o">+</span>       <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_CAMPOS</span><span class="p">));</span>
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_VIEWDIR=&quot;</span> <span class="o">+</span>      <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_VIEWDIR</span><span class="p">));</span>
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_CAMIDX=&quot;</span> <span class="o">+</span>       <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_CAMIDX</span><span class="p">));</span>
+
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_CAMERA=&quot;</span> <span class="o">+</span>       <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_CAMERA</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">defines</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_bindings.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

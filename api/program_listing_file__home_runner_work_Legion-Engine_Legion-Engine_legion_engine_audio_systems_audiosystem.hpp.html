@@ -60,8 +60,7 @@
     <span class="kr">inline</span> <span class="kt">void</span> <span class="n">openal_error</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="n">ALCenum</span> <span class="n">error</span><span class="p">;</span>
-        <span class="n">error</span> <span class="o">=</span> <span class="n">alGetError</span><span class="p">();</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">error</span> <span class="o">!=</span> <span class="n">AL_NO_ERROR</span><span class="p">)</span>
+        <span class="k">while</span> <span class="p">((</span><span class="n">error</span> <span class="o">=</span> <span class="n">alGetError</span><span class="p">())</span> <span class="o">!=</span> <span class="n">AL_NO_ERROR</span><span class="p">)</span>
             <span class="n">legion</span><span class="o">::</span><span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;ERROR: OpenAl error: {}&quot;</span><span class="p">,</span> <span class="n">error</span><span class="p">);</span>
     <span class="p">}</span>
 

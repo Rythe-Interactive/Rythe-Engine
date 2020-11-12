@@ -41,6 +41,7 @@ Program Listing for File process.hpp
            Process() = default;
            Process(Process&&) = default;
            Process& operator=(Process&&) = default;
+           ~Process() = default;
    
            id_type id() const { return m_nameHash; }
    

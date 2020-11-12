@@ -1,0 +1,22 @@
+
+.. _namespace_legion__core__scenemanagement:
+
+Namespace legion::core::scenemanagement
+=======================================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1scenemanagement_1_1scene`
+
+- :ref:`exhale_class_classlegion_1_1core_1_1scenemanagement_1_1_scene_manager`

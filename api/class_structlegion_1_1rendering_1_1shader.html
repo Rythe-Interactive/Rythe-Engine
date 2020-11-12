@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Class shader_parameter_base" href="class_structlegion_1_1rendering_1_1shader__parameter__base.html" />
-    <link rel="prev" title="Class RenderingModule" href="classlegion_1_1rendering_1_1_rendering_module.html" />
+    <link rel="prev" title="Class RenderStage" href="classlegion_1_1rendering_1_1_render_stage.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -39,7 +39,7 @@
           <a href="class_structlegion_1_1rendering_1_1shader__parameter__base.html" title="Class shader_parameter_base"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="classlegion_1_1rendering_1_1_rendering_module.html" title="Class RenderingModule"
+          <a href="classlegion_1_1rendering_1_1_render_stage.html" title="Class RenderStage"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
@@ -63,15 +63,6 @@
 <dt id="_CPPv4N6legion9rendering6shaderE">
 <span id="_CPPv3N6legion9rendering6shaderE"></span><span id="_CPPv2N6legion9rendering6shaderE"></span><span id="legion::rendering::shader"></span><span class="target" id="structlegion_1_1rendering_1_1shader"></span><em class="property">class </em><code class="sig-prename descclassname">legion::rendering<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">shader</code><a class="headerlink" href="#_CPPv4N6legion9rendering6shaderE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Abstraction class of a shader program. </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Types</p>
-<dl class="cpp type">
-<dt id="_CPPv4N6legion9rendering6shader12shader_stateE">
-<span id="_CPPv3N6legion9rendering6shader12shader_stateE"></span><span id="_CPPv2N6legion9rendering6shader12shader_stateE"></span><span class="target" id="structlegion_1_1rendering_1_1shader_1a337fc905e5a153331236adb0ba5b09f9"></span><em class="property">using </em><code class="sig-name descname">shader_state</code> = std::unordered_map&lt;GLenum, GLenum&gt;<a class="headerlink" href="#_CPPv4N6legion9rendering6shader12shader_stateE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Data-structure to hold mapping of context functions and parameters. </p>
-</dd></dl>
-
-</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
@@ -136,7 +127,7 @@
 
 <dl class="cpp function">
 <dt id="_CPPv4N6legion9rendering6shader16get_uniform_infoEv">
-<span id="_CPPv3N6legion9rendering6shader16get_uniform_infoEv"></span><span id="_CPPv2N6legion9rendering6shader16get_uniform_infoEv"></span><span id="legion::rendering::shader::get_uniform_info"></span><span class="target" id="structlegion_1_1rendering_1_1shader_1ac66f2e75edef19cee46e02b3d1331a74"></span>std::vector&lt;std::pair&lt;std::string, GLenum&gt;&gt; <code class="sig-name descname">get_uniform_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering6shader16get_uniform_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion9rendering6shader16get_uniform_infoEv"></span><span id="_CPPv2N6legion9rendering6shader16get_uniform_infoEv"></span><span id="legion::rendering::shader::get_uniform_info"></span><span class="target" id="structlegion_1_1rendering_1_1shader_1a075a849442843d691d4517d68bd78d12"></span>std::vector&lt;std::tuple&lt;std::string, GLint, GLenum&gt;&gt; <code class="sig-name descname">get_uniform_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering6shader16get_uniform_infoEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>
@@ -145,7 +136,8 @@
 <dl class="cpp var">
 <dt id="_CPPv4N6legion9rendering6shader9programIdE">
 <span id="_CPPv3N6legion9rendering6shader9programIdE"></span><span id="_CPPv2N6legion9rendering6shader9programIdE"></span><span id="legion::rendering::shader::programId__GLint"></span><span class="target" id="structlegion_1_1rendering_1_1shader_1a0e2f95acc8b5fb0320770cc34e5a4900"></span>GLint <code class="sig-name descname">programId</code><a class="headerlink" href="#_CPPv4N6legion9rendering6shader9programIdE" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
+<dd><p>Data-structure to hold mapping of context functions and parameters. </p>
+</dd></dl>
 
 <dl class="cpp var">
 <dt id="_CPPv4N6legion9rendering6shader8uniformsE">
@@ -164,7 +156,7 @@
 
 <dl class="cpp var">
 <dt id="_CPPv4N6legion9rendering6shader5stateE">
-<span id="_CPPv3N6legion9rendering6shader5stateE"></span><span id="_CPPv2N6legion9rendering6shader5stateE"></span><span id="legion::rendering::shader::state__shader_state"></span><span class="target" id="structlegion_1_1rendering_1_1shader_1a4367cb9369a7459bb789650127308e3d"></span><a class="reference internal" href="#_CPPv4N6legion9rendering6shader12shader_stateE" title="legion::rendering::shader::shader_state">shader_state</a> <code class="sig-name descname">state</code><a class="headerlink" href="#_CPPv4N6legion9rendering6shader5stateE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion9rendering6shader5stateE"></span><span id="_CPPv2N6legion9rendering6shader5stateE"></span><span id="legion::rendering::shader::state__shader_state"></span><span class="target" id="structlegion_1_1rendering_1_1shader_1a4367cb9369a7459bb789650127308e3d"></span><a class="reference internal" href="typedef_shader_8hpp_1af23ef4f8dd58d8149bbe092b0ddd0796.html#_CPPv4N6legion9rendering12shader_stateE" title="legion::rendering::shader_state">shader_state</a> <code class="sig-name descname">state</code><a class="headerlink" href="#_CPPv4N6legion9rendering6shader5stateE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>
@@ -199,7 +191,7 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
-      <li>Previous: <a href="classlegion_1_1rendering_1_1_rendering_module.html" title="previous chapter">Class RenderingModule</a></li>
+      <li>Previous: <a href="classlegion_1_1rendering_1_1_render_stage.html" title="previous chapter">Class RenderStage</a></li>
       <li>Next: <a href="class_structlegion_1_1rendering_1_1shader__parameter__base.html" title="next chapter">Class shader_parameter_base</a></li>
   </ul></li>
   </ul></li>

@@ -127,7 +127,7 @@
 
     <span class="kt">void</span> <span class="n">QueryRegistry</span><span class="o">::</span><span class="n">evaluateEntityChange</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">removal</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">entity_handle</span> <span class="n">entity</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m_registry</span><span class="p">);</span>
+        <span class="n">entity_handle</span> <span class="n">entity</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span>
 
         <span class="n">async</span><span class="o">::</span><span class="n">mixed_multiguard</span> <span class="n">mmguard</span><span class="p">(</span><span class="n">m_entityLock</span><span class="p">,</span> <span class="n">async</span><span class="o">::</span><span class="n">write</span><span class="p">,</span> <span class="n">m_componentLock</span><span class="p">,</span> <span class="n">async</span><span class="o">::</span><span class="n">read</span><span class="p">);</span> <span class="c1">// We lock now so that we don&#39;t need to reacquire the locks every iteration.</span>
 
@@ -153,7 +153,7 @@
 
     <span class="kt">void</span> <span class="n">QueryRegistry</span><span class="o">::</span><span class="n">markEntityDestruction</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">entity_handle</span> <span class="n">entity</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m_registry</span><span class="p">);</span>
+        <span class="n">entity_handle</span> <span class="n">entity</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span>
 
         <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_entityLock</span><span class="p">);</span>
         <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_entityLists</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="c1">// Iterate over all query tracking lists.</span>

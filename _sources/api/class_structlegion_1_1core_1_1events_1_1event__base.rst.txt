@@ -23,6 +23,7 @@ Derived Types
 - ``public legion::core::events::event< mouse_moved >`` (:ref:`exhale_class_structlegion_1_1core_1_1events_1_1event`)
 - ``public legion::core::events::event< mouse_scrolled >`` (:ref:`exhale_class_structlegion_1_1core_1_1events_1_1event`)
 - ``public legion::core::events::event< T >`` (:ref:`exhale_class_structlegion_1_1core_1_1events_1_1event`)
+- ``public legion::core::events::event< TriggerEvent >`` (:ref:`exhale_class_structlegion_1_1core_1_1events_1_1event`)
 - ``public legion::core::events::event< window_close >`` (:ref:`exhale_class_structlegion_1_1core_1_1events_1_1event`)
 - ``public legion::core::events::event< window_content_rescale >`` (:ref:`exhale_class_structlegion_1_1core_1_1events_1_1event`)
 - ``public legion::core::events::event< window_focus >`` (:ref:`exhale_class_structlegion_1_1core_1_1events_1_1event`)

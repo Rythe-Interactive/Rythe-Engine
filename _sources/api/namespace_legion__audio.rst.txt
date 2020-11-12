@@ -13,6 +13,13 @@ Namespace legion::audio
 
 
 
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__audio__detail`
+
+
 Classes
 -------
 
@@ -28,6 +35,14 @@ Classes
 - :ref:`exhale_struct_structlegion_1_1audio_1_1audio__source`
 
 - :ref:`exhale_struct_structlegion_1_1audio_1_1mp3__audio__loader`
+
+- :ref:`exhale_struct_structlegion_1_1audio_1_1wav__audio__loader`
+
+- :ref:`exhale_struct_structlegion_1_1audio_1_1wav__audio__loader_1_1_r_i_f_f___header`
+
+- :ref:`exhale_struct_structlegion_1_1audio_1_1wav__audio__loader_1_1_r_i_f_f___header_1_1_w_a_v_e___format`
+
+- :ref:`exhale_struct_structlegion_1_1audio_1_1wav__audio__loader_1_1_w_a_v_e___data`
 
 - :ref:`exhale_class_classlegion_1_1audio_1_1_audio_module`
 

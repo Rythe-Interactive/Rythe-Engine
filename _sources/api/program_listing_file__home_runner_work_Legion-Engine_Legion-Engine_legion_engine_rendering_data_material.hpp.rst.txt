@@ -12,6 +12,7 @@ Program Listing for File material.hpp
 
    #pragma once
    #include <rendering/data/shader.hpp>
+   #include <memory>
    
    namespace legion::rendering
    {
@@ -19,36 +20,39 @@ Program Listing for File material.hpp
    
        struct material_parameter_base
        {
+           friend struct material;
+       private:
+           static material_parameter_base* create_param(const std::string& name, const GLint& location, const GLenum& type);
        protected:
            std::string m_name;
            id_type m_id;
            id_type m_typeId;
+           GLint m_location;
    
-           material_parameter_base(const std::string& name, id_type typeId) : m_name(name), m_id(nameHash(name)), m_typeId(typeId) {}
+           material_parameter_base(const std::string& name, GLint location, id_type typeId) : m_name(name), m_id(nameHash(name)), m_typeId(typeId), m_location(location) {}
    
        public:
            id_type type() { return m_typeId; }
    
            virtual void apply(shader_handle& shader) LEGION_PURE;
-   
-           static material_parameter_base* create_param(const std::pair<std::string, GLenum>& info);
        };
    
        template<typename T>
        struct material_parameter : public material_parameter_base
        {
+           friend struct material;
        private:
            T m_value;
-       public:
-           material_parameter(const std::string& name) : material_parameter_base(name, typeHash<T>()) {}
-   
-           void set_value(const T& value) { m_value = value; }
-           T get_value() const { return m_value; }
    
            virtual void apply(shader_handle& shader) override
            {
                shader.get_uniform<T>(m_id).set_value(m_value);
            }
+       public:
+           material_parameter(const std::string& name, GLint location) : material_parameter_base(name, location, typeHash<T>()) {}
+   
+           void set_value(const T& value) { m_value = value; }
+           T get_value() const { return m_value; }
        };
    
        struct material
@@ -61,36 +65,45 @@ Program Listing for File material.hpp
            void init(const shader_handle& shader)
            {
                m_shader = shader;
-               for (auto& uniformInfo : m_shader.get_uniform_info())
-                   m_parameters[nameHash(uniformInfo.first)] = material_parameter_base::create_param(uniformInfo);
+               for (auto& [name, location, type] : m_shader.get_uniform_info())
+               {
+                   id_type hash = nameHash(name);
+                   m_parameters.emplace(std::make_pair(hash, material_parameter_base::create_param(name, location, type)));
+                   m_idOfLocation[location] = hash;
+               }
            }
    
            std::string m_name;
    
-           std::unordered_map<id_type, material_parameter_base*> m_parameters;
+           std::unordered_map<id_type, std::unique_ptr<material_parameter_base>> m_parameters;
+           std::unordered_map<GLint, id_type> m_idOfLocation;
        public:
-           template<typename T>
-           void set_param(const std::string& name, const T& value)
+           void bind();
+   
+           void release()
            {
-               id_type id = nameHash(name);
-               if (m_parameters.count(id) && m_parameters[id]->type() == typeHash<T>())
-                   static_cast<material_parameter<T>*>(m_parameters[id])->set_value(value);
-               else
-                   log::error("material {} does not have a parameter named {} of type {}", m_name, name, undecoratedTypeName<T>());
+               shader_handle::release();
            }
    
            template<typename T>
-           T get_param(const std::string& name)
-           {
-               id_type id = nameHash(name);
-               if (m_parameters.count(id) && m_parameters[id]->type() == typeHash<T>())
-                   return static_cast<material_parameter<T>*>(m_parameters[id])->get_value();
+           void set_param(const std::string& name, const T& value);
    
-               log::error("material {} does not have a parameter named {} of type {}", m_name, name, undecoratedTypeName<T>());
-               return T();
-           }
+           template<typename T>
+           L_NODISCARD bool has_param(const std::string& name);
    
-           attribute get_attribute(const std::string& name)
+           template<typename T>
+           L_NODISCARD T get_param(const std::string& name);
+   
+           template<typename T>
+           void set_param(GLint location, const T& value);
+   
+           template<typename T>
+           L_NODISCARD bool has_param(GLint location);
+   
+           template<typename T>
+           L_NODISCARD T get_param(GLint location);
+   
+           L_NODISCARD attribute get_attribute(const std::string& name)
            {
                return m_shader.get_attribute(nameHash(name));
            }
@@ -102,8 +115,6 @@ Program Listing for File material.hpp
    
            void bind();
    
-           void prepare();
-   
            void release()
            {
                shader_handle::release();
@@ -113,12 +124,32 @@ Program Listing for File material.hpp
            void set_param(const std::string& name, const T& value);
    
            template<typename T>
-           T get_param(const std::string& name);
+           L_NODISCARD bool has_param(const std::string& name);
+   
+           template<typename T>
+           L_NODISCARD T get_param(const std::string& name);
+   
+           template<typename T>
+           void set_param(GLint location, const T& value);
+   
+           template<typename T>
+           L_NODISCARD bool has_param(GLint location);
+   
+           template<typename T>
+           L_NODISCARD T get_param(GLint location);
    
            attribute get_attribute(const std::string& name);
    
            bool operator==(const material_handle& other) const { return id == other.id; }
+   
+           template<typename Archive>
+           void serialize(Archive& archive);
        };
+       template<typename Archive>
+       void material_handle::serialize(Archive& archive)
+       {
+           archive(id);
+       }
    
        constexpr material_handle invalid_material_handle{ invalid_id };
    
@@ -131,10 +162,13 @@ Program Listing for File material.hpp
    
        public:
            static material_handle create_material(const std::string& name, const shader_handle& shader);
+   
            static material_handle create_material(const std::string& name, const filesystem::view& shaderFile, shader_import_settings settings = default_shader_settings);
+   
            static material_handle get_material(const std::string& name);
        };
    
+   #pragma region implementations
        template<typename T>
        void material_handle::set_param(const std::string& name, const T& value)
        {
@@ -143,13 +177,108 @@ Program Listing for File material.hpp
        }
    
        template<typename T>
-       T material_handle::get_param(const std::string& name)
+       void material_handle::set_param(GLint location, const T& value)
+       {
+           async::readonly_guard guard(MaterialCache::m_materialLock);
+           MaterialCache::m_materials[id].set_param<T>(location, value);
+       }
+   
+       template<typename T>
+       L_NODISCARD bool material_handle::has_param(const std::string& name)
+       {
+           async::readonly_guard guard(MaterialCache::m_materialLock);
+           return MaterialCache::m_materials[id].has_param<T>(name);
+       }
+   
+       template<typename T>
+       L_NODISCARD bool material_handle::has_param(GLint location)
+       {
+           async::readonly_guard guard(MaterialCache::m_materialLock);
+           return MaterialCache::m_materials[id].has_param<T>(location);
+       }
+   
+       template<typename T>
+       L_NODISCARD T material_handle::get_param(const std::string& name)
        {
            async::readonly_guard guard(MaterialCache::m_materialLock);
            return MaterialCache::m_materials[id].get_param<T>(name);
        }
    
+       template<typename T>
+       L_NODISCARD T material_handle::get_param(GLint location)
+       {
+           async::readonly_guard guard(MaterialCache::m_materialLock);
+           return MaterialCache::m_materials[id].get_param<T>(location);
+       }
+   
+       template<typename T>
+       void material::set_param(const std::string& name, const T& value)
+       {
+           id_type id = nameHash(name);
+           if (m_parameters.count(id) && m_parameters[id]->type() == typeHash<T>())
+               static_cast<material_parameter<T>*>(m_parameters[id].get())->set_value(value);
+           else
+               log::error("material {} does not have a parameter named {} of type {}", m_name, name, undecoratedTypeName<T>());
+       }
+   
+       template<typename T>
+       L_NODISCARD bool material::has_param(const std::string& name)
+       {
+           id_type id = nameHash(name);
+           return m_parameters.count(id) && m_parameters[id]->type() == typeHash<T>();
+       }
+   
+       template<typename T>
+       L_NODISCARD T material::get_param(const std::string& name)
+       {
+           id_type id = nameHash(name);
+           if (m_parameters.count(id) && m_parameters[id]->type() == typeHash<T>())
+               return static_cast<material_parameter<T>*>(m_parameters[id].get())->get_value();
+   
+           log::error("material {} does not have a parameter named {} of type {}", m_name, name, undecoratedTypeName<T>());
+           return T();
+       }
+   
+       template<typename T>
+       void material::set_param(GLint location, const T& value)
+       {
+           if (!m_idOfLocation.count(location))
+               log::error("material {} does not have a parameter at location {} of type {}", m_name, location, undecoratedTypeName<T>());
+   
+           id_type id = m_idOfLocation[location];
+   
+           if (m_parameters.count(id) && m_parameters[id]->type() == typeHash<T>())
+               static_cast<material_parameter<T>*>(m_parameters[id].get())->set_value(value);
+           else
+               log::error("material {} does not have a parameter at location {} of type {}", m_name, location, undecoratedTypeName<T>());
+       }
+   
+       template<typename T>
+       L_NODISCARD T material::get_param(GLint location)
+       {
+           if (!m_idOfLocation.count(location))
+               log::error("material {} does not have a parameter at location {} of type {}", m_name, location, undecoratedTypeName<T>());
+   
+           id_type id = m_idOfLocation[location];
+           if (m_parameters.count(id) && m_parameters[id]->type() == typeHash<T>())
+               return static_cast<material_parameter<T>*>(m_parameters[id].get())->get_value();
+   
+           log::error("material {} does not have a parameter at location {} of type {}", m_name, location, undecoratedTypeName<T>());
+           return T();
+       }
+   
+       template<typename T>
+       L_NODISCARD bool material::has_param(GLint location)
+       {
+           if (!m_idOfLocation.count(location))
+               return false;
+   
+           id_type id = m_idOfLocation[location];
+           return m_parameters.count(id) && m_parameters[id]->type() == typeHash<T>();
+       }
+   #pragma endregion
    }
+   
    
    #if !defined(DOXY_EXCLUDE)
    namespace std

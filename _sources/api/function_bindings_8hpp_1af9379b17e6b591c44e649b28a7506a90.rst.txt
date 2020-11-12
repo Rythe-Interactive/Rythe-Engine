@@ -1,0 +1,13 @@
+.. _exhale_function_bindings_8hpp_1af9379b17e6b591c44e649b28a7506a90:
+
+Function legion::rendering::detail::get_default_defines
+=======================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_bindings.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::rendering::detail::get_default_defines()

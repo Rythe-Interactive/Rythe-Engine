@@ -1,0 +1,16 @@
+.. _exhale_class_classlegion_1_1rendering_1_1_shader_compiler:
+
+Class ShaderCompiler
+====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_shadercompiler_shadercompiler.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::rendering::ShaderCompiler
+   :members:
+   :protected-members:
+   :undoc-members:

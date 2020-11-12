@@ -37,8 +37,6 @@ Included By
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_result.hpp`
 
-- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_buffer.hpp`
-
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_atomic_sparse_map.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_data_view.hpp`
@@ -85,11 +83,15 @@ Included By
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_trigonometry.hpp`
 
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_shellinvoke.hpp`
+
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_process.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_processchain.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_scheduler.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_serialization_serializationUtil.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.hpp`
 
@@ -103,6 +105,8 @@ Defines
 - :ref:`exhale_define_platform_8hpp_1a143f9211b91cb551daf5cfb28e321016`
 
 - :ref:`exhale_define_platform_8hpp_1a4e14578a41d311e647f3aee2b628d3dd`
+
+- :ref:`exhale_define_platform_8hpp_1a047e130061d8c7493b1224c08eadb4f5`
 
 - :ref:`exhale_define_platform_8hpp_1a2acea82974982ff88014214aafd8d215`
 

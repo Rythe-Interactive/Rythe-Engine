@@ -96,6 +96,15 @@
         <span class="c1">// this is only here for debug reasons</span>
         <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">TempLine</span><span class="o">&gt;</span> <span class="n">collisionsFound</span><span class="p">;</span>
 
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">GetLocalCentroid</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">localColliderCentroid</span><span class="p">;</span>
+        <span class="p">}</span>
+
+    <span class="k">protected</span><span class="o">:</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">localColliderCentroid</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
     <span class="k">private</span><span class="o">:</span>
        <span class="c1">//this is not used, its mostly for debug reasons</span>
         <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">*&gt;</span> <span class="n">dummyHalfEdges</span><span class="p">;</span>

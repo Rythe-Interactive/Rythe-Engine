@@ -153,6 +153,12 @@ Program Listing for File basic_resolver.hpp
            {
                return std::filesystem::exists(strpath_manip::subdir(m_root_path,get_target()));
            }
+   
+           L_NODISCARD std::string get_absolute_path() const
+           {
+               return strpath_manip::subdir(m_root_path, get_target());
+           }
+   
            L_NODISCARD std::set<std::string> ls() const noexcept override{ return {}; }
            common::result<basic_resource, fs_error> get(interfaces::implement_signal_t) noexcept override
            {

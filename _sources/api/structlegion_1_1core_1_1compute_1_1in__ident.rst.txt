@@ -12,7 +12,7 @@ Inheritance Relationships
 Derived Type
 ************
 
-- ``public legion::core::compute::in< T >`` (:ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1in`)
+- ``public legion::core::compute::in< T >`` (:ref:`exhale_class_structlegion_1_1core_1_1compute_1_1in`)
 
 
 Struct Documentation

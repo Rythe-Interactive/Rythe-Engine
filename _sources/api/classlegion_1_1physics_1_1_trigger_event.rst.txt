@@ -1,0 +1,25 @@
+.. _exhale_class_classlegion_1_1physics_1_1_trigger_event:
+
+Class TriggerEvent
+==================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_events_trigger_event.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::core::events::event< TriggerEvent >`` (:ref:`exhale_class_structlegion_1_1core_1_1events_1_1event`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::physics::TriggerEvent
+   :members:
+   :protected-members:
+   :undoc-members:

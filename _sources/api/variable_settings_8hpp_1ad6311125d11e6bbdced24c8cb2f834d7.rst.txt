@@ -1,0 +1,13 @@
+.. _exhale_variable_settings_8hpp_1ad6311125d11e6bbdced24c8cb2f834d7:
+
+Variable legion::rendering::default_shader_settings
+===================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_settings.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::rendering::default_shader_settings

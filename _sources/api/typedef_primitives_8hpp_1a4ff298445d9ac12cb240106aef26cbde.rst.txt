@@ -1,0 +1,13 @@
+.. _exhale_typedef_primitives_8hpp_1a4ff298445d9ac12cb240106aef26cbde:
+
+Typedef legion::core::bitfield64
+================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::bitfield64

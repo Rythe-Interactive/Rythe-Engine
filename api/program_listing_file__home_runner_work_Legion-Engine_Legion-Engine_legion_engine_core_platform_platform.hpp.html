@@ -77,11 +77,18 @@
     <span class="cp">#define VC_EXTRALEAN</span>
     <span class="cp">#define NOMINMAX</span>
     <span class="cp">#include</span> <span class="cpf">&lt;Windows.h&gt;</span><span class="cp"></span>
+    <span class="cp">#include</span> <span class="cpf">&lt;shellapi.h&gt;</span><span class="cp"></span>
+    <span class="cp">#include</span> <span class="cpf">&lt;shlobj.h&gt;</span><span class="cp"></span>
+    <span class="cp">#include</span> <span class="cpf">&lt;shlwapi.h&gt;</span><span class="cp"></span>
+    <span class="cp">#include</span> <span class="cpf">&lt;objbase.h&gt;</span><span class="cp"></span>
 <span class="cp">#elif defined(__linux__)</span>
 
     <span class="cp">#define LEGION_LINUX</span>
 
     <span class="cp">#include</span> <span class="cpf">&lt;sys/resource.h&gt;</span><span class="cp"></span>
+    <span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp"></span>
+    <span class="cp">#include</span> <span class="cpf">&lt;sys/wait.h&gt;</span><span class="cp"></span>
+    <span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp"></span>
     <span class="cp">#include</span> <span class="cpf">&lt;sched.h&gt;</span><span class="cp"></span>
     <span class="cp">#include</span> <span class="cpf">&lt;errno.h&gt;</span><span class="cp"></span>
 <span class="cp">#endif</span>
@@ -121,7 +128,11 @@
 <span class="cp">#  define L_HASCPPATTRIB(x) 0</span>
 <span class="cp">#endif</span>
 
-
+<span class="cp">#if L_HASCPPATTRIB(fallthrough)</span>
+<span class="cp">#define L_FALLTHROUGH [[fallthrough]]</span>
+<span class="cp">#else</span>
+<span class="cp">#define L_FALLTHROUGH</span>
+<span class="cp">#endif</span>
 
 <span class="cp">#if __cplusplus &gt;= LEGION_CPP17V || L_HASCPPATTRIB(nodiscard) || defined(DOXY_INCLUDE)</span>
 

@@ -65,6 +65,8 @@ Included By
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.cpp`
 
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_shellinvoke.hpp`
+
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_processchain.cpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_scheduler.cpp`

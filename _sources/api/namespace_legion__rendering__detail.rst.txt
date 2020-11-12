@@ -1,0 +1,20 @@
+
+.. _namespace_legion__rendering__detail:
+
+Namespace legion::rendering::detail
+===================================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_bindings_8hpp_1af9379b17e6b591c44e649b28a7506a90`

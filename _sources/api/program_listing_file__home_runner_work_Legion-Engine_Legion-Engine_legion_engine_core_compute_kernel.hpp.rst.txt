@@ -38,28 +38,31 @@ Program Listing for File kernel.hpp
    
                Kernel& global(size_type);
    
-               Kernel& build_buffer_names();
+               Kernel& buildBufferNames();
    
-               Kernel& read_write_mode(buffer_type);
+               Kernel& readWriteMode(buffer_type);
    
-               Kernel& enqueue_buffer(Buffer buffer, block_mode blocking = block_mode::BLOCKING);
+               Kernel& enqueueBuffer(Buffer buffer, block_mode blocking = block_mode::BLOCKING);
    
-               Kernel& set_buffer(Buffer buffer);
+               Kernel& setBuffer(Buffer buffer);
    
-               Kernel& set_buffer(Buffer buffer, const std::string& name);
+               Kernel& setBuffer(Buffer buffer, const std::string& name);
    
-               Kernel& set_buffer(Buffer buffer, cl_uint index);
+               Kernel& setBuffer(Buffer buffer, cl_uint index);
    
    
-               Kernel& set_and_enqueue_buffer(Buffer buffer, block_mode blocking = block_mode::BLOCKING);
+               Kernel& setAndEnqueBuffer(Buffer buffer, block_mode blocking = block_mode::BLOCKING);
    
-               Kernel& set_and_enqueue_buffer(Buffer buffer, const std::string&, block_mode blocking = block_mode::BLOCKING);
+               Kernel& setAndEnqueBuffer(Buffer buffer, const std::string&, block_mode blocking = block_mode::BLOCKING);
    
-               Kernel& set_and_enqueue_buffer(Buffer buffer, cl_uint index, block_mode blocking = block_mode::BLOCKING);
+               Kernel& setAndEnqueBuffer(Buffer buffer, cl_uint index, block_mode blocking = block_mode::BLOCKING);
    
                Kernel& dispatch();
    
                void finish() const;
+   
+   
+               size_t getMaxWorkSize() const;
    
            private:
    
@@ -79,7 +82,7 @@ Program Listing for File kernel.hpp
                    // lazy build buffer names
                    if (m_paramsMap.empty())
                    {
-                       build_buffer_names();
+                       buildBufferNames();
                    }
    
                    //find and do thing, otherwise print warning

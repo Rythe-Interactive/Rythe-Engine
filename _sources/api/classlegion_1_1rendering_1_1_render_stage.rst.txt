@@ -1,0 +1,16 @@
+.. _exhale_class_classlegion_1_1rendering_1_1_render_stage:
+
+Class RenderStage
+=================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_renderstage.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::rendering::RenderStage
+   :members:
+   :protected-members:
+   :undoc-members:

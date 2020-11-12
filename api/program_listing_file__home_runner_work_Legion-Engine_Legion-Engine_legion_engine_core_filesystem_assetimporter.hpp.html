@@ -58,20 +58,16 @@
     <span class="p">{</span>
         <span class="k">struct</span> <span class="n">resource_converter_base</span>
         <span class="p">{</span>
-        <span class="k">protected</span><span class="o">:</span>
-            <span class="k">virtual</span> <span class="kt">void</span> <span class="n">dont_call</span><span class="p">()</span> <span class="n">LEGION_PURE</span><span class="p">;</span>
+            <span class="k">virtual</span> <span class="n">id_type</span> <span class="n">result_type</span><span class="p">()</span> <span class="n">LEGION_PURE</span><span class="p">;</span>
         <span class="p">};</span>
     <span class="p">}</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">result</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Settings</span><span class="o">&gt;</span>
     <span class="k">struct</span> <span class="nl">resource_converter</span> <span class="p">:</span> <span class="k">public</span> <span class="n">detail</span><span class="o">::</span><span class="n">resource_converter_base</span>
     <span class="p">{</span>
-        <span class="n">id_type</span> <span class="n">result_type</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">result</span><span class="o">&gt;</span><span class="p">();</span> <span class="p">}</span>
+        <span class="k">virtual</span> <span class="n">id_type</span> <span class="n">result_type</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">result</span><span class="o">&gt;</span><span class="p">();</span> <span class="p">}</span>
 
         <span class="k">virtual</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">result</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">load</span><span class="p">(</span><span class="k">const</span> <span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">resource</span><span class="p">,</span> <span class="n">Settings</span><span class="o">&amp;&amp;</span><span class="p">...)</span> <span class="n">LEGION_PURE</span><span class="p">;</span>
-
-    <span class="k">protected</span><span class="o">:</span>
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">dont_call</span><span class="p">()</span> <span class="k">override</span> <span class="p">{};</span>
     <span class="p">};</span>
 
     <span class="k">struct</span> <span class="n">basic_resource_converter</span> <span class="k">final</span> <span class="o">:</span> <span class="k">public</span> <span class="n">resource_converter</span><span class="o">&lt;</span><span class="n">basic_resource</span><span class="o">&gt;</span>
@@ -88,13 +84,13 @@
     <span class="k">class</span> <span class="nc">AssetImporter</span>
     <span class="p">{</span>
     <span class="k">private</span><span class="o">:</span>
-        <span class="k">static</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">detail</span><span class="o">::</span><span class="n">resource_converter_base</span><span class="o">*&gt;</span> <span class="n">m_converters</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">detail</span><span class="o">::</span><span class="n">resource_converter_base</span><span class="o">*&gt;&gt;</span> <span class="n">m_converters</span><span class="p">;</span>
 
     <span class="k">public</span><span class="o">:</span>
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
         <span class="k">static</span> <span class="kt">void</span> <span class="n">reportConverter</span><span class="p">(</span><span class="n">cstring</span> <span class="n">extension</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">m_converters</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">nameHash</span><span class="p">(</span><span class="n">extension</span><span class="p">),</span> <span class="k">new</span> <span class="n">T</span><span class="p">());</span>
+            <span class="n">m_converters</span><span class="p">[</span><span class="n">nameHash</span><span class="p">(</span><span class="n">extension</span><span class="p">)].</span><span class="n">push_back</span><span class="p">(</span><span class="k">new</span> <span class="n">T</span><span class="p">());</span>
         <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Settings</span><span class="o">&gt;</span>
@@ -121,19 +117,21 @@
             <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">common</span><span class="o">::</span><span class="n">valid</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">get_error</span><span class="p">()));</span>
 
-            <span class="c1">// Retrieve the correct converter to use.</span>
-            <span class="n">detail</span><span class="o">::</span><span class="n">resource_converter_base</span><span class="o">*</span> <span class="n">base</span> <span class="o">=</span> <span class="n">m_converters</span><span class="p">[</span><span class="n">nameHash</span><span class="p">(</span><span class="n">view</span><span class="p">.</span><span class="n">get_extension</span><span class="p">())];</span>
-            <span class="k">auto</span><span class="o">*</span> <span class="n">converter</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">resource_converter</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Settings</span><span class="p">...</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">base</span><span class="p">);</span>
-
-            <span class="c1">// Do a safety check if the cast was valid before we call any functions on it.</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">==</span> <span class="n">converter</span><span class="o">-&gt;</span><span class="n">result_type</span><span class="p">())</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">detail</span><span class="o">::</span><span class="n">resource_converter_base</span><span class="o">*</span> <span class="nl">base</span> <span class="p">:</span> <span class="n">m_converters</span><span class="p">[</span><span class="n">nameHash</span><span class="p">(</span><span class="n">view</span><span class="p">.</span><span class="n">get_extension</span><span class="p">())])</span>
             <span class="p">{</span>
-                <span class="c1">// Attempt the conversion and return the result.</span>
-                <span class="k">auto</span> <span class="n">loadresult</span> <span class="o">=</span> <span class="n">converter</span><span class="o">-&gt;</span><span class="n">load</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Settings</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">)...);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">loadresult</span> <span class="o">==</span> <span class="n">common</span><span class="o">::</span><span class="n">valid</span><span class="p">)</span>
-                    <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Ok</span><span class="p">((</span><span class="n">T</span><span class="p">)</span><span class="n">loadresult</span><span class="p">));</span>
+                <span class="c1">// Do a safety check if the cast was valid before we call any functions on it.</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">==</span> <span class="n">base</span><span class="o">-&gt;</span><span class="n">result_type</span><span class="p">())</span>
+                <span class="p">{</span>
+                    <span class="c1">// Retrieve the correct converter to use.</span>
+                    <span class="k">auto</span><span class="o">*</span> <span class="n">converter</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">resource_converter</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Settings</span><span class="p">...</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">base</span><span class="p">);</span>
 
-                <span class="k">return</span> <span class="nf">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">loadresult</span><span class="p">.</span><span class="n">get_error</span><span class="p">()));</span>
+                    <span class="c1">// Attempt the conversion and return the result.</span>
+                    <span class="k">auto</span> <span class="n">loadresult</span> <span class="o">=</span> <span class="n">converter</span><span class="o">-&gt;</span><span class="n">load</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Settings</span><span class="o">&gt;</span><span class="p">(</span><span class="n">settings</span><span class="p">)...);</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">loadresult</span> <span class="o">==</span> <span class="n">common</span><span class="o">::</span><span class="n">valid</span><span class="p">)</span>
+                        <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Ok</span><span class="p">((</span><span class="n">T</span><span class="p">)</span><span class="n">loadresult</span><span class="p">));</span>
+
+                    <span class="k">return</span> <span class="nf">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">loadresult</span><span class="p">.</span><span class="n">get_error</span><span class="p">()));</span>
+                <span class="p">}</span>
             <span class="p">}</span>
 
             <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">legion_fs_error</span><span class="p">(</span><span class="s">&quot;requested asset load on file that stores a different type of asset.&quot;</span><span class="p">)));</span>

@@ -1,0 +1,110 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_bindings.hpp:
+
+File bindings.hpp
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/util``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/util/bindings.hpp``)
+--------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_bindings.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``string`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`)
+
+- ``vector`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_vector_view.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_model.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_shader.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_shader.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__rendering__detail`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_bindings_8hpp_1af9379b17e6b591c44e649b28a7506a90`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_bindings_8hpp_1a41f9a9dc512c257a6813e79ce7006405`
+
+- :ref:`exhale_define_bindings_8hpp_1abcfb0103b823dedade18b2129f88cffc`
+
+- :ref:`exhale_define_bindings_8hpp_1ad5e0c526a003ddd6bbd48e289757b28c`
+
+- :ref:`exhale_define_bindings_8hpp_1aab2ebcde137852fcb57144e4f1366625`
+
+- :ref:`exhale_define_bindings_8hpp_1a3f101ebd8715307dfec2c2bf31ab053d`
+
+- :ref:`exhale_define_bindings_8hpp_1a5b33e82b6781d083386299874530a74f`
+
+- :ref:`exhale_define_bindings_8hpp_1a055dc1ac974678157edad1f27996a2e5`
+
+- :ref:`exhale_define_bindings_8hpp_1a49878cd27ca0a45c5122677d484bc9b3`
+
+- :ref:`exhale_define_bindings_8hpp_1a109ded45e652142f12e1058fb548c50d`
+
+- :ref:`exhale_define_bindings_8hpp_1a7705dfed803d377413fff18f4c0ca1b2`
+
+- :ref:`exhale_define_bindings_8hpp_1abdfa9205ec1d640a84cbc10e2ab96947`
+
+- :ref:`exhale_define_bindings_8hpp_1a75e330b4c664e88eff45319b5e8ca1fe`
+
+- :ref:`exhale_define_bindings_8hpp_1a9e73a0b1f0ae6c28111bff100fd9a154`
+
+- :ref:`exhale_define_bindings_8hpp_1aa776123367fa4dbd736e826118154708`
+
+- :ref:`exhale_define_bindings_8hpp_1a9b029c397244dbaab3d6e7114dd398d5`
+
+- :ref:`exhale_define_bindings_8hpp_1a51df415fb8d0db59b968bae24fab920b`
+
+- :ref:`exhale_define_bindings_8hpp_1aefadfd860224e8595fbfe11bcd65c8fa`
+
+- :ref:`exhale_define_bindings_8hpp_1a0fae7080e69611477f699007c28b4629`
+
+- :ref:`exhale_define_bindings_8hpp_1aaf8e3dbcb598623fb3b37ae1f57b972e`
+
+- :ref:`exhale_define_bindings_8hpp_1aaf42be1105908eb41f70c56ac1d2519e`
+
+- :ref:`exhale_define_bindings_8hpp_1ad0b54c78079a259ac65644978b587f12`
+

@@ -67,17 +67,17 @@
         <span class="n">ModelCache</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">matrixBuffer</span><span class="p">);</span>
     <span class="p">}</span>
 
-      <span class="n">mesh_handle</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">get_mesh</span><span class="p">()</span>
+    <span class="n">mesh_handle</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">get_mesh</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_mesh</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
     <span class="p">}</span>
 
-      <span class="k">const</span> <span class="n">model</span><span class="o">&amp;</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">get_model</span><span class="p">()</span>
+    <span class="k">const</span> <span class="n">model</span><span class="o">&amp;</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">get_model</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_model</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
     <span class="p">}</span>
 
-      <span class="k">const</span> <span class="n">model</span><span class="o">&amp;</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_model</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+    <span class="k">const</span> <span class="n">model</span><span class="o">&amp;</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_model</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
         <span class="k">return</span> <span class="n">m_models</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
@@ -88,7 +88,10 @@
         <span class="k">if</span> <span class="p">(</span><span class="n">id</span> <span class="o">==</span> <span class="n">invalid_id</span><span class="p">)</span>
             <span class="k">return</span><span class="p">;</span>
 
-        <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">mesh</span><span class="p">]</span> <span class="o">=</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">id</span><span class="p">).</span><span class="n">get</span><span class="p">();</span>
+        <span class="k">auto</span> <span class="n">mesh_handle</span> <span class="o">=</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">mesh_handle</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">mesh</span><span class="p">]</span> <span class="o">=</span> <span class="n">mesh_handle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
 
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_multiguard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">,</span> <span class="n">lock</span><span class="p">);</span>
         <span class="n">model</span><span class="o">&amp;</span> <span class="n">model</span> <span class="o">=</span> <span class="n">m_models</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
@@ -194,7 +197,7 @@
         <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
     <span class="p">}</span>
 
-      <span class="n">model_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">model_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
@@ -203,7 +206,7 @@
         <span class="k">return</span> <span class="n">invalid_model_handle</span><span class="p">;</span>
     <span class="p">}</span>
 
-      <span class="n">model_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+    <span class="n">model_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">m_models</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
@@ -211,12 +214,12 @@
         <span class="k">return</span> <span class="n">invalid_model_handle</span><span class="p">;</span>
     <span class="p">}</span>
 
-      <span class="n">mesh_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_mesh</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+    <span class="n">mesh_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_mesh</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
     <span class="p">}</span>
 
-      <span class="n">mesh_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_mesh</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">mesh_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_mesh</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
         <span class="k">return</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>

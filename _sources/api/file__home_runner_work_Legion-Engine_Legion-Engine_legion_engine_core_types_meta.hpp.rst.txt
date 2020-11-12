@@ -29,7 +29,19 @@ Includes
 --------
 
 
+- ``array``
+
+- ``deque``
+
+- ``list`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_components_audio_listener.hpp`)
+
+- ``queue``
+
+- ``string`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`)
+
 - ``type_traits``
+
+- ``vector`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_vector_view.hpp`)
 
 
 
@@ -62,6 +74,20 @@ Classes
 - :ref:`exhale_struct_structlegion_1_1core_1_1has__resize`
 
 - :ref:`exhale_struct_structlegion_1_1core_1_1has__resize_3_01_c_00_01_ret_07_args_8_8_8_08_4`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1is__container`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1is__container_3_01std_1_1array_3_01_t_00_01_n_01_4_01_4`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1is__container_3_01std_1_1basic__string_3_01_t_01_4_01_4`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1is__container_3_01std_1_1deque_3_01_t_01_4_01_4`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1is__container_3_01std_1_1list_3_01_t_01_4_01_4`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1is__container_3_01std_1_1queue_3_01_t_01_4_01_4`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1is__container_3_01std_1_1vector_3_01_t_01_4_01_4`
 
 - :ref:`exhale_struct_structlegion_1_1core_1_1is__vector`
 

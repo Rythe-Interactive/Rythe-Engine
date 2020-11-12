@@ -192,7 +192,7 @@ Program Listing for File ecsregistry.hpp
    
            L_NODISCARD bool validateEntity(id_type entityId);
    
-           L_NODISCARD entity_handle createEntity();
+           L_NODISCARD entity_handle createEntity(id_type entityId = invalid_id);
    
            void destroyEntity(id_type entityId, bool recurse = true);
    

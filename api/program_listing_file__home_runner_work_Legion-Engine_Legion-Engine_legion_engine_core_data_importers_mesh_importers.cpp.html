@@ -122,7 +122,7 @@
 <span class="s">            d 1</span><span class="se">\n</span><span class="s">\</span>
 <span class="s">            illum 2</span><span class="se">\n\0</span><span class="s">&quot;</span><span class="p">;</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">materialFile</span><span class="p">.</span><span class="n">get_path</span><span class="p">()</span> <span class="o">!=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">materialFile</span><span class="p">.</span><span class="n">get_virtual_path</span><span class="p">()</span> <span class="o">!=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">))</span>
         <span class="p">{</span>
             <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">materialFile</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">common</span><span class="o">::</span><span class="n">valid</span><span class="p">)</span>

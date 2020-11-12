@@ -29,6 +29,14 @@ Includes
 --------
 
 
+- ``cereal/archives/json.hpp``
+
+- ``cereal/archives/portable_binary.hpp``
+
+- ``cereal/types/memory.hpp``
+
+- ``cereal/types/unordered_map.hpp``
+
 - ``core/async/readonly_rw_spinlock.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_readonly_rw_spinlock.hpp`)
 
 - ``core/async/transferable_atomic.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_transferable_atomic.hpp`)
@@ -42,6 +50,8 @@ Includes
 - ``core/events/events.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_events.hpp`)
 
 - ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`)
+
+- ``core/serialization/serializationmeta.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_serialization_serializationmeta.hpp`)
 
 - ``core/types/types.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_types.hpp`)
 

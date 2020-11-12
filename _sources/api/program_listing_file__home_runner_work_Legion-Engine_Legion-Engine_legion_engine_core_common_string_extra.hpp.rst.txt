@@ -22,16 +22,17 @@ Program Listing for File string_extra.hpp
    
    namespace legion::core::common {
    
-       inline size_t replace_items(std::string& source, const std::string& item, const std::string& value)
+       template<typename StringType>
+       inline size_t replace_items(StringType& source, const std::string& item, const std::string& value)
        {
            size_t count = 0;
-           size_t n = 0;
+           auto it = source.begin();
    
-           while ((n = source.find(item, n)) != std::string::npos) // While there's items to be found, keep replacing them with value.
+           while ((it = std::search(it, source.end(), item.begin(), item.end())) != source.end()) // While there's items to be found, keep replacing them with value.
            {
                count++;
-               source.replace(n, item.size(), value);
-               n += value.size();
+               source.erase(it, it + item.size());
+               source.insert(it, value.begin(), value.end());
            }
    
            return count;

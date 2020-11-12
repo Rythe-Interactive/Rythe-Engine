@@ -48,71 +48,98 @@
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_components_rigidbody.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-components-rigidbody-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/components/rigidbody.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
-
 <span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;physics/physicsconstants.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/physicsconstants.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;physics/components/physics_component.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
 <span class="p">{</span>
     <span class="k">struct</span> <span class="n">rigidbody</span>
     <span class="p">{</span>
+
         <span class="c1">//linear motion component</span>
         <span class="kt">float</span> <span class="n">inverseMass</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="p">;</span>
-        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">velocity</span><span class="p">;</span>
-        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">acc</span><span class="p">;</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">velocity</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">acc</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
         <span class="kt">float</span> <span class="n">linearDrag</span><span class="p">;</span>
 
         <span class="c1">//angular motion component</span>
-        <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">inverseInertiaTensor</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="p">(</span><span class="mf">12.0f</span><span class="p">);</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">localInverseInertiaTensor</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="p">(</span><span class="mf">6.0f</span><span class="p">);</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">globalInverseInertiaTensor</span> <span class="o">=</span> <span class="n">localInverseInertiaTensor</span><span class="p">;</span>
 
-        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">angularAcc</span><span class="p">;</span>
-        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">angularVelocity</span><span class="p">;</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">angularAcc</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">angularVelocity</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
         <span class="kt">float</span> <span class="n">angularDrag</span> <span class="o">=</span> <span class="mf">0.01f</span><span class="p">;</span>
 
         <span class="c1">//force application component</span>
-        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">globalCentreOfMass</span><span class="p">;</span>
-        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">forceAccumulator</span><span class="p">;</span>
-        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">torqueAccumulator</span><span class="p">;</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">forceAccumulator</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">torqueAccumulator</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">globalCentreOfMass</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
 
-        <span class="kt">float</span> <span class="n">restitution</span><span class="p">;</span>
-        <span class="kt">float</span> <span class="n">friction</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">restitution</span> <span class="o">=</span> <span class="mf">0.5f</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">friction</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span>
 
         <span class="kt">bool</span> <span class="n">isAsleep</span><span class="p">;</span>
 
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Archive</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">archive</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//We won&#39;t need to manually name all the components in the future</span>
+            <span class="n">archive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Name&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;Rigidbody&quot;</span><span class="p">)),</span> <span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Inverse Mass&quot;</span><span class="p">,</span><span class="n">inverseMass</span><span class="p">),</span>
+                        <span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Velocity&quot;</span><span class="p">,</span><span class="n">velocity</span><span class="p">),</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Acceleration&quot;</span><span class="p">,</span><span class="n">acc</span><span class="p">),</span> <span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Linear Drag&quot;</span><span class="p">,</span><span class="n">linearDrag</span><span class="p">),</span>
+                        <span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Inverse Intertia Tensor&quot;</span><span class="p">,</span><span class="n">localInverseInertiaTensor</span><span class="p">),</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Angular Acceleration&quot;</span><span class="p">,</span><span class="n">angularAcc</span><span class="p">),</span>
+                        <span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Angular Velocity&quot;</span><span class="p">,</span><span class="n">angularVelocity</span><span class="p">),</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Angular Drag&quot;</span><span class="p">,</span><span class="n">angularDrag</span><span class="p">),</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Global Centre of Mass&quot;</span><span class="p">,</span><span class="n">globalCentreOfMass</span><span class="p">),</span>
+                        <span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Force Accumulator&quot;</span><span class="p">,</span><span class="n">forceAccumulator</span><span class="p">),</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Torque Accumulator&quot;</span><span class="p">,</span><span class="n">torqueAccumulator</span><span class="p">),</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Restitution&quot;</span><span class="p">,</span><span class="n">restitution</span><span class="p">),</span>
+                        <span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Friction&quot;</span><span class="p">,</span><span class="n">friction</span><span class="p">),</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Is Asleep?&quot;</span><span class="p">,</span><span class="n">isAsleep</span><span class="p">));</span>
+        <span class="p">}</span>
 
+        <span class="k">static</span> <span class="kt">float</span> <span class="n">calculateRestitution</span><span class="p">(</span><span class="kt">float</span> <span class="n">restitutionA</span><span class="p">,</span> <span class="kt">float</span> <span class="n">restitutionB</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">restitutionA</span> <span class="o">+</span> <span class="n">restitutionB</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0f</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="nf">addForce</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">force</span><span class="p">)</span>
+        <span class="k">static</span> <span class="kt">float</span> <span class="n">calculateFriction</span><span class="p">(</span><span class="kt">float</span> <span class="n">frictionA</span><span class="p">,</span> <span class="kt">float</span> <span class="n">frictionB</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">frictionA</span><span class="p">,</span><span class="n">frictionB</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">addForce</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">force</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">forceAccumulator</span> <span class="o">+=</span> <span class="n">force</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="nf">addForceAt</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldForcePosition</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">force</span><span class="p">)</span>
+        <span class="kt">void</span> <span class="n">addForceAt</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldForcePosition</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">force</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">forceAccumulator</span> <span class="o">+=</span> <span class="n">force</span><span class="p">;</span>
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">a</span> <span class="o">=</span> <span class="n">worldForcePosition</span> <span class="o">-</span> <span class="n">globalCentreOfMass</span><span class="p">;</span>
             <span class="n">torqueAccumulator</span> <span class="o">+=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">worldForcePosition</span> <span class="o">-</span> <span class="n">globalCentreOfMass</span><span class="p">,</span> <span class="n">force</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="nf">setMass</span><span class="p">(</span><span class="kt">float</span> <span class="n">mass</span><span class="p">)</span>
+        <span class="kt">void</span> <span class="n">setMass</span><span class="p">(</span><span class="kt">float</span> <span class="n">mass</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">inverseMass</span> <span class="o">=</span> <span class="mf">1.0f</span> <span class="o">/</span> <span class="n">mass</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="nf">setRestitution</span><span class="p">(</span><span class="kt">float</span> <span class="n">newRestitution</span><span class="p">)</span>
+        <span class="kt">void</span> <span class="n">setRestitution</span><span class="p">(</span><span class="kt">float</span> <span class="n">newRestitution</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">restitution</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">clamp</span><span class="p">(</span><span class="n">newRestitution</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="nf">setFriction</span><span class="p">(</span><span class="kt">float</span> <span class="n">newFriction</span><span class="p">)</span>
+        <span class="kt">void</span> <span class="n">setFriction</span><span class="p">(</span><span class="kt">float</span> <span class="n">newFriction</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">friction</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">clamp</span><span class="p">(</span><span class="n">newFriction</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="nf">resetAccumulators</span><span class="p">()</span>
+        <span class="kt">void</span> <span class="n">resetAccumulators</span><span class="p">()</span>
         <span class="p">{</span>
             <span class="n">forceAccumulator</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
             <span class="n">torqueAccumulator</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">UpdateInertiaTensor</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">quat</span> <span class="n">orientation</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">mat3Rot</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">toMat3</span><span class="p">(</span><span class="n">orientation</span><span class="p">);</span>
+            <span class="n">globalInverseInertiaTensor</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">inverse</span><span class="p">(</span><span class="n">mat3Rot</span><span class="p">)</span> <span class="o">*</span> <span class="n">localInverseInertiaTensor</span> <span class="o">*</span>  <span class="n">mat3Rot</span><span class="p">;</span>
         <span class="p">}</span>
 
 

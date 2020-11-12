@@ -1,0 +1,283 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File shellinvoke.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File shellinvoke.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-shellinvoke-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-platform-shellinvoke-hpp"></span><h1>Program Listing for File shellinvoke.hpp<a class="headerlink" href="#program-listing-for-file-shellinvoke-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_shellinvoke.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-platform-shellinvoke-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/platform/shellinvoke.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/platform/platform.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/types/primitives.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/common/string_extra.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/logging/logging.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span>
+<span class="p">{</span>
+<span class="cp">#if defined(LEGION_WINDOWS)</span>
+    <span class="kr">inline</span> <span class="kt">bool</span> <span class="n">ShellInvoke</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">command</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">err</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">command</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="n">HANDLE</span> <span class="n">childStdoutRd</span><span class="p">;</span>
+        <span class="n">HANDLE</span> <span class="n">childStdoutWr</span><span class="p">;</span>
+        <span class="n">HANDLE</span> <span class="n">childStderrRd</span><span class="p">;</span>
+        <span class="n">HANDLE</span> <span class="n">childStderrWr</span><span class="p">;</span>
+
+        <span class="n">SECURITY_ATTRIBUTES</span> <span class="n">saAttr</span><span class="p">;</span>
+        <span class="n">saAttr</span><span class="p">.</span><span class="n">nLength</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">SECURITY_ATTRIBUTES</span><span class="p">);</span>
+        <span class="n">saAttr</span><span class="p">.</span><span class="n">bInheritHandle</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
+        <span class="n">saAttr</span><span class="p">.</span><span class="n">lpSecurityDescriptor</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">CreatePipe</span><span class="p">(</span><span class="o">&amp;</span><span class="n">childStdoutRd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">childStdoutWr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">saAttr</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">SetHandleInformation</span><span class="p">(</span><span class="n">childStdoutRd</span><span class="p">,</span> <span class="n">HANDLE_FLAG_INHERIT</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">CreatePipe</span><span class="p">(</span><span class="o">&amp;</span><span class="n">childStderrRd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">childStderrWr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">saAttr</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">SetHandleInformation</span><span class="p">(</span><span class="n">childStderrRd</span><span class="p">,</span> <span class="n">HANDLE_FLAG_INHERIT</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="kt">char</span><span class="o">*</span> <span class="n">cmd</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">command</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="n">memcpy</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">command</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">command</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+
+        <span class="n">cmd</span><span class="p">[</span><span class="n">command</span><span class="p">.</span><span class="n">size</span><span class="p">()]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+
+        <span class="n">STARTUPINFOA</span> <span class="n">si</span><span class="p">;</span>
+        <span class="n">PROCESS_INFORMATION</span> <span class="n">pi</span><span class="p">;</span>
+
+        <span class="n">ZeroMemory</span><span class="p">(</span><span class="o">&amp;</span><span class="n">si</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">si</span><span class="p">));</span>
+        <span class="n">si</span><span class="p">.</span><span class="n">cb</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">si</span><span class="p">);</span>
+        <span class="n">si</span><span class="p">.</span><span class="n">hStdError</span> <span class="o">=</span> <span class="n">childStderrWr</span><span class="p">;</span>
+        <span class="n">si</span><span class="p">.</span><span class="n">hStdOutput</span> <span class="o">=</span> <span class="n">childStdoutWr</span><span class="p">;</span>
+        <span class="n">si</span><span class="p">.</span><span class="n">dwFlags</span> <span class="o">|=</span> <span class="n">STARTF_USESTDHANDLES</span><span class="p">;</span>
+        <span class="n">ZeroMemory</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pi</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">pi</span><span class="p">));</span>
+
+        <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;Executing command: {}&quot;</span><span class="p">,</span> <span class="n">command</span><span class="p">);</span>
+        <span class="k">auto</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">CreateProcessA</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">TRUE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">si</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pi</span><span class="p">);</span>
+
+        <span class="n">CloseHandle</span><span class="p">(</span><span class="n">childStdoutWr</span><span class="p">);</span>
+        <span class="n">CloseHandle</span><span class="p">(</span><span class="n">childStderrWr</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="n">FALSE</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">CloseHandle</span><span class="p">(</span><span class="n">childStdoutRd</span><span class="p">);</span>
+            <span class="n">CloseHandle</span><span class="p">(</span><span class="n">childStderrRd</span><span class="p">);</span>
+            <span class="k">delete</span><span class="p">[]</span> <span class="n">cmd</span><span class="p">;</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;Failed to execute command: {}&quot;</span><span class="p">,</span> <span class="n">command</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">DWORD</span> <span class="n">read</span><span class="p">;</span>
+
+        <span class="k">const</span> <span class="n">size_type</span> <span class="n">bufferSize</span> <span class="o">=</span> <span class="mi">512</span><span class="p">;</span>
+
+        <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="n">bufferSize</span><span class="p">];</span>
+
+        <span class="n">BOOL</span> <span class="n">success</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="n">ReadFile</span><span class="p">(</span><span class="n">childStdoutRd</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">bufferSize</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">read</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">success</span> <span class="o">||</span> <span class="n">read</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+
+            <span class="n">out</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">read</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">success</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="n">ReadFile</span><span class="p">(</span><span class="n">childStderrRd</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">bufferSize</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">read</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">success</span> <span class="o">||</span> <span class="n">read</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+
+            <span class="n">err</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">read</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">CloseHandle</span><span class="p">(</span><span class="n">childStdoutRd</span><span class="p">);</span>
+        <span class="n">CloseHandle</span><span class="p">(</span><span class="n">childStderrRd</span><span class="p">);</span>
+        <span class="n">CloseHandle</span><span class="p">(</span><span class="n">pi</span><span class="p">.</span><span class="n">hProcess</span><span class="p">);</span>
+        <span class="n">CloseHandle</span><span class="p">(</span><span class="n">pi</span><span class="p">.</span><span class="n">hThread</span><span class="p">);</span>
+
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">cmd</span><span class="p">;</span>
+        <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;Successfully executed command: {}&quot;</span><span class="p">,</span> <span class="n">command</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="kt">bool</span> <span class="n">ShellInvoke</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">command</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nf">ShellInvoke</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">temp</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="kt">bool</span> <span class="n">ShellInvoke</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">command</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nf">ShellInvoke</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">temp</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="cp">#elif defined(LEGION_LINUX)</span>
+    <span class="kr">inline</span> <span class="kt">bool</span> <span class="n">ShellInvoke</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">command</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">out</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">err</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">const</span> <span class="kt">int</span> <span class="n">READ_END</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">const</span> <span class="kt">int</span> <span class="n">WRITE_END</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="kt">int</span> <span class="n">outfd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">};</span>
+        <span class="kt">int</span> <span class="n">errfd</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">};</span>
+
+        <span class="k">auto</span> <span class="n">cleanup</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">]()</span> <span class="p">{</span>
+            <span class="n">close</span><span class="p">(</span><span class="n">outfd</span><span class="p">[</span><span class="n">READ_END</span><span class="p">]);</span>
+            <span class="n">close</span><span class="p">(</span><span class="n">outfd</span><span class="p">[</span><span class="n">WRITE_END</span><span class="p">]);</span>
+
+            <span class="n">close</span><span class="p">(</span><span class="n">errfd</span><span class="p">[</span><span class="n">READ_END</span><span class="p">]);</span>
+            <span class="n">close</span><span class="p">(</span><span class="n">errfd</span><span class="p">[</span><span class="n">WRITE_END</span><span class="p">]);</span>
+        <span class="p">};</span>
+
+        <span class="k">auto</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">pipe</span><span class="p">(</span><span class="n">outfd</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">pipe</span><span class="p">(</span><span class="n">errfd</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">close</span><span class="p">(</span><span class="n">outfd</span><span class="p">[</span><span class="n">READ_END</span><span class="p">]);</span>
+            <span class="n">close</span><span class="p">(</span><span class="n">outfd</span><span class="p">[</span><span class="n">WRITE_END</span><span class="p">]);</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">auto</span> <span class="n">pid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pid</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">// PARENT</span>
+        <span class="p">{</span>
+            <span class="n">close</span><span class="p">(</span><span class="n">outfd</span><span class="p">[</span><span class="n">WRITE_END</span><span class="p">]);</span>  <span class="c1">// Parent does not write to stdout</span>
+            <span class="n">close</span><span class="p">(</span><span class="n">errfd</span><span class="p">[</span><span class="n">WRITE_END</span><span class="p">]);</span>  <span class="c1">// Parent does not write to stderr</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">pid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">// CHILD</span>
+        <span class="p">{</span>
+            <span class="n">outfd</span><span class="p">[</span><span class="n">WRITE_END</span><span class="p">]</span> <span class="o">=</span> <span class="n">dup2</span><span class="p">(</span><span class="n">outfd</span><span class="p">[</span><span class="n">WRITE_END</span><span class="p">],</span> <span class="n">STDOUT_FILENO</span><span class="p">);</span>
+            <span class="n">errfd</span><span class="p">[</span><span class="n">WRITE_END</span><span class="p">]</span> <span class="o">=</span> <span class="n">dup2</span><span class="p">(</span><span class="n">errfd</span><span class="p">[</span><span class="n">WRITE_END</span><span class="p">],</span> <span class="n">STDERR_FILENO</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">outfd</span><span class="p">[</span><span class="n">WRITE_END</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="n">errfd</span><span class="p">[</span><span class="n">WRITE_END</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+
+            <span class="n">close</span><span class="p">(</span><span class="n">outfd</span><span class="p">[</span><span class="n">READ_END</span><span class="p">]);</span>   <span class="c1">// Child does not read from stdout</span>
+            <span class="n">close</span><span class="p">(</span><span class="n">errfd</span><span class="p">[</span><span class="n">READ_END</span><span class="p">]);</span>   <span class="c1">// Child does not read from stderr</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">execl</span><span class="p">(</span><span class="s">&quot;/bin/bash&quot;</span><span class="p">,</span> <span class="s">&quot;bash&quot;</span><span class="p">,</span> <span class="s">&quot;-c&quot;</span><span class="p">,</span> <span class="n">command</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="k">nullptr</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_FAILURE</span><span class="p">);</span>
+            <span class="n">exit</span><span class="p">(</span><span class="n">EXIT_SUCCESS</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">// PARENT</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pid</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cleanup</span><span class="p">();</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">int</span> <span class="n">status</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">waitpid</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">status</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span> <span class="mi">256</span><span class="o">&gt;</span> <span class="n">buffer</span><span class="p">;</span>
+
+        <span class="kt">ssize_t</span> <span class="n">bytes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">do</span>
+        <span class="p">{</span>
+            <span class="n">bytes</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">outfd</span><span class="p">[</span><span class="n">READ_END</span><span class="p">],</span> <span class="n">buffer</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">buffer</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+            <span class="n">out</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">bytes</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">bytes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">);</span>
+
+        <span class="k">do</span>
+        <span class="p">{</span>
+            <span class="n">bytes</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">errfd</span><span class="p">[</span><span class="n">READ_END</span><span class="p">],</span> <span class="n">buffer</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">buffer</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+            <span class="n">err</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">bytes</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">bytes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">);</span>
+
+        <span class="n">cleanup</span><span class="p">();</span>
+        <span class="k">return</span> <span class="nf">WEXITSTATUS</span><span class="p">(</span><span class="n">status</span><span class="p">)</span> <span class="o">==</span> <span class="n">EXIT_SUCCESS</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="cp">#else</span>
+<span class="cp">#error &quot;fuck you&quot;</span>
+<span class="cp">#endif</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_shellinvoke.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

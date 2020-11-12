@@ -62,14 +62,14 @@ Namespaces
 
 - :ref:`namespace_legion__core__compute`
 
+- :ref:`namespace_legion__core__compute__detail`
+
 
 Classes
 -------
 
 
-- :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1buffer__base`
-
-- :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1in`
+- :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1detail_1_1buffer__base`
 
 - :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1in__ident`
 
@@ -77,11 +77,13 @@ Classes
 
 - :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1inout__ident`
 
-- :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1out`
-
 - :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1out__ident`
 
 - :ref:`exhale_class_classlegion_1_1core_1_1compute_1_1function`
 
 - :ref:`exhale_class_classlegion_1_1core_1_1compute_1_1function__base`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1compute_1_1in`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1compute_1_1out`
 

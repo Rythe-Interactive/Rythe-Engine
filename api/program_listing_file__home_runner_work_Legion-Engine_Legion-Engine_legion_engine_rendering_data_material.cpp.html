@@ -50,54 +50,59 @@
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
 <span class="p">{</span>
-    <span class="n">material_parameter_base</span><span class="o">*</span> <span class="n">material_parameter_base</span><span class="o">::</span><span class="n">create_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;&amp;</span> <span class="n">info</span><span class="p">)</span>
+    <span class="n">material_parameter_base</span><span class="o">*</span> <span class="n">material_parameter_base</span><span class="o">::</span><span class="n">create_param</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span><span class="k">const</span> <span class="n">GLint</span><span class="o">&amp;</span> <span class="n">location</span><span class="p">,</span> <span class="k">const</span> <span class="n">GLenum</span><span class="o">&amp;</span> <span class="n">type</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="k">switch</span> <span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">second</span><span class="p">)</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">type</span><span class="p">)</span>
         <span class="p">{</span>
+        <span class="k">case</span> <span class="nl">GL_SAMPLER_2D</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
         <span class="k">case</span> <span class="nl">GL_FLOAT</span><span class="p">:</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="k">case</span> <span class="nl">GL_FLOAT_VEC2</span><span class="p">:</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="k">case</span> <span class="nl">GL_FLOAT_VEC3</span><span class="p">:</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="k">case</span> <span class="nl">GL_FLOAT_VEC4</span><span class="p">:</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">GL_UNSIGNED_INT</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">uint</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="k">case</span> <span class="nl">GL_INT</span><span class="p">:</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="k">case</span> <span class="nl">GL_INT_VEC2</span><span class="p">:</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">ivec2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">ivec2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="k">case</span> <span class="nl">GL_INT_VEC3</span><span class="p">:</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">ivec3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">ivec3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="k">case</span> <span class="nl">GL_INT_VEC4</span><span class="p">:</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">ivec4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">ivec4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="k">case</span> <span class="nl">GL_BOOL</span><span class="p">:</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="k">case</span> <span class="nl">GL_BOOL_VEC2</span><span class="p">:</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">bvec2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">bvec2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="k">case</span> <span class="nl">GL_BOOL_VEC3</span><span class="p">:</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">bvec3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">bvec3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="k">case</span> <span class="nl">GL_BOOL_VEC4</span><span class="p">:</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">bvec4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">bvec4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="k">case</span> <span class="nl">GL_FLOAT_MAT2</span><span class="p">:</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">mat2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">mat2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="k">case</span> <span class="nl">GL_FLOAT_MAT3</span><span class="p">:</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="k">case</span> <span class="nl">GL_FLOAT_MAT4</span><span class="p">:</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">info</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">);</span>
             <span class="k">break</span><span class="p">;</span>
         <span class="k">default</span><span class="o">:</span>
             <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
@@ -137,7 +142,7 @@
 
         <span class="k">if</span> <span class="p">(</span><span class="n">shader</span> <span class="o">==</span> <span class="n">invalid_shader_handle</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Tried to create a material named {} with an invalid shader file: {}.&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">shaderFile</span><span class="p">.</span><span class="n">get_path</span><span class="p">());</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Tried to create a material named {} with an invalid shader file: {}.&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">shaderFile</span><span class="p">.</span><span class="n">get_virtual_path</span><span class="p">());</span>
             <span class="k">return</span> <span class="n">invalid_material_handle</span><span class="p">;</span>
         <span class="p">}</span>
 
@@ -161,14 +166,7 @@
     <span class="kt">void</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">bind</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materialLock</span><span class="p">);</span>
-        <span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materials</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">m_shader</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
-    <span class="p">}</span>
-
-    <span class="kt">void</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">prepare</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materialLock</span><span class="p">);</span>
-        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">param</span><span class="p">]</span> <span class="o">:</span> <span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materials</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">m_parameters</span><span class="p">)</span>
-            <span class="n">param</span><span class="o">-&gt;</span><span class="n">apply</span><span class="p">(</span><span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materials</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">m_shader</span><span class="p">);</span>
+        <span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materials</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">bind</span><span class="p">();</span>
     <span class="p">}</span>
 
     <span class="n">attribute</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">get_attribute</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
@@ -176,6 +174,12 @@
         <span class="k">return</span> <span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materials</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">m_shader</span><span class="p">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
     <span class="p">}</span>
 
+    <span class="kt">void</span> <span class="n">material</span><span class="o">::</span><span class="n">bind</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">m_shader</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">param</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_parameters</span><span class="p">)</span>
+            <span class="n">param</span><span class="o">-&gt;</span><span class="n">apply</span><span class="p">(</span><span class="n">m_shader</span><span class="p">);</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>

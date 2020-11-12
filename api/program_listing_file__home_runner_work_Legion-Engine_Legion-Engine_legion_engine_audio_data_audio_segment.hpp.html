@@ -66,7 +66,7 @@
 
         <span class="n">audio_segment</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
 
-        <span class="n">audio_segment</span><span class="p">(</span><span class="n">int16</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="n">ALuint</span> <span class="n">bufferId</span><span class="p">,</span> <span class="n">size_type</span> <span class="n">samples</span><span class="p">,</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sampleRate</span><span class="p">,</span> <span class="kt">int</span> <span class="n">layer</span><span class="p">,</span> <span class="kt">int</span> <span class="n">avg_bitRate</span><span class="p">);</span>
+        <span class="n">audio_segment</span><span class="p">(</span><span class="n">byte</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="n">ALuint</span> <span class="n">bufferId</span><span class="p">,</span> <span class="n">size_type</span> <span class="n">samples</span><span class="p">,</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sampleRate</span><span class="p">,</span> <span class="kt">int</span> <span class="n">layer</span><span class="p">,</span> <span class="kt">int</span> <span class="n">avg_bitRate</span><span class="p">);</span>
 
         <span class="n">audio_segment</span><span class="p">(</span><span class="k">const</span> <span class="n">audio_segment</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">);</span>
 
@@ -79,15 +79,32 @@
         <span class="o">~</span><span class="n">audio_segment</span><span class="p">();</span>
 
         <span class="c1">// Read-Write</span>
-        <span class="n">int16</span><span class="o">*</span> <span class="nf">getData</span><span class="p">()</span>
+        <span class="n">byte</span><span class="o">*</span> <span class="nf">getData</span><span class="p">()</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">m_data</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="c1">// Read only</span>
-        <span class="k">const</span> <span class="n">int16</span><span class="o">*</span> <span class="nf">getData</span><span class="p">()</span> <span class="k">const</span>
+        <span class="k">const</span> <span class="n">byte</span><span class="o">*</span> <span class="nf">getData</span><span class="p">()</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">m_data</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">setNextAudioSegment</span><span class="p">(</span><span class="n">audio_segment</span><span class="o">&amp;</span> <span class="n">next</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_next</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">next</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">audio_segment</span><span class="o">*</span> <span class="nf">getNextAudioSegment</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_next</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">audio_segment</span><span class="o">*</span> <span class="nf">clearNextAudioSegment</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">audio_segment</span><span class="o">*</span> <span class="n">next</span> <span class="o">=</span> <span class="n">m_next</span><span class="p">;</span>
+            <span class="n">m_next</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">next</span><span class="p">;</span>
         <span class="p">}</span>
 
     <span class="k">private</span><span class="o">:</span>
@@ -95,15 +112,22 @@
         <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">m_refsLock</span><span class="p">;</span>
         <span class="k">static</span> <span class="n">id_type</span> <span class="n">m_lastId</span><span class="p">;</span>
         <span class="n">id_type</span> <span class="n">m_id</span><span class="p">;</span>
-        <span class="n">int16</span><span class="o">*</span> <span class="n">m_data</span><span class="p">;</span>
+        <span class="n">byte</span><span class="o">*</span> <span class="n">m_data</span><span class="p">;</span>
+
+        <span class="n">audio_segment</span><span class="o">*</span> <span class="n">m_next</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
     <span class="p">};</span>
 
     <span class="k">struct</span> <span class="n">audio_import_settings</span>
     <span class="p">{</span>
-
+        <span class="k">enum</span> <span class="k">struct</span> <span class="nl">channel_processing_setting</span> <span class="p">:</span> <span class="kt">int</span>
+        <span class="p">{</span>
+            <span class="n">none</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="n">force_mono</span><span class="p">,</span>
+            <span class="n">split_channels</span><span class="p">,</span>
+        <span class="p">}</span> <span class="n">channel_processing</span><span class="p">;</span>
     <span class="p">};</span>
 
-    <span class="k">const</span> <span class="n">audio_import_settings</span> <span class="n">default_audio_import_settings</span><span class="p">{};</span>
+    <span class="k">const</span> <span class="n">audio_import_settings</span> <span class="n">default_audio_import_settings</span><span class="p">{</span> <span class="n">audio_import_settings</span><span class="o">::</span><span class="n">channel_processing_setting</span><span class="o">::</span><span class="n">none</span> <span class="p">};</span>
 
     <span class="k">struct</span> <span class="n">audio_segment_handle</span>
     <span class="p">{</span>
@@ -120,7 +144,11 @@
         <span class="k">friend</span> <span class="k">struct</span> <span class="n">audio_segment_handle</span><span class="p">;</span>
     <span class="k">public</span><span class="o">:</span>
         <span class="k">static</span> <span class="n">audio_segment_handle</span> <span class="n">createAudioSegment</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">audio_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_audio_import_settings</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">audio_segment_handle</span> <span class="nf">getAudioSegment</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">unload</span><span class="p">();</span>
     <span class="k">private</span><span class="o">:</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="n">createAudioSegment</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">audio_segment</span><span class="o">*</span> <span class="n">segment</span><span class="p">);</span>
+
         <span class="c1">// Unorderer map to store all unique audio segments</span>
         <span class="c1">// Each audio segment has a unique id using name hash</span>
         <span class="c1">// Each segment also needs a readonly_rw_spinlock for thread safety</span>

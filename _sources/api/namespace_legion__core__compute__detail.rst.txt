@@ -1,0 +1,20 @@
+
+.. _namespace_legion__core__compute__detail:
+
+Namespace legion::core::compute::detail
+=======================================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1detail_1_1buffer__base`

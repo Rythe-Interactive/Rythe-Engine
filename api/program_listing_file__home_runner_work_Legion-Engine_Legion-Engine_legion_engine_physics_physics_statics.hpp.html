@@ -80,7 +80,7 @@
         <span class="p">}</span>
 
         <span class="k">static</span> <span class="kt">bool</span> <span class="n">FindSeperatingAxisByExtremePointProjection</span><span class="p">(</span><span class="n">ConvexCollider</span><span class="o">*</span> <span class="n">convexA</span>
-            <span class="p">,</span> <span class="n">ConvexCollider</span><span class="o">*</span> <span class="n">convexB</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transformA</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transformB</span><span class="p">,</span> <span class="n">PointerEncapsulator</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">&gt;&amp;</span><span class="n">refFace</span><span class="p">,</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">maximumSeperation</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">debugPoint</span><span class="p">)</span>
+            <span class="p">,</span> <span class="n">ConvexCollider</span><span class="o">*</span> <span class="n">convexB</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transformA</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transformB</span><span class="p">,</span> <span class="n">PointerEncapsulator</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">&gt;&amp;</span><span class="n">refFace</span><span class="p">,</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">maximumSeperation</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="kt">float</span> <span class="n">currentMaximumSeperation</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;::</span><span class="n">lowest</span><span class="p">();</span>
 
@@ -101,7 +101,6 @@
 
                 <span class="k">if</span> <span class="p">(</span><span class="n">seperation</span> <span class="o">&gt;</span> <span class="n">currentMaximumSeperation</span><span class="p">)</span>
                 <span class="p">{</span>
-                    <span class="n">debugPoint</span> <span class="o">=</span> <span class="n">worldSupportPoint</span><span class="p">;</span>
                     <span class="n">currentMaximumSeperation</span> <span class="o">=</span> <span class="n">seperation</span><span class="p">;</span>
                     <span class="n">refFace</span><span class="p">.</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">face</span><span class="p">;</span>
                 <span class="p">}</span>
@@ -114,8 +113,8 @@
                 <span class="p">}</span>
             <span class="p">}</span>
             <span class="c1">//no seperating axis was found</span>
-
             <span class="n">maximumSeperation</span> <span class="o">=</span> <span class="n">currentMaximumSeperation</span><span class="p">;</span>
+
             <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
         <span class="p">}</span>
 

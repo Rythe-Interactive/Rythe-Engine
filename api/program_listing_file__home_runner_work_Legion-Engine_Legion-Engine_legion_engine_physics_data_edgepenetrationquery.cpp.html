@@ -46,9 +46,9 @@
   <div class="section" id="program-listing-for-file-edgepenetrationquery-cpp">
 <span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-data-edgepenetrationquery-cpp"></span><h1>Program Listing for File edgepenetrationquery.cpp<a class="headerlink" href="#program-listing-for-file-edgepenetrationquery-cpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_edgepenetrationquery.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-data-edgepenetrationquery-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/data/edgepenetrationquery.cpp</span></code>)</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;physics/data/edgepenetrationquery.h&gt;</span><span class="cp"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;physics/data/edgepenetrationquery.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;physics/physics_statics.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;physics/systems/physicssystem.hpp&gt;</span><span class="cp"></span>
+
 
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
@@ -61,6 +61,7 @@
     <span class="kt">void</span> <span class="n">EdgePenetrationQuery</span><span class="o">::</span><span class="n">populateContactList</span><span class="p">(</span><span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">refTransform</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">incTransform</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="c1">//------------------- The contact points between 2 edges are the closest points between the 2 edges --------------------//</span>
+        <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;EdgePenetrationQuery::populateContactList&quot;</span><span class="p">);</span>
 
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">refTransform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="o">*</span><span class="n">refEdge</span><span class="o">-&gt;</span><span class="n">edgePositionPtr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">refTransform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="o">*</span><span class="n">refEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">edgePositionPtr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
@@ -75,14 +76,10 @@
 
         <span class="n">physics_contact</span> <span class="n">contact</span><span class="p">;</span>
 
-        <span class="n">contact</span><span class="p">.</span><span class="n">incTransform</span> <span class="o">=</span> <span class="n">incTransform</span><span class="p">;</span>
-        <span class="n">contact</span><span class="p">.</span><span class="n">refTransform</span> <span class="o">=</span> <span class="n">refTransform</span><span class="p">;</span>
-
-        <span class="n">contact</span><span class="p">.</span><span class="n">worldContactInc</span> <span class="o">=</span> <span class="n">incContactPoint</span><span class="p">;</span>
-        <span class="n">contact</span><span class="p">.</span><span class="n">worldContactRef</span> <span class="o">=</span> <span class="n">refContactPoint</span><span class="p">;</span>
+        <span class="n">contact</span><span class="p">.</span><span class="n">IncWorldContact</span> <span class="o">=</span> <span class="n">incContactPoint</span><span class="p">;</span>
+        <span class="n">contact</span><span class="p">.</span><span class="n">RefWorldContact</span> <span class="o">=</span> <span class="n">refContactPoint</span><span class="p">;</span>
 
         <span class="n">manifold</span><span class="p">.</span><span class="n">contacts</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">contact</span><span class="p">);</span>
-        <span class="n">PhysicsSystem</span><span class="o">::</span><span class="n">contactPoints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">contact</span><span class="p">);</span>
 
     <span class="p">}</span>
 

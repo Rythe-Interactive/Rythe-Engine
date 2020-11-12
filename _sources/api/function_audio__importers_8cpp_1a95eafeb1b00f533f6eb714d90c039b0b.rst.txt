@@ -1,0 +1,13 @@
+.. _exhale_function_audio__importers_8cpp_1a95eafeb1b00f533f6eb714d90c039b0b:
+
+Function legion::audio::detail::convertToMono(const byte \*, int, int&, int&, int)
+==================================================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_importers_audio_importers.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::audio::detail::convertToMono(const byte *, int, int&, int&, int)

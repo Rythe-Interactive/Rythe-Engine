@@ -29,6 +29,8 @@ Includes
 --------
 
 
+- ``memory``
+
 - ``rendering/data/shader.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_shader.hpp`)
 
 
@@ -36,6 +38,8 @@ Includes
 Included By
 -----------
 
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_camera.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_renderable.hpp`
 
@@ -55,13 +59,13 @@ Classes
 -------
 
 
-- :ref:`exhale_struct_structlegion_1_1rendering_1_1material`
+- :ref:`exhale_class_structlegion_1_1rendering_1_1material`
 
-- :ref:`exhale_struct_structlegion_1_1rendering_1_1material__handle`
+- :ref:`exhale_class_structlegion_1_1rendering_1_1material__handle`
 
-- :ref:`exhale_struct_structlegion_1_1rendering_1_1material__parameter`
+- :ref:`exhale_class_structlegion_1_1rendering_1_1material__parameter`
 
-- :ref:`exhale_struct_structlegion_1_1rendering_1_1material__parameter__base`
+- :ref:`exhale_class_structlegion_1_1rendering_1_1material__parameter__base`
 
 - :ref:`exhale_class_classlegion_1_1rendering_1_1_material_cache`
 

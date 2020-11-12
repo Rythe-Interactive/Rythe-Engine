@@ -51,7 +51,11 @@ Includes
 
 - ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`)
 
+- ``core/platform/shellinvoke.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_shellinvoke.hpp`)
+
 - ``core/scheduling/scheduling.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_scheduling.hpp`)
+
+- ``core/serialization/serializationUtil.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_serialization_serializationUtil.hpp`)
 
 - ``core/time/time.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_time.hpp`)
 
@@ -89,7 +93,9 @@ Included By
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_cube_collider_params.hpp`
 
-- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_edgepenetrationquery.h`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_edgepenetrationquery.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_identifier.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_penetrationquery.h`
 
@@ -101,17 +107,21 @@ Included By
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_halfedgeface.hpp`
 
-- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_contact.h`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_contact.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_statics.hpp`
 
-- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsconstants.h`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsconstants.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsmodule.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_systems_physicssystem.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_debugrendering.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_shadercompiler_shadercompiler.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_settings.hpp`
 
 
 

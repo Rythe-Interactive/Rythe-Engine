@@ -39,9 +39,9 @@ Includes
 
 - ``physics/cube_collider_params.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_cube_collider_params.hpp`)
 
-- ``physics/data/convexconvexpenetrationquery.h`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_convexconvexpenetrationquery.h`)
+- ``physics/data/convexconvexpenetrationquery.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_convexconvexpenetrationquery.hpp`)
 
-- ``physics/data/edgepenetrationquery.h`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_edgepenetrationquery.h`)
+- ``physics/data/edgepenetrationquery.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_edgepenetrationquery.hpp`)
 
 - ``physics/data/penetrationquery.h`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_penetrationquery.h`)
 
@@ -53,7 +53,7 @@ Includes
 
 - ``physics/physics_statics.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_statics.hpp`)
 
-- ``physics/physicsconstants.h`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsconstants.h`)
+- ``physics/physicsconstants.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsconstants.hpp`)
 
 - ``physics/physicsmodule.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsmodule.hpp`)
 

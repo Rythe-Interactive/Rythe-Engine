@@ -1,0 +1,13 @@
+.. _exhale_function_audio__importers_8cpp_1ab50021802c394b363a1b5061d06759d0:
+
+Function legion::audio::detail::extractChannels
+===============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_data_importers_audio_importers.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::audio::detail::extractChannels(const byte *, int, int, int)
