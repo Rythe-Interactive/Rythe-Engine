@@ -32,6 +32,8 @@
     <ClCompile Include="engine\system.cpp" />
     <ClCompile Include="engine\module.cpp" />
     <ClCompile Include="events\defaultevents.cpp" />
+    <ClCompile Include="ecs\component_handle.cpp" />
+    <ClCompile Include="scenemanagement\scenemanager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -403,7 +405,10 @@
     <ClInclude Include="compute\high_level\function.hpp" />
     <ClInclude Include="data\image.hpp" />
     <ClInclude Include="data\importers\image_importers.hpp" />
-    <ClInclude Include="platform\shellinvoke.hpp" />
+    <ClInclude Include="scenemanagement\scene.hpp" />
+    <ClInclude Include="scenemanagement\scenemanager.hpp" />
+    <ClInclude Include="serialization\serializationutil.hpp" />
+    <ClInclude Include="serialization\serializationmeta.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">

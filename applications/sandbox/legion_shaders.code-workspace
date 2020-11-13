@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "assets\\shaders"
+		},
+		{
+			"path": "engine\\shaderlib"
+		}
+	],
+	"settings": {
+		"files.autoSave": "afterDelay"
+	}
+}

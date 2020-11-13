@@ -1,6 +1,4 @@
 #pragma once
-
-
 #include <core/core.hpp>
 #include <physics/components/rigidbody.hpp>
 #include <physics/data/physics_manifold_precursor.h>
@@ -8,6 +6,7 @@
 #include <physics/physics_contact.hpp>
 #include <physics/components/physics_component.hpp>
 #include <physics/data/identifier.hpp>
+#include <physics/events/trigger_event.hpp>
 #include <memory>
 
 namespace legion::physics
@@ -31,7 +30,7 @@ namespace legion::physics
         {
             createProcess<&PhysicsSystem::fixedUpdate>("Physics", m_timeStep);
 
-            rigidbodyIntegrationQuery = createQuery<rigidbody,position,rotation>();
+            rigidbodyIntegrationQuery = createQuery<rigidbody, position, rotation>();
 
             auto broadPhaseLambda = [this]
             (std::vector<physics_manifold_precursor>& manifoldPrecursors
@@ -39,9 +38,9 @@ namespace legion::physics
             {
                 bruteForceBroadPhase(manifoldPrecursors, manifoldPrecursorGrouping);
             };
-            
+
             m_optimizeBroadPhase = broadPhaseLambda;
-            
+
         }
 
 
@@ -145,13 +144,13 @@ namespace legion::physics
 
             //recursively get all physics components from the world
             std::vector<physics_manifold_precursor> manifoldPrecursors;
-            recursiveRetrievePreManifoldData(manifoldPrecursors, ecs::entity_handle(world_entity_id, m_ecs), math::mat4(1.0f), initialColliderID);
+            recursiveRetrievePreManifoldData(manifoldPrecursors, ecs::entity_handle(world_entity_id), math::mat4(1.0f), initialColliderID);
 
             //log::debug(" manifold precursor {}", manifoldPrecursors.size());
 
             std::vector<std::vector<physics_manifold_precursor>> manifoldPrecursorGrouping;
             m_optimizeBroadPhase(manifoldPrecursors, manifoldPrecursorGrouping);
-            
+
             //------------------------------------------------------ Narrowphase -----------------------------------------------------//
             std::vector<physics_manifold> manifoldsToSolve;
 
@@ -184,14 +183,13 @@ namespace legion::physics
 
                         bool isBetweenTriggerAndNonTrigger =
                             (precursorPhyCompA.isTrigger && !precursorPhyCompB.isTrigger) || (!precursorPhyCompA.isTrigger && precursorPhyCompB.isTrigger);
-                            
+
                         bool isBetweenRigidbodyAndNonTrigger =
                             (precursorRigidbodyA && !precursorPhyCompB.isTrigger) || (precursorRigidbodyB && !precursorPhyCompA.isTrigger);
 
                         bool isBetween2Rigidbodies = (precursorRigidbodyA && precursorRigidbodyB);
 
 
-                        
                         if (isBetweenTriggerAndNonTrigger || isBetweenRigidbodyAndNonTrigger || isBetween2Rigidbodies)
                         {
                             constructManifoldsWithPrecursors(manifoldPrecursor.at(i), manifoldPrecursor.at(j),
@@ -273,7 +271,7 @@ namespace legion::physics
         }
 
 
-       
+
         /**@brief moves all physics_manifold_precursor into a singular std::vector. This esentially means that no optimization was done.
         * @note This should only be used for testing/debugging purposes
         */
@@ -281,14 +279,14 @@ namespace legion::physics
             std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping);
 
 
-        /**@brief given 2 physics_manifold_precursors precursorA and precursorB, create a manifold for each collider in precursorA 
+        /**@brief given 2 physics_manifold_precursors precursorA and precursorB, create a manifold for each collider in precursorA
         * with every other collider in precursorB. The manifolds that involve rigidbodies are then pushed into the given manifold list
         * @param manifoldsToSolve [out] a std::vector of physics_manifold that will store the manifolds created
         * @param isRigidbodyInvolved A bool that indicates whether a rigidbody is involved in this manifold
         * @param isTriggerInvolved A bool that indicates whether a physicsComponent with a physicsComponent::isTrigger set to true is involved in this manifold
         */
         void constructManifoldsWithPrecursors(physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB,
-            std::vector<physics_manifold>& manifoldsToSolve,bool isRigidbodyInvolved,bool isTriggerInvolved)
+            std::vector<physics_manifold>& manifoldsToSolve, bool isRigidbodyInvolved, bool isTriggerInvolved)
         {
             auto physicsComponentA = precursorA.physicsComponentHandle.read();
             auto physicsComponentB = precursorB.physicsComponentHandle.read();
@@ -298,7 +296,7 @@ namespace legion::physics
                 for (auto colliderB : *physicsComponentB.colliders)
                 {
                     physics::physics_manifold m;
-                    constructManifoldWithCollider(colliderA,colliderB,precursorA,precursorB,m);
+                    constructManifoldWithCollider(colliderA, colliderB, precursorA, precursorB, m);
 
                     if (!m.isColliding)
                     {
@@ -314,7 +312,18 @@ namespace legion::physics
 
                     if (isTriggerInvolved)
                     {
+
+                        //TODO:(algo-ryth-mix,Developer-The-Great):
+                        //TODO:(cont.) The second paramenter here is supposed to be the delta-time of the physics-system
+                        //TODO:(cont.) A: do we need that? and B: it currently is not.
+                        //
+
+                        //notify the event-bus
+                        raiseEvent<TriggerEvent>(m,1.0f);
                         //notify both the trigger and triggerer
+                        //TODO:(Developer-The-Great): the triggerer and trigger should probably received this event
+                        //TODO:(cont.) through the event bus, we should probably create a filterable system here to
+                        //TODO:(cont.) uniquely identify involved objects and then redirect only required messages
                     }
 
                 }
@@ -323,7 +332,7 @@ namespace legion::physics
 
         void constructManifoldWithCollider(
             PhysicsColliderPtr colliderA, PhysicsColliderPtr colliderB
-            , physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB,physics_manifold& manifold)
+            , physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB, physics_manifold& manifold)
         {
             manifold.colliderA = colliderA;
             manifold.colliderB = colliderB;
@@ -334,7 +343,7 @@ namespace legion::physics
             manifold.transformA = precursorA.worldTransform;
             manifold.transformB = precursorB.worldTransform;
 
-           // log::debug("colliderA->CheckCollision(colliderB, manifold)");
+            // log::debug("colliderA->CheckCollision(colliderB, manifold)");
             colliderA->CheckCollision(colliderB, manifold);
 
         }
@@ -356,7 +365,7 @@ namespace legion::physics
         /** @brief given a set of component handles, updates the position and orientation of an entity with a rigidbody component.
         */
         void integrateRigidbody(ecs::component_handle<position>& posHandle
-            , ecs::component_handle<rotation>& rotHandle , ecs::component_handle<rigidbody>& rbHandle,float dt)
+            , ecs::component_handle<rotation>& rotHandle, ecs::component_handle<rigidbody>& rbHandle, float dt)
         {
             auto rb = rbHandle.read();
             auto rbPos = posHandle.read();
@@ -436,3 +445,4 @@ namespace legion::physics
 
     };
 }
+

@@ -73,7 +73,7 @@ namespace legion::core::filesystem
         return m_path.substr(0, idx + 1) + strpath_manip::separator() + strpath_manip::separator();
     }
 
-    L_NODISCARD const std::string& view::get_path() const
+    L_NODISCARD const std::string& view::get_virtual_path() const
     {
         return m_path;
     }
@@ -104,6 +104,20 @@ namespace legion::core::filesystem
         std::filesystem::path path(m_path);
 
         return decay(Ok(path.filename().string())); // wrap extension in decay.
+    }
+
+    L_NODISCARD common::result_decay_more<std::string, fs_error> view::get_filestem() const
+    {
+        using common::Err, common::Ok;
+        // decay overloads the operator of ok_type and operator== for valid_t.
+        using decay = common::result_decay_more<std::string, fs_error>;
+
+        if (!file_info().is_file) // check if the view is a file.
+            return decay(Err(legion_fs_error("requested file name on view that isn't a file.")));
+
+        std::filesystem::path path(m_path);
+
+        return decay(Ok(path.stem().string())); // wrap extension in decay.
     }
 
     common::result_decay_more<basic_resource, fs_error> view::get()

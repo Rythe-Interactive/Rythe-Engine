@@ -1,0 +1,25 @@
+#version 450
+
+generate(vertex, fragment)
+
+#include <stdio.shinc>
+
+
+shader(vertex)
+{
+    void main(void)
+    {
+        gl_Position = ModelToScreenSpacePosition(position);
+        PropagateStdIO();
+    }
+}
+
+shader(fragment)
+{
+    out vec4 fragment_color;
+
+    void main(void)
+    {
+        fragment_color = vec4(stdio(uv), 0, 1);
+    }
+}
