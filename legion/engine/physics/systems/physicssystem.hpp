@@ -155,8 +155,6 @@ namespace legion::physics
             //------------------------------------------------------ Narrowphase -----------------------------------------------------//
             std::vector<physics_manifold> manifoldsToSolve;
 
-            
-
             for (auto& manifoldPrecursor : manifoldPrecursorGrouping)
             {
                 if (manifoldPrecursor.size() == 0) { continue; }
@@ -196,8 +194,6 @@ namespace legion::physics
                         
                         if (isBetweenTriggerAndNonTrigger || isBetweenRigidbodyAndNonTrigger || isBetween2Rigidbodies)
                         {
-                           
-
                             constructManifoldsWithPrecursors(manifoldPrecursor.at(i), manifoldPrecursor.at(j),
                                 manifoldsToSolve,
                                 precursorRigidbodyA || precursorRigidbodyB
@@ -218,13 +214,16 @@ namespace legion::physics
 
             for (auto& manifold : manifoldsToSolve)
             {
+                //log::debug("----------Logging contacts for manifold ");
+
                 for (auto& contact : manifold.contacts)
                 {
                     contact.preCalculateEffectiveMass();
+
+                    contact.ApplyWarmStarting();
                 }
             }
 
-       
             //resolve contact constraint
             for (size_t i = 0; i < constants::contactSolverIterationCount; i++)
             {
@@ -237,7 +236,6 @@ namespace legion::physics
                 }
             }
 
-            
             
             //resolve friction constraint
             for (size_t i = 0; i < constants::frictionSolverIterationCount; i++)
@@ -255,9 +253,22 @@ namespace legion::physics
             {
                 for (auto& contact : manifold.contacts)
                 {
-                    PhysicsSystem::contactPoints.push_back(contact);
+                    contact.refCollider->converganceIdentifiers.clear();
                 }
             }
+
+            for (auto& manifold : manifoldsToSolve)
+            {
+                for (auto& contact : manifold.contacts)
+                {
+                    //assert(contact.label.IsSet());
+
+                    contact.refCollider->AddConverganceIdentifier(contact);
+                }
+            }
+
+
+
 
         }
 

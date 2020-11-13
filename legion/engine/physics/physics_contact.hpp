@@ -44,9 +44,14 @@ namespace legion::physics
 
         int contactCount = 0;
 
-        void ApplyWarmStarting(float lambda)
+        void ApplyWarmStarting()
         {
+            math::vec3 Ra = RefWorldContact - refRBCentroid;
+            math::vec3 Rb = IncWorldContact - incRBCentroid;
 
+            ApplyImpulse(collisionNormal, totalLambda, Ra, Rb);
+            ApplyImpulse(tangentNormal1, tangent1Lambda, Ra, Rb);
+            ApplyImpulse(tangentNormal2, tangent2Lambda, Ra, Rb);
         }
 
 		/* @brief Calculate a certain linear and angular impulse that will resolve the collision
@@ -136,7 +141,7 @@ namespace legion::physics
 			float penetration = math::dot(RefWorldContact - IncWorldContact, -collisionNormal);
 
             //but allow some penetration for the sake of stability
-            penetration = math::min(penetration + physics::constants::baumgarteSlop, physics::constants::baumgarteSlop);
+            penetration = math::min(penetration + physics::constants::baumgarteSlop, 0.0f);
 
             float baumgarteConstraint = -penetration * physics::constants::baumgarteCoefficient * 1 / dt;
 
@@ -165,37 +170,6 @@ namespace legion::physics
 
             auto idHandleRef = rbRefHandle.entity.get_component_handle<identifier>();
             auto idHandleInc = rbIncHandle.entity.get_component_handle<identifier>();
-
-            if (idHandleInc &&
-                idHandleRef)
-            {
-                //log::debug("/idHandle.read().id {} ", idHandle.read().id);
-               /* if (idHandleInc.read().id == "Stack1" && idHandleRef.read().id == "Stack0")
-                {
-                    log::debug("/////lambda calculation/////");
-                    log::debug("JVX {}", JVx);
-                    log::debug("JVY {}", JVy);
-                    log::debug("JVZ {}", JVz);
-                    log::debug("JVW {}", JVw);
-                    log::debug("/////JV found/////");
-                    log::debug("-jv found {} ", minJV);
-                    log::debug("baumgarteConstraint {} ", baumgarteConstraint);
-                    log::debug("restitutionConstraint {} ", restitutionConstraint);
-                    log::debug("effective mass {} ", effectiveMass);
-                    log::debug("/////lambda found/////");
-                    log::debug("lambda found {} ", foundLambda);
-                    log::debug("lambda applied {} ", lambdaApplied);
-                    log::debug("totalLambda {} ", totalLambda);
-                    log::debug("/////current velocities/////");
-                    log::debug("VA {}", math::to_string(va));
-                    log::debug("WA {}", math::to_string(wa));
-                    log::debug("------------------------");
-                    log::debug("VB {}", math::to_string(vb));
-                    log::debug("WB {}", math::to_string(wb));
-                }*/
-                
-            }
-
 
 			ApplyImpulse(collisionNormal, lambdaApplied,
 				Ra, Rb);

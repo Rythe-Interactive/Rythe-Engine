@@ -7,7 +7,7 @@ namespace legion::physics
     std::vector<math::vec3> PhysicsSystem::aPoint;
     std::vector<math::vec3> PhysicsSystem::bPoint;
     std::vector<physics_contact> PhysicsSystem::contactPoints;
-    bool PhysicsSystem::IsPaused = false;
+    bool PhysicsSystem::IsPaused = true;
     bool PhysicsSystem::oneTimeRunActive = false;
 
 

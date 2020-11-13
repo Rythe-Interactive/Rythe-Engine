@@ -39,5 +39,11 @@ namespace legion::physics
             return firstEdge == rhs.firstEdge & nextEdge == rhs.nextEdge;
         }
 
+        bool IsSet() const
+        {
+            return ((firstEdge.first != -1 && firstEdge.second != -1)
+                && (nextEdge.first != -1 && nextEdge.second != -1));
+        }
+
     };
 }

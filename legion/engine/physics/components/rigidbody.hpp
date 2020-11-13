@@ -29,7 +29,7 @@ namespace legion::physics
         math::vec3 globalCentreOfMass = math::vec3(0.0);
 
         float restitution = 0.5f;
-        float friction = 0.0f;
+        float friction = 0.15f;
 
         bool isAsleep;
 

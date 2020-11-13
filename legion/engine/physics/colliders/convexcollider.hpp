@@ -29,12 +29,10 @@ namespace legion::physics
 
         void AddConverganceIdentifier(const physics_contact& contact) override
         {
-           /* converganceIdentifiers.push_back(
-                ConvexConverganceIdentifier(
-                    contact.label,
-                    contact.totalLambda,
-                    contact.tangent1Lambda,
-                    contact.tangent2Lambda,GetColliderID()));*/
+            converganceIdentifiers.push_back(
+                std::make_unique<ConvexConverganceIdentifier>(contact.label, contact.totalLambda,
+                    contact.tangent1Lambda, contact.tangent2Lambda, GetColliderID()));
+
         }
 
         void CheckCollision(std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold& manifold) override

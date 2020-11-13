@@ -29,6 +29,21 @@ namespace legion::physics
         }
 
         virtual void AddConverganceIdentifier(const  physics_contact& contact) = 0;
+
+        void AttemptFindAndCopyConverganceID(physics_contact& contact)
+        {
+            for (auto&& converganceId : converganceIdentifiers)
+            {
+                if (converganceId->refColliderID == contact.refCollider->GetColliderID())
+                {
+                    if (converganceId->IsEqual(contact))
+                    {
+                        converganceId->CopyLambdasToContact(contact);
+                        return;
+                    }
+                }
+            }
+        }
             
       
 

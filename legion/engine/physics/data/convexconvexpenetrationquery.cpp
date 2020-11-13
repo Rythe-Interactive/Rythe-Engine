@@ -13,9 +13,10 @@ namespace legion::physics
 
     }
 
-    void ConvexConvexPenetrationQuery::populateContactList(physics_manifold& manifold, math::mat4& refTransform, math::mat4 incTransform)
+    void ConvexConvexPenetrationQuery::populateContactList(physics_manifold& manifold, math::mat4& refTransform
+        , math::mat4 incTransform, std::shared_ptr<PhysicsCollider> refCollider)
     {
-        log::debug("//////ConvexConvexPenetrationQuery::populateContactList");
+        //log::debug("//////ConvexConvexPenetrationQuery::populateContactList");
 
         //------------------------------- get all world vertex positions in incFace -------------------------------------------------//
         std::vector<ContactVertex> outputContactPoints;
@@ -47,6 +48,7 @@ namespace legion::physics
         refFace->forEachEdge(clipNeigboringFaceWithOutput);
 
         //-------- get the contact points of the ref polyhedron by projecting the incident contacts to the collision plane ---------//
+        //auto refCollider = manifold.penetrationInformation->isARef ? manifold.colliderA : manifold.colliderB;
 
         for (const auto& incidentContact : outputContactPoints)
         {
@@ -57,18 +59,18 @@ namespace legion::physics
                 math::vec3 referenceContact = incidentContact.position - normal * distanceToCollisionPlane;
 
                 physics_contact contact;
-
+                contact.refCollider = refCollider;
                 contact.IncWorldContact = incidentContact.position;
                 contact.RefWorldContact = referenceContact;
+                contact.label = incidentContact.label;
 
-                //log::debug("*incidentContact");
-                //incidentContact.label.Log();
+                refCollider->AttemptFindAndCopyConverganceID(contact);
 
                 manifold.contacts.push_back(contact);
              
             }
         }
-        log::debug("//////ConvexConvexPenetrationQuery::populateContactList");
+        //log::debug("//////ConvexConvexPenetrationQuery::populateContactList");
     }
 
 

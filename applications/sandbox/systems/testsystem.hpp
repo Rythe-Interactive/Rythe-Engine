@@ -41,11 +41,15 @@ struct sah
     }
 };
 
-enum class PhysicsUnitTestMode
+struct addRB
 {
-    CollisionDetectionMode,
-    CollisionResolution
+    math::vec3 force = math::vec3(0, 0, 6);
+    float time = 0.0f;
+    float addTime = 5.0f;
+    bool rigidbodyAdded = false;
 };
+
+
 
 struct player_move : public app::input_axis<player_move> {};
 struct player_strive : public app::input_axis<player_strive> {};
@@ -432,9 +436,9 @@ public:
 
         //----------- Rigidbody-Collider AABB Test------------//
 
-        setupPhysicsCRUnitTest(cubeH, uvH);
+        //setupPhysicsCRUnitTest(cubeH, uvH);
 
-        setupPhysicsFrictionUnitTest(cubeH, uvH);
+        //setupPhysicsFrictionUnitTest(cubeH, uvH);
 
         setupPhysicsStackingUnitTest(cubeH, uvH);
 
@@ -443,8 +447,7 @@ public:
         cubeParams.width = 1.0f;
         cubeParams.height = 1.0f;
 
-        //CreateCubeStack(3, 2, 2, math::vec3(0, -3.0f, 8.0f), math::vec3(1, 1, 1)
-        //    ,cubeParams, 0.1f, cubeH, wireframeH);
+
 
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::differentThread>("TestChain");
@@ -778,7 +781,6 @@ public:
             idComp.id = "AABBStaticStable";
             idHandle.write(idComp);
 
-
         }
 
         {
@@ -1033,6 +1035,7 @@ public:
 
 
             physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
 
@@ -1359,17 +1362,17 @@ public:
         cubeParams.height = 1.0f;
 
         physics::cube_collider_params staticBlockParams;
-        staticBlockParams.breadth = 5.0f;
-        staticBlockParams.width = 5.0f;
+        staticBlockParams.breadth = 12.0f;
+        staticBlockParams.width = 12.0f;
         staticBlockParams.height = 2.0f;
 
-        //2 stack
+        //10 stack
         {
             auto ent = m_ecs->createEntity();
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(35, -3.0f, 15.0f));
-            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
+            scaleH.write(math::vec3(6.0f, 1.0f, 6.0f));
 
             auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
             renderableHandle.write({ cubeH, wireframeH });
@@ -1403,14 +1406,200 @@ public:
 
         }
 
-       /* CreateCubeStack(2, 1, 1, math::vec3(35, -1.5f, 15.0f), math::vec3(1, 1, 1)
-                ,cubeParams, 0.1f, cubeH, wireframeH);*/
+        CreateCubeStack(7, 1, 1, math::vec3(35, -1.5f, 15.0f), math::vec3(1, 1, 1)
+                ,cubeParams, 0.2f, cubeH, wireframeH);
 
         //10 stactk
+        {
+            auto ent = m_ecs->createEntity();
 
-        //Pyramid Stack
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+            ent.add_component<addRB>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+
+            entPhyHande.write(physicsComponent2);
+
+            //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
+            //auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
+
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToAABBEnt);
+            //renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(35, 5.0f, 10.0f));
+            scaleH.write(math::vec3(1.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto id = idHandle.read();
+            id.id = "AABBRbStable";
+            idHandle.write(id);
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+            auto adderH = ent.add_component<addRB>();
+            auto adder = adderH.read();
+            adder.addTime = 8.0f;
+            adder.force = math::vec3(-5, 0, 5);
+            adderH.write(adder);
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+
+            entPhyHande.write(physicsComponent2);
+
+            //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
+            //auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
+
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToAABBEnt);
+            //renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(40, 2.5f, 10.0f));
+            scaleH.write(math::vec3(1.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto id = idHandle.read();
+            id.id = "AABBRbStable";
+            idHandle.write(id);
+        }
+        ////Pyramid Stack
+
+      /*  massRatioProblem(1, 25, math::vec3(15, -3.0f,5.0f), cubeH, wireframeH);
+        massRatioProblem(1, 50, math::vec3(15, -3.0f, 12.0f), cubeH, wireframeH);
+        massRatioProblem(1, 75, math::vec3(15, -3.0f, 19.0f), cubeH, wireframeH);
+        massRatioProblem(1, 100, math::vec3(15, -3.0f, 26.0f), cubeH, wireframeH);*/
     }
 
+    void massRatioProblem(float m1, float m2,math::vec3 position, rendering::model_handle cubeH, rendering::material_handle wireframeH)
+    {
+        physics::cube_collider_params cubeParams;
+        cubeParams.breadth = 1.0f;
+        cubeParams.width = 1.0f;
+        cubeParams.height = 1.0f;
+
+        physics::cube_collider_params staticBlockParams;
+        staticBlockParams.breadth = 5.0f;
+        staticBlockParams.width = 5.0f;
+        staticBlockParams.height = 1.0f;
+
+        {
+            auto ent = m_ecs->createEntity();
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(position);
+            scaleH.write(math::vec3(2.5f, 0.5f, 2.5f));
+
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            renderableHandle.write({ cubeH, wireframeH });
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(staticBlockParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            //renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(position);
+            scaleH.write(math::vec3(1.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto idComp = idHandle.read();
+            idComp.id = "Stack";
+            idHandle.write(idComp);
+
+
+        }
+
+        {
+           auto ent = m_ecs->createEntity();
+
+           auto entPhyHande = ent.add_component<physics::physicsComponent>();
+           //ent.add_component<addRB>();
+
+           physics::physicsComponent physicsComponent2;
+           physics::physicsComponent::init(physicsComponent2);
+
+
+           physicsComponent2.AddBox(cubeParams);
+
+           entPhyHande.write(physicsComponent2);
+
+           //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
+           auto rbHandle = ent.add_component<physics::rigidbody>();
+           auto rb = rbHandle.read();
+           rb.friction = 0.2f;
+           rb.setMass(m1);
+           rbHandle.write(rb);
+
+           //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToAABBEnt);
+           //renderableHandle.write({ cubeH, wireframeH });
+
+           auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+           positionH.write(position + math::vec3(0,1,0));
+           scaleH.write(math::vec3(1.0f));
+
+           auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+           auto id = idHandle.read();
+           id.id = "AABBRbStable";
+           idHandle.write(id);
+       }
+
+        {
+            auto ent = m_ecs->createEntity();
+
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+            //ent.add_component<addRB>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+
+            entPhyHande.write(physicsComponent2);
+
+            //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
+            auto rbHandle = ent.add_component<physics::rigidbody>();
+            auto rb = rbHandle.read();
+            rb.friction = 0.2f;
+            rb.setMass(m2);
+            rbHandle.write(rb);
+
+            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToAABBEnt);
+            //renderableHandle.write({ cubeH, wireframeH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(position + math::vec3(0, 4, 0));
+            scaleH.write(math::vec3(1.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto id = idHandle.read();
+            id.id = "AABBRbStable";
+            idHandle.write(id);
+        }
+    }
 
     void setupCameraEntity()
     {
@@ -1649,6 +1838,7 @@ public:
 
         //log::info("still alive! {}",deltaTime.seconds());
         static auto sahQuery = createQuery<sah, rotation, position>();
+        static auto rbQuery = createQuery<addRB>();
 
         //static time::span buffer;
         static int frameCount;
@@ -1657,6 +1847,32 @@ public:
         //buffer += deltaTime;
         //accumulated += deltaTime;
         frameCount++;
+
+        for (auto entity : rbQuery)
+        {
+            if (physics::PhysicsSystem::IsPaused) { break; }
+
+            if (auto addHandle = entity.get_component_handle<addRB>())
+            {
+                auto adder = addHandle.read();
+                adder.time += deltaTime;
+
+                if (adder.time > adder.addTime && !adder.rigidbodyAdded)
+                {
+                    adder.rigidbodyAdded = true;
+
+                    auto rbHandle = entity.add_component<physics::rigidbody>();
+                    auto rb = rbHandle.read();
+
+                    rb.velocity = adder.force;
+
+                    rbHandle.write(rb);
+                  
+                }
+
+                addHandle.write(adder);
+            }
+        }
 
         for (auto entity : sahQuery)
         {
@@ -1884,7 +2100,7 @@ public:
                             math::vec3 worldStart = localTransform * math::vec4(*(edgeToExecuteOn->edgePositionPtr), 1);
                             math::vec3 worldEnd = localTransform * math::vec4(*(edgeToExecuteOn->nextEdge->edgePositionPtr), 1);
 
-                            debug::drawLine(worldStart, worldEnd, usedColor, 2.0f,0.0f, false);
+                            debug::drawLine(worldStart, worldEnd, usedColor, 2.0f,0.0f, useDepth);
 
                         } while (initialEdge != currentEdge && currentEdge != nullptr);
                     }
