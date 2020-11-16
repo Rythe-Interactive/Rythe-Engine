@@ -7,10 +7,12 @@ namespace legion::physics
 
 	struct HalfEdgeFace
 	{
+        
+
 		HalfEdgeEdge* startEdge;
 		math::vec3 normal;
 		math::vec3 centroid;
-        std::string id;
+        
 
 		HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
 
