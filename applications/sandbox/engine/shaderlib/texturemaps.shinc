@@ -18,7 +18,7 @@ vec2 ParallaxMap(sampler2D normalHeightMap, float scale, vec2 uv, Camera camera,
 	float currentDepth = 0.0;
 	float prevDepth = 0.0;
 
-	vec2 P = tangentViewDir.xy * scale * vec2(0.01, -0.01);
+	vec2 P = tangentViewDir.xy * scale * vec2(-0.01, 0.01);
 	vec2 deltaUV = P / layerCount;
 
 	vec2 currentUV = uv;
