@@ -123,7 +123,7 @@ namespace legion::core::ecs
          * @throws legion_invalid_entity_error Thrown when handle's registry reference is invalid.
          * @throws legion_entity_not_found_error Thrown when handle's id is invalid.
          */
-        void set_parent(id_type newParent) const;
+        void set_parent(id_type newParent);
 
         /**@brief serializes the entity depending on its archive
          * @param oarchive template<typename Archive>
@@ -161,7 +161,7 @@ namespace legion::core::ecs
          * @throws legion_invalid_entity_error Thrown when handle's registry reference is invalid.
          * @throws legion_entity_not_found_error Thrown when handle's id is invalid.
          */
-        void add_child(id_type childId) const;
+        void add_child(id_type childId);
 
         /**@brief Remove child from entity.
          * @param childId Id of the entity you wish to remove as a child.
@@ -169,7 +169,7 @@ namespace legion::core::ecs
          * @throws legion_invalid_entity_error Thrown when handle's registry reference is invalid.
          * @throws legion_entity_not_found_error Thrown when handle's id is invalid.
          */
-        void remove_child(id_type childId) const;
+        void remove_child(id_type childId);
 
         /**@brief Check if entity contains a certain component.
          * @tparam component_type Type of component to check for.
@@ -210,7 +210,8 @@ namespace legion::core::ecs
          * @returns component_handle_base Valid component handle if the entity has the component, invalid handle if the entity doesn't have the component.
          * @note component_handle_base needs to be force_cast to component_handle<T> in order to be usable.
          */
-        L_NODISCARD component_handle_base get_component_handle(id_type componentTypeId) const;
+        L_NODISCARD component_handle_base get_component_handle(id_type componentTypeId);
+        L_NODISCARD const component_handle_base get_component_handle(id_type componentTypeId) const;
 
         /**@brief Get component handle of a certain component.
          * @tparam component_type Type of component to fetch.
@@ -219,9 +220,15 @@ namespace legion::core::ecs
          * @returns component_handle<component_type> Valid component handle if the entity has the component, invalid handle if the entity doesn't have the component.
          */
         template<typename component_type>
-        L_NODISCARD component_handle<component_type> get_component_handle() const
+        L_NODISCARD component_handle<component_type> get_component_handle()
         {
-            return force_value_cast<component_handle<component_type>>(get_component_handle(typeHash<component_type>()));
+            return get_component_handle(typeHash<component_type>()).cast<component_type>();
+        }
+        
+        template<typename component_type>
+        L_NODISCARD const component_handle<component_type> get_component_handle() const
+        {
+            return get_component_handle(typeHash<component_type>()).cast<component_type>();
         }
 
         /**@brief Get component handles of certain components.
@@ -268,7 +275,7 @@ namespace legion::core::ecs
          * @returns component_handle_base Valid component handle base for the newly created component.
          * @note component_handle_base needs to be force_cast to component_handle<T> in order to be usable.
          */
-        component_handle_base add_component(id_type componentTypeId) const;
+        component_handle_base add_component(id_type componentTypeId);
 
         /**@brief Add component to the entity.
          * @param componentTypeId Type id of component to add.
@@ -279,7 +286,7 @@ namespace legion::core::ecs
          * @returns component_handle_base Valid component handle base for the newly created component.
          * @note component_handle_base needs to be force_cast to component_handle<T> in order to be usable.
          */
-        component_handle_base add_component(id_type componentTypeId, void* value) const;
+        component_handle_base add_component(id_type componentTypeId, void* value);
 
         /**@brief Add component to the entity.
          * @tparam component_type Type of component to add.
@@ -289,7 +296,7 @@ namespace legion::core::ecs
          * @returns component_handle<component_type> Valid component handle for the newly created component.
          */
         template<typename component_type>
-        component_handle<component_type> add_component() const
+        component_handle<component_type> add_component()
         {
             return force_value_cast<component_handle<component_type>>(add_component(typeHash<component_type>()));
         }
@@ -302,7 +309,7 @@ namespace legion::core::ecs
          * @returns component_handle<component_type> Valid component handle for the newly created component.
          */
         template<typename component_type>
-        component_handle<std::remove_reference_t<component_type>> add_component(component_type&& value) const
+        component_handle<std::remove_reference_t<component_type>> add_component(component_type&& value)
         {
             return force_value_cast<component_handle<std::remove_reference_t<component_type>>>(add_component(typeHash<std::remove_reference_t<component_type>>(), reinterpret_cast<void*>(&value)));
         }
@@ -316,7 +323,7 @@ namespace legion::core::ecs
          * @returns component_handle<component_type> Valid component handle for the newly created component.
          */
         template<typename component_type>
-        component_handle<std::remove_reference_t<component_type>> add_component(component_type& value) const
+        component_handle<std::remove_reference_t<component_type>> add_component(component_type& value)
         {
             return add_component(typeHash<std::remove_reference_t<component_type>>(), reinterpret_cast<void*>(&value)).template cast<std::remove_reference_t<component_type>>();
         }
@@ -330,7 +337,7 @@ namespace legion::core::ecs
          * @returns Tuple with all the handles.
          */
         template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
-        auto add_components() const;
+        auto add_components();
 
         /**@brief Add multiple components to the entity through the use of an archetype.
          * @tparam archetype_type The type of archetype to add the components of.
@@ -340,7 +347,7 @@ namespace legion::core::ecs
          * @returns Tuple with all the handles.
          */
         template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
-        auto add_components() const;
+        auto add_components();
 
         /**@brief Add multiple components to the entity.
          * @tparam component_type First type of component to add.
@@ -353,7 +360,7 @@ namespace legion::core::ecs
          * @returns Tuple with all the handles.
          */
         template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
-        auto add_components(component_type&& value, component_types&&... values) const;
+        auto add_components(component_type&& value, component_types&&... values);
 
         /**@brief Add multiple components to the entity.
          * @tparam component_type First type of component to add.
@@ -366,7 +373,7 @@ namespace legion::core::ecs
          * @returns Tuple with all the handles.
          */
         template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
-        auto add_components(component_type& value, component_types&... values) const;
+        auto add_components(component_type& value, component_types&... values);
 
         /**@brief Add multiple components to the entity through the use of an archetype.
          * @tparam archetype_type The type of archetype to add the components of.
@@ -377,7 +384,7 @@ namespace legion::core::ecs
          * @returns Tuple with all the handles.
          */
         template<typename archetype_type, typename... component_types, typename = inherits_from<archetype_type, archetype_base>>
-        auto add_components(component_types&&... values) const;
+        auto add_components(component_types&&... values);
 
         /**@brief Remove component from entity.
          * @param componentTypeId Type id of component to remove.
@@ -386,7 +393,7 @@ namespace legion::core::ecs
          * @throws legion_unknown_component_error Thrown when the component type is unknown.
          * @note Nothing will happen if the entity doesn't have this component.
          */
-        void remove_component(id_type componentTypeId) const;
+        void remove_component(id_type componentTypeId);
 
         /**@brief Remove component from entity.
          * @tparam component_type Type of component to remove.
@@ -396,7 +403,7 @@ namespace legion::core::ecs
          * @note Nothing will happen if the entity doesn't have this component.
          */
         template<typename component_type>
-        void remove_component() const
+        void remove_component()
         {
             remove_component(typeHash<component_type>());
         }
@@ -410,7 +417,7 @@ namespace legion::core::ecs
          * @note Nothing will happen if the entity doesn't have a component.
          */
         template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
-        void remove_components() const;
+        void remove_components();
 
         /**@brief Remove multiple components from entity through an archetype.
          * @tparam archetype_type Type of the archetype with the components to remove.
@@ -420,13 +427,13 @@ namespace legion::core::ecs
          * @note Nothing will happen if the entity doesn't have a component.
          */
         template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
-        void remove_components() const;
+        void remove_components();
 
 
         /**@brief Destroy this entity. Destroys entity and invalidates handle. (also destroys all of it's components)
          * @param recurse Destroy all children and children of children as well? Default value is true.
          */
-        void destroy(bool recurse = true) const;
+        void destroy(bool recurse = true);
 
         /**@brief Check whether this entity handle is valid or not.
          * @returns bool True if the handle is pointing to valid entity and the registry reference is also valid.

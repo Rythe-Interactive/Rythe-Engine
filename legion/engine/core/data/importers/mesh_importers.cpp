@@ -128,7 +128,7 @@ namespace legion::core
 
                 // Extract the actual vertex data. (We flip the X axis to convert it to our left handed coordinate system.)
                 math::vec3 vertex(-attributes.vertices[vertexIndex + 0], attributes.vertices[vertexIndex + 1], attributes.vertices[vertexIndex + 2]);
-                math::vec3 normal(attributes.normals[normalIndex + 0], attributes.normals[normalIndex + 1], attributes.normals[normalIndex + 2]);
+                math::vec3 normal(-attributes.normals[normalIndex + 0], attributes.normals[normalIndex + 1], attributes.normals[normalIndex + 2]);
                 math::vec2 uv{};
                 if (uvIndex + 1 < attributes.texcoords.size())
                     uv = math::vec2(attributes.texcoords[uvIndex + 0], attributes.texcoords[uvIndex + 1]);
