@@ -27,43 +27,43 @@ namespace legion::core::ecs
     }
 
     template<typename component_type, typename... component_types, typename>
-    auto entity_handle::add_components() const
+    auto entity_handle::add_components()
     {
         return m_registry->createComponents<component_type, component_types...>(m_id);
     }
 
     template<typename archetype_type, typename>
-    auto entity_handle::add_components() const
+    auto entity_handle::add_components()
     {
         return m_registry->createComponents<archetype_type>(m_id);
     }
 
     template<typename component_type, typename... component_types, typename>
-    auto entity_handle::add_components(component_type&& value, component_types&&... values) const
+    auto entity_handle::add_components(component_type&& value, component_types&&... values)
     {
         return m_registry->createComponents(m_id, std::forward<component_type>(value), std::forward<component_types>(values)...);
     }
 
     template<typename component_type, typename... component_types, typename>
-    auto entity_handle::add_components(component_type& value, component_types&... values) const
+    auto entity_handle::add_components(component_type& value, component_types&... values)
     {
         return m_registry->createComponents(m_id, value, values...);
     }
 
     template<typename archetype_type, typename... component_types, typename>
-    auto entity_handle::add_components(component_types&&... values) const
+    auto entity_handle::add_components(component_types&&... values)
     {
         return m_registry->createComponents<archetype_type>(m_id, std::forward<component_types>(values)...);
     }
 
     template<typename component_type, typename... component_types, typename>
-    void entity_handle::remove_components() const
+    void entity_handle::remove_components()
     {
         return m_registry->destroyComponents<component_type, component_types...>(m_id);
     }
 
     template<typename archetype_type, typename>
-    void entity_handle::remove_components() const
+    void entity_handle::remove_components()
     {
         return m_registry->destroyComponents<archetype_type>(m_id);
     }

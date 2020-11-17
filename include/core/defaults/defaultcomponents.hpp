@@ -64,26 +64,33 @@ namespace legion::core
             return *this;
         }
 
-        math::vec3 right()
+        L_NODISCARD math::vec3 right()
         {
-            return math::toMat3(*this) * math::vec3(1.f, 0.f, 0.f);
+            return math::toMat3(*this) * math::vec3::right;
         }
 
-        math::vec3 up()
+        L_NODISCARD math::vec3 up()
         {
-            return math::toMat3(*this) * math::vec3(0.f, 1.f, 0.f);
+            return math::toMat3(*this) * math::vec3::up;
         }
 
-        math::vec3 forward()
+        L_NODISCARD math::vec3 forward()
         {
-            return math::toMat3(*this) * math::vec3(0.f, 0.f, 1.f);
+            return math::toMat3(*this) * math::vec3::forward;
         }
 
-        math::mat3 matrix()
+        L_NODISCARD math::mat3 matrix()
         {
             return math::toMat3(*this);
         }
+
+        L_NODISCARD static rotation lookat(math::vec3 position, math::vec3 center, math::vec3 up = math::vec3::up);
     };
+
+    L_NODISCARD inline rotation rotation::lookat(math::vec3 position, math::vec3 center, math::vec3 up)
+    {
+        return math::conjugate(math::normalize(math::toQuat(math::lookAt(position, center, up))));
+    }
 
 
     struct scale : public math::vec3
@@ -120,7 +127,7 @@ namespace legion::core
 
         transform(const base::handleGroup& handles) : base(handles) {}
 
-        std::tuple<position, rotation, scale> get_world_components()
+        L_NODISCARD std::tuple<position, rotation, scale> get_world_components()
         {
             math::mat4 worldMatrix = get_world_to_local_matrix();
             math::vec3 p;
@@ -132,12 +139,12 @@ namespace legion::core
             return std::make_tuple<position, rotation, scale>(p, r, s);
         }
 
-        math::mat4 get_world_to_local_matrix()
+        L_NODISCARD math::mat4 get_world_to_local_matrix()
         {
             return math::inverse(get_local_to_world_matrix());
         }
 
-        math::mat4 get_local_to_world_matrix()
+        L_NODISCARD math::mat4 get_local_to_world_matrix()
         {
             auto& [positionH, rotationH, scaleH] = handles;
             auto parent = positionH.entity.get_parent();
@@ -151,7 +158,7 @@ namespace legion::core
             return math::compose(scaleH.read(), rotationH.read(), positionH.read());
         }
 
-        math::mat4 get_local_to_parent_matrix()
+        L_NODISCARD math::mat4 get_local_to_parent_matrix()
         {
             auto& [positionH, rotationH, scaleH] = handles;
             return math::compose(scaleH.read(), rotationH.read(), positionH.read());
