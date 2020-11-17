@@ -18,6 +18,8 @@ shader(vertex)
 
 shader(fragment)
 {
+    uniform bool discardExcess;
+
     out vec4 fragment_color;
 
     void main(void)
@@ -27,8 +29,9 @@ shader(fragment)
         vec3 worldNormal = GetWorldNormal();
         Material material = ExtractMaterial(stdio(uv), camera, worldNormal, GetWorldTangent(worldNormal));
 
-        // if(material.texcoords.x < 0 || material.texcoords.x > 1 || material.texcoords.y < 0 || material.texcoords.y > 1)
-        //     discard;
+        if(discardExcess)
+            if(material.texcoords.x < 0 || material.texcoords.x > 1 || material.texcoords.y < 0 || material.texcoords.y > 1)
+                discard;
 
         vec3 lighting = GammaCorrect(GetAllLighting(material, camera, GetWorldPosition()));
 

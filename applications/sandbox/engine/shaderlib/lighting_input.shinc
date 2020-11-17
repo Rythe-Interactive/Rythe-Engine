@@ -70,7 +70,7 @@ Material ExtractMaterial(vec2 uv, Camera camera, vec3 worldNormal, vec3 worldTan
     material.albedo = AlbedoMap(material_input.albedo, material.texcoords);
     material.normal = NormalMap(material_input.normalHeight, material.texcoords, tbn);
     vec4 MRDAo = LightingData(material_input.MRDAo, material.texcoords);
-    material.metallic = MRDAo.r;
+    material.metallic = min(MRDAo.r, 1.0 - epsilon);
     material.roughness = MRDAo.g;
     material.dielectric = MRDAo.b;
     material.ambientOcclusion = MRDAo.a;
