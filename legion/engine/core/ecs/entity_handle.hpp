@@ -222,13 +222,13 @@ namespace legion::core::ecs
         template<typename component_type>
         L_NODISCARD component_handle<component_type> get_component_handle()
         {
-            return get_component_handle(typeHash<component_type>()).cast<component_type>();
+            return get_component_handle(typeHash<component_type>()).template cast<component_type>();
         }
         
         template<typename component_type>
         L_NODISCARD const component_handle<component_type> get_component_handle() const
         {
-            return get_component_handle(typeHash<component_type>()).cast<component_type>();
+            return get_component_handle(typeHash<component_type>()).template cast<component_type>();
         }
 
         /**@brief Get component handles of certain components.
