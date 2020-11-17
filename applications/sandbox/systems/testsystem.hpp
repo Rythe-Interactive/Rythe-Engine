@@ -386,10 +386,13 @@ public:
         rendering::material_handle pbrH;
         rendering::material_handle copperH;
         rendering::material_handle aluminumH;
+        rendering::material_handle ironH;
         rendering::material_handle slateH;
         rendering::material_handle rockH;
         rendering::material_handle rock2H;
         rendering::material_handle fabricH;
+        rendering::material_handle bogH;
+        rendering::material_handle paintH;
         rendering::material_handle normalH;
         rendering::material_handle skyboxH;
         rendering::material_handle floorMH;
@@ -438,34 +441,42 @@ public:
             pbrH.set_param("discardExcess", false);
 
             copperH = rendering::MaterialCache::create_material("copper", pbrShader);
-            copperH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/copper-albedo.png"_view));
-            copperH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/copper-normalHeight.png"_view));
-            copperH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/copper-MRDAo.png"_view));
-            copperH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/copper-emissive.png"_view));
+            copperH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/copper/copper-albedo.png"_view));
+            copperH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/copper/copper-normalHeight.png"_view));
+            copperH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/copper/copper-MRDAo.png"_view));
+            copperH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/copper/copper-emissive.png"_view));
             copperH.set_param("material_input.heightScale", 0.3f);
             copperH.set_param("discardExcess", false);
 
             aluminumH = rendering::MaterialCache::create_material("aluminum", pbrShader);
-            aluminumH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/aluminum-albedo.png"_view));
-            aluminumH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/aluminum-normalHeight.png"_view));
-            aluminumH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/aluminum-MRDAo.png"_view));
-            aluminumH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/aluminum-emissive.png"_view));
+            aluminumH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-albedo.png"_view));
+            aluminumH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-normalHeight.png"_view));
+            aluminumH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-MRDAo.png"_view));
+            aluminumH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-emissive.png"_view));
             aluminumH.set_param("material_input.heightScale", 1.f);
             aluminumH.set_param("discardExcess", false);
 
+            ironH = rendering::MaterialCache::create_material("iron", pbrShader);
+            ironH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-albedo.png"_view));
+            ironH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-normalHeight.png"_view));
+            ironH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-MRDAo.png"_view));
+            ironH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-emissive.png"_view));
+            ironH.set_param("material_input.heightScale", 1.f);
+            ironH.set_param("discardExcess", false);
+
             slateH = rendering::MaterialCache::create_material("slate", pbrShader);
-            slateH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/slate-albedo.png"_view));
-            slateH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/slate-normalHeight.png"_view));
-            slateH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/slate-MRDAo.png"_view));
-            slateH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/slate-emissive.png"_view));
+            slateH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/slate/slate-albedo.png"_view));
+            slateH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/slate/slate-normalHeight.png"_view));
+            slateH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/slate/slate-MRDAo.png"_view));
+            slateH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/slate/slate-emissive.png"_view));
             slateH.set_param("material_input.heightScale", 1.f);
             slateH.set_param("discardExcess", true);
 
             rockH = rendering::MaterialCache::create_material("rock", pbrShader);
-            rockH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/rock-albedo.png"_view));
-            rockH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/rock-normalHeight.png"_view));
-            rockH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/rock-MRDAo.png"_view));
-            rockH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/rock-emissive.png"_view));
+            rockH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/rock/rock-albedo.png"_view));
+            rockH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/rock/rock-normalHeight.png"_view));
+            rockH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/rock/rock-MRDAo.png"_view));
+            rockH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/rock/rock-emissive.png"_view));
             rockH.set_param("material_input.heightScale", 1.f);
             rockH.set_param("discardExcess", true);
 
@@ -478,12 +489,28 @@ public:
             rock2H.set_param("discardExcess", false);
 
             fabricH = rendering::MaterialCache::create_material("fabric", pbrShader);
-            fabricH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/fabric-lowres-albedo.png"_view));
-            fabricH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/fabric-lowres-normalHeight.png"_view));
-            fabricH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/fabric-lowres-MRDAo.png"_view));
-            fabricH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/fabric-lowres-emissive.png"_view));
+            fabricH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-albedo.png"_view));
+            fabricH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-normalHeight.png"_view));
+            fabricH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-MRDAo.png"_view));
+            fabricH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-emissive.png"_view));
             fabricH.set_param("material_input.heightScale", 0.5f);
             fabricH.set_param("discardExcess", false);
+
+            bogH = rendering::MaterialCache::create_material("bog", pbrShader);
+            bogH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/bog/bog-albedo.png"_view));
+            bogH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/bog/bog-normalHeight.png"_view));
+            bogH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/bog/bog-MRDAo.png"_view));
+            bogH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/bog/bog-emissive.png"_view));
+            bogH.set_param("material_input.heightScale", 0.5f);
+            bogH.set_param("discardExcess", true);
+
+            paintH = rendering::MaterialCache::create_material("paint", pbrShader);
+            paintH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-albedo.png"_view));
+            paintH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-normalHeight.png"_view));
+            paintH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-MRDAo.png"_view));
+            paintH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-emissive.png"_view));
+            paintH.set_param("material_input.heightScale", 1.f);
+            paintH.set_param("discardExcess", true);
 
             normalH = rendering::MaterialCache::create_material("normal", "assets://shaders/normal.shs"_view);
             normalH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("engine://resources/default/normalHeight"_view));
@@ -528,8 +555,20 @@ public:
 
         {
             auto ent = createEntity();
+            ent.add_component<rendering::renderable>({ planeH, ironH });
+            ent.add_components<transform>(position(20, 0.01f, -20), rotation(), scale(10));
+        }
+
+        {
+            auto ent = createEntity();
             ent.add_component<rendering::renderable>({ planeH, fabricH });
             ent.add_components<transform>(position(-20, 0.01f, 0), rotation(), scale(10));
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_component<rendering::renderable>({ planeH, bogH });
+            ent.add_components<transform>(position(-20, 0.01f, 20), rotation(), scale(10));
         }
 
         {
@@ -542,6 +581,12 @@ public:
             auto ent = createEntity();
             ent.add_component<rendering::renderable>({ planeH, rockH });
             ent.add_components<transform>(position(0, 0.01f, -20), rotation(), scale(10));
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_component<rendering::renderable>({ planeH, paintH });
+            ent.add_components<transform>(position(-20, 0.01f, -20), rotation(), scale(10));
         }
 
         {
@@ -619,6 +664,12 @@ public:
             auto ent = createEntity();
             ent.add_components<rendering::renderable, sah>({ sphereH, aluminumH }, {});
             ent.add_components<transform>(position(0, 3, -8.f), rotation(), scale(2.5f));
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ sphereH, ironH }, {});
+            ent.add_components<transform>(position(0, 3, -2.2f), rotation(), scale(2.5f));
         }
 
         {
