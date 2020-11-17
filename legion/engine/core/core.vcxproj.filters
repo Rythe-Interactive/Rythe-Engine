@@ -18,7 +18,6 @@
     <ClCompile Include="math\glm\detail\glm.cpp" />
     <ClCompile Include="filesystem\filemanip.cpp" />
     <ClCompile Include="filesystem\assetimporter.cpp" />
-    <ClCompile Include="async\readonly_rw_spinlock.cpp" />
     <ClCompile Include="data\mesh.cpp" />
     <ClCompile Include="logging\logging.cpp" />
     <ClCompile Include="data\importers\mesh_importers.cpp" />
@@ -34,6 +33,7 @@
     <ClCompile Include="events\defaultevents.cpp" />
     <ClCompile Include="ecs\component_handle.cpp" />
     <ClCompile Include="scenemanagement\scenemanager.cpp" />
+    <ClCompile Include="async\readonly_rw_spinlock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />

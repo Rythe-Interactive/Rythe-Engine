@@ -36,6 +36,9 @@
     <ClCompile Include="data\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="components\light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\renderingmodule.hpp">
@@ -83,9 +86,6 @@
     <ClInclude Include="pipeline\base\pipeline.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\renderbuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="shadercompiler\shadercompiler.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -93,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="util\bindings.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\light.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

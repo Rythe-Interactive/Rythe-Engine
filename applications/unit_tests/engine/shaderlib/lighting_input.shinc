@@ -2,7 +2,7 @@
 //  Lighting Input  //
 //////////////////////
 
-layout(std140) buffer LightsBuffer
+layout(std140, binding = SV_LIGHTS) readonly buffer LightsBuffer
 {
 	Light lights[];
 };

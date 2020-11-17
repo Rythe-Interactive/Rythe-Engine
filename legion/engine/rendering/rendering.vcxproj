@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="components\light.cpp" />
     <ClCompile Include="data\importers\texture_importers.cpp" />
     <ClCompile Include="data\material.cpp" />
     <ClCompile Include="data\model.cpp" />
@@ -21,10 +22,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\camera.hpp" />
+    <ClInclude Include="components\light.hpp" />
     <ClInclude Include="components\renderable.hpp" />
     <ClInclude Include="data\importers\texture_importers.hpp" />
     <ClInclude Include="data\material.hpp" />
-    <ClInclude Include="data\renderbuffer.h" />
     <ClInclude Include="data\shader.hpp" />
     <ClInclude Include="debugrendering.hpp" />
     <ClInclude Include="detail\stb_image.h" />

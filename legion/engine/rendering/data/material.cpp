@@ -90,7 +90,7 @@ namespace legion::rendering
         if (m_materials.count(id))
             return { id };
 
-        auto shader = ShaderCache::create_shader(shaderFile.get_filename(), shaderFile, settings);
+        auto shader = ShaderCache::create_shader(shaderFile, settings);
 
         if (shader == invalid_shader_handle)
         {

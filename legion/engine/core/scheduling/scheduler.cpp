@@ -25,7 +25,7 @@ namespace legion::core::scheduling
         while (!(*start))
         {
             if (lowPower)
-                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                std::this_thread::sleep_for(std::chrono::milliseconds(2));
             else
                 std::this_thread::yield();
         }
@@ -65,7 +65,7 @@ namespace legion::core::scheduling
                 {
                     if (lowPower)
                     {
-                        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                        std::this_thread::sleep_for(std::chrono::milliseconds(2));
                     }
                     else
                     {

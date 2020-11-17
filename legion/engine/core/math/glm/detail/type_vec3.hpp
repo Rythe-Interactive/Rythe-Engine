@@ -29,6 +29,7 @@ namespace legion::core::math
         static const type left;
         static const type forward;
         static const type backward;
+        static const type zero;
 
         template<typename Archive>
         void serialize(Archive& archive);

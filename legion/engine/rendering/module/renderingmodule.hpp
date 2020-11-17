@@ -14,6 +14,7 @@ namespace legion::rendering
 
             reportComponentType<camera>();
             reportComponentType<renderable>();
+            reportComponentType<light>();
             reportSystem<Renderer>();
         }
 

@@ -125,145 +125,145 @@ public:
 
     virtual void setup()
     {
-#pragma region OpenCL
+//#pragma region OpenCL
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//        std::vector<int> ints;
+//
+//
+//        // load a file with tons of numbers
+//        auto res = fs::view("assets://bigint.txt").get();
+//        if (res == common::valid) {
+//
+//            filesystem::basic_resource contents = res;
+//
+//            char* buf = new char[6]{0};
+//
+//            // get a lot of integers from the data
+//            for (size_t i = 0; i < contents.size() && i < 5 * 2048; i += 5)
+//            {
+//                memcpy(buf, contents.data() + i, 5);
+//                ints.push_back(std::strtol(buf,nullptr,10));
+//            }
+//
+//            delete[] buf;
+//        }
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//        // split the integers into two datasets
+//        std::vector<int> first_ints(ints.begin(), ints.begin() + ints.size() / 2);
+//        std::vector<int> second_ints(ints.begin() + ints.size() / 2, ints.end());
+//
+//        // check how many things we need to process
+//        size_t to_process = std::min(first_ints.size(), second_ints.size());
+//
+//        // get an appropriately sized output buffer
+//        std::vector<int> results(to_process);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//        // import some names
+//        using compute::in,compute::out;
+//
+//        log::debug("Loading OpenCL kernel");
+//
+//        // create opencl-"function"
+//        auto vector_add = fs::view("assets://kernels/vadd_kernel.cl").load_as<compute::function>("vector_add");
+//
+//        log::debug ("Done loading OpenCL kernel");
+//
+//        #if 0
+//
+//        // invoke "function"
+//        auto code1 = vector_add(to_process,first_ints,second_ints,out(results));
+//
+//        // output results
+//        if (code1.valid())
+//            for (int& i : results)
+//            {
+//                log::info("got {}", i);
+//            }
+//        #endif
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//        log::debug("Creating hardware buffers");
+//
+//        // If we need to reuse the function it is more efficient to keep the buffers around.
+//        // This way we do not allocate resources on our computation device every-time.
+//        auto A = compute::Context::createBuffer(first_ints,     compute::buffer_type::READ_BUFFER,  "A");
+//        auto B = compute::Context::createBuffer(second_ints,    compute::buffer_type::READ_BUFFER,  "B");
+//        auto C = compute::Context::createBuffer(results,        compute::buffer_type::WRITE_BUFFER, "C");
+//
+//        log::debug("Done creating hardware buffers");
+//
+//        log::debug("Executing kernel");
+//        // the invocation is otherwise exactly the same
+//        auto code2 = vector_add(to_process,A,B,C);
+//
+//        log::debug("Done executing kernel");
+//
+//        // output results
+//        if (code2.valid())
+//            for (int& i : results)
+//            {
+//                log::info("got {}", i);
+//            }
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//#pragma endregion
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        std::vector<int> ints;
-
-
-        // load a file with tons of numbers
-        auto res = fs::view("assets://bigint.txt").get();
-        if (res == common::valid) {
-
-            filesystem::basic_resource contents = res;
-
-            char* buf = new char[6]{0};
-
-            // get a lot of integers from the data
-            for (size_t i = 0; i < contents.size() && i < 5 * 2048; i += 5)
-            {
-                memcpy(buf, contents.data() + i, 5);
-                ints.push_back(std::strtol(buf,nullptr,10));
-            }
-
-            delete[] buf;
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // split the integers into two datasets
-        std::vector<int> first_ints(ints.begin(), ints.begin() + ints.size() / 2);
-        std::vector<int> second_ints(ints.begin() + ints.size() / 2, ints.end());
-
-        // check how many things we need to process
-        size_t to_process = std::min(first_ints.size(), second_ints.size());
-
-        // get an appropriately sized output buffer
-        std::vector<int> results(to_process);
-
-
-
-
-
-
-
-
-
-
-
-        // import some names
-        using compute::in,compute::out;
-
-        log::debug("Loading OpenCL kernel");
-
-        // create opencl-"function"
-        auto vector_add = fs::view("assets://kernels/vadd_kernel.cl").load_as<compute::function>("vector_add");
-
-        log::debug ("Done loading OpenCL kernel");
-
-        #if 0
-
-        // invoke "function"
-        auto code1 = vector_add(to_process,first_ints,second_ints,out(results));
-
-        // output results
-        if (code1.valid())
-            for (int& i : results)
-            {
-                log::info("got {}", i);
-            }
-        #endif
-
-
-
-
-
-
-
-
-
-
-        log::debug("Creating hardware buffers");
-
-        // If we need to reuse the function it is more efficient to keep the buffers around.
-        // This way we do not allocate resources on our computation device every-time.
-        auto A = compute::Context::createBuffer(first_ints,     compute::buffer_type::READ_BUFFER,  "A");
-        auto B = compute::Context::createBuffer(second_ints,    compute::buffer_type::READ_BUFFER,  "B");
-        auto C = compute::Context::createBuffer(results,        compute::buffer_type::WRITE_BUFFER, "C");
-
-        log::debug("Done creating hardware buffers");
-
-        log::debug("Executing kernel");
-        // the invocation is otherwise exactly the same
-        auto code2 = vector_add(to_process,A,B,C);
-
-        log::debug("Done executing kernel");
-
-        // output results
-        if (code2.valid())
-            for (int& i : results)
-            {
-                log::info("got {}", i);
-            }
-
-
-
-
-
-
-
-
-
-
-#pragma endregion
-       
 #pragma region Input binding
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::LEFT, -1.f);
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::RIGHT, 1.f);
@@ -362,6 +362,9 @@ public:
         window.show();
 
 #pragma region Model and material loading
+        rendering::model_handle directionalLightH;
+        rendering::model_handle spotLightH;
+        rendering::model_handle pointLightH;
         rendering::model_handle cubeH;
         rendering::model_handle sphereH;
         rendering::model_handle suzanneH;
@@ -370,13 +373,20 @@ public:
         rendering::model_handle axesH;
         rendering::model_handle submeshtestH;
         rendering::model_handle floorH;
+        rendering::model_handle planeH;
 
         rendering::material_handle wireframeH;
         rendering::material_handle vertexH;
 
         rendering::material_handle uvH;
         rendering::material_handle textureH;
+        rendering::material_handle directionalLightMH;
+        rendering::material_handle spotLightMH;
+        rendering::material_handle pointLightMH;
         rendering::material_handle pbrH;
+        rendering::material_handle copperH;
+        rendering::material_handle slateH;
+        rendering::material_handle testSlateH;
         rendering::material_handle normalH;
         rendering::material_handle skyboxH;
         rendering::material_handle floorMH;
@@ -385,6 +395,9 @@ public:
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
+            directionalLightH = rendering::ModelCache::create_model("directional light", "assets://models/directional-light.obj"_view);
+            spotLightH = rendering::ModelCache::create_model("spot light", "assets://models/spot-light.obj"_view);
+            pointLightH = rendering::ModelCache::create_model("point light", "assets://models/point-light.obj"_view);
             cubeH = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
             sphereH = rendering::ModelCache::create_model("sphere", "assets://models/sphere.obj"_view);
             suzanneH = rendering::ModelCache::create_model("suzanne", "assets://models/suzanne.obj"_view);
@@ -393,22 +406,57 @@ public:
             axesH = rendering::ModelCache::create_model("axes", "assets://models/xyz.obj"_view, { true, false, "assets://models/xyz.mtl"_view });
             submeshtestH = rendering::ModelCache::create_model("submeshtest", "assets://models/submeshtest.obj"_view);
             floorH = rendering::ModelCache::create_model("floor", "assets://models/groundplane.obj"_view);
+            planeH = rendering::ModelCache::create_model("plane", "assets://models/plane.obj"_view);
 
             wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.shs"_view);
             vertexH = rendering::MaterialCache::create_material("vertex", "assets://shaders/position.shs"_view);
             uvH = rendering::MaterialCache::create_material("uv", "assets://shaders/uv.shs"_view);
 
+            auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
+            directionalLightMH = rendering::MaterialCache::create_material("directional light", colorshader);
+            directionalLightMH.set_param("color", math::color(1, 1, 0.8f));
+            
+            spotLightMH = rendering::MaterialCache::create_material("spot light", colorshader);
+            spotLightMH.set_param("color", math::colors::green);
+            
+            pointLightMH = rendering::MaterialCache::create_material("point light", colorshader);
+            pointLightMH.set_param("color", math::colors::red);
+
             textureH = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
             textureH.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
 
-            pbrH = rendering::MaterialCache::create_material("pbr", "assets://shaders/pbr.shs"_view);
+            auto pbrShader = rendering::ShaderCache::create_shader("pbr", "assets://shaders/pbr.shs"_view);
+            pbrH = rendering::MaterialCache::create_material("pbr", pbrShader);
             pbrH.set_param("material_input.albedo", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
             pbrH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("engine://resources/default/normalHeight"_view));
             pbrH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("engine://resources/default/MRDAo"_view));
-            pbrH.set_param("material_input.emissive", rendering::TextureCache::create_texture("engine://resources/default/emissive"_view));
+            pbrH.set_param("material_input.emissive", rendering::TextureCache::create_texture("engine://resources/default/emissive.png"_view));
             pbrH.set_param("material_input.heightScale", 1.f);
 
+            copperH = rendering::MaterialCache::create_material("copper", pbrShader);
+            copperH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/copper-albedo.png"_view));
+            copperH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/copper-normalHeight.png"_view));
+            copperH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/copper-MRDAo.png"_view));
+            copperH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/copper-emissive.png"_view));
+            copperH.set_param("material_input.heightScale", 1.f);
+
+            slateH = rendering::MaterialCache::create_material("slate", pbrShader);
+            slateH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/slate-albedo.png"_view));
+            slateH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/slate-normalHeight.png"_view));
+            slateH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/slate-MRDAo.png"_view));
+            slateH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/slate-emissive.png"_view));
+            slateH.set_param("material_input.heightScale", 0.3f);
+
+            testSlateH = rendering::MaterialCache::create_material("test slate", pbrShader);
+            testSlateH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/slate-albedo.png"_view));
+            testSlateH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/test-normalHeight.png"_view));
+            testSlateH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/slate-MRDAo.png"_view));
+            testSlateH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/slate-emissive.png"_view));
+            testSlateH.set_param("material_input.heightScale", 0.3f);
+
             normalH = rendering::MaterialCache::create_material("normal", "assets://shaders/normal.shs"_view);
+            normalH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("engine://resources/default/normalHeight"_view));
+
             skyboxH = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.shs"_view);
             floorMH = rendering::MaterialCache::create_material("floor", "assets://shaders/groundplane.shs"_view);
 
@@ -431,22 +479,38 @@ public:
 
         {
             auto ent = createEntity();
+            ent.add_component<rendering::renderable>({ planeH, slateH });
+            ent.add_components<transform>(position(0, 0.01f, 0), rotation(), scale(10));
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_component<rendering::renderable>({ planeH, testSlateH });
+            ent.add_components<transform>(position(20, 0.01f, 0), rotation(), scale(10));
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, rendering::light>({ directionalLightH, directionalLightMH }, rendering::light::directional(math::color(1, 1, 0.8f), 10.f));
+            ent.add_components<transform>(position(5, 13, 5), rotation::lookat(math::vec3(1,1,1), math::vec3::zero), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, rendering::light>({ spotLightH, spotLightMH }, rendering::light::spot(math::colors::green, math::deg2rad(90.f), 10.f));
+            ent.add_components<transform>(position(0.1f, 10, -7), rotation::lookat(math::vec3(0,0,-1), math::vec3::zero), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, rendering::light>({ pointLightH, pointLightMH }, rendering::light::point(math::colors::red));
+            ent.add_components<transform>(position(-5, 9, 0), rotation(), scale());
+        }
+
+        {
+            auto ent = createEntity();
             ent.add_components<rendering::renderable, sah>({ suzanneH, vertexH }, {});
             ent.add_components<transform>(position(0, 3, 5.1f), rotation(), scale());
-
-            auto [positionH, rotationH, scaleH] = ent.get_component_handles<transform>();
-
-            log::trace("p {}, r {}, s {}, has {}", positionH.read(), rotationH.read(), scaleH.read(), ent.has_components<transform>());
-
-            ent.remove_components<transform>();
-
-            log::trace("p {}, r {}, s {}, has {}", positionH.read(), rotationH.read(), scaleH.read(), ent.has_components<position, rotation, scale>());
-            transform transf = ent.add_components<transform>(position(0, 3, 5.1f), rotation(), scale());
-
-            auto& [_, rotationH2, scaleH2] = transf.handles;
-            auto positionH2 = transf.get<position>();
-
-            log::trace("p {}, r {}, s {}, has {}", positionH2.read(), rotationH2.read(), scaleH2.read(), ent.has_components<position, rotation, scale>());
         }
 
         {
@@ -457,7 +521,7 @@ public:
 
         {
             auto ent = m_ecs->createEntity();
-            ent.add_components<rendering::renderable, sah>({ suzanneH, normalH }, {});
+            ent.add_components<rendering::renderable, sah>({ suzanneH, pbrH }, {});
 
             ent.add_components<transform>(position(0, 3, 11.1f), rotation(), scale());
         }
@@ -486,13 +550,13 @@ public:
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable, sah>({ cubeH, textureH }, {});
-            ent.add_components<transform>(position(5.1f, 3, 0), rotation(), scale(0.75f));
+            ent.add_components<rendering::renderable, sah>({ cubeH, pbrH }, {});
+            ent.add_components<transform>(position(5.1f, 9, 0), rotation(), scale(0.75f));
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable, sah>({ sphereH, normalH }, {});
+            ent.add_components<rendering::renderable, sah>({ sphereH, copperH }, {});
             ent.add_components<transform>(position(0, 3, -5.1f), rotation(), scale(2.5f));
         }
 
@@ -527,20 +591,20 @@ public:
 
         //---------------------------------------------------------- Physics Collision Unit Test -------------------------------------------------------------------//
 
-        setupPhysicsCDUnitTest(cubeH, wireframeH);
+        //setupPhysicsCDUnitTest(cubeH, wireframeH);
 
         //----------- Rigidbody-Collider AABB Test------------//
 
 
-        setupPhysicsFrictionUnitTest(cubeH, uvH);
+        //setupPhysicsFrictionUnitTest(cubeH, uvH);
 
-        setupPhysicsStackingUnitTest(cubeH, uvH);
+        //setupPhysicsStackingUnitTest(cubeH, uvH);
 
         physics::cube_collider_params cubeParams;
         cubeParams.breadth = 1.0f;
         cubeParams.width = 1.0f;
         cubeParams.height = 1.0f;
-       setupPhysicsCRUnitTest(cubeH, uvH);
+       //setupPhysicsCRUnitTest(cubeH, uvH);
 
 
      auto sceneEntity = createEntity();
@@ -572,7 +636,7 @@ public:
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::differentThread>("TestChain");
         createProcess<&TestSystem::differentInterval>("TestChain", 1.f);
-        createProcess<&TestSystem::drawInterval>("TestChain");
+        //createProcess<&TestSystem::drawInterval>("TestChain");
     }
 
     void testPhysicsEvent(physics::TriggerEvent* evnt)
@@ -1539,12 +1603,11 @@ public:
         //Pyramid Stack
     }
 
-
+#pragma region input stuff
     void setupCameraEntity()
     {
         player = createEntity();
-        rotation rot = math::conjugate(math::normalize(math::toQuat(math::lookAt(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0)))));
-        player.add_components<transform>(position(0.f, 3.f, 0.f), rot, scale());
+        player.add_components<transform>(position(0.f, 3.f, 0.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
         player.add_component<audio::audio_listener>();
 
         rendering::camera cam;
@@ -1774,6 +1837,7 @@ public:
         source.rewind();
         sourceH.write(source);
     }
+#pragma endregion
 
     void update(time::span deltaTime)
     {
