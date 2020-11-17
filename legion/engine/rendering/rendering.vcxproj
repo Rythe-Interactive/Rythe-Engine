@@ -19,6 +19,7 @@
     <ClCompile Include="data\texture.cpp" />
     <ClCompile Include="shadercompiler\shadercompiler.cpp" />
     <ClCompile Include="systems\renderer.cpp" />
+    <ClCompile Include="util\ini.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\camera.hpp" />
