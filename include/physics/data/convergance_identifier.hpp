@@ -33,9 +33,5 @@ namespace legion::physics
         }
 
         virtual bool IsEqual(physics_contact& contact) { return false; };
-
-    
-
-
     };
 }

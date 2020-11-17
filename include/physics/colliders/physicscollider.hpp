@@ -22,10 +22,7 @@ namespace legion::physics
         PhysicsCollider()
         {
             static int colliderID = 0;
-
-            id = colliderID;
-
-            colliderID++;
+            id = colliderID++;
         }
 
         virtual void AddConverganceIdentifier(const  physics_contact& contact) = 0;

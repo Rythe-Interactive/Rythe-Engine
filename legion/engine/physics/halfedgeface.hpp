@@ -7,13 +7,10 @@ namespace legion::physics
 
 	struct HalfEdgeFace
 	{
-        
-
 		HalfEdgeEdge* startEdge;
 		math::vec3 normal;
 		math::vec3 centroid;
         
-
 		HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
 
 		/** @brief given a function that takes in a HalfEdgeEdge*, 
@@ -21,9 +18,6 @@ namespace legion::physics
 		*/
 		void forEachEdge(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute);
 		
-
 		~HalfEdgeFace();
-
-
 	};
 }

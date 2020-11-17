@@ -36,7 +36,7 @@ namespace legion::physics
 
         bool operator==(const EdgeLabel& rhs)
         {
-            return firstEdge == rhs.firstEdge & nextEdge == rhs.nextEdge;
+            return firstEdge == rhs.firstEdge && nextEdge == rhs.nextEdge;
         }
 
         bool IsSet() const

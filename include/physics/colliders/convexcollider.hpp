@@ -27,12 +27,13 @@ namespace legion::physics
             }
         }
 
+        /** @brief Given a physics_contact that has been resolved, use its label and lambdas in order to create a ConvexConverganceIdentifier
+       */
         void AddConverganceIdentifier(const physics_contact& contact) override
         {
             converganceIdentifiers.push_back(
                 std::make_unique<ConvexConverganceIdentifier>(contact.label, contact.totalLambda,
                     contact.tangent1Lambda, contact.tangent2Lambda, GetColliderID()));
-
         }
 
         void CheckCollision(std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold& manifold) override
@@ -52,30 +53,6 @@ namespace legion::physics
         }
 
         void PopulateContactPointsWith(ConvexCollider* convexCollider, physics_manifold& manifold) override;
-
-
-       
-
-        //inline void DrawColliderRepresentation(math::mat4 transform) override
-        //{
-        //    //draw edges
-        //    auto drawFunc = [transform](HalfEdgeEdge* edge)
-        //    {
-        //        //draw To Next Line
-        //        math::vec3 worldStart = transform * math::vec4(*(edge->edgePositionPtr), 1);
-        //        math::vec3 worldEnd = transform * math::vec4(*(edge->nextEdge->edgePositionPtr), 1);
-
-        //        debug::drawLine(__FUNC__ , __LINE__, worldStart, worldEnd, math::colors::green);
-
-        //    };
-
-        //    debug::drawLine(__FUNC__ , __LINE__, math::vec3(0, 0, 0), math::vec3(0, -1, 0), math::colors::blue);
-
-        //    for (auto face : halfEdgeFaces)
-        //    {
-        //        face->forEachEdge(drawFunc);
-        //    }
-        //}
 
         /**@brief Given the current transform of the entity, creates a tight AABB of the collider;
         */

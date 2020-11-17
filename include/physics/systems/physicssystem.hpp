@@ -247,6 +247,7 @@ namespace legion::physics
                 }
             }
 
+            //reset convergance identifiers for all colliders
             for (auto& manifold : manifoldsToSolve)
             {
                 for (auto& contact : manifold.contacts)
@@ -255,12 +256,11 @@ namespace legion::physics
                 }
             }
 
+            //using the known lambdas of this time step, add it as a convergance identifier
             for (auto& manifold : manifoldsToSolve)
             {
                 for (auto& contact : manifold.contacts)
                 {
-                    //assert(contact.label.IsSet());
-
                     contact.refCollider->AddConverganceIdentifier(contact);
                 }
             }

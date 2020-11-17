@@ -25,7 +25,6 @@ namespace legion::physics
 
         auto initializeEdgeToFaceFunc = [this,&currentEdgeId,edgeCount](HalfEdgeEdge* edge)
         {
-            //log::debug("initializeEdgeToFaceFunc");
             edge->face = this;
 
             int nextID = currentEdgeId + 1 < edgeCount ? currentEdgeId + 1 : 0;
@@ -34,8 +33,6 @@ namespace legion::physics
             (std::make_pair(faceCount, currentEdgeId), std::make_pair(faceCount, nextID));
 
             edge->label = std::move(label);
-            //log::debug(" edge->label first {},{}",edge->label.firstEdge.first, edge->label.firstEdge.second);
-            //log::debug(" edge->label second {},{}", edge->label.nextEdge.first, edge->label.nextEdge.second);
 
             currentEdgeId++;
         };
