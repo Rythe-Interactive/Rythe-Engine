@@ -388,8 +388,8 @@ public:
         rendering::material_handle aluminumH;
         rendering::material_handle slateH;
         rendering::material_handle rockH;
+        rendering::material_handle rock2H;
         rendering::material_handle fabricH;
-        rendering::material_handle testSlateH;
         rendering::material_handle normalH;
         rendering::material_handle skyboxH;
         rendering::material_handle floorMH;
@@ -469,21 +469,21 @@ public:
             rockH.set_param("material_input.heightScale", 1.f);
             rockH.set_param("discardExcess", true);
 
+            rock2H = rendering::MaterialCache::create_material("rock 2", pbrShader);
+            rock2H.set_param("material_input.albedo", rendering::TextureCache::get_handle("rock-albedo.png"));
+            rock2H.set_param("material_input.normalHeight", rendering::TextureCache::get_handle("rock-normalHeight.png"));
+            rock2H.set_param("material_input.MRDAo", rendering::TextureCache::get_handle("rock-MRDAo.png"));
+            rock2H.set_param("material_input.emissive", rendering::TextureCache::get_handle("rock-emissive.png"));
+            rock2H.set_param("material_input.heightScale", 0.5f);
+            rock2H.set_param("discardExcess", false);
+
             fabricH = rendering::MaterialCache::create_material("fabric", pbrShader);
             fabricH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/fabric-lowres-albedo.png"_view));
             fabricH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/fabric-lowres-normalHeight.png"_view));
             fabricH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/fabric-lowres-MRDAo.png"_view));
             fabricH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/fabric-lowres-emissive.png"_view));
             fabricH.set_param("material_input.heightScale", 0.5f);
-            fabricH.set_param("discardExcess", true);
-
-            testSlateH = rendering::MaterialCache::create_material("test slate", pbrShader);
-            testSlateH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/slate-albedo.png"_view));
-            testSlateH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/test-normalHeight.png"_view));
-            testSlateH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/slate-MRDAo.png"_view));
-            testSlateH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/slate-emissive.png"_view));
-            testSlateH.set_param("material_input.heightScale", 0.3f);
-            testSlateH.set_param("discardExcess", true);
+            fabricH.set_param("discardExcess", false);
 
             normalH = rendering::MaterialCache::create_material("normal", "assets://shaders/normal.shs"_view);
             normalH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("engine://resources/default/normalHeight"_view));
@@ -516,8 +516,14 @@ public:
 
         {
             auto ent = createEntity();
-            ent.add_component<rendering::renderable>({ planeH, testSlateH });
+            ent.add_component<rendering::renderable>({ planeH, copperH });
             ent.add_components<transform>(position(20, 0.01f, 0), rotation(), scale(10));
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_component<rendering::renderable>({ planeH, aluminumH });
+            ent.add_components<transform>(position(20, 0.01f, 20), rotation(), scale(10));
         }
 
         {
@@ -613,6 +619,18 @@ public:
             auto ent = createEntity();
             ent.add_components<rendering::renderable, sah>({ sphereH, aluminumH }, {});
             ent.add_components<transform>(position(0, 3, -8.f), rotation(), scale(2.5f));
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ sphereH, rock2H }, {});
+            ent.add_components<transform>(position(4, 3, -8.f), rotation(), scale(2.5f));
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ sphereH, fabricH }, {});
+            ent.add_components<transform>(position(4, 3, -5.1f), rotation(), scale(2.5f));
         }
 
         math::mat4 rotMatrix = math::rotate(1.5f * 3.14159265f, math::vec3(0,1,0));
