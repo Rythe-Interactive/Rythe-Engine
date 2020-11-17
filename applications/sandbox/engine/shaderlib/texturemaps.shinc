@@ -7,18 +7,19 @@
 #if !defined(GEOMETRY_SHADER)
 vec2 ParallaxMap(sampler2D normalHeightMap, float scale, vec2 uv, Camera camera, mat3 tbn)
 {
-	vec3 tangentViewDir = tbn * camera.toView;
+	vec3 tangentViewDir = tbn * normalize(camera.toView);
 
 	const float minLayers = 4.0;
 	const float maxLayers = 32.0;
-	float layerCount = round(mix(minLayers, maxLayers, dot01(vec3(0.0, 0.0, 1.0), tangentViewDir)));
+	float verticality = dot01(vec3(0.0, 0.0, 1.0), tangentViewDir);
+	float layerCount = round(mix(minLayers, maxLayers, verticality));
 
 	float layerDepth = 1.0 / layerCount;
 
 	float currentDepth = 0.0;
 	float prevDepth = 0.0;
 
-	vec2 P = tangentViewDir.xy * scale * vec2(-0.01, 0.01);
+	vec2 P = tangentViewDir.xy * scale * vec2(-0.01, 0.01) * (1.0-pow(1.0-verticality, 2));
 	vec2 deltaUV = P / layerCount;
 
 	vec2 currentUV = uv;
@@ -46,7 +47,7 @@ vec2 ParallaxMap(sampler2D normalHeightMap, float scale, vec2 uv, Camera camera,
 
 vec2 ParallaxMap(float height, float scale, vec2 uv, Camera camera, mat3 tbn)
 {
-	vec3 tangentViewDir = tbn * camera.toView;
+	vec3 tangentViewDir = tbn * normalize(camera.toView);
 
 	float offset = (height * 2.0 - 1.0) * scale * 0.01;
 	vec2 parallexOffset = (tangentViewDir.xy / tangentViewDir.z) * offset;

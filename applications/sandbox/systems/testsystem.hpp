@@ -445,7 +445,7 @@ public:
             copperH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/copper/copper-normalHeight.png"_view));
             copperH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/copper/copper-MRDAo.png"_view));
             copperH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/copper/copper-emissive.png"_view));
-            copperH.set_param("material_input.heightScale", 0.3f);
+            copperH.set_param("material_input.heightScale", 1.f);
             copperH.set_param("discardExcess", false);
 
             aluminumH = rendering::MaterialCache::create_material("aluminum", pbrShader);
@@ -469,7 +469,7 @@ public:
             slateH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/slate/slate-normalHeight.png"_view));
             slateH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/slate/slate-MRDAo.png"_view));
             slateH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/slate/slate-emissive.png"_view));
-            slateH.set_param("material_input.heightScale", 1.f);
+            slateH.set_param("material_input.heightScale", 10.f);
             slateH.set_param("discardExcess", true);
 
             rockH = rendering::MaterialCache::create_material("rock", pbrShader);
@@ -477,7 +477,7 @@ public:
             rockH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/rock/rock-normalHeight.png"_view));
             rockH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/rock/rock-MRDAo.png"_view));
             rockH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/rock/rock-emissive.png"_view));
-            rockH.set_param("material_input.heightScale", 1.f);
+            rockH.set_param("material_input.heightScale", 10.f);
             rockH.set_param("discardExcess", true);
 
             rock2H = rendering::MaterialCache::create_material("rock 2", pbrShader);
@@ -485,7 +485,7 @@ public:
             rock2H.set_param("material_input.normalHeight", rendering::TextureCache::get_handle("rock-normalHeight.png"));
             rock2H.set_param("material_input.MRDAo", rendering::TextureCache::get_handle("rock-MRDAo.png"));
             rock2H.set_param("material_input.emissive", rendering::TextureCache::get_handle("rock-emissive.png"));
-            rock2H.set_param("material_input.heightScale", 0.5f);
+            rock2H.set_param("material_input.heightScale", 1.f);
             rock2H.set_param("discardExcess", false);
 
             fabricH = rendering::MaterialCache::create_material("fabric", pbrShader);
@@ -493,7 +493,7 @@ public:
             fabricH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-normalHeight.png"_view));
             fabricH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-MRDAo.png"_view));
             fabricH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-emissive.png"_view));
-            fabricH.set_param("material_input.heightScale", 0.5f);
+            fabricH.set_param("material_input.heightScale", 1.f);
             fabricH.set_param("discardExcess", false);
 
             bogH = rendering::MaterialCache::create_material("bog", pbrShader);
@@ -501,7 +501,7 @@ public:
             bogH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/bog/bog-normalHeight.png"_view));
             bogH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/bog/bog-MRDAo.png"_view));
             bogH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/bog/bog-emissive.png"_view));
-            bogH.set_param("material_input.heightScale", 0.5f);
+            bogH.set_param("material_input.heightScale", 10.f);
             bogH.set_param("discardExcess", true);
 
             paintH = rendering::MaterialCache::create_material("paint", pbrShader);
