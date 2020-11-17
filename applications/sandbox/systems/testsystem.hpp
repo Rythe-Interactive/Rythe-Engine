@@ -387,7 +387,8 @@ public:
         rendering::material_handle copperH;
         rendering::material_handle aluminumH;
         rendering::material_handle slateH;
-        rendering::material_handle stonewallH;
+        rendering::material_handle rockH;
+        rendering::material_handle fabricH;
         rendering::material_handle testSlateH;
         rendering::material_handle normalH;
         rendering::material_handle skyboxH;
@@ -429,18 +430,20 @@ public:
 
             auto pbrShader = rendering::ShaderCache::create_shader("pbr", "assets://shaders/pbr.shs"_view);
             pbrH = rendering::MaterialCache::create_material("pbr", pbrShader);
-            pbrH.set_param("material_input.albedo", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
-            pbrH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("engine://resources/default/normalHeight"_view));
-            pbrH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("engine://resources/default/MRDAo"_view));
-            pbrH.set_param("material_input.emissive", rendering::TextureCache::create_texture("engine://resources/default/emissive.png"_view));
-            pbrH.set_param("material_input.heightScale", 1.f);
+            pbrH.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
+            pbrH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("engine://resources/default/normalHeight"_view));
+            pbrH.set_param(SV_MRDAO, rendering::TextureCache::create_texture("engine://resources/default/MRDAo"_view));
+            pbrH.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("engine://resources/default/emissive.png"_view));
+            pbrH.set_param(SV_HEIGHTSCALE, 1.f);
+            pbrH.set_param("discardExcess", false);
 
             copperH = rendering::MaterialCache::create_material("copper", pbrShader);
             copperH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/copper-albedo.png"_view));
             copperH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/copper-normalHeight.png"_view));
             copperH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/copper-MRDAo.png"_view));
             copperH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/copper-emissive.png"_view));
-            copperH.set_param("material_input.heightScale", 1.f);
+            copperH.set_param("material_input.heightScale", 0.3f);
+            copperH.set_param("discardExcess", false);
 
             aluminumH = rendering::MaterialCache::create_material("aluminum", pbrShader);
             aluminumH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/aluminum-albedo.png"_view));
@@ -448,6 +451,7 @@ public:
             aluminumH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/aluminum-MRDAo.png"_view));
             aluminumH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/aluminum-emissive.png"_view));
             aluminumH.set_param("material_input.heightScale", 1.f);
+            aluminumH.set_param("discardExcess", false);
 
             slateH = rendering::MaterialCache::create_material("slate", pbrShader);
             slateH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/slate-albedo.png"_view));
@@ -455,13 +459,23 @@ public:
             slateH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/slate-MRDAo.png"_view));
             slateH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/slate-emissive.png"_view));
             slateH.set_param("material_input.heightScale", 1.f);
+            slateH.set_param("discardExcess", true);
 
-            stonewallH = rendering::MaterialCache::create_material("stone wall", pbrShader);
-            stonewallH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/stonewall-albedo.png"_view));
-            stonewallH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/stonewall-normalHeight.png"_view));
-            stonewallH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/stonewall-MRDAo.png"_view));
-            stonewallH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/stonewall-emissive.png"_view));
-            stonewallH.set_param("material_input.heightScale", 0.1f);
+            rockH = rendering::MaterialCache::create_material("rock", pbrShader);
+            rockH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/rock-albedo.png"_view));
+            rockH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/rock-normalHeight.png"_view));
+            rockH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/rock-MRDAo.png"_view));
+            rockH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/rock-emissive.png"_view));
+            rockH.set_param("material_input.heightScale", 1.f);
+            rockH.set_param("discardExcess", true);
+
+            fabricH = rendering::MaterialCache::create_material("fabric", pbrShader);
+            fabricH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/fabric-lowres-albedo.png"_view));
+            fabricH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/fabric-lowres-normalHeight.png"_view));
+            fabricH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/fabric-lowres-MRDAo.png"_view));
+            fabricH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/fabric-lowres-emissive.png"_view));
+            fabricH.set_param("material_input.heightScale", 0.5f);
+            fabricH.set_param("discardExcess", true);
 
             testSlateH = rendering::MaterialCache::create_material("test slate", pbrShader);
             testSlateH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/slate-albedo.png"_view));
@@ -469,6 +483,7 @@ public:
             testSlateH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/slate-MRDAo.png"_view));
             testSlateH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/slate-emissive.png"_view));
             testSlateH.set_param("material_input.heightScale", 0.3f);
+            testSlateH.set_param("discardExcess", true);
 
             normalH = rendering::MaterialCache::create_material("normal", "assets://shaders/normal.shs"_view);
             normalH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("engine://resources/default/normalHeight"_view));
@@ -507,13 +522,19 @@ public:
 
         {
             auto ent = createEntity();
+            ent.add_component<rendering::renderable>({ planeH, fabricH });
+            ent.add_components<transform>(position(-20, 0.01f, 0), rotation(), scale(10));
+        }
+
+        {
+            auto ent = createEntity();
             ent.add_component<rendering::renderable>({ planeH, pbrH });
             ent.add_components<transform>(position(0, 0.01f, 20), rotation(), scale(10));
         }
 
         {
             auto ent = createEntity();
-            ent.add_component<rendering::renderable>({ planeH, stonewallH });
+            ent.add_component<rendering::renderable>({ planeH, rockH });
             ent.add_components<transform>(position(0, 0.01f, -20), rotation(), scale(10));
         }
 
@@ -549,7 +570,7 @@ public:
 
         {
             auto ent = m_ecs->createEntity();
-            ent.add_components<rendering::renderable, sah>({ suzanneH, pbrH }, {});
+            ent.add_components<rendering::renderable, sah>({ suzanneH, copperH }, {});
 
             ent.add_components<transform>(position(0, 3, 11.1f), rotation(), scale());
         }
