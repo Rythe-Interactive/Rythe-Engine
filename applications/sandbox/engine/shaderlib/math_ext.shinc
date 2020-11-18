@@ -2,7 +2,7 @@
 //  Math Extension  //
 //////////////////////
 
-#define epsilon 0.00001
+#define epsilon 0.001
 #define pi 3.141592653589793
 
 float sum(vec2 v)

@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="components\light.cpp" />
     <ClCompile Include="data\importers\texture_importers.cpp" />
     <ClCompile Include="data\material.cpp" />
     <ClCompile Include="data\model.cpp" />
@@ -18,13 +19,14 @@
     <ClCompile Include="data\texture.cpp" />
     <ClCompile Include="shadercompiler\shadercompiler.cpp" />
     <ClCompile Include="systems\renderer.cpp" />
+    <ClCompile Include="util\ini.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\camera.hpp" />
+    <ClInclude Include="components\light.hpp" />
     <ClInclude Include="components\renderable.hpp" />
     <ClInclude Include="data\importers\texture_importers.hpp" />
     <ClInclude Include="data\material.hpp" />
-    <ClInclude Include="data\renderbuffer.h" />
     <ClInclude Include="data\shader.hpp" />
     <ClInclude Include="debugrendering.hpp" />
     <ClInclude Include="detail\stb_image.h" />
@@ -38,6 +40,7 @@
     <ClInclude Include="shadercompiler\shadercompiler.hpp" />
     <ClInclude Include="systems\renderer.hpp" />
     <ClInclude Include="util\bindings.hpp" />
+    <ClInclude Include="util\matini.hpp" />
     <ClInclude Include="util\settings.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -105,7 +108,8 @@
       <AdditionalDependencies>args-application.lib;args-core.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
+      <Command>xcopy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\" /y /i /r
+copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>
@@ -113,6 +117,11 @@
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
     </Lib>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
+xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y
+del ".\xcopyexclude"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -135,7 +144,8 @@
       <AdditionalDependencies>args-application.lib;args-core.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
+      <Command>xcopy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\" /y /i /r
+copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>
@@ -143,6 +153,11 @@
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
     </Lib>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
+xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y
+del ".\xcopyexclude"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

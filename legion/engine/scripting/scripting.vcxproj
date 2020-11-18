@@ -83,7 +83,8 @@
       <AdditionalDependencies>args-core.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
+      <Command>xcopy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\" /y /i /r
+copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>
@@ -91,6 +92,11 @@
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
     </Lib>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
+xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y
+del ".\xcopyexclude"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -113,7 +119,8 @@
       <AdditionalDependencies>args-core.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
+      <Command>xcopy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\" /y /i /r
+copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>
@@ -121,6 +128,11 @@
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
     </Lib>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
+xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y
+del ".\xcopyexclude"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -25,8 +25,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colliders\convexcollider.hpp" />
-    <ClInclude Include="data\convexconvexpenetrationquery.h" />
+    <ClInclude Include="data\contact_vertex.hpp" />
+    <ClInclude Include="data\convergance_identifier.hpp" />
+    <ClInclude Include="data\convexconvexpenetrationquery.hpp" />
     <ClInclude Include="cube_collider_params.hpp" />
+    <ClInclude Include="data\convex_convergance_identifier.hpp" />
+    <ClInclude Include="data\edgepenetrationquery.hpp" />
+    <ClInclude Include="data\edge_label.hpp" />
+    <ClInclude Include="data\identifier.hpp" />
     <ClInclude Include="data\physics_manifold_precursor.h" />
     <ClInclude Include="data\edgepenetrationquery.h" />
     <ClInclude Include="data\pointer_encapsulator.hpp" />
@@ -36,10 +42,10 @@
     <ClInclude Include="colliders\physicscollider.hpp" />
     <ClInclude Include="data\penetrationquery.h" />
     <ClInclude Include="physics.hpp" />
-    <ClInclude Include="physicsconstants.h" />
+    <ClInclude Include="physicsconstants.hpp" />
+    <ClInclude Include="physics_contact.hpp" />
     <ClInclude Include="systems\physicssystem.hpp" />
     <ClInclude Include="physics_statics.hpp" />
-    <ClInclude Include="physics_contact.h" />
     <ClInclude Include="data\physics_manifold.hpp" />
     <ClInclude Include="components\physics_component.hpp" />
     <ClInclude Include="physicsmodule.hpp" />
@@ -110,7 +116,8 @@
       <AdditionalDependencies>args-core.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
+      <Command>xcopy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\" /y /i /r
+copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>
@@ -118,6 +125,11 @@
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
     </Lib>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
+xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y
+del ".\xcopyexclude"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -140,7 +152,8 @@
       <AdditionalDependencies>args-core.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(OutDir)$(TargetName).lib" "$(SolutionDir)deps\lib"</Command>
+      <Command>xcopy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\" /y /i /r
+copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>
@@ -148,6 +161,11 @@
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
     </Lib>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
+xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y
+del ".\xcopyexclude"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

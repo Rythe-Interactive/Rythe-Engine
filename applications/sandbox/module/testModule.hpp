@@ -14,6 +14,7 @@ public:
         addProcessChain("TestChain");
 
         reportComponentType<sah>();
+        reportComponentType<addRB>();
         reportSystem<TestSystem>();
     }
 

@@ -1,0 +1,6 @@
+.cpp
+.vcxproj
+.lua
+.c
+xcopyexclude
+delete_this
