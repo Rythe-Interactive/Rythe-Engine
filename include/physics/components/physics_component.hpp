@@ -22,7 +22,7 @@ namespace legion::physics
 
         std::vector<std::shared_ptr<PhysicsCollider>>* colliders;
 
-        bool isTrigger;
+        bool isTrigger =false;
 
         math::vec3 localCenterOfMass{};
 
