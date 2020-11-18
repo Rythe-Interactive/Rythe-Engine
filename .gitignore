@@ -104,3 +104,6 @@ bld/
 deps/lib/legion*
 *.shil
 !**/applications/**/engine/**
+
+# Mono VM
+vm/**

@@ -46,6 +46,8 @@ namespace legion::core::ecs
 
         template<typename component_type>
         component_handle<component_type> cast();
+        template<typename component_type>
+        const component_handle<component_type> cast() const;
 
 
         void serialize(cereal::JSONOutputArchive& oarchive);
@@ -57,11 +59,11 @@ namespace legion::core::ecs
 
         /**@brief Checks if handle still points to a valid component.
          */
-        L_NODISCARD virtual bool valid() LEGION_IMPURE_RETURN(m_ownerId);
+        L_NODISCARD virtual bool valid() const LEGION_IMPURE_RETURN(m_ownerId);
 
         /**@brief Checks if handle still points to a valid component.
          */
-        operator bool() { return valid(); }
+        operator bool() const { return valid(); }
     };
 
 
@@ -82,16 +84,16 @@ namespace legion::core::ecs
          */
         component_handle(id_type entityId) : component_handle_base(entityId,typeHash<component_type>()) {}
 
-        component_handle& operator=(const component_handle& other) { entity = other.entity; /*m_registry = other.m_registry; */m_ownerId = other.m_ownerId; m_typeId = other.m_typeId; return *this; }
-        component_handle& operator=(component_handle&& other) { entity = other.entity;/* m_registry = other.m_registry;*/ m_ownerId = other.m_ownerId; m_typeId = other.m_typeId; return *this; }
-
-        bool operator==(const component_handle<component_type>& other) const { return /*m_registry == other.m_registry &&*/ m_ownerId == other.m_ownerId && m_typeId == other.m_typeId; }
+        component_handle& operator=(const component_handle& other) { entity = other.entity; m_ownerId = other.m_ownerId; m_typeId = other.m_typeId; return *this; }
+        component_handle& operator=(component_handle&& other) { entity = other.entity; m_ownerId = other.m_ownerId; m_typeId = other.m_typeId; return *this; }
+                                                                                       
+        bool operator==(const component_handle<component_type>& other) const { return m_ownerId == other.m_ownerId && m_typeId == other.m_typeId; }
 
         /**@brief Thread-safe read of component.
          * @param order Memory order at which to load the component.
          * @returns component_type Current value of component.
          */
-        L_NODISCARD component_type read()
+        L_NODISCARD component_type read() const
         {
             if (!m_ownerId || !m_registry)
                 return component_type();
@@ -264,7 +266,7 @@ namespace legion::core::ecs
 
         /**@brief Checks if handle still points to a valid component.
          */
-        virtual bool valid() override
+        virtual bool valid() const override
         {
             return m_ownerId && m_registry && m_registry->getFamily<component_type>()->has_component(m_ownerId);
         }
@@ -273,6 +275,19 @@ namespace legion::core::ecs
 
     template<typename component_type>
     inline component_handle<component_type> component_handle_base::cast()
+    {
+        if (typeHash<component_type>() == m_typeId)
+        {
+            return component_handle<component_type>(m_ownerId);
+        }
+        else
+        {
+            return component_handle<component_type>();
+        }
+    }
+
+    template<typename component_type>
+    inline const component_handle<component_type> component_handle_base::cast() const
     {
         if (typeHash<component_type>() == m_typeId)
         {

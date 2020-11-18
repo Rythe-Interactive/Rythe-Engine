@@ -17,6 +17,8 @@ namespace legion::core::math
 	const vec<3, T, Q> vec<3, T, Q>::forward(static_cast<T>(0), static_cast<T>(0), static_cast<T>(1));
 	template<typename T, qualifier Q>
 	const vec<3, T, Q> vec<3, T, Q>::backward(static_cast<T>(0), static_cast<T>(0), static_cast<T>(-1));
+	template<typename T, qualifier Q>
+	const vec<3, T, Q> vec<3, T, Q>::zero(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0));
 
 	// -- Implicit basic constructors --
 

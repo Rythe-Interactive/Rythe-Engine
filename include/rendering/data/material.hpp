@@ -279,6 +279,72 @@ namespace legion::rendering
         return MaterialCache::m_materials[id].get_param<T>(location);
     }
 
+    template<>
+    inline void material::set_param<math::color>(const std::string& name, const math::color& value)
+    {
+        id_type id = nameHash(name);
+        if (m_parameters.count(id) && m_parameters[id]->type() == typeHash<math::vec4>())
+            static_cast<material_parameter<math::vec4>*>(m_parameters[id].get())->set_value(value);
+        else
+            log::warn("material {} does not have a parameter named {} of type {}", m_name, name, undecoratedTypeName<math::color>());
+    }
+
+    template<>
+    L_NODISCARD inline bool material::has_param<math::color>(const std::string& name)
+    {
+        id_type id = nameHash(name);
+        return m_parameters.count(id) && m_parameters[id]->type() == typeHash<math::vec4>();
+    }
+
+    template<>
+    L_NODISCARD inline math::color material::get_param<math::color>(const std::string& name)
+    {
+        id_type id = nameHash(name);
+        if (m_parameters.count(id) && m_parameters[id]->type() == typeHash<math::vec4>())
+            return static_cast<material_parameter<math::vec4>*>(m_parameters[id].get())->get_value();
+
+        log::warn("material {} does not have a parameter named {} of type {}", m_name, name, undecoratedTypeName<math::color>());
+        return math::color();
+    }
+
+    template<>
+    inline void material::set_param<math::color>(GLint location, const math::color& value)
+    {
+        if (!m_idOfLocation.count(location))
+            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, undecoratedTypeName<math::color>());
+
+        id_type id = m_idOfLocation[location];
+
+        if (m_parameters.count(id) && m_parameters[id]->type() == typeHash<math::vec4>())
+            static_cast<material_parameter<math::vec4>*>(m_parameters[id].get())->set_value(value);
+        else
+            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, undecoratedTypeName<math::color>());
+    }
+
+    template<>
+    L_NODISCARD inline math::color material::get_param<math::color>(GLint location)
+    {
+        if (!m_idOfLocation.count(location))
+            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, undecoratedTypeName<math::color>());
+
+        id_type id = m_idOfLocation[location];
+        if (m_parameters.count(id) && m_parameters[id]->type() == typeHash<math::vec4>())
+            return static_cast<material_parameter<math::vec4>*>(m_parameters[id].get())->get_value();
+
+        log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, undecoratedTypeName<math::color>());
+        return math::color();
+    }
+
+    template<>
+    L_NODISCARD inline bool material::has_param<math::color>(GLint location)
+    {
+        if (!m_idOfLocation.count(location))
+            return false;
+
+        id_type id = m_idOfLocation[location];
+        return m_parameters.count(id) && m_parameters[id]->type() == typeHash<math::vec4>();
+    }
+
     template<typename T>
     void material::set_param(const std::string& name, const T& value)
     {
@@ -286,7 +352,7 @@ namespace legion::rendering
         if (m_parameters.count(id) && m_parameters[id]->type() == typeHash<T>())
             static_cast<material_parameter<T>*>(m_parameters[id].get())->set_value(value);
         else
-            log::error("material {} does not have a parameter named {} of type {}", m_name, name, undecoratedTypeName<T>());
+            log::warn("material {} does not have a parameter named {} of type {}", m_name, name, undecoratedTypeName<T>());
     }
 
     template<typename T>
@@ -303,7 +369,7 @@ namespace legion::rendering
         if (m_parameters.count(id) && m_parameters[id]->type() == typeHash<T>())
             return static_cast<material_parameter<T>*>(m_parameters[id].get())->get_value();
 
-        log::error("material {} does not have a parameter named {} of type {}", m_name, name, undecoratedTypeName<T>());
+        log::warn("material {} does not have a parameter named {} of type {}", m_name, name, undecoratedTypeName<T>());
         return T();
     }
 
@@ -311,27 +377,27 @@ namespace legion::rendering
     void material::set_param(GLint location, const T& value)
     {
         if (!m_idOfLocation.count(location))
-            log::error("material {} does not have a parameter at location {} of type {}", m_name, location, undecoratedTypeName<T>());
+            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, undecoratedTypeName<T>());
 
         id_type id = m_idOfLocation[location];
 
         if (m_parameters.count(id) && m_parameters[id]->type() == typeHash<T>())
             static_cast<material_parameter<T>*>(m_parameters[id].get())->set_value(value);
         else
-            log::error("material {} does not have a parameter at location {} of type {}", m_name, location, undecoratedTypeName<T>());
+            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, undecoratedTypeName<T>());
     }
 
     template<typename T>
     L_NODISCARD T material::get_param(GLint location)
     {
         if (!m_idOfLocation.count(location))
-            log::error("material {} does not have a parameter at location {} of type {}", m_name, location, undecoratedTypeName<T>());
+            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, undecoratedTypeName<T>());
 
         id_type id = m_idOfLocation[location];
         if (m_parameters.count(id) && m_parameters[id]->type() == typeHash<T>())
             return static_cast<material_parameter<T>*>(m_parameters[id].get())->get_value();
 
-        log::error("material {} does not have a parameter at location {} of type {}", m_name, location, undecoratedTypeName<T>());
+        log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, undecoratedTypeName<T>());
         return T();
     }
 
