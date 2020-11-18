@@ -1,0 +1,13 @@
+.. _exhale_function_material_8hpp_1ab73367179f1bd0ccade11f388b50b4b3:
+
+Function legion::rendering::material::get_param< math::color >(const std::string&)
+==================================================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_material.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::rendering::material::get_param< math::color >(const std::string&)

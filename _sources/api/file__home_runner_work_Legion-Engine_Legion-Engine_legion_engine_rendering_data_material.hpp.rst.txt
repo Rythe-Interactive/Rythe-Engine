@@ -45,6 +45,8 @@ Included By
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_material.cpp`
 
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_matini.hpp`
+
 
 
 
@@ -68,6 +70,23 @@ Classes
 - :ref:`exhale_class_structlegion_1_1rendering_1_1material__parameter__base`
 
 - :ref:`exhale_class_classlegion_1_1rendering_1_1_material_cache`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_material_8hpp_1ab73367179f1bd0ccade11f388b50b4b3`
+
+- :ref:`exhale_function_material_8hpp_1a87eb40c46518e29e5a61fc5fefb5306d`
+
+- :ref:`exhale_function_material_8hpp_1aea9e75f89ecec1bdb46889b84500e5ab`
+
+- :ref:`exhale_function_material_8hpp_1a96682413fd71a5a0e74fbab2dfdcda7f`
+
+- :ref:`exhale_function_material_8hpp_1a34036816c545900cb53f585a7fb40428`
+
+- :ref:`exhale_function_material_8hpp_1a9d1263c4d78bd2b77792e79a76948c8a`
 
 
 Variables

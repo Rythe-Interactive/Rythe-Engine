@@ -86,7 +86,7 @@ Program Listing for File entity_handle.hpp
    
            L_NODISCARD entity_handle get_parent() const;
    
-           void set_parent(id_type newParent) const;
+           void set_parent(id_type newParent);
    
            void serialize(cereal::JSONOutputArchive& oarchive);
            void serialize(cereal::BinaryOutputArchive& oarchive);
@@ -99,9 +99,9 @@ Program Listing for File entity_handle.hpp
    
            L_NODISCARD size_type child_count() const;
    
-           void add_child(id_type childId) const;
+           void add_child(id_type childId);
    
-           void remove_child(id_type childId) const;
+           void remove_child(id_type childId);
    
            template<typename component_type>
            L_NODISCARD bool has_component() const { return has_component(typeHash<component_type>()); }
@@ -114,12 +114,19 @@ Program Listing for File entity_handle.hpp
    
            L_NODISCARD bool has_component(id_type componentTypeId) const;
    
-           L_NODISCARD component_handle_base get_component_handle(id_type componentTypeId) const;
+           L_NODISCARD component_handle_base get_component_handle(id_type componentTypeId);
+           L_NODISCARD const component_handle_base get_component_handle(id_type componentTypeId) const;
    
            template<typename component_type>
-           L_NODISCARD component_handle<component_type> get_component_handle() const
+           L_NODISCARD component_handle<component_type> get_component_handle()
            {
-               return force_value_cast<component_handle<component_type>>(get_component_handle(typeHash<component_type>()));
+               return get_component_handle(typeHash<component_type>()).template cast<component_type>();
+           }
+           
+           template<typename component_type>
+           L_NODISCARD const component_handle<component_type> get_component_handle() const
+           {
+               return get_component_handle(typeHash<component_type>()).template cast<component_type>();
            }
    
            template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
@@ -141,58 +148,58 @@ Program Listing for File entity_handle.hpp
            }
    
    
-           component_handle_base add_component(id_type componentTypeId) const;
+           component_handle_base add_component(id_type componentTypeId);
    
-           component_handle_base add_component(id_type componentTypeId, void* value) const;
+           component_handle_base add_component(id_type componentTypeId, void* value);
    
            template<typename component_type>
-           component_handle<component_type> add_component() const
+           component_handle<component_type> add_component()
            {
                return force_value_cast<component_handle<component_type>>(add_component(typeHash<component_type>()));
            }
            template<typename component_type>
-           component_handle<std::remove_reference_t<component_type>> add_component(component_type&& value) const
+           component_handle<std::remove_reference_t<component_type>> add_component(component_type&& value)
            {
                return force_value_cast<component_handle<std::remove_reference_t<component_type>>>(add_component(typeHash<std::remove_reference_t<component_type>>(), reinterpret_cast<void*>(&value)));
            }
    
            template<typename component_type>
-           component_handle<std::remove_reference_t<component_type>> add_component(component_type& value) const
+           component_handle<std::remove_reference_t<component_type>> add_component(component_type& value)
            {
                return add_component(typeHash<std::remove_reference_t<component_type>>(), reinterpret_cast<void*>(&value)).template cast<std::remove_reference_t<component_type>>();
            }
    
            template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
-           auto add_components() const;
+           auto add_components();
    
            template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
-           auto add_components() const;
+           auto add_components();
    
            template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
-           auto add_components(component_type&& value, component_types&&... values) const;
+           auto add_components(component_type&& value, component_types&&... values);
    
            template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
-           auto add_components(component_type& value, component_types&... values) const;
+           auto add_components(component_type& value, component_types&... values);
    
            template<typename archetype_type, typename... component_types, typename = inherits_from<archetype_type, archetype_base>>
-           auto add_components(component_types&&... values) const;
+           auto add_components(component_types&&... values);
    
-           void remove_component(id_type componentTypeId) const;
+           void remove_component(id_type componentTypeId);
    
            template<typename component_type>
-           void remove_component() const
+           void remove_component()
            {
                remove_component(typeHash<component_type>());
            }
    
            template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
-           void remove_components() const;
+           void remove_components();
    
            template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
-           void remove_components() const;
+           void remove_components();
    
    
-           void destroy(bool recurse = true) const;
+           void destroy(bool recurse = true);
    
            bool valid() const;
        };

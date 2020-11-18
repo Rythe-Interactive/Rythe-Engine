@@ -15,19 +15,12 @@ Program Listing for File physicscollider.hpp
    #include <core/core.hpp>
    #include <memory>
    #include <physics/halfedgeface.hpp>
-   
+   #include <physics/data/convergance_identifier.hpp>
+   #include <physics/physics_contact.hpp>
    
    namespace legion::physics
    {
    
-       //for debugging purposes only
-       struct TempLine
-       {
-           math::vec3 start;
-           math::vec3 end;
-       };
-   
-       struct physicsComponent;
        struct physics_manifold;
        class ConvexCollider;
    
@@ -36,12 +29,42 @@ Program Listing for File physicscollider.hpp
        {
        public:
    
-           PhysicsCollider() = default;
+           std::vector<std::unique_ptr<ConverganceIdentifier>> converganceIdentifiers;
+   
+           PhysicsCollider()
+           {
+               static int colliderID = 0;
+               id = colliderID++;
+           }
+   
+           virtual void AddConverganceIdentifier(const  physics_contact& contact) = 0;
+   
+           void AttemptFindAndCopyConverganceID(physics_contact& contact)
+           {
+               for (auto&& converganceId : converganceIdentifiers)
+               {
+                   if (converganceId->refColliderID == contact.refCollider->GetColliderID())
+                   {
+                       if (converganceId->IsEqual(contact))
+                       {
+                           converganceId->CopyLambdasToContact(contact);
+                           return;
+                       }
+                   }
+               }
+           }
+               
+         
    
            virtual void CheckCollision(
                std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold& manifold) {};
    
            virtual void CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) {};
+   
+           int GetColliderID() const
+           {
+               return id;
+           }
    
            virtual void PopulateContactPoints(
                std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold& manifold) {};
@@ -57,8 +80,7 @@ Program Listing for File physicscollider.hpp
                return dummyHalfEdges;
            }
    
-           // this is only here for debug reasons
-           std::vector<TempLine> collisionsFound;
+   
    
            math::vec3 GetLocalCentroid()
            {
@@ -70,6 +92,8 @@ Program Listing for File physicscollider.hpp
            math::vec3 localColliderCentroid = math::vec3(0, 0, 0);
    
        private:
+   
+           int id = -1;
           //this is not used, its mostly for debug reasons
            std::vector<HalfEdgeFace*> dummyHalfEdges;
    

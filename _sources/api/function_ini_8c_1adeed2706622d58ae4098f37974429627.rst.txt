@@ -1,0 +1,13 @@
+.. _exhale_function_ini_8c_1adeed2706622d58ae4098f37974429627:
+
+Function rstrip
+===============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_ini.c`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: rstrip(char *)

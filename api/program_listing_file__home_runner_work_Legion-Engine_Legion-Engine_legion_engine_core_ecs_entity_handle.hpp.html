@@ -122,7 +122,7 @@
 
         <span class="n">L_NODISCARD</span> <span class="n">entity_handle</span> <span class="nf">get_parent</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
-        <span class="kt">void</span> <span class="nf">set_parent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">newParent</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">set_parent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">newParent</span><span class="p">);</span>
 
         <span class="kt">void</span> <span class="nf">serialize</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONOutputArchive</span><span class="o">&amp;</span> <span class="n">oarchive</span><span class="p">);</span>
         <span class="kt">void</span> <span class="nf">serialize</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">BinaryOutputArchive</span><span class="o">&amp;</span> <span class="n">oarchive</span><span class="p">);</span>
@@ -135,9 +135,9 @@
 
         <span class="n">L_NODISCARD</span> <span class="n">size_type</span> <span class="nf">child_count</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
-        <span class="kt">void</span> <span class="nf">add_child</span><span class="p">(</span><span class="n">id_type</span> <span class="n">childId</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">add_child</span><span class="p">(</span><span class="n">id_type</span> <span class="n">childId</span><span class="p">);</span>
 
-        <span class="kt">void</span> <span class="nf">remove_child</span><span class="p">(</span><span class="n">id_type</span> <span class="n">childId</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">remove_child</span><span class="p">(</span><span class="n">id_type</span> <span class="n">childId</span><span class="p">);</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
         <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="n">has_component</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">has_component</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">());</span> <span class="p">}</span>
@@ -150,12 +150,19 @@
 
         <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="nf">has_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
 
-        <span class="n">L_NODISCARD</span> <span class="n">component_handle_base</span> <span class="nf">get_component_handle</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="n">L_NODISCARD</span> <span class="n">component_handle_base</span> <span class="nf">get_component_handle</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">);</span>
+        <span class="n">L_NODISCARD</span> <span class="k">const</span> <span class="n">component_handle_base</span> <span class="nf">get_component_handle</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
-        <span class="n">L_NODISCARD</span> <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span> <span class="n">get_component_handle</span><span class="p">()</span> <span class="k">const</span>
+        <span class="n">L_NODISCARD</span> <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span> <span class="n">get_component_handle</span><span class="p">()</span>
         <span class="p">{</span>
-            <span class="k">return</span> <span class="n">force_value_cast</span><span class="o">&lt;</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">get_component_handle</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()));</span>
+            <span class="k">return</span> <span class="n">get_component_handle</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()).</span><span class="k">template</span> <span class="n">cast</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
+        <span class="n">L_NODISCARD</span> <span class="k">const</span> <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span> <span class="n">get_component_handle</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">get_component_handle</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()).</span><span class="k">template</span> <span class="n">cast</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">();</span>
         <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">doesnt_inherit_from</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
@@ -177,58 +184,58 @@
         <span class="p">}</span>
 
 
-        <span class="n">component_handle_base</span> <span class="n">add_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="n">component_handle_base</span> <span class="n">add_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">);</span>
 
-        <span class="n">component_handle_base</span> <span class="nf">add_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">value</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="n">component_handle_base</span> <span class="nf">add_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">value</span><span class="p">);</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
-        <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span> <span class="n">add_component</span><span class="p">()</span> <span class="k">const</span>
+        <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span> <span class="n">add_component</span><span class="p">()</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">force_value_cast</span><span class="o">&lt;</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">add_component</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()));</span>
         <span class="p">}</span>
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
-        <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span> <span class="n">add_component</span><span class="p">(</span><span class="n">component_type</span><span class="o">&amp;&amp;</span> <span class="n">value</span><span class="p">)</span> <span class="k">const</span>
+        <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span> <span class="n">add_component</span><span class="p">(</span><span class="n">component_type</span><span class="o">&amp;&amp;</span> <span class="n">value</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">force_value_cast</span><span class="o">&lt;</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;&gt;</span><span class="p">(</span><span class="n">add_component</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">(),</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">)));</span>
         <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
-        <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span> <span class="n">add_component</span><span class="p">(</span><span class="n">component_type</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span> <span class="k">const</span>
+        <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span> <span class="n">add_component</span><span class="p">(</span><span class="n">component_type</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">add_component</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">(),</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">)).</span><span class="k">template</span> <span class="n">cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">();</span>
         <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">doesnt_inherit_from</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
-        <span class="k">auto</span> <span class="n">add_components</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">add_components</span><span class="p">();</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">archetype_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">archetype_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
-        <span class="k">auto</span> <span class="n">add_components</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">add_components</span><span class="p">();</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">doesnt_inherit_from</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
-        <span class="k">auto</span> <span class="n">add_components</span><span class="p">(</span><span class="n">component_type</span><span class="o">&amp;&amp;</span> <span class="n">value</span><span class="p">,</span> <span class="n">component_types</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">values</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">add_components</span><span class="p">(</span><span class="n">component_type</span><span class="o">&amp;&amp;</span> <span class="n">value</span><span class="p">,</span> <span class="n">component_types</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">values</span><span class="p">);</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">doesnt_inherit_from</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
-        <span class="k">auto</span> <span class="n">add_components</span><span class="p">(</span><span class="n">component_type</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">,</span> <span class="n">component_types</span><span class="o">&amp;</span><span class="p">...</span> <span class="n">values</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">add_components</span><span class="p">(</span><span class="n">component_type</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">,</span> <span class="n">component_types</span><span class="o">&amp;</span><span class="p">...</span> <span class="n">values</span><span class="p">);</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">archetype_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">archetype_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
-        <span class="k">auto</span> <span class="n">add_components</span><span class="p">(</span><span class="n">component_types</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">values</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">add_components</span><span class="p">(</span><span class="n">component_types</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">values</span><span class="p">);</span>
 
-        <span class="kt">void</span> <span class="nf">remove_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">remove_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">);</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
-        <span class="kt">void</span> <span class="n">remove_component</span><span class="p">()</span> <span class="k">const</span>
+        <span class="kt">void</span> <span class="n">remove_component</span><span class="p">()</span>
         <span class="p">{</span>
             <span class="n">remove_component</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">());</span>
         <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">doesnt_inherit_from</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
-        <span class="kt">void</span> <span class="n">remove_components</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="n">remove_components</span><span class="p">();</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">archetype_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">archetype_type</span><span class="p">,</span> <span class="n">archetype_base</span><span class="o">&gt;&gt;</span>
-        <span class="kt">void</span> <span class="n">remove_components</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="n">remove_components</span><span class="p">();</span>
 
 
-        <span class="kt">void</span> <span class="nf">destroy</span><span class="p">(</span><span class="kt">bool</span> <span class="n">recurse</span> <span class="o">=</span> <span class="nb">true</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">destroy</span><span class="p">(</span><span class="kt">bool</span> <span class="n">recurse</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span>
 
         <span class="kt">bool</span> <span class="nf">valid</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
     <span class="p">};</span>

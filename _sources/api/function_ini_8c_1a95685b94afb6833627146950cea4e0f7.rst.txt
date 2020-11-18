@@ -1,0 +1,13 @@
+.. _exhale_function_ini_8c_1a95685b94afb6833627146950cea4e0f7:
+
+Function find_chars_or_comment
+==============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_ini.c`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: find_chars_or_comment(const char *, const char *)

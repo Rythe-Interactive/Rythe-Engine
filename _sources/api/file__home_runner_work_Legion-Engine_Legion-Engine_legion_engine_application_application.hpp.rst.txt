@@ -49,6 +49,8 @@ Included By
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_camera.hpp`
 
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_light.hpp`
+
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_model.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_texture.hpp`

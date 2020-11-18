@@ -53,12 +53,8 @@
 <span class="p">{</span>
     <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">HalfEdgeFace</span><span class="p">(</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">newStartEdge</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">newNormal</span><span class="p">)</span> <span class="o">:</span> <span class="n">startEdge</span><span class="p">{</span> <span class="n">newStartEdge</span> <span class="p">},</span> <span class="n">normal</span><span class="p">{</span> <span class="n">newNormal</span> <span class="p">}</span>
     <span class="p">{</span>
-        <span class="k">auto</span> <span class="n">setToFaceFunc</span> <span class="o">=</span> <span class="p">[</span><span class="k">this</span><span class="p">](</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">edge</span><span class="o">-&gt;</span><span class="n">face</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="p">};</span>
-
-        <span class="n">forEachEdge</span><span class="p">(</span><span class="n">setToFaceFunc</span><span class="p">);</span>
+        <span class="cm">/*log::debug(&quot;HalfEdgeFace::HalfEdgeFace&quot;);*/</span>
+        <span class="k">static</span> <span class="kt">int</span> <span class="n">faceCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">faceCenter</span><span class="p">{</span> <span class="mf">0.0f</span> <span class="p">};</span>
         <span class="kt">int</span> <span class="n">edgeCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -72,6 +68,26 @@
         <span class="n">forEachEdge</span><span class="p">(</span><span class="n">calculateFaceCentroid</span><span class="p">);</span>
 
         <span class="n">centroid</span> <span class="o">=</span> <span class="n">faceCenter</span><span class="o">/</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span> <span class="n">edgeCount</span><span class="p">);</span>
+
+        <span class="kt">int</span> <span class="n">currentEdgeId</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="k">auto</span> <span class="n">initializeEdgeToFaceFunc</span> <span class="o">=</span> <span class="p">[</span><span class="k">this</span><span class="p">,</span><span class="o">&amp;</span><span class="n">currentEdgeId</span><span class="p">,</span><span class="n">edgeCount</span><span class="p">](</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">edge</span><span class="o">-&gt;</span><span class="n">face</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+            <span class="kt">int</span> <span class="n">nextID</span> <span class="o">=</span> <span class="n">currentEdgeId</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">edgeCount</span> <span class="o">?</span> <span class="n">currentEdgeId</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+
+            <span class="n">EdgeLabel</span> <span class="nf">label</span>
+            <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">faceCount</span><span class="p">,</span> <span class="n">currentEdgeId</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">faceCount</span><span class="p">,</span> <span class="n">nextID</span><span class="p">));</span>
+
+            <span class="n">edge</span><span class="o">-&gt;</span><span class="n">label</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">label</span><span class="p">);</span>
+
+            <span class="n">currentEdgeId</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">};</span>
+
+        <span class="n">forEachEdge</span><span class="p">(</span><span class="n">initializeEdgeToFaceFunc</span><span class="p">);</span>
+
+        <span class="n">faceCount</span><span class="o">++</span><span class="p">;</span>
 
     <span class="p">}</span>
 

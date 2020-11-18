@@ -1,0 +1,44 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_light.cpp:
+
+File light.cpp
+==============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/components``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/components/light.cpp``)
+-----------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_light.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``rendering/components/light.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_light.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__rendering`
+

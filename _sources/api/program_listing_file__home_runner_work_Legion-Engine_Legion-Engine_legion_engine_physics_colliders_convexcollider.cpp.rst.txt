@@ -133,13 +133,15 @@ Program Listing for File convexcollider.cpp
            math::mat4& refTransform = manifold.penetrationInformation->isARef ? manifold.transformA : manifold.transformB;
            math::mat4& incTransform = manifold.penetrationInformation->isARef ? manifold.transformB : manifold.transformA;
    
-           manifold.penetrationInformation->populateContactList(manifold,refTransform,incTransform);
+        
    
            auto refPhysicsCompHandle = manifold.penetrationInformation->isARef ? manifold.physicsCompA : manifold.physicsCompB;
            auto incPhysicsCompHandle = manifold.penetrationInformation->isARef ? manifold.physicsCompB : manifold.physicsCompA;
    
            auto refCollider = manifold.penetrationInformation->isARef ? manifold.colliderA : manifold.colliderB;
            auto incCollider = manifold.penetrationInformation->isARef ? manifold.colliderB : manifold.colliderA;
+   
+           manifold.penetrationInformation->populateContactList(manifold, refTransform, incTransform,refCollider);
    
            ecs::component_handle<rigidbody> refRB = refPhysicsCompHandle.entity.get_component_handle<rigidbody>();
            ecs::component_handle<rigidbody>  incRB = incPhysicsCompHandle.entity.get_component_handle<rigidbody>();

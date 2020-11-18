@@ -1,0 +1,13 @@
+.. _exhale_define_ini_8c_1af98446be7a915b3169e6e5b459304e77:
+
+Define ini_realloc
+==================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_ini.c`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: ini_realloc

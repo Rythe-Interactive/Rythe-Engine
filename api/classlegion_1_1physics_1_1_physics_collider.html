@@ -76,7 +76,17 @@
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
 <dt id="_CPPv4N6legion7physics15PhysicsCollider15PhysicsColliderEv">
-<span id="_CPPv3N6legion7physics15PhysicsCollider15PhysicsColliderEv"></span><span id="_CPPv2N6legion7physics15PhysicsCollider15PhysicsColliderEv"></span><span id="legion::physics::PhysicsCollider::PhysicsCollider"></span><span class="target" id="classlegion_1_1physics_1_1_physics_collider_1aeed933027a566c0644effce7cf7f5668"></span><code class="sig-name descname">PhysicsCollider</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N6legion7physics15PhysicsCollider15PhysicsColliderEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion7physics15PhysicsCollider15PhysicsColliderEv"></span><span id="_CPPv2N6legion7physics15PhysicsCollider15PhysicsColliderEv"></span><span id="legion::physics::PhysicsCollider::PhysicsCollider"></span><span class="target" id="classlegion_1_1physics_1_1_physics_collider_1af5e443c493fdcf0c63deb601e769b534"></span><code class="sig-name descname">PhysicsCollider</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics15PhysicsCollider15PhysicsColliderEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics15PhysicsCollider24AddConverganceIdentifierERK15physics_contact">
+<span id="_CPPv3N6legion7physics15PhysicsCollider24AddConverganceIdentifierERK15physics_contact"></span><span id="_CPPv2N6legion7physics15PhysicsCollider24AddConverganceIdentifierERK15physics_contact"></span><span id="legion::physics::PhysicsCollider::AddConverganceIdentifier__physics_contactCR"></span><span class="target" id="classlegion_1_1physics_1_1_physics_collider_1a2e936f5b27ce5b2c1953c3ef12c2ab50"></span>void <code class="sig-name descname">AddConverganceIdentifier</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="structlegion_1_1physics_1_1physics__contact.html#_CPPv4N6legion7physics15physics_contactE" title="legion::physics::physics_contact">physics_contact</a> &amp;<em>contact</em><span class="sig-paren">)</span> = 0<a class="headerlink" href="#_CPPv4N6legion7physics15PhysicsCollider24AddConverganceIdentifierERK15physics_contact" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics15PhysicsCollider31AttemptFindAndCopyConverganceIDER15physics_contact">
+<span id="_CPPv3N6legion7physics15PhysicsCollider31AttemptFindAndCopyConverganceIDER15physics_contact"></span><span id="_CPPv2N6legion7physics15PhysicsCollider31AttemptFindAndCopyConverganceIDER15physics_contact"></span><span id="legion::physics::PhysicsCollider::AttemptFindAndCopyConverganceID__physics_contactR"></span><span class="target" id="classlegion_1_1physics_1_1_physics_collider_1a27c4328e1c1a3723243ebe6888012a45"></span>void <code class="sig-name descname">AttemptFindAndCopyConverganceID</code><span class="sig-paren">(</span><a class="reference internal" href="structlegion_1_1physics_1_1physics__contact.html#_CPPv4N6legion7physics15physics_contactE" title="legion::physics::physics_contact">physics_contact</a> &amp;<em>contact</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics15PhysicsCollider31AttemptFindAndCopyConverganceIDER15physics_contact" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -97,6 +107,12 @@
 <dt id="_CPPv4N6legion7physics15PhysicsCollider18CheckCollisionWithEP14ConvexColliderR16physics_manifold">
 <span id="_CPPv3N6legion7physics15PhysicsCollider18CheckCollisionWithEP14ConvexColliderR16physics_manifold"></span><span id="_CPPv2N6legion7physics15PhysicsCollider18CheckCollisionWithEP14ConvexColliderR16physics_manifold"></span><span id="legion::physics::PhysicsCollider::CheckCollisionWith__ConvexColliderP.physics_manifoldR"></span><span class="target" id="classlegion_1_1physics_1_1_physics_collider_1a248894348391abe0d21635e6d77b4e2f"></span>void <code class="sig-name descname">CheckCollisionWith</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1physics_1_1_convex_collider.html#_CPPv4N6legion7physics14ConvexColliderE" title="legion::physics::ConvexCollider">ConvexCollider</a> *<em>convexCollider</em>, <a class="reference internal" href="structlegion_1_1physics_1_1physics__manifold.html#_CPPv4N6legion7physics16physics_manifoldE" title="legion::physics::physics_manifold">physics_manifold</a> &amp;<em>manifold</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics15PhysicsCollider18CheckCollisionWithEP14ConvexColliderR16physics_manifold" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>given a convexCollider checks if this collider collides the convexCollider. The information the information is then passed to the manifold. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion7physics15PhysicsCollider13GetColliderIDEv">
+<span id="_CPPv3NK6legion7physics15PhysicsCollider13GetColliderIDEv"></span><span id="_CPPv2NK6legion7physics15PhysicsCollider13GetColliderIDEv"></span><span id="legion::physics::PhysicsCollider::GetColliderIDC"></span><span class="target" id="classlegion_1_1physics_1_1_physics_collider_1aacff597d8e4a0b3e1f39d49e8f146296"></span>int <code class="sig-name descname">GetColliderID</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion7physics15PhysicsCollider13GetColliderIDEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Gets the unique id of this collider. </p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -136,8 +152,8 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Members</p>
 <dl class="cpp var">
-<dt id="_CPPv4N6legion7physics15PhysicsCollider15collisionsFoundE">
-<span id="_CPPv3N6legion7physics15PhysicsCollider15collisionsFoundE"></span><span id="_CPPv2N6legion7physics15PhysicsCollider15collisionsFoundE"></span><span id="legion::physics::PhysicsCollider::collisionsFound__std::vector:TempLine:"></span><span class="target" id="classlegion_1_1physics_1_1_physics_collider_1adf1c28bbe8ff571c3ae0744e66eb13ca"></span>std::vector&lt;<a class="reference internal" href="structlegion_1_1physics_1_1_temp_line.html#_CPPv4N6legion7physics8TempLineE" title="legion::physics::TempLine">TempLine</a>&gt; <code class="sig-name descname">collisionsFound</code><a class="headerlink" href="#_CPPv4N6legion7physics15PhysicsCollider15collisionsFoundE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N6legion7physics15PhysicsCollider22converganceIdentifiersE">
+<span id="_CPPv3N6legion7physics15PhysicsCollider22converganceIdentifiersE"></span><span id="_CPPv2N6legion7physics15PhysicsCollider22converganceIdentifiersE"></span><span id="legion::physics::PhysicsCollider::converganceIdentifiers__std::vector:std::unique_ptr:ConverganceIdentifier::"></span><span class="target" id="classlegion_1_1physics_1_1_physics_collider_1a53fecdde32574d9793eb04247938888d"></span>std::vector&lt;std::unique_ptr&lt;<a class="reference internal" href="classlegion_1_1physics_1_1_convergance_identifier.html#_CPPv4N6legion7physics21ConverganceIdentifierE" title="legion::physics::ConverganceIdentifier">ConverganceIdentifier</a>&gt;&gt; <code class="sig-name descname">converganceIdentifiers</code><a class="headerlink" href="#_CPPv4N6legion7physics15PhysicsCollider22converganceIdentifiersE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>

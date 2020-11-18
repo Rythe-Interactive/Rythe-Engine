@@ -33,6 +33,8 @@ Includes
 
 - ``physics/colliders/convexcollider.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_colliders_convexcollider.hpp`)
 
+- ``physics/data/contact_vertex.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_contact_vertex.hpp`)
+
 - ``physics/data/pointer_encapsulator.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_pointer_encapsulator.hpp`)
 
 

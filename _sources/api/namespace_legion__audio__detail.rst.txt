@@ -24,9 +24,9 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_audio__importers_8cpp_1a95eafeb1b00f533f6eb714d90c039b0b`
-
 - :ref:`exhale_function_audio__importers_8cpp_1ae996ec805a9a71a82884dbf707a7712e`
+
+- :ref:`exhale_function_audio__importers_8cpp_1a95eafeb1b00f533f6eb714d90c039b0b`
 
 - :ref:`exhale_function_audio__importers_8cpp_1ae328e333a68dc047619eda530142d996`
 

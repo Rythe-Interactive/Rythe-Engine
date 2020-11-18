@@ -1,0 +1,40 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_contact_vertex.hpp:
+
+Program Listing for File contact_vertex.hpp
+===========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_contact_vertex.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/data/contact_vertex.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/core.hpp>
+   #include <physics/data/edge_label.hpp>
+   namespace legion::physics
+   {
+       struct ContactVertex
+       {
+           math::vec3 position;
+           EdgeLabel label;
+   
+           ContactVertex(const math::vec3& pPosition, const EdgeLabel& pLabel) : position(pPosition)
+           {
+               label = pLabel;
+           }
+   
+           ContactVertex(const ContactVertex& rhs)
+           {
+               position = rhs.position;
+               label = rhs.label;
+           }
+   
+           bool operator==( const ContactVertex& rhs)
+           {
+               return (label.firstEdge == rhs.label.firstEdge) &
+                   (label.nextEdge == rhs.label.nextEdge);
+           }
+       };
+   }

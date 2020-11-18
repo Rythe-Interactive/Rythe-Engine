@@ -39,7 +39,7 @@ Program Listing for File scenemanager.hpp
    
            static bool createScene(const std::string& name);
    
-           static bool createScene(const std::string& name, const ecs::entity_handle& ent);
+           static bool createScene(const std::string& name, ecs::entity_handle& ent);
    
            static bool loadScene(const std::string& name);
    

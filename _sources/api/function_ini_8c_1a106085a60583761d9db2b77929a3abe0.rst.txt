@@ -1,0 +1,13 @@
+.. _exhale_function_ini_8c_1a106085a60583761d9db2b77929a3abe0:
+
+Function lskip
+==============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_ini.c`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: lskip(const char *)

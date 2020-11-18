@@ -188,6 +188,11 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   structini__parse__string__ctx.rst
+
+.. toctree::
+   :maxdepth: 5
+
    structlegion_1_1application_1_1char__input.rst
 
 .. toctree::
@@ -648,7 +653,17 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   structlegion_1_1physics_1_1_contact_vertex.rst
+
+.. toctree::
+   :maxdepth: 5
+
    structlegion_1_1physics_1_1cube__collider__params.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1physics_1_1_edge_label.rst
 
 .. toctree::
    :maxdepth: 5
@@ -693,12 +708,37 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
-   structlegion_1_1physics_1_1_temp_line.rst
+   structlegion_1_1rendering_1_1camera_1_1camera__input.rst
 
 .. toctree::
    :maxdepth: 5
 
-   structlegion_1_1rendering_1_1camera_1_1camera__input.rst
+   structlegion_1_1rendering_1_1detail_1_1convert__tuple.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1rendering_1_1detail_1_1convert__tuple_3_01_t_00_012_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1rendering_1_1detail_1_1convert__tuple_3_01_t_00_013_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1rendering_1_1detail_1_1convert__tuple_3_01_t_00_014_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1rendering_1_1detail_1_1light__data.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structlegion_1_1rendering_1_1light.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1413,7 +1453,17 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
+   classlegion_1_1physics_1_1_convergance_identifier.rst
+
+.. toctree::
+   :maxdepth: 5
+
    classlegion_1_1physics_1_1_convex_collider.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classlegion_1_1physics_1_1_convex_convergance_identifier.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1469,6 +1519,11 @@ Classes and Structs
    :maxdepth: 5
 
    class_structlegion_1_1rendering_1_1camera.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classlegion_1_1rendering_1_1detail_1_1handler__to__cpp.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1627,6 +1682,11 @@ Enums
 .. toctree::
    :maxdepth: 5
 
+   enum_light_8hpp_1a45f3538838b7de030ad7e532d7c38c11.rst
+
+.. toctree::
+   :maxdepth: 5
+
    enum_settings_8hpp_1a15f47615f6450e2398232badd102474e.rst
 
 .. toctree::
@@ -1657,6 +1717,36 @@ Enums
 Functions
 *********
 
+
+.. toctree::
+   :maxdepth: 5
+
+   function_ini_8c_1a95685b94afb6833627146950cea4e0f7.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_ini_8c_1a2fab292681265b7774e2a2885abb758c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_ini_8c_1a876bf8b62ade275320db827b929f9289.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_ini_8c_1ad8b766ac18397b0b262559203ea7f602.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_ini_8c_1aeb90a0b5e4226351899d28ead4eed6fa.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_ini_8c_1af35fe60b25b04f05cacd3a33c9b28c5d.rst
 
 .. toctree::
    :maxdepth: 5
@@ -2266,7 +2356,57 @@ Functions
 .. toctree::
    :maxdepth: 5
 
+   function_matini_8hpp_1a53f773c025b6345f339c6830644cc4cd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matini_8hpp_1a6deb3ff404b98096a0ba2fb35fe248fd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matini_8hpp_1a596cd4a757e072e93d1464952d64b5cd.rst
+
+.. toctree::
+   :maxdepth: 5
+
    function_bindings_8hpp_1af9379b17e6b591c44e649b28a7506a90.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_material_8hpp_1ab73367179f1bd0ccade11f388b50b4b3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_material_8hpp_1a87eb40c46518e29e5a61fc5fefb5306d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_material_8hpp_1aea9e75f89ecec1bdb46889b84500e5ab.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_material_8hpp_1a96682413fd71a5a0e74fbab2dfdcda7f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_material_8hpp_1a34036816c545900cb53f585a7fb40428.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_material_8hpp_1a9d1263c4d78bd2b77792e79a76948c8a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_ini_8c_1a106085a60583761d9db2b77929a3abe0.rst
 
 .. toctree::
    :maxdepth: 5
@@ -2277,6 +2417,16 @@ Functions
    :maxdepth: 5
 
    function_entry__point_8hpp_1ab28098b1d77dd9b5db85476ec753097f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_ini_8c_1adeed2706622d58ae4098f37974429627.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_ini_8c_1a12124686d5fdc4fa123955450b1201d0.rst
 
 Variables
 *********
@@ -2505,6 +2655,11 @@ Variables
 .. toctree::
    :maxdepth: 5
 
+   variable_physicsconstants_8hpp_1aca3e1eed4940ba519bc1b34980862d4f.rst
+
+.. toctree::
+   :maxdepth: 5
+
    variable_texture_8hpp_1addc25b0d5f17e632dd8eb2741adef7cf.rst
 
 .. toctree::
@@ -2585,6 +2740,26 @@ Defines
    :maxdepth: 5
 
    define_primitives_8hpp_1aec79566d72dfc3fc0a287cb81fa39ac8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_ini_8c_1a444c6b3051cdd942c99ba2e0fea3aa38.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_ini_8c_1a937bb9c197ca944432e1e019075f7c8c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_ini_8c_1a6e5a1f8ec415a0ef4db5c4a2d18808e7.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_ini_8c_1af98446be7a915b3169e6e5b459304e77.rst
 
 .. toctree::
    :maxdepth: 5
@@ -2814,6 +2989,16 @@ Defines
 .. toctree::
    :maxdepth: 5
 
+   define_ini_8c_1ac7c0207aa5a0e10d378be03b68041350.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_ini_8c_1aaf452164719d4d290a4766282df9d690.rst
+
+.. toctree::
+   :maxdepth: 5
+
    define_platform_8hpp_1ac8c687223be2bdac90dfd02bf6bb4a9a.rst
 
 .. toctree::
@@ -2895,6 +3080,16 @@ Defines
    :maxdepth: 5
 
    define_bindings_8hpp_1a5b33e82b6781d083386299874530a74f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_bindings_8hpp_1af8801dc8462248fca93f9726cc9e94d0.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_bindings_8hpp_1a17ffaa56585a709926526bdc484f48cb.rst
 
 .. toctree::
    :maxdepth: 5

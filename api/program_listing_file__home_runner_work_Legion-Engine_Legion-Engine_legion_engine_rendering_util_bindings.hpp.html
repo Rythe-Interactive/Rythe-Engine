@@ -74,9 +74,12 @@
 <span class="cm">/* 1  */</span>  <span class="cp">#define SV_PROJECT        SV_VIEW + 1</span>
 <span class="cm">/* 2  */</span>  <span class="cp">#define SV_CAMPOS         SV_PROJECT + 1</span>
 <span class="cm">/* 3  */</span>  <span class="cp">#define SV_VIEWDIR        SV_CAMPOS + 1</span>
-<span class="cm">/* 4 */</span>  <span class="cp">#define SV_CAMIDX         SV_VIEWDIR + 1</span>
+<span class="cm">/* 4  */</span>  <span class="cp">#define SV_CAMIDX         SV_VIEWDIR + 1</span>
 
 <span class="cm">/* 0  */</span>  <span class="cp">#define SV_CAMERA         SV_VIEW</span>
+
+<span class="cm">/* 5  */</span>  <span class="cp">#define SV_LIGHT_COUNT    SV_CAMIDX + 1</span>
+<span class="cm">/* 0  */</span>  <span class="cp">#define SV_LIGHTS         SV_START</span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span><span class="o">::</span><span class="n">detail</span>
 <span class="p">{</span>
@@ -109,6 +112,8 @@
             <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_CAMIDX=&quot;</span> <span class="o">+</span>       <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_CAMIDX</span><span class="p">));</span>
 
             <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_CAMERA=&quot;</span> <span class="o">+</span>       <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_CAMERA</span><span class="p">));</span>
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_LIGHTS=&quot;</span> <span class="o">+</span>       <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_LIGHTS</span><span class="p">));</span>
+            <span class="n">defines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;SV_LIGHT_COUNT=&quot;</span> <span class="o">+</span>  <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">SV_LIGHT_COUNT</span><span class="p">));</span>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="n">defines</span><span class="p">;</span>

@@ -1,0 +1,80 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_matini.hpp:
+
+File matini.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/util``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/util/matini.hpp``)
+------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_matini.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``inih/ini.h``
+
+- ``rendering/data/material.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_material.hpp`)
+
+- ``sstream``
+
+- ``tuple``
+
+- ``vector`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_vector_view.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__rendering`
+
+- :ref:`namespace_legion__rendering__detail`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1detail_1_1convert__tuple`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1detail_1_1convert__tuple_3_01_t_00_012_01_4`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1detail_1_1convert__tuple_3_01_t_00_013_01_4`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1detail_1_1convert__tuple_3_01_t_00_014_01_4`
+
+- :ref:`exhale_class_classlegion_1_1rendering_1_1detail_1_1handler__to__cpp`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_matini_8hpp_1a53f773c025b6345f339c6830644cc4cd`
+
+- :ref:`exhale_function_matini_8hpp_1a6deb3ff404b98096a0ba2fb35fe248fd`
+
+- :ref:`exhale_function_matini_8hpp_1a596cd4a757e072e93d1464952d64b5cd`
+

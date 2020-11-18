@@ -58,16 +58,12 @@
         <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">startEdge</span><span class="p">;</span>
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">normal</span><span class="p">;</span>
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">centroid</span><span class="p">;</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">id</span><span class="p">;</span>
 
         <span class="n">HalfEdgeFace</span><span class="p">(</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">newStartEdge</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">newNormal</span><span class="p">);</span>
 
         <span class="kt">void</span> <span class="nf">forEachEdge</span><span class="p">(</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">delegate</span><span class="o">&lt;</span> <span class="kt">void</span><span class="p">(</span><span class="n">HalfEdgeEdge</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">functionToExecute</span><span class="p">);</span>
 
-
         <span class="o">~</span><span class="n">HalfEdgeFace</span><span class="p">();</span>
-
-
     <span class="p">};</span>
 <span class="p">}</span>
 </pre></div>

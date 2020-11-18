@@ -156,8 +156,6 @@ Program Listing for File physicssystem.hpp
                //------------------------------------------------------ Narrowphase -----------------------------------------------------//
                std::vector<physics_manifold> manifoldsToSolve;
    
-               
-   
                for (auto& manifoldPrecursor : manifoldPrecursorGrouping)
                {
                    if (manifoldPrecursor.size() == 0) { continue; }
@@ -196,8 +194,6 @@ Program Listing for File physicssystem.hpp
    
                            if (isBetweenTriggerAndNonTrigger || isBetweenRigidbodyAndNonTrigger || isBetween2Rigidbodies)
                            {
-                              
-   
                                constructManifoldsWithPrecursors(manifoldPrecursor.at(i), manifoldPrecursor.at(j),
                                    manifoldsToSolve,
                                    precursorRigidbodyA || precursorRigidbodyB
@@ -218,13 +214,16 @@ Program Listing for File physicssystem.hpp
    
                for (auto& manifold : manifoldsToSolve)
                {
+                   //log::debug("----------Logging contacts for manifold ");
+   
                    for (auto& contact : manifold.contacts)
                    {
                        contact.preCalculateEffectiveMass();
+   
+                       contact.ApplyWarmStarting();
                    }
                }
    
-          
                //resolve contact constraint
                for (size_t i = 0; i < constants::contactSolverIterationCount; i++)
                {
@@ -238,7 +237,6 @@ Program Listing for File physicssystem.hpp
                }
    
                
-               
                //resolve friction constraint
                for (size_t i = 0; i < constants::frictionSolverIterationCount; i++)
                {
@@ -251,13 +249,26 @@ Program Listing for File physicssystem.hpp
                    }
                }
    
+               //reset convergance identifiers for all colliders
                for (auto& manifold : manifoldsToSolve)
                {
                    for (auto& contact : manifold.contacts)
                    {
-                       PhysicsSystem::contactPoints.push_back(contact);
+                       contact.refCollider->converganceIdentifiers.clear();
                    }
                }
+   
+               //using the known lambdas of this time step, add it as a convergance identifier
+               for (auto& manifold : manifoldsToSolve)
+               {
+                   for (auto& contact : manifold.contacts)
+                   {
+                       contact.refCollider->AddConverganceIdentifier(contact);
+                   }
+               }
+   
+   
+   
    
            }
    

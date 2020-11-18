@@ -51,19 +51,12 @@
 <span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;physics/halfedgeface.hpp&gt;</span><span class="cp"></span>
-
+<span class="cp">#include</span> <span class="cpf">&lt;physics/data/convergance_identifier.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/physics_contact.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
 <span class="p">{</span>
 
-    <span class="c1">//for debugging purposes only</span>
-    <span class="k">struct</span> <span class="n">TempLine</span>
-    <span class="p">{</span>
-        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">start</span><span class="p">;</span>
-        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">end</span><span class="p">;</span>
-    <span class="p">};</span>
-
-    <span class="k">struct</span> <span class="n">physicsComponent</span><span class="p">;</span>
     <span class="k">struct</span> <span class="n">physics_manifold</span><span class="p">;</span>
     <span class="k">class</span> <span class="nc">ConvexCollider</span><span class="p">;</span>
 
@@ -72,12 +65,42 @@
     <span class="p">{</span>
     <span class="k">public</span><span class="o">:</span>
 
-        <span class="n">PhysicsCollider</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">ConverganceIdentifier</span><span class="o">&gt;&gt;</span> <span class="n">converganceIdentifiers</span><span class="p">;</span>
+
+        <span class="n">PhysicsCollider</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">static</span> <span class="kt">int</span> <span class="n">colliderID</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">id</span> <span class="o">=</span> <span class="n">colliderID</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">AddConverganceIdentifier</span><span class="p">(</span><span class="k">const</span>  <span class="n">physics_contact</span><span class="o">&amp;</span> <span class="n">contact</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="kt">void</span> <span class="nf">AttemptFindAndCopyConverganceID</span><span class="p">(</span><span class="n">physics_contact</span><span class="o">&amp;</span> <span class="n">contact</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;&amp;</span> <span class="nl">converganceId</span> <span class="p">:</span> <span class="n">converganceIdentifiers</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">converganceId</span><span class="o">-&gt;</span><span class="n">refColliderID</span> <span class="o">==</span> <span class="n">contact</span><span class="p">.</span><span class="n">refCollider</span><span class="o">-&gt;</span><span class="n">GetColliderID</span><span class="p">())</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">converganceId</span><span class="o">-&gt;</span><span class="n">IsEqual</span><span class="p">(</span><span class="n">contact</span><span class="p">))</span>
+                    <span class="p">{</span>
+                        <span class="n">converganceId</span><span class="o">-&gt;</span><span class="n">CopyLambdasToContact</span><span class="p">(</span><span class="n">contact</span><span class="p">);</span>
+                        <span class="k">return</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+
 
         <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">CheckCollision</span><span class="p">(</span>
             <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;</span> <span class="n">physicsCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="p">{};</span>
 
         <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">CheckCollisionWith</span><span class="p">(</span><span class="n">ConvexCollider</span><span class="o">*</span> <span class="n">convexCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="p">{};</span>
+
+        <span class="kt">int</span> <span class="nf">GetColliderID</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">id</span><span class="p">;</span>
+        <span class="p">}</span>
 
         <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">PopulateContactPoints</span><span class="p">(</span>
             <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;</span> <span class="n">physicsCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="p">{};</span>
@@ -93,8 +116,7 @@
             <span class="k">return</span> <span class="n">dummyHalfEdges</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="c1">// this is only here for debug reasons</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">TempLine</span><span class="o">&gt;</span> <span class="n">collisionsFound</span><span class="p">;</span>
+
 
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">GetLocalCentroid</span><span class="p">()</span>
         <span class="p">{</span>
@@ -106,6 +128,8 @@
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">localColliderCentroid</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 
     <span class="k">private</span><span class="o">:</span>
+
+        <span class="kt">int</span> <span class="n">id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
        <span class="c1">//this is not used, its mostly for debug reasons</span>
         <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">*&gt;</span> <span class="n">dummyHalfEdges</span><span class="p">;</span>
 

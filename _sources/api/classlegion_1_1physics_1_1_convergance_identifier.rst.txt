@@ -1,0 +1,25 @@
+.. _exhale_class_classlegion_1_1physics_1_1_convergance_identifier:
+
+Class ConverganceIdentifier
+===========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_convergance_identifier.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Type
+************
+
+- ``public legion::physics::ConvexConverganceIdentifier`` (:ref:`exhale_class_classlegion_1_1physics_1_1_convex_convergance_identifier`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::physics::ConverganceIdentifier
+   :members:
+   :protected-members:
+   :undoc-members:

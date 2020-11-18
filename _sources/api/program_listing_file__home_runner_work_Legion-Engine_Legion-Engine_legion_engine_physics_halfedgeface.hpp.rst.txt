@@ -22,15 +22,11 @@ Program Listing for File halfedgeface.hpp
            HalfEdgeEdge* startEdge;
            math::vec3 normal;
            math::vec3 centroid;
-           std::string id;
-   
+           
            HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
    
            void forEachEdge(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute);
            
-   
            ~HalfEdgeFace();
-   
-   
        };
    }

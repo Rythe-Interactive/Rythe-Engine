@@ -26,6 +26,7 @@ Program Listing for File renderingmodule.hpp
    
                reportComponentType<camera>();
                reportComponentType<renderable>();
+               reportComponentType<light>();
                reportSystem<Renderer>();
            }
    

@@ -138,7 +138,7 @@
         <span class="k">if</span> <span class="p">(</span><span class="n">m_materials</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
             <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
 
-        <span class="k">auto</span> <span class="n">shader</span> <span class="o">=</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">create_shader</span><span class="p">(</span><span class="n">shaderFile</span><span class="p">.</span><span class="n">get_filename</span><span class="p">(),</span> <span class="n">shaderFile</span><span class="p">,</span> <span class="n">settings</span><span class="p">);</span>
+        <span class="k">auto</span> <span class="n">shader</span> <span class="o">=</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">create_shader</span><span class="p">(</span><span class="n">shaderFile</span><span class="p">,</span> <span class="n">settings</span><span class="p">);</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">shader</span> <span class="o">==</span> <span class="n">invalid_shader_handle</span><span class="p">)</span>
         <span class="p">{</span>

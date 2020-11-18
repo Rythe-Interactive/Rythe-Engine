@@ -33,7 +33,11 @@ Includes
 
 - ``memory``
 
+- ``physics/data/convergance_identifier.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_convergance_identifier.hpp`)
+
 - ``physics/halfedgeface.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_halfedgeface.hpp`)
+
+- ``physics/physics_contact.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_contact.hpp`)
 
 
 
@@ -62,8 +66,6 @@ Namespaces
 Classes
 -------
 
-
-- :ref:`exhale_struct_structlegion_1_1physics_1_1_temp_line`
 
 - :ref:`exhale_class_classlegion_1_1physics_1_1_physics_collider`
 

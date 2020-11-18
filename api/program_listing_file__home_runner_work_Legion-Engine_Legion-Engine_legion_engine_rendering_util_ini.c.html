@@ -1,0 +1,385 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File ini.c &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File ini.c</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-ini-c">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-util-ini-c"></span><h1>Program Listing for File ini.c<a class="headerlink" href="#program-listing-for-file-ini-c" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_ini.c.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-util-ini-c"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/util/ini.c</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/* inih -- simple .INI file parser</span>
+
+<span class="cm">SPDX-License-Identifier: BSD-3-Clause</span>
+
+<span class="cm">Copyright (C) 2009-2020, Ben Hoyt</span>
+
+<span class="cm">inih is released under the New BSD license (see LICENSE.txt). Go to the project</span>
+<span class="cm">home page for more info:</span>
+
+<span class="cm">https://github.com/benhoyt/inih</span>
+
+<span class="cm">*/</span>
+
+<span class="cp">#if defined(_MSC_VER) &amp;&amp; !defined(_CRT_SECURE_NO_WARNINGS)</span>
+<span class="cp">#define _CRT_SECURE_NO_WARNINGS</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;ctype.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;inih/ini.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#if !INI_USE_STACK</span>
+<span class="cp">#if INI_CUSTOM_ALLOCATOR</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stddef.h&gt;</span><span class="cp"></span>
+<span class="kt">void</span><span class="o">*</span> <span class="nf">ini_malloc</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">size</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">ini_free</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">ptr</span><span class="p">);</span>
+<span class="kt">void</span><span class="o">*</span> <span class="nf">ini_realloc</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">ptr</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">);</span>
+<span class="cp">#else</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#define ini_malloc malloc</span>
+<span class="cp">#define ini_free free</span>
+<span class="cp">#define ini_realloc realloc</span>
+<span class="cp">#endif</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#define MAX_SECTION 50</span>
+<span class="cp">#define MAX_NAME 50</span>
+
+<span class="cm">/* Used by ini_parse_string() to keep track of string parsing state. */</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">ptr</span><span class="p">;</span>
+    <span class="kt">size_t</span> <span class="n">num_left</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">ini_parse_string_ctx</span><span class="p">;</span>
+
+<span class="cm">/* Strip whitespace chars off end of given string, in place. Return s. */</span>
+<span class="k">static</span> <span class="kt">char</span><span class="o">*</span> <span class="nf">rstrip</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">s</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="n">strlen</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">p</span> <span class="o">&gt;</span> <span class="n">s</span> <span class="o">&amp;&amp;</span> <span class="n">isspace</span><span class="p">((</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">)(</span><span class="o">*--</span><span class="n">p</span><span class="p">)))</span>
+        <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Return pointer to first non-whitespace char in given string. */</span>
+<span class="k">static</span> <span class="kt">char</span><span class="o">*</span> <span class="nf">lskip</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">s</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">s</span> <span class="o">&amp;&amp;</span> <span class="n">isspace</span><span class="p">((</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">)(</span><span class="o">*</span><span class="n">s</span><span class="p">)))</span>
+        <span class="n">s</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">s</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Return pointer to first char (of chars) or inline comment in given string,</span>
+<span class="cm">   or pointer to NUL at end of string if neither found. Inline comment must</span>
+<span class="cm">   be prefixed by a whitespace character to register as a comment. */</span>
+<span class="k">static</span> <span class="kt">char</span><span class="o">*</span> <span class="nf">find_chars_or_comment</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">s</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">chars</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="cp">#if INI_ALLOW_INLINE_COMMENTS</span>
+    <span class="kt">int</span> <span class="n">was_space</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">s</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="n">chars</span> <span class="o">||</span> <span class="o">!</span><span class="n">strchr</span><span class="p">(</span><span class="n">chars</span><span class="p">,</span> <span class="o">*</span><span class="n">s</span><span class="p">))</span> <span class="o">&amp;&amp;</span>
+           <span class="o">!</span><span class="p">(</span><span class="n">was_space</span> <span class="o">&amp;&amp;</span> <span class="n">strchr</span><span class="p">(</span><span class="n">INI_INLINE_COMMENT_PREFIXES</span><span class="p">,</span> <span class="o">*</span><span class="n">s</span><span class="p">)))</span> <span class="p">{</span>
+        <span class="n">was_space</span> <span class="o">=</span> <span class="n">isspace</span><span class="p">((</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">)(</span><span class="o">*</span><span class="n">s</span><span class="p">));</span>
+        <span class="n">s</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="cp">#else</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">s</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="n">chars</span> <span class="o">||</span> <span class="o">!</span><span class="n">strchr</span><span class="p">(</span><span class="n">chars</span><span class="p">,</span> <span class="o">*</span><span class="n">s</span><span class="p">)))</span> <span class="p">{</span>
+        <span class="n">s</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="cp">#endif</span>
+    <span class="k">return</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">s</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* Similar to strncpy, but ensures dest (size bytes) is</span>
+<span class="cm">   NUL-terminated, and doesn&#39;t pad with NULs. */</span>
+<span class="k">static</span> <span class="kt">char</span><span class="o">*</span> <span class="nf">strncpy0</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">dest</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">src</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="cm">/* Could use strncpy internally, but it causes gcc warnings (see issue #91) */</span>
+    <span class="kt">size_t</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">src</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">dest</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">src</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="n">dest</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">dest</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* See documentation in header file. */</span>
+<span class="kt">int</span> <span class="nf">ini_parse_stream</span><span class="p">(</span><span class="n">ini_reader</span> <span class="n">reader</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">stream</span><span class="p">,</span> <span class="n">ini_handler</span> <span class="n">handler</span><span class="p">,</span>
+                     <span class="kt">void</span><span class="o">*</span> <span class="n">user</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="cm">/* Uses a fair bit of stack (use heap instead if you need to) */</span>
+<span class="cp">#if INI_USE_STACK</span>
+    <span class="kt">char</span> <span class="n">line</span><span class="p">[</span><span class="n">INI_MAX_LINE</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">max_line</span> <span class="o">=</span> <span class="n">INI_MAX_LINE</span><span class="p">;</span>
+<span class="cp">#else</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">line</span><span class="p">;</span>
+    <span class="kt">size_t</span> <span class="n">max_line</span> <span class="o">=</span> <span class="n">INI_INITIAL_ALLOC</span><span class="p">;</span>
+<span class="cp">#endif</span>
+<span class="cp">#if INI_ALLOW_REALLOC &amp;&amp; !INI_USE_STACK</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">new_line</span><span class="p">;</span>
+    <span class="kt">size_t</span> <span class="n">offset</span><span class="p">;</span>
+<span class="cp">#endif</span>
+    <span class="kt">char</span> <span class="n">section</span><span class="p">[</span><span class="n">MAX_SECTION</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">prev_name</span><span class="p">[</span><span class="n">MAX_NAME</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+
+    <span class="kt">char</span><span class="o">*</span> <span class="n">start</span><span class="p">;</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">end</span><span class="p">;</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">;</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">value</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">lineno</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">error</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="cp">#if !INI_USE_STACK</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">ini_malloc</span><span class="p">(</span><span class="n">INI_INITIAL_ALLOC</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">line</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#if INI_HANDLER_LINENO</span>
+<span class="cp">#define HANDLER(u, s, n, v) handler(u, s, n, v, lineno)</span>
+<span class="cp">#else</span>
+<span class="cp">#define HANDLER(u, s, n, v) handler(u, s, n, v)</span>
+<span class="cp">#endif</span>
+
+    <span class="cm">/* Scan through stream line by line */</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">reader</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">max_line</span><span class="p">,</span> <span class="n">stream</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+<span class="cp">#if INI_ALLOW_REALLOC &amp;&amp; !INI_USE_STACK</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">offset</span> <span class="o">==</span> <span class="n">max_line</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">line</span><span class="p">[</span><span class="n">offset</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;\n&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">max_line</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">max_line</span> <span class="o">&gt;</span> <span class="n">INI_MAX_LINE</span><span class="p">)</span>
+                <span class="n">max_line</span> <span class="o">=</span> <span class="n">INI_MAX_LINE</span><span class="p">;</span>
+            <span class="n">new_line</span> <span class="o">=</span> <span class="n">ini_realloc</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">max_line</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">new_line</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">ini_free</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">2</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">new_line</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">reader</span><span class="p">(</span><span class="n">line</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">max_line</span> <span class="o">-</span> <span class="n">offset</span><span class="p">),</span> <span class="n">stream</span><span class="p">)</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">max_line</span> <span class="o">&gt;=</span> <span class="n">INI_MAX_LINE</span><span class="p">)</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="n">offset</span> <span class="o">+=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">line</span> <span class="o">+</span> <span class="n">offset</span><span class="p">);</span>
+        <span class="p">}</span>
+<span class="cp">#endif</span>
+
+        <span class="n">lineno</span><span class="o">++</span><span class="p">;</span>
+
+        <span class="n">start</span> <span class="o">=</span> <span class="n">line</span><span class="p">;</span>
+<span class="cp">#if INI_ALLOW_BOM</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">lineno</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">)</span><span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0xEF</span> <span class="o">&amp;&amp;</span>
+                           <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">)</span><span class="n">start</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0xBB</span> <span class="o">&amp;&amp;</span>
+                           <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">)</span><span class="n">start</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0xBF</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">start</span> <span class="o">+=</span> <span class="mi">3</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="cp">#endif</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">lskip</span><span class="p">(</span><span class="n">rstrip</span><span class="p">(</span><span class="n">start</span><span class="p">));</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">strchr</span><span class="p">(</span><span class="n">INI_START_COMMENT_PREFIXES</span><span class="p">,</span> <span class="o">*</span><span class="n">start</span><span class="p">))</span> <span class="p">{</span>
+            <span class="cm">/* Start-of-line comment */</span>
+        <span class="p">}</span>
+<span class="cp">#if INI_ALLOW_MULTILINE</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">prev_name</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">start</span> <span class="o">&amp;&amp;</span> <span class="n">start</span> <span class="o">&gt;</span> <span class="n">line</span><span class="p">)</span> <span class="p">{</span>
+            <span class="cm">/* Non-blank line with leading whitespace, treat as continuation</span>
+<span class="cm">               of previous name&#39;s value (as per Python configparser). */</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">HANDLER</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">prev_name</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">error</span><span class="p">)</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="n">lineno</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="cp">#endif</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">start</span> <span class="o">==</span> <span class="sc">&#39;[&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="cm">/* A &quot;[section]&quot; line */</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">find_chars_or_comment</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&quot;]&quot;</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">end</span> <span class="o">==</span> <span class="sc">&#39;]&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="o">*</span><span class="n">end</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+                <span class="n">strncpy0</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">section</span><span class="p">));</span>
+                <span class="o">*</span><span class="n">prev_name</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+<span class="cp">#if INI_CALL_HANDLER_ON_NEW_SECTION</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">HANDLER</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">error</span><span class="p">)</span>
+                    <span class="n">error</span> <span class="o">=</span> <span class="n">lineno</span><span class="p">;</span>
+<span class="cp">#endif</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+                <span class="cm">/* No &#39;]&#39; found on section line */</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="n">lineno</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">start</span><span class="p">)</span> <span class="p">{</span>
+            <span class="cm">/* Not a comment, must be a name[=:]value pair */</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">find_chars_or_comment</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="s">&quot;=:&quot;</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">end</span> <span class="o">==</span> <span class="sc">&#39;=&#39;</span> <span class="o">||</span> <span class="o">*</span><span class="n">end</span> <span class="o">==</span> <span class="sc">&#39;:&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="o">*</span><span class="n">end</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">rstrip</span><span class="p">(</span><span class="n">start</span><span class="p">);</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="cp">#if INI_ALLOW_INLINE_COMMENTS</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="n">find_chars_or_comment</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">end</span><span class="p">)</span>
+                    <span class="o">*</span><span class="n">end</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+<span class="cp">#endif</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">lskip</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+                <span class="n">rstrip</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+
+                <span class="cm">/* Valid name[=:]value pair found, call handler */</span>
+                <span class="n">strncpy0</span><span class="p">(</span><span class="n">prev_name</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">prev_name</span><span class="p">));</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">HANDLER</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">error</span><span class="p">)</span>
+                    <span class="n">error</span> <span class="o">=</span> <span class="n">lineno</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+                <span class="cm">/* No &#39;=&#39; or &#39;:&#39; found on name[=:]value line */</span>
+<span class="cp">#if INI_ALLOW_NO_VALUE</span>
+                <span class="o">*</span><span class="n">end</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">rstrip</span><span class="p">(</span><span class="n">start</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">HANDLER</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">error</span><span class="p">)</span>
+                    <span class="n">error</span> <span class="o">=</span> <span class="n">lineno</span><span class="p">;</span>
+<span class="cp">#else</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="n">lineno</span><span class="p">;</span>
+<span class="cp">#endif</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+<span class="cp">#if INI_STOP_ON_FIRST_ERROR</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="p">)</span>
+            <span class="k">break</span><span class="p">;</span>
+<span class="cp">#endif</span>
+    <span class="p">}</span>
+
+<span class="cp">#if !INI_USE_STACK</span>
+    <span class="n">ini_free</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>
+<span class="cp">#endif</span>
+
+    <span class="k">return</span> <span class="n">error</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* See documentation in header file. */</span>
+<span class="kt">int</span> <span class="nf">ini_parse_file</span><span class="p">(</span><span class="kt">FILE</span><span class="o">*</span> <span class="n">file</span><span class="p">,</span> <span class="n">ini_handler</span> <span class="n">handler</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">user</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">ini_parse_stream</span><span class="p">((</span><span class="n">ini_reader</span><span class="p">)</span><span class="n">fgets</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">user</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/* See documentation in header file. */</span>
+<span class="kt">int</span> <span class="nf">ini_parse</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">filename</span><span class="p">,</span> <span class="n">ini_handler</span> <span class="n">handler</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">user</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">FILE</span><span class="o">*</span> <span class="n">file</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">error</span><span class="p">;</span>
+
+    <span class="n">file</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">file</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">ini_parse_file</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">user</span><span class="p">);</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">error</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* An ini_reader function to read the next line from a string buffer. This</span>
+<span class="cm">   is the fgets() equivalent used by ini_parse_string(). */</span>
+<span class="k">static</span> <span class="kt">char</span><span class="o">*</span> <span class="nf">ini_reader_string</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">str</span><span class="p">,</span> <span class="kt">int</span> <span class="n">num</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">stream</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">ini_parse_string_ctx</span><span class="o">*</span> <span class="n">ctx</span> <span class="o">=</span> <span class="p">(</span><span class="n">ini_parse_string_ctx</span><span class="o">*</span><span class="p">)</span><span class="n">stream</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">ctx_ptr</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">;</span>
+    <span class="kt">size_t</span> <span class="n">ctx_num_left</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">num_left</span><span class="p">;</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">strp</span> <span class="o">=</span> <span class="n">str</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">c</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">ctx_num_left</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">num</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">ctx_num_left</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="o">*</span><span class="n">ctx_ptr</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">ctx_num_left</span><span class="o">--</span><span class="p">;</span>
+        <span class="o">*</span><span class="n">strp</span><span class="o">++</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">==</span> <span class="sc">&#39;\n&#39;</span><span class="p">)</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="n">num</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="o">*</span><span class="n">strp</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+    <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">ctx_ptr</span><span class="p">;</span>
+    <span class="n">ctx</span><span class="o">-&gt;</span><span class="n">num_left</span> <span class="o">=</span> <span class="n">ctx_num_left</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">str</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* See documentation in header file. */</span>
+<span class="kt">int</span> <span class="nf">ini_parse_string</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">string</span><span class="p">,</span> <span class="n">ini_handler</span> <span class="n">handler</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">user</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">ini_parse_string_ctx</span> <span class="n">ctx</span><span class="p">;</span>
+
+    <span class="n">ctx</span><span class="p">.</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">string</span><span class="p">;</span>
+    <span class="n">ctx</span><span class="p">.</span><span class="n">num_left</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">string</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">ini_parse_stream</span><span class="p">((</span><span class="n">ini_reader</span><span class="p">)</span><span class="n">ini_reader_string</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ctx</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span>
+                            <span class="n">user</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_ini.c.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

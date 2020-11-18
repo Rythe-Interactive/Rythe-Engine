@@ -60,8 +60,9 @@
 <li><p><a class="reference internal" href="#namespaces" id="id2">Namespaces</a></p></li>
 <li><p><a class="reference internal" href="#classes" id="id3">Classes</a></p></li>
 <li><p><a class="reference internal" href="#enums" id="id4">Enums</a></p></li>
-<li><p><a class="reference internal" href="#typedefs" id="id5">Typedefs</a></p></li>
-<li><p><a class="reference internal" href="#variables" id="id6">Variables</a></p></li>
+<li><p><a class="reference internal" href="#functions" id="id5">Functions</a></p></li>
+<li><p><a class="reference internal" href="#typedefs" id="id6">Typedefs</a></p></li>
+<li><p><a class="reference internal" href="#variables" id="id7">Variables</a></p></li>
 </ul>
 </div>
 <div class="section" id="namespaces">
@@ -74,6 +75,7 @@
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="structlegion_1_1rendering_1_1camera_1_1camera__input.html#exhale-struct-structlegion-1-1rendering-1-1camera-1-1camera-input"><span class="std std-ref">Struct camera::camera_input</span></a></p></li>
+<li><p><a class="reference internal" href="structlegion_1_1rendering_1_1light.html#exhale-struct-structlegion-1-1rendering-1-1light"><span class="std std-ref">Struct light</span></a></p></li>
 <li><p><a class="reference internal" href="structlegion_1_1rendering_1_1renderable.html#exhale-struct-structlegion-1-1rendering-1-1renderable"><span class="std std-ref">Struct renderable</span></a></p></li>
 <li><p><a class="reference internal" href="structlegion_1_1rendering_1_1shader__handle.html#exhale-struct-structlegion-1-1rendering-1-1shader-handle"><span class="std std-ref">Struct shader_handle</span></a></p></li>
 <li><p><a class="reference internal" href="structlegion_1_1rendering_1_1shader__import__settings.html#exhale-struct-structlegion-1-1rendering-1-1shader-import-settings"><span class="std std-ref">Struct shader_import_settings</span></a></p></li>
@@ -107,12 +109,25 @@
 <div class="section" id="enums">
 <h2>Enums<a class="headerlink" href="#enums" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
+<li><p><a class="reference internal" href="enum_light_8hpp_1a45f3538838b7de030ad7e532d7c38c11.html#exhale-enum-light-8hpp-1a45f3538838b7de030ad7e532d7c38c11"><span class="std std-ref">Enum light_type</span></a></p></li>
 <li><p><a class="reference internal" href="enum_settings_8hpp_1a15f47615f6450e2398232badd102474e.html#exhale-enum-settings-8hpp-1a15f47615f6450e2398232badd102474e"><span class="std std-ref">Enum rendering_api</span></a></p></li>
 <li><p><a class="reference internal" href="enum_settings_8hpp_1a5d36ae1dcd274777342306852a004312.html#exhale-enum-settings-8hpp-1a5d36ae1dcd274777342306852a004312"><span class="std std-ref">Enum shader_compiler_options</span></a></p></li>
 <li><p><a class="reference internal" href="enum_texture_8hpp_1a4beac8f03a1a4607475602841e77f7ed.html#exhale-enum-texture-8hpp-1a4beac8f03a1a4607475602841e77f7ed"><span class="std std-ref">Enum texture_format</span></a></p></li>
 <li><p><a class="reference internal" href="enum_texture_8hpp_1a43d96b8e8a767d15180b2dd2725dd1cc.html#exhale-enum-texture-8hpp-1a43d96b8e8a767d15180b2dd2725dd1cc"><span class="std std-ref">Enum texture_mipmap</span></a></p></li>
 <li><p><a class="reference internal" href="enum_texture_8hpp_1a98302b4adcb004d184460c840a95b3e5.html#exhale-enum-texture-8hpp-1a98302b4adcb004d184460c840a95b3e5"><span class="std std-ref">Enum texture_type</span></a></p></li>
 <li><p><a class="reference internal" href="enum_texture_8hpp_1a4b31e32f4cfe64378c0cf415ab21c041.html#exhale-enum-texture-8hpp-1a4b31e32f4cfe64378c0cf415ab21c041"><span class="std std-ref">Enum texture_wrap</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="function_matini_8hpp_1a53f773c025b6345f339c6830644cc4cd.html#exhale-function-matini-8hpp-1a53f773c025b6345f339c6830644cc4cd"><span class="std std-ref">Function legion::rendering::apply_material_conf</span></a></p></li>
+<li><p><a class="reference internal" href="function_material_8hpp_1ab73367179f1bd0ccade11f388b50b4b3.html#exhale-function-material-8hpp-1ab73367179f1bd0ccade11f388b50b4b3"><span class="std std-ref">Function legion::rendering::material::get_param&lt; math::color &gt;(const std::string&amp;)</span></a></p></li>
+<li><p><a class="reference internal" href="function_material_8hpp_1a87eb40c46518e29e5a61fc5fefb5306d.html#exhale-function-material-8hpp-1a87eb40c46518e29e5a61fc5fefb5306d"><span class="std std-ref">Function legion::rendering::material::get_param&lt; math::color &gt;(GLint)</span></a></p></li>
+<li><p><a class="reference internal" href="function_material_8hpp_1aea9e75f89ecec1bdb46889b84500e5ab.html#exhale-function-material-8hpp-1aea9e75f89ecec1bdb46889b84500e5ab"><span class="std std-ref">Function legion::rendering::material::has_param&lt; math::color &gt;(const std::string&amp;)</span></a></p></li>
+<li><p><a class="reference internal" href="function_material_8hpp_1a96682413fd71a5a0e74fbab2dfdcda7f.html#exhale-function-material-8hpp-1a96682413fd71a5a0e74fbab2dfdcda7f"><span class="std std-ref">Function legion::rendering::material::has_param&lt; math::color &gt;(GLint)</span></a></p></li>
+<li><p><a class="reference internal" href="function_material_8hpp_1a34036816c545900cb53f585a7fb40428.html#exhale-function-material-8hpp-1a34036816c545900cb53f585a7fb40428"><span class="std std-ref">Function legion::rendering::material::set_param&lt; math::color &gt;(const std::string&amp;, const math::color&amp;)</span></a></p></li>
+<li><p><a class="reference internal" href="function_material_8hpp_1a9d1263c4d78bd2b77792e79a76948c8a.html#exhale-function-material-8hpp-1a9d1263c4d78bd2b77792e79a76948c8a"><span class="std std-ref">Function legion::rendering::material::set_param&lt; math::color &gt;(GLint, const math::color&amp;)</span></a></p></li>
 </ul>
 </div>
 <div class="section" id="typedefs">
@@ -153,6 +168,7 @@
 <li><a class="reference internal" href="#namespaces">Namespaces</a></li>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#enums">Enums</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
 <li><a class="reference internal" href="#typedefs">Typedefs</a></li>
 <li><a class="reference internal" href="#variables">Variables</a></li>
 </ul>

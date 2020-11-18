@@ -24,7 +24,11 @@ Classes
 -------
 
 
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_contact_vertex`
+
 - :ref:`exhale_struct_structlegion_1_1physics_1_1cube__collider__params`
+
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_edge_label`
 
 - :ref:`exhale_struct_structlegion_1_1physics_1_1_half_edge_edge`
 
@@ -42,9 +46,11 @@ Classes
 
 - :ref:`exhale_struct_structlegion_1_1physics_1_1rigidbody`
 
-- :ref:`exhale_struct_structlegion_1_1physics_1_1_temp_line`
+- :ref:`exhale_class_classlegion_1_1physics_1_1_convergance_identifier`
 
 - :ref:`exhale_class_classlegion_1_1physics_1_1_convex_collider`
+
+- :ref:`exhale_class_classlegion_1_1physics_1_1_convex_convergance_identifier`
 
 - :ref:`exhale_class_classlegion_1_1physics_1_1_convex_convex_penetration_query`
 

@@ -1,0 +1,13 @@
+.. _exhale_function_matini_8hpp_1a6deb3ff404b98096a0ba2fb35fe248fd:
+
+Template Function legion::rendering::detail::convert
+====================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_matini.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::rendering::detail::convert(const std::string&)

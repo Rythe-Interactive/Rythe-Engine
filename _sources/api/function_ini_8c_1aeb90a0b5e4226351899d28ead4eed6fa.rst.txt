@@ -1,0 +1,13 @@
+.. _exhale_function_ini_8c_1aeb90a0b5e4226351899d28ead4eed6fa:
+
+Function ini_parse_string
+=========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_ini.c`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ini_parse_string(const char *, ini_handler, void *)

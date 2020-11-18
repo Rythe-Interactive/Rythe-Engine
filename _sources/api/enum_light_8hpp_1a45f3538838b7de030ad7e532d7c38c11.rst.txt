@@ -1,0 +1,13 @@
+.. _exhale_enum_light_8hpp_1a45f3538838b7de030ad7e532d7c38c11:
+
+Enum light_type
+===============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_light.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: legion::rendering::light_type

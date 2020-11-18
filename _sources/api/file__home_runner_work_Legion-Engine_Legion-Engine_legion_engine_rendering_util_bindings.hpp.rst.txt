@@ -78,6 +78,10 @@ Defines
 
 - :ref:`exhale_define_bindings_8hpp_1a5b33e82b6781d083386299874530a74f`
 
+- :ref:`exhale_define_bindings_8hpp_1af8801dc8462248fca93f9726cc9e94d0`
+
+- :ref:`exhale_define_bindings_8hpp_1a17ffaa56585a709926526bdc484f48cb`
+
 - :ref:`exhale_define_bindings_8hpp_1a055dc1ac974678157edad1f27996a2e5`
 
 - :ref:`exhale_define_bindings_8hpp_1a49878cd27ca0a45c5122677d484bc9b3`

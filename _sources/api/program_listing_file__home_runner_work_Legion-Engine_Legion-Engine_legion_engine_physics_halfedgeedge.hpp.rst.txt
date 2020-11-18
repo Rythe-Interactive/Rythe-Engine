@@ -12,6 +12,7 @@ Program Listing for File halfedgeedge.hpp
 
    #pragma once
    #include <core/core.hpp>
+   #include <physics/data/edge_label.hpp>
    #include <physics/halfedgeface.hpp>
    
    namespace legion::physics
@@ -23,6 +24,8 @@ Program Listing for File halfedgeedge.hpp
            HalfEdgeEdge* prevEdge = nullptr;
    
            HalfEdgeFace* face = nullptr;
+   
+           EdgeLabel label;
            
            math::vec3* edgePositionPtr;
            std::string id;

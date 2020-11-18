@@ -79,13 +79,15 @@ Program Listing for File shader.hpp
        template<>
        inline void uniform<texture_handle>::set_value(const texture_handle& value)
        {
+           texture tex;
            if (is_valid())
-           {
-               auto texture = value.get_texture();
-               glActiveTexture(GL_TEXTURE0 + m_location);
-               glBindTexture(GL_TEXTURE_2D, texture.textureId);
-               glUniform1i(m_location, m_location);
-           }
+               tex = value.get_texture();
+           else
+               tex = invalid_texture_handle.get_texture();
+   
+           glActiveTexture(GL_TEXTURE0 + m_location);
+           glBindTexture(GL_TEXTURE_2D, tex.textureId);
+           glUniform1i(m_location, m_location);
        }
    
        template<>

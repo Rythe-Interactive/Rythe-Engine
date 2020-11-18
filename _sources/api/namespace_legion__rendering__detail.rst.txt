@@ -13,8 +13,29 @@ Namespace legion::rendering::detail
 
 
 
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1detail_1_1convert__tuple`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1detail_1_1convert__tuple_3_01_t_00_012_01_4`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1detail_1_1convert__tuple_3_01_t_00_013_01_4`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1detail_1_1convert__tuple_3_01_t_00_014_01_4`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1detail_1_1light__data`
+
+- :ref:`exhale_class_classlegion_1_1rendering_1_1detail_1_1handler__to__cpp`
+
+
 Functions
 ---------
 
+
+- :ref:`exhale_function_matini_8hpp_1a6deb3ff404b98096a0ba2fb35fe248fd`
+
+- :ref:`exhale_function_matini_8hpp_1a596cd4a757e072e93d1464952d64b5cd`
 
 - :ref:`exhale_function_bindings_8hpp_1af9379b17e6b591c44e649b28a7506a90`

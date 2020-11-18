@@ -192,8 +192,6 @@
             <span class="c1">//------------------------------------------------------ Narrowphase -----------------------------------------------------//</span>
             <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">physics_manifold</span><span class="o">&gt;</span> <span class="n">manifoldsToSolve</span><span class="p">;</span>
 
-
-
             <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">manifoldPrecursor</span> <span class="p">:</span> <span class="n">manifoldPrecursorGrouping</span><span class="p">)</span>
             <span class="p">{</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">manifoldPrecursor</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="k">continue</span><span class="p">;</span> <span class="p">}</span>
@@ -232,8 +230,6 @@
 
                         <span class="k">if</span> <span class="p">(</span><span class="n">isBetweenTriggerAndNonTrigger</span> <span class="o">||</span> <span class="n">isBetweenRigidbodyAndNonTrigger</span> <span class="o">||</span> <span class="n">isBetween2Rigidbodies</span><span class="p">)</span>
                         <span class="p">{</span>
-
-
                             <span class="n">constructManifoldsWithPrecursors</span><span class="p">(</span><span class="n">manifoldPrecursor</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">manifoldPrecursor</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">j</span><span class="p">),</span>
                                 <span class="n">manifoldsToSolve</span><span class="p">,</span>
                                 <span class="n">precursorRigidbodyA</span> <span class="o">||</span> <span class="n">precursorRigidbodyB</span>
@@ -254,12 +250,15 @@
 
             <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">manifold</span> <span class="p">:</span> <span class="n">manifoldsToSolve</span><span class="p">)</span>
             <span class="p">{</span>
+                <span class="c1">//log::debug(&quot;----------Logging contacts for manifold &quot;);</span>
+
                 <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">contact</span> <span class="p">:</span> <span class="n">manifold</span><span class="p">.</span><span class="n">contacts</span><span class="p">)</span>
                 <span class="p">{</span>
                     <span class="n">contact</span><span class="p">.</span><span class="n">preCalculateEffectiveMass</span><span class="p">();</span>
+
+                    <span class="n">contact</span><span class="p">.</span><span class="n">ApplyWarmStarting</span><span class="p">();</span>
                 <span class="p">}</span>
             <span class="p">}</span>
-
 
             <span class="c1">//resolve contact constraint</span>
             <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">constants</span><span class="o">::</span><span class="n">contactSolverIterationCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
@@ -274,7 +273,6 @@
             <span class="p">}</span>
 
 
-
             <span class="c1">//resolve friction constraint</span>
             <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">constants</span><span class="o">::</span><span class="n">frictionSolverIterationCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
             <span class="p">{</span>
@@ -287,13 +285,26 @@
                 <span class="p">}</span>
             <span class="p">}</span>
 
+            <span class="c1">//reset convergance identifiers for all colliders</span>
             <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">manifold</span> <span class="p">:</span> <span class="n">manifoldsToSolve</span><span class="p">)</span>
             <span class="p">{</span>
                 <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">contact</span> <span class="p">:</span> <span class="n">manifold</span><span class="p">.</span><span class="n">contacts</span><span class="p">)</span>
                 <span class="p">{</span>
-                    <span class="n">PhysicsSystem</span><span class="o">::</span><span class="n">contactPoints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">contact</span><span class="p">);</span>
+                    <span class="n">contact</span><span class="p">.</span><span class="n">refCollider</span><span class="o">-&gt;</span><span class="n">converganceIdentifiers</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
                 <span class="p">}</span>
             <span class="p">}</span>
+
+            <span class="c1">//using the known lambdas of this time step, add it as a convergance identifier</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">manifold</span> <span class="p">:</span> <span class="n">manifoldsToSolve</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">contact</span> <span class="p">:</span> <span class="n">manifold</span><span class="p">.</span><span class="n">contacts</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">contact</span><span class="p">.</span><span class="n">refCollider</span><span class="o">-&gt;</span><span class="n">AddConverganceIdentifier</span><span class="p">(</span><span class="n">contact</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+
+
 
         <span class="p">}</span>
 

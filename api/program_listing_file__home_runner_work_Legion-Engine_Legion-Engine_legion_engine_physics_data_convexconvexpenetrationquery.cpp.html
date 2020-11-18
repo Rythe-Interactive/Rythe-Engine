@@ -49,6 +49,7 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;physics/data/convexconvexpenetrationquery.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;physics/physics_statics.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;physics/physics_contact.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/data/contact_vertex.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
 <span class="p">{</span>
@@ -59,16 +60,20 @@
 
     <span class="p">}</span>
 
-    <span class="kt">void</span> <span class="n">ConvexConvexPenetrationQuery</span><span class="o">::</span><span class="n">populateContactList</span><span class="p">(</span><span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">refTransform</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">incTransform</span><span class="p">)</span>
+    <span class="kt">void</span> <span class="n">ConvexConvexPenetrationQuery</span><span class="o">::</span><span class="n">populateContactList</span><span class="p">(</span><span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">refTransform</span>
+        <span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">incTransform</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;</span> <span class="n">refCollider</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="c1">//log::debug(&quot;//////ConvexConvexPenetrationQuery::populateContactList&quot;);</span>
+
         <span class="c1">//------------------------------- get all world vertex positions in incFace -------------------------------------------------//</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">outputContactPoints</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ContactVertex</span><span class="o">&gt;</span> <span class="n">outputContactPoints</span><span class="p">;</span>
 
         <span class="k">auto</span> <span class="n">sendToInitialOutput</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">outputContactPoints</span><span class="p">,</span><span class="o">&amp;</span><span class="n">incTransform</span><span class="p">](</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">localVertexPosition</span> <span class="o">=</span> <span class="o">*</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">edgePositionPtr</span><span class="p">;</span>
-            <span class="c1">//math::vec3 worldVertexPosition = incTransform * math::vec4(localVertexPosition, 1);</span>
-            <span class="n">outputContactPoints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">incTransform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">localVertexPosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldVertex</span> <span class="o">=</span> <span class="n">incTransform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">localVertexPosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+            <span class="n">outputContactPoints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">ContactVertex</span><span class="p">(</span><span class="n">worldVertex</span><span class="p">,</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">label</span><span class="p">));</span>
         <span class="p">};</span>
 
         <span class="n">incFace</span><span class="o">-&gt;</span><span class="n">forEachEdge</span><span class="p">(</span><span class="n">sendToInitialOutput</span><span class="p">);</span>
@@ -83,33 +88,36 @@
             <span class="k">auto</span> <span class="n">inputContactList</span> <span class="o">=</span> <span class="n">outputContactPoints</span><span class="p">;</span>
             <span class="n">outputContactPoints</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
 
-            <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">SutherlandHodgmanFaceClip</span><span class="p">(</span><span class="n">planeNormal</span><span class="p">,</span> <span class="n">planePosition</span><span class="p">,</span> <span class="n">inputContactList</span><span class="p">,</span> <span class="n">outputContactPoints</span><span class="p">);</span>
+            <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">SutherlandHodgmanFaceClip</span><span class="p">(</span><span class="n">planeNormal</span><span class="p">,</span> <span class="n">planePosition</span><span class="p">,</span> <span class="n">inputContactList</span><span class="p">,</span> <span class="n">outputContactPoints</span><span class="p">,</span><span class="n">edge</span><span class="p">);</span>
+
         <span class="p">};</span>
 
         <span class="n">refFace</span><span class="o">-&gt;</span><span class="n">forEachEdge</span><span class="p">(</span><span class="n">clipNeigboringFaceWithOutput</span><span class="p">);</span>
 
         <span class="c1">//-------- get the contact points of the ref polyhedron by projecting the incident contacts to the collision plane ---------//</span>
+        <span class="c1">//auto refCollider = manifold.penetrationInformation-&gt;isARef ? manifold.colliderA : manifold.colliderB;</span>
 
         <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="nl">incidentContact</span> <span class="p">:</span> <span class="n">outputContactPoints</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="kt">float</span> <span class="n">distanceToCollisionPlane</span> <span class="o">=</span> <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">PointDistanceToPlane</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">faceCentroid</span><span class="p">,</span> <span class="n">incidentContact</span><span class="p">);</span>
+            <span class="kt">float</span> <span class="n">distanceToCollisionPlane</span> <span class="o">=</span> <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">PointDistanceToPlane</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">faceCentroid</span><span class="p">,</span> <span class="n">incidentContact</span><span class="p">.</span><span class="n">position</span><span class="p">);</span>
 
             <span class="k">if</span> <span class="p">(</span><span class="n">distanceToCollisionPlane</span> <span class="o">&lt;</span> <span class="n">constants</span><span class="o">::</span><span class="n">contactOffset</span><span class="p">)</span>
             <span class="p">{</span>
-                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">referenceContact</span> <span class="o">=</span> <span class="n">incidentContact</span> <span class="o">-</span> <span class="n">normal</span> <span class="o">*</span> <span class="n">distanceToCollisionPlane</span><span class="p">;</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">referenceContact</span> <span class="o">=</span> <span class="n">incidentContact</span><span class="p">.</span><span class="n">position</span> <span class="o">-</span> <span class="n">normal</span> <span class="o">*</span> <span class="n">distanceToCollisionPlane</span><span class="p">;</span>
 
                 <span class="n">physics_contact</span> <span class="n">contact</span><span class="p">;</span>
-
-                <span class="n">contact</span><span class="p">.</span><span class="n">IncWorldContact</span> <span class="o">=</span> <span class="n">incidentContact</span><span class="p">;</span>
+                <span class="n">contact</span><span class="p">.</span><span class="n">refCollider</span> <span class="o">=</span> <span class="n">refCollider</span><span class="p">;</span>
+                <span class="n">contact</span><span class="p">.</span><span class="n">IncWorldContact</span> <span class="o">=</span> <span class="n">incidentContact</span><span class="p">.</span><span class="n">position</span><span class="p">;</span>
                 <span class="n">contact</span><span class="p">.</span><span class="n">RefWorldContact</span> <span class="o">=</span> <span class="n">referenceContact</span><span class="p">;</span>
+                <span class="n">contact</span><span class="p">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">incidentContact</span><span class="p">.</span><span class="n">label</span><span class="p">;</span>
 
-                <span class="c1">//log::debug(&quot;incidentContact {} &quot;, math::to_string(incidentContact));</span>
+                <span class="n">refCollider</span><span class="o">-&gt;</span><span class="n">AttemptFindAndCopyConverganceID</span><span class="p">(</span><span class="n">contact</span><span class="p">);</span>
 
                 <span class="n">manifold</span><span class="p">.</span><span class="n">contacts</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">contact</span><span class="p">);</span>
 
             <span class="p">}</span>
         <span class="p">}</span>
-
+        <span class="c1">//log::debug(&quot;//////ConvexConvexPenetrationQuery::populateContactList&quot;);</span>
     <span class="p">}</span>
 
 

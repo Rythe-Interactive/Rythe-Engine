@@ -37,7 +37,7 @@ Program Listing for File scheduler.cpp
            while (!(*start))
            {
                if (lowPower)
-                   std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                   std::this_thread::sleep_for(std::chrono::milliseconds(2));
                else
                    std::this_thread::yield();
            }
@@ -77,7 +77,7 @@ Program Listing for File scheduler.cpp
                    {
                        if (lowPower)
                        {
-                           std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                           std::this_thread::sleep_for(std::chrono::milliseconds(2));
                        }
                        else
                        {

@@ -67,7 +67,7 @@
         <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="kt">bool</span> <span class="n">SceneManager</span><span class="o">::</span><span class="n">createScene</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span><span class="o">&amp;</span> <span class="n">ent</span><span class="p">)</span>
+    <span class="kt">bool</span> <span class="n">SceneManager</span><span class="o">::</span><span class="n">createScene</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span><span class="o">&amp;</span> <span class="n">ent</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ent</span><span class="p">.</span><span class="n">has_component</span><span class="o">&lt;</span><span class="n">scenemanagement</span><span class="o">::</span><span class="n">scene</span><span class="o">&gt;</span><span class="p">())</span>
         <span class="p">{</span>

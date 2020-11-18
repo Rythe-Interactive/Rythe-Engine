@@ -49,9 +49,9 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_type__util_8cpp_1a216cabaf6d00a70dee4d790833485369`
-
 - :ref:`exhale_function_type__util_8cpp_1a4e1c17350cceba4c3b7b06fa70498c6e`
 
 - :ref:`exhale_function_type__util_8cpp_1a492f8a72e0cd77b3868d5e4b0a2b9b5f`
+
+- :ref:`exhale_function_type__util_8cpp_1a216cabaf6d00a70dee4d790833485369`
 

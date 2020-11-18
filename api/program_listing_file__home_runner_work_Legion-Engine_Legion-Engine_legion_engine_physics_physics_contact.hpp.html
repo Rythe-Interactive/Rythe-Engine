@@ -51,11 +51,20 @@
 <span class="cp">#include</span> <span class="cpf">&lt;physics/components/rigidbody.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;physics/data/identifier.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/data/edge_label.hpp&gt;</span><span class="cp"></span>
+
+
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
 <span class="p">{</span>
+    <span class="k">class</span> <span class="nc">PhysicsCollider</span><span class="p">;</span>
+
     <span class="k">struct</span> <span class="n">physics_contact</span>
     <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;</span> <span class="n">refCollider</span><span class="p">;</span>
+
+        <span class="n">EdgeLabel</span> <span class="n">label</span><span class="p">;</span>
+
         <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">rigidbody</span><span class="o">&gt;</span> <span class="n">rbRefHandle</span><span class="p">;</span>
         <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">rigidbody</span><span class="o">&gt;</span> <span class="n">rbIncHandle</span><span class="p">;</span>
 
@@ -83,9 +92,14 @@
 
         <span class="kt">int</span> <span class="n">contactCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-        <span class="kt">void</span> <span class="nf">ApplyWarmStarting</span><span class="p">(</span><span class="kt">float</span> <span class="n">lambda</span><span class="p">)</span>
+        <span class="kt">void</span> <span class="nf">ApplyWarmStarting</span><span class="p">()</span>
         <span class="p">{</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">Ra</span> <span class="o">=</span> <span class="n">RefWorldContact</span> <span class="o">-</span> <span class="n">refRBCentroid</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">Rb</span> <span class="o">=</span> <span class="n">IncWorldContact</span> <span class="o">-</span> <span class="n">incRBCentroid</span><span class="p">;</span>
 
+            <span class="n">ApplyImpulse</span><span class="p">(</span><span class="n">collisionNormal</span><span class="p">,</span> <span class="n">totalLambda</span><span class="p">,</span> <span class="n">Ra</span><span class="p">,</span> <span class="n">Rb</span><span class="p">);</span>
+            <span class="n">ApplyImpulse</span><span class="p">(</span><span class="n">tangentNormal1</span><span class="p">,</span> <span class="n">tangent1Lambda</span><span class="p">,</span> <span class="n">Ra</span><span class="p">,</span> <span class="n">Rb</span><span class="p">);</span>
+            <span class="n">ApplyImpulse</span><span class="p">(</span><span class="n">tangentNormal2</span><span class="p">,</span> <span class="n">tangent2Lambda</span><span class="p">,</span> <span class="n">Ra</span><span class="p">,</span> <span class="n">Rb</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="cm">/* @brief Calculate a certain linear and angular impulse that will resolve the collision</span>
@@ -179,14 +193,14 @@
 
             <span class="kt">float</span> <span class="n">baumgarteConstraint</span> <span class="o">=</span> <span class="o">-</span><span class="n">penetration</span> <span class="o">*</span> <span class="n">physics</span><span class="o">::</span><span class="n">constants</span><span class="o">::</span><span class="n">baumgarteCoefficient</span> <span class="o">*</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">dt</span><span class="p">;</span>
 
+            <span class="c1">//-------------------------- Restitution Constraint ----------------------------------//</span>
+
             <span class="c1">//calculate restitution between the 2 bodies</span>
             <span class="kt">float</span> <span class="n">restCoeff</span> <span class="o">=</span> <span class="n">rigidbody</span><span class="o">::</span><span class="n">calculateRestitution</span><span class="p">(</span><span class="n">RefRB</span><span class="p">.</span><span class="n">restitution</span><span class="p">,</span> <span class="n">IncRB</span><span class="p">.</span><span class="n">restitution</span><span class="p">);</span>
 
-            <span class="c1">//-------------------------- Restitution Constraint ----------------------------------//</span>
-
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">minWaCrossRa</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="o">-</span><span class="n">wa</span><span class="p">,</span> <span class="n">Ra</span><span class="p">);</span>
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">WbCrossRb</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">wb</span><span class="p">,</span> <span class="n">Rb</span><span class="p">);</span>
-
+            <span class="c1">//restitution is based on the relative velocities of the 2 rigidbodies</span>
             <span class="kt">float</span> <span class="n">restitutionConstraint</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">((</span><span class="o">-</span><span class="n">va</span> <span class="o">+</span> <span class="n">minWaCrossRa</span> <span class="o">+</span> <span class="n">vb</span> <span class="o">+</span> <span class="n">WbCrossRb</span><span class="p">),</span><span class="n">collisionNormal</span><span class="p">)</span> <span class="o">*</span> <span class="n">restCoeff</span><span class="p">;</span>
             <span class="n">restitutionConstraint</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">restitutionConstraint</span> <span class="o">-</span> <span class="n">physics</span><span class="o">::</span><span class="n">constants</span><span class="o">::</span><span class="n">restitutionSlop</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">);</span>
 
@@ -204,37 +218,6 @@
 
             <span class="k">auto</span> <span class="n">idHandleRef</span> <span class="o">=</span> <span class="n">rbRefHandle</span><span class="p">.</span><span class="n">entity</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">();</span>
             <span class="k">auto</span> <span class="n">idHandleInc</span> <span class="o">=</span> <span class="n">rbIncHandle</span><span class="p">.</span><span class="n">entity</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">();</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">idHandleInc</span> <span class="o">&amp;&amp;</span>
-                <span class="n">idHandleRef</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="c1">//log::debug(&quot;/idHandle.read().id {} &quot;, idHandle.read().id);</span>
-               <span class="cm">/* if (idHandleInc.read().id == &quot;Stack1&quot; &amp;&amp; idHandleRef.read().id == &quot;Stack0&quot;)</span>
-<span class="cm">                {</span>
-<span class="cm">                    log::debug(&quot;/////lambda calculation/////&quot;);</span>
-<span class="cm">                    log::debug(&quot;JVX {}&quot;, JVx);</span>
-<span class="cm">                    log::debug(&quot;JVY {}&quot;, JVy);</span>
-<span class="cm">                    log::debug(&quot;JVZ {}&quot;, JVz);</span>
-<span class="cm">                    log::debug(&quot;JVW {}&quot;, JVw);</span>
-<span class="cm">                    log::debug(&quot;/////JV found/////&quot;);</span>
-<span class="cm">                    log::debug(&quot;-jv found {} &quot;, minJV);</span>
-<span class="cm">                    log::debug(&quot;baumgarteConstraint {} &quot;, baumgarteConstraint);</span>
-<span class="cm">                    log::debug(&quot;restitutionConstraint {} &quot;, restitutionConstraint);</span>
-<span class="cm">                    log::debug(&quot;effective mass {} &quot;, effectiveMass);</span>
-<span class="cm">                    log::debug(&quot;/////lambda found/////&quot;);</span>
-<span class="cm">                    log::debug(&quot;lambda found {} &quot;, foundLambda);</span>
-<span class="cm">                    log::debug(&quot;lambda applied {} &quot;, lambdaApplied);</span>
-<span class="cm">                    log::debug(&quot;totalLambda {} &quot;, totalLambda);</span>
-<span class="cm">                    log::debug(&quot;/////current velocities/////&quot;);</span>
-<span class="cm">                    log::debug(&quot;VA {}&quot;, math::to_string(va));</span>
-<span class="cm">                    log::debug(&quot;WA {}&quot;, math::to_string(wa));</span>
-<span class="cm">                    log::debug(&quot;------------------------&quot;);</span>
-<span class="cm">                    log::debug(&quot;VB {}&quot;, math::to_string(vb));</span>
-<span class="cm">                    log::debug(&quot;WB {}&quot;, math::to_string(wb));</span>
-<span class="cm">                }*/</span>
-
-            <span class="p">}</span>
-
 
             <span class="n">ApplyImpulse</span><span class="p">(</span><span class="n">collisionNormal</span><span class="p">,</span> <span class="n">lambdaApplied</span><span class="p">,</span>
                 <span class="n">Ra</span><span class="p">,</span> <span class="n">Rb</span><span class="p">);</span>
@@ -416,6 +399,8 @@
             <span class="n">minRaCrossN</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="o">-</span><span class="n">Ra</span><span class="p">,</span> <span class="n">normal</span><span class="p">);</span>
             <span class="n">RbCrossN</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">Rb</span><span class="p">,</span> <span class="n">normal</span><span class="p">);</span>
         <span class="p">}</span>
+
+
 
         <span class="kt">void</span> <span class="nf">logRigidbodyState</span><span class="p">()</span>
         <span class="p">{</span>

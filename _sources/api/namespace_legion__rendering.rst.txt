@@ -26,6 +26,8 @@ Classes
 
 - :ref:`exhale_struct_structlegion_1_1rendering_1_1camera_1_1camera__input`
 
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1light`
+
 - :ref:`exhale_struct_structlegion_1_1rendering_1_1renderable`
 
 - :ref:`exhale_struct_structlegion_1_1rendering_1_1shader__handle`
@@ -87,6 +89,8 @@ Enums
 -----
 
 
+- :ref:`exhale_enum_light_8hpp_1a45f3538838b7de030ad7e532d7c38c11`
+
 - :ref:`exhale_enum_settings_8hpp_1a15f47615f6450e2398232badd102474e`
 
 - :ref:`exhale_enum_settings_8hpp_1a5d36ae1dcd274777342306852a004312`
@@ -98,6 +102,25 @@ Enums
 - :ref:`exhale_enum_texture_8hpp_1a98302b4adcb004d184460c840a95b3e5`
 
 - :ref:`exhale_enum_texture_8hpp_1a4b31e32f4cfe64378c0cf415ab21c041`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_matini_8hpp_1a53f773c025b6345f339c6830644cc4cd`
+
+- :ref:`exhale_function_material_8hpp_1ab73367179f1bd0ccade11f388b50b4b3`
+
+- :ref:`exhale_function_material_8hpp_1a87eb40c46518e29e5a61fc5fefb5306d`
+
+- :ref:`exhale_function_material_8hpp_1aea9e75f89ecec1bdb46889b84500e5ab`
+
+- :ref:`exhale_function_material_8hpp_1a96682413fd71a5a0e74fbab2dfdcda7f`
+
+- :ref:`exhale_function_material_8hpp_1a34036816c545900cb53f585a7fb40428`
+
+- :ref:`exhale_function_material_8hpp_1a9d1263c4d78bd2b77792e79a76948c8a`
 
 
 Typedefs

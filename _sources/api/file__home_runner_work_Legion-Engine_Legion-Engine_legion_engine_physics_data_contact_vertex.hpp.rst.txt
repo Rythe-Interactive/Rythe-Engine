@@ -1,0 +1,61 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_contact_vertex.hpp:
+
+File contact_vertex.hpp
+=======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/data``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/data/contact_vertex.hpp``)
+------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_contact_vertex.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_core.hpp`)
+
+- ``physics/data/edge_label.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_edge_label.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_convexconvexpenetrationquery.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_statics.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__physics`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_contact_vertex`
+

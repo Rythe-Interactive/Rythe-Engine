@@ -1,0 +1,16 @@
+.. _exhale_class_classlegion_1_1rendering_1_1detail_1_1handler__to__cpp:
+
+Class handler_to_cpp
+====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_matini.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::rendering::detail::handler_to_cpp
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,92 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_ini.c:
+
+File ini.c
+==========
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/util``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/util/ini.c``)
+-------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_ini.c.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``ctype.h``
+
+- ``inih/ini.h``
+
+- ``stdio.h``
+
+- ``stdlib.h``
+
+- ``string.h``
+
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structini__parse__string__ctx`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_ini_8c_1a95685b94afb6833627146950cea4e0f7`
+
+- :ref:`exhale_function_ini_8c_1a2fab292681265b7774e2a2885abb758c`
+
+- :ref:`exhale_function_ini_8c_1a876bf8b62ade275320db827b929f9289`
+
+- :ref:`exhale_function_ini_8c_1ad8b766ac18397b0b262559203ea7f602`
+
+- :ref:`exhale_function_ini_8c_1aeb90a0b5e4226351899d28ead4eed6fa`
+
+- :ref:`exhale_function_ini_8c_1af35fe60b25b04f05cacd3a33c9b28c5d`
+
+- :ref:`exhale_function_ini_8c_1a106085a60583761d9db2b77929a3abe0`
+
+- :ref:`exhale_function_ini_8c_1adeed2706622d58ae4098f37974429627`
+
+- :ref:`exhale_function_ini_8c_1a12124686d5fdc4fa123955450b1201d0`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_ini_8c_1a444c6b3051cdd942c99ba2e0fea3aa38`
+
+- :ref:`exhale_define_ini_8c_1a937bb9c197ca944432e1e019075f7c8c`
+
+- :ref:`exhale_define_ini_8c_1a6e5a1f8ec415a0ef4db5c4a2d18808e7`
+
+- :ref:`exhale_define_ini_8c_1af98446be7a915b3169e6e5b459304e77`
+
+- :ref:`exhale_define_ini_8c_1ac7c0207aa5a0e10d378be03b68041350`
+
+- :ref:`exhale_define_ini_8c_1aaf452164719d4d290a4766282df9d690`
+

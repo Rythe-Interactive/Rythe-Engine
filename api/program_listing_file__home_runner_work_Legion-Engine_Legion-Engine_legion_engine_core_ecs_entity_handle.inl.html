@@ -75,43 +75,43 @@
     <span class="p">}</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="p">,</span> <span class="k">typename</span><span class="o">&gt;</span>
-    <span class="k">auto</span> <span class="n">entity_handle</span><span class="o">::</span><span class="n">add_components</span><span class="p">()</span> <span class="k">const</span>
+    <span class="k">auto</span> <span class="n">entity_handle</span><span class="o">::</span><span class="n">add_components</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">m_registry</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="n">component_types</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">archetype_type</span><span class="p">,</span> <span class="k">typename</span><span class="o">&gt;</span>
-    <span class="k">auto</span> <span class="n">entity_handle</span><span class="o">::</span><span class="n">add_components</span><span class="p">()</span> <span class="k">const</span>
+    <span class="k">auto</span> <span class="n">entity_handle</span><span class="o">::</span><span class="n">add_components</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">m_registry</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">archetype_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="p">,</span> <span class="k">typename</span><span class="o">&gt;</span>
-    <span class="k">auto</span> <span class="n">entity_handle</span><span class="o">::</span><span class="n">add_components</span><span class="p">(</span><span class="n">component_type</span><span class="o">&amp;&amp;</span> <span class="n">value</span><span class="p">,</span> <span class="n">component_types</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">values</span><span class="p">)</span> <span class="k">const</span>
+    <span class="k">auto</span> <span class="n">entity_handle</span><span class="o">::</span><span class="n">add_components</span><span class="p">(</span><span class="n">component_type</span><span class="o">&amp;&amp;</span> <span class="n">value</span><span class="p">,</span> <span class="n">component_types</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">values</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">m_registry</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="p">(</span><span class="n">m_id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">component_types</span><span class="o">&gt;</span><span class="p">(</span><span class="n">values</span><span class="p">)...);</span>
     <span class="p">}</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="p">,</span> <span class="k">typename</span><span class="o">&gt;</span>
-    <span class="k">auto</span> <span class="n">entity_handle</span><span class="o">::</span><span class="n">add_components</span><span class="p">(</span><span class="n">component_type</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">,</span> <span class="n">component_types</span><span class="o">&amp;</span><span class="p">...</span> <span class="n">values</span><span class="p">)</span> <span class="k">const</span>
+    <span class="k">auto</span> <span class="n">entity_handle</span><span class="o">::</span><span class="n">add_components</span><span class="p">(</span><span class="n">component_type</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">,</span> <span class="n">component_types</span><span class="o">&amp;</span><span class="p">...</span> <span class="n">values</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">m_registry</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="p">(</span><span class="n">m_id</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">values</span><span class="p">...);</span>
     <span class="p">}</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">archetype_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="p">,</span> <span class="k">typename</span><span class="o">&gt;</span>
-    <span class="k">auto</span> <span class="n">entity_handle</span><span class="o">::</span><span class="n">add_components</span><span class="p">(</span><span class="n">component_types</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">values</span><span class="p">)</span> <span class="k">const</span>
+    <span class="k">auto</span> <span class="n">entity_handle</span><span class="o">::</span><span class="n">add_components</span><span class="p">(</span><span class="n">component_types</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">values</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">m_registry</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">archetype_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">component_types</span><span class="o">&gt;</span><span class="p">(</span><span class="n">values</span><span class="p">)...);</span>
     <span class="p">}</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="p">,</span> <span class="k">typename</span><span class="o">&gt;</span>
-    <span class="kt">void</span> <span class="n">entity_handle</span><span class="o">::</span><span class="n">remove_components</span><span class="p">()</span> <span class="k">const</span>
+    <span class="kt">void</span> <span class="n">entity_handle</span><span class="o">::</span><span class="n">remove_components</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">m_registry</span><span class="o">-&gt;</span><span class="n">destroyComponents</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="n">component_types</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">archetype_type</span><span class="p">,</span> <span class="k">typename</span><span class="o">&gt;</span>
-    <span class="kt">void</span> <span class="n">entity_handle</span><span class="o">::</span><span class="n">remove_components</span><span class="p">()</span> <span class="k">const</span>
+    <span class="kt">void</span> <span class="n">entity_handle</span><span class="o">::</span><span class="n">remove_components</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">m_registry</span><span class="o">-&gt;</span><span class="n">destroyComponents</span><span class="o">&lt;</span><span class="n">archetype_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
     <span class="p">}</span>

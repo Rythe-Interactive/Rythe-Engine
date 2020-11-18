@@ -115,13 +115,15 @@
     <span class="k">template</span><span class="o">&lt;&gt;</span>
     <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">texture_handle</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">texture</span> <span class="n">tex</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">())</span>
-        <span class="p">{</span>
-            <span class="k">auto</span> <span class="n">texture</span> <span class="o">=</span> <span class="n">value</span><span class="p">.</span><span class="n">get_texture</span><span class="p">();</span>
-            <span class="n">glActiveTexture</span><span class="p">(</span><span class="n">GL_TEXTURE0</span> <span class="o">+</span> <span class="n">m_location</span><span class="p">);</span>
-            <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">texture</span><span class="p">.</span><span class="n">textureId</span><span class="p">);</span>
-            <span class="n">glUniform1i</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="n">m_location</span><span class="p">);</span>
-        <span class="p">}</span>
+            <span class="n">tex</span> <span class="o">=</span> <span class="n">value</span><span class="p">.</span><span class="n">get_texture</span><span class="p">();</span>
+        <span class="k">else</span>
+            <span class="n">tex</span> <span class="o">=</span> <span class="n">invalid_texture_handle</span><span class="p">.</span><span class="n">get_texture</span><span class="p">();</span>
+
+        <span class="n">glActiveTexture</span><span class="p">(</span><span class="n">GL_TEXTURE0</span> <span class="o">+</span> <span class="n">m_location</span><span class="p">);</span>
+        <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">tex</span><span class="p">.</span><span class="n">textureId</span><span class="p">);</span>
+        <span class="n">glUniform1i</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="n">m_location</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="k">template</span><span class="o">&lt;&gt;</span>

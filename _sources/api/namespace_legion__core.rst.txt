@@ -190,13 +190,13 @@ Functions
 
 - :ref:`exhale_function_type__util_8hpp_1a1fe20cafef19940da5c6e26622c46581`
 
-- :ref:`exhale_function_type__util_8cpp_1a216cabaf6d00a70dee4d790833485369`
+- :ref:`exhale_function_type__util_8cpp_1a492f8a72e0cd77b3868d5e4b0a2b9b5f`
 
-- :ref:`exhale_function_type__util_8hpp_1a22ddbf10ae207bd2a99666df70f9b695`
+- :ref:`exhale_function_type__util_8cpp_1a216cabaf6d00a70dee4d790833485369`
 
 - :ref:`exhale_function_type__util_8cpp_1a4e1c17350cceba4c3b7b06fa70498c6e`
 
-- :ref:`exhale_function_type__util_8cpp_1a492f8a72e0cd77b3868d5e4b0a2b9b5f`
+- :ref:`exhale_function_type__util_8hpp_1a22ddbf10ae207bd2a99666df70f9b695`
 
 - :ref:`exhale_function_type__util_8hpp_1a4b5630f47491ff5cef8787bff3baf775`
 

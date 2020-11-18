@@ -58,10 +58,11 @@
         <span class="n">PenetrationQuery</span><span class="p">(</span><span class="n">pFaceCentroid</span><span class="p">,</span><span class="n">pNormal</span><span class="p">,</span><span class="n">pPenetration</span><span class="p">,</span><span class="n">pIsARef</span><span class="p">),</span><span class="n">refEdge</span><span class="p">(</span><span class="n">pRefEdge</span><span class="p">),</span><span class="n">incEdge</span><span class="p">(</span><span class="n">pIncEdge</span><span class="p">)</span> <span class="p">{}</span>
 
 
-    <span class="kt">void</span> <span class="n">EdgePenetrationQuery</span><span class="o">::</span><span class="n">populateContactList</span><span class="p">(</span><span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">refTransform</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">incTransform</span><span class="p">)</span>
+    <span class="kt">void</span> <span class="n">EdgePenetrationQuery</span><span class="o">::</span><span class="n">populateContactList</span><span class="p">(</span><span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">,</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">refTransform</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">incTransform</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;</span> <span class="n">refCollider</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="c1">//------------------- The contact points between 2 edges are the closest points between the 2 edges --------------------//</span>
-        <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;EdgePenetrationQuery::populateContactList&quot;</span><span class="p">);</span>
+        <span class="c1">//log::debug(&quot;EdgePenetrationQuery::populateContactList&quot;);</span>
 
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">refTransform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="o">*</span><span class="n">refEdge</span><span class="o">-&gt;</span><span class="n">edgePositionPtr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">refTransform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="o">*</span><span class="n">refEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">edgePositionPtr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
@@ -76,8 +77,17 @@
 
         <span class="n">physics_contact</span> <span class="n">contact</span><span class="p">;</span>
 
+        <span class="k">auto</span> <span class="n">refLabel</span> <span class="o">=</span> <span class="n">refEdge</span><span class="o">-&gt;</span><span class="n">label</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">incLabel</span> <span class="o">=</span> <span class="n">incEdge</span><span class="o">-&gt;</span><span class="n">label</span><span class="p">;</span>
+
+        <span class="n">contact</span><span class="p">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">EdgeLabel</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">refLabel</span><span class="p">.</span><span class="n">firstEdge</span><span class="p">.</span><span class="n">first</span><span class="p">,</span> <span class="n">refLabel</span><span class="p">.</span><span class="n">firstEdge</span><span class="p">.</span><span class="n">second</span><span class="p">),</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">incLabel</span><span class="p">.</span><span class="n">nextEdge</span><span class="p">.</span><span class="n">first</span><span class="p">,</span> <span class="n">incLabel</span><span class="p">.</span><span class="n">nextEdge</span><span class="p">.</span><span class="n">second</span><span class="p">));</span>
+
+        <span class="n">contact</span><span class="p">.</span><span class="n">refCollider</span> <span class="o">=</span> <span class="n">refCollider</span><span class="p">;</span>
         <span class="n">contact</span><span class="p">.</span><span class="n">IncWorldContact</span> <span class="o">=</span> <span class="n">incContactPoint</span><span class="p">;</span>
         <span class="n">contact</span><span class="p">.</span><span class="n">RefWorldContact</span> <span class="o">=</span> <span class="n">refContactPoint</span><span class="p">;</span>
+
+        <span class="n">refCollider</span><span class="o">-&gt;</span><span class="n">AttemptFindAndCopyConverganceID</span><span class="p">(</span><span class="n">contact</span><span class="p">);</span>
 
         <span class="n">manifold</span><span class="p">.</span><span class="n">contacts</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">contact</span><span class="p">);</span>
 

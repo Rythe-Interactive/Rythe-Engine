@@ -1,0 +1,13 @@
+.. _exhale_define_ini_8c_1a937bb9c197ca944432e1e019075f7c8c:
+
+Define ini_free
+===============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_ini.c`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: ini_free
