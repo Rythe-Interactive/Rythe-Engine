@@ -37,6 +37,9 @@ namespace legion::core::math
         const color black       { 0.f, 0.f, 0.f, 1.f };
         const color transparent { 0.f, 0.f, 0.f, 0.f };
         const color white       { 1.f, 1.f, 1.f, 1.f };
+        const color lightgrey   { 0.75f, 0.75f, 0.75f, 1.f };
+        const color grey        { 0.5f, 0.5f, 0.5f, 1.f };
+        const color darkgrey    { 0.25f, 0.25f, 0.25f, 1.f };
         const color red         { 1.f, 0.f, 0.f, 1.f };
         const color green       { 0.f, 1.f, 0.f, 1.f };
         const color blue        { 0.f, 0.f, 1.f, 1.f };

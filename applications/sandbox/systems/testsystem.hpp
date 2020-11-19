@@ -170,6 +170,7 @@ public:
         rendering::model_handle directionalLightH;
         rendering::model_handle spotLightH;
         rendering::model_handle pointLightH;
+        rendering::model_handle audioSourceH;
         rendering::model_handle cubeH;
         rendering::model_handle sphereH;
         rendering::model_handle suzanneH;
@@ -181,13 +182,14 @@ public:
         rendering::model_handle planeH;
 
         rendering::material_handle wireframeH;
-        rendering::material_handle vertexH;
+        rendering::material_handle vertexColorH;
 
         rendering::material_handle uvH;
         rendering::material_handle textureH;
         rendering::material_handle directionalLightMH;
         rendering::material_handle spotLightMH;
         rendering::material_handle pointLightMH;
+        rendering::material_handle gizmoMH;
         rendering::material_handle pbrH;
         rendering::material_handle copperH;
         rendering::material_handle aluminumH;
@@ -211,6 +213,7 @@ public:
             directionalLightH = rendering::ModelCache::create_model("directional light", "assets://models/directional-light.obj"_view);
             spotLightH = rendering::ModelCache::create_model("spot light", "assets://models/spot-light.obj"_view);
             pointLightH = rendering::ModelCache::create_model("point light", "assets://models/point-light.obj"_view);
+            audioSourceH = rendering::ModelCache::create_model("audio source", "assets://models/audio-source.obj"_view);
             cubeH = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
             sphereH = rendering::ModelCache::create_model("sphere", "assets://models/sphere.obj"_view);
             suzanneH = rendering::ModelCache::create_model("suzanne", "assets://models/suzanne.obj"_view);
@@ -222,7 +225,7 @@ public:
             planeH = rendering::ModelCache::create_model("plane", "assets://models/plane.obj"_view);
 
             wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.shs"_view);
-            vertexH = rendering::MaterialCache::create_material("vertex", "assets://shaders/position.shs"_view);
+            vertexColorH = rendering::MaterialCache::create_material("vertex color", "assets://shaders/vertexcolor.shs"_view);
             uvH = rendering::MaterialCache::create_material("uv", "assets://shaders/uv.shs"_view);
 
             auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
@@ -234,6 +237,9 @@ public:
 
             pointLightMH = rendering::MaterialCache::create_material("point light", colorshader);
             pointLightMH.set_param("color", math::colors::red);
+
+            gizmoMH = rendering::MaterialCache::create_material("gizmo", colorshader);
+            gizmoMH.set_param("color", math::colors::lightgrey);
 
             textureH = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
             textureH.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
@@ -260,7 +266,7 @@ public:
             aluminumH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-normalHeight.png"_view));
             aluminumH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-MRDAo.png"_view));
             aluminumH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-emissive.png"_view));
-            aluminumH.set_param("material_input.heightScale", 1.f);
+            aluminumH.set_param("material_input.heightScale", 0.f);
             aluminumH.set_param("discardExcess", false);
 
             ironH = rendering::MaterialCache::create_material("iron", pbrShader);
@@ -276,7 +282,7 @@ public:
             slateH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/slate/slate-normalHeight.png"_view));
             slateH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/slate/slate-MRDAo.png"_view));
             slateH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/slate/slate-emissive.png"_view));
-            slateH.set_param("material_input.heightScale", 10.f);
+            slateH.set_param("material_input.heightScale", 1.f);
             slateH.set_param("discardExcess", true);
 
             rockH = rendering::MaterialCache::create_material("rock", pbrShader);
@@ -284,7 +290,7 @@ public:
             rockH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/rock/rock-normalHeight.png"_view));
             rockH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/rock/rock-MRDAo.png"_view));
             rockH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/rock/rock-emissive.png"_view));
-            rockH.set_param("material_input.heightScale", 10.f);
+            rockH.set_param("material_input.heightScale", 1.f);
             rockH.set_param("discardExcess", true);
 
             rock2H = rendering::MaterialCache::create_material("rock 2", pbrShader);
@@ -292,7 +298,7 @@ public:
             rock2H.set_param("material_input.normalHeight", rendering::TextureCache::get_handle("rock-normalHeight.png"));
             rock2H.set_param("material_input.MRDAo", rendering::TextureCache::get_handle("rock-MRDAo.png"));
             rock2H.set_param("material_input.emissive", rendering::TextureCache::get_handle("rock-emissive.png"));
-            rock2H.set_param("material_input.heightScale", 1.f);
+            rock2H.set_param("material_input.heightScale", 0.5f);
             rock2H.set_param("discardExcess", false);
 
             fabricH = rendering::MaterialCache::create_material("fabric", pbrShader);
@@ -308,7 +314,7 @@ public:
             bogH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/bog/bog-normalHeight.png"_view));
             bogH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/bog/bog-MRDAo.png"_view));
             bogH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/bog/bog-emissive.png"_view));
-            bogH.set_param("material_input.heightScale", 10.f);
+            bogH.set_param("material_input.heightScale", 0.5f);
             bogH.set_param("discardExcess", true);
 
             paintH = rendering::MaterialCache::create_material("paint", pbrShader);
@@ -399,24 +405,50 @@ public:
         {
             auto ent = createEntity();
             ent.add_components<rendering::renderable, rendering::light>({ directionalLightH, directionalLightMH }, rendering::light::directional(math::color(1, 1, 0.8f), 10.f));
-            ent.add_components<transform>(position(5, 13, 5), rotation::lookat(math::vec3(1, 1, 1), math::vec3::zero), scale());
+            ent.add_components<transform>(position(20, 20, 20), rotation::lookat(math::vec3(1, 1, 1), math::vec3::zero), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable, rendering::light>({ spotLightH, spotLightMH }, rendering::light::spot(math::colors::green, math::deg2rad(90.f), 10.f));
-            ent.add_components<transform>(position(0.1f, 10, -7), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
+            ent.add_components<rendering::renderable, rendering::light>({ spotLightH, spotLightMH }, rendering::light::spot(math::colors::green, math::deg2rad(45.f), 100.f, 50.f));
+            ent.add_components<transform>(position(-20, 0.5, -20), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable, rendering::light>({ pointLightH, pointLightMH }, rendering::light::point(math::colors::red));
-            ent.add_components<transform>(position(-5, 9, 0), rotation(), scale());
+            ent.add_components<rendering::renderable, rendering::light>({ spotLightH, spotLightMH }, rendering::light::spot(math::colors::green, math::deg2rad(45.f), 100.f, 50.f));
+            ent.add_components<transform>(position(0, 0.5, -20), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable, sah>({ suzanneH, vertexH }, {});
+            ent.add_components<rendering::renderable, rendering::light>({ spotLightH, spotLightMH }, rendering::light::spot(math::colors::green, math::deg2rad(45.f), 100.f, 50.f));
+            ent.add_components<transform>(position(20, 0.5, -20), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, rendering::light>({ pointLightH, pointLightMH }, rendering::light::point(math::colors::red, 100.f));
+            ent.add_components<transform>(position(0, 1, 0), rotation(), scale());
+        }
+
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, rendering::light>({ pointLightH, pointLightMH }, rendering::light::point(math::colors::red, 100.f));
+            ent.add_components<transform>(position(-20, 1, 0), rotation(), scale());
+        }
+
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, rendering::light>({ pointLightH, pointLightMH }, rendering::light::point(math::colors::red, 100.f));
+            ent.add_components<transform>(position(20, 1, 0), rotation(), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ suzanneH, normalH }, {});
             ent.add_components<transform>(position(0, 3, 5.1f), rotation(), scale());
         }
 
@@ -451,7 +483,7 @@ public:
 
         {
             auto ent = createEntity();
-            ent.add_component<rendering::renderable>({ axesH, normalH });
+            ent.add_component<rendering::renderable>({ axesH, vertexColorH });
             ent.add_components<transform>();
         }
 
@@ -491,12 +523,11 @@ public:
             ent.add_components<transform>(position(4, 3, -5.1f), rotation(), scale(2.5f));
         }
 
-        math::mat4 rotMatrix = math::rotate(1.5f * 3.14159265f, math::vec3(0, 1, 0));
         //audioSphereLeft setup
         {
             audioSphereLeft = createEntity();
-            audioSphereLeft.add_component<rendering::renderable>({ cubeH, normalH });
-            audioSphereLeft.add_components<transform>(position(-5, 0, 10), rotation(rotMatrix), scale(0.5));
+            audioSphereLeft.add_component<rendering::renderable>({ audioSourceH, gizmoMH });
+            audioSphereLeft.add_components<transform>(position(-5, 1, 10), rotation(), scale(0.5));
 
             auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo32.wav"_view, { audio::audio_import_settings::channel_processing_setting::split_channels });
 
@@ -507,8 +538,8 @@ public:
         //audioSphereRight setup
         {
             audioSphereRight = createEntity();
-            audioSphereRight.add_component<rendering::renderable>({ cubeH, normalH });
-            audioSphereRight.add_components<transform>(position(5, 0, 10), rotation(rotMatrix), scale(0.5));
+            audioSphereRight.add_component<rendering::renderable>({ audioSourceH, gizmoMH });
+            audioSphereRight.add_components<transform>(position(5, 1, 10), rotation(), scale(0.5));
 
             auto segment = audio::AudioSegmentCache::getAudioSegment("kilogram_channel1");
 
@@ -1552,7 +1583,13 @@ public:
         using namespace audio;
         auto sourceH = audioSphereLeft.get_component_handle<audio_source>();
         audio_source source = sourceH.read();
-        const float g = source.getGain() + action->value * action->input_delta * 10.0f;
+        float g = source.getGain() + action->value * action->input_delta * 10.0f;
+        source.setGain(g);
+        sourceH.write(source);
+
+        sourceH = audioSphereRight.get_component_handle<audio_source>();
+        source = sourceH.read();
+        g = source.getGain() + action->value * action->input_delta * 10.0f;
         source.setGain(g);
         sourceH.write(source);
     }

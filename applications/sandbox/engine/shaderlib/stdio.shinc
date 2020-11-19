@@ -6,6 +6,7 @@
 in vec3 position : SV_POSITION;
 in vec3 normal : SV_NORMAL;
 in vec3 tangent : SV_TANGENT;
+in vec4 vertexcolor : SV_COLOR;
 in vec2 uv : SV_TEXCOORD0;
 in mat4 modelMatrix : SV_MODELMATRIX;
 #endif
@@ -30,6 +31,7 @@ io _L_STDIO
 {
     vec3 position;
     vec3 wvertex;
+    vec4 vertexcolor;
     vec3 normal;
     vec3 wnormal;
     vec3 tangent;
@@ -47,6 +49,7 @@ out _L_STDGEOMFRAG
 {
     vec3 position;
     vec3 wvertex;
+    vec4 vertexcolor;
     vec3 normal;
     vec3 wnormal;
     vec3 tangent;
@@ -290,6 +293,7 @@ void PropagateStdIO()
 {
     _L_stdio.position = position;
     _L_stdio.wvertex = GetWorldPosition();
+    _L_stdio.vertexcolor = vertexcolor;
     _L_stdio.normal = normal;
     _L_stdio.wnormal = GetWorldNormal();
     _L_stdio.tangent = tangent;
@@ -302,6 +306,7 @@ void PropagateStdIO(int index)
 {
     stdout(position) = stdin(index, position);
     stdout(wvertex) = stdin(index, wvertex);
+    stdout(vertexcolor) = stdin(index, vertexcolor);
     stdout(normal) = stdin(index, normal);
     stdout(wnormal) = stdin(index, wnormal);
     stdout(tangent) = stdin(index, tangent);
