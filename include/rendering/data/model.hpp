@@ -19,6 +19,7 @@ namespace legion::rendering
         bool buffered;
         app::gl_id vertexArrayId;
         app::gl_id vertexBufferId;
+        app::gl_id colorBufferId;
         app::gl_id normalBufferId;
         app::gl_id uvBufferId;
         app::gl_id tangentBufferId;
