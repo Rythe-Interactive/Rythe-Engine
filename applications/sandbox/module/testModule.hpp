@@ -20,7 +20,6 @@ public:
             reportSystem<TestSystem>();
             reportComponentType<sah>();
         }
-
     }
 
     virtual priority_type priority() override
