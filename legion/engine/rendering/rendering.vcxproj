@@ -24,6 +24,8 @@
   <ItemGroup>
     <ClInclude Include="components\camera.hpp" />
     <ClInclude Include="components\light.hpp" />
+    <ClInclude Include="components\particle.hpp" />
+    <ClInclude Include="components\particle_emitter.hpp" />
     <ClInclude Include="components\renderable.hpp" />
     <ClInclude Include="data\importers\texture_importers.hpp" />
     <ClInclude Include="data\material.hpp" />
@@ -33,11 +35,13 @@
     <ClInclude Include="detail\tiny_obj_loader.h" />
     <ClInclude Include="data\model.hpp" />
     <ClInclude Include="data\texture.hpp" />
+    <ClInclude Include="module\particle_system_manager.hpp" />
     <ClInclude Include="module\renderingmodule.hpp" />
     <ClInclude Include="pipeline\base\pipeline.hpp" />
     <ClInclude Include="pipeline\base\renderstage.hpp" />
     <ClInclude Include="rendering.hpp" />
     <ClInclude Include="shadercompiler\shadercompiler.hpp" />
+    <ClInclude Include="systems\particle_system_base.hpp" />
     <ClInclude Include="systems\renderer.hpp" />
     <ClInclude Include="util\bindings.hpp" />
     <ClInclude Include="util\matini.hpp" />
