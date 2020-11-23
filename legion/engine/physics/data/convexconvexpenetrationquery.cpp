@@ -2,6 +2,7 @@
 #include <physics/data/convexconvexpenetrationquery.hpp>
 #include <physics/physics_statics.hpp>
 #include <physics/physics_contact.hpp>
+#include <physics/data/contact_vertex.hpp>
 
 namespace legion::physics
 {
@@ -12,16 +13,20 @@ namespace legion::physics
 
     }
 
-    void ConvexConvexPenetrationQuery::populateContactList(physics_manifold& manifold, math::mat4& refTransform, math::mat4 incTransform)
+    void ConvexConvexPenetrationQuery::populateContactList(physics_manifold& manifold, math::mat4& refTransform
+        , math::mat4 incTransform, std::shared_ptr<PhysicsCollider> refCollider)
     {
+        //log::debug("//////ConvexConvexPenetrationQuery::populateContactList");
+
         //------------------------------- get all world vertex positions in incFace -------------------------------------------------//
-        std::vector<math::vec3> outputContactPoints;
+        std::vector<ContactVertex> outputContactPoints;
 
         auto sendToInitialOutput = [&outputContactPoints,&incTransform](HalfEdgeEdge* edge)
         {
             math::vec3 localVertexPosition = *edge->edgePositionPtr;
-            //math::vec3 worldVertexPosition = incTransform * math::vec4(localVertexPosition, 1);
-            outputContactPoints.push_back(incTransform * math::vec4(localVertexPosition, 1));
+            math::vec3 worldVertex = incTransform * math::vec4(localVertexPosition, 1);
+
+            outputContactPoints.push_back(ContactVertex(worldVertex,edge->label));
         };
 
         incFace->forEachEdge(sendToInitialOutput);
@@ -36,33 +41,36 @@ namespace legion::physics
             auto inputContactList = outputContactPoints;
             outputContactPoints.clear();
         
-            PhysicsStatics::SutherlandHodgmanFaceClip(planeNormal, planePosition, inputContactList, outputContactPoints);
+            PhysicsStatics::SutherlandHodgmanFaceClip(planeNormal, planePosition, inputContactList, outputContactPoints,edge);
+
         };
 
         refFace->forEachEdge(clipNeigboringFaceWithOutput);
 
         //-------- get the contact points of the ref polyhedron by projecting the incident contacts to the collision plane ---------//
+        //auto refCollider = manifold.penetrationInformation->isARef ? manifold.colliderA : manifold.colliderB;
 
         for (const auto& incidentContact : outputContactPoints)
         {
-            float distanceToCollisionPlane = PhysicsStatics::PointDistanceToPlane(normal, faceCentroid, incidentContact);
+            float distanceToCollisionPlane = PhysicsStatics::PointDistanceToPlane(normal, faceCentroid, incidentContact.position);
 
             if (distanceToCollisionPlane < constants::contactOffset)
             {
-                math::vec3 referenceContact = incidentContact - normal * distanceToCollisionPlane;
+                math::vec3 referenceContact = incidentContact.position - normal * distanceToCollisionPlane;
 
                 physics_contact contact;
-
-                contact.IncWorldContact = incidentContact;
+                contact.refCollider = refCollider;
+                contact.IncWorldContact = incidentContact.position;
                 contact.RefWorldContact = referenceContact;
+                contact.label = incidentContact.label;
 
-                //log::debug("incidentContact {} ", math::to_string(incidentContact));
+                refCollider->AttemptFindAndCopyConverganceID(contact);
 
                 manifold.contacts.push_back(contact);
              
             }
         }
-
+        //log::debug("//////ConvexConvexPenetrationQuery::populateContactList");
     }
 
 

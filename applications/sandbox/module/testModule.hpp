@@ -1,6 +1,7 @@
 #pragma once
 #include <core/core.hpp>
 #include "../systems/testsystem.hpp"
+#include "../systems/simplecameracontroller.hpp"
 
 #include <core/math/math.hpp>
 
@@ -15,6 +16,7 @@ public:
 
         reportComponentType<sah>();
         reportSystem<TestSystem>();
+        reportSystem<SimpleCameraController>();
     }
 
     virtual priority_type priority() override

@@ -23,8 +23,8 @@ namespace legion::physics
 		/** @brief given the necessary information to create contact points between 2 colliding colliders
 		 * calculates the contact points of the colliders and pushes them into the physics_manifold
 		 */
-		virtual void populateContactList
-		(physics_manifold& manifold,math::mat4& refTransform,math::mat4 incTransform)
+		virtual void populateContactList(physics_manifold& manifold
+			,math::mat4& refTransform,math::mat4 incTransform,std::shared_ptr<PhysicsCollider> refCollider)
 		{
 
 		}

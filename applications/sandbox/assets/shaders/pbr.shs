@@ -1,4 +1,5 @@
 #version 450
+#state CULL BACK
 
 generate(fragment, vertex)
 
@@ -17,16 +18,26 @@ shader(vertex)
 
 shader(fragment)
 {
+    uniform bool discardExcess;
+
     out vec4 fragment_color;
 
     void main(void)
     {
         Camera camera = GetCamera();
+
         vec3 worldNormal = GetWorldNormal();
         Material material = ExtractMaterial(stdio(uv), camera, worldNormal, GetWorldTangent(worldNormal));
 
-        vec3 lighting = GetAllLighting(material, camera, GetWorldPosition(), worldNormal);
+        if(discardExcess)
+            if(material.texcoords.x < 0 || material.texcoords.x > 1 || material.texcoords.y < 0 || material.texcoords.y > 1)
+                discard;
 
-        fragment_color = vec4(GammaCorrect(lighting), material.albedo.a);
+        vec3 lighting = GammaCorrect(GetAllLighting(material, camera, GetWorldPosition()));
+
+        vec3 unitDir = reflect(-normalize(camera.toView), material.normal);
+        lighting += mix(vec3(1.f), vec3(0.2f, 0.4f, 1.0f), clamp(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.5f, 0.f, 1.f)) * pow(1.0 - material.roughness, 4);
+
+        fragment_color = vec4(lighting, material.albedo.a);
     }
 }

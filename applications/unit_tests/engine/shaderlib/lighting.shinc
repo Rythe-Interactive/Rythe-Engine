@@ -18,7 +18,7 @@ struct Light
 	float falloff;		// 4	28
 	vec3 position;		// 12	32
 	float angle;		// 4	44
-	vec3 color;		// 12	48
+	vec3 color;		    // 12	48
 	float meta;		    // 4	60
 };
 

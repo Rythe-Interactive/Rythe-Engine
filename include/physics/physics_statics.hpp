@@ -2,6 +2,8 @@
 #include <core/core.hpp>
 #include <physics/colliders/convexcollider.hpp>
 #include <physics/data/pointer_encapsulator.hpp>
+#include <physics/data/contact_vertex.hpp>
+
 namespace legion::physics
 {
     struct HalfEdgeFace;
@@ -204,21 +206,33 @@ namespace legion::physics
         /** @brief Given a 3D plane, clips the vertices in the inputList and places the results in the output list
          *
          */
-        static void SutherlandHodgmanFaceClip(math::vec3& planeNormal, math::vec3& planePosition,
-            std::vector<math::vec3>& inputList, std::vector<math::vec3>& outputList)
+        static void SutherlandHodgmanFaceClip( math::vec3& planeNormal, math::vec3& planePosition,
+            std::vector<ContactVertex>& inputList, std::vector<ContactVertex>& outputList, HalfEdgeEdge* clippingEdge)
         {
             for (size_t i = 0; i < inputList.size(); i++)
             {
-                math::vec3 currentVertex = inputList.at(i);
-                math::vec3 nextVertex = i + 1 >= inputList.size() ? inputList.at(0) : inputList.at(i + 1);
+                ContactVertex& currentVertex = inputList.at(i);
+                ContactVertex& nextVertex = i + 1 >= inputList.size() ? inputList.at(0) : inputList.at(i + 1);
 
-                bool isCurrentVertexUnderPlane = !IsPointAbovePlane(planeNormal, planePosition, currentVertex);
-                bool isNextVertexUnderPlane = !IsPointAbovePlane(planeNormal, planePosition, nextVertex);
+
+                float currentVertDistFromPlane = PointDistanceToPlane(planeNormal, planePosition, currentVertex.position);
+                float nextVertDistFromPlane = PointDistanceToPlane(planeNormal, planePosition, nextVertex.position);
+
+                //at a certain threshold, the vertices can be considered to be on the plane for numerical robustness reasons
+                if (math::abs(currentVertDistFromPlane) < constants::sutherlandHodgmanClippingThreshold
+                    || math::abs(nextVertDistFromPlane) < constants::sutherlandHodgmanClippingThreshold)
+                {
+                    outputList.push_back(nextVertex);
+                    continue;
+                }
+
+                bool isCurrentVertexUnderPlane = currentVertDistFromPlane < 0.0f;
+                bool isNextVertexUnderPlane = nextVertDistFromPlane < 0.0f;
 
                 //we always check clipping with a line that goes from the point below the plane to the point outside the plane.
                 //We do this mostly for numerical robustness reasons.
-                const math::vec3& pointAbovePlane = isCurrentVertexUnderPlane ? nextVertex : currentVertex;
-                const math::vec3& pointBelowPlane = isCurrentVertexUnderPlane ? currentVertex : nextVertex;
+                const math::vec3& pointAbovePlane = isCurrentVertexUnderPlane ? nextVertex.position : currentVertex.position;
+                const math::vec3& pointBelowPlane = isCurrentVertexUnderPlane ? currentVertex.position : nextVertex.position;
 
                 if (isCurrentVertexUnderPlane && isNextVertexUnderPlane)
                 {
@@ -234,7 +248,11 @@ namespace legion::physics
                     if (FindLineToPlaneIntersectionPoint(planeNormal, planePosition,
                         pointBelowPlane, pointAbovePlane, intersectionPoint))
                     {
-                        outputList.push_back(intersectionPoint);
+                        auto currentVertexLabel = currentVertex.label;
+                        auto nextVertexLabel = clippingEdge->label;
+
+                        EdgeLabel label(currentVertexLabel.firstEdge, nextVertexLabel.nextEdge);
+                        outputList.push_back(ContactVertex(intersectionPoint, label));
                     }
 
                     outputList.push_back(nextVertex);
@@ -249,7 +267,11 @@ namespace legion::physics
                     if (FindLineToPlaneIntersectionPoint(planeNormal, planePosition,
                         pointBelowPlane, pointAbovePlane, intersectionPoint))
                     {
-                        outputList.push_back(intersectionPoint);
+                        auto currentVertexLabel = currentVertex.label;
+                        auto nextVertexLabel = clippingEdge->label;
+
+                        EdgeLabel label(currentVertexLabel.firstEdge, nextVertexLabel.nextEdge);
+                        outputList.push_back(ContactVertex(intersectionPoint, label));
                     }
                 }
 

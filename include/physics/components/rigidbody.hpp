@@ -2,7 +2,7 @@
 
 #include <core/core.hpp>
 #include <physics/physicsconstants.hpp>
-#include <physics/components/physics_component.hpp>
+
 
 namespace legion::physics
 {
@@ -29,7 +29,7 @@ namespace legion::physics
         math::vec3 globalCentreOfMass = math::vec3(0.0);
 
         float restitution = 0.5f;
-        float friction = 0.0f;
+        float friction = 0.15f;
 
         bool isAsleep;
 

@@ -5,12 +5,8 @@ namespace legion::physics
 {
     HalfEdgeFace::HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal) : startEdge{ newStartEdge }, normal{ newNormal }
     {
-        auto setToFaceFunc = [this](HalfEdgeEdge* edge)
-        {
-            edge->face = this;
-        };
-
-        forEachEdge(setToFaceFunc);
+        /*log::debug("HalfEdgeFace::HalfEdgeFace");*/
+        static int faceCount = 0;
 
         math::vec3 faceCenter{ 0.0f };
         int edgeCount = 0;
@@ -24,6 +20,26 @@ namespace legion::physics
         forEachEdge(calculateFaceCentroid);
 
         centroid = faceCenter/static_cast<float>( edgeCount);
+
+        int currentEdgeId = 0;
+
+        auto initializeEdgeToFaceFunc = [this,&currentEdgeId,edgeCount](HalfEdgeEdge* edge)
+        {
+            edge->face = this;
+
+            int nextID = currentEdgeId + 1 < edgeCount ? currentEdgeId + 1 : 0;
+
+            EdgeLabel label
+            (std::make_pair(faceCount, currentEdgeId), std::make_pair(faceCount, nextID));
+
+            edge->label = std::move(label);
+
+            currentEdgeId++;
+        };
+
+        forEachEdge(initializeEdgeToFaceFunc);
+
+        faceCount++;
        
     }
 

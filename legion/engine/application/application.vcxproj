@@ -96,10 +96,7 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\" /y /i /r
-copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"
-copy /Y "$(SolutionDir)xcopyexclude" ".\"
-xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y
-del ".\xcopyexclude"</Command>
+copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>
@@ -107,6 +104,11 @@ del ".\xcopyexclude"</Command>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
     </Lib>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
+xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y
+del ".\xcopyexclude"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -130,10 +132,7 @@ del ".\xcopyexclude"</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\" /y /i /r
-copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"
-copy /Y "$(SolutionDir)xcopyexclude" ".\"
-xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y
-del ".\xcopyexclude"</Command>
+copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>
@@ -141,6 +140,11 @@ del ".\xcopyexclude"</Command>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
     </Lib>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
+xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y
+del ".\xcopyexclude"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
