@@ -147,7 +147,15 @@ namespace legion::core::filesystem
             return strpath_manip::subdir(m_root_path, get_target());
         }
 
-        L_NODISCARD std::set<std::string> ls() const noexcept override{ return {}; }
+        L_NODISCARD std::set<std::string> ls() const noexcept override
+        {
+            std::set<std::string> entries;
+            for (const auto & entry : std::filesystem::directory_iterator(strpath_manip::subdir(m_root_path,get_target())))
+            {
+                entries.insert(entry.path().string());
+            }
+            return entries;
+        }
         common::result<basic_resource, fs_error> get(interfaces::implement_signal_t) noexcept override
         {
             using common::Err, common::Ok;

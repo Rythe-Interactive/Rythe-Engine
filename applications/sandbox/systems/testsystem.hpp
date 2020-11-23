@@ -569,25 +569,9 @@ public:
         //setupPhysicsCRUnitTest(cubeH, uvH);
 
 
-        auto sceneEntity = createEntity();
-        std::vector<ecs::entity_handle> children;
-        for (size_type i = 0; i < m_ecs->world.child_count(); i++)
-        {
-            children.push_back(m_ecs->world.get_child(i));
-        }
-        for (auto child : children)
-        {
-            if (child != sceneEntity)
-            {
-                child.set_parent(sceneEntity);
-            }
-        }
-
-        scenemanagement::SceneManager::createScene("Main", sceneEntity);
+        scenemanagement::SceneManager::createScene("Main");
 
         //sceneEntity.destroy();
-
-        //scenemanagement::SceneManager::loadScene("ImposterFlake");
 
         //CreateCubeStack(3, 2, 2, math::vec3(0, -3.0f, 8.0f), math::vec3(1, 1, 1)
         //    ,cubeParams, 0.1f, cubeH, wireframeH);
@@ -1717,6 +1701,7 @@ public:
                 entity.write_component(rot);
             }
         }
+        //scenemanagement::SceneManager::createScene("Main");
     }
 
     void drawInterval(time::span deltaTime)
@@ -1930,7 +1915,6 @@ public:
 
     }
 
-
     void FrictionTestActivate(activateFrictionTest* action)
     {
         if (action->value)
@@ -2026,7 +2010,5 @@ public:
             }
         }
     }
-
-
 
 };

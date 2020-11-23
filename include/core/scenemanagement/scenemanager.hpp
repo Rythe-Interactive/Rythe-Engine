@@ -1,6 +1,8 @@
 #pragma once
 #include <core/engine/system.hpp>
 #include <core/ecs/component_handle.hpp>
+#include <core/filesystem/filesystem.hpp>
+#include <core/filesystem/view.hpp>
 
 namespace legion::core::scenemanagement
 {
@@ -9,9 +11,11 @@ namespace legion::core::scenemanagement
     class SceneManager final : public core::System<SceneManager>
     {
     public:
-        int sceneCount;
+        static int sceneCount;
+        static std::string currentScene;
         static std::unordered_map < id_type, std::string> sceneNames;
         static std::unordered_map < id_type, ecs::component_handle <scene > > sceneList;
+   /*     fs::view fileView;*/
 
         SceneManager() = default;
 
@@ -20,7 +24,29 @@ namespace legion::core::scenemanagement
           */
         virtual void setup()
         {
-
+            fs::view fileView = fs::view("assets://scenes");
+            auto files = fileView.ls();
+            if (files == common::valid)
+            {
+                for (auto file : files.decay())
+                {
+                    log::debug("I am  File");
+                    log::debug(file.get_extension().decay());
+                    if (file.get_extension() == common::valid)
+                    {
+                        log::debug("My Extension is legal");
+                        log::debug(file.get_extension().decay());
+                        if (file.get_extension().decay() == ".cornflake")
+                        {
+                            auto fileName = file.get_filename().decay();
+                            sceneNames.emplace(nameHash(fileName), fileName);
+                            log::debug(fileName);
+                            std::cout << fileName;
+                        }
+                    }
+                }
+            }
+            log::debug("This Setup Works");
         }
 
         /**@brief Updates the SceneManager.
@@ -50,6 +76,12 @@ namespace legion::core::scenemanagement
          */
         static bool loadScene(const std::string& name);
 
+        /**@brief Serializes a scene to disk
+          * @param name: string of the name of the scene you wish to save
+          * @param ent: a specific entity to serialize
+          * @returns a bool signifying whether it was successful
+         */
+        static bool saveScene(const std::string& name, ecs::entity_handle& ent);
 
         /**@brief Gets a scene
           * @param name string of the scenes name that you wish to get
@@ -63,15 +95,5 @@ namespace legion::core::scenemanagement
          */
         static ecs::entity_handle getSceneEntity(std::string name);
 
-
-
-        /**@brief Serializes a scene to disk
-          * @param .name of the file to save as, default is the scenes name
-          * @note Not yet implemented
-          */
-        void saveScene()
-        {
-
-        }
     };
 }

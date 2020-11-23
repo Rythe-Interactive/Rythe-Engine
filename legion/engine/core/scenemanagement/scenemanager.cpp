@@ -4,19 +4,33 @@
 
 namespace legion::core::scenemanagement
 {
+    int SceneManager::sceneCount;
+    std::string SceneManager::currentScene;
     std::unordered_map < id_type, std::string> SceneManager::sceneNames;
     std::unordered_map<id_type, ecs::component_handle<scene>> SceneManager::sceneList;
 
-
-
     bool SceneManager::createScene(const std::string& name)
     {
+        auto sceneEntity = m_ecs->createEntity();
+        std::vector<ecs::entity_handle> children;
+        for (size_type i = 0; i < m_ecs->world.child_count(); i++)
+        {
+            children.push_back(m_ecs->world.get_child(i));
+        }
+        for (auto child : children)
+        {
+            if (child != sceneEntity)
+            {
+                child.set_parent(sceneEntity);
+            }
+        }
+
         scene s;
         s.id = nameHash(name);
         sceneNames.emplace(s.id, name);
-        auto sceneHandle = m_ecs->createEntity().add_component<scenemanagement::scene>(s);
-        sceneList.emplace(nameHash(name), sceneHandle);
-        return true;
+        sceneEntity.add_component<scenemanagement::scene>(s);
+        sceneList.emplace(nameHash(name), sceneEntity);
+        return SceneManager::saveScene(name, sceneEntity);
     }
 
     bool SceneManager::createScene(const std::string& name, ecs::entity_handle& ent)
@@ -29,10 +43,9 @@ namespace legion::core::scenemanagement
             auto sceneHandle = ent.add_component<scenemanagement::scene>(s);
             sceneList.emplace(nameHash(name), sceneHandle);
 
-            std::ofstream outFile("assets/scenes/"+name+".cornflake");
-            serialization::SerializationUtil::JSONSerialize<ecs::entity_handle>(outFile, ent);
+            SceneManager::sceneCount++;
             //true if entity does not have the scene component
-            return true;
+            return SceneManager::saveScene(name, ent);
         }
         //false if it doesn't
         return false;
@@ -44,18 +57,25 @@ namespace legion::core::scenemanagement
         {
             std::ifstream inFile("assets/scenes/" + name + ".cornflake");
             serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
+            SceneManager::currentScene = name;
+            return true;
         }
-        else
+       /* else
         {
             std::ifstream inFile("assets/scenes/" + name + ".cornflake");
             serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
             log::warn("Scene " + name + ".cornflake does not exist in our scenelist, but a file does");
-        }
-        return true;
+            return true;
+        }*/
+        return false;
     }
 
-
-
+    bool SceneManager::saveScene(const std::string& name, ecs::entity_handle& ent)
+    {
+        std::ofstream outFile("assets/scenes/" + name + ".cornflake");
+        serialization::SerializationUtil::JSONSerialize<ecs::entity_handle>(outFile, ent);
+        return true;
+    }
 
     ecs::component_handle<scene> SceneManager::getScene(std::string name)
     {

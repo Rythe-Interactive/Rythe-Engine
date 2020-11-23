@@ -220,6 +220,35 @@ namespace legion::core::filesystem
         return find(identifier);
     }
 
+    common::result_decay_more<std::vector<view>, fs_error> view::ls() const
+    {
+        using common::Err, common::Ok;
+
+        //decay overloads the operator of ok_type and operator== for valid_t
+        using decay = common::result_decay_more<std::vector<view>, fs_error>;
+
+        //get solution
+        auto result = make_solution();
+        if (result.has_err()) Err(result.get_error());
+
+        //get resolver of solution
+        auto resolver = build();
+        if (resolver == nullptr) return decay(Err(legion_fs_error("unable to get required filesystem to get resource!")));
+
+        //get & check traits
+        const auto traits = resolver->get_traits();
+        if (traits.is_valid && traits.exists)
+        {
+            std::vector<view> results;
+            for (auto entry : resolver->ls())
+            {
+                results.emplace_back(entry);
+            }
+            return decay(Ok(results));
+        }
+        return decay(Err(legion_fs_error("invalid file traits: (not valid) or (does not exist) or (cannot be read)")));
+    }
+
     std::string view::create_identifier(const navigator::solution::iterator& e) const
     {
         //iterate through path and create the ident for the provider
