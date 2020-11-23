@@ -102,6 +102,11 @@ namespace legion::core::compute
             but we still need to read it
 
         */
+
+        //first check if the buffer has data
+        if(!buffer.m_data)
+            return *this;
+
         cl_int ret;
         switch (buffer.m_type)
         {
