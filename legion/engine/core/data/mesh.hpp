@@ -34,6 +34,7 @@ namespace legion::core
     {
         std::string fileName;
         std::vector<math::vec3> vertices;
+        std::vector<math::color> colors;
         std::vector<math::vec3> normals;
         std::vector<math::vec2> uvs;
         std::vector<math::vec3> tangents;

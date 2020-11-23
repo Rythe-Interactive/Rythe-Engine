@@ -15,12 +15,14 @@ namespace legion::core::detail
     struct vertex_hash
     {
         id_type hash;
-        vertex_hash(math::vec3 vertex, math::vec3 normal, math::vec2 uv)
+        vertex_hash(math::vec3 vertex, math::color color, math::vec3 normal, math::vec2 uv)
         {
             std::hash<math::vec3> vec3Hasher;
+            std::hash<math::color> colorHasher;
             std::hash<math::vec2> vec2Hasher;
             hash = 0;
             math::detail::hash_combine(hash, vec3Hasher(vertex));
+            math::detail::hash_combine(hash, colorHasher(color));
             math::detail::hash_combine(hash, vec3Hasher(normal));
             math::detail::hash_combine(hash, vec2Hasher(uv));
         }
@@ -128,13 +130,18 @@ namespace legion::core
 
                 // Extract the actual vertex data. (We flip the X axis to convert it to our left handed coordinate system.)
                 math::vec3 vertex(-attributes.vertices[vertexIndex + 0], attributes.vertices[vertexIndex + 1], attributes.vertices[vertexIndex + 2]);
+
+                math::color color = math::colors::white;
+                if (vertexIndex + 2 < attributes.colors.size())
+                    color = math::color(attributes.colors[vertexIndex + 0], attributes.colors[vertexIndex + 1], attributes.colors[vertexIndex + 2]);
+
                 math::vec3 normal(-attributes.normals[normalIndex + 0], attributes.normals[normalIndex + 1], attributes.normals[normalIndex + 2]);
                 math::vec2 uv{};
                 if (uvIndex + 1 < attributes.texcoords.size())
                     uv = math::vec2(attributes.texcoords[uvIndex + 0], attributes.texcoords[uvIndex + 1]);
 
                 // Create a hash to check for doubles.
-                detail::vertex_hash hash(vertex, normal, uv);
+                detail::vertex_hash hash(vertex, color, normal, uv);
 
                 // Use the properties of sparse containers to check for duplicate items.
                 if (indices[hash] >= vertices.size() || vertices[indices[hash]] != hash)
@@ -145,6 +152,7 @@ namespace legion::core
 
                     // Append vertex data.
                     data.vertices.push_back(vertex);
+                    data.colors.push_back(color);
                     data.normals.push_back(normal);
                     data.uvs.push_back(uv);
                 }
