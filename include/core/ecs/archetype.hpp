@@ -42,6 +42,16 @@ namespace legion::core::ecs
             return std::get<component_handle<T>>(handles);
         }
 
+        bool valid()
+        {
+           return std::apply([](auto&&... args) {return(args.valid() && ...); }, handles);
+        }
+
+        operator bool()
+        {
+            return valid();
+        }
+
     private:
         static std::tuple<component_handle<component_type>, component_handle<component_types>...> create(EcsRegistry* registry, id_type entityId);
         static std::tuple<component_handle<component_type>, component_handle<component_types>...> create(EcsRegistry* registry, id_type entityId, component_type&& defaultValue, component_types&&... defaultValues);

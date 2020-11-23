@@ -1,7 +1,7 @@
 #pragma once
 #include <core/math/math.hpp>
 #include <core/ecs/archetype.hpp>
-
+#include <core/data/mesh.hpp>
 #include <core/logging/logging.hpp>
 
 #include <cereal/types/unordered_map.hpp>
@@ -163,6 +163,37 @@ namespace legion::core
             auto& [positionH, rotationH, scaleH] = handles;
             return math::compose(scaleH.read(), rotationH.read(), positionH.read());
         }
+    };
+
+    struct velocity : public math::vec3
+    {
+        velocity() : math::vec3(0, 0, 0) {}
+        velocity(const velocity&) = default;
+        velocity(velocity&&) = default;
+        velocity(const math::vec3& src) : math::vec3(src) {}
+        velocity(float x, float y, float z) : math::vec3(x, y, z) {}
+        velocity(float v) : math::vec3(v) {}
+        velocity& operator=(const velocity&) = default;
+        velocity& operator=(velocity&&) = default;
+        velocity& operator=(const math::vec3& src)
+        {
+            x = src.x;
+            y = src.y;
+            z = src.z;
+            return *this;
+        }
+        velocity& operator=(math::vec3&& src)
+        {
+            x = src.x;
+            y = src.y;
+            z = src.z;
+            return *this;
+        }
+    };
+
+    struct mesh_filter : public mesh_handle
+    {
+        bool operator==(const mesh_filter& other) const { return id == other.id; }
     };
 }
 

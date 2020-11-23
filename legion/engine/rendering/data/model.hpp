@@ -66,6 +66,11 @@ namespace legion::rendering
     public:
         static void buffer(id_type id, app::gl_id matrixBuffer);
         static model_handle create_model(const std::string& name, const fs::view& file, mesh_import_settings settings = default_mesh_settings);
+        static model_handle create_model(const std::string& name);
+        static model_handle create_model(const std::string& name, id_type meshId);
+        static model_handle create_model(id_type meshId);
+        static model_handle create_model(const std::string& name, mesh_handle mesh);
+        static model_handle create_model(mesh_handle mesh);
         static model_handle get_handle(const std::string& name);
         static model_handle get_handle(id_type id);
         static mesh_handle get_mesh(const std::string& name);
