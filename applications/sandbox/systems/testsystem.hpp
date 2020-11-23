@@ -126,25 +126,7 @@ public:
     virtual void setup()
     {
 //#pragma region OpenCL
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 //        std::vector<int> ints;
 //
 //
@@ -165,18 +147,7 @@ public:
 //
 //            delete[] buf;
 //        }
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 //
 //        // split the integers into two datasets
 //        std::vector<int> first_ints(ints.begin(), ints.begin() + ints.size() / 2);
@@ -188,25 +159,17 @@ public:
 //        // get an appropriately sized output buffer
 //        std::vector<int> results(to_process);
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 //
 //        // import some names
-//        using compute::in,compute::out;
-//
-//        log::debug("Loading OpenCL kernel");
-//
-//        // create opencl-"function"
-//        auto vector_add = fs::view("assets://kernels/vadd_kernel.cl").load_as<compute::function>("vector_add");
-//
-//        log::debug ("Done loading OpenCL kernel");
+        using compute::in,compute::out;
+
+        log::debug("Loading OpenCL kernel");
+
+        // create opencl-"function"
+        auto vector_add = fs::view("assets://kernels/pointRasterizer.cl").load_as<compute::function>("Main");
+
+        log::debug ("Done loading OpenCL kernel");
 //
 //        #if 0
 //
@@ -221,14 +184,7 @@ public:
 //            }
 //        #endif
 //
-//
-//
-//
-//
-//
-//
-//
-//
+
 //
 //        log::debug("Creating hardware buffers");
 //
@@ -2212,7 +2168,7 @@ public:
                     }
 
 
-                    physCollider->collisionsFound.clear();
+                    //physCollider->collisionsFound.clear();
                 }
 
             }

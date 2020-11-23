@@ -26,11 +26,14 @@
     <ClInclude Include="module\testmodule.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="test_filesystem.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\PointCloudTestSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\test_filesystem.hpp">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
