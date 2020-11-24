@@ -18,10 +18,12 @@ shader(fragment)
 {
     out vec4 fragment_color;
 
+    uniform vec4 skycolor;
+
     void main(void)
     {
         vec3 unitDir = normalize(stdin(position));
 
-        fragment_color = vec4(mix(vec3(1.f), vec3(0.2f, 0.4f, 1.0f), clamp(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.5f, 0.f, 1.f)), 1.f);
+        fragment_color = vec4(mix(vec3(length(skycolor.rgb)), skycolor.rgb, clamp(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.5f, 0.f, 1.f)), 1.f);
     }
 }
