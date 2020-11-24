@@ -18,4 +18,10 @@ namespace legion::core
     {
         virtual common::result_decay_more<mesh, fs_error> load(const filesystem::basic_resource& resource, mesh_import_settings&& settings) override;
     };
+
+
+    struct gltf_mesh_loader : public filesystem::resource_converter<mesh, mesh_import_settings>
+    {
+        virtual common::result_decay_more<mesh, fs_error> load(const filesystem::basic_resource& resource, mesh_import_settings&& settings) override;
+    };
 }

@@ -1,6 +1,10 @@
 #if !defined(DOXY_EXCLUDE)
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
+#define TINYGLTF_IMPLEMENTATION
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <tiny_gltf.h> 
 #endif
 
 #include <core/data/importers/mesh_importers.hpp>
@@ -179,5 +183,13 @@ namespace legion::core
 
         // Construct and return the result.
         return decay(Ok(data));
+    }
+
+
+    common::result_decay_more<mesh, fs_error> gltf_mesh_loader::load(const filesystem::basic_resource& resource, mesh_import_settings&& settings)
+    {
+        using common::Err, common::Ok;
+        // decay overloads the operator of ok_type and operator== for valid_t.
+        using decay = common::result_decay_more<mesh, fs_error>;
     }
 }
