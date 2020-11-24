@@ -40,7 +40,7 @@ namespace legion::core::compute
 
             using dimension = std::variant<size_type,d2,d3>;
 
-            Kernel(Program*, cl_kernel);
+            Kernel(Program*, cl_kernel) : m_global_size(size_type(0)){};
 
             /**
              * @brief Determines the "Local Work Size", aka how many Kernels should run in parallel
@@ -187,7 +187,7 @@ namespace legion::core::compute
             }
 
 
-            dimension m_global_size = 0;
+            dimension m_global_size;
             size_type m_local_size;
 
 

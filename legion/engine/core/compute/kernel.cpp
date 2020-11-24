@@ -227,7 +227,7 @@ namespace legion::core::compute
         m_default_mode(buffer_type::READ_BUFFER),
         m_prog(program),
         m_func(kernel),
-        m_global_size(0),
+        m_global_size(size_type(0)),
         m_local_size(64)
     {
         m_queue = program->make_cq();
