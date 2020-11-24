@@ -30,17 +30,16 @@ namespace legion::core::scenemanagement
             {
                 for (auto file : files.decay())
                 {
-                    log::debug("I am  File");
+                    log::debug("I am file");
                     if (file.get_extension() == common::valid)
                     {
-                        log::debug("My Extension is legal");
+                        log::debug("My Extension is valid");
                         log::debug(file.get_extension().decay());
                         if (file.get_extension().decay() == ".cornflake")
                         {
                             auto fileName = file.get_filename().decay();
                             sceneNames.emplace(nameHash(fileName), fileName);
                             log::debug(fileName);
-                            std::cout << fileName;
                         }
                     }
                 }

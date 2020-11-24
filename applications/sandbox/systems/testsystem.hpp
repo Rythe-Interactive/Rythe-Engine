@@ -72,6 +72,8 @@ struct activateFrictionTest : public app::input_action<activateFrictionTest> {};
 struct extendedPhysicsContinue : public app::input_action<extendedPhysicsContinue> {};
 struct nextPhysicsTimeStepContinue : public app::input_action<nextPhysicsTimeStepContinue> {};
 
+int num = 0;
+
 class TestSystem final : public System<TestSystem>
 {
 public:
@@ -570,8 +572,12 @@ public:
 
 
         scenemanagement::SceneManager::createScene("Main");
+        log::debug("Created a scene");
 
-        //sceneEntity.destroy();
+
+        scenemanagement::SceneManager::loadScene("Main");
+        log::debug("Finished loading a scene");
+
 
         //CreateCubeStack(3, 2, 2, math::vec3(0, -3.0f, 8.0f), math::vec3(1, 1, 1)
         //    ,cubeParams, 0.1f, cubeH, wireframeH);
@@ -1701,7 +1707,13 @@ public:
                 entity.write_component(rot);
             }
         }
-        //scenemanagement::SceneManager::createScene("Main");
+        //if (num < 1)
+        //{
+
+        scenemanagement::SceneManager::loadScene("Main");
+        log::debug("Finished loading a scene");
+        //    num++;
+        //}
     }
 
     void drawInterval(time::span deltaTime)

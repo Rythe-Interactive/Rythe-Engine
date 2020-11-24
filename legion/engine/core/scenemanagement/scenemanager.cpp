@@ -5,7 +5,7 @@
 namespace legion::core::scenemanagement
 {
     int SceneManager::sceneCount;
-    std::string SceneManager::currentScene;
+    std::string SceneManager::currentScene = "Main";
     std::unordered_map < id_type, std::string> SceneManager::sceneNames;
     std::unordered_map<id_type, ecs::component_handle<scene>> SceneManager::sceneList;
 
@@ -55,18 +55,42 @@ namespace legion::core::scenemanagement
     {
         if (SceneManager::getScene(name))
         {
+            log::debug("Starting destruction of scene");
+            m_ecs->world.get_child(0).destroy();
+            log::debug("Done destroying!");
+
+            scene s;
+            s.id = nameHash(name);
+            sceneNames.emplace(s.id, name);
+            auto sceneEntity = m_ecs->createEntity();
+            sceneEntity.add_component<scenemanagement::scene>(s);
+            m_ecs->world.add_child(sceneEntity);
+
             std::ifstream inFile("assets/scenes/" + name + ".cornflake");
             serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
             SceneManager::currentScene = name;
             return true;
         }
-       /* else
+        else
         {
-            std::ifstream inFile("assets/scenes/" + name + ".cornflake");
+            log::debug("Starting destruction of scene");
+            m_ecs->world.get_child(0).destroy();
+            log::debug("Done destroying!");
+
+            scene s;
+            s.id = nameHash(name);
+            sceneNames.emplace(s.id, name);
+            auto sceneEntity = m_ecs->createEntity();
+            sceneEntity.add_component<scenemanagement::scene>(s);
+            m_ecs->world.add_child(sceneEntity);
+
+           /* std::ifstream inFile("assets/scenes/" + name + ".cornflake");
             serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
-            log::warn("Scene " + name + ".cornflake does not exist in our scenelist, but a file does");
+            log::debug("Scene " + name + ".cornflake does not exist in our scenelist, but a file does");*/
+            SceneManager::currentScene = name;
+
             return true;
-        }*/
+        }
         return false;
     }
 
