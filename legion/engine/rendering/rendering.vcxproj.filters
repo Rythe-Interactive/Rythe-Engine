@@ -42,6 +42,9 @@
     <ClCompile Include="util\ini.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="systems\particle_system_base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\renderingmodule.hpp">
