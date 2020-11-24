@@ -20,11 +20,12 @@ public:
     struct player_fly : public app::input_axis<player_fly> {};
     struct player_look_x : public app::input_axis<player_look_x> {};
     struct player_look_y : public app::input_axis<player_look_y> {};
-private:
-    const int samplesPerTriangle=10;
+    const int samplesPerTriangle = 3;
+    const int seed = 0;
+
     PointCloudTestSystem()
     {
-        app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
+        app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1, 1), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
     }
     // struct player_move : public app::input_action<player_move> {};
 
@@ -32,7 +33,7 @@ private:
     virtual void setup() override
     {
         log::debug("Start Point Cloud Test System setup");
-
+        srand(seed);
         using compute::in, compute::out;
 
 
@@ -56,7 +57,6 @@ private:
 
         log::debug("Done loading OpenCL kernel");
 
-
         log::debug("loading models");
         rendering::material_handle colorMat;
         {
@@ -76,68 +76,89 @@ private:
         auto cache = MeshCache::get_handle("cube");
         auto m = cache.get();
         auto verts = m.second.vertices;
+        auto indices = m.second.indices;
         int vertexCount = verts.size();
+        //Create some info 
+        size_t triangle_count = indices.size() / 3;
+        size_t process_Size = triangle_count;
+        size_t points_Generated = (triangle_count * samplesPerTriangle);
+
+        log::debug("mesh indices count: " + std::to_string(indices.size()));
+        /*   log::debug("mesh indices  : ");
+           for (size_t i = 0; i < indices.size(); i++)
+           {
+               log::info(indices.at(i));
+           }*/
+
         log::debug("vertex count " + std::to_string(vertexCount));
+        /* log::debug("vertecies: ");
+         for (size_t i = 0; i < vertexCount; i++)
+         {
+             log::debug(verts.at(i));
+         }*/
 
-        std::vector<float> singleVertValue(vertexCount * 3);
-        /*    for (size_t i = 0; i < vertexCount; i++)
-            {
-                singleVertValue[i*3] = verts.at(i * 3).x;
-                singleVertValue[i*3] = verts.at(i * 3 + 1).y;
-                singleVertValue[i*] = verts.at(i * 3 + 2).z;
-            }*/
-            //Create buffers
-    //        auto vertBuffer = compute::Context::createBuffer(singleVertValue, compute::buffer_type::READ_BUFFER, "vertices");
+
+        std::vector<uint> seeds(process_Size);
+        for (size_t i = 0; i < process_Size; i++)
+        {
+            seeds.at(i) = std::rand();
+        }
+
+        //Create buffers
         auto vertBuffer = compute::Context::createBuffer(verts, compute::buffer_type::READ_BUFFER, "vertices");
-
-        //std::vector<float> result(vertexCount*3);
-        std::vector<math::vec3> result(vertexCount);
-
+        auto indexBuffer = compute::Context::createBuffer(indices, compute::buffer_type::READ_BUFFER, "indices");
+        auto seedBuffer = compute::Context::createBuffer(seeds, compute::buffer_type::READ_BUFFER, "seed");
+        std::vector<math::vec4> result(points_Generated);
         auto resultBuffer = compute::Context::createBuffer(result, compute::buffer_type::WRITE_BUFFER, "points");
 
         //get size, process r vertecies at 1 
-        size_t process_Size = (vertexCount);
+
+         //  process_Size = 1;
         //execute
-        auto code1 = computeShader(vertexCount/3, vertBuffer, resultBuffer);
+        auto code1 = computeShader(process_Size, vertBuffer, indexBuffer, seedBuffer, resultBuffer);
+        log::info("samples per triangle:  " + std::to_string(samplesPerTriangle));
+
+        log::info("generated " + std::to_string(points_Generated) + " sample points:");
         if (code1.valid())
         {
-           /* for (size_t i = 0; i < vertexCount; i++)
+            for (size_t i = 0; i < points_Generated; i++)
             {
-                log::debug(std::to_string(verts.at(i).x) + ", " + std::to_string(verts.at(i).y) + ", " + std::to_string(verts.at(i).z));
-                log::info("got {}", result.at(i));
-            }*/
+                int index = indices.at(i);
+                log::debug(std::to_string(verts.at(index).x) + ", " + std::to_string(verts.at(index).y) + ", " + std::to_string(verts.at(index).z));
+                log::info(std::to_string(i) + " got {}", result.at(i));
+            }
         }
 
-      //  debug::debug_line(math::vec3(0, 0, 0), math::vec3(10, 10, 10));
+        //   (math::vec3(0, 0, 0), math::vec3(10, 10, 10));
 
 
-               //auto ent = createEntity();
-               //ent.add_component<renderable>({ ModelCache::get_handle("cube"), colorMat });
-               //ent.add_components<transform>(position(-10, 0, 0), rotation(), scale(500.f));
+                  //auto ent = createEntity();
+                  //ent.add_component<renderable>({ ModelCache::get_handle("cube"), colorMat });
+                  //ent.add_components<transform>(position(-10, 0, 0), rotation(), scale(500.f));
 
 
-               //app::InputSystem::createBinding<player_move>(app::inputmap::method::W, 1.f);
-               //app::InputSystem::createBinding<player_move>(app::inputmap::method::S, -1.f);
-               //app::InputSystem::createBinding<player_move>(app::inputmap::method::W, 1.f);
-               //app::InputSystem::createBinding<player_move>(app::inputmap::method::S, -1.f);
-               //app::InputSystem::createBinding<player_strive>(app::inputmap::method::D, 1.f);
-               //app::InputSystem::createBinding<player_strive>(app::inputmap::method::A, -1.f);
-               //app::InputSystem::createBinding<player_fly>(app::inputmap::method::SPACE, 1.f);
-               //app::InputSystem::createBinding<player_fly>(app::inputmap::method::LEFT_SHIFT, -1.f);
-               //app::InputSystem::createBinding<player_look_x>(app::inputmap::method::MOUSE_X, 0.f);
-               //app::InputSystem::createBinding<player_look_y>(app::inputmap::method::MOUSE_Y, 0.f);
+                  //app::InputSystem::createBinding<player_move>(app::inputmap::method::W, 1.f);
+                  //app::InputSystem::createBinding<player_move>(app::inputmap::method::S, -1.f);
+                  //app::InputSystem::createBinding<player_move>(app::inputmap::method::W, 1.f);
+                  //app::InputSystem::createBinding<player_move>(app::inputmap::method::S, -1.f);
+                  //app::InputSystem::createBinding<player_strive>(app::inputmap::method::D, 1.f);
+                  //app::InputSystem::createBinding<player_strive>(app::inputmap::method::A, -1.f);
+                  //app::InputSystem::createBinding<player_fly>(app::inputmap::method::SPACE, 1.f);
+                  //app::InputSystem::createBinding<player_fly>(app::inputmap::method::LEFT_SHIFT, -1.f);
+                  //app::InputSystem::createBinding<player_look_x>(app::inputmap::method::MOUSE_X, 0.f);
+                  //app::InputSystem::createBinding<player_look_y>(app::inputmap::method::MOUSE_Y, 0.f);
 
-               //app::InputSystem::createBinding<player_hover>(app::inputmap::method::Q, 1.f);
-               //app::InputSystem::createBinding<player_hover>(app::inputmap::method::E, -1.f);
+                  //app::InputSystem::createBinding<player_hover>(app::inputmap::method::Q, 1.f);
+                  //app::InputSystem::createBinding<player_hover>(app::inputmap::method::E, -1.f);
 
-               //bindToEvent<player_move, &PointCloudTestSystem::onPlayerMove>();
-               //bindToEvent<player_strive, &PointCloudTestSystem::onPlayerStrive>();
-               ////    bindToEvent<player_fly, &PointCloudTestSystem::onPlayerFly>();
-               //bindToEvent<player_look_x, &PointCloudTestSystem::onPlayerLookX>();
-               //bindToEvent<player_look_y, &PointCloudTestSystem::onPlayerLookY>();
+                  //bindToEvent<player_move, &PointCloudTestSystem::onPlayerMove>();
+                  //bindToEvent<player_strive, &PointCloudTestSystem::onPlayerStrive>();
+                  ////    bindToEvent<player_fly, &PointCloudTestSystem::onPlayerFly>();
+                  //bindToEvent<player_look_x, &PointCloudTestSystem::onPlayerLookX>();
+                  //bindToEvent<player_look_y, &PointCloudTestSystem::onPlayerLookY>();
 
-                //app::InputSystem::createBinding<custimInpit>(app::inputmap::method::T);
-                //bindToEvent<custimInpit, &TestSystem>
+                   //app::InputSystem::createBinding<custimInpit>(app::inputmap::method::T);
+                   //bindToEvent<custimInpit, &TestSystem>
 
     }
 
