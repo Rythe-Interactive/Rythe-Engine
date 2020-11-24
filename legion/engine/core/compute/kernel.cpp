@@ -175,7 +175,7 @@ namespace legion::core::compute
 
     Kernel& Kernel::dispatch()
     {
-        auto& [globals,locals,size] =  parse_dimensions();
+        auto [globals,locals,size] =  parse_dimensions();
 
 
         //enqueue the Kernel in the command queue
