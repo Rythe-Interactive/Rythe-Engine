@@ -83,22 +83,23 @@ namespace legion::core::ecs
 
         async::mixed_multiguard mmguard(m_entityLock, async::write, m_componentLock, async::read); // We lock now so that we don't need to reacquire the locks every iteration.
 
-        for (int i = 1; i <= m_entityLists.size(); i++)
+        for (int i = 0; i < m_entityLists.size(); i++)
         {
-            if (!m_componentTypes[i].contains(componentTypeId)) // This query doesn't care about this component type.
+            id_type queryId = m_entityLists.keys()[i];
+            if (!m_componentTypes[queryId].contains(componentTypeId)) // This query doesn't care about this component type.
                 continue;
 
-            if (m_entityLists[i]->contains(entity))
+            if (m_entityLists[queryId]->contains(entity))
             {
                 if (removal)
                 {
-                    m_entityLists[i]->erase(entity); // Erase the entity from the query's tracking list if the component was removed from the entity.
+                    m_entityLists[queryId]->erase(entity); // Erase the entity from the query's tracking list if the component was removed from the entity.
                     continue;
                 }
             }
-            else if (m_registry.getEntityData(entityId).components.contains(m_componentTypes[i]))
+            else if (m_registry.getEntityData(entityId).components.contains(m_componentTypes[queryId]))
             {
-                m_entityLists[i]->insert(entity); // If the entity also contains all the other required components for this query, then add this entity to the tracking list.
+                m_entityLists[queryId]->insert(entity); // If the entity also contains all the other required components for this query, then add this entity to the tracking list.
             }
         }
     }
@@ -109,8 +110,11 @@ namespace legion::core::ecs
 
         async::readwrite_guard guard(m_entityLock);
         for (int i = 0; i < m_entityLists.size(); i++) // Iterate over all query tracking lists.
-            if (m_entityLists[i]->contains(entity))
-                m_entityLists[i]->erase(entity); // Erase entity from tracking list if it's present.
+        {
+            id_type queryId = m_entityLists.keys()[i];
+            if (m_entityLists[queryId]->contains(entity))
+                m_entityLists[queryId]->erase(entity); // Erase entity from tracking list if it's present.
+        }
     }
 
     id_type QueryRegistry::getQueryId(const hashed_sparse_set<id_type>& componentTypes)
@@ -152,7 +156,7 @@ namespace legion::core::ecs
             async::readwrite_multiguard mguard(m_referenceLock, m_entityLock, m_componentLock);
 
             queryId = m_lastQueryId++;
-            m_entityLists.insert(queryId, new entity_set()); // Create a new entity tracking list.
+            m_entityLists.emplace(queryId, new entity_set()); // Create a new entity tracking list.
 
             m_references.emplace(queryId); // Create a new reference count.
 
@@ -203,7 +207,6 @@ namespace legion::core::ecs
             async::readwrite_multiguard mguard(m_referenceLock, m_entityLock, m_componentLock);
 
             m_references.erase(queryId);
-            delete m_entityLists[queryId];
             m_entityLists.erase(queryId);
             m_componentTypes.erase(queryId);
         }

@@ -150,7 +150,7 @@ namespace legion::rendering
             m_models.insert(id, model);
         }
 
-        log::trace("Created model {} with mesh: {}", name, meshName);
+        log::debug("Created model {} with mesh: {}", name, meshName);
 
         return { id };
     }

@@ -64,6 +64,8 @@ struct audio_test_input : public app::input_action<audio_test_input> {};
 
 struct physics_test_move : public app::input_axis<physics_test_move> {};
 
+struct light_switch : public app::input_action<light_switch> {};
+
 struct activate_CRtest2 : public app::input_action<activate_CRtest2> {};
 struct activate_CRtest3 : public app::input_action<activate_CRtest3> {};
 
@@ -80,7 +82,7 @@ public:
     TestSystem()
     {
         log::filter(log::severity::debug);
-        app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
+        app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1920, 1080), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
     }
 
     ecs::entity_handle audioSphereLeft;
@@ -95,6 +97,19 @@ public:
     ecs::entity_handle staticToOBBEnt;
     ecs::entity_handle staticToEdgeEnt;
     ecs::entity_handle staticTo2StackEnt;
+
+    ecs::entity_handle sun;
+    rendering::material_handle pbrH;
+    rendering::material_handle copperH;
+    rendering::material_handle aluminumH;
+    rendering::material_handle ironH;
+    rendering::material_handle slateH;
+    rendering::material_handle rockH;
+    rendering::material_handle rock2H;
+    rendering::material_handle fabricH;
+    rendering::material_handle bogH;
+    rendering::material_handle paintH;
+    rendering::material_handle skyboxH;
 
     //Friction Test
     std::vector<ecs::entity_handle> physicsFrictionTestRotators;
@@ -135,11 +150,14 @@ public:
 
         app::InputSystem::createBinding< activateFrictionTest >(app::inputmap::method::KP_4);
 
+        app::InputSystem::createBinding<light_switch>(app::inputmap::method::F);
 
         app::InputSystem::createBinding< extendedPhysicsContinue>(app::inputmap::method::M);
         app::InputSystem::createBinding<nextPhysicsTimeStepContinue>(app::inputmap::method::N);
 
         bindToEvent<physics_test_move, &TestSystem::onUnitPhysicsUnitTestMove>();
+
+        bindToEvent<light_switch, &TestSystem::onLightSwitch>();
 
         bindToEvent<audio_move, &TestSystem::onSphereAAMove>();
         bindToEvent<audio_strive, &TestSystem::onSphereAAStrive>();
@@ -192,18 +210,7 @@ public:
         rendering::material_handle spotLightMH;
         rendering::material_handle pointLightMH;
         rendering::material_handle gizmoMH;
-        rendering::material_handle pbrH;
-        rendering::material_handle copperH;
-        rendering::material_handle aluminumH;
-        rendering::material_handle ironH;
-        rendering::material_handle slateH;
-        rendering::material_handle rockH;
-        rendering::material_handle rock2H;
-        rendering::material_handle fabricH;
-        rendering::material_handle bogH;
-        rendering::material_handle paintH;
         rendering::material_handle normalH;
-        rendering::material_handle skyboxH;
         rendering::material_handle floorMH;
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
@@ -251,17 +258,19 @@ public:
             pbrH.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
             pbrH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("engine://resources/default/normalHeight"_view));
             pbrH.set_param(SV_MRDAO, rendering::TextureCache::create_texture("engine://resources/default/MRDAo"_view));
-            pbrH.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("engine://resources/default/emissive.png"_view));
+            pbrH.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("engine://resources/default/emissive"_view));
             pbrH.set_param(SV_HEIGHTSCALE, 1.f);
             pbrH.set_param("discardExcess", false);
+            pbrH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
 
             copperH = rendering::MaterialCache::create_material("copper", pbrShader);
             copperH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/copper/copper-albedo.png"_view));
             copperH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/copper/copper-normalHeight.png"_view));
             copperH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/copper/copper-MRDAo.png"_view));
             copperH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/copper/copper-emissive.png"_view));
-            copperH.set_param("material_input.heightScale", 1.f);
+            copperH.set_param("material_input.heightScale", 0.1f);
             copperH.set_param("discardExcess", false);
+            copperH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
 
             aluminumH = rendering::MaterialCache::create_material("aluminum", pbrShader);
             aluminumH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-albedo.png"_view));
@@ -270,14 +279,16 @@ public:
             aluminumH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-emissive.png"_view));
             aluminumH.set_param("material_input.heightScale", 0.f);
             aluminumH.set_param("discardExcess", false);
+            aluminumH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
 
             ironH = rendering::MaterialCache::create_material("iron", pbrShader);
             ironH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-albedo.png"_view));
             ironH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-normalHeight.png"_view));
             ironH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-MRDAo.png"_view));
             ironH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-emissive.png"_view));
-            ironH.set_param("material_input.heightScale", 1.f);
+            ironH.set_param("material_input.heightScale", 0.1f);
             ironH.set_param("discardExcess", false);
+            ironH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
 
             slateH = rendering::MaterialCache::create_material("slate", pbrShader);
             slateH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/slate/slate-albedo.png"_view));
@@ -286,6 +297,7 @@ public:
             slateH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/slate/slate-emissive.png"_view));
             slateH.set_param("material_input.heightScale", 1.f);
             slateH.set_param("discardExcess", true);
+            slateH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
 
             rockH = rendering::MaterialCache::create_material("rock", pbrShader);
             rockH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/rock/rock-albedo.png"_view));
@@ -294,6 +306,7 @@ public:
             rockH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/rock/rock-emissive.png"_view));
             rockH.set_param("material_input.heightScale", 1.f);
             rockH.set_param("discardExcess", true);
+            rockH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
 
             rock2H = rendering::MaterialCache::create_material("rock 2", pbrShader);
             rock2H.set_param("material_input.albedo", rendering::TextureCache::get_handle("rock-albedo.png"));
@@ -302,14 +315,16 @@ public:
             rock2H.set_param("material_input.emissive", rendering::TextureCache::get_handle("rock-emissive.png"));
             rock2H.set_param("material_input.heightScale", 0.5f);
             rock2H.set_param("discardExcess", false);
+            rock2H.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
 
             fabricH = rendering::MaterialCache::create_material("fabric", pbrShader);
             fabricH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-albedo.png"_view));
             fabricH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-normalHeight.png"_view));
             fabricH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-MRDAo.png"_view));
             fabricH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-emissive.png"_view));
-            fabricH.set_param("material_input.heightScale", 1.f);
+            fabricH.set_param("material_input.heightScale", 0.1f);
             fabricH.set_param("discardExcess", false);
+            fabricH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
 
             bogH = rendering::MaterialCache::create_material("bog", pbrShader);
             bogH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/bog/bog-albedo.png"_view));
@@ -318,19 +333,23 @@ public:
             bogH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/bog/bog-emissive.png"_view));
             bogH.set_param("material_input.heightScale", 0.5f);
             bogH.set_param("discardExcess", true);
+            bogH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
 
             paintH = rendering::MaterialCache::create_material("paint", pbrShader);
             paintH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-albedo.png"_view));
             paintH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-normalHeight.png"_view));
             paintH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-MRDAo.png"_view));
             paintH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-emissive.png"_view));
-            paintH.set_param("material_input.heightScale", 1.f);
-            paintH.set_param("discardExcess", true);
+            paintH.set_param("material_input.heightScale", 0.1f);
+            paintH.set_param("discardExcess", false);
+            paintH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
 
             normalH = rendering::MaterialCache::create_material("normal", "assets://shaders/normal.shs"_view);
             normalH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("engine://resources/default/normalHeight"_view));
 
             skyboxH = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.shs"_view);
+            skyboxH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+
             floorMH = rendering::MaterialCache::create_material("floor", "assets://shaders/groundplane.shs"_view);
 
             app::ContextHelper::makeContextCurrent(nullptr);
@@ -340,8 +359,8 @@ public:
 #pragma region Entities
         {
             auto ent = createEntity();
-            ent.add_component<rendering::renderable>({ cubeH, skyboxH });
-            ent.add_components<transform>(position(), rotation(), scale(500.f));
+            ent.add_component<rendering::renderable>({ uvsphereH, skyboxH });
+            ent.add_components<transform>(position(), rotation(), scale(1000.f));
         }
 
         {
@@ -359,93 +378,93 @@ public:
         {
             auto ent = createEntity();
             ent.add_component<rendering::renderable>({ planeH, copperH });
-            ent.add_components<transform>(position(20, 0.01f, 0), rotation(), scale(10));
+            ent.add_components<transform>(position(10, 0.01f, 0), rotation(), scale(10));
         }
 
         {
             auto ent = createEntity();
             ent.add_component<rendering::renderable>({ planeH, aluminumH });
-            ent.add_components<transform>(position(20, 0.01f, 20), rotation(), scale(10));
+            ent.add_components<transform>(position(10, 0.01f, 10), rotation(), scale(10));
         }
 
         {
             auto ent = createEntity();
             ent.add_component<rendering::renderable>({ planeH, ironH });
-            ent.add_components<transform>(position(20, 0.01f, -20), rotation(), scale(10));
+            ent.add_components<transform>(position(10, 0.01f, -10), rotation(), scale(10));
         }
 
         {
             auto ent = createEntity();
             ent.add_component<rendering::renderable>({ planeH, fabricH });
-            ent.add_components<transform>(position(-20, 0.01f, 0), rotation(), scale(10));
+            ent.add_components<transform>(position(-10, 0.01f, 0), rotation(), scale(10));
         }
 
         {
             auto ent = createEntity();
             ent.add_component<rendering::renderable>({ planeH, bogH });
-            ent.add_components<transform>(position(-20, 0.01f, 20), rotation(), scale(10));
+            ent.add_components<transform>(position(-10, 0.01f, 10), rotation(), scale(10));
         }
 
         {
             auto ent = createEntity();
             ent.add_component<rendering::renderable>({ planeH, pbrH });
-            ent.add_components<transform>(position(0, 0.01f, 20), rotation(), scale(10));
+            ent.add_components<transform>(position(0, 0.01f, 10), rotation(), scale(10));
         }
 
         {
             auto ent = createEntity();
             ent.add_component<rendering::renderable>({ planeH, rockH });
-            ent.add_components<transform>(position(0, 0.01f, -20), rotation(), scale(10));
+            ent.add_components<transform>(position(0, 0.01f, -10), rotation(), scale(10));
         }
 
         {
             auto ent = createEntity();
             ent.add_component<rendering::renderable>({ planeH, paintH });
-            ent.add_components<transform>(position(-20, 0.01f, -20), rotation(), scale(10));
+            ent.add_components<transform>(position(-10, 0.01f, -10), rotation(), scale(10));
+        }
+
+        {
+            sun = createEntity();
+            sun.add_components<rendering::renderable, rendering::light>({ directionalLightH, directionalLightMH }, rendering::light::directional(math::color(1, 1, 0.8f), 10.f));
+            sun.add_components<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, 1), math::vec3::zero), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable, rendering::light>({ directionalLightH, directionalLightMH }, rendering::light::directional(math::color(1, 1, 0.8f), 10.f));
-            ent.add_components<transform>(position(20, 20, 20), rotation::lookat(math::vec3(1, 1, 1), math::vec3::zero), scale());
+            ent.add_components<rendering::renderable, rendering::light>({ spotLightH, spotLightMH }, rendering::light::spot(math::colors::green, math::deg2rad(45.f), 1.f, 100.f));
+            ent.add_components<transform>(position(-10, 0.5, -10), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable, rendering::light>({ spotLightH, spotLightMH }, rendering::light::spot(math::colors::green, math::deg2rad(45.f), 100.f, 50.f));
-            ent.add_components<transform>(position(-20, 0.5, -20), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
+            ent.add_components<rendering::renderable, rendering::light>({ spotLightH, spotLightMH }, rendering::light::spot(math::colors::green, math::deg2rad(45.f), 1.f, 100.f));
+            ent.add_components<transform>(position(0, 0.5, -10), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable, rendering::light>({ spotLightH, spotLightMH }, rendering::light::spot(math::colors::green, math::deg2rad(45.f), 100.f, 50.f));
-            ent.add_components<transform>(position(0, 0.5, -20), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
+            ent.add_components<rendering::renderable, rendering::light>({ spotLightH, spotLightMH }, rendering::light::spot(math::colors::green, math::deg2rad(45.f), 1.f, 100.f));
+            ent.add_components<transform>(position(10, 0.5, -10), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable, rendering::light>({ spotLightH, spotLightMH }, rendering::light::spot(math::colors::green, math::deg2rad(45.f), 100.f, 50.f));
-            ent.add_components<transform>(position(20, 0.5, -20), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::renderable, rendering::light>({ pointLightH, pointLightMH }, rendering::light::point(math::colors::red, 100.f));
+            ent.add_components<rendering::renderable, rendering::light>({ pointLightH, pointLightMH }, rendering::light::point(math::colors::red, 1.f));
             ent.add_components<transform>(position(0, 1, 0), rotation(), scale());
         }
 
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable, rendering::light>({ pointLightH, pointLightMH }, rendering::light::point(math::colors::red, 100.f));
-            ent.add_components<transform>(position(-20, 1, 0), rotation(), scale());
+            ent.add_components<rendering::renderable, rendering::light>({ pointLightH, pointLightMH }, rendering::light::point(math::colors::red, 1.f));
+            ent.add_components<transform>(position(-10, 1, 0), rotation(), scale());
         }
 
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable, rendering::light>({ pointLightH, pointLightMH }, rendering::light::point(math::colors::red, 100.f));
-            ent.add_components<transform>(position(20, 1, 0), rotation(), scale());
+            ent.add_components<rendering::renderable, rendering::light>({ pointLightH, pointLightMH }, rendering::light::point(math::colors::red, 1.f));
+            ent.add_components<transform>(position(10, 1, 0), rotation(), scale());
         }
 
         {
@@ -492,37 +511,79 @@ public:
         {
             auto ent = createEntity();
             ent.add_components<rendering::renderable, sah>({ cubeH, pbrH }, {});
-            ent.add_components<transform>(position(5.1f, 9, 0), rotation(), scale(0.75f));
+            ent.add_components<transform>(position(5.1f, 9, 0), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
             ent.add_components<rendering::renderable, sah>({ sphereH, copperH }, {});
-            ent.add_components<transform>(position(0, 3, -5.1f), rotation(), scale(2.5f));
+            ent.add_components<transform>(position(0, 3, -5.1f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
             ent.add_components<rendering::renderable, sah>({ sphereH, aluminumH }, {});
-            ent.add_components<transform>(position(0, 3, -8.f), rotation(), scale(2.5f));
+            ent.add_components<transform>(position(0, 3, -8.f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
             ent.add_components<rendering::renderable, sah>({ sphereH, ironH }, {});
-            ent.add_components<transform>(position(0, 3, -2.2f), rotation(), scale(2.5f));
+            ent.add_components<transform>(position(0, 3, -2.2f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
             ent.add_components<rendering::renderable, sah>({ sphereH, rock2H }, {});
-            ent.add_components<transform>(position(4, 3, -8.f), rotation(), scale(2.5f));
+            ent.add_components<transform>(position(4, 3, -8.f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
             ent.add_components<rendering::renderable, sah>({ sphereH, fabricH }, {});
-            ent.add_components<transform>(position(4, 3, -5.1f), rotation(), scale(2.5f));
+            ent.add_components<transform>(position(4, 3, -5.1f), rotation(), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ sphereH, paintH }, {});
+            ent.add_components<transform>(position(4, 3, -2.2f), rotation(), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ uvsphereH, copperH }, {});
+            ent.add_components<transform>(position(0, 3, -3.6f), rotation(), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ uvsphereH, aluminumH }, {});
+            ent.add_components<transform>(position(0, 3, -6.5f), rotation(), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ uvsphereH, ironH }, {});
+            ent.add_components<transform>(position(0, 3, -0.7f), rotation(), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ uvsphereH, rock2H }, {});
+            ent.add_components<transform>(position(4, 3, -6.5f), rotation(), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ uvsphereH, fabricH }, {});
+            ent.add_components<transform>(position(4, 3, -3.6f), rotation(), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::renderable, sah>({ uvsphereH, paintH }, {});
+            ent.add_components<transform>(position(4, 3, -0.7f), rotation(), scale());
         }
 
         //audioSphereLeft setup
@@ -1551,6 +1612,58 @@ public:
     }
 
 #pragma region input stuff
+    void onLightSwitch(light_switch* action)
+    {
+        static bool on = true;
+
+        if (!action->value)
+        {
+            //auto light = sun.read_component<rendering::light>();
+            if (on)
+            {
+                /*light.set_intensity(0.f);
+                sun.write_component(light);*/
+
+                if (sun)
+                    sun.destroy();
+
+                pbrH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
+                copperH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
+                aluminumH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
+                ironH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
+                slateH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
+                rockH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
+                rock2H.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
+                fabricH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
+                bogH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
+                paintH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
+                skyboxH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
+            }
+            else
+            {
+                if (!sun)
+                {
+                    sun = createEntity();
+                    sun.add_components<rendering::renderable, rendering::light>({ rendering::ModelCache::get_handle("directional light"), rendering::MaterialCache::get_material("directional light") }, rendering::light::directional(math::color(1, 1, 0.8f), 10.f));
+                    sun.add_components<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, 1), math::vec3::zero), scale());
+                }
+
+                pbrH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+                copperH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+                aluminumH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+                ironH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+                slateH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+                rockH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+                rock2H.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+                fabricH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+                bogH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+                paintH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+                skyboxH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            }
+            on = !on;
+        }
+    }
+
     void onSphereAAMove(audio_move* action)
     {
         auto posH = audioSphereLeft.get_component_handle<position>();
@@ -1678,10 +1791,6 @@ public:
 
     void update(time::span deltaTime)
     {
-        debug::drawLine(math::vec3(0, 0, 0), math::vec3(1, 0, 0), math::colors::red, 10);
-        debug::drawLine(math::vec3(0, 0, 0), math::vec3(0, 1, 0), math::colors::green, 10);
-        debug::drawLine(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::colors::blue, 10);
-
         static auto sahQuery = createQuery<sah, rotation, position>();
 
         for (auto entity : sahQuery)
@@ -1693,7 +1802,7 @@ public:
             entity.write_component(rot);
 
             auto pos = entity.read_component<position>();
-            debug::drawLine(pos, pos + rot.forward(), math::colors::magenta, 10);
+            debug::drawLine(pos, pos + rot.forward(), math::colors::magenta);
         }
 
         if (rotate && !physics::PhysicsSystem::IsPaused)
