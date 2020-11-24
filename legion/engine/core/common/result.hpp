@@ -21,6 +21,7 @@
 #include <memory>
 #include <stdexcept>
 #include <utility>
+#include <functional>
 
 #include <core/platform/platform.hpp>
 
