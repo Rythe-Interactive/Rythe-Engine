@@ -14,7 +14,7 @@ namespace legion::physics::constants
 
 	static constexpr float faceToEdgePenetrationBias = 0.01f;
 
-	static constexpr float baumgarteCoefficient = 0.3f;
+	static constexpr float baumgarteCoefficient = 0.2f;
 
     static constexpr float baumgarteSlop = 0.01f;
 
@@ -24,4 +24,5 @@ namespace legion::physics::constants
 
     static constexpr float sutherlandHodgmanClippingThreshold = 0.01f;
 
+    static constexpr bool applyWarmStarting = true;
 }

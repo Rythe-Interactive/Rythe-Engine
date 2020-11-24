@@ -29,6 +29,8 @@ namespace legion::physics
 
         void AttemptFindAndCopyConverganceID(physics_contact& contact)
         {
+            if (!constants::applyWarmStarting) { return; }
+
             for (auto&& converganceId : converganceIdentifiers)
             {
                 if (converganceId->refColliderID == contact.refCollider->GetColliderID())
@@ -82,6 +84,9 @@ namespace legion::physics
         * @note This is called internally by PhysicsSysten
         */
         inline virtual void DrawColliderRepresentation(math::mat4 transform) {};
+
+        virtual void UpdateTightBoundingVolume(const math::mat4& transform) {};
+
 
         inline virtual std::vector<HalfEdgeFace*>& GetHalfEdgeFaces()
         {

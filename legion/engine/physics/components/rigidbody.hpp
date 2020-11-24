@@ -16,7 +16,7 @@ namespace legion::physics
         float linearDrag;
 
         //angular motion component
-        math::mat3 localInverseInertiaTensor = math::mat3(6.0f);
+        math::mat3 localInverseInertiaTensor = math::mat3(3.0f);
         math::mat3 globalInverseInertiaTensor = localInverseInertiaTensor;
 
         math::vec3 angularAcc = math::vec3(0.0);
@@ -28,7 +28,7 @@ namespace legion::physics
         math::vec3 torqueAccumulator = math::vec3(0.0);
         math::vec3 globalCentreOfMass = math::vec3(0.0);
 
-        float restitution = 0.5f;
+        float restitution = 0.3f;
         float friction = 0.15f;
 
         bool isAsleep;

@@ -54,9 +54,14 @@ namespace legion::physics
 
         void PopulateContactPointsWith(ConvexCollider* convexCollider, physics_manifold& manifold) override;
 
+        void UpdateTightBoundingVolume(const math::mat4& transform) override
+        {
+            UpdateTightAABB(transform);
+        }
+
         /**@brief Given the current transform of the entity, creates a tight AABB of the collider;
         */
-        void UpdateTightAABB(math::mat4 transform)
+        void UpdateTightAABB(const math::mat4& transform)
         {
 
         }

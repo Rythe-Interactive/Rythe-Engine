@@ -4,6 +4,7 @@
 #include <physics/systems/physicssystem.hpp>
 #include <physics/components/physics_component.hpp>
 #include <physics/components/rigidbody.hpp>
+#include <physics/halfedgefinder.hpp>
 
 namespace legion::physics
 {
@@ -18,6 +19,7 @@ namespace legion::physics
             reportComponentType<physicsComponent>();
             reportComponentType<rigidbody>();
             reportComponentType<identifier>();
+            reportComponentType<HalfEdgeFinder>();
 
         }
 

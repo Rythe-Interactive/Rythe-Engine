@@ -11,6 +11,13 @@
 
 namespace legion::physics
 {
+    struct MeshLine
+    {
+        math::vec3 start;
+        math::vec3 end;
+        math::color Color;
+    };
+
     typedef std::shared_ptr<PhysicsCollider> PhysicsColliderPtr;
 
     class PhysicsSystem final : public System<PhysicsSystem>
@@ -23,6 +30,7 @@ namespace legion::physics
         static std::vector<physics_contact> contactPoints;
         static std::vector<math::vec3 > aPoint;
         static std::vector<math::vec3> bPoint;
+        static std::vector<MeshLine> meshLines;
 
         ecs::EntityQuery  rigidbodyIntegrationQuery;
 
@@ -210,15 +218,18 @@ namespace legion::physics
             //the effective mass remains the same for every iteration of the solver. This means that we can precalculate it before
             //we start the solver
 
+            //log::debug("");
+            //log::debug("--------------Logging contacts for manifold -------------------");
+            //log::debug("");
+            //log::debug("*START IMPULSE");
             for (auto& manifold : manifoldsToSolve)
             {
-                //log::debug("----------Logging contacts for manifold ");
-
                 for (auto& contact : manifold.contacts)
                 {
                     contact.preCalculateEffectiveMass();
 
                     contact.ApplyWarmStarting();
+                    //log::debug("contact {}" , contact.totalLambda);
                 }
             }
 
@@ -250,12 +261,17 @@ namespace legion::physics
             //reset convergance identifiers for all colliders
             for (auto& manifold : manifoldsToSolve)
             {
+                manifold.colliderA->converganceIdentifiers.clear();
+                manifold.colliderB->converganceIdentifiers.clear();
+
                 for (auto& contact : manifold.contacts)
                 {
-                    contact.refCollider->converganceIdentifiers.clear();
+                    
+                   // PhysicsSystem::contactPoints.push_back(contact);
                 }
             }
 
+            //log::debug("*END IMPULSE");
             //using the known lambdas of this time step, add it as a convergance identifier
             for (auto& manifold : manifoldsToSolve)
             {

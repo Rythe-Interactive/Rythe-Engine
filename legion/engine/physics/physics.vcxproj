@@ -16,6 +16,7 @@
     <ClCompile Include="data\edgepenetrationquery.cpp" />
     <ClCompile Include="halfedgeface.cpp" />
     <ClCompile Include="components\physics_component.cpp" />
+    <ClCompile Include="mesh_splitter_utils\splittable_polygon.cpp" />
     <ClCompile Include="systems\physicssystem.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -41,9 +42,12 @@
     <ClInclude Include="halfedgeface.hpp" />
     <ClInclude Include="colliders\physicscollider.hpp" />
     <ClInclude Include="data\penetrationquery.h" />
+    <ClInclude Include="halfedgefinder.hpp" />
+    <ClInclude Include="mesh_splitter_utils\mesh_half_edge.hpp" />
     <ClInclude Include="physics.hpp" />
     <ClInclude Include="physicsconstants.hpp" />
     <ClInclude Include="physics_contact.hpp" />
+    <ClInclude Include="mesh_splitter_utils\splittable_polygon.h" />
     <ClInclude Include="systems\physicssystem.hpp" />
     <ClInclude Include="physics_statics.hpp" />
     <ClInclude Include="data\physics_manifold.hpp" />
