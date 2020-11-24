@@ -313,8 +313,11 @@ namespace legion::core
 		{
 			if (contains(val))
 			{
-				m_dense[m_sparse[val]] = m_dense[m_size - 1];
-				m_sparse[m_dense[m_size - 1]] = m_sparse[val];
+                if (m_size - 1 != m_sparse[val])
+                {
+                    m_dense[m_sparse[val]] = m_dense[m_size - 1];
+                    m_sparse[m_dense[m_size - 1]] = m_sparse[val];
+                }
 				--m_size;
 				return true;
 			}

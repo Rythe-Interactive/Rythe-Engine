@@ -101,7 +101,7 @@ namespace legion::rendering
         m_materials[id].init(shader);
         m_materials[id].m_name = name;
 
-        log::trace("Created material {} with shader: {}", name, shader.get_name());
+        log::debug("Created material {} with shader: {}", name, shader.get_name());
 
         return { id };
     }
