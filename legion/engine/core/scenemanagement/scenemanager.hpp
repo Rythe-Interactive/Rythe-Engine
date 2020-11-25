@@ -24,13 +24,13 @@ namespace legion::core::scenemanagement
           */
         virtual void setup()
         {
-            fs::view fileView = fs::view("assets://////////////////////////////////////////////////////////////////////////////////////////scenes");
+            fs::view fileView = fs::view("assets://scenes");
             auto files = fileView.ls();
             if (files == common::valid)
             {
                 for (auto file : files.decay())
                 {
-                    log::debug("I am file");
+                    log::debug(file.get_domain());
                     if (file.get_extension() == common::valid)
                     {
                         log::debug("My Extension is valid");

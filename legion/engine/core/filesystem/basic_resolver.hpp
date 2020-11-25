@@ -152,7 +152,8 @@ namespace legion::core::filesystem
             std::set<std::string> entries;
             for (const auto & entry : std::filesystem::directory_iterator(strpath_manip::subdir(m_root_path,get_target())))
             {
-                entries.insert(entry.path().string());
+                entries.insert(get_identifier()+entry.path().relative_path().string());
+                
             }
             return entries;
         }
@@ -160,7 +161,7 @@ namespace legion::core::filesystem
         {
             using common::Err, common::Ok;
 
-            if(!exists()) return Err(legion_fs_error("file does not exist cannot read"));
+            if(!exists()) return Err(legion_fs_error("file does not exist, cannot read"));
             if(!is_file()) return Err(legion_fs_error("not a file"));
             if(!readable()) return Err(legion_fs_error("file not readable"));
             return Ok(basic_resource(read_file(strpath_manip::subdir(m_root_path,get_target()))));

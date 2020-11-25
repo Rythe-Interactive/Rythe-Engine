@@ -5,6 +5,7 @@
 #include "navigator.hpp"
 #include "provider_registry.hpp"
 #include "detail/strpath_manip.hpp"
+#include <core/logging/logging.hpp>
 
 
 namespace legion::core::filesystem
@@ -243,6 +244,7 @@ namespace legion::core::filesystem
             for (auto entry : resolver->ls())
             {
                 results.emplace_back(entry);
+                log::debug(entry);
             }
             return decay(Ok(results));
         }

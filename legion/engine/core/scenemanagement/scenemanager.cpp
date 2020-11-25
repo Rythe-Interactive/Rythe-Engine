@@ -1,5 +1,6 @@
 #include <core/scenemanagement/scene.hpp>
 #include <core/serialization/serializationUtil.hpp>
+#include <core/logging/logging.hpp>
 
 
 namespace legion::core::scenemanagement
@@ -42,7 +43,6 @@ namespace legion::core::scenemanagement
             sceneNames.emplace(s.id, name);
             auto sceneHandle = ent.add_component<scenemanagement::scene>(s);
             sceneList.emplace(nameHash(name), sceneHandle);
-
             SceneManager::sceneCount++;
             //true if entity does not have the scene component
             return SceneManager::saveScene(name, ent);
@@ -53,26 +53,16 @@ namespace legion::core::scenemanagement
 
     bool SceneManager::loadScene(const std::string& name)
     {
-        if (SceneManager::getScene(name))
-        {
-            std::ifstream inFile("assets/scenes/" + name + ".cornflake");
-            auto sceneEntity = serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
-            SceneManager::currentScene = name;
+        sceneList[nameHash(currentScene)].entity.destroy();
 
-            m_ecs->world.add_child(sceneEntity);
-            return true;
-        }
-        else
-        {
-            std::ifstream inFile("assets/scenes/" + name + ".cornflake");
-            auto sceneEntity = serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
-            log::debug("Scene " + name + ".cornflake does not exist in our scenelist, but a file does");
-            SceneManager::currentScene = name;
+        std::ifstream inFile("assets/scenes/" + name + ".cornflake");
+        auto sceneEntity = serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
+        SceneManager::currentScene = name;
 
-            m_ecs->world.add_child(sceneEntity);
-            return true;
-        }
-        return false;
+        m_ecs->world.add_child(sceneEntity);
+        scenemanagement::SceneManager::createScene(name,sceneEntity);
+        log::debug("........Done saving scene");
+        return true;
     }
 
     bool SceneManager::saveScene(const std::string& name, ecs::entity_handle& ent)
@@ -91,4 +81,5 @@ namespace legion::core::scenemanagement
     {
         return SceneManager::sceneList[nameHash(name)].entity;
     }
+
 }

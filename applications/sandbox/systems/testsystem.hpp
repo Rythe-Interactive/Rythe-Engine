@@ -649,11 +649,8 @@ public:
         cubeParams.height = 1.0f;
         //setupPhysicsCRUnitTest(cubeH, uvH);
 
-
         scenemanagement::SceneManager::createScene("Main");
         log::debug("Created a scene");
-
-
 
         //CreateCubeStack(3, 2, 2, math::vec3(0, -3.0f, 8.0f), math::vec3(1, 1, 1)
         //    ,cubeParams, 0.1f, cubeH, wireframeH);
@@ -1660,7 +1657,7 @@ public:
     {
         if (action->pressed())
         {
-            scenemanagement::SceneManager::loadScene("Main4");
+            scenemanagement::SceneManager::loadScene("Main3");
             log::debug("Finished loading a scene");
         }
     }
