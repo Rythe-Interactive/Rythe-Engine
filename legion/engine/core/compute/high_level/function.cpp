@@ -62,7 +62,7 @@ namespace legion::core::compute
         {
             if(arg.container.first != nullptr)
             {
-                m_kernel->setKernelArg(arg.container.first,arg.container.second);
+                m_kernel->setKernelArg(arg.container.first,arg.container.second,arg.name);
             }
         }
 
