@@ -42,7 +42,7 @@
     <ClInclude Include="halfedgeface.hpp" />
     <ClInclude Include="colliders\physicscollider.hpp" />
     <ClInclude Include="data\penetrationquery.h" />
-    <ClInclude Include="halfedgefinder.hpp" />
+    <ClInclude Include="mesh_splitter.hpp" />
     <ClInclude Include="mesh_splitter_utils\mesh_half_edge.hpp" />
     <ClInclude Include="physics.hpp" />
     <ClInclude Include="physicsconstants.hpp" />

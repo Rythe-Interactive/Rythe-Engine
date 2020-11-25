@@ -1,11 +1,12 @@
 #pragma once
 #include <core/core.hpp>
 #include <physics/mesh_splitter_utils/mesh_half_edge.hpp>
+#include <physics/mesh_splitter_utils/splittable_polygon.h>
 #include <rendering/components/renderable.hpp>
 namespace legion::physics
 {
 
-    struct HalfEdgeFinder
+    struct MeshSplitter
     {
         typedef std::pair<int, int> edgeVertexIndexPair;
 
@@ -13,9 +14,15 @@ namespace legion::physics
             std::shared_ptr< physics::MeshHalfEdge>> VertexIndexToHalfEdgePtr;
 
         typedef std::shared_ptr<MeshHalfEdge> meshHalfEdgePtr;
+        typedef std::shared_ptr<SplittablePolygon> SplittablePolygonPtr;
 
         meshHalfEdgePtr currentPtr;
 
+        std::vector<std::shared_ptr< SplittablePolygon>> meshPolygons;
+
+        /** @brief Creates a Half-Edge Data structure around the mesh and 
+        * 
+        */
         void InitializePolygons(ecs::entity_handle entity)
         {
             auto rederableHandle = entity.get_component_handle<rendering::renderable>();
@@ -24,18 +31,20 @@ namespace legion::physics
             if (rederableHandle && posH && rotH && scaleH)
             {
                 log::debug("Mesh and Transform found");
-                std::vector<std::shared_ptr<MeshHalfEdge>> meshHalfEdges;
+                std::queue<meshHalfEdgePtr> meshHalfEdges;
 
                 auto renderable = rederableHandle.read();
                 auto mesh = renderable.model.get_mesh().get().second;
 
-                
+                const math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
                 FindHalfEdge(mesh.indices,mesh.vertices
-                    , math::compose(scaleH.read(), rotH.read(), posH.read()), meshHalfEdges);
+                    , transform, meshHalfEdges);
+
+                BFSPolygonize(meshHalfEdges,transform);
 
                 log::debug("Mesh vertices {}, Mesh indices {}",mesh.vertices.size(),mesh.indices.size());
 
-                Polygonize(meshHalfEdges);
+                
             }
             else
             {
@@ -46,10 +55,9 @@ namespace legion::physics
 
         void FindHalfEdge
         (std::vector<uint>& indices,std::vector<math::vec3>& vertices,math::mat4 transform,
-            std::vector<std::shared_ptr<MeshHalfEdge>>& meshHalfEdges)
+            std::queue<meshHalfEdgePtr>& meshHalfEdges)
         {
             VertexIndexToHalfEdgePtr indexToEdgeMap;
-
 
             //[1] find the unique vertices of a mesh. We are currently keeping a list of found
             //vertices and comparing them to our current vertices
@@ -109,7 +117,6 @@ namespace legion::physics
                 int uniqueSecondIndex = uniqueIndex.at(secondVertIndex);
                 int uniqueThirdIndex = uniqueIndex.at(thirdVertIndex);
 
-
                 //-----------------instantiate first half edge---------------------//
                 //MeshHalfEdge firstEdge = std::make
                 auto firstEdge = InstantiateEdge(firstVertIndex
@@ -158,26 +165,126 @@ namespace legion::physics
             }
 
 
-            currentPtr = meshHalfEdges.at(0);
+            currentPtr = meshHalfEdges.front();
 
         }
 
-        void Polygonize(std::vector<std::shared_ptr<MeshHalfEdge>>& halfEdges)
+        void BFSPolygonize(std::queue<meshHalfEdgePtr>& halfEdgeQueue,const math::mat4& transform)
         {
+            //while edge queue is not empty
+            while (!halfEdgeQueue.empty())
+            {
+                meshHalfEdgePtr startEdge = halfEdgeQueue.front();
+                halfEdgeQueue.pop();
 
+                if (!startEdge->isVisited)
+                {
+                    SplittablePolygonPtr polygon = nullptr;
+
+                    if (BFSIdentifyPolygon(startEdge, polygon, halfEdgeQueue, transform))
+                    {
+                        meshPolygons.push_back(polygon);
+                    }
+                }
+                //break;
+            }
+
+
+        }
+
+        bool BFSIdentifyPolygon(meshHalfEdgePtr startEdge
+            , std::shared_ptr<SplittablePolygon>& polygon, std::queue<meshHalfEdgePtr>& halfEdgeQueue
+            , const math::mat4& transform)
+        {
+            log::debug("->BFSIdentifyPolygon");
+            //polygonEdgeList : edges considered to be in the same polygon
+            std::vector<meshHalfEdgePtr> edgesInPolygon;
+
+            meshHalfEdgePtr nextEdge = nullptr;
+            meshHalfEdgePtr prevEdge = nullptr;
+
+            //startEdge may not form a triangle,we early out if this happens
+            if (!startEdge->AttemptGetTrianglesInEdges(nextEdge, prevEdge))
+            {
+                return false;
+            }
+
+            assert(nextEdge);
+            assert(prevEdge);
+
+            edgesInPolygon.push_back(startEdge);
+            edgesInPolygon.push_back(nextEdge);
+            edgesInPolygon.push_back(prevEdge);
+
+            //mark all edges visited
+            startEdge->MarkTriangleEdgeVisited();
+
+            //get all neigbors of the startEdge Triangle and put them in unvisitedEdgeQueue
+            std::queue<meshHalfEdgePtr> unvisitedEdgeQueue;
+            startEdge->populateQueueWithTriangleNeighbor(unvisitedEdgeQueue);
+
+            std::vector<meshHalfEdgePtr> edgesNotInPolygon;
+
+            const math::vec3 comparisonNormal = startEdge->CalculateEdgeNormal(transform);
+
+            //BFS search for adjacent triangles with same normal
+            while (!unvisitedEdgeQueue.empty())
+            {
+                //log::debug("Pop Edge");
+
+                auto edgeToCheck = unvisitedEdgeQueue.front();
+                unvisitedEdgeQueue.pop();
+
+                if (!edgeToCheck) { continue; }
+
+                if (!edgeToCheck->isVisited && edgeToCheck->IsTriangleValid())
+                {
+                    edgeToCheck->MarkTriangleEdgeVisited();
+
+                    //if triangle has same normal as original
+                    if (edgeToCheck->IsNormalCloseEnough(comparisonNormal, transform))
+                    {
+                        //add all edges in triangle to polygonEdgeList
+                        edgeToCheck->populateVectorWithTriangle(edgesInPolygon);
+                        //add neigbors to polygonEdgeNonVisitedQueue
+                        edgeToCheck->populateQueueWithTriangleNeighbor(unvisitedEdgeQueue);
+                        //log::debug("Is in same polygon");
+                    }
+                    else
+                    {
+                        //add edge to edgesNotInPolygon
+                        edgeToCheck->populateVectorWithTriangle(edgesNotInPolygon);
+                        //log::debug("Is NOT same polygon");
+                    }
+
+                       
+                }
+
+            }
+
+            for (auto edge : edgesNotInPolygon)
+            {
+                edge->isVisited = false;
+                halfEdgeQueue.push(edge);
+            }
+
+            polygon = std::make_shared<SplittablePolygon>(edgesInPolygon);
+            polygon->calculateLocalCentroid();
+
+            return true;
         }
 
         meshHalfEdgePtr InstantiateEdge(int vertexIndex
             , const std::pair<int, int> uniqueIndexPair
             ,const std::vector<math::vec3>& vertices
-            , std::vector<meshHalfEdgePtr>& edgePtrs
+            , std::queue<meshHalfEdgePtr>& edgePtrs
             , VertexIndexToHalfEdgePtr& indexToEdgeMap)
         {
             auto firstEdge = std::make_shared<MeshHalfEdge>(vertices[vertexIndex]);
 
             auto edgeToAdd = UniqueAdd(firstEdge, indexToEdgeMap, uniqueIndexPair);
 
-            edgePtrs.push_back(edgeToAdd);
+            edgePtrs.push(edgeToAdd);
 
             return edgeToAdd;
         }

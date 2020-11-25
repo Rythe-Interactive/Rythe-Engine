@@ -12,7 +12,8 @@
 #include <physics/systems/physicssystem.hpp>
 #include <physics/halfedgeface.hpp>
 #include <physics/data/penetrationquery.h>
-#include <physics/halfedgefinder.hpp>
+#include <physics/mesh_splitter.hpp>
+#include <physics/mesh_splitter_utils/splittable_polygon.h>
 
 #include <core/compute/context.hpp>
 #include <core/compute/kernel.hpp>
@@ -1588,11 +1589,11 @@ public:
             idHandle.write(id);
 
 
-            auto finderH = ent.add_component<physics::HalfEdgeFinder>();
+        /*    auto finderH = ent.add_component<physics::MeshSplitter>();
 
             auto finder = finderH.read();
             finder.InitializePolygons(ent);
-            finderH.write(finder);
+            finderH.write(finder);*/
         }
        
 
@@ -1673,13 +1674,14 @@ public:
             idHandle.write(id);
 
 
-            auto finderH = ent.add_component<physics::HalfEdgeFinder>();
+            auto finderH = ent.add_component<physics::MeshSplitter>();
 
             auto finder = finderH.read();
             finder.InitializePolygons(ent);
             finderH.write(finder);
         }
         //Complex Mesh
+
         {
             auto ent = m_ecs->createEntity();
 
@@ -1701,7 +1703,7 @@ public:
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(37, 1.5f, 15.0f));
-            scaleH.write(math::vec3(2.0f));
+            scaleH.write(math::vec3(5.0f));
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
             auto id = idHandle.read();
@@ -1709,11 +1711,11 @@ public:
             idHandle.write(id);
 
 
-            auto finderH = ent.add_component<physics::HalfEdgeFinder>();
+            /*auto finderH = ent.add_component<physics::HalfEdgeFinder>();
 
             auto finder = finderH.read();
             finder.InitializePolygons(ent);
-            finderH.write(finder);
+            finderH.write(finder);*/
         }
 
         //Complex Mesh
@@ -2075,7 +2077,7 @@ public:
         sourceH.write(source);
     }
 
-    ecs::EntityQuery halfEdgeQuery = createQuery<physics::HalfEdgeFinder>();
+    ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
 
     void update(time::span deltaTime)
     {
@@ -2153,12 +2155,13 @@ public:
 
         for (auto entity : halfEdgeQuery)
         {
-            auto edgeFinderH = entity.get_component_handle<physics::HalfEdgeFinder>();
+            auto edgeFinderH = entity.get_component_handle<physics::MeshSplitter>();
             auto [posH, rotH, scaleH] = entity.get_component_handles<transform>();
 
             math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
 
-            auto edgePtr = edgeFinderH.read().currentPtr;
+            auto edgeFinder = edgeFinderH.read();
+            auto edgePtr = edgeFinder.currentPtr;
 
             math::vec3 worldPos = transform * math::vec4(edgePtr->position, 1);
             math::vec3 worldNextPos = transform * math::vec4(edgePtr->nextEdge->position, 1);
@@ -2169,6 +2172,27 @@ public:
             debug::drawLine(worldNextPos, worldNextPos + math::vec3(0, 0.1f, 0), math::colors::blue, 5.0f,  0.0f, true);
 
             auto getEdge = entity.get_component_handle <physics::identifier>();
+
+            for (auto polygon : edgeFinder.meshPolygons)
+            {
+                for (auto edge : polygon->GetMeshEdges())
+                {
+                    math::vec3 worldCentroid = transform * math::vec4(polygon->localCentroid, 1);
+
+                    math::vec3 worldEdgePos = transform * math::vec4(edge->position, 1);
+                    math::vec3 worldEdgeNextPos = transform * math::vec4(edge->nextEdge->position, 1);
+
+                    math::vec3 edgeToCentroid = (worldCentroid - worldEdgePos) * 0.1f;
+                    math::vec3 nextEdgeToCentroid = (worldCentroid - worldEdgeNextPos) * 0.1f;
+
+                    debug::drawLine(worldEdgePos + edgeToCentroid
+                        , worldEdgeNextPos + nextEdgeToCentroid, polygon->debugColor, 5.0f, 0.0f, false);
+
+                }
+
+
+            }
+
             //log::debug("draw edge for {} ", getEdge.read().id);
             //log::debug(" posH {} ", math::to_string(math::vec3(posH.read())));
             //log::debug(" worldPos {} ", math::to_string(worldPos));
@@ -2616,7 +2640,7 @@ public:
             for (auto entity : halfEdgeQuery)
             {
 
-                auto edgeFinderH = entity.get_component_handle<physics::HalfEdgeFinder>();
+                auto edgeFinderH = entity.get_component_handle<physics::MeshSplitter>();
 
                 auto edgeFinder = edgeFinderH.read();
 
@@ -2639,7 +2663,7 @@ public:
             for (auto entity : halfEdgeQuery)
             {
 
-                auto edgeFinderH = entity.get_component_handle<physics::HalfEdgeFinder>();
+                auto edgeFinderH = entity.get_component_handle<physics::MeshSplitter>();
 
                 auto edgeFinder = edgeFinderH.read();
 

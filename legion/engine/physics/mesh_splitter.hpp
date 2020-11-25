@@ -6,7 +6,7 @@
 namespace legion::physics
 {
 
-    struct HalfEdgeFinder
+    struct MeshSplitter
     {
         typedef std::pair<int, int> edgeVertexIndexPair;
 
@@ -20,6 +20,9 @@ namespace legion::physics
 
         std::vector<std::shared_ptr< SplittablePolygon>> meshPolygons;
 
+        /** @brief Creates a Half-Edge Data structure around the mesh and 
+        * 
+        */
         void InitializePolygons(ecs::entity_handle entity)
         {
             auto rederableHandle = entity.get_component_handle<rendering::renderable>();
@@ -183,7 +186,7 @@ namespace legion::physics
                         meshPolygons.push_back(polygon);
                     }
                 }
-                break;
+                //break;
             }
 
 
@@ -227,10 +230,12 @@ namespace legion::physics
             //BFS search for adjacent triangles with same normal
             while (!unvisitedEdgeQueue.empty())
             {
-                log::debug("Pop Edge");
+                //log::debug("Pop Edge");
 
                 auto edgeToCheck = unvisitedEdgeQueue.front();
                 unvisitedEdgeQueue.pop();
+
+                if (!edgeToCheck) { continue; }
 
                 if (!edgeToCheck->isVisited && edgeToCheck->IsTriangleValid())
                 {
@@ -243,13 +248,13 @@ namespace legion::physics
                         edgeToCheck->populateVectorWithTriangle(edgesInPolygon);
                         //add neigbors to polygonEdgeNonVisitedQueue
                         edgeToCheck->populateQueueWithTriangleNeighbor(unvisitedEdgeQueue);
-                        log::debug("Is in same polygon");
+                        //log::debug("Is in same polygon");
                     }
                     else
                     {
                         //add edge to edgesNotInPolygon
                         edgeToCheck->populateVectorWithTriangle(edgesNotInPolygon);
-                        log::debug("Is NOT same polygon");
+                        //log::debug("Is NOT same polygon");
                     }
 
                        
