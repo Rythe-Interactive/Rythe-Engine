@@ -24,7 +24,7 @@ namespace legion::core::scenemanagement
           */
         virtual void setup()
         {
-            fs::view fileView = fs::view("assets://scenes");
+            fs::view fileView = fs::view("assets://////////////////////////////////////////////////////////////////////////////////////////scenes");
             auto files = fileView.ls();
             if (files == common::valid)
             {

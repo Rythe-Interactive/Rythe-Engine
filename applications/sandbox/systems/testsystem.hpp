@@ -74,6 +74,12 @@ struct activateFrictionTest : public app::input_action<activateFrictionTest> {};
 struct extendedPhysicsContinue : public app::input_action<extendedPhysicsContinue> {};
 struct nextPhysicsTimeStepContinue : public app::input_action<nextPhysicsTimeStepContinue> {};
 
+//scene loading binds
+struct loadscene1 : public app::input_action<loadscene1> {};
+struct loadscene2 : public app::input_action<loadscene2> {};
+struct loadscene3 : public app::input_action<loadscene3> {};
+struct loadscene4 : public app::input_action<loadscene4> {};
+
 int num = 0;
 
 class TestSystem final : public System<TestSystem>
@@ -155,6 +161,11 @@ public:
         app::InputSystem::createBinding< extendedPhysicsContinue>(app::inputmap::method::M);
         app::InputSystem::createBinding<nextPhysicsTimeStepContinue>(app::inputmap::method::N);
 
+        app::InputSystem::createBinding<loadscene1>(app::inputmap::method::F1);
+        app::InputSystem::createBinding<loadscene2>(app::inputmap::method::F2);
+        app::InputSystem::createBinding<loadscene3>(app::inputmap::method::F3);
+        app::InputSystem::createBinding<loadscene4>(app::inputmap::method::F4);
+
         bindToEvent<physics_test_move, &TestSystem::onUnitPhysicsUnitTestMove>();
 
         bindToEvent<light_switch, &TestSystem::onLightSwitch>();
@@ -180,11 +191,18 @@ public:
         //friction test
         bindToEvent< activateFrictionTest, &TestSystem::FrictionTestActivate>();
 
-
         bindToEvent< extendedPhysicsContinue, &TestSystem::onExtendedPhysicsContinueRequest>();
         bindToEvent<nextPhysicsTimeStepContinue, &TestSystem::onNextPhysicsTimeStepRequest>();
 
-#pragma endregion
+        //load scene
+
+   
+        bindToEvent<loadscene1, &TestSystem::scene1>();
+        bindToEvent<loadscene2, &TestSystem::scene2>();
+        bindToEvent<loadscene3, &TestSystem::scene3>();
+        bindToEvent<loadscene4, &TestSystem::scene4>();
+
+#pragma endregion              
 
 #pragma region Model and material loading
         rendering::model_handle directionalLightH;
@@ -636,9 +654,6 @@ public:
         log::debug("Created a scene");
 
 
-        scenemanagement::SceneManager::loadScene("Main");
-        log::debug("Finished loading a scene");
-
 
         //CreateCubeStack(3, 2, 2, math::vec3(0, -3.0f, 8.0f), math::vec3(1, 1, 1)
         //    ,cubeParams, 0.1f, cubeH, wireframeH);
@@ -646,6 +661,7 @@ public:
         createProcess<&TestSystem::update>("Update");
         //createProcess<&TestSystem::drawInterval>("TestChain");
     }
+
 
     void testPhysicsEvent(physics::TriggerEvent* evnt)
     {
@@ -1612,6 +1628,43 @@ public:
     }
 
 #pragma region input stuff
+
+    void scene1(loadscene1* action)
+    {
+        if (action->pressed())
+        {
+            scenemanagement::SceneManager::loadScene("Main");
+            log::debug("Finished loading a scene");
+        }
+    }
+
+    void scene2(loadscene2* action)
+    {
+        if (action->pressed())
+        {
+            scenemanagement::SceneManager::loadScene("Main2");
+            log::debug("Finished loading a scene");
+        }
+    }
+
+    void scene3(loadscene3* action)
+    {
+        if (action->pressed())
+        {
+            scenemanagement::SceneManager::loadScene("Main3");
+            log::debug("Finished loading a scene");
+        }
+    }
+
+    void scene4(loadscene4* action)
+    {
+        if (action->pressed())
+        {
+            scenemanagement::SceneManager::loadScene("Main4");
+            log::debug("Finished loading a scene");
+        }
+    }
+
     void onLightSwitch(light_switch* action)
     {
         static bool on = true;
@@ -1816,13 +1869,12 @@ public:
                 entity.write_component(rot);
             }
         }
-        //if (num < 1)
-        //{
-
-        scenemanagement::SceneManager::loadScene("Main");
-        log::debug("Finished loading a scene");
-        //    num++;
-        //}
+        /* if (num < 1)
+         {
+         scenemanagement::SceneManager::loadScene("Main");
+         log::debug("Finished loading a scene");
+             num++;
+         }*/
     }
 
     void drawInterval(time::span deltaTime)

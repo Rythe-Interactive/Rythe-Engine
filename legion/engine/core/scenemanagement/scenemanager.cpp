@@ -55,40 +55,21 @@ namespace legion::core::scenemanagement
     {
         if (SceneManager::getScene(name))
         {
-            log::debug("Starting destruction of scene");
-            m_ecs->world.get_child(0).destroy();
-            log::debug("Done destroying!");
-
-            scene s;
-            s.id = nameHash(name);
-            sceneNames.emplace(s.id, name);
-            auto sceneEntity = m_ecs->createEntity();
-            sceneEntity.add_component<scenemanagement::scene>(s);
-            m_ecs->world.add_child(sceneEntity);
-
             std::ifstream inFile("assets/scenes/" + name + ".cornflake");
-            serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
+            auto sceneEntity = serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
             SceneManager::currentScene = name;
+
+            m_ecs->world.add_child(sceneEntity);
             return true;
         }
         else
         {
-            log::debug("Starting destruction of scene");
-            m_ecs->world.get_child(0).destroy();
-            log::debug("Done destroying!");
-
-            scene s;
-            s.id = nameHash(name);
-            sceneNames.emplace(s.id, name);
-            auto sceneEntity = m_ecs->createEntity();
-            sceneEntity.add_component<scenemanagement::scene>(s);
-            m_ecs->world.add_child(sceneEntity);
-
-           /* std::ifstream inFile("assets/scenes/" + name + ".cornflake");
-            serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
-            log::debug("Scene " + name + ".cornflake does not exist in our scenelist, but a file does");*/
+            std::ifstream inFile("assets/scenes/" + name + ".cornflake");
+            auto sceneEntity = serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
+            log::debug("Scene " + name + ".cornflake does not exist in our scenelist, but a file does");
             SceneManager::currentScene = name;
 
+            m_ecs->world.add_child(sceneEntity);
             return true;
         }
         return false;
