@@ -190,7 +190,7 @@ public:
         rendering::model_handle pointLightH;
         rendering::model_handle audioSourceH;
         rendering::model_handle cubeH;
-        //rendering::model_handle gltfCubeH;
+        rendering::model_handle gltfCubeH;
         rendering::model_handle sphereH;
         rendering::model_handle suzanneH;
         rendering::model_handle gltfTestH;
@@ -225,7 +225,7 @@ public:
             pointLightH = rendering::ModelCache::create_model("point light", "assets://models/point-light.obj"_view);
             audioSourceH = rendering::ModelCache::create_model("audio source", "assets://models/audio-source.obj"_view);
             cubeH = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
-            //gltfCubeH = rendering::ModelCache::create_model("gltfCube", "assets://models/cube.glb"_view);
+            gltfCubeH = rendering::ModelCache::create_model("gltfCube", "assets://models/cube.gltf"_view, { true, true, "assets://models/submeshtest.glb"_view });
             sphereH = rendering::ModelCache::create_model("sphere", "assets://models/sphere.obj"_view);
             suzanneH = rendering::ModelCache::create_model("suzanne", "assets://models/suzanne.obj"_view);
             gltfTestH = rendering::ModelCache::create_model("gltfTest", "assets://models/submeshtest.glb"_view);
@@ -368,11 +368,11 @@ public:
         }
 
         //glft test
-        /*{
+        {
             auto ent = createEntity();
             ent.add_component<rendering::renderable>({ gltfCubeH, pbrH });
             ent.add_components<transform>(position(0,20,0), rotation(), scale(1.0f));
-        }*/
+        }
         //glft test
         {
             auto ent = createEntity();

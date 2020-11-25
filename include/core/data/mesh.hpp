@@ -81,7 +81,7 @@ namespace legion::core
     {
         bool triangulate;
         bool vertex_color;
-        filesystem::view materialFile;
+        filesystem::view contextFolder;
     };
 
     /**@brief Default mesh import settings.
