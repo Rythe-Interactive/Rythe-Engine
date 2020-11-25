@@ -34,6 +34,10 @@ SOFTWARE.
 #define NLOHMANN_JSON_VERSION_MINOR 5
 #define NLOHMANN_JSON_VERSION_PATCH 0
 
+#define not !
+#define or ||
+#define and &&
+
 #include <algorithm> // all_of, find, for_each
 #include <cassert> // assert
 #include <ciso646> // and, not, or

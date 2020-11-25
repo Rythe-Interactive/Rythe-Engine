@@ -2,9 +2,8 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
 #define TINYGLTF_IMPLEMENTATION
-#define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include <tiny_gltf.h> 
+#include <tinygltf/tiny_gltf.h> 
 #endif
 
 #include <core/data/importers/mesh_importers.hpp>
@@ -12,6 +11,7 @@
 #include <core/logging/logging.hpp>
 #include <core/common/string_extra.hpp>
 #include <unordered_map>
+#include <algorithm>
 
 namespace legion::core::detail
 {
@@ -40,6 +40,30 @@ namespace legion::core::detail
             return hash != other.hash;
         }
     };
+
+    template <class T>
+    void handleGltfBuffer(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, std::vector<T>* data)
+    {
+        /*for (size_t i = 0; i < bufferView.byteLength; i += sizeof(T))
+        {
+            data->push_back(*reinterpret_cast<const T*>(&buffer.data.at(i) + bufferView.byteOffset));
+        }*/
+        data->resize(bufferView.byteLength / sizeof(T));
+        memcpy(data->data(), &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
+    }
+
+    void handleGltfIndices(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, std::vector<unsigned int>* data)
+    {
+        //indices in glft are in uin16
+        data->resize(bufferView.byteLength / 2);
+
+        std::vector<int16> origin;
+        origin.resize(bufferView.byteLength / 2);
+        memcpy(origin.data(), &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
+        //memcpy(data->data(), &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
+        std::copy(origin.begin(), origin.begin()+origin.size(), data->begin());
+        //std::copy(buffer.data.at(0) + bufferView.byteOffset, buffer.data.at(0) + bufferView.byteOffset + bufferView.byteLength, std::back_inserter(*data));
+    }
 }
 
 #if !defined(DOXY_EXCLUDE)
@@ -188,8 +212,117 @@ namespace legion::core
 
     common::result_decay_more<mesh, fs_error> gltf_mesh_loader::load(const filesystem::basic_resource& resource, mesh_import_settings&& settings)
     {
+        //log::debug("Loading glb");
         using common::Err, common::Ok;
         // decay overloads the operator of ok_type and operator== for valid_t.
         using decay = common::result_decay_more<mesh, fs_error>;
+
+        namespace tg = tinygltf;
+
+        tg::Model model;
+        tg::TinyGLTF loader;
+        std::string err;
+        std::string warn;
+
+        //bool ret = loader.LoadBinaryFromFile(&model, &err, &warn, resource.);
+        bool ret = loader.LoadBinaryFromMemory(&model, &err, &warn, resource.data(), resource.size());
+
+        if (!err.empty())
+        {
+            log::error("Error: {}", err);
+        }
+        if (!warn.empty())
+        {
+            log::warn("Warning: {}", warn);
+        }
+        if (!ret)
+        {
+            return decay(Err(legion_fs_error("Failed to parse glTF")));
+        }
+
+        size_t offset = 0;
+        core::mesh meshData;
+        for (auto& mesh : model.meshes)
+        {
+            sub_mesh m;
+            m.name = mesh.name;
+            for (auto primitive : mesh.primitives)
+            {
+                for (auto& attrib : primitive.attributes)
+                {
+                    const tg::Accessor& accessor = model.accessors.at(attrib.second);
+                    tg::BufferView& view = model.bufferViews.at(accessor.bufferView);
+                    tg::Buffer& buff = model.buffers.at(view.buffer);
+                    if (attrib.first.compare("POSITION") == 0)
+                    {
+                        // Position data
+                        detail::handleGltfBuffer<math::vec3>(buff, view, &(meshData.vertices));
+                    }
+                    else if (attrib.first.compare("NORMAL") == 0)
+                    {
+                        // Normal data
+                        detail::handleGltfBuffer<math::vec3>(buff, view, &(meshData.normals));
+                    }
+                    else if (attrib.first.compare("TEXCOORD_0") == 0)
+                    {
+                        // UV data
+                        detail::handleGltfBuffer<math::vec2>(buff, view, &(meshData.uvs));
+                    }
+                    else
+                    {
+                        log::warn("More data to be found in .gbl. Data can be accesed through: {}", attrib.first);
+                    }
+                }
+                const tg::Accessor& accessor = model.accessors.at(primitive.indices);
+                tg::BufferView& view = model.bufferViews.at(accessor.bufferView);
+                tg::Buffer& buff = model.buffers.at(view.buffer);
+                detail::handleGltfIndices(buff, view, &(meshData.indices));
+            }
+            m.indexCount = meshData.indices.size() - offset;
+            m.indexOffset = meshData.indices.size() - m.indexCount;
+            offset += m.indexCount;
+            //log::debug("c {}, o {}", m.indexCount, m.indexOffset);
+            meshData.submeshes.push_back(m);
+        }
+
+        // Debugging purpose
+        /*meshData.indices[9] = 4;
+        meshData.indices[10] = 6;
+        meshData.indices[11] = 7;*/
+
+        /*
+        for (int i = 0; i < meshData.vertices.size(); ++i)
+        {
+            log::debug("[{}]: V{} \tN{} \t{}", i, meshData.vertices[i], meshData.normals[i], meshData.uvs[i]);
+            meshData.colors.push_back(core::math::colors::grey);
+        }
+        for (int i = 0; i < meshData.indices.size(); ++i)
+        {
+            log::debug("[{}]: I{}", i, meshData.indices[i]);
+            if ((i+1) % 6 == 0) log::debug("");
+        }
+        log::debug("V {}, N {}, UV {}, C {}, I {}", meshData.vertices.size(), meshData.normals.size(), meshData.uvs.size(), meshData.colors.size(), meshData.indices.size());
+        */
+
+        for (int i = 0; i < meshData.vertices.size(); ++i)
+        {
+            meshData.vertices[i] = meshData.vertices[i] * math::vec3(-1, 1, 1);
+            meshData.normals[i] = meshData.normals[i] * math::vec3(-1, 1, 1);
+            meshData.uvs[i] = meshData.uvs[i] * math::vec2(1, -1);
+            meshData.colors.push_back(core::math::colors::grey);
+        }
+
+        // Because we only flip one axis we also need to flip the triangle rotation.
+        for (int i = 0; i < meshData.indices.size(); i += 3)
+        {
+            uint i1 = meshData.indices[i + 1];
+            uint i2 = meshData.indices[i + 2];
+            meshData.indices[i + 1] = i2;
+            meshData.indices[i + 2] = i1;
+        }
+
+        mesh::calculate_tangents(&meshData);
+
+        return decay(Ok(meshData));
     }
 }

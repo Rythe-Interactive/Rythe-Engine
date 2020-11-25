@@ -152,11 +152,8 @@ LICENSE
 
 */
 
-#pragma warning(disable:4996)
-
 #ifndef INCLUDE_STB_IMAGE_WRITE_H
 #define INCLUDE_STB_IMAGE_WRITE_H
-#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdlib.h>
 

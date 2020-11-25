@@ -20,6 +20,7 @@ namespace legion::core
             filesystem::provider_registry::domain_create_resolver<filesystem::basic_resolver>("engine://", "./engine");
 
             filesystem::AssetImporter::reportConverter<obj_mesh_loader>(".obj");
+            filesystem::AssetImporter::reportConverter<gltf_mesh_loader>(".glb");
 
             for (cstring extension : stb_image_loader::extensions)
                 filesystem::AssetImporter::reportConverter<stb_image_loader>(extension);
