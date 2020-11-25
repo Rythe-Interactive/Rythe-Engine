@@ -127,7 +127,7 @@ namespace legion::core::ecs
         }
     }
 
-    L_NODISCARD   bool EcsRegistry::validateEntity(id_type entityId)
+    L_NODISCARD bool EcsRegistry::validateEntity(id_type entityId)
     {
         async::readonly_guard guard(m_entityLock);
         return entityId && m_containedEntities.contains(entityId);
@@ -169,11 +169,6 @@ namespace legion::core::ecs
         m_queryRegistry.markEntityDestruction(entityId); // Remove entity from any queries.
 
         entity_handle entity(entityId);
-
-        for (auto child : entity)
-        {
-
-        }
 
         {
             async::readwrite_guard guard(m_entityLock); // Request read-write permission for the entity list.

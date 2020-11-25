@@ -1,9 +1,10 @@
 #version 450
 #state CULL OFF
 
-generate(vertex, geometry, fragment)
+generate(vertex, fragment)
 
 #include <stdio.shinc>
+#include <math_ext.shinc>
 
 shader(vertex)
 {
@@ -14,51 +15,27 @@ shader(vertex)
     }
 }
 
-shader(geometry)
-{
-    geometry_input(triangles)
-    geometry_output(triangle_strip, max_vertices = 3)
-
-    out IO
-    {
-        vec3 barycentricCoords;
-    } outData;
-
-    void main(void)
-    {
-        gl_Position = gl_in[0].gl_Position;
-        outData.barycentricCoords = vec3(1, 0, 0);
-        PropagateStdIO(0);
-        EmitVertex();
-        gl_Position = gl_in[1].gl_Position;
-        outData.barycentricCoords = vec3(0, 1, 0);
-        PropagateStdIO(1);
-        EmitVertex();
-        gl_Position = gl_in[2].gl_Position;
-        outData.barycentricCoords = vec3(0, 0, 1);
-        PropagateStdIO(2);
-        EmitVertex();
-        EndPrimitive();
-    }
-}
-
 shader(fragment)
 {
-    in IO
-    {
-        vec3 barycentricCoords;
-    } inData;
-
     out vec4 fragment_color;
 
     void main(void)
     {
-        vec3 deltas = fwidth(inData.barycentricCoords);
-        vec3 adjustedCoords = smoothstep(deltas, 2* deltas, inData.barycentricCoords);
-        float linePresence = min(adjustedCoords.x, min(adjustedCoords.y, adjustedCoords.z));
-        if(linePresence > 0.9)
+        vec2 grid = mod(GetWorldPosition().xz, 1.0);
+        vec2 invgrid = 1.0 - grid;
+        grid = grid * grid;
+        grid = grid * grid;
+        invgrid = invgrid * invgrid;
+        invgrid = invgrid * invgrid;
+        grid = clamp01(grid + invgrid);
+
+        if(max(grid.x, grid.y) < 0.9)
             discard;
 
-        fragment_color = vec4(vec3(0), mix(1, 0, length(stdin(position))/250.f));
+        float alpha = mix(1, 0, clamp01(length(stdio(position))/250.0));
+        //if(alpha <= 0.0)
+            //discard;
+
+        fragment_color = vec4(vec3(0.3), alpha);
     }
 }
