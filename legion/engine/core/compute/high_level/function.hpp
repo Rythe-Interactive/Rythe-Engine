@@ -22,17 +22,34 @@ namespace legion::core::compute {
     namespace detail {
         struct buffer_base
     {
-        buffer_base(byte* buffer, size_t size, std::string n) : container(std::make_pair(buffer, size)), name(std::move(n)) {}
+        buffer_base(byte* buffer, size_type size, std::string n) : container(std::make_pair(buffer, size)), name(std::move(n)) {}
         buffer_base(const buffer_base& other) = default;
         buffer_base(buffer_base&& other) noexcept = default;
         buffer_base& operator=(const buffer_base& other) = default;
         buffer_base& operator=(buffer_base&& other) noexcept = default;
         ~buffer_base() = default;
 
-        std::pair<byte*, size_t> container;
+        std::pair<byte*, size_type> container;
         std::string name;
     };
     }
+
+
+    struct karg
+    {
+        template <class T>
+        karg(T& v, const std::string& n = "") : container(&v,sizeof(T)), name(n) {}
+        karg(const karg&) = default;
+        karg(karg&&) noexcept = default;
+        karg& operator=(const karg&) = default;
+        karg& operator=(karg&&) noexcept = default;
+        ~karg() = default;
+
+        std::pair<void*,size_type> container;
+        std::string name;
+    };
+
+    struct invalid_karg_type {};
 
 
     /**
@@ -109,8 +126,8 @@ namespace legion::core::compute {
                                   >;
 
         //invokes the NdRangeKernel
-        [[nodiscard]] common::result<void, void> invoke (dvar global, invoke_buffer_container & parameters) const;
-        [[nodiscard]] common::result<void, void> invoke2(dvar global, std::vector<Buffer> buffers) const;
+        [[nodiscard]] common::result<void, void> invoke (dvar global, invoke_buffer_container & parameters,std::vector<karg> kernelArgs) const;
+        [[nodiscard]] common::result<void, void> invoke2(dvar global, std::vector<Buffer> buffers,std::vector<karg> kernelArgs) const;
 
 
         std::unique_ptr<Kernel> m_kernel;
@@ -185,7 +202,7 @@ namespace legion::core::compute {
             }
 
             //check if we are dealing with a list of buffers or a list of vectors
-            if constexpr ((std::is_same_v<compute::Buffer,std::remove_reference_t<Args>> && ...))
+            if constexpr (((std::is_same_v<compute::Buffer,std::remove_reference_t<Args>> || std::is_same_v<karg,Args> ) && ...))
             {
                 return invoke_helper_buffers(dim,std::forward<Args>(args)...);
             }
@@ -218,19 +235,44 @@ namespace legion::core::compute {
             {
                 return std::pair<buffer_base*, buffer_type>(static_cast<buffer_base*>(&buffer_container), buffer_type::WRITE_BUFFER);
             }
-            else
+            else if constexpr(std::is_base_of_v<inout_ident,T>)
             {
                 return std::pair<buffer_base*, buffer_type>(static_cast<buffer_base*>(&buffer_container), buffer_type::READ_BUFFER | buffer_type::WRITE_BUFFER);
             }
+            else
+                return std::pair<buffer_base*,buffer_type>(nullptr,buffer_type::WRITE_BUFFER);
         }
+
+        template <class T>
+        static karg transform_to_karg(T& buffer_container)
+        {
+            if constexpr (std::is_same_v<karg,T>)
+                return buffer_container;
+            else
+            {
+                invalid_karg_type* dummy = nullptr;
+                return karg(dummy,"");
+            }
+
+        }
+
+        template <class T>
+        static Buffer transform_to_buffer(T& buffer_container)
+        {
+            if constexpr (std::is_same_v<Buffer,T>)
+                return buffer_container;
+            else return Buffer(nullptr,nullptr,0,buffer_type::WRITE_BUFFER,"");
+        }
+
 
            private:
         template <typename... Args>
         common::result<void, void> invoke_helper_raw(dvar dispatch_size, Args&& ... args)
         {
 
-            //do some sanity checking args either need to be in(vector) out(vector) inout(vector) or vector
+            //do some sanity checking args either need to be in(vector) out(vector) inout(vector) vector or karg
             static_assert(((
+                std::is_same_v<karg,Args> ||
                 std::is_base_of_v<detail::buffer_base, Args> ||
                 is_vector<std::remove_reference_t<Args>>::value) && ...), "Types passed to operator() must be vector or in,out,inout");
 
@@ -238,16 +280,22 @@ namespace legion::core::compute {
             //promote vector to in(vector) leave the rest alone
             std::tuple container = { std::conditional_t<is_vector<std::remove_reference_t<Args>>::value,in<Args>,Args>(args)... };
 
+            auto kargs = std::apply(
+            [](auto&& ... x)
+            {
+                    return {function::transform_to_karg(x)...};
+            },container);
+
             //transform from tuple(in,out,inout,...) to vector(pair(buffer,"in"),pair(buffer,"out"), ...)
             auto vector = std::apply(
-                [](auto&&...x)
-                {
-                    return invoke_buffer_container { function::transform_to_pairs(x)... };
-                }, container);
+            [](auto&&...x)
+            {
+                return invoke_buffer_container { function::transform_to_pairs(x)... };
+            }, container);
 
 
             //we finally transformed it into a way that the non-templated function can use
-            return invoke(dispatch_size, vector);
+            return invoke(dispatch_size, vector,kargs);
         }
 
         template <typename... Args>
@@ -256,7 +304,20 @@ namespace legion::core::compute {
             static_assert((std::is_same_v<compute::Buffer,std::remove_reference_t<Args>> && ...),
                 "Types passed to operator must be Buffer");
 
-            return invoke2(dispatch_size,{args...});
+            std::tuple tpl = { args... };
+
+            auto kargs = std::apply(
+            [](auto&& ... x)
+            {
+                    return {function::transform_to_karg(x)...};
+            },tpl);
+            auto buffers = std::apply(
+            [](auto&&...x)
+            {
+                return invoke_buffer_container { function::transform_to_buffer(x)... };
+            },tpl);
+
+            return invoke2(dispatch_size,{args...},kargs);
         }
     };
 }

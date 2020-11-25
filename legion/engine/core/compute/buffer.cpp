@@ -11,6 +11,7 @@ namespace legion::core::compute
 
     Buffer::Buffer(cl_context ctx, byte* data, size_t len, buffer_type type, std::string name) :m_size(len), m_data(data), m_name(std::move(name))
     {
+        if(!ctx) return;
         //initialize new ref-counter
         m_ref_count = new size_t(1);
 

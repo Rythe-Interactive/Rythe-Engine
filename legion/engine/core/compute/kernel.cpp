@@ -256,4 +256,25 @@ namespace legion::core::compute
         m_global_size = d3{s0,s1,s2};
         return *this;
     }
+
+    Kernel& Kernel::setKernelArg(void* value, size_type size, const std::string& name)
+    {
+        //translate name to index
+        param_find([this, size, v = std::forward<void*>(value)](cl_uint index)
+        {
+            this->setKernelArg(v,size,index);
+        }, name);
+        return *this;
+    }
+
+    Kernel& Kernel::setKernelArg(void* value, size_type size, cl_uint index)
+    {
+        if(clSetKernelArg(m_func,index,size,value) != CL_SUCCESS)
+        {
+            log::warn("clSetKernelArg failed for Arg at index {}",index);
+        }
+    }
+
+
+
 }
