@@ -283,7 +283,7 @@ namespace legion::core::compute {
             auto kargs = std::apply(
             [](auto&& ... x)
             {
-                    return {function::transform_to_karg(x)...};
+                    return std::vector<karg>{function::transform_to_karg(x)...};
             },container);
 
             //transform from tuple(in,out,inout,...) to vector(pair(buffer,"in"),pair(buffer,"out"), ...)
@@ -309,12 +309,12 @@ namespace legion::core::compute {
             auto kargs = std::apply(
             [](auto&& ... x)
             {
-                    return {function::transform_to_karg(x)...};
+                    return std::vector<karg>{function::transform_to_karg(x)...};
             },tpl);
             auto buffers = std::apply(
             [](auto&&...x)
             {
-                return invoke_buffer_container { function::transform_to_buffer(x)... };
+                return std::vector<Buffer>{ function::transform_to_buffer(x)... };
             },tpl);
 
             return invoke2(dispatch_size,{args...},kargs);
