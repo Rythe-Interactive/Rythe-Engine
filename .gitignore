@@ -107,3 +107,6 @@ deps/lib/legion*
 
 # Mono VM
 vm/**
+
+# Legion Includes
+include/**
