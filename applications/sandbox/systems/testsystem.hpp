@@ -172,11 +172,11 @@ public:
         rendering::model_handle pointLightH;
         rendering::model_handle audioSourceH;
         rendering::model_handle cubeH;
-        rendering::model_handle gltfCubeH;
+        //rendering::model_handle gltfCubeH;
         rendering::model_handle sphereH;
         rendering::model_handle suzanneH;
         rendering::model_handle gltfTestH;
-        rendering::model_handle gltfGizmoH;
+        //rendering::model_handle gltfGizmoH;
         //rendering::model_handle gnomeH;
         rendering::model_handle uvsphereH;
         rendering::model_handle axesH;
@@ -222,7 +222,7 @@ public:
             sphereH = rendering::ModelCache::create_model("sphere", "assets://models/sphere.obj"_view);
             suzanneH = rendering::ModelCache::create_model("suzanne", "assets://models/suzanne.obj"_view);
             gltfTestH = rendering::ModelCache::create_model("gltfTest", "assets://models/submeshtest.glb"_view);
-            gltfGizmoH = rendering::ModelCache::create_model("gltfGizmo", "assets://models/xyz.glb"_view);
+            //gltfGizmoH = rendering::ModelCache::create_model("gltfGizmo", "assets://models/xyz.glb"_view);
             //gnomeH = rendering::ModelCache::create_model("gnome", "assets://models/wizardgnome.obj"_view);
             uvsphereH = rendering::ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view);
             axesH = rendering::ModelCache::create_model("axes", "assets://models/xyz.obj"_view, { true, false, "assets://models/xyz.mtl"_view });
@@ -506,11 +506,11 @@ public:
             ent.add_components<transform>();
         }
         // glTF gizmo
-        {
+        /*{
             auto ent = createEntity();
             ent.add_component<rendering::renderable>({ gltfGizmoH, vertexColorH });
             ent.add_components<transform>(position(2, 20, 0), rotation(), scale(1.0f));
-        }
+        }*/
 
         {
             auto ent = createEntity();

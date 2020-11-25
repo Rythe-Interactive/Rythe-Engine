@@ -48,8 +48,9 @@ namespace legion::core::detail
         {
             data->push_back(*reinterpret_cast<const T*>(&buffer.data.at(i) + bufferView.byteOffset));
         }*/
-        data->resize(bufferView.byteLength / sizeof(T));
-        memcpy(data->data(), &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
+        size_t size = data->size();
+        data->resize(size + bufferView.byteLength / sizeof(T));
+        memcpy(data->data()+size, &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
     }
 
 
@@ -61,10 +62,11 @@ namespace legion::core::detail
         //origin.resize(bufferView.byteLength);
         //memcpy(origin.data(), &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
 
+        size_t size = data->size();
         if (accessorType == TINYGLTF_TYPE_VEC3)
         {
             log::debug("Color accessor type: Vec3");
-            size_t dataIndex = 0;
+            size_t dataIndex = size;
             if (componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE)
             {
                 log::debug("Color component type: u byte");
@@ -78,7 +80,7 @@ namespace legion::core::detail
             else if (componentType == TINYGLTF_COMPONENT_TYPE_FLOAT)
             {
                 log::debug("Color component type: float");
-                data->resize(bufferView.byteLength / sizeof(math::vec3));
+                data->resize(size + bufferView.byteLength / sizeof(math::vec3));
                 for (int i = 0; i < bufferView.byteLength; i += 3 * sizeof(float))
                 {
                     float r = *reinterpret_cast<const float*>(&buffer.data.at(i) + bufferView.byteOffset);
@@ -95,7 +97,7 @@ namespace legion::core::detail
         else if (accessorType == TINYGLTF_TYPE_VEC4)
         {
             log::debug("Color accessor type: Vec4");
-            size_t dataIndex = 0;
+            size_t dataIndex = size;
             if (componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE)
             {
                 log::debug("Color component type: u byte");
@@ -109,7 +111,7 @@ namespace legion::core::detail
             else if (componentType == TINYGLTF_COMPONENT_TYPE_FLOAT)
             {
                 log::debug("Color component type: float");
-                data->resize(bufferView.byteLength / sizeof(math::vec4));
+                data->resize(size + bufferView.byteLength / sizeof(math::vec4));
                 log::debug("Resized color data to: {}", data->size());
                 for (int i = 0; i < bufferView.byteLength; i += 4 * sizeof(float))
                 {
@@ -128,17 +130,22 @@ namespace legion::core::detail
         else log::warn("Warning: Vert colors were not vec3 or vec4, skipping colors");
     }
 
-    void handleGltfIndices(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, std::vector<unsigned int>* data)
+    void handleGltfIndices(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, int offset, std::vector<unsigned int>* data)
     {
+        size_t size = data->size();
         //indices in glft are in uin16
-        data->resize(bufferView.byteLength / 2);
+        data->resize(size + bufferView.byteLength / 2);
 
         std::vector<int16> origin;
         origin.resize(bufferView.byteLength / 2);
         memcpy(origin.data(), &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
         //memcpy(data->data(), &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
-        std::copy(origin.begin(), origin.begin()+origin.size(), data->begin());
+        //std::copy(origin.begin(), origin.begin()+origin.size(), data->begin()+size);
         //std::copy(buffer.data.at(0) + bufferView.byteOffset, buffer.data.at(0) + bufferView.byteOffset + bufferView.byteLength, std::back_inserter(*data));
+        for (int i = 0; i < origin.size(); ++i)
+        {
+            data->at(i + size) = origin[i]+offset;
+        }
     }
 }
 
@@ -325,6 +332,11 @@ namespace legion::core
             log::debug("Loading submesh: {}", m.name);
             for (auto primitive : mesh.primitives)
             {
+                const tg::Accessor& accessor = model.accessors.at(primitive.indices);
+                tg::BufferView& view = model.bufferViews.at(accessor.bufferView);
+                tg::Buffer& buff = model.buffers.at(view.buffer);
+                detail::handleGltfIndices(buff, view, meshData.vertices.size(), &(meshData.indices));
+
                 for (auto& attrib : primitive.attributes)
                 {
                     const tg::Accessor& accessor = model.accessors.at(attrib.second);
@@ -356,13 +368,18 @@ namespace legion::core
                         log::warn("\n\n\n\nMore data to be found in .gbl. Data can be accesed through: {}\n\n\n", attrib.first);
                     }
                 }
-                const tg::Accessor& accessor = model.accessors.at(primitive.indices);
-                tg::BufferView& view = model.bufferViews.at(accessor.bufferView);
-                tg::Buffer& buff = model.buffers.at(view.buffer);
-                detail::handleGltfIndices(buff, view, &(meshData.indices));
             }
             m.indexCount = meshData.indices.size() - offset;
             m.indexOffset = meshData.indices.size() - m.indexCount;
+            /*log::debug("total: {}, count: {}, offset: {}", meshData.indices.size(), m.indexCount, m.indexOffset);
+            log::debug("first indices: {} {} {} {} {} {}",
+                meshData.indices[m.indexOffset],
+                meshData.indices[m.indexOffset + 1],
+                meshData.indices[m.indexOffset + 2],
+                meshData.indices[m.indexOffset + 3],
+                meshData.indices[m.indexOffset + 4],
+                meshData.indices[m.indexOffset + 5]
+            );*/
             offset += m.indexCount;
             meshData.submeshes.push_back(m);
         }

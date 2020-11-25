@@ -1,10 +1,10 @@
 {
     "Entity": {
-        "Id": 35,
+        "Id": 34,
         "Name": "Entity",
         "Components": [
             {
-                "Owner": 35,
+                "Owner": 34,
                 "Component Type": 9547123436134525643,
                 "Component Name": "struct legion::core::scenemanagement::scene",
                 "NAME": "Main"
@@ -1104,22 +1104,27 @@
                 "Components": [
                     {
                         "Owner": 26,
+                        "Component Type": 7523951964142181909,
+                        "Component Name": "struct sah"
+                    },
+                    {
+                        "Owner": 26,
                         "Component Type": 6208564340805693071,
                         "Component Name": "struct legion::rendering::renderable",
                         "value0": {
-                            "value0": 15349227722433584422
+                            "value0": 5503224543670688896
                         },
                         "value1": {
-                            "value0": 13544847828024012600
+                            "value0": 8630977270866280095
                         }
                     },
                     {
                         "Owner": 26,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
+                        "x": 0.75,
+                        "y": 0.75,
+                        "z": 0.75
                     },
                     {
                         "Owner": 26,
@@ -1134,8 +1139,8 @@
                         "Owner": 26,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
-                        "x": 2.0,
-                        "y": 20.0,
+                        "x": 5.099999904632568,
+                        "y": 9.0,
                         "z": 0.0
                     }
                 ],
@@ -1155,19 +1160,19 @@
                         "Component Type": 6208564340805693071,
                         "Component Name": "struct legion::rendering::renderable",
                         "value0": {
-                            "value0": 5503224543670688896
+                            "value0": 9915782786907616376
                         },
                         "value1": {
-                            "value0": 8630977270866280095
+                            "value0": 5048211821449389780
                         }
                     },
                     {
                         "Owner": 27,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
-                        "x": 0.75,
-                        "y": 0.75,
-                        "z": 0.75
+                        "x": 2.5,
+                        "y": 2.5,
+                        "z": 2.5
                     },
                     {
                         "Owner": 27,
@@ -1182,9 +1187,9 @@
                         "Owner": 27,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
-                        "x": 5.099999904632568,
-                        "y": 9.0,
-                        "z": 0.0
+                        "x": 0.0,
+                        "y": 3.0,
+                        "z": -5.099999904632568
                     }
                 ],
                 "Children": []
@@ -1206,7 +1211,7 @@
                             "value0": 9915782786907616376
                         },
                         "value1": {
-                            "value0": 5048211821449389780
+                            "value0": 8671878212514116987
                         }
                     },
                     {
@@ -1232,7 +1237,7 @@
                         "Component Name": "struct legion::core::position",
                         "x": 0.0,
                         "y": 3.0,
-                        "z": -5.099999904632568
+                        "z": -8.0
                     }
                 ],
                 "Children": []
@@ -1254,7 +1259,7 @@
                             "value0": 9915782786907616376
                         },
                         "value1": {
-                            "value0": 8671878212514116987
+                            "value0": 6773895175305003099
                         }
                     },
                     {
@@ -1280,7 +1285,7 @@
                         "Component Name": "struct legion::core::position",
                         "x": 0.0,
                         "y": 3.0,
-                        "z": -8.0
+                        "z": -2.200000047683716
                     }
                 ],
                 "Children": []
@@ -1302,7 +1307,7 @@
                             "value0": 9915782786907616376
                         },
                         "value1": {
-                            "value0": 6773895175305003099
+                            "value0": 3874232068280630314
                         }
                     },
                     {
@@ -1326,9 +1331,9 @@
                         "Owner": 30,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
-                        "x": 0.0,
+                        "x": 4.0,
                         "y": 3.0,
-                        "z": -2.200000047683716
+                        "z": -8.0
                     }
                 ],
                 "Children": []
@@ -1350,7 +1355,7 @@
                             "value0": 9915782786907616376
                         },
                         "value1": {
-                            "value0": 3874232068280630314
+                            "value0": 14417210513765110748
                         }
                     },
                     {
@@ -1376,7 +1381,7 @@
                         "Component Name": "struct legion::core::position",
                         "x": 4.0,
                         "y": 3.0,
-                        "z": -8.0
+                        "z": -5.099999904632568
                     }
                 ],
                 "Children": []
@@ -1387,27 +1392,22 @@
                 "Components": [
                     {
                         "Owner": 32,
-                        "Component Type": 7523951964142181909,
-                        "Component Name": "struct sah"
-                    },
-                    {
-                        "Owner": 32,
                         "Component Type": 6208564340805693071,
                         "Component Name": "struct legion::rendering::renderable",
                         "value0": {
-                            "value0": 9915782786907616376
+                            "value0": 6842981191551175902
                         },
                         "value1": {
-                            "value0": 14417210513765110748
+                            "value0": 5388337048991757045
                         }
                     },
                     {
                         "Owner": 32,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
-                        "x": 2.5,
-                        "y": 2.5,
-                        "z": 2.5
+                        "x": 0.5,
+                        "y": 0.5,
+                        "z": 0.5
                     },
                     {
                         "Owner": 32,
@@ -1422,9 +1422,14 @@
                         "Owner": 32,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
-                        "x": 4.0,
-                        "y": 3.0,
-                        "z": -5.099999904632568
+                        "x": -5.0,
+                        "y": 1.0,
+                        "z": 10.0
+                    },
+                    {
+                        "Owner": 32,
+                        "Component Type": 12879719932595839335,
+                        "Component Name": "struct legion::audio::audio_source"
                     }
                 ],
                 "Children": []
@@ -1465,60 +1470,12 @@
                         "Owner": 33,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
-                        "x": -5.0,
-                        "y": 1.0,
-                        "z": 10.0
-                    },
-                    {
-                        "Owner": 33,
-                        "Component Type": 12879719932595839335,
-                        "Component Name": "struct legion::audio::audio_source"
-                    }
-                ],
-                "Children": []
-            },
-            {
-                "Id": 34,
-                "Name": "Entity",
-                "Components": [
-                    {
-                        "Owner": 34,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 6842981191551175902
-                        },
-                        "value1": {
-                            "value0": 5388337048991757045
-                        }
-                    },
-                    {
-                        "Owner": 34,
-                        "Component Type": 4306336647627884212,
-                        "Component Name": "struct legion::core::scale",
-                        "x": 0.5,
-                        "y": 0.5,
-                        "z": 0.5
-                    },
-                    {
-                        "Owner": 34,
-                        "Component Type": 7097645533378480892,
-                        "Component Name": "struct legion::core::rotation",
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0,
-                        "w": 1.0
-                    },
-                    {
-                        "Owner": 34,
-                        "Component Type": 1703773829785910945,
-                        "Component Name": "struct legion::core::position",
                         "x": 5.0,
                         "y": 1.0,
                         "z": 10.0
                     },
                     {
-                        "Owner": 34,
+                        "Owner": 33,
                         "Component Type": 12879719932595839335,
                         "Component Name": "struct legion::audio::audio_source"
                     }
