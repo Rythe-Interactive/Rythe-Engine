@@ -175,7 +175,7 @@ public:
         rendering::model_handle gltfCubeH;
         rendering::model_handle sphereH;
         rendering::model_handle suzanneH;
-        //rendering::model_handle gltfSuzanneH;
+        rendering::model_handle gltfTestH;
         rendering::model_handle gltfGizmoH;
         //rendering::model_handle gnomeH;
         rendering::model_handle uvsphereH;
@@ -218,10 +218,10 @@ public:
             pointLightH = rendering::ModelCache::create_model("point light", "assets://models/point-light.obj"_view);
             audioSourceH = rendering::ModelCache::create_model("audio source", "assets://models/audio-source.obj"_view);
             cubeH = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
-            gltfCubeH = rendering::ModelCache::create_model("gltfCube", "assets://models/cube.glb"_view);
+            //gltfCubeH = rendering::ModelCache::create_model("gltfCube", "assets://models/cube.glb"_view);
             sphereH = rendering::ModelCache::create_model("sphere", "assets://models/sphere.obj"_view);
             suzanneH = rendering::ModelCache::create_model("suzanne", "assets://models/suzanne.obj"_view);
-            //gltfSuzanneH = rendering::ModelCache::create_model("gltfSuzanne", "assets://models/suzanne_test.glb"_view);
+            gltfTestH = rendering::ModelCache::create_model("gltfTest", "assets://models/submeshtest.glb"_view);
             gltfGizmoH = rendering::ModelCache::create_model("gltfGizmo", "assets://models/xyz.glb"_view);
             //gnomeH = rendering::ModelCache::create_model("gnome", "assets://models/wizardgnome.obj"_view);
             uvsphereH = rendering::ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view);
@@ -349,17 +349,17 @@ public:
         }
 
         //glft test
-        {
+        /*{
             auto ent = createEntity();
             ent.add_component<rendering::renderable>({ gltfCubeH, pbrH });
             ent.add_components<transform>(position(0,20,0), rotation(), scale(1.0f));
+        }*/
+        //glft test
+        {
+            auto ent = createEntity();
+            ent.add_component<rendering::renderable>({ gltfTestH, pbrH });
+            ent.add_components<transform>(position(10, 20, 0), rotation(), scale(1.0f));
         }
-        ////glft test
-        //{
-        //    auto ent = createEntity();
-        //    ent.add_component<rendering::renderable>({ gltfSuzanneH, copperH });
-        //    ent.add_components<transform>(position(2, 20, 0), rotation(), scale(1.0f));
-        //}
 
         {
             auto ent = createEntity();
@@ -509,7 +509,7 @@ public:
         {
             auto ent = createEntity();
             ent.add_component<rendering::renderable>({ gltfGizmoH, vertexColorH });
-            ent.add_components<transform>(position(2,0,0), rotation(), scale(1.0f));
+            ent.add_components<transform>(position(2, 20, 0), rotation(), scale(1.0f));
         }
 
         {

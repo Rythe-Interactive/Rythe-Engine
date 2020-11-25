@@ -63,7 +63,7 @@
                         "Component Type": 6208564340805693071,
                         "Component Name": "struct legion::rendering::renderable",
                         "value0": {
-                            "value0": 13377239608053983805
+                            "value0": 15739531059523035116
                         },
                         "value1": {
                             "value0": 8630977270866280095
@@ -90,7 +90,7 @@
                         "Owner": 3,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
-                        "x": 0.0,
+                        "x": 10.0,
                         "y": 20.0,
                         "z": 0.0
                     }
@@ -1135,7 +1135,7 @@
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": 2.0,
-                        "y": 0.0,
+                        "y": 20.0,
                         "z": 0.0
                     }
                 ],

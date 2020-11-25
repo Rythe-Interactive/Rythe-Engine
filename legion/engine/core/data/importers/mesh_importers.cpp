@@ -52,6 +52,82 @@ namespace legion::core::detail
         memcpy(data->data(), &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
     }
 
+
+    void handleGltfColor(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, int accessorType, int componentType, std::vector<math::color>* data)
+    {
+        //colors in glft are in vec3/vec4 float/unsigned byte/unsigned short
+
+        //std::vector<float> origin;
+        //origin.resize(bufferView.byteLength);
+        //memcpy(origin.data(), &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
+
+        if (accessorType == TINYGLTF_TYPE_VEC3)
+        {
+            log::debug("Color accessor type: Vec3");
+            size_t dataIndex = 0;
+            if (componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE)
+            {
+                log::debug("Color component type: u byte");
+                log::warn("Warning: Vert colors for UNSIGNED BYTE not implemented");
+            }
+            else if (componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT)
+            {
+                log::debug("Color component type: u short");
+                log::warn("Warning: Vert colors for UNSIGNED SHORT not implemented");
+            }
+            else if (componentType == TINYGLTF_COMPONENT_TYPE_FLOAT)
+            {
+                log::debug("Color component type: float");
+                data->resize(bufferView.byteLength / sizeof(math::vec3));
+                for (int i = 0; i < bufferView.byteLength; i += 3 * sizeof(float))
+                {
+                    float r = *reinterpret_cast<const float*>(&buffer.data.at(i) + bufferView.byteOffset);
+                    float g = *reinterpret_cast<const float*>(&buffer.data.at(i + sizeof(float)) + bufferView.byteOffset);
+                    float b = *reinterpret_cast<const float*>(&buffer.data.at(i + 2 * sizeof(float)) + bufferView.byteOffset);
+                    data->at(dataIndex++) = math::color(r, g, b);
+                }
+            }
+            else
+            {
+                log::warn("Warning: Vert colors were not stored as UNSIGNED BYTE/SHORT or float, skipping");
+            }
+        }
+        else if (accessorType == TINYGLTF_TYPE_VEC4)
+        {
+            log::debug("Color accessor type: Vec4");
+            size_t dataIndex = 0;
+            if (componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE)
+            {
+                log::debug("Color component type: u byte");
+                log::warn("Warning: Vert colors for UNSIGNED BYTE not implemented");
+            }
+            else if (componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT)
+            {
+                log::debug("Color component type: u short");
+                log::warn("Warning: Vert colors for UNSIGNED SHORT not implemented");
+            }
+            else if (componentType == TINYGLTF_COMPONENT_TYPE_FLOAT)
+            {
+                log::debug("Color component type: float");
+                data->resize(bufferView.byteLength / sizeof(math::vec4));
+                log::debug("Resized color data to: {}", data->size());
+                for (int i = 0; i < bufferView.byteLength; i += 4 * sizeof(float))
+                {
+                    float r = *reinterpret_cast<const float*>(&buffer.data.at(i) + bufferView.byteOffset);
+                    float g = *reinterpret_cast<const float*>(&buffer.data.at(i + sizeof(float)) + bufferView.byteOffset);
+                    float b = *reinterpret_cast<const float*>(&buffer.data.at(i + 2 * sizeof(float)) + bufferView.byteOffset);
+                    float a = *reinterpret_cast<const float*>(&buffer.data.at(i + 3 * sizeof(float)) + bufferView.byteOffset);
+                    data->at(dataIndex++) = math::color(r, g, b, a);
+                }
+            }
+            else
+            {
+                log::warn("Warning: Vert colors were not stored as UNSIGNED BYTE/SHORT or float, skipping");
+            }
+        }
+        else log::warn("Warning: Vert colors were not vec3 or vec4, skipping colors");
+    }
+
     void handleGltfIndices(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, std::vector<unsigned int>* data)
     {
         //indices in glft are in uin16
@@ -246,6 +322,7 @@ namespace legion::core
         {
             sub_mesh m;
             m.name = mesh.name;
+            log::debug("Loading submesh: {}", m.name);
             for (auto primitive : mesh.primitives)
             {
                 for (auto& attrib : primitive.attributes)
@@ -257,6 +334,7 @@ namespace legion::core
                     {
                         // Position data
                         detail::handleGltfBuffer<math::vec3>(buff, view, &(meshData.vertices));
+                        log::debug("Vertices count: {}", meshData.vertices.size());
                     }
                     else if (attrib.first.compare("NORMAL") == 0)
                     {
@@ -268,9 +346,14 @@ namespace legion::core
                         // UV data
                         detail::handleGltfBuffer<math::vec2>(buff, view, &(meshData.uvs));
                     }
+                    else if (attrib.first.compare("COLOR_0") == 0)
+                    {
+                        // UV data
+                        detail::handleGltfColor(buff, view, accessor.type, accessor.componentType, &(meshData.colors));
+                    }
                     else
                     {
-                        log::warn("More data to be found in .gbl. Data can be accesed through: {}", attrib.first);
+                        log::warn("\n\n\n\nMore data to be found in .gbl. Data can be accesed through: {}\n\n\n", attrib.first);
                     }
                 }
                 const tg::Accessor& accessor = model.accessors.at(primitive.indices);
@@ -281,16 +364,9 @@ namespace legion::core
             m.indexCount = meshData.indices.size() - offset;
             m.indexOffset = meshData.indices.size() - m.indexCount;
             offset += m.indexCount;
-            //log::debug("c {}, o {}", m.indexCount, m.indexOffset);
             meshData.submeshes.push_back(m);
         }
-
-        // Debugging purpose
-        /*meshData.indices[9] = 4;
-        meshData.indices[10] = 6;
-        meshData.indices[11] = 7;*/
-
-        /*
+        /* //Debug information
         for (int i = 0; i < meshData.vertices.size(); ++i)
         {
             log::debug("[{}]: V{} \tN{} \t{}", i, meshData.vertices[i], meshData.normals[i], meshData.uvs[i]);
@@ -308,8 +384,9 @@ namespace legion::core
         {
             meshData.vertices[i] = meshData.vertices[i] * math::vec3(-1, 1, 1);
             meshData.normals[i] = meshData.normals[i] * math::vec3(-1, 1, 1);
-            meshData.uvs[i] = meshData.uvs[i] * math::vec2(1, -1);
-            meshData.colors.push_back(core::math::colors::grey);
+            if (meshData.uvs.size() == i) meshData.uvs.push_back(math::vec2(0, 0));
+            else meshData.uvs[i] = meshData.uvs[i] * math::vec2(1, -1);
+            if(meshData.colors.size() == i) meshData.colors.push_back(core::math::colors::grey);
         }
 
         // Because we only flip one axis we also need to flip the triangle rotation.
