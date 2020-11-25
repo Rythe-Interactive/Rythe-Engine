@@ -20,7 +20,7 @@ public:
     struct player_fly : public app::input_axis<player_fly> {};
     struct player_look_x : public app::input_axis<player_look_x> {};
     struct player_look_y : public app::input_axis<player_look_y> {};
-    const int samplesPerTriangle = 3;
+    const int samplesPerTriangle = 10;
     const int seed = 0;
 
     PointCloudTestSystem()
@@ -123,9 +123,11 @@ public:
         {
             for (size_t i = 0; i < points_Generated; i++)
             {
-                int index = indices.at(i);
-                log::debug(std::to_string(verts.at(index).x) + ", " + std::to_string(verts.at(index).y) + ", " + std::to_string(verts.at(index).z));
-                log::info(std::to_string(i) + " got {}", result.at(i));
+            //    int index = indices.at(i);
+             //   log::debug(index);
+               // log::debug(std::to_string(verts.at(index).x) + ", " + std::to_string(verts.at(index).y) + ", " + std::to_string(verts.at(index).z));
+                //std::to_string(i) + 
+                log::info(" got {}", result.at(i));
             }
         }
 

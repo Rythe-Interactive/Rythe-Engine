@@ -17,7 +17,7 @@ float4 SampleTriangle(float2 rand,float4 a, float4 b, float4 c )
     return r;
 }
 
-const int sampelePerTri=3;
+const int sampelePerTri=10;
 __kernel void Main(__global const float* vertices,__global const uint* indices,__global const uint* seed, __global float4* points )
 {
     int n=get_global_id(0)*3;
@@ -30,34 +30,35 @@ __kernel void Main(__global const float* vertices,__global const uint* indices,_
     uint vertex3Index = indices[n+2];
 
     //get vertex values
-    //vert1
-    float v1a = vertices[vertex1Index];
-    float v1b = vertices[vertex1Index+1];
-    float v1c = vertices[vertex1Index+2];
+    //vertA
+    float v1a = vertices[indices[n]*3];
+    float v1b = vertices[indices[n]*3+1];
+    float v1c = vertices[indices[n]*3+2];
     float4 vertA = (float4)(v1a,v1b,v1c,1.0f);
     //vert2
-    float v2a = vertices[vertex2Index];
-    float v2b = vertices[vertex2Index+1];
-    float v2c = vertices[vertex2Index+2];
+    float v2a = vertices[indices[n+1]*3];
+    float v2b = vertices[indices[n+1]*3+1];
+    float v2c = vertices[indices[n+1]*3+2];
     float4 vertB = (float4)(v2a,v2b,v2c,1.0f);
     //vert3
-    float v3a = vertices[vertex3Index];
-    float v3b = vertices[vertex3Index+1];
-    float v3c = vertices[vertex3Index+2];
+    float v3a = vertices[indices[n+2]*3];
+    float v3b = vertices[indices[n+2]*3+1];
+    float v3c = vertices[indices[n+2]*3+2];
     float4 vertC = (float4)(v3a,v3b,v3c,1.0f);
 
     for(int i =0; i <sampelePerTri; i++)
     {
         int index= resultIndex + i;
      //   float a = wang_hash(currentSeed) /(float)UINT_MAX;
+
         float2 randPoint =(float2)( wang_hash(currentSeed) /(float)UINT_MAX, wang_hash(currentSeed+1) /(float)UINT_MAX);
+        randPoint.y=0;
         currentSeed+=2;
 
         float4 newPoint = SampleTriangle(randPoint,vertA,vertB,vertC);
-        newPoint=(float4)(vertices[0]+i, vertices[1]+i, vertices[2]+i,1);
-       // newPoint=vertC;
-       // newPoint= (float4)(randPoint.x,randPoint.y,0,1);
-       // float4 newPoint = (float4)(wang_hash(currentSeed) /(float)UINT_MAX,0,0,n/3);
+      //  newPoint=(float4)(randPoint.x, randPoint.y, 0,1);
+      // newPoint=vertA;
+        //newPoint=(float4)(vertices[indices[n+i]*3], vertices[indices[n+i]*3+1], vertices[indices[n+i]*3+2],indices[n+i]);
         points[index]=newPoint;
         currentSeed++;
     }
