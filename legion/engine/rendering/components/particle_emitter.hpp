@@ -1,6 +1,6 @@
 #pragma once
 #include <core/core.hpp>
-#include <rendering/systems/particle_system_base.hpp>
+#include <rendering/data/particle_system_cache.hpp>
 
 namespace legion::rendering
 {
