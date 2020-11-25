@@ -21,7 +21,7 @@ namespace legion::core::ecs
         return *this;
     }
 
-    L_NODISCARD   const hashed_sparse_set<id_type>& entity_handle::component_composition() const
+    L_NODISCARD const hashed_sparse_set<id_type>& entity_handle::component_composition() const
     {
         if (!m_registry)
             throw legion_invalid_entity_error;
@@ -112,7 +112,7 @@ namespace legion::core::ecs
     {
         std::vector <ecs::component_handle_base> components;
         std::vector <ecs::entity_handle> children;
-        oarchive(cereal::make_nvp("Id", m_id),cereal::make_nvp("Name", std::string("Entity")));
+        oarchive(cereal::make_nvp("Id", m_id), cereal::make_nvp("Name", std::string("Entity")));
         entity_handle ent;
         if (!m_registry->validateEntity(m_id))
             ent = m_registry->createEntity(m_id);
