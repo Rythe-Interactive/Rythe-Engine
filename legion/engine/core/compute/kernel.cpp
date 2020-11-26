@@ -180,14 +180,17 @@ namespace legion::core::compute
 
     Kernel& Kernel::dispatch()
     {
+        auto [globals,locals,size] =  parse_dimensions();
+
+
         //enqueue the Kernel in the command queue
         cl_int ret = clEnqueueNDRangeKernel(
             m_queue,
             m_func,
-            1,
+            size,
             nullptr,
-            &m_global_size,
-            &m_local_size,
+            globals.data(),
+            locals.data (),
             0,
             nullptr,
             nullptr
@@ -229,13 +232,13 @@ namespace legion::core::compute
         m_default_mode(buffer_type::READ_BUFFER),
         m_prog(program),
         m_func(kernel),
-        m_global_size(0),
+        m_global_size(size_type(0)),
         m_local_size(64)
     {
         m_queue = program->make_cq();
     }
 
-    Kernel& Kernel::local(size_t s)
+    Kernel& Kernel::local(size_type s)
     {
 
         //TODO(algo-ryth-mix) This should cap at CL_KERNEL_WORK_GROUP_SIZE 
@@ -243,9 +246,19 @@ namespace legion::core::compute
         return *this;
     }
 
-    Kernel& Kernel::global(size_t s)
+    Kernel& Kernel::global(dimension s)
     {
         m_global_size = s;
+        return *this;
+    }
+    Kernel& Kernel::global(size_type s0,size_type s1)
+    {
+        m_global_size = d2{s0,s1};
+        return *this;
+    }
+    Kernel& Kernel::global(size_type s0, size_type s1,size_type s2)
+    {
+        m_global_size = d3{s0,s1,s2};
         return *this;
     }
 }

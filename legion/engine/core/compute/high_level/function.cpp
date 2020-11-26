@@ -4,7 +4,7 @@
 
 namespace legion::core::compute
 {
-    common::result<void, void> function_base::invoke(size_type global, invoke_buffer_container& parameters) const
+    common::result<void, void> function_base::invoke(dvar global, invoke_buffer_container& parameters) const
     {
         std::vector<Buffer> buffers;
         buffers.reserve(parameters.size());
@@ -13,12 +13,28 @@ namespace legion::core::compute
         {
             buffers.emplace_back(Context::createBuffer(base->container.first, base->container.second, type, base->name));
         }
-        return invoke2(global,buffers);
+        return invoke2(std::move(global),buffers);
     }
 
-    common::result<void, void> function_base::invoke2(size_type global, std::vector<Buffer> buffers) const
+    common::result<void, void> function_base::invoke2(dvar global, std::vector<Buffer> buffers) const
     {
-        m_kernel->local(m_locals).global(global);
+
+        if(std::holds_alternative<std::tuple<size_type,size_type,size_type>>(global))
+        {
+            auto& [s0,s1,s2] = std::get<2>(global);
+            m_kernel->local(m_locals).global(s0,s1,s2);
+        }
+
+        if(std::holds_alternative<std::tuple<size_type,size_type>>(global))
+        {
+            auto& [s0,s1] = std::get<1>(global);
+            m_kernel->local(m_locals).global(s0,s1);
+        }
+        if(std::holds_alternative<std::tuple<size_type>>(global))
+        {
+            auto& [s0] = std::get<0>(global);
+            m_kernel->local(m_locals).global(s0);
+        }
 
         m_kernel->readWriteMode(buffer_type::READ_BUFFER);
 
