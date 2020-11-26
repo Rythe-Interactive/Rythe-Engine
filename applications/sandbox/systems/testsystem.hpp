@@ -65,6 +65,7 @@ struct audio_test_input : public app::input_action<audio_test_input> {};
 struct physics_test_move : public app::input_axis<physics_test_move> {};
 
 struct light_switch : public app::input_action<light_switch> {};
+struct tonemap_switch : public app::input_action<tonemap_switch> {};
 
 struct activate_CRtest2 : public app::input_action<activate_CRtest2> {};
 struct activate_CRtest3 : public app::input_action<activate_CRtest3> {};
@@ -157,6 +158,7 @@ public:
         app::InputSystem::createBinding< activateFrictionTest >(app::inputmap::method::KP_4);
 
         app::InputSystem::createBinding<light_switch>(app::inputmap::method::F);
+        app::InputSystem::createBinding<tonemap_switch>(app::inputmap::method::G);
 
         app::InputSystem::createBinding< extendedPhysicsContinue>(app::inputmap::method::M);
         app::InputSystem::createBinding<nextPhysicsTimeStepContinue>(app::inputmap::method::N);
@@ -169,6 +171,7 @@ public:
         bindToEvent<physics_test_move, &TestSystem::onUnitPhysicsUnitTestMove>();
 
         bindToEvent<light_switch, &TestSystem::onLightSwitch>();
+        bindToEvent<tonemap_switch, &TestSystem::onTonemapSwitch>();
 
         bindToEvent<audio_move, &TestSystem::onSphereAAMove>();
         bindToEvent<audio_strive, &TestSystem::onSphereAAStrive>();
@@ -216,7 +219,6 @@ public:
         rendering::model_handle uvsphereH;
         rendering::model_handle axesH;
         rendering::model_handle submeshtestH;
-        rendering::model_handle floorH;
         rendering::model_handle planeH;
 
         rendering::material_handle wireframeH;
@@ -229,7 +231,6 @@ public:
         rendering::material_handle pointLightMH;
         rendering::material_handle gizmoMH;
         rendering::material_handle normalH;
-        rendering::material_handle floorMH;
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
 
@@ -248,7 +249,6 @@ public:
             uvsphereH = rendering::ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view);
             axesH = rendering::ModelCache::create_model("axes", "assets://models/xyz.obj"_view, { true, false, "assets://models/xyz.mtl"_view });
             submeshtestH = rendering::ModelCache::create_model("submeshtest", "assets://models/submeshtest.obj"_view);
-            floorH = rendering::ModelCache::create_model("floor", "assets://models/groundplane.obj"_view);
             planeH = rendering::ModelCache::create_model("plane", "assets://models/plane.obj"_view);
 
             wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.shs"_view);
@@ -280,6 +280,7 @@ public:
             pbrH.set_param(SV_HEIGHTSCALE, 1.f);
             pbrH.set_param("discardExcess", false);
             pbrH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            pbrH.set_param("tonemap", false);
 
             copperH = rendering::MaterialCache::create_material("copper", pbrShader);
             copperH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/copper/copper-albedo.png"_view));
@@ -289,6 +290,7 @@ public:
             copperH.set_param("material_input.heightScale", 0.1f);
             copperH.set_param("discardExcess", false);
             copperH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            copperH.set_param("tonemap", false);
 
             aluminumH = rendering::MaterialCache::create_material("aluminum", pbrShader);
             aluminumH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-albedo.png"_view));
@@ -298,6 +300,7 @@ public:
             aluminumH.set_param("material_input.heightScale", 0.f);
             aluminumH.set_param("discardExcess", false);
             aluminumH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            aluminumH.set_param("tonemap", false);
 
             ironH = rendering::MaterialCache::create_material("iron", pbrShader);
             ironH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-albedo.png"_view));
@@ -307,6 +310,7 @@ public:
             ironH.set_param("material_input.heightScale", 0.1f);
             ironH.set_param("discardExcess", false);
             ironH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            ironH.set_param("tonemap", false);
 
             slateH = rendering::MaterialCache::create_material("slate", pbrShader);
             slateH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/slate/slate-albedo.png"_view));
@@ -316,6 +320,7 @@ public:
             slateH.set_param("material_input.heightScale", 1.f);
             slateH.set_param("discardExcess", true);
             slateH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            slateH.set_param("tonemap", false);
 
             rockH = rendering::MaterialCache::create_material("rock", pbrShader);
             rockH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/rock/rock-albedo.png"_view));
@@ -325,6 +330,7 @@ public:
             rockH.set_param("material_input.heightScale", 1.f);
             rockH.set_param("discardExcess", true);
             rockH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            rockH.set_param("tonemap", false);
 
             rock2H = rendering::MaterialCache::create_material("rock 2", pbrShader);
             rock2H.set_param("material_input.albedo", rendering::TextureCache::get_handle("rock-albedo.png"));
@@ -334,6 +340,7 @@ public:
             rock2H.set_param("material_input.heightScale", 0.5f);
             rock2H.set_param("discardExcess", false);
             rock2H.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            rock2H.set_param("tonemap", false);
 
             fabricH = rendering::MaterialCache::create_material("fabric", pbrShader);
             fabricH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-albedo.png"_view));
@@ -343,6 +350,7 @@ public:
             fabricH.set_param("material_input.heightScale", 0.1f);
             fabricH.set_param("discardExcess", false);
             fabricH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            fabricH.set_param("tonemap", false);
 
             bogH = rendering::MaterialCache::create_material("bog", pbrShader);
             bogH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/bog/bog-albedo.png"_view));
@@ -352,6 +360,7 @@ public:
             bogH.set_param("material_input.heightScale", 0.5f);
             bogH.set_param("discardExcess", true);
             bogH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            bogH.set_param("tonemap", false);
 
             paintH = rendering::MaterialCache::create_material("paint", pbrShader);
             paintH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-albedo.png"_view));
@@ -361,32 +370,20 @@ public:
             paintH.set_param("material_input.heightScale", 0.1f);
             paintH.set_param("discardExcess", false);
             paintH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            paintH.set_param("tonemap", false);
 
             normalH = rendering::MaterialCache::create_material("normal", "assets://shaders/normal.shs"_view);
             normalH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("engine://resources/default/normalHeight"_view));
 
             skyboxH = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.shs"_view);
             skyboxH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
-
-            floorMH = rendering::MaterialCache::create_material("floor", "assets://shaders/groundplane.shs"_view);
+            skyboxH.set_param("tonemap", false);
 
             app::ContextHelper::makeContextCurrent(nullptr);
         }
 #pragma endregion
 
 #pragma region Entities
-        {
-            auto ent = createEntity();
-            ent.add_component<rendering::renderable>({ uvsphereH, skyboxH });
-            ent.add_components<transform>(position(), rotation(), scale(1000.f));
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_component<rendering::renderable>({ floorH, floorMH });
-            ent.add_components<transform>();
-        }
-
         {
             auto ent = createEntity();
             ent.add_component<rendering::renderable>({ planeH, slateH });
@@ -1664,7 +1661,7 @@ public:
 
     void onLightSwitch(light_switch* action)
     {
-        static bool on = true;
+        static bool on = false;
 
         if (!action->value)
         {
@@ -1709,6 +1706,44 @@ public:
                 bogH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
                 paintH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
                 skyboxH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            }
+            on = !on;
+        }
+    }
+
+    void onTonemapSwitch(tonemap_switch* action)
+    {
+        static bool on = true;
+
+        if (!action->value)
+        {
+            if (on)
+            {
+                pbrH.set_param("tonemap", false);
+                copperH.set_param("tonemap", false);
+                aluminumH.set_param("tonemap", false);
+                ironH.set_param("tonemap", false);
+                slateH.set_param("tonemap", false);
+                rockH.set_param("tonemap", false);
+                rock2H.set_param("tonemap", false);
+                fabricH.set_param("tonemap", false);
+                bogH.set_param("tonemap", false);
+                paintH.set_param("tonemap", false);
+                skyboxH.set_param("tonemap", false);
+            }
+            else
+            {
+                pbrH.set_param("tonemap", true);
+                copperH.set_param("tonemap", true);
+                aluminumH.set_param("tonemap", true);
+                ironH.set_param("tonemap", true);
+                slateH.set_param("tonemap", true);
+                rockH.set_param("tonemap", true);
+                rock2H.set_param("tonemap", true);
+                fabricH.set_param("tonemap", true);
+                bogH.set_param("tonemap", true);
+                paintH.set_param("tonemap", true);
+                skyboxH.set_param("tonemap", true);
             }
             on = !on;
         }
