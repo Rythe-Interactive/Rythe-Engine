@@ -13,11 +13,11 @@ uint wang_hash(uint seed)
 float4 SampleTriangle(float2 rand,float4 a, float4 b, float4 c )
 {
     float4 r;
-    r= (float4)(a + rand.x*(b-a) + rand.y * (c-a));
+    r= (float4)(a + rand.x* normalize(b-a) + rand.y * normalize(c-a));
     return r;
 }
 
-const int sampelePerTri=10;
+const int sampelePerTri=30;
 __kernel void Main(__global const float* vertices,__global const uint* indices,__global const uint* seed, __global float4* points )
 {
     int n=get_global_id(0)*3;
@@ -52,7 +52,7 @@ __kernel void Main(__global const float* vertices,__global const uint* indices,_
      //   float a = wang_hash(currentSeed) /(float)UINT_MAX;
 
         float2 randPoint =(float2)( wang_hash(currentSeed) /(float)UINT_MAX, wang_hash(currentSeed+1) /(float)UINT_MAX);
-        randPoint.y=0;
+        //randPoint.x=0;
         currentSeed+=2;
 
         float4 newPoint = SampleTriangle(randPoint,vertA,vertB,vertC);
