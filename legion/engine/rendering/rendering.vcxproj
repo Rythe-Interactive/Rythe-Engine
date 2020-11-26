@@ -15,6 +15,7 @@
     <ClCompile Include="data\importers\texture_importers.cpp" />
     <ClCompile Include="data\material.cpp" />
     <ClCompile Include="data\model.cpp" />
+    <ClCompile Include="data\particle_system_cache.cpp" />
     <ClCompile Include="data\shader.cpp" />
     <ClCompile Include="data\texture.cpp" />
     <ClCompile Include="shadercompiler\shadercompiler.cpp" />

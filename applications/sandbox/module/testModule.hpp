@@ -5,6 +5,8 @@
 
 #include <core/math/math.hpp>
 
+#include "../systems/testsystem2.hpp"
+
 using namespace legion;
 
 class TestModule : public Module
@@ -16,6 +18,7 @@ public:
 
         reportComponentType<sah>();
         reportSystem<TestSystem>();
+        //reportSystem<TestSystem2>();
         reportSystem<SimpleCameraController>();
     }
 

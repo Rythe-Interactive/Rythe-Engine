@@ -5,22 +5,17 @@
 
 namespace legion::rendering
 {
-    void ParticleSystemBase::createParticle(ecs::component_handle<particle> particleHandle, ecs::component_handle<transform> transformHandle, ecs::component_handle<particle_emitter> emitterHandle)
+    ecs::EcsRegistry* ParticleSystemBase::m_registry;
+
+    void ParticleSystemBase::createParticle(ecs::component_handle<particle> particleHandle, transform transformHandle) const
     {
         ecs::entity_handle particularParticle = particleHandle.entity;
 
-        //Handle transform adjustments.
-        particularParticle.add_component(transformHandle);
-
         //Handle model and material assigning.
-        ecs::component_handle<renderable> renderableHandle = particularParticle.add_component<renderable>();
-        renderable renderable = renderableHandle.read();
-        renderable.model = m_particleModel;
-        renderable.material = m_particleMaterial;
-        renderableHandle.write(renderable);
+        particularParticle.add_component<renderable>({m_particleModel, m_particleMaterial});
     }
 
-    void ParticleSystemBase::cleanUpParticle(ecs::component_handle<particle> particleHandle, ecs::component_handle<particle_emitter> emitterHandle)
+    void ParticleSystemBase::cleanUpParticle(ecs::component_handle<particle> particleHandle, ecs::component_handle<particle_emitter> emitterHandle) const
     {
         //Read emitter
         particle_emitter emitter = emitterHandle.read();
@@ -35,13 +30,12 @@ namespace legion::rendering
             emitter.deadParticles.emplace_back(particularParticle);
             //Remove renderable to stop them from being rendered
             particularParticle.remove_component<renderable>();
-            particularParticle.remove_component<transform>();
         }
         //Write to emitter
         emitterHandle.write(emitter);
     }
 
-    ecs::component_handle<particle> ParticleSystemBase::checkToRecycle(ecs::component_handle<particle_emitter> emitterHandle)
+    ecs::component_handle<particle> ParticleSystemBase::checkToRecycle(ecs::component_handle<particle_emitter> emitterHandle) const
     {
         particle_emitter emitter = emitterHandle.read();
         ecs::entity_handle particularParticle;

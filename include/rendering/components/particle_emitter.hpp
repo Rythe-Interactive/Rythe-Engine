@@ -4,10 +4,14 @@
 
 namespace legion::rendering
 {
+    /**
+     * @brief Particle Emitter is the component that hold all the particles and related particle system.
+     */
     struct particle_emitter
     {
         std::vector<ecs::entity_handle> livingParticles;
         std::vector<ecs::entity_handle> deadParticles;
         ParticleSystemHandle particleSystemHandle;
+        bool setupCompleted;
     };
 }
