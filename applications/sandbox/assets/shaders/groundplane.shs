@@ -33,8 +33,8 @@ shader(fragment)
             discard;
 
         float alpha = mix(1, 0, clamp01(length(stdio(position))/250.0));
-        //if(alpha <= 0.0)
-            //discard;
+        if(alpha <= 0.0)
+            discard;
 
         fragment_color = vec4(vec3(0.3), alpha);
     }
