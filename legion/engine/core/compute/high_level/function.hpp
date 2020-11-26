@@ -202,6 +202,9 @@ namespace legion::core::compute {
             }
 
             //check if we are dealing with a list of buffers or a list of vectors
+            //TODO(algo-ryth-mix) Update the cppcheck version of the CI once this bug is resolved!
+            //cppcheck has an issue with if contexpr and the || in here
+            //cppcheck-suppress internalAstError
             if constexpr (((std::is_same_v<compute::Buffer,std::remove_reference_t<Args>> || std::is_same_v<karg,Args> ) && ...))
             {
                 return invoke_helper_buffers(dim,std::forward<Args>(args)...);
