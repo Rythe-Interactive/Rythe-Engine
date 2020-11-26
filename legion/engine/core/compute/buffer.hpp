@@ -51,7 +51,11 @@ namespace legion::core::compute {
     class Buffer
     {
     public:
-        Buffer(cl_context,byte*,size_t,buffer_type,std::string);
+
+        Buffer(cl_context, void*,size_type,size_type,size_type,cl_mem_object_type, cl_image_format*, buffer_type,std::string);
+        Buffer(cl_context,cl_uint,buffer_type,bool,std::string);
+        Buffer(cl_context,cl_uint,cl_uint,cl_uint,buffer_type,std::string);
+        Buffer(cl_context,byte*,size_type,buffer_type,std::string);
 
         Buffer(Buffer&& b) noexcept;
         Buffer(const Buffer& b);
