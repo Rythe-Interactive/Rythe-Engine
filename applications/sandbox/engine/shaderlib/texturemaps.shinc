@@ -1,0 +1,79 @@
+///////////////////////
+//  Texture Mapping  //
+///////////////////////
+
+#include <math_ext.shinc>
+
+#if !defined(GEOMETRY_SHADER)
+vec2 ParallaxMap(sampler2D normalHeightMap, float scale, vec2 uv, Camera camera, mat3 tbn)
+{
+	if(scale == 0)
+		return uv;
+
+	vec3 tangentViewDir = tbn * normalize(camera.toView);
+
+	const float minLayers = 4.0;
+	float maxLayers = mix(128.0, 4.0, clamp01(length(camera.toView) / 256.0));
+	float verticality = dot01(vec3(0.0, 0.0, 1.0), tangentViewDir);
+	float layerCount = mix(minLayers, maxLayers, verticality);
+
+	float layerDepth = 1.0 / layerCount;
+
+	float currentDepth = 0.0;
+	float prevDepth = 0.0;
+
+	vec2 P = tangentViewDir.xy * scale * vec2(-0.1, 0.1);
+	vec2 deltaUV = P / layerCount;
+
+	vec2 currentUV = uv;
+	vec2 prevUV = currentUV;
+	float currentDepthMapValue = texture(normalHeightMap, currentUV).a;
+	float prevDepthMapValue = currentDepthMapValue;
+
+	while(currentDepth < currentDepthMapValue)
+	{
+		prevUV = currentUV;
+		currentUV -= deltaUV;
+
+		prevDepthMapValue = currentDepthMapValue;
+		currentDepthMapValue = texture(normalHeightMap, currentUV).a;
+
+		prevDepth = currentDepth;
+		currentDepth += layerDepth;
+	}
+
+	float afterDepth = currentDepthMapValue - currentDepth;
+	float beforeDepth = prevDepthMapValue - prevDepth;
+
+	return mix(prevUV, currentUV, afterDepth / (afterDepth - beforeDepth));
+}
+
+vec2 ParallaxMap(float height, float scale, vec2 uv, Camera camera, mat3 tbn)
+{
+	vec3 tangentViewDir = tbn * normalize(camera.toView);
+
+	float offset = (height * 2.0 - 1.0) * scale * 0.01;
+	vec2 parallexOffset = (tangentViewDir.xy / tangentViewDir.z) * offset;
+    return uv - parallexOffset;
+}
+#endif
+
+vec3 NormalMap(sampler2D map, vec2 uv, mat3 tbn)
+{
+	return normalize(tbn * normalize(texture(map, uv).xyz * 2.0 - 1.0));
+}
+
+vec4 AlbedoMap(sampler2D albedoMap, vec2 uv)
+{
+    return pow(texture(albedoMap, uv).rgba, vec4(vec3(2.2), 1.0));
+}
+
+vec4 LightingData(sampler2D MRDAoMap, vec2 uv)
+{
+	return texture(MRDAoMap, uv);
+}
+
+vec3 EmissiveMap(sampler2D emissiveMap, vec2 uv)
+{
+	return texture(emissiveMap, uv).rgb;
+}
