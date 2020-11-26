@@ -127,7 +127,7 @@ namespace legion::core::ecs
         }
     }
 
-    L_NODISCARD   bool EcsRegistry::validateEntity(id_type entityId)
+    L_NODISCARD bool EcsRegistry::validateEntity(id_type entityId)
     {
         async::readonly_guard guard(m_entityLock);
         return entityId && m_containedEntities.contains(entityId);
@@ -135,7 +135,6 @@ namespace legion::core::ecs
 
     entity_handle EcsRegistry::createEntity(id_type entityId)
     {
-
         id_type id;
         if (!entityId)
             id = m_nextEntityId++;
@@ -146,7 +145,7 @@ namespace legion::core::ecs
         }
 
         if (validateEntity(id))
-            return createEntity(id++);
+            return createEntity();
 
         {
             async::readwrite_guard guard(m_entityDataLock);  // We need write permission now because we hope to insert a new item.
@@ -170,11 +169,6 @@ namespace legion::core::ecs
         m_queryRegistry.markEntityDestruction(entityId); // Remove entity from any queries.
 
         entity_handle entity(entityId);
-
-        for (auto child : entity)
-        {
-
-        }
 
         {
             async::readwrite_guard guard(m_entityLock); // Request read-write permission for the entity list.

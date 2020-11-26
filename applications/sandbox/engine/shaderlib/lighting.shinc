@@ -121,7 +121,7 @@ vec3 CalculateLight(Light light, Camera camera, Material material, vec3 worldPos
             break;
         case spot_light:
             lightDirection = normalize(light.position - worldPosition);
-            intensity = pow(max((dot(normalize(light.direction), lightDirection) - cos(light.angle*0.5)) / (1.0 - cos(light.angle*0.5)), 0.0), light.falloff) * light.intensity;
+            intensity = pow(max((dot(normalize(light.direction), lightDirection) - cos(light.angle*2.0)) / (1.0 - cos(light.angle*2.0)), 0.0), light.falloff) * light.intensity;
             break;
         default:
             lightDirection = vec3(0, 1, 0);
@@ -151,7 +151,7 @@ vec3 CalculateLight(Light light, Camera camera, Material material, vec3 worldPos
     float normalDotLight = dot01(material.normal, lightDirection);
 
 	// cook-torrance brdf
-	vec3 fresnelReflection = fresnelSchlick(halfwayDotView, material.F0);
+	vec3 fresnelReflection = fresnelSchlick(mix(halfwayDotView, 1.0, material.roughness), material.F0);
 	float normalDistribution = DistributionGGX(normalDotHalfway, material.roughness);
 	float geometryShadowing = GeometrySmith(normalDotView, normalDotLight, material.roughness);
     vec3 specular = CookTorranceBRDF(normalDistribution, fresnelReflection, geometryShadowing, normalDotLight, normalDotView);

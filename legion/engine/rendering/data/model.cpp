@@ -62,6 +62,12 @@ namespace legion::rendering
         glEnableVertexAttribArray(SV_POSITION);
         glVertexAttribPointer(SV_POSITION, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
+        glGenBuffers(1, &model.colorBufferId);
+        glBindBuffer(GL_ARRAY_BUFFER, model.colorBufferId);
+        glBufferData(GL_ARRAY_BUFFER, mesh.colors.size() * sizeof(math::color), mesh.colors.data(), GL_STATIC_DRAW);
+        glEnableVertexAttribArray(SV_COLOR);
+        glVertexAttribPointer(SV_COLOR, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
         glGenBuffers(1, &model.normalBufferId);
         glBindBuffer(GL_ARRAY_BUFFER, model.normalBufferId);
         glBufferData(GL_ARRAY_BUFFER, mesh.normals.size() * sizeof(math::vec3), mesh.normals.data(), GL_STATIC_DRAW);
@@ -144,7 +150,7 @@ namespace legion::rendering
             m_models.insert(id, model);
         }
 
-        log::trace("Created model {} with mesh: {}", name, meshName);
+        log::debug("Created model {} with mesh: {}", name, meshName);
 
         return { id };
     }

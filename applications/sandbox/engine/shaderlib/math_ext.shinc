@@ -1,6 +1,8 @@
 //////////////////////
 //  Math Extension  //
 //////////////////////
+#if !defined MATH_EXT
+#define MATH_EXT
 
 #define epsilon 0.001
 #define pi 3.141592653589793
@@ -104,3 +106,5 @@ vec4 safeDiv(vec4 a, vec4 b)
 {
     return a / (sign(b) * max(abs(b), epsilon));
 }
+
+#endif
