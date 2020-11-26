@@ -2,7 +2,10 @@
 #include <rendering/data/particle_system_base.hpp>
 
 using namespace legion;
-
+/**
+ * @struct pointCloudParameters
+ * @brief A struct that simplifies the parameter input of the particle system constructor.
+ */
 struct pointCloudParameters
 {
     math::vec3 startingSize;
@@ -22,6 +25,11 @@ struct pointCloudParameters
 class PointCloudParticleSystem : public rendering::ParticleSystemBase
 {
 public:
+    /**
+     * @brief Constructor of the point cloud particle system.
+     * @param params A struct with a bunch of default parameters and some parameters needed to be set.
+     * @param positions A list of positions that the particle system uses to create its particles at.
+     */
     PointCloudParticleSystem(pointCloudParameters params, const std::vector<math::vec3>& positions)
     {
         m_looping = params.looping;
@@ -37,24 +45,32 @@ public:
         m_particleModel = params.particleModel;
         m_positions = positions;
     }
-
+    /**
+     * @brief Setup function that will be called to populate the emitter with the required particles.
+     * @param emitter_handle The emitter that you are populating.
+     */
     void setup(ecs::component_handle<rendering::particle_emitter> emitter_handle) const override
     {
+        //Reads emitter.
         rendering::particle_emitter emitter = emitter_handle.read();
         for (auto position : m_positions)
         {
+            //Checks the emitter if it has a recycled particle to use, if not it creates a new one.
             ecs::component_handle<rendering::particle> particleComponent = checkToRecycle(emitter_handle);
             auto ent = particleComponent.entity;
+            //Checks if the entity has a transform, if not it adds one.
             if (!ent.has_components<transform>())
                 ent.add_components<transform>();
+            //Gets and sets the particle position to the right position.
             transform trans = ent.get_component_handles<transform>();
             core::position posParticle = trans.get<core::position>().read();
             posParticle = position;
+            //Gets and sets the particle scale to the right scale.
             core::position scaleParticle = trans.get<core::scale>().read();
             scaleParticle = math::vec3(m_startingSize);
             trans.get<core::position>().write(posParticle);
             trans.get<core::scale>().write(scaleParticle);
-            log::debug("Entity Created");
+            //Populates the particle with the appropriate stuffs.
             createParticle(particleComponent, trans);
         }
     }

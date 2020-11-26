@@ -10,9 +10,15 @@ namespace legion::rendering
     {
         std::unique_ptr<ParticleSystemBase> particleSystem(ptr);
         id_type id = nameHash(name);
+
+        //acquire lock
         async::readwrite_guard guard(m_particleSystemLock);
+
+        //emplace kv-pair
         auto iterator = m_cache.emplace(id, std::move(particleSystem));
-        if(iterator.second)
+
+        //check for success
+        if (iterator.second)
             return ParticleSystemHandle{ iterator.first->first };
         return ParticleSystemHandle{ invalid_id };
     }

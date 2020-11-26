@@ -1,11 +1,11 @@
 #pragma once
 #include <core/core.hpp>
+#include <core/math/math.hpp>
 #include "../systems/testsystem.hpp"
+#include "../systems/testsystem2.hpp"
 #include "../systems/simplecameracontroller.hpp"
 
-#include <core/math/math.hpp>
 
-#include "../systems/testsystem2.hpp"
 
 using namespace legion;
 
