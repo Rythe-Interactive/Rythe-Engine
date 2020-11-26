@@ -223,7 +223,7 @@ namespace legion::core::compute
                 l.emplace_back(m_local_size / dim);
             }
 
-            return std::make_tuple(std::vector<size_type>(v,v+dim-1),l,dim);
+            return std::make_tuple(std::vector<size_type>(v,v+dim),l,dim);
         }
 
         dimension m_global_size;
