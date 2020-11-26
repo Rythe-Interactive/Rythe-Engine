@@ -77,7 +77,7 @@ public:
 
         switch(img.format){
         case channel_format::eight_bit: fmt.image_channel_data_type = CL_UNORM_INT8; break;
-        case channel_format::sixteen_bit: fmt.image_channel_data_type = CL_UNORM_INT8; break;
+        case channel_format::sixteen_bit: fmt.image_channel_data_type = CL_UNORM_INT16; break;
         case channel_format::float_hdr: fmt.image_channel_data_type = CL_FLOAT;break;
         default:
             {
