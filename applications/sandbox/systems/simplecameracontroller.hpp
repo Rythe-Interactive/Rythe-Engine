@@ -21,7 +21,9 @@ struct vsync_action : public app::input_action<vsync_action> {};
 class SimpleCameraController final : public System<SimpleCameraController>
 {
 public:
-    ecs::entity_handle player;
+    ecs::entity_handle camera;
+    ecs::entity_handle skybox;
+    ecs::entity_handle groundplane;
 
     virtual void setup()
     {
@@ -57,19 +59,36 @@ public:
         window.enableCursor(false);
         window.show();
 
-        setupCameraEntity();
+        {
+            async::readwrite_guard guard(*window.lock);
+            app::ContextHelper::makeContextCurrent(window);
+            setupCameraEntity();
+            app::ContextHelper::makeContextCurrent(nullptr);
+        }
     }
 
 #pragma region input stuff
     void setupCameraEntity()
     {
-        player = createEntity();
-        player.add_components<transform>(position(0.f, 3.f, 0.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
-        player.add_component<audio::audio_listener>();
+        groundplane = createEntity();
+        auto groundmat = rendering::MaterialCache::create_material("floor", "assets://shaders/groundplane.shs"_view);
+        groundmat.set_param("heightMap", rendering::TextureCache::create_texture("heightMap", "assets://textures/mississippi.png"_view));
+        groundplane.add_component<rendering::renderable>({ rendering::ModelCache::create_model("floor", "assets://models/groundplane.obj"_view), groundmat });
+        groundplane.add_components<transform>();
+
+        skybox = createEntity();
+        auto skyboxMat = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.shs"_view);
+        skyboxMat.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+        skybox.add_component<rendering::renderable>({ rendering::ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view), skyboxMat });
+        skybox.add_components<transform>(position(), rotation(), scale(1000.f));
+
+        camera = createEntity();
+        camera.add_components<transform>(position(0.f, 3.f, 0.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
+        camera.add_component<audio::audio_listener>();
 
         rendering::camera cam;
         cam.set_projection(90.f, 0.1f, 1000.f);
-        player.add_component<rendering::camera>(cam);
+        camera.add_component<rendering::camera>(cam);
     }
 
     void onExit(exit_action* action)
@@ -112,31 +131,43 @@ public:
 
     void onPlayerMove(player_move* action)
     {
-        auto posH = player.get_component_handle<position>();
-        auto rot = player.get_component_handle<rotation>().read();
+        auto posH = camera.get_component_handle<position>();
+        auto rot = camera.get_component_handle<rotation>().read();
         math::vec3 move = math::toMat3(rot) * math::vec3(0.f, 0.f, 1.f);
         move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 10.f;
         posH.fetch_add(move);
+
+        auto pos = posH.read();
+        skybox.write_component(pos);
+        //groundplane.write_component(position(pos.x, 0, pos.z));
     }
 
     void onPlayerStrive(player_strive* action)
     {
-        auto posH = player.get_component_handle<position>();
-        auto rot = player.get_component_handle<rotation>().read();
+        auto posH = camera.get_component_handle<position>();
+        auto rot = camera.get_component_handle<rotation>().read();
         math::vec3 move = math::toMat3(rot) * math::vec3(1.f, 0.f, 0.f);
         move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 10.f;
         posH.fetch_add(move);
+
+        auto pos = posH.read();
+        skybox.write_component(pos);
+        //groundplane.write_component(position(pos.x, 0, pos.z));
     }
 
     void onPlayerFly(player_fly* action)
     {
-        auto posH = player.get_component_handle<position>();
+        auto posH = camera.get_component_handle<position>();
         posH.fetch_add(math::vec3(0.f, action->value * action->input_delta * 10.f, 0.f));
+
+        auto pos = posH.read();
+        skybox.write_component(pos);
+        //groundplane.write_component(position(pos.x, 0, pos.z));
     }
 
     void onPlayerLookX(player_look_x* action)
     {
-        auto rotH = player.get_component_handle<rotation>();
+        auto rotH = camera.get_component_handle<rotation>();
         rotH.fetch_multiply(math::angleAxis(action->value, math::vec3(0, 1, 0)));
         rotH.read_modify_write(rotation(), [](const rotation& src, rotation&& dummy)
             {
@@ -154,7 +185,7 @@ public:
 
     void onPlayerLookY(player_look_y* action)
     {
-        auto rotH = player.get_component_handle<rotation>();
+        auto rotH = camera.get_component_handle<rotation>();
         rotH.fetch_multiply(math::angleAxis(action->value, math::vec3(1, 0, 0)));
         rotH.read_modify_write(rotation(), [](const rotation& src, rotation&& dummy)
             {
