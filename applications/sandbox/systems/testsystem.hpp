@@ -391,7 +391,7 @@ public:
 
         {
             auto ent = createEntity();
-            ent.add_component<rendering::renderable>({ floorH, floorMH });
+            ent.add_component<rendering::renderable>({ planeH, wireframeH });
             ent.add_components<transform>();
         }
 

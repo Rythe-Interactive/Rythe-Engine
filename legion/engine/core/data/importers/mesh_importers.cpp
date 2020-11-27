@@ -41,6 +41,13 @@ namespace legion::core::detail
         }
     };
 
+    /**
+     * @brief Function to copy tinygltf buffer data into the correct mesh data vector
+     * 
+     * \param buffer - The tinygltf::Buffer buffer containing the data
+     * \param bufferView - the tinygltf::BufferView containing information about data size and offset
+     * \param data - std::Vector<T> where the buffer is going to be copied into. The vector will be resized to vector.size()+(tinygltf data size)
+     */
     template <class T>
     void handleGltfBuffer(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, std::vector<T>* data)
     {
@@ -53,32 +60,43 @@ namespace legion::core::detail
         memcpy(data->data()+size, &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
     }
 
-
-    void handleGltfColor(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, int accessorType, int componentType, std::vector<math::color>* data)
+    /**
+     * @brief Function to handle vertex color of tinygltf
+     * 
+     * \param buffer - tinygltf::Buffer containing the mesh data
+     * \param bufferView - tinygltf::BufferView containing information about the buffer (data size/data offset)
+     * \param accessorType - tinygltf accessorType, Vertex color is expected to come in vec3 or vec4 - will be handled by the function
+     * \param componentType - tinygltf componentType, Vertex color is expected to come in float, unsigned byte or unsigned short - will be handled by the function
+     * \param data - std::vector<color> the destination of the data copy. The vector will be resized to vector.size()+(tinygltf vertex color size)
+     */
+    void handleGltfVertexColor(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, int accessorType, int componentType, std::vector<math::color>* data)
     {
         //colors in glft are in vec3/vec4 float/unsigned byte/unsigned short
-
-        //std::vector<float> origin;
-        //origin.resize(bufferView.byteLength);
-        //memcpy(origin.data(), &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
 
         size_t size = data->size();
         if (accessorType == TINYGLTF_TYPE_VEC3)
         {
+            // Copy the vertex colors into the vector, keeping in my mind that the vertex color data is only r,g,b
+
             log::debug("Color accessor type: Vec3");
             size_t dataIndex = size;
             if (componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE)
             {
+                // Vertex colors in unsigned byte
+                // Currently not supported
                 log::debug("Color component type: u byte");
                 log::warn("Warning: Vert colors for UNSIGNED BYTE not implemented");
             }
             else if (componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT)
             {
+                // Vertex colors in unsigned short
+                // Currently not supported
                 log::debug("Color component type: u short");
                 log::warn("Warning: Vert colors for UNSIGNED SHORT not implemented");
             }
             else if (componentType == TINYGLTF_COMPONENT_TYPE_FLOAT)
             {
+                // Vertex colors in float
                 log::debug("Color component type: float");
                 data->resize(size + bufferView.byteLength / sizeof(math::vec3));
                 for (int i = 0; i < bufferView.byteLength; i += 3 * sizeof(float))
@@ -96,23 +114,27 @@ namespace legion::core::detail
         }
         else if (accessorType == TINYGLTF_TYPE_VEC4)
         {
+            // Copy the vertex colors into the vector, keeping in my mind that the vertex color data is r,g,b,a
+
             log::debug("Color accessor type: Vec4");
             size_t dataIndex = size;
             if (componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE)
             {
-                log::debug("Color component type: u byte");
+                // Vertex colors in unsigned byte
+                // Currently not supported
                 log::warn("Warning: Vert colors for UNSIGNED BYTE not implemented");
             }
             else if (componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT)
             {
-                log::debug("Color component type: u short");
+                // Vertex colors in unsigned short
+                // Currently not supported
                 log::warn("Warning: Vert colors for UNSIGNED SHORT not implemented");
             }
             else if (componentType == TINYGLTF_COMPONENT_TYPE_FLOAT)
             {
-                log::debug("Color component type: float");
+                // Vertex colors in float
                 data->resize(size + bufferView.byteLength / sizeof(math::vec4));
-                log::debug("Resized color data to: {}", data->size());
+
                 for (int i = 0; i < bufferView.byteLength; i += 4 * sizeof(float))
                 {
                     float r = *reinterpret_cast<const float*>(&buffer.data.at(i) + bufferView.byteOffset);
@@ -130,6 +152,14 @@ namespace legion::core::detail
         else log::warn("Warning: Vert colors were not vec3 or vec4, skipping colors");
     }
 
+    /**
+     * @brief Function to copy tinygltf indices data into std::vector
+     * 
+     * \param buffer - The tinygltf::Buffer containting mesh data
+     * \param bufferView - the tinygltf::BufferView containting data about the buffer (data size/data offset)
+     * \param offset - The mesh Indices offset. ( e.g. For the first submesh 0, for the second submesh submesh[0].indices.size() )
+     * \param data - The std::vector to copy the indices data into
+     */
     void handleGltfIndices(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, int offset, std::vector<unsigned int>* data)
     {
         size_t size = data->size();
@@ -139,9 +169,7 @@ namespace legion::core::detail
         std::vector<int16> origin;
         origin.resize(bufferView.byteLength / 2);
         memcpy(origin.data(), &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
-        //memcpy(data->data(), &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
-        //std::copy(origin.begin(), origin.begin()+origin.size(), data->begin()+size);
-        //std::copy(buffer.data.at(0) + bufferView.byteOffset, buffer.data.at(0) + bufferView.byteOffset + bufferView.byteLength, std::back_inserter(*data));
+
         for (int i = 0; i < origin.size(); ++i)
         {
             data->at(i + size) = origin[i]+offset;
@@ -295,7 +323,6 @@ namespace legion::core
 
     common::result_decay_more<mesh, fs_error> gltf_binary_mesh_loader::load(const filesystem::basic_resource& resource, mesh_import_settings&& settings)
     {
-        //log::debug("Loading glb");
         using common::Err, common::Ok;
         // decay overloads the operator of ok_type and operator== for valid_t.
         using decay = common::result_decay_more<mesh, fs_error>;
@@ -307,18 +334,23 @@ namespace legion::core
         std::string err;
         std::string warn;
 
+        // Load gltf mesh data into model
         bool ret = loader.LoadBinaryFromMemory(&model, &err, &warn, resource.data(), resource.size());
+
 
         if (!err.empty())
         {
+            // Check and print errors
             log::error("Error: {}", err);
         }
         if (!warn.empty())
         {
+            // Check and print warnings
             log::warn("Warning: {}", warn);
         }
         if (!ret)
         {
+            // If the return failed, return error
             return decay(Err(legion_fs_error("Failed to parse glTF")));
         }
 
@@ -326,11 +358,17 @@ namespace legion::core
         core::mesh meshData;
         for (auto& mesh : model.meshes)
         {
+            // Loop through all the meshes (submeshes)
+
             sub_mesh m;
             m.name = mesh.name;
             log::debug("Loading submesh: {}", m.name);
             for (auto primitive : mesh.primitives)
             {
+                // Loop through all primitives in the mesh
+                // Primitives can be vertex position, normal, texcoord (uv) and vertex colors
+
+                // Find the indices of our mesh and copy them into meshData.indices
                 const tg::Accessor& accessor = model.accessors.at(primitive.indices);
                 tg::BufferView& view = model.bufferViews.at(accessor.bufferView);
                 tg::Buffer& buff = model.buffers.at(view.buffer);
@@ -338,6 +376,9 @@ namespace legion::core
 
                 for (auto& attrib : primitive.attributes)
                 {
+                    // Loop through the attributes of the primitive
+                    // Depending on the attribute the data is copied into a different std::vector in meshData
+
                     const tg::Accessor& accessor = model.accessors.at(attrib.second);
                     tg::BufferView& view = model.bufferViews.at(accessor.bufferView);
                     tg::Buffer& buff = model.buffers.at(view.buffer);
@@ -359,8 +400,8 @@ namespace legion::core
                     }
                     else if (attrib.first.compare("COLOR_0") == 0)
                     {
-                        // UV data
-                        detail::handleGltfColor(buff, view, accessor.type, accessor.componentType, &(meshData.colors));
+                        // Vertex color data
+                        detail::handleGltfVertexColor(buff, view, accessor.type, accessor.componentType, &(meshData.colors));
                     }
                     else
                     {
@@ -368,12 +409,15 @@ namespace legion::core
                     }
                 }
             }
+
+            // Calculate size of submesh and offset of submesh to sure in meshData
             m.indexCount = meshData.indices.size() - offset;
             m.indexOffset = meshData.indices.size() - m.indexCount;
             offset += m.indexCount;
             meshData.submeshes.push_back(m);
         }
 
+        // Convert to left handed coord system
         for (int i = 0; i < meshData.vertices.size(); ++i)
         {
             meshData.vertices[i] = meshData.vertices[i] * math::vec3(-1, 1, 1);
@@ -399,7 +443,6 @@ namespace legion::core
 
     common::result_decay_more<mesh, fs_error> gltf_ascii_mesh_loader::load(const filesystem::basic_resource& resource, mesh_import_settings&& settings)
     {
-        log::debug("loading ascii gltf");
         //log::debug("Loading glb");
         using common::Err, common::Ok;
         // decay overloads the operator of ok_type and operator== for valid_t.
@@ -412,25 +455,22 @@ namespace legion::core
         std::string err;
         std::string warn;
 
-        /*if (!settings.contextFolder.is_valid())
-        {
-            return decay(Err(legion_fs_error("Context folder of mesh import settings was invalid")));
-        }*/
-
-        //bool ret = loader.LoadBinaryFromFile(&model, &err, &warn, resource.);
-        //bool ret = loader.LoadASCIIFromString(&model, &err, &warn, resource.to_string().c_str(), resource.to_string().length(), settings.contextFolder.get_filename());
+        // Load gltf mesh data into model
         bool ret = loader.LoadASCIIFromString(&model, &err, &warn, resource.to_string().c_str(), resource.to_string().length(), "assets://models");
 
         if (!err.empty())
         {
+            // Check and print errors
             log::error("Error: {}", err);
         }
         if (!warn.empty())
         {
+            // Check and print warnings
             log::warn("Warning: {}", warn);
         }
         if (!ret)
         {
+            // If the return failed, return error
             return decay(Err(legion_fs_error("Failed to parse glTF")));
         }
 
@@ -438,11 +478,16 @@ namespace legion::core
         core::mesh meshData;
         for (auto& mesh : model.meshes)
         {
+            // Loop through all the meshes (submeshes)
+
             sub_mesh m;
             m.name = mesh.name;
             log::debug("Loading submesh: {}", m.name);
             for (auto primitive : mesh.primitives)
             {
+                // Loop through all primitives in the mesh
+                // Primitives can be vertex position, normal, texcoord (uv) and vertex colors
+
                 const tg::Accessor& accessor = model.accessors.at(primitive.indices);
                 tg::BufferView& view = model.bufferViews.at(accessor.bufferView);
                 tg::Buffer& buff = model.buffers.at(view.buffer);
@@ -450,6 +495,9 @@ namespace legion::core
 
                 for (auto& attrib : primitive.attributes)
                 {
+                    // Loop through the attributes of the primitive
+                    // Depending on the attribute the data is copied into a different std::vector in meshData
+
                     const tg::Accessor& accessor = model.accessors.at(attrib.second);
                     tg::BufferView& view = model.bufferViews.at(accessor.bufferView);
                     tg::Buffer& buff = model.buffers.at(view.buffer);
@@ -471,8 +519,8 @@ namespace legion::core
                     }
                     else if (attrib.first.compare("COLOR_0") == 0)
                     {
-                        // UV data
-                        detail::handleGltfColor(buff, view, accessor.type, accessor.componentType, &(meshData.colors));
+                        // Vertex color data
+                        detail::handleGltfVertexColor(buff, view, accessor.type, accessor.componentType, &(meshData.colors));
                     }
                     else
                     {
@@ -480,12 +528,15 @@ namespace legion::core
                     }
                 }
             }
+
+            // Calculate size of submesh and offset of submesh to sure in meshData
             m.indexCount = meshData.indices.size() - offset;
             m.indexOffset = meshData.indices.size() - m.indexCount;
             offset += m.indexCount;
             meshData.submeshes.push_back(m);
         }
 
+        // Convert to left handed coord system
         for (int i = 0; i < meshData.vertices.size(); ++i)
         {
             meshData.vertices[i] = meshData.vertices[i] * math::vec3(-1, 1, 1);
