@@ -1,6 +1,7 @@
 #pragma once
 #include <application/events/inputevents.hpp>
 #include <application/events/windowinputevents.hpp>
+#include <numeric>
 
 namespace legion::application
 {
@@ -34,6 +35,15 @@ namespace legion::application
             inputmap::modifier_keys last_mods;
             float last_value;
         };
+
+        struct axis_command_queue
+        {
+            std::vector<float> values;
+            std::vector<inputmap::modifier_keys> mods;
+            std::vector<inputmap::method> methods;
+            delegate<void()> invoke;
+        };
+
     public:
         void setup() override
         {
@@ -254,10 +264,7 @@ namespace legion::application
             data.callback = action_callback::create(
                 [](InputSystem* self, bool state, inputmap::modifier_keys mods, inputmap::method method, float def, float delta)
                 {
-                    Event e;
-                    e.input_delta = delta;
-                    e.set(state ? def : 0.0f, mods, method); //convert key state false:true to float range 1-0
-                    self->raiseEvent<Event>(e);
+                    self->pushCommand<Event>(state ? def : 0.0f,mods,method);
                 }
             );
             data.trigger_value = value;
@@ -297,10 +304,7 @@ namespace legion::application
             data.callback = axis_callback::create(
                 [](InputSystem* self, float value, inputmap::modifier_keys mods, inputmap::method method, float delta)
                 {
-                    Event e;
-                    e.input_delta = delta;
-                    e.set(value, mods, method);
-                    self->raiseEvent<Event>(e);
+                    self->pushCommand<Event>(value,mods,method);
                 }
             );
 
@@ -341,10 +345,8 @@ namespace legion::application
                         action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, deltaTime);
                 }
             }
-
+            raiseCommandQueues();
             onMouseReset();
-
-
         }
 
         void matchGLFWAxisWithSignalAxis(const GLFWgamepadstate& state, inputmap::modifier_keys joystick,
@@ -539,6 +541,31 @@ namespace legion::application
             }
         }
 
+        template <class Event>
+        void pushCommand(float value,inputmap::modifier_keys mods, inputmap::method method)
+        {
+            auto& cq = m_axes_command_queues[Event::id];
+            cq.first.values.push_back(value);
+            cq.first.mods.push_back(mods);
+            cq.first.methods.push_back(method);
+        }
+
+        void raiseCommandQueues()
+        {
+
+            for(auto & [key,value] : m_axes_command_queues){
+                auto axis = std::make_unique<input_axis<std::nullptr_t>>();
+                axis->value_parts = value.values;
+                axis->mods_parts = value.mods;
+                axis->identifier_parts = value.methods;
+
+                axis->value = std::accumulate(value.values.begin(),value.values.end(),0.0f);
+
+                raiseEventUnsafe(std::move(axis),key);
+            }
+            m_axes_command_queues.clear();
+        }
+
         static math::dvec2 m_mousePos;
         static math::dvec2 m_mouseDelta;
 
@@ -546,5 +573,9 @@ namespace legion::application
         static sparse_map<inputmap::method, sparse_map<id_type, action_data>> m_actions;
 
         static sparse_map<inputmap::method, sparse_map<id_type, axis_data>>  m_axes;
+
+        static sparse_map<id_type,axis_command_queue> m_axes_command_queues;
+
+        static std::vector<delegate<void(InputSystem*,axis_command_queue)>> m_emitters;
     };
 }
