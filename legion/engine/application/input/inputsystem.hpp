@@ -66,7 +66,7 @@ namespace legion::application
                     //that are already connected
 
                     //note that GLFW only supports 16 gamepads!
-                    for (size_t i = 0; i < inputmap::modifier_keys::MAX_SIZE - inputmap::modifier_keys::JOYSTICK0; ++i)
+                    for (size_type i = 0; i < inputmap::modifier_keys::MAX_SIZE - inputmap::modifier_keys::JOYSTICK0; ++i)
                     {
                         if (ContextHelper::joystickPresent(i))
                         {
@@ -345,12 +345,12 @@ namespace legion::application
                         action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, deltaTime);
                 }
             }
-            raiseCommandQueues();
+            raiseCommandQueues(deltaTime);
             onMouseReset();
         }
 
         void matchGLFWAxisWithSignalAxis(const GLFWgamepadstate& state, inputmap::modifier_keys joystick,
-            const std::size_t glfw, inputmap::method m)
+            const size_type glfw, inputmap::method m)
         {
             const float value = state.axes[glfw];
             for (auto [_, axis] : m_axes[m])
@@ -545,20 +545,21 @@ namespace legion::application
         void pushCommand(float value,inputmap::modifier_keys mods, inputmap::method method)
         {
             auto& cq = m_axes_command_queues[Event::id];
-            cq.first.values.push_back(value);
-            cq.first.mods.push_back(mods);
-            cq.first.methods.push_back(method);
+            cq.values.push_back(value);
+            cq.mods.push_back(mods);
+            cq.methods.push_back(method);
         }
 
-        void raiseCommandQueues()
+        void raiseCommandQueues(float delta)
         {
 
-            for(auto & [key,value] : m_axes_command_queues){
+            for(auto  [key,value] : m_axes_command_queues){
                 auto axis = std::make_unique<input_axis<std::nullptr_t>>();
                 axis->value_parts = value.values;
                 axis->mods_parts = value.mods;
                 axis->identifier_parts = value.methods;
 
+                axis->input_delta = delta;
                 axis->value = std::accumulate(value.values.begin(),value.values.end(),0.0f);
 
                 raiseEventUnsafe(std::move(axis),key);
@@ -576,6 +577,5 @@ namespace legion::application
 
         static sparse_map<id_type,axis_command_queue> m_axes_command_queues;
 
-        static std::vector<delegate<void(InputSystem*,axis_command_queue)>> m_emitters;
     };
 }

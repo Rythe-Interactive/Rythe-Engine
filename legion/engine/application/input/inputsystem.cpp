@@ -9,4 +9,5 @@ namespace legion::application
     sparse_map<inputmap::method, sparse_map<id_type, InputSystem::action_data>> InputSystem::m_actions;
 
     sparse_map<inputmap::method, sparse_map<id_type, InputSystem::axis_data>> InputSystem::m_axes;
+    sparse_map<id_type,InputSystem::axis_command_queue> InputSystem::m_axes_command_queues;
 }
