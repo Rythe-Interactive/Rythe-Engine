@@ -5,7 +5,7 @@ In Legion, file operations are abstracted away behind what we call **Virtual Fil
 These Filesystems provide a way to interact with a users pc that is both safe and convenient.
 Let us look at an example:
 
-.. codeblock:: cpp
+.. code-block:: cpp
 
 
     // we want to access a file in a folder on the users pc
@@ -19,7 +19,7 @@ This allows us to work with the filesystem in little bubbles that can be moved w
 For instance. imagine one day you decide to move the `folder` into a different location, let's say alongside your project
 Instead of having to fix every file access all you need to do is
 
-.. codeblock:: cpp
+.. code-block:: cpp
 
 
     // we want to access a file in a folder on the users pc
@@ -36,7 +36,7 @@ Instead of having to fix every file access all you need to do is
 They also provide a little bit of security. 
 Let's say your game supports mods. You do not want those mods to access files outside of their own little sandbox.
 
-.. codeblock:: cpp
+.. code-block:: cpp
 
 
     // we create a new virtual filesystem for the mod
@@ -49,7 +49,7 @@ Let's say your game supports mods. You do not want those mods to access files ou
 If no other method of accessing files other than this view exists, then the mod is locked into this sandbox
 trying to access files before this folder will fail!
 
-.. codeblock:: cpp
+.. code-block:: cpp
 
 
     //we try to be sneaky and access something we shouldn't
