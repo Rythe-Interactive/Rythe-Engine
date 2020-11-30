@@ -7,20 +7,65 @@
 #if !defined(GEOMETRY_SHADER)
 vec2 ParallaxMap(sampler2D normalHeightMap, float scale, vec2 uv, Camera camera, mat3 tbn)
 {
-	if(scale == 0)
+	if(scale <= epsilon)
 		return uv;
 
 	vec3 tangentViewDir = tbn * normalize(camera.toView);
 
 	const float minLayers = 4.0;
-	float maxLayers = mix(128.0, 4.0, clamp01(length(camera.toView) / 256.0));
-	float verticality = dot01(vec3(0.0, 0.0, 1.0), tangentViewDir);
-	float layerCount = mix(minLayers, maxLayers, verticality);
+	float distScale = 1.0 - clamp01(length(camera.toView) / 128.0);
+	distScale = 1.0 - (distScale * distScale);
+	float maxLayers = mix(32.0, 4.0, distScale);
+	float layerCount = mix(minLayers, maxLayers, abs(dot(vec3(0.0, 0.0, 1.0), tangentViewDir)));
 
 	float layerDepth = 1.0 / layerCount;
 
-	float currentDepth = 0.0;
-	float prevDepth = 0.0;
+	float currentLayerDepth = 0.0;
+	float prevLayerDepth = 0.0;
+
+	vec2 P = tangentViewDir.xy * scale * vec2(-0.2, 0.2);
+	vec2 deltaUV = P / layerCount;
+
+	vec2 currentUV = uv;
+	vec2 prevUV = currentUV;
+	float currentDepthMapValue = texture(normalHeightMap, currentUV).a;
+	float prevDepthMapValue = currentDepthMapValue;
+
+	while(currentLayerDepth < currentDepthMapValue)
+	{
+		prevUV = currentUV;
+		currentUV -= deltaUV;
+
+		prevDepthMapValue = currentDepthMapValue;
+		currentDepthMapValue = texture(normalHeightMap, currentUV).a;
+
+		prevLayerDepth = currentLayerDepth;
+		currentLayerDepth += layerDepth;
+	}
+
+	float afterDepth = currentDepthMapValue - currentLayerDepth;
+	float beforeDepth = prevDepthMapValue - prevLayerDepth;
+
+	return mix(currentUV, prevUV, afterDepth / (afterDepth - beforeDepth));
+}
+
+vec2 ParallaxMap2(sampler2D normalHeightMap, float scale, vec2 uv, Camera camera, mat3 tbn)
+{
+	if(scale <= epsilon)
+		return uv;
+
+	vec3 tangentViewDir = tbn * normalize(camera.toView);
+
+	const float minLayers = 4.0;
+	float distScale = clamp01(length(camera.toView) / 256.0);
+	//distScale = 1.0 - (distScale * distScale);
+	float maxLayers = mix(64.0, 4.0, distScale);
+	float layerCount = mix(minLayers, maxLayers, dot01(vec3(0.0, 0.0, 1.0), tangentViewDir));
+
+	float layerDepth = 1.0 / layerCount;
+
+	float currentLayerDepth = 0.0;
+	float prevLayerDepth = 0.0;
 
 	vec2 P = tangentViewDir.xy * scale * vec2(-0.1, 0.1);
 	vec2 deltaUV = P / layerCount;
@@ -30,7 +75,7 @@ vec2 ParallaxMap(sampler2D normalHeightMap, float scale, vec2 uv, Camera camera,
 	float currentDepthMapValue = texture(normalHeightMap, currentUV).a;
 	float prevDepthMapValue = currentDepthMapValue;
 
-	while(currentDepth < currentDepthMapValue)
+	while(currentLayerDepth < currentDepthMapValue)
 	{
 		prevUV = currentUV;
 		currentUV -= deltaUV;
@@ -38,12 +83,12 @@ vec2 ParallaxMap(sampler2D normalHeightMap, float scale, vec2 uv, Camera camera,
 		prevDepthMapValue = currentDepthMapValue;
 		currentDepthMapValue = texture(normalHeightMap, currentUV).a;
 
-		prevDepth = currentDepth;
-		currentDepth += layerDepth;
+		prevLayerDepth = currentLayerDepth;
+		currentLayerDepth += layerDepth;
 	}
 
-	float afterDepth = currentDepthMapValue - currentDepth;
-	float beforeDepth = prevDepthMapValue - prevDepth;
+	float afterDepth = currentDepthMapValue - currentLayerDepth;
+	float beforeDepth = prevDepthMapValue - prevLayerDepth;
 
 	return mix(prevUV, currentUV, afterDepth / (afterDepth - beforeDepth));
 }
@@ -52,15 +97,16 @@ vec2 ParallaxMap(float height, float scale, vec2 uv, Camera camera, mat3 tbn)
 {
 	vec3 tangentViewDir = tbn * normalize(camera.toView);
 
-	float offset = (height * 2.0 - 1.0) * scale * 0.01;
-	vec2 parallexOffset = (tangentViewDir.xy / tangentViewDir.z) * offset;
+	float offset = height * scale;
+	vec2 parallexOffset = (tangentViewDir.xy) * offset * vec2(-0.1, 0.1);
     return uv - parallexOffset;
 }
+
 #endif
 
 vec3 NormalMap(sampler2D map, vec2 uv, mat3 tbn)
 {
-	return normalize(tbn * normalize(texture(map, uv).xyz * 2.0 - 1.0));
+	return normalize(transpose(tbn) * normalize(texture(map, uv).xyz * 2.0 - 1.0));
 }
 
 vec4 AlbedoMap(sampler2D albedoMap, vec2 uv)

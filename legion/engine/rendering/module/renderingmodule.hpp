@@ -1,6 +1,8 @@
 #pragma once
 #include <rendering/data/importers/texture_importers.hpp>
 #include <rendering/systems/renderer.hpp>
+#include <rendering/systems/particle_system_manager.hpp>
+
 
 namespace legion::rendering
 {
@@ -16,6 +18,10 @@ namespace legion::rendering
             reportComponentType<mesh_renderer>();
             reportComponentType<light>();
             reportSystem<Renderer>();
+
+            reportComponentType<particle>();
+            reportComponentType<particle_emitter>();
+            reportSystem<ParticleSystemManager>();
         }
 
         virtual priority_type priority() override

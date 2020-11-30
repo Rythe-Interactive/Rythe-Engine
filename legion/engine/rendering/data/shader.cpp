@@ -447,9 +447,17 @@ namespace legion::rendering
         {
             auto shaderId = compile_shader(shaderType, shaderIL.c_str(), shaderIL.size());
 
-            if (shaderId == (app::gl_id) - 1)
+            if (shaderId == (app::gl_id) -1)
             {
-                log::error("Error occurred in shader: {}\n{}", name, shaderIL);
+                auto v = common::split_string_at<'\n'>(shaderIL);
+
+                std::string output;
+                for (int i = 0; i < v.size(); i++)
+                {
+                    output += std::to_string(i + 1) + "\t| " + v[i] + "\n";
+                }
+
+                log::error("Error occurred in shader: {}\n{}", name, output);
 
                 for (auto id : shaderIds)
                 {

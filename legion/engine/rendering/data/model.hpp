@@ -36,10 +36,10 @@ namespace legion::rendering
         id_type id;
         
         bool operator==(const model_handle& other) const { return id == other.id; }
-        bool is_buffered();
-        void buffer_data(app::gl_id matrixBuffer);
-        mesh_handle get_mesh();
-        const model& get_model();
+        bool is_buffered() const;
+        void buffer_data(app::gl_id matrixBuffer) const;
+        mesh_handle get_mesh() const;
+        const model& get_model() const;
 
         template<typename Archive>
         void serialize(Archive& archive);

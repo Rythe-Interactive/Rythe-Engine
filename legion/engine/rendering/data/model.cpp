@@ -9,22 +9,22 @@ namespace legion::rendering
     sparse_map<id_type, model> ModelCache::m_models;
     async::readonly_rw_spinlock ModelCache::m_modelLock;
 
-    bool model_handle::is_buffered()
+    bool model_handle::is_buffered() const
     {
         return ModelCache::get_model(id).buffered;
     }
 
-    void model_handle::buffer_data(app::gl_id matrixBuffer)
+    void model_handle::buffer_data(app::gl_id matrixBuffer) const
     {
         ModelCache::buffer(id, matrixBuffer);
     }
 
-    mesh_handle model_handle::get_mesh()
+    mesh_handle model_handle::get_mesh() const
     {
         return ModelCache::get_mesh(id);
     }
 
-    const model& model_handle::get_model()
+    const model& model_handle::get_model() const
     {
         return ModelCache::get_model(id);
     }
@@ -126,6 +126,11 @@ namespace legion::rendering
         std::string meshName;
 
         {// Load the mesh if it wasn't already. (It's called MeshCache for a reason.)
+            if (settings.contextFolder.get_virtual_path() == "")
+            {
+                settings.contextFolder = file.parent();
+            }
+
             auto handle = MeshCache::create_mesh(name, file, settings);
             if (handle == invalid_mesh_handle)
             {
@@ -150,7 +155,7 @@ namespace legion::rendering
             m_models.insert(id, model);
         }
 
-        log::trace("Created model {} with mesh: {}", name, meshName);
+        log::debug("Created model {} with mesh: {}", name, meshName);
 
         return { id };
     }

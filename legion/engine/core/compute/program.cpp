@@ -73,6 +73,13 @@ namespace legion::core::compute {
         if (ret != CL_SUCCESS)
         {
             log::error("clBuildProgram failed");
+
+            size_t length;
+            char buffer[8192];
+
+            clGetProgramBuildInfo(m_program,device,CL_PROGRAM_BUILD_LOG,sizeof(buffer),buffer,&length);
+            buffer[length] = NULL;
+            log::warn("BUILD LOG:\n{}",buffer);
         }
 
         /*}*/
