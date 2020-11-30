@@ -109,6 +109,7 @@ public:
     rendering::material_handle bogH;
     rendering::material_handle paintH;
     rendering::material_handle skyboxH;
+    rendering::material_handle gnomeMH;
 
     //Friction Test
     std::vector<ecs::entity_handle> physicsFrictionTestRotators;
@@ -193,12 +194,9 @@ public:
         rendering::model_handle pointLightH;
         rendering::model_handle audioSourceH;
         rendering::model_handle cubeH;
-        rendering::model_handle gltfCubeH;
         rendering::model_handle sphereH;
         rendering::model_handle suzanneH;
-        rendering::model_handle gltfTestH;
-        //rendering::model_handle gltfGizmoH;
-        //rendering::model_handle gnomeH;
+        rendering::model_handle gnomeH;
         rendering::model_handle uvsphereH;
         rendering::model_handle axesH;
         rendering::model_handle submeshtestH;
@@ -226,14 +224,11 @@ public:
             pointLightH = rendering::ModelCache::create_model("point light", "assets://models/point-light.obj"_view);
             audioSourceH = rendering::ModelCache::create_model("audio source", "assets://models/audio-source.obj"_view);
             cubeH = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
-            gltfCubeH = rendering::ModelCache::create_model("gltfCube", "assets://models/cube.gltf"_view, { true, true, "assets://models/submeshtest.glb"_view });
             sphereH = rendering::ModelCache::create_model("sphere", "assets://models/sphere.obj"_view);
             suzanneH = rendering::ModelCache::create_model("suzanne", "assets://models/suzanne.obj"_view);
-            gltfTestH = rendering::ModelCache::create_model("gltfTest", "assets://models/submeshtest.glb"_view);
-            //gltfGizmoH = rendering::ModelCache::create_model("gltfGizmo", "assets://models/xyz.glb"_view);
-            //gnomeH = rendering::ModelCache::create_model("gnome", "assets://models/wizardgnome.obj"_view);
+            gnomeH = rendering::ModelCache::create_model("gnome", "assets://models/wizardgnomeretop.obj"_view);
             uvsphereH = rendering::ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view);
-            axesH = rendering::ModelCache::create_model("axes", "assets://models/xyz.obj"_view, { true, false, "assets://models/xyz.mtl"_view });
+            axesH = rendering::ModelCache::create_model("axes", "assets://models/xyz.obj"_view);
             submeshtestH = rendering::ModelCache::create_model("submeshtest", "assets://models/submeshtest.obj"_view);
             planeH = rendering::ModelCache::create_model("plane", "assets://models/plane.obj"_view);
 
@@ -358,6 +353,16 @@ public:
             paintH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
             paintH.set_param("tonemap", false);
 
+            gnomeMH = rendering::MaterialCache::create_material("gnome", pbrShader);
+            gnomeMH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/warlock/warlock-albedo.png"_view));
+            gnomeMH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/warlock/warlock-normalHeight.png"_view));
+            gnomeMH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/warlock/warlock-MRDAo.png"_view));
+            gnomeMH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/warlock/warlock-emissive.png"_view));
+            gnomeMH.set_param("material_input.heightScale", 0.f);
+            gnomeMH.set_param("discardExcess", false);
+            gnomeMH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            gnomeMH.set_param("tonemap", false);
+
             normalH = rendering::MaterialCache::create_material("normal", "assets://shaders/normal.shs"_view);
             normalH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("engine://resources/default/normalHeight"_view));
 
@@ -370,31 +375,6 @@ public:
 #pragma endregion
 
 #pragma region Entities
-        {
-            auto ent = createEntity();
-            ent.add_component<rendering::renderable>({ uvsphereH, skyboxH });
-            ent.add_components<transform>(position(), rotation(), scale(1000.f));
-        }
-
-        //glft test
-        {
-            auto ent = createEntity();
-            ent.add_component<rendering::renderable>({ gltfCubeH, pbrH });
-            ent.add_components<transform>(position(0,20,0), rotation(), scale(1.0f));
-        }
-        //glft test
-        {
-            auto ent = createEntity();
-            ent.add_component<rendering::renderable>({ gltfTestH, pbrH });
-            ent.add_components<transform>(position(10, 20, 0), rotation(), scale(1.0f));
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_component<rendering::renderable>({ planeH, wireframeH });
-            ent.add_components<transform>();
-        }
-
         {
             auto ent = createEntity();
             ent.add_component<rendering::renderable>({ planeH, slateH });
@@ -512,6 +492,13 @@ public:
             ent.add_components<transform>(position(0, 3, 11.1f), rotation(), scale());
         }
 
+        {
+            auto ent = m_ecs->createEntity();
+            ent.add_components<rendering::renderable, sah>({ gnomeH, gnomeMH }, {});
+
+            ent.add_components<transform>(position(0, 3, 2.1f), rotation(), scale());
+        }
+
         /*   {
                auto ent = m_ecs->createEntity();
                ent.add_component<sah>();
@@ -533,12 +520,6 @@ public:
             ent.add_component<rendering::renderable>({ axesH, vertexColorH });
             ent.add_components<transform>();
         }
-        // glTF gizmo
-        /*{
-            auto ent = createEntity();
-            ent.add_component<rendering::renderable>({ gltfGizmoH, vertexColorH });
-            ent.add_components<transform>(position(2, 20, 0), rotation(), scale(1.0f));
-        }*/
 
         {
             auto ent = createEntity();
@@ -688,7 +669,6 @@ public:
         //    ,cubeParams, 0.1f, cubeH, wireframeH);
 
         createProcess<&TestSystem::update>("Update");
-        //createProcess<&TestSystem::drawInterval>("TestChain");
     }
 
     void testPhysicsEvent(physics::TriggerEvent* evnt)
@@ -1658,7 +1638,7 @@ public:
 #pragma region input stuff
     void onLightSwitch(light_switch* action)
     {
-        static bool on = false;
+        static bool on = true;
 
         if (!action->value)
         {
@@ -1710,7 +1690,7 @@ public:
 
     void onTonemapSwitch(tonemap_switch* action)
     {
-        static bool on = true;
+        static bool on = false;
 
         if (!action->value)
         {

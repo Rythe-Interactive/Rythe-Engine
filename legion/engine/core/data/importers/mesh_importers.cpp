@@ -10,6 +10,7 @@
 #include <core/math/math.hpp>
 #include <core/logging/logging.hpp>
 #include <core/common/string_extra.hpp>
+#include <core/filesystem/basic_resolver.hpp>
 #include <unordered_map>
 #include <algorithm>
 
@@ -43,7 +44,7 @@ namespace legion::core::detail
 
     /**
      * @brief Function to copy tinygltf buffer data into the correct mesh data vector
-     * 
+     *
      * @param buffer - The tinygltf::Buffer buffer containing the data
      * @param bufferView - the tinygltf::BufferView containing information about data size and offset
      * @param data - std::Vector<T> where the buffer is going to be copied into. The vector will be resized to vector.size()+(tinygltf data size)
@@ -53,12 +54,12 @@ namespace legion::core::detail
     {
         size_t size = data->size();
         data->resize(size + bufferView.byteLength / sizeof(T));
-        memcpy(data->data()+size, &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
+        memcpy(data->data() + size, &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
     }
 
     /**
      * @brief Function to handle vertex color of tinygltf
-     * 
+     *
      * @param buffer - tinygltf::Buffer containing the mesh data
      * @param bufferView - tinygltf::BufferView containing information about the buffer (data size/data offset)
      * @param accessorType - tinygltf accessorType, Vertex color is expected to come in vec3 or vec4 - will be handled by the function
@@ -145,7 +146,7 @@ namespace legion::core::detail
 
     /**
      * @brief Function to copy tinygltf indices data into std::vector
-     * 
+     *
      * @param buffer - The tinygltf::Buffer containting mesh data
      * @param bufferView - the tinygltf::BufferView containting data about the buffer (data size/data offset)
      * @param offset - The mesh Indices offset. ( e.g. For the first submesh 0, for the second submesh submesh[0].indices.size() )
@@ -163,7 +164,7 @@ namespace legion::core::detail
 
         for (int i = 0; i < origin.size(); ++i)
         {
-            data->at(i + size) = origin[i]+offset;
+            data->at(i + size) = origin[i] + offset;
         }
     }
 }
@@ -198,28 +199,39 @@ namespace legion::core
         config.triangulate = settings.triangulate;
         config.vertex_color = settings.vertex_color;
 
-        std::string mtl = "newmtl None\n\
-            Ns 0\n\
-            Ka 0.000000 0.000000 0.000000\n\
-            Kd 0.8 0.8 0.8\n\
-            Ks 0.8 0.8 0.8\n\
-            d 1\n\
-            illum 2\n\0";
+        std::string baseDir = "";
 
-        if (settings.contextFolder.get_virtual_path() != std::string(""))
+        filesystem::navigator navigator(settings.contextFolder.get_virtual_path());
+        auto solution = navigator.find_solution();
+        if (solution.has_err())
+            log::warn(std::string("Invalid obj context path, ") + solution.get_error().what());
+        else
         {
-            auto result = settings.contextFolder.get();
-            if (result != common::valid)
-                log::warn("{}", result.get_error());
+            auto s = solution.get();
+            if (s.size() != 1)
+                log::warn("Invalid obj context path, fs::view was not fully local");
             else
             {
-                filesystem::basic_resource resource = result;
-                mtl = resource.to_string();
+                filesystem::basic_resolver* resolver = dynamic_cast<filesystem::basic_resolver*>(s[0].first);
+                if (!resolver)
+                    log::warn("Invalid obj context path, fs::view was not local");
+                else
+                {
+                    resolver->set_target(s[0].second);
+
+                    if (!resolver->is_valid())
+                        log::warn("Invalid obj context path");
+                    else
+                        baseDir = resolver->get_absolute_path();
+                }
             }
         }
+        std::stringbuf obj_buf(resource.to_string());
+        std::istream obj_ifs(&obj_buf);
+        tinyobj::MaterialFileReader matFileReader(baseDir);
 
         // Try to parse the mesh data from the text data in the file.
-        if (!reader.ParseFromString(resource.to_string(), mtl, config))
+        if (!reader.ParseFromString(resource.to_string(), matFileReader, config))
         {
             return decay(Err(legion_fs_error(reader.Error().c_str())));
         }
@@ -413,7 +425,7 @@ namespace legion::core
             meshData.normals[i] = meshData.normals[i] * math::vec3(-1, 1, 1);
             if (meshData.uvs.size() == i) meshData.uvs.push_back(math::vec2(0, 0));
             else meshData.uvs[i] = meshData.uvs[i] * math::vec2(1, -1);
-            if(meshData.colors.size() == i) meshData.colors.push_back(core::math::colors::grey);
+            if (meshData.colors.size() == i) meshData.colors.push_back(core::math::colors::grey);
         }
 
         // Because we only flip one axis we also need to flip the triangle rotation.
@@ -443,8 +455,36 @@ namespace legion::core
         std::string err;
         std::string warn;
 
+        std::string ascii = resource.to_string();
+
+        filesystem::navigator navigator(settings.contextFolder.get_virtual_path());
+        auto solution = navigator.find_solution();
+        if (solution.has_err())
+        {
+            log::warn(std::string("Invalid gltf context path, ") + solution.get_error().what());
+        }
+
+        auto s = solution.get();
+        if (s.size() != 1)
+        {
+            log::warn("Invalid gltf context path, fs::view was not fully local");
+        }
+
+        filesystem::basic_resolver* resolver = dynamic_cast<filesystem::basic_resolver*>(s[0].first);
+        if (!resolver)
+        {
+            log::warn("Invalid gltf context path, fs::view was not local");
+        }
+
+        resolver->set_target(s[0].second);
+
+        if (!resolver->is_valid())
+        {
+            log::warn("Invalid gltf context path");
+        }
+
         // Load gltf mesh data into model
-        bool ret = loader.LoadASCIIFromString(&model, &err, &warn, resource.to_string().c_str(), resource.to_string().length(), "assets://models");
+        bool ret = loader.LoadASCIIFromString(&model, &err, &warn, ascii.c_str(), ascii.length(), resolver->get_absolute_path());
 
         if (!err.empty())
         {

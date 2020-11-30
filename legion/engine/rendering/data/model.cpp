@@ -126,6 +126,11 @@ namespace legion::rendering
         std::string meshName;
 
         {// Load the mesh if it wasn't already. (It's called MeshCache for a reason.)
+            if (settings.contextFolder.get_virtual_path() == "")
+            {
+                settings.contextFolder = file.parent();
+            }
+
             auto handle = MeshCache::create_mesh(name, file, settings);
             if (handle == invalid_mesh_handle)
             {

@@ -27,6 +27,7 @@ struct Light
 
 struct Material
 {
+    mat3 tbn;
     vec4 albedo;
  	vec3 normal;
  	float metallic;
@@ -49,7 +50,7 @@ float Attenuation(vec3 worldPosition, vec3 lightPosition, float attenuationRadiu
 
 vec3 fresnelSchlick(float halfwayDotView, vec3 F0)
 {
-    return F0 + (1.0 - F0) * pow(1.0 - halfwayDotView, 5.0);
+    return mix(pow(1.0 - halfwayDotView, 5.0).xxx, ones.rgb, F0);
 }
 
 vec3 Fresnel0(vec4 albedo, float metallic, float dielectric)
@@ -68,20 +69,20 @@ float DistributionGGX(float normalDotHalfway, float roughness)
     float a2     = a * a;
     float NdotH2 = normalDotHalfway * normalDotHalfway;
 
-    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
+    float denom = ((NdotH2 * (a2 - 1.0)) + 1.0);
 	denom = pi * denom * denom;
 
-    return a2 / denom;
+    return safeDiv(a2, denom);
 }
 
 float GeometrySchlickGGX(float cosTheta, float roughness)
 {
     float r = roughness + 1.0;
-    float k = (r * r) / 8.0;
+    float k = (r * r) * 0.125;
 
-    float denom = cosTheta * (1.0 - k) + k;
+    float denom = (cosTheta * (1.0 - k)) + k;
 
-    return cosTheta / denom;
+    return safeDiv(cosTheta, denom);
 }
 
 float GeometrySmith(float normalDotView, float normalDotLight, float roughness)
@@ -100,7 +101,7 @@ vec3 CookTorranceBRDF(float normalDistribution, vec3 fresnelReflection, float ge
 vec3 LambertianDiffuse(vec3 kS, vec3 albedo, float metallic)
 {
     vec3 kD = (vec3(1.0) - kS) * (1.0 - metallic);
-    return kD * albedo / pi;
+    return kD * albedo * one_over_pi;
 }
 
 float ambientIntensity;
@@ -121,7 +122,7 @@ vec3 CalculateLight(Light light, Camera camera, Material material, vec3 worldPos
             break;
         case spot_light:
             lightDirection = normalize(light.position - worldPosition);
-            intensity = pow(max((dot(normalize(light.direction), lightDirection) - cos(light.angle*2.0)) / (1.0 - cos(light.angle*2.0)), 0.0), light.falloff) * light.intensity;
+            intensity = pow(max(safeDiv(dot(normalize(light.direction), lightDirection) - cos(light.angle*2.0), (1.0 - cos(light.angle*2.0))), 0.0), light.falloff) * light.intensity;
             break;
         default:
             lightDirection = vec3(0, 1, 0);
