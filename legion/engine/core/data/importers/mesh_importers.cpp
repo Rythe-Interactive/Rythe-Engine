@@ -44,17 +44,13 @@ namespace legion::core::detail
     /**
      * @brief Function to copy tinygltf buffer data into the correct mesh data vector
      * 
-     * \param buffer - The tinygltf::Buffer buffer containing the data
-     * \param bufferView - the tinygltf::BufferView containing information about data size and offset
-     * \param data - std::Vector<T> where the buffer is going to be copied into. The vector will be resized to vector.size()+(tinygltf data size)
+     * @param buffer - The tinygltf::Buffer buffer containing the data
+     * @param bufferView - the tinygltf::BufferView containing information about data size and offset
+     * @param data - std::Vector<T> where the buffer is going to be copied into. The vector will be resized to vector.size()+(tinygltf data size)
      */
     template <class T>
     void handleGltfBuffer(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, std::vector<T>* data)
     {
-        /*for (size_t i = 0; i < bufferView.byteLength; i += sizeof(T))
-        {
-            data->push_back(*reinterpret_cast<const T*>(&buffer.data.at(i) + bufferView.byteOffset));
-        }*/
         size_t size = data->size();
         data->resize(size + bufferView.byteLength / sizeof(T));
         memcpy(data->data()+size, &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
@@ -63,11 +59,11 @@ namespace legion::core::detail
     /**
      * @brief Function to handle vertex color of tinygltf
      * 
-     * \param buffer - tinygltf::Buffer containing the mesh data
-     * \param bufferView - tinygltf::BufferView containing information about the buffer (data size/data offset)
-     * \param accessorType - tinygltf accessorType, Vertex color is expected to come in vec3 or vec4 - will be handled by the function
-     * \param componentType - tinygltf componentType, Vertex color is expected to come in float, unsigned byte or unsigned short - will be handled by the function
-     * \param data - std::vector<color> the destination of the data copy. The vector will be resized to vector.size()+(tinygltf vertex color size)
+     * @param buffer - tinygltf::Buffer containing the mesh data
+     * @param bufferView - tinygltf::BufferView containing information about the buffer (data size/data offset)
+     * @param accessorType - tinygltf accessorType, Vertex color is expected to come in vec3 or vec4 - will be handled by the function
+     * @param componentType - tinygltf componentType, Vertex color is expected to come in float, unsigned byte or unsigned short - will be handled by the function
+     * @param data - std::vector<color> the destination of the data copy. The vector will be resized to vector.size()+(tinygltf vertex color size)
      */
     void handleGltfVertexColor(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, int accessorType, int componentType, std::vector<math::color>* data)
     {
@@ -78,26 +74,22 @@ namespace legion::core::detail
         {
             // Copy the vertex colors into the vector, keeping in my mind that the vertex color data is only r,g,b
 
-            log::debug("Color accessor type: Vec3");
             size_t dataIndex = size;
             if (componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE)
             {
                 // Vertex colors in unsigned byte
                 // Currently not supported
-                log::debug("Color component type: u byte");
-                log::warn("Warning: Vert colors for UNSIGNED BYTE not implemented");
+                log::warn("Vert colors for UNSIGNED BYTE not implemented");
             }
             else if (componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT)
             {
                 // Vertex colors in unsigned short
                 // Currently not supported
-                log::debug("Color component type: u short");
-                log::warn("Warning: Vert colors for UNSIGNED SHORT not implemented");
+                log::warn("Vert colors for UNSIGNED SHORT not implemented");
             }
             else if (componentType == TINYGLTF_COMPONENT_TYPE_FLOAT)
             {
                 // Vertex colors in float
-                log::debug("Color component type: float");
                 data->resize(size + bufferView.byteLength / sizeof(math::vec3));
                 for (int i = 0; i < bufferView.byteLength; i += 3 * sizeof(float))
                 {
@@ -109,26 +101,25 @@ namespace legion::core::detail
             }
             else
             {
-                log::warn("Warning: Vert colors were not stored as UNSIGNED BYTE/SHORT or float, skipping");
+                log::warn("Vert colors were not stored as UNSIGNED BYTE/SHORT or float, skipping");
             }
         }
         else if (accessorType == TINYGLTF_TYPE_VEC4)
         {
             // Copy the vertex colors into the vector, keeping in my mind that the vertex color data is r,g,b,a
 
-            log::debug("Color accessor type: Vec4");
             size_t dataIndex = size;
             if (componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE)
             {
                 // Vertex colors in unsigned byte
                 // Currently not supported
-                log::warn("Warning: Vert colors for UNSIGNED BYTE not implemented");
+                log::warn("Vert colors for UNSIGNED BYTE not implemented");
             }
             else if (componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT)
             {
                 // Vertex colors in unsigned short
                 // Currently not supported
-                log::warn("Warning: Vert colors for UNSIGNED SHORT not implemented");
+                log::warn("Vert colors for UNSIGNED SHORT not implemented");
             }
             else if (componentType == TINYGLTF_COMPONENT_TYPE_FLOAT)
             {
@@ -146,19 +137,19 @@ namespace legion::core::detail
             }
             else
             {
-                log::warn("Warning: Vert colors were not stored as UNSIGNED BYTE/SHORT or float, skipping");
+                log::warn("Vert colors were not stored as UNSIGNED BYTE/SHORT or float, skipping");
             }
         }
-        else log::warn("Warning: Vert colors were not vec3 or vec4, skipping colors");
+        else log::warn("Vert colors were not vec3 or vec4, skipping colors");
     }
 
     /**
      * @brief Function to copy tinygltf indices data into std::vector
      * 
-     * \param buffer - The tinygltf::Buffer containting mesh data
-     * \param bufferView - the tinygltf::BufferView containting data about the buffer (data size/data offset)
-     * \param offset - The mesh Indices offset. ( e.g. For the first submesh 0, for the second submesh submesh[0].indices.size() )
-     * \param data - The std::vector to copy the indices data into
+     * @param buffer - The tinygltf::Buffer containting mesh data
+     * @param bufferView - the tinygltf::BufferView containting data about the buffer (data size/data offset)
+     * @param offset - The mesh Indices offset. ( e.g. For the first submesh 0, for the second submesh submesh[0].indices.size() )
+     * @param data - The std::vector to copy the indices data into
      */
     void handleGltfIndices(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, int offset, std::vector<unsigned int>* data)
     {
@@ -341,12 +332,12 @@ namespace legion::core
         if (!err.empty())
         {
             // Check and print errors
-            log::error("Error: {}", err);
+            log::error("{}", err);
         }
         if (!warn.empty())
         {
             // Check and print warnings
-            log::warn("Warning: {}", warn);
+            log::warn("{}", warn);
         }
         if (!ret)
         {
@@ -362,7 +353,6 @@ namespace legion::core
 
             sub_mesh m;
             m.name = mesh.name;
-            log::debug("Loading submesh: {}", m.name);
             for (auto primitive : mesh.primitives)
             {
                 // Loop through all primitives in the mesh
@@ -386,7 +376,6 @@ namespace legion::core
                     {
                         // Position data
                         detail::handleGltfBuffer<math::vec3>(buff, view, &(meshData.vertices));
-                        log::debug("Vertices count: {}", meshData.vertices.size());
                     }
                     else if (attrib.first.compare("NORMAL") == 0)
                     {
@@ -405,7 +394,7 @@ namespace legion::core
                     }
                     else
                     {
-                        log::warn("\n\n\n\nMore data to be found in .gbl. Data can be accesed through: {}\n\n\n", attrib.first);
+                        log::warn("More data to be found in .gbl. Data can be accesed through: {}", attrib.first);
                     }
                 }
             }
@@ -443,7 +432,6 @@ namespace legion::core
 
     common::result_decay_more<mesh, fs_error> gltf_ascii_mesh_loader::load(const filesystem::basic_resource& resource, mesh_import_settings&& settings)
     {
-        //log::debug("Loading glb");
         using common::Err, common::Ok;
         // decay overloads the operator of ok_type and operator== for valid_t.
         using decay = common::result_decay_more<mesh, fs_error>;
@@ -461,12 +449,12 @@ namespace legion::core
         if (!err.empty())
         {
             // Check and print errors
-            log::error("Error: {}", err);
+            log::error("{}", err);
         }
         if (!warn.empty())
         {
             // Check and print warnings
-            log::warn("Warning: {}", warn);
+            log::warn("{}", warn);
         }
         if (!ret)
         {
@@ -482,7 +470,6 @@ namespace legion::core
 
             sub_mesh m;
             m.name = mesh.name;
-            log::debug("Loading submesh: {}", m.name);
             for (auto primitive : mesh.primitives)
             {
                 // Loop through all primitives in the mesh
@@ -505,7 +492,6 @@ namespace legion::core
                     {
                         // Position data
                         detail::handleGltfBuffer<math::vec3>(buff, view, &(meshData.vertices));
-                        log::debug("Vertices count: {}", meshData.vertices.size());
                     }
                     else if (attrib.first.compare("NORMAL") == 0)
                     {
@@ -524,7 +510,7 @@ namespace legion::core
                     }
                     else
                     {
-                        log::warn("\n\n\n\nMore data to be found in .gbl. Data can be accesed through: {}\n\n\n", attrib.first);
+                        log::warn("More data to be found in .gbl. Data can be accesed through: {}", attrib.first);
                     }
                 }
             }

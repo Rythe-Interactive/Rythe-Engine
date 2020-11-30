@@ -1551,7 +1551,7 @@ class TinyGLTF {
 
 #ifndef TINYGLTF_NO_STB_IMAGE
 #ifndef TINYGLTF_NO_INCLUDE_STB_IMAGE
-#include "stb_image.h"
+#include "../stb_image.h"
 #endif
 #endif
 
