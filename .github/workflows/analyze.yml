@@ -35,4 +35,4 @@ jobs:
        /home/runner/.local/bin/analyze-build --status-bugs
 
     - name: cppcheck
-      run: cppcheck --project=legion-engine.sln --suppress=syntaxError --xml --error-exitcode=1 2>&1 | python3 tools/cppcheck2github.py
+      run: cppcheck --project=legion-engine.sln --inline-suppr --suppress=syntaxError --xml --error-exitcode=1 2>&1 | python3 tools/cppcheck2github.py
