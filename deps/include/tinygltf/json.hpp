@@ -34,9 +34,13 @@ SOFTWARE.
 #define NLOHMANN_JSON_VERSION_MINOR 5
 #define NLOHMANN_JSON_VERSION_PATCH 0
 
+#ifdef _MSC_VER
+// Define and, not and or for windows
+#define and &&
 #define not !
 #define or ||
-#define and &&
+
+#endif
 
 #include <algorithm> // all_of, find, for_each
 #include <cassert> // assert
