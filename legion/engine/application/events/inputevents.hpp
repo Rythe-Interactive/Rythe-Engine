@@ -30,17 +30,17 @@ namespace legion::application
     template <class T>
     struct input_axis : public events::event<T>
     {
-        void set(float v,inputmap::modifier_keys m,inputmap::method id)
-        {
-            value = v;
-            mods = m;
-            identifier = id;
-        }
-
         float input_delta;
+
+        std::vector<float> value_parts;
         float value{};
+
+        std::vector<inputmap::modifier_keys> mods_parts{};
         inputmap::modifier_keys mods{};
+
+        std::vector<inputmap::method> identifier_parts{};
         inputmap::method identifier{};
+
 
         virtual bool unique() override { return false; }
     };

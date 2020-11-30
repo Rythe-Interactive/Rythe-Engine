@@ -108,5 +108,9 @@ deps/lib/legion*
 # Mono VM
 vm/**
 
+# Legion Precompiled shader files
+*.shil
+
 # Legion Includes
 include/**
+
