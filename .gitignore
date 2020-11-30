@@ -107,3 +107,5 @@ deps/lib/legion*
 
 # Mono VM
 vm/**
+include/*
+*.shil

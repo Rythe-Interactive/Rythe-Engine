@@ -54,8 +54,7 @@ namespace legion::application
             bindToEvent<mouse_scrolled, &InputSystem::onMouseScrolled>();
 
             //create Update Process
-            createProcess<&InputSystem::onUpdate>("Input");
-
+            createProcess<&InputSystem::onUpdate>("Input", 1.f/300.f);
 
             //make sure we get the joystick-callback on initialization of GLFW
             ContextHelper::addOnInitCallback(delegate<void()>::create([]
@@ -324,12 +323,9 @@ namespace legion::application
 
         void onUpdate(time::time_span<fast_time> deltaTime)
         {
-            (void)deltaTime;
-
             onJoystick(deltaTime);
 
             //update all axis with their current values
-
             for (auto [_, inner_map] : m_axes)
             {
                 for (auto [_, axis] : inner_map)
@@ -337,6 +333,7 @@ namespace legion::application
                     axis.callback(this, axis.last_value, axis.last_mods, axis.last_method, deltaTime);
                 }
             }
+
             for (auto [_, inner_map] : m_actions)
             {
                 for (auto [_, action] : inner_map)
@@ -345,7 +342,9 @@ namespace legion::application
                         action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, deltaTime);
                 }
             }
+
             raiseCommandQueues(deltaTime);
+
             onMouseReset();
         }
 
@@ -563,8 +562,10 @@ namespace legion::application
                 axis->value = std::accumulate(value.values.begin(),value.values.end(),0.0f);
 
                 raiseEventUnsafe(std::move(axis),key);
+                value.mods.clear();
+                value.values.clear();
+                value.methods.clear();
             }
-            m_axes_command_queues.clear();
         }
 
         static math::dvec2 m_mousePos;
