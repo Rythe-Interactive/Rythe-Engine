@@ -69,7 +69,7 @@ namespace legion::core::scheduling
                     }
                     else
                     {
-                        std::this_thread::yield();
+                        std::this_thread::sleep_for(std::chrono::microseconds(1));
                     }
                 }
             }
