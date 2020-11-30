@@ -82,11 +82,19 @@ Let's go through this step by step!
 
 - We reuse the good old `test` view here, of course you could create a new one instead, but this will work just fine.
 - Then we call the ``get()`` method of the view. Since reading a file might not succeed we have to do something about this.
-
-.. only:: comment
-    vvv This sentence needs to be seriously reworked vvv
-- This is where ``result`` comes in. You can read about it in the `architecture <../architecture-wiki/result.html>`_ section of this wiki.
-  The gist is that we somehow need to handle a potential error, here we log what the error was and then return a basic_resouce with the value "error"
-  instead to write this handler we use an anonymous lambda, which is almost like a function, just a bit conciser. We register this lambda with ``except()``
+- This is where ``.except()`` comes into play, it is a function of ``result``, you can read more about results 
+  ` here <../architecture-wiki/result.rst>`_. A result needs to be resolved, the safest way to do this is using either `except`
+  or manually check if there is an error with `has_err()`. Here we check with ``except`` and return a different value if there was 
+  an error.
 
 - Finally we log the contents of the file, note that we use ``.to_string()`` to turn the ``basic_resouce`` back into a std::string.
+
+.. toctree::
+    :maxdepth: 2
+
+    virtual_filesystems.rst
+    automatic_conversion.rst
+    asset_import_pipelines.rst
+    advanced_filesystem_usage.rst
+    custom_providers.rst
+    
