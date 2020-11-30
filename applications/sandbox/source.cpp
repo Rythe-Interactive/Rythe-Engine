@@ -1,7 +1,9 @@
 #define LEGION_ENTRY
+#if defined(NDEBUG)
 #define LEGION_KEEP_CONSOLE
+#endif
 #define LEGION_LOW_POWER
-#define LEGION_MIN_THREADS 6 // Update, Rendering, Input, Audio, Physics, TestChain
+#define LEGION_MIN_THREADS 5 // Update, Rendering, Input, Audio, Physics
 
 #include <core/core.hpp>
 #include <application/application.hpp>

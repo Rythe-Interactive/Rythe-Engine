@@ -107,7 +107,7 @@ extern void reportModules(legion::core::Engine* engine);
 			std::cout << "==============================" << std::endl;
 			engine.run();
 
-	#if defined(LEGION_DEBUG) || defined(LEGION_KEEP_CONSOLE)
+	#if defined(LEGION_KEEP_CONSOLE)
 			std::cout << "Press any key to exit." << std::endl;
 			std::cin.ignore();
 	#endif
