@@ -125,6 +125,7 @@ namespace legion::core
     {
         using base = ecs::archetype<position, rotation, scale>;
 
+        transform() = default;
         transform(const base::handleGroup& handles) : base(handles) {}
 
         L_NODISCARD std::tuple<position, rotation, scale> get_world_components()
@@ -193,6 +194,9 @@ namespace legion::core
 
     struct mesh_filter : public mesh_handle
     {
+        mesh_filter() = default;
+        mesh_filter(const mesh_handle& src) { id = src.id; };
+
         bool operator==(const mesh_filter& other) const { return id == other.id; }
     };
 }

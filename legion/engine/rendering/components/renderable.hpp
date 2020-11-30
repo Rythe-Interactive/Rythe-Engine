@@ -6,6 +6,9 @@ namespace legion::rendering
 {
     struct mesh_renderer
     {
+        mesh_renderer() = default;
+        mesh_renderer(const material_handle& src) { material = src; }
+
         material_handle material;
     };
 
@@ -14,6 +17,7 @@ namespace legion::rendering
     {
         using base = ecs::archetype<mesh_filter, mesh_renderer>;
 
+        renderable() = default;
         renderable(const base::handleGroup& handles) : base(handles) {}
 
         model_handle get_model()

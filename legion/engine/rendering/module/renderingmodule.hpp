@@ -13,7 +13,7 @@ namespace legion::rendering
                 fs::AssetImporter::reportConverter<stbi_texture_loader>(extension);
 
             reportComponentType<camera>();
-            reportComponentType<renderable>();
+            reportComponentType<mesh_renderer>();
             reportComponentType<light>();
             reportSystem<Renderer>();
         }

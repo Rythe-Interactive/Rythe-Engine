@@ -32,6 +32,7 @@ namespace legion::core::ecs
 
         handleGroup handles;
 
+        archetype() = default;
         archetype(const handleGroup& handles) : handles(handles) {}
 
         /**@brief Get the handle to one of the components in the archetype.

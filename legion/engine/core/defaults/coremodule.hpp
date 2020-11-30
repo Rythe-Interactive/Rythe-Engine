@@ -31,6 +31,8 @@ namespace legion::core
             reportComponentType<position>();
             reportComponentType<rotation>();
             reportComponentType<scale>();
+            reportComponentType<velocity>();
+            reportComponentType<mesh_filter>();
             reportComponentType<scenemanagement::scene>();
             reportSystem <scenemanagement::SceneManager>();
         }
