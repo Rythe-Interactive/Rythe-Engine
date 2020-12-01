@@ -29,6 +29,7 @@ namespace legion::rendering
         void update(time::span deltaTime)
         {
             static auto emitters = createQuery<particle_emitter>();
+            emitters.queryEntities();
             for (auto entity : emitters)
             {
                 if(!entity.get_component_handle<particle_emitter>().read().setupCompleted)
