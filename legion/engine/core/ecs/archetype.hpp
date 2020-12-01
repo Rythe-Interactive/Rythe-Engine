@@ -32,6 +32,7 @@ namespace legion::core::ecs
 
         handleGroup handles;
 
+        archetype() = default;
         archetype(const handleGroup& handles) : handles(handles) {}
 
         /**@brief Get the handle to one of the components in the archetype.
@@ -40,6 +41,16 @@ namespace legion::core::ecs
         component_handle<T> get()
         {
             return std::get<component_handle<T>>(handles);
+        }
+
+        bool valid()
+        {
+           return std::apply([](auto&&... args) {return(args.valid() && ...); }, handles);
+        }
+
+        operator bool()
+        {
+            return valid();
         }
 
     private:
