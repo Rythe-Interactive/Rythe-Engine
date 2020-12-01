@@ -70,8 +70,8 @@ public:
     {
         auto debugDrawEdges = [](legion::physics::HalfEdgeEdge* edge)
         {
-            math::vec3 pos0 = *edge->edgePositionPtr;
-            math::vec3 pos1 = *edge->nextEdge->edgePositionPtr;
+            math::vec3 pos0 = edge->edgePosition;
+            math::vec3 pos1 = edge->nextEdge->edgePosition;
             debug::drawLine(pos0, pos1, math::colors::red);
         };
 

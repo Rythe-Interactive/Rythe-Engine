@@ -15,12 +15,12 @@ namespace legion::physics
 
         EdgeLabel label;
         
-		math::vec3* edgePositionPtr;
+		math::vec3 edgePosition;
         std::string id;
 
         HalfEdgeEdge() = default;
 
-		HalfEdgeEdge(math::vec3* newEdgePositionPtr) : edgePositionPtr{ newEdgePositionPtr }
+		HalfEdgeEdge(math::vec3 newEdgePositionPtr) : edgePosition{ newEdgePositionPtr }
 		{
 
 		}
@@ -51,7 +51,7 @@ namespace legion::physics
 		*/
 		math::vec3 getLocalEdgeDirection()  const
 		{
-			return *nextEdge->edgePositionPtr - *edgePositionPtr;
+			return nextEdge->edgePosition - edgePosition;
 		}
 	};
 }

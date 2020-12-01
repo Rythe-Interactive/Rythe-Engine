@@ -13,7 +13,7 @@ namespace legion::physics
 
         auto calculateFaceCentroid = [&faceCenter,&edgeCount](HalfEdgeEdge* edge)
         {
-            math::vec3 pos = *(edge->edgePositionPtr);
+            math::vec3 pos = edge->edgePosition;
             faceCenter += pos;
             edgeCount++;
         };

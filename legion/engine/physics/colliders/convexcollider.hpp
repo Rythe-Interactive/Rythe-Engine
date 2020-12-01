@@ -91,35 +91,35 @@ namespace legion::physics
             vertices.push_back(mesh.vertices.at(index3));
 
             // Face 0 - edges: 0, 1, 2 - vertices: 0, 1, 2
-            HalfEdgeEdge* edge0 = new HalfEdgeEdge(&vertices.at(0));
-            HalfEdgeEdge* edge1 = new HalfEdgeEdge(&vertices.at(1));
-            HalfEdgeEdge* edge2 = new HalfEdgeEdge(&vertices.at(2));
+            HalfEdgeEdge* edge0 = new HalfEdgeEdge(vertices.at(0));
+            HalfEdgeEdge* edge1 = new HalfEdgeEdge(vertices.at(1));
+            HalfEdgeEdge* edge2 = new HalfEdgeEdge(vertices.at(2));
             edge0->setNextAndPrevEdge(edge2, edge1);
             edge1->setNextAndPrevEdge(edge0, edge2);
             edge2->setNextAndPrevEdge(edge1, edge0);
             HalfEdgeFace* face012 = new HalfEdgeFace(edge0, normal);
             // Face 1 - edges: 3, 4, 5 - vertices: 3, 1, 0
-            HalfEdgeEdge* edge3 = new HalfEdgeEdge(&vertices.at(3));
-            HalfEdgeEdge* edge4 = new HalfEdgeEdge(&vertices.at(1));
-            HalfEdgeEdge* edge5 = new HalfEdgeEdge(&vertices.at(0));
+            HalfEdgeEdge* edge3 = new HalfEdgeEdge(vertices.at(3));
+            HalfEdgeEdge* edge4 = new HalfEdgeEdge(vertices.at(1));
+            HalfEdgeEdge* edge5 = new HalfEdgeEdge(vertices.at(0));
             edge3->setNextAndPrevEdge(edge5, edge4);
             edge4->setNextAndPrevEdge(edge3, edge5);
             edge5->setNextAndPrevEdge(edge4, edge3);
             vec3 normal310 = normalize(cross((mesh.vertices.at(index1) - mesh.vertices.at(index3)), (mesh.vertices.at(index0) - mesh.vertices.at(index3))));
             HalfEdgeFace* face310 = new HalfEdgeFace(edge3, normal310);
             // Face 2 - edges: 6, 7, 8 - vertices 2, 1, 3
-            HalfEdgeEdge* edge6 = new HalfEdgeEdge(&vertices.at(2));
-            HalfEdgeEdge* edge7 = new HalfEdgeEdge(&vertices.at(1));
-            HalfEdgeEdge* edge8 = new HalfEdgeEdge(&vertices.at(3));
+            HalfEdgeEdge* edge6 = new HalfEdgeEdge(vertices.at(2));
+            HalfEdgeEdge* edge7 = new HalfEdgeEdge(vertices.at(1));
+            HalfEdgeEdge* edge8 = new HalfEdgeEdge(vertices.at(3));
             edge6->setNextAndPrevEdge(edge8, edge7);
             edge7->setNextAndPrevEdge(edge6, edge8);
             edge8->setNextAndPrevEdge(edge7, edge6);
             vec3 normal213 = normalize(cross((mesh.vertices.at(index1) - mesh.vertices.at(index2)), (mesh.vertices.at(index3) - mesh.vertices.at(index2))));
             HalfEdgeFace* face213 = new HalfEdgeFace(edge6, normal213);
             // Face 3 - edges: 9, 10, 11 - vertices: 3, 0, 2
-            HalfEdgeEdge* edge9 = new HalfEdgeEdge(&vertices.at(3));
-            HalfEdgeEdge* edge10 = new HalfEdgeEdge(&vertices.at(0));
-            HalfEdgeEdge* edge11 = new HalfEdgeEdge(&vertices.at(2));
+            HalfEdgeEdge* edge9 = new HalfEdgeEdge(vertices.at(3));
+            HalfEdgeEdge* edge10 = new HalfEdgeEdge(vertices.at(0));
+            HalfEdgeEdge* edge11 = new HalfEdgeEdge(vertices.at(2));
             edge9->setNextAndPrevEdge(edge11, edge10);
             edge10->setNextAndPrevEdge(edge9, edge11);
             edge11->setNextAndPrevEdge(edge10, edge9);
@@ -187,14 +187,14 @@ namespace legion::physics
             vertices.push_back(maxVertexMinusWidthMinusBreadth);
             vertices.push_back(maxVertexMinusBreadth);
 
-            math::vec3* a = &vertices.at(0);
-            math::vec3* b = &vertices.at(1);
-            math::vec3* c = &vertices.at(2);
-            math::vec3* d = &vertices.at(3);
-            math::vec3* e = &vertices.at(4);
-            math::vec3* f = &vertices.at(5);
-            math::vec3* g = &vertices.at(6);
-            math::vec3* h = &vertices.at(7);
+            math::vec3 a = vertices.at(0);
+            math::vec3 b = vertices.at(1);
+            math::vec3 c = vertices.at(2);
+            math::vec3 d = vertices.at(3);
+            math::vec3 e = vertices.at(4);
+            math::vec3 f = vertices.at(5);
+            math::vec3 g = vertices.at(6);
+            math::vec3 h = vertices.at(7);
 
             for (auto& vertex : vertices)
             {
@@ -367,7 +367,6 @@ namespace legion::physics
                 assert(edge->nextEdge);
                 assert(edge->prevEdge);
                 assert(edge->pairingEdge);
-                assert(edge->edgePositionPtr);
 
                 
             };
@@ -389,7 +388,7 @@ namespace legion::physics
 
             for (const auto vert : vertices)
             {
-                faceEdges.push_back(new HalfEdgeEdge(vert));
+                faceEdges.push_back(new HalfEdgeEdge(*vert));
             }
 
             for (size_t i = 0; i < faceEdges.size(); i++)
