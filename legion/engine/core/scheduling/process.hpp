@@ -87,7 +87,7 @@ namespace legion::core::scheduling
                 m_operation.invoke(m_interval);
             }
 
-            return m_timeBuffer < m_interval;
+            return true;
         }
     };
 }

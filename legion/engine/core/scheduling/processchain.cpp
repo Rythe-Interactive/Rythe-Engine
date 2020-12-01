@@ -27,6 +27,8 @@ namespace legion::core::scheduling
 
                 if (chain->m_low_power)
                     std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                else
+                    std::this_thread::yield();
             }
             chain->m_scheduler->unsubscribeFromSync();
             chain->m_scheduler->reportExit(chain->m_threadId); // Mark Exit.

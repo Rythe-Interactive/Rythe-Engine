@@ -25,6 +25,7 @@ struct Light
 
 struct Material
 {
+    mat3 tbn;
     vec4 albedo;
  	vec3 normal;
  	float metallic;
@@ -61,24 +62,28 @@ uniform MaterialInput material_input : SV_MATERIAL;
 
 #include <texturemaps.shinc>
 
-Material ExtractMaterial(vec2 uv, Camera camera, vec3 worldNormal, vec3 worldTangent)
+Material ExtractMaterial(vec2 uv, Camera camera, vec3 worldNormal, vec3 worldTangent, bool meta)
 {
-    mat3 tbn = GetTBNMatrix(worldNormal, worldTangent);
-
     Material material;
-    material.texcoords = ParallaxMap(material_input.normalHeight, material_input.heightScale, uv, camera, tbn);
+    material.tbn = GetTBNMatrix(worldNormal, worldTangent);
+    if(meta)
+        material.texcoords = ParallaxMap2(material_input.normalHeight, material_input.heightScale, uv, camera, material.tbn);
+    else
+        material.texcoords = ParallaxMap(material_input.normalHeight, material_input.heightScale, uv, camera, material.tbn);
+
     material.albedo = AlbedoMap(material_input.albedo, material.texcoords);
-    material.normal = NormalMap(material_input.normalHeight, material.texcoords, tbn);
+    material.normal = NormalMap(material_input.normalHeight, material.texcoords, material.tbn);
     vec4 MRDAo = LightingData(material_input.MRDAo, material.texcoords);
     material.metallic = min(MRDAo.r, 1.0 - epsilon);
     material.roughness = MRDAo.g;
     material.dielectric = MRDAo.b;
     material.ambientOcclusion = MRDAo.a;
- 	material.emissive = EmissiveMap(material_input.emissive, material.texcoords);
     material.F0 = Fresnel0(material.albedo, material.metallic, material.dielectric);
+ 	material.emissive = EmissiveMap(material_input.emissive, material.texcoords);
 
     return material;
 }
+
 
 #if defined(LIGHTING_INCL)
 vec3 GetAllLighting(Material material, Camera camera, vec3 worldPosition)

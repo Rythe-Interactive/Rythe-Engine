@@ -17,20 +17,10 @@ namespace legion::core::events
      */
     class EventBus
     {
-        sparse_map<id_type, hashed_sparse_set<event_base*>> m_events;
+        sparse_map<id_type, hashed_sparse_set<std::shared_ptr<event_base>>> m_events;
         sparse_map<id_type, multicast_delegate<void(event_base*)>> m_eventCallbacks;
 
     public:
-        ~EventBus()
-        {
-            for (auto [_, events] : m_events)
-            {
-                for (auto* event : events)
-                    delete event;
-
-                events.clear();
-            }
-        }
 
         /**@brief Insert event into bus and notify all subscribers.
          * @tparam event_type Event type to raise.
@@ -45,12 +35,30 @@ namespace legion::core::events
             if (event.persistent() && !(event.unique() && m_events[event_type::id].size()))
             {
                 eventptr = new event_type(std::move(event));
-                m_events[event_type::id].insert(eventptr); // If it's persistent keep the event stored. (Or at least keep it somewhere fetch able.)
+                m_events[event_type::id].emplace(eventptr); // If it's persistent keep the event stored. (Or at least keep it somewhere fetch able.)
             }
             else
                 eventptr = &event;
 
             force_value_cast<multicast_delegate<void(event_type*)>>(m_eventCallbacks[event_type::id]).invoke(eventptr); // Notify.            
+        }
+
+        void raiseEvent(std::unique_ptr<event_base>&& value)
+        {
+            if (value->persistent() && !(value->unique() && m_events[value->get_id()].size()))
+            {
+                m_events[value->get_id()].emplace(value.release()); // If it's persistent keep the event stored. (Or at least keep it somewhere fetch able.)
+            }
+            m_eventCallbacks[value->get_id()].invoke(value.get());
+        }
+
+        void raiseEventUnsafe(std::unique_ptr<event_base>&& value, id_type id)
+        {
+            if (value->persistent() && !(value->unique() && m_events[id].size()))
+            {
+                m_events[id].emplace(value.release()); // If it's persistent keep the event stored. (Or at least keep it somewhere fetch able.)
+            }
+            m_eventCallbacks[id].invoke(value.get());
         }
 
         /**@brief Check if an event is active.

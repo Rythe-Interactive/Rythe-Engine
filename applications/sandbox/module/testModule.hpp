@@ -1,10 +1,11 @@
 #pragma once
 #include <core/core.hpp>
+#include <core/math/math.hpp>
 #include "../systems/testsystem.hpp"
-#include "../systems/PointCloudTestSystem.hpp"
+
 #include "../systems/simplecameracontroller.hpp"
 
-#include <core/math/math.hpp>
+
 
 using namespace legion;
 
@@ -24,6 +25,7 @@ public:
             reportComponentType<sah>();
             reportSystem<TestSystem>();
         }
+        //reportSystem<TestSystem2>();
         reportSystem<SimpleCameraController>();
     }
 
