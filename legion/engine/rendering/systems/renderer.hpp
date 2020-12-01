@@ -477,13 +477,12 @@ namespace legion::rendering
 
             //bind some fbo with texture for color and render buffers for depth and stencil
 
-                math::ivec2 resolution(1920, 1080);
                 //framebuffer
                 framebuffer fbo;
                 //texture
-                texture_handle texture = TextureCache::create_texture("test_image", resolution.x, resolution.y);
+                texture_handle texture = TextureCache::create_texture("test_image", viewportSize.x, viewportSize.y);
                 //render buffer
-                renderbuffer rbo{GL_DEPTH_STENCIL_ATTACHMENT,resolution.x,resolution.y};
+                renderbuffer rbo{GL_DEPTH_STENCIL_ATTACHMENT,viewportSize.x, viewportSize.y};
 
                 //attach fbo and texture
                 rbo.bind();
