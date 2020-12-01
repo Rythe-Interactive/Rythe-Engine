@@ -10,6 +10,35 @@ If you are on Windows you can do this by right-clicking your project -> Properti
 
 Adding Physics Components
 -------------------------
+To achieve anything with the physics-engine we need to attach physics components to our entities.
+While it is not particularly complicated it is a bit more involved than adding regular components.
+Take a look:
+
+
+
+.. code-block:: cpp
+    :linenos:
+
+
+    //create an entity 
+    auto ent = m_ecs->createEntity();
+
+    //attach a physics component to the entity
+    auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+    //init the physics Component
+    physics::physicsComponent physicsComponent;
+    physics::physicsComponent::init(physicsComponent);
+
+    // Add a Box and write back to the Entity
+    physicsComponent.AddBox(cubeParams);
+    entPhyHande.write(physicsComponent); 
+
+
+As you can see we need to call ``physics::physicsComponent::init`` on the component, which assures that the physics component is properly setup.
+After that you can work with it as you would with any other component. here we just simply add a box to the physicsComponent and then write it
+to the handle.
+
 
 
 Checking For Collisions
