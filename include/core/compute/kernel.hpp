@@ -3,7 +3,7 @@
 
 #include <core/compute/buffer.hpp>
 #include <core/logging/logging.hpp>
-
+#include <variant>
 #include <map>
 
 
@@ -25,6 +25,21 @@ namespace legion::core::compute
     class Kernel
         {
         public:
+            struct d2
+            {
+                size_type s0;
+                size_type s1;
+            };
+
+            struct d3
+            {
+                size_type s0;
+                size_type s1;
+                size_type s3;
+            };
+
+            using dimension = std::variant<size_type,d2,d3>;
+
             Kernel(Program*, cl_kernel);
 
             /**
@@ -37,7 +52,9 @@ namespace legion::core::compute
              * @brief Determines the "Global Work Size", aka how many Kernels should run in total
              *         This number should match your input arrays (but not exceed it!)
              */
-            Kernel& global(size_type);
+            Kernel& global(dimension);
+            Kernel& global(size_type,size_type);
+            Kernel& global(size_type,size_type,size_type);
 
             /**
              * @brief Maps Parameter Names to indices, for example:
@@ -132,7 +149,7 @@ namespace legion::core::compute
             /**
              * @brief Gets the maximum parallel work size for this kernel.
              */
-            size_t getMaxWorkSize() const;
+            size_type getMaxWorkSize() const;
 
         private:
 
@@ -141,7 +158,36 @@ namespace legion::core::compute
             Program* m_prog;
             cl_kernel m_func;
             cl_command_queue m_queue;
-            size_type m_global_size;
+
+            std::tuple<std::vector<size_type>,std::vector<size_type>,size_type> parse_dimensions()
+            {
+                size_type dim = 1;
+                size_type* v;
+                if((v = reinterpret_cast<size_type*>(std::get_if<d3>(&m_global_size))))
+                {
+                    dim = 3;
+                }
+                else if ((v = reinterpret_cast<size_type*>(std::get_if<d2>(&m_global_size))))
+                {
+                    dim  = 2;
+                }
+                else
+                {
+                    v = &std::get<size_type>(m_global_size);
+                }
+
+                std::vector<size_type> l;
+                for (size_type i = 0; i < dim; ++i)
+                {
+                    l.emplace_back(m_local_size / dim);
+                }
+
+                return std::make_tuple(std::vector<size_type>(v,v+dim),l,dim);
+
+            }
+
+
+            dimension m_global_size;
             size_type m_local_size;
 
 

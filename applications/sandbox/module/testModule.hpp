@@ -1,6 +1,7 @@
 #pragma once
 #include <core/core.hpp>
 #include "../systems/testsystem.hpp"
+#include "../systems/PointCloudTestSystem.hpp"
 #include "../systems/simplecameracontroller.hpp"
 
 #include <core/math/math.hpp>
@@ -12,10 +13,17 @@ class TestModule : public Module
 public:
     virtual void setup() override
     {
-        addProcessChain("TestChain");
 
-        reportComponentType<sah>();
-        reportSystem<TestSystem>();
+        if (true)
+        {
+            reportSystem<PointCloudTestSystem>();
+        }
+        else
+        {
+            addProcessChain("TestChain");
+            reportComponentType<sah>();
+            reportSystem<TestSystem>();
+        }
         reportSystem<SimpleCameraController>();
     }
 

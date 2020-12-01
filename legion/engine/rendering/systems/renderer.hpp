@@ -485,7 +485,7 @@ namespace legion::rendering
                     for (auto [material, instances] : instancesPerMaterial)
                     {
                         glBindBuffer(GL_ARRAY_BUFFER, modelMatrixBufferId);
-                        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(math::mat4) * instances.size(), instances.data());
+                        glBufferData(GL_ARRAY_BUFFER, sizeof(math::mat4) * instances.size(), instances.data(),GL_DYNAMIC_DRAW);
                         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
                         cam_input_data.bind(material);
