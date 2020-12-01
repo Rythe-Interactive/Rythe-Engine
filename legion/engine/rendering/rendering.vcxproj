@@ -29,9 +29,11 @@
     <ClInclude Include="components\particle.hpp" />
     <ClInclude Include="components\particle_emitter.hpp" />
     <ClInclude Include="components\renderable.hpp" />
+    <ClInclude Include="data\framebuffer.hpp" />
     <ClInclude Include="data\importers\texture_importers.hpp" />
     <ClInclude Include="data\material.hpp" />
     <ClInclude Include="data\particle_system_cache.hpp" />
+    <ClInclude Include="data\renderbuffer.hpp" />
     <ClInclude Include="data\shader.hpp" />
     <ClInclude Include="debugrendering.hpp" />
     <ClInclude Include="detail\stb_image.h" />

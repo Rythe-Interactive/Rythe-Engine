@@ -149,9 +149,7 @@ namespace legion::core::ecs
         if (!m_registry)
             throw legion_invalid_entity_error;
 
-        entity_set& children = m_registry->getEntityData(m_id).children;
-
-        return children[index];
+        return m_registry->getEntityData(m_id).children[index];
     }
 
     L_NODISCARD size_type entity_handle::child_count() const
