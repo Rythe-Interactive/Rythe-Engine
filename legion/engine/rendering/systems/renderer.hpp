@@ -480,9 +480,9 @@ namespace legion::rendering
                 //framebuffer
                 framebuffer fbo;
                 //texture
-                texture_handle texture = TextureCache::create_texture("test_image", viewportSize.x, viewportSize.y);
+                texture_handle texture = TextureCache::create_texture("test_image", viewportSize);
                 //render buffer
-                renderbuffer rbo{GL_DEPTH_STENCIL_ATTACHMENT,viewportSize.x, viewportSize.y};
+                renderbuffer rbo{GL_DEPTH_STENCIL_ATTACHMENT, viewportSize};
 
                 //attach fbo and texture
                 rbo.bind();

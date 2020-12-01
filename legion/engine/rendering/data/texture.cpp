@@ -109,7 +109,7 @@ namespace legion::rendering
         return create_texture(file.get_filename(), file, settings);
     }
 
-    texture_handle TextureCache::create_texture(const std::string& name, GLsizei width, GLsizei height)
+    texture_handle TextureCache::create_texture(const std::string& name, math::ivec2 size, texture_import_settings settings)
     {
         id_type id = nameHash(name);
         {
@@ -119,35 +119,45 @@ namespace legion::rendering
         }
 
         texture texture{};
-        texture.type = texture_type::two_dimensional;
-        texture.textureId = id;
+        texture.type = settings.type;
+
         // Allocate and bind the texture.
         glGenTextures(1, &texture.textureId);
-        glBindTexture(static_cast<GLenum>(texture.type), texture.textureId);
+        glBindTexture(static_cast<GLenum>(settings.type), texture.textureId);
 
-        texture.size = math::ivec2(width, height);
-        texture.channels = texture_components::rgb;
+        // Handle mips
+        if (settings.generateMipmaps)
+        {
+            glTexParameteri(static_cast<GLenum>(settings.type), GL_TEXTURE_MIN_FILTER, static_cast<GLint>(settings.min));
+            glTexParameteri(static_cast<GLenum>(settings.type), GL_TEXTURE_MAG_FILTER, static_cast<GLint>(settings.mag));
+        }
+
+        // Handle wrapping behavior.
+        glTexParameteri(static_cast<GLenum>(settings.type), GL_TEXTURE_WRAP_R, static_cast<GLint>(settings.wrapR));
+        glTexParameteri(static_cast<GLenum>(settings.type), GL_TEXTURE_WRAP_S, static_cast<GLint>(settings.wrapS));
+        glTexParameteri(static_cast<GLenum>(settings.type), GL_TEXTURE_WRAP_T, static_cast<GLint>(settings.wrapT));
+
+        texture.size = size;
+        texture.channels = settings.components;
 
         // Construct the texture using the loaded data.
         glTexImage2D(
-            static_cast<GLenum>(texture.type),
+            static_cast<GLenum>(settings.type),
             0,
-            static_cast<int>(texture.channels),
+            static_cast<GLint>(settings.intendedFormat),
             texture.size.x,
             texture.size.y,
             0,
-            static_cast<int>(texture.channels),
-            GL_UNSIGNED_BYTE,
+            components_to_format[static_cast<int>(settings.components)],
+            channels_to_glenum[static_cast<uint>(settings.fileFormat)],
             NULL);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
         {
             async::readwrite_guard guard(m_textureLock);
             m_textures.insert(id, texture);
         }
 
-        log::debug("Created texture from image {}", texture.textureId);
+        log::debug("Created blank texture of size {}", texture.size);
 
         return { id };
 

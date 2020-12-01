@@ -161,7 +161,7 @@ namespace legion::rendering
          */
         static texture_handle create_texture(const std::string& name, const fs::view& file, texture_import_settings settings = default_texture_settings);
         static texture_handle create_texture(const fs::view& file, texture_import_settings settings = default_texture_settings);
-        static texture_handle create_texture(const std::string& name, GLsizei width, GLsizei height);
+        static texture_handle create_texture(const std::string& name, math::ivec2 size, texture_import_settings settings = default_texture_settings);
 
         /**@brief Create a new texture from an image if a texture with the same name doesn't exist yet.
          * @param name Name of the image and identifying name for the texture.
