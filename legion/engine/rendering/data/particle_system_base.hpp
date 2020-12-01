@@ -41,7 +41,7 @@ namespace legion::rendering
          * @param particleHandle The particle that is to be cleaned up.
          * @param emitterHandle The emitter that hold that particular particle.
          */
-        void cleanUpParticle(
+        virtual void cleanUpParticle(
             ecs::component_handle<particle> particleHandle,
             ecs::component_handle<particle_emitter> emitterHandle) const;
         /**
