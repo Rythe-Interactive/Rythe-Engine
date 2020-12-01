@@ -62,10 +62,106 @@ namespace legion::physics
         }
 
 		/**@brief Constructs a polyhedron-shaped convex hull that encompasses the given mesh.
+        * @param meshHandle - The mesh handle to lock the mesh and the mesh to create a hull from
 		*/
-        void ConstructConvexHullWithMesh()
+        void ConstructConvexHullWithMesh(legion::core::mesh_handle& meshHandle)
         {
+            auto meshLockPair = meshHandle.get();
+            async::readonly_guard guard(meshLockPair.first);
+            legion::core::mesh mesh = meshLockPair.second;
+            using namespace math;
 
+            ivec2 indices = convexHullFindOuterIndices(mesh);
+            int index0 = indices.x;
+            int index1 = indices.y;
+
+            log::debug("indices {}, {}", index0, index1);
+
+            vec3 line = mesh.vertices[index1] - mesh.vertices[index0];
+            vec3 nLine = normalize(line);
+
+            float largestDistance = 0;
+            int index2 = -1; // The index which is furthest from the line between index0 and index1. Third index in the initial hull
+            for (int i = 0; i < mesh.vertices.size(); ++i)
+            {
+                if (i == index0 || i == index1) continue;
+                vec3 toLineOrigin = mesh.vertices[index0] - mesh.vertices[i];
+                // Get distance over line
+                float distOnLine = dot(toLineOrigin, nLine);
+                // closest point on the line to vert i
+                vec3 closestPoint = mesh.vertices[index0] + (nLine*distOnLine);
+                vec3 vecToLine = closestPoint - mesh.vertices[i];
+                float distToLineSq = (vecToLine.x * vecToLine.x) + (vecToLine.y + vecToLine.y) + (vecToLine.z * vecToLine.z);
+                if (distToLineSq > largestDistance)
+                {
+                    largestDistance = distToLineSq;
+                    index2 = i;
+                }
+            }
+            log::debug("index2 {}", index2);
+            log::debug("Vertices: {} ; {} ; {}", mesh.vertices.at(index0), mesh.vertices.at(index1), mesh.vertices.at(index2));
+
+            vec3 normal = normalize(cross((mesh.vertices.at(index1) - mesh.vertices.at(index0)), (mesh.vertices.at(index2) - mesh.vertices.at(index0))));
+
+            largestDistance = 0;
+            int index3 = -1; // The index which is furthest from the plane between index0, index1 and index2. Fourth index in the initial hull
+            for (int i = 0; i < mesh.vertices.size(); ++i)
+            {
+                if (i == index0 || i == index1 || i == index2) continue;
+                float dist = abs(dot(normal, mesh.vertices.at(i) - mesh.vertices.at(index0)));
+                log::debug("dist to plane: {}", dist);
+                if (dist > largestDistance)
+                {
+                    largestDistance = dist;
+                    index3 = i;
+                }
+            }
+
+            vertices.push_back(mesh.vertices.at(index0));
+            vertices.push_back(mesh.vertices.at(index1));
+            vertices.push_back(mesh.vertices.at(index2));
+            vertices.push_back(mesh.vertices.at(index3));
+
+            // Face 0 - edges: 0, 1, 2 - vertices: 0, 1, 2
+            HalfEdgeEdge* edge0 = new HalfEdgeEdge(&vertices.at(0));
+            HalfEdgeEdge* edge1 = new HalfEdgeEdge(&vertices.at(1));
+            HalfEdgeEdge* edge2 = new HalfEdgeEdge(&vertices.at(2));
+            edge0->setNextAndPrevEdge(edge2, edge1);
+            edge1->setNextAndPrevEdge(edge0, edge2);
+            edge2->setNextAndPrevEdge(edge1, edge0);
+            HalfEdgeFace* face012 = new HalfEdgeFace(edge0, normal);
+            // Face 1 - edges: 3, 4, 5 - vertices: 3, 1, 0
+            HalfEdgeEdge* edge3 = new HalfEdgeEdge(&vertices.at(3));
+            HalfEdgeEdge* edge4 = new HalfEdgeEdge(&vertices.at(1));
+            HalfEdgeEdge* edge5 = new HalfEdgeEdge(&vertices.at(0));
+            edge3->setNextAndPrevEdge(edge5, edge4);
+            edge4->setNextAndPrevEdge(edge3, edge5);
+            edge5->setNextAndPrevEdge(edge4, edge3);
+            vec3 normal310 = normalize(cross((mesh.vertices.at(index1) - mesh.vertices.at(index3)), (mesh.vertices.at(index0) - mesh.vertices.at(index3))));
+            HalfEdgeFace* face310 = new HalfEdgeFace(edge3, normal310);
+            // Face 2 - edges: 6, 7, 8 - vertices 2, 1, 3
+            HalfEdgeEdge* edge6 = new HalfEdgeEdge(&vertices.at(2));
+            HalfEdgeEdge* edge7 = new HalfEdgeEdge(&vertices.at(1));
+            HalfEdgeEdge* edge8 = new HalfEdgeEdge(&vertices.at(3));
+            edge6->setNextAndPrevEdge(edge8, edge7);
+            edge7->setNextAndPrevEdge(edge6, edge8);
+            edge8->setNextAndPrevEdge(edge7, edge6);
+            vec3 normal213 = normalize(cross((mesh.vertices.at(index1) - mesh.vertices.at(index2)), (mesh.vertices.at(index3) - mesh.vertices.at(index2))));
+            HalfEdgeFace* face213 = new HalfEdgeFace(edge6, normal213);
+            // Face 3 - edges: 9, 10, 11 - vertices: 3, 0, 2
+            HalfEdgeEdge* edge9 = new HalfEdgeEdge(&vertices.at(3));
+            HalfEdgeEdge* edge10 = new HalfEdgeEdge(&vertices.at(0));
+            HalfEdgeEdge* edge11 = new HalfEdgeEdge(&vertices.at(2));
+            edge9->setNextAndPrevEdge(edge11, edge10);
+            edge10->setNextAndPrevEdge(edge9, edge11);
+            edge11->setNextAndPrevEdge(edge10, edge9);
+            vec3 normal302 = normalize(cross((mesh.vertices.at(index0) - mesh.vertices.at(index3)), (mesh.vertices.at(index2) - mesh.vertices.at(index3))));
+            HalfEdgeFace* face302 = new HalfEdgeFace(edge6, normal302);
+
+            halfEdgeFaces.push_back(face012);
+            halfEdgeFaces.push_back(face310);
+            halfEdgeFaces.push_back(face213);
+            halfEdgeFaces.push_back(face302);
         }
 
 		/**@brief Constructs a box-shaped convex hull that encompasses the given mesh.
@@ -334,16 +430,56 @@ namespace legion::physics
             return new HalfEdgeFace(faceEdges.at(0), faceNormal);
         }
 
+        /**@brief Function to find the outer two indices with the largest distance from the mesh
+         * @brief The indices are found by constructing a virtual box around the mesh and checking all the outer vertices with each other for the greatest distance
+         * @param mesh - Mesh to find the outer vertices for
+         * @return ivec2 containing the outer vertices. x is the first index, y is the second.
+         */
+        math::ivec2 convexHullFindOuterIndices(core::mesh& mesh)
+        {
+            // Step 1 - create a box around the mesh
+
+            math::vec3 first = mesh.vertices.at(0);
+            // stores outer vertices in the following order:
+            // min x, max x, min y, max y, min z, max z
+            // The array is initialized with the first vertex
+            float outer[] = { first.x, first.x, first.y, first.y, first.z, first.z };
+            for (int i = 1; i < mesh.vertices.size(); ++i)
+            {
+                if (mesh.vertices.at(i).x < outer[0]) outer[0] = i;
+                else if (mesh.vertices.at(i).x > outer[1]) outer[1] = i;
+                if (mesh.vertices.at(i).y < outer[2]) outer[2] = i;
+                else if (mesh.vertices.at(i).y > outer[3]) outer[3] = i;
+                if (mesh.vertices.at(i).z < outer[4]) outer[4] = i;
+                else if (mesh.vertices.at(i).z > outer[5]) outer[5] = i;
+            }
+
+            // Check if it is a plane, min == max
+
+            float largestDistance = 0;
+            int index0;
+            int index1;
+            // Find the largest distance between two vertices in the box
+            for (int i = 0; i < 6; ++i)
+            {
+                for (int j = i; j < 6; ++j)
+                {
+                    float dist = distance(mesh.vertices[i], mesh.vertices[j]);
+                    if (dist > largestDistance)
+                    {
+                        index0 = i;
+                        index1 = j;
+                        largestDistance = dist;
+                    }
+                }
+            }
+            return math::ivec2(index0, index1);
+        }
+
         std::vector<math::vec3> vertices;
         std::vector<HalfEdgeFace*> halfEdgeFaces;
 
         //feature id container
-
-
-
-
-
-
 	};
 }
 

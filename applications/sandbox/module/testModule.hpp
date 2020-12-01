@@ -3,6 +3,7 @@
 #include <core/math/math.hpp>
 #include "../systems/testsystem.hpp"
 #include "../systems/testsystem2.hpp"
+#include "../systems/testsystemconvexhull.hpp"
 #include "../systems/simplecameracontroller.hpp"
 
 
@@ -16,9 +17,10 @@ public:
     {
         addProcessChain("TestChain");
 
-        reportComponentType<sah>();
-        reportSystem<TestSystem>();
+        //reportComponentType<sah>();
+        //reportSystem<TestSystem>();
         //reportSystem<TestSystem2>();
+        reportSystem<TestSystemConvexHull>();
         reportSystem<SimpleCameraController>();
     }
 
