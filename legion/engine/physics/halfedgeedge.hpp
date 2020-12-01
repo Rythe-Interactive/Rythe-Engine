@@ -33,6 +33,14 @@ namespace legion::physics
 			prevEdge = newPrevEdge;
 		}
 
+        /**@brief Sets the pairingEdge to the passed in edge, and sets the edge.pairingEdge to this
+         */
+        void setPairingEdge(HalfEdgeEdge* edge)
+        {
+            pairingEdge = edge;
+            edge->pairingEdge = this;
+        }
+
 		math::vec3 getLocalNormal() const
 		{
 			return face->normal;

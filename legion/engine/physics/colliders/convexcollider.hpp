@@ -77,45 +77,13 @@ namespace legion::physics
 
             log::debug("indices {}, {}", index0, index1);
 
-            vec3 line = mesh.vertices[index1] - mesh.vertices[index0];
-            vec3 nLine = normalize(line);
-
-            float largestDistance = 0;
-            int index2 = -1; // The index which is furthest from the line between index0 and index1. Third index in the initial hull
-            for (int i = 0; i < mesh.vertices.size(); ++i)
-            {
-                if (i == index0 || i == index1) continue;
-                vec3 toLineOrigin = mesh.vertices[index0] - mesh.vertices[i];
-                // Get distance over line
-                float distOnLine = dot(toLineOrigin, nLine);
-                // closest point on the line to vert i
-                vec3 closestPoint = mesh.vertices[index0] + (nLine*distOnLine);
-                vec3 vecToLine = closestPoint - mesh.vertices[i];
-                float distToLineSq = (vecToLine.x * vecToLine.x) + (vecToLine.y + vecToLine.y) + (vecToLine.z * vecToLine.z);
-                if (distToLineSq > largestDistance)
-                {
-                    largestDistance = distToLineSq;
-                    index2 = i;
-                }
-            }
+            int index2 = convexHullFindIndexClosestToLine(mesh, index0, index1);
             log::debug("index2 {}", index2);
             log::debug("Vertices: {} ; {} ; {}", mesh.vertices.at(index0), mesh.vertices.at(index1), mesh.vertices.at(index2));
 
             vec3 normal = normalize(cross((mesh.vertices.at(index1) - mesh.vertices.at(index0)), (mesh.vertices.at(index2) - mesh.vertices.at(index0))));
 
-            largestDistance = 0;
-            int index3 = -1; // The index which is furthest from the plane between index0, index1 and index2. Fourth index in the initial hull
-            for (int i = 0; i < mesh.vertices.size(); ++i)
-            {
-                if (i == index0 || i == index1 || i == index2) continue;
-                float dist = abs(dot(normal, mesh.vertices.at(i) - mesh.vertices.at(index0)));
-                log::debug("dist to plane: {}", dist);
-                if (dist > largestDistance)
-                {
-                    largestDistance = dist;
-                    index3 = i;
-                }
-            }
+            int index3 = convexHullFindIndexClosestToPlane(mesh, index0, index1, index2, normal);
 
             vertices.push_back(mesh.vertices.at(index0));
             vertices.push_back(mesh.vertices.at(index1));
@@ -158,10 +126,19 @@ namespace legion::physics
             vec3 normal302 = normalize(cross((mesh.vertices.at(index0) - mesh.vertices.at(index3)), (mesh.vertices.at(index2) - mesh.vertices.at(index3))));
             HalfEdgeFace* face302 = new HalfEdgeFace(edge6, normal302);
 
+            edge0->setPairingEdge(edge4);
+            edge1->setPairingEdge(edge6);
+            edge2->setPairingEdge(edge10);
+            edge3->setPairingEdge(edge7);
+            edge5->setPairingEdge(edge9);
+            edge8->setPairingEdge(edge11);
+
             halfEdgeFaces.push_back(face012);
             halfEdgeFaces.push_back(face310);
             halfEdgeFaces.push_back(face213);
             halfEdgeFaces.push_back(face302);
+
+            AssertEdgeValidity();
         }
 
 		/**@brief Constructs a box-shaped convex hull that encompasses the given mesh.
@@ -474,6 +451,65 @@ namespace legion::physics
                 }
             }
             return math::ivec2(index0, index1);
+        }
+
+        /**@brief Function to find the index in a mesh which is closest to a line between two vertices in the mesh
+         * @param mesh - The mesh with the vertices
+         * @param lineStartIndex - The index of the vertex where the line starts
+         * @param lineEndIndex - The index of the vertex at the end of the line
+         * @return The index of the vertex with the largest distance from the line, mesh.vertices.size() is returned if a such a point cannot be found
+         */
+        size_type convexHullFindIndexClosestToLine(core::mesh& mesh, size_type lineStartIndex, size_type lineEndIndex)
+        {
+            math::vec3 linedir = normalize(mesh.vertices[lineEndIndex] - mesh.vertices[lineStartIndex]);
+
+            float largestDistance = 0;
+            // Save the index which is furthest from the line between the mesh vertices at lineStartIndex and lineEndIndex
+            size_type index = mesh.vertices.size();
+            for (int i = 0; i < mesh.vertices.size(); ++i)
+            {
+                if (i == lineStartIndex || i == lineEndIndex) continue;
+                math::vec3 toLineOrigin = mesh.vertices[lineStartIndex] - mesh.vertices[i];
+                // Get distance over line
+                float distOnLine = math::dot(toLineOrigin, linedir);
+                // closest point on the line to vert i
+                math::vec3 closestPoint = mesh.vertices[lineStartIndex] + (linedir * distOnLine);
+                math::vec3 vecToLine = closestPoint - mesh.vertices[i];
+                // Distance to line squared (Do not get actual distance with sqrt, since sqrt is a heavy computation)
+                float distToLineSq = (vecToLine.x * vecToLine.x) + (vecToLine.y + vecToLine.y) + (vecToLine.z * vecToLine.z);
+                if (distToLineSq > largestDistance)
+                {
+                    largestDistance = distToLineSq;
+                    index = i;
+                }
+            }
+            return index;
+        }
+
+        /**@brief Function to find the index in a mesh which is closest to the plane between plane indices
+         * @param mesh - The mesh with the vertices
+         * @param planeIndex0 - First plane index
+         * @param planeIndex1 - Second plane index
+         * @param planeIndex2 - Third plane index
+         * @param normal - The normal of the plane index
+         * @return The index of the vertex with the largest distance from the plane, mesh.vertices.size() is returned if a such a point cannot be found
+         */
+        size_type convexHullFindIndexClosestToPlane(core::mesh& mesh, size_type planeIndex0, size_type planeIndex1, size_type planeIndex2, math::vec3 normal)
+        {
+            float largestDistance = 0;
+            // Save the index which is furthest from the plane between the mesh vertices at the plane indices
+            int index = mesh.vertices.size();
+            for (int i = 0; i < mesh.vertices.size(); ++i)
+            {
+                if (i == planeIndex0 || i == planeIndex1 || i == planeIndex2) continue;
+                float dist = math::abs(math::dot(normal, mesh.vertices.at(i) - mesh.vertices.at(planeIndex0)));
+                if (dist > largestDistance)
+                {
+                    largestDistance = dist;
+                    index = i;
+                }
+            }
+            return index;
         }
 
         std::vector<math::vec3> vertices;
