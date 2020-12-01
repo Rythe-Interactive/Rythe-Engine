@@ -12,7 +12,7 @@ namespace legion::core::math
      * @param lineOrigin - The origin of the line
      * @param lineEnd - The end of the line
      */
-    float pointToLine(vec3 point, vec3 lineOrigin, vec3 lineEnd)
+    float pointToLine(const vec3& point, const vec3& lineOrigin, const vec3& lineEnd)
     {
         vec3 dir = normalize(lineEnd - lineOrigin);
         vec3 toLineOrigin = lineOrigin - point;
@@ -27,7 +27,7 @@ namespace legion::core::math
      * @param lineOrigin - The origin of the line
      * @param lineEnd - The end of the line
      */
-    float squaredDistanceToLine(vec3 point, vec3 lineOrigin, vec3 lineEnd)
+    float squaredDistanceToLine(const vec3& point, const vec3& lineOrigin, const vec3& lineEnd)
     {
         vec3 dir = normalize(lineEnd - lineOrigin);
         vec3 toLineOrigin = lineOrigin - point;
@@ -83,7 +83,7 @@ namespace legion::core::math
 
     /**@brief Calculates the size of a triangles surface area
      */
-    float triangleSurface(vec3 p0, vec3 p1, vec3 p2)
+    float triangleSurface(const vec3& p0, const vec3& p1, const vec3& p2)
     {
         return 0.5 * (normalizeDot(p0, p1) * normalizeDot(p0, p2)) * fastSin(0);
     }
@@ -95,7 +95,7 @@ namespace legion::core::math
      * @param triPoint2 - The last triangle point
      * @param triNormal - The triangle plane normal
      */
-    float pointToTriangle(const vec3& p, vec3 triPoint0, vec3 triPoint1, vec3 triPoint2, vec3 triNormal)
+    float pointToTriangle(const vec3& p, const vec3& triPoint0, const vec3& triPoint1, const vec3& triPoint2, const vec3& triNormal)
     {
         // Distance to plane
         float distanceToPlane = dot(triNormal, p - triPoint0);
@@ -138,7 +138,7 @@ namespace legion::core::math
      * @param triPoint1 - The second triangle point
      * @param triPoint2 - The last triangle point
      */
-    float pointToTriangle(const vec3& p, vec3 triPoint0, vec3 triPoint1, vec3 triPoint2)
+    float pointToTriangle(const vec3& p, const vec3& triPoint0, const vec3& triPoint1, const vec3& triPoint2)
     {
         vec3 normal = normalize(cross(triPoint1 - triPoint0, triPoint2 - triPoint0));
         return pointToTriangle(p, triPoint0, triPoint1, triPoint2, normal);
@@ -221,7 +221,7 @@ namespace legion::core::math
      * @param planePosition - A point on the plane
      * @param planeNormal - The plane normal
      */
-    float pointToPlane(vec3 point, vec3 planePosition, vec3 planeNormal)
+    float pointToPlane(const vec3& point, const vec3& planePosition, const vec3& planeNormal)
     {
         return dot(planeNormal, point - planePosition);
     }
