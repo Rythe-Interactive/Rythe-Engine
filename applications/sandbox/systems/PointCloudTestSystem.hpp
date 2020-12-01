@@ -20,7 +20,7 @@ public:
     struct player_fly : public app::input_axis<player_fly> {};
     struct player_look_x : public app::input_axis<player_look_x> {};
     struct player_look_y : public app::input_axis<player_look_y> {};
-    const int samplesPerTriangle = 1;
+    const int samplesPerTriangle = 10;
     const int seed = 1;
 
     PointCloudTestSystem()
