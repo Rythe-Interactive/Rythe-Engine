@@ -473,6 +473,8 @@ namespace legion::rendering
                 glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(detail::light_data) * lights.size(), lights.data());
                 glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
+                // bind some fbo with textures for color and render buffers for depth and stencil
+
                 for (auto [modelHandle, instancesPerMaterial] : batches)
                 {
                     if (!modelHandle.is_buffered())
@@ -511,6 +513,10 @@ namespace legion::rendering
                 }
 
                 debugRenderPass(view, projection, deltaTime);
+
+                // unbind fbo and bind default framebuffer
+                // disable depth buffer
+                // draw quad with color texture
             }
             else
             {

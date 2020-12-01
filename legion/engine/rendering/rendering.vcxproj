@@ -52,6 +52,9 @@
     <ClInclude Include="util\matini.hpp" />
     <ClInclude Include="util\settings.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="pipeline\base\pipeline.inl" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
