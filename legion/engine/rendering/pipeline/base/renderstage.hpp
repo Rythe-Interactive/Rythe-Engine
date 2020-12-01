@@ -16,6 +16,7 @@ namespace legion::rendering
         static RenderPipelineBase* m_pipeline;
 
     public:
+        virtual void setup() LEGION_PURE;
         virtual void render(app::window context, camera cam) LEGION_PURE;
     };
 }

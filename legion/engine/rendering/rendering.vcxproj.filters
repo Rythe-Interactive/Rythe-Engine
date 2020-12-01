@@ -132,4 +132,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="pipeline\base\pipeline.inl">
+      <Filter>Header Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>
