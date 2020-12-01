@@ -7,6 +7,8 @@
 #include <rendering/debugrendering.hpp>
 #include <unordered_set>
 
+#include <rendering/data/framebuffer.hpp>
+
 using namespace legion::core::filesystem::literals;
 using namespace std::literals::chrono_literals;
 
@@ -473,6 +475,22 @@ namespace legion::rendering
                 glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(detail::light_data) * lights.size(), lights.data());
                 glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
+            //bind some fbo with texture for color and render buffers for depth and stencil
+
+                math::ivec2 resolution(1920, 1080);
+                //framebuffer
+                framebuffer fbo;
+                //texture
+                texture_handle texture = TextureCache::create_texture("test_image", resolution.x, resolution.y);
+                //render buffer
+                renderbuffer rbo{GL_DEPTH_STENCIL_ATTACHMENT,resolution.x,resolution.y};
+
+                //attach fbo and texture
+                rbo.bind();
+                fbo.attach(texture, GL_COLOR_ATTACHMENT0);
+                fbo.attach(rbo, GL_DEPTH_STENCIL_ATTACHMENT);
+
+
                 for (auto [modelHandle, instancesPerMaterial] : batches)
                 {
                     if (!modelHandle.is_buffered())
@@ -511,6 +529,14 @@ namespace legion::rendering
                 }
 
                 debugRenderPass(view, projection, deltaTime);
+
+
+            //unbind fbo and bind default framebuffer
+                fbo.release();
+
+                //disable depth buffer
+                glClear(GL_COLOR_BUFFER_BIT);
+                //draw quad with color texture
             }
             else
             {

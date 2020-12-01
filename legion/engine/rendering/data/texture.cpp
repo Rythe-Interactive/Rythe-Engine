@@ -109,6 +109,51 @@ namespace legion::rendering
         return create_texture(file.get_filename(), file, settings);
     }
 
+    texture_handle TextureCache::create_texture(const std::string& name, GLsizei width, GLsizei height)
+    {
+        id_type id = nameHash(name);
+        {
+            async::readonly_guard guard(m_textureLock);
+            if (m_textures.contains(id))
+                return { id };
+        }
+
+        texture texture{};
+        texture.type = texture_type::two_dimensional;
+        texture.textureId = id;
+        // Allocate and bind the texture.
+        glGenTextures(1, &texture.textureId);
+        glBindTexture(static_cast<GLenum>(texture.type), texture.textureId);
+
+        texture.size = math::ivec2(width, height);
+        texture.channels = texture_components::rgb;
+
+        // Construct the texture using the loaded data.
+        glTexImage2D(
+            static_cast<GLenum>(texture.type),
+            0,
+            static_cast<int>(texture.channels),
+            texture.size.x,
+            texture.size.y,
+            0,
+            static_cast<int>(texture.channels),
+            GL_UNSIGNED_BYTE,
+            NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+
+        {
+            async::readwrite_guard guard(m_textureLock);
+            m_textures.insert(id, texture);
+        }
+
+        log::debug("Created texture from image {}", texture.textureId);
+
+        return { id };
+
+    }
+
+
     texture_handle TextureCache::create_texture_from_image(const std::string& name, texture_import_settings settings)
     {
         if (m_invalidTexture.id == invalid_id)

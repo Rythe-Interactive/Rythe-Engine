@@ -7,10 +7,12 @@ namespace legion::rendering
 {
     struct framebuffer
     {
+        //Id of the framebuffer.
         app::gl_id id;
+        //type of framebuffer, either read, write or both.
         GLenum target;
 
-        framebuffer(GLenum target) : target(target)
+        framebuffer(GLenum target = GL_FRAMEBUFFER) : target(target)
         {
             glGenFramebuffers(1, &id);
         }
@@ -18,6 +20,11 @@ namespace legion::rendering
         ~framebuffer()
         {
             glDeleteFramebuffers(1, &id);
+        }
+
+        bool verify()
+        {
+            return glCheckFramebufferStatus(target) == GL_FRAMEBUFFER_COMPLETE;
         }
 
         void bind()
@@ -32,7 +39,7 @@ namespace legion::rendering
 
         void attach(texture_handle texture, GLenum attachment)
         {
-            glNamedFramebufferTexture(id, attachment, GL_RENDERBUFFER, texture.get_texture().textureId);
+            glNamedFramebufferTexture(id, attachment, GL_TEXTURE_2D, texture.get_texture().textureId);
         }
 
         void release()
