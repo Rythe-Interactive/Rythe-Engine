@@ -405,6 +405,9 @@ namespace legion::rendering
             if (!m_ecs->world.has_component<app::window>() || m_exit)
                 return;
 
+            renderablesQuery.queryEntities();
+            lightQuery.queryEntities();
+            cameraQuery.queryEntities();
             //waitForSync();
 
             time::clock renderClock;

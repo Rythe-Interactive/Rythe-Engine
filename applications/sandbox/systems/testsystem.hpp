@@ -577,49 +577,49 @@ public:
 
         {
             auto ent = createEntity();
-			ent.add_components<rendering::renderable>(sphereH.get_mesh(), rendering::mesh_renderer(paintH));
+            ent.add_components<rendering::renderable>(sphereH.get_mesh(), rendering::mesh_renderer(paintH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(4, 3, -2.2f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-			ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(copperH));
+            ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(copperH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -3.6f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-			ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(aluminumH));
+            ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(aluminumH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -6.5f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-			ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(ironH));
+            ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(ironH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -0.7f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-			ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(rock2H));
+            ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(rock2H));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(4, 3, -6.5f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-			ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(fabricH));
+            ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(fabricH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(4, 3, -3.6f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-			ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(paintH));
+            ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(paintH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(4, 3, -0.7f), rotation(), scale());
         }
@@ -1862,6 +1862,7 @@ public:
     {
         static auto sahQuery = createQuery<sah, rotation, position>();
 
+        sahQuery.queryEntities();
         for (auto entity : sahQuery)
         {
             auto rot = entity.read_component<rotation>();
@@ -1949,6 +1950,7 @@ public:
         physics::PhysicsSystem::aPoint.clear();
         physics::PhysicsSystem::bPoint.clear();
 
+        physicsQuery.queryEntities();
         //this is called so that i can draw stuff
         for (auto entity : physicsQuery)
         {

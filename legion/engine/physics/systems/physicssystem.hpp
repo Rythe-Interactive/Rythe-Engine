@@ -47,6 +47,7 @@ namespace legion::physics
 
         void fixedUpdate(time::time_span<fast_time> deltaTime)
         {
+            rigidbodyIntegrationQuery.queryEntities();
             if (!IsPaused)
             {
                 integrateRigidbodies(deltaTime);
