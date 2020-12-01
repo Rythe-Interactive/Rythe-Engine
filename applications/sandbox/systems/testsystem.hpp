@@ -1641,24 +1641,6 @@ public:
         }
     }
 
-    void scene3(loadscene3* action)
-    {
-        if (action->pressed())
-        {
-            scenemanagement::SceneManager::loadScene("Main3");
-            log::debug("Finished loading a scene");
-        }
-    }
-
-    void scene4(loadscene4* action)
-    {
-        if (action->pressed())
-        {
-            scenemanagement::SceneManager::loadScene("Main3");
-            log::debug("Finished loading a scene");
-        }
-    }
-
     void onLightSwitch(light_switch* action)
     {
         static bool on = false;
