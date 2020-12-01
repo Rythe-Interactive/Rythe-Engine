@@ -31,27 +31,24 @@ namespace legion::rendering
             static auto emitters = createQuery<particle_emitter>();
             for (auto entity : emitters)
             {
-                if(!entity.get_component_handle<particle_emitter>().read().setupCompleted)
-                {
-                    auto particleEmitHandl = entity.get_component_handle<particle_emitter>().read();
-                    particleEmitHandl.setupCompleted = true;
-                    entity.get_component_handle<particle_emitter>().write(particleEmitHandl);
+                auto emitterHandle = entity.get_component_handle<particle_emitter>();
+                auto emit = emitterHandle.read();
 
-                    ecs::component_handle<particle_emitter> emitterHandle = entity.get_component_handle<particle_emitter>();
-                    const ParticleSystemBase* particleSystem = emitterHandle.read().particleSystemHandle.get();
+                if(!emit.setupCompleted)
+                {
+                    emit.setupCompleted = true;
+                    emitterHandle.write(emit);
+
+                    const ParticleSystemBase* particleSystem = emit.particleSystemHandle.get();
                     particleSystem->setup(emitterHandle);
                 }
                 else
                 {
-                    ecs::component_handle<particle_emitter> emitterHandle = entity.get_component_handle<particle_emitter>();
-                    particle_emitter emitter = emitterHandle.read();
-                    std::vector<ecs::entity_handle> particles = emitter.livingParticles;
-                    const ParticleSystemBase* particleSystem = emitter.particleSystemHandle.get();
+                    std::vector<ecs::entity_handle> particles = emit.livingParticles;
+                    const ParticleSystemBase* particleSystem = emit.particleSystemHandle.get();
                     particleSystem->update(particles, emitterHandle);
                 }
             }
         }
-
-
     };
 }
