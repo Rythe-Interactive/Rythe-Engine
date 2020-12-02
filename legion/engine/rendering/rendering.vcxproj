@@ -27,6 +27,7 @@
     <ClCompile Include="imgui_impl\imgui_impl_glfw.cpp" />
     <ClCompile Include="imgui_impl\imgui_impl_opengl3.cpp" />
     <ClCompile Include="imgui_impl\imgui_widgets.cpp" />
+    <ClCompile Include="imgui_impl\imnodes.cpp" />
     <ClCompile Include="imgui_impl\ImSequencer.cpp" />
     <ClCompile Include="shadercompiler\shadercompiler.cpp" />
     <ClCompile Include="data\particle_system_base.cpp" />

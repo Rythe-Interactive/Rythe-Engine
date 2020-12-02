@@ -5,6 +5,7 @@
 #include <rendering/data/material.hpp>
 #include <core/logging/logging.hpp>
 #include <imgui/ImGuizmo.h>
+#include <imgui/imnodes.h>
 #include <rendering/debugrendering.hpp>
 
 #include <rendering/components/renderable.hpp>
@@ -92,7 +93,7 @@ public:
                 m_cubeent = createEntity();
                 m_cubeent.add_components<transform>(position(),rotation(),scale(1));
                 model = math::compose(scale(1.f),rotation(),position());
-                m_cubeent.add_component<rendering::renderable>({cube,directionalLightMH});
+                m_cubeent.add_components<rendering::renderable>(cube.get_mesh(), rendering::mesh_renderer(directionalLightMH));
 
             }
 
@@ -121,7 +122,40 @@ public:
             }
             ImGui::InputText("Text",buffer,512);
             ImGui::End();
-            //ImGuizmo::ViewManipulate(value_ptr(view), 1.0f, ImVec2(io.DisplaySize.x - 128, 0), ImVec2(128, 128), 0x10101010);
+            ImGuizmo::ViewManipulate(value_ptr(view), 1.0f, ImVec2(io.DisplaySize.x - 128, 0), ImVec2(128, 128), 0x10101010);
+            ImGui::Begin("node editor");
+            imnodes::BeginNodeEditor();
+
+
+            imnodes::BeginNode(1);
+            imnodes::BeginNodeTitleBar();
+            ImGui::TextUnformatted("output node");
+            imnodes::EndNodeTitleBar();
+            ImGui::Dummy({80,45});
+            const int output_attr_id = 2;
+            imnodes::BeginOutputAttribute(output_attr_id);
+            // in between Begin|EndAttribute calls, you can call ImGui
+            // UI functions
+            ImGui::Text("output pin");
+            imnodes::EndOutputAttribute();
+            imnodes::EndNode();
+
+            imnodes::BeginNode(2);
+            imnodes::BeginNodeTitleBar();
+            ImGui::TextUnformatted("input node");
+            imnodes::EndNodeTitleBar();
+            ImGui::Dummy({80,45});
+            imnodes::BeginInputAttribute(3);
+            // in between Begin|EndAttribute calls, you can call ImGui
+            // UI functions
+            ImGui::Text("input pin");
+            imnodes::EndOutputAttribute();
+            imnodes::EndNode();
+
+            imnodes::EndNodeEditor();
+            ImGui::End();
+
+
         };
 
     }
@@ -131,6 +165,7 @@ public:
     math::mat4 model = math::mat4(1.0f);
     void update(time::span dt)
     {
+        cameraQuery.queryEntities();
         ecs::entity_handle cam_ent = cameraQuery[0];
         auto [cposh,croth,cscaleh] =  cam_ent.get_component_handles<transform>();
 
@@ -145,8 +180,7 @@ public:
             auto [mposh,mroth,mscaleh] = m_cubeent.get_component_handles<transform>();
             math::vec3 mpos,mscale,dummy;
             math::quat mrot;
-            math::decompose(model,mscale,mrot,mpos);
-          //  ImGuizmo::DecomposeMatrixToComponents(value_ptr(model), value_ptr(mpos), value_ptr(dummy), value_ptr(mscale));
+            decompose(model,mscale,mrot,mpos);
             mposh.write(mpos);
             mroth.write(mrot);
             mscaleh.write(mscale);
