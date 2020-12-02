@@ -1,5 +1,6 @@
 #pragma once
 #include <core/math/glm/glm_include.hpp>
+#include <core/math/glm/gtx/string_cast.hpp>
 
 /**
  * @file geometry.hpp
@@ -12,13 +13,14 @@ namespace legion::core::math
      * @param lineOrigin - The origin of the line
      * @param lineEnd - The end of the line
      */
-    float pointToLine(const vec3& point, const vec3& lineOrigin, const vec3& lineEnd)
+    inline float pointToLine(const vec3& point, const vec3& lineOrigin, const vec3& lineEnd)
     {
         vec3 dir = normalize(lineEnd - lineOrigin);
-        vec3 toLineOrigin = lineOrigin - point;
+        vec3 toLineOrigin = point - lineOrigin;
         float distOnLine = dot(toLineOrigin, dir);
         vec3 closestPointOnLine = lineOrigin + (dir * distOnLine);
-        return distance(closestPointOnLine, point);
+        vec3 difference = closestPointOnLine - point;
+        return difference.length();
     }
 
     /**@brief Calculates the shortest squared distance between a point and a line
@@ -27,13 +29,15 @@ namespace legion::core::math
      * @param lineOrigin - The origin of the line
      * @param lineEnd - The end of the line
      */
-    float squaredDistanceToLine(const vec3& point, const vec3& lineOrigin, const vec3& lineEnd)
+    inline float pointToLineSquared(const vec3& point, const vec3& lineOrigin, const vec3& lineEnd, int index)
     {
         vec3 dir = normalize(lineEnd - lineOrigin);
-        vec3 toLineOrigin = lineOrigin - point;
+        vec3 toLineOrigin = point - lineOrigin;
         float distOnLine = dot(toLineOrigin, dir);
         vec3 closestPointOnLine = lineOrigin + (dir * distOnLine);
-        return (closestPointOnLine.x * closestPointOnLine.x) + (closestPointOnLine.y * closestPointOnLine.y) + (closestPointOnLine.z * closestPointOnLine.z);
+        vec3 difference = closestPointOnLine - point;
+        float dist = ((difference.x * difference.x) + (difference.y * difference.y) + (difference.z * difference.z));
+        return dist;
     }
 
 
@@ -83,9 +87,9 @@ namespace legion::core::math
 
     /**@brief Calculates the size of a triangles surface area
      */
-    float triangleSurface(const vec3& p0, const vec3& p1, const vec3& p2)
+    inline float triangleSurface(const vec3& p0, const vec3& p1, const vec3& p2)
     {
-        return 0.5 * (normalizeDot(p0, p1) * normalizeDot(p0, p2)) * fastSin(0);
+        return 0.5f * (normalizeDot(p0, p1) * normalizeDot(p0, p2)) * fastSin(0.f);
     }
 
     /**@brief Calculates the distance between a point and a triangle plane
@@ -95,7 +99,7 @@ namespace legion::core::math
      * @param triPoint2 - The last triangle point
      * @param triNormal - The triangle plane normal
      */
-    float pointToTriangle(const vec3& p, const vec3& triPoint0, const vec3& triPoint1, const vec3& triPoint2, const vec3& triNormal)
+    inline float pointToTriangle(const vec3& p, const vec3& triPoint0, const vec3& triPoint1, const vec3& triPoint2, const vec3& triNormal)
     {
         // Distance to plane
         float distanceToPlane = dot(triNormal, p - triPoint0);
@@ -115,9 +119,9 @@ namespace legion::core::math
         }
 
         //Point q is not on the triangle, check distance toward each edge of the triangle
-        float sqDistance01 = squaredDistanceToLine(p, triPoint0, triPoint1);
-        float sqDistance02 = squaredDistanceToLine(p, triPoint0, triPoint2);
-        float sqDistance12 = squaredDistanceToLine(p, triPoint1, triPoint2);
+        float sqDistance01 = pointToLineSquared(p, triPoint0, triPoint1, 0);
+        float sqDistance02 = pointToLineSquared(p, triPoint0, triPoint2, 0);
+        float sqDistance12 = pointToLineSquared(p, triPoint1, triPoint2, 0);
 
         // Assume the shortest distance is sqDistance01
         // Then check if this is true
@@ -138,7 +142,7 @@ namespace legion::core::math
      * @param triPoint1 - The second triangle point
      * @param triPoint2 - The last triangle point
      */
-    float pointToTriangle(const vec3& p, const vec3& triPoint0, const vec3& triPoint1, const vec3& triPoint2)
+    inline float pointToTriangle(const vec3& p, const vec3& triPoint0, const vec3& triPoint1, const vec3& triPoint2)
     {
         vec3 normal = normalize(cross(triPoint1 - triPoint0, triPoint2 - triPoint0));
         return pointToTriangle(p, triPoint0, triPoint1, triPoint2, normal);
@@ -157,12 +161,12 @@ namespace legion::core::math
             normal = normalize(cross(p1 - p0, p2 - p0));
         }
 
-        triangle(vec3 p0, vec3 p1, vec3 p2, vec3 normal) :
-            normal(normalize(normal))
+        triangle(vec3 p0, vec3 p1, vec3 p2, vec3 normal)
         {
             points[0] = p0;
             points[1] = p1;
             points[2] = p2;
+            normal = normalize(normal);
         }
 
         // The three points of the triangle
@@ -192,9 +196,9 @@ namespace legion::core::math
             }
 
             //Point q is not on the triangle, check distance toward each edge of the triangle
-            float sqDistance01 = squaredDistanceToLine(p, points[0], points[1]);
-            float sqDistance02 = squaredDistanceToLine(p, points[0], points[2]);
-            float sqDistance12 = squaredDistanceToLine(p, points[1], points[2]);
+            float sqDistance01 = pointToLineSquared(p, points[0], points[1], 0);
+            float sqDistance02 = pointToLineSquared(p, points[0], points[2], 0);
+            float sqDistance12 = pointToLineSquared(p, points[1], points[2], 0);
 
             // Assume the shortest distance is sqDistance01
             // Then check if this is true
@@ -212,7 +216,7 @@ namespace legion::core::math
          */
         float surface() const
         {
-            return 0.5 * (normalizeDot(points[0], points[1]) * normalizeDot(points[0], points[2])) * fastSin(0);
+            return 0.5f * (normalizeDot(points[0], points[1]) * normalizeDot(points[0], points[2])) * fastSin(0.f);
         }
     };
 
@@ -221,7 +225,7 @@ namespace legion::core::math
      * @param planePosition - A point on the plane
      * @param planeNormal - The plane normal
      */
-    float pointToPlane(const vec3& point, const vec3& planePosition, const vec3& planeNormal)
+    inline float pointToPlane(const vec3& point, const vec3& planePosition, const vec3& planeNormal)
     {
         return dot(planeNormal, point - planePosition);
     }
@@ -232,9 +236,9 @@ namespace legion::core::math
     struct plane
     {
         plane(vec3 position, vec3 normal) :
-            position(position), normal(normalize(normal))
+            position(position)
         {
-
+            normal = normalize(normal);
         }
 
         /**@brief Constructs a plane from three points on the plane

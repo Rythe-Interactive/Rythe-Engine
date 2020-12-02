@@ -470,6 +470,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="math\glm\vec4.hpp" />
     <ClInclude Include="math\glm\vector_relational.hpp" />
     <ClInclude Include="math\math.hpp" />
+    <ClInclude Include="math\geometry.hpp" />
     <ClInclude Include="math\precision.hpp" />
     <ClInclude Include="math\trigonometry.hpp" />
     <ClInclude Include="platform\platform.hpp" />
@@ -491,7 +492,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="types\type_util.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="async\readonly_rw_spinlock.cpp"/>
+    <ClCompile Include="async\readonly_rw_spinlock.cpp" />
     <ClCompile Include="compute\buffer.cpp" />
     <ClCompile Include="compute\context.cpp" />
     <ClCompile Include="compute\high_level\function.cpp" />
