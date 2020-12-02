@@ -235,29 +235,29 @@ namespace legion::rendering
             cameraQuery = createQuery<camera, position, rotation, scale>();
 
             m_scheduler->sendCommand(m_scheduler->getChainThreadId("Rendering"), [](void* param)
-                {
-                    Renderer* self = reinterpret_cast<Renderer*>(param);
-                    log::trace("Waiting on main window.");
+            {
+                Renderer* self = reinterpret_cast<Renderer*>(param);
+                log::trace("Waiting on main window.");
 
-                    while (!self->main_window_valid())
-                        std::this_thread::yield();
+                while (!self->main_window_valid())
+                    std::this_thread::yield();
 
-                    app::window window = self->get_main_window();
+                app::window window = self->get_main_window();
 
-                    log::trace("Initializing context.");
+                log::trace("Initializing context.");
 
-                    async::readwrite_guard guard(*window.lock);
-                    app::ContextHelper::makeContextCurrent(window);
+                async::readwrite_guard guard(*window.lock);
+                app::ContextHelper::makeContextCurrent(window);
 
-                    bool result = self->initData(window);
+                bool result = self->initData(window);
 
-                    app::ContextHelper::makeContextCurrent(nullptr);
+                app::ContextHelper::makeContextCurrent(nullptr);
 
-                    if (!result)
-                        log::error("Failed to initialize context.");
+                if (!result)
+                    log::error("Failed to initialize context.");
 
-                    self->initialized.store(result, std::memory_order_release);
-                }, this);
+                self->initialized.store(result, std::memory_order_release);
+            }, this);
 
             while (!initialized.load(std::memory_order_acquire))
                 std::this_thread::yield();
@@ -280,90 +280,92 @@ namespace legion::rendering
                 glEnable(GL_DEBUG_OUTPUT);
 
                 glDebugMessageCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+                {
+                    if (!log::impl::thread_names.count(std::this_thread::get_id()))
+                        log::impl::thread_names[std::this_thread::get_id()] = "OpenGL";
+
+                    cstring s;
+                    switch (source)
                     {
-                        if (!log::impl::thread_names.count(std::this_thread::get_id()))
-                            log::impl::thread_names[std::this_thread::get_id()] = "OpenGL";
+                    case GL_DEBUG_SOURCE_API:
+                        s = "OpenGL";
+                        break;
+                    case GL_DEBUG_SOURCE_SHADER_COMPILER:
+                        s = "Shader compiler";
+                        break;
+                    case GL_DEBUG_SOURCE_THIRD_PARTY:
+                        s = "Third party";
+                        break;
+                    case GL_DEBUG_SOURCE_APPLICATION:
+                        s = "Application";
+                        break;
+                    case GL_DEBUG_SOURCE_OTHER:
+                        s = "Other";
+                        break;
+                    default:
+                        s = "Unknown";
+                        break;
+                    }
 
-                        cstring s;
-                        switch (source)
-                        {
-                        case GL_DEBUG_SOURCE_API:
-                            s = "OpenGL";
-                            break;
-                        case GL_DEBUG_SOURCE_SHADER_COMPILER:
-                            s = "Shader compiler";
-                            break;
-                        case GL_DEBUG_SOURCE_THIRD_PARTY:
-                            s = "Third party";
-                            break;
-                        case GL_DEBUG_SOURCE_APPLICATION:
-                            s = "Application";
-                            break;
-                        case GL_DEBUG_SOURCE_OTHER:
-                            s = "Other";
-                            break;
-                        default:
-                            s = "Unknown";
-                            break;
-                        }
+                    cstring t;
 
-                        cstring t;
+                    switch (type)
+                    {
+                    case GL_DEBUG_TYPE_ERROR:
+                        t = "Error";
+                        break;
+                    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+                        t = "Deprecation";
+                        break;
+                    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+                        t = "Undefined behavior";
+                        break;
+                    case GL_DEBUG_TYPE_PERFORMANCE:
+                        t = "Performance";
+                        break;
+                    case GL_DEBUG_TYPE_PORTABILITY:
+                        t = "Portability";
+                        break;
+                    case GL_DEBUG_TYPE_MARKER:
+                        t = "Marker";
+                        break;
+                    case GL_DEBUG_TYPE_PUSH_GROUP:
+                        t = "Push";
+                        break;
+                    case GL_DEBUG_TYPE_POP_GROUP:
+                        t = "Pop";
+                        break;
+                    case GL_DEBUG_TYPE_OTHER:
+                        t = "Misc";
+                        break;
+                    default:
+                        t = "Unknown";
+                        break;
+                    }
 
-                        switch (type)
-                        {
-                        case GL_DEBUG_TYPE_ERROR:
-                            t = "Error";
-                            break;
-                        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-                            t = "Deprecation";
-                            break;
-                        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
-                            t = "Undefined behavior";
-                            break;
-                        case GL_DEBUG_TYPE_PERFORMANCE:
-                            t = "Performance";
-                            break;
-                        case GL_DEBUG_TYPE_PORTABILITY:
-                            t = "Portability";
-                            break;
-                        case GL_DEBUG_TYPE_MARKER:
-                            t = "Marker";
-                            break;
-                        case GL_DEBUG_TYPE_PUSH_GROUP:
-                            t = "Push";
-                            break;
-                        case GL_DEBUG_TYPE_POP_GROUP:
-                            t = "Pop";
-                            break;
-                        case GL_DEBUG_TYPE_OTHER:
-                            t = "Misc";
-                            break;
-                        default:
-                            t = "Unknown";
-                            break;
-                        }
-
-                        cstring sev;
-                        switch (severity)
-                        {
-                        case GL_DEBUG_SEVERITY_HIGH:
-                            log::error("[{}-{}] {}", s, t, message);
-                            break;
-                        case GL_DEBUG_SEVERITY_MEDIUM:
-                            log::warn("[{}-{}] {}", s, t, message);
-                            break;
-                        case GL_DEBUG_SEVERITY_LOW:
-                            log::debug("[{}-{}] {}", s, t, message);
-                            break;
-                        case GL_DEBUG_SEVERITY_NOTIFICATION:
-                            log::trace("[{}-{}] {}", s, t, message);
-                            break;
-                        default:
-                            log::debug("[{}-{}] {}", s, t, message);
-                            break;
-                        }
-                    }, nullptr);
+                    cstring sev;
+                    switch (severity)
+                    {
+                    case GL_DEBUG_SEVERITY_HIGH:
+                        log::error("[{}-{}] {}", s, t, message);
+                        break;
+                    case GL_DEBUG_SEVERITY_MEDIUM:
+                        log::warn("[{}-{}] {}", s, t, message);
+                        break;
+                    case GL_DEBUG_SEVERITY_LOW:
+                        log::debug("[{}-{}] {}", s, t, message);
+                        break;
+                    case GL_DEBUG_SEVERITY_NOTIFICATION:
+                        log::trace("[{}-{}] {}", s, t, message);
+                        break;
+                    default:
+                        log::debug("[{}-{}] {}", s, t, message);
+                        break;
+                    }
+                }, nullptr);
                 log::info("loaded OpenGL version: {}.{}", GLVersion.major, GLVersion.minor);
+
+
             }
 
             glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
@@ -375,7 +377,6 @@ namespace legion::rendering
             glEnable(GL_CULL_FACE);
             glCullFace(GL_BACK);
             glFrontFace(GL_CW);
-            glEnable(GL_MULTISAMPLE);
 
             const unsigned char* vendor = glGetString(GL_VENDOR);
             const unsigned char* renderer = glGetString(GL_RENDERER);
@@ -398,6 +399,20 @@ namespace legion::rendering
             glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(detail::light_data) * 1024, nullptr, GL_DYNAMIC_DRAW);
             glBindBufferBase(GL_SHADER_STORAGE_BUFFER, SV_LIGHTS, lightsBufferId);
             glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+            //framebuffer test quad
+#pragma region framebufferquad
+
+            glGenVertexArrays(1, &quadVAO);
+            glGenBuffers(1, &quadVBO);
+            glBindVertexArray(quadVAO);
+            glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+            glEnableVertexAttribArray(0);
+            glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+            glEnableVertexAttribArray(1);
+            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+#pragma endregion 
 
             return true;
         }
@@ -423,8 +438,33 @@ namespace legion::rendering
             math::ivec2 viewportSize = app::ContextHelper::getFramebufferSize(window);
             if (viewportSize.x != 0 && viewportSize.y != 0)
             {
+                
+                math::ivec2 superSize = viewportSize*2;
 
-                glViewport(0, 0, viewportSize.x, viewportSize.y);
+                //framebuffer
+                static framebuffer fbo;
+                //texture
+                static texture_handle texture = TextureCache::create_texture("test_image", superSize,{
+        texture_type::two_dimensional, channel_format::eight_bit, texture_format::rgb,
+        texture_components::rgb, true, true, texture_mipmap::linear, texture_mipmap::linear,
+        texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat });
+                //render buffer
+                static renderbuffer rbo{ GL_DEPTH24_STENCIL8, superSize };
+                //shader init
+                static auto screenShader = ShaderCache::create_shader("screen_shader", "assets://shaders/screenshader.shs"_view);
+
+                //attach fbo and texture
+                fbo.bind();
+                fbo.attach(texture, GL_COLOR_ATTACHMENT0);
+                fbo.attach(rbo, GL_DEPTH_STENCIL_ATTACHMENT);
+
+                //verification step
+                auto [verified, result] = fbo.verify();
+                if (!verified) log::warn(result);
+
+                glEnable(GL_DEPTH_TEST);
+
+                glViewport(0, 0, superSize.x, superSize.y);
                 glClearColor(0.3f, 0.5f, 1.0f, 1.0f);
                 glClearDepth(0.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -475,21 +515,9 @@ namespace legion::rendering
                 glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(detail::light_data) * lights.size(), lights.data());
                 glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
-            //bind some fbo with texture for color and render buffers for depth and stencil
-
-                //framebuffer
-                framebuffer fbo;
-                //texture
-                texture_handle texture = TextureCache::create_texture("test_image", viewportSize);
-                //render buffer
-                renderbuffer rbo{GL_DEPTH_STENCIL_ATTACHMENT, viewportSize};
-
-                //attach fbo and texture
-                rbo.bind();
-                fbo.attach(texture, GL_COLOR_ATTACHMENT0);
-                fbo.attach(rbo, GL_DEPTH_STENCIL_ATTACHMENT);
 
 
+                //the cool render stuff
                 for (auto [modelHandle, instancesPerMaterial] : batches)
                 {
                     if (!modelHandle.is_buffered())
@@ -516,7 +544,7 @@ namespace legion::rendering
                         glBindVertexArray(mesh.vertexArrayId);
                         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);
                         glBindBuffer(GL_SHADER_STORAGE_BUFFER, lightsBufferId);
-
+                        glBindTexture(GL_TEXTURE_2D, 0);
                         for (auto submesh : mesh.submeshes)
                             glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)(submesh.indexOffset * sizeof(uint)), (GLsizei)instances.size());
 
@@ -526,16 +554,25 @@ namespace legion::rendering
                         material.release();
                     }
                 }
-
+                //less cool render stuff, but neccesary
                 debugRenderPass(view, projection, deltaTime);
 
-
-            //unbind fbo and bind default framebuffer
+                //unbind fbo and bind default framebuffer
                 fbo.release();
 
                 //disable depth buffer
-                glClear(GL_COLOR_BUFFER_BIT);
+                glViewport(0, 0, viewportSize.x, viewportSize.y);
+                //glDisable(GL_DEPTH_TEST);
+                //glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+                //screenshader config
+                screenShader.bind();
+                screenShader.get_uniform<texture_handle>("screenTexture").set_value(texture);
                 //draw quad with color texture
+                glBindVertexArray(quadVAO);
+                glDrawArrays(GL_TRIANGLES, 0, 6);
             }
             else
             {
@@ -557,5 +594,17 @@ namespace legion::rendering
                  log::debug("render took: {:.3f}ms\tdeltaTime: {:.3f}ms fps: {:.3f} average: {:.3f}", elapsed.milliseconds(), deltaTime.milliseconds(), 1.0 / deltaTime, 1.0 / (totalTime / frameCount));
              }*/
         }
+    private:
+        float quadVertices[24] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+            // positions   // texCoords
+            -1.0f,  1.0f,  0.0f, 1.0f,
+            -1.0f, -1.0f,  0.0f, 0.0f,
+             1.0f, -1.0f,  1.0f, 0.0f,
+
+            -1.0f,  1.0f,  0.0f, 1.0f,
+             1.0f, -1.0f,  1.0f, 0.0f,
+             1.0f,  1.0f,  1.0f, 1.0f
+        };
+        unsigned int quadVAO, quadVBO;
     };
 }
