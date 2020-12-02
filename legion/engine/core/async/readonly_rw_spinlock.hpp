@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <array>
 #include <thread>
+#include <functional>
 #include <core/types/primitives.hpp>
 #include <core/platform/platform.hpp>
 #include <core/containers/sparse_set.hpp>
@@ -325,6 +326,18 @@ namespace legion::core::async
             default:
                 return;
             }
+        }
+
+        /**@brief Execute a function inside a critical section locked by a certain guard.
+         * @tparam Guard Guard type to lock the lock with.
+         * @param func Function to execute.
+         * @return Return value of func.
+         */
+        template<typename Guard, typename Func>
+        auto critical_section(const Func& func) -> decltype(auto)
+        {
+            Guard guard(*this);
+            return std::invoke(func);
         }
     };
 

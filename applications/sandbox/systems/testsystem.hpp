@@ -171,7 +171,7 @@ public:
         bindToEvent<stop_audio_source, &TestSystem::stopAudioSource>();
         bindToEvent<rewind_audio_source, &TestSystem::rewindAudioSource>();
 
-        bindToEvent<physics::TriggerEvent, &TestSystem::testPhysicsEvent>();
+        bindToEvent<physics::trigger_event, &TestSystem::testPhysicsEvent>();
 
         bindToEvent<audio_test_input, &TestSystem::audioTestInput>();
 
@@ -696,7 +696,7 @@ public:
         createProcess<&TestSystem::update>("Update");
     }
 
-    void testPhysicsEvent(physics::TriggerEvent* evnt)
+    void testPhysicsEvent(physics::trigger_event* evnt)
     {
         log::debug("received trigger event {}", evnt->manifold.isColliding);
     }
