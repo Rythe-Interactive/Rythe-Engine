@@ -6,6 +6,10 @@
 #include <core/compute/context.hpp>
 #include <core/compute/kernel.hpp>
 
+
+#include "pointcloud_particlesystem.hpp"
+#include <rendering/components/particle_emitter.hpp>
+
 using namespace legion;
 using namespace rendering;
 
@@ -20,7 +24,7 @@ public:
     struct player_fly : public app::input_axis<player_fly> {};
     struct player_look_x : public app::input_axis<player_look_x> {};
     struct player_look_y : public app::input_axis<player_look_y> {};
-    const int samplesPerTriangle = 10;
+    const int samplesPerTriangle = 1;
     const int seed = 1;
 
     PointCloudTestSystem()
@@ -52,12 +56,12 @@ public:
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
             ModelCache::create_model("cube", "assets://models/Cube.obj"_view);
-          /*  ModelCache::create_model("sphere", "assets://models/sphere.obj"_view);
-            ModelCache::create_model("suzanne", "assets://models/suzanne.obj"_view);*/
+            /*  ModelCache::create_model("sphere", "assets://models/sphere.obj"_view);
+              ModelCache::create_model("suzanne", "assets://models/suzanne.obj"_view);*/
             ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view);
 
-            
-            
+
+
             colorMat = MaterialCache::create_material("colorMat", "assets://shaders/color.shs"_view);
             app::ContextHelper::makeContextCurrent(nullptr);
         }
@@ -65,7 +69,7 @@ public:
         log::debug("done loading models");
 
         //get vertecies
-        auto cache = MeshCache::get_handle("uvsphere");
+        auto cache = MeshCache::get_handle("cube");
         auto m = cache.get();
         auto verts = m.second.vertices;
         auto indices = m.second.indices;
@@ -95,8 +99,8 @@ public:
         std::vector<float> randVec(100);
         for (int i = 0; i < 100; i++)
         {
-            randVec.at(i) =( std::rand() / (float)RAND_MAX);
-          //  log::debug(std::to_string(randVec.at(i)));
+            randVec.at(i) = (std::rand() / (float)RAND_MAX);
+            //  log::debug(std::to_string(randVec.at(i)));
         }
         auto randbuffer = compute::Context::createBuffer(result, compute::buffer_type::READ_BUFFER, "randBuffer");
 
@@ -114,18 +118,47 @@ public:
         std::vector<ecs::entity_handle> enteties(points_Generated);
         if (code1.valid())
         {
-            for (size_t i = 0; i < points_Generated; i++)
+            log::info("reading cl data");
+
+          //  for (size_t i = 0; i < points_Generated; i++)
+          //  {
+          //      math::vec3 currentPos = result.at(i).xyz * scaling + startPos;
+
+          ///*      auto ent = createEntity();
+          //      ent.add_component<renderable>({ ModelCache::get_handle("cube"), colorMat });
+          //      ent.add_components<transform>(currentPos, rotation(), scale(individualScale));
+          //      enteties.at(i) = ent;*/
+          //      //   log::info(" got: " + std::to_string(result.at(i).x) + ", " + std::to_string(result.at(i).y));
+          //    //      log::info(" got: " + std::to_string(result.at(i).w));
+          //  }
+
+
+            std::vector<math::vec3> particleInput(points_Generated);
+            for (int i = 0; i < points_Generated; i++)
             {
-                math::vec3 currentPos = result.at(i).xyz * scaling + startPos;
-
-                auto ent = createEntity();
-                ent.add_component<renderable>({ ModelCache::get_handle("cube"), colorMat });
-                ent.add_components<transform>(currentPos, rotation(), scale(individualScale));
-                enteties.at(i) = ent;
-               //   log::info(" got: " + std::to_string(result.at(i).x) + ", " + std::to_string(result.at(i).y));
-             //      log::info(" got: " + std::to_string(result.at(i).w));
-
+                particleInput.at(i) = result.at(i).xyz;
             }
+            log::info("creating particle system");
+            pointCloudParameters params
+            {
+               math::vec3(0.2f),
+               colorMat,
+               ModelCache::get_handle("cube")
+            };
+            auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params, particleInput);
+
+#pragma region entities
+
+            {
+                auto ent = createEntity();
+                ent.add_components<transform>(position(-5, 0.01f, 0), rotation(), scale(1));
+                rendering::particle_emitter emitter = ent.add_component<rendering::particle_emitter>().read();
+                emitter.particleSystemHandle = pointcloud;
+                ent.get_component_handle<rendering::particle_emitter>().write(emitter);
+            }
+            log::info("done creating particle system");
+
+#pragma endregion
         }
     }
 };
