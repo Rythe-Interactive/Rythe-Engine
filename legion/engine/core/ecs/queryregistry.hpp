@@ -119,7 +119,7 @@ namespace legion::core::ecs
          * @param queryId Id of the query to get the entities from.
          * @return sparse_map<id_type, entity_handle>& Sparse map with the ids as the key and the handles as the value.
          */
-        const entity_set& getEntities(id_type queryId);
+        entity_set getEntities(id_type queryId);
 
         /**@brief Add to reference count of a query.
          * @param queryId Id of query to increase reference count of.

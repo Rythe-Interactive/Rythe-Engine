@@ -176,7 +176,7 @@ namespace legion::core::ecs
             return std::make_tuple(getComponent<component_type>(entityId), getComponent<component_types>(entityId)...);
         }
 
-        template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
+        template<typename archetype_type, typename... component_types, typename = inherits_from<archetype_type, archetype_base>>
         L_NODISCARD auto getComponents(id_type entityId)
         {
             return archetype_type::get(this, entityId);
@@ -290,7 +290,6 @@ namespace legion::core::ecs
 
         /**@brief Create new entity.
          * @returns entity_handle Entity handle pointing to the newly created entity.
-         * @throws legion_entity_exists_error When the next entity id is somehow already taken. (only possible if someone else messed with my/Glyn's code)
          */
         L_NODISCARD entity_handle createEntity(id_type entityId = invalid_id);
 

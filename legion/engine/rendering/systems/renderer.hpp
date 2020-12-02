@@ -228,7 +228,7 @@ namespace legion::rendering
 
             bindToEvent<events::exit, &Renderer::onExit>();
             createProcess<&Renderer::render>("Rendering");
-            renderablesQuery = createQuery<renderable, position, rotation, scale>();
+            renderablesQuery = createQuery<mesh_filter, mesh_renderer, position, rotation, scale>();
             lightQuery = createQuery<light, position, rotation>();
             cameraQuery = createQuery<camera, position, rotation, scale>();
 
@@ -405,6 +405,9 @@ namespace legion::rendering
             if (!m_ecs->world.has_component<app::window>() || m_exit)
                 return;
 
+            renderablesQuery.queryEntities();
+            lightQuery.queryEntities();
+            cameraQuery.queryEntities();
             //waitForSync();
 
             time::clock renderClock;
@@ -442,21 +445,21 @@ namespace legion::rendering
 
                 for (auto ent : renderablesQuery)
                 {
-                    renderable rend = ent.get_component_handle<renderable>().read();
+                    renderable rend = ent.get_component_handles<renderable>();
 
-                    if (rend.material == invalid_material_handle)
+                    if (rend.get_material() == invalid_material_handle)
                     {
                         log::warn("Entity {} has an invalid material.", ent.get_id());
                         continue;
                     }
-                    if (rend.model == invalid_model_handle)
+                    if (rend.get_model() == invalid_model_handle)
                     {
                         log::warn("Entity {} has an invalid model.", ent.get_id());
                         continue;
                     }
 
                     transform transf = ent.get_component_handles<transform>();
-                    batches[rend.model][rend.material].push_back(transf.get_local_to_world_matrix());
+                    batches[rend.get_model()][rend.get_material()].push_back(transf.get_local_to_world_matrix());
                 }
 
                 for (auto ent : lightQuery)

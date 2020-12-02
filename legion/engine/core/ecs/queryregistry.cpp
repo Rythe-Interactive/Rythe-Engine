@@ -175,11 +175,11 @@ namespace legion::core::ecs
         return queryId;
     }
 
-    const entity_set& QueryRegistry::getEntities(id_type queryId)
+    entity_set QueryRegistry::getEntities(id_type queryId)
     {
         async::readonly_guard entguard(m_entityLock);
-
-        return *m_entityLists.get(queryId);
+        entity_set copy = *m_entityLists.get(queryId);
+        return copy;
     }
 
     void QueryRegistry::addReference(id_type queryId)

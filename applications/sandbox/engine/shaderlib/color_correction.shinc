@@ -79,6 +79,11 @@ vec3 BaierToneMap(vec3 color)
 
 vec3 LegionToneMap(vec3 color)
 {
+    return mix(-((color*color*color*color*color*368)-(color*color*color*color*151))/1.1, color, vec3(color.r > 0.306, color.g > 0.306, color.b > 0.306));
+}
+
+vec3 LegionToneMapOld(vec3 color)
+{
     return mix(-((color*color*color*4.2)-(color*color*4.1))/1.0, color, vec3(color.r > 0.5, color.g > 0.5, color.b > 0.5));
 }
 

@@ -53,6 +53,11 @@ namespace legion::application
             return m_isFullscreen;
         }
 
+        inline math::ivec2 size() const
+        {
+            return m_size;
+        }
+
         inline const std::string& title() const
         {
             return m_title;
@@ -62,6 +67,7 @@ namespace legion::application
         std::string m_title;
         bool m_isFullscreen;
         int m_swapInterval;
+        math::ivec2 m_size;
     };
 
     const window invalid_window = {};

@@ -251,5 +251,16 @@ class Test {
 	 * @}
 	 */
 
+    namespace literals
+	{
+        /**@brief. creates a view from a string literal
+         */
+       inline basic_resource operator""_res(const char* str,size_type len)
+       {
+           return basic_resource(std::string_view(str,len));
+       }
+
+	}
+
 	#endif
 }

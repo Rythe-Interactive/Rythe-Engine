@@ -92,9 +92,6 @@
     <ClInclude Include="systems\physicssystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="events\trigger_event.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="data\edge_label.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -120,6 +117,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\edgepenetrationquery.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="events\events.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

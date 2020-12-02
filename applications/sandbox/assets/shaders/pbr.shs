@@ -30,7 +30,7 @@ shader(fragment)
         Camera camera = GetCamera();
 
         vec3 worldNormal = GetWorldNormal();
-        Material material = ExtractMaterial(stdio(uv), camera, worldNormal, GetWorldTangent(worldNormal));
+        Material material = ExtractMaterial(stdio(uv), camera, worldNormal, GetWorldTangent(worldNormal), tonemap);
 
         if(discardExcess)
             if(material.texcoords.x < 0 || material.texcoords.x > 1 || material.texcoords.y < 0 || material.texcoords.y > 1)
@@ -43,11 +43,11 @@ shader(fragment)
 
         if(tonemap)
         {
-            fragment_color = vec4(WarmToneMap(lighting), material.albedo.a);
+             fragment_color = vec4(LegionToneMap(lighting), material.albedo.a);
         }
         else
         {
-            fragment_color = vec4(LegionToneMap(lighting), material.albedo.a);
+             fragment_color = vec4(LegionToneMap(lighting), material.albedo.a);
         }
     }
 }

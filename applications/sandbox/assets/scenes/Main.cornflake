@@ -1,10 +1,10 @@
 {
     "Entity": {
-        "Id": 40,
+        "Id": 39,
         "Name": "Entity",
         "Components": [
             {
-                "Owner": 40,
+                "Owner": 39,
                 "Component Type": 9547123436134525643,
                 "Component Name": "struct legion::core::scenemanagement::scene",
                 "NAME": "Main"
@@ -17,22 +17,21 @@
                 "Components": [
                     {
                         "Owner": 2,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 16147701225056486911
-                        },
-                        "value1": {
-                            "value0": 7014630808162887427
-                        }
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
+                    },
+                    {
+                        "Owner": 2,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 2,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
-                        "x": 1000.0,
-                        "y": 1000.0,
-                        "z": 1000.0
+                        "x": 10.0,
+                        "y": 10.0,
+                        "z": 10.0
                     },
                     {
                         "Owner": 2,
@@ -48,7 +47,7 @@
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": 0.0,
-                        "y": 0.0,
+                        "y": 0.009999999776482582,
                         "z": 0.0
                     }
                 ],
@@ -60,22 +59,21 @@
                 "Components": [
                     {
                         "Owner": 3,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 11545668865037648829
-                        },
-                        "value1": {
-                            "value0": 11545668865037648829
-                        }
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
+                    },
+                    {
+                        "Owner": 3,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 3,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
+                        "x": 10.0,
+                        "y": 10.0,
+                        "z": 10.0
                     },
                     {
                         "Owner": 3,
@@ -90,8 +88,8 @@
                         "Owner": 3,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
-                        "x": 0.0,
-                        "y": 0.0,
+                        "x": 10.0,
+                        "y": 0.009999999776482582,
                         "z": 0.0
                     }
                 ],
@@ -103,14 +101,13 @@
                 "Components": [
                     {
                         "Owner": 4,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 18257050065998780757
-                        },
-                        "value1": {
-                            "value0": 1796173653269013518
-                        }
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
+                    },
+                    {
+                        "Owner": 4,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 4,
@@ -133,9 +130,9 @@
                         "Owner": 4,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
-                        "x": 0.0,
+                        "x": 10.0,
                         "y": 0.009999999776482582,
-                        "z": 0.0
+                        "z": 10.0
                     }
                 ],
                 "Children": []
@@ -146,14 +143,13 @@
                 "Components": [
                     {
                         "Owner": 5,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 18257050065998780757
-                        },
-                        "value1": {
-                            "value0": 5048211821449389780
-                        }
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
+                    },
+                    {
+                        "Owner": 5,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 5,
@@ -178,7 +174,7 @@
                         "Component Name": "struct legion::core::position",
                         "x": 10.0,
                         "y": 0.009999999776482582,
-                        "z": 0.0
+                        "z": -10.0
                     }
                 ],
                 "Children": []
@@ -189,14 +185,13 @@
                 "Components": [
                     {
                         "Owner": 6,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 18257050065998780757
-                        },
-                        "value1": {
-                            "value0": 8671878212514116987
-                        }
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
+                    },
+                    {
+                        "Owner": 6,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 6,
@@ -217,92 +212,6 @@
                     },
                     {
                         "Owner": 6,
-                        "Component Type": 1703773829785910945,
-                        "Component Name": "struct legion::core::position",
-                        "x": 10.0,
-                        "y": 0.009999999776482582,
-                        "z": 10.0
-                    }
-                ],
-                "Children": []
-            },
-            {
-                "Id": 7,
-                "Name": "Entity",
-                "Components": [
-                    {
-                        "Owner": 7,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 18257050065998780757
-                        },
-                        "value1": {
-                            "value0": 6773895175305003099
-                        }
-                    },
-                    {
-                        "Owner": 7,
-                        "Component Type": 4306336647627884212,
-                        "Component Name": "struct legion::core::scale",
-                        "x": 10.0,
-                        "y": 10.0,
-                        "z": 10.0
-                    },
-                    {
-                        "Owner": 7,
-                        "Component Type": 7097645533378480892,
-                        "Component Name": "struct legion::core::rotation",
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0,
-                        "w": 1.0
-                    },
-                    {
-                        "Owner": 7,
-                        "Component Type": 1703773829785910945,
-                        "Component Name": "struct legion::core::position",
-                        "x": 10.0,
-                        "y": 0.009999999776482582,
-                        "z": -10.0
-                    }
-                ],
-                "Children": []
-            },
-            {
-                "Id": 8,
-                "Name": "Entity",
-                "Components": [
-                    {
-                        "Owner": 8,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 18257050065998780757
-                        },
-                        "value1": {
-                            "value0": 14417210513765110748
-                        }
-                    },
-                    {
-                        "Owner": 8,
-                        "Component Type": 4306336647627884212,
-                        "Component Name": "struct legion::core::scale",
-                        "x": 10.0,
-                        "y": 10.0,
-                        "z": 10.0
-                    },
-                    {
-                        "Owner": 8,
-                        "Component Type": 7097645533378480892,
-                        "Component Name": "struct legion::core::rotation",
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0,
-                        "w": 1.0
-                    },
-                    {
-                        "Owner": 8,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": -10.0,
@@ -313,22 +222,21 @@
                 "Children": []
             },
             {
-                "Id": 9,
+                "Id": 7,
                 "Name": "Entity",
                 "Components": [
                     {
-                        "Owner": 9,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 18257050065998780757
-                        },
-                        "value1": {
-                            "value0": 21745149160326459
-                        }
+                        "Owner": 7,
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
-                        "Owner": 9,
+                        "Owner": 7,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 7,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
                         "x": 10.0,
@@ -336,7 +244,7 @@
                         "z": 10.0
                     },
                     {
-                        "Owner": 9,
+                        "Owner": 7,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
                         "x": 0.0,
@@ -345,7 +253,7 @@
                         "w": 1.0
                     },
                     {
-                        "Owner": 9,
+                        "Owner": 7,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": -10.0,
@@ -356,22 +264,21 @@
                 "Children": []
             },
             {
-                "Id": 10,
+                "Id": 8,
                 "Name": "Entity",
                 "Components": [
                     {
-                        "Owner": 10,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 18257050065998780757
-                        },
-                        "value1": {
-                            "value0": 8630977270866280095
-                        }
+                        "Owner": 8,
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
-                        "Owner": 10,
+                        "Owner": 8,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 8,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
                         "x": 10.0,
@@ -379,7 +286,7 @@
                         "z": 10.0
                     },
                     {
-                        "Owner": 10,
+                        "Owner": 8,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
                         "x": 0.0,
@@ -388,7 +295,7 @@
                         "w": 1.0
                     },
                     {
-                        "Owner": 10,
+                        "Owner": 8,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": 0.0,
@@ -399,22 +306,21 @@
                 "Children": []
             },
             {
-                "Id": 11,
+                "Id": 9,
                 "Name": "Entity",
                 "Components": [
                     {
-                        "Owner": 11,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 18257050065998780757
-                        },
-                        "value1": {
-                            "value0": 11780878001689302868
-                        }
+                        "Owner": 9,
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
-                        "Owner": 11,
+                        "Owner": 9,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 9,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
                         "x": 10.0,
@@ -422,7 +328,7 @@
                         "z": 10.0
                     },
                     {
-                        "Owner": 11,
+                        "Owner": 9,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
                         "x": 0.0,
@@ -431,7 +337,7 @@
                         "w": 1.0
                     },
                     {
-                        "Owner": 11,
+                        "Owner": 9,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": 0.0,
@@ -442,22 +348,21 @@
                 "Children": []
             },
             {
-                "Id": 12,
+                "Id": 10,
                 "Name": "Entity",
                 "Components": [
                     {
-                        "Owner": 12,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 18257050065998780757
-                        },
-                        "value1": {
-                            "value0": 6083584261053556819
-                        }
+                        "Owner": 10,
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
-                        "Owner": 12,
+                        "Owner": 10,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 10,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
                         "x": 10.0,
@@ -465,7 +370,7 @@
                         "z": 10.0
                     },
                     {
-                        "Owner": 12,
+                        "Owner": 10,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
                         "x": 0.0,
@@ -474,11 +379,105 @@
                         "w": 1.0
                     },
                     {
-                        "Owner": 12,
+                        "Owner": 10,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": -10.0,
                         "y": 0.009999999776482582,
+                        "z": -10.0
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 11,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 11,
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
+                    },
+                    {
+                        "Owner": 11,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 11,
+                        "Component Type": 2383550021419578009,
+                        "Component Name": "struct legion::rendering::light"
+                    },
+                    {
+                        "Owner": 11,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 11,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.115916907787323,
+                        "y": -0.8804763555526733,
+                        "z": 0.2798481583595276,
+                        "w": 0.3647052049636841
+                    },
+                    {
+                        "Owner": 11,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 10.0,
+                        "y": 10.0,
+                        "z": 10.0
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 12,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 12,
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
+                    },
+                    {
+                        "Owner": 12,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 12,
+                        "Component Type": 2383550021419578009,
+                        "Component Name": "struct legion::rendering::light"
+                    },
+                    {
+                        "Owner": 12,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 12,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": -0.0,
+                        "y": -0.0,
+                        "z": -0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 12,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": -10.0,
+                        "y": 0.5,
                         "z": -10.0
                     }
                 ],
@@ -490,19 +489,18 @@
                 "Components": [
                     {
                         "Owner": 13,
-                        "Component Type": 2383550021419578009,
-                        "Component Name": "struct legion::rendering::light"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 13,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 5112364170975192303
-                        },
-                        "value1": {
-                            "value0": 5112364170975192303
-                        }
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 13,
+                        "Component Type": 2383550021419578009,
+                        "Component Name": "struct legion::rendering::light"
                     },
                     {
                         "Owner": 13,
@@ -516,18 +514,18 @@
                         "Owner": 13,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
-                        "x": 0.115916907787323,
-                        "y": -0.8804763555526733,
-                        "z": 0.2798481583595276,
-                        "w": 0.3647052049636841
+                        "x": -0.0,
+                        "y": -0.0,
+                        "z": -0.0,
+                        "w": 1.0
                     },
                     {
                         "Owner": 13,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
-                        "x": 10.0,
-                        "y": 10.0,
-                        "z": 10.0
+                        "x": 0.0,
+                        "y": 0.5,
+                        "z": -10.0
                     }
                 ],
                 "Children": []
@@ -538,19 +536,18 @@
                 "Components": [
                     {
                         "Owner": 14,
-                        "Component Type": 2383550021419578009,
-                        "Component Name": "struct legion::rendering::light"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 14,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 4127307817236017217
-                        },
-                        "value1": {
-                            "value0": 4127307817236017217
-                        }
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 14,
+                        "Component Type": 2383550021419578009,
+                        "Component Name": "struct legion::rendering::light"
                     },
                     {
                         "Owner": 14,
@@ -573,7 +570,7 @@
                         "Owner": 14,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
-                        "x": -10.0,
+                        "x": 10.0,
                         "y": 0.5,
                         "z": -10.0
                     }
@@ -586,19 +583,18 @@
                 "Components": [
                     {
                         "Owner": 15,
-                        "Component Type": 2383550021419578009,
-                        "Component Name": "struct legion::rendering::light"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 15,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 4127307817236017217
-                        },
-                        "value1": {
-                            "value0": 4127307817236017217
-                        }
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 15,
+                        "Component Type": 2383550021419578009,
+                        "Component Name": "struct legion::rendering::light"
                     },
                     {
                         "Owner": 15,
@@ -612,9 +608,9 @@
                         "Owner": 15,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
-                        "x": -0.0,
-                        "y": -0.0,
-                        "z": -0.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
                         "w": 1.0
                     },
                     {
@@ -622,8 +618,8 @@
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": 0.0,
-                        "y": 0.5,
-                        "z": -10.0
+                        "y": 1.0,
+                        "z": 0.0
                     }
                 ],
                 "Children": []
@@ -634,19 +630,18 @@
                 "Components": [
                     {
                         "Owner": 16,
-                        "Component Type": 2383550021419578009,
-                        "Component Name": "struct legion::rendering::light"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 16,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 4127307817236017217
-                        },
-                        "value1": {
-                            "value0": 4127307817236017217
-                        }
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 16,
+                        "Component Type": 2383550021419578009,
+                        "Component Name": "struct legion::rendering::light"
                     },
                     {
                         "Owner": 16,
@@ -660,18 +655,18 @@
                         "Owner": 16,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
-                        "x": -0.0,
-                        "y": -0.0,
-                        "z": -0.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
                         "w": 1.0
                     },
                     {
                         "Owner": 16,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
-                        "x": 10.0,
-                        "y": 0.5,
-                        "z": -10.0
+                        "x": -10.0,
+                        "y": 1.0,
+                        "z": 0.0
                     }
                 ],
                 "Children": []
@@ -682,19 +677,18 @@
                 "Components": [
                     {
                         "Owner": 17,
-                        "Component Type": 2383550021419578009,
-                        "Component Name": "struct legion::rendering::light"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 17,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 5592977308715235853
-                        },
-                        "value1": {
-                            "value0": 5592977308715235853
-                        }
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 17,
+                        "Component Type": 2383550021419578009,
+                        "Component Name": "struct legion::rendering::light"
                     },
                     {
                         "Owner": 17,
@@ -717,7 +711,7 @@
                         "Owner": 17,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
-                        "x": 0.0,
+                        "x": 10.0,
                         "y": 1.0,
                         "z": 0.0
                     }
@@ -730,118 +724,21 @@
                 "Components": [
                     {
                         "Owner": 18,
-                        "Component Type": 2383550021419578009,
-                        "Component Name": "struct legion::rendering::light"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 18,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 5592977308715235853
-                        },
-                        "value1": {
-                            "value0": 5592977308715235853
-                        }
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 18,
-                        "Component Type": 4306336647627884212,
-                        "Component Name": "struct legion::core::scale",
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    {
-                        "Owner": 18,
-                        "Component Type": 7097645533378480892,
-                        "Component Name": "struct legion::core::rotation",
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0,
-                        "w": 1.0
-                    },
-                    {
-                        "Owner": 18,
-                        "Component Type": 1703773829785910945,
-                        "Component Name": "struct legion::core::position",
-                        "x": -10.0,
-                        "y": 1.0,
-                        "z": 0.0
-                    }
-                ],
-                "Children": []
-            },
-            {
-                "Id": 19,
-                "Name": "Entity",
-                "Components": [
-                    {
-                        "Owner": 19,
-                        "Component Type": 2383550021419578009,
-                        "Component Name": "struct legion::rendering::light"
-                    },
-                    {
-                        "Owner": 19,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 5592977308715235853
-                        },
-                        "value1": {
-                            "value0": 5592977308715235853
-                        }
-                    },
-                    {
-                        "Owner": 19,
-                        "Component Type": 4306336647627884212,
-                        "Component Name": "struct legion::core::scale",
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    {
-                        "Owner": 19,
-                        "Component Type": 7097645533378480892,
-                        "Component Name": "struct legion::core::rotation",
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0,
-                        "w": 1.0
-                    },
-                    {
-                        "Owner": 19,
-                        "Component Type": 1703773829785910945,
-                        "Component Name": "struct legion::core::position",
-                        "x": 10.0,
-                        "y": 1.0,
-                        "z": 0.0
-                    }
-                ],
-                "Children": []
-            },
-            {
-                "Id": 20,
-                "Name": "Entity",
-                "Components": [
-                    {
-                        "Owner": 20,
                         "Component Type": 7523951964142181909,
                         "Component Name": "struct sah"
                     },
                     {
-                        "Owner": 20,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 6546381963644500447
-                        },
-                        "value1": {
-                            "value0": 6991063326977151602
-                        }
-                    },
-                    {
-                        "Owner": 20,
+                        "Owner": 18,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
                         "x": 1.0,
@@ -849,7 +746,7 @@
                         "z": 1.0
                     },
                     {
-                        "Owner": 20,
+                        "Owner": 18,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
                         "x": 0.0,
@@ -858,7 +755,7 @@
                         "w": 1.0
                     },
                     {
-                        "Owner": 20,
+                        "Owner": 18,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": 0.0,
@@ -869,27 +766,26 @@
                 "Children": []
             },
             {
-                "Id": 21,
+                "Id": 19,
                 "Name": "Entity",
                 "Components": [
                     {
-                        "Owner": 21,
+                        "Owner": 19,
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
+                    },
+                    {
+                        "Owner": 19,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 19,
                         "Component Type": 7523951964142181909,
                         "Component Name": "struct sah"
                     },
                     {
-                        "Owner": 21,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 6546381963644500447
-                        },
-                        "value1": {
-                            "value0": 11132040061712174085
-                        }
-                    },
-                    {
-                        "Owner": 21,
+                        "Owner": 19,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
                         "x": 1.0,
@@ -897,7 +793,7 @@
                         "z": 1.0
                     },
                     {
-                        "Owner": 21,
+                        "Owner": 19,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
                         "x": 0.0,
@@ -906,7 +802,7 @@
                         "w": 1.0
                     },
                     {
-                        "Owner": 21,
+                        "Owner": 19,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": 0.0,
@@ -917,27 +813,26 @@
                 "Children": []
             },
             {
-                "Id": 22,
+                "Id": 20,
                 "Name": "Entity",
                 "Components": [
                     {
-                        "Owner": 22,
+                        "Owner": 20,
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
+                    },
+                    {
+                        "Owner": 20,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 20,
                         "Component Type": 7523951964142181909,
                         "Component Name": "struct sah"
                     },
                     {
-                        "Owner": 22,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 6546381963644500447
-                        },
-                        "value1": {
-                            "value0": 5048211821449389780
-                        }
-                    },
-                    {
-                        "Owner": 22,
+                        "Owner": 20,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
                         "x": 1.0,
@@ -945,7 +840,7 @@
                         "z": 1.0
                     },
                     {
-                        "Owner": 22,
+                        "Owner": 20,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
                         "x": 0.0,
@@ -954,7 +849,7 @@
                         "w": 1.0
                     },
                     {
-                        "Owner": 22,
+                        "Owner": 20,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": 0.0,
@@ -965,24 +860,112 @@
                 "Children": []
             },
             {
+                "Id": 21,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 21,
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
+                    },
+                    {
+                        "Owner": 21,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 21,
+                        "Component Type": 7523951964142181909,
+                        "Component Name": "struct sah"
+                    },
+                    {
+                        "Owner": 21,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 21,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 21,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 0.0,
+                        "y": 3.0,
+                        "z": 2.0999999046325685
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 22,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 22,
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
+                    },
+                    {
+                        "Owner": 22,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 22,
+                        "Component Type": 7523951964142181909,
+                        "Component Name": "struct sah"
+                    },
+                    {
+                        "Owner": 22,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 22,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 22,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 0.0,
+                        "y": 10.0,
+                        "z": 0.0
+                    }
+                ],
+                "Children": []
+            },
+            {
                 "Id": 23,
                 "Name": "Entity",
                 "Components": [
                     {
                         "Owner": 23,
-                        "Component Type": 7523951964142181909,
-                        "Component Name": "struct sah"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 23,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 13126652788706525288
-                        },
-                        "value1": {
-                            "value0": 8630977270866280095
-                        }
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 23,
@@ -1006,7 +989,7 @@
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": 0.0,
-                        "y": 10.0,
+                        "y": 0.0,
                         "z": 0.0
                     }
                 ],
@@ -1018,14 +1001,18 @@
                 "Components": [
                     {
                         "Owner": 24,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 3645275238404220856
-                        },
-                        "value1": {
-                            "value0": 13544847828024012600
-                        }
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
+                    },
+                    {
+                        "Owner": 24,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 24,
+                        "Component Type": 7523951964142181909,
+                        "Component Name": "struct sah"
                     },
                     {
                         "Owner": 24,
@@ -1048,8 +1035,8 @@
                         "Owner": 24,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
-                        "x": 0.0,
-                        "y": 0.0,
+                        "x": 5.099999904632568,
+                        "y": 9.0,
                         "z": 0.0
                     }
                 ],
@@ -1061,19 +1048,18 @@
                 "Components": [
                     {
                         "Owner": 25,
-                        "Component Type": 7523951964142181909,
-                        "Component Name": "struct sah"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 25,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 5503224543670688896
-                        },
-                        "value1": {
-                            "value0": 8630977270866280095
-                        }
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 25,
+                        "Component Type": 7523951964142181909,
+                        "Component Name": "struct sah"
                     },
                     {
                         "Owner": 25,
@@ -1096,9 +1082,9 @@
                         "Owner": 25,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
-                        "x": 5.099999904632568,
-                        "y": 9.0,
-                        "z": 0.0
+                        "x": 0.0,
+                        "y": 3.0,
+                        "z": -5.099999904632568
                     }
                 ],
                 "Children": []
@@ -1109,19 +1095,18 @@
                 "Components": [
                     {
                         "Owner": 26,
-                        "Component Type": 7523951964142181909,
-                        "Component Name": "struct sah"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 26,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 9915782786907616376
-                        },
-                        "value1": {
-                            "value0": 5048211821449389780
-                        }
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 26,
+                        "Component Type": 7523951964142181909,
+                        "Component Name": "struct sah"
                     },
                     {
                         "Owner": 26,
@@ -1146,7 +1131,7 @@
                         "Component Name": "struct legion::core::position",
                         "x": 0.0,
                         "y": 3.0,
-                        "z": -5.099999904632568
+                        "z": -8.0
                     }
                 ],
                 "Children": []
@@ -1157,19 +1142,18 @@
                 "Components": [
                     {
                         "Owner": 27,
-                        "Component Type": 7523951964142181909,
-                        "Component Name": "struct sah"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 27,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 9915782786907616376
-                        },
-                        "value1": {
-                            "value0": 8671878212514116987
-                        }
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 27,
+                        "Component Type": 7523951964142181909,
+                        "Component Name": "struct sah"
                     },
                     {
                         "Owner": 27,
@@ -1194,7 +1178,7 @@
                         "Component Name": "struct legion::core::position",
                         "x": 0.0,
                         "y": 3.0,
-                        "z": -8.0
+                        "z": -2.200000047683716
                     }
                 ],
                 "Children": []
@@ -1205,19 +1189,18 @@
                 "Components": [
                     {
                         "Owner": 28,
-                        "Component Type": 7523951964142181909,
-                        "Component Name": "struct sah"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 28,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 9915782786907616376
-                        },
-                        "value1": {
-                            "value0": 6773895175305003099
-                        }
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 28,
+                        "Component Type": 7523951964142181909,
+                        "Component Name": "struct sah"
                     },
                     {
                         "Owner": 28,
@@ -1238,54 +1221,6 @@
                     },
                     {
                         "Owner": 28,
-                        "Component Type": 1703773829785910945,
-                        "Component Name": "struct legion::core::position",
-                        "x": 0.0,
-                        "y": 3.0,
-                        "z": -2.200000047683716
-                    }
-                ],
-                "Children": []
-            },
-            {
-                "Id": 29,
-                "Name": "Entity",
-                "Components": [
-                    {
-                        "Owner": 29,
-                        "Component Type": 7523951964142181909,
-                        "Component Name": "struct sah"
-                    },
-                    {
-                        "Owner": 29,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 9915782786907616376
-                        },
-                        "value1": {
-                            "value0": 3874232068280630314
-                        }
-                    },
-                    {
-                        "Owner": 29,
-                        "Component Type": 4306336647627884212,
-                        "Component Name": "struct legion::core::scale",
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    {
-                        "Owner": 29,
-                        "Component Type": 7097645533378480892,
-                        "Component Name": "struct legion::core::rotation",
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0,
-                        "w": 1.0
-                    },
-                    {
-                        "Owner": 29,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": 4.0,
@@ -1296,27 +1231,26 @@
                 "Children": []
             },
             {
-                "Id": 30,
+                "Id": 29,
                 "Name": "Entity",
                 "Components": [
                     {
-                        "Owner": 30,
+                        "Owner": 29,
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
+                    },
+                    {
+                        "Owner": 29,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 29,
                         "Component Type": 7523951964142181909,
                         "Component Name": "struct sah"
                     },
                     {
-                        "Owner": 30,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 9915782786907616376
-                        },
-                        "value1": {
-                            "value0": 14417210513765110748
-                        }
-                    },
-                    {
-                        "Owner": 30,
+                        "Owner": 29,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
                         "x": 1.0,
@@ -1324,7 +1258,7 @@
                         "z": 1.0
                     },
                     {
-                        "Owner": 30,
+                        "Owner": 29,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
                         "x": 0.0,
@@ -1333,7 +1267,7 @@
                         "w": 1.0
                     },
                     {
-                        "Owner": 30,
+                        "Owner": 29,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": 4.0,
@@ -1344,27 +1278,26 @@
                 "Children": []
             },
             {
-                "Id": 31,
+                "Id": 30,
                 "Name": "Entity",
                 "Components": [
                     {
-                        "Owner": 31,
+                        "Owner": 30,
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
+                    },
+                    {
+                        "Owner": 30,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 30,
                         "Component Type": 7523951964142181909,
                         "Component Name": "struct sah"
                     },
                     {
-                        "Owner": 31,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 9915782786907616376
-                        },
-                        "value1": {
-                            "value0": 6083584261053556819
-                        }
-                    },
-                    {
-                        "Owner": 31,
+                        "Owner": 30,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
                         "x": 1.0,
@@ -1372,7 +1305,7 @@
                         "z": 1.0
                     },
                     {
-                        "Owner": 31,
+                        "Owner": 30,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
                         "x": 0.0,
@@ -1381,7 +1314,7 @@
                         "w": 1.0
                     },
                     {
-                        "Owner": 31,
+                        "Owner": 30,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": 4.0,
@@ -1392,24 +1325,70 @@
                 "Children": []
             },
             {
+                "Id": 31,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 31,
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
+                    },
+                    {
+                        "Owner": 31,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 31,
+                        "Component Type": 7523951964142181909,
+                        "Component Name": "struct sah"
+                    },
+                    {
+                        "Owner": 31,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 31,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 31,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 0.0,
+                        "y": 3.0,
+                        "z": -3.5999999046325685
+                    }
+                ],
+                "Children": []
+            },
+            {
                 "Id": 32,
                 "Name": "Entity",
                 "Components": [
                     {
                         "Owner": 32,
-                        "Component Type": 7523951964142181909,
-                        "Component Name": "struct sah"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 32,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 16147701225056486911
-                        },
-                        "value1": {
-                            "value0": 5048211821449389780
-                        }
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 32,
+                        "Component Type": 7523951964142181909,
+                        "Component Name": "struct sah"
                     },
                     {
                         "Owner": 32,
@@ -1434,7 +1413,7 @@
                         "Component Name": "struct legion::core::position",
                         "x": 0.0,
                         "y": 3.0,
-                        "z": -3.5999999046325685
+                        "z": -6.5
                     }
                 ],
                 "Children": []
@@ -1445,19 +1424,18 @@
                 "Components": [
                     {
                         "Owner": 33,
-                        "Component Type": 7523951964142181909,
-                        "Component Name": "struct sah"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 33,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 16147701225056486911
-                        },
-                        "value1": {
-                            "value0": 8671878212514116987
-                        }
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 33,
+                        "Component Type": 7523951964142181909,
+                        "Component Name": "struct sah"
                     },
                     {
                         "Owner": 33,
@@ -1482,7 +1460,7 @@
                         "Component Name": "struct legion::core::position",
                         "x": 0.0,
                         "y": 3.0,
-                        "z": -6.5
+                        "z": -0.699999988079071
                     }
                 ],
                 "Children": []
@@ -1493,19 +1471,18 @@
                 "Components": [
                     {
                         "Owner": 34,
-                        "Component Type": 7523951964142181909,
-                        "Component Name": "struct sah"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 34,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 16147701225056486911
-                        },
-                        "value1": {
-                            "value0": 6773895175305003099
-                        }
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 34,
+                        "Component Type": 7523951964142181909,
+                        "Component Name": "struct sah"
                     },
                     {
                         "Owner": 34,
@@ -1526,54 +1503,6 @@
                     },
                     {
                         "Owner": 34,
-                        "Component Type": 1703773829785910945,
-                        "Component Name": "struct legion::core::position",
-                        "x": 0.0,
-                        "y": 3.0,
-                        "z": -0.699999988079071
-                    }
-                ],
-                "Children": []
-            },
-            {
-                "Id": 35,
-                "Name": "Entity",
-                "Components": [
-                    {
-                        "Owner": 35,
-                        "Component Type": 7523951964142181909,
-                        "Component Name": "struct sah"
-                    },
-                    {
-                        "Owner": 35,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 16147701225056486911
-                        },
-                        "value1": {
-                            "value0": 3874232068280630314
-                        }
-                    },
-                    {
-                        "Owner": 35,
-                        "Component Type": 4306336647627884212,
-                        "Component Name": "struct legion::core::scale",
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    {
-                        "Owner": 35,
-                        "Component Type": 7097645533378480892,
-                        "Component Name": "struct legion::core::rotation",
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0,
-                        "w": 1.0
-                    },
-                    {
-                        "Owner": 35,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": 4.0,
@@ -1584,27 +1513,26 @@
                 "Children": []
             },
             {
-                "Id": 36,
+                "Id": 35,
                 "Name": "Entity",
                 "Components": [
                     {
-                        "Owner": 36,
+                        "Owner": 35,
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
+                    },
+                    {
+                        "Owner": 35,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 35,
                         "Component Type": 7523951964142181909,
                         "Component Name": "struct sah"
                     },
                     {
-                        "Owner": 36,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 16147701225056486911
-                        },
-                        "value1": {
-                            "value0": 14417210513765110748
-                        }
-                    },
-                    {
-                        "Owner": 36,
+                        "Owner": 35,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
                         "x": 1.0,
@@ -1612,7 +1540,7 @@
                         "z": 1.0
                     },
                     {
-                        "Owner": 36,
+                        "Owner": 35,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
                         "x": 0.0,
@@ -1621,7 +1549,7 @@
                         "w": 1.0
                     },
                     {
-                        "Owner": 36,
+                        "Owner": 35,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": 4.0,
@@ -1632,27 +1560,26 @@
                 "Children": []
             },
             {
-                "Id": 37,
+                "Id": 36,
                 "Name": "Entity",
                 "Components": [
                     {
-                        "Owner": 37,
+                        "Owner": 36,
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
+                    },
+                    {
+                        "Owner": 36,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 36,
                         "Component Type": 7523951964142181909,
                         "Component Name": "struct sah"
                     },
                     {
-                        "Owner": 37,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 16147701225056486911
-                        },
-                        "value1": {
-                            "value0": 6083584261053556819
-                        }
-                    },
-                    {
-                        "Owner": 37,
+                        "Owner": 36,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
                         "x": 1.0,
@@ -1660,7 +1587,7 @@
                         "z": 1.0
                     },
                     {
-                        "Owner": 37,
+                        "Owner": 36,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
                         "x": 0.0,
@@ -1669,7 +1596,7 @@
                         "w": 1.0
                     },
                     {
-                        "Owner": 37,
+                        "Owner": 36,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": 4.0,
@@ -1680,22 +1607,21 @@
                 "Children": []
             },
             {
-                "Id": 38,
+                "Id": 37,
                 "Name": "Entity",
                 "Components": [
                     {
-                        "Owner": 38,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 6842981191551175902
-                        },
-                        "value1": {
-                            "value0": 5388337048991757045
-                        }
+                        "Owner": 37,
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
-                        "Owner": 38,
+                        "Owner": 37,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 37,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
                         "x": 0.5,
@@ -1703,7 +1629,7 @@
                         "z": 0.5
                     },
                     {
-                        "Owner": 38,
+                        "Owner": 37,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
                         "x": 0.0,
@@ -1712,7 +1638,7 @@
                         "w": 1.0
                     },
                     {
-                        "Owner": 38,
+                        "Owner": 37,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": -5.0,
@@ -1720,7 +1646,7 @@
                         "z": 10.0
                     },
                     {
-                        "Owner": 38,
+                        "Owner": 37,
                         "Component Type": 12879719932595839335,
                         "Component Name": "struct legion::audio::audio_source"
                     }
@@ -1728,22 +1654,21 @@
                 "Children": []
             },
             {
-                "Id": 39,
+                "Id": 38,
                 "Name": "Entity",
                 "Components": [
                     {
-                        "Owner": 39,
-                        "Component Type": 6208564340805693071,
-                        "Component Name": "struct legion::rendering::renderable",
-                        "value0": {
-                            "value0": 6842981191551175902
-                        },
-                        "value1": {
-                            "value0": 5388337048991757045
-                        }
+                        "Owner": 38,
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
-                        "Owner": 39,
+                        "Owner": 38,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 38,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
                         "x": 0.5,
@@ -1751,7 +1676,7 @@
                         "z": 0.5
                     },
                     {
-                        "Owner": 39,
+                        "Owner": 38,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
                         "x": 0.0,
@@ -1760,7 +1685,7 @@
                         "w": 1.0
                     },
                     {
-                        "Owner": 39,
+                        "Owner": 38,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": 5.0,
@@ -1768,7 +1693,7 @@
                         "z": 10.0
                     },
                     {
-                        "Owner": 39,
+                        "Owner": 38,
                         "Component Type": 12879719932595839335,
                         "Component Name": "struct legion::audio::audio_source"
                     }

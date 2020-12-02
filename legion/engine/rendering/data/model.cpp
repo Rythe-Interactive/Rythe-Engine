@@ -9,22 +9,22 @@ namespace legion::rendering
     sparse_map<id_type, model> ModelCache::m_models;
     async::readonly_rw_spinlock ModelCache::m_modelLock;
 
-    bool model_handle::is_buffered()
+    bool model_handle::is_buffered() const
     {
         return ModelCache::get_model(id).buffered;
     }
 
-    void model_handle::buffer_data(app::gl_id matrixBuffer)
+    void model_handle::buffer_data(app::gl_id matrixBuffer) const
     {
         ModelCache::buffer(id, matrixBuffer);
     }
 
-    mesh_handle model_handle::get_mesh()
+    mesh_handle model_handle::get_mesh() const
     {
         return ModelCache::get_mesh(id);
     }
 
-    const model& model_handle::get_model()
+    const model& model_handle::get_model() const
     {
         return ModelCache::get_model(id);
     }
@@ -126,6 +126,11 @@ namespace legion::rendering
         std::string meshName;
 
         {// Load the mesh if it wasn't already. (It's called MeshCache for a reason.)
+            if (settings.contextFolder.get_virtual_path() == "")
+            {
+                settings.contextFolder = file.parent();
+            }
+
             auto handle = MeshCache::create_mesh(name, file, settings);
             if (handle == invalid_mesh_handle)
             {
@@ -151,6 +156,217 @@ namespace legion::rendering
         }
 
         log::debug("Created model {} with mesh: {}", name, meshName);
+
+        return { id };
+    }
+
+    model_handle ModelCache::create_model(const std::string& name)
+    {
+        id_type id = nameHash(name);
+
+        {// Check if the model already exists.
+            async::readonly_guard guard(m_modelLock);
+            if (m_models.contains(id))
+                return { id };
+        }
+
+        model model{};
+        std::string meshName;
+
+        {// Load the mesh if it wasn't already. (It's called MeshCache for a reason.)
+            auto handle = MeshCache::get_handle(name);
+            if (handle == invalid_mesh_handle)
+            {
+                log::error("Failed to load model {}", name);
+                return invalid_model_handle;
+            }
+
+            // Copy the sub-mesh data.
+            auto [lock, data] = handle.get();
+            async::readonly_guard guard(lock);
+            meshName = data.fileName;
+
+            for (auto& submeshData : data.submeshes)
+                model.submeshes.push_back(submeshData);
+        }
+
+        // The model still needs to be buffered on the rendering thread.
+        model.buffered = false;
+
+        { // Insert the model into the model list.
+            async::readwrite_guard guard(m_modelLock);
+            m_models.insert(id, model);
+        }
+
+        log::trace("Created model {} with mesh: {}", name, meshName);
+
+        return { id };
+    }
+
+    model_handle ModelCache::create_model(const std::string& name, id_type meshId)
+    {
+        id_type id = nameHash(name);
+
+        {// Check if the model already exists.
+            async::readonly_guard guard(m_modelLock);
+            if (m_models.contains(id))
+                return { id };
+        }
+
+        model model{};
+        std::string meshName;
+
+        {// Load the mesh if it wasn't already. (It's called MeshCache for a reason.)
+            auto handle = MeshCache::get_handle(meshId);
+            if (handle == invalid_mesh_handle)
+            {
+                log::error("Failed to load model {}", name);
+                return invalid_model_handle;
+            }
+
+            // Copy the sub-mesh data.
+            auto [lock, data] = handle.get();
+            async::readonly_guard guard(lock);
+            meshName = data.fileName;
+
+            for (auto& submeshData : data.submeshes)
+                model.submeshes.push_back(submeshData);
+        }
+
+        // The model still needs to be buffered on the rendering thread.
+        model.buffered = false;
+
+        { // Insert the model into the model list.
+            async::readwrite_guard guard(m_modelLock);
+            m_models.insert(id, model);
+        }
+
+        log::trace("Created model {} with mesh: {}", name, meshName);
+
+        return { id };
+    }
+
+    model_handle ModelCache::create_model(id_type id)
+    {
+        {// Check if the model already exists.
+            async::readonly_guard guard(m_modelLock);
+            if (m_models.contains(id))
+                return { id };
+        }
+
+        model model{};
+        std::string meshName;
+
+        {// Load the mesh if it wasn't already. (It's called MeshCache for a reason.)
+            auto handle = MeshCache::get_handle(id);
+            if (handle == invalid_mesh_handle)
+            {
+                log::error("Failed to load model {}", id);
+                return invalid_model_handle;
+            }
+
+            // Copy the sub-mesh data.
+            auto [lock, data] = handle.get();
+            async::readonly_guard guard(lock);
+            meshName = data.fileName;
+
+            for (auto& submeshData : data.submeshes)
+                model.submeshes.push_back(submeshData);
+        }
+
+        // The model still needs to be buffered on the rendering thread.
+        model.buffered = false;
+
+        { // Insert the model into the model list.
+            async::readwrite_guard guard(m_modelLock);
+            m_models.insert(id, model);
+        }
+
+        log::trace("Created model {} with mesh: {}", id, meshName);
+
+        return { id };
+    }
+
+    model_handle ModelCache::create_model(const std::string& name, mesh_handle mesh)
+    {
+        id_type id = nameHash(name);
+
+        {// Check if the model already exists.
+            async::readonly_guard guard(m_modelLock);
+            if (m_models.contains(id))
+                return { id };
+        }
+
+        model model{};
+        std::string meshName;
+
+        {// Load the mesh if it wasn't already. (It's called MeshCache for a reason.)
+            if (mesh == invalid_mesh_handle)
+            {
+                log::error("Failed to load model {}", name);
+                return invalid_model_handle;
+            }
+
+            // Copy the sub-mesh data.
+            auto [lock, data] = mesh.get();
+            async::readonly_guard guard(lock);
+            meshName = data.fileName;
+
+            for (auto& submeshData : data.submeshes)
+                model.submeshes.push_back(submeshData);
+        }
+
+        // The model still needs to be buffered on the rendering thread.
+        model.buffered = false;
+
+        { // Insert the model into the model list.
+            async::readwrite_guard guard(m_modelLock);
+            m_models.insert(id, model);
+        }
+
+        log::trace("Created model {} with mesh: {}", name, meshName);
+
+        return { id };
+    }
+
+    model_handle ModelCache::create_model(mesh_handle mesh)
+    {
+        id_type id = mesh.id;
+
+        {// Check if the model already exists.
+            async::readonly_guard guard(m_modelLock);
+            if (m_models.contains(id))
+                return { id };
+        }
+
+        model model{};
+        std::string meshName;
+
+        {// Load the mesh if it wasn't already. (It's called MeshCache for a reason.)
+            if (mesh == invalid_mesh_handle)
+            {
+                log::error("Failed to load model {}", id);
+                return invalid_model_handle;
+            }
+
+            // Copy the sub-mesh data.
+            auto [lock, data] = mesh.get();
+            async::readonly_guard guard(lock);
+            meshName = data.fileName;
+
+            for (auto& submeshData : data.submeshes)
+                model.submeshes.push_back(submeshData);
+        }
+
+        // The model still needs to be buffered on the rendering thread.
+        model.buffered = false;
+
+        { // Insert the model into the model list.
+            async::readwrite_guard guard(m_modelLock);
+            m_models.insert(id, model);
+        }
+
+        log::trace("Created model {} with mesh: {}", id, meshName);
 
         return { id };
     }

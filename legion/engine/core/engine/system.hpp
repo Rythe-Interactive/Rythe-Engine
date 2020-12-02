@@ -93,6 +93,16 @@ namespace legion::core
             m_eventBus->raiseEvent<event_type>(arguments...);
         }
 
+        void raiseEvent(std::unique_ptr<events::event_base>&& value)
+        {
+            m_eventBus->raiseEvent(std::move(value));
+        }
+
+        void raiseEventUnsafe(std::unique_ptr<events::event_base>&& value, id_type id)
+        {
+            m_eventBus->raiseEventUnsafe(std::move(value), id);
+        }
+
         template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
         L_NODISCARD bool checkEvent() const
         {
