@@ -26,6 +26,7 @@ public:
     ecs::entity_handle skybox;
     ecs::entity_handle groundplane;
 
+    bool escaped = false;
     float movementspeed = 5.f;
 
     virtual void setup()
@@ -119,10 +120,9 @@ public:
     {
         if (action->released())
         {
-            static bool enabled = false;
             app::window window = m_ecs->world.get_component_handle<app::window>().read();
-            enabled = !enabled;
-            window.enableCursor(enabled);
+            escaped = !escaped;
+            window.enableCursor(escaped);
             window.show();
         }
     }
@@ -141,6 +141,9 @@ public:
 
     void onPlayerMove(player_move* action)
     {
+        if (escaped)
+            return;
+
         auto posH = camera.get_component_handle<position>();
         auto rot = camera.get_component_handle<rotation>().read();
         math::vec3 move = math::toMat3(rot) * math::vec3(0.f, 0.f, 1.f);
@@ -154,6 +157,9 @@ public:
 
     void onPlayerStrive(player_strive* action)
     {
+        if (escaped)
+            return;
+
         auto posH = camera.get_component_handle<position>();
         auto rot = camera.get_component_handle<rotation>().read();
         math::vec3 move = math::toMat3(rot) * math::vec3(1.f, 0.f, 0.f);
@@ -167,6 +173,9 @@ public:
 
     void onPlayerFly(player_fly* action)
     {
+        if (escaped)
+            return;
+
         auto posH = camera.get_component_handle<position>();
         posH.fetch_add(math::vec3(0.f, action->value * action->input_delta * movementspeed, 0.f));
 
@@ -176,6 +185,9 @@ public:
 
     void onPlayerLookX(player_look_x* action)
     {
+        if (escaped)
+            return;
+
         auto rotH = camera.get_component_handle<rotation>();
         rotH.fetch_multiply(math::angleAxis(action->value * action->input_delta * 500.f, math::vec3(0, 1, 0)));
         rotH.read_modify_write(rotation(), [](const rotation& src, rotation&& dummy)
@@ -194,6 +206,9 @@ public:
 
     void onPlayerLookY(player_look_y* action)
     {
+        if (escaped)
+            return;
+
         auto rotH = camera.get_component_handle<rotation>();
         rotH.fetch_multiply(math::angleAxis(action->value * action->input_delta * 500.f, math::vec3(1, 0, 0)));
         rotH.read_modify_write(rotation(), [](const rotation& src, rotation&& dummy)
