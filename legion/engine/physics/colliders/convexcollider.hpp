@@ -93,6 +93,8 @@ namespace legion::physics
                 return;
             }
 
+            log::debug("Vertices: {} ; {} ; {} ; {}", mesh.vertices.at(index0), mesh.vertices.at(index1), mesh.vertices.at(index2), mesh.vertices.at(index3));
+
             vertices.push_back(mesh.vertices.at(index0));
             vertices.push_back(mesh.vertices.at(index1));
             vertices.push_back(mesh.vertices.at(index2));
@@ -475,6 +477,9 @@ namespace legion::physics
             // Save the index which is furthest from the line between the mesh vertices at lineStartIndex and lineEndIndex
             size_type index = mesh.vertices.size();
             log::debug("Math function debug\n");
+
+            // Possible speed up.
+            // Check if mesh.vertices.at(i) is equal to line start coord of line end coord. Such an if check is possibly faster than the math
             for (int i = 0; i < mesh.vertices.size(); ++i)
             {
                 if (i == lineStartIndex || i == lineEndIndex) continue;
@@ -504,10 +509,12 @@ namespace legion::physics
             float largestDistance = 0;
             // Save the index which is furthest from the plane between the mesh vertices at the plane indices
             int index = mesh.vertices.size();
+            // Possible speed up.
+            // Check if mesh.vertices.at(i) is equal to line start coord of line end coord. Such an if check is possibly faster than the math
             for (int i = 0; i < mesh.vertices.size(); ++i)
             {
                 if (i == planeIndex0 || i == planeIndex1 || i == planeIndex2) continue;
-                float dist = math::abs(math::dot(normal, mesh.vertices.at(i) - mesh.vertices.at(planeIndex0)));
+                float dist = math::abs(math::pointToTriangle(mesh.vertices.at(i), mesh.vertices.at(planeIndex0), mesh.vertices.at(planeIndex1), mesh.vertices.at(planeIndex2), normal));
                 log::debug("{} dist: {}", i, dist);
                 if (dist > largestDistance)
                 {

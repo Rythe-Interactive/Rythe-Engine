@@ -42,25 +42,25 @@ public:
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
-
-            auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
-            directionalLightMH = rendering::MaterialCache::create_material("directional light", colorshader);
-            directionalLightMH.set_param("color", math::color(1, 1, 0.8f));
-
             cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
-            vertexColor = rendering::MaterialCache::create_material("vertex color", "assets://shaders/vertexcolor.shs"_view);
             wireFrameH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.shs"_view);
 
             // Create physics entity
             {
                 auto ent = createEntity();
-                //ent.add_components<rendering::renderable>({ cube, vertexColor });
+                ent.add_components<rendering::renderable>({ cube, wireFrameH });
                 ent.add_components<transform>(position(0, 0, 0), rotation(), scale(1));
                 auto pcH = ent.add_component<physics::physicsComponent>();
                 auto pc = pcH.read();
 
                 auto mesh = cube.get_mesh();
                 collider = pc.ConstructConvexHull(mesh);
+            }
+            // Create entity for reference
+            {
+                auto ent = createEntity();
+                ent.add_components<rendering::renderable>({ cube, wireFrameH });
+                ent.add_components<transform>(position(1.5f, 0, 0), rotation(), scale(1));
             }
 
         }
