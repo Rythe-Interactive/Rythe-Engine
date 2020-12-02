@@ -290,7 +290,6 @@ namespace legion::core::ecs
 
         /**@brief Create new entity.
          * @returns entity_handle Entity handle pointing to the newly created entity.
-         * @throws legion_entity_exists_error When the next entity id is somehow already taken. (only possible if someone else messed with my/Glyn's code)
          */
         L_NODISCARD entity_handle createEntity(id_type entityId = invalid_id);
 
