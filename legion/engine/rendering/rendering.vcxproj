@@ -18,6 +18,16 @@
     <ClCompile Include="data\particle_system_cache.cpp" />
     <ClCompile Include="data\shader.cpp" />
     <ClCompile Include="data\texture.cpp" />
+    <ClCompile Include="imgui_impl\ImCurveEdit.cpp" />
+    <ClCompile Include="imgui_impl\ImGradient.cpp" />
+    <ClCompile Include="imgui_impl\imgui.cpp" />
+    <ClCompile Include="imgui_impl\ImGuizmo.cpp" />
+    <ClCompile Include="imgui_impl\imgui_demo.cpp" />
+    <ClCompile Include="imgui_impl\imgui_draw.cpp" />
+    <ClCompile Include="imgui_impl\imgui_impl_glfw.cpp" />
+    <ClCompile Include="imgui_impl\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="imgui_impl\imgui_widgets.cpp" />
+    <ClCompile Include="imgui_impl\ImSequencer.cpp" />
     <ClCompile Include="shadercompiler\shadercompiler.cpp" />
     <ClCompile Include="data\particle_system_base.cpp" />
     <ClCompile Include="systems\renderer.cpp" />
@@ -38,6 +48,7 @@
     <ClInclude Include="detail\tiny_obj_loader.h" />
     <ClInclude Include="data\model.hpp" />
     <ClInclude Include="data\texture.hpp" />
+    <ClInclude Include="systems\imgui_gui_system.hpp" />
     <ClInclude Include="systems\particle_system_manager.hpp" />
     <ClInclude Include="module\renderingmodule.hpp" />
     <ClInclude Include="pipeline\base\pipeline.hpp" />

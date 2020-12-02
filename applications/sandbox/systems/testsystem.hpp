@@ -652,7 +652,11 @@ public:
 
         createProcess<&TestSystem::update>("Update");
         //createProcess<&TestSystem::drawInterval>("TestChain");
+
+
     }
+
+
 
     void testPhysicsEvent(physics::TriggerEvent* evnt)
     {
