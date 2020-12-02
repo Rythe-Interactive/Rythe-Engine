@@ -492,7 +492,7 @@ namespace legion::application
             return;
 
         async::readonly_guard guard(m_creationLock);
-
+        m_windowQuery.queryEntities();
         for (auto entity : m_windowQuery)
         {
             window win = entity.get_component_handle<window>().read();

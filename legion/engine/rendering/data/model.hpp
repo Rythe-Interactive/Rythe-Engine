@@ -36,10 +36,10 @@ namespace legion::rendering
         id_type id;
         
         bool operator==(const model_handle& other) const { return id == other.id; }
-        bool is_buffered();
-        void buffer_data(app::gl_id matrixBuffer);
-        mesh_handle get_mesh();
-        const model& get_model();
+        bool is_buffered() const;
+        void buffer_data(app::gl_id matrixBuffer) const;
+        mesh_handle get_mesh() const;
+        const model& get_model() const;
 
         template<typename Archive>
         void serialize(Archive& archive);
@@ -66,6 +66,11 @@ namespace legion::rendering
     public:
         static void buffer(id_type id, app::gl_id matrixBuffer);
         static model_handle create_model(const std::string& name, const fs::view& file, mesh_import_settings settings = default_mesh_settings);
+        static model_handle create_model(const std::string& name);
+        static model_handle create_model(const std::string& name, id_type meshId);
+        static model_handle create_model(id_type meshId);
+        static model_handle create_model(const std::string& name, mesh_handle mesh);
+        static model_handle create_model(mesh_handle mesh);
         static model_handle get_handle(const std::string& name);
         static model_handle get_handle(id_type id);
         static mesh_handle get_mesh(const std::string& name);

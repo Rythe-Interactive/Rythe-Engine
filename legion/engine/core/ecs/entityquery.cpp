@@ -45,6 +45,11 @@ namespace legion::core::ecs
         return *this;
     }
 
+    void EntityQuery::queryEntities()
+    {
+        m_localcopy = m_registry->getEntities(m_id);
+    }
+
     EntityQuery::~EntityQuery()
     {
         if (QueryRegistry::isValid(m_registry))
@@ -55,12 +60,12 @@ namespace legion::core::ecs
 
     entity_set::const_iterator EntityQuery::begin() const
     {
-        return m_registry->getEntities(m_id).begin();
+        return m_localcopy.begin();
     }
 
     entity_set::const_iterator EntityQuery::end() const
     {
-        return m_registry->getEntities(m_id).end();
+        return m_localcopy.end();
     }
 
     void EntityQuery::addComponentType(id_type componentTypeId)
@@ -128,11 +133,11 @@ namespace legion::core::ecs
 
     entity_handle EntityQuery::operator[](size_type index)
     {
-        return m_ecsRegistry->getEntity(m_registry->getEntities(m_id)[index]);
+        return m_localcopy[index];
     }
 
     size_type EntityQuery::size()
     {
-        return m_registry->getEntities(m_id).size();
+        return m_localcopy.size();
     }
 }

@@ -61,15 +61,15 @@ public:
             //Checks if the entity has a transform, if not it adds one.
             if (!ent.has_components<transform>())
                 ent.add_components<transform>();
-            //Gets and sets the particle position to the right position.
-            transform trans = ent.get_component_handles<transform>();
-            core::position posParticle = trans.get<core::position>().read();
-            posParticle = position;
-            //Gets and sets the particle scale to the right scale.
-            core::position scaleParticle = trans.get<core::scale>().read();
-            scaleParticle = math::vec3(m_startingSize);
-            trans.get<core::position>().write(posParticle);
-            trans.get<core::scale>().write(scaleParticle);
+
+            //Gets position, rotation and scale of entity.
+            auto trans = ent.get_component_handles<transform>();
+            auto& [pos, _ , scale] = trans;
+
+            //Sets the particle scale to the right scale.
+            pos.write(position);
+            scale.write(math::vec3(m_startingSize));
+            
             //Populates the particle with the appropriate stuffs.
             createParticle(particleComponent, trans);
         }

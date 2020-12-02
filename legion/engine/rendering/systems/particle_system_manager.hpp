@@ -29,29 +29,30 @@ namespace legion::rendering
         void update(time::span deltaTime)
         {
             static auto emitters = createQuery<particle_emitter>();
+            emitters.queryEntities();
             for (auto entity : emitters)
             {
-                if(!entity.get_component_handle<particle_emitter>().read().setupCompleted)
+                //Gets emitter handle and emitter.
+                auto emitterHandle = entity.get_component_handle<particle_emitter>();
+                auto emit = emitterHandle.read();
+                //Checks if emitter was already initialized.
+                if(!emit.setupCompleted)
                 {
-                    auto particleEmitHandl = entity.get_component_handle<particle_emitter>().read();
-                    particleEmitHandl.setupCompleted = true;
-                    entity.get_component_handle<particle_emitter>().write(particleEmitHandl);
+                    //If NOT then it goes through the particle system setup.
+                    emit.setupCompleted = true;
+                    emitterHandle.write(emit);
 
-                    ecs::component_handle<particle_emitter> emitterHandle = entity.get_component_handle<particle_emitter>();
-                    const ParticleSystemBase* particleSystem = emitterHandle.read().particleSystemHandle.get();
+                    const ParticleSystemBase* particleSystem = emit.particleSystemHandle.get();
                     particleSystem->setup(emitterHandle);
                 }
                 else
                 {
-                    ecs::component_handle<particle_emitter> emitterHandle = entity.get_component_handle<particle_emitter>();
-                    particle_emitter emitter = emitterHandle.read();
-                    std::vector<ecs::entity_handle> particles = emitter.livingParticles;
-                    const ParticleSystemBase* particleSystem = emitter.particleSystemHandle.get();
+                    //If it IS then it runs the emitter through the particle system update.
+                    std::vector<ecs::entity_handle> particles = emit.livingParticles;
+                    const ParticleSystemBase* particleSystem = emit.particleSystemHandle.get();
                     particleSystem->update(particles, emitterHandle);
                 }
             }
         }
-
-
     };
 }
