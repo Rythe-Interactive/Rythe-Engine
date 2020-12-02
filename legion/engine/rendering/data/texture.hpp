@@ -49,7 +49,7 @@ namespace legion::rendering
 
     /**@brief Utility array for converting component count to GLenum. (components_to_format[4] = GL_RGBA)
      */
-    constexpr GLenum components_to_format[] = { 0, GL_RED, GL_RG, GL_RGB, GL_RGBA };
+    constexpr GLenum components_to_format[] = { 0, GL_RED, GL_RG, GL_RGB, GL_RGBA, GL_DEPTH_COMPONENT, GL_STENCIL_INDEX, GL_DEPTH_STENCIL };
 
     /**@brief Utility array for converting data size to GLenum. (channels_to_glenum[sizeof(byte)] = GL_UNSIGNED_BYTE)
      */

@@ -10,6 +10,7 @@ namespace legion::rendering
         renderbuffer(GLenum internalformat, math::ivec2 resolution, int samples = 0)
         {
             glGenRenderbuffers(1, &id);
+            glBindRenderbuffer(GL_RENDERBUFFER, id);
             if (samples > 0)
                 glNamedRenderbufferStorageMultisample(id, samples, internalformat, resolution.x, resolution.y);
             else
@@ -33,6 +34,11 @@ namespace legion::rendering
         void bind()
         {
             glBindRenderbuffer(GL_RENDERBUFFER, id);
+        }
+
+        static void release()
+        {
+            glBindRenderbuffer(GL_RENDERBUFFER, 0);
         }
 
     };

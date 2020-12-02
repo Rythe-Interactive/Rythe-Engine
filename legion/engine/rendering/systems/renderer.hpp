@@ -444,25 +444,28 @@ namespace legion::rendering
                 //framebuffer
                 static framebuffer fbo;
                 //texture
-                static texture_handle texture = TextureCache::create_texture("test_image", superSize,{
+                static texture_handle texture = TextureCache::create_texture("color_image", superSize,{
         texture_type::two_dimensional, channel_format::eight_bit, texture_format::rgb,
         texture_components::rgb, true, true, texture_mipmap::linear, texture_mipmap::linear,
         texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat });
+
+                static texture_handle depthtexture = TextureCache::create_texture("depth_image", superSize,{
+        texture_type::two_dimensional, channel_format::eight_bit, texture_format::depth,
+        texture_components::depth, true, true, texture_mipmap::linear, texture_mipmap::linear,
+        texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat });
                 //render buffer
-                static renderbuffer rbo{ GL_DEPTH24_STENCIL8, superSize };
+                //static renderbuffer rbo{ GL_DEPTH24_STENCIL8, superSize };
                 //shader init
                 static auto screenShader = ShaderCache::create_shader("screen_shader", "assets://shaders/screenshader.shs"_view);
 
                 //attach fbo and texture
                 fbo.bind();
                 fbo.attach(texture, GL_COLOR_ATTACHMENT0);
-                fbo.attach(rbo, GL_DEPTH_STENCIL_ATTACHMENT);
+                fbo.attach(depthtexture, GL_DEPTH_ATTACHMENT);
 
                 //verification step
                 auto [verified, result] = fbo.verify();
                 if (!verified) log::warn(result);
-
-                glEnable(GL_DEPTH_TEST);
 
                 glViewport(0, 0, superSize.x, superSize.y);
                 glClearColor(0.3f, 0.5f, 1.0f, 1.0f);
@@ -514,8 +517,6 @@ namespace legion::rendering
                 glBindBuffer(GL_SHADER_STORAGE_BUFFER, lightsBufferId);
                 glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(detail::light_data) * lights.size(), lights.data());
                 glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-
-
 
                 //the cool render stuff
                 for (auto [modelHandle, instancesPerMaterial] : batches)

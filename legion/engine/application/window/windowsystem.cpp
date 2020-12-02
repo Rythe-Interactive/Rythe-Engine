@@ -308,7 +308,6 @@ namespace legion::application
                 ContextHelper::windowHint(GLFW_REFRESH_RATE, mode->refreshRate);
             }
 
-
             if (request.size == math::ivec2(0, 0))
                 request.size = { 400, 400 };
 

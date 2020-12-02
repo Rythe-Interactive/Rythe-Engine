@@ -62,15 +62,11 @@ uniform MaterialInput material_input : SV_MATERIAL;
 
 #include <texturemaps.shinc>
 
-Material ExtractMaterial(vec2 uv, Camera camera, vec3 worldNormal, vec3 worldTangent, bool meta)
+Material ExtractMaterial(vec2 uv, Camera camera, vec3 worldNormal, vec3 worldTangent)
 {
     Material material;
     material.tbn = GetTBNMatrix(worldNormal, worldTangent);
-    if(meta)
-        material.texcoords = ParallaxMap2(material_input.normalHeight, material_input.heightScale, uv, camera, material.tbn);
-    else
-        material.texcoords = ParallaxMap(material_input.normalHeight, material_input.heightScale, uv, camera, material.tbn);
-
+    material.texcoords = ParallaxMap(material_input.normalHeight, material_input.heightScale, uv, camera, material.tbn);
     material.albedo = AlbedoMap(material_input.albedo, material.texcoords);
     material.normal = NormalMap(material_input.normalHeight, material.texcoords, material.tbn);
     vec4 MRDAo = LightingData(material_input.MRDAo, material.texcoords);

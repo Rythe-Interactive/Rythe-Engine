@@ -31,7 +31,7 @@ namespace legion::rendering
 
         virtual void init() LEGION_PURE;
 
-        virtual void render() LEGION_PURE;
+        virtual void render(app::window context, camera cam) LEGION_PURE;
     };
 
     template<typename Self>
@@ -41,13 +41,10 @@ namespace legion::rendering
         static std::multimap<priority_type, std::unique_ptr<RenderStage>, std::greater<>> m_stages;
 
     public:
-        template<typename StageType, priority_type priority = default_priority, inherits_from<StageType, RenderStage> = 0>
+        template<typename StageType, inherits_from<StageType, RenderStage> = 0>
         static void attachStage();
 
-        template<typename StageType, inherits_from<StageType, RenderStage> = 0>
-        static void attachStage(priority_type priority = default_priority);
-
-        static void attachStage(std::unique_ptr<RenderStage>&& stage, priority_type priority = default_priority);
+        static void attachStage(std::unique_ptr<RenderStage>&& stage);
 
         virtual void setup() LEGION_PURE;
 

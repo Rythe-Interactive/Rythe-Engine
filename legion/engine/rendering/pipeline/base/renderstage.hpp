@@ -8,7 +8,7 @@ namespace legion::rendering
 
     class RenderStage
     {
-        friend class RenderPipeline;
+        friend class Renderer;
     protected:
         static ecs::EcsRegistry* m_ecs;
         static schd::Scheduler* m_scheduler;
@@ -18,5 +18,6 @@ namespace legion::rendering
     public:
         virtual void setup() LEGION_PURE;
         virtual void render(app::window context, camera cam) LEGION_PURE;
+        virtual priority_type priority() LEGION_IMPURE_RETURN(default_priority);
     };
 }

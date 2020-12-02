@@ -30,7 +30,7 @@ shader(fragment)
         Camera camera = GetCamera();
 
         vec3 worldNormal = GetWorldNormal();
-        Material material = ExtractMaterial(stdio(uv), camera, worldNormal, GetWorldTangent(worldNormal), tonemap);
+        Material material = ExtractMaterial(stdio(uv), camera, worldNormal, GetWorldTangent(worldNormal));
 
         if(discardExcess)
             if(material.texcoords.x < 0 || material.texcoords.x > 1 || material.texcoords.y < 0 || material.texcoords.y > 1)
