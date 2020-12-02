@@ -4,3 +4,6 @@
 .c
 xcopyexclude
 delete_this
+.obj
+.tlog
+.recipe

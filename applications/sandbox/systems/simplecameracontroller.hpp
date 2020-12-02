@@ -11,6 +11,7 @@ struct player_strive : public app::input_axis<player_strive> {};
 struct player_fly : public app::input_axis<player_fly> {};
 struct player_look_x : public app::input_axis<player_look_x> {};
 struct player_look_y : public app::input_axis<player_look_y> {};
+struct player_speedup : public app::input_axis<player_speedup> {};
 
 struct exit_action : public app::input_action<exit_action> {};
 
@@ -25,9 +26,11 @@ public:
     ecs::entity_handle skybox;
     ecs::entity_handle groundplane;
 
+    bool escaped = false;
+    float movementspeed = 5.f;
+
     virtual void setup()
     {
-
 #pragma region Input binding
         app::InputSystem::createBinding<player_move>(app::inputmap::method::W, 1.f);
         app::InputSystem::createBinding<player_move>(app::inputmap::method::S, -1.f);
@@ -37,6 +40,8 @@ public:
         app::InputSystem::createBinding<player_fly>(app::inputmap::method::LEFT_SHIFT, -1.f);
         app::InputSystem::createBinding<player_look_x>(app::inputmap::method::MOUSE_X, 0.f);
         app::InputSystem::createBinding<player_look_y>(app::inputmap::method::MOUSE_Y, 0.f);
+        app::InputSystem::createBinding<player_speedup>(app::inputmap::method::LEFT_CONTROL, 3.f);
+        app::InputSystem::createBinding<player_speedup>(app::inputmap::method::LEFT_ALT, -3.f);
 
         app::InputSystem::createBinding<exit_action>(app::inputmap::method::ESCAPE);
         app::InputSystem::createBinding<fullscreen_action>(app::inputmap::method::F11);
@@ -49,6 +54,7 @@ public:
         bindToEvent<player_look_x, &SimpleCameraController::onPlayerLookX>();
         bindToEvent<player_look_y, &SimpleCameraController::onPlayerLookY>();
         bindToEvent<exit_action, &SimpleCameraController::onExit>();
+        bindToEvent<player_speedup, &SimpleCameraController::onSpeedUp>();
         bindToEvent<fullscreen_action, &SimpleCameraController::onFullscreen>();
         bindToEvent<escape_cursor_action, &SimpleCameraController::onEscapeCursor>();
         bindToEvent<vsync_action, &SimpleCameraController::onVSYNCSwap>();
@@ -67,19 +73,18 @@ public:
         }
     }
 
-#pragma region input stuff
     void setupCameraEntity()
     {
         groundplane = createEntity();
         auto groundmat = rendering::MaterialCache::create_material("floor", "assets://shaders/groundplane.shs"_view);
         groundmat.set_param("heightMap", rendering::TextureCache::create_texture("heightMap", "assets://textures/mississippi.png"_view));
-        groundplane.add_component<rendering::renderable>({ rendering::ModelCache::create_model("floor", "assets://models/groundplane.obj"_view), groundmat });
+        groundplane.add_components<rendering::renderable>(rendering::ModelCache::create_model("floor", "assets://models/groundplane.obj"_view).get_mesh(), rendering::mesh_renderer(groundmat));
         groundplane.add_components<transform>();
 
         skybox = createEntity();
         auto skyboxMat = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.shs"_view);
         skyboxMat.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
-        skybox.add_component<rendering::renderable>({ rendering::ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view), skyboxMat });
+        skybox.add_components<rendering::renderable>(rendering::ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view).get_mesh(), rendering::mesh_renderer(skyboxMat));
         skybox.add_components<transform>(position(), rotation(), scale(1000.f));
 
         camera = createEntity();
@@ -91,10 +96,16 @@ public:
         camera.add_component<rendering::camera>(cam);
     }
 
+#pragma region input stuff
     void onExit(exit_action* action)
     {
         if (action->released())
             raiseEvent<events::exit>();
+    }
+
+    void onSpeedUp(player_speedup* action)
+    {
+        movementspeed = 5.f + action->value;
     }
 
     void onFullscreen(fullscreen_action* action)
@@ -109,10 +120,9 @@ public:
     {
         if (action->released())
         {
-            static bool enabled = false;
             app::window window = m_ecs->world.get_component_handle<app::window>().read();
-            enabled = !enabled;
-            window.enableCursor(enabled);
+            escaped = !escaped;
+            window.enableCursor(escaped);
             window.show();
         }
     }
@@ -131,44 +141,55 @@ public:
 
     void onPlayerMove(player_move* action)
     {
+        if (escaped)
+            return;
+
         auto posH = camera.get_component_handle<position>();
         auto rot = camera.get_component_handle<rotation>().read();
         math::vec3 move = math::toMat3(rot) * math::vec3(0.f, 0.f, 1.f);
-        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 10.f;
+        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * movementspeed;
         posH.fetch_add(move);
 
         auto pos = posH.read();
         skybox.write_component(pos);
-        //groundplane.write_component(position(pos.x, 0, pos.z));
+        groundplane.write_component(position(pos.x, 0, pos.z));
     }
 
     void onPlayerStrive(player_strive* action)
     {
+        if (escaped)
+            return;
+
         auto posH = camera.get_component_handle<position>();
         auto rot = camera.get_component_handle<rotation>().read();
         math::vec3 move = math::toMat3(rot) * math::vec3(1.f, 0.f, 0.f);
-        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 10.f;
+        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * movementspeed;
         posH.fetch_add(move);
 
         auto pos = posH.read();
         skybox.write_component(pos);
-        //groundplane.write_component(position(pos.x, 0, pos.z));
+        groundplane.write_component(position(pos.x, 0, pos.z));
     }
 
     void onPlayerFly(player_fly* action)
     {
+        if (escaped)
+            return;
+
         auto posH = camera.get_component_handle<position>();
-        posH.fetch_add(math::vec3(0.f, action->value * action->input_delta * 10.f, 0.f));
+        posH.fetch_add(math::vec3(0.f, action->value * action->input_delta * movementspeed, 0.f));
 
         auto pos = posH.read();
         skybox.write_component(pos);
-        //groundplane.write_component(position(pos.x, 0, pos.z));
     }
 
     void onPlayerLookX(player_look_x* action)
     {
+        if (escaped)
+            return;
+
         auto rotH = camera.get_component_handle<rotation>();
-        rotH.fetch_multiply(math::angleAxis(action->value, math::vec3(0, 1, 0)));
+        rotH.fetch_multiply(math::angleAxis(action->value * action->input_delta * 500.f, math::vec3(0, 1, 0)));
         rotH.read_modify_write(rotation(), [](const rotation& src, rotation&& dummy)
             {
                 (void)dummy;
@@ -185,8 +206,11 @@ public:
 
     void onPlayerLookY(player_look_y* action)
     {
+        if (escaped)
+            return;
+
         auto rotH = camera.get_component_handle<rotation>();
-        rotH.fetch_multiply(math::angleAxis(action->value, math::vec3(1, 0, 0)));
+        rotH.fetch_multiply(math::angleAxis(action->value * action->input_delta * 500.f, math::vec3(1, 0, 0)));
         rotH.read_modify_write(rotation(), [](const rotation& src, rotation&& dummy)
             {
                 (void)dummy;

@@ -81,16 +81,14 @@ namespace legion::physics
         * of the collider.
         * @note This is called internally by PhysicsSysten
         */
-        inline virtual void DrawColliderRepresentation(math::mat4 transform) {};
+        virtual void DrawColliderRepresentation(math::mat4 transform) {};
 
-        inline virtual std::vector<HalfEdgeFace*>& GetHalfEdgeFaces()
+        virtual std::vector<HalfEdgeFace*>& GetHalfEdgeFaces()
         {
             return dummyHalfEdges;
         }
 
-
-
-        math::vec3 GetLocalCentroid()
+        L_NODISCARD math::vec3 GetLocalCentroid() const noexcept
         {
             return localColliderCentroid;
         }

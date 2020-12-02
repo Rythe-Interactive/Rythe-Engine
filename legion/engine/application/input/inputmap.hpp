@@ -1,12 +1,13 @@
 #pragma once
 #include <set>
-
+#include <cstdint>
+#include <cstddef>
 
 namespace legion::application
 {
     struct inputmap
     {
-        enum class modifier_keys : uint8_t
+        enum class modifier_keys : math::uint8_t
         {
             NONE = 0,
             CTRL = 1,
@@ -20,29 +21,29 @@ namespace legion::application
             MAX_SIZE = 16 + JOYSTICK0
         };
 
-        static uint8_t value(modifier_keys m)
+        static math::uint8_t value(modifier_keys m)
         {
-            return static_cast<uint8_t>(m);
+            return static_cast<math::uint8_t>(m);
         }
 
-        friend uint8_t operator-(modifier_keys lhs, modifier_keys rhs)
+        friend math::uint8_t operator-(modifier_keys lhs, modifier_keys rhs)
         {
             return value(lhs) - value(rhs);
         }
 
-        friend uint8_t operator+(modifier_keys lhs, modifier_keys rhs)
+        friend math::uint8_t operator+(modifier_keys lhs, modifier_keys rhs)
         {
             return value(lhs) + value(rhs);
         }
-        friend modifier_keys operator+(modifier_keys lhs, uint8_t rhs)
+        friend modifier_keys operator+(modifier_keys lhs, math::uint8_t rhs)
         {
             return static_cast<modifier_keys>(value(lhs) + rhs);
         }
-        friend uint8_t operator&(modifier_keys lhs, modifier_keys rhs)
+        friend math::uint8_t operator&(modifier_keys lhs, modifier_keys rhs)
         {
             return value(lhs) & value(rhs);
         }
-        friend uint8_t operator|(modifier_keys lhs, modifier_keys rhs)
+        friend math::uint8_t operator|(modifier_keys lhs, modifier_keys rhs)
         {
             return value(lhs) | value(rhs);
         }

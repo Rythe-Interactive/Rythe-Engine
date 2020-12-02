@@ -22,7 +22,7 @@ namespace legion::core::compute {
     enum class buffer_type : int
     {
         WRITE_BUFFER = 1,
-        READ_BUFFER = 2
+        READ_BUFFER = 2,
     };
 
     /**
@@ -88,6 +88,7 @@ namespace legion::core::compute {
          * @brief Checks if OpenCL can write to this buffer.
          */
         bool isWriteBuffer()const  { return m_type == CL_MEM_WRITE_ONLY || m_type == CL_MEM_READ_WRITE; }
+        bool isValid() const { return m_data != nullptr; };
     private:
         friend class Program;
         friend class Kernel;

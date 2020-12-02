@@ -59,10 +59,15 @@ namespace legion::application
             m_eventBus->raiseEvent<window_move>(m_windowComponents[window], math::ivec2(x, y));
     }
 
-    void WindowSystem::onWindowResize(GLFWwindow* window, int width, int height)
+    void WindowSystem::onWindowResize(GLFWwindow* win, int width, int height)
     {
-        if (m_windowComponents.contains(window))
-            m_eventBus->raiseEvent<window_resize>(m_windowComponents[window], math::ivec2(width, height));
+        if (m_windowComponents.contains(win))
+        {
+            auto wincomp = m_windowComponents[win].read();
+            wincomp.m_size = math::ivec2(width, height);
+            m_windowComponents[win].write(wincomp);
+            m_eventBus->raiseEvent<window_resize>(m_windowComponents[win], wincomp.m_size);
+        }
     }
 
     void WindowSystem::onWindowRefresh(GLFWwindow* window)
@@ -331,6 +336,7 @@ namespace legion::application
             win.m_title = request.name;
             win.m_isFullscreen = (request.monitor != nullptr);
             win.m_swapInterval = request.swapInterval;
+            win.m_size = request.size;
 
             ecs::component_handle<window> handle;
 
@@ -428,6 +434,7 @@ namespace legion::application
                 const GLFWvidmode* mode = ContextHelper::getVideoMode(monitor);
 
                 ContextHelper::setWindowMonitor(win, nullptr, request.position, request.size, mode->refreshRate);
+                win.m_size = request.size;
                 log::trace("Set window {} to windowed.", request.entityId);
             }
             else
@@ -436,6 +443,7 @@ namespace legion::application
                 const GLFWvidmode* mode = ContextHelper::getVideoMode(monitor);
 
                 ContextHelper::setWindowMonitor(win, monitor, { 0 ,0 }, math::ivec2(mode->width, mode->height), mode->refreshRate);
+                win.m_size = math::ivec2(mode->width, mode->height);
                 ContextHelper::makeContextCurrent(win);
                 ContextHelper::swapInterval(win.m_swapInterval);
                 ContextHelper::makeContextCurrent(nullptr);
@@ -492,7 +500,7 @@ namespace legion::application
             return;
 
         async::readonly_guard guard(m_creationLock);
-
+        m_windowQuery.queryEntities();
         for (auto entity : m_windowQuery)
         {
             window win = entity.get_component_handle<window>().read();
