@@ -21,6 +21,7 @@
     <ClCompile Include="imgui_impl\ImCurveEdit.cpp" />
     <ClCompile Include="imgui_impl\ImGradient.cpp" />
     <ClCompile Include="imgui_impl\imgui.cpp" />
+    <ClCompile Include="imgui_impl\ImGuiFileBrowser.cpp" />
     <ClCompile Include="imgui_impl\ImGuizmo.cpp" />
     <ClCompile Include="imgui_impl\imgui_demo.cpp" />
     <ClCompile Include="imgui_impl\imgui_draw.cpp" />
