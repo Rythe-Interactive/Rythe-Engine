@@ -563,8 +563,6 @@ namespace legion::rendering
 
                 //disable depth buffer
                 glViewport(0, 0, viewportSize.x, viewportSize.y);
-                //glDisable(GL_DEPTH_TEST);
-                //glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 

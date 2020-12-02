@@ -20,6 +20,7 @@ namespace legion::rendering
         renderbuffer(GLenum internalformat, int width, int height, int samples = 0)
         {
             glGenRenderbuffers(1, &id);
+            glBindRenderbuffer(GL_RENDERBUFFER, id);
             if (samples > 0)
                 glNamedRenderbufferStorageMultisample(id, samples, internalformat, width, height);
             else
