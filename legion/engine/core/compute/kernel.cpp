@@ -278,6 +278,7 @@ namespace legion::core::compute
         {
             log::warn("clSetKernelArg failed for Arg at index {}",index);
         }
+        return *this;
     }
 
 
