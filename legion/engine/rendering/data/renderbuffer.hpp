@@ -15,6 +15,7 @@ namespace legion::rendering
                 glNamedRenderbufferStorageMultisample(id, samples, internalformat, resolution.x, resolution.y);
             else
                 glNamedRenderbufferStorage(id, internalformat, resolution.x, resolution.y);
+            glBindRenderbuffer(GL_RENDERBUFFER, 0);
         }
 
         renderbuffer(GLenum internalformat, int width, int height, int samples = 0)
@@ -25,6 +26,7 @@ namespace legion::rendering
                 glNamedRenderbufferStorageMultisample(id, samples, internalformat, width, height);
             else
                 glNamedRenderbufferStorage(id, internalformat, width, height);
+            glBindRenderbuffer(GL_RENDERBUFFER, 0);
         }
 
         ~renderbuffer()

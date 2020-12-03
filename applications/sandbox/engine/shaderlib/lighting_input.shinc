@@ -26,6 +26,7 @@ struct Light
 struct Material
 {
     mat3 tbn;
+    float height;
     vec4 albedo;
  	vec3 normal;
  	float metallic;
@@ -33,8 +34,8 @@ struct Material
     float roughness;
     float dielectric;
  	float ambientOcclusion;
-    vec3 F0;
     vec2 texcoords;
+    vec3 F0;
 };
 
 vec3 Fresnel0(vec4 albedo, float metallic, float dielectric)
@@ -66,7 +67,7 @@ Material ExtractMaterial(vec2 uv, Camera camera, vec3 worldNormal, vec3 worldTan
 {
     Material material;
     material.tbn = GetTBNMatrix(worldNormal, worldTangent);
-    material.texcoords = ParallaxMap(material_input.normalHeight, material_input.heightScale, uv, camera, material.tbn);
+    material.texcoords = ParallaxMap(material_input.normalHeight, material_input.heightScale, uv, camera, material.tbn, material.height);
     material.albedo = AlbedoMap(material_input.albedo, material.texcoords);
     material.normal = NormalMap(material_input.normalHeight, material.texcoords, material.tbn);
     vec4 MRDAo = LightingData(material_input.MRDAo, material.texcoords);

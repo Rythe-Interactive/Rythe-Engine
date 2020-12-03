@@ -27,9 +27,6 @@
     <ClCompile Include="data\material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="systems\renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="shadercompiler\shadercompiler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -54,6 +51,12 @@
     <ClCompile Include="pipeline\default\mainrenderstage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="systems\oldrenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="systems\renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\renderingmodule.hpp">
@@ -75,9 +78,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="components\renderable.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\renderer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="components\camera.hpp">
@@ -143,9 +143,18 @@
     <ClInclude Include="pipeline\default\mainrenderstage.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="systems\oldrenderer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\renderer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="pipeline\base\pipeline.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="systems\renderer.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

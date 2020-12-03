@@ -8,14 +8,14 @@
 
 namespace legion::rendering
 {
-    class Renderer;
+    class OldRenderer;
 
     /**@class camera
      * @brief Camera component
      */
     struct camera
     {
-        friend class Renderer;
+        friend class OldRenderer;
     private:
         struct camera_input
         {

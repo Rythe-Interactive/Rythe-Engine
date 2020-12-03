@@ -22,6 +22,7 @@
     <ClCompile Include="pipeline\default\mainrenderstage.cpp" />
     <ClCompile Include="shadercompiler\shadercompiler.cpp" />
     <ClCompile Include="data\particle_system_base.cpp" />
+    <ClCompile Include="systems\oldrenderer.cpp" />
     <ClCompile Include="systems\renderer.cpp" />
     <ClCompile Include="util\ini.c" />
   </ItemGroup>
@@ -51,6 +52,7 @@
     <ClInclude Include="rendering.hpp" />
     <ClInclude Include="shadercompiler\shadercompiler.hpp" />
     <ClInclude Include="data\particle_system_base.hpp" />
+    <ClInclude Include="systems\oldrenderer.hpp" />
     <ClInclude Include="systems\renderer.hpp" />
     <ClInclude Include="util\bindings.hpp" />
     <ClInclude Include="util\matini.hpp" />
@@ -58,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="pipeline\base\pipeline.inl" />
+    <None Include="systems\renderer.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

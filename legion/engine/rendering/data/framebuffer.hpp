@@ -25,7 +25,7 @@ namespace legion::rendering
         std::pair<bool,std::string> verify() const
         {
             const auto verification = glCheckNamedFramebufferStatus(id, target);
-            std::pair<bool, std::string> result{false,"Unkown framebuffer error."};
+            auto result = std::make_pair(false,"Unkown framebuffer error: " + std::to_string(verification));
             switch (verification)
             {
             case GL_FRAMEBUFFER_COMPLETE:
