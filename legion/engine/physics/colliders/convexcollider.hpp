@@ -106,17 +106,10 @@ namespace legion::physics
             HalfEdgeEdge* edge0 = new HalfEdgeEdge(vertices.at(0));
             HalfEdgeEdge* edge1 = new HalfEdgeEdge(vertices.at(1));
             HalfEdgeEdge* edge2 = new HalfEdgeEdge(vertices.at(2));
-            /*edge0->setNextAndPrevEdge(edge2, edge1);
+            edge0->setNextAndPrevEdge(edge2, edge1);
             edge1->setNextAndPrevEdge(edge0, edge2);
-            edge2->setNextAndPrevEdge(edge1, edge0);*/
-            // Tri inverse test
-            edge0->setNextAndPrevEdge(edge1, edge2);
-            edge2->setNextAndPrevEdge(edge0, edge1);
-            edge1->setNextAndPrevEdge(edge2, edge0);
-            HalfEdgeFace* face012 = new HalfEdgeFace(edge0, -normal);
-            face012->inverse();
-            log::debug("     Verts: {} to {} to {}", vertices.at(0), vertices.at(1), vertices.at(2));
-            log::debug("Face Verts: {} to {} to {}, prev: {}", face012->startEdge->edgePosition, face012->startEdge->nextEdge->edgePosition, face012->startEdge->nextEdge->nextEdge->edgePosition, face012->startEdge->prevEdge->edgePosition);
+            edge2->setNextAndPrevEdge(edge1, edge0);
+            HalfEdgeFace* face012 = new HalfEdgeFace(edge0, normal);
             // Face 1 - edges: 3, 4, 5 - vertices: 3, 1, 0
             HalfEdgeEdge* edge3 = new HalfEdgeEdge(vertices.at(3));
             HalfEdgeEdge* edge4 = new HalfEdgeEdge(vertices.at(1));
@@ -143,7 +136,7 @@ namespace legion::physics
             edge10->setNextAndPrevEdge(edge9, edge11);
             edge11->setNextAndPrevEdge(edge10, edge9);
             math::vec3 normal302 = normalize(cross((mesh.vertices.at(index0) - mesh.vertices.at(index3)), (mesh.vertices.at(index2) - mesh.vertices.at(index3))));
-            HalfEdgeFace* face302 = new HalfEdgeFace(edge6, normal302);
+            HalfEdgeFace* face302 = new HalfEdgeFace(edge9, normal302);
 
             edge0->setPairingEdge(edge4);
             edge1->setPairingEdge(edge6);
@@ -151,6 +144,17 @@ namespace legion::physics
             edge3->setPairingEdge(edge7);
             edge5->setPairingEdge(edge9);
             edge8->setPairingEdge(edge11);
+
+            // Make sure all the created faces are convex with each other
+            // Also 'repair' them when they are not convex
+            HalfEdgeFace::makeNormalsConvexWithFace(*face012, *face310);
+            HalfEdgeFace::makeNormalsConvexWithFace(*face012, *face213);
+            HalfEdgeFace::makeNormalsConvexWithFace(*face012, *face302);
+
+            HalfEdgeFace::makeNormalsConvexWithFace(*face310, *face213);
+            HalfEdgeFace::makeNormalsConvexWithFace(*face310, *face302);
+
+            HalfEdgeFace::makeNormalsConvexWithFace(*face213, *face302);
 
             halfEdgeFaces.push_back(face012);
             halfEdgeFaces.push_back(face310);

@@ -67,8 +67,10 @@ namespace legion::physics
     {
         HalfEdgeEdge* start = startEdge;
         HalfEdgeEdge* current = startEdge;
-        if (start->nextEdge == start) return;
-
+        if (start->nextEdge == start)
+        {
+            return;
+        }
         do
         {
             HalfEdgeEdge* prev = current->prevEdge;
@@ -96,7 +98,7 @@ namespace legion::physics
         return true;
     }
 
-    void HalfEdgeFace::makeNormalsConvexWithFace(HalfEdgeFace& other)
+    bool HalfEdgeFace::makeNormalsConvexWithFace(HalfEdgeFace& other)
     {
         math::vec3 difference = startEdge->edgePosition - other.centroid;
         float scaledAngle = math::dot(difference, normal);
@@ -105,7 +107,9 @@ namespace legion::physics
         if (scaledAngle <= 0)
         {
             inverse();
+            return true;
         }
+        return false;
     }
 
 	bool HalfEdgeFace::testConvexity(const HalfEdgeFace& first, const HalfEdgeFace& second)
@@ -113,10 +117,11 @@ namespace legion::physics
 		return first.testConvexity(second) && second.testConvexity(first);
 	}
 
-    void HalfEdgeFace::makeNormalsConvexWithFace(HalfEdgeFace& first, HalfEdgeFace& second)
+    bool HalfEdgeFace::makeNormalsConvexWithFace(HalfEdgeFace& first, HalfEdgeFace& second)
     {
-        first.makeNormalsConvexWithFace(second);
-        second.makeNormalsConvexWithFace(first);
+        bool inversedNormal = first.makeNormalsConvexWithFace(second);
+        inversedNormal |= second.makeNormalsConvexWithFace(first);
+        return inversedNormal;
     }
 
     HalfEdgeFace::~HalfEdgeFace()

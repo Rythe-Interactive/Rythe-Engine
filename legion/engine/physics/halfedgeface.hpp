@@ -32,7 +32,7 @@ namespace legion::physics
 
         /**@brief Makes the normals for this faces point to the convex side of the plane in regard to each other
          */
-        void makeNormalsConvexWithFace(HalfEdgeFace& other);
+        bool makeNormalsConvexWithFace(HalfEdgeFace& other);
 
         /**@brief Tests if the the two planes are convex in regard to each other
          * @return true when convex, false if coplaner or concave
@@ -41,7 +41,7 @@ namespace legion::physics
 
         /**@brief Makes the normals for both faces point to the convex side of the plane in regard to each other
          */
-        static void makeNormalsConvexWithFace(HalfEdgeFace& first, HalfEdgeFace& second);
+        static bool makeNormalsConvexWithFace(HalfEdgeFace& first, HalfEdgeFace& second);
 		
 		~HalfEdgeFace();
 	};
