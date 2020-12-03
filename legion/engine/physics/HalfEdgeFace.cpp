@@ -63,6 +63,62 @@ namespace legion::physics
 
     }
 
+    void HalfEdgeFace::inverse()
+    {
+        HalfEdgeEdge* start = startEdge;
+        HalfEdgeEdge* current = startEdge;
+        if (start->nextEdge == start) return;
+
+        do
+        {
+            HalfEdgeEdge* prev = current->prevEdge;
+            current->prevEdge = current->nextEdge;
+            current->nextEdge = prev;
+
+            // Current should go the edge that was previously the next
+            current = current->prevEdge;
+        } while (current != start);
+
+        normal = -normal; // Inverse the normal
+    }
+
+    bool HalfEdgeFace::testConvexity(const HalfEdgeFace& other) const
+    {
+        math::vec3 difference = startEdge->edgePosition - other.centroid;
+        float scaledAngle = math::dot(difference, normal);
+
+        // if the scaledAngle is smaller or equal to 0, it is not convex
+        if (scaledAngle <= 0)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    void HalfEdgeFace::makeNormalsConvexWithFace(HalfEdgeFace& other)
+    {
+        math::vec3 difference = startEdge->edgePosition - other.centroid;
+        float scaledAngle = math::dot(difference, normal);
+
+        // if the scaledAngle is smaller or equal to 0, it is not convex
+        if (scaledAngle <= 0)
+        {
+            inverse();
+        }
+    }
+
+	bool HalfEdgeFace::testConvexity(const HalfEdgeFace& first, const HalfEdgeFace& second)
+	{
+		return first.testConvexity(second) && second.testConvexity(first);
+	}
+
+    void HalfEdgeFace::makeNormalsConvexWithFace(HalfEdgeFace& first, HalfEdgeFace& second)
+    {
+        first.makeNormalsConvexWithFace(second);
+        second.makeNormalsConvexWithFace(first);
+    }
+
     HalfEdgeFace::~HalfEdgeFace()
     {
         auto deleteFunc = [](HalfEdgeEdge* edge) { delete edge; };

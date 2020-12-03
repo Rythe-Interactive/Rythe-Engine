@@ -106,10 +106,17 @@ namespace legion::physics
             HalfEdgeEdge* edge0 = new HalfEdgeEdge(vertices.at(0));
             HalfEdgeEdge* edge1 = new HalfEdgeEdge(vertices.at(1));
             HalfEdgeEdge* edge2 = new HalfEdgeEdge(vertices.at(2));
-            edge0->setNextAndPrevEdge(edge2, edge1);
+            /*edge0->setNextAndPrevEdge(edge2, edge1);
             edge1->setNextAndPrevEdge(edge0, edge2);
-            edge2->setNextAndPrevEdge(edge1, edge0);
-            HalfEdgeFace* face012 = new HalfEdgeFace(edge0, normal);
+            edge2->setNextAndPrevEdge(edge1, edge0);*/
+            // Tri inverse test
+            edge0->setNextAndPrevEdge(edge1, edge2);
+            edge2->setNextAndPrevEdge(edge0, edge1);
+            edge1->setNextAndPrevEdge(edge2, edge0);
+            HalfEdgeFace* face012 = new HalfEdgeFace(edge0, -normal);
+            face012->inverse();
+            log::debug("     Verts: {} to {} to {}", vertices.at(0), vertices.at(1), vertices.at(2));
+            log::debug("Face Verts: {} to {} to {}, prev: {}", face012->startEdge->edgePosition, face012->startEdge->nextEdge->edgePosition, face012->startEdge->nextEdge->nextEdge->edgePosition, face012->startEdge->prevEdge->edgePosition);
             // Face 1 - edges: 3, 4, 5 - vertices: 3, 1, 0
             HalfEdgeEdge* edge3 = new HalfEdgeEdge(vertices.at(3));
             HalfEdgeEdge* edge4 = new HalfEdgeEdge(vertices.at(1));
