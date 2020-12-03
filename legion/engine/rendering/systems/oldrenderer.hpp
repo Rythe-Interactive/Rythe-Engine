@@ -443,7 +443,7 @@ namespace legion::rendering
                 static math::ivec2 textureSize = superSize;
 
                 //framebuffer
-                static framebuffer fbo;
+                static framebuffer fbo(GL_FRAMEBUFFER);
                 //texture
                 static texture_handle texture = TextureCache::create_texture("color_image", superSize,{
         texture_type::two_dimensional, channel_format::eight_bit, texture_format::rgb,

@@ -2,30 +2,37 @@
 #include <application/application.hpp>
 #include <rendering/data/texture.hpp>
 #include <rendering/data/renderbuffer.hpp>
+#include <any>
+#include <unordered_map>
 
 namespace legion::rendering
 {
     struct framebuffer
     {
         //Id of the framebuffer.
-        app::gl_id id;
+        app::gl_id id = invalid_id;
         //type of framebuffer, either read, write or both.
-        GLenum target;
+        GLenum target = GL_FRAMEBUFFER;
 
-        framebuffer(GLenum target = GL_FRAMEBUFFER) : target(target)
+        std::unordered_map<GLenum, std::any> attachments;
+
+        framebuffer() = default;
+
+        explicit framebuffer(GLenum target) : target(target)
         {
             glGenFramebuffers(1, &id);
         }
 
         ~framebuffer()
         {
-            glDeleteFramebuffers(1, &id);
+            if (id)
+                glDeleteFramebuffers(1, &id);
         }
 
-        std::pair<bool,std::string> verify() const
+        std::pair<bool, std::string> verify() const
         {
             const auto verification = glCheckNamedFramebufferStatus(id, target);
-            auto result = std::make_pair(false,"Unkown framebuffer error: " + std::to_string(verification));
+            auto result = std::make_pair(false, "Unkown framebuffer error: " + std::to_string(verification));
             switch (verification)
             {
             case GL_FRAMEBUFFER_COMPLETE:
@@ -58,26 +65,40 @@ namespace legion::rendering
             default:
                 return result;
             }
-        } 
+        }
 
         void bind()
         {
             glBindFramebuffer(target, id);
         }
 
-        void attach(const renderbuffer& renderbuffer, GLenum attachment)
+        void attach(const renderbuffer& rbo, GLenum attachment)
         {
-            glNamedFramebufferRenderbuffer(id, attachment, GL_RENDERBUFFER, renderbuffer.id);
+            glNamedFramebufferRenderbuffer(id, attachment, GL_RENDERBUFFER, rbo.id);
+            attachments[attachment] = std::make_any<renderbuffer>(rbo);
         }
 
         void attach(texture_handle texture, GLenum attachment)
         {
             glNamedFramebufferTexture(id, attachment, texture.get_texture().textureId, 0);
+            attachments[attachment] = std::make_any<renderbuffer>(texture);
+        }
+
+        std::any getAttachment(GLenum attachment)
+        {
+            if (!attachments.count(attachment))
+                return std::any();
+            return attachments[attachment];
         }
 
         void release()
         {
             glBindFramebuffer(target, 0);
+        }
+
+        operator bool()
+        {
+            return id;
         }
     };
 }

@@ -18,6 +18,7 @@
     <ClCompile Include="data\particle_system_cache.cpp" />
     <ClCompile Include="data\shader.cpp" />
     <ClCompile Include="data\texture.cpp" />
+    <ClCompile Include="pipeline\base\pipeline.cpp" />
     <ClCompile Include="pipeline\default\defaultpipeline.cpp" />
     <ClCompile Include="pipeline\default\mainrenderstage.cpp" />
     <ClCompile Include="shadercompiler\shadercompiler.cpp" />

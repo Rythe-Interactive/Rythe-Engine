@@ -3,7 +3,7 @@
 #include <rendering/data/material.hpp>
 
 /**
- * @file camera.hpp 
+ * @file camera.hpp
  */
 
 namespace legion::rendering
@@ -16,6 +16,7 @@ namespace legion::rendering
     struct camera
     {
         friend class OldRenderer;
+        friend class Renderer;
     private:
         struct camera_input
         {
@@ -68,8 +69,13 @@ namespace legion::rendering
             };
         };
 
+        ecs::component_handle<app::window> m_targetWindow;
+        framebuffer m_renderTarget;
     public:
         float fov, nearz, farz;
+
+        void set_target_window(const ecs::component_handle<app::window>& win) { m_targetWindow = win; }
+        void set_render_target(const framebuffer& target) { m_renderTarget = target; }
 
         /**@brief Set the projection variables of the camera.
          * @param fov Horizontal field of view in degrees.

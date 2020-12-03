@@ -60,9 +60,9 @@ namespace legion::rendering
     }
 
     template<typename Self>
-    inline void RenderPipeline<Self>::render(app::window context, camera cam)
+    inline void RenderPipeline<Self>::render(app::window& context, camera& cam, time::span deltaTime)
     {
         for (auto& [_, stage] : m_stages)
-            stage->render(context, cam);
+            stage->render(context, cam, deltaTime);
     }
 }

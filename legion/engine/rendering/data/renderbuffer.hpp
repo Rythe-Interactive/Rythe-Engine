@@ -5,9 +5,11 @@ namespace legion::rendering
 {
     struct renderbuffer
     {
-        app::gl_id id;
-        int samples;
-        GLenum format;
+        app::gl_id id = invalid_id;
+        int samples = 0;
+        GLenum format = 0;
+
+        renderbuffer() = default;
 
         renderbuffer(GLenum internalformat, math::ivec2 resolution, int samples = 0)
         {
@@ -35,7 +37,8 @@ namespace legion::rendering
 
         ~renderbuffer()
         {
-            glDeleteRenderbuffers(1, &id);
+            if (id)
+                glDeleteRenderbuffers(1, &id);
         }
 
         void bind()

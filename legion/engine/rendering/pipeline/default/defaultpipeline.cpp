@@ -5,6 +5,7 @@ namespace legion::rendering
 {
     void DefaultPipeline::setup()
     {
+        addFramebuffer("main");
         attachStage<MainRenderState>();
     }
 

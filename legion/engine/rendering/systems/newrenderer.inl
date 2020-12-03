@@ -6,5 +6,6 @@ namespace legion::rendering
     inline void Renderer::SetPipeline(Args&&... args)
     {
         m_pipeline = std::unique_ptr<RenderPipelineBase>(new Pipeline(std::forward(args)...));
+        RenderStage::m_pipeline = m_pipeline.get();
     }
 }

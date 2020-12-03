@@ -14,10 +14,14 @@ namespace legion::rendering
 {
     class RenderPipelineBase
     {
+        friend class Renderer;
     protected:
         sparse_map<id_type, framebuffer> m_framebuffers;
         sparse_map<id_type, std::any> m_metadata;
 
+        static ecs::EcsRegistry* m_ecs;
+        static schd::Scheduler* m_scheduler;
+        static events::EventBus* m_eventBus;
     public:
 
         template<typename T>
@@ -29,14 +33,18 @@ namespace legion::rendering
         template<typename T>
         T* get_meta(std::string name);
 
+        framebuffer addFramebuffer(const std::string& name, GLenum target = GL_FRAMEBUFFER);
+        framebuffer getFramebuffer(const std::string& name);
+
         virtual void init() LEGION_PURE;
 
-        virtual void render(app::window context, camera cam) LEGION_PURE;
+        virtual void render(app::window& context, camera& cam, time::span deltaTime) LEGION_PURE;
     };
 
     template<typename Self>
     class RenderPipeline : public RenderPipelineBase
     {
+        friend class Renderer;
     protected:
         static std::multimap<priority_type, std::unique_ptr<RenderStage>, std::greater<>> m_stages;
 
@@ -49,7 +57,7 @@ namespace legion::rendering
         virtual void setup() LEGION_PURE;
 
         void init() override;
-        void render(app::window context, camera cam) override;
+        void render(app::window& context, camera& cam, time::span deltaTime) override;
     };
 }
 
