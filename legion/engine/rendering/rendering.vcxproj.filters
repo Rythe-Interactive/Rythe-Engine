@@ -54,7 +54,7 @@
     <ClCompile Include="systems\oldrenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="systems\renderer.cpp">
+    <ClCompile Include="systems\newrenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -146,7 +146,7 @@
     <ClInclude Include="systems\oldrenderer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="systems\renderer.hpp">
+    <ClInclude Include="systems\newrenderer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -154,7 +154,7 @@
     <None Include="pipeline\base\pipeline.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="systems\renderer.inl">
+    <None Include="systems\newrenderer.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

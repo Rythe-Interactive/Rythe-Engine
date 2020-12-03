@@ -50,10 +50,12 @@ namespace legion::rendering
 
         void resize(math::ivec2 newSize)
         {
+            glBindRenderbuffer(GL_RENDERBUFFER, id);
             if (samples > 0)
                 glNamedRenderbufferStorageMultisample(id, samples, format, newSize.x, newSize.y);
             else
                 glNamedRenderbufferStorage(id, format, newSize.x, newSize.y);
+            glBindRenderbuffer(GL_RENDERBUFFER, 0);
         }
 
     };

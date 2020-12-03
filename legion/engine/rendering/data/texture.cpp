@@ -24,6 +24,7 @@ namespace legion::rendering
 
     void texture::resize(math::ivec2 newSize) const
     {
+        glBindTexture(static_cast<GLenum>(type), textureId);
         glTexImage2D(
             static_cast<GLenum>(type),
             0,
@@ -34,6 +35,7 @@ namespace legion::rendering
             components_to_format[static_cast<int>(channels)],
             channels_to_glenum[static_cast<uint>(fileFormat)],
             NULL);
+        glBindTexture(static_cast<GLenum>(type), 0);
     }
 
     sparse_map<id_type, texture> TextureCache::m_textures;
@@ -166,6 +168,8 @@ namespace legion::rendering
             channels_to_glenum[static_cast<uint>(settings.fileFormat)],
             NULL);
 
+        glBindTexture(static_cast<GLenum>(settings.type), 0);
+
         {
             async::readwrite_guard guard(m_textureLock);
             m_textures.insert(id, texture);
@@ -254,6 +258,8 @@ namespace legion::rendering
         // Generate mips.
         if (settings.generateMipmaps)
             glGenerateMipmap(static_cast<GLenum>(settings.type));
+
+        glBindTexture(static_cast<GLenum>(settings.type), 0);
 
         {
             async::readwrite_guard guard(m_textureLock);

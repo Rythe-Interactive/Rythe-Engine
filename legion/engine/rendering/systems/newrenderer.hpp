@@ -26,4 +26,4 @@ namespace legion::rendering
     };
 }
 
-#include <rendering/systems/renderer.inl>
+#include <rendering/systems/newrenderer.inl>

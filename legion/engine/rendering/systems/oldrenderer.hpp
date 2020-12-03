@@ -14,7 +14,7 @@ using namespace std::literals::chrono_literals;
 
 namespace legion::rendering
 {
-    class Renderer final : public System<Renderer>
+    class OldRenderer final : public System<OldRenderer>
     {
     public:
         sparse_map<model_handle, sparse_map<material_handle, std::vector<math::mat4>>> batches;
@@ -222,21 +222,21 @@ namespace legion::rendering
 
         virtual void setup()
         {
-            scheduling::ProcessChain::subscribeToChainStart<&Renderer::startDebugDomain>();
-            scheduling::ProcessChain::subscribeToChainEnd<&Renderer::endDebugDomain>();
+            scheduling::ProcessChain::subscribeToChainStart<&OldRenderer::startDebugDomain>();
+            scheduling::ProcessChain::subscribeToChainEnd<&OldRenderer::endDebugDomain>();
             debug::setEventBus(m_eventBus);
 
-            bindToEvent<debug::debug_line, &Renderer::drawLine>();
+            bindToEvent<debug::debug_line, &OldRenderer::drawLine>();
 
-            bindToEvent<events::exit, &Renderer::onExit>();
-            createProcess<&Renderer::render>("Rendering");
+            bindToEvent<events::exit, &OldRenderer::onExit>();
+            createProcess<&OldRenderer::render>("Rendering");
             renderablesQuery = createQuery<mesh_filter, mesh_renderer, position, rotation, scale>();
             lightQuery = createQuery<light, position, rotation>();
             cameraQuery = createQuery<camera, position, rotation, scale>();
 
             m_scheduler->sendCommand(m_scheduler->getChainThreadId("Rendering"), [](void* param)
             {
-                Renderer* self = reinterpret_cast<Renderer*>(param);
+                OldRenderer* self = reinterpret_cast<OldRenderer*>(param);
                 log::trace("Waiting on main window.");
 
                 while (!self->main_window_valid())
@@ -364,8 +364,6 @@ namespace legion::rendering
                     }
                 }, nullptr);
                 log::info("loaded OpenGL version: {}.{}", GLVersion.major, GLVersion.minor);
-
-                textureSize = m_ecs->world.get_component_handle<app::window>().read().size() * superSampleAmount;
             }
 
             glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
@@ -440,7 +438,10 @@ namespace legion::rendering
             {
                 
                 math::ivec2 superSize = viewportSize* superSampleAmount;
-                
+
+
+                static math::ivec2 textureSize = superSize;
+
                 //framebuffer
                 static framebuffer fbo;
                 //texture
@@ -448,7 +449,7 @@ namespace legion::rendering
         texture_type::two_dimensional, channel_format::eight_bit, texture_format::rgb,
         texture_components::rgb, true, true, texture_mipmap::linear, texture_mipmap::linear,
         texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat });
-                static renderbuffer rbo{ GL_DEPTH24_STENCIL8, viewportSize.x,viewportSize.y };
+                static renderbuffer rbo{ GL_DEPTH24_STENCIL8, superSize.x, superSize.y };
                 static texture_handle depthtexture = TextureCache::create_texture("depth_image", superSize,{
         texture_type::two_dimensional, channel_format::eight_bit, texture_format::depth,
         texture_components::depth, true, true, texture_mipmap::linear, texture_mipmap::linear,
@@ -456,9 +457,10 @@ namespace legion::rendering
 
                 if (textureSize != superSize)
                 {
-                    //texture.get_texture().resize(superSize);
-                    //depthtexture.get_texture().resize(superSize);
+                    texture.get_texture().resize(superSize);
+                    depthtexture.get_texture().resize(superSize);
                     //rbo.resize(superSize);
+                    textureSize = superSize;
                 }
 
                 //shader init
@@ -467,12 +469,12 @@ namespace legion::rendering
                 //attach fbo and texture
                 fbo.bind();
                 fbo.attach(texture, GL_COLOR_ATTACHMENT0);
-                fbo.attach(rbo, GL_DEPTH_STENCIL_ATTACHMENT);
-                //fbo.attach(depthtexture, GL_DEPTH_ATTACHMENT);
+                //fbo.attach(rbo, GL_DEPTH_STENCIL_ATTACHMENT);
+                fbo.attach(depthtexture, GL_DEPTH_ATTACHMENT);
 
                 //verification step
-                auto [verified, result] = fbo.verify();
-                if (!verified) log::warn(result);
+                auto [verified, message] = fbo.verify();
+                if (!verified) log::warn(message);
 
                 glViewport(0, 0, superSize.x, superSize.y);
                 glClearColor(0.3f, 0.5f, 1.0f, 1.0f);
@@ -579,8 +581,6 @@ namespace legion::rendering
                 //draw quad with color texture
                 glBindVertexArray(quadVAO);
                 glDrawArrays(GL_TRIANGLES, 0, 6);
-
-                textureSize = superSize;
             }
             else
             {
@@ -614,7 +614,6 @@ namespace legion::rendering
              1.0f,  1.0f,  1.0f, 1.0f
         };
         unsigned int quadVAO, quadVBO;
-        math::ivec2 textureSize;
         unsigned int superSampleAmount = 2;
     };
 }

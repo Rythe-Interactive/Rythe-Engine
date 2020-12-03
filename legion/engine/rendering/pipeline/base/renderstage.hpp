@@ -8,7 +8,7 @@ namespace legion::rendering
 
     class RenderStage
     {
-        friend class Renderer;
+        friend class OldRenderer;
     protected:
         static ecs::EcsRegistry* m_ecs;
         static schd::Scheduler* m_scheduler;
