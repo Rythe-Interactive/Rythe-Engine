@@ -12,6 +12,7 @@
 #include "pointcloud_particlesystem.hpp"
 #include <rendering/components/particle_emitter.hpp>
 
+
 using namespace legion;
 
 class TestSystem2 final : public System<TestSystem2>
@@ -23,8 +24,13 @@ public:
         app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1);
     }
 
+
+
+
     virtual void setup()
     {
+
+
         rendering::model_handle cube;
         rendering::material_handle flatGreen;
         rendering::material_handle vertexColor;
@@ -72,14 +78,14 @@ public:
             params.particleMaterial = vertexColor,
                 params.particleModel = cube
             };
-            auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud",params, positions);
+            auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params, positions);
 
 #pragma region entities
 
             {
                 auto ent = createEntity();
                 ent.add_components<transform>(position(-5, 0.01f, 0), rotation(), scale(1));
-                rendering::particle_emitter emitter =  ent.add_component<rendering::particle_emitter>().read();
+                rendering::particle_emitter emitter = ent.add_component<rendering::particle_emitter>().read();
                 emitter.particleSystemHandle = pointcloud;
                 ent.get_component_handle<rendering::particle_emitter>().write(emitter);
             }
@@ -91,6 +97,6 @@ public:
 
     virtual void update()
     {
-        
+
     }
 };

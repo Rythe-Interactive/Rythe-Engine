@@ -22,6 +22,7 @@
 #include <physics/physics_statics.hpp>
 #include <physics/data/identifier.hpp>
 #include <audio/audio.hpp>
+#include <Voro++/voro++.hh>
 
 using namespace legion;
 
@@ -75,6 +76,8 @@ struct activateFrictionTest : public app::input_action<activateFrictionTest> {};
 struct extendedPhysicsContinue : public app::input_action<extendedPhysicsContinue> {};
 struct nextPhysicsTimeStepContinue : public app::input_action<nextPhysicsTimeStepContinue> {};
 
+double rnd() { return double(rand()) / RAND_MAX; }
+
 class TestSystem final : public System<TestSystem>
 {
 public:
@@ -120,9 +123,11 @@ public:
     ecs::entity_handle Point6FrictionBody;
     ecs::entity_handle FullFrictionBody;
 
+
     virtual void setup()
     {
-
+        GNUPlatonicSolids();
+        GNURandomPoints();
 #pragma region Input binding
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::LEFT, -1.f);
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::RIGHT, 1.f);
@@ -2100,7 +2105,6 @@ public:
 
     }
 
-
     void FrictionTestActivate(activateFrictionTest* action)
     {
         if (action->value)
@@ -2197,6 +2201,142 @@ public:
         }
     }
 
+    void GNUPlotVoronoi()
+    {
+        double x, y, z, rsq, r;
+        voro::voronoicell v;
+
+        v.init(-1, 1, -1, 1, -1, 1);
+        for (int i = 0; i < 250; i++) {
+            x = 2 * rnd() - 1;
+            y = 2 * rnd() - 1;
+            z = 2 * rnd() - 1;
+            rsq = x * x + y * y + z * z;
+            if (rsq > 0.01 && rsq < 1) {
+                r = 1 / sqrt(rsq); x *= r; y *= r; z *= r;
+                v.plane(x, y, z, 1);
+            }
+        }
+
+        v.draw_gnuplot(0, 0, 0, "assets/voronoi/output/single_cell.gnu");
+    }
+
+    void GNUPlatonicSolids()
+    {
+        const double Phi = 0.5 * (1 + sqrt(5.0));
+        const double phi = 0.5 * (1 - sqrt(5.0));
+
+        voro::voronoicell v;
+
+        // Create a tetrahedron
+        v.init(-2, 2, -2, 2, -2, 2);
+        v.plane(1, 1, 1);
+        v.plane(1, -1, -1);
+        v.plane(-1, 1, -1);
+        v.plane(-1, -1, 1);
+        std::vector<int> vi;
+        v.face_freq_table(vi);
+        voro::voro_print_vector(vi);
+
+        v.draw_gnuplot(0, 0, 0, "assets/voronoi/output/tetrahedron.gnu");
+
+        // Create a cube. Since this is the default shape
+          // we don't need to do any plane cutting.
+        v.init(-1, 1, -1, 1, -1, 1);
+        v.draw_gnuplot(0, 0, 0, "assets/voronoi/output/cube.gnu");
+
+        // Create an octahedron
+        v.init(-2, 2, -2, 2, -2, 2);
+        v.plane(1, 1, 1);
+        v.plane(-1, 1, 1);
+        v.plane(1, -1, 1);
+        v.plane(-1, -1, 1);
+        v.plane(1, 1, -1);
+        v.plane(-1, 1, -1);
+        v.plane(1, -1, -1);
+        v.plane(-1, -1, -1);
+
+        v.draw_gnuplot(0, 0, 0, "assets/voronoi/output/octahedron.gnu");
+
+        // Create a dodecahedron
+        v.init(-2, 2, -2, 2, -2, 2);
+        v.plane(0, Phi, 1);
+        v.plane(0, -Phi, 1);
+        v.plane(0, Phi, -1);
+        v.plane(0, -Phi, -1);
+        v.plane(1, 0, Phi);
+        v.plane(-1, 0, Phi);
+        v.plane(1, 0, -Phi);
+        v.plane(-1, 0, -Phi);
+        v.plane(Phi, 1, 0);
+        v.plane(-Phi, 1, 0);
+        v.plane(Phi, -1, 0);
+        v.plane(-Phi, -1, 0);
+
+        v.draw_gnuplot(0, 0, 0, "assets/voronoi/output/dodecahedron.gnu");
+
+        // Create an icosahedron
+        v.init(-2, 2, -2, 2, -2, 2);
+        v.plane(1, 1, 1);
+        v.plane(-1, 1, 1);
+        v.plane(1, -1, 1);
+        v.plane(-1, -1, 1);
+        v.plane(1, 1, -1);
+        v.plane(-1, 1, -1);
+        v.plane(1, -1, -1);
+        v.plane(-1, -1, -1);
+        v.plane(0, phi, Phi);
+        v.plane(0, phi, -Phi);
+        v.plane(0, -phi, Phi);
+        v.plane(0, -phi, -Phi);
+        v.plane(Phi, 0, phi);
+        v.plane(Phi, 0, -phi);
+        v.plane(-Phi, 0, phi);
+        v.plane(-Phi, 0, -phi);
+        v.plane(phi, Phi, 0);
+        v.plane(phi, -Phi, 0);
+        v.plane(-phi, Phi, 0);
+        v.plane(-phi, -Phi, 0);
+
+        v.draw_gnuplot(0, 0, 0, "assets/voronoi/output/icosahedron.txt");
+    }
+
+    void GNURandomPoints()
+    {
+        const double x_min = -1, x_max = 1;
+        const double y_min = -1, y_max = 1;
+        const double z_min = -1, z_max = 1;
+        const double cvol = (x_max - x_min) * (y_max - y_min) * (x_max - x_min);
+
+        const int n_x = 6, n_y = 6, n_z = 6;
+
+        const int particles = 20;
+
+        int i;
+        double x, y, z;
+
+        // Create a container with the geometry given above, and make it
+            // non-periodic in each of the three coordinates. Allocate space for
+           // eight particles within each computational block
+        voro::container con(x_min, x_max, y_min, y_max, z_min, z_max, n_x, n_y, n_z,
+            false, false, false, 8);
+
+        // Randomly add particles into the container
+        for (i = 0; i < particles; i++) {
+            x = x_min + rnd() * (x_max - x_min);
+            y = y_min + rnd() * (y_max - y_min);
+            z = z_min + rnd() * (z_max - z_min);
+            con.put(i, x, y, z);
 
 
+
+            // Sum up the volumes, and check that this matches the container volume
+            double vvol = con.sum_cell_volumes();
+
+            // Output the particle positions in gnuplot format
+            con.draw_cells_gnuplot("assets/voronoi/output/random_points_v.txt");
+            con.draw_cells_gnuplot("assets/voronoi/output/random_points_v.gnu");
+            con.draw_particles("assets/voronoi/output/particles.txt");
+        }
+    }
 };
