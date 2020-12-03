@@ -184,6 +184,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="filesystem\view.hpp" />
     <ClInclude Include="compute\program.hpp" />
     <ClInclude Include="logging\logging.hpp" />
+    <ClInclude Include="math\close_enough.hpp" />
     <ClInclude Include="math\color.hpp" />
     <ClInclude Include="math\constants.hpp" />
     <ClInclude Include="math\glm\common.hpp" />

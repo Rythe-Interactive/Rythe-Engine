@@ -44,6 +44,7 @@ public:
 
             cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
             wireFrameH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.shs"_view);
+            vertexColor = rendering::MaterialCache::create_material("vertexColor", "assets://shaders/vertexcolor.shs"_view);
 
             // Create physics entity
             {
@@ -59,8 +60,14 @@ public:
             // Create entity for reference
             {
                 auto ent = createEntity();
+                ent.add_components<rendering::renderable>({ cube, vertexColor });
+                ent.add_components<transform>(position(3.5f, 0, 0), rotation(), scale(1));
+            }
+            // Create entity for reference
+            {
+                auto ent = createEntity();
                 ent.add_components<rendering::renderable>({ cube, wireFrameH });
-                ent.add_components<transform>(position(1.5f, 0, 0), rotation(), scale(1));
+                ent.add_components<transform>(position(0, 0, -3.5f), rotation(), scale(1));
             }
 
         }
@@ -70,6 +77,7 @@ public:
     {
         auto debugDrawEdges = [](legion::physics::HalfEdgeEdge* edge)
         {
+            if (!edge || !edge->nextEdge) return;
             math::vec3 pos0 = edge->edgePosition;
             math::vec3 pos1 = edge->nextEdge->edgePosition;
             debug::drawLine(pos0, pos1, math::colors::red);

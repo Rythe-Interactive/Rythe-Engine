@@ -410,6 +410,7 @@
     <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
     <ClInclude Include="math\geometry.hpp" />
+    <ClInclude Include="math\close_enough.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">
