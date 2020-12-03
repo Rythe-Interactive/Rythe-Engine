@@ -25,4 +25,6 @@ namespace legion::physics::constants
     static constexpr float sutherlandHodgmanClippingThreshold = 0.01f;
 
     static constexpr bool applyWarmStarting = true;
+
+    static constexpr float polygonItersectionEpsilon = 0.01f;
 }

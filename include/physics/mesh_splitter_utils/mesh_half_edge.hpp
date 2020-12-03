@@ -1,5 +1,6 @@
 #pragma once
 #include <core/core.hpp>
+#include <physics/mesh_splitter_utils/splittable_polygon.h>
 
 namespace legion::physics
 {
@@ -8,8 +9,10 @@ namespace legion::physics
         math::vec3 position;
         std::shared_ptr<MeshHalfEdge> nextEdge;
         std::shared_ptr<MeshHalfEdge> pairingEdge;
+        std::weak_ptr<SplittablePolygon> owner;
 
         bool isVisited = false;
+        bool isBoundary = false;
 
         MeshHalfEdge(math::vec3 pPosition) : position(pPosition)
         {
@@ -45,9 +48,34 @@ namespace legion::physics
 
         void populateQueueWithTriangleNeighbor(std::queue<std::shared_ptr<MeshHalfEdge>>& edgeQueue)
         {
-            edgeQueue.push(pairingEdge);
-            edgeQueue.push(nextEdge->pairingEdge);
-            edgeQueue.push(nextEdge->nextEdge->pairingEdge);
+            if (pairingEdge)
+            {
+                edgeQueue.push(pairingEdge);
+            }
+            //else
+            //{
+            //    isBoundary = true;
+            //}
+
+
+            if (nextEdge->pairingEdge)
+            {
+                edgeQueue.push(nextEdge->pairingEdge);
+            }
+            /*else
+            {
+                nextEdge->isBoundary = true;
+            }*/
+
+            if (nextEdge->nextEdge->pairingEdge)
+            {
+                edgeQueue.push(nextEdge->nextEdge->pairingEdge);
+            }
+            /*else
+            {
+                nextEdge->nextEdge->isBoundary = true;
+            }*/
+
         }
 
         void populateVectorWithTriangle(std::vector<std::shared_ptr<MeshHalfEdge>>& edgeVector)
@@ -74,12 +102,24 @@ namespace legion::physics
 
         bool IsNormalCloseEnough(const math::vec3& comparisonNormal, const math::mat4& transform)
         {
-            static float toleranceResult = 0.05f;
+            
+            //float dotResult = math::dot(CalculateEdgeNormal(transform), comparisonNormal);
 
-            float dotResult = math::dot(CalculateEdgeNormal(transform), comparisonNormal);
-
-            return math::abs(dotResult) > (1.0f - toleranceResult);
+            return CompareNormals(CalculateEdgeNormal(transform), comparisonNormal);
         }
+
+        static bool CompareNormals(const math::vec3& comparisonNormal, const math::vec3& otherNormal) 
+        {
+            static float toleranceDot = math::cos(math::deg2rad(5.0f));
+
+            float dotResult = math::dot(otherNormal, comparisonNormal);
+
+
+            return dotResult > toleranceDot;
+        }
+
+        
+
 
     };
 

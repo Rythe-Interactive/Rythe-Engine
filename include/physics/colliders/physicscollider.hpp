@@ -8,7 +8,7 @@
 
 namespace legion::physics
 {
-
+    //class PhysicsCollider;
     struct physics_manifold;
     class ConvexCollider;
 

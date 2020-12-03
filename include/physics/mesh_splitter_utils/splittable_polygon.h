@@ -1,27 +1,51 @@
 #pragma once
 #include <core/core.hpp>
-#include <physics/mesh_splitter_utils/mesh_half_edge.hpp>
+
 
 namespace legion::physics
 {
-	class SplittablePolygon
+	enum class SplitState
+	{
+		Above,
+		Below,
+		Split,
+		Unknown
+	};
+
+	struct MeshHalfEdge;
+
+	class SplittablePolygon : public std::enable_shared_from_this<SplittablePolygon>
 	{
 	public:
-		SplittablePolygon(std::vector<std::shared_ptr<MeshHalfEdge>> pEdgesInMesh);
+		SplittablePolygon(std::vector<std::shared_ptr<MeshHalfEdge>> pEdgesInMesh,math::vec3 normal);
 
 		std::vector<std::shared_ptr<MeshHalfEdge>>& GetMeshEdges();
 
-		void calculateLocalCentroid();
+		void CalculateLocalCentroid();
+
+		void AssignEdgeOwnership();
+		
+
+		void CalculatePolygonSplit(const math::mat4& transform
+			, math::vec3 planePosition, math::vec3 planeNormal);
+
+		void IdentifyBoundaries(const math::mat4& transform);
+
+		SplitState GetPolygonSplitState() const;
 
 		//mostly used for debugging
 		math::vec3 localCentroid{ 0,0,0 };
 		math::color debugColor;
 
+		bool isVisited = false;
+
+		math::vec3 localNormal;
 	private:
 
-		
+		SplitState m_SplitState = SplitState::Unknown;
 
-		std::vector<std::shared_ptr<MeshHalfEdge>> edgesInMesh;
+		std::vector<std::shared_ptr<MeshHalfEdge>> edgesInPolygon;
+
 
 
 	};
