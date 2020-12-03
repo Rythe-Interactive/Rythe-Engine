@@ -22,6 +22,20 @@ namespace legion::rendering
         retrieveBinaryData(value->type, start);
     }
 
+    void texture::resize(math::ivec2 newSize) const
+    {
+        glTexImage2D(
+            static_cast<GLenum>(type),
+            0,
+            static_cast<GLint>(format),
+            newSize.x,
+            newSize.y,
+            0,
+            components_to_format[static_cast<int>(channels)],
+            channels_to_glenum[static_cast<uint>(fileFormat)],
+            NULL);
+    }
+
     sparse_map<id_type, texture> TextureCache::m_textures;
     async::readonly_rw_spinlock TextureCache::m_textureLock;
     texture_handle TextureCache::m_invalidTexture;
@@ -60,7 +74,6 @@ namespace legion::rendering
             else
                 texture = m_textures[id];
         }
-
         texture_data data{};
         data.size.x = texture.size.x;
         data.size.y = texture.size.y;
@@ -98,7 +111,6 @@ namespace legion::rendering
             async::readwrite_guard guard(m_textureLock);
             m_textures.insert(id, result);
         }
-
         log::debug("Created texture {} with file: {}", name, file.get_filename().decay());
 
         return { id };
@@ -139,6 +151,8 @@ namespace legion::rendering
 
         texture.size = size;
         texture.channels = settings.components;
+        texture.format = settings.intendedFormat;
+        texture.fileFormat = settings.fileFormat;
 
         // Construct the texture using the loaded data.
         glTexImage2D(

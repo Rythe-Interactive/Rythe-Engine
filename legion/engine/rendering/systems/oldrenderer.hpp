@@ -365,7 +365,7 @@ namespace legion::rendering
                 }, nullptr);
                 log::info("loaded OpenGL version: {}.{}", GLVersion.major, GLVersion.minor);
 
-
+                textureSize = m_ecs->world.get_component_handle<app::window>().read().size() * superSampleAmount;
             }
 
             glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
@@ -439,8 +439,8 @@ namespace legion::rendering
             if (viewportSize.x != 0 && viewportSize.y != 0)
             {
                 
-                math::ivec2 superSize = viewportSize*2;
-
+                math::ivec2 superSize = viewportSize* superSampleAmount;
+                
                 //framebuffer
                 static framebuffer fbo;
                 //texture
@@ -448,20 +448,27 @@ namespace legion::rendering
         texture_type::two_dimensional, channel_format::eight_bit, texture_format::rgb,
         texture_components::rgb, true, true, texture_mipmap::linear, texture_mipmap::linear,
         texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat });
-
+                static renderbuffer rbo{ GL_DEPTH24_STENCIL8, viewportSize.x,viewportSize.y };
                 static texture_handle depthtexture = TextureCache::create_texture("depth_image", superSize,{
         texture_type::two_dimensional, channel_format::eight_bit, texture_format::depth,
         texture_components::depth, true, true, texture_mipmap::linear, texture_mipmap::linear,
         texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat });
-                //render buffer
-                //static renderbuffer rbo{ GL_DEPTH24_STENCIL8, superSize };
+
+                if (textureSize != superSize)
+                {
+                    //texture.get_texture().resize(superSize);
+                    //depthtexture.get_texture().resize(superSize);
+                    //rbo.resize(superSize);
+                }
+
                 //shader init
                 static auto screenShader = ShaderCache::create_shader("screen_shader", "assets://shaders/screenshader.shs"_view);
 
                 //attach fbo and texture
                 fbo.bind();
                 fbo.attach(texture, GL_COLOR_ATTACHMENT0);
-                fbo.attach(depthtexture, GL_DEPTH_ATTACHMENT);
+                fbo.attach(rbo, GL_DEPTH_STENCIL_ATTACHMENT);
+                //fbo.attach(depthtexture, GL_DEPTH_ATTACHMENT);
 
                 //verification step
                 auto [verified, result] = fbo.verify();
@@ -572,6 +579,8 @@ namespace legion::rendering
                 //draw quad with color texture
                 glBindVertexArray(quadVAO);
                 glDrawArrays(GL_TRIANGLES, 0, 6);
+
+                textureSize = superSize;
             }
             else
             {
@@ -605,5 +614,7 @@ namespace legion::rendering
              1.0f,  1.0f,  1.0f, 1.0f
         };
         unsigned int quadVAO, quadVBO;
+        math::ivec2 textureSize;
+        unsigned int superSampleAmount = 2;
     };
 }

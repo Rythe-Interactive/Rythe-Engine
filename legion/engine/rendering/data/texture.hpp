@@ -91,9 +91,12 @@ namespace legion::rendering
         math::ivec2 size;
         texture_components channels;
         texture_type type;
+        texture_format format;
+        channel_format fileFormat;
 
         static void to_resource(fs::basic_resource* resource, const texture& value);
         static void from_resource(texture* value, const fs::basic_resource& resource);
+        void resize(math::ivec2 size) const;
     };
 
     /**@class texture_handle
