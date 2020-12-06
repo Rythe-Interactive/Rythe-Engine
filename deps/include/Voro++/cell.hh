@@ -90,6 +90,7 @@ class voronoicell_base {
 		void init_tetrahedron_base(double x0,double y0,double z0,double x1,double y1,double z1,double x2,double y2,double z2,double x3,double y3,double z3);
 		void translate(double x,double y,double z);
 		void draw_pov(double x,double y,double z,FILE *fp=stdout);
+		void draw_json(double x, double y, double z, double cellId,FILE* fp = stdout);
 		/** Outputs the cell in POV-Ray format, using cylinders for edges
 		 * and spheres for vertices, to a given file.
 		 * \param[in] (x,y,z) a displacement to add to the cell's
