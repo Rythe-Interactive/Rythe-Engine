@@ -419,17 +419,51 @@ namespace legion::physics
         }
 
 
+        /**Creates a Voronoi diagram based on the given parameters.
+        * @param points A list of points these will serve as the points of the voronoi diagram.
+        * @param xRange The min and max of the width of the voronoi diagram space.
+        * @param yRange The min and max of the height of the voronoi diagram space.
+        * @param zRange The min and max of the depth of the voronoi diagram space.
+        * @param containerResolution The resolution of the contianer the voronoi diagram will be generated in.
+        * @param xPeriodic A bool that decides whether x should be periodic.
+        * @param yPeriodic A bool that decides whether y should be periodic.
+        * @param zPeriodic A bool that decides whether z should be periodic.
+        * @param initMem The initial memory amount.
+        * @return A list of lists of vec4's
+        */
         static std::vector<std::vector<math::vec4>> GenerateVoronoi(std::vector<math::vec3> points,math::vec2 xRange, math::vec2 yRange, math::vec2 zRange, math::vec3 containerResolution, bool xPeriodic = false, bool yPeriodic = false, bool zPeriodic = false, int initMem = 8)
         {
             return GenerateVoronoi(points,xRange.x,xRange.y,yRange.x,yRange.y,zRange.x,zRange.y,containerResolution.x,containerResolution.y,containerResolution.z,xPeriodic,yPeriodic,zPeriodic,initMem);
         }
 
+        /**Creates a Voronoi diagram based on the given parameters.
+        * @param points A list of points these will serve as the points of the voronoi diagram.
+        * @param xMin The min of the width of the voronoi diagram space.
+         * @param xMax The max of the width of the voronoi diagram space.
+        * @param yMin The min of the height of the voronoi diagram space.
+        * @param yMax The  max of the height of the voronoi diagram space
+        * @param zMin The min of the depth of the voronoi diagram space.
+        * @param zMax The max of the depth of the voronoi diagram space 
+        * @param conResX The x resolution of the contianer the voronoi diagram will be generated in.
+        * @param conResY The y resolution of the contianer the voronoi diagram will be generated in.
+        * @param conResZ The z resolution of the contianer the voronoi diagram will be generated in.
+        * @param xPeriodic A bool that decides whether x should be periodic.
+        * @param yPeriodic A bool that decides whether y should be periodic.
+        * @param zPeriodic A bool that decides whether z should be periodic.
+        * @param initMem The initial memory amount.
+        * @return A list of lists of vec4's
+        */
         static std::vector<std::vector<math::vec4>> GenerateVoronoi(std::vector<math::vec3> points,const double xMin = -5, const double xMax = 5, const double yMin = -5, const double yMax = 5, const double zMin = -5, const double zMax = 5,const double conResX = 10,const double conResY = 10 , const double conResZ = 10,bool xPeriodic = false,bool yPeriodic = false,bool zPeriodic = false,int initMem = 8)
         {
             voro::container con(xMin, xMax, yMin, yMax, zMin, zMax, conResX, conResY, conResZ, xPeriodic, yPeriodic, zPeriodic, initMem);
             return GenerateVoronoi(con,points);
         }
 
+        /**Creates a Voronoi diagram based on the given parameters.
+        * @param con The container that hold the parameters and generates the voronoi diagram.
+        * @param points A list of points these will serve as the points of the voronoi diagram.
+        * @return A list of lists of vec4's
+        */
         static std::vector<std::vector<math::vec4>> GenerateVoronoi(voro::container& con,std::vector<math::vec3> points)
         {
             int i = 0;
@@ -441,6 +475,10 @@ namespace legion::physics
             return GenerateVoronoi(con);
         }
 
+        /**Creates a Voronoi diagram based on the given parameters.
+        * @param con The container that hold the parameters and generates the voronoi diagram.
+        * @return A list of lists of vec4's
+        */
         static std::vector<std::vector<math::vec4>> GenerateVoronoi(voro::container& con)
         {
             con.draw_cells_json("assets/voronoi/output/cells.json");
