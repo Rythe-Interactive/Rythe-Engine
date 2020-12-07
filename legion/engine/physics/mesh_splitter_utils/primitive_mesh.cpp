@@ -3,7 +3,7 @@
 
 namespace legion::physics
 {
-
+    ecs::EcsRegistry* PrimitiveMesh::m_ecs = nullptr;
     ecs::entity_handle PrimitiveMesh::InstantiateNewGameObject()
     {
         auto ent = m_ecs->createEntity();
@@ -33,7 +33,7 @@ namespace legion::physics
 
         mesh_handle meshH = core::MeshCache::create_mesh("newMesh", newMesh);
 
-        auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+        //auto renderableHandle = m_ecs->createComponents<rendering::renderable>(ent);
        //rendering::ModelCache::create_model(meshH)
 
         auto transformH = m_ecs->createComponents<transform>(ent);

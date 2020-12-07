@@ -6,6 +6,7 @@
 #include <physics/mesh_splitter_utils/splittable_polygon.h>
 #include <rendering/components/renderable.hpp>
 #include <physics/mesh_splitter_utils/primitive_mesh.h>
+#include <rendering/components/renderable.hpp>
 
 namespace legion::physics
 {
@@ -37,41 +38,13 @@ namespace legion::physics
         
     };
 
-    class SortingCriterium
-    {
-    public:
-
-        SortingCriterium(
-            const math::vec3& pSortingCentroid,
-            const math::vec3& pSortingDirection,
-            const math::mat4& pTransform) : sortingCentroid(pSortingCentroid),
-            sortingDirection(pSortingDirection), transform(pTransform)
-        {
-
-        }
-
-        math::vec3 sortingCentroid;
-        math::vec3 sortingDirection;
-        math::mat4 transform;
-
-        bool operator()(MeshHalfEdge& left, MeshHalfEdge& right) const
-        {
-            math::vec3 aWorldCentroid = left.GetWorldCentroid(transform);
-            math::vec3 bWorldCentroid = right.GetWorldCentroid(transform);
-
-            math::vec3 AtoPolygonCentroid = aWorldCentroid - sortingCentroid;
-            math::vec3 BtoPolygonCentroid = bWorldCentroid - sortingCentroid;
-
-            return
-                math::dot(AtoPolygonCentroid, sortingDirection) <
-                math::dot(BtoPolygonCentroid, sortingDirection);
-        }
-    };
-
     struct MeshSplitter
     {
         ecs::entity_handle owner;
         ecs::entity_handle splitTester;
+
+        rendering::material_handle ownerMaterialH;
+        
 
         meshHalfEdgePtr currentPtr;
 
@@ -81,6 +54,7 @@ namespace legion::physics
 
         void TestSplit()
         {
+            
             if (splitTester)
             {
                 
@@ -104,16 +78,19 @@ namespace legion::physics
         {
             owner = entity;
 
-            auto rederableHandle = entity.get_component_handle<rendering::renderable>();
-            auto [posH, rotH, scaleH] = entity.get_component_handles<transform>();
+            auto [meshFilter,meshRenderer] = entity.get_component_handles<rendering::renderable>();
 
-            if (rederableHandle && posH && rotH && scaleH)
+            ownerMaterialH = meshRenderer.read().material;
+
+            auto [posH, rotH, scaleH] = entity.get_component_handles<transform>();
+            
+            if (meshFilter && posH && rotH && scaleH)
             {
                 log::debug("Mesh and Transform found");
                 std::queue<meshHalfEdgePtr> meshHalfEdges;
 
-                auto renderable = rederableHandle.read();
-                mesh mesh = renderable.model.get_mesh().get().second;
+                //auto renderable = renderable.read();
+                mesh& mesh = meshFilter.read().get().second;
 
                 const math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
 
@@ -403,7 +380,6 @@ namespace legion::physics
                     splitMesh,
                     nonSplitMesh,requestedState);
 
-
                 //---------------------------------- Copy all polygons in splitMesh and nonSplitMesh ----------------------------------//
                 CopyPolygons(splitMesh, nonSplitMesh);
 
@@ -412,9 +388,7 @@ namespace legion::physics
                 std::vector<std::vector<SplittablePolygonPtr>> intersectionIslands;
 
                 //----------------------------------- Detect multiple holes in mesh  --------------------------------------------------//
-
                 DetectIntersectionIsland(splitMesh, intersectionIslands);
-
 
                 for ( std::vector<SplittablePolygonPtr>& intersectionIsland : intersectionIslands)
                 {
@@ -435,8 +409,8 @@ namespace legion::physics
                 resultPolygon.insert(resultPolygon.end(),
                     std::make_move_iterator(nonSplitMesh.begin()), std::make_move_iterator(nonSplitMesh.end()));
                 
-                PrimitiveMesh newMesh(resultPolygon);
-
+                PrimitiveMesh newMesh(resultPolygon, ownerMaterialH);
+                newMesh.InstantiateNewGameObject();
 
                 initialFound->isVisited = true;
 
@@ -444,10 +418,6 @@ namespace legion::physics
                     FindFirstIntersectingOrRequestedState
                     (initialFound, requestedState);
             }
-
-
-
-
         }
 
         void BFSFindRequestedAndIntersecting(

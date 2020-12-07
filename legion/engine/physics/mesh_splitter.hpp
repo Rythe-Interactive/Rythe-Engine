@@ -38,37 +38,6 @@ namespace legion::physics
         
     };
 
-    class SortingCriterium
-    {
-    public:
-
-        SortingCriterium(
-            const math::vec3& pSortingCentroid,
-            const math::vec3& pSortingDirection,
-            const math::mat4& pTransform) : sortingCentroid(pSortingCentroid),
-            sortingDirection(pSortingDirection), transform(pTransform)
-        {
-
-        }
-
-        math::vec3 sortingCentroid;
-        math::vec3 sortingDirection;
-        math::mat4 transform;
-
-        bool operator()(MeshHalfEdge& left, MeshHalfEdge& right) const
-        {
-            math::vec3 aWorldCentroid = left.GetWorldCentroid(transform);
-            math::vec3 bWorldCentroid = right.GetWorldCentroid(transform);
-
-            math::vec3 AtoPolygonCentroid = aWorldCentroid - sortingCentroid;
-            math::vec3 BtoPolygonCentroid = bWorldCentroid - sortingCentroid;
-
-            return
-                math::dot(AtoPolygonCentroid, sortingDirection) <
-                math::dot(BtoPolygonCentroid, sortingDirection);
-        }
-    };
-
     struct MeshSplitter
     {
         ecs::entity_handle owner;
@@ -109,20 +78,19 @@ namespace legion::physics
         {
             owner = entity;
 
-            auto renderableH = entity.get_component_handle<rendering::renderable>();
-            
-            ownerMaterialH = renderableH.read().material;
+            auto [meshFilter,meshRenderer] = entity.get_component_handles<rendering::renderable>();
 
-            auto rederableHandle = entity.get_component_handle<rendering::renderable>();
+            ownerMaterialH = meshRenderer.read().material;
+
             auto [posH, rotH, scaleH] = entity.get_component_handles<transform>();
-
-            if (rederableHandle && posH && rotH && scaleH)
+            
+            if (meshFilter && posH && rotH && scaleH)
             {
                 log::debug("Mesh and Transform found");
                 std::queue<meshHalfEdgePtr> meshHalfEdges;
 
-                auto renderable = rederableHandle.read();
-                mesh mesh = renderable.model.get_mesh().get().second;
+                //auto renderable = renderable.read();
+                mesh& mesh = meshFilter.read().get().second;
 
                 const math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
 

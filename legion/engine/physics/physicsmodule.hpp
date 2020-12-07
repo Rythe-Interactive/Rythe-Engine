@@ -20,7 +20,7 @@ namespace legion::physics
             reportComponentType<rigidbody>();
             reportComponentType<identifier>();
             reportComponentType<MeshSplitter>();
-
+            //reportComponentType <addRB>();
         }
 
         virtual priority_type priority() override

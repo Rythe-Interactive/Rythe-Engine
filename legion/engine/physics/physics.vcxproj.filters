@@ -42,6 +42,12 @@
     <ClCompile Include="systems\physicssystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="mesh_splitter_utils\primitive_mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh_splitter_utils\splittable_polygon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cube_collider_params.hpp">
@@ -120,6 +126,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="events\events.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_splitter_utils\mesh_half_edge.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_splitter_utils\mesh_splitter_typedefs.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_splitter_utils\primitive_mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_splitter_utils\splittable_polygon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_splitter.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
