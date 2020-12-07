@@ -70,6 +70,8 @@ public:
                 ent.add_components<transform>(position(0, 0, -3.5f), rotation(), scale(1));
             }
 
+            //float pointToTri = math::pointToTriangle(math::vec3(2, 1, 1), math::vec3(0,0,0), math::vec3(0, 2, 1), math::vec3(0, 0, 2), math::vec3(1,0,0));
+            //log::debug("\t\t\tPoint to tri: {}", pointToTri);
         }
     }
 

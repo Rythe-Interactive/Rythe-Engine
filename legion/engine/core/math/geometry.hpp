@@ -135,7 +135,7 @@ namespace legion::core::math
         float projectionLength = length(p - triPoint0) * cosAngle;
         float positive = 1;
         if (projectionLength < 0) positive = -1;
-        std::cout << "\t\t\t\t\t\tPositive: " << positive << std::endl;
+        //std::cout << "\t\t\t\t\t\tPositive: " << positive << std::endl;
         vec3 towardProjection = -projectionLength * (triNormal / length(triNormal));
         // Q is the projection of p onto the plane
         vec3 q = p + towardProjection;
@@ -161,30 +161,30 @@ namespace legion::core::math
         double q12Area = triangleSurface(q, triPoint1, triPoint2);
         double triArea = triangleSurface(triPoint0, triPoint1, triPoint2);
         double area = (q01Area + q02Area + q12Area);
-        std::cout << "\t\t\t\t\t\tAreas: " << q01Area << " + " << q02Area << " + " << q12Area << " = " << area << " == " << triArea << std::endl;
+        //std::cout << "\t\t\t\t\t\tAreas: " << q01Area << " + " << q02Area << " + " << q12Area << " = " << area << " == " << triArea << std::endl;
 
         // If the area of q to each set of two points is equal to the triangle surface area, q is on the triangle
         if (math::close_enough(area, triArea))
         {
-            std::cout << "\t\t\t\t\t\tclose enough!" << std::endl;
+            //std::cout << "\t\t\t\t\t\tclose enough!" << std::endl;
             // The distance is simply the distance between the original point and the projected point of p (q)
             //std::cout << "\t\t\t\t\t\tReturning distance to q: " << (distance(p, q) * positive) << std::endl;
             //return distance(p, q)*positive;
             //std::cout << "\t\t\t\t\t\tReturning distance to q, diff: " << abs(distance(p, q)*positive-projectionLength) << std::endl;
-            std::cout << "\t\t\t\t\t\tReturning distance: " << projectionLength << std::endl;
-            std::cout << "\t\t\t\t\t\tTo point: " << length(p - q) << std::endl;
+            //std::cout << "\t\t\t\t\t\tReturning distance: " << projectionLength << std::endl;
+            //std::cout << "\t\t\t\t\t\tTo point: " << length(p - q) << std::endl;
             return projectionLength;
         }
 
-        std::cout << "\t\t\t\t\t\tCalculating line distances: " << std::endl;
+        //std::cout << "\t\t\t\t\t\tCalculating line distances: " << std::endl;
 
         //Point q is not on the triangle, check distance toward each edge of the triangle
         float distance01 = pointToLine(p, triPoint1, triPoint0);
         float distance02 = pointToLine(p, triPoint2, triPoint0);
         float distance12 = pointToLine(p, triPoint2, triPoint1);
-        std::cout << "\t\t\t\t\t\t\t01: " << distance01 << "\n";
-        std::cout << "\t\t\t\t\t\t\t02: " << distance02 << "\n";
-        std::cout << "\t\t\t\t\t\t\t12: " << distance12 << "\n";
+        //std::cout << "\t\t\t\t\t\t\t01: " << distance01 << "\n";
+        //std::cout << "\t\t\t\t\t\t\t02: " << distance02 << "\n";
+        //std::cout << "\t\t\t\t\t\t\t12: " << distance12 << "\n";
 
         // Assume the shortest distance is sqDistance01
         // Then check if this is true
@@ -195,7 +195,7 @@ namespace legion::core::math
         }
         else if (distance12 < distance01) shortestDistance = distance12;
 
-        std::cout << "\t\t\t\t\t\tReturning shortest distance: " << shortestDistance << std::endl;
+        //std::cout << "\t\t\t\t\t\tReturning shortest distance: " << shortestDistance << std::endl;
 
         return shortestDistance*positive;
     }

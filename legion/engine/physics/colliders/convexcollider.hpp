@@ -162,8 +162,6 @@ namespace legion::physics
 #pragma endregion buildInitalHull
             // End of building the initial hull
 
-            return;
-
             std::vector<math::vec3> toBeSorted;
             for (int i = 0; i < mesh.vertices.size(); ++i)
             {
@@ -567,7 +565,7 @@ namespace legion::physics
             for (int i = 0; i < mesh.vertices.size(); ++i)
             {
                 if (i == planeIndex0 || i == planeIndex1 || i == planeIndex2) continue;
-                log::debug("{} vert: {}", i, mesh.vertices.at(i));
+                //log::debug("{} vert: {}", i, mesh.vertices.at(i));
                 float dist = abs(math::pointToTriangle(mesh.vertices.at(i), mesh.vertices.at(planeIndex0), mesh.vertices.at(planeIndex1), mesh.vertices.at(planeIndex2), normal));
                 //log::debug("{} dist: {}", i, dist);
                 if (dist > largestDistance && dist > 0)
@@ -576,7 +574,7 @@ namespace legion::physics
                     index = i;
                 }
             }
-            log::debug("Choose vert {}", index);
+            //log::debug("Choose vert {}", index);
             return index;
         }
 
