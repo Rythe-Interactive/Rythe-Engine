@@ -3,6 +3,8 @@
 #include <physics/colliders/convexcollider.hpp>
 #include <physics/data/pointer_encapsulator.hpp>
 #include <physics/data/contact_vertex.hpp>
+#include <Voro++/voro++.hh>
+#include <Voro++/common.hh>
 
 namespace legion::physics
 {
@@ -414,6 +416,36 @@ namespace legion::physics
             const math::vec3& planeNormal)
         {
             return math::dot(planePosition - startPoint, planeNormal) / math::dot(math::normalize(endPoint - startPoint), planeNormal);
+        }
+
+
+        static std::vector<std::vector<math::vec4>> GenerateVoronoi(std::vector<math::vec3> points,math::vec2 xRange, math::vec2 yRange, math::vec2 zRange, math::vec3 containerResolution, bool xPeriodic = false, bool yPeriodic = false, bool zPeriodic = false, int initMem = 8)
+        {
+            return GenerateVoronoi(points,xRange.x,xRange.y,yRange.x,yRange.y,zRange.x,zRange.y,containerResolution.x,containerResolution.y,containerResolution.z,xPeriodic,yPeriodic,zPeriodic,initMem);
+        }
+
+        static std::vector<std::vector<math::vec4>> GenerateVoronoi(std::vector<math::vec3> points,const double xMin = -5, const double xMax = 5, const double yMin = -5, const double yMax = 5, const double zMin = -5, const double zMax = 5,const double conResX = 10,const double conResY = 10 , const double conResZ = 10,bool xPeriodic = false,bool yPeriodic = false,bool zPeriodic = false,int initMem = 8)
+        {
+            voro::container con(xMin, xMax, yMin, yMax, zMin, zMax, conResX, conResY, conResZ, xPeriodic, yPeriodic, zPeriodic, initMem);
+            return GenerateVoronoi(con,points);
+        }
+
+        static std::vector<std::vector<math::vec4>> GenerateVoronoi(voro::container& con,std::vector<math::vec3> points)
+        {
+            int i = 0;
+            for (math::vec3 point : points)
+            {
+                con.put(i,point.x,point.y,point.z);
+                i++;
+            }
+            return GenerateVoronoi(con);
+        }
+
+        static std::vector<std::vector<math::vec4>> GenerateVoronoi(voro::container& con)
+        {
+            con.draw_cells_json("assets/voronoi/output/cells.json");
+            std::ifstream f("assets/voronoi/output/cells.json");
+            return serialization::SerializationUtil::JSONDeserialize< std::vector<std::vector<math::vec4>>>(f);
         }
 
     private:

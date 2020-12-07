@@ -15,8 +15,8 @@ public:
     virtual void setup() override
     {
         reportComponentType<sah>();
-        reportSystem<TestSystem>();
-        //reportSystem<TestSystem2>();
+        //reportSystem<TestSystem>();
+        reportSystem<TestSystem2>();
         reportSystem<SimpleCameraController>();
     }
 
