@@ -127,7 +127,7 @@ public:
                     target[3][0], target[3][1],target[3][2],target[3][3]);
             };
 
-            if (ImGui::Button("Ey look at me!"))
+            if (ImGui::Button("Log-Matrices!"))
             {
                log_matrix(view,"View-Matrix");
                log_matrix(projection,"Projection-Matrix");
