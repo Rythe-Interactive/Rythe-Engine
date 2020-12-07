@@ -190,9 +190,8 @@ public:
 
         auto rotH = camera.get_component_handle<rotation>();
         rotH.fetch_multiply(math::angleAxis(action->value * action->input_delta * 500.f, math::vec3(0, 1, 0)));
-        rotH.read_modify_write(rotation(), [](const rotation& src, rotation&& dummy)
+        rotH.read_modify_write([](rotation& src)
             {
-                (void)dummy;
                 math::vec3 fwd = math::toMat3(src) * math::vec3(0.f, 0.f, 1.f);
                 if (fwd.y < -0.95f)
                     fwd.y = -0.95f;
@@ -200,7 +199,7 @@ public:
                     fwd.y = 0.95f;
                 fwd = math::normalize(fwd);
                 math::vec3 right = math::cross(fwd, math::vec3(0.f, 1.f, 0.f));
-                return (rotation)math::conjugate(math::toQuat(math::lookAt(math::vec3(0.f, 0.f, 0.f), fwd, math::cross(right, fwd))));
+                src = (rotation)math::conjugate(math::toQuat(math::lookAt(math::vec3(0.f, 0.f, 0.f), fwd, math::cross(right, fwd))));
             });
     }
 
@@ -211,9 +210,8 @@ public:
 
         auto rotH = camera.get_component_handle<rotation>();
         rotH.fetch_multiply(math::angleAxis(action->value * action->input_delta * 500.f, math::vec3(1, 0, 0)));
-        rotH.read_modify_write(rotation(), [](const rotation& src, rotation&& dummy)
+        rotH.read_modify_write([](rotation& src)
             {
-                (void)dummy;
                 math::vec3 fwd = math::toMat3(src) * math::vec3(0.f, 0.f, 1.f);
                 if (fwd.y < -0.95f)
                     fwd.y = -0.95f;
@@ -221,7 +219,7 @@ public:
                     fwd.y = 0.95f;
                 fwd = math::normalize(fwd);
                 math::vec3 right = math::cross(fwd, math::vec3(0.f, 1.f, 0.f));
-                return (rotation)math::conjugate(math::toQuat(math::lookAt(math::vec3(0.f, 0.f, 0.f), fwd, math::cross(right, fwd))));
+                src = (rotation)math::conjugate(math::toQuat(math::lookAt(math::vec3(0.f, 0.f, 0.f), fwd, math::cross(right, fwd))));
             });
     }
 #pragma endregion

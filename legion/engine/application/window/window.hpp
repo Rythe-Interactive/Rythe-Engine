@@ -58,6 +58,11 @@ namespace legion::application
             return m_size;
         }
 
+        inline math::ivec2 viewportSize() const
+        {
+            return ContextHelper::getFramebufferSize(handle);
+        }
+
         inline const std::string& title() const
         {
             return m_title;
@@ -71,4 +76,45 @@ namespace legion::application
     };
 
     const window invalid_window = {};
+
+    struct contextguard
+    {
+        contextguard(window win) : m_win(win)
+        {
+            win.lock->lock(async::write);
+            ContextHelper::makeContextCurrent(win);
+        }
+
+        contextguard() = delete;
+        contextguard(const contextguard&) = delete;
+        contextguard(contextguard&&) = delete;
+
+        ~contextguard()
+        {
+            ContextHelper::makeContextCurrent(nullptr);
+            m_win.lock->unlock(async::write);
+        }
+
+    private:
+        window m_win;
+    };
+
 }
+
+
+#if !defined(DOXY_EXCLUDE)
+namespace std
+{
+    template<>
+    struct hash<legion::application::window>
+    {
+        std::size_t operator()(legion::application::window const& win) const noexcept
+        {
+            std::size_t hash;
+            std::size_t h1 = std::hash<intptr_t>{}(reinterpret_cast<intptr_t>(win.handle));
+            std::size_t h2 = std::hash<intptr_t>{}(reinterpret_cast<intptr_t>(win.lock));
+            return h1 ^ (h2 << 1);
+        }
+    };
+}
+#endif

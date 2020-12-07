@@ -1,6 +1,7 @@
 #pragma once
 #include <application/application.hpp>
 #include <rendering/data/material.hpp>
+#include <rendering/data/framebuffer.hpp>
 
 /**
  * @file camera.hpp
@@ -17,7 +18,10 @@ namespace legion::rendering
     {
         friend class OldRenderer;
         friend class Renderer;
-    private:
+
+        ecs::component_handle<app::window> targetWindow;
+        framebuffer renderTarget;
+        math::color clearColor = math::colors::cornflower;
         struct camera_input
         {
             camera_input(math::mat4 view, math::mat4 proj, math::vec3 pos, uint idx, math::vec3 vdir) :
@@ -25,7 +29,7 @@ namespace legion::rendering
             {
             }
 
-            void bind(material_handle& materialHandle)
+            void bind(material_handle& materialHandle) const
             {
                 if (materialHandle.has_param<math::mat4>(SV_VIEW))
                     materialHandle.set_param(SV_VIEW, view);
@@ -69,13 +73,7 @@ namespace legion::rendering
             };
         };
 
-        ecs::component_handle<app::window> m_targetWindow;
-        framebuffer m_renderTarget;
-    public:
         float fov, nearz, farz;
-
-        void set_target_window(const ecs::component_handle<app::window>& win) { m_targetWindow = win; }
-        void set_render_target(const framebuffer& target) { m_renderTarget = target; }
 
         /**@brief Set the projection variables of the camera.
          * @param fov Horizontal field of view in degrees.

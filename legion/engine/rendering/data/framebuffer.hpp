@@ -81,7 +81,7 @@ namespace legion::rendering
         void attach(texture_handle texture, GLenum attachment)
         {
             glNamedFramebufferTexture(id, attachment, texture.get_texture().textureId, 0);
-            attachments[attachment] = std::make_any<renderbuffer>(texture);
+            attachments[attachment] = std::make_any<texture_handle>(texture);
         }
 
         std::any getAttachment(GLenum attachment)

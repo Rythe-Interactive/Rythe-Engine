@@ -152,7 +152,8 @@ namespace legion::core::ecs
          * @param value Value you wish to add.
          * @returns component_type Current value of component.
          */
-        component_type read_modify_write(component_type&& value, component_type(*modifier)(const component_type&, component_type&&))
+        template<typename Func>
+        component_type read_modify_write(Func&& modifier)
         {
             if (!m_ownerId || !m_registry)
                 return component_type();
@@ -165,7 +166,25 @@ namespace legion::core::ecs
                 return component_type();
 
             component_type& comp = family->get_component(m_ownerId);
-            comp = modifier(comp, std::forward<component_type>(value));
+            modifier(comp);
+            return comp;
+        }
+
+        template<typename Func>
+        component_type read_modify_write(const Func& modifier)
+        {
+            if (!m_ownerId || !m_registry)
+                return component_type();
+
+            component_container<component_type>* family = m_registry->getFamily<component_type>();
+
+            async::readonly_guard rguard(family->get_lock());
+
+            if (!family->has_component(m_ownerId))
+                return component_type();
+
+            component_type& comp = family->get_component(m_ownerId);
+            modifier(comp);
             return comp;
         }
 

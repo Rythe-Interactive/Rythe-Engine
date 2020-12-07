@@ -4,14 +4,14 @@
 namespace legion::rendering
 {
     template<typename T>
-    inline bool RenderPipelineBase::has_meta(std::string name)
+    inline bool RenderPipelineBase::has_meta(const std::string& name)
     {
         id_type id = nameHash(name);
         return m_metadata.count(id) && (m_metadata[id].type() == typeid(T));
     }
 
     template<typename T, typename... Args>
-    inline T* RenderPipelineBase::create_meta(std::string name, Args&&... args)
+    inline T* RenderPipelineBase::create_meta(const std::string& name, Args&&... args)
     {
         id_type id = nameHash(name);
 
@@ -28,13 +28,42 @@ namespace legion::rendering
     }
 
     template<typename T>
-    inline T* RenderPipelineBase::get_meta(std::string name)
+    inline T* RenderPipelineBase::get_meta(const std::string& name)
     {
         id_type id = nameHash(name);
 
         if (m_metadata.count(id) && (m_metadata[id].type() == typeid(T))
             return std::any_cast<T>(&m_metadata[id]);
             return nullptr;
+    }
+
+    template<typename T>
+    inline bool RenderPipelineBase::has_meta(id_type nameHash)
+    {
+        return m_metadata.count(nameHash) && (m_metadata[nameHash].type() == typeid(T));
+    }
+
+    template<typename T, typename... Args>
+    inline T* RenderPipelineBase::create_meta(id_type nameHash, Args&&... args)
+    {
+        if (m_metadata.count(nameHash))
+        {
+            if (m_metadata[nameHash].type() == typeid(T))
+                return std::any_cast<T>(&m_metadata[nameHash]);
+            else
+                return nullptr;
+        }
+
+        m_metadata.emplace(nameHash, std::make_any<T>(std::forward(args)...);
+        return std::any_cast<T>(&m_metadata[nameHash]);
+    }
+
+    template<typename T>
+    inline T* RenderPipelineBase::get_meta(id_type nameHash)
+    {
+        if (m_metadata.count(nameHash) && (m_metadata[nameHash].type() == typeid(T)))
+            return std::any_cast<T>(&m_metadata[nameHash]);
+        return nullptr;
     }
 
     template<typename Self>
@@ -52,17 +81,17 @@ namespace legion::rendering
     }
 
     template<typename Self>
-    inline void RenderPipeline<Self>::init()
+    inline void RenderPipeline<Self>::init(app::window& context)
     {
-        setup();
+        setup(context);
         for (auto& [_, stage] : m_stages)
-            stage->setup();
+            stage->setup(context);
     }
 
     template<typename Self>
-    inline void RenderPipeline<Self>::render(app::window& context, camera& cam, time::span deltaTime)
+    inline void RenderPipeline<Self>::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
         for (auto& [_, stage] : m_stages)
-            stage->render(context, cam, deltaTime);
+            stage->render(context, cam, camInput, deltaTime);
     }
 }

@@ -477,7 +477,7 @@ namespace legion::rendering
                 if (!verified) log::warn(message);
 
                 glViewport(0, 0, superSize.x, superSize.y);
-                glClearColor(0.3f, 0.5f, 1.0f, 1.0f);
+                glClearColor(0.392f, 0.584f, 0.929f, 1.0f);
                 glClearDepth(0.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

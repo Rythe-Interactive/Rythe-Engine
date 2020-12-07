@@ -265,7 +265,22 @@ namespace legion::core
         template <typename lambda_type>
         static delegate create(const lambda_type& instance)
         {
-            return delegate((void*)(new lambda_type(instance)), lambda_stub<lambda_type>);
+            return delegate((void*)(new lambda_type(instance)), lambda_stub<lambda_type>,
+                [](void* ptr)
+                {
+                    lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
+                    return (void*)(new lambda_type(*p));
+                },
+                [](void* ptr)
+                {
+                    lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
+                    return (void*)(new lambda_type(std::move(*p)));
+                },
+                [](void* ptr)
+                {
+                    lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
+                    delete p;
+                });
         }
 
         return_type operator()(parameter_types... arguments) const
@@ -278,10 +293,16 @@ namespace legion::core
         }
 
     private:
-        delegate(void* anObject, typename delegate_base<return_type(parameter_types...)>::stub_type aStub)
+        delegate(void* anObject, typename delegate_base<return_type(parameter_types...)>::stub_type aStub,
+            typename delegate_base<return_type(parameter_types...)>::allocator aCopy = nullptr,
+            typename delegate_base<return_type(parameter_types...)>::allocator aMove = nullptr,
+            typename delegate_base<return_type(parameter_types...)>::deleter aDelete = nullptr)
         {
             m_invocation.object = anObject;
             m_invocation.stub = aStub;
+            m_invocation.copy = aCopy;
+            m_invocation.move = aMove;
+            m_invocation.del = aDelete;
         }
 
         void assign(void* anObject, typename delegate_base<return_type(parameter_types...)>::stub_type aStub,

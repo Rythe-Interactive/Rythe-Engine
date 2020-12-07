@@ -19,8 +19,11 @@
     <ClCompile Include="data\shader.cpp" />
     <ClCompile Include="data\texture.cpp" />
     <ClCompile Include="pipeline\base\pipeline.cpp" />
+    <ClCompile Include="pipeline\base\renderstage.cpp" />
     <ClCompile Include="pipeline\default\defaultpipeline.cpp" />
-    <ClCompile Include="pipeline\default\mainrenderstage.cpp" />
+    <ClCompile Include="pipeline\default\stages\clearstage.cpp" />
+    <ClCompile Include="pipeline\default\stages\meshrenderstage.cpp" />
+    <ClCompile Include="pipeline\default\stages\submitstage.cpp" />
     <ClCompile Include="shadercompiler\shadercompiler.cpp" />
     <ClCompile Include="data\particle_system_base.cpp" />
     <ClCompile Include="systems\newrenderer.cpp" />
@@ -45,7 +48,9 @@
     <ClInclude Include="data\model.hpp" />
     <ClInclude Include="data\texture.hpp" />
     <ClInclude Include="pipeline\default\defaultpipeline.hpp" />
-    <ClInclude Include="pipeline\default\mainrenderstage.hpp" />
+    <ClInclude Include="pipeline\default\stages\clearstage.hpp" />
+    <ClInclude Include="pipeline\default\stages\meshrenderstage.hpp" />
+    <ClInclude Include="pipeline\default\stages\submitstage.hpp" />
     <ClInclude Include="systems\newrenderer.hpp" />
     <ClInclude Include="systems\particle_system_manager.hpp" />
     <ClInclude Include="module\renderingmodule.hpp" />
