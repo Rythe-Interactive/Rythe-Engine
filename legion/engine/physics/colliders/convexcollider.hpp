@@ -75,15 +75,14 @@ namespace legion::physics
             int index0 = indices.x;
             int index1 = indices.y;
 
-            log::debug("indices {}, {}", index0, index1);
+            //log::debug("indices {}, {}", index0, index1);
 
             int index2 = convexHullFindIndexClosestToLine(mesh, index0, index1);
-            log::debug("index2 {}", index2);
-            log::debug("Vertices: {} ; {} ; {}", mesh.vertices.at(index0), mesh.vertices.at(index1), mesh.vertices.at(index2));
-
+            //log::debug("index2 {}", index2);
+            //log::debug("Vertices: {} ; {} ; {}", mesh.vertices.at(index0), mesh.vertices.at(index1), mesh.vertices.at(index2));
             math::vec3 normal = normalize(cross((mesh.vertices.at(index1) - mesh.vertices.at(index0)), (mesh.vertices.at(index2) - mesh.vertices.at(index0))));
 
-            log::debug("plane normal: {}", normal);
+            //log::debug("plane normal: {}", normal);
 
             int index3 = convexHullFindIndexClosestToTriangle(mesh, index0, index1, index2, normal);
 
@@ -162,6 +161,8 @@ namespace legion::physics
             halfEdgeFaces.push_back(face302);
 #pragma endregion buildInitalHull
             // End of building the initial hull
+
+            return;
 
             std::vector<math::vec3> toBeSorted;
             for (int i = 0; i < mesh.vertices.size(); ++i)
@@ -522,28 +523,29 @@ namespace legion::physics
         size_type convexHullFindIndexClosestToLine(core::mesh& mesh, size_type lineStartIndex, size_type lineEndIndex)
         {
             math::vec3 linedir = normalize(mesh.vertices[lineEndIndex] - mesh.vertices[lineStartIndex]);
-            log::debug("Line: {} to {}", mesh.vertices[lineStartIndex], mesh.vertices[lineEndIndex]);
+            //log::debug("Line: {} to {}", mesh.vertices[lineStartIndex], mesh.vertices[lineEndIndex]);
 
             float largestDistance = 0;
             // Save the index which is furthest from the line between the mesh vertices at lineStartIndex and lineEndIndex
             size_type index = mesh.vertices.size();
-            log::debug("Math function debug\n");
+            //log::debug("Math function debug\n");
 
             // Possible speed up.
             // Check if mesh.vertices.at(i) is equal to line start coord of line end coord. Such an if check is possibly faster than the math
             for (int i = 0; i < mesh.vertices.size(); ++i)
             {
+                //log::debug("index: {}", i);
                 if (i == lineStartIndex || i == lineEndIndex) continue;
-                float distSq = math::pointToLineSquared(mesh.vertices.at(i), mesh.vertices.at(lineStartIndex), mesh.vertices.at(lineEndIndex));
-                log::debug("{} P: {}", i, mesh.vertices.at(i));
-                log::debug("{} dist: {}", i, distSq);
-                if (distSq > largestDistance)
+                float dist = math::pointToLine(mesh.vertices.at(i), mesh.vertices.at(lineStartIndex), mesh.vertices.at(lineEndIndex));
+                //log::debug("{} P: {}", i, mesh.vertices.at(i));
+                //log::debug("{} dist: {}", i, dist);
+                if (dist > largestDistance && dist > 0)
                 {
-                    largestDistance = distSq;
+                    largestDistance = dist;
                     index = i;
                 }
             }
-            log::debug("On to plane calculatino\n\n");
+            //log::debug("Closest index to line: {} ; {}, dist: {}", index, mesh.vertices.at(index), largestDistance);
             return index;
         }
 
@@ -565,14 +567,16 @@ namespace legion::physics
             for (int i = 0; i < mesh.vertices.size(); ++i)
             {
                 if (i == planeIndex0 || i == planeIndex1 || i == planeIndex2) continue;
+                log::debug("{} vert: {}", i, mesh.vertices.at(i));
                 float dist = abs(math::pointToTriangle(mesh.vertices.at(i), mesh.vertices.at(planeIndex0), mesh.vertices.at(planeIndex1), mesh.vertices.at(planeIndex2), normal));
-                log::debug("{} dist: {}", i, dist);
-                if (dist > largestDistance)
+                //log::debug("{} dist: {}", i, dist);
+                if (dist > largestDistance && dist > 0)
                 {
                     largestDistance = dist;
                     index = i;
                 }
             }
+            log::debug("Choose vert {}", index);
             return index;
         }
 
@@ -586,10 +590,6 @@ namespace legion::physics
          */
         std::vector<std::vector<math::vec3>> convexHullMatchVerticesToFace(std::vector<math::vec3>& vertices)
         {
-
-            // Problems found before end of the day:
-            //      No verts get assigned to face 1
-
             std::vector<std::vector<math::vec3>> map;
             // Add all faces to the map
             for (size_type f = 0; f < halfEdgeFaces.size(); ++f) map.push_back(std::vector<math::vec3>());
@@ -597,7 +597,7 @@ namespace legion::physics
             for (size_type i = 0; i < vertices.size(); ++i)
             {
                 log::debug("Vert: {}", vertices.at(i));
-                float largestDistance = std::numeric_limits<float>::max();
+                float smallestDistance = std::numeric_limits<float>::max();
                 int faceIndex = -1;
                 math::vec3 faceVerts[] = { math::vec3(0,0,0), math::vec3(0,0,0), math::vec3(0,0,0)};
                 for (size_type f = 0; f < halfEdgeFaces.size(); ++f)
@@ -605,16 +605,18 @@ namespace legion::physics
                     // Get the distances to the face
                     HalfEdgeEdge* startEdge = halfEdgeFaces.at(f)->startEdge;
                     float distance = math::pointToTriangle(vertices.at(i), startEdge->edgePosition, startEdge->nextEdge->edgePosition, startEdge->prevEdge->edgePosition, halfEdgeFaces.at(f)->normal);
-                    if (distance > 0 && distance < largestDistance)
+                    if (distance > 0 && distance < smallestDistance)
                     {
                         faceIndex = f;
-                        largestDistance = distance;
+                        smallestDistance = distance;
                         faceVerts[0] = startEdge->edgePosition;
                         faceVerts[1] = startEdge->nextEdge->edgePosition;
                         faceVerts[2] = startEdge->prevEdge->edgePosition;
+                        log::debug("\tOverwrite existing shortest distance");
                     }
                 }
-                log::debug("\tmatched face @ {}: {} {} {}", faceIndex, faceVerts[0], faceVerts[1], faceVerts[2]);
+                //log::debug("\tmatched face @ {}: {} {} {}", faceIndex, faceVerts[0], faceVerts[1], faceVerts[2]);
+                log::debug("Vert {}, Matched face @ {}, dist: {}", vertices.at(i), faceIndex, smallestDistance);
                 if (faceIndex >= 0)
                 {
                     map[faceIndex].push_back(vertices.at(i));

@@ -16,31 +16,35 @@ namespace legion::core::math
      */
     inline float pointToLine(const vec3& point, const vec3& lineOrigin, const vec3& lineEnd)
     {
-        vec3 dir = normalize(lineEnd - lineOrigin);
+        if (point == lineOrigin || point == lineEnd) return 0.0f;
+        vec3 dir = lineEnd - lineOrigin;
         vec3 toLineOrigin = point - lineOrigin;
-        float distOnLine = dot(toLineOrigin, dir);
-        vec3 closestPointOnLine = lineOrigin + (dir * distOnLine);
-        vec3 difference = closestPointOnLine - point;
-        return difference.length();
-    }
 
-    /**@brief Calculates the shortest squared distance between a point and a line
-     * @brief Squared distance removes the need for a sqrt calculation 
-     * @param point - The point
-     * @param lineOrigin - The origin of the line
-     * @param lineEnd - The end of the line
-     */
-    inline float pointToLineSquared(const vec3& point, const vec3& lineOrigin, const vec3& lineEnd)
-    {
-        vec3 dir = normalize(lineEnd - lineOrigin);
-        vec3 toLineOrigin = point - lineOrigin;
-        float distOnLine = dot(toLineOrigin, dir);
-        vec3 closestPointOnLine = lineOrigin + (dir * distOnLine);
-        vec3 difference = closestPointOnLine - point;
-        float dist = ((difference.x * difference.x) + (difference.y * difference.y) + (difference.z * difference.z));
-        return dist;
+        if (dot(toLineOrigin, dir) <= 0.0)
+        {
+            // Projected point is before the start of the line
+            // Use distance to start of the line
+            //std::cout << "\t\t\t\t\t\t\tUsing to line origin" << std::endl;
+            return length(toLineOrigin);
+        }
+        vec3 toLineEnd = point - lineEnd;
+        if (dot(toLineEnd, dir) >= 0.0f)
+        {
+            // Projected point is beyond end of line
+            // Use distance toward end of line
+            //std::cout << "\t\t\t\t\t\t\tUsing to line end" << std::endl;
+            return length(toLineEnd);
+        }
+        //float distOnLine = dot(toLineOrigin, normalize(dir));
+        //vec3 closestPointOnLine = lineOrigin + (normalize(dir) * distOnLine);
+        //vec3 difference = closestPointOnLine - point;
+        //std::cout << "\t\t\t\t\t\t\tUsing line projection: " << " ; " << length(difference) << std::endl;
+        //return length(difference);
+        //float dist = length(cross(dir, toLineOrigin)) / length(dir);
+        //std::cout << "\t\t\t\t\t\t\tUsing line projection: " << dist << " ; " << length(difference) << ", diff: " << abs(dist-length(difference)) << std::endl;
+        //std::cout << "\t\t\t\t\t\t\tUsing line projection: " << dist << std::endl;
+        return length(cross(dir, toLineOrigin)) / length(dir);
     }
-
 
     /**@class line_segment
      * @brief Data structure for a line segment
@@ -102,6 +106,10 @@ namespace legion::core::math
      */
     inline float pointToTriangle(const vec3& p, const vec3& triPoint0, const vec3& triPoint1, const vec3& triPoint2, const vec3& triNormal)
     {
+        if (p == triPoint0 ||
+            p == triPoint1 ||
+            p == triPoint2) return 0.f;
+        //std::cout << "\t\t\t\t\t\tTriangle: " << to_string(triPoint0) << " ; " << to_string(triPoint1) << " ; " << to_string(triPoint2) << "\n";
         // Distance to plane
         //float distanceToPlane = dot(triNormal, p - triPoint0); // If this is negative, the point is behiond the plane
         //float positive = 1; // positive by default
@@ -115,13 +123,31 @@ namespace legion::core::math
         //float q02Area = triangleSurface(q, triPoint0, triPoint2);
         //float q12Area = triangleSurface(q, triPoint1, triPoint2);
 
-        float cosAngle = dot(triNormal, p - triPoint0) / (distance(p, triPoint0) * triNormal.length());
-        float projectionLength = (p - triPoint0).length() * cosAngle;
+        float cosAngle = dot(triNormal, p - triPoint0) / (distance(p, triPoint0) * length(triNormal));
+        float projectionLength = length(p - triPoint0) * cosAngle;
         float positive = 1;
         if (projectionLength < 0) positive = -1;
-        vec3 towardProjection = -projectionLength * (triNormal / triNormal.length());
+        std::cout << "\t\t\t\t\t\tPositive: " << positive << std::endl;
+        vec3 towardProjection = -projectionLength * (triNormal / length(triNormal));
         // Q is the projection of p onto the plane
         vec3 q = p + towardProjection;
+
+        vec3 v1 = ((triPoint0 - triPoint1) / length(triPoint0 - triPoint1)) + ((triPoint0 - triPoint2) / length(triPoint0 - triPoint2));
+        vec3 v2 = ((triPoint1 - triPoint2) / length(triPoint1 - triPoint2)) + ((triPoint1 - triPoint0) / length(triPoint1 - triPoint0));
+        //vec3 v3 = ((triPoint2 - triPoint0) / length(triPoint2 - triPoint0)) + ((triPoint2 - triPoint1) / length(triPoint2 - triPoint1));
+
+        float f1 = dot( v1 * (q-triPoint0), triNormal); // if > 0 -> q is anticlockwise of V1 (applies to other f's as well)
+        float f2 = dot( v2 * (q - triPoint1), triNormal);
+
+        
+        if (f1 >= 0 && f2 <= 0 && dot((q - triPoint0) * (q - triPoint1), triNormal) >= 0)
+        {
+            // q is in triangle
+            std::cout << "\t\t\t\t\t\tReturning distance: " << projectionLength << std::endl;
+            return projectionLength;
+        }
+
+        /* // Old way of finding if the point is in the triangle
         float q01Area = triangleSurface(q, triPoint0, triPoint1);
         float q02Area = triangleSurface(q, triPoint0, triPoint2);
         float q12Area = triangleSurface(q, triPoint1, triPoint2);
@@ -130,24 +156,34 @@ namespace legion::core::math
         if (math::close_enough(q01Area + q02Area + q12Area, triangleSurface(triPoint0, triPoint1, triPoint2)))
         {
             // The distance is simply the distance between the original point and the projected point of p (q)
-            return distance(p, q)*positive;
-        }
+            //std::cout << "\t\t\t\t\t\tReturning distance to q: " << (distance(p, q) * positive) << std::endl;
+            //return distance(p, q)*positive;
+            std::cout << "\t\t\t\t\t\tReturning distance to q, diff: " << abs(distance(p, q)*positive-projectionLength) << std::endl;
+            return projectionLength;
+        }*/
+
+        std::cout << "\t\t\t\t\t\tCalculating line distances: " << std::endl;
 
         //Point q is not on the triangle, check distance toward each edge of the triangle
-        float sqDistance01 = pointToLineSquared(p, triPoint0, triPoint1);
-        float sqDistance02 = pointToLineSquared(p, triPoint0, triPoint2);
-        float sqDistance12 = pointToLineSquared(p, triPoint1, triPoint2);
+        float distance01 = pointToLine(p, triPoint1, triPoint0);
+        float distance02 = pointToLine(p, triPoint2, triPoint1);
+        float distance12 = pointToLine(p, triPoint2, triPoint1);
+        std::cout << "\t\t\t\t\t\t\t01: " << distance01 << "\n";
+        std::cout << "\t\t\t\t\t\t\t02: " << distance02 << "\n";
+        std::cout << "\t\t\t\t\t\t\t12: " << distance12 << "\n";
 
         // Assume the shortest distance is sqDistance01
         // Then check if this is true
-        float shortestDistance = sqDistance01;
-        if (sqDistance02 < sqDistance12)
+        float shortestDistance = distance01;
+        if (distance02 < distance12)
         {
-            if (sqDistance02 < sqDistance01) shortestDistance = sqDistance02;
+            if (distance02 < distance01) shortestDistance = distance02;
         }
-        else if (sqDistance12 < sqDistance01) shortestDistance = sqDistance12;
+        else if (distance12 < distance01) shortestDistance = distance12;
 
-        return sqrt(shortestDistance)*positive;
+        std::cout << "\t\t\t\t\t\tReturning shortest distance: " << shortestDistance << std::endl;
+
+        return shortestDistance*positive;
     }
 
     /**@brief Calculates the distance between a point and a triangle plane
@@ -173,9 +209,9 @@ namespace legion::core::math
      */
     inline bool pointProjectionOntoTriangle(const vec3& p, const vec3& triPoint0, const vec3& triPoint1, const vec3& triPoint2, const vec3& triNormal)
     {
-        float cosAngle = dot(triNormal, p - triPoint0) / (distance(p, triPoint0) * triNormal.length());
-        float projectionLength = (p - triPoint0).length() * cosAngle;
-        vec3 towardProjection = -projectionLength * (triNormal / triNormal.length());
+        float cosAngle = dot(triNormal, p - triPoint0) / (distance(p, triPoint0) * length(triNormal));
+        float projectionLength = length(p - triPoint0) * cosAngle;
+        vec3 towardProjection = -projectionLength * (triNormal / length(triNormal));
         // Q is the projection of p onto the plane
         vec3 q = p + towardProjection;
         float q01Area = triangleSurface(q, triPoint0, triPoint1);
@@ -240,18 +276,18 @@ namespace legion::core::math
             }
 
             //Point q is not on the triangle, check distance toward each edge of the triangle
-            float sqDistance01 = pointToLineSquared(p, points[0], points[1]);
-            float sqDistance02 = pointToLineSquared(p, points[0], points[2]);
-            float sqDistance12 = pointToLineSquared(p, points[1], points[2]);
+            float distance01 = pointToLine(p, points[0], points[1]);
+            float distance02 = pointToLine(p, points[0], points[2]);
+            float distance12 = pointToLine(p, points[1], points[2]);
 
             // Assume the shortest distance is sqDistance01
             // Then check if this is true
-            float shortestDistance = sqDistance01;
-            if (sqDistance02 < sqDistance12)
+            float shortestDistance = distance01;
+            if (distance02 < distance12)
             {
-                if (sqDistance02 < sqDistance01) shortestDistance = sqDistance02;
+                if (distance02 < distance01) shortestDistance = distance02;
             }
-            else if (sqDistance12 < sqDistance01) shortestDistance = sqDistance12;
+            else if (distance12 < distance01) shortestDistance = distance12;
 
             return sqrt(shortestDistance);
         }

@@ -26,11 +26,12 @@ namespace legion::physics
 
         /**@brief Tests if this face is convex in regard to the passed face
          * @param other - the other plane
-         * @return true when convex, false if coplaner or concave
+         * @return Returns true when convex, false if coplaner or concave
          */
         bool testConvexity(const HalfEdgeFace& other) const;
 
         /**@brief Makes the normals for this faces point to the convex side of the plane in regard to each other
+         * @return Returns true when the face has been made convex, false when it was already convex
          */
         bool makeNormalsConvexWithFace(HalfEdgeFace& other);
 
@@ -40,6 +41,7 @@ namespace legion::physics
         static bool testConvexity(const HalfEdgeFace& first, const HalfEdgeFace& second);
 
         /**@brief Makes the normals for both faces point to the convex side of the plane in regard to each other
+         * @return Returns true when one of the faces or both have been made convex, false when they were already convex
          */
         static bool makeNormalsConvexWithFace(HalfEdgeFace& first, HalfEdgeFace& second);
 		
