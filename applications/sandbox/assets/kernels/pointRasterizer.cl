@@ -1,24 +1,25 @@
 
-
+//constant values
+//exit condition for poission sampling
 const int K=30;
 const uint RAND_MAX= 255;
+//predefined values
 #define maxPointsPerTri 300
-
 #define radius 0.33f
-
 #define cellSize (radius)/1.41421356237f
 #define depth (int)ceil(1/ cellSize)
-
-
 #define girdDimension  depth *depth
 
+//seed state
 uint state = 777;
 float floatState=0.777f;
+//returns random uint (range 0-255?)
 uint Rand()
 {
    state = state * 1664525 + 1013904223;
    return state >> 24;
 }
+//uses Rand to generate a random float (range 0-1)
 float RandomValue()
 {
    uint randInt =Rand();
@@ -26,28 +27,21 @@ float RandomValue()
    return randInt / (float) RAND_MAX;
 
 }
-uint wang_hash(uint seed)
-{
-        seed = (seed ^ 61) ^ (seed >> 16);
-        seed *= 9;
-        seed = seed ^ (seed >> 4);
-        seed *= 0x27d4eb2d;
-        seed = seed ^ (seed >> 15);
-        return seed;
-}
+
 //includes upper bound
 uint randomUpperRange(uint upper)
 {
     uint r = Rand();
     return r %(upper+1);
 }
-
+//usese barycentric coordinates to sample a new point
 float4 SampleTriangle(float2 rand,float4 a, float4 b, float4 c )
 {
     float4 r;
     r= (float4)(a + rand.x* normalize(b-a) + rand.y * normalize(c-a));
     return r;
 }
+//checks validity of point for poission sampling
 bool CheckPoint(float2 newPoint, float2* points, int* grid)
 {
     //check if point lies within triangle range else just return false
@@ -80,40 +74,36 @@ bool CheckPoint(float2 newPoint, float2* points, int* grid)
     }
     return false;
 }
+//sampling technique checkout:
+//http://www.cemyuksel.com/cyCodeBase/soln/poisson_disk_sampling.html 
+//to understand some more.
 void PoissionSampling(__local float2* outputPoints, int samplePerTri)
 {
     //init output
-    //__local float2 outputPoints[maxPointsPerTri];
     int outPutIndex=0;
-    //get celll size && cell count
-    // float cellSize = radius/ sqrt(2.0f);
-    // int dimX = ceil(dimensions.x / cellSize);
-    // int dimY = ceil(dimensions.y / cellSize);
+ 
     //create cell grid
     __local int grid[maxPointsPerTri];
 
     __local float2 spawnPoints[maxPointsPerTri];
-    // for(int i=0; i<maxPointsPerTri; i++)
-    // spawnPoints[i]=0;
     //add center point as starting point
     spawnPoints[0] = (float2)(0.25f,0.25f);
     int spawnPointAmount=1;
     while(spawnPointAmount>0)
     {
-       // spawnPointAmount--;
        //get random point from spawn points && its position
         int index = randomUpperRange(spawnPointAmount);
-      //  float2 spawnCenter = spawnPoints[index-1];
         float2 spawnCenter = spawnPoints[spawnPointAmount];
 
         bool isAccepteed=false;
-        //try generating a new valid point
+        //try generating a valid point until k is reached
         for(int i=0; i <K; i++)
         {
+            //generate offset and new point
             float angle = RandomValue() * 2 * M_PI;
             float2 direction = (float2)(sin(angle), cos(angle));
             float2 newPoint = spawnCenter + normalize(direction) * radius;
-
+            //check point
             if(CheckPoint(newPoint,outputPoints, grid ))
             {
             outputPoints[outPutIndex] = newPoint;
@@ -133,16 +123,13 @@ void PoissionSampling(__local float2* outputPoints, int samplePerTri)
         }     
     }
 
-  //  return outputPoints;
 }
 
 
 __kernel void Main(__global const float* vertices,__global const uint* indices,const uint samplePerTri, __global float4* points)
 {
-
+    //init indices and rand state
     int n=get_global_id(0)*3;
-   // points[n]=(float4)(1,2,3,4);
-
     state= get_global_id(0);
     int resultIndex = get_global_id(0)*samplePerTri;
     //get vertex indices
@@ -167,15 +154,14 @@ __kernel void Main(__global const float* vertices,__global const uint* indices,c
     float v3c = vertices[indices[n+2]*3+2];
     float4 vertC = (float4)(v3a,v3b,v3c,1.0f);
 
-
+    //generate samples
     __local float2 poissonOutput[maxPointsPerTri];
-
-   PoissionSampling(poissonOutput,samplePerTri);
+    PoissionSampling(poissonOutput,samplePerTri);
+    //store generated samples
     for(int i =0; i <samplePerTri; i++)
     {
-         int index= resultIndex + i;
+        int index= resultIndex + i;
         float4 newPoint =SampleTriangle(poissonOutput[i],vertA,vertB,vertC);
-     //   newPoint =(float4)( poissonOutput[i].x, poissonOutput[i].y,0,1);
         points[index]=newPoint;
     }
 

@@ -13,7 +13,7 @@
 #include <rendering/systems/pointcloudgeneration.hpp>
 using namespace legion;
 using namespace rendering;
-
+//system to test the point cloud generation system and the point cloud component
 class PointCloudTestSystem final : public legion::core::System<PointCloudTestSystem >
 {
 public:
@@ -24,9 +24,6 @@ public:
     struct player_fly : public app::input_axis<player_fly> {};
     struct player_look_x : public app::input_axis<player_look_x> {};
     struct player_look_y : public app::input_axis<player_look_y> {};
-    const int samplesPerTriangle = 25;
-    const int seed = 1;
-
 
     PointCloudTestSystem()
     {
