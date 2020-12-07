@@ -118,10 +118,19 @@ public:
             EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
 
 
+            const auto log_matrix = [](const math::mat4& target,const std::string& name)
+            {
+                 log::debug("{}:\n {} {} {} {}\n {} {} {} {}\n {} {} {} {}\n {} {} {} {}\n", name,
+                    target[0][0], target[0][1],target[0][2],target[0][3],
+                    target[1][0], target[1][1],target[1][2],target[1][3],
+                    target[2][0], target[2][1],target[2][2],target[2][3],
+                    target[3][0], target[3][1],target[3][2],target[3][3]);
+            };
+
             if (ImGui::Button("Ey look at me!"))
             {
-                log::debug("This is called! {}", buffer);
-
+               log_matrix(view,"View-Matrix");
+               log_matrix(projection,"Projection-Matrix");
             }
             ImGui::InputText("Text", buffer, 512);
             ImGui::End();
@@ -254,7 +263,7 @@ void EditTransform(const float* cameraView, const float* cameraProjection, float
     static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
     static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::LOCAL);
     static bool useSnap = false;
-    static float snap[3] = { 1.f, 1.f, 1.f };
+    static float snap[] = { 1.f, 1.f, 1.f };
     static float bounds[] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
     static float boundsSnap[] = { 0.1f, 0.1f, 0.1f };
     static bool boundSizing = false;
@@ -320,5 +329,5 @@ void EditTransform(const float* cameraView, const float* cameraProjection, float
     }
     ImGuiIO& io = ImGui::GetIO();
     ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-    ImGuizmo::Manipulate(cameraView, cameraProjection, mCurrentGizmoOperation, mCurrentGizmoMode, matrix, NULL, useSnap ? &snap[0] : NULL, boundSizing ? bounds : NULL, boundSizingSnap ? boundsSnap : NULL);
+    ImGuizmo::Manipulate(cameraView, cameraProjection, mCurrentGizmoOperation, mCurrentGizmoMode, matrix, NULL, useSnap ? snap : NULL, boundSizing ? bounds : NULL, boundSizingSnap ? boundsSnap : NULL);
 }
