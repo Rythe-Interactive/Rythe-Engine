@@ -18,6 +18,14 @@ namespace legion::physics
 		*/
 		void forEachEdge(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute);
 
+        /**@brief Get the amount of edges
+         */
+        int edgeCount() const;
+
+        /**@brief Gets the edge that is retrieved after calling edge->next n times
+         */
+        HalfEdgeEdge* getEdgeN(int n);
+
         /**@brief Inverses the face
          * The edges will be stored in reverse and therefore the normal will point in the other direction
          * The normal will be changed 

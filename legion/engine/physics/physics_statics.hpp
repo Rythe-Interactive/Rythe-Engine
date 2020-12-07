@@ -375,6 +375,7 @@ namespace legion::physics
         }
 
         /**@brief Finds the distance of a point given a 3D plane
+        * Assumes the plane normal is normalized
         */
         static float PointDistanceToPlane(const math::vec3& planeNormal, const math::vec3& planePosition, const math::vec3& point)
         {

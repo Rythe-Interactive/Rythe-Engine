@@ -90,6 +90,9 @@ namespace legion::physics
 
             log::debug("Vertices: {} ; {} ; {} ; {}", mesh.vertices.at(index0), mesh.vertices.at(index1), mesh.vertices.at(index2), mesh.vertices.at(index3));
 
+            // map to find the index of a face ptr
+            std::unordered_map<HalfEdgeFace*, int> faceIndexMap;
+
             // Build the initial hull
 #pragma region buildInitalHull
             vertices.push_back(mesh.vertices.at(index0));
@@ -155,6 +158,10 @@ namespace legion::physics
             halfEdgeFaces.push_back(face310);
             halfEdgeFaces.push_back(face213);
             halfEdgeFaces.push_back(face302);
+            faceIndexMap.emplace(std::make_pair( halfEdgeFaces[0], 0));
+            faceIndexMap.emplace(std::make_pair( halfEdgeFaces[1], 1));
+            faceIndexMap.emplace(std::make_pair( halfEdgeFaces[2], 2));
+            faceIndexMap.emplace(std::make_pair( halfEdgeFaces[3], 3));
 #pragma endregion buildInitalHull
             // End of building the initial hull
 
@@ -193,6 +200,14 @@ namespace legion::physics
                 }
             }
             log::debug("Largest distance for vert: {}, face: {}", faceVertMap.at(faceIndex).at(vertIndex), faceIndex);
+
+            // The selected vert needs to be merged into the hull
+            std::deque<HalfEdgeEdge*>* edges = convexHullFindHorizon(faceVertMap.at(faceIndex).at(vertIndex), *halfEdgeFaces.at(faceIndex));
+            for (int i = 0; i < edges->size(); ++i)
+            {
+                log::debug("Found edge from {}, to {}, with face {}", edges->at(i)->edgePosition, edges->at(i)->nextEdge->edgePosition, faceIndexMap.at(edges->at(i)->face));
+            }
+
 
             //AssertEdgeValidity();
         }
@@ -577,9 +592,7 @@ namespace legion::physics
          */
         std::vector<std::vector<math::vec3>> convexHullMatchVerticesToFace(std::vector<math::vec3>& vertices)
         {
-            std::vector<std::vector<math::vec3>> map;
-            // Add all faces to the map
-            for (size_type f = 0; f < halfEdgeFaces.size(); ++f) map.push_back(std::vector<math::vec3>());
+            std::vector<std::vector<math::vec3>> map = std::vector<std::vector<math::vec3>>(halfEdgeFaces.size());
 
             for (size_type i = 0; i < vertices.size(); ++i)
             {
@@ -606,6 +619,68 @@ namespace legion::physics
                 }
             }
             return map;
+        }
+
+        /**@brief Constructs a horizon for a given vertex starting at face index faceIndex
+         * The function assumes that the passed faceIndex is correct and will not check if the point is visible from the face
+         * @param vert - The Vertex which a horizon needs be found
+         * @param face - Face that starts the horizon
+         * @return List of half edges that are the horizonEdge
+         */
+        std::deque<HalfEdgeEdge*>* convexHullFindHorizon(math::vec3 vert, HalfEdgeFace& face, HalfEdgeEdge* originEdge = nullptr, std::deque<HalfEdgeEdge*>* edges = nullptr)
+        {
+            if (edges == nullptr) edges = new std::deque<HalfEdgeEdge*>();
+
+            std::vector<bool> horizonEdges = convexHullFindHorizonEdgesForFace(vert, -1, face);
+            log::debug("Edge count: {}", face.edgeCount());
+            for (int i = 0; i < face.edgeCount(); ++i)
+            {
+                if (originEdge == face.getEdgeN(i)) continue;
+                if (horizonEdges.at(i))
+                {
+                    // Handle horizon edge
+                    edges->push_back(face.getEdgeN(i));
+                }
+                else
+                {
+                    // Handle non-horizon edge
+                    edges = convexHullFindHorizon(vert, *face.getEdgeN(i)->pairingEdge->face, face.getEdgeN(i)->pairingEdge, edges);
+                }
+            }
+
+            return edges;
+        }
+
+        /**@brief Finds the horizonEdges of a face for a vertex
+         * @param vert - The vertex for which the horizon is found
+         * @param originEdge - An edge that may have been passed in a past cycle, this edge index is skipped
+         * @param face - The face which edges needs to be checked
+         * @return List of booleans, true or false for each of the face. True when it is a horizon edge, false if not
+         */
+        std::vector<bool> convexHullFindHorizonEdgesForFace(math::vec3 vert, int originEdge, HalfEdgeFace& face)
+        {
+            std::vector<bool> edges;
+            HalfEdgeEdge* current = face.startEdge;
+            int edgeIndex = 0;
+            do
+            {
+                if (edgeIndex != originEdge)
+                {
+                    if (math::pointToPlane(vert, current->pairingEdge->edgePosition, current->pairingEdge->face->normal) < 0.0f)
+                    {
+                        // Check if vert is under the plane face
+                        // Because the hull is closed and convex we can assume that if the vert is under the plane the plane is not visible from the vert
+                        // Because of this, the edge that we crossed is a horizon edge
+                        edges.push_back(true);
+                    }
+                    else edges.push_back(false);
+                }
+
+                ++edgeIndex;
+                current = current->nextEdge;
+            } while (current != face.startEdge);
+
+            return edges;
         }
 
         std::vector<math::vec3> vertices;

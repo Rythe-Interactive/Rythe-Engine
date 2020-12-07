@@ -63,6 +63,29 @@ namespace legion::physics
 
     }
 
+    int HalfEdgeFace::edgeCount() const
+    {
+        int count = 0;
+        HalfEdgeEdge* current = startEdge;
+        do
+        {
+            ++count;
+            current = current->nextEdge;
+        } while (current != startEdge);
+
+        return count;
+    }
+
+    HalfEdgeEdge* HalfEdgeFace::getEdgeN(int n)
+    {
+        HalfEdgeEdge* edge = startEdge;
+        for (; n > 0; --n)
+        {
+            edge = edge->nextEdge;
+        }
+        return edge;
+    }
+
     void HalfEdgeFace::inverse()
     {
         HalfEdgeEdge* start = startEdge;
