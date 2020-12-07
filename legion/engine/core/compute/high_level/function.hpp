@@ -13,7 +13,6 @@
 #include <core/detail/internals.hpp>
 #include <core/filesystem/resource.hpp>
 
-#include <core/logging/logging.hpp>
 namespace legion::core::compute {
 
     struct in_ident {};
@@ -40,16 +39,9 @@ namespace legion::core::compute {
     struct karg
     {
 
-        karg(invalid_karg_type)
-        {
-
-        }
+        karg(invalid_karg_type){}
         template <class T, std::enable_if_t<!std::is_same_v<std::remove_reference_t<T>, karg>, int > = 0>
-        karg(T& v, const std::string& n = "") : container(&v, sizeof(T)), name(n)
-        {
-            log::debug("hello");
-            log::debug(name);
-        }
+        karg(T& v, const std::string& n = "") : container(&v, sizeof(T)), name(n){}
         karg(const karg&) = default;
         karg(karg&&) noexcept = default;
         karg& operator=(const karg&) = default;
@@ -151,7 +143,7 @@ namespace legion::core::compute {
          * @param locals Number of parallel processes or 0,
          *         when 0 the measured max will be used.
          * @return How many parallel processes are going to be used.
-        */
+         */
         size_type setLocalSize(size_type locals)
         {
             const size_type max = m_kernel->getMaxWorkSize();
@@ -215,7 +207,7 @@ namespace legion::core::compute {
          * @param dispatch_size How many items to process.
          * @param args a collection of either vectors and wrapped vectors or compute::Buffers
          * @return Ok() if the kernel succeeded or Err() otherwise
-        */
+         */
         template <typename... Args>
         common::result<void, void> operator()(std::variant<size_type, math::ivec2, math::ivec3> dispatch_size, Args&&... args)
         {

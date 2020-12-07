@@ -20,7 +20,6 @@ namespace legion::rendering
      * @brief A system that iterates all queried entities containing point_cloud and generates a particle system for them.
      */
     class PointCloudGeneration : public System<PointCloudGeneration>
-
     {
     public:
 

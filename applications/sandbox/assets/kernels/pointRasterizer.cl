@@ -8,7 +8,7 @@ const uint RAND_MAX= 255;
 #define radius 0.33f
 #define cellSize (radius)/1.41421356237f
 #define depth (int)ceil(1/ cellSize)
-#define girdDimension  depth *depth
+#define gridDimension  depth *depth
 
 //seed state
 uint state = 777;
@@ -29,7 +29,7 @@ float RandomValue()
 }
 
 //includes upper bound
-uint randomUpperRange(uint upper)
+uint RandomUpperRange(uint upper)
 {
     uint r = Rand();
     return r %(upper+1);
@@ -92,7 +92,7 @@ void PoissionSampling(__local float2* outputPoints, int samplePerTri)
     while(spawnPointAmount>0)
     {
        //get random point from spawn points && its position
-        int index = randomUpperRange(spawnPointAmount);
+        int index = RandomUpperRange(spawnPointAmount);
         float2 spawnCenter = spawnPoints[spawnPointAmount];
 
         bool isAccepteed=false;

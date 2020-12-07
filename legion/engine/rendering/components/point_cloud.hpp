@@ -20,11 +20,11 @@ namespace legion::rendering
     public:
 
         /**@brief Takes in a mesh handle, transform and a material, optionally it takes in max points and radius.
-         * Mesh is used to sample the points for the point cloud.
-         * Transform is the position of the object / point cloud.
-         * Material is the material used by the particle system that renders the points.
-         * Max points is used to calculate the samples for each triangle of the mesh,
-         * Radius defines point scale.
+         * @param newMesh is used to sample the points for the point cloud.
+         * @param newTrans is the position of the object / point cloud.
+         * @param mat is the material used by the particle system that renders the points.
+         * @param maxPoints is used to calculate the samples for each triangle of the mesh,
+         * @param radius defines point scale.
          */
         point_cloud(mesh_handle newMesh, transform newTrans, material_handle mat, uint maxPoints = 100, float radius = 0.2f)
         {
