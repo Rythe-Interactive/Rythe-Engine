@@ -439,7 +439,7 @@ namespace legion::physics
         /**Creates a Voronoi diagram based on the given parameters.
         * @param points A list of points these will serve as the points of the voronoi diagram.
         * @param xMin The min of the width of the voronoi diagram space.
-         * @param xMax The max of the width of the voronoi diagram space.
+        * @param xMax The max of the width of the voronoi diagram space.
         * @param yMin The min of the height of the voronoi diagram space.
         * @param yMax The  max of the height of the voronoi diagram space
         * @param zMin The min of the depth of the voronoi diagram space.
