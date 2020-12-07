@@ -11,7 +11,15 @@ namespace legion::rendering
     {
         std::vector<ecs::entity_handle> livingParticles;
         std::vector<ecs::entity_handle> deadParticles;
+        //std::vector<math::vec3> directions;
         ParticleSystemHandle particleSystemHandle;
         bool setupCompleted;
+
+        bool particleIsAlive(ecs::component_handle<particle> particularParticle)
+        {
+            auto result = std::find(livingParticles.begin(), livingParticles.end(), particularParticle);
+            if (result == livingParticles.end()) return false;
+            return true;
+        }
     };
 }

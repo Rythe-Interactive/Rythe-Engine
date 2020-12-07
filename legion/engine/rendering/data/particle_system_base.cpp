@@ -59,6 +59,7 @@ namespace legion::rendering
             //Add new particle to living particle list.
             emitter.livingParticles.emplace_back(particularParticle);
         }
+        emitterHandle.write(emitter);
         return particularParticle.get_component_handle<particle>();
     }
 }
