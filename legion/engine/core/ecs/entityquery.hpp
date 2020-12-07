@@ -4,6 +4,7 @@
 #include <core/platform/platform.hpp>
 #include <core/containers/hashed_sparse_set.hpp>
 #include <core/ecs/entity_handle.hpp>
+#include <core/ecs/archetype.hpp>
 
 /**
  * @file entityquery.hpp
@@ -70,6 +71,19 @@ namespace legion::core::ecs
          */
         template<typename component_type>
         void addComponentType() { addComponentType(typeHash<component_type>()); }
+
+
+        template <class archetype, std::size_t N = std::tuple_size<archetype>::value,typename Indicies = std::make_index_sequence<N>>
+        void addArchetype()
+        {
+            addArchetypeEnumerated<archetype>(Indicies{});
+        }
+
+        template <class archetype,std::size_t... I>
+        void addArchetypeEnumerated(std::index_sequence<I...>)
+        {
+            (addComponentType<std::tuple_element<I,archetype>>(),...);
+        }
 
         /**@brief Add component type to query for.
          * @param componentTypeId
