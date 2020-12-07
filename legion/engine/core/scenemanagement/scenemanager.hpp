@@ -42,7 +42,7 @@ namespace legion::core::scenemanagement
           * @param ent a specific entity to create a scene from
           * @returns a bool signifying whether it was successful
           */
-        static bool createScene(const std::string& name, const ecs::entity_handle& ent);
+        static bool createScene(const std::string& name, ecs::entity_handle& ent);
 
         /**@brief Deserializes the scene from the disk
          * @param name of the file to deserialize

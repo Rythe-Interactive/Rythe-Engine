@@ -99,6 +99,8 @@ namespace legion::rendering
             m_textures.insert(id, result);
         }
 
+        log::debug("Created texture {} with file: {}", name, file.get_filename().decay());
+
         return { id };
     }
 
@@ -188,6 +190,8 @@ namespace legion::rendering
             async::readwrite_guard guard(m_textureLock);
             m_textures.insert(id, texture);
         }
+
+        log::debug("Created texture from image {}", image.id);
 
         return { id };
     }

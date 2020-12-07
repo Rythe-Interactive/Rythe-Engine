@@ -2,6 +2,8 @@
 [![build](https://github.com/Legion-Engine/Legion-Engine/workflows/build-action/badge.svg)](https://github.com/Legion-Engine/Legion-Engine/actions?query=workflow%3Abuild-action)
 [![analyze](https://github.com/Legion-Engine/Legion-Engine/workflows/analyze-action/badge.svg)](https://github.com/Legion-Engine/Legion-Engine/actions?query=workflow%3Aanalyze-action)
 [![docs](https://github.com/Legion-Engine/Legion-Engine/workflows/docs-action/badge.svg)](https://docs.legion-engine.com)
+[![License-MIT](https://img.shields.io/github/license/Legion-Engine/Legion-Engine)](https://github.com/Legion-Engine/Legion-Engine/blob/main/LICENSE)
+[![Discord](https://img.shields.io/static/v1?label=Discord&message=Join%20Our%20Discord%20Server!&color=white&logo=discord)](https://discord.gg/unVNRbd)
 # Legion-Engine
 Legion-Engine is a data oriented C++17 OpenGL game engine built to make optimal use of modern hardware.<br><br>
 The Legion-Core is built on an async compute minded design to take care of the logic and an ECS to take care of the data. This allows the engine and editor to utilize all the power they can find and to be extremely modular.
@@ -100,5 +102,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 See also the list of [contributors](AUTHORS.md) who participated in this project.
 
 ## License
-
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+
+

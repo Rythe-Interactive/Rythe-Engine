@@ -1,6 +1,7 @@
 #pragma once
 #include <application/events/inputevents.hpp>
 #include <application/events/windowinputevents.hpp>
+#include <numeric>
 
 namespace legion::application
 {
@@ -34,6 +35,15 @@ namespace legion::application
             inputmap::modifier_keys last_mods;
             float last_value;
         };
+
+        struct axis_command_queue
+        {
+            std::vector<float> values;
+            std::vector<inputmap::modifier_keys> mods;
+            std::vector<inputmap::method> methods;
+            delegate<void()> invoke;
+        };
+
     public:
         void setup() override
         {
@@ -44,8 +54,7 @@ namespace legion::application
             bindToEvent<mouse_scrolled, &InputSystem::onMouseScrolled>();
 
             //create Update Process
-            createProcess<&InputSystem::onUpdate>("Input");
-
+            createProcess<&InputSystem::onUpdate>("Input", 1.f/300.f);
 
             //make sure we get the joystick-callback on initialization of GLFW
             ContextHelper::addOnInitCallback(delegate<void()>::create([]
@@ -56,7 +65,7 @@ namespace legion::application
                     //that are already connected
 
                     //note that GLFW only supports 16 gamepads!
-                    for (size_t i = 0; i < inputmap::modifier_keys::MAX_SIZE - inputmap::modifier_keys::JOYSTICK0; ++i)
+                    for (size_type i = 0; i < inputmap::modifier_keys::MAX_SIZE - inputmap::modifier_keys::JOYSTICK0; ++i)
                     {
                         if (ContextHelper::joystickPresent(i))
                         {
@@ -254,10 +263,7 @@ namespace legion::application
             data.callback = action_callback::create(
                 [](InputSystem* self, bool state, inputmap::modifier_keys mods, inputmap::method method, float def, float delta)
                 {
-                    Event e;
-                    e.input_delta = delta;
-                    e.set(state ? def : 0.0f, mods, method); //convert key state false:true to float range 1-0
-                    self->raiseEvent<Event>(e);
+                    self->pushCommand<Event>(state ? def : 0.0f,mods,method);
                 }
             );
             data.trigger_value = value;
@@ -297,10 +303,7 @@ namespace legion::application
             data.callback = axis_callback::create(
                 [](InputSystem* self, float value, inputmap::modifier_keys mods, inputmap::method method, float delta)
                 {
-                    Event e;
-                    e.input_delta = delta;
-                    e.set(value, mods, method);
-                    self->raiseEvent<Event>(e);
+                    self->pushCommand<Event>(value,mods,method);
                 }
             );
 
@@ -320,12 +323,9 @@ namespace legion::application
 
         void onUpdate(time::time_span<fast_time> deltaTime)
         {
-            (void)deltaTime;
-
             onJoystick(deltaTime);
 
             //update all axis with their current values
-
             for (auto [_, inner_map] : m_axes)
             {
                 for (auto [_, axis] : inner_map)
@@ -333,6 +333,7 @@ namespace legion::application
                     axis.callback(this, axis.last_value, axis.last_mods, axis.last_method, deltaTime);
                 }
             }
+
             for (auto [_, inner_map] : m_actions)
             {
                 for (auto [_, action] : inner_map)
@@ -342,13 +343,13 @@ namespace legion::application
                 }
             }
 
+            raiseCommandQueues(deltaTime);
+
             onMouseReset();
-
-
         }
 
         void matchGLFWAxisWithSignalAxis(const GLFWgamepadstate& state, inputmap::modifier_keys joystick,
-            const std::size_t glfw, inputmap::method m)
+            const size_type glfw, inputmap::method m)
         {
             const float value = state.axes[glfw];
             for (auto [_, axis] : m_axes[m])
@@ -539,6 +540,34 @@ namespace legion::application
             }
         }
 
+        template <class Event>
+        void pushCommand(float value,inputmap::modifier_keys mods, inputmap::method method)
+        {
+            auto& cq = m_axes_command_queues[Event::id];
+            cq.values.push_back(value);
+            cq.mods.push_back(mods);
+            cq.methods.push_back(method);
+        }
+
+        void raiseCommandQueues(float delta)
+        {
+
+            for(auto  [key,value] : m_axes_command_queues){
+                auto axis = std::make_unique<input_axis<std::nullptr_t>>();
+                axis->value_parts = value.values;
+                axis->mods_parts = value.mods;
+                axis->identifier_parts = value.methods;
+
+                axis->input_delta = delta;
+                axis->value = std::accumulate(value.values.begin(),value.values.end(),0.0f);
+
+                raiseEventUnsafe(std::move(axis),key);
+                value.mods.clear();
+                value.values.clear();
+                value.methods.clear();
+            }
+        }
+
         static math::dvec2 m_mousePos;
         static math::dvec2 m_mouseDelta;
 
@@ -546,5 +575,8 @@ namespace legion::application
         static sparse_map<inputmap::method, sparse_map<id_type, action_data>> m_actions;
 
         static sparse_map<inputmap::method, sparse_map<id_type, axis_data>>  m_axes;
+
+        static sparse_map<id_type,axis_command_queue> m_axes_command_queues;
+
     };
 }

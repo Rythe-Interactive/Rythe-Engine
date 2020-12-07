@@ -19,7 +19,7 @@ namespace legion::core::scenemanagement
         return true;
     }
 
-    bool SceneManager::createScene(const std::string& name, const ecs::entity_handle& ent)
+    bool SceneManager::createScene(const std::string& name, ecs::entity_handle& ent)
     {
         if (!ent.has_component<scenemanagement::scene>())
         {

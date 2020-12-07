@@ -15,6 +15,7 @@ namespace legion::core
         auto& data = resource->get();
         appendBinaryData(&value.fileName, data);
         appendBinaryData(&value.vertices, data);
+        appendBinaryData(&value.colors, data);
         appendBinaryData(&value.normals, data);
         appendBinaryData(&value.uvs, data);
         appendBinaryData(&value.tangents, data);
@@ -42,6 +43,7 @@ namespace legion::core
         // Read data
         retrieveBinaryData(value->fileName, start);
         retrieveBinaryData(value->vertices, start);
+        retrieveBinaryData(value->colors, start);
         retrieveBinaryData(value->normals, start);
         retrieveBinaryData(value->uvs, start);
         retrieveBinaryData(value->tangents, start);

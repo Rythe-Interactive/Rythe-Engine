@@ -21,7 +21,7 @@ namespace legion::core::ecs
         return *this;
     }
 
-    L_NODISCARD   const hashed_sparse_set<id_type>& entity_handle::component_composition() const
+    L_NODISCARD const hashed_sparse_set<id_type>& entity_handle::component_composition() const
     {
         if (!m_registry)
             throw legion_invalid_entity_error;
@@ -56,7 +56,7 @@ namespace legion::core::ecs
         return m_registry->getEntity(m_registry->getEntityData(m_id).parent);
     }
 
-    void entity_handle::set_parent(id_type newParent) const
+    void entity_handle::set_parent(id_type newParent)
     {
         if (!m_registry)
             throw legion_invalid_entity_error;
@@ -112,7 +112,7 @@ namespace legion::core::ecs
     {
         std::vector <ecs::component_handle_base> components;
         std::vector <ecs::entity_handle> children;
-        oarchive(cereal::make_nvp("Id", m_id),cereal::make_nvp("Name", std::string("Entity")));
+        oarchive(cereal::make_nvp("Id", m_id), cereal::make_nvp("Name", std::string("Entity")));
         entity_handle ent;
         if (!m_registry->validateEntity(m_id))
             ent = m_registry->createEntity(m_id);
@@ -139,12 +139,12 @@ namespace legion::core::ecs
         }
     }
 
-    L_NODISCARD   entity_handle entity_handle::operator[](index_type index) const
+    L_NODISCARD entity_handle entity_handle::operator[](index_type index) const
     {
         return get_child(index);
     }
 
-    L_NODISCARD   entity_handle entity_handle::get_child(index_type index) const
+    L_NODISCARD entity_handle entity_handle::get_child(index_type index) const
     {
         if (!m_registry)
             throw legion_invalid_entity_error;
@@ -161,7 +161,7 @@ namespace legion::core::ecs
         return m_registry->getEntityData(m_id).children.size();
     }
 
-    void entity_handle::add_child(id_type childId) const
+    void entity_handle::add_child(id_type childId)
     {
         if (!m_registry)
             throw legion_invalid_entity_error;
@@ -173,7 +173,7 @@ namespace legion::core::ecs
             child.set_parent(m_id);
     }
 
-    void entity_handle::remove_child(id_type childId) const
+    void entity_handle::remove_child(id_type childId)
     {
         if (!m_registry)
             throw legion_invalid_entity_error;
@@ -184,42 +184,49 @@ namespace legion::core::ecs
             child.set_parent(invalid_id);
     }
 
-    L_NODISCARD   bool entity_handle::has_component(id_type componentTypeId) const
+    L_NODISCARD bool entity_handle::has_component(id_type componentTypeId) const
     {
         if (!m_registry)
             throw legion_invalid_entity_error;
         return m_registry->getEntityData(m_id).components.contains(componentTypeId);
     }
 
-    L_NODISCARD   component_handle_base entity_handle::get_component_handle(id_type componentTypeId) const
+    L_NODISCARD component_handle_base entity_handle::get_component_handle(id_type componentTypeId)
     {
         if (!m_registry)
             throw legion_invalid_entity_error;
         return m_registry->getComponent(m_id, componentTypeId);
     }
 
-    component_handle_base entity_handle::add_component(id_type componentTypeId) const
+    L_NODISCARD const component_handle_base entity_handle::get_component_handle(id_type componentTypeId) const
+    {
+        if (!m_registry)
+            throw legion_invalid_entity_error;
+        return m_registry->getComponent(m_id, componentTypeId);
+    }
+
+    component_handle_base entity_handle::add_component(id_type componentTypeId)
     {
         if (!m_registry)
             throw legion_invalid_entity_error;
         return m_registry->createComponent(m_id, componentTypeId);
     }
 
-    component_handle_base entity_handle::add_component(id_type componentTypeId, void* value) const
+    component_handle_base entity_handle::add_component(id_type componentTypeId, void* value)
     {
         if (!m_registry)
             throw legion_invalid_entity_error;
         return m_registry->createComponent(m_id, componentTypeId, value);
     }
 
-    void entity_handle::remove_component(id_type componentTypeId) const
+    void entity_handle::remove_component(id_type componentTypeId)
     {
         if (!m_registry)
             throw legion_invalid_entity_error;
         m_registry->destroyComponent(m_id, componentTypeId);
     }
 
-    void entity_handle::destroy(bool recurse) const
+    void entity_handle::destroy(bool recurse)
     {
         if (!m_registry)
             throw legion_invalid_entity_error;

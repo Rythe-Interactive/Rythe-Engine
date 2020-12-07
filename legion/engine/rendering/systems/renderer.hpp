@@ -2,6 +2,7 @@
 #include <rendering/data/model.hpp>
 #include <rendering/data/shader.hpp>
 #include <rendering/components/renderable.hpp>
+#include <rendering/components/light.hpp>
 #include <rendering/components/camera.hpp>
 #include <rendering/debugrendering.hpp>
 #include <unordered_set>
@@ -15,11 +16,13 @@ namespace legion::rendering
     {
     public:
         sparse_map<model_handle, sparse_map<material_handle, std::vector<math::mat4>>> batches;
-
+        std::vector<detail::light_data> lights;
         ecs::EntityQuery renderablesQuery;
+        ecs::EntityQuery lightQuery;
         ecs::EntityQuery cameraQuery;
         std::atomic_bool initialized = false;
         app::gl_id modelMatrixBufferId;
+        app::gl_id lightsBufferId;
 
         uint_max frameCount = 0;
         uint temp = 0;
@@ -225,7 +228,8 @@ namespace legion::rendering
 
             bindToEvent<events::exit, &Renderer::onExit>();
             createProcess<&Renderer::render>("Rendering");
-            renderablesQuery = createQuery<renderable, position, rotation, scale>();
+            renderablesQuery = createQuery<mesh_filter, mesh_renderer, position, rotation, scale>();
+            lightQuery = createQuery<light, position, rotation>();
             cameraQuery = createQuery<camera, position, rotation, scale>();
 
             m_scheduler->sendCommand(m_scheduler->getChainThreadId("Rendering"), [](void* param)
@@ -384,8 +388,15 @@ namespace legion::rendering
 
             glGenBuffers(1, &modelMatrixBufferId);
             glBindBuffer(GL_ARRAY_BUFFER, modelMatrixBufferId);
-            glBufferData(GL_ARRAY_BUFFER, 65536, nullptr, GL_DYNAMIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(math::mat4) * 1024, nullptr, GL_DYNAMIC_DRAW);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+            glGenBuffers(1, &lightsBufferId);
+            glBindBuffer(GL_SHADER_STORAGE_BUFFER, lightsBufferId);
+            glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(detail::light_data) * 1024, nullptr, GL_DYNAMIC_DRAW);
+            glBindBufferBase(GL_SHADER_STORAGE_BUFFER, SV_LIGHTS, lightsBufferId);
+            glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
             return true;
         }
 
@@ -394,6 +405,9 @@ namespace legion::rendering
             if (!m_ecs->world.has_component<app::window>() || m_exit)
                 return;
 
+            renderablesQuery.queryEntities();
+            lightQuery.queryEntities();
+            cameraQuery.queryEntities();
             //waitForSync();
 
             time::clock renderClock;
@@ -414,6 +428,7 @@ namespace legion::rendering
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 batches.clear();
+                lights.clear();
 
                 auto camEnt = cameraQuery[0];
 
@@ -430,22 +445,33 @@ namespace legion::rendering
 
                 for (auto ent : renderablesQuery)
                 {
-                    renderable rend = ent.get_component_handle<renderable>().read();
+                    renderable rend = ent.get_component_handles<renderable>();
 
-                    if (rend.material == invalid_material_handle)
+                    if (rend.get_material() == invalid_material_handle)
                     {
                         log::warn("Entity {} has an invalid material.", ent.get_id());
                         continue;
                     }
-                    if (rend.model == invalid_model_handle)
+                    if (rend.get_model() == invalid_model_handle)
                     {
                         log::warn("Entity {} has an invalid model.", ent.get_id());
                         continue;
                     }
 
                     transform transf = ent.get_component_handles<transform>();
-                    batches[rend.model][rend.material].push_back(transf.get_local_to_world_matrix());
+                    batches[rend.get_model()][rend.get_material()].push_back(transf.get_local_to_world_matrix());
                 }
+
+                for (auto ent : lightQuery)
+                {
+                    light lght = ent.read_component<light>();
+
+                    lights.push_back(lght.get_light_data(ent.get_component_handle<position>(), ent.get_component_handle<rotation>()));
+                }
+
+                glBindBuffer(GL_SHADER_STORAGE_BUFFER, lightsBufferId);
+                glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(detail::light_data) * lights.size(), lights.data());
+                glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
                 for (auto [modelHandle, instancesPerMaterial] : batches)
                 {
@@ -466,14 +492,18 @@ namespace legion::rendering
                         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
                         cam_input_data.bind(material);
+                        if (material.has_param<uint>(SV_LIGHT_COUNT))
+                            material.set_param<uint>(SV_LIGHT_COUNT, lights.size());
                         material.bind();
 
                         glBindVertexArray(mesh.vertexArrayId);
                         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);
+                        glBindBuffer(GL_SHADER_STORAGE_BUFFER, lightsBufferId);
 
                         for (auto submesh : mesh.submeshes)
                             glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)(submesh.indexOffset * sizeof(uint)), (GLsizei)instances.size());
 
+                        glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
                         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
                         glBindVertexArray(0);
                         material.release();

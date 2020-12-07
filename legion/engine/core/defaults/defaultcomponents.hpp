@@ -1,7 +1,7 @@
 #pragma once
 #include <core/math/math.hpp>
 #include <core/ecs/archetype.hpp>
-
+#include <core/data/mesh.hpp>
 #include <core/logging/logging.hpp>
 
 #include <cereal/types/unordered_map.hpp>
@@ -64,26 +64,33 @@ namespace legion::core
             return *this;
         }
 
-        math::vec3 right()
+        L_NODISCARD math::vec3 right()
         {
-            return math::toMat3(*this) * math::vec3(1.f, 0.f, 0.f);
+            return math::toMat3(*this) * math::vec3::right;
         }
 
-        math::vec3 up()
+        L_NODISCARD math::vec3 up()
         {
-            return math::toMat3(*this) * math::vec3(0.f, 1.f, 0.f);
+            return math::toMat3(*this) * math::vec3::up;
         }
 
-        math::vec3 forward()
+        L_NODISCARD math::vec3 forward()
         {
-            return math::toMat3(*this) * math::vec3(0.f, 0.f, 1.f);
+            return math::toMat3(*this) * math::vec3::forward;
         }
 
-        math::mat3 matrix()
+        L_NODISCARD math::mat3 matrix()
         {
             return math::toMat3(*this);
         }
+
+        L_NODISCARD static rotation lookat(math::vec3 position, math::vec3 center, math::vec3 up = math::vec3::up);
     };
+
+    L_NODISCARD inline rotation rotation::lookat(math::vec3 position, math::vec3 center, math::vec3 up)
+    {
+        return math::conjugate(math::normalize(math::toQuat(math::lookAt(position, center, up))));
+    }
 
 
     struct scale : public math::vec3
@@ -118,9 +125,10 @@ namespace legion::core
     {
         using base = ecs::archetype<position, rotation, scale>;
 
+        transform() = default;
         transform(const base::handleGroup& handles) : base(handles) {}
 
-        std::tuple<position, rotation, scale> get_world_components()
+        L_NODISCARD std::tuple<position, rotation, scale> get_world_components()
         {
             math::mat4 worldMatrix = get_world_to_local_matrix();
             math::vec3 p;
@@ -132,12 +140,12 @@ namespace legion::core
             return std::make_tuple<position, rotation, scale>(p, r, s);
         }
 
-        math::mat4 get_world_to_local_matrix()
+        L_NODISCARD math::mat4 get_world_to_local_matrix()
         {
             return math::inverse(get_local_to_world_matrix());
         }
 
-        math::mat4 get_local_to_world_matrix()
+        L_NODISCARD math::mat4 get_local_to_world_matrix()
         {
             auto& [positionH, rotationH, scaleH] = handles;
             auto parent = positionH.entity.get_parent();
@@ -151,12 +159,46 @@ namespace legion::core
             return math::compose(scaleH.read(), rotationH.read(), positionH.read());
         }
 
-        math::mat4 get_local_to_parent_matrix()
+        L_NODISCARD math::mat4 get_local_to_parent_matrix()
         {
             auto& [positionH, rotationH, scaleH] = handles;
             return math::compose(scaleH.read(), rotationH.read(), positionH.read());
         }
 
+    };
+
+    struct velocity : public math::vec3
+    {
+        velocity() : math::vec3(0, 0, 0) {}
+        velocity(const velocity&) = default;
+        velocity(velocity&&) = default;
+        velocity(const math::vec3& src) : math::vec3(src) {}
+        velocity(float x, float y, float z) : math::vec3(x, y, z) {}
+        velocity(float v) : math::vec3(v) {}
+        velocity& operator=(const velocity&) = default;
+        velocity& operator=(velocity&&) = default;
+        velocity& operator=(const math::vec3& src)
+        {
+            x = src.x;
+            y = src.y;
+            z = src.z;
+            return *this;
+        }
+        velocity& operator=(math::vec3&& src)
+        {
+            x = src.x;
+            y = src.y;
+            z = src.z;
+            return *this;
+        }
+    };
+
+    struct mesh_filter : public mesh_handle
+    {
+        mesh_filter() = default;
+        mesh_filter(const mesh_handle& src) { id = src.id; };
+
+        bool operator==(const mesh_filter& other) const { return id == other.id; }
     };
 }
 

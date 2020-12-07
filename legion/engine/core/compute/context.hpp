@@ -2,6 +2,8 @@
 
 #include <core/compute/program.hpp> // Kernel, Buffer
 #include <core/filesystem/resource.hpp> // basic_resource
+#include <utility>
+#include <core/data/image.hpp>
 
 /**
  * @file context.hpp
@@ -63,6 +65,55 @@ public:
     static Buffer createBuffer(byte* data, size_type size, buffer_type type, std::string name = "")
     {
         return Buffer(m_context,data,size,type,std::forward<std::string>(name));
+    }
+
+    static Buffer createImage(image& img,buffer_type type, std::string name ="")
+    {
+        size_type width = img.size.x;
+        size_type height = img.size.y;
+        size_type depth = 0;
+
+        cl_image_format fmt;
+
+        switch(img.format){
+        case channel_format::eight_bit: fmt.image_channel_data_type = CL_UNORM_INT8; break;
+        case channel_format::sixteen_bit: fmt.image_channel_data_type = CL_UNORM_INT16; break;
+        case channel_format::float_hdr: fmt.image_channel_data_type = CL_FLOAT;break;
+        default:
+            {
+                log::warn("Buffer::createImage invalid Image format!");
+                fmt.image_channel_data_type = CL_UNORM_INT8;
+            }
+        }
+
+        switch(img.components)
+        {
+        case image_components::grey: fmt.image_channel_order = CL_R; break;
+        case image_components::grey_alpha: fmt.image_channel_order = CL_RA; break;
+        case image_components::rgb: fmt.image_channel_order = CL_RGB; break;
+        case image_components::rgba: fmt.image_channel_order = CL_RGBA; break;
+        default:
+            {
+                log::warn("Buffer::createImage invalid Image Components!");
+                fmt.image_channel_order = CL_RGBA; 
+            }
+        }
+
+        return Buffer(m_context,img.get_raw_data<byte>(),width,height,depth,CL_MEM_OBJECT_IMAGE2D,&fmt,type,name);
+    }
+
+    static Buffer createImageFromOpenGLImage(uint target,uint texture,buffer_type type, std::string name ="",uint mip_level = 0)
+    {
+        return Buffer(m_context,target,texture,mip_level,type, std::move(name));
+    }
+
+    static Buffer createImageFromOpenGLBuffer(uint bufferid,buffer_type type, std::string name ="")
+    {
+        return Buffer(m_context,bufferid,type,false, std::move(name));
+    }
+    static Buffer createImageFromOpenGLRenderBuffer(uint bufferid,buffer_type type, std::string name ="")
+    {
+        return Buffer(m_context,bufferid,type,true, std::move(name));
     }
 
 

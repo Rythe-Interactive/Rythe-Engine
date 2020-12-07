@@ -25,7 +25,7 @@ namespace legion::core::scheduling
         while (!(*start))
         {
             if (lowPower)
-                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                std::this_thread::sleep_for(std::chrono::milliseconds(2));
             else
                 std::this_thread::yield();
         }
@@ -65,11 +65,11 @@ namespace legion::core::scheduling
                 {
                     if (lowPower)
                     {
-                        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+                        std::this_thread::sleep_for(std::chrono::milliseconds(2));
                     }
                     else
                     {
-                        std::this_thread::yield();
+                        std::this_thread::sleep_for(std::chrono::microseconds(1));
                     }
                 }
             }
@@ -81,10 +81,13 @@ namespace legion::core::scheduling
         legion::core::log::impl::thread_names[std::this_thread::get_id()] = "Initialization";
 
         if (m_availableThreads < minThreads)
+        {
+            m_lowPower = true;
             m_availableThreads = minThreads;
+        }
 
         std::thread::id id;
-        while ((id = createThread(threadMain, &m_threadsShouldTerminate, &m_threadsShouldStart, lowPower)) != invalid_thread_id)
+        while ((id = createThread(threadMain, &m_threadsShouldTerminate, &m_threadsShouldStart, m_lowPower)) != invalid_thread_id)
         {
             m_commands[id];
             m_commandLocks[id];
