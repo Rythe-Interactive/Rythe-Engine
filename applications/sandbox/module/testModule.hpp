@@ -5,7 +5,7 @@
 #include"../systems/PointCloudTestSystem.hpp"
 #include "../systems/simplecameracontroller.hpp"
 
-
+#include<rendering/systems/pointcloudgeneration.hpp>
 
 using namespace legion;
 
@@ -18,6 +18,7 @@ public:
         if (true)
         {
             reportSystem<PointCloudTestSystem>();
+        //    reportSystem<PointCloudGeneration>();
         }
         else
         {

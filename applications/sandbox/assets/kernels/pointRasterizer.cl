@@ -1,6 +1,5 @@
 
 
-const int sampelePerTri=1;
 const int K=30;
 const uint RAND_MAX= 255;
 #define maxPointsPerTri 300
@@ -81,7 +80,7 @@ bool CheckPoint(float2 newPoint, float2* points, int* grid)
     }
     return false;
 }
-void PoissionSampling(__local float2* outputPoints)
+void PoissionSampling(__local float2* outputPoints, int samplePerTri)
 {
     //init output
     //__local float2 outputPoints[maxPointsPerTri];
@@ -124,7 +123,7 @@ void PoissionSampling(__local float2* outputPoints)
             isAccepteed=true;
 
             grid[(int)(newPoint.x / cellSize) *(int)(newPoint.y/cellSize)] = outPutIndex;
-            if(outPutIndex> sampelePerTri) return;
+            if(outPutIndex> samplePerTri) return;
             }
         }
         if(!isAccepteed)
@@ -138,14 +137,14 @@ void PoissionSampling(__local float2* outputPoints)
 }
 
 
-__kernel void Main(__global const float* vertices,__global const uint* indices,__global const uint* seed,__global const float* randBuffer, __global float4* points)
+__kernel void Main(__global const float* vertices,__global const uint* indices,const uint samplePerTri, __global float4* points)
 {
-    
+
     int n=get_global_id(0)*3;
-  //  if(n>0) return;
-    int currentSeed = seed[n];
+   // points[n]=(float4)(1,2,3,4);
+
     state= get_global_id(0);
-    int resultIndex = get_global_id(0)*sampelePerTri;
+    int resultIndex = get_global_id(0)*samplePerTri;
     //get vertex indices
     uint vertex1Index = indices[n];
     uint vertex2Index = indices[n+1];
@@ -170,17 +169,14 @@ __kernel void Main(__global const float* vertices,__global const uint* indices,_
 
 
     __local float2 poissonOutput[maxPointsPerTri];
-  //  uint r=0;
 
-  //  poissonOutput =
-   PoissionSampling(poissonOutput);
-    for(int i =0; i <sampelePerTri; i++)
+   PoissionSampling(poissonOutput,samplePerTri);
+    for(int i =0; i <samplePerTri; i++)
     {
          int index= resultIndex + i;
         float4 newPoint =SampleTriangle(poissonOutput[i],vertA,vertB,vertC);
      //   newPoint =(float4)( poissonOutput[i].x, poissonOutput[i].y,0,1);
         points[index]=newPoint;
-      //  currentSeed++;
     }
 
  

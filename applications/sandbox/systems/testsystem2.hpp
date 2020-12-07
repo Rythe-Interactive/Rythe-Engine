@@ -9,7 +9,7 @@
 #include <rendering/components/renderable.hpp>
 
 
-#include "pointcloud_particlesystem.hpp"
+#include <rendering/systems/pointcloud_particlesystem.hpp>
 #include <rendering/components/particle_emitter.hpp>
 
 using namespace legion;
