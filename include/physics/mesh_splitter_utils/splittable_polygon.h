@@ -24,6 +24,8 @@ namespace legion::physics
 		void CalculateLocalCentroid();
 
 		void AssignEdgeOwnership();
+
+		void ResetEdgeVisited();
 		
 
 		void CalculatePolygonSplit(const math::mat4& transform

@@ -106,6 +106,8 @@ namespace legion::core
          */
         static mesh_handle create_mesh(const std::string& name, const filesystem::view& file, mesh_import_settings settings = default_mesh_settings);
 
+        static mesh_handle create_mesh(const std::string& name, const mesh& mesh);
+
         /**@brief Copy a mesh with a certain name to a new name. Will overwrite the destination if that mesh already existed.
          * @param name Source name
          * @param newName Destination name

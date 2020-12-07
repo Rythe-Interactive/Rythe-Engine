@@ -170,6 +170,16 @@ namespace legion::core
         return { id };
     }
 
+    mesh_handle MeshCache::create_mesh(const std::string& name, const mesh& meshData)
+    {
+        id_type newId = nameHash(name); // Get the new id.
+
+        auto* pair_ptr = new std::pair<async::readonly_rw_spinlock, mesh>(std::make_pair(async::readonly_rw_spinlock(), meshData));
+        m_meshes.emplace(std::make_pair(newId, pair_ptr));
+
+        return { newId };
+    }
+
     mesh_handle MeshCache::copy_mesh(const std::string& name, const std::string& newName)
     {
         id_type id = nameHash(name); // Get the id of the original mesh.

@@ -1,6 +1,7 @@
 #pragma once
 #include <core/core.hpp>
 #include <physics/mesh_splitter_utils/splittable_polygon.h>
+#include <physics/physics_statics.hpp>
 
 namespace legion::physics
 {
@@ -18,6 +19,108 @@ namespace legion::physics
         {
 
         };
+
+        auto GetTriangle() 
+        {
+            return std::make_tuple(shared_from_this(), nextEdge, nextEdge->nextEdge);
+        }
+
+        void SetPairing(std::shared_ptr<MeshHalfEdge> newPairing)
+        {
+            pairingEdge = newPairing;
+            newPairing->pairingEdge = pairingEdge;
+        }
+
+        static void ConnectIntoTriangle(std::shared_ptr<MeshHalfEdge> first
+            , std::shared_ptr<MeshHalfEdge> second,
+            std::shared_ptr<MeshHalfEdge> third)
+        {
+            first->nextEdge = second;
+            second->nextEdge = third;
+            third->nextEdge = first;
+        }
+ 
+
+        bool IsSplitByPlane(const math::mat4& transform
+            , const math::vec3& planePosition
+            ,const  math::vec3& planeNormal)
+        {
+            int x = 0;
+            int y = 0;
+
+            auto [currentDistFromPlane, nextDistFromPlane] = GetEdgeDistancesFromPlane(transform, planePosition, planeNormal);
+
+            if (currentDistFromPlane > constants::polygonSplitterEpsilon)
+            {
+                x = 1;
+            }
+            else if (currentDistFromPlane < -constants::polygonSplitterEpsilon)
+            {
+                x = -1;
+            }
+
+
+            if (nextDistFromPlane > constants::polygonSplitterEpsilon)
+            {
+                y = 1;
+            }
+            else if (nextDistFromPlane < -constants::polygonSplitterEpsilon)
+            {
+                y = -1;
+            }
+
+            int edgeSplitState = x * y;
+
+
+            return edgeSplitState < 0;
+
+
+        }
+
+        math::vec3 GetWorldCentroid(const math::mat4& transform) const
+        {
+            return transform * math::vec4((position + nextEdge->position) * 0.5f, 1);
+        }
+
+        bool isEdgePartlyAbovePlane(const math::mat4& transform, const math::vec3& planePosition, const math::vec3& planeNormal)
+        {
+            auto [currentDistFromPlane, nextDistFromPlane] = GetEdgeDistancesFromPlane(transform, planePosition, planeNormal);
+
+            bool currentAbovePlane = currentDistFromPlane > constants::polygonSplitterEpsilon;
+            bool nextAbovePlane = nextDistFromPlane > constants::polygonSplitterEpsilon;
+
+            return currentAbovePlane || nextAbovePlane;
+        }
+
+        bool isEdgePartlyBelowPlane(const math::mat4& transform, const math::vec3& planePosition, const math::vec3& planeNormal)
+        {
+            auto [currentDistFromPlane, nextDistFromPlane] = GetEdgeDistancesFromPlane(transform, planePosition, planeNormal);
+
+            bool currentBelowPlane = currentDistFromPlane < -constants::polygonSplitterEpsilon;
+            bool nextBelowPlane = nextDistFromPlane < -constants::polygonSplitterEpsilon;
+
+            return currentBelowPlane || nextBelowPlane;
+        }
+
+        std::tuple<float, float> GetEdgeDistancesFromPlane(const math::mat4& transform, const math::vec3& planePosition, const math::vec3& planeNormal)
+        {
+            auto [currentWorldPos, nextWorldPos] = GetEdgeWorldPositions(transform);
+
+            float currentDistFromPlane = PhysicsStatics::PointDistanceToPlane(planeNormal, planePosition,  currentWorldPos);
+            float nextDistFromPlane = PhysicsStatics::PointDistanceToPlane(planeNormal, planePosition,  nextWorldPos);
+
+            return std::make_tuple(currentDistFromPlane, nextDistFromPlane);
+        }
+
+        std::tuple<math::vec3, math::vec3> GetEdgeWorldPositions(const math::mat4& transform)
+        {
+            math::vec3 currentWorldPos = transform * math::vec4(position, 1);
+            math::vec3 nextWorldPos = transform * math::vec4(nextEdge->position, 1);
+
+            return std::make_tuple(currentWorldPos, nextWorldPos);
+        }
+
+
 
         bool AttemptGetTrianglesInEdges
         (std::shared_ptr<MeshHalfEdge>& nextEdge, std::shared_ptr<MeshHalfEdge>& prevEdge)

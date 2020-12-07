@@ -135,6 +135,8 @@ public:
 
     virtual void setup()
     {
+        physics::PrimitiveMesh::SetECSRegistry(m_ecs);
+       
 #pragma region OpenCL
 
 
@@ -546,8 +548,6 @@ public:
             audioSphereRight.add_component<audio::audio_source>(source);
         }
 #pragma endregion
-
-        
 
         //---------------------------------------------------------- Physics Collision Unit Test -------------------------------------------------------------------//
 
@@ -1722,28 +1722,18 @@ public:
         //Split plane
         ecs::entity_handle cylinderSplit;
         {
-            //auto splitterCylinder = m_ecs->createEntity();
-            //cylinderSplit = splitterCylinder;
+            auto splitterCylinder = m_ecs->createEntity();
+            cylinderSplit = splitterCylinder;
 
-            //auto entPhyHande = splitterCylinder.add_component<physics::physicsComponent>();
+            //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
+            //auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
 
-            //physics::physicsComponent physicsComponent2;
-            //physics::physicsComponent::init(physicsComponent2);
+            auto renderableHandle = m_ecs->createComponent<rendering::renderable>(splitterCylinder);
+            renderableHandle.write({ planeH,TextureH });
 
-
-            //physicsComponent2.AddBox(cubeParams);
-
-            //entPhyHande.write(physicsComponent2);
-
-            ////auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
-            ////auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(splitterCylinder);
-            //renderableHandle.write({ planeH,TextureH });
-
-            //auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(splitterCylinder);
-            //positionH.write(math::vec3(37, 1.5f, 15.0f));
-            //scaleH.write(math::vec3(0.02f));
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(splitterCylinder);
+            positionH.write(math::vec3(37, 1.5f, 15.0f));
+            scaleH.write(math::vec3(0.02f));
 
         }
 
@@ -1784,21 +1774,6 @@ public:
             //finder.InitializePolygons(ent);
             //finderH.write(finder);
         }
-
-       
-        
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         //Complex Mesh
@@ -2355,26 +2330,31 @@ public:
 
             }
 
-            //int i = 0;
-            //int j = 0;
+            auto& boundaryInfoList = edgeFinder.debugHelper.boundaryEdgesForPolygon;
 
-            //auto pol = edgeFinder.meshPolygons[i];
-            //auto edge = pol->GetMeshEdges()[j];
+            for (size_t i = 0; i < boundaryInfoList.size(); i++)
+            {
+                auto& boundaryInfo = boundaryInfoList[i];
+                math::color color = boundaryInfo.drawColor;
 
-            //math::vec3 worldEdgePos = transform * math::vec4(edge->position, 1);
-            //math::vec3 worldEdgeNextPos = transform * math::vec4(edge->nextEdge->position, 1);
+                if (i != edgeFinder.debugHelper.polygonToDisplay) { continue; }
 
-            //debug::drawLine(worldEdgePos
-            //    , worldEdgeNextPos, math::colors::red, 8.0f, 0.0f, false);
-            //math::vec3 n1 = edge->CalculateEdgeNormal(transform);
-            //math::vec3 n2 = edge->pairingEdge->CalculateEdgeNormal(transform);
-            //bool x = physics::MeshHalfEdge::CompareNormals(n1,n2);
+                for (int j =0 ; j < boundaryInfo.boundaryEdges.size();j++)
+                {
+                    auto edge = boundaryInfo.boundaryEdges.at(j);
 
-            //log::debug("edge {} ", edge->isBoundary);
-            //log::debug("draw edge for {} ", getEdge.read().id);
-            //log::debug(" posH {} ", math::to_string(math::vec3(posH.read())));
-            //log::debug(" worldPos {} ", math::to_string(worldPos));
-            //log::debug(" worldNextPos {} ", math::to_string(worldNextPos));
+                    math::vec3 worldEdgePos = transform * math::vec4(edge->position, 1);
+                    math::vec3 worldEdgeNextPos = transform * math::vec4(edge->nextEdge->position, 1);
+
+                    float interpolant = (float)j / boundaryInfo.boundaryEdges.size();
+
+                    debug::drawLine(worldEdgePos 
+                        , worldEdgeNextPos , math::lerp(color,math::colors::black, interpolant), 10.0f, 0.0f, false);
+
+                }
+
+            }
+
         }
 
         //if (buffer > 1.f)

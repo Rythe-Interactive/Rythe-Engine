@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include <core/core.hpp>
 #include <physics/mesh_splitter_utils/splittable_polygon.h>
 #include <physics/mesh_splitter_utils/mesh_splitter_typedefs.hpp>
 
@@ -14,6 +14,8 @@ namespace legion::physics
 		{
 
 		}
+
+		ecs::entity_handle InstantiateNewGameObject();
 
 	private:
 

@@ -27,4 +27,6 @@ namespace legion::physics::constants
     static constexpr bool applyWarmStarting = true;
 
     static constexpr float polygonItersectionEpsilon = 0.01f;
+
+    static constexpr float polygonSplitterEpsilon = 0.01f;
 }
