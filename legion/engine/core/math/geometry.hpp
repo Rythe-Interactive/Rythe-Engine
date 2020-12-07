@@ -94,7 +94,15 @@ namespace legion::core::math
      */
     inline float triangleSurface(const vec3& p0, const vec3& p1, const vec3& p2)
     {
-        return 0.5f * (normalizeDot(p0, p1) * normalizeDot(p0, p2)) * fastSin(0.f);
+        if (p0 == p1 || p0 == p2 || p1 == p2) return 0.0;
+        /*double dot = normalizeDot(p1-p0,p2-p0);
+        return 0.5f * dot;*/
+        // side lengths
+        float a = abs(length(p0 - p1));
+        float b = abs(length(p1 - p2));
+        float c = abs(length(p2 - p0));
+        float s = (a + b + c) * 0.5f;
+        return sqrt(s * (s - a) * (s - b) * (s - c));
     }
 
     /**@brief Calculates the distance between a point and a triangle plane
@@ -132,41 +140,47 @@ namespace legion::core::math
         // Q is the projection of p onto the plane
         vec3 q = p + towardProjection;
 
-        vec3 v1 = ((triPoint0 - triPoint1) / length(triPoint0 - triPoint1)) + ((triPoint0 - triPoint2) / length(triPoint0 - triPoint2));
-        vec3 v2 = ((triPoint1 - triPoint2) / length(triPoint1 - triPoint2)) + ((triPoint1 - triPoint0) / length(triPoint1 - triPoint0));
-        //vec3 v3 = ((triPoint2 - triPoint0) / length(triPoint2 - triPoint0)) + ((triPoint2 - triPoint1) / length(triPoint2 - triPoint1));
+        //vec3 v1 = ((triPoint0 - triPoint1) / length(triPoint0 - triPoint1)) + ((triPoint0 - triPoint2) / length(triPoint0 - triPoint2));
+        //vec3 v2 = ((triPoint1 - triPoint2) / length(triPoint1 - triPoint2)) + ((triPoint1 - triPoint0) / length(triPoint1 - triPoint0));
+        ////vec3 v3 = ((triPoint2 - triPoint0) / length(triPoint2 - triPoint0)) + ((triPoint2 - triPoint1) / length(triPoint2 - triPoint1));
 
-        float f1 = dot( v1 * (q-triPoint0), triNormal); // if > 0 -> q is anticlockwise of V1 (applies to other f's as well)
-        float f2 = dot( v2 * (q - triPoint1), triNormal);
+        //float f1 = dot( v1 * (q-triPoint0), triNormal); // if > 0 -> q is anticlockwise of V1 (applies to other f's as well)
+        //float f2 = dot( v2 * (q - triPoint1), triNormal);
 
-        
-        if (f1 >= 0 && f2 <= 0 && dot((q - triPoint0) * (q - triPoint1), triNormal) >= 0)
-        {
-            // q is in triangle
-            std::cout << "\t\t\t\t\t\tReturning distance: " << projectionLength << std::endl;
-            return projectionLength;
-        }
+        //
+        //if (!(f1 < 0 && f2 > 0 && dot((q - triPoint0) * (q - triPoint1), triNormal) < 0))
+        //{
+        //    // q is in triangle
+        //    std::cout << "\t\t\t\t\t\tReturning distance: " << projectionLength << std::endl;
+        //    //return projectionLength;
+        //}
 
-        /* // Old way of finding if the point is in the triangle
-        float q01Area = triangleSurface(q, triPoint0, triPoint1);
-        float q02Area = triangleSurface(q, triPoint0, triPoint2);
-        float q12Area = triangleSurface(q, triPoint1, triPoint2);
+         // Old way of finding if the point is in the triangle
+        double q01Area = triangleSurface(q, triPoint0, triPoint1);
+        double q02Area = triangleSurface(q, triPoint0, triPoint2);
+        double q12Area = triangleSurface(q, triPoint1, triPoint2);
+        double triArea = triangleSurface(triPoint0, triPoint1, triPoint2);
+        double area = (q01Area + q02Area + q12Area);
+        std::cout << "\t\t\t\t\t\tAreas: " << q01Area << " + " << q02Area << " + " << q12Area << " = " << area << " == " << triArea << std::endl;
 
         // If the area of q to each set of two points is equal to the triangle surface area, q is on the triangle
-        if (math::close_enough(q01Area + q02Area + q12Area, triangleSurface(triPoint0, triPoint1, triPoint2)))
+        if (math::close_enough(area, triArea))
         {
+            std::cout << "\t\t\t\t\t\tclose enough!" << std::endl;
             // The distance is simply the distance between the original point and the projected point of p (q)
             //std::cout << "\t\t\t\t\t\tReturning distance to q: " << (distance(p, q) * positive) << std::endl;
             //return distance(p, q)*positive;
-            std::cout << "\t\t\t\t\t\tReturning distance to q, diff: " << abs(distance(p, q)*positive-projectionLength) << std::endl;
+            //std::cout << "\t\t\t\t\t\tReturning distance to q, diff: " << abs(distance(p, q)*positive-projectionLength) << std::endl;
+            std::cout << "\t\t\t\t\t\tReturning distance: " << projectionLength << std::endl;
+            std::cout << "\t\t\t\t\t\tTo point: " << length(p - q) << std::endl;
             return projectionLength;
-        }*/
+        }
 
         std::cout << "\t\t\t\t\t\tCalculating line distances: " << std::endl;
 
         //Point q is not on the triangle, check distance toward each edge of the triangle
         float distance01 = pointToLine(p, triPoint1, triPoint0);
-        float distance02 = pointToLine(p, triPoint2, triPoint1);
+        float distance02 = pointToLine(p, triPoint2, triPoint0);
         float distance12 = pointToLine(p, triPoint2, triPoint1);
         std::cout << "\t\t\t\t\t\t\t01: " << distance01 << "\n";
         std::cout << "\t\t\t\t\t\t\t02: " << distance02 << "\n";
@@ -307,7 +321,7 @@ namespace legion::core::math
      */
     inline float pointToPlane(const vec3& point, const vec3& planePosition, const vec3& planeNormal)
     {
-        return dot(planeNormal, point - planePosition);
+        return dot(normalize(planeNormal), point - planePosition);
     }
 
     /**@class plane
