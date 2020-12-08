@@ -11,7 +11,7 @@
 namespace legion::rendering
 {
     /**@class point_cloud
-     * @brief Struct that holds data for the mandatory for the pointcloud generation  
+     * @brief Struct that holds data for the mandatory for the pointcloud generation
      */
     struct point_cloud
     {
@@ -28,9 +28,10 @@ namespace legion::rendering
         {
             m_mesh = newMesh;
             m_trans = newTrans;
-            m_samplesPerTriangle = calculateSamplesPerTriangle(maxPoints);
+            //m_samplesPerTriangle = calculateSamplesPerTriangle(maxPoints);
             m_pointRadius = radius;
             m_Material = mat;
+            InitSampleValues(maxPoints);
         }
         point_cloud() = default;
 
@@ -44,8 +45,47 @@ namespace legion::rendering
         transform m_trans;
         mesh_handle m_mesh;
         uint m_samplesPerTriangle;
+        uint m_sampleDepth;
         material_handle m_Material;
 
+
+        void InitSampleValues(uint maxPoints)
+        {
+            uint samplesPerTri = calculateSamplesPerTriangle(maxPoints);
+
+            //generate sample width
+            uint currentIterator = 0;
+            uint sum = 0;
+            uint previousSum = 0;
+            //iterate until the samples reach the max sample per triangle
+            // add more rows until the sum of all rows exceeds the sample per triangle count:
+            // *
+            // *  *
+            // *  *  *
+            // *  *  *  *
+            while (sum < samplesPerTri)
+            {
+                previousSum = sum;
+                sum = 0;
+                currentIterator++;
+                //exit if too many iterations are made 
+                if (currentIterator > 30)
+                {
+                    log::error("please decrease max sample points for point cloud object");
+                    return;
+                }
+                
+                for (int i = currentIterator; i > 0; i--)
+                {
+                    sum += i;
+                }
+            }
+            m_samplesPerTriangle = previousSum;
+            m_sampleDepth = currentIterator - 1;
+            log::debug("samples per tri " + std::to_string(m_samplesPerTriangle));
+            log::debug("samples depth " + std::to_string(m_sampleDepth));
+
+        }
         uint calculateSamplesPerTriangle(uint maxPoints)
         {
             if (!m_mesh) return 0;
@@ -53,6 +93,12 @@ namespace legion::rendering
             auto indices = mesh.second.indices;
             uint triangleCount = indices.size() / 3;
             return maxPoints / triangleCount;
+        }
+
+        uint calculateSampleWidth(uint samplePerTriangle)
+        {
+
+
         }
     };
 }

@@ -214,7 +214,8 @@ namespace legion::core::compute
         clFinish(m_queue);
 
         //neccessary 
-        clReleaseCommandQueue(m_queue);
+      /*  clReleaseCommandQueue(m_queue);
+        m_queue = m_prog->make_cq();*/
     }
 
     size_t Kernel::getMaxWorkSize() const

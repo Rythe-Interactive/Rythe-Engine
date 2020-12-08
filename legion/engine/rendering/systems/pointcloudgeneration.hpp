@@ -84,17 +84,22 @@ namespace legion::rendering
             size_t triangle_count = indices.size() / 3;
             uint process_Size = triangle_count;
             size_t points_Generated = (triangle_count * realPointCloud.m_samplesPerTriangle);
-            //log::debug(realPointCloud.m_samplesPerTriangle);
+            log::debug("spt:");
+            log::debug(realPointCloud.m_samplesPerTriangle);
+
 
             //Generate points 
             std::vector<math::vec4> result(points_Generated);
+          //  pointCloudGeneratorCS = fs::view("assets://kernels/pointRasterizer.cl").load_as<compute::function>("Main");
             auto computeResult = pointCloudGeneratorCS
             (
                 process_Size, in(vertices, "vertices"),
                 in(indices, "indices"),
-                karg(realPointCloud.m_samplesPerTriangle,"samplePerTri"),
+                karg(realPointCloud.m_samplesPerTriangle, "samplePerTri"),
+                karg(realPointCloud.m_sampleDepth, "sampleWidth"),
                 out(result, "points")
             );
+
             //check if result is valid
             if (computeResult.valid())
             {
@@ -102,7 +107,7 @@ namespace legion::rendering
                 std::vector<math::vec3> particleInput(points_Generated);
                 for (int i = 0; i < points_Generated; i++)
                 {
-                    //log::debug(result.at(i));
+                    //   log::debug(result.at(i));
                     particleInput.at(i) = result.at(i).xyz;
                 }
                 //generate particle params
@@ -127,7 +132,6 @@ namespace legion::rendering
 
         void GenerateParticles(pointCloudParameters params, std::vector<math::vec3> input, transform trans)
         {
-            //log::debug("generating particle system");
             //generate particle system
             std::string name = "GeneratedPointCloud " + std::to_string(cloudGenerationCount);
 

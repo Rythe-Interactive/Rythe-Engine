@@ -34,22 +34,33 @@ public:
     virtual void setup() override
     {
 
-        auto ent = createEntity();
-        auto trans = ent.add_components<transform>(position(-5, 0, 0), rotation(), scale(0.5f));
+      
         //get mesh
         ModelCache::create_model("cube", "assets://models/Cube.obj"_view);
-        mesh_handle mesh = MeshCache::get_handle("cube");
+        ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view);
+
+
         //create particle system material
-        material_handle newMat;
+        material_handle particleMaterial;
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
         {
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
             auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
-            newMat = rendering::MaterialCache::create_material("directional light", colorshader);
-            newMat.set_param("color", math::colors::black);
+            particleMaterial = rendering::MaterialCache::create_material("directional light", colorshader);
+            particleMaterial.set_param("color", math::colors::green);
         }
-        ent.add_component<point_cloud>(point_cloud(mesh, trans, newMat, 150, 0.2f));
+
+        mesh_handle uvMesh = MeshCache::get_handle("uvsphere");
+        mesh_handle cubeMesh = MeshCache::get_handle("cube");
+
+        auto ent = createEntity();
+        auto trans = ent.add_components<transform>(position(-5, 0, 0), rotation(), scale(0.5f));
+        ent.add_component<point_cloud>(point_cloud(uvMesh, trans, particleMaterial, 300, 0.1f));
+
+        auto ent2 = createEntity();
+        auto trans2 = ent2.add_components<transform>(position(5, 0, 0), rotation(), scale(0.5f));
+        ent2.add_component<point_cloud>(point_cloud(cubeMesh, trans2, particleMaterial, 200, 0.1f));
     }
 };
 

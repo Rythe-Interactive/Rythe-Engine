@@ -124,12 +124,51 @@ void PoissionSampling(__local float2* outputPoints, int samplePerTri)
     }
 
 }
+uint sampleWidth(int samplesPerTri)
+{
+   // return 0;
+    int currentIterator =0;
+    int sum =0;
+    int prevSum=0;
+    while(sum <samplesPerTri)
+    {
+        currentIterator++;
+        if(currentIterator>=K) return 0;
 
+       // prevSum = sum;
 
-__kernel void Main(__global const float* vertices,__global const uint* indices,const uint samplePerTri, __global float4* points)
+        sum=0;
+        for(int i= currentIterator; i>0; i--)
+        {
+            sum += i;
+        }
+    }
+    return currentIterator-1;
+}
+
+float2 sampleUniformly(__local float2* output, uint samplesPerTri, uint sampleWidth)
+{
+    float offset = 1.0f / (float)(sampleWidth+1);
+    float2 coordinates;
+    int index=0;
+    for(int x=0; x<sampleWidth; x++)
+    {
+        for(int y=0; y<sampleWidth-x; y++)
+        {
+            coordinates=(float2)(offset*(x+1), offset*(y+1));
+            output[index] = coordinates;
+            index++;
+        }
+
+    }
+
+}
+
+__kernel void Main(__global const float* vertices,__global const uint* indices,const uint samplePerTri,const uint sampleWidth, __global float4* points)
 {
     //init indices and rand state
     int n=get_global_id(0)*3;
+  //  points[n] = (float4)(sampleWidth(samplePerTri),samplePerTri,0,1);
     state= get_global_id(0);
     int resultIndex = get_global_id(0)*samplePerTri;
     //get vertex indices
@@ -155,13 +194,17 @@ __kernel void Main(__global const float* vertices,__global const uint* indices,c
     float4 vertC = (float4)(v3a,v3b,v3c,1.0f);
 
     //generate samples
-    __local float2 poissonOutput[maxPointsPerTri];
-    PoissionSampling(poissonOutput,samplePerTri);
+    __local float2 uniformOutput[maxPointsPerTri];
+    sampleUniformly(uniformOutput,samplePerTri,sampleWidth);
+    //__local float2 poissonOutput[maxPointsPerTri];
+    //PoissionSampling(poissonOutput,samplePerTri);
     //store generated samples
     for(int i =0; i <samplePerTri; i++)
     {
         int index= resultIndex + i;
-        float4 newPoint =SampleTriangle(poissonOutput[i],vertA,vertB,vertC);
+       // float4 newPoint =SampleTriangle(poissonOutput[i],vertA,vertB,vertC);
+        float4 newPoint =SampleTriangle(uniformOutput[i],vertA,vertB,vertC);
+       // newPoint=(float4)(uniformOutput[i].x, uniformOutput[i].y, 0,1);
         points[index]=newPoint;
     }
 
