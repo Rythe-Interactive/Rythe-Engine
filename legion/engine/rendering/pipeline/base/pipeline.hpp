@@ -56,13 +56,13 @@ namespace legion::rendering
     {
         friend class Renderer;
     protected:
-        static std::multimap<priority_type, std::unique_ptr<RenderStage>, std::greater<>> m_stages;
+        static std::multimap<priority_type, std::unique_ptr<RenderStageBase>, std::greater<>> m_stages;
 
     public:
-        template<typename StageType, inherits_from<StageType, RenderStage> = 0>
+        template<typename StageType, inherits_from<StageType, RenderStage<StageType>> = 0>
         static void attachStage();
 
-        static void attachStage(std::unique_ptr<RenderStage>&& stage);
+        static void attachStage(std::unique_ptr<RenderStageBase>&& stage);
 
         virtual void setup(app::window& context) LEGION_PURE;
 

@@ -7,7 +7,7 @@ namespace legion::rendering
 
     void SubmitStage::setup(app::window& context)
     {
-        app::contextguard guard(context);
+        app::context_guard guard(context);
         float quadVertices[24] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
           // positions   // texCoords
           -1.0f,  1.0f,  0.0f, 1.0f,
@@ -38,7 +38,7 @@ namespace legion::rendering
 
         auto fbo = m_pipeline->getFramebuffer(mainId);
 
-        app::contextguard guard(context);
+        app::context_guard guard(context);
 
         auto viewportSize = context.viewportSize();
 

@@ -1,5 +1,6 @@
 #include <rendering/pipeline/default/stages/meshrenderstage.hpp>
 #include <rendering/components/light.hpp>
+#include <rendering/data/buffer.hpp>
 
 namespace legion::rendering
 {
@@ -21,7 +22,7 @@ namespace legion::rendering
         if (!batches)
             return;
 
-        app::gl_id* lightsBuffer = m_pipeline->get_meta<app::gl_id>(lightsId);
+        buffer* lightsBuffer = m_pipeline->get_meta<buffer>(lightsId);
         if (!lightsBuffer)
             return;
 
@@ -29,13 +30,13 @@ namespace legion::rendering
         if (!lightCount)
             return;
 
-        app::gl_id* modelMatrixBuffer = m_pipeline->get_meta<app::gl_id>(matricesId);
+        buffer* modelMatrixBuffer = m_pipeline->get_meta<buffer>(matricesId);
         if (!modelMatrixBuffer)
             return;
 
         auto fbo = m_pipeline->getFramebuffer(mainId);
 
-        app::contextguard guard(context);
+        app::context_guard guard(context);
 
         fbo.bind();
 
@@ -58,20 +59,17 @@ namespace legion::rendering
                     continue;
                 }
 
-                glBindBuffer(GL_ARRAY_BUFFER, *modelMatrixBuffer);
-                glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(math::mat4) * instances.size(), instances.data());
-                glBindBuffer(GL_ARRAY_BUFFER, 0);
+                modelMatrixBuffer->bufferData(instances);
 
-                glBindVertexArray(mesh.vertexArrayId);
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);
-                glBindBuffer(GL_SHADER_STORAGE_BUFFER, *lightsBuffer);
-                glBindTexture(GL_TEXTURE_2D, 0);
+                mesh.vertexArray.bind();
+                mesh.indexBuffer.bind();
+                lightsBuffer->bind();
                 for (auto submesh : mesh.submeshes)
                     glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)(submesh.indexOffset * sizeof(uint)), (GLsizei)instances.size());
 
-                glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-                glBindVertexArray(0);
+                lightsBuffer->release();
+                mesh.indexBuffer.release();
+                mesh.vertexArray.release();
             }
 
             material.release();

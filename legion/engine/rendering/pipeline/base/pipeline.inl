@@ -67,7 +67,7 @@ namespace legion::rendering
     }
 
     template<typename Self>
-    template<typename StageType, inherits_from<StageType, RenderStage>>
+    template<typename StageType, inherits_from<StageType, RenderStage<StageType>>>
     inline void RenderPipeline<Self>::attachStage()
     {
         auto ptr = new StageType();
@@ -75,7 +75,7 @@ namespace legion::rendering
     }
 
     template<typename Self>
-    inline void RenderPipeline<Self>::attachStage(std::unique_ptr<RenderStage>&& stage)
+    inline void RenderPipeline<Self>::attachStage(std::unique_ptr<RenderStageBase>&& stage)
     {
         m_stages.emplace(stage->priority(), std::forward(stage));
     }

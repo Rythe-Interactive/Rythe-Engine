@@ -61,7 +61,7 @@ namespace legion::core::ecs
         void recursiveDestroyEntityInternal(id_type entityId);
 
     public:
-        entity_handle world;
+        static entity_handle world;
 
         /**@brief Constructor initializes everything for the ECS and creates world entity.
          */

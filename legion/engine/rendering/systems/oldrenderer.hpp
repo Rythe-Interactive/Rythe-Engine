@@ -23,8 +23,8 @@ namespace legion::rendering
         ecs::EntityQuery lightQuery;
         ecs::EntityQuery cameraQuery;
         std::atomic_bool initialized = false;
-        app::gl_id modelMatrixBufferId;
-        app::gl_id lightsBufferId;
+        buffer modelMatrixBuffer;
+        buffer lightsBuffer;
 
         uint_max frameCount = 0;
         uint temp = 0;
@@ -235,29 +235,29 @@ namespace legion::rendering
             cameraQuery = createQuery<camera, position, rotation, scale>();
 
             m_scheduler->sendCommand(m_scheduler->getChainThreadId("Rendering"), [](void* param)
-            {
-                OldRenderer* self = reinterpret_cast<OldRenderer*>(param);
-                log::trace("Waiting on main window.");
+                {
+                    OldRenderer* self = reinterpret_cast<OldRenderer*>(param);
+                    log::trace("Waiting on main window.");
 
-                while (!self->main_window_valid())
-                    std::this_thread::yield();
+                    while (!self->main_window_valid())
+                        std::this_thread::yield();
 
-                app::window window = self->get_main_window();
+                    app::window window = self->get_main_window();
 
-                log::trace("Initializing context.");
+                    log::trace("Initializing context.");
 
-                async::readwrite_guard guard(*window.lock);
-                app::ContextHelper::makeContextCurrent(window);
+                    async::readwrite_guard guard(*window.lock);
+                    app::ContextHelper::makeContextCurrent(window);
 
-                bool result = self->initData(window);
+                    bool result = self->initData(window);
 
-                app::ContextHelper::makeContextCurrent(nullptr);
+                    app::ContextHelper::makeContextCurrent(nullptr);
 
-                if (!result)
-                    log::error("Failed to initialize context.");
+                    if (!result)
+                        log::error("Failed to initialize context.");
 
-                self->initialized.store(result, std::memory_order_release);
-            }, this);
+                    self->initialized.store(result, std::memory_order_release);
+                }, this);
 
             while (!initialized.load(std::memory_order_acquire))
                 std::this_thread::yield();
@@ -280,89 +280,89 @@ namespace legion::rendering
                 glEnable(GL_DEBUG_OUTPUT);
 
                 glDebugMessageCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
-                {
-                    if (!log::impl::thread_names.count(std::this_thread::get_id()))
-                        log::impl::thread_names[std::this_thread::get_id()] = "OpenGL";
-
-                    cstring s;
-                    switch (source)
                     {
-                    case GL_DEBUG_SOURCE_API:
-                        s = "OpenGL";
-                        break;
-                    case GL_DEBUG_SOURCE_SHADER_COMPILER:
-                        s = "Shader compiler";
-                        break;
-                    case GL_DEBUG_SOURCE_THIRD_PARTY:
-                        s = "Third party";
-                        break;
-                    case GL_DEBUG_SOURCE_APPLICATION:
-                        s = "Application";
-                        break;
-                    case GL_DEBUG_SOURCE_OTHER:
-                        s = "Other";
-                        break;
-                    default:
-                        s = "Unknown";
-                        break;
-                    }
+                        if (!log::impl::thread_names.count(std::this_thread::get_id()))
+                            log::impl::thread_names[std::this_thread::get_id()] = "OpenGL";
 
-                    cstring t;
+                        cstring s;
+                        switch (source)
+                        {
+                        case GL_DEBUG_SOURCE_API:
+                            s = "OpenGL";
+                            break;
+                        case GL_DEBUG_SOURCE_SHADER_COMPILER:
+                            s = "Shader compiler";
+                            break;
+                        case GL_DEBUG_SOURCE_THIRD_PARTY:
+                            s = "Third party";
+                            break;
+                        case GL_DEBUG_SOURCE_APPLICATION:
+                            s = "Application";
+                            break;
+                        case GL_DEBUG_SOURCE_OTHER:
+                            s = "Other";
+                            break;
+                        default:
+                            s = "Unknown";
+                            break;
+                        }
 
-                    switch (type)
-                    {
-                    case GL_DEBUG_TYPE_ERROR:
-                        t = "Error";
-                        break;
-                    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-                        t = "Deprecation";
-                        break;
-                    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
-                        t = "Undefined behavior";
-                        break;
-                    case GL_DEBUG_TYPE_PERFORMANCE:
-                        t = "Performance";
-                        break;
-                    case GL_DEBUG_TYPE_PORTABILITY:
-                        t = "Portability";
-                        break;
-                    case GL_DEBUG_TYPE_MARKER:
-                        t = "Marker";
-                        break;
-                    case GL_DEBUG_TYPE_PUSH_GROUP:
-                        t = "Push";
-                        break;
-                    case GL_DEBUG_TYPE_POP_GROUP:
-                        t = "Pop";
-                        break;
-                    case GL_DEBUG_TYPE_OTHER:
-                        t = "Misc";
-                        break;
-                    default:
-                        t = "Unknown";
-                        break;
-                    }
+                        cstring t;
 
-                    cstring sev;
-                    switch (severity)
-                    {
-                    case GL_DEBUG_SEVERITY_HIGH:
-                        log::error("[{}-{}] {}", s, t, message);
-                        break;
-                    case GL_DEBUG_SEVERITY_MEDIUM:
-                        log::warn("[{}-{}] {}", s, t, message);
-                        break;
-                    case GL_DEBUG_SEVERITY_LOW:
-                        log::debug("[{}-{}] {}", s, t, message);
-                        break;
-                    case GL_DEBUG_SEVERITY_NOTIFICATION:
-                        log::trace("[{}-{}] {}", s, t, message);
-                        break;
-                    default:
-                        log::debug("[{}-{}] {}", s, t, message);
-                        break;
-                    }
-                }, nullptr);
+                        switch (type)
+                        {
+                        case GL_DEBUG_TYPE_ERROR:
+                            t = "Error";
+                            break;
+                        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+                            t = "Deprecation";
+                            break;
+                        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+                            t = "Undefined behavior";
+                            break;
+                        case GL_DEBUG_TYPE_PERFORMANCE:
+                            t = "Performance";
+                            break;
+                        case GL_DEBUG_TYPE_PORTABILITY:
+                            t = "Portability";
+                            break;
+                        case GL_DEBUG_TYPE_MARKER:
+                            t = "Marker";
+                            break;
+                        case GL_DEBUG_TYPE_PUSH_GROUP:
+                            t = "Push";
+                            break;
+                        case GL_DEBUG_TYPE_POP_GROUP:
+                            t = "Pop";
+                            break;
+                        case GL_DEBUG_TYPE_OTHER:
+                            t = "Misc";
+                            break;
+                        default:
+                            t = "Unknown";
+                            break;
+                        }
+
+                        cstring sev;
+                        switch (severity)
+                        {
+                        case GL_DEBUG_SEVERITY_HIGH:
+                            log::error("[{}-{}] {}", s, t, message);
+                            break;
+                        case GL_DEBUG_SEVERITY_MEDIUM:
+                            log::warn("[{}-{}] {}", s, t, message);
+                            break;
+                        case GL_DEBUG_SEVERITY_LOW:
+                            log::debug("[{}-{}] {}", s, t, message);
+                            break;
+                        case GL_DEBUG_SEVERITY_NOTIFICATION:
+                            log::trace("[{}-{}] {}", s, t, message);
+                            break;
+                        default:
+                            log::debug("[{}-{}] {}", s, t, message);
+                            break;
+                        }
+                    }, nullptr);
                 log::info("loaded OpenGL version: {}.{}", GLVersion.major, GLVersion.minor);
             }
 
@@ -387,16 +387,10 @@ namespace legion::rendering
 
             log::info("Initialized Renderer\n\tCONTEXT INFO\n\t----------------------------------\n\tGPU Vendor:\t{}\n\tGPU:\t\t{}\n\tGL Version:\t{}\n\tGLSL Version:\t{}\n\t----------------------------------\n", vendor, renderer, version, glslVersion);
 
-            glGenBuffers(1, &modelMatrixBufferId);
-            glBindBuffer(GL_ARRAY_BUFFER, modelMatrixBufferId);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(math::mat4) * 1024, nullptr, GL_DYNAMIC_DRAW);
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            modelMatrixBuffer = buffer(GL_ARRAY_BUFFER, sizeof(math::mat4) * 1024, nullptr, GL_DYNAMIC_DRAW);
 
-            glGenBuffers(1, &lightsBufferId);
-            glBindBuffer(GL_SHADER_STORAGE_BUFFER, lightsBufferId);
-            glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(detail::light_data) * 1024, nullptr, GL_DYNAMIC_DRAW);
-            glBindBufferBase(GL_SHADER_STORAGE_BUFFER, SV_LIGHTS, lightsBufferId);
-            glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+            lightsBuffer = buffer(GL_SHADER_STORAGE_BUFFER, sizeof(detail::light_data) * 1024, nullptr, GL_DYNAMIC_DRAW);
+            lightsBuffer.bindBufferBase(SV_LIGHTS);
 
             //framebuffer test quad
 #pragma region framebufferquad
@@ -436,8 +430,8 @@ namespace legion::rendering
             math::ivec2 viewportSize = app::ContextHelper::getFramebufferSize(window);
             if (viewportSize.x != 0 && viewportSize.y != 0)
             {
-                
-                math::ivec2 superSize = viewportSize* superSampleAmount;
+
+                math::ivec2 superSize = viewportSize * superSampleAmount;
 
 
                 static math::ivec2 textureSize = superSize;
@@ -445,12 +439,12 @@ namespace legion::rendering
                 //framebuffer
                 static framebuffer fbo(GL_FRAMEBUFFER);
                 //texture
-                static texture_handle texture = TextureCache::create_texture("color_image", superSize,{
+                static texture_handle texture = TextureCache::create_texture("color_image", superSize, {
         texture_type::two_dimensional, channel_format::eight_bit, texture_format::rgb,
         texture_components::rgb, true, true, texture_mipmap::linear, texture_mipmap::linear,
         texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat });
                 static renderbuffer rbo{ GL_DEPTH24_STENCIL8, superSize.x, superSize.y };
-                static texture_handle depthtexture = TextureCache::create_texture("depth_image", superSize,{
+                static texture_handle depthtexture = TextureCache::create_texture("depth_image", superSize, {
         texture_type::two_dimensional, channel_format::eight_bit, texture_format::depth,
         texture_components::depth, true, true, texture_mipmap::linear, texture_mipmap::linear,
         texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat });
@@ -523,15 +517,13 @@ namespace legion::rendering
                     lights.push_back(lght.get_light_data(ent.get_component_handle<position>(), ent.get_component_handle<rotation>()));
                 }
 
-                glBindBuffer(GL_SHADER_STORAGE_BUFFER, lightsBufferId);
-                glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(detail::light_data) * lights.size(), lights.data());
-                glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+                lightsBuffer.bufferData(lights);
 
                 //the cool render stuff
                 for (auto [modelHandle, instancesPerMaterial] : batches)
                 {
                     if (!modelHandle.is_buffered())
-                        modelHandle.buffer_data(modelMatrixBufferId);
+                        modelHandle.buffer_data(modelMatrixBuffer);
 
                     model mesh = modelHandle.get_model();
                     if (mesh.submeshes.empty())
@@ -542,25 +534,23 @@ namespace legion::rendering
 
                     for (auto [material, instances] : instancesPerMaterial)
                     {
-                        glBindBuffer(GL_ARRAY_BUFFER, modelMatrixBufferId);
-                        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(math::mat4) * instances.size(), instances.data());
-                        glBindBuffer(GL_ARRAY_BUFFER, 0);
+                        modelMatrixBuffer.bufferData(instances);
 
                         cam_input_data.bind(material);
                         if (material.has_param<uint>(SV_LIGHT_COUNT))
                             material.set_param<uint>(SV_LIGHT_COUNT, lights.size());
                         material.bind();
 
-                        glBindVertexArray(mesh.vertexArrayId);
-                        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBufferId);
-                        glBindBuffer(GL_SHADER_STORAGE_BUFFER, lightsBufferId);
+                        mesh.vertexArray.bind();
+                        mesh.indexBuffer.bind();
+                        lightsBuffer.bind();
                         glBindTexture(GL_TEXTURE_2D, 0);
                         for (auto submesh : mesh.submeshes)
                             glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)(submesh.indexOffset * sizeof(uint)), (GLsizei)instances.size());
 
                         glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-                        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-                        glBindVertexArray(0);
+                        mesh.indexBuffer.release();
+                        mesh.vertexArray.release();
                         material.release();
                     }
                 }

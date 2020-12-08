@@ -5,6 +5,6 @@ namespace legion::rendering
 {
     class DefaultPipeline : public RenderPipeline<DefaultPipeline>
     {
-        virtual void setup();
+        virtual void setup(app::window& context) override;
     };
 }

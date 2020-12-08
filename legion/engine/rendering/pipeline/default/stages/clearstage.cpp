@@ -4,7 +4,7 @@ namespace legion::rendering
 {
     void ClearStage::setup(app::window& context)
     {
-        app::contextguard guard(context);
+        app::context_guard guard(context);
         glClearDepth(0.0f);
     }
 
@@ -15,7 +15,7 @@ namespace legion::rendering
 
         auto fbo = m_pipeline->getFramebuffer(mainId);
 
-        app::contextguard guard(context);
+        app::context_guard guard(context);
 
         fbo.bind();
 

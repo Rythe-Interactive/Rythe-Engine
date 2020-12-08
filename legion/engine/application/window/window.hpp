@@ -77,19 +77,19 @@ namespace legion::application
 
     const window invalid_window = {};
 
-    struct contextguard
+    struct context_guard
     {
-        contextguard(window win) : m_win(win)
+        context_guard(window win) : m_win(win)
         {
             win.lock->lock(async::write);
             ContextHelper::makeContextCurrent(win);
         }
 
-        contextguard() = delete;
-        contextguard(const contextguard&) = delete;
-        contextguard(contextguard&&) = delete;
+        context_guard() = delete;
+        context_guard(const context_guard&) = delete;
+        context_guard(context_guard&&) = delete;
 
-        ~contextguard()
+        ~context_guard()
         {
             ContextHelper::makeContextCurrent(nullptr);
             m_win.lock->unlock(async::write);

@@ -48,9 +48,6 @@
     <ClCompile Include="pipeline\default\defaultpipeline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pipeline\default\mainrenderstage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="systems\oldrenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -155,9 +152,6 @@
     <ClInclude Include="pipeline\default\defaultpipeline.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="pipeline\default\mainrenderstage.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="systems\oldrenderer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -171,6 +165,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="pipeline\default\stages\submitstage.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\vertexarray.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\buffer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
