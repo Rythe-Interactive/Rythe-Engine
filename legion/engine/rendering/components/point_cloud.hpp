@@ -4,10 +4,8 @@
 #include <core/logging/logging.hpp>
 #include <application/application.hpp>
 
-
 #include <core/compute/context.hpp>
 #include <core/compute/kernel.hpp>
-
 
 
 namespace legion::rendering
@@ -57,7 +55,4 @@ namespace legion::rendering
             return maxPoints / triangleCount;
         }
     };
-
-
-
 }
