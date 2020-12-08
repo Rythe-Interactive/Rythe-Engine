@@ -204,7 +204,7 @@ namespace legion::core::ecs
 
             {
                 async::readwrite_guard guard(m_lock);
-                m_components[dst] = *reinterpret_cast<component_type*>(&m_components[src]);
+                m_components[dst] = m_components[src];
             }
 
             m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(dst));

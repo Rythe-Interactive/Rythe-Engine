@@ -97,7 +97,8 @@ namespace legion::core::ecs
     }
 
 
-    component_handle_base EcsRegistry::copyComponent(id_type destinationEntity, id_type  sourceEntity, id_type componentTypeId)
+
+    component_handle_base EcsRegistry::copyComponent(id_type destinationEntity, id_type sourceEntity, id_type componentTypeId)
     {
         if (!validateEntity(sourceEntity) || !validateEntity(destinationEntity))
             throw legion_entity_not_found_error;
