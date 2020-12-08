@@ -53,11 +53,13 @@ namespace legion::rendering
         void InitComputeShader()
         {
             //log::debug("init compute shader");
-            pointCloudGeneratorCS = fs::view("assets://kernels/pointRasterizer.cl").load_as<compute::function>("Main");
+             if(!pointCloudGeneratorCS.isValid())
+                pointCloudGeneratorCS = fs::view("assets://kernels/pointRasterizer.cl").load_as<compute::function>("Main");
         }
         //query entities and iterate them
         void Generate()
         {
+           
             // log::debug("generating clouds");
             query.queryEntities();
             for (auto& ent : query)

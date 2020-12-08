@@ -249,6 +249,11 @@ namespace legion::core::compute {
             value->setProgram(resource.to<Program>());
         }
 
+        bool isValid() const
+        {
+            return m_program != nullptr;
+        }
+
     private:
         std::string m_name;
 
