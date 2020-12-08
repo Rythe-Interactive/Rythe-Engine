@@ -251,6 +251,8 @@ namespace legion::core::ecs
          */
         component_handle_base createComponent(id_type entityId, id_type componentTypeId, void* value);
 
+        component_handle_base copyComponent(id_type destinationEntity, id_type sourceEntity, id_type componentTypeId);
+
         /**@brief Destroy component of a certain type attached to a certain entity.
          * @param entityId Id of the entity you wish to remove the component from.
          * @param componentTypeId Type id of component you wish to destroy.

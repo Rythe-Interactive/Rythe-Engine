@@ -35,6 +35,8 @@ namespace legion::core::ecs
         virtual void create_component(id_type entityId, void* value) LEGION_PURE;
         virtual void destroy_component(id_type entityId) LEGION_PURE;
 
+        virtual void clone_component(id_type dst, id_type src) LEGION_PURE;
+
         virtual void serialize(cereal::JSONOutputArchive& oarchive, id_type entityId) LEGION_PURE;
         virtual void serialize(cereal::BinaryOutputArchive& oarchive, id_type entityId) LEGION_PURE;
 
@@ -190,6 +192,16 @@ namespace legion::core::ecs
 
             async::readwrite_guard wguard(m_lock);
             m_components.erase(entityId);
+        }
+
+        void clone_component(id_type dst, id_type src) override
+        {
+            {
+                async::readwrite_guard guard(m_lock);
+                m_components[dst] = *reinterpret_cast<component_type*>(&m_components[src]);
+            }
+
+            m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(dst));
         }
     };
 }

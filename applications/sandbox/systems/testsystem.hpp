@@ -379,6 +379,7 @@ public:
             auto ent = createEntity();
             ent.add_components<rendering::renderable>(planeH.get_mesh(), rendering::mesh_renderer(slateH));
             ent.add_components<transform>(position(0, 0.01f, 0), rotation(), scale(10));
+                        
         }
 
         {
@@ -622,6 +623,10 @@ public:
             ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(paintH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(4, 3, -0.7f), rotation(), scale());
+            auto ent2 = ent.clone();
+            auto pos = ent2.get_component_handle<position>().read();
+            pos.y = 6;
+            ent2.get_component_handle<position>().write(pos);
         }
 
         //audioSphereLeft setup
