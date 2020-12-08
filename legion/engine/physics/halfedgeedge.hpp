@@ -34,9 +34,11 @@ namespace legion::physics
 		}
 
         /**@brief Sets the pairingEdge to the passed in edge, and sets the edge.pairingEdge to this
+         * if this edge or the passed edge already have pairing edge, the pairing edge of the pairing edge will be set to nullptr
          */
         void setPairingEdge(HalfEdgeEdge* edge)
         {
+            if (!edge) return;
             pairingEdge = edge;
             edge->pairingEdge = this;
         }

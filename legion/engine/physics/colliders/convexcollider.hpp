@@ -158,10 +158,10 @@ namespace legion::physics
             halfEdgeFaces.push_back(face310);
             halfEdgeFaces.push_back(face213);
             halfEdgeFaces.push_back(face302);
-            faceIndexMap.emplace(std::make_pair( halfEdgeFaces[0], 0));
-            faceIndexMap.emplace(std::make_pair( halfEdgeFaces[1], 1));
-            faceIndexMap.emplace(std::make_pair( halfEdgeFaces[2], 2));
-            faceIndexMap.emplace(std::make_pair( halfEdgeFaces[3], 3));
+            faceIndexMap.emplace(halfEdgeFaces[0], 0);
+            faceIndexMap.emplace(halfEdgeFaces[1], 1);
+            faceIndexMap.emplace(halfEdgeFaces[2], 2);
+            faceIndexMap.emplace(halfEdgeFaces[3], 3);
 #pragma endregion buildInitalHull
             // End of building the initial hull
 
@@ -179,37 +179,145 @@ namespace legion::physics
             delete meshLockGuard;
             meshLockGuard = nullptr;
             // From here the mesh may no longer be used
-            std::vector<std::vector<math::vec3>> faceVertMap = convexHullMatchVerticesToFace(toBeSorted);
+            std::vector<std::vector<math::vec3>> faceVertMap;// = convexHullMatchVerticesToFace(toBeSorted);
 
-            // Find the largest distance form vert to its face
-            // That vert will be added to the hull
-            float largestDistance = 0;
-            size_type faceIndex = 0;
-            size_type vertIndex = 0;
-            for (size_type i = 0; i < faceVertMap.size(); ++i)
+            int looped = 0;
+            while (true)
             {
-                for (size_type j = 0; j < faceVertMap.at(i).size(); ++j)
+                faceVertMap.clear();
+                faceVertMap = convexHullMatchVerticesToFace(toBeSorted);
+
+                // Find the largest distance form vert to its face
+                // That vert will be added to the hull
+                float largestDistance = 0;
+                size_type faceIndex = 0;
+                size_type vertIndex = 0;
+                for (size_type i = 0; i < faceVertMap.size(); ++i)
                 {
-                    float dist = math::pointToTriangle(faceVertMap.at(i).at(j), halfEdgeFaces.at(i)->startEdge->edgePosition, halfEdgeFaces.at(i)->startEdge->nextEdge->edgePosition, halfEdgeFaces.at(i)->startEdge->prevEdge->edgePosition, halfEdgeFaces.at(i)->normal);
-                    if (dist > largestDistance)
+                    for (size_type j = 0; j < faceVertMap.at(i).size(); ++j)
                     {
-                        largestDistance = dist;
-                        faceIndex = i;
-                        vertIndex = j;
+                        float dist = math::pointToTriangle(faceVertMap.at(i).at(j), halfEdgeFaces.at(i)->startEdge->edgePosition, halfEdgeFaces.at(i)->startEdge->nextEdge->edgePosition, halfEdgeFaces.at(i)->startEdge->prevEdge->edgePosition, halfEdgeFaces.at(i)->normal);
+                        if (dist > largestDistance)
+                        {
+                            largestDistance = dist;
+                            faceIndex = i;
+                            vertIndex = j;
+                        }
                     }
                 }
+                if (largestDistance == 0) break;
+                //log::debug("Largest distance for vert: {}, face: {}", faceVertMap.at(faceIndex).at(vertIndex), faceIndex);
+
+                std::deque<HalfEdgeEdge*> edges;
+                // The selected vert needs to be merged into the hull
+                convexHullFindHorizon(faceVertMap.at(faceIndex).at(vertIndex), *halfEdgeFaces.at(faceIndex), edges);
+                // Debug information
+                /*for (int i = 0; i < edges.size(); ++i)
+                {
+                    log::debug("Found edge from {}, to {}, with face {}", edges.at(i)->edgePosition, edges.at(i)->nextEdge->edgePosition, faceIndexMap.at(edges.at(i)->face));
+                }*/
+
+                if (looped == 1)
+                {
+                    log::debug("--------------------------------------\n\t\t\t\t\t\tLooped once!");
+                    for (int i = 0; i < vertices.size(); ++i)
+                    {
+                        log::debug("Vert [{}]: {}", i, vertices.at(i));
+                    }
+                    for (int i = 0; i < halfEdgeFaces.size(); ++i)
+                    {
+                        log::debug("Face [{}], with normal {}", i, halfEdgeFaces.at(i)->normal);
+                        int count = halfEdgeFaces.at(i)->edgeCount();
+                        for (int e = 0; e < count; ++e)
+                        {
+                            HalfEdgeEdge* edge = halfEdgeFaces.at(i)->getEdgeN(e);
+                            log::debug("\tEdge [{}]: {}", e, edge->edgePosition);
+                            //log::debug("\t\tPairing Edge: from {} to {}", edge->pairingEdge->edgePosition , edge->pairingEdge->nextEdge->edgePosition);
+                            if (edge->pairingEdge->nextEdge->edgePosition != edge->edgePosition)
+                            {
+                                log::debug("\t\tPairing Edge: from {} to {}", edge->pairingEdge->edgePosition, edge->pairingEdge->nextEdge->edgePosition);
+                            }
+                        }
+                    }
+                    break;
+                }
+
+                HalfEdgeEdge* firstEdge = nullptr;
+                HalfEdgeEdge* pairingEdge = nullptr;
+                std::unordered_map<HalfEdgeFace*, HalfEdgeEdge*> facesToBeDeleted;
+                std::vector<HalfEdgeFace*> createdFaces;
+                // Create new faces for each edge
+                for (int i = 0; i < edges.size(); ++i)
+                {
+                    facesToBeDeleted.try_emplace(edges.at(i)->face, edges.at(i));
+                    // We need to create a copy of the edge edges.at(i), because we still need to delete the old face and old edges later
+                    HalfEdgeEdge* edge0 = new HalfEdgeEdge(edges.at(i)->edgePosition);
+                    HalfEdgeEdge* edge1 = new HalfEdgeEdge(edges.at(i)->pairingEdge->edgePosition); // Tail of edge
+                    HalfEdgeEdge* edge2 = new HalfEdgeEdge(faceVertMap.at(faceIndex).at(vertIndex));
+                    edge0->setNextAndPrevEdge(edge2, edge1);
+                    edge0->setPairingEdge(edges.at(i)->pairingEdge);
+                    edge1->setNextAndPrevEdge(edge0, edge2);
+                    if (i == 0)
+                    {
+                        firstEdge = edge1;
+                    }
+                    else edge1->setPairingEdge(pairingEdge);
+                    edge2->setNextAndPrevEdge(edge1, edge0);
+                    if (i == edges.size()-1) edge2->setPairingEdge(firstEdge);
+                    pairingEdge = edge2;
+
+                    // Calculate normal
+                    math::vec3 normal = math::normalize(math::cross(edge1->edgePosition - edge0->edgePosition, edge2->edgePosition - edge0->edgePosition));
+                    HalfEdgeFace* face = new HalfEdgeFace(edge0, normal);
+                    face->setFaceForAllEdges();
+                    //halfEdgeFaces.push_back(face);
+                    createdFaces.push_back(face);
+                }
+                vertices.push_back(faceVertMap.at(faceIndex).at(vertIndex));
+
+                faceVertMap.at(faceIndex).erase(faceVertMap.at(faceIndex).begin() + vertIndex);
+                toBeSorted.clear();
+                for (size_type i = 0; i < faceVertMap.size(); ++i)
+                {
+                    for (size_type j = 0; j < faceVertMap.at(i).size(); ++j)
+                    {
+                        toBeSorted.push_back(faceVertMap.at(i).at(j));
+                    }
+                }
+
+                //log::debug("Face count: {}", halfEdgeFaces.size());
+                // Delete the edges and faces
+                for (auto& f : facesToBeDeleted)
+                {
+                    log::debug("\n\t\t\t\t\t\tDeleting Face with normal: {}", f.first->normal);
+                    int count = f.first->edgeCount();
+                    for (int e = 0; e < count; ++e)
+                    {
+                        HalfEdgeEdge* edge = f.first->getEdgeN(e);
+                        log::debug("\tEdge [{}]: {}", e, edge->edgePosition);
+                    }
+                    //f.first->deleteEdges();
+                    halfEdgeFaces.erase(std::remove(halfEdgeFaces.begin(), halfEdgeFaces.end(), f.first), halfEdgeFaces.end());
+                    faceIndexMap.erase(faceIndexMap.find(f.first));
+                    delete f.first;
+                }
+                //log::debug("Face count: {}", halfEdgeFaces.size());
+
+                for (int i = 0; i < createdFaces.size(); ++i)
+                {
+                    faceIndexMap.emplace(createdFaces.at(i), halfEdgeFaces.size());
+                    halfEdgeFaces.push_back(createdFaces.at(i));
+                    for (int j = i; j < createdFaces.size(); ++j)
+                    {
+                        HalfEdgeFace::makeNormalsConvexWithFace(*createdFaces.at(i), *createdFaces.at(j));
+                    }
+                }
+
+                ++looped;
             }
-            log::debug("Largest distance for vert: {}, face: {}", faceVertMap.at(faceIndex).at(vertIndex), faceIndex);
-
-            // The selected vert needs to be merged into the hull
-            std::deque<HalfEdgeEdge*>* edges = convexHullFindHorizon(faceVertMap.at(faceIndex).at(vertIndex), *halfEdgeFaces.at(faceIndex));
-            for (int i = 0; i < edges->size(); ++i)
-            {
-                log::debug("Found edge from {}, to {}, with face {}", edges->at(i)->edgePosition, edges->at(i)->nextEdge->edgePosition, faceIndexMap.at(edges->at(i)->face));
-            }
 
 
-            //AssertEdgeValidity();
+            AssertEdgeValidity();
         }
 
 		/**@brief Constructs a box-shaped convex hull that encompasses the given mesh.
@@ -438,7 +546,7 @@ namespace legion::physics
                 assert(edge->nextEdge);
                 assert(edge->prevEdge);
                 assert(edge->pairingEdge);
-
+                assert(edge->face);
                 
             };
 
@@ -625,30 +733,26 @@ namespace legion::physics
          * The function assumes that the passed faceIndex is correct and will not check if the point is visible from the face
          * @param vert - The Vertex which a horizon needs be found
          * @param face - Face that starts the horizon
-         * @return List of half edges that are the horizonEdge
          */
-        std::deque<HalfEdgeEdge*>* convexHullFindHorizon(math::vec3 vert, HalfEdgeFace& face, HalfEdgeEdge* originEdge = nullptr, std::deque<HalfEdgeEdge*>* edges = nullptr)
+        void convexHullFindHorizon(math::vec3 vert, HalfEdgeFace& face, std::deque<HalfEdgeEdge*>& edges, HalfEdgeEdge* originEdge = nullptr, HalfEdgeFace* originFace = nullptr)
         {
-            if (edges == nullptr) edges = new std::deque<HalfEdgeEdge*>();
-
+            if (&face == originFace) return;
+            if (originFace == nullptr) originFace = &face;
             std::vector<bool> horizonEdges = convexHullFindHorizonEdgesForFace(vert, -1, face);
-            log::debug("Edge count: {}", face.edgeCount());
             for (int i = 0; i < face.edgeCount(); ++i)
             {
                 if (originEdge == face.getEdgeN(i)) continue;
                 if (horizonEdges.at(i))
                 {
                     // Handle horizon edge
-                    edges->push_back(face.getEdgeN(i));
+                    edges.push_back(face.getEdgeN(i));
                 }
                 else
                 {
                     // Handle non-horizon edge
-                    edges = convexHullFindHorizon(vert, *face.getEdgeN(i)->pairingEdge->face, face.getEdgeN(i)->pairingEdge, edges);
+                    convexHullFindHorizon(vert, *face.getEdgeN(i)->pairingEdge->face, edges, face.getEdgeN(i)->pairingEdge, originFace);
                 }
             }
-
-            return edges;
         }
 
         /**@brief Finds the horizonEdges of a face for a vertex

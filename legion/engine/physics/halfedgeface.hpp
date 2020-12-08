@@ -13,6 +13,15 @@ namespace legion::physics
         
 		HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
 
+        /**@brief Deletes all the edges of this face
+         * Warning: pairing edges are not deleted because their face may still exist
+         */
+        void deleteEdges();
+
+        /**@brief set the face of all the edges to this face
+         */
+        void setFaceForAllEdges();
+
 		/** @brief given a function that takes in a HalfEdgeEdge*, 
 		* executes the function on each edge connected to 'startEdge'
 		*/

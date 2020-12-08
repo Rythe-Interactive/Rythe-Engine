@@ -43,6 +43,29 @@ namespace legion::physics
        
     }
 
+    void HalfEdgeFace::deleteEdges()
+    {
+        log::debug("Deleting edges!");
+        HalfEdgeEdge* current = startEdge->nextEdge;
+        do
+        {
+            if (current->pairingEdge) current->pairingEdge->pairingEdge = nullptr;
+            delete current->prevEdge;
+            current = current->nextEdge;
+        } while (current != startEdge && current != nullptr);
+        startEdge = nullptr;
+    }
+
+    void HalfEdgeFace::setFaceForAllEdges()
+    {
+        HalfEdgeEdge* current = startEdge;
+        do
+        {
+            current->face = this;
+            current = current->nextEdge;
+        } while (current != startEdge);
+    }
+
 
     void HalfEdgeFace::forEachEdge(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute)
     {
@@ -149,7 +172,11 @@ namespace legion::physics
 
     HalfEdgeFace::~HalfEdgeFace()
     {
-        auto deleteFunc = [](HalfEdgeEdge* edge) { delete edge; };
+        log::debug("Deleting face");
+        auto deleteFunc = [](HalfEdgeEdge* edge)
+        {
+            delete edge;
+        };
 
         forEachEdge(deleteFunc);
 
