@@ -41,6 +41,11 @@ namespace legion::core::compute
         using dimension = std::variant<size_type,d2,d3>;
 
         Kernel(Program*, cl_kernel);
+        Kernel(const Kernel& other) = default;
+        Kernel(Kernel&& other) noexcept = default;
+        Kernel& operator=(const Kernel& other) = default;
+        Kernel& operator=(Kernel&& other) noexcept = default;
+        ~Kernel();
 
         /**
          * @brief Determines the "Local Work Size", aka how many Kernels should run in parallel

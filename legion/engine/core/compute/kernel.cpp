@@ -210,11 +210,8 @@ namespace legion::core::compute
         //execute all commands in the queue
         clFlush(m_queue);
 
-        //probably not necessarily necessary
+        //waits for all tasks
         clFinish(m_queue);
-
-        //neccessary 
-        clReleaseCommandQueue(m_queue);
     }
 
     size_t Kernel::getMaxWorkSize() const
@@ -237,6 +234,12 @@ namespace legion::core::compute
         m_local_size(64)
     {
         m_queue = program->make_cq();
+    }
+
+    Kernel::~Kernel()
+    {
+        //clear CommandQueue memory
+        clReleaseCommandQueue(m_queue);
     }
 
     Kernel& Kernel::local(size_type s)
