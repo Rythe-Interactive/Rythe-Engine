@@ -4,7 +4,6 @@
 #include <physics/data/pointer_encapsulator.hpp>
 #include <physics/data/contact_vertex.hpp>
 #include <Voro++/voro++.hh>
-#include <Voro++/common.hh>
 
 namespace legion::physics
 {
@@ -417,7 +416,6 @@ namespace legion::physics
         {
             return math::dot(planePosition - startPoint, planeNormal) / math::dot(math::normalize(endPoint - startPoint), planeNormal);
         }
-
 
         /**Creates a Voronoi diagram based on the given parameters.
         * @param points A list of points these will serve as the points of the voronoi diagram.

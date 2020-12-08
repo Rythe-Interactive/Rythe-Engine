@@ -9,11 +9,12 @@
 #include <rendering/components/renderable.hpp>
 
 #include <Voro++/voro++.hh>
-#include <Voro++/common.hh>
 
 
 #include <rendering/systems/pointcloud_particlesystem.hpp>
 #include <rendering/components/particle_emitter.hpp>
+
+#include <physics/physics_statics.hpp>
 
 
 using namespace legion;
@@ -105,7 +106,7 @@ public:
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
 
-        /*  {
+          {
               async::readwrite_guard guard(*window.lock);
               app::ContextHelper::makeContextCurrent(window);
 
@@ -158,7 +159,7 @@ public:
 
   #pragma endregion
 
-          }*/
+          }
         std::vector<math::vec3> points;
         double x, y, z;
         double width = 10, height = 10, depth = 10;
@@ -169,6 +170,7 @@ public:
             z = -depth + rnd() * (depth - (-depth));
             points.push_back(math::vec3(x, y, z));
         }
+        
         voronoi = physics::PhysicsStatics::GenerateVoronoi(points);
 
         createProcess<&TestSystem2::update>("Update");
