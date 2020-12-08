@@ -22,8 +22,11 @@
 #include <physics/physics_statics.hpp>
 #include <physics/data/identifier.hpp>
 #include <audio/audio.hpp>
+#include <Voro++/voro++.hh>
+#include <Voro++/common.hh>
 
 using namespace legion;
+
 
 
 struct sah
@@ -75,6 +78,8 @@ struct activateFrictionTest : public app::input_action<activateFrictionTest> {};
 struct extendedPhysicsContinue : public app::input_action<extendedPhysicsContinue> {};
 struct nextPhysicsTimeStepContinue : public app::input_action<nextPhysicsTimeStepContinue> {};
 
+
+
 class TestSystem final : public System<TestSystem>
 {
 public:
@@ -120,8 +125,12 @@ public:
     ecs::entity_handle Point6FrictionBody;
     ecs::entity_handle FullFrictionBody;
 
+
+
     virtual void setup()
     {
+
+
 
 #pragma region Input binding
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::LEFT, -1.f);
@@ -201,6 +210,7 @@ public:
         rendering::model_handle axesH;
         rendering::model_handle submeshtestH;
         rendering::model_handle planeH;
+        //rendering::model_handle cylinderH;
 
         rendering::material_handle wireframeH;
         rendering::material_handle vertexColorH;
@@ -231,6 +241,7 @@ public:
             axesH = rendering::ModelCache::create_model("axes", "assets://models/xyz.obj"_view);
             submeshtestH = rendering::ModelCache::create_model("submeshtest", "assets://models/submeshtest.obj"_view);
             planeH = rendering::ModelCache::create_model("plane", "assets://models/plane.obj"_view);
+            //cylinderH = rendering::ModelCache::create_model("cylinder","assets://models/cylinder.obj"_view);
 
             wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.shs"_view);
             vertexColorH = rendering::MaterialCache::create_material("vertex color", "assets://shaders/vertexcolor.shs"_view);
@@ -670,21 +681,21 @@ public:
         //setupPhysicsCRUnitTest(cubeH, uvH);
 
 
-        auto sceneEntity = createEntity();
-        std::vector<ecs::entity_handle> children;
-        for (size_type i = 0; i < m_ecs->world.child_count(); i++)
-        {
-            children.push_back(m_ecs->world.get_child(i));
-        }
-        for (auto child : children)
-        {
-            if (child != sceneEntity)
-            {
-                child.set_parent(sceneEntity);
-            }
-        }
+        //auto sceneEntity = createEntity();
+        //std::vector<ecs::entity_handle> children;
+        //for (size_type i = 0; i < m_ecs->world.child_count(); i++)
+        //{
+        //    children.push_back(m_ecs->world.get_child(i));
+        //}
+        //for (auto child : children)
+        //{
+        //    if (child != sceneEntity)
+        //    {
+        //        child.set_parent(sceneEntity);
+        //    }
+        //}
 
-        scenemanagement::SceneManager::createScene("Main", sceneEntity);
+        //scenemanagement::SceneManager::createScene("Main", sceneEntity);
 
         //sceneEntity.destroy();
 
@@ -1860,6 +1871,7 @@ public:
 
     void update(time::span deltaTime)
     {
+
         static auto sahQuery = createQuery<sah, rotation, position>();
 
         sahQuery.queryEntities();
@@ -2100,7 +2112,6 @@ public:
 
     }
 
-
     void FrictionTestActivate(activateFrictionTest* action)
     {
         if (action->value)
@@ -2196,7 +2207,5 @@ public:
             }
         }
     }
-
-
 
 };
