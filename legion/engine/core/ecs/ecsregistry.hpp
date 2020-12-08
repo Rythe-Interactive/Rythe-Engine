@@ -251,6 +251,13 @@ namespace legion::core::ecs
          */
         component_handle_base createComponent(id_type entityId, id_type componentTypeId, void* value);
 
+        /**
+         * @brief Copies a component from entity to another.
+         * @param destinationEntity The entity you want to copy the component onto.
+         * @param sourceEntity The entity you want to copy the component from.
+         * @param componentTypeId The component you want to copy
+         * @return component_handle_base Component handle to the copied component.
+        */
         component_handle_base copyComponent(id_type destinationEntity, id_type sourceEntity, id_type componentTypeId);
 
         /**@brief Destroy component of a certain type attached to a certain entity.

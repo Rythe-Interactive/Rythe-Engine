@@ -194,6 +194,9 @@ namespace legion::core::ecs
             m_components.erase(entityId);
         }
 
+        /**
+         * @brief clones a component from a source to a destination entity
+         */
         void clone_component(id_type dst, id_type src) override
         {
             {
