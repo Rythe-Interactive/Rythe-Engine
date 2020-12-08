@@ -346,6 +346,38 @@ namespace voro {
 			draw_particles(fp);
 			fclose(fp);
 		}
+
+		/** Computes all Voronoi cells and saves the output in JSON
+		* format.
+		* \param[in] c_loop a custom loop object that facilites looping thourgh the data.
+		* \param[in] fp a file handle to write to. */
+		template<class c_loop>
+		void draw_cells_json(c_loop& vl, FILE* fp) {
+			voronoicell c; double* pp;
+			fprintf(fp, "{\n\"Voronoi\":\n[");
+			if (vl.start()) do if (compute_cell(c, vl)) {
+				pp = p[vl.ijk] + ps * vl.q;
+				c.draw_json(*pp, pp[1], pp[2], id[vl.ijk][vl.q], fp);
+			} while (vl.inc());
+			fprintf(fp, "]\n}");
+		}
+
+		/** Computes all Voronoi cells and saves the output in JSON
+		 * format.
+		 * \param[in] fp a file handle to write to. */
+		inline void draw_cells_json(FILE* fp = stdout) {
+			c_loop_all vl(*this);
+			draw_cells_json(vl, fp);
+		}
+
+		/** Computes all Voronoi cells and saves the output in JSON
+		 * format.
+		 * \param[in] filename the name of the file to write to. */
+		inline void draw_cells_json(const char* filename) {
+			FILE* fp = safe_fopen(filename, "w");
+			draw_cells_json(fp);
+			fclose(fp);
+		}
 		/** Dumps particle positions in POV-Ray format.
 		 * \param[in] vl the loop class to use.
 		 * \param[in] fp a file handle to write to. */
