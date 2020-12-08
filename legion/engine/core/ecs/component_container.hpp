@@ -199,6 +199,9 @@ namespace legion::core::ecs
          */
         void clone_component(id_type dst, id_type src) override
         {
+            static_assert(std::is_copy_constructible<component_type>::value,
+                "cannot copy component, therefore component cannot be cloned onto new entity!");
+
             {
                 async::readwrite_guard guard(m_lock);
                 m_components[dst] = *reinterpret_cast<component_type*>(&m_components[src]);
