@@ -4,7 +4,7 @@
 const int K=30;
 const uint RAND_MAX= 255;
 //predefined values
-#define maxPointsPerTri 300
+#define maxPointsPerTri 500
 #define radius 0.33f
 #define cellSize (radius)/1.41421356237f
 #define depth (int)ceil(1/ cellSize)
@@ -38,7 +38,7 @@ uint RandomUpperRange(uint upper)
 float4 SampleTriangle(float2 rand,float4 a, float4 b, float4 c )
 {
     float4 r;
-    r= (float4)(a + rand.x* normalize(b-a) + rand.y * normalize(c-a));
+    r= (float4)(a + rand.x* (b-a) + rand.y * (c-a));
     return r;
 }
 //checks validity of point for poission sampling
@@ -155,20 +155,19 @@ float2 sampleUniformly(__local float2* output, uint samplesPerTri, uint sampleWi
     {
         for(int y=0; y<sampleWidth-x; y++)
         {
-            coordinates=(float2)(offset*(x+1), offset*(y+1));
+           // if(x+y>sampleWidth) continue;
+            coordinates=(float2)(offset*(x), offset*(y));
             output[index] = coordinates;
             index++;
         }
-
     }
-
 }
 
 __kernel void Main(__global const float* vertices,__global const uint* indices,const uint samplePerTri,const uint sampleWidth, __global float4* points)
 {
     //init indices and rand state
     int n=get_global_id(0)*3;
-  //  points[n] = (float4)(sampleWidth(samplePerTri),samplePerTri,0,1);
+    //points[n] = (float4)(sampleWidth(samplePerTri),samplePerTri,0,1);
     state= get_global_id(0);
     int resultIndex = get_global_id(0)*samplePerTri;
     //get vertex indices

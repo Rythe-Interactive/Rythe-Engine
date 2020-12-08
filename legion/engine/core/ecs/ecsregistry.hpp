@@ -213,8 +213,8 @@ namespace legion::core::ecs
         {
             return archetype_type::create(this, entityId);
         }
-        
-        template<typename archetype_type, typename... component_types, typename = inherits_from<archetype_type, archetype_base>>
+
+        template<typename archetype_type, typename... component_types, inherits_from<archetype_type, archetype_base> = 0>
         auto createComponents(id_type entityId, component_types&&... defaultValues)
         {
             return archetype_type::create(this, entityId, std::move(defaultValues)...);

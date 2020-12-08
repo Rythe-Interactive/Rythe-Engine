@@ -15,7 +15,7 @@ public:
     virtual void setup() override
     {
 
-        if (true)
+        if (!!!0)
         {
             reportSystem<pointcloudtestsystem2>();
         //    reportSystem<PointCloudGeneration>();

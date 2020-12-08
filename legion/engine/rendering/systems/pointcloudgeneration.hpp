@@ -86,8 +86,11 @@ namespace legion::rendering
             size_t points_Generated = (triangle_count * realPointCloud.m_samplesPerTriangle);
             log::debug("spt:");
             log::debug(realPointCloud.m_samplesPerTriangle);
+            log::debug("triangle count");
+            log::debug(triangle_count);
 
-
+            log::debug("depth");
+            log::debug(realPointCloud.m_sampleDepth);
             //Generate points 
             std::vector<math::vec4> result(points_Generated);
           //  pointCloudGeneratorCS = fs::view("assets://kernels/pointRasterizer.cl").load_as<compute::function>("Main");
@@ -107,7 +110,7 @@ namespace legion::rendering
                 std::vector<math::vec3> particleInput(points_Generated);
                 for (int i = 0; i < points_Generated; i++)
                 {
-                    //   log::debug(result.at(i));
+                  //  log::debug(result.at(i));
                     particleInput.at(i) = result.at(i).xyz;
                 }
                 //generate particle params

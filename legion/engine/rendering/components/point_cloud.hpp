@@ -52,7 +52,8 @@ namespace legion::rendering
         void InitSampleValues(uint maxPoints)
         {
             uint samplesPerTri = calculateSamplesPerTriangle(maxPoints);
-
+            //3 is the minimum value that works, if its smaller it will break the compute shader
+            if (samplesPerTri <= 3) samplesPerTri = 3;
             //generate sample width
             uint currentIterator = 0;
             uint sum = 0;
@@ -95,10 +96,5 @@ namespace legion::rendering
             return maxPoints / triangleCount;
         }
 
-        uint calculateSampleWidth(uint samplePerTriangle)
-        {
-
-
-        }
     };
 }
