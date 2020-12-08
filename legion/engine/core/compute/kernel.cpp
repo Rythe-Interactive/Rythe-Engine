@@ -180,7 +180,8 @@ namespace legion::core::compute
 
     Kernel& Kernel::dispatch()
     {
-        auto [globals,locals,size] =  parse_dimensions();
+        auto [globals, locals, size] = parse_dimensions();
+   
 
 
         //enqueue the Kernel in the command queue
@@ -190,7 +191,7 @@ namespace legion::core::compute
             size,
             nullptr,
             globals.data(),
-            locals.data (),
+            locals.data(),
             0,
             nullptr,
             nullptr
@@ -251,14 +252,14 @@ namespace legion::core::compute
         m_global_size = s;
         return *this;
     }
-    Kernel& Kernel::global(size_type s0,size_type s1)
+    Kernel& Kernel::global(size_type s0, size_type s1)
     {
-        m_global_size = d2{s0,s1};
+        m_global_size = d2{ s0,s1 };
         return *this;
     }
-    Kernel& Kernel::global(size_type s0, size_type s1,size_type s2)
+    Kernel& Kernel::global(size_type s0, size_type s1, size_type s2)
     {
-        m_global_size = d3{s0,s1,s2};
+        m_global_size = d3{ s0,s1,s2 };
         return *this;
     }
 

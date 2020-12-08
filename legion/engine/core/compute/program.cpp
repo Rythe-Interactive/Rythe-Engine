@@ -75,7 +75,7 @@ namespace legion::core::compute {
             log::error("clBuildProgram failed");
 
             size_t length;
-            char buffer[8192];
+            char buffer[8192*4];
 
             clGetProgramBuildInfo(m_program,device,CL_PROGRAM_BUILD_LOG,sizeof(buffer),buffer,&length);
             buffer[length] = NULL;
