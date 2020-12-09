@@ -1,4 +1,3 @@
-#include "pipeline.hpp"
 #pragma once
 
 namespace legion::rendering
@@ -23,7 +22,7 @@ namespace legion::rendering
                 return nullptr;
         }
 
-        m_metadata.emplace(id, std::make_any<T>(std::forward(args)...);
+        m_metadata.emplace(id, std::make_any<T>(std::forward<Args>(args)...);
         return std::any_cast<T>(&m_metadata[id]);
     }
 
@@ -54,7 +53,7 @@ namespace legion::rendering
                 return nullptr;
         }
 
-        m_metadata.emplace(nameHash, std::make_any<T>(std::forward(args)...);
+        m_metadata.emplace(nameHash, std::make_any<T>(std::forward<Args>(args)...);
         return std::any_cast<T>(&m_metadata[nameHash]);
     }
 
@@ -77,7 +76,7 @@ namespace legion::rendering
     template<typename Self>
     inline void RenderPipeline<Self>::attachStage(std::unique_ptr<RenderStageBase>&& stage)
     {
-        m_stages.emplace(stage->priority(), std::forward(stage));
+        m_stages.emplace(stage->priority(), std::forward<std::unique_ptr<RenderStageBase>&&>(stage));
     }
 
     template<typename Self>

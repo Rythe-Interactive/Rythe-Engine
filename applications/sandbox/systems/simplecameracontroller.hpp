@@ -78,13 +78,13 @@ public:
         groundplane = createEntity();
         auto groundmat = rendering::MaterialCache::create_material("floor", "assets://shaders/groundplane.shs"_view);
         groundmat.set_param("heightMap", rendering::TextureCache::create_texture("heightMap", "assets://textures/mississippi.png"_view));
-        groundplane.add_components<rendering::renderable>(rendering::ModelCache::create_model("floor", "assets://models/groundplane.obj"_view).get_mesh(), rendering::mesh_renderer(groundmat));
+        groundplane.add_components<rendering::mesh_renderable>(rendering::ModelCache::create_model("floor", "assets://models/groundplane.obj"_view).get_mesh(), rendering::mesh_renderer(groundmat));
         groundplane.add_components<transform>();
 
         skybox = createEntity();
         auto skyboxMat = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.shs"_view);
         skyboxMat.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
-        skybox.add_components<rendering::renderable>(rendering::ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view).get_mesh(), rendering::mesh_renderer(skyboxMat));
+        skybox.add_components<rendering::mesh_renderable>(rendering::ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view).get_mesh(), rendering::mesh_renderer(skyboxMat));
         skybox.add_components<transform>(position(), rotation(), scale(1000.f));
 
         camera = createEntity();

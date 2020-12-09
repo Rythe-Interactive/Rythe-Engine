@@ -82,7 +82,9 @@ namespace legion::rendering
         {
             glBindBuffer(m_target, m_id);
 
-            auto oldSize = size();
+            size_type oldSize;
+            glGetBufferParameteri64v(m_target, GL_BUFFER_SIZE, reinterpret_cast<GLint64*>(&oldSize));
+
             auto dataSize = data.size() * sizeof(T);
             if(oldSize >= dataSize)
                 glBufferSubData(m_target, 0, dataSize, data.data());

@@ -23,7 +23,7 @@ namespace legion::core::common
 
         template<typename... Args>
         managed_resource(delegate<void(T&)> destroyFunc, Args&&... args)
-            : m_id(m_lastId.fetch_add(1, std::memory_order_acq_rel) + 1), m_destroyFunc(destroyFunc), value(std::forward(args)...)
+            : m_id(m_lastId.fetch_add(1, std::memory_order_acq_rel) + 1), m_destroyFunc(destroyFunc), value(std::forward<Args>(args)...)
         {
             async::readwrite_guard guard(m_referenceLock);
             m_references[m_id]++;

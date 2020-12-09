@@ -12,7 +12,7 @@ namespace legion::rendering
         ecs::entity_handle particularParticle = particleHandle.entity;
 
         //Handle model and material assigning.
-        particularParticle.add_components<renderable>(m_particleModel.get_mesh(), rendering::mesh_renderer(m_particleMaterial));
+        particularParticle.add_components<mesh_renderable>(m_particleModel.get_mesh(), rendering::mesh_renderer(m_particleMaterial));
     }
 
     void ParticleSystemBase::cleanUpParticle(ecs::component_handle<particle> particleHandle, ecs::component_handle<particle_emitter> emitterHandle) const
@@ -29,7 +29,7 @@ namespace legion::rendering
             //Add to dead
             emitter.deadParticles.emplace_back(particularParticle);
             //Remove renderable to stop them from being rendered
-            particularParticle.remove_component<renderable>();
+            particularParticle.remove_component<mesh_renderable>();
         }
         //Write to emitter
         emitterHandle.write(emitter);

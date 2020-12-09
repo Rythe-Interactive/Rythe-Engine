@@ -144,14 +144,14 @@ namespace legion::core::ecs
          */
         virtual void create_component(id_type entityId) override
         {
-            component_type comp;
-            if constexpr (detail::has_init<component_type, void(component_type&)>::value)
-                component_type::init(comp);
-
             {
                 async::readwrite_guard guard(m_lock);
-                m_components.insert(entityId, std::move(comp));
+                m_components.emplace(entityId);
             }
+            if constexpr (detail::has_init<component_type, void(component_type&, entity_handle)>::value)
+                component_type::init(m_components[entityId], entity_handle(entityId));
+            else if constexpr (detail::has_init<component_type, void(component_type&)>::value)
+                component_type::init(m_components[entityId]);
 
             m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId));
         }
@@ -168,6 +168,10 @@ namespace legion::core::ecs
                 async::readwrite_guard guard(m_lock);
                 m_components[entityId] = *reinterpret_cast<component_type*>(value);
             }
+            if constexpr (detail::has_init<component_type, void(component_type&, entity_handle)>::value)
+                component_type::init(m_components[entityId], entity_handle(entityId));
+            else if constexpr (detail::has_init<component_type, void(component_type&)>::value)
+                component_type::init(m_components[entityId]);
 
             m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId));
         }

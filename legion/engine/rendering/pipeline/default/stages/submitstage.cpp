@@ -34,13 +34,15 @@ namespace legion::rendering
     void SubmitStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
         (void)deltaTime;
+        (void)camInput;
+
         static id_type mainId = nameHash("main");
 
-        auto fbo = m_pipeline->getFramebuffer(mainId);
+        auto fbo = getFramebuffer(mainId);
 
         app::context_guard guard(context);
 
-        auto viewportSize = context.viewportSize();
+        auto viewportSize = context.framebufferSize();
 
         auto colorAttachment = fbo.getAttachment(GL_COLOR_ATTACHMENT0);
         if (!colorAttachment.has_value() || colorAttachment.type() != typeid(texture_handle))

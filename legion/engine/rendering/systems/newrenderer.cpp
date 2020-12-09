@@ -178,7 +178,7 @@ namespace legion::rendering
             if (!win)
                 continue;
 
-            auto viewportSize = win.viewportSize();
+            auto viewportSize = win.framebufferSize();
 
             if (viewportSize.x == 0 || viewportSize.y == 0)
                 continue;

@@ -58,7 +58,7 @@ namespace legion::application
             return m_size;
         }
 
-        inline math::ivec2 viewportSize() const
+        inline math::ivec2 framebufferSize() const
         {
             return ContextHelper::getFramebufferSize(handle);
         }

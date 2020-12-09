@@ -19,6 +19,32 @@ namespace legion::rendering
         virtual void setup(app::window& context) LEGION_PURE;
         virtual void render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime) LEGION_PURE;
         virtual priority_type priority() LEGION_IMPURE_RETURN(default_priority);
+
+    protected:
+        template<typename T>
+        bool has_meta(const std::string& name);
+
+        template<typename T, typename... Args>
+        T* create_meta(const std::string& name, Args&&... args);
+
+        template<typename T>
+        T* get_meta(const std::string& name);
+
+        template<typename T>
+        bool has_meta(id_type nameHash);
+
+        template<typename T, typename... Args>
+        T* create_meta(id_type nameHash, Args&&... args);
+
+        template<typename T>
+        T* get_meta(id_type nameHash);
+
+        framebuffer addFramebuffer(const std::string& name, GLenum target = GL_FRAMEBUFFER);
+        bool hasFramebuffer(const std::string& name, GLenum target = GL_FRAMEBUFFER);
+        framebuffer getFramebuffer(const std::string& name);
+        framebuffer addFramebuffer(id_type nameHash, GLenum target = GL_FRAMEBUFFER);
+        bool hasFramebuffer(id_type nameHash, GLenum target = GL_FRAMEBUFFER);
+        framebuffer getFramebuffer(id_type nameHash);
     };
 
     template<typename SelfType>
@@ -104,3 +130,5 @@ namespace legion::rendering
 
     };
 }
+
+#include <rendering/pipeline/base/renderstage.inl>

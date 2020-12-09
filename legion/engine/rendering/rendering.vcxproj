@@ -22,6 +22,9 @@
     <ClCompile Include="pipeline\base\renderstage.cpp" />
     <ClCompile Include="pipeline\default\defaultpipeline.cpp" />
     <ClCompile Include="pipeline\default\stages\clearstage.cpp" />
+    <ClCompile Include="pipeline\default\stages\framebufferresizestage.cpp" />
+    <ClCompile Include="pipeline\default\stages\lightbufferstage.cpp" />
+    <ClCompile Include="pipeline\default\stages\meshbatchingstage.cpp" />
     <ClCompile Include="pipeline\default\stages\meshrenderstage.cpp" />
     <ClCompile Include="pipeline\default\stages\submitstage.cpp" />
     <ClCompile Include="shadercompiler\shadercompiler.cpp" />
@@ -51,6 +54,9 @@
     <ClInclude Include="data\texture.hpp" />
     <ClInclude Include="pipeline\default\defaultpipeline.hpp" />
     <ClInclude Include="pipeline\default\stages\clearstage.hpp" />
+    <ClInclude Include="pipeline\default\stages\framebufferresizestage.hpp" />
+    <ClInclude Include="pipeline\default\stages\lightbufferstage.hpp" />
+    <ClInclude Include="pipeline\default\stages\meshbatchingstage.hpp" />
     <ClInclude Include="pipeline\default\stages\meshrenderstage.hpp" />
     <ClInclude Include="pipeline\default\stages\submitstage.hpp" />
     <ClInclude Include="systems\newrenderer.hpp" />
@@ -68,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="pipeline\base\pipeline.inl" />
+    <None Include="pipeline\base\renderstage.inl" />
     <None Include="systems\newrenderer.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

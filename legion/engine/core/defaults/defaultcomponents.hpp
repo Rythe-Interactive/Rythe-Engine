@@ -195,7 +195,7 @@ namespace legion::core
     struct mesh_filter : public mesh_handle
     {
         mesh_filter() = default;
-        mesh_filter(const mesh_handle& src) { id = src.id; };
+        explicit mesh_filter(const mesh_handle& src) { id = src.id; };
 
         bool operator==(const mesh_filter& other) const { return id == other.id; }
     };

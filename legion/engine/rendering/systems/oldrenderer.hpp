@@ -493,7 +493,7 @@ namespace legion::rendering
 
                 for (auto ent : renderablesQuery)
                 {
-                    renderable rend = ent.get_component_handles<renderable>();
+                    mesh_renderable rend = ent.get_component_handles<mesh_renderable>();
 
                     if (rend.get_material() == invalid_material_handle)
                     {

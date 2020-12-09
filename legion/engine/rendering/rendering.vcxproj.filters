@@ -69,6 +69,15 @@
     <ClCompile Include="pipeline\base\renderstage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pipeline\default\stages\lightbufferstage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pipeline\default\stages\meshbatchingstage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pipeline\default\stages\framebufferresizestage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\renderingmodule.hpp">
@@ -173,12 +182,24 @@
     <ClInclude Include="data\buffer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="pipeline\default\stages\lightbufferstage.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pipeline\default\stages\meshbatchingstage.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pipeline\default\stages\framebufferresizestage.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="pipeline\base\pipeline.inl">
       <Filter>Header Files</Filter>
     </None>
     <None Include="systems\newrenderer.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="pipeline\base\renderstage.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

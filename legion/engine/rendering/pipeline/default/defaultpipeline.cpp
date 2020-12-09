@@ -1,5 +1,8 @@
 #include <rendering/pipeline/default/defaultpipeline.hpp>
+#include <rendering/pipeline/default/stages/clearstage.hpp>
+#include <rendering/pipeline/default/stages/lightbufferstage.hpp>
 #include <rendering/pipeline/default/stages/meshrenderstage.hpp>
+#include <rendering/pipeline/default/stages/submitstage.hpp>
 #include <rendering/data/buffer.hpp>
 
 namespace legion::rendering
@@ -7,7 +10,10 @@ namespace legion::rendering
     void DefaultPipeline::setup(app::window& context)
     {
         addFramebuffer("main");
+        attachStage<ClearStage>();
+        attachStage<LightBufferStage>();
         attachStage<MeshRenderStage>();
+        attachStage<SubmitStage>();
 
         buffer modelMatrixBuffer;
 

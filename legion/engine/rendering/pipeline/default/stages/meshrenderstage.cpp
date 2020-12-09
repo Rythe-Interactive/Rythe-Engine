@@ -18,23 +18,23 @@ namespace legion::rendering
         static id_type lightCountId = nameHash("light count");
         static id_type matricesId = nameHash("model matrix buffer");
 
-        auto* batches = m_pipeline->get_meta<sparse_map<material_handle, sparse_map<model_handle, std::vector<math::mat4>>>>(batchesId);
+        auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::unordered_set<ecs::entity_handle>>>>(batchesId);
         if (!batches)
             return;
 
-        buffer* lightsBuffer = m_pipeline->get_meta<buffer>(lightsId);
+        buffer* lightsBuffer = get_meta<buffer>(lightsId);
         if (!lightsBuffer)
             return;
 
-        size_type* lightCount = m_pipeline->get_meta<size_type>(lightCountId);
+        size_type* lightCount = get_meta<size_type>(lightCountId);
         if (!lightCount)
             return;
 
-        buffer* modelMatrixBuffer = m_pipeline->get_meta<buffer>(matricesId);
+        buffer* modelMatrixBuffer = get_meta<buffer>(matricesId);
         if (!modelMatrixBuffer)
             return;
 
-        auto fbo = m_pipeline->getFramebuffer(mainId);
+        auto fbo = getFramebuffer(mainId);
 
         app::context_guard guard(context);
 
@@ -59,7 +59,15 @@ namespace legion::rendering
                     continue;
                 }
 
-                modelMatrixBuffer->bufferData(instances);
+                m_matrices.resize(instances.size());
+                int i = 0;
+                for (auto& ent : instances)
+                {
+                    m_matrices[i] = transform(ent.get_component_handles<transform>()).get_local_to_world_matrix();
+                    i++;
+                }
+
+                modelMatrixBuffer->bufferData(m_matrices);
 
                 mesh.vertexArray.bind();
                 mesh.indexBuffer.bind();
