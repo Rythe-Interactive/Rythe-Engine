@@ -12,9 +12,42 @@ namespace legion::core::compute
     Buffer::Buffer(cl_context ctx, void* data, size_type width, size_type height, size_type depth, cl_mem_object_type object_type, cl_image_format* format, buffer_type type, std::string name)
         : m_name(std::move(name))
         , m_data((byte*)data)
-        , m_size(width* height * 3)
+
     {
 
+        int channelSize;
+
+        switch (format->image_channel_order)
+        {
+        case CL_RGBA:
+            channelSize = 4;
+            break;
+        case CL_RGB:
+            channelSize = 3;
+            break;
+        case CL_RA:
+            channelSize = 2;
+            break;
+        case CL_R:
+            channelSize = 1;
+            break;
+        }
+
+
+        switch(format->image_channel_data_type)
+        {
+        case CL_UNORM_INT8:
+            
+            break;
+        case CL_UNORM_INT16:
+            channelSize *= 2;
+            break;
+        case CL_FLOAT:
+            channelSize *= 4;
+            break;
+        }
+
+        m_size = width * height * channelSize;
         m_ref_count = new size_type(1);
         //convert buffer_type to cl_mem_flags
         if (type == buffer_type::READ_BUFFER)
@@ -26,7 +59,6 @@ namespace legion::core::compute
 
         m_type |= CL_MEM_USE_HOST_PTR;
 
-       // m_type = CL_MEM_OBJECT_IMAGE2D;
         cl_image_desc description;
         description.image_type = object_type;
         description.image_width = width;
@@ -55,7 +87,7 @@ namespace legion::core::compute
 
         cl_int ret;
 
-        m_memory_object = clCreateImage(ctx, m_type, format, &description, data , &ret);
+        m_memory_object = clCreateImage(ctx, m_type, format, &description, data, &ret);
 
         if (ret != CL_SUCCESS)
         {
