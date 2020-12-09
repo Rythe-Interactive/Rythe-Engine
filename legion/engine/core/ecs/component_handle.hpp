@@ -163,6 +163,7 @@ namespace legion::core::ecs
 
             component_container<component_type>* family = m_registry->getFamily<component_type>();
 
+            component_type ret;
             {
                 async::readonly_guard rguard(family->get_lock());
 
@@ -171,9 +172,10 @@ namespace legion::core::ecs
 
                 component_type& comp = family->get_component(entity);
                 modifier(comp);
+                ret = comp;
             }
             m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
-            return comp;
+            return ret;
         }
 
         template<typename Func>
@@ -184,6 +186,7 @@ namespace legion::core::ecs
 
             component_container<component_type>* family = m_registry->getFamily<component_type>();
 
+            component_type ret;
             {
                 async::readonly_guard rguard(family->get_lock());
 
@@ -192,9 +195,10 @@ namespace legion::core::ecs
 
                 component_type& comp = family->get_component(entity);
                 modifier(comp);
+                ret = comp;
             }
             m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
-            return comp;
+            return ret;
         }
 
         /**@brief Thread-safe read modify write with add modification on component.
@@ -208,6 +212,7 @@ namespace legion::core::ecs
 
             component_container<component_type>* family = m_registry->getFamily<component_type>();
 
+            component_type ret;
             {
                 async::readonly_guard rguard(family->get_lock());
 
@@ -216,9 +221,10 @@ namespace legion::core::ecs
 
                 component_type& comp = family->get_component(entity);
                 comp = comp + value;
+                ret = comp;
             }
             m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
-            return comp;
+            return ret;
         }
 
         /**@brief Thread-safe read modify write with add modification on component.
@@ -232,6 +238,7 @@ namespace legion::core::ecs
 
             component_container<component_type>* family = m_registry->getFamily<component_type>();
 
+            component_type ret;
             {
                 async::readonly_guard rguard(family->get_lock());
 
@@ -240,9 +247,10 @@ namespace legion::core::ecs
 
                 component_type& comp = family->get_component(entity);
                 comp = comp + value;
+                ret = comp;
             }
             m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
-            return comp;
+            return ret;
         }
 
         /**@brief Thread-safe read modify write with multiply modification on component.
@@ -256,6 +264,7 @@ namespace legion::core::ecs
 
             component_container<component_type>* family = m_registry->getFamily<component_type>();
 
+            component_type ret;
             {
                 async::readonly_guard rguard(family->get_lock());
 
@@ -264,9 +273,10 @@ namespace legion::core::ecs
 
                 component_type& comp = family->get_component(entity);
                 comp = comp * value;
+                ret = comp;
             }
             m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
-            return comp;
+            return ret;
         }
 
         /**@brief Thread-safe read modify write with multiply modification on component.
@@ -280,6 +290,7 @@ namespace legion::core::ecs
 
             component_container<component_type>* family = m_registry->getFamily<component_type>();
 
+            component_type ret;
             {
                 async::readonly_guard rguard(family->get_lock());
 
@@ -288,9 +299,10 @@ namespace legion::core::ecs
 
                 component_type& comp = family->get_component(entity);
                 comp = comp * value;
+                ret = comp;
             }
             m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
-            return comp;
+            return ret;
         }
 
         /**@brief Locks component family and destroys component.

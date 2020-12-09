@@ -2,15 +2,17 @@
 
 namespace legion::rendering
 {
+   std::unordered_set<ecs::entity_handle> LightBufferStage::m_lightEntities;
+   std::vector<detail::light_data> LightBufferStage::m_lights;
+
     void LightBufferStage::onLightCreate(events::component_creation<light>* event)
     {
-        light lght = event->entity.read_component<light>();
-        lights.insert(event->entity, lght.get_light_data(event->entity.get_component_handle<position>(), event->entity.get_component_handle<rotation>()));
+        m_lightEntities.insert(event->entity);
     }
 
     void LightBufferStage::onLightDestroy(events::component_destruction<light>* event)
     {
-        lights.erase(event->entity);
+        m_lightEntities.erase(event->entity);
     }
 
     void LightBufferStage::setup(app::window& context)
@@ -25,6 +27,9 @@ namespace legion::rendering
 
         create_meta<buffer>("light buffer", lightsBuffer);
         create_meta<size_type>("light count");
+
+        bindToEvent<events::component_creation<light>, &LightBufferStage::onLightCreate>();
+        bindToEvent<events::component_destruction<light>, &LightBufferStage::onLightDestroy>();
     }
 
     void LightBufferStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
@@ -36,16 +41,25 @@ namespace legion::rendering
         static id_type lightsbufferId = nameHash("light buffer");
         static id_type lightCountId = nameHash("light count");
         buffer* lightsBuffer = get_meta<buffer>(lightsbufferId);
-        *get_meta<id_type>(lightCountId) = lights.size();
+        *get_meta<id_type>(lightCountId) = m_lightEntities.size();
+
+        m_lights.resize(m_lightEntities.size());
+        int i = 0;
+        for (auto ent : m_lightEntities)
+        {
+            light lght = ent.read_component<light>();
+            m_lights[i] = lght.get_light_data(ent.get_component_handle<position>(), ent.get_component_handle<rotation>());
+            i++;
+        }
 
         app::context_guard guard(context);
-        lightsBuffer->bufferData(lights.values());
+        lightsBuffer->bufferData(m_lights);
 
     }
 
     priority_type LightBufferStage::priority()
     {
-        return PRIORITY_MAX;
+        return setup_priority;
     }
 
 }

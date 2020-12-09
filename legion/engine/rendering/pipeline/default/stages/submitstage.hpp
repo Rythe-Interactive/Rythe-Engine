@@ -9,6 +9,7 @@ namespace legion::rendering
         unsigned int m_quadVAO, m_quadVBO;
         shader_handle m_screenShader;
 
+    public:
         virtual void setup(app::window& context) override;
         virtual void render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime) override;
         virtual priority_type priority() override;

@@ -2,6 +2,13 @@
 #include <application/application.hpp>
 #include <rendering/components/camera.hpp>
 
+#define setup_priority 64
+#define opaque_priority 32
+#define transparent_priority 16
+//      default_priority 0
+#define post_fx_priority -32
+#define submit_priority -64
+
 namespace legion::rendering
 {
     class RenderPipelineBase;
@@ -13,6 +20,7 @@ namespace legion::rendering
         static ecs::EcsRegistry* m_ecs;
         static schd::Scheduler* m_scheduler;
         static events::EventBus* m_eventBus;
+
     public:
         static RenderPipelineBase* m_pipeline;
 
@@ -21,6 +29,8 @@ namespace legion::rendering
         virtual priority_type priority() LEGION_IMPURE_RETURN(default_priority);
 
     protected:
+        void abort();
+
         template<typename T>
         bool has_meta(const std::string& name);
 

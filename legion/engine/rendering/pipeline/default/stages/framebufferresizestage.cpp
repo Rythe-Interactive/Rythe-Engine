@@ -2,6 +2,9 @@
 
 namespace legion::rendering
 {
+    std::atomic<float> FramebufferResizeStage::m_renderScale = 1.f;
+
+
     void FramebufferResizeStage::setRenderScale(float renderScale)
     {
         m_renderScale.store(renderScale, std::memory_order_release);
@@ -23,10 +26,12 @@ namespace legion::rendering
         texture_type::two_dimensional, channel_format::eight_bit, texture_format::rgb,
         texture_components::rgb, true, true, texture_mipmap::linear, texture_mipmap::linear,
         texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat });
+
         m_depthTexture = TextureCache::create_texture("depth_image", m_framebufferSize, {
         texture_type::two_dimensional, channel_format::eight_bit, texture_format::depth,
         texture_components::depth, true, true, texture_mipmap::linear, texture_mipmap::linear,
         texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat });
+
         m_stencilbuffer = renderbuffer(GL_STENCIL, m_framebufferSize);
 
         auto fbo = getFramebuffer("main");
@@ -37,7 +42,29 @@ namespace legion::rendering
 
     void FramebufferResizeStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
+        float renderScale = m_renderScale.load(std::memory_order_acquire);
+        math::ivec2 framebufferSize = context.framebufferSize();
+        framebufferSize.x *= renderScale;
+        framebufferSize.y *= renderScale;
 
+        if (framebufferSize.x == 0 || framebufferSize.y == 0)
+        {
+            abort();
+            return;
+        }
+
+        if (framebufferSize != m_framebufferSize)
+        {
+            m_framebufferSize = framebufferSize;
+            m_colorTexture.get_texture().resize(framebufferSize);
+            m_depthTexture.get_texture().resize(framebufferSize);
+            m_stencilbuffer.resize(framebufferSize);
+        }
+    }
+
+    priority_type FramebufferResizeStage::priority()
+    {
+        return setup_priority;
     }
 
 }

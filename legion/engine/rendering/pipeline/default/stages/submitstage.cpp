@@ -50,7 +50,7 @@ namespace legion::rendering
 
         auto screenTexture = std::any_cast<texture_handle>(colorAttachment);
 
-        auto& [success, message] = cam.renderTarget.verify();
+        auto [success, message] = cam.renderTarget.verify();
         if (!success)
         {
             log::warn(message);
@@ -75,6 +75,6 @@ namespace legion::rendering
 
     priority_type SubmitStage::priority()
     {
-        return PRIORITY_MIN;
+        return submit_priority;
     }
 }

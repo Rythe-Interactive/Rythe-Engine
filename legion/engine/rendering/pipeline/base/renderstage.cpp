@@ -8,6 +8,11 @@ namespace legion::rendering
     events::EventBus* RenderStageBase::m_eventBus;
     RenderPipelineBase* RenderStageBase::m_pipeline;
 
+    void RenderStageBase::abort()
+    {
+        m_pipeline->abort();
+    }
+
     framebuffer RenderStageBase::addFramebuffer(const std::string& name, GLenum target)
     {
         return m_pipeline->addFramebuffer(name, target);

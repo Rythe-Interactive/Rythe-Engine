@@ -30,14 +30,14 @@ namespace legion::core::common
         }
 
         managed_resource(const managed_resource<T>& src)
-            : m_id(src.m_id), m_destroyFunc(src.m_destroyFunc), m_copyFunc(src.m_copyFunc), m_moveFunc(src.m_moveFunc), value(m_copyFunc(src.value))
+            : m_id(src.m_id), m_destroyFunc(src.m_destroyFunc), value(src.value)
         {
             async::readwrite_guard guard(m_referenceLock);
             m_references[m_id]++;
         }
 
         managed_resource(managed_resource<T>&& src)
-            : m_id(src.m_id), m_destroyFunc(src.m_destroyFunc), m_copyFunc(src.m_copyFunc), m_moveFunc(src.m_moveFunc), value(m_moveFunc(std::move(src.value)))
+            : m_id(src.m_id), m_destroyFunc(std::move(src.m_destroyFunc)), value(std::move(src.value))
         {
             async::readwrite_guard guard(m_referenceLock);
             m_references[m_id]++;
@@ -47,9 +47,7 @@ namespace legion::core::common
         {
             m_id = src.m_id;
             m_destroyFunc = src.m_destroyFunc;
-            m_copyFunc = src.m_copyFunc;
-            m_moveFunc = src.m_moveFunc;
-            value = m_copyFunc(src.value);
+            value = src.value;
             async::readwrite_guard guard(m_referenceLock);
             m_references[m_id]++;
             return *this;
@@ -58,10 +56,8 @@ namespace legion::core::common
         managed_resource<T>& operator=(managed_resource<T>&& src)
         {
             m_id = src.m_id;
-            m_destroyFunc = src.m_destroyFunc;
-            m_copyFunc = src.m_copyFunc;
-            m_moveFunc = src.m_moveFunc;
-            value = m_moveFunc(std::move(src.value));
+            m_destroyFunc = std::move(src.m_destroyFunc);
+            value = std::move(src.value);
             async::readwrite_guard guard(m_referenceLock);
             m_references[m_id]++;
             return *this;
@@ -84,6 +80,9 @@ namespace legion::core::common
 
         ~managed_resource()
         {
+            if (!m_id)
+                return;
+
             async::readwrite_guard guard(m_referenceLock);
             m_references[m_id]--;
             if (m_references[m_id] == 0)
@@ -93,4 +92,13 @@ namespace legion::core::common
             }
         }
     };
+
+    template<typename T>
+    async::readonly_rw_spinlock managed_resource<T>::m_referenceLock;
+
+    template<typename T>
+    std::unordered_map<id_type, size_type> managed_resource<T>::m_references;
+
+    template<typename T>
+    std::atomic<id_type> managed_resource<T>::m_lastId;
 }

@@ -132,6 +132,7 @@ namespace legion::core::ecs
         std::vector <ecs::entity_handle> children;
         oarchive(cereal::make_nvp("ID", m_id), cereal::make_nvp("NAME", std::string("ENTITY")));
         auto ent = m_registry->createEntity(m_id);
+        (void)ent;
         oarchive(cereal::make_nvp("COMPONENTS", components), cereal::make_nvp("CHILDREN", children));
         for (auto child : children)
         {

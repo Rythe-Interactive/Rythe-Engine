@@ -19,7 +19,11 @@ namespace legion::rendering
         static ecs::EcsRegistry* m_ecs;
         static schd::Scheduler* m_scheduler;
         static events::EventBus* m_eventBus;
+
+        bool m_abort;
+
     public:
+        void abort();
 
         template<typename T>
         bool has_meta(const std::string& name);

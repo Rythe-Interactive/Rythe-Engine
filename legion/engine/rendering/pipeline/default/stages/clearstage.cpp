@@ -19,6 +19,14 @@ namespace legion::rendering
 
         app::context_guard guard(context);
 
+        auto [valid, message] = fbo.verify();
+        if (!valid)
+        {
+            log::error("Main frame buffer isn't complete: {}", message);
+            abort();
+            return;
+        }
+
         fbo.bind();
 
         glClearColor(cam.clearColor.r, cam.clearColor.g, cam.clearColor.b, cam.clearColor.a);
@@ -29,6 +37,6 @@ namespace legion::rendering
 
     priority_type ClearStage::priority()
     {
-        return PRIORITY_MAX;
+        return setup_priority;
     }
 }

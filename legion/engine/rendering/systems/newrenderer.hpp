@@ -1,5 +1,6 @@
 #pragma once
 #include <rendering/pipeline/base/pipeline.hpp>
+#include <rendering/pipeline/default/defaultpipeline.hpp>
 
 #include <unordered_map>
 
@@ -15,6 +16,11 @@ namespace legion::rendering
         bool initContext(const app::window& window);
 
     public:
+        Renderer() : System<Renderer>()
+        {
+            setPipeline<DefaultPipeline>();
+        }
+
         virtual void setup();
 
         void render(time::span deltatime);

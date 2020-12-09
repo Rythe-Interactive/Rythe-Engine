@@ -17,7 +17,7 @@ using namespace legion;
 class TestSystem2 final : public System<TestSystem2>
 {
 public:
-    TestSystem2()
+    TestSystem2() : System<TestSystem2>()
     {
         log::filter(log::severity::debug);
         app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1);

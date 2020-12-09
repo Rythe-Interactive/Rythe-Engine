@@ -38,6 +38,14 @@ namespace legion::rendering
 
         app::context_guard guard(context);
 
+        auto [valid, message] = fbo.verify();
+        if (!valid)
+        {
+            log::error("Main frame buffer isn't complete: {}", message);
+            abort();
+            return;
+        }
+
         fbo.bind();
 
         for (auto [material, instancesPerMaterial] : *batches)
@@ -84,5 +92,10 @@ namespace legion::rendering
         }
 
         fbo.release();
+    }
+
+    priority_type MeshRenderStage::priority()
+    {
+        return opaque_priority;
     }
 }

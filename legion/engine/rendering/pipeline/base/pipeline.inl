@@ -2,6 +2,10 @@
 
 namespace legion::rendering
 {
+    template<typename Self>
+    std::multimap<priority_type, std::unique_ptr<RenderStageBase>, std::greater<>> RenderPipeline<Self>::m_stages;
+
+
     template<typename T>
     inline bool RenderPipelineBase::has_meta(const std::string& name)
     {
@@ -22,7 +26,7 @@ namespace legion::rendering
                 return nullptr;
         }
 
-        m_metadata.emplace(id, std::make_any<T>(std::forward<Args>(args)...);
+        m_metadata.emplace(id, std::make_any<T>(std::forward<Args>(args)...));
         return std::any_cast<T>(&m_metadata[id]);
     }
 
@@ -70,7 +74,7 @@ namespace legion::rendering
     inline void RenderPipeline<Self>::attachStage()
     {
         auto ptr = new StageType();
-        m_stages.emplace(ptr->priority(), std::unique_ptr<RenderStage>(ptr));
+        m_stages.emplace(ptr->priority(), std::unique_ptr<RenderStageBase>(ptr));
     }
 
     template<typename Self>
@@ -90,7 +94,12 @@ namespace legion::rendering
     template<typename Self>
     inline void RenderPipeline<Self>::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
+        m_abort = false;
         for (auto& [_, stage] : m_stages)
+        {
             stage->render(context, cam, camInput, deltaTime);
+            if (m_abort)
+                break;
+        }
     }
 }

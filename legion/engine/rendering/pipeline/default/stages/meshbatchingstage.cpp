@@ -120,6 +120,13 @@ namespace  legion::rendering
     void MeshBatchingStage::setup(app::window& context)
     {
         create_meta<sparse_map<material_handle, sparse_map<model_handle, sparse_map<ecs::entity_handle, math::mat4>>>>("mesh batches");
+
+        bindToEvent<events::component_creation<mesh_renderer>, &MeshBatchingStage::onRendererCreate>();
+        bindToEvent<events::component_destruction<mesh_renderer>, &MeshBatchingStage::onRendererDestroy>();
+        bindToEvent<events::component_modification<mesh_renderer>, &MeshBatchingStage::onRendererModified>();
+        bindToEvent<events::component_creation<mesh_filter>, &MeshBatchingStage::onFilterCreate>();
+        bindToEvent<events::component_destruction<mesh_filter>, &MeshBatchingStage::onFilterDestroy>();
+        bindToEvent<events::component_modification<mesh_filter>, &MeshBatchingStage::onFilterModified>();
     }
 
     void MeshBatchingStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
@@ -132,7 +139,7 @@ namespace  legion::rendering
 
     priority_type MeshBatchingStage::priority()
     {
-        return PRIORITY_MAX;
+        return setup_priority;
     }
 
 }
