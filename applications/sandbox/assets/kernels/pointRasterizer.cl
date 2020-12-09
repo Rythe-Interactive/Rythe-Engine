@@ -126,7 +126,7 @@ void PoissionSampling(__local float2* outputPoints, int samplePerTri)
 }
 uint sampleWidth(int samplesPerTri)
 {
-   // return 0;
+    // return 0;
     int currentIterator =0;
     int sum =0;
     int prevSum=0;
@@ -163,7 +163,18 @@ float2 sampleUniformly(__local float2* output, uint samplesPerTri, uint sampleWi
     }
 }
 
-__kernel void Main(__global const float* vertices,__global const uint* indices,const uint samplePerTri,const uint sampleWidth, __global float4* points)
+__kernel void Main
+(
+    __global const float* vertices,
+    __global const uint* indices,
+    __global const float* uvs,
+   // __read_only image2d_t normalMap,
+    __global const float* normalMap,
+    const uint samplePerTri,
+    const uint sampleWidth,
+    const uint normalStrength,
+    __global float4* points
+)
 {
     //init indices and rand state
     int n=get_global_id(0)*3;
@@ -174,6 +185,7 @@ __kernel void Main(__global const float* vertices,__global const uint* indices,c
     uint vertex1Index = indices[n];
     uint vertex2Index = indices[n+1];
     uint vertex3Index = indices[n+2];
+
 
     //get vertex values
     //vertA

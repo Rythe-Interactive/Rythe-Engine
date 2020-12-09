@@ -37,13 +37,14 @@ public:
         ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view);
         ModelCache::create_model("sphere", "assets://models/sphere.obj"_view);
         ModelCache::create_model("suzanne", "assets://models/suzanne.obj"_view);
-        ModelCache::create_model("stanford_bunny", "assets://models/stanford_bunny.obj"_view);
 
-        
+
         //create particle system material
         material_handle particleMaterial;
         rendering::material_handle rockH;
-
+        //rendering::texture m_normalMap;
+        rendering::texture_handle m_normalMap;
+        image_handle image;
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
         {
             async::readwrite_guard guard(*window.lock);
@@ -52,29 +53,28 @@ public:
             particleMaterial = rendering::MaterialCache::create_material("directional light", colorshader);
             particleMaterial.set_param("color", math::colors::green);
 
+           // m_normalMap = rendering::TextureCache::create_texture("normal test", "assets://textures/test-normal.png"_view);
+            image = ImageCache::create_image("normal image", "assets://textures/test-normal.png"_view);
 
         }
 
-        mesh_handle uvMesh = MeshCache::get_handle("uvsphere"); 
+        mesh_handle uvMesh = MeshCache::get_handle("uvsphere");
         mesh_handle cubeMesh = MeshCache::get_handle("cube");
         mesh_handle sphereMesh = MeshCache::get_handle("sphere");
         mesh_handle suzanneeMesh = MeshCache::get_handle("suzanne");
-        mesh_handle stanford_bunnyMesh = MeshCache::get_handle("stanford_bunny");
-
-        
-      
 
 
 
 
-     //   auto comparison
-      /*  auto ent = createEntity();
-        auto trans = ent.add_components<transform>(position(-5, 0, 0), rotation(), scale(0.5f));
-        ent.add_component<point_cloud>(point_cloud(uvMesh, trans, particleMaterial, 300, 0.1f));*/
+
+        //   auto comparison
+         /*  auto ent = createEntity();
+           auto trans = ent.add_components<transform>(position(-5, 0, 0), rotation(), scale(0.5f));
+           ent.add_component<point_cloud>(point_cloud(uvMesh, trans, particleMaterial, 300, 0.1f));*/
 
         auto ent2 = createEntity();
         auto trans2 = ent2.add_components<transform>(position(5, 0, 0), rotation(), scale(0.5f));
-        ent2.add_component<point_cloud>(point_cloud(stanford_bunnyMesh, trans2, particleMaterial, 3000, 0.05f));
+        ent2.add_component<point_cloud>(point_cloud(sphereMesh, trans2, particleMaterial, image, 1000, 0.05f));
     }
 };
 
