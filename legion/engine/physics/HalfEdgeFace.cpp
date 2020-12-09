@@ -49,7 +49,7 @@ namespace legion::physics
         HalfEdgeEdge* current = startEdge->nextEdge;
         do
         {
-            if (current->pairingEdge) current->pairingEdge->pairingEdge = nullptr;
+            if (current->prevEdge->pairingEdge && current->prevEdge->pairingEdge->pairingEdge == current) current->prevEdge->pairingEdge->pairingEdge = nullptr;
             delete current->prevEdge;
             current = current->nextEdge;
         } while (current != startEdge && current != nullptr);
@@ -132,6 +132,11 @@ namespace legion::physics
 
     bool HalfEdgeFace::testConvexity(const HalfEdgeFace& other) const
     {
+        if (&other == this)
+        {
+            log::warn("Testing face with itself for convexity: returning true");
+            return true;
+        }
         math::vec3 difference = startEdge->edgePosition - other.centroid;
         float scaledAngle = math::dot(difference, normal);
 
@@ -146,6 +151,11 @@ namespace legion::physics
 
     bool HalfEdgeFace::makeNormalsConvexWithFace(HalfEdgeFace& other)
     {
+        if (&other == this)
+        {
+            log::warn("Make normals for face convex with itself: returning false");
+            return false;
+        }
         math::vec3 difference = startEdge->edgePosition - other.centroid;
         float scaledAngle = math::dot(difference, normal);
 
@@ -160,11 +170,21 @@ namespace legion::physics
 
 	bool HalfEdgeFace::testConvexity(const HalfEdgeFace& first, const HalfEdgeFace& second)
 	{
+        if (&first == &second)
+        {
+            log::warn("Testing face with itself for convexity: returning true");
+            return true;
+        }
 		return first.testConvexity(second) && second.testConvexity(first);
 	}
 
     bool HalfEdgeFace::makeNormalsConvexWithFace(HalfEdgeFace& first, HalfEdgeFace& second)
     {
+        if (&first == &second)
+        {
+            log::warn("Make normals for face convex with itself: returning false");
+            return false;
+        }
         bool inversedNormal = first.makeNormalsConvexWithFace(second);
         inversedNormal |= second.makeNormalsConvexWithFace(first);
         return inversedNormal;
@@ -175,6 +195,10 @@ namespace legion::physics
         log::debug("Deleting face");
         auto deleteFunc = [](HalfEdgeEdge* edge)
         {
+            if (edge->pairingEdge && edge->pairingEdge && edge->pairingEdge->pairingEdge == edge)
+            {
+                edge->pairingEdge->pairingEdge = nullptr;
+            }
             delete edge;
         };
 

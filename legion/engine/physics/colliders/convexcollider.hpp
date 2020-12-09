@@ -184,6 +184,33 @@ namespace legion::physics
             int looped = 0;
             while (true)
             {
+                // Debug stuffs
+                if (looped == 2)
+                {
+                    log::debug("--------------------------------------\n\t\t\t\t\t\tLoop completed!");
+                    for (int i = 0; i < vertices.size(); ++i)
+                    {
+                        log::debug("Vert [{}]: {}", i, vertices.at(i));
+                    }
+                    for (int i = 0; i < halfEdgeFaces.size(); ++i)
+                    {
+                        log::debug("Face [{}], with normal {}", i, halfEdgeFaces.at(i)->normal);
+                        int count = halfEdgeFaces.at(i)->edgeCount();
+                        for (int e = 0; e < count; ++e)
+                        {
+                            HalfEdgeEdge* edge = halfEdgeFaces.at(i)->getEdgeN(e);
+                            log::debug("\tEdge [{}]: {}", e, edge->edgePosition);
+                            //log::debug("\t\tPairing Edge: from {} to {}", edge->pairingEdge->edgePosition , edge->pairingEdge->nextEdge->edgePosition);
+                            if (edge->pairingEdge)
+                            {
+                                if(edge->pairingEdge->nextEdge)
+                                    if(edge->pairingEdge->nextEdge->edgePosition != edge->edgePosition)
+                                        log::debug("\t\tPairing Edge: from {} to {}", edge->pairingEdge->edgePosition, edge->pairingEdge->nextEdge->edgePosition);
+                            }
+                        }
+                    }
+                    break;
+                }
                 faceVertMap.clear();
                 faceVertMap = convexHullMatchVerticesToFace(toBeSorted);
 
@@ -210,36 +237,13 @@ namespace legion::physics
 
                 std::deque<HalfEdgeEdge*> edges;
                 // The selected vert needs to be merged into the hull
-                convexHullFindHorizon(faceVertMap.at(faceIndex).at(vertIndex), *halfEdgeFaces.at(faceIndex), edges);
+                convexHullConstructHorizon(faceVertMap.at(faceIndex).at(vertIndex), *halfEdgeFaces.at(faceIndex), edges);
+
+                log::debug("\n-----------------------------------------------------------------------------------------------------\n\t\t\t\t\t\tCreating new faces");
                 // Debug information
-                /*for (int i = 0; i < edges.size(); ++i)
+                for (int i = 0; i < edges.size(); ++i)
                 {
                     log::debug("Found edge from {}, to {}, with face {}", edges.at(i)->edgePosition, edges.at(i)->nextEdge->edgePosition, faceIndexMap.at(edges.at(i)->face));
-                }*/
-
-                if (looped == 1)
-                {
-                    log::debug("--------------------------------------\n\t\t\t\t\t\tLooped once!");
-                    for (int i = 0; i < vertices.size(); ++i)
-                    {
-                        log::debug("Vert [{}]: {}", i, vertices.at(i));
-                    }
-                    for (int i = 0; i < halfEdgeFaces.size(); ++i)
-                    {
-                        log::debug("Face [{}], with normal {}", i, halfEdgeFaces.at(i)->normal);
-                        int count = halfEdgeFaces.at(i)->edgeCount();
-                        for (int e = 0; e < count; ++e)
-                        {
-                            HalfEdgeEdge* edge = halfEdgeFaces.at(i)->getEdgeN(e);
-                            log::debug("\tEdge [{}]: {}", e, edge->edgePosition);
-                            //log::debug("\t\tPairing Edge: from {} to {}", edge->pairingEdge->edgePosition , edge->pairingEdge->nextEdge->edgePosition);
-                            if (edge->pairingEdge->nextEdge->edgePosition != edge->edgePosition)
-                            {
-                                log::debug("\t\tPairing Edge: from {} to {}", edge->pairingEdge->edgePosition, edge->pairingEdge->nextEdge->edgePosition);
-                            }
-                        }
-                    }
-                    break;
                 }
 
                 HalfEdgeEdge* firstEdge = nullptr;
@@ -249,22 +253,35 @@ namespace legion::physics
                 // Create new faces for each edge
                 for (int i = 0; i < edges.size(); ++i)
                 {
+                    //log::debug("Edge [{}]: from {}, to {}", i, edges.at(i)->edgePosition, edges.at(i)->nextEdge->edgePosition);
+                    //log::debug("Pairing Edge from {}, to {}", edges.at(i)->pairingEdge->edgePosition, edges.at(i)->pairingEdge->nextEdge->edgePosition);
                     facesToBeDeleted.try_emplace(edges.at(i)->face, edges.at(i));
                     // We need to create a copy of the edge edges.at(i), because we still need to delete the old face and old edges later
                     HalfEdgeEdge* edge0 = new HalfEdgeEdge(edges.at(i)->edgePosition);
-                    HalfEdgeEdge* edge1 = new HalfEdgeEdge(edges.at(i)->pairingEdge->edgePosition); // Tail of edge
-                    HalfEdgeEdge* edge2 = new HalfEdgeEdge(faceVertMap.at(faceIndex).at(vertIndex));
+                    HalfEdgeEdge* edge1 = new HalfEdgeEdge(edges.at(i)->nextEdge->edgePosition); // Tail of edge
+                    HalfEdgeEdge* edge2 = new HalfEdgeEdge(faceVertMap.at(faceIndex).at(vertIndex)); // Vertex positon 
+                    //log::debug("\tCreated edges @: {}, {}, {}", edge0->edgePosition, edge1->edgePosition, edge2->edgePosition);
                     edge0->setNextAndPrevEdge(edge2, edge1);
                     edge0->setPairingEdge(edges.at(i)->pairingEdge);
+                    //log::debug("Adjescent edge from {}, to {}, pairing: {} to {}", edge0->edgePosition, edge0->nextEdge->edgePosition, edge0->pairingEdge->edgePosition, edge0->pairingEdge->nextEdge->edgePosition);
                     edge1->setNextAndPrevEdge(edge0, edge2);
+                    edge2->setNextAndPrevEdge(edge1, edge0);
+                    if (i == edges.size() - 1)
+                    {
+                        //log::debug("\tEdge2 @ {} pairing {}", edge2->edgePosition, firstEdge->edgePosition);
+                        edge1->setPairingEdge(firstEdge);
+                    }
                     if (i == 0)
                     {
-                        firstEdge = edge1;
+                        //log::debug("\tFirst pairing edge set to: {}", edge2->edgePosition);
+                        firstEdge = edge2;
                     }
-                    else edge1->setPairingEdge(pairingEdge);
-                    edge2->setNextAndPrevEdge(edge1, edge0);
-                    if (i == edges.size()-1) edge2->setPairingEdge(firstEdge);
-                    pairingEdge = edge2;
+                    else
+                    {
+                        //log::debug("\tEdge2 @ {} pairing {}", edge1->edgePosition, pairingEdge->edgePosition);
+                        edge2->setPairingEdge(pairingEdge);
+                    }
+                    pairingEdge = edge1;
 
                     // Calculate normal
                     math::vec3 normal = math::normalize(math::cross(edge1->edgePosition - edge0->edgePosition, edge2->edgePosition - edge0->edgePosition));
@@ -303,13 +320,15 @@ namespace legion::physics
                 }
                 //log::debug("Face count: {}", halfEdgeFaces.size());
 
+                // Make sure all the normals are correct
                 for (int i = 0; i < createdFaces.size(); ++i)
                 {
                     faceIndexMap.emplace(createdFaces.at(i), halfEdgeFaces.size());
                     halfEdgeFaces.push_back(createdFaces.at(i));
-                    for (int j = i; j < createdFaces.size(); ++j)
+                    for (int j = i+1; j < createdFaces.size(); ++j)
                     {
-                        HalfEdgeFace::makeNormalsConvexWithFace(*createdFaces.at(i), *createdFaces.at(j));
+                        bool convexity = !HalfEdgeFace::makeNormalsConvexWithFace(*createdFaces.at(i), *createdFaces.at(j));
+                        log::debug("Convexity for {} and {}: {}", i, j, convexity);
                     }
                 }
 
@@ -317,7 +336,7 @@ namespace legion::physics
             }
 
 
-            AssertEdgeValidity();
+            //AssertEdgeValidity();
         }
 
 		/**@brief Constructs a box-shaped convex hull that encompasses the given mesh.
@@ -727,6 +746,42 @@ namespace legion::physics
                 }
             }
             return map;
+        }
+
+
+        void convexHullConstructHorizon(math::vec3 vert, HalfEdgeFace& face, std::deque<HalfEdgeEdge*>& edges, HalfEdgeEdge* originEdge = nullptr, HalfEdgeFace* originFace = nullptr)
+        {
+            if (&face == originFace) return;
+            if (originFace == nullptr) originFace = &face;
+            HalfEdgeEdge* start = face.startEdge->prevEdge;
+            HalfEdgeEdge* edge = face.startEdge->prevEdge;
+
+            // Loop through all the edges of this face
+            do
+            {
+                if (originEdge == edge)
+                {
+                    edge = edge->nextEdge;
+                    continue;
+                }
+                // Cross the edge
+                HalfEdgeFace* crossedFace = edge->pairingEdge->face;
+
+                // If the vert is above the face, the face is part of the horizon
+                if (math::pointToPlane(vert, crossedFace->startEdge->edgePosition, crossedFace->normal) > 0.0f)
+                {
+                    // Plane is part of horizon
+                    convexHullConstructHorizon(vert, *crossedFace, edges, edge->pairingEdge, originFace);
+                }
+                else
+                {
+                    // Plane is not part of horizon
+                    // Therefore the crossed edge was a horizon edge
+                    edges.push_back(edge);
+                }
+
+                edge = edge->nextEdge;
+            } while (edge != start);
         }
 
         /**@brief Constructs a horizon for a given vertex starting at face index faceIndex

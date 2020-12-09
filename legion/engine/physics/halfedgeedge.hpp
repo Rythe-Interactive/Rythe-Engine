@@ -38,7 +38,6 @@ namespace legion::physics
          */
         void setPairingEdge(HalfEdgeEdge* edge)
         {
-            if (!edge) return;
             pairingEdge = edge;
             edge->pairingEdge = this;
         }
