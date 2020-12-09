@@ -132,7 +132,7 @@ namespace legion::physics
 
     bool HalfEdgeFace::testConvexity(const HalfEdgeFace& other) const
     {
-        if (&other == this)
+        if (other == *this)
         {
             log::warn("Testing face with itself for convexity: returning true");
             return true;
@@ -151,7 +151,7 @@ namespace legion::physics
 
     bool HalfEdgeFace::makeNormalsConvexWithFace(HalfEdgeFace& other)
     {
-        if (&other == this)
+        if (other == *this)
         {
             log::warn("Make normals for face convex with itself: returning false");
             return false;
@@ -168,9 +168,31 @@ namespace legion::physics
         return false;
     }
 
+    HalfEdgeFace::face_angle_relation HalfEdgeFace::getAngleRelation(const HalfEdgeFace& other)
+    {
+        if (other == *this)
+        {
+            log::warn("Calculating face angle relation between the same face, returning coplaner");
+            return face_angle_relation::coplaner;
+        }
+        math::vec3 difference = startEdge->edgePosition - other.centroid;
+        float scaledAngle = math::dot(difference, normal);
+
+        // if the scaledAngle is > 0  it is convex
+        if (scaledAngle >= math::epsilon<float>())
+        {
+            return face_angle_relation::convex;
+        }
+        else if (scaledAngle <= math::epsilon<float>())
+        {
+            return face_angle_relation::concave;
+        }
+        else return face_angle_relation::coplaner;
+    }
+
 	bool HalfEdgeFace::testConvexity(const HalfEdgeFace& first, const HalfEdgeFace& second)
 	{
-        if (&first == &second)
+        if (first == second)
         {
             log::warn("Testing face with itself for convexity: returning true");
             return true;
@@ -180,7 +202,7 @@ namespace legion::physics
 
     bool HalfEdgeFace::makeNormalsConvexWithFace(HalfEdgeFace& first, HalfEdgeFace& second)
     {
-        if (&first == &second)
+        if (first == second)
         {
             log::warn("Make normals for face convex with itself: returning false");
             return false;

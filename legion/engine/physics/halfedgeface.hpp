@@ -7,6 +7,19 @@ namespace legion::physics
 
 	struct HalfEdgeFace
 	{
+        /**@class face_angle_relation
+         * @brief Struct to indicate the angle relation between two faces
+         * Coplaner:    The faces could be merged, the angle between them is 180 degrees
+         * Convex:      The faces are convex, the inside angle between them is less than 180 degrees, they create an acute angle
+         * Concave:     The faces are concave, the inside angle is more than 180 degrees, they create an obtuse angle
+         */
+        enum struct face_angle_relation : int
+        {
+            coplaner = 0,
+            convex,
+            concave
+        };
+
 		HalfEdgeEdge* startEdge;
 		math::vec3 normal;
 		math::vec3 centroid;
@@ -52,6 +65,10 @@ namespace legion::physics
          */
         bool makeNormalsConvexWithFace(HalfEdgeFace& other);
 
+        /**@brief Calculates the angle relation between two planes
+         */
+        face_angle_relation getAngleRelation(const HalfEdgeFace& other);
+
         /**@brief Tests if the the two planes are convex in regard to each other
          * @return true when convex, false if coplaner or concave
          */
@@ -61,6 +78,12 @@ namespace legion::physics
          * @return Returns true when one of the faces or both have been made convex, false when they were already convex
          */
         static bool makeNormalsConvexWithFace(HalfEdgeFace& first, HalfEdgeFace& second);
+
+        friend bool operator==(const HalfEdgeFace& lhs, const HalfEdgeFace& rhs)
+        {
+            // Because the centroid is dependent on all edges, we do not need to check the edge positions
+            return lhs.normal == rhs.normal && lhs.centroid == rhs.centroid;
+        }
 		
 		~HalfEdgeFace();
 	};

@@ -86,7 +86,7 @@ public:
         for (int i = 0; i < faces.size(); ++i)
         {
             faces.at(i)->forEachEdge(debugDrawEdges);
-            debug::drawLine(faces.at(i)->centroid, faces.at(i)->centroid + faces.at(i)->normal * 0.3f, math::colors::blue);
+            debug::drawLine(faces.at(i)->centroid, faces.at(i)->centroid + faces.at(i)->normal * 0.3f, math::colors::black);
         }
     }
 };
