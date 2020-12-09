@@ -327,8 +327,18 @@ namespace legion::physics
                     halfEdgeFaces.push_back(createdFaces.at(i));
                     for (int j = i+1; j < createdFaces.size(); ++j)
                     {
-                        bool convexity = !HalfEdgeFace::makeNormalsConvexWithFace(*createdFaces.at(i), *createdFaces.at(j));
-                        log::debug("Convexity for {} and {}: {}", i, j, convexity);
+                        // Check face relation
+                        HalfEdgeFace::face_angle_relation relation0 = createdFaces.at(i)->getAngleRelation(*createdFaces.at(j));
+                        HalfEdgeFace::face_angle_relation relation1 = createdFaces.at(j)->getAngleRelation(*createdFaces.at(i));
+                        if (relation0 == relation1 && relation0 == HalfEdgeFace::face_angle_relation::coplaner)
+                        {
+                            // Merge faces
+                        }
+                        else if (relation0 != HalfEdgeFace::face_angle_relation::convex || relation1 != HalfEdgeFace::face_angle_relation::convex)
+                        {
+                            // Faces were not coplaner and not convex, therefore they are made convex
+                            bool convexity = !HalfEdgeFace::makeNormalsConvexWithFace(*createdFaces.at(i), *createdFaces.at(j));
+                        }
                     }
                 }
 

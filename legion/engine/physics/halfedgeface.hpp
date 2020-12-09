@@ -79,6 +79,19 @@ namespace legion::physics
          */
         static bool makeNormalsConvexWithFace(HalfEdgeFace& first, HalfEdgeFace& second);
 
+        /**@brief Finds the edge that splits the two faces
+         * @return A pointer to the edge, nullptr if the two faces are not connected
+         */
+        static HalfEdgeEdge* findMiddleEdge(const HalfEdgeFace& first, const HalfEdgeFace& second);
+
+        /**@brief Merges two faces
+         * Warning: Only the face middleEdge.face will be usable after the merge, the other face will be deleted
+         * Warning: The passed middleEdge will also be deleted
+         * @param middleEdge The edge that seperates the two faces7
+         * @return Pointer to the merged HalfEdgeFace
+         */
+        static HalfEdgeFace* mergeFaces(HalfEdgeEdge& middleEdge);
+
         friend bool operator==(const HalfEdgeFace& lhs, const HalfEdgeFace& rhs)
         {
             // Because the centroid is dependent on all edges, we do not need to check the edge positions
