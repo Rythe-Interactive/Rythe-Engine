@@ -88,7 +88,7 @@ namespace legion::physics
                 return;
             }
 
-            log::debug("Vertices: {} ; {} ; {} ; {}", mesh.vertices.at(index0), mesh.vertices.at(index1), mesh.vertices.at(index2), mesh.vertices.at(index3));
+            //log::debug("Vertices: {} ; {} ; {} ; {}", mesh.vertices.at(index0), mesh.vertices.at(index1), mesh.vertices.at(index2), mesh.vertices.at(index3));
 
             // map to find the index of a face ptr
             std::unordered_map<HalfEdgeFace*, int> faceIndexMap;
@@ -184,7 +184,7 @@ namespace legion::physics
             int looped = 0;
             while (true)
             {
-                log::debug("------------------------------------------------\n\t\t\t\t\t\tStarting loop {}", looped);
+                //log::debug("------------------------------------------------\n\t\t\t\t\t\tStarting loop {}", looped);
 
                 /*for (int i = 0; i < toBeSorted.size(); ++i)
                 {
@@ -193,7 +193,7 @@ namespace legion::physics
 
                 if (toBeSorted.size() == 0)
                 {
-                    log::debug("To be sorted is empty");
+                    //log::debug("To be sorted is empty");
                     break;
                 }
 
@@ -209,9 +209,9 @@ namespace legion::physics
                 {
                     for (size_type j = 0; j < faceVertMap.at(i).size(); ++j)
                     {
-                        log::debug("faceVertMap[{}][{}] = {}", i, j, faceVertMap.at(i).at(j));
+                        //log::debug("faceVertMap[{}][{}] = {}", i, j, faceVertMap.at(i).at(j));
                         float dist = math::pointToTriangle(faceVertMap.at(i).at(j), halfEdgeFaces.at(i)->startEdge->edgePosition, halfEdgeFaces.at(i)->startEdge->nextEdge->edgePosition, halfEdgeFaces.at(i)->startEdge->prevEdge->edgePosition, halfEdgeFaces.at(i)->normal);
-                        log::debug("distance: {}", dist);
+                        //log::debug("distance: {}", dist);
                         if (dist > largestDistance)
                         {
                             largestDistance = dist;
@@ -226,13 +226,13 @@ namespace legion::physics
                 // The selected vert needs to be merged into the hull
                 convexHullConstructHorizon(faceVertMap.at(faceIndex).at(vertIndex), *halfEdgeFaces.at(faceIndex), edges);
 
-                log::debug("\n-----------------------------------------------------------------------------------------------------\n\t\t\t\t\t\tCreating new faces");
+                //log::debug("\n-----------------------------------------------------------------------------------------------------\n\t\t\t\t\t\tCreating new faces");
                 // Debug information
-                log::debug("From viewpoint: {}", faceVertMap.at(faceIndex).at(vertIndex));
-                for (int i = 0; i < edges.size(); ++i)
+                //log::debug("From viewpoint: {}", faceVertMap.at(faceIndex).at(vertIndex));
+                /*for (int i = 0; i < edges.size(); ++i)
                 {
                     log::debug("Found edge from {}, to {}, with face {}", edges.at(i)->edgePosition, edges.at(i)->nextEdge->edgePosition, faceIndexMap.at(edges.at(i)->face));
-                }
+                }*/
                 // Debug stuffs
                 //if (looped == 4)
                 //{
@@ -323,12 +323,12 @@ namespace legion::physics
                 // Delete the edges and faces
                 for (auto& f : facesToBeDeleted)
                 {
-                    log::debug("\n\t\t\t\t\t\tDeleting Face with normal: {}", f.first->normal);
+                    //log::debug("\n\t\t\t\t\t\tDeleting Face with normal: {}", f.first->normal);
                     int count = f.first->edgeCount();
                     for (int e = 0; e < count; ++e)
                     {
                         HalfEdgeEdge* edge = f.first->getEdgeN(e);
-                        log::debug("\tEdge [{}]: {}", e, edge->edgePosition);
+                        //log::debug("\tEdge [{}]: {}", e, edge->edgePosition);
                     }
                     //f.first->deleteEdges();
                     halfEdgeFaces.erase(std::remove(halfEdgeFaces.begin(), halfEdgeFaces.end(), f.first), halfEdgeFaces.end());
@@ -350,10 +350,13 @@ namespace legion::physics
                         if (relation0 == HalfEdgeFace::face_angle_relation::coplaner)
                         {
                             HalfEdgeEdge* centerEdge = HalfEdgeFace::findMiddleEdge(*halfEdgeFaces.at(j), *createdFaces.at(i));
-                            HalfEdgeFace* face = HalfEdgeFace::mergeFaces(*centerEdge);
-                            createdFaces.erase(createdFaces.begin() + i);
-                            log::debug("Merging faces");
-                            break;
+                            if (centerEdge != nullptr)
+                            {
+                                HalfEdgeFace* face = HalfEdgeFace::mergeFaces(*centerEdge);
+                                createdFaces.erase(createdFaces.begin() + i);
+                                //log::debug("Merging faces");
+                                break;
+                            }
                         }
                     }
                 }
@@ -366,7 +369,7 @@ namespace legion::physics
                     for (int j = i + 1; j < createdFaces.size(); ++j)
                     {
                         bool convexity = !HalfEdgeFace::makeNormalsConvexWithFace(*createdFaces.at(i), *createdFaces.at(j));
-                        log::debug("Convexity for {} and {}: {}", i, j, convexity);
+                        //log::debug("Convexity for {} and {}: {}", i, j, convexity);
                     }
                 }
 
@@ -374,7 +377,7 @@ namespace legion::physics
             }
 
 
-            //AssertEdgeValidity();
+            AssertEdgeValidity();
         }
 
 		/**@brief Constructs a box-shaped convex hull that encompasses the given mesh.
@@ -764,7 +767,7 @@ namespace legion::physics
                 float smallestDistance = std::numeric_limits<float>::max();
                 int faceIndex = -1;
                 math::vec3 faceVerts[] = { math::vec3(0,0,0), math::vec3(0,0,0), math::vec3(0,0,0)};
-                log::debug("Vert {} @ {}", i, vertices.at(i));
+                //log::debug("Vert {} @ {}", i, vertices.at(i));
                 for (size_type f = 0; f < halfEdgeFaces.size(); ++f)
                 {
                     // Get the distances to the face

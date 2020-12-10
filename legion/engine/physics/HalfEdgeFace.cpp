@@ -177,8 +177,6 @@ namespace legion::physics
         }
         float distToPlane = math::pointToPlane(centroid, other.centroid, other.normal);
 
-        log::debug("Dist to plane: {}", distToPlane);
-
         // if the distance to the face is negative, is it under the other face, therefore convex
         if (distToPlane <= -math::epsilon<float>())
         {
@@ -233,7 +231,10 @@ namespace legion::physics
 
     HalfEdgeFace* HalfEdgeFace::mergeFaces(HalfEdgeEdge& middleEdge)
     {
-        if(middleEdge.face->startEdge == &middleEdge) middleEdge.face->startEdge = middleEdge.prevEdge;
+        if (middleEdge.face->startEdge == &middleEdge)
+        {
+            middleEdge.face->startEdge = middleEdge.face->startEdge->prevEdge;
+        }
         // Set correct faces
         /*middleEdge.pairingEdge->nextEdge->face = middleEdge.face;
         middleEdge.pairingEdge->prevEdge->face = middleEdge.face;*/
@@ -245,9 +246,11 @@ namespace legion::physics
             current = current->nextEdge;
         } while (current != end);
 
-        // Merge the edges of the faces
+        // Link edges
         middleEdge.prevEdge->nextEdge = middleEdge.pairingEdge->nextEdge;
+        middleEdge.nextEdge->prevEdge = middleEdge.pairingEdge->prevEdge;
         middleEdge.pairingEdge->prevEdge->nextEdge = middleEdge.nextEdge;
+        middleEdge.pairingEdge->nextEdge->prevEdge = middleEdge.prevEdge;
 
         HalfEdgeFace* face = middleEdge.face;
 
@@ -269,10 +272,13 @@ namespace legion::physics
 
         // Clean up all the memory of the damaged edges and face
         // Damaged in the sense that they no longer point to anything and the face exists of only one edge
-        middleEdge.pairingEdge->face->startEdge = nullptr;
-        delete middleEdge.pairingEdge->face;
-        delete middleEdge.pairingEdge;
-        delete& middleEdge;
+        /*middleEdge.pairingEdge->face->startEdge = nullptr;
+        middleEdge.pairingEdge->face = nullptr;
+        middleEdge.pairingEdge->pairingEdge = nullptr;*/
+        //delete middleEdge.pairingEdge->face;
+        //delete middleEdge.pairingEdge;
+        //middleEdge.pairingEdge = nullptr;
+        //delete& middleEdge;
 
         return face;
 
@@ -313,7 +319,6 @@ namespace legion::physics
 
     HalfEdgeFace::~HalfEdgeFace()
     {
-        log::debug("Deleting face");
         auto deleteFunc = [](HalfEdgeEdge* edge)
         {
             if (edge->pairingEdge && edge->pairingEdge && edge->pairingEdge->pairingEdge == edge)
