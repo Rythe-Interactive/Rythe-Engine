@@ -25,7 +25,7 @@ namespace legion::rendering
          * @param particle_list A list of particles to iterate over.
          * @param particle_emitter The emitter component handle holding the particles.
          */
-        virtual void update(std::vector<ecs::entity_handle> particle_list, ecs::component_handle<particle_emitter> particle_emitter) const LEGION_IMPURE;
+        virtual void update(std::vector<ecs::entity_handle> particle_list, ecs::component_handle<particle_emitter> particle_emitter, time::span delta_time) const LEGION_IMPURE;
 
     protected:
         /**
@@ -42,8 +42,8 @@ namespace legion::rendering
          * @param emitterHandle The emitter that hold that particular particle.
          */
         virtual void cleanUpParticle(
-            ecs::component_handle<particle> particleHandle,
-            ecs::component_handle<particle_emitter> emitterHandle) const;
+            const ecs::entity_handle& particleHandle,
+            ecs::component_handle<particle_emitter>& emitterHandle) const;
         /**
          * @brief Checks if the given emitter has a particle ready to be used, otherwise make a new one.
          * @param emitterHandle The emitter that is being checked for an available particle.

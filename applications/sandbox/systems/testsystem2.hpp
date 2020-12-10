@@ -10,6 +10,8 @@
 
 #include <Voro++/voro++.hh>
 
+#include "pointcloud_particlesystem.hpp"
+#include "explosion_particlesystem.hpp"
 
 #include <rendering/systems/pointcloud_particlesystem.hpp>
 #include <rendering/components/particle_emitter.hpp>
@@ -19,78 +21,8 @@
 
 using namespace legion;
 
-class wall_torus : public voro::wall {
-public:
+struct activateUpdate : public app::input_action<activateUpdate> {};
 
-    // The wall constructor initializes constants for the major and
-    // minor axes of the torus. It also initializes the wall ID
-    // number that is used when the plane cuts are made. This is
-    // only tracked with the voronoicell_neighbor class and is
-    // ignored otherwise. It can be omitted, and then an arbitrary
-    // value of -99 is used.
-    wall_torus(double imjr, double imnr, int iw_id = -99)
-        : w_id(iw_id), mjr(imjr), mnr(imnr) {};
-
-    // This returns true if a given vector is inside the torus, and
-    // false if it is outside. For the current example, this
-    // routine is not needed, but in general it would be, for use
-    // with the point_inside() routine in the container class.
-    bool point_inside(double x, double y, double z) {
-        double temp = sqrt(x * x + y * y) - mjr;
-        return temp * temp + z * z < mnr* mnr;
-    }
-
-    // This template takes a reference to a voronoicell or
-    // voronoicell_neighbor object for a particle at a vector
-    // (x,y,z), and makes a plane cut to to the object to account
-    // for the toroidal wall
-    template<class vc_class>
-    inline bool cut_cell_base(vc_class& c, double x, double y, double z) {
-        double orad = sqrt(x * x + y * y);
-        double odis = orad - mjr;
-        double ot = odis * odis + z * z;
-
-        // Unless the particle is within 1% of the major
-        // radius, then a plane cut is made
-        if (ot > 0.01 * mnr) {
-            ot = 2 * mnr / sqrt(ot) - 2;
-            z *= ot;
-            odis *= ot / orad;
-            x *= odis;
-            y *= odis;
-            return c.nplane(x, y, z, w_id);
-        }
-        return true;
-    }
-
-    // These virtual functions are called during the cell
-    // computation in the container class. They call instances of
-    // the template given above.
-    bool cut_cell(voro::voronoicell& c, double x,
-        double y, double z) {
-        return cut_cell_base(c, x, y, z);
-    }
-    bool cut_cell(voro::voronoicell_neighbor& c, double x,
-        double y, double z) {
-        return cut_cell_base(c, x, y, z);
-    }
-private:
-    // The ID number associated with the wall
-    const int w_id;
-    // The major radius of the torus
-    const double mjr;
-    // The minor radius of the torus
-    const double mnr;
-};
-
-double rnd() { return double(rand()) / RAND_MAX; }
-
-//scene loading binds
-//struct savescene1 : public app::input_action<savescene1> {};
-//struct savescene2 : public app::input_action<savescene2> {};
-//
-//struct loadscene1 : public app::input_action<loadscene1> {};
-//struct loadscene2 : public app::input_action<loadscene2> {};
 
 class TestSystem2 final : public System<TestSystem2>
 {
@@ -101,85 +33,78 @@ public:
         app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1);
     }
 
+    std::vector<bool*> explEmitterActivation;
     std::vector<std::vector<math::vec4>> voronoi;
 
     virtual void setup()
     {
+        app::InputSystem::createBinding<activateUpdate>(app::inputmap::method::COMMA, 1.f);
+        bindToEvent<activateUpdate, &TestSystem2::onParticleActivate>();
 
-        app::InputSystem::createBinding<savescene1>(app::inputmap::method::F1);
-        app::InputSystem::createBinding<savescene2>(app::inputmap::method::F2);
-        app::InputSystem::createBinding<loadscene1>(app::inputmap::method::F3);
-        app::InputSystem::createBinding<loadscene2>(app::inputmap::method::F4);
+        rendering::model_handle explosionSphere;
+        rendering::model_handle particleSphere;
 
-        bindToEvent<savescene1, &TestSystem2::saveScene1>();
-        bindToEvent<savescene2, &TestSystem2::saveScene2>();
-        bindToEvent<loadscene1, &TestSystem2::loadScene1>();
-        bindToEvent<loadscene2, &TestSystem2::loadScene2>();
-
-        rendering::model_handle cube;
-        rendering::material_handle flatGreen;
         rendering::material_handle vertexColor;
+        rendering::material_handle pointCloudColor;
         rendering::material_handle directionalLightMH;
 
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
 
-        {
-            async::readwrite_guard guard(*window.lock);
-            app::ContextHelper::makeContextCurrent(window);
+          {
+              async::readwrite_guard guard(*window.lock);
+              app::ContextHelper::makeContextCurrent(window);
 
 
-            auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
-            directionalLightMH = rendering::MaterialCache::create_material("directional light", colorshader);
-            directionalLightMH.set_param("color", math::color(1, 1, 0.8f));
+              auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
+              directionalLightMH = rendering::MaterialCache::create_material("directional light", colorshader);
+              directionalLightMH.set_param("color", math::color(1, 1, 0.8f));
 
-            cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
-            vertexColor = rendering::MaterialCache::create_material("vertex color", "assets://shaders/vertexcolor.shs"_view);
-
-
-            std::vector<math::vec3> positions{
-                math::vec3(0,1.0f,0),
-                math::vec3(0,1.25f,0),
-                math::vec3(0,1.5f,0),
-                math::vec3(0,1.75f,0),
-
-                math::vec3(1,1.0f,0),
-                math::vec3(1,1.25f,0),
-                math::vec3(1,1.5f,0),
-                math::vec3(1,1.75f,0),
-
-                math::vec3(1,1.0f,1),
-                math::vec3(1,1.25f,1),
-                math::vec3(1,1.5f,1),
-                math::vec3(1,1.75f,1),
-
-                math::vec3(0,1.0f,1),
-                math::vec3(0,1.25f,1),
-                math::vec3(0,1.5f,1),
-                math::vec3(0,1.75f,1)
-            };
-            pointCloudParameters params{
-            params.startingSize = math::vec3(0.2f),
-            params.particleMaterial = vertexColor,
-                params.particleModel = cube
-            };
-            auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params, positions);
+              cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
+              vertexColor = rendering::MaterialCache::create_material("vertex color", "assets://shaders/vertexcolor.shs"_view);
 
 
+              std::vector<math::vec3> positions{
+                  math::vec3(0,1.0f,0),
+                  math::vec3(0,1.25f,0),
+                  math::vec3(0,1.5f,0),
+                  math::vec3(0,1.75f,0),
 
-#pragma region entities
+                  math::vec3(1,1.0f,0),
+                  math::vec3(1,1.25f,0),
+                  math::vec3(1,1.5f,0),
+                  math::vec3(1,1.75f,0),
 
-            {
-                auto ent = createEntity();
-                ent.add_components<transform>(position(-5, 0.01f, 0), rotation(), scale(1));
-                rendering::particle_emitter emitter = ent.add_component<rendering::particle_emitter>().read();
-                emitter.particleSystemHandle = pointcloud;
-                ent.get_component_handle<rendering::particle_emitter>().write(emitter);
-            }
+                  math::vec3(1,1.0f,1),
+                  math::vec3(1,1.25f,1),
+                  math::vec3(1,1.5f,1),
+                  math::vec3(1,1.75f,1),
 
-#pragma endregion
+                  math::vec3(0,1.0f,1),
+                  math::vec3(0,1.25f,1),
+                  math::vec3(0,1.5f,1),
+                  math::vec3(0,1.75f,1)
+              };
+              pointCloudParameters params{
+              params.startingSize = math::vec3(0.2f),
+              params.particleMaterial = vertexColor,
+                  params.particleModel = cube
+              };
+              auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params, positions);
 
-        }
+  #pragma region entities
+
+              {
+                  auto ent = createEntity();
+                  ent.add_components<transform>(position(-5, 0.01f, 0), rotation(), scale(1));
+                  rendering::particle_emitter emitter = ent.add_component<rendering::particle_emitter>().read();
+                  emitter.particleSystemHandle = pointcloud;
+                  ent.get_component_handle<rendering::particle_emitter>().write(emitter);
+              }
+
+  #pragma endregion
+
+          }
         std::vector<math::vec3> points;
         double x, y, z;
         double width = 10, height = 10, depth = 10;
@@ -189,8 +114,75 @@ public:
             y = -height + rnd() * (height - (-height));
             z = -depth + rnd() * (depth - (-depth));
             points.push_back(math::vec3(x, y, z));
-        }
+            async::readwrite_guard guard(*window.lock);
+            app::ContextHelper::makeContextCurrent(window);
 
+
+            auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
+            directionalLightMH = rendering::MaterialCache::create_material("directional light", colorshader);
+            directionalLightMH.set_param("color", math::color(1, 1, 0.8f));
+
+            explosionSphere = rendering::ModelCache::create_model("cube", "assets://models/explosionMesh.obj"_view);
+            particleSphere = rendering::ModelCache::create_model("cube", "assets://models/particleModel.obj"_view);
+
+            pointCloudColor = rendering::MaterialCache::create_material("color2", "assets://shaders/color.shs"_view);
+            pointCloudColor.set_param("color", math::color(0, 1, 1));
+            vertexColor = rendering::MaterialCache::create_material("color1", "assets://shaders/color.shs"_view);
+            vertexColor.set_param("color", math::color(227.0f / 255.0f, 86.0f / 255.0f, 28.0f / 255.0f));
+
+            auto pos = explosionSphere.get_mesh().get().second.vertices;
+
+            pointCloudParameters params{
+            math::vec3(0.2f),
+            pointCloudColor,
+                particleSphere
+            };
+            auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params, pos);
+
+
+            explosionParameters explosionParams{
+                math::vec3(2.0f),
+                vertexColor,
+                particleSphere,
+                3.0f,
+                math::vec3(0.2f),
+                0.99f,
+                0.99f,
+                math::colors::yellow,
+                explosionSphere
+            };
+
+            auto explosion = rendering::ParticleSystemCache::createParticleSystem<ExplosionParticleSystem>("explosion", explosionParams);
+#pragma region entities
+
+            {
+                auto ent = createEntity();
+                ent.add_components<transform>(position(-5, 0.01f, 0), rotation(), scale());
+                rendering::particle_emitter emitter = ent.add_component<rendering::particle_emitter>().read();
+                emitter.particleSystemHandle = pointcloud;
+                ent.get_component_handle<rendering::particle_emitter>().write(emitter);
+            }
+
+            {
+                auto ent = createEntity();
+                ent.add_components<transform>(position(0, 3.0f, 3.0f), rotation(), scale(15.f));
+                rendering::particle_emitter emitter = ent.add_component<rendering::particle_emitter>().read();
+                emitter.particleSystemHandle = explosion;
+                ent.get_component_handle<rendering::particle_emitter>().write(emitter);
+            }
+
+            /*{
+                auto ent = createEntity();
+                ent.add_components<transform>(position(2, 3.0f, 3.0f), rotation(), scale(3.f));
+                rendering::particle_emitter emitter = ent.add_component<rendering::particle_emitter>().read();
+                emitter.particleSystemHandle = explosion;
+                ent.get_component_handle<rendering::particle_emitter>().write(emitter);
+            }*/
+
+#pragma endregion
+
+        }
+        
         voronoi = physics::PhysicsStatics::GenerateVoronoi(points);
 
         createProcess<&TestSystem2::update>("Update");
@@ -201,43 +193,18 @@ public:
         for (auto point : voronoi)
         {
             debug::drawLine(point[0], point[1], math::colors::magenta);
-        }
+		}
     }
 
-    void saveScene1(savescene1* action)
+    void onParticleActivate(activateUpdate* action)
     {
-        if (action->pressed())
+        auto emitters = createQuery<rendering::particle_emitter>();
+        emitters.queryEntities();
+        for (auto entity_handle : emitters)
         {
-            log::debug("Saving scene: Main");
-            scenemanagement::SceneManager::createScene("Main");
-            log::debug("Finishded saving scene: Main");
-        }
-    }
-    void saveScene2(savescene2* action)
-    {
-        if (action->pressed())
-        {
-            log::debug("Saving scene: Main2");
-            scenemanagement::SceneManager::createScene("Main2");
-            log::debug("Finishded saving scene: Main2");
-        }
-    }
-    void loadScene1(loadscene1* action)
-    {
-        if (action->pressed())
-        {
-            log::debug("Started loading scene: Main");
-            scenemanagement::SceneManager::loadScene("Main");
-            log::debug("Finished loading a scene");
-        }
-    }
-    void loadScene2(loadscene2* action)
-    {
-        if (action->pressed())
-        {
-            log::debug("Started loading scene: Main");
-            scenemanagement::SceneManager::loadScene("Main2");
-            log::debug("Finished loading a scene");
+            rendering::particle_emitter emit =  entity_handle.get_component_handle<rendering::particle_emitter>().read();
+            emit.playAnimation = true;
+            entity_handle.get_component_handle<rendering::particle_emitter>().write(emit);
         }
     }
 };
