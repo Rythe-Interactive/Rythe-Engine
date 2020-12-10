@@ -11,7 +11,7 @@ namespace legion::rendering
     {
         std::vector<ecs::entity_handle> livingParticles;
         std::vector<ecs::entity_handle> deadParticles;
-        //std::vector<math::vec3> directions;
+        bool playAnimation = false;
         ParticleSystemHandle particleSystemHandle;
         bool setupCompleted;
 

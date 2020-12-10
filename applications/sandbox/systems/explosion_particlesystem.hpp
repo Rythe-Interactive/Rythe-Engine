@@ -18,6 +18,7 @@ struct explosionParameters
     float decelerationScalar;
     float sizeOverLifeTime;
     math::color endColor;
+    rendering::model_handle explosionModel;
 
     float startingLifeTime = 0.0f;
     bool looping = false;
@@ -29,7 +30,6 @@ struct explosionParameters
 class ExplosionParticleSystem : public rendering::ParticleSystemBase
 {
 public:
-
     ExplosionParticleSystem(explosionParameters params)
     {
         m_looping = params.looping;
@@ -43,6 +43,7 @@ public:
         m_sizeOverLifetime = params.sizeOverLifeTime;
         m_particleMaterial = params.particleMaterial;
         m_particleModel = params.particleModel;
+        m_explosionModel = params.explosionModel;
 
         m_decelerationScalar = params.decelerationScalar;
         m_endColor = params.endColor;
@@ -51,20 +52,21 @@ public:
 
     void setup(ecs::component_handle<rendering::particle_emitter> emitter_handle) const override
     {
-        auto vertPositions = m_particleModel.get_mesh().get().second.vertices;
+        auto vertPositions = m_explosionModel.get_mesh().get().second.vertices;
+
         //emitter positions/origin
         const auto emitterPosHandle = emitter_handle.entity.get_component_handle<position>();
+        auto scaleOfEmitter = emitter_handle.entity.get_component_handle<scale>().read();
         const math::vec3 emitterPos = emitterPosHandle.read();
 
         auto emitter = emitter_handle.read();
-        //std::vector<math::vec3> directions = emitter.directions;
-        time::clock<> timer;
+
         for (math::vec3 vert_position : vertPositions)
         {
-            timer.start();
 #pragma region Create particle
-                //Checks the emitter if it has a recycled particle to use, if not it creates a new one.
+            //Checks the emitter if it has a recycled particle to use, if not it creates a new one.
             ecs::component_handle<rendering::particle> particleComponent = checkToRecycle(emitter_handle);
+
             auto ent = particleComponent.entity;
             //Checks if the entity has a transform, if not it adds one.
             if (!ent.has_components<transform>())
@@ -75,87 +77,87 @@ public:
             auto& [pos, _, scale] = trans;
 
             //Sets the particle scale to the right scale.
-            auto newPos = emitterPos + vert_position;
+            auto newPos = emitterPos;
             pos.write(newPos);
-            scale.write(math::vec3(m_startingSize));
+            scale.write(math::vec3(m_startingSize)* scaleOfEmitter);
 
             //Populates the particle with the appropriate stuffs.
             createParticle(particleComponent, trans);
-            log::debug("create particle took: {} ms", timer.restart().milliseconds());
 #pragma endregion 
 #pragma region Set directions
-            math::vec3 pointPos = newPos;
+            math::vec3 pointPos = emitterPos + vert_position;
             math::vec3 pointDirection = math::normalize(pointPos - emitterPos);
-            //if (emitter.particleIsAlive(particleComponent))
-            //    directions.emplace(directions.end(),pointDirection);
-            log::debug("set directions took: {} ms", timer.restart().milliseconds());
 #pragma endregion
 #pragma region Set parameter values
             rendering::particle particularParticle = particleComponent.read();
             particularParticle.lifeTime = 0;
-            particularParticle.particleVelocity = m_startingVelocity.x * pointDirection;
+            particularParticle.particleVelocity = m_startingVelocity.x * pointDirection * scaleOfEmitter.r;
             particleComponent.write(particularParticle);
 #pragma endregion
-            log::debug("set parameters took: {} ms", timer.restart().milliseconds());
         }
     }
 
     void update(std::vector<ecs::entity_handle> particle_list, ecs::component_handle<rendering::particle_emitter> particle_emitter, time::span delta_time) const override
     {
+        auto scaleOfEmitter = particle_emitter.entity.get_component_handle<scale>().read();
+
         auto emitter = particle_emitter.read();
-        for (int i = 0; i < particle_list.size(); i++)
+        if (emitter.playAnimation)
         {
-            auto particleEnt = particle_list[i];
-
-            auto particleHandle = particleEnt.get_component_handle<rendering::particle>();
-            rendering::particle particle = particleHandle.read();
-
-            if (particle.lifeTime == -9)
+            for (int i = 0; i < particle_list.size(); i++)
             {
-#pragma region Check if still alive
+                auto particleEnt = particle_list[i];
 
-                //const int index = FindIndexOf(particle_list, particleEnt);
-                cleanUpParticle(particleHandle, particle_emitter);
-                //auto toRemove = std::remove(emitter.directions.begin(), emitter.directions.end(), emitter.directions[index]);
-                //emitter.directions.erase(toRemove);
-#pragma endregion 
-            }
-            else
-            {
-                //Get transform
-                auto [position, _, scale] = particleEnt.get_component_handles<transform>();
-                //Update position
-                math::vec3 pos = position.read();
-                pos.x += particle.particleVelocity.x * delta_time;
-                pos.y += particle.particleVelocity.y * delta_time;
-                pos.z += particle.particleVelocity.z * delta_time;
-                position.write(pos);
-                //Update size
-                math::vec3 size = scale.read();
-                size *= m_sizeOverLifetime;
-                scale.write(size);
-                //Update velocity
-                particle.particleVelocity *= m_decelerationScalar;
+                auto particleHandle = particleEnt.get_component_handle<rendering::particle>();
+                rendering::particle particle = particleHandle.read();
 
-                //check if first particle, because material is universal. dont wanna set it every frame
-                if (i == 0)
+                if (particle.lifeTime >= m_maxLifeTime* scaleOfEmitter.r)
                 {
-                    //Update color
-                    auto meshRenderer = particleEnt.get_component_handle<rendering::mesh_renderer>().read();
-                    rendering::material_handle matHandle = meshRenderer.material;
-                    matHandle.set_param("color", LinearInterpolateColor(m_beginColor, m_endColor, particle.lifeTime, m_maxLifeTime));
+#pragma region Check if still alive
+                    cleanUpParticle(particleEnt, particle_emitter);
+#pragma endregion 
                 }
+                else
+                {
+                    //Get transform
+                    auto [position, _, scale] = particleEnt.get_component_handles<transform>();
+                    //Update position
+                    math::vec3 pos = position.read();
+                    pos.x += particle.particleVelocity.x * delta_time;
+                    pos.y += particle.particleVelocity.y * delta_time;
+                    pos.z += particle.particleVelocity.z * delta_time;
+                    position.write(pos);
+                    //Update size
+                    math::vec3 size = scale.read();
+                    size *= m_sizeOverLifetime;
+                    scale.write(size);
+                    //Update velocity
+                    particle.particleVelocity *= m_decelerationScalar;
 
-                //update lifetime
-                particle.lifeTime += delta_time;
+                    //check if first particle, because material is universal. dont wanna set it every frame
+                    if (i == 0)
+                    {
+                        //Update color
+                        auto meshRenderer = particleEnt.get_component_handle<rendering::mesh_renderer>().read();
+                        rendering::material_handle matHandle = meshRenderer.material;
+                        math::color rgba = math::lerp(m_beginColor, m_endColor, (particle.lifeTime / m_maxLifeTime));
+                        matHandle.set_param("color", rgba);
+                    }
 
-                particleHandle.write(particle);
+                    //update lifetime
+                    particle.lifeTime += delta_time;
+
+                    particleHandle.write(particle);
+                }
+            }
+            if (particle_list.size() <= 0)
+            {
+                particle_emitter.destroy();
             }
         }
     }
 
 private:
-
     static const int FindIndexOf(std::vector<ecs::entity_handle> list, ecs::entity_handle entity)
     {
         for (int i = 0; i < list.size(); i++)
@@ -164,17 +166,10 @@ private:
         }
         return -1;
     }
-    static const math::color LinearInterpolateColor(math::color beginColor, math::color endColor, float currentLifetime, float maxLifetime)
-    {
-        float r = beginColor.r + (endColor.r - beginColor.r) / maxLifetime * currentLifetime;
-        float g = beginColor.g + (endColor.g - beginColor.g) / maxLifetime * currentLifetime;
-        float b = beginColor.b + (endColor.b - beginColor.b) / maxLifetime * currentLifetime;
-        float a = beginColor.a + (endColor.a - beginColor.a) / maxLifetime * currentLifetime;
-
-        return math::color(r, b, g, a);
-    }
 
     float m_decelerationScalar;
     math::color m_beginColor;
     math::color m_endColor;
+    rendering::model_handle m_explosionModel;
+
 };
