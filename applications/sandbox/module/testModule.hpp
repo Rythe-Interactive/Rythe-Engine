@@ -5,6 +5,7 @@
 #include "../systems/testsystem2.hpp"
 #include"../systems/pointcloudtestsystem2.hpp"
 #include "../systems/simplecameracontroller.hpp"
+#include "../systems/scenetestsystem1.hpp"
 
 #include<rendering/systems/pointcloudgeneration.hpp>
 
@@ -27,7 +28,8 @@ public:
         //    reportComponentType<sah>();
         //    reportSystem<TestSystem>();
         //}
-        reportSystem<TestSystem2>();
+        //reportSystem<TestSystem2>();
+        reportSystem<SceneTestSystem1>();
         reportSystem<SimpleCameraController>();
     }
 

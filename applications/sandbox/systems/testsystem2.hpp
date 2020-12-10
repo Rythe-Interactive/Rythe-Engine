@@ -85,6 +85,13 @@ private:
 
 double rnd() { return double(rand()) / RAND_MAX; }
 
+//scene loading binds
+//struct savescene1 : public app::input_action<savescene1> {};
+//struct savescene2 : public app::input_action<savescene2> {};
+//
+//struct loadscene1 : public app::input_action<loadscene1> {};
+//struct loadscene2 : public app::input_action<loadscene2> {};
+
 class TestSystem2 final : public System<TestSystem2>
 {
 public:
@@ -98,6 +105,17 @@ public:
 
     virtual void setup()
     {
+
+        app::InputSystem::createBinding<savescene1>(app::inputmap::method::F1);
+        app::InputSystem::createBinding<savescene2>(app::inputmap::method::F2);
+        app::InputSystem::createBinding<loadscene1>(app::inputmap::method::F3);
+        app::InputSystem::createBinding<loadscene2>(app::inputmap::method::F4);
+
+        bindToEvent<savescene1, &TestSystem2::saveScene1>();
+        bindToEvent<savescene2, &TestSystem2::saveScene2>();
+        bindToEvent<loadscene1, &TestSystem2::loadScene1>();
+        bindToEvent<loadscene2, &TestSystem2::loadScene2>();
+
         rendering::model_handle cube;
         rendering::material_handle flatGreen;
         rendering::material_handle vertexColor;
@@ -106,60 +124,62 @@ public:
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
 
-          {
-              async::readwrite_guard guard(*window.lock);
-              app::ContextHelper::makeContextCurrent(window);
+        {
+            async::readwrite_guard guard(*window.lock);
+            app::ContextHelper::makeContextCurrent(window);
 
 
-              auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
-              directionalLightMH = rendering::MaterialCache::create_material("directional light", colorshader);
-              directionalLightMH.set_param("color", math::color(1, 1, 0.8f));
+            auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
+            directionalLightMH = rendering::MaterialCache::create_material("directional light", colorshader);
+            directionalLightMH.set_param("color", math::color(1, 1, 0.8f));
 
-              cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
-              vertexColor = rendering::MaterialCache::create_material("vertex color", "assets://shaders/vertexcolor.shs"_view);
+            cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
+            vertexColor = rendering::MaterialCache::create_material("vertex color", "assets://shaders/vertexcolor.shs"_view);
 
 
-              std::vector<math::vec3> positions{
-                  math::vec3(0,1.0f,0),
-                  math::vec3(0,1.25f,0),
-                  math::vec3(0,1.5f,0),
-                  math::vec3(0,1.75f,0),
+            std::vector<math::vec3> positions{
+                math::vec3(0,1.0f,0),
+                math::vec3(0,1.25f,0),
+                math::vec3(0,1.5f,0),
+                math::vec3(0,1.75f,0),
 
-                  math::vec3(1,1.0f,0),
-                  math::vec3(1,1.25f,0),
-                  math::vec3(1,1.5f,0),
-                  math::vec3(1,1.75f,0),
+                math::vec3(1,1.0f,0),
+                math::vec3(1,1.25f,0),
+                math::vec3(1,1.5f,0),
+                math::vec3(1,1.75f,0),
 
-                  math::vec3(1,1.0f,1),
-                  math::vec3(1,1.25f,1),
-                  math::vec3(1,1.5f,1),
-                  math::vec3(1,1.75f,1),
+                math::vec3(1,1.0f,1),
+                math::vec3(1,1.25f,1),
+                math::vec3(1,1.5f,1),
+                math::vec3(1,1.75f,1),
 
-                  math::vec3(0,1.0f,1),
-                  math::vec3(0,1.25f,1),
-                  math::vec3(0,1.5f,1),
-                  math::vec3(0,1.75f,1)
-              };
-              pointCloudParameters params{
-              params.startingSize = math::vec3(0.2f),
-              params.particleMaterial = vertexColor,
-                  params.particleModel = cube
-              };
-              auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params, positions);
+                math::vec3(0,1.0f,1),
+                math::vec3(0,1.25f,1),
+                math::vec3(0,1.5f,1),
+                math::vec3(0,1.75f,1)
+            };
+            pointCloudParameters params{
+            params.startingSize = math::vec3(0.2f),
+            params.particleMaterial = vertexColor,
+                params.particleModel = cube
+            };
+            auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params, positions);
 
-  #pragma region entities
 
-              {
-                  auto ent = createEntity();
-                  ent.add_components<transform>(position(-5, 0.01f, 0), rotation(), scale(1));
-                  rendering::particle_emitter emitter = ent.add_component<rendering::particle_emitter>().read();
-                  emitter.particleSystemHandle = pointcloud;
-                  ent.get_component_handle<rendering::particle_emitter>().write(emitter);
-              }
 
-  #pragma endregion
+#pragma region entities
 
-          }
+            {
+                auto ent = createEntity();
+                ent.add_components<transform>(position(-5, 0.01f, 0), rotation(), scale(1));
+                rendering::particle_emitter emitter = ent.add_component<rendering::particle_emitter>().read();
+                emitter.particleSystemHandle = pointcloud;
+                ent.get_component_handle<rendering::particle_emitter>().write(emitter);
+            }
+
+#pragma endregion
+
+        }
         std::vector<math::vec3> points;
         double x, y, z;
         double width = 10, height = 10, depth = 10;
@@ -170,7 +190,7 @@ public:
             z = -depth + rnd() * (depth - (-depth));
             points.push_back(math::vec3(x, y, z));
         }
-        
+
         voronoi = physics::PhysicsStatics::GenerateVoronoi(points);
 
         createProcess<&TestSystem2::update>("Update");
@@ -181,6 +201,43 @@ public:
         for (auto point : voronoi)
         {
             debug::drawLine(point[0], point[1], math::colors::magenta);
+        }
+    }
+
+    void saveScene1(savescene1* action)
+    {
+        if (action->pressed())
+        {
+            log::debug("Saving scene: Main");
+            scenemanagement::SceneManager::createScene("Main");
+            log::debug("Finishded saving scene: Main");
+        }
+    }
+    void saveScene2(savescene2* action)
+    {
+        if (action->pressed())
+        {
+            log::debug("Saving scene: Main2");
+            scenemanagement::SceneManager::createScene("Main2");
+            log::debug("Finishded saving scene: Main2");
+        }
+    }
+    void loadScene1(loadscene1* action)
+    {
+        if (action->pressed())
+        {
+            log::debug("Started loading scene: Main");
+            scenemanagement::SceneManager::loadScene("Main");
+            log::debug("Finished loading a scene");
+        }
+    }
+    void loadScene2(loadscene2* action)
+    {
+        if (action->pressed())
+        {
+            log::debug("Started loading scene: Main");
+            scenemanagement::SceneManager::loadScene("Main2");
+            log::debug("Finished loading a scene");
         }
     }
 };

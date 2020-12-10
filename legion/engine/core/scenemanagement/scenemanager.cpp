@@ -26,11 +26,14 @@ namespace legion::core::scenemanagement
             }
         }
 
-        scene s;
-        s.id = nameHash(name);
-        sceneNames.emplace(s.id, name);
-        sceneEntity.add_component<scenemanagement::scene>(s);
-        sceneList.emplace(nameHash(name), sceneEntity);
+        if (!SceneManager::getScene(name))
+        {
+            scene s;
+            s.id = nameHash(name);
+            sceneNames.emplace(s.id, name);
+            sceneEntity.add_component<scenemanagement::scene>(s);
+            sceneList.emplace(nameHash(name), sceneEntity);
+        }
         return SceneManager::saveScene(name, sceneEntity);
     }
 
@@ -53,13 +56,11 @@ namespace legion::core::scenemanagement
 
     bool SceneManager::loadScene(const std::string& name)
     {
-        sceneList[nameHash(currentScene)].entity.destroy();
 
         std::ifstream inFile("assets/scenes/" + name + ".cornflake");
         auto sceneEntity = serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
         SceneManager::currentScene = name;
 
-        m_ecs->world.add_child(sceneEntity);
         scenemanagement::SceneManager::createScene(name,sceneEntity);
         log::debug("........Done saving scene");
         return true;
