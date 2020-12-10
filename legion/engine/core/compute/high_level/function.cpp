@@ -4,34 +4,34 @@
 
 namespace legion::core::compute
 {
-    common::result<void, void> function_base::invoke(dvar global, invoke_buffer_container& parameters,std::vector<karg> kargs) const
+    common::result<void, void> function_base::invoke(dvar global, invoke_buffer_container& parameters, std::vector<karg> kargs) const
     {
         std::vector<Buffer> buffers;
         buffers.reserve(parameters.size());
 
         for (auto& [base, type] : parameters)
         {
-            if(base->container.first != nullptr)
+            if (base && base->container.first != nullptr)
                 buffers.emplace_back(Context::createBuffer(base->container.first, base->container.second, type, base->name));
         }
-        return invoke2(std::move(global),buffers,std::move(kargs));
+        return invoke2(std::move(global), buffers, std::move(kargs));
     }
 
-    common::result<void, void> function_base::invoke2(dvar global, std::vector<Buffer> buffers,std::vector<karg> kargs) const
+    common::result<void, void> function_base::invoke2(dvar global, std::vector<Buffer> buffers, std::vector<karg> kargs) const
     {
 
-        if(std::holds_alternative<std::tuple<size_type,size_type,size_type>>(global))
+        if (std::holds_alternative<std::tuple<size_type, size_type, size_type>>(global))
         {
-            auto& [s0,s1,s2] = std::get<2>(global);
-            m_kernel->local(m_locals).global(s0,s1,s2);
+            auto& [s0, s1, s2] = std::get<2>(global);
+            m_kernel->local(m_locals).global(s0, s1, s2);
         }
 
-        if(std::holds_alternative<std::tuple<size_type,size_type>>(global))
+        if (std::holds_alternative<std::tuple<size_type, size_type>>(global))
         {
-            auto& [s0,s1] = std::get<1>(global);
-            m_kernel->local(m_locals).global(s0,s1);
+            auto& [s0, s1] = std::get<1>(global);
+            m_kernel->local(m_locals).global(s0, s1);
         }
-        if(std::holds_alternative<std::tuple<size_type>>(global))
+        if (std::holds_alternative<std::tuple<size_type>>(global))
         {
             auto& [s0] = std::get<0>(global);
             m_kernel->local(m_locals).global(s0);
@@ -42,7 +42,7 @@ namespace legion::core::compute
         cl_uint i = 0;
         for (Buffer& buffer : buffers)
         {
-            if(!buffer.isValid()) continue;
+            if (!buffer.isValid()) continue;
             if (buffer.hasName())
             {
                 m_kernel->setBuffer(buffer);
@@ -60,9 +60,9 @@ namespace legion::core::compute
         }
         for (const karg& arg : kargs)
         {
-            if(arg.container.first != nullptr)
+            if (arg.container.first != nullptr)
             {
-                m_kernel->setKernelArg(arg.container.first,arg.container.second,arg.name);
+                m_kernel->setKernelArg(arg.container.first, arg.container.second, arg.name);
             }
         }
 
@@ -73,7 +73,7 @@ namespace legion::core::compute
 
         for (const Buffer& buffer : buffers)
         {
-            if(!buffer.isValid()) continue;
+            if (!buffer.isValid()) continue;
             if (buffer.isWriteBuffer())
             {
                 m_kernel->enqueueBuffer(buffer);

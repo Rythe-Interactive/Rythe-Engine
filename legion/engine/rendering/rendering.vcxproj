@@ -28,6 +28,8 @@
     <ClInclude Include="components\light.hpp" />
     <ClInclude Include="components\particle.hpp" />
     <ClInclude Include="components\particle_emitter.hpp" />
+    <ClInclude Include="components\point_cloud.hpp" />
+    <ClInclude Include="systems\pointcloudgeneration.hpp" />
     <ClInclude Include="components\renderable.hpp" />
     <ClInclude Include="data\importers\texture_importers.hpp" />
     <ClInclude Include="data\material.hpp" />
@@ -45,6 +47,7 @@
     <ClInclude Include="rendering.hpp" />
     <ClInclude Include="shadercompiler\shadercompiler.hpp" />
     <ClInclude Include="data\particle_system_base.hpp" />
+    <ClInclude Include="systems\pointcloud_particlesystem.hpp" />
     <ClInclude Include="systems\renderer.hpp" />
     <ClInclude Include="util\bindings.hpp" />
     <ClInclude Include="util\matini.hpp" />

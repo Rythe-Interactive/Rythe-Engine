@@ -81,6 +81,15 @@ namespace legion::core::ecs
          */
         entity_handle& operator=(const entity_handle& other);
 
+        /**
+         * @brief Clones an entity.
+         * @param keep_parent If true sets the parent of the cloned entity to the same parent as the source [default: true]
+         * @param clone_children  If true copies all the children of the entity as well. [default: true]
+         * @param clone_components  If true copies all the components of the entity. [default: true]
+         * @return entity_handle A handle to the copied entity.
+        */
+        L_NODISCARD entity_handle clone(bool keep_parent = true, bool clone_children = true, bool clone_components = true) const;
+
         /**@brief Returns the type id's of the components this entity contains.
          * @returns hashed_sparse_set<id_type>& Sparse map with component type id as both the key as well as the value. (behaves as sparse_set with hash table)
          * @throws legion_invalid_entity_error Thrown when handle's registry reference is invalid.
