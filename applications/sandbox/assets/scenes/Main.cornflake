@@ -1,10 +1,10 @@
 {
     "Entity": {
-        "Id": 39,
+        "Id": 40,
         "Name": "Entity",
         "Components": [
             {
-                "Owner": 39,
+                "Owner": 40,
                 "Component Type": 9547123436134525643,
                 "Component Name": "struct legion::core::scenemanagement::scene",
                 "NAME": "Main"
@@ -1622,11 +1622,16 @@
                     },
                     {
                         "Owner": 37,
+                        "Component Type": 7523951964142181909,
+                        "Component Name": "struct sah"
+                    },
+                    {
+                        "Owner": 37,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
-                        "x": 0.5,
-                        "y": 0.5,
-                        "z": 0.5
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
                     },
                     {
                         "Owner": 37,
@@ -1641,14 +1646,9 @@
                         "Owner": 37,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
-                        "x": -5.0,
-                        "y": 1.0,
-                        "z": 10.0
-                    },
-                    {
-                        "Owner": 37,
-                        "Component Type": 12879719932595839335,
-                        "Component Name": "struct legion::audio::audio_source"
+                        "x": 4.0,
+                        "y": 6.0,
+                        "z": -0.699999988079071
                     }
                 ],
                 "Children": []
@@ -1688,12 +1688,59 @@
                         "Owner": 38,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
-                        "x": 5.0,
+                        "x": -5.0,
                         "y": 1.0,
                         "z": 10.0
                     },
                     {
                         "Owner": 38,
+                        "Component Type": 12879719932595839335,
+                        "Component Name": "struct legion::audio::audio_source"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 39,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 39,
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
+                    },
+                    {
+                        "Owner": 39,
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
+                    },
+                    {
+                        "Owner": 39,
+                        "Component Type": 4306336647627884212,
+                        "Component Name": "struct legion::core::scale",
+                        "x": 0.5,
+                        "y": 0.5,
+                        "z": 0.5
+                    },
+                    {
+                        "Owner": 39,
+                        "Component Type": 7097645533378480892,
+                        "Component Name": "struct legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 39,
+                        "Component Type": 1703773829785910945,
+                        "Component Name": "struct legion::core::position",
+                        "x": 5.0,
+                        "y": 1.0,
+                        "z": 10.0
+                    },
+                    {
+                        "Owner": 39,
                         "Component Type": 12879719932595839335,
                         "Component Name": "struct legion::audio::audio_source"
                     }

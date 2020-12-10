@@ -17,13 +17,15 @@
 #include <core/compute/kernel.hpp>
 #include <core/compute/high_level/function.hpp>
 #include <rendering/debugrendering.hpp>
-#include <physics/systems/physicssystem.hpp>
 
 #include <physics/physics_statics.hpp>
 #include <physics/data/identifier.hpp>
 #include <audio/audio.hpp>
+#include <Voro++/voro++.hh>
+#include <Voro++/common.hh>
 
 using namespace legion;
+
 
 
 struct sah
@@ -78,8 +80,6 @@ struct nextPhysicsTimeStepContinue : public app::input_action<nextPhysicsTimeSte
 //scene loading binds
 struct loadscene1 : public app::input_action<loadscene1> {};
 struct loadscene2 : public app::input_action<loadscene2> {};
-struct loadscene3 : public app::input_action<loadscene3> {};
-struct loadscene4 : public app::input_action<loadscene4> {};
 
 int num = 0;
 
@@ -128,8 +128,12 @@ public:
     ecs::entity_handle Point6FrictionBody;
     ecs::entity_handle FullFrictionBody;
 
+
+
     virtual void setup()
     {
+
+
 
 #pragma region Input binding
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::LEFT, -1.f);
@@ -166,8 +170,7 @@ public:
 
         app::InputSystem::createBinding<loadscene1>(app::inputmap::method::F1);
         app::InputSystem::createBinding<loadscene2>(app::inputmap::method::F2);
-        app::InputSystem::createBinding<loadscene3>(app::inputmap::method::F3);
-        app::InputSystem::createBinding<loadscene4>(app::inputmap::method::F4);
+
 
         bindToEvent<physics_test_move, &TestSystem::onUnitPhysicsUnitTestMove>();
 
@@ -203,8 +206,7 @@ public:
    
         bindToEvent<loadscene1, &TestSystem::scene1>();
         bindToEvent<loadscene2, &TestSystem::scene2>();
-        bindToEvent<loadscene3, &TestSystem::scene3>();
-        bindToEvent<loadscene4, &TestSystem::scene4>();
+
 
 #pragma endregion              
 
@@ -221,6 +223,7 @@ public:
         rendering::model_handle axesH;
         rendering::model_handle submeshtestH;
         rendering::model_handle planeH;
+        //rendering::model_handle cylinderH;
 
         rendering::material_handle wireframeH;
         rendering::material_handle vertexColorH;
@@ -251,6 +254,7 @@ public:
             axesH = rendering::ModelCache::create_model("axes", "assets://models/xyz.obj"_view);
             submeshtestH = rendering::ModelCache::create_model("submeshtest", "assets://models/submeshtest.obj"_view);
             planeH = rendering::ModelCache::create_model("plane", "assets://models/plane.obj"_view);
+            //cylinderH = rendering::ModelCache::create_model("cylinder","assets://models/cylinder.obj"_view);
 
             wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.shs"_view);
             vertexColorH = rendering::MaterialCache::create_material("vertex color", "assets://shaders/vertexcolor.shs"_view);
@@ -399,6 +403,7 @@ public:
             auto ent = createEntity();
             ent.add_components<rendering::renderable>(planeH.get_mesh(), rendering::mesh_renderer(slateH));
             ent.add_components<transform>(position(0, 0.01f, 0), rotation(), scale(10));
+                        
         }
 
         {
@@ -642,6 +647,10 @@ public:
             ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(paintH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(4, 3, -0.7f), rotation(), scale());
+            auto ent2 = ent.clone();
+            auto pos = ent2.get_component_handle<position>().read();
+            pos.y = 6;
+            ent2.get_component_handle<position>().write(pos);
         }
 
         //audioSphereLeft setup
@@ -1882,6 +1891,7 @@ public:
 
     void update(time::span deltaTime)
     {
+
         static auto sahQuery = createQuery<sah, rotation, position>();
 
         sahQuery.queryEntities();
