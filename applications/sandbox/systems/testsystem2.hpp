@@ -102,13 +102,13 @@ public:
                 ent.get_component_handle<rendering::particle_emitter>().write(emitter);
             }
 
-            {
+            /*{
                 auto ent = createEntity();
                 ent.add_components<transform>(position(2, 3.0f, 3.0f), rotation(), scale(3.f));
                 rendering::particle_emitter emitter = ent.add_component<rendering::particle_emitter>().read();
                 emitter.particleSystemHandle = explosion;
                 ent.get_component_handle<rendering::particle_emitter>().write(emitter);
-            }
+            }*/
 
 #pragma endregion
 
