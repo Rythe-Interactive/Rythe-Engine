@@ -239,7 +239,7 @@ namespace legion::core::compute
     Kernel::~Kernel()
     {
         //clear CommandQueue memory
-        clReleaseCommandQueue(m_queue);
+        //clReleaseCommandQueue(m_queue);
     }
 
     Kernel& Kernel::local(size_type s)
