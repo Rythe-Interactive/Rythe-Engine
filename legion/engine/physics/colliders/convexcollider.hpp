@@ -184,33 +184,19 @@ namespace legion::physics
             int looped = 0;
             while (true)
             {
-                // Debug stuffs
-                if (looped == 2)
+                log::debug("------------------------------------------------\n\t\t\t\t\t\tStarting loop {}", looped);
+
+                /*for (int i = 0; i < toBeSorted.size(); ++i)
                 {
-                    log::debug("--------------------------------------\n\t\t\t\t\t\tLoop completed!");
-                    for (int i = 0; i < vertices.size(); ++i)
-                    {
-                        log::debug("Vert [{}]: {}", i, vertices.at(i));
-                    }
-                    for (int i = 0; i < halfEdgeFaces.size(); ++i)
-                    {
-                        log::debug("Face [{}], with normal {}", i, halfEdgeFaces.at(i)->normal);
-                        int count = halfEdgeFaces.at(i)->edgeCount();
-                        for (int e = 0; e < count; ++e)
-                        {
-                            HalfEdgeEdge* edge = halfEdgeFaces.at(i)->getEdgeN(e);
-                            log::debug("\tEdge [{}]: {}", e, edge->edgePosition);
-                            //log::debug("\t\tPairing Edge: from {} to {}", edge->pairingEdge->edgePosition , edge->pairingEdge->nextEdge->edgePosition);
-                            if (edge->pairingEdge)
-                            {
-                                if(edge->pairingEdge->nextEdge)
-                                    if(edge->pairingEdge->nextEdge->edgePosition != edge->edgePosition)
-                                        log::debug("\t\tPairing Edge: from {} to {}", edge->pairingEdge->edgePosition, edge->pairingEdge->nextEdge->edgePosition);
-                            }
-                        }
-                    }
+                    log::debug("ToBeSorted {} @ {}", i, toBeSorted.at(i));
+                }*/
+
+                if (toBeSorted.size() == 0)
+                {
+                    log::debug("To be sorted is empty");
                     break;
                 }
+
                 faceVertMap.clear();
                 faceVertMap = convexHullMatchVerticesToFace(toBeSorted);
 
@@ -223,7 +209,9 @@ namespace legion::physics
                 {
                     for (size_type j = 0; j < faceVertMap.at(i).size(); ++j)
                     {
+                        log::debug("faceVertMap[{}][{}] = {}", i, j, faceVertMap.at(i).at(j));
                         float dist = math::pointToTriangle(faceVertMap.at(i).at(j), halfEdgeFaces.at(i)->startEdge->edgePosition, halfEdgeFaces.at(i)->startEdge->nextEdge->edgePosition, halfEdgeFaces.at(i)->startEdge->prevEdge->edgePosition, halfEdgeFaces.at(i)->normal);
+                        log::debug("distance: {}", dist);
                         if (dist > largestDistance)
                         {
                             largestDistance = dist;
@@ -232,7 +220,6 @@ namespace legion::physics
                         }
                     }
                 }
-                if (largestDistance == 0) break;
                 //log::debug("Largest distance for vert: {}, face: {}", faceVertMap.at(faceIndex).at(vertIndex), faceIndex);
 
                 std::deque<HalfEdgeEdge*> edges;
@@ -241,10 +228,38 @@ namespace legion::physics
 
                 log::debug("\n-----------------------------------------------------------------------------------------------------\n\t\t\t\t\t\tCreating new faces");
                 // Debug information
+                log::debug("From viewpoint: {}", faceVertMap.at(faceIndex).at(vertIndex));
                 for (int i = 0; i < edges.size(); ++i)
                 {
                     log::debug("Found edge from {}, to {}, with face {}", edges.at(i)->edgePosition, edges.at(i)->nextEdge->edgePosition, faceIndexMap.at(edges.at(i)->face));
                 }
+                // Debug stuffs
+                //if (looped == 4)
+                //{
+                //    log::debug("--------------------------------------\n\t\t\t\t\t\tLoop completed!");
+                //    for (int i = 0; i < vertices.size(); ++i)
+                //    {
+                //        log::debug("Vert [{}]: {}", i, vertices.at(i));
+                //    }
+                //    for (int i = 0; i < halfEdgeFaces.size(); ++i)
+                //    {
+                //        log::debug("Face [{}], with normal {}", i, halfEdgeFaces.at(i)->normal);
+                //        int count = halfEdgeFaces.at(i)->edgeCount();
+                //        for (int e = 0; e < count; ++e)
+                //        {
+                //            HalfEdgeEdge* edge = halfEdgeFaces.at(i)->getEdgeN(e);
+                //            log::debug("\tEdge [{}]: {}", e, edge->edgePosition);
+                //            //log::debug("\t\tPairing Edge: from {} to {}", edge->pairingEdge->edgePosition , edge->pairingEdge->nextEdge->edgePosition);
+                //            if (edge->pairingEdge)
+                //            {
+                //                if (edge->pairingEdge->nextEdge)
+                //                    if (edge->pairingEdge->nextEdge->edgePosition != edge->edgePosition)
+                //                        log::debug("\t\tPairing Edge: from {} to {}", edge->pairingEdge->edgePosition, edge->pairingEdge->nextEdge->edgePosition);
+                //            }
+                //        }
+                //    }
+                //    break;
+                //}
 
                 HalfEdgeEdge* firstEdge = nullptr;
                 HalfEdgeEdge* pairingEdge = nullptr;
@@ -292,13 +307,15 @@ namespace legion::physics
                 }
                 vertices.push_back(faceVertMap.at(faceIndex).at(vertIndex));
 
-                faceVertMap.at(faceIndex).erase(faceVertMap.at(faceIndex).begin() + vertIndex);
+                math::vec3 addedVert = faceVertMap.at(faceIndex).at(vertIndex);
                 toBeSorted.clear();
                 for (size_type i = 0; i < faceVertMap.size(); ++i)
                 {
                     for (size_type j = 0; j < faceVertMap.at(i).size(); ++j)
                     {
-                        toBeSorted.push_back(faceVertMap.at(i).at(j));
+                        // Make sure we do not add the vert to the list that we just added to the hull
+                        if(faceVertMap.at(i).at(j) != addedVert)
+                            toBeSorted.push_back(faceVertMap.at(i).at(j));
                     }
                 }
 
@@ -326,6 +343,8 @@ namespace legion::physics
                     for (int j = 0; j < halfEdgeFaces.size(); ++j)
                     {
                         // Do not check if createdFace is halfEdgeFace, because the createdFaces are not yet added to the halfEdgeFaces list
+                        /*log::debug(createdFaces.at(i)->startEdge->edgePosition);
+                        log::debug(halfEdgeFaces.at(j)->startEdge->edgePosition);*/
                         HalfEdgeFace::face_angle_relation relation0 = createdFaces.at(i)->getAngleRelation(*halfEdgeFaces.at(j));
                         //HalfEdgeFace::face_angle_relation relation1 = halfEdgeFaces.at(j)->getAngleRelation(*createdFaces.at(i));
                         if (relation0 == HalfEdgeFace::face_angle_relation::coplaner)
@@ -334,6 +353,7 @@ namespace legion::physics
                             HalfEdgeFace* face = HalfEdgeFace::mergeFaces(*centerEdge);
                             createdFaces.erase(createdFaces.begin() + i);
                             log::debug("Merging faces");
+                            break;
                         }
                     }
                 }
@@ -744,12 +764,13 @@ namespace legion::physics
                 float smallestDistance = std::numeric_limits<float>::max();
                 int faceIndex = -1;
                 math::vec3 faceVerts[] = { math::vec3(0,0,0), math::vec3(0,0,0), math::vec3(0,0,0)};
+                log::debug("Vert {} @ {}", i, vertices.at(i));
                 for (size_type f = 0; f < halfEdgeFaces.size(); ++f)
                 {
                     // Get the distances to the face
                     HalfEdgeEdge* startEdge = halfEdgeFaces.at(f)->startEdge;
                     float distance = math::pointToTriangle(vertices.at(i), startEdge->edgePosition, startEdge->nextEdge->edgePosition, startEdge->prevEdge->edgePosition, halfEdgeFaces.at(f)->normal);
-                    if (distance > 0 && distance < smallestDistance)
+                    if (distance > 0.f && distance < smallestDistance)
                     {
                         faceIndex = f;
                         smallestDistance = distance;

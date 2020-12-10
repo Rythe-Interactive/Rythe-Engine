@@ -121,7 +121,7 @@ namespace legion::core::math
         double q12Area = triangleSurface(q, triPoint1, triPoint2);
 
         // If the area of q to each set of two points is equal to the triangle surface area, q is on the triangle
-        if (math::close_enough((q01Area + q02Area + q12Area), triangleSurface(triPoint0, triPoint1, triPoint2)))
+        if (abs(q01Area + q02Area + q12Area) - triangleSurface(triPoint0, triPoint1, triPoint2) < math::epsilon<float>())
         {
             return projectionLength;
         }
