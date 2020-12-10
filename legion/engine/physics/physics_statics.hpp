@@ -403,17 +403,41 @@ namespace legion::physics
 
             float t = FindLineToPointInterpolant(startPoint, endPoint, planePosition, planeNormal);
 
-            intersectionPoint = startPoint + math::normalize(direction) * t;
+            intersectionPoint = startPoint + direction * t;
 
             return true;
         }
+
+        /**@brief Given a line going from start point to end point finds the intersection point of the line to a given 3D plane
+        * @param [out] interpolant The calculated interpolant required to get from the startPoint to the endPoint
+        * @return Returns true if an intersection is found
+        */
+        static bool FindLineToPlaneIntersectionPoint(const math::vec3& planeNormal, const math::vec3& planePosition,
+            const math::vec3& startPoint, const math::vec3& endPoint, math::vec3& intersectionPoint,float& interpolant)
+        {
+            math::vec3 direction = endPoint - startPoint;
+
+            if (math::epsilonEqual(math::dot(direction, planeNormal), 0.0f, math::epsilon<float>()))
+            {
+                return false;
+            }
+
+            interpolant = FindLineToPointInterpolant(startPoint, endPoint, planePosition, planeNormal);
+            
+
+            intersectionPoint = startPoint + direction * interpolant;
+
+            return true;
+        }
+
+
 
         /** Given a line going from a startPoint to and endPoint, finds the interpolant required to intersect a given 3D plane
         */
         static float FindLineToPointInterpolant(const math::vec3& startPoint, const math::vec3& endPoint, const math::vec3& planePosition,
             const math::vec3& planeNormal)
         {
-            return math::dot(planePosition - startPoint, planeNormal) / math::dot(math::normalize(endPoint - startPoint), planeNormal);
+            return math::dot(planePosition - startPoint, planeNormal) / math::dot(endPoint - startPoint, planeNormal);
         }
 
     private:

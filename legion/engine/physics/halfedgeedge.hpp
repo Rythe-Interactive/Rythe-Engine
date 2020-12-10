@@ -8,7 +8,7 @@ namespace legion::physics
 	struct HalfEdgeEdge
 	{
 		HalfEdgeEdge* pairingEdge = nullptr;
-		HalfEdgeEdge * nextEdge = nullptr;
+		HalfEdgeEdge* nextEdge = nullptr;
 		HalfEdgeEdge* prevEdge = nullptr;
 
 		HalfEdgeFace* face = nullptr;

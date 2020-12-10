@@ -11,7 +11,7 @@ namespace legion::core::math
 	template<class T>
 	constexpr T rad2deg_c()
 	{
-		return T(360) / half_pi<T>();
+		return T(360) / two_pi<T>();
 	}
 
 	template <class T>
@@ -24,7 +24,7 @@ namespace legion::core::math
 	template <class T>
 	constexpr T deg2rad_c()
 	{
-		return half_pi<T>() / T(360);
+		return two_pi<T>() / T(360);
 	}
 
 	template <class T>

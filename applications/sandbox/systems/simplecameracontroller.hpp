@@ -92,7 +92,7 @@ public:
         camera.add_component<audio::audio_listener>();
 
         rendering::camera cam;
-        cam.set_projection(90.f, 0.1f, 1000.f);
+        cam.set_projection(90.0f / 4.0f, 0.1f, 1000.f);
         camera.add_component<rendering::camera>(cam);
     }
 

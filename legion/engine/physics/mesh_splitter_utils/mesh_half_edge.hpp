@@ -8,6 +8,8 @@ namespace legion::physics
     struct MeshHalfEdge : std::enable_shared_from_this<MeshHalfEdge>
     {
         math::vec3 position;
+        math::vec2 uv;
+
         std::shared_ptr<MeshHalfEdge> nextEdge;
         std::shared_ptr<MeshHalfEdge> pairingEdge;
         std::weak_ptr<SplittablePolygon> owner;
@@ -15,10 +17,15 @@ namespace legion::physics
         bool isVisited = false;
         bool isBoundary = false;
 
-        MeshHalfEdge(math::vec3 pPosition) : position(pPosition)
+        MeshHalfEdge(const math::vec3& pPosition,const math::vec2& pUVs) : position(pPosition),uv(pUVs)
         {
 
-        };
+        }
+
+        MeshHalfEdge(const math::vec3& pPosition) : position(pPosition)
+        {
+
+        }
 
         auto GetTriangle() 
         {
@@ -114,10 +121,15 @@ namespace legion::physics
 
         std::tuple<math::vec3, math::vec3> GetEdgeWorldPositions(const math::mat4& transform)
         {
-            math::vec3 currentWorldPos = transform * math::vec4(position, 1);
-            math::vec3 nextWorldPos = transform * math::vec4(nextEdge->position, 1);
+            math::vec3 currentWorldPos = GetEdgeWorldPosition(transform);
+            math::vec3 nextWorldPos = nextEdge->GetEdgeWorldPosition(transform);
 
             return std::make_tuple(currentWorldPos, nextWorldPos);
+        }
+
+        math::vec3 GetEdgeWorldPosition(const math::mat4& transform)
+        {
+            return transform * math::vec4(position, 1);
         }
 
 

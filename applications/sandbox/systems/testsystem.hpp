@@ -12,7 +12,7 @@
 #include <physics/systems/physicssystem.hpp>
 #include <physics/halfedgeface.hpp>
 #include <physics/data/penetrationquery.h>
-#include <physics/mesh_splitter.hpp>
+#include <physics/mesh_splitter_utils/mesh_splitter.hpp>
 #include <physics/mesh_splitter_utils/splittable_polygon.h>
 
 #include <core/compute/context.hpp>
@@ -126,11 +126,12 @@ public:
     ecs::entity_handle Point6FrictionBody;
     ecs::entity_handle FullFrictionBody;
 
-    ecs::EntityQuery halfEdgeQuery;
+    //ecs::EntityQuery halfEdgeQuery;
 
     virtual void setup()
     {
-        halfEdgeQuery = createQuery<physics::MeshSplitter>();
+        physics::PrimitiveMesh::SetECSRegistry(m_ecs);
+        
 
 #pragma region Input binding
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::LEFT, -1.f);
@@ -722,8 +723,9 @@ public:
 
         //CreateCubeStack(3, 2, 2, math::vec3(0, -3.0f, 8.0f), math::vec3(1, 1, 1)
         //    ,cubeParams, 0.1f, cubeH, wireframeH);
-
-        createProcess<&TestSystem::update>("Update");
+        //physicsUpdate(time::span deltaTime)
+        createProcess<&TestSystem::update>("Update" );
+        createProcess<&TestSystem::physicsUpdate>("Physics" , 0.02f);
     }
 
     void setupMeshSplitterTest(rendering::model_handle planeH, rendering::model_handle cubeH
@@ -745,24 +747,24 @@ public:
             physics::physicsComponent physicsComponent2;
             physics::physicsComponent::init(physicsComponent2);
 
-
             physicsComponent2.AddBox(cubeParams);
 
             entPhyHande.write(physicsComponent2);
 
-            //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
-            //auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
             splitter.add_components<rendering::renderable>(planeH.get_mesh(), rendering::mesh_renderer(TextureH));
-            /*auto renderableHandle = m_ecs->createComponents<rendering::renderable>(splitter);
-            renderableHandle.write({ planeH,TextureH });*/
-
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(splitter);
             positionH.write(math::vec3(37, 1.5f, 10.0f));
-            scaleH.write(math::vec3(0.02f));
+            scaleH.write(math::vec3(0.01f));
+
+            auto rotation = rotationH.read();
+
+            rotation *= math::angleAxis(math::deg2rad(60.0f), math::vec3(1, 0, 0));
+            
+            splitter.write_component(rotation);
 
         }
-        //Cube
+        //Cube 
         {
             auto ent = m_ecs->createEntity();
 
@@ -777,10 +779,6 @@ public:
 
             entPhyHande.write(physicsComponent2);
 
-            //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
-            //auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
-
-            //auto renderableHandle = m_ecs->createComponents<rendering::renderable>(ent);
             ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(TextureH));
             //renderableHandle.write({ cubeH,TextureH });
 
@@ -793,15 +791,14 @@ public:
             id.id = "AABBRbStable";
             idHandle.write(id);
 
-
             auto finderH = ent.add_component<physics::MeshSplitter>();
 
             auto finder = finderH.read();
             finder.splitTester = cubeSplit;
             finder.InitializePolygons(ent);
             finderH.write(finder);
-        }
 
+        }
 
         //Split plane
         ecs::entity_handle cylinderSplit;
@@ -857,9 +854,7 @@ public:
             //finderH.write(finder);
         }
 
-
         //Complex Mesh
-
         {
             auto ent = m_ecs->createEntity();
 
@@ -898,6 +893,7 @@ public:
         //Complex Mesh
 
     }
+
     void testPhysicsEvent(physics::trigger_event* evnt)
     {
         log::debug("received trigger event {}", evnt->manifold.isColliding);
@@ -2008,6 +2004,7 @@ public:
     void update(time::span deltaTime)
     {
         static auto sahQuery = createQuery<sah, rotation, position>();
+
         //static auto rbQuery = createQuery<addRB>();
        
 
@@ -2056,6 +2053,9 @@ public:
 
             auto pos = entity.read_component<position>();
             debug::drawLine(pos, pos + rot.forward(), math::colors::magenta);
+
+           
+
         }
 
         if (rotate && !physics::PhysicsSystem::IsPaused)
@@ -2070,9 +2070,39 @@ public:
             }
         }
 
+        static auto posQuery = createQuery<position>();
 
-        log::debug("halfEdgeQuery.size() {} " , halfEdgeQuery.size());
+        //posQuery.queryEntities();
+        //for (auto entity : posQuery)
+        //{
+        //    auto pos = entity.read_component<position>();
 
+        //    debug::drawLine(pos, pos + math::vec3(0,1,0), math::colors::blue,10.0f,0.0f);
+
+        //}
+
+       
+
+        //if (buffer > 1.f)
+        //{
+        //    buffer -= 1.f;
+
+        //    for (auto entity : query)
+        //    {
+        //        auto comp = entity.get_component_handle<sah>();
+        //        std::cout << "component value: " << comp.read().value << std::endl;
+        //    }
+
+        //    std::cout << "Hi! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+        //}
+    }
+
+    void physicsUpdate(time::span deltaTime)
+    {
+        static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
+
+        halfEdgeQuery.queryEntities();
+        //log::debug("halfEdgeQuery.size() {} ", halfEdgeQuery.size());
         for (auto entity : halfEdgeQuery)
         {
             auto edgeFinderH = entity.get_component_handle<physics::MeshSplitter>();
@@ -2080,25 +2110,25 @@ public:
 
             math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
 
-            auto edgeFinder = edgeFinderH.read();
-            auto edgePtr = edgeFinder.currentPtr;
+            auto splitter = edgeFinderH.read();
+            auto edgePtr = splitter.edgeFinder.currentPtr;
 
             math::vec3 worldPos = transform * math::vec4(edgePtr->position, 1);
             math::vec3 worldNextPos = transform * math::vec4(edgePtr->nextEdge->position, 1);
 
-            debug::drawLine(worldPos, worldNextPos, math::colors::red, 1.0f,0.0f,true);
+            debug::drawLine(worldPos, worldNextPos, math::colors::red, 1.0f, 0.0f, true);
 
-            debug::drawLine(worldPos, worldPos + math::vec3(0,0.1f,0), math::colors::green,5.0f,0.0f, true);
-            debug::drawLine(worldNextPos, worldNextPos + math::vec3(0, 0.1f, 0), math::colors::blue, 5.0f,  0.0f, true);
+            debug::drawLine(worldPos, worldPos + math::vec3(0, 0.1f, 0), math::colors::green, 5.0f, 0.0f, true);
+            debug::drawLine(worldNextPos, worldNextPos + math::vec3(0, 0.1f, 0), math::colors::blue, 5.0f, 0.0f, true);
 
             auto getEdge = entity.get_component_handle<physics::identifier>();
 
-            for (size_t i = 0; i < edgeFinder.debugHelper.intersectionIslands.size(); i++)
+            for (size_t i = 0; i < splitter.debugHelper.intersectionIslands.size(); i++)
             {
-                auto maxColor = edgeFinder.debugHelper.colors.size();
-                math::color color = edgeFinder.debugHelper.colors[i% maxColor];
+                auto maxColor = splitter.debugHelper.colors.size();
+                math::color color = splitter.debugHelper.colors[i % maxColor];
 
-                auto island = edgeFinder.debugHelper.intersectionIslands.at(i);
+                auto island = splitter.debugHelper.intersectionIslands.at(i);
 
                 for (auto pos : island)
                 {
@@ -2106,24 +2136,24 @@ public:
                     debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), color, 10.0f, 0.0f);
                 }
 
-              
+
             }
 
-           /* for (auto intersectingPosition : edgeFinder.debugHelper.intersectionsPolygons)
-            {
-                math::vec3 worldIntersect = transform * math::vec4(intersectingPosition, 1);
-                debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), math::colors::blue, 10.0f, 0.0f);
-            }*/
+            /* for (auto intersectingPosition : edgeFinder.debugHelper.intersectionsPolygons)
+             {
+                 math::vec3 worldIntersect = transform * math::vec4(intersectingPosition, 1);
+                 debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), math::colors::blue, 10.0f, 0.0f);
+             }*/
 
-            for (auto intersectingPosition : edgeFinder.debugHelper.nonIntersectionPolygons)
+            for (auto intersectingPosition : splitter.debugHelper.nonIntersectionPolygons)
             {
                 math::vec3 worldIntersect = transform * math::vec4(intersectingPosition, 1);
                 debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), math::colors::yellow, 10.0f, 0.0f);
             }
 
-           
+
             //log::debug("Count boundary polygon {} ");
-            for (auto polygon : edgeFinder.meshPolygons)
+            for (auto polygon : splitter.meshPolygons)
             {
                 int boundaryCount = 0;
                 math::vec3 worldCentroid = transform * math::vec4(polygon->localCentroid, 1);
@@ -2141,29 +2171,39 @@ public:
                         math::vec3 edgeToCentroid = (worldCentroid - worldEdgePos) * 0.05f;
                         math::vec3 nextEdgeToCentroid = (worldCentroid - worldEdgeNextPos) * 0.05f;
 
-                        debug::drawLine(worldEdgePos + edgeToCentroid
-                            , worldEdgeNextPos + nextEdgeToCentroid, polygon->debugColor, 5.0f, 0.0f, false);
+                        //debug::drawLine(worldEdgePos + edgeToCentroid
+                        //    , worldEdgeNextPos + nextEdgeToCentroid, polygon->debugColor, 5.0f, 0.0f, false);
                     }
-                    
-                }
-                math::vec3 normalWorld = transform * math::vec4(polygon->localNormal, 0);
-                debug::drawLine(worldCentroid
-                    , worldCentroid + (normalWorld), polygon->debugColor, 5.0f, 0.0f, false);
 
-               // log::debug("polygon boundaryCount {} ", boundaryCount);
+                }
+  /*              math::vec3 normalWorld = transform * math::vec4(polygon->localNormal, 0);
+                debug::drawLine(worldCentroid
+                    , worldCentroid + (normalWorld), polygon->debugColor, 5.0f, 0.0f, false);*/
+
+                // log::debug("polygon boundaryCount {} ", boundaryCount);
 
             }
 
-            auto& boundaryInfoList = edgeFinder.debugHelper.boundaryEdgesForPolygon;
+            auto& boundaryInfoList = splitter.debugHelper.boundaryEdgesForPolygon;
+
+            debug::drawLine(splitter.debugHelper.cuttingSetting.first
+                , splitter.debugHelper.cuttingSetting.first + (splitter.debugHelper.cuttingSetting.second) * 2.0f, math::colors::cyan, 5.0f, 0.0f, false);
+
+            
 
             for (size_t i = 0; i < boundaryInfoList.size(); i++)
             {
                 auto& boundaryInfo = boundaryInfoList[i];
                 math::color color = boundaryInfo.drawColor;
 
-                if (i != edgeFinder.debugHelper.polygonToDisplay) { continue; }
+                if (i != splitter.debugHelper.polygonToDisplay) { continue; }
 
-                for (int j =0 ; j < boundaryInfo.boundaryEdges.size();j++)
+                math::vec3 polygonNormalOffset = boundaryInfo.worldNormal * 0.01f;
+
+                debug::drawLine(boundaryInfo.intersectionPoints.first
+                    ,  boundaryInfo.intersectionPoints.second, math::colors::magenta, 10.0f, 0.0f, false);
+
+                for (int j = 0; j < boundaryInfo.boundaryEdges.size(); j++)
                 {
                     auto edge = boundaryInfo.boundaryEdges.at(j);
 
@@ -2172,30 +2212,27 @@ public:
 
                     float interpolant = (float)j / boundaryInfo.boundaryEdges.size();
 
-                    debug::drawLine(worldEdgePos 
-                        , worldEdgeNextPos , math::lerp(color,math::colors::black, interpolant), 10.0f, 0.0f, false);
+                    debug::drawLine(worldEdgePos
+                        , worldEdgeNextPos, math::lerp(color, math::colors::black, interpolant), 10.0f, 0.0f, false);
 
                 }
 
+                math::vec3 basePos = boundaryInfo.base + polygonNormalOffset;
+                debug::drawLine(basePos
+                    , boundaryInfo.base + math::vec3(0,0.1f,0) + polygonNormalOffset, math::colors::red, 10.0f, 0.0f, false);
+
+                debug::drawLine(boundaryInfo.prevSupport + polygonNormalOffset
+                    , boundaryInfo.prevSupport + math::vec3(0, 0.1f, 0) + polygonNormalOffset, math::colors::green, 10.0f, 0.0f, false);
+
+                debug::drawLine(boundaryInfo.nextSupport + polygonNormalOffset
+                    , boundaryInfo.nextSupport + math::vec3(0, 0.1f, 0) + polygonNormalOffset, math::colors::blue, 10.0f, 0.0f, false);
+
+                debug::drawLine(boundaryInfo.intersectionEdge + polygonNormalOffset
+                    , boundaryInfo.intersectionEdge + math::vec3(0, 0.1f, 0) + polygonNormalOffset, math::colors::magenta, 10.0f, 0.0f, false);
             }
 
         }
-
-        //if (buffer > 1.f)
-        //{
-        //    buffer -= 1.f;
-
-        //    for (auto entity : query)
-        //    {
-        //        auto comp = entity.get_component_handle<sah>();
-        //        std::cout << "component value: " << comp.read().value << std::endl;
-        //    }
-
-        //    std::cout << "Hi! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
-        //}
     }
-
-  
 
     void differentInterval(time::span deltaTime)
     {
@@ -2565,6 +2602,8 @@ public:
 
     void OnNextEdge(nextEdge_action* action)
     {
+        static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
+
         if (action->value)
         {
             log::debug("OnNextEdge(nextEdge_action* action)");
@@ -2573,12 +2612,12 @@ public:
 
                 auto edgeFinderH = entity.get_component_handle<physics::MeshSplitter>();
 
-                auto edgeFinder = edgeFinderH.read();
+                auto splitter = edgeFinderH.read();
 
               
-                edgeFinder.currentPtr = edgeFinder.currentPtr->nextEdge;
+                splitter .edgeFinder.currentPtr = splitter .edgeFinder.currentPtr->nextEdge;
 
-                edgeFinderH.write(edgeFinder);
+                edgeFinderH.write(splitter);
 
             }
         }
@@ -2588,6 +2627,8 @@ public:
 
     void OnNextPair(nextPairing_action * action)
     {
+        static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
+
         if (action->value)
         {
             log::debug("OnNextPair(nextPairing_action * action)");
@@ -2596,12 +2637,12 @@ public:
 
                 auto edgeFinderH = entity.get_component_handle<physics::MeshSplitter>();
 
-                auto edgeFinder = edgeFinderH.read();
+                auto splitter = edgeFinderH.read();
 
-                edgeFinder.currentPtr = edgeFinder.currentPtr->pairingEdge;
+                splitter .edgeFinder.currentPtr = splitter .edgeFinder.currentPtr->pairingEdge;
 
 
-                edgeFinderH.write(edgeFinder);
+                edgeFinderH.write(splitter);
 
             }
         }
@@ -2610,14 +2651,19 @@ public:
 
     void OnSplit(physics_split_test * action)
     {
+        static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
+
         if (action->value)
         {
+            halfEdgeQuery.queryEntities();
             for (auto entity : halfEdgeQuery)
             {
                 auto edgeFinderH = entity.get_component_handle<physics::MeshSplitter>();
                 auto edgeFinder = edgeFinderH.read();
                 edgeFinder.TestSplit();
                 edgeFinderH.write(edgeFinder);
+                edgeFinder.DestroyTestSplitter(m_ecs);
+
             }
         }
         

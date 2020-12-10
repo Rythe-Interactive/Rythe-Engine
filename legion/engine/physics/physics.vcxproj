@@ -43,8 +43,11 @@
     <ClInclude Include="halfedgeface.hpp" />
     <ClInclude Include="colliders\physicscollider.hpp" />
     <ClInclude Include="data\penetrationquery.h" />
-    <ClInclude Include="mesh_splitter.hpp" />
+    <ClInclude Include="mesh_splitter_utils\half_edge_finder.h" />
+    <ClInclude Include="mesh_splitter_utils\intersecting_polygon_organizer.hpp" />
+    <ClInclude Include="mesh_splitter_utils\mesh_splitter.hpp" />
     <ClInclude Include="mesh_splitter_utils\mesh_half_edge.hpp" />
+    <ClInclude Include="mesh_splitter_utils\mesh_splitter_debug_helpers.h" />
     <ClInclude Include="mesh_splitter_utils\mesh_splitter_typedefs.hpp" />
     <ClInclude Include="mesh_splitter_utils\primitive_mesh.h" />
     <ClInclude Include="mesh_splitter_utils\splittable_polygon.h" />

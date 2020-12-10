@@ -182,15 +182,15 @@ namespace legion::physics
                 //-----------------instantiate first half edge---------------------//
                 //MeshHalfEdge firstEdge = std::make
                 auto firstEdge = InstantiateEdge(firstVertIndex
-                    , edgeVertexIndexPair(uniqueFirstIndex, uniqueSecondIndex), vertices, meshHalfEdges, indexToEdgeMap);
+                    , edgeVertexIndexPair(uniqueFirstIndex, uniqueSecondIndex), mesh, meshHalfEdges, indexToEdgeMap);
 
                 //-----------------instantiate second half edge---------------------//
                 auto secondEdge = InstantiateEdge(secondVertIndex
-                    , edgeVertexIndexPair(uniqueSecondIndex, uniqueThirdIndex), vertices, meshHalfEdges, indexToEdgeMap);
+                    , edgeVertexIndexPair(uniqueSecondIndex, uniqueThirdIndex), mesh, meshHalfEdges, indexToEdgeMap);
 
                 //-----------------instantiate third half edge---------------------//
                 auto thirdEdge = InstantiateEdge(thirdVertIndex
-                    , edgeVertexIndexPair(uniqueThirdIndex, uniqueFirstIndex), vertices, meshHalfEdges, indexToEdgeMap);
+                    , edgeVertexIndexPair(uniqueThirdIndex, uniqueFirstIndex), mesh, meshHalfEdges, indexToEdgeMap);
 
 
                 firstEdge->nextEdge = secondEdge;
@@ -409,7 +409,7 @@ namespace legion::physics
                 resultPolygon.insert(resultPolygon.end(),
                     std::make_move_iterator(nonSplitMesh.begin()), std::make_move_iterator(nonSplitMesh.end()));
                 
-                PrimitiveMesh newMesh(resultPolygon, ownerMaterialH);
+                PrimitiveMesh newMesh(owner, resultPolygon, ownerMaterialH);
                 newMesh.InstantiateNewGameObject();
 
                 initialFound->isVisited = true;
@@ -825,9 +825,7 @@ namespace legion::physics
                         outfirstFound = polygon;
                         return true;
                     }
-
                 }
-
             }
 
             return false;
@@ -849,11 +847,11 @@ namespace legion::physics
 
         meshHalfEdgePtr InstantiateEdge(int vertexIndex
             , const std::pair<int, int> uniqueIndexPair
-            , const std::vector<math::vec3>& vertices
+            , const mesh& mesh
             , std::queue<meshHalfEdgePtr>& edgePtrs
             , VertexIndexToHalfEdgePtr& indexToEdgeMap)
         {
-            auto firstEdge = std::make_shared<MeshHalfEdge>(vertices[vertexIndex]);
+            auto firstEdge = std::make_shared<MeshHalfEdge>(mesh.vertices[vertexIndex],mesh.uvs[vertexIndex]);
 
             auto edgeToAdd = UniqueAdd(firstEdge, indexToEdgeMap, uniqueIndexPair);
 
@@ -902,7 +900,7 @@ namespace legion::physics
             }
             else
             {
-                currentSupportEdge = std::make_shared<MeshHalfEdge>(baseEdge->nextEdge->position);
+                currentSupportEdge = std::make_shared<MeshHalfEdge>(baseEdge->nextEdge->position, math::vec2());
                 currentSupportEdge->SetPairing(supportEdge);
                 generatedEdges.push_back(currentSupportEdge);
 
@@ -923,7 +921,7 @@ namespace legion::physics
             {
                 math::vec3 worldPosition =worldStartIntersection + startToEndIntersection * (float)i / maxData;
                 nextSupportEdge = std::make_shared< MeshHalfEdge>(
-                    math::inverse(transform) * math::vec4(worldPosition,1));
+                    math::inverse(transform) * math::vec4(worldPosition,1), math::vec2());
 
                 generatedEdges.push_back(nextSupportEdge);
             }
@@ -937,9 +935,9 @@ namespace legion::physics
             float interpolant = (float)currentIndex / maxData;
 
             meshHalfEdgePtr intersectionEdge = std::make_shared< MeshHalfEdge>(
-                math::inverse(transform) *  math::vec4(worldStartIntersection + (startToEndIntersection * interpolant),1));
+                math::inverse(transform) *  math::vec4(worldStartIntersection + (startToEndIntersection * interpolant),1),math::vec2());
             generatedEdges.push_back(intersectionEdge);
-
+            intersectionEdge->isBoundary = true;
 
             CreateNonAllignedQuad(currentSupportEdge, nextSupportEdge, baseEdge, intersectionEdge, generatedEdges);
 
@@ -1021,6 +1019,7 @@ namespace legion::physics
 
             meshHalfEdgePtr intersectionEdge = std::make_shared<MeshHalfEdge>(
                 math::inverse(transform) * math::vec4((worldStartIntersection + (startToEndIntersection * interpolant),1)));
+            intersectionEdge->isBoundary = true;
 
             generatedEdges.push_back(intersectionEdge);
 

@@ -140,7 +140,16 @@
     <ClInclude Include="mesh_splitter_utils\splittable_polygon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="mesh_splitter.hpp">
+    <ClInclude Include="mesh_splitter_utils\mesh_splitter.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_splitter_utils\half_edge_finder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_splitter_utils\mesh_splitter_debug_helpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_splitter_utils\intersecting_polygon_organizer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
