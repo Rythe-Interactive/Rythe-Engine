@@ -26,29 +26,29 @@ namespace legion::rendering
         void abort();
 
         template<typename T>
-        bool has_meta(const std::string& name);
+        L_NODISCARD bool has_meta(const std::string& name);
 
         template<typename T, typename... Args>
         T* create_meta(const std::string& name, Args&&... args);
 
         template<typename T>
-        T* get_meta(const std::string& name);
+        L_NODISCARD T* get_meta(const std::string& name);
 
         template<typename T>
-        bool has_meta(id_type nameHash);
+        L_NODISCARD bool has_meta(id_type nameHash);
 
         template<typename T, typename... Args>
         T* create_meta(id_type nameHash, Args&&... args);
 
         template<typename T>
-        T* get_meta(id_type nameHash);
+        L_NODISCARD T* get_meta(id_type nameHash);
 
-        framebuffer addFramebuffer(const std::string& name, GLenum target = GL_FRAMEBUFFER);
-        bool hasFramebuffer(const std::string& name, GLenum target = GL_FRAMEBUFFER);
-        framebuffer getFramebuffer(const std::string& name);
-        framebuffer addFramebuffer(id_type nameHash, GLenum target = GL_FRAMEBUFFER);
-        bool hasFramebuffer(id_type nameHash, GLenum target = GL_FRAMEBUFFER);
-        framebuffer getFramebuffer(id_type nameHash);
+        framebuffer* addFramebuffer(const std::string& name, GLenum target = GL_FRAMEBUFFER);
+        L_NODISCARD bool hasFramebuffer(const std::string& name, GLenum target = GL_FRAMEBUFFER);
+        L_NODISCARD framebuffer* getFramebuffer(const std::string& name);
+        framebuffer* addFramebuffer(id_type nameHash, GLenum target = GL_FRAMEBUFFER);
+        L_NODISCARD bool hasFramebuffer(id_type nameHash, GLenum target = GL_FRAMEBUFFER);
+        L_NODISCARD framebuffer* getFramebuffer(id_type nameHash);
 
         virtual void init(app::window& context) LEGION_PURE;
 

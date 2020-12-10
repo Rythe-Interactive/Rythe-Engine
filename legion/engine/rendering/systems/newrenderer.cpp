@@ -170,6 +170,7 @@ namespace legion::rendering
     void Renderer::render(time::span deltatime)
     {
         static auto cameraQuery = createQuery<camera>();
+        cameraQuery.queryEntities();
         for (auto ent : cameraQuery)
         {
             auto cam = ent.get_component_handle<camera>().read();

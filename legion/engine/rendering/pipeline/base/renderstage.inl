@@ -3,7 +3,7 @@
 namespace legion::rendering
 {
     template<typename T>
-    inline bool RenderStageBase::has_meta(const std::string& name)
+    L_NODISCARD inline bool RenderStageBase::has_meta(const std::string& name)
     {
         return m_pipeline->has_meta<T>(name);
     }
@@ -15,13 +15,13 @@ namespace legion::rendering
     }
 
     template<typename T>
-    inline T* RenderStageBase::get_meta(const std::string& name)
+    L_NODISCARD inline T* RenderStageBase::get_meta(const std::string& name)
     {
         return m_pipeline->get_meta<T>(name);
     }
 
     template<typename T>
-    inline bool RenderStageBase::has_meta(id_type nameHash)
+    L_NODISCARD inline bool RenderStageBase::has_meta(id_type nameHash)
     {
         return m_pipeline->has_meta<T>(nameHash);
     }
@@ -33,7 +33,7 @@ namespace legion::rendering
     }
 
     template<typename T>
-    inline T* RenderStageBase::get_meta(id_type nameHash)
+    L_NODISCARD inline T* RenderStageBase::get_meta(id_type nameHash)
     {
         return m_pipeline->get_meta<T>(nameHash);
     }

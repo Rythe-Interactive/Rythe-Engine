@@ -7,7 +7,7 @@ namespace legion::rendering
 
 
     template<typename T>
-    inline bool RenderPipelineBase::has_meta(const std::string& name)
+    L_NODISCARD inline bool RenderPipelineBase::has_meta(const std::string& name)
     {
         id_type id = nameHash(name);
         return m_metadata.count(id) && (m_metadata[id].type() == typeid(T));
@@ -31,7 +31,7 @@ namespace legion::rendering
     }
 
     template<typename T>
-    inline T* RenderPipelineBase::get_meta(const std::string& name)
+    L_NODISCARD inline T* RenderPipelineBase::get_meta(const std::string& name)
     {
         id_type id = nameHash(name);
 
@@ -41,7 +41,7 @@ namespace legion::rendering
     }
 
     template<typename T>
-    inline bool RenderPipelineBase::has_meta(id_type nameHash)
+    L_NODISCARD inline bool RenderPipelineBase::has_meta(id_type nameHash)
     {
         return m_metadata.count(nameHash) && (m_metadata[nameHash].type() == typeid(T));
     }
@@ -62,7 +62,7 @@ namespace legion::rendering
     }
 
     template<typename T>
-    inline T* RenderPipelineBase::get_meta(id_type nameHash)
+    L_NODISCARD inline T* RenderPipelineBase::get_meta(id_type nameHash)
     {
         if (m_metadata.count(nameHash) && (m_metadata[nameHash].type() == typeid(T)))
             return std::any_cast<T>(&m_metadata[nameHash]);

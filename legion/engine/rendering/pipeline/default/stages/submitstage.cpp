@@ -39,22 +39,31 @@ namespace legion::rendering
         static id_type mainId = nameHash("main");
 
         auto fbo = getFramebuffer(mainId);
+        if (!fbo)
+        {
+            log::error("Main frame buffer is missing.");
+            abort();
+            return;
+        }
 
         app::context_guard guard(context);
 
         auto viewportSize = context.framebufferSize();
 
-        auto colorAttachment = fbo.getAttachment(GL_COLOR_ATTACHMENT0);
+        auto colorAttachment = fbo->getAttachment(GL_COLOR_ATTACHMENT0);
         if (!colorAttachment.has_value() || colorAttachment.type() != typeid(texture_handle))
             return;
 
         auto screenTexture = std::any_cast<texture_handle>(colorAttachment);
 
-        auto [success, message] = cam.renderTarget.verify();
-        if (!success)
+        if (cam.renderTarget.id() != 0)
         {
-            log::warn(message);
-            return;
+            auto [success, message] = cam.renderTarget.verify();
+            if (!success)
+            {
+                log::error(message);
+                return;
+            }
         }
 
         cam.renderTarget.bind();

@@ -458,10 +458,9 @@ namespace legion::rendering
                 }
 
                 //shader init
-                static auto screenShader = ShaderCache::create_shader("screen_shader", "assets://shaders/screenshader.shs"_view);
+                static auto screenShader = ShaderCache::create_shader("screen_shader", "engine://shaders/screenshader.shs"_view);
 
                 //attach fbo and texture
-                fbo.bind();
                 fbo.attach(texture, GL_COLOR_ATTACHMENT0);
                 //fbo.attach(rbo, GL_DEPTH_STENCIL_ATTACHMENT);
                 fbo.attach(depthtexture, GL_DEPTH_ATTACHMENT);
@@ -469,6 +468,8 @@ namespace legion::rendering
                 //verification step
                 auto [verified, message] = fbo.verify();
                 if (!verified) log::warn(message);
+
+                fbo.bind();
 
                 glViewport(0, 0, superSize.x, superSize.y);
                 glClearColor(0.392f, 0.584f, 0.929f, 1.0f);

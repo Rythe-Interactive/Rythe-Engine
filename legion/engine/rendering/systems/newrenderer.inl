@@ -12,10 +12,12 @@ namespace legion::rendering
             if (!m_pipelines.count(context))
             {
                 m_pipelines.emplace(context, std::unique_ptr<Pipeline>(new Pipeline(std::forward(args)...)));
+                RenderStageBase::m_pipeline = m_pipelines[context].get();
                 m_pipelines[context]->init(context);
             }
+            else
+                RenderStageBase::m_pipeline = m_pipelines[context].get();
 
-            RenderStageBase::m_pipeline = m_pipelines[context].get();
             return RenderStageBase::m_pipeline;
         });
     }

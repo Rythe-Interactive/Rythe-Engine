@@ -10,8 +10,7 @@ namespace legion::rendering
 
         math::ivec2 m_framebufferSize;
         texture_handle m_colorTexture;
-        texture_handle m_depthTexture;
-        renderbuffer m_stencilbuffer;
+        texture_handle m_depthStencilTexture;
 
     public:
         static void setRenderScale(float renderScale);

@@ -19,7 +19,7 @@ namespace legion::core::common
     public:
         T value;
 
-        explicit managed_resource(nullptr_t t) {}
+        explicit managed_resource(nullptr_t t) : value() {}
 
         template<typename... Args>
         managed_resource(delegate<void(T&)> destroyFunc, Args&&... args)

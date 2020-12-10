@@ -22,22 +22,30 @@ namespace legion::rendering
         m_framebufferSize.x = math::max((int)(m_framebufferSize.x * renderScale), 1);
         m_framebufferSize.y = math::max((int)(m_framebufferSize.y * renderScale), 1);
 
+        app::context_guard guard(context);
+
         m_colorTexture = TextureCache::create_texture("color_image", m_framebufferSize, {
         texture_type::two_dimensional, channel_format::eight_bit, texture_format::rgb,
         texture_components::rgb, true, true, texture_mipmap::linear, texture_mipmap::linear,
         texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat });
 
-        m_depthTexture = TextureCache::create_texture("depth_image", m_framebufferSize, {
-        texture_type::two_dimensional, channel_format::eight_bit, texture_format::depth,
-        texture_components::depth, true, true, texture_mipmap::linear, texture_mipmap::linear,
+        m_depthStencilTexture = TextureCache::create_texture("depth_stencil_image", m_framebufferSize, {
+        texture_type::two_dimensional, channel_format::depth_stencil, texture_format::depth_stencil,
+        texture_components::depth_stencil, true, true, texture_mipmap::linear, texture_mipmap::linear,
         texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat });
 
-        m_stencilbuffer = renderbuffer(GL_STENCIL, m_framebufferSize);
+        //m_stencilbuffer = renderbuffer(GL_STENCIL_INDEX8, m_framebufferSize);
 
         auto fbo = getFramebuffer("main");
-        fbo.attach(m_colorTexture, GL_COLOR_ATTACHMENT0);
-        fbo.attach(m_depthTexture, GL_DEPTH_ATTACHMENT);
-        fbo.attach(m_stencilbuffer, GL_STENCIL_ATTACHMENT);
+
+        if (!fbo)
+        {
+            log::error("Main frame buffer is missing.");
+            return;
+        }
+
+        fbo->attach(m_colorTexture, GL_COLOR_ATTACHMENT0);
+        fbo->attach(m_depthStencilTexture, GL_DEPTH_STENCIL_ATTACHMENT);
     }
 
     void FramebufferResizeStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
@@ -55,10 +63,23 @@ namespace legion::rendering
 
         if (framebufferSize != m_framebufferSize)
         {
+            app::context_guard guard(context);
+
             m_framebufferSize = framebufferSize;
             m_colorTexture.get_texture().resize(framebufferSize);
-            m_depthTexture.get_texture().resize(framebufferSize);
-            m_stencilbuffer.resize(framebufferSize);
+            m_depthStencilTexture.get_texture().resize(framebufferSize);
+
+            auto fbo = getFramebuffer("main");
+
+            if (!fbo)
+            {
+                log::error("Main frame buffer is missing.");
+                abort();
+                return;
+            }
+
+            fbo->attach(m_colorTexture, GL_COLOR_ATTACHMENT0);
+            fbo->attach(m_depthStencilTexture, GL_DEPTH_STENCIL_ATTACHMENT);
         }
     }
 

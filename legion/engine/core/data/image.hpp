@@ -16,6 +16,7 @@ namespace legion::core
      */
     enum struct channel_format : uint
     {
+        depth_stencil = 0,
         eight_bit = 1,
         sixteen_bit = 2,
         float_hdr = 4

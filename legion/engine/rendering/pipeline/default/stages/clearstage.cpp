@@ -16,10 +16,16 @@ namespace legion::rendering
         static id_type mainId = nameHash("main");
 
         auto fbo = getFramebuffer(mainId);
+        if (!fbo)
+        {
+            log::error("Main frame buffer is missing.");
+            abort();
+            return;
+        }
 
         app::context_guard guard(context);
 
-        auto [valid, message] = fbo.verify();
+        auto [valid, message] = fbo->verify();
         if (!valid)
         {
             log::error("Main frame buffer isn't complete: {}", message);
@@ -27,12 +33,12 @@ namespace legion::rendering
             return;
         }
 
-        fbo.bind();
+        fbo->bind();
 
         glClearColor(cam.clearColor.r, cam.clearColor.g, cam.clearColor.b, cam.clearColor.a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        fbo.release();
+        fbo->release();
     }
 
     priority_type ClearStage::priority()

@@ -11,7 +11,6 @@ namespace legion::rendering
 {
     void DefaultPipeline::setup(app::window& context)
     {
-        addFramebuffer("main");
         attachStage<ClearStage>();
         attachStage<FramebufferResizeStage>();
         attachStage<LightBufferStage>();
@@ -23,6 +22,7 @@ namespace legion::rendering
 
         {
             app::context_guard guard(context);
+            addFramebuffer("main");
             modelMatrixBuffer = buffer(GL_ARRAY_BUFFER, sizeof(math::mat4) * 1024, nullptr, GL_DYNAMIC_DRAW);
         }
 

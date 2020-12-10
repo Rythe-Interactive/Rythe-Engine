@@ -30,6 +30,13 @@ namespace legion::rendering
 
         bindToEvent<events::component_creation<light>, &LightBufferStage::onLightCreate>();
         bindToEvent<events::component_destruction<light>, &LightBufferStage::onLightDestroy>();
+
+
+        static auto lightsQuery = createQuery<light>();
+        lightsQuery.queryEntities();
+
+        for (auto ent : lightsQuery)
+            m_lightEntities.insert(ent);
     }
 
     void LightBufferStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)

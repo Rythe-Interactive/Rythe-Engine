@@ -27,7 +27,7 @@ namespace legion::rendering
     {
         depth = GL_DEPTH_COMPONENT,
         stencil = GL_STENCIL_INDEX,
-        depth_stencil = GL_DEPTH_STENCIL,
+        depth_stencil = GL_DEPTH24_STENCIL8,
         red = GL_RED,
         rg = GL_RG,
         rgb = GL_RGB,
@@ -53,7 +53,7 @@ namespace legion::rendering
 
     /**@brief Utility array for converting data size to GLenum. (channels_to_glenum[sizeof(byte)] = GL_UNSIGNED_BYTE)
      */
-    constexpr GLenum channels_to_glenum[] = {0, GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT, 0, GL_FLOAT };
+    constexpr GLenum channels_to_glenum[] = { GL_UNSIGNED_INT_24_8, GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT, 0, GL_FLOAT };
 
     enum struct texture_mipmap : GLint
     {

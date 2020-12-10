@@ -35,10 +35,16 @@ namespace legion::rendering
             return;
 
         auto fbo = getFramebuffer(mainId);
+        if (!fbo)
+        {
+            log::error("Main frame buffer is missing.");
+            abort();
+            return;
+        }
 
         app::context_guard guard(context);
 
-        auto [valid, message] = fbo.verify();
+        auto [valid, message] = fbo->verify();
         if (!valid)
         {
             log::error("Main frame buffer isn't complete: {}", message);
@@ -46,7 +52,7 @@ namespace legion::rendering
             return;
         }
 
-        fbo.bind();
+        fbo->bind();
 
         for (auto [material, instancesPerMaterial] : *batches)
         {
@@ -91,7 +97,7 @@ namespace legion::rendering
             material.release();
         }
 
-        fbo.release();
+        fbo->release();
     }
 
     priority_type MeshRenderStage::priority()
