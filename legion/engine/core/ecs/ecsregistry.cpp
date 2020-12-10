@@ -96,6 +96,25 @@ namespace legion::core::ecs
         return component_handle_base(entityId, componentTypeId);
     }
 
+
+
+    component_handle_base EcsRegistry::copyComponent(id_type destinationEntity, id_type sourceEntity, id_type componentTypeId)
+    {
+        if (!validateEntity(sourceEntity) || !validateEntity(destinationEntity))
+            throw legion_entity_not_found_error;
+
+        getFamily(componentTypeId)->clone_component(destinationEntity, sourceEntity);
+
+        {
+            async::readonly_guard guard(m_entityDataLock);
+            m_entityData[destinationEntity].components.insert(componentTypeId); // Is fine because the lock only locks order changes in the container, not the values themselves.
+        }
+
+        m_queryRegistry.evaluateEntityChange(destinationEntity, componentTypeId, false);
+
+        return component_handle_base(destinationEntity, componentTypeId);
+    }
+
     component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId, void* value)
     {
         if (!validateEntity(entityId))

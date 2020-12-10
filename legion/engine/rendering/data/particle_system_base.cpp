@@ -15,7 +15,7 @@ namespace legion::rendering
         particularParticle.add_component<mesh_renderer>(rendering::mesh_renderer(m_particleMaterial, m_particleModel));
     }
 
-    void ParticleSystemBase::cleanUpParticle(ecs::component_handle<particle> particleHandle, ecs::component_handle<particle_emitter> emitterHandle) const
+    void ParticleSystemBase::cleanUpParticle(const ecs::entity_handle& particleHandle, ecs::component_handle<particle_emitter>& emitterHandle) const
     {
         //Read emitter
         particle_emitter emitter = emitterHandle.read();
@@ -29,7 +29,8 @@ namespace legion::rendering
             //Add to dead
             emitter.deadParticles.emplace_back(particularParticle);
             //Remove renderable to stop them from being rendered
-            particularParticle.remove_component<mesh_renderable>();
+            particularParticle.remove_component<mesh_renderer>();
+            particularParticle.remove_component<mesh_filter>();
         }
         //Write to emitter
         emitterHandle.write(emitter);
@@ -59,6 +60,7 @@ namespace legion::rendering
             //Add new particle to living particle list.
             emitter.livingParticles.emplace_back(particularParticle);
         }
+        emitterHandle.write(emitter);
         return particularParticle.get_component_handle<particle>();
     }
 }

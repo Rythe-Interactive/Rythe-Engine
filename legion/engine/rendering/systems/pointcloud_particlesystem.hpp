@@ -75,7 +75,7 @@ public:
         }
     }
 
-    void update(std::vector<ecs::entity_handle>, ecs::component_handle<rendering::particle_emitter>) const override
+    void update(std::vector<ecs::entity_handle>, ecs::component_handle<rendering::particle_emitter>, time::span) const override
     {
         
     }

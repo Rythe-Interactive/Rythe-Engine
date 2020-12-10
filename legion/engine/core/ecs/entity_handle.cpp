@@ -21,6 +21,29 @@ namespace legion::core::ecs
         return *this;
     }
 
+    entity_handle entity_handle::clone(bool keep_parent, bool clone_children, bool clone_components) const
+    {
+        entity_handle clone = m_registry->createEntity();
+        entity_data& data = m_registry->getEntityData(get_id());
+
+        if(keep_parent)
+            clone.set_parent(data.parent);
+
+        if(clone_components)
+            for(id_type cid : data.components)
+            {
+                m_registry->copyComponent(clone,*this,cid);
+            }
+
+        if(clone_children)
+            for(const entity_handle& h: data.children)
+            {
+                h.clone(false,true,true).set_parent(clone);
+            }
+
+        return clone;
+    }
+
     L_NODISCARD const hashed_sparse_set<id_type>& entity_handle::component_composition() const
     {
         if (!m_registry)

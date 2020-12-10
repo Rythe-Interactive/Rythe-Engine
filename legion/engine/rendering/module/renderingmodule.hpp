@@ -3,8 +3,8 @@
 #include <rendering/systems/oldrenderer.hpp>
 #include <rendering/systems/newrenderer.hpp>
 #include <rendering/systems/particle_system_manager.hpp>
-
-
+#include <rendering/components/point_cloud.hpp>
+#include <rendering/systems/pointcloudgeneration.hpp>
 namespace legion::rendering
 {
     class RenderingModule : public Module
@@ -23,6 +23,10 @@ namespace legion::rendering
             reportComponentType<particle>();
             reportComponentType<particle_emitter>();
             reportSystem<ParticleSystemManager>();
+
+            reportComponentType<point_cloud>();
+            reportSystem<PointCloudGeneration>();
+
         }
 
         virtual priority_type priority() override
