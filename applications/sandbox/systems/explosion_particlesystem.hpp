@@ -34,6 +34,9 @@ struct explosionParameters
 class ExplosionParticleSystem : public rendering::ParticleSystemBase
 {
 public:
+    /**
+     * @brief Constructor used to set all the member variables.
+     */
     ExplosionParticleSystem(explosionParameters params)
     {
         m_looping = params.looping;
@@ -53,7 +56,9 @@ public:
         m_endColor = params.endColor;
         m_beginColor = m_particleMaterial.get_param<math::vec4>("color");
     }
-
+    /**
+     * @brief The setup function used to initialize all the particles.
+	 */
     void setup(ecs::component_handle<rendering::particle_emitter> emitter_handle) const override
     {
         auto vertPositions = m_explosionModel.get_mesh().get().second.vertices;
@@ -103,6 +108,9 @@ public:
         }
     }
 
+    /**
+     * @brief The update function that loops through all particles to update their positions, scale and color.
+     */
     void update(std::vector<ecs::entity_handle> particle_list, ecs::component_handle<rendering::particle_emitter> particle_emitter, time::span delta_time) const override
     {
         //Read the scale of the emitter.
