@@ -10,7 +10,7 @@
 
 #include <Voro++/voro++.hh>
 
-#include "pointcloud_particlesystem.hpp"
+#include <rendering/systems/pointcloud_particlesystem.hpp>
 #include "explosion_particlesystem.hpp"
 
 #include <rendering/systems/pointcloud_particlesystem.hpp>

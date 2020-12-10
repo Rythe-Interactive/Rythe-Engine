@@ -12,7 +12,7 @@ namespace legion::rendering
     public:
         vertexarray() = default;
 
-        explicit vertexarray(nullptr_t temp) : m_id([](app::gl_id& value) { glDeleteVertexArrays(1, &value); }, invalid_id)
+        explicit vertexarray(std::nullptr_t t) : m_id([](app::gl_id& value) { glDeleteVertexArrays(1, &value); }, invalid_id)
         {
             glGenVertexArrays(1, &m_id);
         }
