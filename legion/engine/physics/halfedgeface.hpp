@@ -65,7 +65,7 @@ namespace legion::physics
          */
         bool makeNormalsConvexWithFace(HalfEdgeFace& other);
 
-        /**@brief Calculates the angle relation between two planes
+        /**@brief Calculates the angle relation from this to another face
          */
         face_angle_relation getAngleRelation(const HalfEdgeFace& other);
 
@@ -96,6 +96,13 @@ namespace legion::physics
         {
             // Because the centroid is dependent on all edges, we do not need to check the edge positions
             return lhs.normal == rhs.normal && lhs.centroid == rhs.centroid;
+        }
+
+        static std::string to_string(const face_angle_relation& relation)
+        {
+            if (relation == face_angle_relation::coplaner) return "coplaner";
+            if (relation == face_angle_relation::convex) return "convex";
+            if (relation == face_angle_relation::concave) return "concave";
         }
 		
 		~HalfEdgeFace();
