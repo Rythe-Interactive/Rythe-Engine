@@ -17,7 +17,6 @@
 #include <core/compute/kernel.hpp>
 #include <core/compute/high_level/function.hpp>
 #include <rendering/debugrendering.hpp>
-#include <physics/systems/physicssystem.hpp>
 
 #include <physics/physics_statics.hpp>
 #include <physics/data/identifier.hpp>
