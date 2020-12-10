@@ -5,8 +5,8 @@
 
 using namespace legion;
 /**
- * @struct pointCloudParameters
- * @brief A struct that simplifies the parameter input of the particle system constructor.
+ * @struct explosionParameters
+ * @brief A struct that simplifies the parameter input of the explosion particle system constructor.
  */
 struct explosionParameters
 {
@@ -27,6 +27,10 @@ struct explosionParameters
     uint maxParticles = 0;
 };
 
+/**
+ * @struct ExplosionParticleSystem
+ * @brief Explosion particle system that can be used for explosion VFX
+ */
 class ExplosionParticleSystem : public rendering::ParticleSystemBase
 {
 public:
@@ -60,10 +64,10 @@ public:
         const math::vec3 emitterPos = emitterPosHandle.read();
 
         auto emitter = emitter_handle.read();
-
+        //Loop through each vertex in the model.
         for (math::vec3 vert_position : vertPositions)
         {
-#pragma region Create particle
+            #pragma region Create particle
             //Checks the emitter if it has a recycled particle to use, if not it creates a new one.
             ecs::component_handle<rendering::particle> particleComponent = checkToRecycle(emitter_handle);
 
@@ -83,39 +87,47 @@ public:
 
             //Populates the particle with the appropriate stuffs.
             createParticle(particleComponent, trans);
-#pragma endregion 
-#pragma region Set directions
+            #pragma endregion 
+            #pragma region Set directions
+            //Calculates position offset from center to create a direction for the velocity.
             math::vec3 pointPos = emitterPos + vert_position;
             math::vec3 pointDirection = math::normalize(pointPos - emitterPos);
-#pragma endregion
-#pragma region Set parameter values
+            #pragma endregion
+            #pragma region Set parameter values
+            //Read particle component to set its lifetime and its velocity.
             rendering::particle particularParticle = particleComponent.read();
             particularParticle.lifeTime = 0;
             particularParticle.particleVelocity = m_startingVelocity.x * pointDirection * scaleOfEmitter.r;
             particleComponent.write(particularParticle);
-#pragma endregion
+#           pragma endregion
         }
     }
 
     void update(std::vector<ecs::entity_handle> particle_list, ecs::component_handle<rendering::particle_emitter> particle_emitter, time::span delta_time) const override
     {
+        //Read the scale of the emitter.
         auto scaleOfEmitter = particle_emitter.entity.get_component_handle<scale>().read();
-
+        //Read the emitter component.
         auto emitter = particle_emitter.read();
+        //Checks if the emitter is supposed to start animating.
         if (emitter.playAnimation)
         {
+            //Loops through all the particles to update them.
             for (int i = 0; i < particle_list.size(); i++)
             {
+                //Get the specified particle entity.
                 auto particleEnt = particle_list[i];
 
+                //Get the specified particle handle.
                 auto particleHandle = particleEnt.get_component_handle<rendering::particle>();
                 rendering::particle particle = particleHandle.read();
 
+                //Checks if the particle lifetime has surpassed the total lifetime. If so, it gets recycled.
                 if (particle.lifeTime >= m_maxLifeTime* scaleOfEmitter.r)
                 {
-#pragma region Check if still alive
+                    #pragma region Check if still alive
                     cleanUpParticle(particleEnt, particle_emitter);
-#pragma endregion 
+                    #pragma endregion 
                 }
                 else
                 {
@@ -150,6 +162,7 @@ public:
                     particleHandle.write(particle);
                 }
             }
+            //If the list is empty, It will destroy the emitter.
             if (particle_list.size() <= 0)
             {
                 particle_emitter.destroy();
