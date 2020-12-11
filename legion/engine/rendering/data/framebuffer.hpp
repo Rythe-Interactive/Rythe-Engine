@@ -265,7 +265,7 @@ namespace legion::rendering
             if (m_id.value == 0)
             {
                 log::error("Attempting to attach render targets to default framebuffer.");
-                return;
+                return std::any();
             }
 
             if (!m_attachments.count(attachment))
