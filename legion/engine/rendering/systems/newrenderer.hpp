@@ -27,6 +27,9 @@ namespace legion::rendering
 
         template<typename Pipeline, typename... Args, inherits_from<Pipeline, RenderPipeline<Pipeline>> = 0>
         static void setPipeline(Args&&... args);
+
+        L_NODISCARD static RenderPipelineBase* getPipeline(app::window& context);
+        L_NODISCARD static RenderPipelineBase* getMainPipeline();
     };
 }
 

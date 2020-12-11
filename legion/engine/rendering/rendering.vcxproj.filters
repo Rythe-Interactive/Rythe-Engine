@@ -78,6 +78,15 @@
     <ClCompile Include="pipeline\base\pipelinebase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="data\buffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="data\framebuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="data\renderbuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\renderingmodule.hpp">
@@ -214,5 +223,8 @@
     <ClInclude Include="systems\pointcloud_particlesystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <None Include="data\buffer.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

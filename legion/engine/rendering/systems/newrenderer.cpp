@@ -131,7 +131,7 @@ namespace legion::rendering
         RenderPipelineBase::m_ecs = m_ecs;
         RenderPipelineBase::m_scheduler = m_scheduler;
         RenderPipelineBase::m_eventBus = m_eventBus;
-        
+
         RenderStageBase::m_ecs = m_ecs;
         RenderStageBase::m_scheduler = m_scheduler;
         RenderStageBase::m_eventBus = m_eventBus;
@@ -169,6 +169,9 @@ namespace legion::rendering
 
     void Renderer::render(time::span deltatime)
     {
+        if (m_pipelineProvider.isNull())
+            return;
+
         static auto cameraQuery = createQuery<camera>();
         cameraQuery.queryEntities();
         for (auto ent : cameraQuery)
@@ -200,4 +203,28 @@ namespace legion::rendering
             m_pipelineProvider(win)->render(win, cam, cam_input_data, deltatime);
         }
     }
+
+    L_NODISCARD RenderPipelineBase* Renderer::getPipeline(app::window& context)
+    {
+        if (m_pipelineProvider.isNull())
+            return nullptr;
+
+        if (context == app::invalid_window)
+            return nullptr;
+
+        return m_pipelineProvider(context);
+    }
+
+    L_NODISCARD RenderPipelineBase* Renderer::getMainPipeline()
+    {
+        if (m_pipelineProvider.isNull())
+            return nullptr;
+
+        auto context = world.get_component_handle<app::window>().read();
+        if (context == app::invalid_window)
+            return nullptr;
+
+        return m_pipelineProvider(context);
+    }
+
 }

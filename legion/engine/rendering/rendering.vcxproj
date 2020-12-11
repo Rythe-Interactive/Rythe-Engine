@@ -12,10 +12,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="components\light.cpp" />
+    <ClCompile Include="data\buffer.cpp" />
+    <ClCompile Include="data\framebuffer.cpp" />
     <ClCompile Include="data\importers\texture_importers.cpp" />
     <ClCompile Include="data\material.cpp" />
     <ClCompile Include="data\model.cpp" />
     <ClCompile Include="data\particle_system_cache.cpp" />
+    <ClCompile Include="data\renderbuffer.cpp" />
     <ClCompile Include="data\shader.cpp" />
     <ClCompile Include="data\texture.cpp" />
     <ClCompile Include="pipeline\base\pipelinebase.cpp" />
@@ -77,6 +80,7 @@
     <ClInclude Include="util\settings.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="data\buffer.inl" />
     <None Include="pipeline\base\pipeline.inl" />
     <None Include="pipeline\base\renderstage.inl" />
     <None Include="systems\newrenderer.inl" />
