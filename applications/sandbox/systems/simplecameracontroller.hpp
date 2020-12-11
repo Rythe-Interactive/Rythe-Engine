@@ -45,7 +45,7 @@ public:
 
         app::InputSystem::createBinding<exit_action>(app::inputmap::method::ESCAPE);
         app::InputSystem::createBinding<fullscreen_action>(app::inputmap::method::F11);
-        app::InputSystem::createBinding<escape_cursor_action>(app::inputmap::method::TAB);
+        app::InputSystem::createBinding<escape_cursor_action>(app::inputmap::method::MOUSE_RIGHT);
         app::InputSystem::createBinding<vsync_action>(app::inputmap::method::F1);
 
         bindToEvent<player_move, &SimpleCameraController::onPlayerMove>();
@@ -118,12 +118,17 @@ public:
 
     void onEscapeCursor(escape_cursor_action* action)
     {
-        if (action->released())
+        if (action->released() && !escaped)
         {
             app::window window = m_ecs->world.get_component_handle<app::window>().read();
-            escaped = !escaped;
-            window.enableCursor(escaped);
-            window.show();
+            escaped = true;
+            window.enableCursor(true);
+        }
+        else if (action->pressed() && escaped)
+        {
+            app::window window = m_ecs->world.get_component_handle<app::window>().read();
+            escaped = false;
+            window.enableCursor(false);
         }
     }
 
