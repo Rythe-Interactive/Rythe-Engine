@@ -26,7 +26,7 @@ using namespace legion;
 //struct loadscene2 : public app::input_action<loadscene2> {};
 
 struct createRandEnt : public app::input_action<createRandEnt> {};
-
+double rnd() { return double(rand()) / RAND_MAX; }
 class SceneTestSystem1 final : public System<SceneTestSystem1>
 {
 public:
