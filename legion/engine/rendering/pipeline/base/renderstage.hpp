@@ -1,6 +1,7 @@
 #pragma once
 #include <application/application.hpp>
 #include <rendering/components/camera.hpp>
+#include <rendering/pipeline/base/pipelinebase.hpp>
 
 #define setup_priority 64
 #define opaque_priority 32

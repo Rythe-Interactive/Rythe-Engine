@@ -1,4 +1,4 @@
-#include <rendering/pipeline/base/pipeline.hpp>
+#include <rendering/pipeline/base/pipelinebase.hpp>
 
 namespace legion::rendering
 {

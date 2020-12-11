@@ -18,7 +18,7 @@
     <ClCompile Include="data\particle_system_cache.cpp" />
     <ClCompile Include="data\shader.cpp" />
     <ClCompile Include="data\texture.cpp" />
-    <ClCompile Include="pipeline\base\pipeline.cpp" />
+    <ClCompile Include="pipeline\base\pipelinebase.cpp" />
     <ClCompile Include="pipeline\base\renderstage.cpp" />
     <ClCompile Include="pipeline\default\defaultpipeline.cpp" />
     <ClCompile Include="pipeline\default\stages\clearstage.cpp" />
@@ -39,6 +39,7 @@
     <ClInclude Include="components\particle.hpp" />
     <ClInclude Include="components\particle_emitter.hpp" />
     <ClInclude Include="components\point_cloud.hpp" />
+    <ClInclude Include="pipeline\base\pipeline.hpp" />
     <ClInclude Include="systems\pointcloudgeneration.hpp" />
     <ClInclude Include="components\renderable.hpp" />
     <ClInclude Include="data\buffer.hpp" />
@@ -64,7 +65,7 @@
     <ClInclude Include="systems\newrenderer.hpp" />
     <ClInclude Include="systems\particle_system_manager.hpp" />
     <ClInclude Include="module\renderingmodule.hpp" />
-    <ClInclude Include="pipeline\base\pipeline.hpp" />
+    <ClInclude Include="pipeline\base\pipelinebase.hpp" />
     <ClInclude Include="pipeline\base\renderstage.hpp" />
     <ClInclude Include="rendering.hpp" />
     <ClInclude Include="shadercompiler\shadercompiler.hpp" />

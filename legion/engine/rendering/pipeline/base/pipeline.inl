@@ -35,7 +35,7 @@ namespace legion::rendering
     {
         id_type id = nameHash(name);
 
-        if (m_metadata.count(id) && (m_metadata[id].type() == typeid(T))
+        if (m_metadata.count(id) && (m_metadata[id].type() == typeid(T)))
             return std::any_cast<T>(&m_metadata[id]);
             return nullptr;
     }
@@ -57,7 +57,7 @@ namespace legion::rendering
                 return nullptr;
         }
 
-        m_metadata.emplace(nameHash, std::make_any<T>(std::forward<Args>(args)...);
+        m_metadata.emplace(nameHash, std::make_any<T>(std::forward<Args>(args)...));
         return std::any_cast<T>(&m_metadata[nameHash]);
     }
 
