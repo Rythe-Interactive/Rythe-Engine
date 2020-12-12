@@ -43,6 +43,7 @@ public:
 
         rendering::model_handle explosionSphere;
         rendering::model_handle particleSphere;
+        rendering::model_handle cube;
 
         rendering::material_handle vertexColor;
         rendering::material_handle pointCloudColor;
