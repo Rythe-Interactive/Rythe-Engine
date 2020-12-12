@@ -33,6 +33,7 @@ namespace legion::core::async
     struct readonly_rw_spinlock final
     {
     private:
+        static bool m_forceRelease;
         static std::atomic_uint m_lastId;
 
         static thread_local std::unique_ptr<std::unordered_map<uint, int>> m_localWriters;
@@ -45,6 +46,9 @@ namespace legion::core::async
 
         void read_lock()
         {
+            if (m_forceRelease)
+                return;
+
             if ((*m_localState)[m_id] != lock_state::idle) // If we're either already reading or writing then the lock doesn't need to be reacquired.
             {
                 // Report another local reader to the lock.
@@ -72,6 +76,8 @@ namespace legion::core::async
 
         bool read_try_lock()
         {
+            if (m_forceRelease)
+                return true;
 
             if ((*m_localState)[m_id] != lock_state::idle) // If we're either already reading or writing then the lock doesn't need to be reacquired.
             {
@@ -95,6 +101,9 @@ namespace legion::core::async
 
         void write_lock()
         {
+            if (m_forceRelease)
+                return;
+
             if ((*m_localState)[m_id] == lock_state::read) // If we're currently only acquired for read we need to stop reading before requesting rw.
             {
                 read_unlock();
@@ -125,6 +134,8 @@ namespace legion::core::async
 
         bool write_try_lock()
         {
+            if (m_forceRelease)
+                return true;
 
             bool relock = false;
             if ((*m_localState)[m_id] == lock_state::read) // If we're currently only acquired for read we need to stop reading before requesting rw.
@@ -160,6 +171,9 @@ namespace legion::core::async
 
         void read_unlock()
         {
+            if (m_forceRelease)
+                return;
+
             (*m_localReaders)[m_id]--;
 
             if ((*m_localReaders)[m_id] > 0 || (*m_localWriters)[m_id] > 0) // Another local guard is still alive that will unlock the lock for this thread.
@@ -174,6 +188,9 @@ namespace legion::core::async
 
         void write_unlock()
         {
+            if (m_forceRelease)
+                return;
+
             (*m_localWriters)[m_id]--;
 
             if ((*m_localWriters)[m_id] > 0) // Another local guard is still alive that will unlock the lock for this thread.
@@ -192,6 +209,11 @@ namespace legion::core::async
         }
 
     public:
+        static void force_release()
+        {
+            m_forceRelease = true;
+        }
+
         readonly_rw_spinlock() = default;
 
         readonly_rw_spinlock(readonly_rw_spinlock&& source) : m_id(source.m_id)
@@ -231,6 +253,9 @@ namespace legion::core::async
          */
         void lock(lock_state permissionLevel)
         {
+            if (m_forceRelease)
+                return;
+
             if (!m_localWriters.get())
                 m_localWriters = std::make_unique<std::unordered_map<uint, int>>();
             if (!m_localReaders.get())
@@ -258,6 +283,9 @@ namespace legion::core::async
          */
         bool try_lock(lock_state permissionLevel)
         {
+            if (m_forceRelease)
+                return true;
+
             if (!m_localWriters.get())
                 m_localWriters = std::make_unique<std::unordered_map<uint, int>>();
             if (!m_localReaders.get())
@@ -282,6 +310,9 @@ namespace legion::core::async
          */
         void unlock(lock_state permissionLevel)
         {
+            if (m_forceRelease)
+                return;
+
             if (!m_localWriters.get())
                 m_localWriters = std::make_unique<std::unordered_map<uint, int>>();
             if (!m_localReaders.get())
