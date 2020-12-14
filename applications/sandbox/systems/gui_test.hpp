@@ -2,14 +2,15 @@
 #include <core/core.hpp>
 #include <rendering/util/gui.hpp>
 #include <rendering/pipeline/gui/stages/imguirenderstage.hpp>
+#include <rendering/systems/renderer.hpp>
 
 class GuiTestSystem : public System<GuiTestSystem>
 {
-    ecs::EntityQuery cameraQuery = createQuery<camera, position, rotation, scale>();
+    ecs::EntityQuery cameraQuery = createQuery<rendering::camera, position, rotation, scale>();
 
 
-    material_handle vertexColorMaterial;
-    model_handle cubeModel;
+    rendering::material_handle vertexColorMaterial;
+    rendering::model_handle cubeModel;
     ecs::entity_handle cubeEntity;
 
 
@@ -23,26 +24,26 @@ class GuiTestSystem : public System<GuiTestSystem>
     void setup() override
     {
 
-        static_cast<DefaultPipeline*>(Renderer::getMainPipeline())->attachStage<ImGuiStage>();
+        static_cast<rendering::DefaultPipeline*>(rendering::Renderer::getMainPipeline())->attachStage<rendering::ImGuiStage>();
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
 
         {
             application::context_guard guard(window);
 
-            cubeModel = ModelCache::create_model("cube", "assets://models/cube.obj"_view);
-            vertexColorMaterial = MaterialCache::create_material("color shader", "assets://shaders/texture.shs"_view);
+            cubeModel = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
+            vertexColorMaterial = rendering::MaterialCache::create_material("color shader", "assets://shaders/texture.shs"_view);
         }
 
 
         cubeEntity = createEntity();
 
         cubeEntity.add_components<transform>(position(), rotation(), scale());
-        cubeEntity.add_components<mesh_renderable>(mesh_filter(cubeModel.get_mesh()), mesh_renderer(vertexColorMaterial));
+        cubeEntity.add_components<rendering::mesh_renderable>(mesh_filter(cubeModel.get_mesh()), rendering::mesh_renderer(vertexColorMaterial));
 
 
         //gui code goes here
-        ImGuiStage::addGuiRender<GuiTestSystem,&GuiTestSystem::onGUI>(this);
+        rendering::ImGuiStage::addGuiRender<GuiTestSystem,&GuiTestSystem::onGUI>(this);
         createProcess<&GuiTestSystem::update>("Update");
     }
 
@@ -99,7 +100,7 @@ class GuiTestSystem : public System<GuiTestSystem>
         math::compose(temp, cscaleh.read(), croth.read(), cposh.read());
         view = inverse(temp);
 
-        const auto cam = cam_ent.get_component_handle<camera>().read();
+        const auto cam = cam_ent.get_component_handle<rendering::camera>().read();
         const float ratio = 16.0f/9.0f;
         projection = math::perspective(math::deg2rad(cam.fov*aspect),aspect,cam.nearz,cam.farz);
     }

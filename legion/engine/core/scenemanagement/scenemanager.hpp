@@ -38,8 +38,8 @@ namespace legion::core::scenemanagement
                     {
                         if (file.get_extension().decay() == ".cornflake")
                         {
-                            /*auto fileName = file.get_filename().decay();
-                            sceneNames.emplace(nameHash(fileName), fileName);*/
+                            auto fileName = file.get_filename().decay();
+                            sceneNames.emplace(nameHash(fileName), fileName);
                         }
                     }
                 }
