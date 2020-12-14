@@ -539,6 +539,7 @@ namespace legion::core
                     m_sparse[m_dense_key[m_size - 1]] = std::move(m_sparse[key]);
                 }
                 --m_size;
+                --m_capacity;
                 m_dense_value.resize(m_size);
                 m_dense_key.resize(m_size);
                 return true;
