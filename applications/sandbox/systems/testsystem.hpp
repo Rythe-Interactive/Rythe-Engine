@@ -21,6 +21,7 @@
 #include <physics/physics_statics.hpp>
 #include <physics/data/identifier.hpp>
 #include <audio/audio.hpp>
+#include <rendering/components/renderable.hpp>
 #include <Voro++/voro++.hh>
 #include <Voro++/common.hh>
 
@@ -706,6 +707,7 @@ public:
         //    ,cubeParams, 0.1f, cubeH, wireframeH);
 
         createProcess<&TestSystem::update>("Update");
+        //createProcess<&TestSystem::drawInterval>("TestChain");
     }
 
     void testPhysicsEvent(physics::trigger_event* evnt)

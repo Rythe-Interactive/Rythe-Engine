@@ -21,6 +21,18 @@
     <ClCompile Include="data\renderbuffer.cpp" />
     <ClCompile Include="data\shader.cpp" />
     <ClCompile Include="data\texture.cpp" />
+    <ClCompile Include="imgui_impl\ImCurveEdit.cpp" />
+    <ClCompile Include="imgui_impl\ImGradient.cpp" />
+    <ClCompile Include="imgui_impl\imgui.cpp" />
+    <ClCompile Include="imgui_impl\ImGuiFileBrowser.cpp" />
+    <ClCompile Include="imgui_impl\ImGuizmo.cpp" />
+    <ClCompile Include="imgui_impl\imgui_demo.cpp" />
+    <ClCompile Include="imgui_impl\imgui_draw.cpp" />
+    <ClCompile Include="imgui_impl\imgui_impl_glfw.cpp" />
+    <ClCompile Include="imgui_impl\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="imgui_impl\imgui_widgets.cpp" />
+    <ClCompile Include="imgui_impl\imnodes.cpp" />
+    <ClCompile Include="imgui_impl\ImSequencer.cpp" />
     <ClCompile Include="data\vertexarray.cpp" />
     <ClCompile Include="pipeline\base\pipelinebase.cpp" />
     <ClCompile Include="pipeline\base\renderstage.cpp" />
@@ -31,6 +43,7 @@
     <ClCompile Include="pipeline\default\stages\meshbatchingstage.cpp" />
     <ClCompile Include="pipeline\default\stages\meshrenderstage.cpp" />
     <ClCompile Include="pipeline\default\stages\submitstage.cpp" />
+    <ClCompile Include="pipeline\gui\stages\imguirenderstage.cpp" />
     <ClCompile Include="shadercompiler\shadercompiler.cpp" />
     <ClCompile Include="data\particle_system_base.cpp" />
     <ClCompile Include="systems\renderer.cpp" />
@@ -43,6 +56,7 @@
     <ClInclude Include="components\particle_emitter.hpp" />
     <ClInclude Include="components\point_cloud.hpp" />
     <ClInclude Include="pipeline\base\pipeline.hpp" />
+    <ClInclude Include="pipeline\gui\stages\imguirenderstage.hpp" />
     <ClInclude Include="systems\pointcloudgeneration.hpp" />
     <ClInclude Include="components\renderable.hpp" />
     <ClInclude Include="data\buffer.hpp" />
@@ -75,6 +89,7 @@
     <ClInclude Include="data\particle_system_base.hpp" />
     <ClInclude Include="systems\pointcloud_particlesystem.hpp" />
     <ClInclude Include="util\bindings.hpp" />
+    <ClInclude Include="util\gui.hpp" />
     <ClInclude Include="util\matini.hpp" />
     <ClInclude Include="util\settings.hpp" />
   </ItemGroup>
