@@ -12,13 +12,20 @@ namespace legion::physics
     {
         auto collider = std::make_shared<ConvexCollider>();
 
-        collider->ConstructConvexHullWithMesh(meshHandle);
+        //collider->ConstructConvexHullWithMesh(meshHandle);
+        collider->doStep(meshHandle);
 
         colliders->push_back(collider);
 
         calculateNewLocalCenterOfMass();
 
         return collider;
+    }
+
+    void physicsComponent::ConstructConvexHull(legion::core::mesh_handle& meshHandle, ConvexCollider& col)
+    {
+        col.doStep(meshHandle);
+        calculateNewLocalCenterOfMass();
     }
 
     void physicsComponent::ConstructBox()

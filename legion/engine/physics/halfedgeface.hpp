@@ -8,7 +8,7 @@ namespace legion::physics
 	struct HalfEdgeFace
 	{
         /**@class face_angle_relation
-         * @brief Struct to indicate the angle relation between two faces
+         * @brief Enum Struct to indicate the angle relation between two faces
          * Coplaner:    The faces could be merged, the angle between them is 180 degrees
          * Convex:      The faces are convex, the inside angle between them is less than 180 degrees, they create an acute angle
          * Concave:     The faces are concave, the inside angle is more than 180 degrees, they create an obtuse angle
@@ -39,14 +39,6 @@ namespace legion::physics
 		* executes the function on each edge connected to 'startEdge'
 		*/
 		void forEachEdge(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute);
-
-        /**@brief Get the amount of edges
-         */
-        int edgeCount() const;
-
-        /**@brief Gets the edge that is retrieved after calling edge->next n times
-         */
-        HalfEdgeEdge* getEdgeN(int n);
 
         /**@brief Inverses the face
          * The edges will be stored in reverse and therefore the normal will point in the other direction

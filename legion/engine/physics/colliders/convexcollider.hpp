@@ -62,129 +62,144 @@ namespace legion::physics
 
         }
 
+
+        /**@brief Does one step of the convex hull generation
+         * Just for debug purposes 
+         */
+        void doStep(legion::core::mesh_handle& mesh)
+        {
+            ConstructConvexHullWithMesh(mesh);
+            ++step;
+        }
+
 		/**@brief Constructs a polyhedron-shaped convex hull that encompasses the given mesh.
         * @param meshHandle - The mesh handle to lock the mesh and the mesh to create a hull from
 		*/
         void ConstructConvexHullWithMesh(legion::core::mesh_handle& meshHandle)
         {
-            auto meshLockPair = meshHandle.get();
-            async::readonly_guard* meshLockGuard = new async::readonly_guard(meshLockPair.first);
-            legion::core::mesh mesh = meshLockPair.second;
-
-            math::ivec2 indices = convexHullFindOuterIndices(mesh);
-            int index0 = indices.x;
-            int index1 = indices.y;
-
-            int index2 = convexHullFindIndexClosestToLine(mesh, index0, index1);
-            math::vec3 normal = normalize(cross((mesh.vertices.at(index1) - mesh.vertices.at(index0)), (mesh.vertices.at(index2) - mesh.vertices.at(index0))));
-
-            //log::debug("plane normal: {}", normal);
-
-            int index3 = convexHullFindIndexClosestToTriangle(mesh, index0, index1, index2, normal);
-
-            if (index3 == mesh.vertices.size())
+            // Step 0 - Create inital hull
+            if (step == 0)
             {
-                log::error("Initial hull, index 3 cannot be found!");
-                return;
-            }
+                auto meshLockPair = meshHandle.get();
+                async::readonly_guard* meshLockGuard = new async::readonly_guard(meshLockPair.first);
+                legion::core::mesh mesh = meshLockPair.second;
 
-            //log::debug("Vertices: {} ; {} ; {} ; {}", mesh.vertices.at(index0), mesh.vertices.at(index1), mesh.vertices.at(index2), mesh.vertices.at(index3));
+                math::ivec2 indices = convexHullFindOuterIndices(mesh);
+                int index0 = indices.x;
+                int index1 = indices.y;
 
-            // map to find the index of a face ptr
-            std::unordered_map<HalfEdgeFace*, int> faceIndexMap;
+                int index2 = convexHullFindIndexClosestToLine(mesh, index0, index1);
+                math::vec3 normal = normalize(cross((mesh.vertices.at(index1) - mesh.vertices.at(index0)), (mesh.vertices.at(index2) - mesh.vertices.at(index0))));
 
-            // Build the initial hull
+                //log::debug("plane normal: {}", normal);
+
+                int index3 = convexHullFindIndexClosestToTriangle(mesh, index0, index1, index2, normal);
+
+                if (index3 == mesh.vertices.size())
+                {
+                    log::error("Initial hull, index 3 cannot be found!");
+                    return;
+                }
+
+                //log::debug("Vertices: {} ; {} ; {} ; {}", mesh.vertices.at(index0), mesh.vertices.at(index1), mesh.vertices.at(index2), mesh.vertices.at(index3));
+
+                // map to find the index of a face ptr
+                //std::unordered_map<HalfEdgeFace*, int> faceIndexMap;
+
+                // Build the initial hull
 #pragma region buildInitalHull
-            vertices.push_back(mesh.vertices.at(index0));
-            vertices.push_back(mesh.vertices.at(index1));
-            vertices.push_back(mesh.vertices.at(index2));
-            vertices.push_back(mesh.vertices.at(index3));
+                vertices.push_back(mesh.vertices.at(index0));
+                vertices.push_back(mesh.vertices.at(index1));
+                vertices.push_back(mesh.vertices.at(index2));
+                vertices.push_back(mesh.vertices.at(index3));
 
-            // Face 0 - edges: 0, 1, 2 - vertices: 0, 1, 2
-            HalfEdgeEdge* edge0 = new HalfEdgeEdge(vertices.at(0));
-            HalfEdgeEdge* edge1 = new HalfEdgeEdge(vertices.at(1));
-            HalfEdgeEdge* edge2 = new HalfEdgeEdge(vertices.at(2));
-            edge0->setNextAndPrevEdge(edge2, edge1);
-            edge1->setNextAndPrevEdge(edge0, edge2);
-            edge2->setNextAndPrevEdge(edge1, edge0);
-            HalfEdgeFace* face012 = new HalfEdgeFace(edge0, normal);
-            // Face 1 - edges: 3, 4, 5 - vertices: 3, 1, 0
-            HalfEdgeEdge* edge3 = new HalfEdgeEdge(vertices.at(3));
-            HalfEdgeEdge* edge4 = new HalfEdgeEdge(vertices.at(1));
-            HalfEdgeEdge* edge5 = new HalfEdgeEdge(vertices.at(0));
-            edge3->setNextAndPrevEdge(edge5, edge4);
-            edge4->setNextAndPrevEdge(edge3, edge5);
-            edge5->setNextAndPrevEdge(edge4, edge3);
-            math::vec3 normal310 = normalize(cross((mesh.vertices.at(index1) - mesh.vertices.at(index3)), (mesh.vertices.at(index0) - mesh.vertices.at(index3))));
-            HalfEdgeFace* face310 = new HalfEdgeFace(edge3, normal310);
-            // Face 2 - edges: 6, 7, 8 - vertices 2, 1, 3
-            HalfEdgeEdge* edge6 = new HalfEdgeEdge(vertices.at(2));
-            HalfEdgeEdge* edge7 = new HalfEdgeEdge(vertices.at(1));
-            HalfEdgeEdge* edge8 = new HalfEdgeEdge(vertices.at(3));
-            edge6->setNextAndPrevEdge(edge8, edge7);
-            edge7->setNextAndPrevEdge(edge6, edge8);
-            edge8->setNextAndPrevEdge(edge7, edge6);
-            math::vec3 normal213 = normalize(cross((mesh.vertices.at(index1) - mesh.vertices.at(index2)), (mesh.vertices.at(index3) - mesh.vertices.at(index2))));
-            HalfEdgeFace* face213 = new HalfEdgeFace(edge6, normal213);
-            // Face 3 - edges: 9, 10, 11 - vertices: 3, 0, 2
-            HalfEdgeEdge* edge9 = new HalfEdgeEdge(vertices.at(3));
-            HalfEdgeEdge* edge10 = new HalfEdgeEdge(vertices.at(0));
-            HalfEdgeEdge* edge11 = new HalfEdgeEdge(vertices.at(2));
-            edge9->setNextAndPrevEdge(edge11, edge10);
-            edge10->setNextAndPrevEdge(edge9, edge11);
-            edge11->setNextAndPrevEdge(edge10, edge9);
-            math::vec3 normal302 = normalize(cross((mesh.vertices.at(index0) - mesh.vertices.at(index3)), (mesh.vertices.at(index2) - mesh.vertices.at(index3))));
-            HalfEdgeFace* face302 = new HalfEdgeFace(edge9, normal302);
+                // Face 0 - edges: 0, 1, 2 - vertices: 0, 1, 2
+                HalfEdgeEdge* edge0 = new HalfEdgeEdge(vertices.at(0));
+                HalfEdgeEdge* edge1 = new HalfEdgeEdge(vertices.at(1));
+                HalfEdgeEdge* edge2 = new HalfEdgeEdge(vertices.at(2));
+                edge0->setNextAndPrevEdge(edge2, edge1);
+                edge1->setNextAndPrevEdge(edge0, edge2);
+                edge2->setNextAndPrevEdge(edge1, edge0);
+                HalfEdgeFace* face012 = new HalfEdgeFace(edge0, normal);
+                // Face 1 - edges: 3, 4, 5 - vertices: 3, 1, 0
+                HalfEdgeEdge* edge3 = new HalfEdgeEdge(vertices.at(3));
+                HalfEdgeEdge* edge4 = new HalfEdgeEdge(vertices.at(1));
+                HalfEdgeEdge* edge5 = new HalfEdgeEdge(vertices.at(0));
+                edge3->setNextAndPrevEdge(edge5, edge4);
+                edge4->setNextAndPrevEdge(edge3, edge5);
+                edge5->setNextAndPrevEdge(edge4, edge3);
+                math::vec3 normal310 = normalize(cross((mesh.vertices.at(index1) - mesh.vertices.at(index3)), (mesh.vertices.at(index0) - mesh.vertices.at(index3))));
+                HalfEdgeFace* face310 = new HalfEdgeFace(edge3, normal310);
+                // Face 2 - edges: 6, 7, 8 - vertices 2, 1, 3
+                HalfEdgeEdge* edge6 = new HalfEdgeEdge(vertices.at(2));
+                HalfEdgeEdge* edge7 = new HalfEdgeEdge(vertices.at(1));
+                HalfEdgeEdge* edge8 = new HalfEdgeEdge(vertices.at(3));
+                edge6->setNextAndPrevEdge(edge8, edge7);
+                edge7->setNextAndPrevEdge(edge6, edge8);
+                edge8->setNextAndPrevEdge(edge7, edge6);
+                math::vec3 normal213 = normalize(cross((mesh.vertices.at(index1) - mesh.vertices.at(index2)), (mesh.vertices.at(index3) - mesh.vertices.at(index2))));
+                HalfEdgeFace* face213 = new HalfEdgeFace(edge6, normal213);
+                // Face 3 - edges: 9, 10, 11 - vertices: 3, 0, 2
+                HalfEdgeEdge* edge9 = new HalfEdgeEdge(vertices.at(3));
+                HalfEdgeEdge* edge10 = new HalfEdgeEdge(vertices.at(0));
+                HalfEdgeEdge* edge11 = new HalfEdgeEdge(vertices.at(2));
+                edge9->setNextAndPrevEdge(edge11, edge10);
+                edge10->setNextAndPrevEdge(edge9, edge11);
+                edge11->setNextAndPrevEdge(edge10, edge9);
+                math::vec3 normal302 = normalize(cross((mesh.vertices.at(index0) - mesh.vertices.at(index3)), (mesh.vertices.at(index2) - mesh.vertices.at(index3))));
+                HalfEdgeFace* face302 = new HalfEdgeFace(edge9, normal302);
 
-            edge0->setPairingEdge(edge4);
-            edge1->setPairingEdge(edge6);
-            edge2->setPairingEdge(edge10);
-            edge3->setPairingEdge(edge7);
-            edge5->setPairingEdge(edge9);
-            edge8->setPairingEdge(edge11);
+                edge0->setPairingEdge(edge4);
+                edge1->setPairingEdge(edge6);
+                edge2->setPairingEdge(edge10);
+                edge3->setPairingEdge(edge7);
+                edge5->setPairingEdge(edge9);
+                edge8->setPairingEdge(edge11);
 
-            // Make sure all the created faces are convex with each other
-            // Also 'repair' them when they are not convex
-            HalfEdgeFace::makeNormalsConvexWithFace(*face012, *face310);
-            HalfEdgeFace::makeNormalsConvexWithFace(*face012, *face213);
-            HalfEdgeFace::makeNormalsConvexWithFace(*face012, *face302);
+                // Make sure all the created faces are convex with each other
+                // Also 'repair' them when they are not convex
+                HalfEdgeFace::makeNormalsConvexWithFace(*face012, *face310);
+                HalfEdgeFace::makeNormalsConvexWithFace(*face012, *face213);
+                HalfEdgeFace::makeNormalsConvexWithFace(*face012, *face302);
 
-            HalfEdgeFace::makeNormalsConvexWithFace(*face310, *face213);
-            HalfEdgeFace::makeNormalsConvexWithFace(*face310, *face302);
+                HalfEdgeFace::makeNormalsConvexWithFace(*face310, *face213);
+                HalfEdgeFace::makeNormalsConvexWithFace(*face310, *face302);
 
-            HalfEdgeFace::makeNormalsConvexWithFace(*face213, *face302);
+                HalfEdgeFace::makeNormalsConvexWithFace(*face213, *face302);
 
-            halfEdgeFaces.push_back(face012);
-            halfEdgeFaces.push_back(face310);
-            halfEdgeFaces.push_back(face213);
-            halfEdgeFaces.push_back(face302);
-            faceIndexMap.emplace(halfEdgeFaces[0], 0);
-            faceIndexMap.emplace(halfEdgeFaces[1], 1);
-            faceIndexMap.emplace(halfEdgeFaces[2], 2);
-            faceIndexMap.emplace(halfEdgeFaces[3], 3);
+                halfEdgeFaces.push_back(face012);
+                halfEdgeFaces.push_back(face310);
+                halfEdgeFaces.push_back(face213);
+                halfEdgeFaces.push_back(face302);
+                faceIndexMap.emplace(halfEdgeFaces[0], 0);
+                faceIndexMap.emplace(halfEdgeFaces[1], 1);
+                faceIndexMap.emplace(halfEdgeFaces[2], 2);
+                faceIndexMap.emplace(halfEdgeFaces[3], 3);
 #pragma endregion buildInitalHull
-            // End of building the initial hull
+                // End of building the initial hull
 
-            std::vector<math::vec3> toBeSorted;
-            for (int i = 0; i < mesh.vertices.size(); ++i)
-            {
-                bool skipVert = false;
-                for (int j = 0; j < vertices.size(); ++j)
-                    if (mesh.vertices[i] == vertices[j]) skipVert = true;
-                if (skipVert) continue;
+                for (int i = 0; i < mesh.vertices.size(); ++i)
+                {
+                    bool skipVert = false;
+                    for (int j = 0; j < vertices.size(); ++j)
+                        if (mesh.vertices[i] == vertices[j]) skipVert = true;
+                    if (skipVert) continue;
 
-                toBeSorted.push_back(mesh.vertices.at(i));
+                    toBeSorted.push_back(mesh.vertices.at(i));
+                }
+
+                delete meshLockGuard;
+                meshLockGuard = nullptr;
+                // From here the mesh may no longer be used
+
             }
+            // end of Step 0 - Create inital hull
 
-            delete meshLockGuard;
-            meshLockGuard = nullptr;
-            // From here the mesh may no longer be used
-            std::vector<std::vector<math::vec3>> faceVertMap;// = convexHullMatchVerticesToFace(toBeSorted);
-
-            int looped = 0;
-            while (true)
+            // Step 1 and up, add a vert to the hull
+            if (step == 0) return;
+            while (looped < step)
             {
-                //log::debug("------------------------------------------------\n\t\t\t\t\t\tStarting loop {}", looped);
+                log::debug("------------------------------------------------\n\t\t\t\t\t\tStarting loop {}", looped);
 
                 /*for (int i = 0; i < toBeSorted.size(); ++i)
                 {
@@ -225,41 +240,14 @@ namespace legion::physics
                 std::deque<HalfEdgeEdge*> edges;
                 // The selected vert needs to be merged into the hull
                 convexHullConstructHorizon(faceVertMap.at(faceIndex).at(vertIndex), *halfEdgeFaces.at(faceIndex), edges);
-
-                //log::debug("\n-----------------------------------------------------------------------------------------------------\n\t\t\t\t\t\tCreating new faces");
-                // Debug information
-                //log::debug("From viewpoint: {}", faceVertMap.at(faceIndex).at(vertIndex));
-                /*for (int i = 0; i < edges.size(); ++i)
+                log::debug("VERT TO MERGE: {}", faceVertMap.at(faceIndex).at(vertIndex));
+                auto printStuffs = [](HalfEdgeEdge* edge)
                 {
-                    log::debug("Found edge from {}, to {}, with face {}", edges.at(i)->edgePosition, edges.at(i)->nextEdge->edgePosition, faceIndexMap.at(edges.at(i)->face));
-                }*/
-                // Debug stuffs
-                //if (looped == 4)
-                //{
-                //    log::debug("--------------------------------------\n\t\t\t\t\t\tLoop completed!");
-                //    for (int i = 0; i < vertices.size(); ++i)
-                //    {
-                //        log::debug("Vert [{}]: {}", i, vertices.at(i));
-                //    }
-                //    for (int i = 0; i < halfEdgeFaces.size(); ++i)
-                //    {
-                //        log::debug("Face [{}], with normal {}", i, halfEdgeFaces.at(i)->normal);
-                //        int count = halfEdgeFaces.at(i)->edgeCount();
-                //        for (int e = 0; e < count; ++e)
-                //        {
-                //            HalfEdgeEdge* edge = halfEdgeFaces.at(i)->getEdgeN(e);
-                //            log::debug("\tEdge [{}]: {}", e, edge->edgePosition);
-                //            //log::debug("\t\tPairing Edge: from {} to {}", edge->pairingEdge->edgePosition , edge->pairingEdge->nextEdge->edgePosition);
-                //            if (edge->pairingEdge)
-                //            {
-                //                if (edge->pairingEdge->nextEdge)
-                //                    if (edge->pairingEdge->nextEdge->edgePosition != edge->edgePosition)
-                //                        log::debug("\t\tPairing Edge: from {} to {}", edge->pairingEdge->edgePosition, edge->pairingEdge->nextEdge->edgePosition);
-                //            }
-                //        }
-                //    }
-                //    break;
-                //}
+                    log::debug("{}", edge->edgePosition);
+                };
+                log::debug("Matched face: ");
+                halfEdgeFaces.at(faceIndex)->forEachEdge(printStuffs);
+                log::debug("FOUND {} EDGES", edges.size());
 
                 HalfEdgeEdge* firstEdge = nullptr;
                 HalfEdgeEdge* pairingEdge = nullptr;
@@ -268,7 +256,7 @@ namespace legion::physics
                 // Create new faces for each edge
                 for (int i = 0; i < edges.size(); ++i)
                 {
-                    //log::debug("Edge [{}]: from {}, to {}", i, edges.at(i)->edgePosition, edges.at(i)->nextEdge->edgePosition);
+                    log::debug("Edge [{}]: from {}, to {}", i, edges.at(i)->edgePosition, edges.at(i)->nextEdge->edgePosition);
                     //log::debug("Pairing Edge from {}, to {}", edges.at(i)->pairingEdge->edgePosition, edges.at(i)->pairingEdge->nextEdge->edgePosition);
                     facesToBeDeleted.try_emplace(edges.at(i)->face, edges.at(i));
                     // We need to create a copy of the edge edges.at(i), because we still need to delete the old face and old edges later
@@ -323,13 +311,6 @@ namespace legion::physics
                 // Delete the edges and faces
                 for (auto& f : facesToBeDeleted)
                 {
-                    //log::debug("\n\t\t\t\t\t\tDeleting Face with normal: {}", f.first->normal);
-                    int count = f.first->edgeCount();
-                    for (int e = 0; e < count; ++e)
-                    {
-                        HalfEdgeEdge* edge = f.first->getEdgeN(e);
-                        //log::debug("\tEdge [{}]: {}", e, edge->edgePosition);
-                    }
                     //f.first->deleteEdges();
                     halfEdgeFaces.erase(std::remove(halfEdgeFaces.begin(), halfEdgeFaces.end(), f.first), halfEdgeFaces.end());
                     faceIndexMap.erase(faceIndexMap.find(f.first));
@@ -337,47 +318,31 @@ namespace legion::physics
                 }
                 //log::debug("Face count: {}", halfEdgeFaces.size());
 
-                // Merge faces with coplanerity
-                for (int i = createdFaces.size()-1; i >= 0; --i)
+                for (int i = createdFaces.size() - 1; i >= 0; --i)
                 {
-                    for (int j = 0; j < halfEdgeFaces.size(); ++j)
-                    {
-                        // Do not check if createdFace is halfEdgeFace, because the createdFaces are not yet added to the halfEdgeFaces list
-                        /*log::debug(createdFaces.at(i)->startEdge->edgePosition);
-                        log::debug(halfEdgeFaces.at(j)->startEdge->edgePosition);*/
-                        HalfEdgeFace::face_angle_relation relation0 = createdFaces.at(i)->getAngleRelation(*halfEdgeFaces.at(j));
-                        //HalfEdgeFace::face_angle_relation relation1 = halfEdgeFaces.at(j)->getAngleRelation(*createdFaces.at(i));
-                        if (relation0 == HalfEdgeFace::face_angle_relation::coplaner)
-                        {
-                            HalfEdgeEdge* centerEdge = HalfEdgeFace::findMiddleEdge(*halfEdgeFaces.at(j), *createdFaces.at(i));
-                            if (centerEdge != nullptr)
-                            {
-                                HalfEdgeFace* face = HalfEdgeFace::mergeFaces(*centerEdge);
-                                createdFaces.erase(createdFaces.begin() + i);
-                                //log::debug("Merging faces");
-                                break;
-                            }
-                        }
-                    }
+                    log::debug("Created face {}, {}, {}, {}", i, createdFaces.at(i)->startEdge->edgePosition, createdFaces.at(i)->startEdge->nextEdge->edgePosition, createdFaces.at(i)->startEdge->prevEdge->edgePosition);
                 }
 
+                convexHullMergeFaces(createdFaces);
+
                 // Make sure all the normals are correct
+                // It seems that making the faces convex with each other is not necesarry in 3D
                 for (int i = 0; i < createdFaces.size(); ++i)
                 {
                     faceIndexMap.emplace(createdFaces.at(i), halfEdgeFaces.size());
                     halfEdgeFaces.push_back(createdFaces.at(i));
-                    for (int j = i + 1; j < createdFaces.size(); ++j)
-                    {
-                        bool convexity = !HalfEdgeFace::makeNormalsConvexWithFace(*createdFaces.at(i), *createdFaces.at(j));
-                        //log::debug("Convexity for {} and {}: {}", i, j, convexity);
-                    }
+                    //for (int j = i + 1; j < createdFaces.size(); ++j)
+                    //{
+                    //    bool convexity = !HalfEdgeFace::makeNormalsConvexWithFace(*createdFaces.at(i), *createdFaces.at(j));
+                    //    //log::debug("Convexity for {} and {}: {}", i, j, convexity);
+                    //}
                 }
 
                 ++looped;
             }
 
 
-            AssertEdgeValidity();
+            //AssertEdgeValidity();
         }
 
 		/**@brief Constructs a box-shaped convex hull that encompasses the given mesh.
@@ -659,15 +624,42 @@ namespace legion::physics
             // min x, max x, min y, max y, min z, max z
             // The array is initialized with the first vertex
             float outer[] = { first.x, first.x, first.y, first.y, first.z, first.z };
+            int indices[] = { 0,0,0,0,0,0 };
             for (int i = 1; i < mesh.vertices.size(); ++i)
             {
-                if (mesh.vertices.at(i).x < outer[0]) outer[0] = i;
-                else if (mesh.vertices.at(i).x > outer[1]) outer[1] = i;
-                if (mesh.vertices.at(i).y < outer[2]) outer[2] = i;
-                else if (mesh.vertices.at(i).y > outer[3]) outer[3] = i;
-                if (mesh.vertices.at(i).z < outer[4]) outer[4] = i;
-                else if (mesh.vertices.at(i).z > outer[5]) outer[5] = i;
+                if (mesh.vertices.at(i).x < outer[0])
+                {
+                    outer[0] = mesh.vertices.at(i).x;
+                    indices[0] = i;
+                }
+                else if (mesh.vertices.at(i).x > outer[1])
+                {
+                    outer[1] = mesh.vertices.at(i).x;
+                    indices[1] = i;
+                }
+                if (mesh.vertices.at(i).y < outer[2])
+                {
+                    outer[2] = mesh.vertices.at(i).y;
+                    indices[2] = i;
+                }
+                else if (mesh.vertices.at(i).y > outer[3])
+                {
+                    outer[3] = mesh.vertices.at(i).y;
+                    indices[3] = i;
+                }
+                if (mesh.vertices.at(i).z < outer[4])
+                {
+                    outer[4] = mesh.vertices.at(i).z;
+                    indices[4] = i;
+                }
+                else if (mesh.vertices.at(i).z > outer[5])
+                {
+                    outer[5] = mesh.vertices.at(i).z;
+                    indices[5] = i;
+                }
             }
+
+            log::debug("Outer: x{}, x{}, y{}, y{}, z{}, z{}", outer[0], outer[1], outer[2], outer[3], outer[4], outer[5]);
 
             // Check if it is a plane, min == max
 
@@ -679,11 +671,11 @@ namespace legion::physics
             {
                 for (int j = i; j < 6; ++j)
                 {
-                    float dist = distance(mesh.vertices[i], mesh.vertices[j]);
+                    float dist = distance(mesh.vertices[indices[i]], mesh.vertices[indices[j]]);
                     if (dist > largestDistance)
                     {
-                        index0 = i;
-                        index1 = j;
+                        index0 = indices[i];
+                        index1 = indices[j];
                         largestDistance = dist;
                     }
                 }
@@ -758,6 +750,13 @@ namespace legion::physics
          * std::deque<std::vector<int>>.at(index) gets the list of vertices that are matched to face at targeted index in the halfEdgeFaces list
          * std::vector<int>.at(index) gets the vertex
          */
+
+        // TODO / TO DO / ERROR
+        // THE ERROR IN MY CODE THAT DOES NOT GENERATE THE HULL CORRECTLY IS IN THIS PART
+        // OR AT LEAST, THE LAST VERT (FOR THE CURRENT MESH) DOES NOT GET MATCHED WITH THE CORRECT FACE
+        // EXPECTATION OF ERROR:
+        //      I EXPECT THAT BECAUSE IT TAKES THE DISTANCE TOWARDS A TRIANGLE IT HAS A WRONG DISTANCE WHEN IT COMES TO FACES WITH MORE THAN 3 SIDES
+
         std::vector<std::vector<math::vec3>> convexHullMatchVerticesToFace(std::vector<math::vec3>& vertices)
         {
             std::vector<std::vector<math::vec3>> map = std::vector<std::vector<math::vec3>>(halfEdgeFaces.size());
@@ -773,7 +772,7 @@ namespace legion::physics
                     // Get the distances to the face
                     HalfEdgeEdge* startEdge = halfEdgeFaces.at(f)->startEdge;
                     float distance = math::pointToTriangle(vertices.at(i), startEdge->edgePosition, startEdge->nextEdge->edgePosition, startEdge->prevEdge->edgePosition, halfEdgeFaces.at(f)->normal);
-                    if (distance > 0.f && distance < smallestDistance)
+                    if (distance > -math::epsilon<float>() && distance < smallestDistance)
                     {
                         faceIndex = f;
                         smallestDistance = distance;
@@ -826,66 +825,104 @@ namespace legion::physics
             } while (edge != start);
         }
 
-        /**@brief Constructs a horizon for a given vertex starting at face index faceIndex
-         * The function assumes that the passed faceIndex is correct and will not check if the point is visible from the face
-         * @param vert - The Vertex which a horizon needs be found
-         * @param face - Face that starts the horizon
-         */
-        void convexHullFindHorizon(math::vec3 vert, HalfEdgeFace& face, std::deque<HalfEdgeEdge*>& edges, HalfEdgeEdge* originEdge = nullptr, HalfEdgeFace* originFace = nullptr)
+        void convexHullMergeFaces(std::vector<HalfEdgeFace*>& createdFaces)
         {
-            if (&face == originFace) return;
-            if (originFace == nullptr) originFace = &face;
-            std::vector<bool> horizonEdges = convexHullFindHorizonEdgesForFace(vert, -1, face);
-            for (int i = 0; i < face.edgeCount(); ++i)
+            if (looped == 4)
             {
-                if (originEdge == face.getEdgeN(i)) continue;
-                if (horizonEdges.at(i))
+                log::debug("Not merging!");
+                return;
+            }
+
+            for (int i = createdFaces.size() - 1; i >= 0; --i)
+            {
+                log::debug("Created face {}, {}, {}, {}", i, createdFaces.at(i)->startEdge->edgePosition, createdFaces.at(i)->startEdge->nextEdge->edgePosition, createdFaces.at(i)->startEdge->prevEdge->edgePosition);
+            }
+
+            auto printPositions = [](HalfEdgeEdge* edge)
+            {
+                log::debug("{}", edge->edgePosition);
+            };
+
+            bool looping = false;
+            // Merge faces with coplanerity
+            for (int i = createdFaces.size() - 1; i >= 0; --i)
+            {
+                for (int j = 0; j < halfEdgeFaces.size(); ++j)
                 {
-                    // Handle horizon edge
-                    edges.push_back(face.getEdgeN(i));
+                    // Do not check if createdFace is halfEdgeFace, because the createdFaces are not yet added to the halfEdgeFaces list
+                    /*log::debug(createdFaces.at(i)->startEdge->edgePosition);
+                    log::debug(halfEdgeFaces.at(j)->startEdge->edgePosition);*/
+                    HalfEdgeFace::face_angle_relation relation0 = createdFaces.at(i)->getAngleRelation(*halfEdgeFaces.at(j));
+                    //HalfEdgeFace::face_angle_relation relation1 = halfEdgeFaces.at(j)->getAngleRelation(*createdFaces.at(i));
+                    //log::debug("Relation between faces: {}", HalfEdgeFace::to_string(relation0));
+                    if (relation0 == HalfEdgeFace::face_angle_relation::coplaner)
+                    {
+                        HalfEdgeEdge* centerEdge = HalfEdgeFace::findMiddleEdge(*halfEdgeFaces.at(j), *createdFaces.at(i));
+                        if (centerEdge != nullptr)
+                        {
+                            log::debug("Merging Faces");
+                            HalfEdgeFace* face = HalfEdgeFace::mergeFaces(*centerEdge);
+                            assert(face == halfEdgeFaces.at(j));
+                            face->forEachEdge(printPositions);
+                            createdFaces.erase(createdFaces.begin() + i);
+                            looping = true;
+                            //log::debug("Merging faces");
+                            break;
+                        }
+                        //else log::debug("Center edge is nullptr");
+                    }
                 }
-                else
+            }
+
+            for (int i = createdFaces.size() - 1; i >= 0; --i)
+            {
+                log::debug("Created face {}, {}, {}, {}", i, createdFaces.at(i)->startEdge->edgePosition, createdFaces.at(i)->startEdge->nextEdge->edgePosition, createdFaces.at(i)->startEdge->prevEdge->edgePosition);
+            }
+
+            while (looping)
+            {
+                looping = false;
+                log::debug("Looping through faces");
+
+                for (int i = createdFaces.size() - 1; i >= 0; --i)
                 {
-                    // Handle non-horizon edge
-                    convexHullFindHorizon(vert, *face.getEdgeN(i)->pairingEdge->face, edges, face.getEdgeN(i)->pairingEdge, originFace);
+                    for (int j = 0; j < halfEdgeFaces.size(); ++j)
+                    {
+                        // Do not check if createdFace is halfEdgeFace, because the createdFaces are not yet added to the halfEdgeFaces list
+                        /*log::debug(createdFaces.at(i)->startEdge->edgePosition);
+                        log::debug(halfEdgeFaces.at(j)->startEdge->edgePosition);*/
+                        HalfEdgeFace::face_angle_relation relation0 = createdFaces.at(i)->getAngleRelation(*halfEdgeFaces.at(j));
+                        //HalfEdgeFace::face_angle_relation relation1 = halfEdgeFaces.at(j)->getAngleRelation(*createdFaces.at(i));
+                        log::debug("Relation between faces: {}", HalfEdgeFace::to_string(relation0));
+                        if (relation0 == HalfEdgeFace::face_angle_relation::coplaner)
+                        {
+                            HalfEdgeEdge* centerEdge = HalfEdgeFace::findMiddleEdge(*halfEdgeFaces.at(j), *createdFaces.at(i));
+                            if (centerEdge != nullptr)
+                            {
+                                log::debug("Merging Faces");
+                                HalfEdgeFace* face = HalfEdgeFace::mergeFaces(*centerEdge);
+                                assert(face == halfEdgeFaces.at(j));
+                                createdFaces.erase(createdFaces.begin() + i);
+                                looping = true;
+                                //log::debug("Merging faces");
+                                break;
+                            }
+                            else log::debug("Center edge is nullptr");
+                        }
+                    }
                 }
             }
         }
 
-        /**@brief Finds the horizonEdges of a face for a vertex
-         * @param vert - The vertex for which the horizon is found
-         * @param originEdge - An edge that may have been passed in a past cycle, this edge index is skipped
-         * @param face - The face which edges needs to be checked
-         * @return List of booleans, true or false for each of the face. True when it is a horizon edge, false if not
-         */
-        std::vector<bool> convexHullFindHorizonEdgesForFace(math::vec3 vert, int originEdge, HalfEdgeFace& face)
-        {
-            std::vector<bool> edges;
-            HalfEdgeEdge* current = face.startEdge;
-            int edgeIndex = 0;
-            do
-            {
-                if (edgeIndex != originEdge)
-                {
-                    if (math::pointToPlane(vert, current->pairingEdge->edgePosition, current->pairingEdge->face->normal) < 0.0f)
-                    {
-                        // Check if vert is under the plane face
-                        // Because the hull is closed and convex we can assume that if the vert is under the plane the plane is not visible from the vert
-                        // Because of this, the edge that we crossed is a horizon edge
-                        edges.push_back(true);
-                    }
-                    else edges.push_back(false);
-                }
-
-                ++edgeIndex;
-                current = current->nextEdge;
-            } while (current != face.startEdge);
-
-            return edges;
-        }
-
         std::vector<math::vec3> vertices;
         std::vector<HalfEdgeFace*> halfEdgeFaces;
+
+        // Convex hull generation debug stuffs
+        int step = 0;
+        std::vector<math::vec3> toBeSorted;
+        std::vector<std::vector<math::vec3>> faceVertMap;
+        std::unordered_map<HalfEdgeFace*, int> faceIndexMap;
+        int looped = 0;
 
         //feature id container
 	};

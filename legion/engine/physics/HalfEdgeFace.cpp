@@ -82,31 +82,8 @@ namespace legion::physics
             currentEdge = currentEdge->nextEdge;
             functionToExecute(edgeToExecuteOn);
 
-        } while (initialEdge != currentEdge && currentEdge != nullptr);
+        } while (initialEdge != currentEdge && currentEdge->nextEdge != nullptr);
 
-    }
-
-    int HalfEdgeFace::edgeCount() const
-    {
-        int count = 0;
-        HalfEdgeEdge* current = startEdge;
-        do
-        {
-            ++count;
-            current = current->nextEdge;
-        } while (current != nullptr && current != startEdge);
-
-        return count;
-    }
-
-    HalfEdgeEdge* HalfEdgeFace::getEdgeN(int n)
-    {
-        HalfEdgeEdge* edge = startEdge;
-        for (; n > 0; --n)
-        {
-            edge = edge->nextEdge;
-        }
-        return edge;
     }
 
     void HalfEdgeFace::inverse()
@@ -219,18 +196,34 @@ namespace legion::physics
             HalfEdgeEdge* secondCurrent = second.startEdge;
             do
             {
-                if (firstCurrent->pairingEdge == secondCurrent) return firstCurrent;
+                if (firstCurrent->pairingEdge == secondCurrent)
+                {
+                    log::debug("firstCurrent->pairingEdge == secondCurrent");
+                    return firstCurrent;
+                }
+                if (firstCurrent == secondCurrent->pairingEdge)
+                {
+                    log::debug("firstCurrent == secondCurrent->pairingEdge");
+                    return firstCurrent;
+                }
 
                 secondCurrent = secondCurrent->nextEdge;
-            } while (secondCurrent != nullptr && secondCurrent != second.startEdge);
+            } while (secondCurrent != second.startEdge);
             firstCurrent = firstCurrent->nextEdge;
-        } while (firstCurrent != nullptr && firstCurrent != first.startEdge);
+        } while (firstCurrent != first.startEdge);
 
         return nullptr;
     }
 
     HalfEdgeFace* HalfEdgeFace::mergeFaces(HalfEdgeEdge& middleEdge)
     {
+        assert(middleEdge.nextEdge != nullptr);
+        assert(middleEdge.prevEdge != nullptr);
+        assert(middleEdge.pairingEdge != nullptr);
+        assert(middleEdge.pairingEdge->nextEdge != nullptr);
+        assert(middleEdge.pairingEdge->prevEdge != nullptr);
+        assert(middleEdge.nextEdge->nextEdge != &middleEdge);
+
         if (middleEdge.face->startEdge == &middleEdge)
         {
             middleEdge.face->startEdge = middleEdge.face->startEdge->prevEdge;
@@ -239,7 +232,7 @@ namespace legion::physics
         /*middleEdge.pairingEdge->nextEdge->face = middleEdge.face;
         middleEdge.pairingEdge->prevEdge->face = middleEdge.face;*/
         HalfEdgeEdge* end = middleEdge.pairingEdge;
-        HalfEdgeEdge* current = middleEdge.pairingEdge->nextEdge;
+        HalfEdgeEdge* current = middleEdge.pairingEdge;
         do
         {
             current->face = middleEdge.face;
@@ -272,49 +265,20 @@ namespace legion::physics
 
         // Clean up all the memory of the damaged edges and face
         // Damaged in the sense that they no longer point to anything and the face exists of only one edge
+
+        // Currently not cleaning memory because of bug fixing
+        // PLEASE DO NOT ALLOW THIS CODE PASSED PULL REQUEST - THE MEMORY NEEDS TO BE CLEANED UP!
+
         /*middleEdge.pairingEdge->face->startEdge = nullptr;
-        middleEdge.pairingEdge->face = nullptr;
         middleEdge.pairingEdge->pairingEdge = nullptr;*/
-        //delete middleEdge.pairingEdge->face;
         //delete middleEdge.pairingEdge;
         //middleEdge.pairingEdge = nullptr;
+
+        //middleEdge.pairingEdge->face->startEdge = nullptr;
+        //delete middleEdge.pairingEdge->face;
         //delete& middleEdge;
 
         return face;
-
-        //return face;
-        
-        //middleEdge.face->startEdge = middleEdge.prevEdge;
-        //HalfEdgeEdge* start = middleEdge.pairingEdge->face->startEdge;
-        //HalfEdgeEdge* current = middleEdge.pairingEdge->face->startEdge;
-        //do
-        //{
-        //    current->face = middleEdge.face;
-        //    current = current->nextEdge;
-        //} while (current != start);
-
-        //HalfEdgeEdge* prev = middleEdge.prevEdge;
-        //start = middleEdge.pairingEdge->nextEdge;
-        //current = middleEdge.pairingEdge->nextEdge;
-        //do
-        //{
-        //    prev->nextEdge = current;
-        //    current->prevEdge = prev;
-        //    prev = current;
-        //    current = current->nextEdge;
-        //} while (current != nullptr && current != start);
-        //middleEdge.nextEdge->prevEdge = middleEdge.pairingEdge->prevEdge;
-        //middleEdge.pairingEdge->prevEdge->nextEdge = middleEdge.nextEdge;
-
-        //HalfEdgeFace* face = middleEdge.face;
-
-        //// Clean up all the memory
-        //middleEdge.pairingEdge->face->startEdge = nullptr;
-        //delete middleEdge.pairingEdge->face;
-        //delete middleEdge.pairingEdge;
-        //delete& middleEdge;
-
-        //return face;
     }
 
     HalfEdgeFace::~HalfEdgeFace()
