@@ -21,6 +21,7 @@
     <ClCompile Include="data\renderbuffer.cpp" />
     <ClCompile Include="data\shader.cpp" />
     <ClCompile Include="data\texture.cpp" />
+    <ClCompile Include="data\vertexarray.cpp" />
     <ClCompile Include="pipeline\base\pipelinebase.cpp" />
     <ClCompile Include="pipeline\base\renderstage.cpp" />
     <ClCompile Include="pipeline\default\defaultpipeline.cpp" />
