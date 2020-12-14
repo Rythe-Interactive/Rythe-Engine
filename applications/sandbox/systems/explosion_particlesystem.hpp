@@ -1,7 +1,7 @@
 #pragma once
 #include <rendering/data/particle_system_base.hpp>
 
-#include <rendering/systems/newrenderer.hpp>
+#include <rendering/systems/renderer.hpp>
 
 using namespace legion;
 /**

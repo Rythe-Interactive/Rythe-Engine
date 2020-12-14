@@ -43,6 +43,7 @@
     <ClCompile Include="pipeline\default\stages\meshbatchingstage.cpp" />
     <ClCompile Include="pipeline\default\stages\meshrenderstage.cpp" />
     <ClCompile Include="pipeline\default\stages\submitstage.cpp" />
+    <ClCompile Include="pipeline\gui\stages\imguirenderstage.cpp" />
     <ClCompile Include="shadercompiler\shadercompiler.cpp" />
     <ClCompile Include="data\particle_system_base.cpp" />
     <ClCompile Include="systems\renderer.cpp" />
@@ -55,6 +56,7 @@
     <ClInclude Include="components\particle_emitter.hpp" />
     <ClInclude Include="components\point_cloud.hpp" />
     <ClInclude Include="pipeline\base\pipeline.hpp" />
+    <ClInclude Include="pipeline\gui\stages\imguirenderstage.hpp" />
     <ClInclude Include="systems\pointcloudgeneration.hpp" />
     <ClInclude Include="components\renderable.hpp" />
     <ClInclude Include="data\buffer.hpp" />
@@ -70,7 +72,6 @@
     <ClInclude Include="detail\tiny_obj_loader.h" />
     <ClInclude Include="data\model.hpp" />
     <ClInclude Include="data\texture.hpp" />
-    <ClInclude Include="systems\imgui_gui_system.hpp" />
     <ClInclude Include="pipeline\default\defaultpipeline.hpp" />
     <ClInclude Include="pipeline\default\stages\clearstage.hpp" />
     <ClInclude Include="pipeline\default\stages\framebufferresizestage.hpp" />

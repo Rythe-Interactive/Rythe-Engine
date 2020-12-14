@@ -1,264 +1,91 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="components\light.cpp" />
+    <ClCompile Include="data\buffer.cpp" />
+    <ClCompile Include="data\framebuffer.cpp" />
+    <ClCompile Include="data\importers\texture_importers.cpp" />
+    <ClCompile Include="data\material.cpp" />
+    <ClCompile Include="data\model.cpp" />
+    <ClCompile Include="data\particle_system_cache.cpp" />
+    <ClCompile Include="data\renderbuffer.cpp" />
+    <ClCompile Include="data\shader.cpp" />
+    <ClCompile Include="data\texture.cpp" />
+    <ClCompile Include="imgui_impl\ImCurveEdit.cpp" />
+    <ClCompile Include="imgui_impl\ImGradient.cpp" />
+    <ClCompile Include="imgui_impl\imgui.cpp" />
+    <ClCompile Include="imgui_impl\ImGuiFileBrowser.cpp" />
+    <ClCompile Include="imgui_impl\ImGuizmo.cpp" />
+    <ClCompile Include="imgui_impl\imgui_demo.cpp" />
+    <ClCompile Include="imgui_impl\imgui_draw.cpp" />
+    <ClCompile Include="imgui_impl\imgui_impl_glfw.cpp" />
+    <ClCompile Include="imgui_impl\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="imgui_impl\imgui_widgets.cpp" />
+    <ClCompile Include="imgui_impl\imnodes.cpp" />
+    <ClCompile Include="imgui_impl\ImSequencer.cpp" />
+    <ClCompile Include="data\vertexarray.cpp" />
+    <ClCompile Include="pipeline\base\pipelinebase.cpp" />
+    <ClCompile Include="pipeline\base\renderstage.cpp" />
+    <ClCompile Include="pipeline\default\defaultpipeline.cpp" />
+    <ClCompile Include="pipeline\default\stages\clearstage.cpp" />
+    <ClCompile Include="pipeline\default\stages\framebufferresizestage.cpp" />
+    <ClCompile Include="pipeline\default\stages\lightbufferstage.cpp" />
+    <ClCompile Include="pipeline\default\stages\meshbatchingstage.cpp" />
+    <ClCompile Include="pipeline\default\stages\meshrenderstage.cpp" />
+    <ClCompile Include="pipeline\default\stages\submitstage.cpp" />
+    <ClCompile Include="shadercompiler\shadercompiler.cpp" />
+    <ClCompile Include="data\particle_system_base.cpp" />
+    <ClCompile Include="systems\renderer.cpp" />
+    <ClCompile Include="util\ini.c" />
+    <ClCompile Include="pipeline\gui\stages\imguirenderstage.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="data\importers\texture_importers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="data\texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="data\model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="data\material.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="shadercompiler\shadercompiler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="data\shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="components\light.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="util\ini.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="data\particle_system_base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="data\particle_system_cache.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl\imgui.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl\imgui_demo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl\imgui_draw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl\imgui_impl_glfw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl\imgui_impl_opengl3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl\imgui_widgets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl\ImCurveEdit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl\ImGradient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl\ImGuizmo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl\ImSequencer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl\imnodes.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl\ImGuiFileBrowser.cpp">
-    <ClCompile Include="pipeline\default\defaultpipeline.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pipeline\default\stages\meshrenderstage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pipeline\default\stages\clearstage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pipeline\default\stages\submitstage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pipeline\base\renderstage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pipeline\default\stages\lightbufferstage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pipeline\default\stages\meshbatchingstage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pipeline\default\stages\framebufferresizestage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pipeline\base\pipelinebase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="data\buffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="data\framebuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="data\renderbuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="data\vertexarray.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="systems\renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="components\camera.hpp" />
+    <ClInclude Include="components\light.hpp" />
+    <ClInclude Include="components\particle.hpp" />
+    <ClInclude Include="components\particle_emitter.hpp" />
+    <ClInclude Include="components\point_cloud.hpp" />
+    <ClInclude Include="pipeline\base\pipeline.hpp" />
+    <ClInclude Include="systems\pointcloudgeneration.hpp" />
+    <ClInclude Include="components\renderable.hpp" />
+    <ClInclude Include="data\buffer.hpp" />
+    <ClInclude Include="data\framebuffer.hpp" />
+    <ClInclude Include="data\importers\texture_importers.hpp" />
+    <ClInclude Include="data\material.hpp" />
+    <ClInclude Include="data\particle_system_cache.hpp" />
+    <ClInclude Include="data\renderbuffer.hpp" />
+    <ClInclude Include="data\shader.hpp" />
+    <ClInclude Include="data\vertexarray.hpp" />
+    <ClInclude Include="debugrendering.hpp" />
+    <ClInclude Include="detail\stb_image.h" />
+    <ClInclude Include="detail\tiny_obj_loader.h" />
+    <ClInclude Include="data\model.hpp" />
+    <ClInclude Include="data\texture.hpp" />
+    <ClInclude Include="pipeline\default\defaultpipeline.hpp" />
+    <ClInclude Include="pipeline\default\stages\clearstage.hpp" />
+    <ClInclude Include="pipeline\default\stages\framebufferresizestage.hpp" />
+    <ClInclude Include="pipeline\default\stages\lightbufferstage.hpp" />
+    <ClInclude Include="pipeline\default\stages\meshbatchingstage.hpp" />
+    <ClInclude Include="pipeline\default\stages\meshrenderstage.hpp" />
+    <ClInclude Include="pipeline\default\stages\submitstage.hpp" />
+    <ClInclude Include="systems\renderer.hpp" />
+    <ClInclude Include="systems\particle_system_manager.hpp" />
+    <ClInclude Include="module\renderingmodule.hpp" />
+    <ClInclude Include="pipeline\base\pipelinebase.hpp" />
+    <ClInclude Include="pipeline\base\renderstage.hpp" />
+    <ClInclude Include="rendering.hpp" />
+    <ClInclude Include="shadercompiler\shadercompiler.hpp" />
+    <ClInclude Include="data\particle_system_base.hpp" />
+    <ClInclude Include="systems\pointcloud_particlesystem.hpp" />
+    <ClInclude Include="util\bindings.hpp" />
+    <ClInclude Include="util\matini.hpp" />
+    <ClInclude Include="util\settings.hpp" />
+    <ClInclude Include="pipeline\gui\stages\imguirenderstage.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="module\renderingmodule.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="rendering.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\texture.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="detail\tiny_obj_loader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="detail\stb_image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\importers\texture_importers.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="components\renderable.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="components\camera.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\shader.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\model.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\material.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="debugrendering.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pipeline\base\renderstage.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="shadercompiler\shadercompiler.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="util\settings.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="util\bindings.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="components\light.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="util\matini.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="components\particle.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="components\particle_emitter.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\particle_system_cache.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\particle_system_base.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\particle_system_manager.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\imgui_gui_system.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\framebuffer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\renderbuffer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pipeline\default\defaultpipeline.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pipeline\default\stages\meshrenderstage.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pipeline\default\stages\clearstage.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pipeline\default\stages\submitstage.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\vertexarray.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\buffer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pipeline\default\stages\lightbufferstage.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pipeline\default\stages\meshbatchingstage.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pipeline\default\stages\framebufferresizestage.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pipeline\base\pipelinebase.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pipeline\base\pipeline.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\renderer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="pipeline\base\pipeline.inl">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="pipeline\base\renderstage.inl">
-      <Filter>Header Files</Filter>
-    </None>
-    <ClInclude Include="components\point_cloud.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\pointcloudgeneration.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\pointcloud_particlesystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <None Include="data\buffer.inl">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="systems\renderer.inl">
-      <Filter>Header Files</Filter>
-    </None>
+    <None Include="data\buffer.inl" />
+    <None Include="pipeline\base\pipeline.inl" />
+    <None Include="pipeline\base\renderstage.inl" />
+    <None Include="systems\renderer.inl" />
   </ItemGroup>
 </Project>

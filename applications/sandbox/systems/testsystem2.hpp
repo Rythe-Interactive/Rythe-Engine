@@ -1,25 +1,18 @@
 #pragma once
 #include <core/core.hpp>
 #include <application/application.hpp>
-#include <core/filesystem/filesystem.hpp>
 #include <rendering/data/material.hpp>
 #include <core/logging/logging.hpp>
 #include <imgui/ImGuizmo.h>
-#include <imgui/imnodes.h>
-#include <rendering/debugrendering.hpp>
-
-#include <rendering/components/renderable.hpp>
-
-#include <Voro++/voro++.hh>
 
 #include <rendering/systems/pointcloud_particlesystem.hpp>
 #include "explosion_particlesystem.hpp"
 
-#include <rendering/systems/pointcloud_particlesystem.hpp>
 #include <rendering/components/particle_emitter.hpp>
 #include <imgui/ImGuiFileBrowser.h>
+#include <imgui/imnodes.h>
 
-#include <physics/physics_statics.hpp>
+#include <rendering/pipeline/gui/stages/imguirenderstage.hpp>
 
 
 using namespace legion;
@@ -192,10 +185,10 @@ public:
             createProcess<&TestSystem2::update>("Update");
 
 
-        }
+      
 
 
-        rendering::Renderer::receiveGui += [this]()
+        rendering::ImGuiStage::OnGuiRender += [this]()
         {
             ImGui::ShowDemoWindow();
 
