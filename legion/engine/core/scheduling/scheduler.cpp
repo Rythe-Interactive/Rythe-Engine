@@ -229,6 +229,8 @@ namespace legion::core::scheduling
             destroyThread(id);
         }
 
+        async::readonly_rw_spinlock::force_release();
+
         m_exits.clear();
     }
 

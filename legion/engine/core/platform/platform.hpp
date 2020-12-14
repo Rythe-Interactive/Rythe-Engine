@@ -35,7 +35,7 @@
 #endif
 
 
-#if defined(_MSC_VER)
+#if defined(_WIN64)
     /**@def LEGION_WINDOWS
      * @brief Defined when compiling for Windows.
      */
@@ -77,6 +77,16 @@
     #endif
 #endif
 
+#if defined(__clang__)
+    // clang
+#define L_PAUSE_INSTRUCTION __builtin_ia32_pause
+#elif defined(__GNUG__) || (defined(__GNUC__) && defined(__cplusplus))
+    // gcc
+#define L_PAUSE_INSTRUCTION __builtin_ia32_pause
+#elif defined(_MSC_VER)
+    // msvc
+#define L_PAUSE_INSTRUCTION _mm_pause
+#endif
 
 #if (defined(LEGION_WINDOWS) && !defined(LEGION_WINDOWS_USE_CDECL)) || defined (DOXY_INCLUDE)
     /**@def LEGION_CCONV
