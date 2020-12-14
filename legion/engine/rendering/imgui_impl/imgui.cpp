@@ -9694,10 +9694,19 @@ const ImGuiPayload* ImGui::AcceptDragDropPayload(const char* type, ImGuiDragDrop
     return &payload;
 }
 
+//CHANGE(algorythmix): cppcheck complains about the adress of a local variable being returned(they really gotta fix that)
+
+//was
+/*
 const ImGuiPayload* ImGui::GetDragDropPayload()
 {
     ImGuiContext& g = *GImGui;
     return g.DragDropActive ? &g.DragDropPayload : NULL;
+}
+*/
+const ImGuiPayload* ImGui::GetDragDropPayload()
+{
+    return GImGui->DragDropActive ? &(GImGui->DragDropPayload) : NULL;
 }
 
 // We don't really use/need this now, but added it for the sake of consistency and because we might need it later.
@@ -10022,13 +10031,13 @@ ImGuiWindowSettings* ImGui::FindOrCreateWindowSettings(const char* name)
     return CreateNewWindowSettings(name);
 }
 
+//CHANGE(algorythmix): cppcheck again
 ImGuiSettingsHandler* ImGui::FindSettingsHandler(const char* type_name)
 {
-    ImGuiContext& g = *GImGui;
     const ImGuiID type_hash = ImHashStr(type_name);
-    for (int handler_n = 0; handler_n < g.SettingsHandlers.Size; handler_n++)
-        if (g.SettingsHandlers[handler_n].TypeHash == type_hash)
-            return &g.SettingsHandlers[handler_n];
+    for (int handler_n = 0; handler_n < GImGui->SettingsHandlers.Size; handler_n++)
+        if (GImGui->SettingsHandlers[handler_n].TypeHash == type_hash)
+            return &(GImGui->SettingsHandlers[handler_n]);
     return NULL;
 }
 
