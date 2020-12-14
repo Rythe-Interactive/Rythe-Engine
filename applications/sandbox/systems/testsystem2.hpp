@@ -23,7 +23,6 @@ using namespace legion;
 
 struct activateUpdate : public app::input_action<activateUpdate> {};
 
-
 class TestSystem2 final : public System<TestSystem2>
 {
 public:

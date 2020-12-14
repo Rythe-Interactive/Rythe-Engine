@@ -84,7 +84,7 @@ struct savescene2 : public app::input_action<savescene2> {};
 
 struct loadscene1 : public app::input_action<loadscene1> {};
 struct loadscene2 : public app::input_action<loadscene2> {};
-
+double rnd() { return double(rand()) / RAND_MAX; }
 class TestSystem final : public System<TestSystem>
 {
 public:
