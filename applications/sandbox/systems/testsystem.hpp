@@ -79,13 +79,6 @@ struct nextPhysicsTimeStepContinue : public app::input_action<nextPhysicsTimeSte
 
 using namespace legion::core::filesystem::literals;
 
-//scene loading binds
-struct savescene1 : public app::input_action<savescene1> {};
-struct savescene2 : public app::input_action<savescene2> {};
-
-struct loadscene1 : public app::input_action<loadscene1> {};
-struct loadscene2 : public app::input_action<loadscene2> {};
-double rnd() { return double(rand()) / RAND_MAX; }
 class TestSystem final : public System<TestSystem>
 {
 public:
@@ -168,12 +161,6 @@ public:
         app::InputSystem::createBinding< extendedPhysicsContinue>(app::inputmap::method::M);
         app::InputSystem::createBinding<nextPhysicsTimeStepContinue>(app::inputmap::method::N);
 
-        app::InputSystem::createBinding<savescene1>(app::inputmap::method::F1);
-        app::InputSystem::createBinding<savescene2>(app::inputmap::method::F2);
-        app::InputSystem::createBinding<loadscene1>(app::inputmap::method::F3);
-        app::InputSystem::createBinding<loadscene2>(app::inputmap::method::F4);
-
-
         bindToEvent<physics_test_move, &TestSystem::onUnitPhysicsUnitTestMove>();
 
         bindToEvent<light_switch, &TestSystem::onLightSwitch>();
@@ -189,7 +176,7 @@ public:
         bindToEvent<stop_audio_source, &TestSystem::stopAudioSource>();
         bindToEvent<rewind_audio_source, &TestSystem::rewindAudioSource>();
 
-        //bindToEvent<physics::trigger_event, &TestSystem::testPhysicsEvent>();
+        bindToEvent<physics::trigger_event, &TestSystem::testPhysicsEvent>();
 
         bindToEvent<audio_test_input, &TestSystem::audioTestInput>();
 
@@ -200,18 +187,11 @@ public:
         //friction test
         bindToEvent< activateFrictionTest, &TestSystem::FrictionTestActivate>();
 
+
         bindToEvent< extendedPhysicsContinue, &TestSystem::onExtendedPhysicsContinueRequest>();
         bindToEvent<nextPhysicsTimeStepContinue, &TestSystem::onNextPhysicsTimeStepRequest>();
 
-        //load scene
-
-        bindToEvent<savescene1, &TestSystem::saveScene1>();
-        bindToEvent<savescene2, &TestSystem::saveScene2>();
-        bindToEvent<loadscene1, &TestSystem::loadScene1>();
-        bindToEvent<loadscene2, &TestSystem::loadScene2>();
-
-
-#pragma endregion              
+#pragma endregion
 
 #pragma region Model and material loading
         rendering::model_handle directionalLightH;
@@ -510,30 +490,30 @@ public:
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(suzanneH.get_mesh(), rendering::mesh_renderer(normalH));
-            //ent.add_component<sah>({});
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(normalH));
+            ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, 5.1f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(suzanneH.get_mesh(), rendering::mesh_renderer(wireframeH));
-            //ent.add_component<sah>({});
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(wireframeH));
+            ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, 8.1f), rotation(), scale());
         }
 
         {
             auto ent = m_ecs->createEntity();
-            ent.add_components<rendering::mesh_renderable>(suzanneH.get_mesh(), rendering::mesh_renderer(copperH));
-            //ent.add_component<sah>({});
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(copperH));
+            ent.add_component<sah>({});
 
             ent.add_components<transform>(position(0, 3, 11.1f), rotation(), scale());
         }
 
         {
             auto ent = m_ecs->createEntity();
-            ent.add_components<rendering::mesh_renderable>(gnomeH.get_mesh(), rendering::mesh_renderer(gnomeMH));
-            //ent.add_component<sah>({});
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(gnomeH.get_mesh()), rendering::mesh_renderer(gnomeMH));
+            ent.add_component<sah>({});
 
             ent.add_components<transform>(position(0, 3, 2.1f), rotation(), scale());
         }
@@ -550,8 +530,8 @@ public:
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(submeshtestH.get_mesh(), rendering::mesh_renderer(pbrH));
-            //ent.add_component<sah>({});
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(submeshtestH.get_mesh()), rendering::mesh_renderer(pbrH));
+            ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 10, 0), rotation(), scale());
         }
 
@@ -563,92 +543,92 @@ public:
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(cubeH.get_mesh(), rendering::mesh_renderer(pbrH));
-            //ent.add_component<sah>({});
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(pbrH));
+            ent.add_component<sah>({});
             ent.add_components<transform>(position(5.1f, 9, 0), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(sphereH.get_mesh(), rendering::mesh_renderer(copperH));
-            //ent.add_component<sah>({});
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(copperH));
+            ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -5.1f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(sphereH.get_mesh(), rendering::mesh_renderer(aluminumH));
-            //ent.add_component<sah>({});
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(aluminumH));
+            ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -8.f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(sphereH.get_mesh(), rendering::mesh_renderer(ironH));
-            //ent.add_component<sah>({});
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(ironH));
+            ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -2.2f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(sphereH.get_mesh(), rendering::mesh_renderer(rock2H));
-            //ent.add_component<sah>({});
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(rock2H));
+            ent.add_component<sah>({});
             ent.add_components<transform>(position(4, 3, -8.f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(sphereH.get_mesh(), rendering::mesh_renderer(fabricH));
-            //ent.add_component<sah>({});
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(fabricH));
+            ent.add_component<sah>({});
             ent.add_components<transform>(position(4, 3, -5.1f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(sphereH.get_mesh(), rendering::mesh_renderer(paintH));
-           //ent.add_component<sah>({});
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(paintH));
+            ent.add_component<sah>({});
             ent.add_components<transform>(position(4, 3, -2.2f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(copperH));
-            //ent.add_component<sah>({});
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(copperH));
+            ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -3.6f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(aluminumH));
-           //ent.add_component<sah>({});
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(aluminumH));
+            ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -6.5f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(ironH));
-            //ent.add_component<sah>({});
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(ironH));
+            ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -0.7f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(rock2H));
-            //ent.add_component<sah>({});
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(rock2H));
+            ent.add_component<sah>({});
             ent.add_components<transform>(position(4, 3, -6.5f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(fabricH));
-            //ent.add_component<sah>({});
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(fabricH));
+            ent.add_component<sah>({});
             ent.add_components<transform>(position(4, 3, -3.6f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(paintH));
-            //ent.add_component<sah>({});
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(paintH));
+            ent.add_component<sah>({});
             ent.add_components<transform>(position(4, 3, -0.7f), rotation(), scale());
             auto ent2 = ent.clone();
             auto pos = ent2.get_component_handle<position>().read();
@@ -701,17 +681,37 @@ public:
         cubeParams.height = 1.0f;
         //setupPhysicsCRUnitTest(cubeH, uvH);
 
+
+        //auto sceneEntity = createEntity();
+        //std::vector<ecs::entity_handle> children;
+        //for (size_type i = 0; i < m_ecs->world.child_count(); i++)
+        //{
+        //    children.push_back(m_ecs->world.get_child(i));
+        //}
+        //for (auto child : children)
+        //{
+        //    if (child != sceneEntity)
+        //    {
+        //        child.set_parent(sceneEntity);
+        //    }
+        //}
+
+        //scenemanagement::SceneManager::createScene("Main", sceneEntity);
+
+        //sceneEntity.destroy();
+
+        //scenemanagement::SceneManager::loadScene("ImposterFlake");
+
         //CreateCubeStack(3, 2, 2, math::vec3(0, -3.0f, 8.0f), math::vec3(1, 1, 1)
         //    ,cubeParams, 0.1f, cubeH, wireframeH);
 
         createProcess<&TestSystem::update>("Update");
     }
 
-
-  /*  void testPhysicsEvent(physics::TriggerEvent* evnt)
+    void testPhysicsEvent(physics::trigger_event* evnt)
     {
         log::debug("received trigger event {}", evnt->manifold.isColliding);
-    }*/
+    }
 
     void setupPhysicsCDUnitTest(rendering::model_handle cubeH, rendering::material_handle wireframeH)
     {
@@ -1654,44 +1654,6 @@ public:
     }
 
 #pragma region input stuff
-
-    void saveScene1(savescene1* action)
-    {
-        if (action->pressed())
-        {
-            log::debug("Saving scene: Main");
-            scenemanagement::SceneManager::createScene("Main");
-            log::debug("Finishded saving scene: Main");
-        }
-    }
-    void saveScene2(savescene2* action)
-    {
-        if (action->pressed())
-        {
-            log::debug("Saving scene: Main2");
-            scenemanagement::SceneManager::createScene("Main2");
-            log::debug("Finishded saving scene: Main2");
-        }
-    }
-    void loadScene1(loadscene1* action)
-    {
-        if (action->pressed())
-        {
-            log::debug("Started loading scene: Main");
-            scenemanagement::SceneManager::loadScene("Main");
-            log::debug("Finished loading a scene");
-        }
-    }
-    void loadScene2(loadscene2* action)
-    {
-        if (action->pressed())
-        {
-            log::debug("Started loading scene: Main");
-            scenemanagement::SceneManager::loadScene("Main2");
-            log::debug("Finished loading a scene");
-        }
-    }
-
     void onLightSwitch(light_switch* action)
     {
         static bool on = true;

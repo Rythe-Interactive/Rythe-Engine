@@ -19,11 +19,11 @@ using namespace legion;
 
 
 ////scene loading binds
-//struct savescene1 : public app::input_action<savescene1> {};
-//struct savescene2 : public app::input_action<savescene2> {};
-//
-//struct loadscene1 : public app::input_action<loadscene1> {};
-//struct loadscene2 : public app::input_action<loadscene2> {};
+struct savescene1 : public app::input_action<savescene1> {};
+struct savescene2 : public app::input_action<savescene2> {};
+
+struct loadscene1 : public app::input_action<loadscene1> {};
+struct loadscene2 : public app::input_action<loadscene2> {};
 
 struct createRandEnt : public app::input_action<createRandEnt> {};
 double rnd() { return double(rand()) / RAND_MAX; }
@@ -70,6 +70,10 @@ public:
             directionalLightMH.set_param("color", math::color(1, 1, 0.8f));
 
             cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
+
+            color = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
+            color.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
+
             vertexColor = rendering::MaterialCache::create_material("vertex color", "assets://shaders/vertexcolor.shs"_view);
 
 
@@ -77,14 +81,14 @@ public:
 
             {
                 auto ent = createEntity();
-                ent.add_components<rendering::mesh_renderable>(cube.get_mesh(), rendering::mesh_renderer(vertexColor));
+                ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(vertexColor));
                 ent.add_components<transform>(position(-5, 0.01f, 0), rotation(), scale(1));
             }
 
             {
                 auto ent = createEntity();
-                ent.add_components<rendering::mesh_renderable>(cube.get_mesh(), rendering::mesh_renderer(color));
-                ent.add_components<transform>(position(-5, 0.01f, 0), rotation(), scale(1));
+                ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(color));
+                ent.add_components<transform>(position(-2, 0.01f, 0), rotation(), scale(1));
             }
 
 #pragma endregion
@@ -139,11 +143,9 @@ public:
     void createRandomEntity(createRandEnt* action)
     {
         cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
-        color = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
-        color.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
 
         auto ent = createEntity();
-        ent.add_components<rendering::mesh_renderable>(cube.get_mesh(), rendering::mesh_renderer(color));
+        ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(color));
         ent.add_components<transform>(position(rnd() * 5, 0.01f, rnd() * 5), rotation(), scale(1));
     }
 };
