@@ -24,6 +24,8 @@
 #include <Voro++/voro++.hh>
 #include <Voro++/common.hh>
 
+#include <rendering/pipeline/default/stages/postprocessingstage.hpp>
+
 using namespace legion;
 
 
@@ -124,10 +126,13 @@ public:
     ecs::entity_handle Point6FrictionBody;
     ecs::entity_handle FullFrictionBody;
 
-
+    rendering::shader_handle invertShader;
+    rendering::shader_handle blurShader;
 
     virtual void setup()
     {
+        
+
 #pragma region Input binding
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::LEFT, -1.f);
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::RIGHT, 1.f);
@@ -224,6 +229,12 @@ public:
         {
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
+
+
+            invertShader = rendering::ShaderCache::create_shader("invert_shader", "assets://shaders/invertcolor.shs"_view);
+            rendering::PostProcessingStage::addShader(invertShader);
+            blurShader = rendering::ShaderCache::create_shader("blur_shader", "assets://shaders/blurcolor.shs"_view);
+            rendering::PostProcessingStage::addShader(blurShader);
 
             directionalLightH = rendering::ModelCache::create_model("directional light", "assets://models/directional-light.obj"_view);
             spotLightH = rendering::ModelCache::create_model("spot light", "assets://models/spot-light.obj"_view);

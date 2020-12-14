@@ -33,6 +33,8 @@ namespace legion::rendering
         GLenum m_type;
         GLint m_location;
 
+        shader_parameter_base(std::nullptr_t t): m_shaderId(invalid_id), m_name(""), m_type(0), m_location(0){};
+
         shader_parameter_base(id_type shaderId, std::string_view name, GLenum type, GLint location) : m_shaderId(shaderId), m_name(name), m_type(type), m_location(location) {};
 
     public:
@@ -72,7 +74,7 @@ namespace legion::rendering
     {
     public:
         uniform(id_type shaderId, std::string_view name, GLenum type, GLint location) : shader_parameter_base(shaderId, name, type, location) {}
-
+        uniform(std::nullptr_t t) : shader_parameter_base(t){};
         /**@brief Set the value of the uniform.
          */
         void set_value(const T& value);
@@ -284,13 +286,21 @@ namespace legion::rendering
         template<typename T>
         uniform<T> get_uniform(const std::string& name)
         {
-            return *dynamic_cast<uniform<T>*>(uniforms[nameHash(name)].get());
+            auto* ptr = dynamic_cast<uniform<T>*>(uniforms[nameHash(name)].get());
+            if (ptr)
+                return *ptr;
+            log::error("Uniform of type {} does not exist with name {}.", typeName<T>(), name);
+            return uniform<T>(nullptr);
         }
 
         template<typename T>
         uniform<T> get_uniform(id_type id)
         {
-            return *dynamic_cast<uniform<T>*>(uniforms[id].get());
+            auto* ptr = dynamic_cast<uniform<T>*>(uniforms[id].get());
+            if (ptr)
+                return *ptr;
+            log::error("Uniform of type {} does not exist with id {}.", typeName<T>(), id);
+            return uniform<T>(nullptr);
         }
 
         attribute get_attribute(const std::string& name)
