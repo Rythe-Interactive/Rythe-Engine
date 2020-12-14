@@ -77,7 +77,7 @@ struct activateFrictionTest : public app::input_action<activateFrictionTest> {};
 struct extendedPhysicsContinue : public app::input_action<extendedPhysicsContinue> {};
 struct nextPhysicsTimeStepContinue : public app::input_action<nextPhysicsTimeStepContinue> {};
 
-
+using namespace legion::core::filesystem::literals;
 
 class TestSystem final : public System<TestSystem>
 {

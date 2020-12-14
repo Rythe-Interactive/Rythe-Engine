@@ -1,4 +1,4 @@
-#include <rendering/systems/newrenderer.hpp>
+#include <rendering/systems/renderer.hpp>
 
 namespace legion::rendering
 {

@@ -33,8 +33,7 @@
     <ClCompile Include="pipeline\default\stages\submitstage.cpp" />
     <ClCompile Include="shadercompiler\shadercompiler.cpp" />
     <ClCompile Include="data\particle_system_base.cpp" />
-    <ClCompile Include="systems\newrenderer.cpp" />
-    <ClCompile Include="systems\oldrenderer.cpp" />
+    <ClCompile Include="systems\renderer.cpp" />
     <ClCompile Include="util\ini.c" />
   </ItemGroup>
   <ItemGroup>
@@ -66,7 +65,7 @@
     <ClInclude Include="pipeline\default\stages\meshbatchingstage.hpp" />
     <ClInclude Include="pipeline\default\stages\meshrenderstage.hpp" />
     <ClInclude Include="pipeline\default\stages\submitstage.hpp" />
-    <ClInclude Include="systems\newrenderer.hpp" />
+    <ClInclude Include="systems\renderer.hpp" />
     <ClInclude Include="systems\particle_system_manager.hpp" />
     <ClInclude Include="module\renderingmodule.hpp" />
     <ClInclude Include="pipeline\base\pipelinebase.hpp" />
@@ -75,7 +74,6 @@
     <ClInclude Include="shadercompiler\shadercompiler.hpp" />
     <ClInclude Include="data\particle_system_base.hpp" />
     <ClInclude Include="systems\pointcloud_particlesystem.hpp" />
-    <ClInclude Include="systems\oldrenderer.hpp" />
     <ClInclude Include="util\bindings.hpp" />
     <ClInclude Include="util\matini.hpp" />
     <ClInclude Include="util\settings.hpp" />
@@ -84,7 +82,7 @@
     <None Include="data\buffer.inl" />
     <None Include="pipeline\base\pipeline.inl" />
     <None Include="pipeline\base\renderstage.inl" />
-    <None Include="systems\newrenderer.inl" />
+    <None Include="systems\renderer.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
