@@ -35,6 +35,8 @@ namespace legion::core::ecs
         virtual void create_component(id_type entityId, void* value) LEGION_PURE;
         virtual void destroy_component(id_type entityId) LEGION_PURE;
 
+        virtual void clone_component(id_type dst, id_type src) LEGION_PURE;
+
         virtual void serialize(cereal::JSONOutputArchive& oarchive, id_type entityId) LEGION_PURE;
         virtual void serialize(cereal::BinaryOutputArchive& oarchive, id_type entityId) LEGION_PURE;
 
@@ -144,14 +146,14 @@ namespace legion::core::ecs
          */
         virtual void create_component(id_type entityId) override
         {
-            component_type comp;
-            if constexpr (detail::has_init<component_type, void(component_type&)>::value)
-                component_type::init(comp);
-
             {
                 async::readwrite_guard guard(m_lock);
-                m_components.insert(entityId, std::move(comp));
+                m_components.emplace(entityId);
             }
+            if constexpr (detail::has_init<component_type, void(component_type&, entity_handle)>::value)
+                component_type::init(m_components[entityId], entity_handle(entityId));
+            else if constexpr (detail::has_init<component_type, void(component_type&)>::value)
+                component_type::init(m_components[entityId]);
 
             m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId));
         }
@@ -168,6 +170,10 @@ namespace legion::core::ecs
                 async::readwrite_guard guard(m_lock);
                 m_components[entityId] = *reinterpret_cast<component_type*>(value);
             }
+            if constexpr (detail::has_init<component_type, void(component_type&, entity_handle)>::value)
+                component_type::init(m_components[entityId], entity_handle(entityId));
+            else if constexpr (detail::has_init<component_type, void(component_type&)>::value)
+                component_type::init(m_components[entityId]);
 
             m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId));
         }
@@ -190,6 +196,22 @@ namespace legion::core::ecs
 
             async::readwrite_guard wguard(m_lock);
             m_components.erase(entityId);
+        }
+
+        /**
+         * @brief clones a component from a source to a destination entity
+         */
+        void clone_component(id_type dst, id_type src) override
+        {
+            static_assert(std::is_copy_constructible<component_type>::value,
+                "cannot copy component, therefore component cannot be cloned onto new entity!");
+
+            {
+                async::readwrite_guard guard(m_lock);
+                m_components[dst] = m_components[src];
+            }
+
+            m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(dst));
         }
     };
 }

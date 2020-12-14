@@ -21,6 +21,8 @@ namespace legion::core
 
         sparse_map<id_type, std::unique_ptr<scheduling::Process>> m_processes;
 
+        static ecs::entity_handle world;
+
     public:
         const id_type id;
         const std::string name;

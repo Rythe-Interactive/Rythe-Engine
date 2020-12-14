@@ -21,6 +21,29 @@ namespace legion::core::ecs
         return *this;
     }
 
+    entity_handle entity_handle::clone(bool keep_parent, bool clone_children, bool clone_components) const
+    {
+        entity_handle clone = m_registry->createEntity();
+        entity_data& data = m_registry->getEntityData(get_id());
+
+        if(keep_parent)
+            clone.set_parent(data.parent);
+
+        if(clone_components)
+            for(id_type cid : data.components)
+            {
+                m_registry->copyComponent(clone,*this,cid);
+            }
+
+        if(clone_children)
+            for(const entity_handle& h: data.children)
+            {
+                h.clone(false,true,true).set_parent(clone);
+            }
+
+        return clone;
+    }
+
     L_NODISCARD const hashed_sparse_set<id_type>& entity_handle::component_composition() const
     {
         if (!m_registry)
@@ -132,6 +155,7 @@ namespace legion::core::ecs
         std::vector <ecs::entity_handle> children;
         oarchive(cereal::make_nvp("ID", m_id), cereal::make_nvp("NAME", std::string("ENTITY")));
         auto ent = m_registry->createEntity(m_id);
+        (void)ent;
         oarchive(cereal::make_nvp("COMPONENTS", components), cereal::make_nvp("CHILDREN", children));
         for (auto child : children)
         {
@@ -149,9 +173,7 @@ namespace legion::core::ecs
         if (!m_registry)
             throw legion_invalid_entity_error;
 
-        entity_set& children = m_registry->getEntityData(m_id).children;
-
-        return children[index];
+        return m_registry->getEntityData(m_id).children[index];
     }
 
     L_NODISCARD size_type entity_handle::child_count() const

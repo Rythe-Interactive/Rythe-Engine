@@ -25,6 +25,7 @@ namespace legion::core::scheduling
         time::time_span<fast_time> m_timeBuffer;
         time::clock<fast_time> m_clock;
         bool m_fixedTimeStep;
+        bool firstStep = true;
     public:
 
         template<size_type charc>
@@ -67,6 +68,12 @@ namespace legion::core::scheduling
         {
             time::time_span<fast_time> deltaTime = m_clock.restart();
 
+            if (firstStep)
+            {
+                deltaTime = 0;
+                firstStep = false;
+            }
+
             deltaTime *= timeScale;
 
             if (deltaTime < 0)
@@ -83,7 +90,6 @@ namespace legion::core::scheduling
             if (m_timeBuffer >= m_interval)
             {
                 m_timeBuffer -= m_interval;
-
                 m_operation.invoke(m_interval);
             }
 

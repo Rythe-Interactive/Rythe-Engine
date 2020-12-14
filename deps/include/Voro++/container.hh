@@ -359,7 +359,7 @@ namespace voro {
 				pp = p[vl.ijk] + ps * vl.q;
 				c.draw_json(*pp, pp[1], pp[2], id[vl.ijk][vl.q], fp);
 			} while (vl.inc());
-			fprintf(fp, "]\n}");
+			fprintf(fp, "[{\"x\": 0,\"y\": 0,\"z\": 0,\"w\":0},{\"x\": 0,\"y\": 0,\"z\": 0,\"w\": 0}]]\n}");
 		}
 
 		/** Computes all Voronoi cells and saves the output in JSON
@@ -378,6 +378,7 @@ namespace voro {
 			draw_cells_json(fp);
 			fclose(fp);
 		}
+
 		/** Dumps particle positions in POV-Ray format.
 		 * \param[in] vl the loop class to use.
 		 * \param[in] fp a file handle to write to. */

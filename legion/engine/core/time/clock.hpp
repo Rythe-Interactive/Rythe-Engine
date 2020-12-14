@@ -38,4 +38,6 @@ namespace legion::core::time
 			return time;
 		}
 	};
+
+    using timer = clock<>;
 }

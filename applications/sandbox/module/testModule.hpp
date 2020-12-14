@@ -2,6 +2,7 @@
 #include <core/core.hpp>
 #include <core/math/math.hpp>
 #include "../systems/testsystem.hpp"
+//#include "../systems/testsystem2.hpp"
 #include"../systems/pointcloudtestsystem2.hpp"
 #include "../systems/simplecameracontroller.hpp"
 
@@ -14,19 +15,19 @@ class TestModule : public Module
 public:
     virtual void setup() override
     {
-
-        if (!!!0)
-        {
-            reportSystem<pointcloudtestsystem2>();
-        //    reportSystem<PointCloudGeneration>();
-        }
-        else
-        {
-            addProcessChain("TestChain");
-            reportComponentType<sah>();
-            reportSystem<TestSystem>();
-        }
-        //reportSystem<TestSystem2>();
+        //if (false)
+        //{
+        //    reportSystem<pointcloudtestsystem2>();
+        //    //    reportSystem<PointCloudGeneration>();
+        //}
+        //else
+        //{
+        //    addProcessChain("TestChain");
+        //    reportComponentType<sah>();
+        //    reportSystem<TestSystem>();
+        //}
+        reportComponentType<sah>();
+        reportSystem<TestSystem>();
         reportSystem<SimpleCameraController>();
     }
 
