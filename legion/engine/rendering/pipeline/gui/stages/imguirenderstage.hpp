@@ -11,7 +11,7 @@ namespace legion::rendering
         priority_type priority() override;
 
         template <class T,void(T::*Func)()>
-        static void AddGuiRender(void* ptr)
+        static void addGuiRender(T* ptr)
         {
             OnGuiRender += delegate<void()>::create<T,Func>(ptr);
         }
