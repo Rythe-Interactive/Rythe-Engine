@@ -17,6 +17,8 @@ class TestModule : public Module
 public:
     virtual void setup() override
     {
+        reportSystem<SimpleCameraController>();
+
         //addProcessChain("TestChain");
         //reportComponentType<sah>();
         //reportSystem<pointcloudtestsystem2>();
@@ -24,7 +26,6 @@ public:
         //reportSystem<TestSystem>();
         //reportSystem<TestSystem2>();
         reportSystem<GuiTestSystem>();
-        reportSystem<SimpleCameraController>();
     }
 
     virtual priority_type priority() override

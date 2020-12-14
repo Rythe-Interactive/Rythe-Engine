@@ -21,6 +21,7 @@
 #include <physics/physics_statics.hpp>
 #include <physics/data/identifier.hpp>
 #include <audio/audio.hpp>
+#include <rendering/components/renderable.hpp>
 #include <Voro++/voro++.hh>
 #include <Voro++/common.hh>
 

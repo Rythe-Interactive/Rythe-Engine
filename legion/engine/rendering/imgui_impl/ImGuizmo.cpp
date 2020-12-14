@@ -32,6 +32,8 @@
 #include <malloc.h>
 #endif
 
+constexpr static int lgn__hack_line_thickness = 5;
+
 // includes patches for multiview from
 // https://github.com/CedricGuillemet/ImGuizmo/issues/15
 
@@ -41,8 +43,8 @@ namespace gizmo
    static const float ZPI = 3.14159265358979323846f;
    static const float RAD2DEG = (180.f / ZPI);
    static const float DEG2RAD = (ZPI / 180.f);
-   static float gGizmoSizeClipSpace = 0.1f;
-   const float screenRotateSize = 0.06f;
+   static float gGizmoSizeClipSpace = .1f;
+   const float screenRotateSize = 0.12f;
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    // utility and math
@@ -1140,9 +1142,9 @@ namespace gizmo
             gContext.mRadiusSquareCenter = radiusAxis;
          }
 
-         drawList->AddPolyline(circlePos, halfCircleSegmentCount, colors[3 - axis], false, 2);
+         drawList->AddPolyline(circlePos, halfCircleSegmentCount, colors[3 - axis], false, lgn__hack_line_thickness);
       }
-      drawList->AddCircle(worldToPos(gContext.mModel.v.position, gContext.mViewProjection), gContext.mRadiusSquareCenter, colors[0], 64, 3.f);
+      drawList->AddCircle(worldToPos(gContext.mModel.v.position, gContext.mViewProjection), gContext.mRadiusSquareCenter, colors[0], 64, lgn__hack_line_thickness);
 
       if (gContext.mbUsing && (gContext.mActualID == -1 || gContext.mActualID == gContext.mEditingID))
       {
@@ -1160,7 +1162,7 @@ namespace gizmo
             circlePos[i] = worldToPos(pos + gContext.mModel.v.position, gContext.mViewProjection);
          }
          drawList->AddConvexPolyFilled(circlePos, halfCircleSegmentCount, 0x801080FF);
-         drawList->AddPolyline(circlePos, halfCircleSegmentCount, 0xFF1080FF, true, 2);
+         drawList->AddPolyline(circlePos, halfCircleSegmentCount, 0xFF1080FF, true, lgn__hack_line_thickness);
 
          ImVec2 destinationPosOnScreen = circlePos[1];
          char tmps[512];
@@ -1211,11 +1213,11 @@ namespace gizmo
 
             if (gContext.mbUsing && (gContext.mActualID == -1 || gContext.mActualID == gContext.mEditingID))
             {
-               drawList->AddLine(baseSSpace, worldDirSSpaceNoScale, 0xFF404040, 3.f);
+               drawList->AddLine(baseSSpace, worldDirSSpaceNoScale, 0xFF404040, lgn__hack_line_thickness);
                drawList->AddCircleFilled(worldDirSSpaceNoScale, 6.f, 0xFF404040);
             }
 
-            drawList->AddLine(baseSSpace, worldDirSSpace, colors[i + 1], 3.f);
+            drawList->AddLine(baseSSpace, worldDirSSpace, colors[i + 1], lgn__hack_line_thickness);
             drawList->AddCircleFilled(worldDirSSpace, 6.f, colors[i + 1]);
 
             if (gContext.mAxisFactor[i] < 0.f)
@@ -1277,7 +1279,7 @@ namespace gizmo
             ImVec2 baseSSpace = worldToPos(dirAxis * 0.1f * gContext.mScreenFactor, gContext.mMVP);
             ImVec2 worldDirSSpace = worldToPos(dirAxis * gContext.mScreenFactor, gContext.mMVP);
 
-            drawList->AddLine(baseSSpace, worldDirSSpace, colors[i + 1], 3.f);
+            drawList->AddLine(baseSSpace, worldDirSSpace, colors[i + 1], lgn__hack_line_thickness);
 
             // Arrow head begin
             ImVec2 dir(origin - worldDirSSpace);
@@ -1322,7 +1324,7 @@ namespace gizmo
          dif *= 5.f;
          drawList->AddCircle(sourcePosOnScreen, 6.f, translationLineColor);
          drawList->AddCircle(destinationPosOnScreen, 6.f, translationLineColor);
-         drawList->AddLine(ImVec2(sourcePosOnScreen.x + dif.x, sourcePosOnScreen.y + dif.y), ImVec2(destinationPosOnScreen.x - dif.x, destinationPosOnScreen.y - dif.y), translationLineColor, 2.f);
+         drawList->AddLine(ImVec2(sourcePosOnScreen.x + dif.x, sourcePosOnScreen.y + dif.y), ImVec2(destinationPosOnScreen.x - dif.x, destinationPosOnScreen.y - dif.y), translationLineColor, lgn__hack_line_thickness);
 
          char tmps[512];
          vec_t deltaInfo = gContext.mModel.v.position - gContext.mMatrixOrigin;
@@ -1659,7 +1661,7 @@ namespace gizmo
          const float len = IntersectRayPlane(gContext.mRayOrigin, gContext.mRayVector, pickupPlan);
          vec_t localPos = gContext.mRayOrigin + gContext.mRayVector * len - gContext.mModel.v.position;
 
-         if (Dot(Normalized(localPos), gContext.mRayVector) < -FLT_EPSILON)
+         if (Dot(Normalized(localPos), gContext.mRayVector) > FLT_EPSILON)
          {
             continue;
          }

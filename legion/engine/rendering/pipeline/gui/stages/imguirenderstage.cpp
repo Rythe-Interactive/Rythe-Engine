@@ -66,5 +66,5 @@ namespace legion::rendering
         return -100;
     }
 
-    multicast_delegate<void()> ImGuiStage::OnGuiRender{};
+    multicast_delegate<void()> ImGuiStage::OnGuiRender;
 }
