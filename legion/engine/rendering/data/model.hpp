@@ -65,6 +65,7 @@ namespace legion::rendering
         static async::readonly_rw_spinlock m_modelLock;
 
         static const model& get_model(id_type id);
+        std::string modelPath;
 
     public:
         static void buffer_model(id_type id, const buffer& matrixBuffer);

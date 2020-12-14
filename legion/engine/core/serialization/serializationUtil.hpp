@@ -113,7 +113,7 @@ namespace legion::core::serialization
         template<class T>
         static void JSONSerialize(std::ofstream& os, T serializable)
         {
-            cereal::JSONOutputArchive archive(os);// Create an output archive, Output as outputing to a string stream
+            cereal::JSONOutputArchive archive(os);// Create an output archive, Output as outputing to a filestream
             archive(cereal::make_nvp(typeid(T).name(),serializable)); // Read the data to the archive
         }
 

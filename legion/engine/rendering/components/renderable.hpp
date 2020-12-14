@@ -12,7 +12,6 @@ namespace legion::rendering
         mesh_renderer() = default;
         explicit mesh_renderer(const material_handle& src) { material = src; }
         mesh_renderer(const material_handle& src, const model_handle& model) { material = src; m_tempHandle = model; }
-
         static void init(mesh_renderer& src, ecs::entity_handle owner)
         {
             if (!owner.has_component<mesh_filter>())
@@ -20,7 +19,7 @@ namespace legion::rendering
                 owner.add_component<mesh_filter>(mesh_filter(src.m_tempHandle.get_mesh()));
             }
         }
-
+       
         material_handle material = invalid_material_handle;
     };
 
@@ -43,6 +42,21 @@ namespace legion::rendering
         material_handle get_material()
         {
             return get<mesh_renderer>().read().material;
+        }
+
+        std::string get_model_path()
+        {
+            id_type id = get<mesh_filter>().read().id;
+            if (id == invalid_id)
+                return { invalid_id };
+            return ModelCache::get_handle(id).get_mesh().get().second.fileName;
+        }
+
+        std::string get_material_path()
+        {
+            //id_type id = get<mesh_renderer>().read().material.id;
+            //if (id == invalid_id)
+            //    return { invalid_id };
         }
 
         template<typename Archive>

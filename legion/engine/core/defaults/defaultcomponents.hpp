@@ -198,6 +198,13 @@ namespace legion::core
         explicit mesh_filter(const mesh_handle& src) { id = src.id; };
 
         bool operator==(const mesh_filter& other) const { return id == other.id; }
+        std::string filePath = std::string("assets://models/" + get().second.fileName);
+
+        template<class Archive>
+        void serialize(Archive& oa)
+        {
+            oa(id,cereal::make_nvp("Filepath",filePath));
+        }
     };
 }
 
