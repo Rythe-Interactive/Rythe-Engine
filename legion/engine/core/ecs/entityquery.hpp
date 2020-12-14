@@ -52,6 +52,19 @@ namespace legion::core::ecs
          */
         L_NODISCARD id_type id() { return m_id; }
 
+        template <typename archetype>
+        void addArchetype()
+        {
+            addArchetypeImpl<archetype>(std::make_index_sequence<std::tuple_size<archetype>::value>{});
+        }
+    private:
+        template <typename archetype,size_t ... I>
+        void addArchetypeImpl(std::index_sequence<I...>)
+        {
+            (addComponentType(typeHash<std::tuple_element<I,archetype>>),...);
+        }
+    public:
+
         /**@brief Add component type to query for.
          * @tparam component_type
          */
