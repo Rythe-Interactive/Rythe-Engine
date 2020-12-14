@@ -7,7 +7,8 @@
 #include <imgui/imgui_internal.h>
 #include <cstdlib>
 
-namespace ImSequencer
+namespace imgui{
+namespace sequencer 
 {
 #ifndef IMGUI_DEFINE_MATH_OPERATORS
    static ImVec2 operator+(const ImVec2& a, const ImVec2& b) {
@@ -669,4 +670,5 @@ namespace ImSequencer
       }
       return ret;
    }
+}
 }

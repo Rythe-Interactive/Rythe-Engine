@@ -5,7 +5,8 @@
 #include <string>
 #include <vector>
 
-namespace imgui_addons
+namespace imgui {
+namespace filebrowser
 {
     class ImGuiFileBrowser
     {
@@ -117,6 +118,6 @@ namespace imgui_addons
             std::vector< std::reference_wrapper<std::string> > inputcb_filter_files;
     };
 }
-
+}
 
 #endif // IMGUIFILEBROWSER_H

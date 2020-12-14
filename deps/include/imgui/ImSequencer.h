@@ -4,7 +4,8 @@
 
 struct ImDrawList;
 struct ImRect;
-namespace ImSequencer
+namespace imgui {
+namespace sequencer
 {
    enum SEQUENCER_OPTIONS
    {
@@ -48,4 +49,5 @@ namespace ImSequencer
    // return true if selection is made
    bool Sequencer(SequenceInterface* sequence, int* currentFrame, bool* expanded, int* selectedEntry, int* firstFrame, int sequenceOptions);
 
+}
 }

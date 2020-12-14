@@ -1,6 +1,6 @@
 #pragma once
 #include <core/core.hpp>
-#include <imgui/imgui.h>
+#include <rendering/util/gui.hpp>
 #include <rendering/pipeline/gui/stages/imguirenderstage.hpp>
 
 class GuiTestSystem : public System<GuiTestSystem>
@@ -13,7 +13,7 @@ class GuiTestSystem : public System<GuiTestSystem>
         //gui code goes here
         ImGuiStage::OnGuiRender += [this]()
         {
-             ImGui::ShowDemoWindow();
+             imgui::base::ShowDemoWindow();
         };
     }
 };

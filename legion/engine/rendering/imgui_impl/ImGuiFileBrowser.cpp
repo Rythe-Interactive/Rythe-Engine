@@ -25,7 +25,8 @@
 #include <dirent.h>
 #endif // defined (WIN32) || defined (_WIN32)
 
-namespace imgui_addons
+namespace imgui {
+namespace filebrowser 
 {
     ImGuiFileBrowser::ImGuiFileBrowser()
     {
@@ -1188,4 +1189,5 @@ namespace imgui_addons
             free(real_path);
     }
     #endif // OSWIN
+}
 }

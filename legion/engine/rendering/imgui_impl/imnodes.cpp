@@ -30,7 +30,8 @@
 #include <stdio.h>  // for fwrite, ssprintf, sscanf
 #include <stdlib.h>
 
-namespace imnodes
+namespace imgui{
+namespace nodes
 {
 namespace
 {
@@ -2931,4 +2932,5 @@ void LoadEditorStateFromIniFile(EditorContext* const editor, const char* const f
     LoadEditorStateFromIniString(editor, file_data, data_size);
     ImGui::MemFree(file_data);
 }
-} // namespace imnodes
+} // namespace nodes
+} // namespace imgui

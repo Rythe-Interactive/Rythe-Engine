@@ -32,7 +32,7 @@ public:
     ecs::EntityQuery cameraQuery = createQuery<rendering::camera, position, rotation, scale>();
     ecs::entity_handle m_cubeent;
     std::vector<std::pair<int, int>> links;
-    imgui_addons::ImGuiFileBrowser file_dialog;
+    imgui::filebrowser::ImGuiFileBrowser file_dialog;
 
     std::vector<bool*> explEmitterActivation;
     std::vector<std::vector<math::vec4>> voronoi;
@@ -193,8 +193,8 @@ public:
             ImGui::ShowDemoWindow();
 
             ImGuiIO& io = ImGui::GetIO();
-            ImGuizmo::SetOrthographic(false);
-            ImGuizmo::BeginFrame();
+            imgui::gizmo::SetOrthographic(false);
+            imgui::gizmo::BeginFrame();
             ImGui::Begin("Hello World");
             EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
 
@@ -215,9 +215,9 @@ public:
             }
             ImGui::InputText("Text", buffer, 512);
             ImGui::End();
-            ImGuizmo::ViewManipulate(value_ptr(view), 1.0f, ImVec2(io.DisplaySize.x - 128, 0), ImVec2(128, 128), 0x10101010);
+            imgui::gizmo::ViewManipulate(value_ptr(view), 1.0f, ImVec2(io.DisplaySize.x - 128, 0), ImVec2(128, 128), 0x10101010);
             ImGui::Begin("node editor");
-            imnodes::BeginNodeEditor();
+            imgui::nodes::BeginNodeEditor();
 
             // elsewhere in the code...
             for (int i = 0; i < links.size(); ++i)
@@ -225,46 +225,46 @@ public:
                 const std::pair<int, int>& p = links[i];
                 // in this case, we just use the array index of the link
                 // as the unique identifier
-                imnodes::Link(i, p.first, p.second);
+                imgui::nodes::Link(i, p.first, p.second);
             }
-            imnodes::BeginNode(1);
-            imnodes::BeginNodeTitleBar();
+            imgui::nodes::BeginNode(1);
+            imgui::nodes::BeginNodeTitleBar();
             ImGui::TextUnformatted("output node");
-            imnodes::EndNodeTitleBar();
+            imgui::nodes::EndNodeTitleBar();
             ImGui::Dummy({ 80,45 });
             const int output_attr_id = 2;
-            imnodes::BeginOutputAttribute(output_attr_id);
+            imgui::nodes::BeginOutputAttribute(output_attr_id);
             // in between Begin|EndAttribute calls, you can call ImGui
             // UI functions
             ImGui::Text("output pin");
-            imnodes::EndOutputAttribute();
-            imnodes::EndNode();
+            imgui::nodes::EndOutputAttribute();
+            imgui::nodes::EndNode();
 
-            imnodes::BeginNode(2);
-            imnodes::BeginNodeTitleBar();
+            imgui::nodes::BeginNode(2);
+            imgui::nodes::BeginNodeTitleBar();
             ImGui::TextUnformatted("input node");
-            imnodes::EndNodeTitleBar();
+            imgui::nodes::EndNodeTitleBar();
             ImGui::Dummy({ 80,45 });
-            imnodes::BeginInputAttribute(3);
+            imgui::nodes::BeginInputAttribute(3);
             // in between Begin|EndAttribute calls, you can call ImGui
             // UI functions
             ImGui::Text("input pin");
-            imnodes::EndOutputAttribute();
-            imnodes::EndNode();
+            imgui::nodes::EndOutputAttribute();
+            imgui::nodes::EndNode();
 
-            imnodes::EndNodeEditor();
+            imgui::nodes::EndNodeEditor();
             int start_attr, end_attr;
-            if (imnodes::IsLinkCreated(&start_attr, &end_attr))
+            if (imgui::nodes::IsLinkCreated(&start_attr, &end_attr))
             {
                 links.push_back(std::make_pair(start_attr, end_attr));
             }
 
-            const int num_selected = imnodes::NumSelectedLinks();
+            const int num_selected = imgui::nodes::NumSelectedLinks();
             if (num_selected > 0 && ImGui::IsKeyReleased(GLFW_KEY_X))
             {
                 static std::vector<int> selected_links;
                 selected_links.resize(static_cast<size_t>(num_selected));
-                imnodes::GetSelectedLinks(selected_links.data());
+                imgui::nodes::GetSelectedLinks(selected_links.data());
                 for (auto& link : selected_links)
                 {
                     links.erase(links.begin() + link);
@@ -292,13 +292,13 @@ public:
             if (save)
                 ImGui::OpenPopup("Save File");
 
-            if (file_dialog.showFileDialog("Open File", imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, ImVec2(700, 310), ".rar,.zip,.7z"))
+            if (file_dialog.showFileDialog("Open File", imgui::filebrowser::ImGuiFileBrowser::DialogMode::OPEN, ImVec2(700, 310), ".rar,.zip,.7z"))
             {
                 open = false;
                 log::debug("{}", file_dialog.selected_fn);     // The name of the selected file or directory in case of Select Directory dialog mode
                 log::debug("{}", file_dialog.selected_path);   // The absolute path to the selected file
             }
-            if (file_dialog.showFileDialog("Save File", imgui_addons::ImGuiFileBrowser::DialogMode::SAVE, ImVec2(700, 310), ".png,.jpg,.bmp"))
+            if (file_dialog.showFileDialog("Save File", imgui::filebrowser::ImGuiFileBrowser::DialogMode::SAVE, ImVec2(700, 310), ".png,.jpg,.bmp"))
             {
                 save = false;
                 log::debug("{}", file_dialog.selected_fn);      // The name of the selected file or directory in case of Select Directory dialog mode
@@ -350,76 +350,4 @@ public:
 };
 
 
-void EditTransform(const float* cameraView, const float* cameraProjection, float* matrix, bool editTransformDecomposition)
-{
-    static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
-    static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::LOCAL);
-    static bool useSnap = false;
-    static float snap[] = { 1.f, 1.f, 1.f };
-    static float bounds[] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
-    static float boundsSnap[] = { 0.1f, 0.1f, 0.1f };
-    static bool boundSizing = false;
-    static bool boundSizingSnap = false;
 
-    if (editTransformDecomposition)
-    {
-        if (ImGui::IsKeyPressed(90))
-            mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
-        if (ImGui::IsKeyPressed(69))
-            mCurrentGizmoOperation = ImGuizmo::ROTATE;
-        if (ImGui::IsKeyPressed(82)) // r Key
-            mCurrentGizmoOperation = ImGuizmo::SCALE;
-        if (ImGui::RadioButton("Translate", mCurrentGizmoOperation == ImGuizmo::TRANSLATE))
-            mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
-        ImGui::SameLine();
-        if (ImGui::RadioButton("Rotate", mCurrentGizmoOperation == ImGuizmo::ROTATE))
-            mCurrentGizmoOperation = ImGuizmo::ROTATE;
-        ImGui::SameLine();
-        if (ImGui::RadioButton("Scale", mCurrentGizmoOperation == ImGuizmo::SCALE))
-            mCurrentGizmoOperation = ImGuizmo::SCALE;
-        float matrixTranslation[3], matrixRotation[3], matrixScale[3];
-        ImGuizmo::DecomposeMatrixToComponents(matrix, matrixTranslation, matrixRotation, matrixScale);
-        ImGui::InputFloat3("Tr", matrixTranslation);
-        ImGui::InputFloat3("Rt", matrixRotation);
-        ImGui::InputFloat3("Sc", matrixScale);
-        ImGuizmo::RecomposeMatrixFromComponents(matrixTranslation, matrixRotation, matrixScale, matrix);
-
-        if (mCurrentGizmoOperation != ImGuizmo::SCALE)
-        {
-            if (ImGui::RadioButton("Local", mCurrentGizmoMode == ImGuizmo::LOCAL))
-                mCurrentGizmoMode = ImGuizmo::LOCAL;
-            ImGui::SameLine();
-            if (ImGui::RadioButton("World", mCurrentGizmoMode == ImGuizmo::WORLD))
-                mCurrentGizmoMode = ImGuizmo::WORLD;
-        }
-        if (ImGui::IsKeyPressed(83))
-            useSnap = !useSnap;
-        ImGui::Checkbox("", &useSnap);
-        ImGui::SameLine();
-
-        switch (mCurrentGizmoOperation)
-        {
-        case ImGuizmo::TRANSLATE:
-            ImGui::InputFloat3("Snap", &snap[0]);
-            break;
-        case ImGuizmo::ROTATE:
-            ImGui::InputFloat("Angle Snap", &snap[0]);
-            break;
-        case ImGuizmo::SCALE:
-            ImGui::InputFloat("Scale Snap", &snap[0]);
-            break;
-        }
-        ImGui::Checkbox("Bound Sizing", &boundSizing);
-        if (boundSizing)
-        {
-            ImGui::PushID(3);
-            ImGui::Checkbox("", &boundSizingSnap);
-            ImGui::SameLine();
-            ImGui::InputFloat3("Snap", boundsSnap);
-            ImGui::PopID();
-        }
-    }
-    ImGuiIO& io = ImGui::GetIO();
-    ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-    ImGuizmo::Manipulate(cameraView, cameraProjection, mCurrentGizmoOperation, mCurrentGizmoMode, matrix, NULL, useSnap ? snap : NULL, boundSizing ? bounds : NULL, boundSizingSnap ? boundsSnap : NULL);
-}
