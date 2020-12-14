@@ -155,6 +155,7 @@ namespace legion::core::ecs
         std::vector <ecs::entity_handle> children;
         oarchive(cereal::make_nvp("ID", m_id), cereal::make_nvp("NAME", std::string("ENTITY")));
         auto ent = m_registry->createEntity(m_id);
+        (void)ent;
         oarchive(cereal::make_nvp("COMPONENTS", components), cereal::make_nvp("CHILDREN", children));
         for (auto child : children)
         {
@@ -172,9 +173,7 @@ namespace legion::core::ecs
         if (!m_registry)
             throw legion_invalid_entity_error;
 
-        entity_set& children = m_registry->getEntityData(m_id).children;
-
-        return children[index];
+        return m_registry->getEntityData(m_id).children[index];
     }
 
     L_NODISCARD size_type entity_handle::child_count() const

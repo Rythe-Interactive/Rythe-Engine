@@ -12,12 +12,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="components\light.cpp" />
+    <ClCompile Include="data\buffer.cpp" />
+    <ClCompile Include="data\framebuffer.cpp" />
     <ClCompile Include="data\importers\texture_importers.cpp" />
     <ClCompile Include="data\material.cpp" />
     <ClCompile Include="data\model.cpp" />
     <ClCompile Include="data\particle_system_cache.cpp" />
+    <ClCompile Include="data\renderbuffer.cpp" />
     <ClCompile Include="data\shader.cpp" />
     <ClCompile Include="data\texture.cpp" />
+    <ClCompile Include="data\vertexarray.cpp" />
+    <ClCompile Include="pipeline\base\pipelinebase.cpp" />
+    <ClCompile Include="pipeline\base\renderstage.cpp" />
+    <ClCompile Include="pipeline\default\defaultpipeline.cpp" />
+    <ClCompile Include="pipeline\default\stages\clearstage.cpp" />
+    <ClCompile Include="pipeline\default\stages\framebufferresizestage.cpp" />
+    <ClCompile Include="pipeline\default\stages\lightbufferstage.cpp" />
+    <ClCompile Include="pipeline\default\stages\meshbatchingstage.cpp" />
+    <ClCompile Include="pipeline\default\stages\meshrenderstage.cpp" />
+    <ClCompile Include="pipeline\default\stages\submitstage.cpp" />
     <ClCompile Include="shadercompiler\shadercompiler.cpp" />
     <ClCompile Include="data\particle_system_base.cpp" />
     <ClCompile Include="systems\renderer.cpp" />
@@ -29,29 +42,47 @@
     <ClInclude Include="components\particle.hpp" />
     <ClInclude Include="components\particle_emitter.hpp" />
     <ClInclude Include="components\point_cloud.hpp" />
+    <ClInclude Include="pipeline\base\pipeline.hpp" />
     <ClInclude Include="systems\pointcloudgeneration.hpp" />
     <ClInclude Include="components\renderable.hpp" />
+    <ClInclude Include="data\buffer.hpp" />
+    <ClInclude Include="data\framebuffer.hpp" />
     <ClInclude Include="data\importers\texture_importers.hpp" />
     <ClInclude Include="data\material.hpp" />
     <ClInclude Include="data\particle_system_cache.hpp" />
+    <ClInclude Include="data\renderbuffer.hpp" />
     <ClInclude Include="data\shader.hpp" />
+    <ClInclude Include="data\vertexarray.hpp" />
     <ClInclude Include="debugrendering.hpp" />
     <ClInclude Include="detail\stb_image.h" />
     <ClInclude Include="detail\tiny_obj_loader.h" />
     <ClInclude Include="data\model.hpp" />
     <ClInclude Include="data\texture.hpp" />
+    <ClInclude Include="pipeline\default\defaultpipeline.hpp" />
+    <ClInclude Include="pipeline\default\stages\clearstage.hpp" />
+    <ClInclude Include="pipeline\default\stages\framebufferresizestage.hpp" />
+    <ClInclude Include="pipeline\default\stages\lightbufferstage.hpp" />
+    <ClInclude Include="pipeline\default\stages\meshbatchingstage.hpp" />
+    <ClInclude Include="pipeline\default\stages\meshrenderstage.hpp" />
+    <ClInclude Include="pipeline\default\stages\submitstage.hpp" />
+    <ClInclude Include="systems\renderer.hpp" />
     <ClInclude Include="systems\particle_system_manager.hpp" />
     <ClInclude Include="module\renderingmodule.hpp" />
-    <ClInclude Include="pipeline\base\pipeline.hpp" />
+    <ClInclude Include="pipeline\base\pipelinebase.hpp" />
     <ClInclude Include="pipeline\base\renderstage.hpp" />
     <ClInclude Include="rendering.hpp" />
     <ClInclude Include="shadercompiler\shadercompiler.hpp" />
     <ClInclude Include="data\particle_system_base.hpp" />
     <ClInclude Include="systems\pointcloud_particlesystem.hpp" />
-    <ClInclude Include="systems\renderer.hpp" />
     <ClInclude Include="util\bindings.hpp" />
     <ClInclude Include="util\matini.hpp" />
     <ClInclude Include="util\settings.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\buffer.inl" />
+    <None Include="pipeline\base\pipeline.inl" />
+    <None Include="pipeline\base\renderstage.inl" />
+    <None Include="systems\renderer.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -9,6 +9,7 @@ namespace legion::core::ecs
 {
     // 2 because the world entity is 1 and 0 is invalid_id
     id_type EcsRegistry::m_nextEntityId = 2;
+    entity_handle EcsRegistry::world = entity_handle(world_entity_id);
 
     void EcsRegistry::recursiveDestroyEntityInternal(id_type entityId)
     {
@@ -50,7 +51,6 @@ namespace legion::core::ecs
         m_entityData.emplace(world_entity_id);
         m_containedEntities.insert(world_entity_id);
         m_entities.emplace(world_entity_id);
-        world = entity_handle(world_entity_id);
     }
 
     component_container_base* EcsRegistry::getFamily(id_type componentTypeId)
