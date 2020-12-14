@@ -51,11 +51,10 @@ public:
             app::ContextHelper::makeContextCurrent(window);
             auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
             particleMaterial = rendering::MaterialCache::create_material("directional light", colorshader);
-            particleMaterial.set_param("color", math::colors::green);
+            particleMaterial.set_param("color", math::colors::blue);
 
-           // m_normalMap = rendering::TextureCache::create_texture("normal test", "assets://textures/test-normal.png"_view);
-            image = ImageCache::create_image("normal image", "assets://textures/test-normal.png"_view);
-
+            image = ImageCache::create_image("normal image", "assets://textures/test-height.png"_view);
+          //  image = ImageCache::create_image("normal image", "assets://textures/rock-height.png"_view);
         }
 
         mesh_handle uvMesh = MeshCache::get_handle("uvsphere");
@@ -63,18 +62,9 @@ public:
         mesh_handle sphereMesh = MeshCache::get_handle("sphere");
         mesh_handle suzanneeMesh = MeshCache::get_handle("suzanne");
 
-
-
-
-
-        //   auto comparison
-         /*  auto ent = createEntity();
-           auto trans = ent.add_components<transform>(position(-5, 0, 0), rotation(), scale(0.5f));
-           ent.add_component<point_cloud>(point_cloud(uvMesh, trans, particleMaterial, 300, 0.1f));*/
-
         auto ent2 = createEntity();
         auto trans2 = ent2.add_components<transform>(position(5, 0, 0), rotation(), scale(0.5f));
-        ent2.add_component<point_cloud>(point_cloud(sphereMesh, trans2, particleMaterial, image, 1000, 0.05f));
+        ent2.add_component<point_cloud>(point_cloud(cubeMesh, trans2, particleMaterial, image, 6000, 0.015f));
     }
 };
 

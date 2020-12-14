@@ -80,23 +80,16 @@ namespace legion::rendering
             auto vertices = m.second.vertices;
             auto indices = m.second.indices;
             auto uvs = m.second.uvs;
-            //log::debug(vertices.size());
-            //log::debug(indices.size());
+          
             size_t triangle_count = indices.size() / 3;
             uint process_Size = triangle_count;
             size_t points_Generated = (triangle_count * realPointCloud.m_samplesPerTriangle);
-            /*   log::debug("spt:");
-               log::debug(realPointCloud.m_samplesPerTriangle);
-               log::debug("triangle count");
-               log::debug(triangle_count);
-
-               log::debug("depth");
-               log::debug(realPointCloud.m_sampleDepth);*/
-               //Generate points 
+            
+            //Generate points 
             std::vector<math::vec4> result(points_Generated);
 
             //Get normal map
-            auto [lock, img] = realPointCloud.m_normalMap.get_raw_image();
+            auto [lock, img] = realPointCloud.m_heightMap.get_raw_image();
             {
                 async::readonly_guard guard(lock);
                 auto normalMapBuffer = compute::Context::createImage(img, compute::buffer_type::READ_BUFFER, "normalMap");
@@ -104,7 +97,7 @@ namespace legion::rendering
                 auto indexBuffer = compute::Context::createBuffer(indices, compute::buffer_type::READ_BUFFER, "indices");
                 auto uvBuffer = compute::Context::createBuffer(uvs, compute::buffer_type::READ_BUFFER, "uvs");
                 auto outBuffer = compute::Context::createBuffer(result, compute::buffer_type::WRITE_BUFFER, "points");
-
+                uint size = realPointCloud.m_heightMap.size().x;
                 auto computeResult = pointCloudGeneratorCS
                 (
                     process_Size,
@@ -114,7 +107,8 @@ namespace legion::rendering
                     normalMapBuffer,
                     karg(realPointCloud.m_samplesPerTriangle, "samplePerTri"),
                     karg(realPointCloud.m_sampleDepth, "sampleWidth"),
-                    karg(realPointCloud.m_normalStrength, "normalStrength"),
+                    karg(realPointCloud.m_heightStrength, "normalStrength"),
+                    karg(size, "textureSize"),
                     outBuffer
                 );
             }
@@ -122,7 +116,7 @@ namespace legion::rendering
             std::vector<math::vec3> particleInput(points_Generated);
             for (int i = 0; i < points_Generated; i++)
             {
-                //  log::debug(result.at(i));
+              // log::debug(result.at(i));
                 particleInput.at(i) = result.at(i).xyz;
             }
             //generate particle params
@@ -133,8 +127,6 @@ namespace legion::rendering
                ModelCache::get_handle("cube")
             };
             GenerateParticles(params, particleInput, realPointCloud.m_trans);
-
-
 
 
             //write that pc has been generated
@@ -161,8 +153,5 @@ namespace legion::rendering
             cloudGenerationCount++;
         }
     };
-
-
-
 }
 

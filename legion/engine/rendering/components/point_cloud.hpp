@@ -24,11 +24,11 @@ namespace legion::rendering
          * @param maxPoints is used to calculate the samples for each triangle of the mesh,
          * @param radius defines point scale.
          */
-        point_cloud(mesh_handle newMesh, transform newTrans, material_handle mat, image_handle normal, uint maxPoints = 100, float radius = 0.2f)
+        point_cloud(mesh_handle newMesh, transform newTrans, material_handle mat, image_handle heightMap, uint maxPoints = 100, float radius = 0.2f)
         {
             m_mesh = newMesh;
             m_trans = newTrans;
-            m_normalMap = normal;
+            m_heightMap = heightMap;
             //m_samplesPerTriangle = calculateSamplesPerTriangle(maxPoints);
             m_pointRadius = radius;
             m_Material = mat;
@@ -42,14 +42,14 @@ namespace legion::rendering
         bool m_hasBeenGenerated = false;
 
         //point cloud parameters
-        uint m_normalStrength = 1;
+        float m_heightStrength = 0.2f;
         float m_pointRadius;
         transform m_trans;
         mesh_handle m_mesh;
         uint m_samplesPerTriangle;
         uint m_sampleDepth;
         material_handle m_Material;
-        image_handle m_normalMap;
+        image_handle m_heightMap;
 
         void InitSampleValues(uint maxPoints)
         {
@@ -72,7 +72,7 @@ namespace legion::rendering
                 sum = 0;
                 currentIterator++;
                 //exit if too many iterations are made 
-                if (currentIterator > 30)
+                if (currentIterator > 45)
                 {
                     log::error("please decrease max sample points for point cloud object");
                     return;
