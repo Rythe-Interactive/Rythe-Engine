@@ -153,7 +153,8 @@ namespace legion::application
 
     void ContextHelper::setWindowShouldClose(GLFWwindow* window, int value)
     {
-        glfwSetWindowShouldClose(window, value);
+        if (window)
+            glfwSetWindowShouldClose(window, value);
     }
 
     int ContextHelper::windowShouldClose(GLFWwindow* window)

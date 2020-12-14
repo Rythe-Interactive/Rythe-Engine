@@ -28,6 +28,19 @@ namespace legion::core::events
     };
 
     template<typename component_type>
+    struct component_modification : public event<component_modification<component_type>>
+    {
+        ecs::entity_handle entity;
+
+        component_modification() = default;
+        component_modification(ecs::entity_handle entity) : entity(entity) {}
+
+        virtual bool persistent() override { return false; }
+        virtual bool unique() override { return false; }
+
+    };
+
+    template<typename component_type>
     struct component_destruction : public event<component_destruction<component_type>>
     {
         ecs::entity_handle entity;

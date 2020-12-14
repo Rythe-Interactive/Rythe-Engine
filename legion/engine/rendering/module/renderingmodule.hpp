@@ -1,6 +1,8 @@
 #pragma once
 #include <rendering/data/importers/texture_importers.hpp>
 #include <rendering/systems/renderer.hpp>
+#include <rendering/components/renderable.hpp>
+#include <rendering/components/light.hpp>
 #include <rendering/systems/particle_system_manager.hpp>
 #include <rendering/components/point_cloud.hpp>
 #include <rendering/systems/pointcloudgeneration.hpp>

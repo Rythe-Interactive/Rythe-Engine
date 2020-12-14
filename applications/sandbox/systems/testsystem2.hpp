@@ -26,7 +26,7 @@ struct activateUpdate : public app::input_action<activateUpdate> {};
 class TestSystem2 final : public System<TestSystem2>
 {
 public:
-    TestSystem2()
+    TestSystem2() : System<TestSystem2>()
     {
         log::filter(log::severity::debug);
         app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1);
@@ -47,6 +47,7 @@ public:
         rendering::material_handle vertexColor;
         rendering::material_handle pointCloudColor;
         rendering::material_handle directionalLightMH;
+        
 
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
@@ -60,7 +61,7 @@ public:
               directionalLightMH = rendering::MaterialCache::create_material("directional light", colorshader);
               directionalLightMH.set_param("color", math::color(1, 1, 0.8f));
 
-              cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
+             cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
               vertexColor = rendering::MaterialCache::create_material("vertex color", "assets://shaders/vertexcolor.shs"_view);
 
 
@@ -105,15 +106,15 @@ public:
   #pragma endregion
 
           }
-        std::vector<math::vec3> points;
-        double x, y, z;
-        double width = 10, height = 10, depth = 10;
-        for (int i = 0; i < 40; i++)
-        {
-            x = -width + rnd() * (width - (-width));
+        //std::vector<math::vec3> points;
+        //double x, y, z;
+        //double width = 10, height = 10, depth = 10;
+        //for (int i = 0; i < 40; i++)
+        //{
+           /* x = -width + rnd() * (width - (-width));
             y = -height + rnd() * (height - (-height));
             z = -depth + rnd() * (depth - (-depth));
-            points.push_back(math::vec3(x, y, z));
+            points.push_back(math::vec3(x, y, z));*/
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
@@ -181,19 +182,19 @@ public:
 
 #pragma endregion
 
-        }
+        //}
         
-        voronoi = physics::PhysicsStatics::GenerateVoronoi(points);
+        /*voronoi = physics::PhysicsStatics::GenerateVoronoi(points);*/
 
         createProcess<&TestSystem2::update>("Update");
     }
 
     void update(time::span deltaTime)
     {
-        for (auto point : voronoi)
-        {
-            debug::drawLine(point[0], point[1], math::colors::magenta);
-		}
+  //      for (auto point : voronoi)
+  //      {
+  //          debug::drawLine(point[0], point[1], math::colors::magenta);
+		//}
     }
 
     void onParticleActivate(activateUpdate* action)
