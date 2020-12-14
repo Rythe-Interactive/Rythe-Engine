@@ -3,6 +3,7 @@
 
 #include <cereal/types/unordered_map.hpp>
 #include <cereal/types/memory.hpp>
+#include <cereal/types/vector.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
 
@@ -113,7 +114,7 @@ namespace legion::core::serialization
         static void JSONSerialize(std::ofstream& os, T serializable)
         {
             cereal::JSONOutputArchive archive(os);// Create an output archive, Output as outputing to a string stream
-            archive(cereal::make_nvp("Entity", serializable)); // Read the data to the archive
+            archive(cereal::make_nvp(typeid(T).name(),serializable)); // Read the data to the archive
         }
 
         /**@brief JSON deserialization from a filestream
