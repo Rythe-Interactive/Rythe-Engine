@@ -13,7 +13,7 @@ namespace legion::rendering
         template <class T,void(T::*Func)()>
         static void addGuiRender(T* ptr)
         {
-            OnGuiRender += delegate<void()>::create<T,Func>(ptr);
+            m_onGuiRender += delegate<void()>::create<T,Func>(ptr);
         }
 
 
@@ -21,6 +21,6 @@ namespace legion::rendering
 
         /** @brief to render imgui things add a function here
          */
-        static multicast_delegate<void()> OnGuiRender;
+        static multicast_delegate<void()> m_onGuiRender;
     };
 }

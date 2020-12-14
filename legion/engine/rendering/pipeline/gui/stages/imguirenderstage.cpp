@@ -50,9 +50,9 @@ namespace legion::rendering
         ImGui::NewFrame();
 
         //call gui callback
-        if (!OnGuiRender.isNull())
+        if (!m_onGuiRender.isNull())
         {
-            OnGuiRender();
+            m_onGuiRender();
         }
 
         //render gui
@@ -66,5 +66,5 @@ namespace legion::rendering
         return -100;
     }
 
-    multicast_delegate<void()> ImGuiStage::OnGuiRender;
+    multicast_delegate<void()> ImGuiStage::m_onGuiRender;
 }
