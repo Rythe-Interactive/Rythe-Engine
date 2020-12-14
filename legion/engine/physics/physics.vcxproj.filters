@@ -152,5 +152,11 @@
     <ClInclude Include="mesh_splitter_utils\intersecting_polygon_organizer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="mesh_splitter_utils\mesh_split_params.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_splitter_utils\intersection_edge_info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

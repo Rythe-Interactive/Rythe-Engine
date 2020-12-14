@@ -3,17 +3,25 @@
 #include <physics/mesh_splitter_utils/splittable_polygon.h>
 #include <physics/mesh_splitter_utils/mesh_splitter_typedefs.hpp>
 #include <physics/mesh_splitter_utils/mesh_splitter_debug_helpers.h>
+#include <physics/mesh_splitter_utils/intersection_edge_info.h>
 
 namespace legion::physics
 {
     struct IntersectingPolygonOrganizer
     {
+        MeshSplitterDebugHelper* debugHelper = nullptr;
+
+        IntersectingPolygonOrganizer(MeshSplitterDebugHelper* pDebugHelper) : debugHelper(pDebugHelper)
+        {
+
+        }
+
         void categorizeEdges(SplittablePolygonPtr splitPolygon
             , const math::mat4& transform, const math::vec3 cutPosition
-            , const math::vec3 cutNormal, SplitState requestedState, MeshSplitterDebugHelper& debugHelper)
+            , const math::vec3 cutNormal, SplitState requestedState
+            , std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges)
         {
             BoundaryEdgeInfo polygonDebugInfo;
-
 
             bool keepAbove = requestedState == SplitState::Above ? true : false;
             //For now assume no islands in one polygon
@@ -161,16 +169,12 @@ namespace legion::physics
             math::vec3 worldFirstEdge = splitEdges.at(0)->GetWorldCentroid(transform);
             math::vec3 worldSecondEdge = splitEdges.at(splitEdges.size() - 1)->GetWorldCentroid(transform);
 
-
-
             //use min max edges as new sorting direction
 
             //sort effectedUsedEdges based on sorting direction
 
             math::vec3 sortingCentroid = (worldFirstEdge + worldSecondEdge) / 2.0f;
             math::vec3 sortingDirection = worldSecondEdge - worldFirstEdge;
-
-
 
             auto boundarySorter = [&transform, &sortingCentroid, &sortingDirection]
             (const std::shared_ptr<MeshHalfEdge>& lhs, std::shared_ptr<MeshHalfEdge>& rhs)
@@ -196,8 +200,6 @@ namespace legion::physics
 
             //[5] Regenerate Edges
             //check if current polygon point is above splitting plane
-
-
 
             //get start and end intersection points
             auto [firstEdgeCurrent, firstEdgeNext] = firstEdge->GetEdgeWorldPositions(transform);
@@ -243,13 +245,13 @@ namespace legion::physics
                 {
                     InsideIntersectionMeshRegeneration(
                         transform, effectedUsedEdges,
-                        generatedHalfEdges, i, supportEdge, vertexIntersectionInfo, polygonDebugInfo);
+                        generatedHalfEdges, i, supportEdge, vertexIntersectionInfo, polygonDebugInfo, generatedIntersectionEdges);
                 }
                 else
                 {
                     OutsideIntersectionMeshRegeneration(
                         transform, effectedUsedEdges,
-                        generatedHalfEdges, i, supportEdge, vertexIntersectionInfo, polygonDebugInfo);
+                        generatedHalfEdges, i, supportEdge, vertexIntersectionInfo, polygonDebugInfo, generatedIntersectionEdges);
                 }
 
 
@@ -274,7 +276,7 @@ namespace legion::physics
                 generatedHalfEdges.begin(),
                 generatedHalfEdges.end());
 
-            debugHelper.boundaryEdgesForPolygon.push_back(polygonDebugInfo);
+            debugHelper->boundaryEdgesForPolygon.push_back(polygonDebugInfo);
 
             auto& meshEdges = splitPolygon->GetMeshEdges();
 
@@ -286,13 +288,13 @@ namespace legion::physics
 
 
 
-            debugHelper.polygonCount++;
+            debugHelper->polygonCount++;
         }
 
         void InsideIntersectionMeshRegeneration(const math::mat4& transform, std::vector<meshHalfEdgePtr>& effectedBoundaryEdges,
             std::vector<meshHalfEdgePtr>& generatedEdges, int i
             , meshHalfEdgePtr& supportEdge,
-            const SplitterIntersectionInfo& vertexIntersectionInfo, BoundaryEdgeInfo& debugStuff)
+            const SplitterIntersectionInfo& vertexIntersectionInfo, BoundaryEdgeInfo& debugStuff, std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges)
         {
             //select Base Half Edge
             meshHalfEdgePtr baseEdge = effectedBoundaryEdges[i];
@@ -382,6 +384,11 @@ namespace legion::physics
 
             CreateNonAllignedQuad(currentSupportEdge, nextSupportEdge, baseEdge, intersectionEdge, generatedEdges);
 
+            IntersectionEdgeInfo intersectionEdgeInfo(
+                intersectionEdge);
+
+            generatedIntersectionEdges.push_back(intersectionEdgeInfo);
+
             supportEdge = nextSupportEdge;
 
 
@@ -416,7 +423,7 @@ namespace legion::physics
         void OutsideIntersectionMeshRegeneration(const math::mat4& transform, std::vector<meshHalfEdgePtr>& effectedBoundaryEdges,
             std::vector<meshHalfEdgePtr>& generatedEdges, int i
             , meshHalfEdgePtr supportEdge,
-            const SplitterIntersectionInfo& vertexIntersectionInfo, BoundaryEdgeInfo& debugStuff)
+            const SplitterIntersectionInfo& vertexIntersectionInfo, BoundaryEdgeInfo& debugStuff, std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges)
         {
             meshHalfEdgePtr baseEdge = effectedBoundaryEdges[i];
 
@@ -480,6 +487,10 @@ namespace legion::physics
 
             generatedEdges.push_back(intersectionEdge);
 
+            IntersectionEdgeInfo intersectionEdgeInfo(
+                intersectionEdge);
+
+            generatedIntersectionEdges.push_back(intersectionEdgeInfo);
 
             CreateAllignedQuad(currentSupportEdge, nextSupportEdge, baseEdge,
                 intersectionEdge, generatedEdges);

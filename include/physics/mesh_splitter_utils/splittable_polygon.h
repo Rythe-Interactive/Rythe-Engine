@@ -17,7 +17,7 @@ namespace legion::physics
 	class SplittablePolygon : public std::enable_shared_from_this<SplittablePolygon>
 	{
 	public:
-		SplittablePolygon(std::vector<std::shared_ptr<MeshHalfEdge>> pEdgesInMesh,math::vec3 normal);
+		SplittablePolygon(std::vector<std::shared_ptr<MeshHalfEdge>>& pEdgesInMesh,math::vec3 normal);
 
 		std::vector<std::shared_ptr<MeshHalfEdge>>& GetMeshEdges();
 

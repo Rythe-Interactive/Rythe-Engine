@@ -168,6 +168,7 @@ public:
 
         app::InputSystem::createBinding< extendedPhysicsContinue>(app::inputmap::method::M);
         app::InputSystem::createBinding<nextPhysicsTimeStepContinue>(app::inputmap::method::N);
+
         app::InputSystem::createBinding<physics_split_test>(app::inputmap::method::ENTER);
 
         bindToEvent<physics_test_move, &TestSystem::onUnitPhysicsUnitTestMove>();
@@ -277,7 +278,7 @@ public:
             gizmoMH.set_param("color", math::colors::lightgrey);
 
             textureH = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
-            textureH.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
+            textureH.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo2"_view));
 
             auto pbrShader = rendering::ShaderCache::create_shader("pbr", "assets://shaders/pbr.shs"_view);
             pbrH = rendering::MaterialCache::create_material("pbr", pbrShader);
@@ -2111,15 +2112,16 @@ public:
             math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
 
             auto splitter = edgeFinderH.read();
-            auto edgePtr = splitter.edgeFinder.currentPtr;
 
-            math::vec3 worldPos = transform * math::vec4(edgePtr->position, 1);
-            math::vec3 worldNextPos = transform * math::vec4(edgePtr->nextEdge->position, 1);
+            //auto edgePtr = splitter.edgeFinder.currentPtr;
 
-            debug::drawLine(worldPos, worldNextPos, math::colors::red, 1.0f, 0.0f, true);
+            //math::vec3 worldPos = transform * math::vec4(edgePtr->position, 1);
+            //math::vec3 worldNextPos = transform * math::vec4(edgePtr->nextEdge->position, 1);
 
-            debug::drawLine(worldPos, worldPos + math::vec3(0, 0.1f, 0), math::colors::green, 5.0f, 0.0f, true);
-            debug::drawLine(worldNextPos, worldNextPos + math::vec3(0, 0.1f, 0), math::colors::blue, 5.0f, 0.0f, true);
+            //debug::drawLine(worldPos, worldNextPos, math::colors::red, 1.0f, 0.0f, true);
+
+            //debug::drawLine(worldPos, worldPos + math::vec3(0, 0.1f, 0), math::colors::green, 5.0f, 0.0f, true);
+            //debug::drawLine(worldNextPos, worldNextPos + math::vec3(0, 0.1f, 0), math::colors::blue, 5.0f, 0.0f, true);
 
             auto getEdge = entity.get_component_handle<physics::identifier>();
 
@@ -2602,7 +2604,7 @@ public:
 
     void OnNextEdge(nextEdge_action* action)
     {
-        static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
+        /*static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
 
         if (action->value)
         {
@@ -2620,14 +2622,14 @@ public:
                 edgeFinderH.write(splitter);
 
             }
-        }
+        }*/
 
       
     }
 
     void OnNextPair(nextPairing_action * action)
     {
-        static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
+        /*static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
 
         if (action->value)
         {
@@ -2645,7 +2647,7 @@ public:
                 edgeFinderH.write(splitter);
 
             }
-        }
+        }*/
       
     }
 

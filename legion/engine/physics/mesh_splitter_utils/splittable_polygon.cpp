@@ -6,7 +6,7 @@
 namespace legion::physics
 {
     SplittablePolygon::SplittablePolygon
-    (std::vector<std::shared_ptr<MeshHalfEdge>> pEdgesInMesh,math::vec3 pNormal)
+    (std::vector<std::shared_ptr<MeshHalfEdge>>& pEdgesInMesh,math::vec3 pNormal)
         : edgesInPolygon(std::move(pEdgesInMesh)), localNormal(pNormal)
     {
         debugColor = math::color(math::linearRand(0.25f, 0.7f), math::linearRand(0.25f, 0.7f), math::linearRand(0.25f, 0.7f));
