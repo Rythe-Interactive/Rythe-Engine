@@ -40,10 +40,11 @@ public:
     rendering::material_handle flatGreen;
     rendering::material_handle vertexColor;
     rendering::material_handle directionalLightMH;
+    rendering::material_handle color;
 
     virtual void setup()
     {
-
+#pragma region Inputs
         app::InputSystem::createBinding<savescene1>(app::inputmap::method::F1);
         app::InputSystem::createBinding<savescene2>(app::inputmap::method::F2);
         app::InputSystem::createBinding<loadscene1>(app::inputmap::method::F3);
@@ -57,11 +58,8 @@ public:
         bindToEvent<loadscene2, &SceneTestSystem1::loadScene2>();
 
         bindToEvent<createRandEnt, &SceneTestSystem1::createRandomEntity>();
-
-
-
+#pragma endregion
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
-
         {
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
@@ -79,7 +77,13 @@ public:
 
             {
                 auto ent = createEntity();
-                ent.add_components<rendering::renderable>(cube.get_mesh(), rendering::mesh_renderer(vertexColor));
+                ent.add_components<rendering::mesh_renderable>(cube.get_mesh(), rendering::mesh_renderer(vertexColor));
+                ent.add_components<transform>(position(-5, 0.01f, 0), rotation(), scale(1));
+            }
+
+            {
+                auto ent = createEntity();
+                ent.add_components<rendering::mesh_renderable>(cube.get_mesh(), rendering::mesh_renderer(color));
                 ent.add_components<transform>(position(-5, 0.01f, 0), rotation(), scale(1));
             }
 
@@ -135,9 +139,11 @@ public:
     void createRandomEntity(createRandEnt* action)
     {
         cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
-        vertexColor = rendering::MaterialCache::create_material("vertex color", "assets://shaders/vertexcolor.shs"_view);
+        color = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
+        color.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
+
         auto ent = createEntity();
-        ent.add_components<rendering::renderable>(cube.get_mesh(), rendering::mesh_renderer(vertexColor));
+        ent.add_components<rendering::mesh_renderable>(cube.get_mesh(), rendering::mesh_renderer(color));
         ent.add_components<transform>(position(rnd() * 5, 0.01f, rnd() * 5), rotation(), scale(1));
     }
 };
