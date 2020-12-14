@@ -134,7 +134,7 @@ namespace legion::rendering
         if (!app::ContextHelper::getCurrentContext())
         {
             log::error("No current context to read from.");
-            return;
+            return math::ivec2(0, 0);
         }
 #endif
         math::ivec2 size;
