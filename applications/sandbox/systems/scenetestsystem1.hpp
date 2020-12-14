@@ -143,6 +143,8 @@ public:
     void createRandomEntity(createRandEnt* action)
     {
         cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
+        color = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
+        color.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
 
         auto ent = createEntity();
         ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(color));

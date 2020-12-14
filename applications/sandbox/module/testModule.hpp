@@ -24,8 +24,8 @@ public:
         //}
         //else
         //{
-            reportComponentType<sah>();
-            reportSystem<TestSystem>();
+          /*  reportComponentType<sah>();
+            reportSystem<TestSystem>();*/
         //}
         //reportSystem<TestSystem2>();
         reportSystem<SceneTestSystem1>();

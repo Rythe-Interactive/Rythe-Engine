@@ -7,6 +7,13 @@
                 "Owner": 7,
                 "Component Type": 9547123436134525643,
                 "Component Name": "struct legion::core::scenemanagement::scene",
+                "Filename": {
+                    "value0": 72,
+                    "value1": 101,
+                    "value2": 121,
+                    "value3": 111,
+                    "value4": 0
+                },
                 "NAME": "Main"
             }
         ],
@@ -18,7 +25,16 @@
                     {
                         "Owner": 2,
                         "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Name": "struct legion::core::mesh_filter",
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
+                        "value0": 5503224543670688896,
+                        "Filename": "cube.obj"
                     },
                     {
                         "Owner": 2,
@@ -29,6 +45,13 @@
                         "Owner": 2,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
                         "x": 1.0,
                         "y": 1.0,
                         "z": 1.0
@@ -37,6 +60,13 @@
                         "Owner": 2,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
                         "x": 0.0,
                         "y": 0.0,
                         "z": 0.0,
@@ -46,6 +76,13 @@
                         "Owner": 2,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
                         "x": -5.0,
                         "y": 0.009999999776482582,
                         "z": 0.0
@@ -60,7 +97,16 @@
                     {
                         "Owner": 3,
                         "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Name": "struct legion::core::mesh_filter",
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
+                        "value0": 5503224543670688896,
+                        "Filename": "cube.obj"
                     },
                     {
                         "Owner": 3,
@@ -71,6 +117,13 @@
                         "Owner": 3,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
                         "x": 1.0,
                         "y": 1.0,
                         "z": 1.0
@@ -79,6 +132,13 @@
                         "Owner": 3,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
                         "x": 0.0,
                         "y": 0.0,
                         "z": 0.0,
@@ -88,6 +148,13 @@
                         "Owner": 3,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
                         "x": -2.0,
                         "y": 0.009999999776482582,
                         "z": 0.0
@@ -102,7 +169,16 @@
                     {
                         "Owner": 4,
                         "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Name": "struct legion::core::mesh_filter",
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
+                        "value0": 11545668865037648829,
+                        "Filename": "groundplane.obj"
                     },
                     {
                         "Owner": 4,
@@ -113,6 +189,13 @@
                         "Owner": 4,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
                         "x": 1.0,
                         "y": 1.0,
                         "z": 1.0
@@ -121,6 +204,13 @@
                         "Owner": 4,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
                         "x": 0.0,
                         "y": 0.0,
                         "z": 0.0,
@@ -130,6 +220,13 @@
                         "Owner": 4,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
                         "x": 0.0,
                         "y": 0.0,
                         "z": 0.0
@@ -144,7 +241,16 @@
                     {
                         "Owner": 5,
                         "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Name": "struct legion::core::mesh_filter",
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
+                        "value0": 16147701225056486911,
+                        "Filename": "uvsphere.obj"
                     },
                     {
                         "Owner": 5,
@@ -155,6 +261,13 @@
                         "Owner": 5,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
                         "x": 1000.0,
                         "y": 1000.0,
                         "z": 1000.0
@@ -163,6 +276,13 @@
                         "Owner": 5,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
                         "x": 0.0,
                         "y": 0.0,
                         "z": 0.0,
@@ -172,6 +292,13 @@
                         "Owner": 5,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
                         "x": 0.0,
                         "y": 3.0,
                         "z": 0.0
@@ -187,6 +314,13 @@
                         "Owner": 6,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
                         "x": 1.0,
                         "y": 1.0,
                         "z": 1.0
@@ -195,15 +329,29 @@
                         "Owner": 6,
                         "Component Type": 7097645533378480892,
                         "Component Name": "struct legion::core::rotation",
-                        "x": 0.24468450248241425,
-                        "y": -0.6411562561988831,
-                        "z": 0.2270287126302719,
-                        "w": 0.6910182237625122
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
+                        "x": 0.39526575803756716,
+                        "y": -0.5841671824455261,
+                        "z": 0.3901130259037018,
+                        "w": 0.5918830633163452
                     },
                     {
                         "Owner": 6,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
+                        "Filename": {
+                            "value0": 72,
+                            "value1": 101,
+                            "value2": 121,
+                            "value3": 111,
+                            "value4": 0
+                        },
                         "x": 0.0,
                         "y": 3.0,
                         "z": 0.0
