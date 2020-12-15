@@ -11,6 +11,8 @@
 #include <sstream>
 #include <fstream>
 #include <string>
+#include <memory>
+#include <any>
 
 
 //Some testing objects for serialization
@@ -114,7 +116,7 @@ namespace legion::core::serialization
         static void JSONSerialize(std::ofstream& os, T serializable)
         {
             cereal::JSONOutputArchive archive(os);// Create an output archive, Output as outputing to a filestream
-            archive(cereal::make_nvp(typeid(T).name(),serializable)); // Read the data to the archive
+            archive(cereal::make_nvp(typeid(T).name(), serializable)); // Read the data to the archive
         }
 
         /**@brief JSON deserialization from a filestream
@@ -152,6 +154,22 @@ namespace legion::core::serialization
             T t;
             iarchive(t); // Read the data from the archive
             return t;
+        }
+    };
+
+
+    class DataCache
+    {
+    public:
+
+        std::unordered_map<id_type, std::vector<std::any>> cache;
+
+        template<typename serializableType>
+        static size_t append_list(std::string name,serializableType type)
+        {
+            id_type id = nameHash(name);
+            cache[id].push_back(std::make_any<serializableType>(type));
+            return cache[id].size()-1;
         }
     };
 }
