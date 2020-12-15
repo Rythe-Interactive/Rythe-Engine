@@ -19,7 +19,7 @@ namespace legion::physics
     {
 
         ecs::entity_handle owner;
-        ecs::entity_handle splitTester;
+        std::vector<ecs::entity_handle> splitTester;
 
         rendering::material_handle ownerMaterialH;
 
@@ -30,16 +30,21 @@ namespace legion::physics
         void TestSplit()
         {
 
-            if (splitTester)
+            if (!splitTester.empty())
             {
+                std::vector<MeshSplitParams> splittingPlanes;
 
-                auto [posH, rotH, scaleH] = splitTester.get_component_handles<transform>();
-                const math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
+                for (auto splitObject : splitTester)
+                {
+                    auto [posH, rotH, scaleH] = splitObject.get_component_handles<transform>();
+                    const math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
+                    const math::vec3 worldUp = transform * math::vec4(0, 1, 0, 0);
 
-                const math::vec3 worldUp = transform * math::vec4(0, 1, 0, 0);
-
-                SplitMesh(posH.read(), math::normalize(worldUp), true);
-
+                    splittingPlanes.push_back(MeshSplitParams(posH.read(),math::normalize(worldUp)));
+                  
+                }
+                
+                MultipleSplitMesh(splittingPlanes);
 
             }
             else
@@ -50,7 +55,13 @@ namespace legion::physics
 
         void DestroyTestSplitter(ecs::EcsRegistry* m_ecs)
         {
-            m_ecs->destroyEntity(splitTester);
+            for (auto splitObject : splitTester)
+            {
+                m_ecs->destroyEntity(splitObject);
+            }
+
+            splitTester.clear();
+           
         }
 
         /** @brief Creates a Half-Edge Data structure around the mesh and
@@ -207,34 +218,205 @@ namespace legion::physics
             return true;
         }
 
-        //TODO MultipleSplitMesh and SplitMesh can be refactored somehow
-
-        void MultipleSplitMesh(std::vector<MeshSplitParams> splittingPlanes, bool keepBelow = true)
+        void SplitPolygons
+        (   std::vector<SplittablePolygonPtr>& polygonsToSplit,
+            const math::vec3& planeNormal,
+            const math::vec3& planePosition,
+            const math::mat4& transform,
+            std::vector<std::vector<SplittablePolygonPtr>>& resultingIslands,
+            bool keepBelow = true)
         {
+            log::debug("SplitPolygons");
+            for (auto polygon : polygonsToSplit)
+            {
+                polygon->isVisited = false;
+                polygon->CalculatePolygonSplit(transform, planePosition, planeNormal);
+                /*log::debug("-------------");
+                log::debug(" polygon->visited {} " ,polygon->isVisited);
+                log::debug(" polygon edge count {} ", polygon->GetMeshEdges().size());
+                switch (polygon->GetPolygonSplitState())
+                {
+                case SplitState::Above:
+                    log::debug("Above");
+                    break;
+                case SplitState::Split:
+                    log::debug("Split");
+                    break;
+                case SplitState::Below:
+                    log::debug("Below");
+                    break;
+                default:
+                    break;
+
+               
+
+                }
+                int bCount = 0;
+
+                for (auto edge : polygon->GetMeshEdges())
+                {
+                    if (edge->isBoundary)
+                    {
+                        bCount++;
+                    }
+                }
+                log::debug(" polygon boundary count {} ", bCount);
+                log::debug("-------------");*/
+            }
+
+            SplitState requestedState = keepBelow ? SplitState::Below : SplitState::Above;
+
+            SplittablePolygonPtr initialFound = nullptr;
+
+            bool foundUnvisited =
+                FindFirstIntersectingOrRequestedState
+                (initialFound, requestedState,polygonsToSplit);
+
+            log::debug("-> Start while loop");
+
+            for (auto polygon : polygonsToSplit)
+            {
+                log::debug("-> checking polygon ");
+                //log::debug("polygon is intersecting ");
+
+                //polygon->AssignEdgeOwnership();
+
+                //if (polygon->isIntersectingPart)
+                //{
+                //    DebugBreak();
+                //    for (auto edge : polygon->GetMeshEdges())
+                //    {
+                //        if (edge->isBoundary)
+                //        {
+                //            auto pairing = edge->pairingEdge;
+
+                //            auto pairingpairing = pairing->pairingEdge;
+
+                //           /* std::string pairingID = pairing->debugID;
+                //            std::string pairingpairingID = pairingpairing->debugID;*/
+
+                //            assert(pairingpairing == edge);
+
+                //        }
+                //    }
+                //}
+            }
+
+            while (foundUnvisited)
+            {
+                std::vector<SplittablePolygonPtr> splitMesh;
+                std::vector<SplittablePolygonPtr> nonSplitMesh;
+
+               
+
+                //------------------------ BFS search polygons that are in the same island -------------------------------------------//
+                //------------------------ and  divide them into a list of split and nonsplit polygons--------------------------//
+                initialFound->isVisited = false;
+                BFSFindRequestedAndIntersecting(
+                    initialFound,
+                    splitMesh,
+                    nonSplitMesh, requestedState);
+
+       /*         log::debug("split containes");
+                for (auto pol : splitMesh)
+                {
+                    log::debug("pol is intersecting? {} " , pol->isIntersectingPart);
+                }*/
+                    
+
+                //find holes is newly created mesh
+                std::vector < std::vector <meshHalfEdgePtr>> holeIslands;
+                std::vector<std::vector<SplittablePolygonPtr>> intersectionIslands;
+
+                //----------------------------------- Detect multiple holes in mesh  --------------------------------------------------//
+
+                DetectIntersectionIsland(splitMesh, intersectionIslands);
+
+                std::vector<IntersectionEdgeInfo> generatedIntersectionEdges;
+
+                //----------------------------------- Filter Edges in polygon in order to fit sliced mesh --------------------------------------------------//
+
+                for (std::vector<SplittablePolygonPtr>& intersectionIsland : intersectionIslands)
+                {
+                    for (SplittablePolygonPtr islandPolygon : intersectionIsland)
+                    {
+                        categorizeEdges(islandPolygon, transform, planePosition, planeNormal, requestedState, generatedIntersectionEdges);
+                    }
+                }
+
+                math::vec3 localNormal = transform * math::vec4(planeNormal, 0);
+                SplittablePolygonPtr intersectionPolygon = CreateIntersectionPolygon(generatedIntersectionEdges, math::normalize(localNormal));
+                intersectionPolygon->isVisited = true;
+                intersectionPolygon->ResetEdgeVisited();
+                //intersectionPolygon->isIntersectingPart = true;
+                //---------------------------------- Add intersecting and nonsplit to primitive mesh ---------------------------------//
+                
+
+                std::vector< SplittablePolygonPtr> resultPolygons;
+
+                resultPolygons.insert(resultPolygons.end()
+                    , std::make_move_iterator(splitMesh.begin()), std::make_move_iterator(splitMesh.end()));
+
+                resultPolygons.insert(resultPolygons.end()
+                    , std::make_move_iterator(nonSplitMesh.begin()), std::make_move_iterator(nonSplitMesh.end()));
+
+                resultPolygons.push_back(std::move(intersectionPolygon));
+
+                
+
+                foundUnvisited =
+                    FindFirstIntersectingOrRequestedState
+                    (initialFound, requestedState,polygonsToSplit);
+
+                resultingIslands.push_back(std::move(resultPolygons));
+
+            }
+
+
+        }
+
+
+
+        void MultipleSplitMesh(const std::vector<MeshSplitParams>& splittingPlanes, bool keepBelow = true)
+        {
+            auto [posH, rotH, scaleH] = owner.get_component_handles<transform>();
+            const math::mat4& transform = math::compose(scaleH.read(), rotH.read(), posH.read());
+
             //copy original mesh
 
+            std::vector< std::vector<SplittablePolygonPtr>> outputPolygonIslandsGenerated;
+            outputPolygonIslandsGenerated.push_back(std::move(meshPolygons));
+            meshPolygons.clear();
+
             //for each splitting plane in splittingPlanes
+            for (const MeshSplitParams& splitParam : splittingPlanes)
+            {
+                std::vector< std::vector<SplittablePolygonPtr>> inputList = std::move(outputPolygonIslandsGenerated);
+                outputPolygonIslandsGenerated.clear();
 
-                //for each polygonIsland Generated
+                for (std::vector<SplittablePolygonPtr>& polygonIsland : inputList)
+                {
+                    for (SplittablePolygonPtr polygon : polygonIsland)
+                    {
+                        polygon->isVisited = false;
+                    }
 
-                    //identify polygon state
+                    SplitPolygons
+                    (polygonIsland,
+                        splitParam.planeNormal,
+                        splitParam.planePostion,
+                        transform,
+                        outputPolygonIslandsGenerated);
+                }
+            }
 
-                    //while(cannot find unvisited or requested)
-
-                        //------------------------ BFS search polygons that are in the same island -------------------------------------------//
-
-                        //------------------------ and put them divide them into a list of intersecting and nonsplit--------------------------//
-
-                        //-------------------------Detect multiple holes in mesh  --------------------------------------------------//
-
-                        //------------------------- iterate through multiple holes in a mesh  --------------------------------------------------//
-
-                        //-------------------------- Add intersecting and nonsplit to primitive mesh ------------------------------------------//
-
-                        //attempt find unvisisted polygon
+            for (auto& polygonIsland : outputPolygonIslandsGenerated)
+            {
+                PrimitiveMesh newMesh(owner, polygonIsland, ownerMaterialH);
+                newMesh.InstantiateNewGameObject();
+            }
 
 
-             //using the polygons generated, re-create the object
         }
 
         void SplitMesh(math::vec3 position, math::vec3 normal, bool keepBelow = true)
@@ -245,82 +427,13 @@ namespace legion::physics
             auto [posH, rotH, scaleH] = owner.get_component_handles<transform>();
             const math::mat4& transform = math::compose(scaleH.read(), rotH.read(), posH.read());
 
-            //for each polygon in polygonMesh
-                //check split state of the polygon
-            for (auto polygon : meshPolygons)
+            std::vector<std::vector<SplittablePolygonPtr>> resultingIsland;
+            SplitPolygons(meshPolygons, normal, position, transform,resultingIsland, keepBelow);
+
+            for (auto& polygonIsland : resultingIsland)
             {
-                polygon->CalculatePolygonSplit(transform, position, normal);
-            }
-
-            SplitState requestedState = keepBelow ? SplitState::Below : SplitState::Above;
-
-            //find first intersecting or requested polygon
-            SplittablePolygonPtr initialFound = nullptr;
-
-            bool foundUnvisited =
-                FindFirstIntersectingOrRequestedState
-                (initialFound, requestedState);
-
-            //while(cannot find unvisited or requested)
-            while (foundUnvisited)
-            {
-                std::vector<SplittablePolygonPtr> splitMesh;
-                std::vector<SplittablePolygonPtr> nonSplitMesh;
-
-                //------------------------ BFS search polygons that are in the same island -------------------------------------------//
-                //------------------------ and put them divide them into a list of intersecting and nonsplit--------------------------//
-                BFSFindRequestedAndIntersecting(
-                    initialFound,
-                    splitMesh,
-                    nonSplitMesh, requestedState);
-
-                //---------------------------------- Copy all polygons in splitMesh and nonSplitMesh ----------------------------------//
-                CopyPolygons(splitMesh, nonSplitMesh);
-
-                //find holes is newly created mesh
-                std::vector < std::vector <meshHalfEdgePtr>> holeIslands;
-                std::vector<std::vector<SplittablePolygonPtr>> intersectionIslands;
-
-                //----------------------------------- Detect multiple holes in mesh  --------------------------------------------------//
-
-                DetectIntersectionIsland(splitMesh, intersectionIslands);
-
-
-                std::vector<IntersectionEdgeInfo> generatedIntersectionEdges;
-
-                for (std::vector<SplittablePolygonPtr>& intersectionIsland : intersectionIslands)
-                {
-                    for (SplittablePolygonPtr islandPolygon : intersectionIsland)
-                    {
-                        categorizeEdges(islandPolygon, transform, position, normal, requestedState, generatedIntersectionEdges);
-                    }
-                }
-
-                math::vec3 localNormal = transform * math::vec4(normal, 0);
-                SplittablePolygonPtr intersectionPolygon = CreateIntersectionPolygon(generatedIntersectionEdges,math::normalize(localNormal));
-
-
-                //---------------------------------- Add intersecting and nonsplit to primitive mesh ---------------------------------//
-                //add stuff here
-
-                std::vector< SplittablePolygonPtr> resultPolygon;
-
-                resultPolygon.insert(resultPolygon.end()
-                    , std::make_move_iterator(splitMesh.begin()), std::make_move_iterator(splitMesh.end()));
-
-                resultPolygon.insert(resultPolygon.end()
-                    , std::make_move_iterator(nonSplitMesh.begin()), std::make_move_iterator(nonSplitMesh.end()));
-
-                resultPolygon.push_back(intersectionPolygon);
-
-                PrimitiveMesh newMesh(owner, resultPolygon, ownerMaterialH);
+                PrimitiveMesh newMesh(owner, polygonIsland, ownerMaterialH);
                 newMesh.InstantiateNewGameObject();
-
-                initialFound->isVisited = true;
-
-                foundUnvisited =
-                    FindFirstIntersectingOrRequestedState
-                    (initialFound, requestedState);
             }
         }
 
@@ -329,6 +442,7 @@ namespace legion::physics
             std::vector<SplittablePolygonPtr>& originalSplitMesh,
             std::vector<SplittablePolygonPtr>& originalNonSplitMesh, SplitState requestedState)
         {
+            //DebugBreak();
             std::queue<SplittablePolygonPtr> unvisitedPolygonQueue;
             unvisitedPolygonQueue.push(intialPolygon);
 
@@ -337,6 +451,11 @@ namespace legion::physics
             {
                 auto polygonPtr = unvisitedPolygonQueue.front();
                 unvisitedPolygonQueue.pop();
+
+                //if (polygonPtr->isIntersectingPart)
+                //{
+                //    DebugBreak();
+                //}
 
                 if (!polygonPtr->isVisited)
                 {
@@ -365,9 +484,8 @@ namespace legion::physics
                         {
                             bool isBoundary = edge->isBoundary;
                             bool hasPairing = (edge->pairingEdge) != nullptr;
-                            bool pairingHasOwner = edge->pairingEdge->owner.lock() != nullptr;
-
-                            if (isBoundary && hasPairing && pairingHasOwner)
+                        
+                            if (isBoundary && hasPairing)
                             {
                                 unvisitedPolygonQueue.push(edge->pairingEdge->owner.lock());
                             }
@@ -393,9 +511,35 @@ namespace legion::physics
 
         }
 
-        void CopyPolygons(std::vector<SplittablePolygonPtr>& originalSplitMesh,
-            std::vector<SplittablePolygonPtr>& originalNonSplitMesh)
+        std::vector<SplittablePolygonPtr>& CopyPolygons(std::vector<SplittablePolygonPtr>& originalSplitMesh)
         {
+            std::vector<SplittablePolygonPtr> result;
+
+            //copy each edge in mesh
+            for (SplittablePolygonPtr polygon : originalSplitMesh)
+            {
+                //copy polygon and place on shadow edge
+
+            }
+
+                
+
+
+
+            return result;
+        }
+
+        void CopyEdgeVector(std::vector<meshHalfEdgePtr>& originalHalfEdgeList, std::vector<meshHalfEdgePtr>& resultCopyList)
+        {
+            for (meshHalfEdgePtr originalEdge : originalHalfEdgeList)
+            {
+                //copy polygon and place on shadow edge
+
+            }
+
+            
+
+
 
         }
 
@@ -463,9 +607,10 @@ namespace legion::physics
             polygonOrganizer.categorizeEdges(splitPolygon, transform, cutPosition, cutNormal, requestedState,generatedIntersectionEdges);
         }
 
-        bool FindFirstIntersectingOrRequestedState(SplittablePolygonPtr& outfirstFound, SplitState requestedState)
+        bool FindFirstIntersectingOrRequestedState(SplittablePolygonPtr& outfirstFound, SplitState requestedState
+            , std::vector<SplittablePolygonPtr>& polygonList)
         {
-            for (auto polygon : meshPolygons)
+            for (auto polygon : polygonList)
             {
                 if (!polygon->isVisited)
                 {
@@ -501,6 +646,8 @@ namespace legion::physics
             std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges,
             const math::vec3& localSplitNormal)
         {
+            //log::debug("CreateIntersectionPolygon");
+
             std::vector<meshHalfEdgePtr> edgesCreated;
 
             math::vec3 localCentroid{};
@@ -515,18 +662,29 @@ namespace legion::physics
                 //temporarily second edge to info.second
                 meshHalfEdgePtr thirdEdge = std::make_shared<MeshHalfEdge>(info.second);
 
+                //info.pairingToConnectTo->debugID = "ShouldConnecTo";
+                
+
                 info.centroidEdge = thirdEdge;
                 info.instantiatedEdge  = firstEdge;
-                info.instantiatedEdge->SetPairing(info.pairingToConnectTo);
 
-                firstEdge->isBoundary = true;
+                info.pairingToConnectTo->SetPairing(info.instantiatedEdge);
                 
+                info.instantiatedEdge->isBoundary = true;
+
                 MeshHalfEdge::ConnectIntoTriangle(firstEdge, secondEdge, thirdEdge);
             
-                firstEdge->populateVectorWithTriangle(edgesCreated);
+                info.instantiatedEdge->populateVectorWithTriangle(edgesCreated);
 
-               
-                
+                //info.instantiatedEdge->debugID = "InstantiatedEdge";
+
+                /*assert(firstEdge != info.pairingToConnectTo);
+
+                assert(firstEdge->pairingEdge == info.pairingToConnectTo);
+
+                assert(info.pairingToConnectTo->pairingEdge == firstEdge);
+
+                assert(info.pairingToConnectTo->pairingEdge != info.pairingToConnectTo);*/
                 localCentroid += info.first;
             }
 
@@ -537,9 +695,11 @@ namespace legion::physics
             for (IntersectionEdgeInfo& info : generatedIntersectionEdges)
             {
                 info.centroidEdge->position = localCentroid;
+                assert(info.instantiatedEdge->nextEdge->nextEdge);
+                
             }
 
-            //---------------------------------- Set pairing information of all edges -------------------------------------//
+            //---------------------------------- Set pairing information of all edges ---------------------------------------------//
 
             for (IntersectionEdgeInfo& info : generatedIntersectionEdges)
             {
@@ -548,32 +708,36 @@ namespace legion::physics
                 //get closest unvisisted IntersectionEdgeInfo
 
                 const math::vec3& pointToCompare = info.second;
-
+                //log::debug("Finding distance");
                 //find edge closest to pointToCompare
                 for (IntersectionEdgeInfo& otherInfo : generatedIntersectionEdges)
                 {
+            
+                    assert(otherInfo.instantiatedEdge);
                     if (info.instantiatedEdge == otherInfo.instantiatedEdge) { continue; }
 
                     float distanceFound = math::distance2(pointToCompare, otherInfo.first);
-
+                    //log::debug("distanceFound {}" , distanceFound);
                     if (distanceFound < currentClosestDistance)
                     {
                         currentClosestDistance = distanceFound;
-                        closestEdge = otherInfo.instantiatedEdge;
+                        closestEdge = otherInfo.centroidEdge;
                     }
 
                 }
 
+                assert(closestEdge);
                 auto infoEdge = info.instantiatedEdge->nextEdge;
-                auto infoEdgePairing = closestEdge->nextEdge->nextEdge;
+                auto infoEdgePairing = closestEdge;
 
                 infoEdge->SetPairing(infoEdgePairing);
 
-
             }
 
+            auto polygon = std::make_shared<SplittablePolygon>(edgesCreated, localSplitNormal);
+            polygon->AssignEdgeOwnership();
 
-            return std::make_shared<SplittablePolygon>(edgesCreated,localSplitNormal);
+            return  polygon;
         };
     };
 

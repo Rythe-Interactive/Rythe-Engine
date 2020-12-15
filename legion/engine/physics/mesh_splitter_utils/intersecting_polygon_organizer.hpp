@@ -245,13 +245,13 @@ namespace legion::physics
                 {
                     InsideIntersectionMeshRegeneration(
                         transform, effectedUsedEdges,
-                        generatedHalfEdges, i, supportEdge, vertexIntersectionInfo, polygonDebugInfo, generatedIntersectionEdges);
+                        generatedHalfEdges, i, supportEdge, vertexIntersectionInfo, polygonDebugInfo, generatedIntersectionEdges,splitPolygon);
                 }
                 else
                 {
                     OutsideIntersectionMeshRegeneration(
                         transform, effectedUsedEdges,
-                        generatedHalfEdges, i, supportEdge, vertexIntersectionInfo, polygonDebugInfo, generatedIntersectionEdges);
+                        generatedHalfEdges, i, supportEdge, vertexIntersectionInfo, polygonDebugInfo, generatedIntersectionEdges, splitPolygon);
                 }
 
 
@@ -287,14 +287,15 @@ namespace legion::physics
             meshEdges.insert(meshEdges.end(), generatedHalfEdges.begin(), generatedHalfEdges.end());
 
 
-
+            splitPolygon->AssignEdgeOwnership();
             debugHelper->polygonCount++;
         }
 
         void InsideIntersectionMeshRegeneration(const math::mat4& transform, std::vector<meshHalfEdgePtr>& effectedBoundaryEdges,
             std::vector<meshHalfEdgePtr>& generatedEdges, int i
             , meshHalfEdgePtr& supportEdge,
-            const SplitterIntersectionInfo& vertexIntersectionInfo, BoundaryEdgeInfo& debugStuff, std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges)
+            const SplitterIntersectionInfo& vertexIntersectionInfo, BoundaryEdgeInfo& debugStuff, std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges
+            , SplittablePolygonPtr owner)
         {
             //select Base Half Edge
             meshHalfEdgePtr baseEdge = effectedBoundaryEdges[i];
@@ -320,7 +321,8 @@ namespace legion::physics
             else
             {
                 currentSupportEdge = std::make_shared<MeshHalfEdge>
-                    (baseEdge->nextEdge->position, baseEdge->nextEdge->uv);
+                    (baseEdge->nextEdge->position, baseEdge->nextEdge->uv, owner);
+               
 
                 currentSupportEdge->SetPairing(supportEdge);
                 generatedEdges.push_back(currentSupportEdge);
@@ -350,7 +352,7 @@ namespace legion::physics
                 math::vec2 uv = initialUVIntersection + startToEndUV * (float)i / maxData;
 
                 nextSupportEdge = std::make_shared< MeshHalfEdge>(
-                    math::inverse(transform) * math::vec4(worldPosition, 1), uv);
+                    math::inverse(transform) * math::vec4(worldPosition, 1), uv, owner);
 
                 generatedEdges.push_back(nextSupportEdge);
             }
@@ -374,7 +376,7 @@ namespace legion::physics
             math::vec2 uv = initialUVIntersection + startToEndUV * interpolant;
 
             meshHalfEdgePtr intersectionEdge = std::make_shared< MeshHalfEdge>(
-                localIntersectionPosition, uv);
+                localIntersectionPosition, uv, owner);
 
 
             generatedEdges.push_back(intersectionEdge);
@@ -382,12 +384,14 @@ namespace legion::physics
 
             debugStuff.intersectionEdge = intersectionEdge->GetEdgeWorldPosition(transform);
 
-            CreateNonAllignedQuad(currentSupportEdge, nextSupportEdge, baseEdge, intersectionEdge, generatedEdges);
+            CreateNonAllignedQuad(currentSupportEdge, nextSupportEdge, baseEdge, intersectionEdge, generatedEdges,owner);
+
+            //-------------------------- Insantiate intersection info ----------------------------------------------//
 
             IntersectionEdgeInfo intersectionEdgeInfo(
                 intersectionEdge);
-
             generatedIntersectionEdges.push_back(intersectionEdgeInfo);
+            
 
             supportEdge = nextSupportEdge;
 
@@ -397,18 +401,18 @@ namespace legion::physics
 
         void CreateNonAllignedQuad(
             meshHalfEdgePtr currentSupport, meshHalfEdgePtr nextSupport, meshHalfEdgePtr baseEdge, meshHalfEdgePtr intersectionEdge,
-            std::vector<meshHalfEdgePtr>& generatedEdges
+            std::vector<meshHalfEdgePtr>& generatedEdges, SplittablePolygonPtr owner
         )
         {
             //create new supporttriangle located at next support
-            meshHalfEdgePtr supportTriangle = std::make_shared< MeshHalfEdge>(nextSupport->position, nextSupport->uv);
+            meshHalfEdgePtr supportTriangle = std::make_shared< MeshHalfEdge>(nextSupport->position, nextSupport->uv, owner);
 
 
             //currentSupport-intersection-supporttriangle
             MeshHalfEdge::ConnectIntoTriangle(currentSupport, intersectionEdge, supportTriangle);
 
             //create new nextsupporttriangle located at currentsupport
-            meshHalfEdgePtr nextSupportTriangle = std::make_shared< MeshHalfEdge>(currentSupport->position, currentSupport->uv);
+            meshHalfEdgePtr nextSupportTriangle = std::make_shared< MeshHalfEdge>(currentSupport->position, currentSupport->uv, owner);
 
             //nextsupporttriangle-nextSupport-baseEdge
             MeshHalfEdge::ConnectIntoTriangle(nextSupportTriangle, nextSupport, baseEdge);
@@ -423,7 +427,8 @@ namespace legion::physics
         void OutsideIntersectionMeshRegeneration(const math::mat4& transform, std::vector<meshHalfEdgePtr>& effectedBoundaryEdges,
             std::vector<meshHalfEdgePtr>& generatedEdges, int i
             , meshHalfEdgePtr supportEdge,
-            const SplitterIntersectionInfo& vertexIntersectionInfo, BoundaryEdgeInfo& debugStuff, std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges)
+            const SplitterIntersectionInfo& vertexIntersectionInfo, BoundaryEdgeInfo& debugStuff, std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges
+            , SplittablePolygonPtr owner)
         {
             meshHalfEdgePtr baseEdge = effectedBoundaryEdges[i];
 
@@ -445,7 +450,7 @@ namespace legion::physics
             else
             {
                 currentSupportEdge = std::make_shared<MeshHalfEdge>
-                    (supportEdge->nextEdge->position, supportEdge->nextEdge->uv);
+                    (supportEdge->nextEdge->position, supportEdge->nextEdge->uv, owner);
 
                 currentSupportEdge->SetPairing(supportEdge);
                 generatedEdges.push_back(currentSupportEdge);
@@ -461,7 +466,7 @@ namespace legion::physics
             }
             else
             {
-                nextSupportEdge = std::make_shared<MeshHalfEdge>(baseEdge->nextEdge->position, baseEdge->nextEdge->uv);
+                nextSupportEdge = std::make_shared<MeshHalfEdge>(baseEdge->nextEdge->position, baseEdge->nextEdge->uv, owner);
                 generatedEdges.push_back(nextSupportEdge);
             }
 
@@ -481,34 +486,34 @@ namespace legion::physics
             math::vec2 edgeUV = initialUVIntersection + startToEndUV * interpolant;
 
             meshHalfEdgePtr intersectionEdge = std::make_shared<MeshHalfEdge>
-                (localIntersectionEdgePosition, edgeUV);
-
+                (localIntersectionEdgePosition, edgeUV, owner);
             intersectionEdge->isBoundary = true;
-
             generatedEdges.push_back(intersectionEdge);
+
+            CreateAllignedQuad(currentSupportEdge, nextSupportEdge, baseEdge,
+                intersectionEdge, generatedEdges, owner);
 
             IntersectionEdgeInfo intersectionEdgeInfo(
                 intersectionEdge);
 
             generatedIntersectionEdges.push_back(intersectionEdgeInfo);
 
-            CreateAllignedQuad(currentSupportEdge, nextSupportEdge, baseEdge,
-                intersectionEdge, generatedEdges);
+            
 
         }
 
         void CreateAllignedQuad(meshHalfEdgePtr currentSupport, meshHalfEdgePtr nextSupport, meshHalfEdgePtr baseEdge,
-            meshHalfEdgePtr intersectionEdge, std::vector<meshHalfEdgePtr>& generatedEdges)
+            meshHalfEdgePtr intersectionEdge, std::vector<meshHalfEdgePtr>& generatedEdges, SplittablePolygonPtr owner)
         {
             //create new supporttriangle located at next support
-            meshHalfEdgePtr supportTriangle = std::make_shared<MeshHalfEdge>(nextSupport->position, nextSupport->uv);
+            meshHalfEdgePtr supportTriangle = std::make_shared<MeshHalfEdge>(nextSupport->position, nextSupport->uv, owner);
 
 
             //currentSupport-intersection-supporttriangle
             MeshHalfEdge::ConnectIntoTriangle(currentSupport, supportTriangle, intersectionEdge);
 
             //create new nextsupporttriangle located at currentsupport
-            meshHalfEdgePtr  nextSupportTriangle = std::make_shared<MeshHalfEdge>(currentSupport->position, currentSupport->uv);
+            meshHalfEdgePtr  nextSupportTriangle = std::make_shared<MeshHalfEdge>(currentSupport->position, currentSupport->uv, owner);
 
             //nextsupporttriangle-nextSupport-baseEdge
             MeshHalfEdge::ConnectIntoTriangle(nextSupportTriangle, baseEdge, nextSupport);

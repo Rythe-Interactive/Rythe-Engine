@@ -10,12 +10,21 @@ namespace legion::physics
         math::vec3 position;
         math::vec2 uv;
 
-        std::shared_ptr<MeshHalfEdge> nextEdge;
-        std::shared_ptr<MeshHalfEdge> pairingEdge;
+        std::shared_ptr<MeshHalfEdge> nextEdge = nullptr;
+        std::shared_ptr<MeshHalfEdge> pairingEdge = nullptr;
+        std::shared_ptr<MeshHalfEdge> shadowEdge = nullptr;
+
         std::weak_ptr<SplittablePolygon> owner;
 
         bool isVisited = false;
         bool isBoundary = false;
+
+        //std::string debugID = "";
+
+        MeshHalfEdge(const math::vec3& pPosition, const math::vec2& pUVs, std::weak_ptr<SplittablePolygon> pOwner) : position(pPosition), uv(pUVs),owner(pOwner)
+        {
+
+        }
 
         MeshHalfEdge(const math::vec3& pPosition,const math::vec2& pUVs) : position(pPosition),uv(pUVs)
         {
@@ -32,10 +41,15 @@ namespace legion::physics
             return std::make_tuple(shared_from_this(), nextEdge, nextEdge->nextEdge);
         }
 
-        void SetPairing(std::shared_ptr<MeshHalfEdge> newPairing)
+        void SetPairing(std::shared_ptr<MeshHalfEdge>& newPairing)
         {
             pairingEdge = newPairing;
-            newPairing->pairingEdge = pairingEdge;
+            newPairing->pairingEdge = shared_from_this();
+        }
+
+        void CloneOnShadowEdge()
+        {
+
         }
 
         static void ConnectIntoTriangle(std::shared_ptr<MeshHalfEdge> first

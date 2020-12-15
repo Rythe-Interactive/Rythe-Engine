@@ -229,6 +229,7 @@ public:
 
         rendering::material_handle uvH;
         rendering::material_handle textureH;
+        rendering::material_handle texture2H;
         rendering::material_handle directionalLightMH;
         rendering::material_handle spotLightMH;
         rendering::material_handle pointLightMH;
@@ -278,7 +279,10 @@ public:
             gizmoMH.set_param("color", math::colors::lightgrey);
 
             textureH = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
-            textureH.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo2"_view));
+            textureH.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
+
+            texture2H = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
+            texture2H.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/split-test.png"_view));
 
             auto pbrShader = rendering::ShaderCache::create_shader("pbr", "assets://shaders/pbr.shs"_view);
             pbrH = rendering::MaterialCache::create_material("pbr", pbrShader);
@@ -693,7 +697,7 @@ public:
 
         //setupPhysicsStackingUnitTest(cubeH,uvH,textureH);
 
-        setupMeshSplitterTest(floorH,cubeH, cylinderH, magneticLowH, textureH);
+        setupMeshSplitterTest(floorH,cubeH, cylinderH, magneticLowH, texture2H);
 
         physics::cube_collider_params cubeParams;
         cubeParams.breadth = 1.0f;
@@ -736,7 +740,33 @@ public:
         cubeParams.breadth = 2.0f;
         cubeParams.width = 2.0f;
         cubeParams.height = 2.0f;
+        ecs::entity_handle cubeSplit2;
+        {
+            auto splitter = m_ecs->createEntity();
+            cubeSplit2 = splitter;
 
+            auto entPhyHande = splitter.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+            physicsComponent2.AddBox(cubeParams);
+
+            entPhyHande.write(physicsComponent2);
+
+            splitter.add_components<rendering::renderable>(planeH.get_mesh(), rendering::mesh_renderer(TextureH));
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(splitter);
+            positionH.write(math::vec3(37, 1.5f, 10.0f));
+            scaleH.write(math::vec3(0.01f));
+
+            auto rotation = rotationH.read();
+
+            //rotation *= math::angleAxis(math::deg2rad(60.0f), math::vec3(1, 0, 0));
+
+            splitter.write_component(rotation);
+
+        }
         //Cube split plane
         ecs::entity_handle cubeSplit;
         {
@@ -765,6 +795,10 @@ public:
             splitter.write_component(rotation);
 
         }
+
+       
+
+
         //Cube 
         {
             auto ent = m_ecs->createEntity();
@@ -795,7 +829,8 @@ public:
             auto finderH = ent.add_component<physics::MeshSplitter>();
 
             auto finder = finderH.read();
-            finder.splitTester = cubeSplit;
+            finder.splitTester.push_back(cubeSplit);
+            finder.splitTester.push_back(cubeSplit2);
             finder.InitializePolygons(ent);
             finderH.write(finder);
 

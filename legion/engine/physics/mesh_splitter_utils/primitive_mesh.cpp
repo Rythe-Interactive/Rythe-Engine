@@ -50,8 +50,9 @@ namespace legion::physics
         rotH.write(originalRotH.read());
         scaleH.write(originalScaleH.read());
 
-
-        m_ecs->destroyEntity(originalEntity);
+        math::vec3 initialPos = originalPosH.read();
+        originalPosH.write(initialPos + math::vec3(7, 0, 0));
+        //m_ecs->destroyEntity(originalEntity);
 
         return ent;
     }

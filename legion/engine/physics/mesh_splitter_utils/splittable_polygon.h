@@ -40,6 +40,7 @@ namespace legion::physics
 		math::color debugColor;
 
 		bool isVisited = false;
+		//bool isIntersectingPart = false;
 
 		math::vec3 localNormal;
 	private:
