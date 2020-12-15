@@ -121,6 +121,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="async\rw_spinlock.hpp" />
     <ClInclude Include="async\spinlock.hpp" />
     <ClInclude Include="async\transferable_atomic.hpp" />
+    <ClInclude Include="common\managed_resource.hpp" />
     <ClInclude Include="compute\buffer.hpp" />
     <ClInclude Include="compute\context.hpp" />
     <ClInclude Include="common\common.hpp" />

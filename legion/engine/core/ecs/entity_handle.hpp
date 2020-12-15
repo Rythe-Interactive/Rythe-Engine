@@ -453,3 +453,16 @@ namespace legion::core::ecs
 
     using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
 }
+
+#if !defined(DOXY_EXCLUDE)
+namespace std
+{
+    template<> struct hash<legion::core::ecs::entity_handle>
+    {
+        std::size_t operator()(legion::core::ecs::entity_handle const& handle) const noexcept
+        {
+            return std::hash<legion::core::id_type>{}(handle.get_id());
+        }
+    };
+}
+#endif

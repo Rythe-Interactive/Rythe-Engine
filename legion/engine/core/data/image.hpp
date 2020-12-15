@@ -16,6 +16,7 @@ namespace legion::core
      */
     enum struct channel_format : uint
     {
+        depth_stencil = 0,
         eight_bit = 1,
         sixteen_bit = 2,
         float_hdr = 4
@@ -28,7 +29,10 @@ namespace legion::core
         grey = 1,
         grey_alpha = 2,
         rgb = 3,
-        rgba = 4
+        rgba = 4,
+        depth = 5,
+        stencil = 6,
+        depth_stencil = 7
     };
 
     /**@class image

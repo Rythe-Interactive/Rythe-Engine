@@ -1,10 +1,10 @@
 {
     "Entity": {
-        "Id": 40,
+        "Id": 39,
         "Name": "Entity",
         "Components": [
             {
-                "Owner": 40,
+                "Owner": 39,
                 "Component Type": 9547123436134525643,
                 "Component Name": "struct legion::core::scenemanagement::scene",
                 "NAME": "Main"
@@ -17,13 +17,13 @@
                 "Components": [
                     {
                         "Owner": 2,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 2,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 2,
@@ -59,13 +59,13 @@
                 "Components": [
                     {
                         "Owner": 3,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 3,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 3,
@@ -101,13 +101,13 @@
                 "Components": [
                     {
                         "Owner": 4,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 4,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 4,
@@ -143,13 +143,13 @@
                 "Components": [
                     {
                         "Owner": 5,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 5,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 5,
@@ -185,13 +185,13 @@
                 "Components": [
                     {
                         "Owner": 6,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 6,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 6,
@@ -227,13 +227,13 @@
                 "Components": [
                     {
                         "Owner": 7,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 7,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 7,
@@ -269,13 +269,13 @@
                 "Components": [
                     {
                         "Owner": 8,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 8,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 8,
@@ -311,13 +311,13 @@
                 "Components": [
                     {
                         "Owner": 9,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 9,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 9,
@@ -353,13 +353,13 @@
                 "Components": [
                     {
                         "Owner": 10,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 10,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 10,
@@ -395,13 +395,13 @@
                 "Components": [
                     {
                         "Owner": 11,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 11,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 11,
@@ -442,13 +442,13 @@
                 "Components": [
                     {
                         "Owner": 12,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 12,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 12,
@@ -489,13 +489,13 @@
                 "Components": [
                     {
                         "Owner": 13,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 13,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 13,
@@ -536,13 +536,13 @@
                 "Components": [
                     {
                         "Owner": 14,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 14,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 14,
@@ -583,13 +583,13 @@
                 "Components": [
                     {
                         "Owner": 15,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 15,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 15,
@@ -630,13 +630,13 @@
                 "Components": [
                     {
                         "Owner": 16,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 16,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 16,
@@ -677,13 +677,13 @@
                 "Components": [
                     {
                         "Owner": 17,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 17,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 17,
@@ -724,13 +724,13 @@
                 "Components": [
                     {
                         "Owner": 18,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 18,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 18,
@@ -771,13 +771,13 @@
                 "Components": [
                     {
                         "Owner": 19,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 19,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 19,
@@ -818,13 +818,13 @@
                 "Components": [
                     {
                         "Owner": 20,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 20,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 20,
@@ -865,13 +865,13 @@
                 "Components": [
                     {
                         "Owner": 21,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 21,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 21,
@@ -912,13 +912,13 @@
                 "Components": [
                     {
                         "Owner": 22,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 22,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 22,
@@ -959,13 +959,13 @@
                 "Components": [
                     {
                         "Owner": 23,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 23,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 23,
@@ -1001,13 +1001,13 @@
                 "Components": [
                     {
                         "Owner": 24,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 24,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 24,
@@ -1048,13 +1048,13 @@
                 "Components": [
                     {
                         "Owner": 25,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 25,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 25,
@@ -1095,13 +1095,13 @@
                 "Components": [
                     {
                         "Owner": 26,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 26,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 26,
@@ -1142,13 +1142,13 @@
                 "Components": [
                     {
                         "Owner": 27,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 27,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 27,
@@ -1189,13 +1189,13 @@
                 "Components": [
                     {
                         "Owner": 28,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 28,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 28,
@@ -1236,13 +1236,13 @@
                 "Components": [
                     {
                         "Owner": 29,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 29,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 29,
@@ -1283,13 +1283,13 @@
                 "Components": [
                     {
                         "Owner": 30,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 30,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 30,
@@ -1330,13 +1330,13 @@
                 "Components": [
                     {
                         "Owner": 31,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 31,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 31,
@@ -1377,13 +1377,13 @@
                 "Components": [
                     {
                         "Owner": 32,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 32,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 32,
@@ -1424,13 +1424,13 @@
                 "Components": [
                     {
                         "Owner": 33,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 33,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 33,
@@ -1471,13 +1471,13 @@
                 "Components": [
                     {
                         "Owner": 34,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 34,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 34,
@@ -1518,13 +1518,13 @@
                 "Components": [
                     {
                         "Owner": 35,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 35,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 35,
@@ -1565,13 +1565,13 @@
                 "Components": [
                     {
                         "Owner": 36,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 36,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 36,
@@ -1612,26 +1612,21 @@
                 "Components": [
                     {
                         "Owner": 37,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
-                    },
-                    {
-                        "Owner": 37,
                         "Component Type": 2140060032789729682,
                         "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 37,
-                        "Component Type": 7523951964142181909,
-                        "Component Name": "struct sah"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 37,
                         "Component Type": 4306336647627884212,
                         "Component Name": "struct legion::core::scale",
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
+                        "x": 0.5,
+                        "y": 0.5,
+                        "z": 0.5
                     },
                     {
                         "Owner": 37,
@@ -1646,9 +1641,14 @@
                         "Owner": 37,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
-                        "x": 4.0,
-                        "y": 6.0,
-                        "z": -0.699999988079071
+                        "x": -5.0,
+                        "y": 1.0,
+                        "z": 10.0
+                    },
+                    {
+                        "Owner": 37,
+                        "Component Type": 12879719932595839335,
+                        "Component Name": "struct legion::audio::audio_source"
                     }
                 ],
                 "Children": []
@@ -1659,13 +1659,13 @@
                 "Components": [
                     {
                         "Owner": 38,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
+                        "Component Type": 2140060032789729682,
+                        "Component Name": "struct legion::core::mesh_filter"
                     },
                     {
                         "Owner": 38,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
+                        "Component Type": 9485733878716987864,
+                        "Component Name": "struct legion::rendering::mesh_renderer"
                     },
                     {
                         "Owner": 38,
@@ -1686,53 +1686,6 @@
                     },
                     {
                         "Owner": 38,
-                        "Component Type": 1703773829785910945,
-                        "Component Name": "struct legion::core::position",
-                        "x": -5.0,
-                        "y": 1.0,
-                        "z": 10.0
-                    },
-                    {
-                        "Owner": 38,
-                        "Component Type": 12879719932595839335,
-                        "Component Name": "struct legion::audio::audio_source"
-                    }
-                ],
-                "Children": []
-            },
-            {
-                "Id": 39,
-                "Name": "Entity",
-                "Components": [
-                    {
-                        "Owner": 39,
-                        "Component Type": 9485733878716987864,
-                        "Component Name": "struct legion::rendering::mesh_renderer"
-                    },
-                    {
-                        "Owner": 39,
-                        "Component Type": 2140060032789729682,
-                        "Component Name": "struct legion::core::mesh_filter"
-                    },
-                    {
-                        "Owner": 39,
-                        "Component Type": 4306336647627884212,
-                        "Component Name": "struct legion::core::scale",
-                        "x": 0.5,
-                        "y": 0.5,
-                        "z": 0.5
-                    },
-                    {
-                        "Owner": 39,
-                        "Component Type": 7097645533378480892,
-                        "Component Name": "struct legion::core::rotation",
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0,
-                        "w": 1.0
-                    },
-                    {
-                        "Owner": 39,
                         "Component Type": 1703773829785910945,
                         "Component Name": "struct legion::core::position",
                         "x": 5.0,
@@ -1740,7 +1693,7 @@
                         "z": 10.0
                     },
                     {
-                        "Owner": 39,
+                        "Owner": 38,
                         "Component Type": 12879719932595839335,
                         "Component Name": "struct legion::audio::audio_source"
                     }

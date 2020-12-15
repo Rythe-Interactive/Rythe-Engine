@@ -25,9 +25,21 @@ namespace legion::core
     }
 
     template<typename T, typename U>
-    constexpr T* force_cast(U value)
+    constexpr T* force_cast(const U& value)
     {
         return reinterpret_cast<T*>(&value);
+    }
+
+    template<typename T, typename U>
+    constexpr T* force_cast(U&& value)
+    {
+        return reinterpret_cast<T*>(&value);
+    }
+
+    template<typename T, typename U>
+    constexpr T* force_cast(U* value)
+    {
+        return reinterpret_cast<T*>(value);
     }
 
     /**@brief Returns typeid(T).name().

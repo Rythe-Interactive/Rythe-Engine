@@ -55,8 +55,8 @@ namespace legion::core
         size_type m_capacity = 0;
 
     public:
-        L_NODISCARD dense_value_container& dense() { return m_dense_value; }
-        L_NODISCARD const dense_value_container& dense() const { return m_dense_value; }
+        L_NODISCARD dense_value_container& values() { return m_dense_value; }
+        L_NODISCARD const dense_value_container& values() const { return m_dense_value; }
 
         L_NODISCARD dense_key_container& keys() { return m_dense_key; }
         L_NODISCARD const dense_key_container& keys() const { return m_dense_key; }
@@ -539,6 +539,8 @@ namespace legion::core
                     m_sparse[m_dense_key[m_size - 1]] = std::move(m_sparse[key]);
                 }
                 --m_size;
+                m_dense_value.resize(m_size);
+                m_dense_key.resize(m_size);
                 return true;
             }
             return false;

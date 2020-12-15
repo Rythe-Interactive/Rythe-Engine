@@ -60,8 +60,8 @@ namespace legion::core
 
     public:
         L_NODISCARD async::rw_spinlock& get_lock() const { return m_container_lock; }
-        L_NODISCARD dense_value_container& dense() { return m_dense_value; }
-        L_NODISCARD const dense_value_container& dense() const { return m_dense_value; }
+        L_NODISCARD dense_value_container& values() { return m_dense_value; }
+        L_NODISCARD const dense_value_container& values() const { return m_dense_value; }
 
         L_NODISCARD dense_key_container& keys() { return m_dense_key; }
         L_NODISCARD const dense_key_container& keys() const { return m_dense_key; }

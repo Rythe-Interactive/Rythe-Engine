@@ -61,7 +61,7 @@ namespace legion::core::ecs
         void recursiveDestroyEntityInternal(id_type entityId);
 
     public:
-        entity_handle world;
+        static entity_handle world;
 
         /**@brief Constructor initializes everything for the ECS and creates world entity.
          */
@@ -113,7 +113,7 @@ namespace legion::core::ecs
          * @param entityId Id of the entity.
          * @throws legion_entity_not_found_error If the entity id does not belong to a valid entity.
          */
-        template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
+        template<typename component_type, doesnt_inherit_from<component_type, archetype_base> = 0>
         L_NODISCARD bool hasComponent(id_type entityId)
         {
             return hasComponent(entityId, typeHash<component_type>());
@@ -125,7 +125,7 @@ namespace legion::core::ecs
          * @param entityId Id of the entity.
          * @throws legion_entity_not_found_error If the entity id does not belong to a valid entity.
          */
-        template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+        template<typename component_type, typename... component_types, doesnt_inherit_from<component_type, archetype_base> = 0>
         L_NODISCARD bool hasComponents(id_type entityId)
         {
             return hasComponent<component_type>(entityId) && (hasComponent<component_types>(entityId) && ...);
@@ -136,7 +136,7 @@ namespace legion::core::ecs
          * @param entityId Id of the entity.
          * @throws legion_entity_not_found_error If the entity id does not belong to a valid entity.
          */
-        template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
+        template<typename archetype_type, inherits_from<archetype_type, archetype_base> = 0>
         L_NODISCARD bool hasComponents(id_type entityId)
         {
             return archetype_type::has(this, entityId);
@@ -157,7 +157,7 @@ namespace legion::core::ecs
          * @returns component_handle<component_type> Component handle to the requested component. (may be invalid if the entity does not have this component type)
          * @throws legion_entity_not_found_error If the entity id does not belong to a valid entity.
          */
-        template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
+        template<typename component_type, doesnt_inherit_from<component_type, archetype_base> = 0>
         L_NODISCARD component_handle<component_type> getComponent(id_type entityId)
         {
             return getComponent(entityId, typeHash<component_type>()).template cast<component_type>();
@@ -170,13 +170,13 @@ namespace legion::core::ecs
          * @returns component_handle<component_type> Component handle to the requested component. (may be invalid if the entity does not have this component type)
          * @throws legion_entity_not_found_error If the entity id does not belong to a valid entity.
          */
-        template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+        template<typename component_type, typename... component_types, doesnt_inherit_from<component_type, archetype_base> = 0>
         L_NODISCARD std::tuple<component_handle<component_type>, component_handle<component_types>...> getComponents(id_type entityId)
         {
             return std::make_tuple(getComponent<component_type>(entityId), getComponent<component_types>(entityId)...);
         }
 
-        template<typename archetype_type, typename... component_types, typename = inherits_from<archetype_type, archetype_base>>
+        template<typename archetype_type, typename... component_types, inherits_from<archetype_type, archetype_base> = 0>
         L_NODISCARD auto getComponents(id_type entityId)
         {
             return archetype_type::get(this, entityId);
@@ -188,45 +188,45 @@ namespace legion::core::ecs
          * @returns component_handle<component_type> Component handle to the created component.
          * @throws legion_entity_not_found_error If the entity id does not belong to a valid entity.
          */
-        template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
+        template<typename component_type, doesnt_inherit_from<component_type, archetype_base> = 0>
         component_handle<component_type> createComponent(id_type entityId)
         {
             return createComponent(entityId, typeHash<component_type>()).template cast<component_type>();
         }
 
-        template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
+        template<typename component_type, doesnt_inherit_from<component_type, archetype_base> = 0>
         component_handle<std::remove_reference_t<component_type>> createComponent(id_type entityId, component_type&& component)
         {
             std::remove_reference_t<component_type> temp = component;
             return createComponent(entityId, typeHash<std::remove_reference_t<component_type>>(), &temp).template cast<std::remove_reference_t<component_type>>();
         }
 
-        template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
+        template<typename component_type, doesnt_inherit_from<component_type, archetype_base> = 0>
         component_handle<std::remove_reference_t<component_type>> createComponent(id_type entityId, component_type& component)
         {
             std::remove_reference_t<component_type> temp = component;
             return createComponent(entityId, typeHash<std::remove_reference_t<component_type>>(), &temp).template cast<std::remove_reference_t<component_type>>();
         }
 
-        template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
+        template<typename archetype_type, inherits_from<archetype_type, archetype_base> = 0>
         auto createComponents(id_type entityId)
         {
             return archetype_type::create(this, entityId);
         }
-        
-        template<typename archetype_type, typename... component_types, typename = inherits_from<archetype_type, archetype_base>>
+
+        template<typename archetype_type, typename... component_types, inherits_from<archetype_type, archetype_base> = 0>
         auto createComponents(id_type entityId, component_types&&... defaultValues)
         {
             return archetype_type::create(this, entityId, std::move(defaultValues)...);
         }
 
-        template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+        template<typename component_type, typename... component_types, doesnt_inherit_from<component_type, archetype_base> = 0>
         std::tuple<component_handle<component_type>, component_handle<component_types>...> createComponents(id_type entityId)
         {
             return std::make_tuple(createComponent<component_type>(entityId), createComponent<component_types>(entityId)...);
         }
 
-        template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+        template<typename component_type, typename... component_types, doesnt_inherit_from<component_type, archetype_base> = 0>
         std::tuple<component_handle<std::remove_reference_t<component_type>>, component_handle<std::remove_reference_t<component_types>>...> createComponents(id_type entityId, component_type&& defaultValue, component_types&&... defaultValues)
         {
             return std::make_tuple(createComponent<std::remove_reference_t<component_type>>(entityId, std::forward<component_type>(defaultValue)), createComponent<std::remove_reference_t<component_types>>(entityId, std::forward<component_types>(defaultValues))...);
@@ -272,20 +272,20 @@ namespace legion::core::ecs
          * @param entityId Id of the entity you wish to remove the component from.
          * @throws legion_entity_not_found_error If the entity id does not belong to a valid entity.
          */
-        template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
+        template<typename component_type, doesnt_inherit_from<component_type, archetype_base> = 0>
         void destroyComponent(id_type entityId)
         {
             destroyComponent(entityId, typeHash<component_type>());
         }
 
-        template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+        template<typename component_type, typename... component_types, doesnt_inherit_from<component_type, archetype_base> = 0>
         void destroyComponents(id_type entityId)
         {
             destroyComponent(entityId, typeHash<component_type>());
             (destroyComponent(entityId, typeHash<component_types>()), ...);
         }
 
-        template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
+        template<typename archetype_type, inherits_from<archetype_type, archetype_base> = 0>
         void destroyComponents(id_type entityId)
         {
             archetype_type::destroy(this, entityId);

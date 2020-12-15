@@ -14,9 +14,9 @@ namespace legion::rendering
         return ModelCache::get_model(id).buffered;
     }
 
-    void model_handle::buffer_data(app::gl_id matrixBuffer) const
+    void model_handle::buffer_data(const buffer& matrixBuffer) const
     {
-        ModelCache::buffer(id, matrixBuffer);
+        ModelCache::buffer_model(id, matrixBuffer);
     }
 
     mesh_handle model_handle::get_mesh() const
@@ -35,7 +35,7 @@ namespace legion::rendering
         return m_models[id];
     }
 
-    void ModelCache::buffer(id_type id, app::gl_id matrixBuffer)
+    void ModelCache::buffer_model(id_type id, const buffer& matrixBuffer)
     {
         if (id == invalid_id)
             return;
@@ -48,7 +48,35 @@ namespace legion::rendering
         async::readonly_multiguard guard(m_modelLock, lock);
         model& model = m_models[id];
 
-        glGenVertexArrays(1, &model.vertexArrayId);
+        model.vertexArray = vertexarray::generate();
+        model.indexBuffer = buffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indices, GL_STATIC_DRAW);
+
+        model.vertexBuffer = buffer(GL_ARRAY_BUFFER, mesh.vertices, GL_STATIC_DRAW);
+        model.vertexArray.setAttribPointer(model.vertexBuffer, SV_POSITION, 3, GL_FLOAT, false, 0, 0);
+
+        model.colorBuffer = buffer(GL_ARRAY_BUFFER, mesh.colors, GL_STATIC_DRAW);
+        model.vertexArray.setAttribPointer(model.colorBuffer, SV_COLOR, 4, GL_FLOAT, false, 0, 0);
+
+        model.normalBuffer = buffer(GL_ARRAY_BUFFER, mesh.normals, GL_STATIC_DRAW);
+        model.vertexArray.setAttribPointer(model.normalBuffer, SV_NORMAL, 3, GL_FLOAT, false, 0, 0);
+
+        model.tangentBuffer = buffer(GL_ARRAY_BUFFER, mesh.tangents, GL_STATIC_DRAW);
+        model.vertexArray.setAttribPointer(model.tangentBuffer, SV_TANGENT, 3, GL_FLOAT, false, 0, 0);
+
+        model.uvBuffer = buffer(GL_ARRAY_BUFFER, mesh.uvs, GL_STATIC_DRAW);
+        model.vertexArray.setAttribPointer(model.uvBuffer, SV_TEXCOORD0, 2, GL_FLOAT, false, 0, 0);
+
+        model.vertexArray.setAttribPointer(matrixBuffer, SV_MODELMATRIX + 0, 4, GL_FLOAT, false, sizeof(math::mat4), 0 * sizeof(math::mat4::col_type));
+        model.vertexArray.setAttribPointer(matrixBuffer, SV_MODELMATRIX + 1, 4, GL_FLOAT, false, sizeof(math::mat4), 1 * sizeof(math::mat4::col_type));
+        model.vertexArray.setAttribPointer(matrixBuffer, SV_MODELMATRIX + 2, 4, GL_FLOAT, false, sizeof(math::mat4), 2 * sizeof(math::mat4::col_type));
+        model.vertexArray.setAttribPointer(matrixBuffer, SV_MODELMATRIX + 3, 4, GL_FLOAT, false, sizeof(math::mat4), 3 * sizeof(math::mat4::col_type));
+
+        model.vertexArray.setAttribDivisor(SV_MODELMATRIX + 0, 1);
+        model.vertexArray.setAttribDivisor(SV_MODELMATRIX + 1, 1);
+        model.vertexArray.setAttribDivisor(SV_MODELMATRIX + 2, 1);
+        model.vertexArray.setAttribDivisor(SV_MODELMATRIX + 3, 1);
+
+        /*glGenVertexArrays(1, &model.vertexArrayId);
         glBindVertexArray(model.vertexArrayId);
 
         glGenBuffers(1, &model.indexBufferId);
@@ -103,7 +131,7 @@ namespace legion::rendering
         glVertexAttribDivisor(SV_MODELMATRIX + 3, 1);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
+        glBindVertexArray(0);*/
 
         model.buffered = true;
     }

@@ -409,6 +409,7 @@
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
     <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
+    <ClInclude Include="common\managed_resource.hpp" />
     <ClInclude Include="async\spinlock.hpp" />
     <ClInclude Include="async\rw_spinlock.hpp" />
   </ItemGroup>

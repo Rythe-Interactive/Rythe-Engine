@@ -21,6 +21,7 @@
 #include <physics/physics_statics.hpp>
 #include <physics/data/identifier.hpp>
 #include <audio/audio.hpp>
+#include <rendering/components/renderable.hpp>
 #include <Voro++/voro++.hh>
 #include <Voro++/common.hh>
 
@@ -77,12 +78,12 @@ struct activateFrictionTest : public app::input_action<activateFrictionTest> {};
 struct extendedPhysicsContinue : public app::input_action<extendedPhysicsContinue> {};
 struct nextPhysicsTimeStepContinue : public app::input_action<nextPhysicsTimeStepContinue> {};
 
-
+using namespace legion::core::filesystem::literals;
 
 class TestSystem final : public System<TestSystem>
 {
 public:
-    TestSystem()
+    TestSystem() : System<TestSystem>()
     {
         log::filter(log::severity::debug);
         app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1920, 1080), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
@@ -128,9 +129,6 @@ public:
 
     virtual void setup()
     {
-
-
-
 #pragma region Input binding
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::LEFT, -1.f);
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::RIGHT, 1.f);
@@ -274,100 +272,100 @@ public:
             pbrH.set_param("tonemap", false);
 
             copperH = rendering::MaterialCache::create_material("copper", pbrShader);
-            copperH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/copper/copper-albedo.png"_view));
-            copperH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/copper/copper-normalHeight.png"_view));
-            copperH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/copper/copper-MRDAo.png"_view));
-            copperH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/copper/copper-emissive.png"_view));
+            copperH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/copper/copper-albedo-512.png"_view));
+            copperH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/copper/copper-normalHeight-512.png"_view));
+            copperH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/copper/copper-MRDAo-512.png"_view));
+            copperH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/copper/copper-emissive-512.png"_view));
             copperH.set_param("material_input.heightScale", 0.1f);
             copperH.set_param("discardExcess", false);
             copperH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
             copperH.set_param("tonemap", false);
 
             aluminumH = rendering::MaterialCache::create_material("aluminum", pbrShader);
-            aluminumH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-albedo.png"_view));
-            aluminumH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-normalHeight.png"_view));
-            aluminumH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-MRDAo.png"_view));
-            aluminumH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-emissive.png"_view));
+            aluminumH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-albedo-512.png"_view));
+            aluminumH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-normalHeight-512.png"_view));
+            aluminumH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-MRDAo-512.png"_view));
+            aluminumH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-emissive-512.png"_view));
             aluminumH.set_param("material_input.heightScale", 0.f);
             aluminumH.set_param("discardExcess", false);
             aluminumH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
             aluminumH.set_param("tonemap", false);
 
             ironH = rendering::MaterialCache::create_material("iron", pbrShader);
-            ironH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-albedo.png"_view));
-            ironH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-normalHeight.png"_view));
-            ironH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-MRDAo.png"_view));
-            ironH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-emissive.png"_view));
+            ironH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-albedo-512.png"_view));
+            ironH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-normalHeight-512.png"_view));
+            ironH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-MRDAo-512.png"_view));
+            ironH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-emissive-512.png"_view));
             ironH.set_param("material_input.heightScale", 0.1f);
             ironH.set_param("discardExcess", false);
             ironH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
             ironH.set_param("tonemap", false);
 
             slateH = rendering::MaterialCache::create_material("slate", pbrShader);
-            slateH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/slate/slate-albedo.png"_view));
-            slateH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/slate/slate-normalHeight.png"_view));
-            slateH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/slate/slate-MRDAo.png"_view));
-            slateH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/slate/slate-emissive.png"_view));
+            slateH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/slate/slate-albedo-512.png"_view));
+            slateH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/slate/slate-normalHeight-512.png"_view));
+            slateH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/slate/slate-MRDAo-512.png"_view));
+            slateH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/slate/slate-emissive-512.png"_view));
             slateH.set_param("material_input.heightScale", 1.f);
             slateH.set_param("discardExcess", true);
             slateH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
             slateH.set_param("tonemap", false);
 
             rockH = rendering::MaterialCache::create_material("rock", pbrShader);
-            rockH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/rock/rock-albedo.png"_view));
-            rockH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/rock/rock-normalHeight.png"_view));
-            rockH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/rock/rock-MRDAo.png"_view));
-            rockH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/rock/rock-emissive.png"_view));
+            rockH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/rock/rock-albedo-512.png"_view));
+            rockH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/rock/rock-normalHeight-512.png"_view));
+            rockH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/rock/rock-MRDAo-512.png"_view));
+            rockH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/rock/rock-emissive-512.png"_view));
             rockH.set_param("material_input.heightScale", 1.f);
             rockH.set_param("discardExcess", true);
             rockH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
             rockH.set_param("tonemap", false);
 
             rock2H = rendering::MaterialCache::create_material("rock 2", pbrShader);
-            rock2H.set_param("material_input.albedo", rendering::TextureCache::get_handle("rock-albedo.png"));
-            rock2H.set_param("material_input.normalHeight", rendering::TextureCache::get_handle("rock-normalHeight.png"));
-            rock2H.set_param("material_input.MRDAo", rendering::TextureCache::get_handle("rock-MRDAo.png"));
-            rock2H.set_param("material_input.emissive", rendering::TextureCache::get_handle("rock-emissive.png"));
+            rock2H.set_param("material_input.albedo", rendering::TextureCache::get_handle("rock-albedo-512.png"));
+            rock2H.set_param("material_input.normalHeight", rendering::TextureCache::get_handle("rock-normalHeight-512.png"));
+            rock2H.set_param("material_input.MRDAo", rendering::TextureCache::get_handle("rock-MRDAo-512.png"));
+            rock2H.set_param("material_input.emissive", rendering::TextureCache::get_handle("rock-emissive-512.png"));
             rock2H.set_param("material_input.heightScale", 0.5f);
             rock2H.set_param("discardExcess", false);
             rock2H.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
             rock2H.set_param("tonemap", false);
 
             fabricH = rendering::MaterialCache::create_material("fabric", pbrShader);
-            fabricH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-albedo.png"_view));
-            fabricH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-normalHeight.png"_view));
-            fabricH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-MRDAo.png"_view));
-            fabricH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-emissive.png"_view));
+            fabricH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-albedo-512.png"_view));
+            fabricH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-normalHeight-512.png"_view));
+            fabricH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-MRDAo-512.png"_view));
+            fabricH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-emissive-512.png"_view));
             fabricH.set_param("material_input.heightScale", 0.1f);
             fabricH.set_param("discardExcess", false);
             fabricH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
             fabricH.set_param("tonemap", false);
 
             bogH = rendering::MaterialCache::create_material("bog", pbrShader);
-            bogH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/bog/bog-albedo.png"_view));
-            bogH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/bog/bog-normalHeight.png"_view));
-            bogH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/bog/bog-MRDAo.png"_view));
-            bogH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/bog/bog-emissive.png"_view));
+            bogH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/bog/bog-albedo-512.png"_view));
+            bogH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/bog/bog-normalHeight-512.png"_view));
+            bogH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/bog/bog-MRDAo-512.png"_view));
+            bogH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/bog/bog-emissive-512.png"_view));
             bogH.set_param("material_input.heightScale", 0.5f);
             bogH.set_param("discardExcess", true);
             bogH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
             bogH.set_param("tonemap", false);
 
             paintH = rendering::MaterialCache::create_material("paint", pbrShader);
-            paintH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-albedo.png"_view));
-            paintH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-normalHeight.png"_view));
-            paintH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-MRDAo.png"_view));
-            paintH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-emissive.png"_view));
+            paintH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-albedo-512.png"_view));
+            paintH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-normalHeight-512.png"_view));
+            paintH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-MRDAo-512.png"_view));
+            paintH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-emissive-512.png"_view));
             paintH.set_param("material_input.heightScale", 0.1f);
             paintH.set_param("discardExcess", false);
             paintH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
             paintH.set_param("tonemap", false);
 
             gnomeMH = rendering::MaterialCache::create_material("gnome", pbrShader);
-            gnomeMH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/warlock/warlock-albedo.png"_view));
-            gnomeMH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/warlock/warlock-normalHeight.png"_view));
-            gnomeMH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/warlock/warlock-MRDAo.png"_view));
-            gnomeMH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/warlock/warlock-emissive.png"_view));
+            gnomeMH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/warlock/warlock-albedo-512.png"_view));
+            gnomeMH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/warlock/warlock-normalHeight-512.png"_view));
+            gnomeMH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/warlock/warlock-MRDAo-512.png"_view));
+            gnomeMH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/warlock/warlock-emissive-512.png"_view));
             gnomeMH.set_param("material_input.heightScale", 0.f);
             gnomeMH.set_param("discardExcess", false);
             gnomeMH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
@@ -387,90 +385,90 @@ public:
 #pragma region Entities
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(planeH.get_mesh(), rendering::mesh_renderer(slateH));
+            ent.add_component(rendering::mesh_renderer(slateH, planeH));
             ent.add_components<transform>(position(0, 0.01f, 0), rotation(), scale(10));
                         
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(planeH.get_mesh(), rendering::mesh_renderer(copperH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(copperH));
             ent.add_components<transform>(position(10, 0.01f, 0), rotation(), scale(10));
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(planeH.get_mesh(), rendering::mesh_renderer(aluminumH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(aluminumH));
             ent.add_components<transform>(position(10, 0.01f, 10), rotation(), scale(10));
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(planeH.get_mesh(), rendering::mesh_renderer(ironH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(ironH));
             ent.add_components<transform>(position(10, 0.01f, -10), rotation(), scale(10));
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(planeH.get_mesh(), rendering::mesh_renderer(fabricH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(fabricH));
             ent.add_components<transform>(position(-10, 0.01f, 0), rotation(), scale(10));
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(planeH.get_mesh(), rendering::mesh_renderer(bogH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(bogH));
             ent.add_components<transform>(position(-10, 0.01f, 10), rotation(), scale(10));
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(planeH.get_mesh(), rendering::mesh_renderer(pbrH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(pbrH));
             ent.add_components<transform>(position(0, 0.01f, 10), rotation(), scale(10));
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(planeH.get_mesh(), rendering::mesh_renderer(rockH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(rockH));
             ent.add_components<transform>(position(0, 0.01f, -10), rotation(), scale(10));
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(planeH.get_mesh(), rendering::mesh_renderer(paintH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(paintH));
             ent.add_components<transform>(position(-10, 0.01f, -10), rotation(), scale(10));
         }
 
         {
-            auto ent = createEntity();
-            ent.add_components<rendering::renderable>(directionalLightH.get_mesh(), rendering::mesh_renderer(directionalLightMH));
-            ent.add_component<rendering::light>(rendering::light::directional(math::color(1, 1, 0.8f), 10.f));
-            ent.add_components<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, 1), math::vec3::zero), scale());
+            sun = createEntity();
+            sun.add_components<rendering::mesh_renderable>(mesh_filter(directionalLightH.get_mesh()), rendering::mesh_renderer(directionalLightMH));
+            sun.add_component<rendering::light>(rendering::light::directional(math::color(1, 1, 0.8f), 10.f));
+            sun.add_components<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, 1), math::vec3::zero), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(spotLightH.get_mesh(), rendering::mesh_renderer(spotLightMH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(spotLightH.get_mesh()), rendering::mesh_renderer(spotLightMH));
             ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), 1.f, 100.f));
             ent.add_components<transform>(position(-10, 0.5, -10), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(spotLightH.get_mesh(), rendering::mesh_renderer(spotLightMH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(spotLightH.get_mesh()), rendering::mesh_renderer(spotLightMH));
             ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), 1.f, 100.f));
             ent.add_components<transform>(position(0, 0.5, -10), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(spotLightH.get_mesh(), rendering::mesh_renderer(spotLightMH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(spotLightH.get_mesh()), rendering::mesh_renderer(spotLightMH));
             ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), 1.f, 100.f));
             ent.add_components<transform>(position(10, 0.5, -10), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(pointLightH.get_mesh(), rendering::mesh_renderer(pointLightMH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
             ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 1.f));
             ent.add_components<transform>(position(0, 1, 0), rotation(), scale());
         }
@@ -478,7 +476,7 @@ public:
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(pointLightH.get_mesh(), rendering::mesh_renderer(pointLightMH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
             ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 1.f));
             ent.add_components<transform>(position(-10, 1, 0), rotation(), scale());
         }
@@ -486,28 +484,28 @@ public:
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(pointLightH.get_mesh(), rendering::mesh_renderer(pointLightMH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
             ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 1.f));
             ent.add_components<transform>(position(10, 1, 0), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(suzanneH.get_mesh(), rendering::mesh_renderer(normalH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(normalH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, 5.1f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(suzanneH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(wireframeH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, 8.1f), rotation(), scale());
         }
 
         {
             auto ent = m_ecs->createEntity();
-            ent.add_components<rendering::renderable>(suzanneH.get_mesh(), rendering::mesh_renderer(copperH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(copperH));
             ent.add_component<sah>({});
 
             ent.add_components<transform>(position(0, 3, 11.1f), rotation(), scale());
@@ -515,7 +513,7 @@ public:
 
         {
             auto ent = m_ecs->createEntity();
-            ent.add_components<rendering::renderable>(gnomeH.get_mesh(), rendering::mesh_renderer(gnomeMH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(gnomeH.get_mesh()), rendering::mesh_renderer(gnomeMH));
             ent.add_component<sah>({});
 
             ent.add_components<transform>(position(0, 3, 2.1f), rotation(), scale());
@@ -524,7 +522,7 @@ public:
         /*   {
                auto ent = m_ecs->createEntity();
                ent.add_component<sah>();
-               m_ecs->createComponent<rendering::renderable>(ent, { gnomeH, normalH });
+               m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent), { gnomeH, normalH });
 
                auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
                positionH.write(math::vec3(0, 2, 15.1f));
@@ -533,104 +531,104 @@ public:
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(submeshtestH.get_mesh(), rendering::mesh_renderer(pbrH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(submeshtestH.get_mesh()), rendering::mesh_renderer(pbrH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 10, 0), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(axesH.get_mesh(), rendering::mesh_renderer(vertexColorH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(axesH.get_mesh()), rendering::mesh_renderer(vertexColorH));
             ent.add_components<transform>();
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(pbrH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(pbrH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(5.1f, 9, 0), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(sphereH.get_mesh(), rendering::mesh_renderer(copperH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(copperH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -5.1f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(sphereH.get_mesh(), rendering::mesh_renderer(aluminumH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(aluminumH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -8.f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(sphereH.get_mesh(), rendering::mesh_renderer(ironH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(ironH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -2.2f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(sphereH.get_mesh(), rendering::mesh_renderer(rock2H));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(rock2H));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(4, 3, -8.f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(sphereH.get_mesh(), rendering::mesh_renderer(fabricH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(fabricH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(4, 3, -5.1f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(sphereH.get_mesh(), rendering::mesh_renderer(paintH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(paintH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(4, 3, -2.2f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(copperH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(copperH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -3.6f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(aluminumH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(aluminumH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -6.5f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(ironH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(ironH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -0.7f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(rock2H));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(rock2H));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(4, 3, -6.5f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(fabricH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(fabricH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(4, 3, -3.6f), rotation(), scale());
         }
 
         {
             auto ent = createEntity();
-            ent.add_components<rendering::renderable>(uvsphereH.get_mesh(), rendering::mesh_renderer(paintH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(paintH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(4, 3, -0.7f), rotation(), scale());
             auto ent2 = ent.clone();
@@ -642,7 +640,7 @@ public:
         //audioSphereLeft setup
         {
             audioSphereLeft = createEntity();
-            audioSphereLeft.add_components<rendering::renderable>(audioSourceH.get_mesh(), rendering::mesh_renderer(gizmoMH));
+            audioSphereLeft.add_components<rendering::mesh_renderable>(mesh_filter(audioSourceH.get_mesh()), rendering::mesh_renderer(gizmoMH));
             audioSphereLeft.add_components<transform>(position(-5, 1, 10), rotation(), scale(0.5));
 
             auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo32.wav"_view, { audio::audio_import_settings::channel_processing_setting::split_channels });
@@ -654,7 +652,7 @@ public:
         //audioSphereRight setup
         {
             audioSphereRight = createEntity();
-            audioSphereRight.add_components<rendering::renderable>(audioSourceH.get_mesh(), rendering::mesh_renderer(gizmoMH));
+            audioSphereRight.add_components<rendering::mesh_renderable>(mesh_filter(audioSourceH.get_mesh()), rendering::mesh_renderer(gizmoMH));
             audioSphereRight.add_components<transform>(position(5, 1, 10), rotation(), scale(0.5));
 
             auto segment = audio::AudioSegmentCache::getAudioSegment("kilogram_channel1");
@@ -709,6 +707,7 @@ public:
         //    ,cubeParams, 0.1f, cubeH, wireframeH);
 
         createProcess<&TestSystem::update>("Update");
+        //createProcess<&TestSystem::drawInterval>("TestChain");
     }
 
     void testPhysicsEvent(physics::trigger_event* evnt)
@@ -743,7 +742,7 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(0, -3.0f, 8.0f));
@@ -764,7 +763,7 @@ public:
             entPhyHande.write(physicsComponent2);
 
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(3.0, -3.0f, 8.0f));
@@ -789,7 +788,7 @@ public:
             entPhyHande.write(physicsComponent2);
 
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(0, -3.0f, 5.0f));
@@ -810,7 +809,7 @@ public:
             entPhyHande.write(physicsComponent2);
 
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(3.0, -2.0f, 4.0f));
@@ -834,7 +833,7 @@ public:
             entPhyHande.write(physicsComponent2);
 
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(0, -3.0f, -2.0f));
@@ -855,7 +854,7 @@ public:
             entPhyHande.write(physicsComponent2);
 
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(3.0, -3.0f, -2.0f));
@@ -886,7 +885,7 @@ public:
             entPhyHande.write(physicsComponent2);
 
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(0, -3.0f, -7.0f));
@@ -911,7 +910,7 @@ public:
             physicsComponent2.isTrigger = true;
             entPhyHande.write(physicsComponent2);
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(3.0, -3.0f, -7.0f));
@@ -942,7 +941,7 @@ public:
             entPhyHande.write(physicsComponent2);
 
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(0, -3.0f, -12.0f));
@@ -967,7 +966,7 @@ public:
             entPhyHande.write(physicsComponent2);
 
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(3.0, -3.0f, -13.0f));
@@ -1003,7 +1002,7 @@ public:
             positionH.write(math::vec3(testPos, -3.0f, 15.0f));
             scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
         }
 
         {
@@ -1019,8 +1018,8 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            //renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
+            //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(testPos, -3.0f, 15.0f));
@@ -1049,8 +1048,8 @@ public:
             //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
             //auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToAABBEnt);
-            //renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(staticToAABBEnt);
+            //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToAABBEntLinear);
             positionH.write(math::vec3(testPos, -0.0f, 15.0f));
@@ -1077,8 +1076,8 @@ public:
         //    auto crb = m_ecs->createComponent<physics::rigidbody>(ent);
         //    auto rbHandle = ent.add_component<physics::rigidbody>();
 
-        //    //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToAABBEnt);
-        //    //renderableHandle.write({ cubeH, wireframeH });
+        //    //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(staticToAABBEnt);
+        //    //renderableHandle.write({ cubeH), wireframeH });
 
         //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
         //    positionH.write(math::vec3(testPos+0.5f, -1.0f, 15.0f));
@@ -1099,7 +1098,7 @@ public:
             positionH.write(math::vec3(testPos, -3.0f, 8.0f));
             scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
         }
 
         {
@@ -1115,8 +1114,8 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            //renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
+            //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(testPos, -3.0f, 8.0f));
@@ -1144,8 +1143,8 @@ public:
             //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
             //auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToAABBEnt);
-            //renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(staticToAABBEnt);
+            //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToAABBEntRotation);
             positionH.write(math::vec3(testPos - 2.7f, -0.0f, 8.0f));
@@ -1166,7 +1165,7 @@ public:
             positionH.write(math::vec3(testPos, -3.0f, 2.0f));
             scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
         }
 
         {
@@ -1183,8 +1182,8 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            //renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
+            //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(testPos, -3.0f, 2.0f));
@@ -1210,8 +1209,8 @@ public:
             entPhyHande.write(physicsComponent2);
 
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToOBBEnt);
-            //renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(staticToOBBEnt);
+            //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToOBBEnt);
             positionH.write(math::vec3(testPos, -0.0f, 2.0f));
@@ -1243,7 +1242,7 @@ public:
             positionH.write(math::vec3(testPos, -3.0f, -4.0f));
             scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
         }
 
         {
@@ -1260,8 +1259,8 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            //renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
+            //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(testPos, -3.0f, -4.0f));
@@ -1286,8 +1285,8 @@ public:
             entPhyHande.write(physicsComponent2);
 
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToEdgeEnt);
-            //renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(staticToEdgeEnt);
+            //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToEdgeEnt);
             positionH.write(math::vec3(testPos + 3.0f, 2.0f, -4.0f));
@@ -1332,7 +1331,7 @@ public:
             positionH.write(math::vec3(testPos, -3.0f, 15.0f));
             scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
         }
 
         {
@@ -1348,8 +1347,8 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            //renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
+            //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(testPos, -3.0f, 15.0f));
@@ -1375,8 +1374,8 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            //renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
+            //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(NoFrictionBody);
             positionH.write(math::vec3(testPos - 1.0f, -1.5f, 15.0f));
@@ -1398,7 +1397,7 @@ public:
             positionH.write(math::vec3(testPos, -3.0f, 8.0f));
             scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
         }
 
         {
@@ -1414,8 +1413,8 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            //renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
+            //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(testPos, -3.0f, 8.0f));
@@ -1442,8 +1441,8 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            //renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
+            //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(Point3FrictionBody);
             positionH.write(math::vec3(testPos - 1.0f, -1.5f, 8.0f));
@@ -1466,7 +1465,7 @@ public:
             positionH.write(math::vec3(testPos, -3.0f, 1.0f));
             scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
         }
 
         {
@@ -1482,8 +1481,8 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            //renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
+            //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(testPos, -3.0f, 1.0f));
@@ -1510,8 +1509,8 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            //renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
+            //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(Point6FrictionBody);
             positionH.write(math::vec3(testPos - 1.0f, -1.5f, 1.0f));
@@ -1533,7 +1532,7 @@ public:
             positionH.write(math::vec3(testPos, -3.0f, -6.0f));
             scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
         }
 
         {
@@ -1549,8 +1548,8 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            //renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
+            //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(testPos, -3.0f, -6.0f));
@@ -1577,8 +1576,8 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            //renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
+            //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(FullFrictionBody);
             positionH.write(math::vec3(testPos - 1.0f, -1.5f, -6.0f));
@@ -1617,7 +1616,7 @@ public:
             positionH.write(math::vec3(35, -3.0f, 15.0f));
             scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
         }
 
         {
@@ -1633,8 +1632,8 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
-            //renderableHandle.write({ cubeH, wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
+            //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(35, -3.0f, 15.0f));
@@ -1689,7 +1688,7 @@ public:
                 if (!sun)
                 {
                     sun = createEntity();
-                    sun.add_components<rendering::renderable>(MeshCache::get_handle("directional light"), rendering::mesh_renderer(rendering::MaterialCache::get_material("directional light")));
+                    sun.add_components<rendering::mesh_renderable>(mesh_filter(MeshCache::get_handle("directional light")), rendering::mesh_renderer(rendering::MaterialCache::get_material("directional light")));
                     sun.add_component<rendering::light>(rendering::light::directional(math::color(1, 1, 0.8f), 10.f));
                     sun.add_components<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, 1), math::vec3::zero), scale());
                 }

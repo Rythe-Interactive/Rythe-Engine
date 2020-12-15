@@ -12,7 +12,7 @@ namespace legion::rendering
         ecs::entity_handle particularParticle = particleHandle.entity;
 
         //Handle model and material assigning.
-        particularParticle.add_components<renderable>(m_particleModel.get_mesh(), mesh_renderer(m_particleMaterial));
+        particularParticle.add_component<mesh_renderer>(rendering::mesh_renderer(m_particleMaterial, m_particleModel));
     }
 
     void ParticleSystemBase::cleanUpParticle(const ecs::entity_handle& particleHandle, ecs::component_handle<particle_emitter>& emitterHandle) const
