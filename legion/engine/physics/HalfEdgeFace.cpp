@@ -11,7 +11,7 @@ namespace legion::physics
         math::vec3 faceCenter{ 0.0f };
         int edgeCount = 0;
 
-        auto calculateFaceCentroid = [&faceCenter,&edgeCount](HalfEdgeEdge* edge)
+        auto calculateFaceCentroid = [&faceCenter, &edgeCount](HalfEdgeEdge* edge)
         {
             math::vec3 pos = edge->edgePosition;
             faceCenter += pos;
@@ -19,11 +19,11 @@ namespace legion::physics
         };
         forEachEdge(calculateFaceCentroid);
 
-        centroid = faceCenter/static_cast<float>( edgeCount);
+        centroid = faceCenter / static_cast<float>(edgeCount);
 
         int currentEdgeId = 0;
 
-        auto initializeEdgeToFaceFunc = [this,&currentEdgeId,edgeCount](HalfEdgeEdge* edge)
+        auto initializeEdgeToFaceFunc = [this, &currentEdgeId, edgeCount](HalfEdgeEdge* edge)
         {
             edge->face = this;
 
@@ -40,7 +40,7 @@ namespace legion::physics
         forEachEdge(initializeEdgeToFaceFunc);
 
         faceCount++;
-       
+
     }
 
     void HalfEdgeFace::deleteEdges()
@@ -88,22 +88,40 @@ namespace legion::physics
 
     void HalfEdgeFace::inverse()
     {
+        
         HalfEdgeEdge* start = startEdge;
         HalfEdgeEdge* current = startEdge;
-        if (start->nextEdge == start)
-        {
-            return;
-        }
+        assert (start->nextEdge != start);
+        /*
+        HalfEdgeEdge* last = startEdge->prevEdge;
+        math::vec3 initialPosition = startEdge->edgePosition;
+
+
         do
         {
+
+            //fix edge-positions
+            if(current != last)
+            {
+                current->edgePosition = current->nextEdge->edgePosition; 
+            } else
+            {
+                current->edgePosition = initialPosition;
+            }
+
+
+
+
+
             HalfEdgeEdge* prev = current->prevEdge;
             current->prevEdge = current->nextEdge;
             current->nextEdge = prev;
 
+
             // Current should go the edge that was previously the next
             current = current->prevEdge;
         } while (current != start);
-
+        */
         normal = -normal; // Inverse the normal
     }
 
@@ -166,15 +184,15 @@ namespace legion::physics
         else return face_angle_relation::coplaner;
     }
 
-	bool HalfEdgeFace::testConvexity(const HalfEdgeFace& first, const HalfEdgeFace& second)
-	{
+    bool HalfEdgeFace::testConvexity(const HalfEdgeFace& first, const HalfEdgeFace& second)
+    {
         if (first == second)
         {
             log::warn("Testing face with itself for convexity: returning true");
             return true;
         }
-		return first.testConvexity(second) && second.testConvexity(first);
-	}
+        return first.testConvexity(second) && second.testConvexity(first);
+    }
 
     bool HalfEdgeFace::makeNormalsConvexWithFace(HalfEdgeFace& first, HalfEdgeFace& second)
     {
@@ -207,6 +225,7 @@ namespace legion::physics
                     return firstCurrent;
                 }
 
+
                 secondCurrent = secondCurrent->nextEdge;
             } while (secondCurrent != second.startEdge);
             firstCurrent = firstCurrent->nextEdge;
@@ -223,6 +242,9 @@ namespace legion::physics
         assert(middleEdge.pairingEdge->nextEdge != nullptr);
         assert(middleEdge.pairingEdge->prevEdge != nullptr);
         assert(middleEdge.nextEdge->nextEdge != &middleEdge);
+
+        assert(middleEdge.edgePosition != middleEdge.pairingEdge->edgePosition);
+       
 
         if (middleEdge.face->startEdge == &middleEdge)
         {
@@ -295,8 +317,4 @@ namespace legion::physics
         forEachEdge(deleteFunc);
 
     }
-
-
-
-
 }
