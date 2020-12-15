@@ -99,6 +99,18 @@ public:
                 ent.add_components<rendering::renderable>({ cube, wireFrameH });
                 ent.add_components<transform>(position(0, 0, -5.0f), rotation(), scale(1));
             }
+            {
+                math::vec3 p = math::vec3(11, 4, 5);
+                std::vector<math::vec3> points{ math::vec3(0,0,0), math::vec3(2, 5, 5), math::vec3(12, 5, 5), math::vec3(10, 0, 0) };
+                math::mat4 planeMat = math::planeMatrix(points.at(0), points.at(1), points.at(3), math::vec3(0,0,0));
+                std::vector<math::vec3> newPoints{
+                    math::vec3(math::inverse(planeMat) * math::vec4(points.at(0),1)),
+                    math::vec3(math::inverse(planeMat) * math::vec4(points.at(1),1)),
+                    math::vec3(math::inverse(planeMat) * math::vec4(points.at(2),1)),
+                    math::vec3(math::inverse(planeMat) * math::vec4(points.at(3),1))
+                };
+                log::debug("mapped: {} {} {} {}", newPoints.at(0), newPoints.at(1), newPoints.at(2), newPoints.at(3));
+            }
         }
     }
 
@@ -201,7 +213,6 @@ public:
     {
         if (action->value)
         {
-            log::debug("Debug!");
             if (pStep > 0)
             {
                 auto debugDrawEdges = [](legion::physics::HalfEdgeEdge* edge)

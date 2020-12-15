@@ -9,12 +9,47 @@
 
 namespace legion::core::math
 {
+    inline float pointToLineSegment2D(const vec2& point, const vec2& lineOrigin, const vec2& lineEnd)
+    {
+        if (point == lineOrigin || point == lineEnd) return 0.0f;
+        vec2 lineDirection = lineEnd - lineOrigin;
+        vec2 lineNormal = vec2(-lineDirection.y, lineDirection.x);
+
+        vec2 toLineOrigin = point - lineOrigin;
+
+        if (dot(toLineOrigin, lineDirection) <= 0.0)
+        {
+            // Point is before the start of the line
+            // Return to line start
+            return length(toLineOrigin);
+        }
+        vec2 toLineEnd = point - lineEnd;
+
+        if (dot(toLineEnd, lineDirection) >= 0.0)
+        {
+            // Point is after the end of the line
+            // Return to line start
+            return length(toLineEnd);
+        }
+
+        return dot(point - lineOrigin, normalize(lineNormal));
+    }
+
+    inline float pointToLine2D(const vec2& point, const vec2& lineOrigin, const vec2& lineEnd)
+    {
+        if (point == lineOrigin || point == lineEnd) return 0.0f;
+        vec2 lineDirection = lineEnd - lineOrigin;
+        vec2 lineNormal = vec2(-lineDirection.y, lineDirection.x);
+
+        return dot(point - lineOrigin, normalize(lineNormal));
+    }
+
     /**@brief Calcualtes the shortest distance between a point and a line
      * @param point - The point
      * @param lineOrigin - The origin of the line
      * @param lineEnd - The end of the line
      */
-    inline float pointToLine(const vec3& point, const vec3& lineOrigin, const vec3& lineEnd)
+    inline float pointToLineSegment(const vec3& point, const vec3& lineOrigin, const vec3& lineEnd)
     {
         if (point == lineOrigin || point == lineEnd) return 0.0f;
         vec3 dir = lineEnd - lineOrigin;
@@ -127,9 +162,9 @@ namespace legion::core::math
         }
 
         //Point q is not on the triangle, check distance toward each edge of the triangle
-        float distance01 = pointToLine(p, triPoint1, triPoint0);
-        float distance02 = pointToLine(p, triPoint2, triPoint0);
-        float distance12 = pointToLine(p, triPoint2, triPoint1);
+        float distance01 = pointToLineSegment(p, triPoint1, triPoint0);
+        float distance02 = pointToLineSegment(p, triPoint2, triPoint0);
+        float distance12 = pointToLineSegment(p, triPoint2, triPoint1);
 
         // Assume the shortest distance is sqDistance01
         // Then check if this is true
@@ -243,9 +278,9 @@ namespace legion::core::math
             }
 
             //Point q is not on the triangle, check distance toward each edge of the triangle
-            float distance01 = pointToLine(p, points[1], points[0]);
-            float distance02 = pointToLine(p, points[2], points[0]);
-            float distance12 = pointToLine(p, points[2], points[1]);
+            float distance01 = pointToLineSegment(p, points[1], points[0]);
+            float distance02 = pointToLineSegment(p, points[2], points[0]);
+            float distance12 = pointToLineSegment(p, points[2], points[1]);
 
             // Assume the shortest distance is sqDistance01
             // Then check if this is true
@@ -315,4 +350,91 @@ namespace legion::core::math
             return dot(normal, p-position);
         }
     };
+
+    /**@brief Calculates a matrix for a plane
+     *     p1---------- 
+     *     /          /
+     *    /          /
+     *   /          /
+     *  /          /
+     * p0---------p2 
+     * @param normal The normal of the plane
+     * @param centroid The center of the the plane
+     */
+    inline mat4 planeMatrix(const vec3& p0, const vec3& p1, const vec3& p2, const vec3& centroid)
+    {
+        vec3 xAxis = p2 - p0;
+        vec3 zAxis = p1 - p0;
+
+        mat4 scale(
+            length(xAxis), 0, 0, 0,
+            0, length(zAxis), 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+            );
+
+        vec3 rotX = xAxis / length(xAxis);
+        vec3 rotZ = zAxis / length(zAxis);
+        vec3 rotY = cross(rotX, rotZ);
+
+        mat4 rot(
+            rotX.x, rotX.y, rotX.z, 0,
+            rotY.x, rotY.y, rotY.z, 0,
+            rotZ.x, rotZ.y, rotZ.z, 0,
+            0, 0, 0, 1
+        );
+
+        mat4 translation(
+            1, 0, 0, centroid.x,
+            0, 1, 0, centroid.y,
+            0, 0, 1, centroid.z,
+            0, 0, 0, 1
+        );
+
+        return translation * rot * scale;
+    }
+
+    inline bool projectedPointInPolygon(const vec3& p, const std::vector<vec3>& points, const vec3& normal, const vec3& centroid)
+    {
+        assert(points.size() != 0);
+
+        // Project point onto polygon
+        float cosAngle = dot(normal, p - points.at(0)) / (distance(p, points.at(0)) * length(normal));
+        float projectionLength = length(p - points.at(0)) * cosAngle;
+        vec3 towardProjection = -projectionLength * (normal / length(normal));
+        // Q is the projection of p onto the plane
+        vec3 q = p + towardProjection;
+
+        // Bring it into 2D space
+        // Calc tangent by crossing normal with world up
+        vec3 tangent = normalize(cross(normal, vec3(0, 1, 0)));
+        vec3 tangent2 = normalize(cross(tangent, normal));
+
+        vec3 qToPolygonVertex = q - points.at(0);
+
+        vec2 projectedPoint2D;
+        projectedPoint2D.x = dot(qToPolygonVertex, tangent);
+        projectedPoint2D.y = dot(qToPolygonVertex, tangent2);
+
+        std::vector<vec2> points2D;
+        for (int i = 0; i < points.size(); ++i)
+        {
+            vec3 pointToPolygon = points.at(i) - centroid;
+            vec2 point;
+            point.x = dot(pointToPolygon, tangent);
+            point.y = dot(pointToPolygon, tangent2);
+            points2D.push_back(point);
+        }
+
+        for (size_t i = 0; i < points2D.size(); ++i)
+        {
+            size_t next = (i + 1) % points2D.size();
+
+            float dist = pointToLine2D(projectedPoint2D, points2D.at(i), points2D.at(next));
+
+            if (dist > 0) return false;
+        }
+
+        return true;
+    }
 }

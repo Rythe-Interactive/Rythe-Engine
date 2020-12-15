@@ -703,7 +703,7 @@ namespace legion::physics
             for (int i = 0; i < mesh.vertices.size(); ++i)
             {
                 if (i == lineStartIndex || i == lineEndIndex) continue;
-                float dist = math::pointToLine(mesh.vertices.at(i), mesh.vertices.at(lineStartIndex), mesh.vertices.at(lineEndIndex));
+                float dist = math::pointToLineSegment(mesh.vertices.at(i), mesh.vertices.at(lineStartIndex), mesh.vertices.at(lineEndIndex));
                 if (dist > largestDistance && dist > 0)
                 {
                     largestDistance = dist;
@@ -766,19 +766,34 @@ namespace legion::physics
                 float smallestDistance = std::numeric_limits<float>::max();
                 int faceIndex = -1;
                 math::vec3 faceVerts[] = { math::vec3(0,0,0), math::vec3(0,0,0), math::vec3(0,0,0)};
-                //log::debug("Vert {} @ {}", i, vertices.at(i));
+                log::debug("\n\n\n\t\t\t\tVert {} @ {}", i, vertices.at(i));
                 for (size_type f = 0; f < halfEdgeFaces.size(); ++f)
                 {
-                    // Get the distances to the face
-                    HalfEdgeEdge* startEdge = halfEdgeFaces.at(f)->startEdge;
-                    float distance = math::pointToTriangle(vertices.at(i), startEdge->edgePosition, startEdge->nextEdge->edgePosition, startEdge->prevEdge->edgePosition, halfEdgeFaces.at(f)->normal);
-                    if (distance > -math::epsilon<float>() && distance < smallestDistance)
+                    std::vector<math::vec3> points;
+                    log::debug("Face @ ");
+                    auto collectPoints = [&points](HalfEdgeEdge* edge)
                     {
-                        faceIndex = f;
-                        smallestDistance = distance;
-                        faceVerts[0] = startEdge->edgePosition;
-                        faceVerts[1] = startEdge->nextEdge->edgePosition;
-                        faceVerts[2] = startEdge->prevEdge->edgePosition;
+                        points.push_back(edge->edgePosition);
+                        log::debug("{}", edge->edgePosition);
+                    };
+                    halfEdgeFaces.at(f)->forEachEdge(collectPoints);
+                    float distToPlane = math::pointToPlane(vertices.at(i), points.at(0), halfEdgeFaces.at(f)->normal);
+                    bool projected = math::projectedPointInPolygon(vertices.at(i), points, halfEdgeFaces.at(f)->normal, halfEdgeFaces.at(f)->centroid);
+                    log::debug("PlaneDist: {} && Projected: {}", distToPlane, projected);
+                    if (distToPlane > 0 && projected)
+                    {
+                        log::debug("Did the thing!----------------------------------------------------Did the thing!");
+                        // Get the distances to the face
+                        HalfEdgeEdge* startEdge = halfEdgeFaces.at(f)->startEdge;
+                        float distance = math::pointToTriangle(vertices.at(i), startEdge->edgePosition, startEdge->nextEdge->edgePosition, startEdge->prevEdge->edgePosition, halfEdgeFaces.at(f)->normal);
+                        if (distance > 0 && distance < smallestDistance)
+                        {
+                            faceIndex = f;
+                            smallestDistance = distance;
+                            faceVerts[0] = startEdge->edgePosition;
+                            faceVerts[1] = startEdge->nextEdge->edgePosition;
+                            faceVerts[2] = startEdge->prevEdge->edgePosition;
+                        }
                     }
                 }
                 if (faceIndex >= 0)
