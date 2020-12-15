@@ -11,6 +11,8 @@
 
 namespace legion::rendering
 {
+    using attachment = std::variant<std::monostate, texture_handle, renderbuffer>;
+    static const attachment invalid_attachment = std::monostate();
     /**@class framebuffer
      * @brief Low level framebuffer.
      */
@@ -23,7 +25,7 @@ namespace legion::rendering
         GLenum m_target = GL_FRAMEBUFFER;
 
         // Attachments to the framebuffer. Can be either texture handles or renderbuffers.
-        std::unordered_map<GLenum, std::any> m_attachments;
+        std::unordered_map<GLenum, attachment> m_attachments;
 
     public:
 
@@ -61,6 +63,12 @@ namespace legion::rendering
          */
         void attach(renderbuffer rbo, GLenum attachment);
 
+        /**@brief Attach a unknown type attachment to a certain attachment-point of this framebuffer.
+         * @param any Attachment to attach.
+         * @param attachment Attachment-point to attach the renderbuffer to.
+         */
+        void attach(attachment att, GLenum attachment);
+
         /**@brief Attach a texture to a certain attachment-point of this framebuffer.
          * @param texture Texture handle of the texture to attach.
          * @param attachment Attachment-point to attach the texture to.
@@ -71,7 +79,7 @@ namespace legion::rendering
          * @param attachment Attachment-point to fetch the attachment for.
          * @return const std::any& An std::any that should be any_castable to either a texture handle or a renderbuffer if an attachment was active, the std::any will be empty otherwise.
          */
-        L_NODISCARD const std::any& getAttachment(GLenum attachment) const;
+        L_NODISCARD const attachment& getAttachment(GLenum attachment) const;
 
         /**@brief Release the framebuffer from the current context. Useful for low level native rendering.
          */

@@ -19,7 +19,6 @@ shader(vertex)
     }
 }
 
-const float offset = 1.0 / 300.0;
 
 shader(fragment)
 {
@@ -31,16 +30,19 @@ shader(fragment)
 
     void main(void)
     {
+        const ivec2 texSize = textureSize(screenTexture, 0);
+        vec2 offset = vec2(2.0 / texSize.x, 2.0 / texSize.y);
+
         vec2 offsets[9] = vec2[](
-        vec2(-offset,  offset), // top-left
-        vec2( 0.0f,    offset), // top-center
-        vec2( offset,  offset), // top-right
-        vec2(-offset,  0.0f),   // center-left
+        vec2(-offset.x,  offset.y), // top-left
+        vec2( 0.0f,    offset.y), // top-center
+        vec2( offset.x,  offset.y), // top-right
+        vec2(-offset.x,  0.0f),   // center-left
         vec2( 0.0f,    0.0f),   // center-center
-        vec2( offset,  0.0f),   // center-right
-        vec2(-offset, -offset), // bottom-left
-        vec2( 0.0f,   -offset), // bottom-center
-        vec2( offset, -offset)  // bottom-right    
+        vec2( offset.x,  0.0f),   // center-right
+        vec2(-offset.x, -offset.y), // bottom-left
+        vec2( 0.0f,   -offset.y), // bottom-center
+        vec2( offset.x, -offset.y)  // bottom-right
         );
 
         float kernel[9] = float[](
@@ -52,12 +54,12 @@ shader(fragment)
         vec3 sampleTex[9];
         for(int i = 0; i < 9; i++)
         {
-            sampleTex[i] = vec3(texture(screenTexture, TexCoords.st + offsets[i]));
+            sampleTex[i] = texture(screenTexture, TexCoords + offsets[i]).rgb;
         }
         vec3 col = vec3(0.0);
         for(int i = 0; i < 9; i++)
             col += sampleTex[i] * kernel[i];
-        
+
         FragColor = vec4(col, 1.0);
     }
 }

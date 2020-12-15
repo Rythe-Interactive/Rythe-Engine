@@ -13,6 +13,13 @@ namespace legion::rendering
         static std::multimap<priority_type, shader_handle> m_shaders;
         vertexarray m_quadVAO;
         buffer m_quadVBO;
+
+        framebuffer m_drawFBO;
+
+        texture_handle m_swapTexture;
+
+        shader_handle m_screenShader;
+
     public:
         static void addShader(shader_handle shaderToAdd, priority_type priority = default_priority);
         static void removeShader(shader_handle shaderToRemove);

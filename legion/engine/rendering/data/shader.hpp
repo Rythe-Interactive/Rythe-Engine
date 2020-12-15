@@ -294,6 +294,13 @@ namespace legion::rendering
         }
 
         template<typename T>
+        bool has_uniform(const std::string& name)
+        {
+            auto id = nameHash(name);
+            return uniforms.count(id) && dynamic_cast<uniform<T>*>(uniforms[id].get()) != nullptr;
+        }
+
+        template<typename T>
         uniform<T> get_uniform(id_type id)
         {
             auto* ptr = dynamic_cast<uniform<T>*>(uniforms[id].get());
@@ -301,6 +308,12 @@ namespace legion::rendering
                 return *ptr;
             log::error("Uniform of type {} does not exist with id {}.", typeName<T>(), id);
             return uniform<T>(nullptr);
+        }
+
+        template<typename T>
+        bool has_uniform(id_type id)
+        {
+            return uniforms.count(id) && dynamic_cast<uniform<T>*>(uniforms[id].get()) != nullptr;
         }
 
         attribute get_attribute(const std::string& name)
@@ -345,7 +358,13 @@ namespace legion::rendering
         uniform<T> get_uniform(const std::string& name);
 
         template<typename T>
+        bool has_uniform(const std::string& name);
+
+        template<typename T>
         uniform<T> get_uniform(id_type uniformId);
+
+        template<typename T>
+        bool has_uniform(id_type uniformId);
 
         attribute get_attribute(const std::string& name);
 
@@ -391,8 +410,20 @@ namespace legion::rendering
     }
 
     template<typename T>
+    inline bool shader_handle::has_uniform(const std::string& name)
+    {
+        return ShaderCache::get_shader(id)->has_uniform<T>(name);
+    }
+
+    template<typename T>
     uniform<T> shader_handle::get_uniform(id_type uniformId)
     {
         return ShaderCache::get_shader(id)->get_uniform<T>(uniformId);
+    }
+
+    template<typename T>
+    inline bool shader_handle::has_uniform(id_type uniformId)
+    {
+        return ShaderCache::get_shader(id)->has_uniform<T>(uniformId);
     }
 }

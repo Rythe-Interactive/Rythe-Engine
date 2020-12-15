@@ -88,7 +88,6 @@ namespace legion::rendering
     {
         app::gl_id textureId = invalid_id;
 
-        math::ivec2 size;
         texture_components channels;
         texture_type type;
         texture_format format;
@@ -96,6 +95,7 @@ namespace legion::rendering
 
         static void to_resource(fs::basic_resource* resource, const texture& value);
         static void from_resource(texture* value, const fs::basic_resource& resource);
+        math::ivec2 size() const;
         void resize(math::ivec2 size) const;
     };
 

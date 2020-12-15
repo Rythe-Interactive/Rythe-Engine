@@ -24,6 +24,7 @@ namespace legion::rendering
 
     void PostProcessingStage::setup(app::window& context)
     {
+        using namespace legion::core::fs::literals;
 
         float quadVertices[24] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
           // positions   // texCoords
@@ -38,14 +39,25 @@ namespace legion::rendering
         app::context_guard guard(context);
 
         m_quadVAO = vertexarray::generate();
-        m_quadVBO = buffer(GL_ARRAY_BUFFER,sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-        m_quadVAO.setAttribPointer(m_quadVBO, 0, 2, GL_FLOAT, false, 4*sizeof(float), 0);
+        m_quadVBO = buffer(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+        m_quadVAO.setAttribPointer(m_quadVBO, 0, 2, GL_FLOAT, false, 4 * sizeof(float), 0);
         m_quadVAO.setAttribPointer(m_quadVBO, 1, 2, GL_FLOAT, false, 4 * sizeof(float), 2 * sizeof(float));
+
+        m_drawFBO = framebuffer(GL_FRAMEBUFFER);
+
+        m_swapTexture = TextureCache::create_texture("color_swap_image", math::ivec2(1, 1), {
+        texture_type::two_dimensional, channel_format::eight_bit, texture_format::rgb,
+        texture_components::rgb, true, true, texture_mipmap::linear, texture_mipmap::linear,
+        texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat });
+
+        m_screenShader = ShaderCache::create_shader("screen shader", "engine://shaders/screenshader.shs"_view);
     }
 
     void PostProcessingStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
         static id_type mainId = nameHash("main");
+        static id_type screenId = nameHash("screenTexture");
+        static id_type depthId = nameHash("depthTexture");
 
         auto fbo = getFramebuffer(mainId);
         if (!fbo)
@@ -65,33 +77,70 @@ namespace legion::rendering
             return;
         }
 
-
-        auto a = fbo->getAttachment(GL_COLOR_ATTACHMENT0);
-        if (!a.has_value())
+        auto colorAttachment = fbo->getAttachment(GL_COLOR_ATTACHMENT0);
+        if (std::holds_alternative<std::monostate>(colorAttachment))
         {
             log::error("Color attachment was not found.");
             return;
         }
-        if (a.type() != typeid(texture_handle))
+        if (!std::holds_alternative<texture_handle>(colorAttachment))
         {
             log::error("Color attachment needs to be a texture to be able to use it for post processing.");
             return;
         }
 
-        texture_handle* texture = std::any_cast<texture_handle>(&a);
-        fbo->bind();
+        texture_handle textures[] = { std::get<texture_handle>(colorAttachment), m_swapTexture };
+
+        math::ivec2 attachmentSize = textures[0].get_texture().size();
+        auto tex = m_swapTexture.get_texture();
+        if (attachmentSize != tex.size())
+            tex.resize(attachmentSize);
+
+        int index = 0;
+
+        bool stencil = false;
+        auto depthAttachment = fbo->getAttachment(GL_DEPTH);
+        if (std::holds_alternative<std::monostate>(depthAttachment))
+        {
+            stencil = true;
+            depthAttachment = fbo->getAttachment(GL_DEPTH_STENCIL);
+        }
+
+        glDisable(GL_DEPTH_TEST);
+
+
         m_quadVAO.bind();
 
-        for (auto [_,shader] : m_shaders)
+        for (auto& [_, shader] : m_shaders)
         {
+            fbo->attach(textures[!index], GL_COLOR_ATTACHMENT0);
+            fbo->bind();
+
             shader.bind();
-            shader.get_uniform<texture_handle>("screenTexture").set_value(*texture);
+
+            if (std::holds_alternative<texture_handle>(depthAttachment) && shader.has_uniform<texture_handle>(depthId))
+                shader.get_uniform<texture_handle>(depthId).set_value(std::get<texture_handle>(depthAttachment));
+
+            shader.get_uniform<texture_handle>(screenId).set_value(textures[index]);
             glDrawArrays(GL_TRIANGLES, 0, 6);
-            glBindTexture(GL_TEXTURE_2D, 0);
-            shader.release();
+            fbo->release();
+            index = !index;
         }
+
+        if (index)
+        {
+            fbo->attach(textures[0], GL_COLOR_ATTACHMENT0);
+            fbo->bind();
+            m_screenShader.bind();
+            m_screenShader.get_uniform<texture_handle>(screenId).set_value(textures[1]);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+            fbo->release();
+        }
+
+        rendering::shader::release();
         m_quadVAO.release();
-        fbo->release();
+
+        glEnable(GL_DEPTH_TEST);
     }
 
     priority_type PostProcessingStage::priority()
