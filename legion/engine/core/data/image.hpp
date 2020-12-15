@@ -2,7 +2,7 @@
 #include <core/types/primitives.hpp>
 #include <core/containers/sparse_map.hpp>
 #include <core/math/color.hpp>
-#include <core/async/readonly_rw_spinlock.hpp>
+#include <core/async/rw_spinlock.hpp>
 #include <core/filesystem/view.hpp>
 #include <mutex>
 
@@ -226,7 +226,7 @@ namespace legion::core
 
         /**@brief Get the image and the attached lock. Will return invalid_image if the handle was invalid.
          */
-        std::pair<async::readonly_rw_spinlock&, image&> get_raw_image();
+        std::pair<async::rw_spinlock&, image&> get_raw_image();
 
         void destroy();
 
@@ -262,17 +262,17 @@ namespace legion::core
         friend struct image_handle;
     private:
         static const std::vector<math::color> m_nullColors;
-        static async::readonly_rw_spinlock m_nullLock;
+        static async::rw_spinlock m_nullLock;
 
-        static std::unordered_map<id_type, std::unique_ptr<std::pair<async::readonly_rw_spinlock, image>>> m_images;
-        static async::readonly_rw_spinlock m_imagesLock;
+        static std::unordered_map<id_type, std::unique_ptr<std::pair<async::rw_spinlock, image>>> m_images;
+        static async::rw_spinlock m_imagesLock;
         static std::unordered_map<id_type, std::unique_ptr<std::vector<math::color>>> m_colors;
-        static async::readonly_rw_spinlock m_colorsLock;
+        static async::rw_spinlock m_colorsLock;
 
         static const std::vector<math::color>& process_raw(id_type id);
 
         static const std::vector<math::color>& read_colors(id_type id);
-        static std::pair<async::readonly_rw_spinlock&, image&> get_raw_image(id_type id);
+        static std::pair<async::rw_spinlock&, image&> get_raw_image(id_type id);
 
     public:
         /**@brief Create a new image and load it from a file if a image with the same name doesn't exist yet.

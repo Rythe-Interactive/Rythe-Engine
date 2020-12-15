@@ -3,15 +3,15 @@
 namespace legion::application
 {
     sparse_map<GLFWwindow*, ecs::component_handle<window>> WindowSystem::m_windowComponents;
-    async::readonly_rw_spinlock WindowSystem::m_creationLock;
+    async::spinlock WindowSystem::m_creationLock;
 
-    async::readonly_rw_spinlock WindowSystem::m_creationRequestLock;
+    async::spinlock WindowSystem::m_creationRequestLock;
     std::vector<WindowSystem::window_request> WindowSystem::m_creationRequests;
 
-    async::readonly_rw_spinlock WindowSystem::m_fullscreenRequestLock;
+    async::spinlock WindowSystem::m_fullscreenRequestLock;
     std::vector<WindowSystem::fullscreen_toggle_request> WindowSystem::m_fullscreenRequests;
 
-    async::readonly_rw_spinlock WindowSystem::m_iconRequestLock;
+    async::spinlock WindowSystem::m_iconRequestLock;
     std::vector<WindowSystem::icon_request> WindowSystem::m_iconRequests;
 
     void WindowSystem::closeWindow(GLFWwindow* window)
@@ -20,7 +20,7 @@ namespace legion::application
             return;
 
         {
-            async::readwrite_guard guard(m_creationLock); // Lock all creation sensitive data.
+            std::lock_guard guard(m_creationLock); // Lock all creation sensitive data.
 
             auto handle = m_windowComponents[window];
 
@@ -33,7 +33,7 @@ namespace legion::application
 
                 auto* lock = handle.read().lock;
                 {
-                    async::readwrite_guard guard(*lock); // "deleting" the window is technically writing, so we copy the pointer and use that to lock it.
+                    std::lock_guard guard(*lock); // "deleting" the window is technically writing, so we copy the pointer and use that to lock it.
                     handle.write(invalid_window); // We mark the window as deleted without deleting it yet. It can cause users to find invalid windows,                                                    
                 }                                 // but at least they won't use a destroyed component after the lock unlocks.
                 delete lock;
@@ -150,7 +150,7 @@ namespace legion::application
 
     void WindowSystem::onExit(events::exit* event)
     {
-        async::readwrite_guard guard(m_creationLock);
+        std::lock_guard guard(m_creationLock);
         for (auto entity : m_windowQuery)
         {
             ContextHelper::setWindowShouldClose(entity.get_component_handle<window>().read(), true);
@@ -164,7 +164,7 @@ namespace legion::application
     {
         if (entityId)
         {
-            async::readwrite_guard guard(m_iconRequestLock);
+            std::lock_guard guard(m_iconRequestLock);
             m_iconRequests.emplace_back(entityId, icon);
         }
         else
@@ -175,7 +175,7 @@ namespace legion::application
     {
         if (entityId)
         {
-            async::readwrite_guard guard(m_iconRequestLock);
+            std::lock_guard guard(m_iconRequestLock);
             m_iconRequests.emplace_back(entityId, iconName);
         }
         else
@@ -186,7 +186,7 @@ namespace legion::application
     {
         if (entityId)
         {
-            async::readwrite_guard guard(m_fullscreenRequestLock);
+            std::lock_guard guard(m_fullscreenRequestLock);
             m_fullscreenRequests.emplace_back(entityId, position, size);
         }
         else
@@ -197,7 +197,7 @@ namespace legion::application
     {
         if (entityId)
         {
-            async::readwrite_guard guard(m_creationRequestLock);
+            std::lock_guard guard(m_creationRequestLock);
             m_creationRequests.emplace_back(entityId, size, name, icon, monitor, share, swapInterval, hints);
         }
         else
@@ -208,7 +208,7 @@ namespace legion::application
     {
         if (entityId)
         {
-            async::readwrite_guard guard(m_creationRequestLock);
+            std::lock_guard guard(m_creationRequestLock);
             m_creationRequests.emplace_back(entityId, size, name, icon, monitor, share, swapInterval);
         }
         else
@@ -219,7 +219,7 @@ namespace legion::application
     {
         if (entityId)
         {
-            async::readwrite_guard guard(m_creationRequestLock);
+            std::lock_guard guard(m_creationRequestLock);
             m_creationRequests.emplace_back(entityId, size, name, iconName, monitor, share, swapInterval);
         }
         else
@@ -230,7 +230,7 @@ namespace legion::application
     {
         if (entityId)
         {
-            async::readwrite_guard guard(m_creationRequestLock);
+            std::lock_guard guard(m_creationRequestLock);
             m_creationRequests.emplace_back(entityId, size, name, iconName, monitor, share, swapInterval);
         }
         else
@@ -272,7 +272,7 @@ namespace legion::application
         if (m_exit) // If the engine is exiting then we can't create new windows.
             return;
 
-        async::readwrite_guard guard(m_creationRequestLock);
+        std::lock_guard guard(m_creationRequestLock);
         for (auto& request : m_creationRequests)
         {
             if (!m_ecs->validateEntity(request.entityId))
@@ -365,10 +365,10 @@ namespace legion::application
 
             if (!m_ecs->getEntityData(request.entityId).components.contains(typeHash<window>()))
             {
-                win.lock = new async::readonly_rw_spinlock();
+                win.lock = new async::spinlock();
 
-                async::readwrite_guard wguard(*win.lock);     // This is the only code that has access to win.lock right now, so there's no deadlock risk.
-                async::readwrite_guard cguard(m_creationLock);// Locking them both separately is faster than using a multilock.
+                std::lock_guard wguard(*win.lock);     // This is the only code that has access to win.lock right now, so there's no deadlock risk.
+                std::lock_guard cguard(m_creationLock);// Locking them both separately is faster than using a multilock.
 
                 handle = m_ecs->createComponent<window>(request.entityId, win);
 
@@ -384,7 +384,7 @@ namespace legion::application
                 handle = m_ecs->getComponent<window>(request.entityId);
                 window oldWindow = handle.read();
 
-                async::readwrite_multiguard wguard(*oldWindow.lock, m_creationLock);
+                std::scoped_lock wguard(*oldWindow.lock, m_creationLock);
 
                 ContextHelper::destroyWindow(oldWindow);
                 m_windowComponents.erase(oldWindow);
@@ -409,7 +409,7 @@ namespace legion::application
         if (m_exit) // If the engine is exiting then we can't change any windows.
             return;
 
-        async::readwrite_guard guard(m_fullscreenRequestLock);
+        std::lock_guard guard(m_fullscreenRequestLock);
         for (auto& request : m_fullscreenRequests)
         {
             if (!m_ecs->validateEntity(request.entityId))
@@ -426,7 +426,7 @@ namespace legion::application
             }
 
             window win = handle.read();
-            async::readwrite_guard wguard(*win.lock);
+            std::lock_guard wguard(*win.lock);
 
             if (win.m_isFullscreen)
             {
@@ -462,7 +462,7 @@ namespace legion::application
         if (m_exit) // If the engine is exiting then we can't change any windows.
             return;
 
-        async::readwrite_guard guard(m_iconRequestLock);
+        std::lock_guard guard(m_iconRequestLock);
         for (auto& request : m_iconRequests)
         {
 
@@ -499,13 +499,13 @@ namespace legion::application
         if (!ContextHelper::initialized())
             return;
 
-        async::readonly_guard guard(m_creationLock);
+        std::lock_guard guard(m_creationLock);
         m_windowQuery.queryEntities();
         for (auto entity : m_windowQuery)
         {
             window win = entity.get_component_handle<window>().read();
             {
-                async::readwrite_guard guard(*win.lock);
+                std::lock_guard guard(*win.lock);
                 ContextHelper::makeContextCurrent(win);
                 ContextHelper::swapBuffers(win);
                 ContextHelper::makeContextCurrent(nullptr);

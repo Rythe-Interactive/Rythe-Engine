@@ -147,7 +147,7 @@ namespace legion::rendering
         friend struct texture_handle;
     private:
         static sparse_map<id_type, texture> m_textures;
-        static async::readonly_rw_spinlock m_textureLock;
+        static async::rw_spinlock m_textureLock;
 
         static const texture& get_texture(id_type id);
         static texture_data get_data(id_type id);

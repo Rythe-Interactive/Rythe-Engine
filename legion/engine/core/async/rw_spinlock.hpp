@@ -8,17 +8,17 @@
 #include <core/types/primitives.hpp>
 #include <core/platform/platform.hpp>
 #include <core/containers/sparse_set.hpp>
-#include <core/async/sequential_spinlock.hpp>
+#include <core/detail/internals.hpp>
 
 /**
- * @file readonly_rw_spinlock.hpp
+ * @file rw_spinlock.hpp
  */
 
 namespace legion::core::async
 {
     enum lock_state { idle = 0, read = 1, write = -1 };
 
-    /**@class readonly_rw_spinlock
+    /**@class rw_spinlock
      * @brief Lock used with ::async::readonly_guard and ::async::readwrite_guard.
      * @note Read-only operations can happen simultaneously without waiting for each other.
      *		 Read-only operations will only wait for Read-Write operations to be finished.
@@ -30,7 +30,7 @@ namespace legion::core::async
      * @ref legion::core::async::readwrite_multiguard
      * @ref legion::core::async::mixed_multiguard
      */
-    struct readonly_rw_spinlock final
+    struct rw_spinlock final
     {
     private:
         static bool m_forceRelease;
@@ -214,10 +214,13 @@ namespace legion::core::async
             m_forceRelease = true;
         }
 
-        readonly_rw_spinlock() = default;
+        rw_spinlock() = default;
 
-        readonly_rw_spinlock(readonly_rw_spinlock&& source) : m_id(source.m_id)
+        rw_spinlock(rw_spinlock&& source)
         {
+            if (m_forceRelease)
+                return;
+
             if (!m_localWriters.get())
                 m_localWriters = std::make_unique<std::unordered_map<uint, int>>();
             if (!m_localReaders.get())
@@ -225,11 +228,15 @@ namespace legion::core::async
             if (!m_localState.get())
                 m_localState = std::make_unique<std::unordered_map<uint, lock_state>>();
 
-            m_lockState.store(source.m_lockState.load(std::memory_order_acquire), std::memory_order_release);
+            assert_msg("Attempted to move a rw_spinlockthat was locked.", source.m_lockState.load(std::memory_order_relaxed) == lock_state::idle);
+            m_id = source.m_id;
         }
 
-        readonly_rw_spinlock& operator=(readonly_rw_spinlock&& source)
+        rw_spinlock& operator=(rw_spinlock&& source)
         {
+            if (m_forceRelease)
+                return *this;
+
             if (!m_localWriters.get())
                 m_localWriters = std::make_unique<std::unordered_map<uint, int>>();
             if (!m_localReaders.get())
@@ -237,13 +244,13 @@ namespace legion::core::async
             if (!m_localState.get())
                 m_localState = std::make_unique<std::unordered_map<uint, lock_state>>();
 
+            assert_msg("Attempted to move a rw_spinlockthat was locked.", source.m_lockState.load(std::memory_order_relaxed) == lock_state::idle);
             m_id = source.m_id;
-            m_lockState.store(source.m_lockState.load(std::memory_order_acquire), std::memory_order_release);
             return *this;
         }
 
-        readonly_rw_spinlock(const readonly_rw_spinlock&) = delete;
-        readonly_rw_spinlock& operator=(const readonly_rw_spinlock&) = delete;
+        rw_spinlock(const rw_spinlock&) = delete;
+        rw_spinlock& operator=(const rw_spinlock&) = delete;
 
         /**@brief Lock for a certain permission level. (locking for idle does nothing)
          * @note Locking stacks, locking for readonly multiple times will remain readonly.
@@ -251,7 +258,7 @@ namespace legion::core::async
          *		 Locking for write multiple times will remain in write.
          * @param permissionLevel
          */
-        void lock(lock_state permissionLevel)
+        void lock(lock_state permissionLevel = lock_state::write)
         {
             if (m_forceRelease)
                 return;
@@ -281,7 +288,7 @@ namespace legion::core::async
          * @param permissionLevel
          * @return bool True when locked.
          */
-        bool try_lock(lock_state permissionLevel)
+        bool try_lock(lock_state permissionLevel = lock_state::write)
         {
             if (m_forceRelease)
                 return true;
@@ -308,7 +315,7 @@ namespace legion::core::async
          * @note If both read and write locks have been requested before and write is unlocked then the lock will return to readonly state.
          * @param permissionLevel
          */
-        void unlock(lock_state permissionLevel)
+        void unlock(lock_state permissionLevel = lock_state::write)
         {
             if (m_forceRelease)
                 return;
@@ -331,6 +338,57 @@ namespace legion::core::async
             }
         }
 
+        /** @brief Locks the rw_spinlockfor shared ownership, blocks if the rw_spinlockis not available
+         */
+        void lock_shared()
+        {
+            if (m_forceRelease)
+                return;
+
+            if (!m_localWriters.get())
+                m_localWriters = std::make_unique<std::unordered_map<uint, int>>();
+            if (!m_localReaders.get())
+                m_localReaders = std::make_unique<std::unordered_map<uint, int>>();
+            if (!m_localState.get())
+                m_localState = std::make_unique<std::unordered_map<uint, lock_state>>();
+
+            return read_lock();
+        }
+
+        /** @brief Tries to lock the rw_spinlockfor shared ownership, returns if the rw_spinlockis not available
+         */
+        bool try_lock_shared()
+        {
+            if (m_forceRelease)
+                return true;
+
+            if (!m_localWriters.get())
+                m_localWriters = std::make_unique<std::unordered_map<uint, int>>();
+            if (!m_localReaders.get())
+                m_localReaders = std::make_unique<std::unordered_map<uint, int>>();
+            if (!m_localState.get())
+                m_localState = std::make_unique<std::unordered_map<uint, lock_state>>();
+
+            return read_try_lock();
+        }
+
+        /** @brief Unlocks the mutex (shared ownership)
+         */
+        void unlock_shared()
+        {
+            if (m_forceRelease)
+                return;
+
+            if (!m_localWriters.get())
+                m_localWriters = std::make_unique<std::unordered_map<uint, int>>();
+            if (!m_localReaders.get())
+                m_localReaders = std::make_unique<std::unordered_map<uint, int>>();
+            if (!m_localState.get())
+                m_localState = std::make_unique<std::unordered_map<uint, lock_state>>();
+
+            return read_unlock();
+        }
+
         /**@brief Execute a function inside a critical section locked by a certain guard.
          * @tparam Guard Guard type to lock the lock with.
          * @param func Function to execute.
@@ -345,20 +403,20 @@ namespace legion::core::async
     };
 
     /**@class readonly_guard
-     * @brief RAII guard that uses ::async::readonly_rw_spinlock to lock for read-only.
+     * @brief RAII guard that uses ::async::rw_spinlock to lock for read-only.
      * @note Read-only operations can happen simultaneously without waiting for each other.
      *		 Read-only operations will only wait for Read-Write operations to be finished.
-     * @ref legion::core::async::readonly_rw_spinlock
+     * @ref legion::core::async::rw_spinlock
      */
     class readonly_guard final
     {
     private:
-        readonly_rw_spinlock& m_lock;
+        rw_spinlock& m_lock;
 
     public:
         /**@brief Creates readonly guard and locks for Read-only.
          */
-        readonly_guard(readonly_rw_spinlock& lock) : m_lock(lock)
+        readonly_guard(rw_spinlock& lock) : m_lock(lock)
         {
             m_lock.lock(read);
         }
@@ -379,18 +437,18 @@ namespace legion::core::async
      * @brief RAII guard that uses multiple ::async::readonly_rw_spinlocks to lock them all for read-only. (similar to std::lock)
      * @note Read-only operations can happen simultaneously without waiting for each other.
      *		 Read-only operations will only wait for Read-Write operations to be finished.
-     * @ref legion::core::async::readonly_rw_spinlock
+     * @ref legion::core::async::rw_spinlock
      */
     template<size_type S>
     class readonly_multiguard final
     {
     private:
-        std::array<readonly_rw_spinlock*, S> m_locks;
+        std::array<rw_spinlock*, S> m_locks;
 
     public:
         /**@brief Creates readonly multi-guard and locks for Read-only.
          */
-        template<typename lock_type1 = readonly_rw_spinlock, typename lock_type2 = readonly_rw_spinlock, typename... lock_typesN>
+        template<typename lock_type1 = rw_spinlock, typename lock_type2 = rw_spinlock, typename... lock_typesN>
         readonly_multiguard(lock_type1& lock1, lock_type2& lock2, lock_typesN&... locks) : m_locks{ {&lock1, &lock2, &locks...} }
         {
             int lastLocked = -1; // Index to the last locked lock.
@@ -427,7 +485,7 @@ namespace legion::core::async
          */
         ~readonly_multiguard()
         {
-            for (readonly_rw_spinlock* lock : m_locks)
+            for (rw_spinlock* lock : m_locks)
                 lock->unlock(read);
         }
 
@@ -439,20 +497,20 @@ namespace legion::core::async
     readonly_multiguard(types...)->readonly_multiguard<sizeof...(types)>;
 #endif
     /**@class readwrite_guard
-     * @brief RAII guard that uses ::async::readonly_rw_spinlock to lock for read-write.
+     * @brief RAII guard that uses ::async::rw_spinlock to lock for read-write.
      * @note Read-Write operations cannot happen simultaneously and will wait for each other.
      *		 Read-Write operations will also wait for any Read-only operations to be finished.
-     * @ref legion::core::async::readonly_rw_spinlock
+     * @ref legion::core::async::rw_spinlock
      */
     class readwrite_guard final
     {
     private:
-        readonly_rw_spinlock& m_lock;
+        rw_spinlock& m_lock;
 
     public:
         /**@brief Creates read-write guard and locks for Read-Write.
          */
-        readwrite_guard(readonly_rw_spinlock& lock) : m_lock(lock)
+        readwrite_guard(rw_spinlock& lock) : m_lock(lock)
         {
             m_lock.lock(write);
         }
@@ -474,13 +532,13 @@ namespace legion::core::async
      * @brief RAII guard that uses multiple ::async::readonly_rw_spinlocks to lock them all for read-write. (similar to std::lock)
      * @note Read-Write operations cannot happen simultaneously and will wait for each other.
      *		 Read-Write operations will also wait for any Read-only operations to be finished.
-     * @ref legion::core::async::readonly_rw_spinlock
+     * @ref legion::core::async::rw_spinlock
      */
     template<size_type S>
     class readwrite_multiguard final
     {
     private:
-        std::array<readonly_rw_spinlock*, S> m_locks;
+        std::array<rw_spinlock*, S> m_locks;
 
     public:
         /**@brief Creates read-write multi-guard and locks for Read-Write.
@@ -522,7 +580,7 @@ namespace legion::core::async
          */
         ~readwrite_multiguard()
         {
-            for (readonly_rw_spinlock* lock : m_locks)
+            for (rw_spinlock* lock : m_locks)
                 lock->unlock(write);
         }
 
@@ -538,18 +596,18 @@ namespace legion::core::async
      *		 Read-only operations will only wait for Read-Write operations to be finished.
      * @note Read-Write operations cannot happen simultaneously and will wait for each other.
      *		 Read-Write operations will also wait for any Read-only operations to be finished.
-     * @ref legion::core::async::readonly_rw_spinlock
+     * @ref legion::core::async::rw_spinlock
      */
     template<size_type S>
     class mixed_multiguard final
     {
     private:
-        std::array<readonly_rw_spinlock*, S / 2> m_locks;
+        std::array<rw_spinlock*, S / 2> m_locks;
         std::array<lock_state, S / 2> m_states;
 
         // Recursive function for filling the arrays with the neccessary data from the template arguments.
         template<size_type I, typename... types>
-        void fill(readonly_rw_spinlock& lock, lock_state state, types&&... args)
+        void fill(rw_spinlock& lock, lock_state state, types&&... args)
         {
             if constexpr (I > 2)
             {
@@ -562,7 +620,7 @@ namespace legion::core::async
 
     public:
         /**@brief Creates readonly multi-guard and locks for specified permissions.
-         * @note Argument order should be as follows: (readonly_rw_spinlock&, lock_state, readonly_rw_spinlock&, lock_state, ...)
+         * @note Argument order should be as follows: (rw_spinlock&, lock_state, rw_spinlock&, lock_state, ...)
          */
         template<typename... types>
         explicit mixed_multiguard(types&&... arguments)

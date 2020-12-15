@@ -23,7 +23,7 @@ namespace legion::rendering
     }
 
     sparse_map<id_type, texture> TextureCache::m_textures;
-    async::readonly_rw_spinlock TextureCache::m_textureLock;
+    async::rw_spinlock TextureCache::m_textureLock;
     texture_handle TextureCache::m_invalidTexture;
 
     texture_data texture_handle::get_data() const

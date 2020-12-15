@@ -443,8 +443,8 @@ namespace legion::core
                 if (m_size >= m_capacity)
                     reserve(m_size + 1);
 
-                auto itr_value = m_dense_value.begin() + m_size;
-                *itr_value = value_type();
+               // auto itr_value = m_dense_value.begin() + m_size;
+               // *itr_value = value_type();
 
                 auto itr_key = m_dense_key.begin() + m_size;
                 *itr_key = key;

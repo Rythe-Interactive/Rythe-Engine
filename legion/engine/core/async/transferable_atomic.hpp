@@ -1,6 +1,6 @@
 #pragma once
 #include <atomic>
-#include <core/async/readonly_rw_spinlock.hpp>
+#include <core/async/rw_spinlock.hpp>
 
 /**
  * @file transferable_atomic.hpp
@@ -16,7 +16,7 @@ namespace legion::core::async
 	{
 	private:
 		mutable std::atomic<T> m_atomic;
-		mutable readonly_rw_spinlock m_lock;
+		mutable rw_spinlock m_lock;
 	public:
 		transferable_atomic() = default;
 
@@ -38,7 +38,7 @@ namespace legion::core::async
 
 		~transferable_atomic() = default;
 
-		readonly_rw_spinlock& get_lock() noexcept
+		rw_spinlock& get_lock() noexcept
 		{
 			return m_lock;
 		}

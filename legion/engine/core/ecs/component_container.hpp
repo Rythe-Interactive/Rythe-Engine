@@ -1,5 +1,5 @@
 #pragma once
-#include <core/async/readonly_rw_spinlock.hpp>
+#include <core/async/rw_spinlock.hpp>
 #include <core/async/transferable_atomic.hpp>
 #include <core/platform/platform.hpp>
 #include <core/containers/atomic_sparse_map.hpp>
@@ -55,7 +55,7 @@ namespace legion::core::ecs
     {
     private:
         sparse_map<id_type, component_type> m_components;
-        mutable async::readonly_rw_spinlock m_lock;
+        mutable async::rw_spinlock m_lock;
 
         events::EventBus* m_eventBus;
         EcsRegistry* m_registry;
@@ -99,9 +99,9 @@ namespace legion::core::ecs
             oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
         }
 
-        /**@brief Get the readonly_rw_spinlock of this container.
+        /**@brief Get the rw_spinlock of this container.
          */
-        async::readonly_rw_spinlock& get_lock() const
+        async::rw_spinlock& get_lock() const
         {
             return m_lock;
         }
@@ -118,7 +118,7 @@ namespace legion::core::ecs
         /**@brief Thread unsafe component fetch, use component_container::get_lock and lock for at least read_only before calling this function.
          * @param entityId ID of entity you want to get the component from.
          * @ref component_container::get_lock()
-         * @ref legion::core::async::readonly_rw_spinlock
+         * @ref legion::core::async::rw_spinlock
          */
         L_NODISCARD component_type& get_component(id_type entityId)
         {
@@ -130,7 +130,7 @@ namespace legion::core::ecs
         /**@brief Thread unsafe component fetch, use component_container::get_lock and lock for at least read_only before calling this function.
          * @param entityId ID of entity you want to get the component from.
          * @ref component_container::get_lock()
-         * @ref legion::core::async::readonly_rw_spinlock
+         * @ref legion::core::async::rw_spinlock
          */
         L_NODISCARD const component_type& get_component(id_type entityId) const
         {

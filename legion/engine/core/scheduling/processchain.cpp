@@ -8,7 +8,7 @@
 
 namespace legion::core::scheduling
 {
-    async::readonly_rw_spinlock ProcessChain::m_callbackLock;
+    async::rw_spinlock ProcessChain::m_callbackLock;
     multicast_delegate<void()> ProcessChain::m_onFrameStart;
     multicast_delegate<void()> ProcessChain::m_onFrameEnd;
 

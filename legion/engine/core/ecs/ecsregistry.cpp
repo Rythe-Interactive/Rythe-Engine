@@ -243,7 +243,7 @@ namespace legion::core::ecs
         return data;
     }
 
-    L_NODISCARD std::pair<entity_set&, async::readonly_rw_spinlock&> EcsRegistry::getEntities()
+    L_NODISCARD std::pair<entity_set&, async::rw_spinlock&> EcsRegistry::getEntities()
     {
         return std::make_pair(std::ref(m_entities), std::ref(m_entityLock));
     }

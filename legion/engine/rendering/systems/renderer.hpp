@@ -29,7 +29,7 @@ namespace legion::rendering
         time::span totalTime;
         bool m_exit = false;
 
-        static async::readonly_rw_spinlock debugLinesLock;
+        static async::rw_spinlock debugLinesLock;
         static thread_local std::unordered_set<debug::debug_line>* localLines;
         static std::unordered_map<std::thread::id, std::unordered_set<debug::debug_line>*> debugLines;
 
@@ -244,7 +244,7 @@ namespace legion::rendering
 
                     log::trace("Initializing context.");
 
-                    async::readwrite_guard guard(*window.lock);
+                    std::lock_guard guard(*window.lock);
                     app::ContextHelper::makeContextCurrent(window);
 
                     bool result = self->initData(window);
@@ -415,7 +415,7 @@ namespace legion::rendering
 
             app::window window = m_ecs->world.get_component_handle<app::window>().read();
 
-            async::readwrite_guard guard(*window.lock);
+            std::lock_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
             math::ivec2 viewportSize = app::ContextHelper::getFramebufferSize(window);

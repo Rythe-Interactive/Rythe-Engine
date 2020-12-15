@@ -23,7 +23,7 @@ namespace legion::application
     {
     private:
         static std::atomic_bool m_initialized;
-        static async::readonly_rw_spinlock m_initCallbackLock;
+        static async::rw_spinlock m_initCallbackLock;
         static multicast_delegate<void()> m_onInit;
 
         static atomic_sparse_map<GLFWwindow*, bool> m_windowInitialized;

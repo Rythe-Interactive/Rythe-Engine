@@ -225,7 +225,7 @@ public:
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
 
         {
-            async::readwrite_guard guard(*window.lock);
+            std::lock_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
             directionalLightH = rendering::ModelCache::create_model("directional light", "assets://models/directional-light.obj"_view);

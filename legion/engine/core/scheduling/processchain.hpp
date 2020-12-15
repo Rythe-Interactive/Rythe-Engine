@@ -26,12 +26,12 @@ namespace legion::core::scheduling
 		id_type m_nameHash = invalid_id;
 		std::thread::id m_threadId;
 		Scheduler* m_scheduler;
-		async::readonly_rw_spinlock m_processesLock;
+		async::rw_spinlock m_processesLock;
 		sparse_map<id_type, Process*> m_processes;
 		async::transferable_atomic<bool> m_exit;
         bool m_low_power;
 
-        static async::readonly_rw_spinlock m_callbackLock;
+        static async::rw_spinlock m_callbackLock;
         static multicast_delegate<void()> m_onFrameStart;
         static multicast_delegate<void()> m_onFrameEnd;
 
