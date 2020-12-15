@@ -15,7 +15,6 @@ class TestModule : public Module
 public:
     virtual void setup() override
     {
-
         //if (false)
         //{
         //    reportSystem<pointcloudtestsystem2>();
