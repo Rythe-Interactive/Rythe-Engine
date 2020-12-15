@@ -58,6 +58,7 @@ namespace legion::core::scheduling
 
             instruction();
 
+            L_PAUSE_INSTRUCTION();
             {
                 async::readonly_guard guard(m_jobQueueLock);
 
