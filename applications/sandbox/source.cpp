@@ -11,6 +11,8 @@
 #define AUDIO_EXIT_ON_FAIL
 #include <audio/audio.hpp>
 #include <physics/physics.hpp>
+#include <rendering/module/renderingmodule.hpp>
+
 
 #include "module/testModule.hpp"
 
