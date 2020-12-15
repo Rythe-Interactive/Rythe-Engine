@@ -72,6 +72,11 @@ namespace legion::physics
             ++step;
         }
 
+
+        //TODO(algorythmix,jelled1st) This desperately needs cleanup
+        //TODO(cont.) investigate unused variables! (projected)
+        //LIKE A LOT OF CLEANUP
+
         /**@brief Constructs a polyhedron-shaped convex hull that encompasses the given mesh.
         * @param meshHandle - The mesh handle to lock the mesh and the mesh to create a hull from
         */
@@ -238,6 +243,26 @@ namespace legion::physics
                 faceVertMap.clear();
                 faceVertMap = convexHullMatchVerticesToFace(toBeSorted);
 
+                bool shouldEnd = true;
+
+                for(auto& faceVert : faceVertMap)
+                {
+                    if(faceVert.size() != 0)
+                    {
+                        shouldEnd = false;
+                        break;
+                    }
+                }
+
+                if(shouldEnd)
+                {
+                    //We are done yay!
+                    //this really needs documentation
+                    //because a single return in a function that is 308 lines long is a bit of an oof for debugging
+                    AssertEdgeValidity();
+                    return;
+                }
+
                 // Find the largest distance form vert to its face
                 // That vert will be added to the hull
                 float largestDistance = 0;
@@ -354,11 +379,14 @@ namespace legion::physics
                 {
                     faceIndexMap.emplace(createdFaces.at(i), halfEdgeFaces.size());
                     halfEdgeFaces.push_back(createdFaces.at(i));
-                    for (int j = i + 1; j < createdFaces.size(); ++j)
-                    {
-                        bool convexity = !HalfEdgeFace::makeNormalsConvexWithFace(*createdFaces.at(i), *createdFaces.at(j));
-                        //log::debug("Convexity for {} and {}: {}", i, j, convexity);
-                    }
+                    //for (int j = i + 1; j < createdFaces.size(); ++j)
+                    //{
+                    //    bool convexity = !HalfEdgeFace::makeNormalsConvexWithFace(*createdFaces.at(i), *createdFaces.at(j));
+                    //    //log::debug("Convexity for {} and {}: {}", i, j, convexity);
+                    //}
+
+                    HalfEdgeFace* pairing = createdFaces.at(i)->startEdge->pairingEdge->face;
+                    HalfEdgeFace::makeNormalsConvexWithFace(*createdFaces.at(i), *pairing);
                 }
 
                 ++looped;
