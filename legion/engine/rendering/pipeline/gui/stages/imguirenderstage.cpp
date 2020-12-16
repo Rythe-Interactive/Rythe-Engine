@@ -43,6 +43,11 @@ namespace legion::rendering
         }
         //make context current
         application::context_guard guard(context);
+        if (!guard.contextIsValid())
+        {
+            abort();
+            return;
+        }
 
         //start imgui frame
         ImGui_ImplOpenGL3_NewFrame();

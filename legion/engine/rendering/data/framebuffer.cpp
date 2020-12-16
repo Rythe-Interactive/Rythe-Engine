@@ -7,7 +7,8 @@ namespace legion::rendering
 #if defined(LEGION_DEBUG)
             if (!app::ContextHelper::getCurrentContext())
             {
-                log::error("No current context to delete framebuffer with.");
+                if (app::ContextHelper::initialized())
+                    log::error("No current context to delete framebuffer with.");
                 return;
             }
 #endif

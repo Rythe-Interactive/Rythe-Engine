@@ -24,6 +24,7 @@ namespace legion::application
 
             auto handle = m_windowComponents[window];
 
+            async::spinlock* lock = nullptr;
             if (handle.valid())
             {
                 m_eventBus->raiseEvent<window_close>(m_windowComponents[window]); // Trigger any callbacks that want to know about any windows closing.
@@ -31,26 +32,26 @@ namespace legion::application
                 if (!ContextHelper::windowShouldClose(window)) // If a callback cancelled the window destruction then we should cancel.
                     return;
 
-                auto* lock = handle.read().lock;
                 {
+                    lock = handle.read().lock;
                     std::lock_guard guard(*lock); // "deleting" the window is technically writing, so we copy the pointer and use that to lock it.
                     handle.write(invalid_window); // We mark the window as deleted without deleting it yet. It can cause users to find invalid windows,                                                    
-                }                                 // but at least they won't use a destroyed component after the lock unlocks.
-                delete lock;
+                                                  // but at least they won't use a destroyed component after the lock unlocks.
 
-                id_type ownerId = handle.entity;
+                    handle.destroy();
+                    m_windowComponents.erase(window);
+                }
 
-                handle.destroy();
-                m_windowComponents.erase(window);
-
-                if (ownerId == world_entity_id)
+                if (handle.entity.get_id() == world_entity_id)
                 {
                     m_eventBus->raiseEvent<events::exit>(); // If the current window we're closing is the main window we want to close the application.
                 }                                           // (we might want to leave this up to the user at some point.)
-            }
-        }
 
-        ContextHelper::destroyWindow(window); // After all traces of the window throughout the engine have been erased we actually close the window.
+                ContextHelper::destroyWindow(window); // After all traces of the window throughout the engine have been erased we actually close the window.
+            }
+            if (lock)
+                delete lock;
+        }
     }
 
     void WindowSystem::onWindowMoved(GLFWwindow* window, int x, int y)
@@ -153,11 +154,36 @@ namespace legion::application
         std::lock_guard guard(m_creationLock);
         for (auto entity : m_windowQuery)
         {
-            ContextHelper::setWindowShouldClose(entity.get_component_handle<window>().read(), true);
+            auto handle = entity.get_component_handle<window>();
+            window win = handle.read();
+
+            async::spinlock* lock = nullptr;
+            if (handle.valid())
+            {
+                m_eventBus->raiseEvent<window_close>(handle); // Trigger any callbacks that want to know about any windows closing.
+
+                {
+                    lock = handle.read().lock;
+                    std::lock_guard guard(*lock); // "deleting" the window is technically writing, so we copy the pointer and use that to lock it.
+                    handle.write(invalid_window); // We mark the window as deleted without deleting it yet. It can cause users to find invalid windows,                                                    
+                                                  // but at least they won't use a destroyed component after the lock unlocks.
+                    handle.destroy();
+                    m_windowComponents.erase(win);
+                }
+
+                ContextHelper::destroyWindow(win); // After all traces of the window throughout the engine have been erased we actually close the window.
+            }
+            if (lock)
+                delete lock;
         }
 
         m_exit = true;
         ContextHelper::terminate();
+    }
+
+    bool WindowSystem::windowStillExists(GLFWwindow* win)
+    {
+        return m_windowComponents.contains(win);
     }
 
     void WindowSystem::requestIconChange(id_type entityId, image_handle icon)
@@ -336,8 +362,6 @@ namespace legion::application
             win.m_swapInterval = request.swapInterval;
             win.m_size = request.size;
 
-            ecs::component_handle<window> handle;
-
             auto setCallbacks = [](const window& win)
             {
                 ContextHelper::makeContextCurrent(win);
@@ -361,18 +385,18 @@ namespace legion::application
                 ContextHelper::makeContextCurrent(nullptr);
             };
 
+            ecs::component_handle<window> handle(request.entityId);
             if (!m_ecs->getEntityData(request.entityId).components.contains(typeHash<window>()))
             {
                 win.lock = new async::spinlock();
 
                 std::lock_guard wguard(*win.lock);     // This is the only code that has access to win.lock right now, so there's no deadlock risk.
                 std::lock_guard cguard(m_creationLock);// Locking them both separately is faster than using a multilock.
-
+                m_windowComponents.insert(win, handle);
                 handle = m_ecs->createComponent<window>(request.entityId, win);
 
                 log::trace("created window: {}", request.name);
 
-                m_windowComponents.insert(win, handle);
 
                 // Set all callbacks.
                 setCallbacks(win);
@@ -384,15 +408,15 @@ namespace legion::application
 
                 std::scoped_lock wguard(*oldWindow.lock, m_creationLock);
 
-                ContextHelper::destroyWindow(oldWindow);
                 m_windowComponents.erase(oldWindow);
+                ContextHelper::destroyWindow(oldWindow);
 
                 win.lock = oldWindow.lock;
                 handle.write(win);
+                m_windowComponents.insert(win, handle);
 
                 log::trace("replaced window: {}", request.name);
 
-                m_windowComponents.insert(win, handle);
 
                 // Set all callbacks.
                 setCallbacks(win);

@@ -1,4 +1,5 @@
 #include <application/window/window.hpp>
+#include <application/window/windowsystem.hpp>
 
 namespace legion::application
 {
@@ -45,4 +46,24 @@ namespace legion::application
         return m_title;
     }
 
+    context_guard::context_guard(window win) : m_win(win)
+	{
+		win.lock->lock();
+
+        if (!WindowSystem::windowStillExists(win.handle))
+            return;
+
+		m_contextIsValid = ContextHelper::makeContextCurrent(win);
+		if (!m_contextIsValid)
+			log::warn("Context is no longer valid.");
+	}
+
+    context_guard::~context_guard()
+    {
+        if (!m_contextIsValid)
+            return;
+
+        ContextHelper::makeContextCurrent(nullptr);
+        m_win.lock->unlock();
+    }
 }
