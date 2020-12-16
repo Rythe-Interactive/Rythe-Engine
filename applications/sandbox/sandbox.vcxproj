@@ -106,6 +106,7 @@
   <ItemGroup>
     <ClInclude Include="data\pp_edgedetect.hpp" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="systems\gui_test.hpp" />
     <ClInclude Include="systems\pointcloudtestsystem2.hpp" />
     <ClInclude Include="systems\explosion_particlesystem.hpp" />
     <ClInclude Include="systems\pointcloud_particlesystem.hpp" />

@@ -44,6 +44,9 @@
     <ClInclude Include="systems\pointcloud_particlesystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="systems\gui_test.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="data\pp_blur.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

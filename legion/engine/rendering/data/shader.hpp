@@ -387,7 +387,7 @@ namespace legion::rendering
     private:
 
         static sparse_map<id_type, shader> m_shaders;
-        static async::readonly_rw_spinlock m_shaderLock;
+        static async::rw_spinlock m_shaderLock;
 
         static shader* get_shader(id_type id);
 

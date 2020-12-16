@@ -1,10 +1,6 @@
 #pragma once
-#ifndef _MSC_VER
-#include <cstdint> //linux std::(u)int(8-64)_t
-#else
-#include <cstddef> //msc   std::(u)int(8-64)_t
-#endif
-#include <vector>  //      std::vector<T>
+#include <cstdint> 
+#include <vector>  
 #include <string>
 #include <string_view>
 

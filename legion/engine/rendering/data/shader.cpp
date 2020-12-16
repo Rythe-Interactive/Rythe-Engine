@@ -6,7 +6,7 @@
 namespace legion::rendering
 {
     sparse_map<id_type, shader> ShaderCache::m_shaders;
-    async::readonly_rw_spinlock ShaderCache::m_shaderLock;
+    async::rw_spinlock ShaderCache::m_shaderLock;
 
     shader* ShaderCache::get_shader(id_type id)
     {
