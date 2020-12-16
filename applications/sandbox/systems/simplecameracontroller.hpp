@@ -66,7 +66,7 @@ public:
         window.show();
 
         {
-            async::readwrite_guard guard(*window.lock);
+            std::lock_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
             setupCameraEntity();
             app::ContextHelper::makeContextCurrent(nullptr);

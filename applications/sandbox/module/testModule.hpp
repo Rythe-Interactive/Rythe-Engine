@@ -2,8 +2,8 @@
 #include <core/core.hpp>
 #include <core/math/math.hpp>
 #include "../systems/testsystem.hpp"
-#include "../systems/testsystem2.hpp"
-#include "../systems/pointcloudtestsystem2.hpp"
+//#include "../systems/testsystem2.hpp"
+//#include"../systems/pointcloudtestsystem2.hpp"
 #include "../systems/simplecameracontroller.hpp"
 #include "../systems/gui_test.hpp"
 
@@ -17,14 +17,9 @@ class TestModule : public Module
 public:
     virtual void setup() override
     {
+        reportComponentType<sah>();
+        reportSystem<TestSystem>();
         reportSystem<SimpleCameraController>();
-
-        //addProcessChain("TestChain");
-        //reportComponentType<sah>();
-        //reportSystem<pointcloudtestsystem2>();
-        //reportSystem<PointCloudGeneration>();
-        //reportSystem<TestSystem>();
-        //reportSystem<TestSystem2>();
         reportSystem<GuiTestSystem>();
     }
 

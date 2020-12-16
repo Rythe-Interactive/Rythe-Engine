@@ -16,57 +16,26 @@ namespace legion::application
         window() = default;
 
         GLFWwindow* handle;
-        async::readonly_rw_spinlock* lock;
+        async::spinlock* lock;
 
         operator GLFWwindow* () const { return handle; }
         window& operator=(GLFWwindow* ptr) { handle = ptr; return *this; }
 
-        inline void enableCursor(bool enabled) const
-        {
-            async::readwrite_guard guard(*lock);
-            ContextHelper::makeContextCurrent(handle);
-            ContextHelper::setInputMode(handle, GLFW_CURSOR, enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
-            ContextHelper::makeContextCurrent(nullptr);
-        }
+        void enableCursor(bool enabled) const;
 
-        inline void setSwapInterval(uint interval)
-        {
-            async::readwrite_guard guard(*lock);
-            ContextHelper::makeContextCurrent(handle);
-            ContextHelper::swapInterval(interval);
-            m_swapInterval = interval;
-            ContextHelper::makeContextCurrent(nullptr);
-        }
+        void setSwapInterval(uint interval);
 
-        inline void show() const
-        {
-            ContextHelper::showWindow(handle);
-        }
+        void show() const;
 
-        inline int swapInterval() const
-        {
-            return m_swapInterval;
-        }
+        int swapInterval() const;
 
-        inline bool isFullscreen() const
-        {
-            return m_isFullscreen;
-        }
+        bool isFullscreen() const;
 
-        inline math::ivec2 size() const
-        {
-            return m_size;
-        }
+        math::ivec2 size() const;
 
-        inline math::ivec2 framebufferSize() const
-        {
-            return ContextHelper::getFramebufferSize(handle);
-        }
+        math::ivec2 framebufferSize() const;
 
-        inline const std::string& title() const
-        {
-            return m_title;
-        }
+        const std::string& title() const;
 
     private:
         std::string m_title;
@@ -81,7 +50,7 @@ namespace legion::application
     {
         context_guard(window win) : m_win(win)
         {
-            win.lock->lock(async::write);
+            win.lock->lock();
             ContextHelper::makeContextCurrent(win);
         }
 
@@ -92,7 +61,7 @@ namespace legion::application
         ~context_guard()
         {
             ContextHelper::makeContextCurrent(nullptr);
-            m_win.lock->unlock(async::write);
+            m_win.lock->unlock();
         }
 
     private:

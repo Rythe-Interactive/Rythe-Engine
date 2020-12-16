@@ -66,7 +66,7 @@ namespace legion::audio
 
         static void setDistanceModel(ALenum distanceModel);
 
-        static async::readonly_rw_spinlock contextLock;
+        static async::spinlock contextLock;
         static ALCcontext* alcContext;
     private:
         void initSource(audio_source& source);

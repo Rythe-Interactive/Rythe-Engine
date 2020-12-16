@@ -7,12 +7,12 @@ namespace legion::core
     std::mutex image::m_refsLock;
 
     const std::vector<math::color> ImageCache::m_nullColors;
-    async::readonly_rw_spinlock ImageCache::m_nullLock;
+    async::rw_spinlock ImageCache::m_nullLock;
 
-    std::unordered_map<id_type, std::unique_ptr<std::pair<async::readonly_rw_spinlock, image>>> ImageCache::m_images;
-    async::readonly_rw_spinlock ImageCache::m_imagesLock;
+    std::unordered_map<id_type, std::unique_ptr<std::pair<async::rw_spinlock, image>>> ImageCache::m_images;
+    async::rw_spinlock ImageCache::m_imagesLock;
     std::unordered_map<id_type, std::unique_ptr<std::vector<math::color>>> ImageCache::m_colors;
-    async::readonly_rw_spinlock ImageCache::m_colorsLock;
+    async::rw_spinlock ImageCache::m_colorsLock;
 
     void image::apply_raw(bool lazyApply)
     {
@@ -46,7 +46,7 @@ namespace legion::core
         return ImageCache::read_colors(id);
     }
 
-    std::pair<async::readonly_rw_spinlock&, image&> image_handle::get_raw_image()
+    std::pair<async::rw_spinlock&, image&> image_handle::get_raw_image()
     {
         return ImageCache::get_raw_image(id);
     }
@@ -248,7 +248,7 @@ namespace legion::core
         return *m_colors[id];
     }
 
-    std::pair<async::readonly_rw_spinlock&, image&> ImageCache::get_raw_image(id_type id)
+    std::pair<async::rw_spinlock&, image&> ImageCache::get_raw_image(id_type id)
     {
         async::readonly_guard guard(m_colorsLock);
         auto& [lock, image] = *m_images[id];
@@ -275,9 +275,10 @@ namespace legion::core
 
         {
             async::readwrite_guard guard(m_imagesLock);
-            auto* pair_ptr = new std::pair<async::readonly_rw_spinlock, image>(std::make_pair<async::readonly_rw_spinlock, image>(async::readonly_rw_spinlock(), std::move(result)));
+            auto* pair_ptr = new std::pair<async::rw_spinlock, image>();
+            pair_ptr->second = std::move(result);
             pair_ptr->second.m_id = id;
-            m_images.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::readonly_rw_spinlock, image>>(pair_ptr)));
+            m_images.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::rw_spinlock, image>>(pair_ptr)));
         }
 
         return { id };

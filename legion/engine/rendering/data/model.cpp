@@ -7,7 +7,7 @@
 namespace legion::rendering
 {
     sparse_map<id_type, model> ModelCache::m_models;
-    async::readonly_rw_spinlock ModelCache::m_modelLock;
+    async::rw_spinlock ModelCache::m_modelLock;
 
     bool model_handle::is_buffered() const
     {

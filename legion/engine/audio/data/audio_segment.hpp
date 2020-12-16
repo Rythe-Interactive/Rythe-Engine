@@ -90,7 +90,7 @@ namespace legion::audio
     struct audio_segment_handle
     {
         id_type id;
-        std::pair<async::readonly_rw_spinlock&, audio_segment&> get();
+        std::pair<async::rw_spinlock&, audio_segment&> get();
 
         operator id_type () { return id; }
     };
@@ -109,9 +109,9 @@ namespace legion::audio
 
         // Unorderer map to store all unique audio segments
         // Each audio segment has a unique id using name hash
-        // Each segment also needs a readonly_rw_spinlock for thread safety
-        static std::unordered_map<id_type, std::unique_ptr<std::pair<async::readonly_rw_spinlock, audio_segment>>> m_segments;
+        // Each segment also needs a rw_spinlock for thread safety
+        static std::unordered_map<id_type, std::unique_ptr<std::pair<async::rw_spinlock, audio_segment>>> m_segments;
 
-        static async::readonly_rw_spinlock m_segmentsLock;
+        static async::rw_spinlock m_segmentsLock;
     };
 }

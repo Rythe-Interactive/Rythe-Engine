@@ -33,11 +33,11 @@
     <ClCompile Include="events\defaultevents.cpp" />
     <ClCompile Include="ecs\component_handle.cpp" />
     <ClCompile Include="scenemanagement\scenemanager.cpp" />
-    <ClCompile Include="async\readonly_rw_spinlock.cpp" />
+    <ClCompile Include="async\rw_spinlock.cpp" />
+    <ClCompile Include="async\spinlock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
-    <ClInclude Include="async\readonly_rw_spinlock.hpp" />
     <ClInclude Include="async\transferable_atomic.hpp" />
     <ClInclude Include="common\common.hpp" />
     <ClInclude Include="common\inteface_traits.hpp" />
@@ -410,6 +410,8 @@
     <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
     <ClInclude Include="common\managed_resource.hpp" />
+    <ClInclude Include="async\spinlock.hpp" />
+    <ClInclude Include="async\rw_spinlock.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">

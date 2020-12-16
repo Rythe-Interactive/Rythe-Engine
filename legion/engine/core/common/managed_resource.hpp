@@ -1,6 +1,6 @@
 #pragma once
 #include <core/containers/delegate.hpp>
-#include <core/async/readonly_rw_spinlock.hpp>
+#include <core/async/rw_spinlock.hpp>
 #include <unordered_map>
 
 namespace legion::core::common
@@ -9,7 +9,7 @@ namespace legion::core::common
     struct managed_resource
     {
     private:
-        static async::readonly_rw_spinlock m_referenceLock;
+        static async::rw_spinlock m_referenceLock;
         static std::unordered_map<id_type, size_type> m_references;
         static std::atomic<id_type> m_lastId;
         id_type m_id = invalid_id;
@@ -94,7 +94,7 @@ namespace legion::core::common
     };
 
     template<typename T>
-    async::readonly_rw_spinlock managed_resource<T>::m_referenceLock;
+    async::rw_spinlock managed_resource<T>::m_referenceLock;
 
     template<typename T>
     std::unordered_map<id_type, size_type> managed_resource<T>::m_references;
