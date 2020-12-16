@@ -5,8 +5,14 @@
 #include <atomic>
 #include <mutex> // Anyone who includes this file can also use std::lock_guard
 
+/**@file spinlock.hpp
+ */
+
 namespace legion::core::async
 {
+    /**@class spinlock
+     * @brief Spinlock is a synchronization primitive that can be used to protect shared data from being simultaneously accessed by multiple threads.
+     */
     struct spinlock final
     {
     private:
@@ -17,6 +23,8 @@ namespace legion::core::async
         uint m_id = m_lastId.fetch_add(1, std::memory_order_relaxed);
 
     public:
+        /**@brief Forces lock to no longer care about thread safety start shutting down. Should be called after all threads have been destroyed.
+         */
         static void force_release(bool release = true);
 
         spinlock() = default;
@@ -25,10 +33,16 @@ namespace legion::core::async
 
         spinlock& operator=(spinlock&& source);
 
+        /**@brief Locks the spinlock, blocks if the spinlock is not available.
+         */
         void lock() noexcept;
 
+        /**@brief Tries to lock the spinlock, returns if the spinlock is not available.
+         */
         L_NODISCARD bool try_lock() noexcept;
 
+        /**@brief Unlocks the spinlock.
+         */
         void unlock() noexcept;
     };
 }

@@ -216,7 +216,7 @@ namespace legion::core::async
 
         rw_spinlock() = default;
 
-        rw_spinlock(rw_spinlock&& source)
+        rw_spinlock(rw_spinlock&& source) noexcept
         {
             if (m_forceRelease)
                 return;
@@ -225,7 +225,7 @@ namespace legion::core::async
             m_id = source.m_id;
         }
 
-        rw_spinlock& operator=(rw_spinlock&& source)
+        rw_spinlock& operator=(rw_spinlock&& source) noexcept
         {
             if (m_forceRelease)
                 return *this;
@@ -240,7 +240,8 @@ namespace legion::core::async
 
         /**@brief Lock for a certain permission level. (locking for idle does nothing)
          * @note Locking stacks, locking for readonly multiple times will remain readonly.
-         *		 Locking for write after already being locked for readonly in the same thread will attempt to elevate lock permission of this thread to write.
+         *		 Locking for write after already being locked for readonly in the same thread
+         *       will attempt to elevate lock permission of this thread to write.
          *		 Locking for write multiple times will remain in write.
          * @param permissionLevel
          */

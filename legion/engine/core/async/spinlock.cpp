@@ -11,7 +11,7 @@ namespace legion::core::async
         m_forceRelease = release;
     }
 
-    spinlock::spinlock(spinlock&& source)
+    spinlock::spinlock(spinlock&& source) noexcept
     {
         if (m_forceRelease)
             return;
@@ -19,7 +19,7 @@ namespace legion::core::async
         assert_msg("Attempted to move a spinlock that was locked.", !source.m_lock.load(std::memory_order_relaxed));
     }
 
-    spinlock& spinlock::operator=(spinlock&& source)
+    spinlock& spinlock::operator=(spinlock&& source) noexcept
     {
         if (m_forceRelease)
             return *this;
