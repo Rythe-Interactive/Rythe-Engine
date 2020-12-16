@@ -166,6 +166,52 @@ namespace legion::physics
 
             std::sort(splitEdges.begin(), splitEdges.end(), initialSorter);
 
+            //Check for the special case where there are only 2 splitEdges and 1 
+            int edgesUsed = effectedUsedEdges.size();
+            static int numberOfEdgesToMakeATriangle = 2;
+
+            if (edgesUsed == numberOfEdgesToMakeATriangle)
+            {
+                //DebugBreak();
+                //get first and last edge
+                meshHalfEdgePtr firstEdge = splitEdges.at(0);
+                meshHalfEdgePtr secondEdge = splitEdges.at(1);
+
+                math::vec3 edgeWorldPosition = firstEdge->GetEdgeWorldPosition(transform);
+
+                bool startFromOutsideIntersection =
+                    keepAbove == PhysicsStatics::IsPointAbovePlane(cutNormal, cutPosition, edgeWorldPosition);
+
+                //handle triangle split
+                meshHalfEdgePtr intersectionEdge = nullptr;
+
+                HandleTriangleSplit(startFromOutsideIntersection
+                    , firstEdge, secondEdge,
+                     intersectionEdge,cutNormal,cutPosition,
+                    transform);
+
+                IntersectionEdgeInfo intersectionEdgeInfo(intersectionEdge);
+
+                generatedIntersectionEdges.push_back(intersectionEdgeInfo);
+
+                auto& meshEdges = splitPolygon->GetMeshEdges();
+                meshEdges.clear();
+
+                meshEdges.push_back(firstEdge);
+                meshEdges.push_back(secondEdge);
+                meshEdges.push_back(intersectionEdge);
+
+                splitPolygon->CalculateLocalCentroid();
+                splitPolygon->AssignEdgeOwnership();
+
+                return;
+            }
+            else if(edgesUsed < numberOfEdgesToMakeATriangle)
+            {
+                //there exist a number of edges that is on the splitting plane
+                return;
+            }
+
             math::vec3 worldFirstEdge = splitEdges.at(0)->GetWorldCentroid(transform);
             math::vec3 worldSecondEdge = splitEdges.at(splitEdges.size() - 1)->GetWorldCentroid(transform);
 
@@ -203,14 +249,14 @@ namespace legion::physics
 
             //get start and end intersection points
             auto [firstEdgeCurrent, firstEdgeNext] = firstEdge->GetEdgeWorldPositions(transform);
-            auto [secondEdgeCurrent, secondEdgeNext] = secondEdge->GetEdgeWorldPositions(transform);
+            //auto [secondEdgeCurrent, secondEdgeNext] = secondEdge->GetEdgeWorldPositions(transform);
 
             bool startFromOutsideIntersection =
                 keepAbove == PhysicsStatics::IsPointAbovePlane(cutNormal, cutPosition, firstEdgeCurrent);
 
             //Find the intersection points of both edges toward the plane
 
-            math::vec3 firstEdgeIntersection;
+    /*        math::vec3 firstEdgeIntersection;
             float firstEdgeInterpolant;
             PhysicsStatics::FindLineToPlaneIntersectionPoint(cutNormal, cutPosition,
                 firstEdgeCurrent, firstEdgeNext, firstEdgeIntersection, firstEdgeInterpolant);
@@ -222,7 +268,11 @@ namespace legion::physics
             PhysicsStatics::FindLineToPlaneIntersectionPoint(cutNormal, cutPosition,
                 secondEdgeCurrent, secondEdgeNext, secondEdgeIntersection, secondEdgeInterpolant);
 
-            math::vec2 secondInterpolantUV = math::lerp(secondEdge->uv, secondEdge->nextEdge->uv, secondEdgeInterpolant);
+            math::vec2 secondInterpolantUV = math::lerp(secondEdge->uv, secondEdge->nextEdge->uv, secondEdgeInterpolant);*/
+
+            auto [firstEdgeIntersection, firstInterpolantUV, secondEdgeIntersection, secondInterpolantUV]
+                = GetFirstAndLastEdgeIntersectionInfo(cutNormal, cutPosition, transform,
+                firstEdge, secondEdge);
 
             math::vec3 startToEndIntersection = secondEdgeIntersection - firstEdgeIntersection;
             math::vec2 startToEndUV = secondInterpolantUV - firstInterpolantUV;
@@ -286,7 +336,7 @@ namespace legion::physics
             meshEdges.insert(meshEdges.end(), effectedUsedEdges.begin(), effectedUsedEdges.end());
             meshEdges.insert(meshEdges.end(), generatedHalfEdges.begin(), generatedHalfEdges.end());
 
-
+            splitPolygon->CalculateLocalCentroid();
             splitPolygon->AssignEdgeOwnership();
             debugHelper->polygonCount++;
         }
@@ -523,6 +573,75 @@ namespace legion::physics
             generatedEdges.push_back(supportTriangle);
             generatedEdges.push_back(nextSupportTriangle);
         }
+
+        void HandleTriangleSplit(bool startFromOutsideIntersection
+            ,meshHalfEdgePtr firstSplitEdge, meshHalfEdgePtr secondSplitEdge
+            , meshHalfEdgePtr& intersectionEdge,const math::vec3& cutNormal, const math::vec3& cutPosition,
+            const math::mat4& transform)
+        {
+            auto [firstEdgeIntersection, firstInterpolantUV, secondEdgeIntersection, secondInterpolantUV]
+                = GetFirstAndLastEdgeIntersectionInfo(cutNormal, cutPosition, transform,
+                    firstSplitEdge, secondSplitEdge);
+
+            math::vec3 startToEndIntersection = secondEdgeIntersection - firstEdgeIntersection;
+            math::vec2 startToEndUV = secondInterpolantUV - firstInterpolantUV;
+
+            const math::mat4 inverseTrans{ math::inverse(transform) };
+
+            if (!startFromOutsideIntersection)
+            {
+                firstSplitEdge->position = inverseTrans * math::vec4(firstEdgeIntersection,1);
+                firstSplitEdge->uv = firstInterpolantUV;
+
+                intersectionEdge = std::make_shared<MeshHalfEdge>
+                (inverseTrans * math::vec4(secondEdgeIntersection,1),secondInterpolantUV);
+
+                MeshHalfEdge::ConnectIntoTriangle(firstSplitEdge, secondSplitEdge, intersectionEdge);
+            }
+            else
+            {
+                intersectionEdge = std::make_shared<MeshHalfEdge>
+                (inverseTrans * math::vec4(firstEdgeIntersection,1),firstInterpolantUV);
+
+                secondSplitEdge->position = inverseTrans *  math::vec4(secondEdgeIntersection,1);
+                secondSplitEdge->uv = secondInterpolantUV;
+
+                MeshHalfEdge::ConnectIntoTriangle(firstSplitEdge, intersectionEdge, secondSplitEdge);
+            }
+        }
+
+
+
+        std::tuple<math::vec3,math::vec2,math::vec3,math::vec2> GetFirstAndLastEdgeIntersectionInfo(const math::vec3& cutNormal,const math::vec3& cutPosition
+            ,const math::mat4 transform,
+            meshHalfEdgePtr firstEdge, meshHalfEdgePtr secondEdge)
+        {
+           
+
+            auto [firstEdgeCurrent, firstEdgeNext] = firstEdge->GetEdgeWorldPositions(transform);
+            auto [secondEdgeCurrent, secondEdgeNext] = secondEdge->GetEdgeWorldPositions(transform);
+
+            math::vec3 firstEdgeIntersection;
+            float firstEdgeInterpolant;
+            PhysicsStatics::FindLineToPlaneIntersectionPoint(cutNormal, cutPosition,
+                firstEdgeCurrent, firstEdgeNext, firstEdgeIntersection, firstEdgeInterpolant);
+
+            math::vec2 firstInterpolantUV = math::lerp(firstEdge->uv, firstEdge->nextEdge->uv, firstEdgeInterpolant);
+
+            math::vec3 secondEdgeIntersection;
+            float secondEdgeInterpolant;
+            PhysicsStatics::FindLineToPlaneIntersectionPoint(cutNormal, cutPosition,
+                secondEdgeCurrent, secondEdgeNext, secondEdgeIntersection, secondEdgeInterpolant);
+
+            math::vec2 secondInterpolantUV = math::lerp(secondEdge->uv, secondEdge->nextEdge->uv, secondEdgeInterpolant);
+
+            math::vec3 startToEndIntersection = secondEdgeIntersection - firstEdgeIntersection;
+            math::vec2 startToEndUV = secondInterpolantUV - firstInterpolantUV;
+
+            return std::make_tuple(firstEdgeIntersection, firstInterpolantUV, secondEdgeIntersection, secondInterpolantUV);
+        }
+
+
 
     };
 

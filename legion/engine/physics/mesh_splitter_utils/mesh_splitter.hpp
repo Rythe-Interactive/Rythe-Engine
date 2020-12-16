@@ -231,37 +231,7 @@ namespace legion::physics
             {
                 polygon->isVisited = false;
                 polygon->CalculatePolygonSplit(transform, planePosition, planeNormal);
-                /*log::debug("-------------");
-                log::debug(" polygon->visited {} " ,polygon->isVisited);
-                log::debug(" polygon edge count {} ", polygon->GetMeshEdges().size());
-                switch (polygon->GetPolygonSplitState())
-                {
-                case SplitState::Above:
-                    log::debug("Above");
-                    break;
-                case SplitState::Split:
-                    log::debug("Split");
-                    break;
-                case SplitState::Below:
-                    log::debug("Below");
-                    break;
-                default:
-                    break;
 
-               
-
-                }
-                int bCount = 0;
-
-                for (auto edge : polygon->GetMeshEdges())
-                {
-                    if (edge->isBoundary)
-                    {
-                        bCount++;
-                    }
-                }
-                log::debug(" polygon boundary count {} ", bCount);
-                log::debug("-------------");*/
             }
 
             SplitState requestedState = keepBelow ? SplitState::Below : SplitState::Above;
@@ -272,35 +242,7 @@ namespace legion::physics
                 FindFirstIntersectingOrRequestedState
                 (initialFound, requestedState,polygonsToSplit);
 
-            log::debug("-> Start while loop");
-
-            for (auto polygon : polygonsToSplit)
-            {
-                log::debug("-> checking polygon ");
-                //log::debug("polygon is intersecting ");
-
-                //polygon->AssignEdgeOwnership();
-
-                //if (polygon->isIntersectingPart)
-                //{
-                //    DebugBreak();
-                //    for (auto edge : polygon->GetMeshEdges())
-                //    {
-                //        if (edge->isBoundary)
-                //        {
-                //            auto pairing = edge->pairingEdge;
-
-                //            auto pairingpairing = pairing->pairingEdge;
-
-                //           /* std::string pairingID = pairing->debugID;
-                //            std::string pairingpairingID = pairingpairing->debugID;*/
-
-                //            assert(pairingpairing == edge);
-
-                //        }
-                //    }
-                //}
-            }
+            //log::debug("-> Start while loop");
 
             while (foundUnvisited)
             {
@@ -382,11 +324,15 @@ namespace legion::physics
             auto [posH, rotH, scaleH] = owner.get_component_handles<transform>();
             const math::mat4& transform = math::compose(scaleH.read(), rotH.read(), posH.read());
 
-            //copy original mesh
+            //copy polygons of original mesh
 
             std::vector< std::vector<SplittablePolygonPtr>> outputPolygonIslandsGenerated;
-            outputPolygonIslandsGenerated.push_back(std::move(meshPolygons));
-            meshPolygons.clear();
+
+            std::vector<SplittablePolygonPtr> copiedPolygons;
+            CopyPolygons(meshPolygons, copiedPolygons);
+
+            outputPolygonIslandsGenerated.push_back(std::move(copiedPolygons));
+            
 
             //for each splitting plane in splittingPlanes
             for (const MeshSplitParams& splitParam : splittingPlanes)
@@ -511,22 +457,53 @@ namespace legion::physics
 
         }
 
-        std::vector<SplittablePolygonPtr>& CopyPolygons(std::vector<SplittablePolygonPtr>& originalSplitMesh)
+        void CopyPolygons(std::vector<SplittablePolygonPtr>& originalSplitMesh, std::vector<SplittablePolygonPtr>& copySplitMesh)
         {
-            std::vector<SplittablePolygonPtr> result;
 
-            //copy each edge in mesh
-            for (SplittablePolygonPtr polygon : originalSplitMesh)
+            //----copy all edges of all polygons and connect them to each edge that is within the same polygon--//
+            for (SplittablePolygonPtr originalPolygon : originalSplitMesh)
             {
-                //copy polygon and place on shadow edge
+                originalPolygon->ResetEdgeVisited();
 
+                std::vector<meshHalfEdgePtr> copyPolygonEdges;
+                CopyEdgeVector(originalPolygon->GetMeshEdges(), copyPolygonEdges);
+
+                auto copyPolygon = std::make_shared<SplittablePolygon>(copyPolygonEdges,originalPolygon->localNormal);
+                copyPolygon->AssignEdgeOwnership();
+                copySplitMesh.push_back(copyPolygon);
             }
 
+            //----use shadow edge to connect boundary edges between copied polygons--//
+
+            for (SplittablePolygonPtr originalPolygon : originalSplitMesh)
+            {
                 
 
+                for (auto originalEdge : originalPolygon->GetMeshEdges())
+                {
+                    if (originalEdge->isBoundary && originalEdge->pairingEdge)
+                    {
+                        auto shadowEdge = originalEdge->shadowEdge;
+                        auto shadowEdgePairing = originalEdge->pairingEdge->shadowEdge;
 
+                        shadowEdge->SetPairing(shadowEdgePairing);
+                    }
 
-            return result;
+                }
+            }
+
+            //----nullify shadow edge for each edge in the original polygon list--//
+
+            for (SplittablePolygonPtr originalPolygon : originalSplitMesh)
+            {
+                originalPolygon->ResetEdgeVisited();
+
+                for (auto originalEdge : originalPolygon->GetMeshEdges())
+                {
+                    originalEdge->shadowEdge = nullptr;
+                }
+            }
+
         }
 
         void CopyEdgeVector(std::vector<meshHalfEdgePtr>& originalHalfEdgeList, std::vector<meshHalfEdgePtr>& resultCopyList)
@@ -534,10 +511,52 @@ namespace legion::physics
             for (meshHalfEdgePtr originalEdge : originalHalfEdgeList)
             {
                 //copy polygon and place on shadow edge
+                originalEdge->CloneOnShadowEdge();
+            }
+
+            //BFS connect with clone edge
+            std::queue<meshHalfEdgePtr> unvisitedOriginalHalfEdgeList;
+            unvisitedOriginalHalfEdgeList.push(originalHalfEdgeList[0]);
+
+            while (!unvisitedOriginalHalfEdgeList.empty())
+            {
+                auto originalEdge = unvisitedOriginalHalfEdgeList.front();
+                unvisitedOriginalHalfEdgeList.pop();
+
+                if (!originalEdge->isVisited)
+                {
+                    originalEdge->isVisited = true;
+
+                    auto [original1,original2,original3] = originalEdge->GetTriangle();
+                    auto [shadow1, shadow2, shadow3] = originalEdge->GetShadowTriangle();
+
+                    MeshHalfEdge::ConnectIntoTriangle(shadow1, shadow2, shadow3);
+
+                    if (!original1->isBoundary)
+                    {
+                        shadow1->SetPairing(original1->pairingEdge->shadowEdge);
+                        unvisitedOriginalHalfEdgeList.push(original1->pairingEdge);
+                    }
+
+                    if (!original2->isBoundary)
+                    {
+                        shadow2->SetPairing(original2->pairingEdge->shadowEdge);
+                        unvisitedOriginalHalfEdgeList.push(original2->pairingEdge);
+                    }
+
+                    if (!original3->isBoundary)
+                    {
+                        shadow3->SetPairing(original3->pairingEdge->shadowEdge);
+                        unvisitedOriginalHalfEdgeList.push(original3->pairingEdge);
+                    }
+
+                    shadow1->populateVectorWithTriangle(resultCopyList);
+
+                }
+
 
             }
 
-            
 
 
 

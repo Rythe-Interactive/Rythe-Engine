@@ -16,6 +16,7 @@ namespace legion::physics
 
         std::weak_ptr<SplittablePolygon> owner;
 
+        //TODO: these bools should probably be stored as an array in SplittablePolygon
         bool isVisited = false;
         bool isBoundary = false;
 
@@ -41,6 +42,11 @@ namespace legion::physics
             return std::make_tuple(shared_from_this(), nextEdge, nextEdge->nextEdge);
         }
 
+        auto GetShadowTriangle()
+        {
+            return std::make_tuple(shadowEdge, nextEdge->shadowEdge, nextEdge->nextEdge->shadowEdge);
+        }
+
         void SetPairing(std::shared_ptr<MeshHalfEdge>& newPairing)
         {
             pairingEdge = newPairing;
@@ -49,7 +55,8 @@ namespace legion::physics
 
         void CloneOnShadowEdge()
         {
-
+            shadowEdge = std::make_shared<MeshHalfEdge>(position, uv);
+            shadowEdge->isBoundary = isBoundary;
         }
 
         static void ConnectIntoTriangle(std::shared_ptr<MeshHalfEdge> first

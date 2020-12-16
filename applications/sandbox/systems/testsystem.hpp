@@ -697,7 +697,7 @@ public:
 
         //setupPhysicsStackingUnitTest(cubeH,uvH,textureH);
 
-        setupMeshSplitterTest(floorH,cubeH, cylinderH, magneticLowH, texture2H);
+        setupMeshSplitterTest(floorH,cubeH, cylinderH, magneticLowH,texture2H);
 
         physics::cube_collider_params cubeParams;
         cubeParams.breadth = 1.0f;
@@ -757,12 +757,12 @@ public:
             splitter.add_components<rendering::renderable>(planeH.get_mesh(), rendering::mesh_renderer(TextureH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(splitter);
-            positionH.write(math::vec3(37, 1.5f, 10.0f));
+            positionH.write(math::vec3(36, 1.0f, 10.0f));
             scaleH.write(math::vec3(0.01f));
 
             auto rotation = rotationH.read();
 
-            //rotation *= math::angleAxis(math::deg2rad(60.0f), math::vec3(1, 0, 0));
+            rotation *= math::angleAxis(math::deg2rad(-60.0f), math::vec3(1, 0, 0));
 
             splitter.write_component(rotation);
 
@@ -770,7 +770,7 @@ public:
         //Cube split plane
         ecs::entity_handle cubeSplit;
         {
-            auto splitter = m_ecs->createEntity();
+           /* auto splitter = m_ecs->createEntity();
             cubeSplit = splitter;
 
             auto entPhyHande = splitter.add_component<physics::physicsComponent>();
@@ -792,7 +792,7 @@ public:
 
             rotation *= math::angleAxis(math::deg2rad(60.0f), math::vec3(1, 0, 0));
             
-            splitter.write_component(rotation);
+            splitter.write_component(rotation);*/
 
         }
 
@@ -829,7 +829,7 @@ public:
             auto finderH = ent.add_component<physics::MeshSplitter>();
 
             auto finder = finderH.read();
-            finder.splitTester.push_back(cubeSplit);
+            //finder.splitTester.push_back(cubeSplit);
             finder.splitTester.push_back(cubeSplit2);
             finder.InitializePolygons(ent);
             finderH.write(finder);
@@ -2201,15 +2201,14 @@ public:
                     {
                         boundaryCount++;
 
-
                         math::vec3 worldEdgePos = transform * math::vec4(edge->position, 1);
                         math::vec3 worldEdgeNextPos = transform * math::vec4(edge->nextEdge->position, 1);
 
                         math::vec3 edgeToCentroid = (worldCentroid - worldEdgePos) * 0.05f;
                         math::vec3 nextEdgeToCentroid = (worldCentroid - worldEdgeNextPos) * 0.05f;
 
-                        //debug::drawLine(worldEdgePos + edgeToCentroid
-                        //    , worldEdgeNextPos + nextEdgeToCentroid, polygon->debugColor, 5.0f, 0.0f, false);
+                        debug::drawLine(worldEdgePos + edgeToCentroid
+                            , worldEdgeNextPos + nextEdgeToCentroid, polygon->debugColor, 5.0f, 0.0f, false);
                     }
 
                 }
