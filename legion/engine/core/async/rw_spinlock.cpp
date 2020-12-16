@@ -213,7 +213,7 @@ namespace legion::core::async
         }
     }
 
-    bool rw_spinlock::try_lock(lock_state permissionLevel = lock_state::write)
+    bool rw_spinlock::try_lock(lock_state permissionLevel)
     {
         if (m_forceRelease)
             return true;
@@ -229,7 +229,7 @@ namespace legion::core::async
         }
     }
 
-    void rw_spinlock::unlock(lock_state permissionLevel = lock_state::write)
+    void rw_spinlock::unlock(lock_state permissionLevel)
     {
         if (m_forceRelease)
             return;
