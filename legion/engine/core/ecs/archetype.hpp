@@ -43,6 +43,12 @@ namespace legion::core::ecs
             return std::get<component_handle<T>>(handles);
         }
 
+        template<std::size_t I>
+        auto get() ->decltype(auto)
+        {
+            return std::get<I>(handles);
+        }
+
         bool valid()
         {
            return std::apply([](auto&&... args) {return(args.valid() && ...); }, handles);
