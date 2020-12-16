@@ -104,10 +104,12 @@
     <ClCompile Include="source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="data\pp_edgedetect.hpp" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="systems\pointcloudtestsystem2.hpp" />
     <ClInclude Include="systems\explosion_particlesystem.hpp" />
     <ClInclude Include="systems\pointcloud_particlesystem.hpp" />
+    <ClInclude Include="data\pp_blur.hpp" />
     <ClInclude Include="systems\simplecameracontroller.hpp" />
     <ClInclude Include="systems\testsystem2.hpp" />
     <ClInclude Include="module\testmodule.hpp" />

@@ -18,6 +18,7 @@
     <ClCompile Include="data\material.cpp" />
     <ClCompile Include="data\model.cpp" />
     <ClCompile Include="data\particle_system_cache.cpp" />
+    <ClCompile Include="data\postprocessingeffect.cpp" />
     <ClCompile Include="data\renderbuffer.cpp" />
     <ClCompile Include="data\shader.cpp" />
     <ClCompile Include="data\texture.cpp" />
@@ -43,6 +44,8 @@
     <ClInclude Include="components\particle.hpp" />
     <ClInclude Include="components\particle_emitter.hpp" />
     <ClInclude Include="components\point_cloud.hpp" />
+    <ClInclude Include="data\postprocessingeffect.hpp" />
+    <ClInclude Include="data\screen_quad.hpp" />
     <ClInclude Include="pipeline\base\pipeline.hpp" />
     <ClInclude Include="pipeline\default\stages\postprocessingstage.hpp" />
     <ClInclude Include="systems\pointcloudgeneration.hpp" />

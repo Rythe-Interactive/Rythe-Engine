@@ -90,6 +90,9 @@
     <ClCompile Include="pipeline\default\stages\postprocessingstage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="data\postprocessingeffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="module\renderingmodule.hpp">
@@ -204,6 +207,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="pipeline\default\stages\postprocessingstage.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\postprocessingeffect.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\screen_quad.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

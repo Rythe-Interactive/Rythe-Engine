@@ -26,6 +26,9 @@
 
 #include <rendering/pipeline/default/stages/postprocessingstage.hpp>
 
+#include "../data/pp_blur.hpp"
+#include "../data/pp_edgedetect.hpp"
+
 using namespace legion;
 
 
@@ -127,7 +130,13 @@ public:
     ecs::entity_handle FullFrictionBody;
 
     rendering::shader_handle invertShader;
+    //rendering::PostProcessingEffect invertEffect;
+
+    rendering::shader_handle edgedetectShader;
+    //rendering::PostProcessingEffect edgedetectEffect;
+
     rendering::shader_handle blurShader;
+    //rendering::PostProcessingBlur blurEffect;
 
     virtual void setup()
     {
@@ -230,11 +239,8 @@ public:
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
-
-            invertShader = rendering::ShaderCache::create_shader("invert_shader", "assets://shaders/invertcolor.shs"_view);
-            rendering::PostProcessingStage::addShader(invertShader);
-            blurShader = rendering::ShaderCache::create_shader("blur_shader", "assets://shaders/blurcolor.shs"_view);
-            rendering::PostProcessingStage::addShader(blurShader);
+            rendering::PostProcessingStage::addEffect<rendering::PostProcessingEdgeDetect>();
+            rendering::PostProcessingStage::addEffect<rendering::PostProcessingBlur>();
 
             directionalLightH = rendering::ModelCache::create_model("directional light", "assets://models/directional-light.obj"_view);
             spotLightH = rendering::ModelCache::create_model("spot light", "assets://models/spot-light.obj"_view);

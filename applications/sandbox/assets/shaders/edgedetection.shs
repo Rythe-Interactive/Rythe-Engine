@@ -28,8 +28,6 @@ shader(fragment)
 
     uniform sampler2D screenTexture;
 
-    const float blurStrength = 8.;
-
     void main(void)
     {
         const ivec2 texSize = textureSize(screenTexture, 0);
@@ -48,9 +46,9 @@ shader(fragment)
         );
 
         float kernel[9] = float[](
-        1.0 / blurStrength, 2.0 / blurStrength, 1.0 / blurStrength,
-        2.0 / blurStrength, 4.0 / blurStrength, 2.0 / blurStrength,
-        1.0 / blurStrength, 2.0 / blurStrength, 1.0 / blurStrength
+        1, 1, 1,
+        1, -8, 1,
+        1, 1, 1
         );
 
         vec3 sampleTex[9];

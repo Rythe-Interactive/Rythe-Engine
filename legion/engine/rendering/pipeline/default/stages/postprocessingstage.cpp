@@ -3,24 +3,8 @@
 namespace legion::rendering
 {
 
-    std::multimap<priority_type, shader_handle> PostProcessingStage::m_shaders;
+    std::multimap<priority_type, std::unique_ptr<PostProcessingEffectBase>> PostProcessingStage::m_effects;
 
-    void PostProcessingStage::addShader(shader_handle shaderToAdd, priority_type priority)
-    {
-        m_shaders.emplace(priority, shaderToAdd);
-    }
-
-    void PostProcessingStage::removeShader(shader_handle shaderToRemove)
-    {
-        for (auto iter = m_shaders.begin(); iter != m_shaders.end();)
-        {
-            const auto eraseIter = iter++;
-            if (eraseIter->second == shaderToRemove)
-            {
-                m_shaders.erase(eraseIter);
-            }
-        }
-    }
 
     void PostProcessingStage::setup(app::window& context)
     {
@@ -106,39 +90,40 @@ namespace legion::rendering
             depthAttachment = fbo->getAttachment(GL_DEPTH_STENCIL);
         }
 
+        texture_handle depthTexture = invalid_texture_handle;
+        if (std::holds_alternative<texture_handle>(depthAttachment))
+            depthTexture = std::get<texture_handle>(depthAttachment);
         glDisable(GL_DEPTH_TEST);
 
 
-        m_quadVAO.bind();
-
-        for (auto& [_, shader] : m_shaders)
+        for (auto& [_, effect] : m_effects)
         {
-            fbo->attach(textures[!index], GL_COLOR_ATTACHMENT0);
-            fbo->bind();
+            if (!effect->isInitialized()) effect->init(context);
+            for (auto& pass : effect->renderPasses)
+            {
+                fbo->attach(textures[!index], GL_COLOR_ATTACHMENT0);
+                fbo->bind();
+              
+                pass.invoke(textures[index], depthTexture);
 
-            shader.bind();
-
-            if (std::holds_alternative<texture_handle>(depthAttachment) && shader.has_uniform<texture_handle>(depthId))
-                shader.get_uniform<texture_handle>(depthId).set_value(std::get<texture_handle>(depthAttachment));
-
-            shader.get_uniform<texture_handle>(screenId).set_value(textures[index]);
-            glDrawArrays(GL_TRIANGLES, 0, 6);
-            fbo->release();
-            index = !index;
+                fbo->release();
+                index = !index;
+            }
         }
 
         if (index)
         {
             fbo->attach(textures[0], GL_COLOR_ATTACHMENT0);
             fbo->bind();
+            m_quadVAO.bind();
             m_screenShader.bind();
             m_screenShader.get_uniform<texture_handle>(screenId).set_value(textures[1]);
             glDrawArrays(GL_TRIANGLES, 0, 6);
+            m_quadVAO.release();
             fbo->release();
         }
 
         rendering::shader::release();
-        m_quadVAO.release();
 
         glEnable(GL_DEPTH_TEST);
     }
