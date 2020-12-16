@@ -150,26 +150,26 @@ namespace legion::core::compute
         return *this;
     }
 
-    Kernel& Kernel::setAndEnqueBuffer(Buffer buffer, block_mode blocking)
+    Kernel& Kernel::setAndEnqueueBuffer(Buffer buffer, block_mode blocking)
     {
         //get name from buffer
         if (buffer.m_name.empty())
             log::warn("Encountered unnamed buffer! binding to a Kernel-location will fail!");
-        return setAndEnqueBuffer(buffer, buffer.m_name, blocking);
+        return setAndEnqueueBuffer(buffer, buffer.m_name, blocking);
     }
 
 
-    Kernel& Kernel::setAndEnqueBuffer(Buffer buffer, const std::string& name, block_mode blocking)
+    Kernel& Kernel::setAndEnqueueBuffer(Buffer buffer, const std::string& name, block_mode blocking)
     {
         //translate name to index
         param_find([this, b = std::forward<Buffer>(buffer), blocking](cl_uint index)
         {
-            setAndEnqueBuffer(b, index, blocking);
+            setAndEnqueueBuffer(b, index, blocking);
         }, name);
         return *this;
     }
 
-    Kernel& Kernel::setAndEnqueBuffer(Buffer buffer, cl_uint index, block_mode blocking)
+    Kernel& Kernel::setAndEnqueueBuffer(Buffer buffer, cl_uint index, block_mode blocking)
     {
         //set and ... enqueue_buffer
         //nothing fun to see here
@@ -181,9 +181,6 @@ namespace legion::core::compute
     Kernel& Kernel::dispatch()
     {
         auto [globals, locals, size] = parse_dimensions();
-
-
-
         //enqueue the Kernel in the command queue
         cl_int ret = clEnqueueNDRangeKernel(
             m_queue,
@@ -233,15 +230,10 @@ namespace legion::core::compute
         m_global_size(size_type(0)),
         m_local_size(64)
     {
+        m_refcounter = new size_t(1);
         m_queue = program->make_cq();
     }
-
-    Kernel::~Kernel()
-    {
-        //clear CommandQueue memory
-        //clReleaseCommandQueue(m_queue);
-    }
-
+  
     Kernel& Kernel::local(size_type s)
     {
 
@@ -284,7 +276,4 @@ namespace legion::core::compute
         }
         return *this;
     }
-
-
-
 }
