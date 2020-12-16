@@ -4,8 +4,10 @@
 #include <rendering/pipeline/default/stages/lightbufferstage.hpp>
 #include <rendering/pipeline/default/stages/meshbatchingstage.hpp>
 #include <rendering/pipeline/default/stages/meshrenderstage.hpp>
+#include <rendering/pipeline/default/stages/postprocessingstage.hpp>
 #include <rendering/pipeline/default/stages/submitstage.hpp>
 #include <rendering/data/buffer.hpp>
+
 
 namespace legion::rendering
 {
@@ -16,6 +18,7 @@ namespace legion::rendering
         attachStage<LightBufferStage>();
         attachStage<MeshBatchingStage>();
         attachStage<MeshRenderStage>();
+        attachStage<PostProcessingStage>();
         attachStage<SubmitStage>();
 
         buffer modelMatrixBuffer;
