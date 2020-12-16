@@ -29,9 +29,9 @@ namespace legion::core::async
 
         spinlock() = default;
 
-        spinlock(spinlock&& source);
+        spinlock(spinlock&& source) noexcept;
 
-        spinlock& operator=(spinlock&& source);
+        spinlock& operator=(spinlock&& source) noexcept;
 
         /**@brief Locks the spinlock, blocks if the spinlock is not available.
          */

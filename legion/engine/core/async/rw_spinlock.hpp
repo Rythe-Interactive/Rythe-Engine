@@ -44,196 +44,25 @@ namespace legion::core::async
         // State of the lock. -1 means that a thread has write permission. 0 means that the lock is unlocked. 1+ means that there are N amount of readers.
         std::atomic_int m_lockState = { 0 };
 
-        void read_lock()
-        {
-            if (m_forceRelease)
-                return;
+        void read_lock();
 
-            if (m_localState[m_id] != lock_state::idle) // If we're either already reading or writing then the lock doesn't need to be reacquired.
-            {
-                // Report another local reader to the lock.
-                m_localReaders[m_id]++;
-                return;
-            }
+        bool read_try_lock();
 
-            int state;
+        void write_lock();
 
-            while (true)
-            {
-                // Read the current value and continue waiting until we're in a lockable state.
-                while ((state = m_lockState.load(std::memory_order_relaxed)) == lock_state::write)
-                    L_PAUSE_INSTRUCTION();
+        bool write_try_lock();
 
-                // Try to add a reader to the lock state. If the lock succeeded then we can continue.
-                if (m_lockState.compare_exchange_weak(state, state + lock_state::read, std::memory_order_acquire, std::memory_order_relaxed))
-                    break;
-            }
+        void read_unlock();
 
-            // Report another reader to the lock.
-            m_localReaders[m_id]++;
-            m_localState[m_id] = lock_state::read; // Set thread_local state to read.
-        }
-
-        bool read_try_lock()
-        {
-            if (m_forceRelease)
-                return true;
-
-            if (m_localState[m_id] != lock_state::idle) // If we're either already reading or writing then the lock doesn't need to be reacquired.
-            {
-                // Report another local reader to the lock.
-                m_localReaders[m_id]++;
-                return true;
-            }
-
-            // Expect idle as default.
-            int state;
-
-            if ((state = m_lockState.load(std::memory_order_relaxed)) == lock_state::write || // Check if we can lock at all first to reduce LSU abuse on SMT CPUs if this occurs in a try_lock loop.
-                !m_lockState.compare_exchange_strong(state, state + lock_state::read, std::memory_order_acquire, std::memory_order_relaxed)) // Try to add a reader to the lock state.
-                return false;
-
-            // Report another reader to the lock.
-            m_localReaders[m_id]++;
-            m_localState[m_id] = lock_state::read; // Set thread_local state to read.
-            return true;
-        }
-
-        void write_lock()
-        {
-            if (m_forceRelease)
-                return;
-
-            if (m_localState[m_id] == lock_state::read) // If we're currently only acquired for read we need to stop reading before requesting rw.
-            {
-                read_unlock();
-                m_localReaders[m_id]++;
-            }
-            else if (m_localState[m_id] == lock_state::write) // If we're already writing then we don't need to reacquire the lock.
-            {
-                m_localWriters[m_id]++;
-                return;
-            }
-
-            int state;
-
-            while (true)
-            {
-                // Read the current value and continue waiting until we're in a lockable state.
-                while ((state = m_lockState.load(std::memory_order_relaxed)) != lock_state::idle)
-                    L_PAUSE_INSTRUCTION();
-
-                // Try to set the lock state to write. If the lock succeeded then we can continue.
-                if (m_lockState.compare_exchange_weak(state, lock_state::write, std::memory_order_acquire, std::memory_order_relaxed))
-                    break;
-            }
-
-            m_localWriters[m_id]++;
-            m_localState[m_id] = lock_state::write; // Set thread_local state to write.
-        }
-
-        bool write_try_lock()
-        {
-            if (m_forceRelease)
-                return true;
-
-            bool relock = false;
-            if (m_localState[m_id] == lock_state::read) // If we're currently only acquired for read we need to stop reading before requesting rw.
-            {
-                relock = true;
-                read_unlock();
-                m_localReaders[m_id]++;
-            }
-            else if (m_localState[m_id] == lock_state::write) // If we're already writing then we don't need to reacquire the lock.
-            {
-                m_localWriters[m_id]++;
-                return true;
-            }
-
-            // Expect idle as default.
-            int state = lock_state::idle;
-
-            if ((state = m_lockState.load(std::memory_order_relaxed)) != lock_state::idle || // Check if we can lock at all first to reduce LSU abuse on SMT CPUs if this occurs in a try_lock loop.
-                !m_lockState.compare_exchange_strong(state, lock_state::write, std::memory_order_acquire, std::memory_order_relaxed)) // Try to set the lock state to write.
-            {
-                if (relock)
-                {
-                    m_localReaders[m_id]--;
-                    read_lock();
-                }
-                return false;
-            }
-
-            m_localWriters[m_id]++;
-            m_localState[m_id] = lock_state::write; // Set thread_local state to write.
-            return true;
-        }
-
-        void read_unlock()
-        {
-            if (m_forceRelease)
-                return;
-
-            m_localReaders[m_id]--;
-
-            if (m_localReaders[m_id] > 0 || m_localWriters[m_id] > 0) // Another local guard is still alive that will unlock the lock for this thread.
-            {
-                return;
-            }
-
-            m_lockState.fetch_sub(lock_state::read, std::memory_order_release);
-
-            m_localState[m_id] = lock_state::idle; // Set thread_local state to idle.
-        }
-
-        void write_unlock()
-        {
-            if (m_forceRelease)
-                return;
-
-            m_localWriters[m_id]--;
-
-            if (m_localWriters[m_id] > 0) // Another local guard is still alive that will unlock the lock for this thread.
-            {
-                return;
-            }
-            else if (m_localReaders[m_id] > 0)
-            {
-                m_lockState.store(lock_state::read, std::memory_order_release);
-                m_localState[m_id] = lock_state::read; // Set thread_local state to idle.
-                return;
-            }
-
-            m_lockState.store(lock_state::idle, std::memory_order_release);
-            m_localState[m_id] = lock_state::idle; // Set thread_local state to idle.
-        }
+        void write_unlock();
 
     public:
-        static void force_release(bool release = true)
-        {
-            m_forceRelease = release;
-        }
+        static void force_release(bool release = true);
 
         rw_spinlock() = default;
 
-        rw_spinlock(rw_spinlock&& source) noexcept
-        {
-            if (m_forceRelease)
-                return;
-
-            assert_msg("Attempted to move a rw_spinlock that was locked.", source.m_lockState.load(std::memory_order_relaxed) == lock_state::idle);
-            m_id = source.m_id;
-        }
-
-        rw_spinlock& operator=(rw_spinlock&& source) noexcept
-        {
-            if (m_forceRelease)
-                return *this;
-
-            assert_msg("Attempted to move a rw_spinlock that was locked.", source.m_lockState.load(std::memory_order_relaxed) == lock_state::idle);
-            m_id = source.m_id;
-            return *this;
-        }
+        rw_spinlock(rw_spinlock&& source) noexcept;
+        rw_spinlock& operator=(rw_spinlock&& source) noexcept;
 
         rw_spinlock(const rw_spinlock&) = delete;
         rw_spinlock& operator=(const rw_spinlock&) = delete;
@@ -245,21 +74,7 @@ namespace legion::core::async
          *		 Locking for write multiple times will remain in write.
          * @param permissionLevel
          */
-        void lock(lock_state permissionLevel = lock_state::write)
-        {
-            if (m_forceRelease)
-                return;
-
-            switch (permissionLevel)
-            {
-            case lock_state::read:
-                return read_lock();
-            case lock_state::write:
-                return write_lock();
-            default:
-                return;
-            }
-        }
+        void lock(lock_state permissionLevel = lock_state::write);
 
         /**@brief Try to lock for a certain permission level. If it fails it will return false otherwise true. (locking for idle does nothing)
          * @note Locking stacks, locking for readonly multiple times will remain readonly.
@@ -268,71 +83,25 @@ namespace legion::core::async
          * @param permissionLevel
          * @return bool True when locked.
          */
-        bool try_lock(lock_state permissionLevel = lock_state::write)
-        {
-            if (m_forceRelease)
-                return true;
-
-            switch (permissionLevel)
-            {
-            case lock_state::read:
-                return read_try_lock();
-            case lock_state::write:
-                return write_try_lock();
-            default:
-                return false;
-            }
-        }
+        bool try_lock(lock_state permissionLevel = lock_state::write);
 
         /**@brief Unlock from a certain permission level.
          * @note If both read and write locks have been requested before and write is unlocked then the lock will return to readonly state.
          * @param permissionLevel
          */
-        void unlock(lock_state permissionLevel = lock_state::write)
-        {
-            if (m_forceRelease)
-                return;
-
-            switch (permissionLevel)
-            {
-            case legion::core::async::lock_state::read:
-                return read_unlock();
-            case legion::core::async::lock_state::write:
-                return write_unlock();
-            default:
-                return;
-            }
-        }
+        void unlock(lock_state permissionLevel = lock_state::write);
 
         /** @brief Locks the rw_spinlockfor shared ownership, blocks if the rw_spinlockis not available
          */
-        void lock_shared()
-        {
-            if (m_forceRelease)
-                return;
-
-            return read_lock();
-        }
+        void lock_shared();
 
         /** @brief Tries to lock the rw_spinlockfor shared ownership, returns if the rw_spinlockis not available
          */
-        bool try_lock_shared()
-        {
-            if (m_forceRelease)
-                return true;
-
-            return read_try_lock();
-        }
+        bool try_lock_shared();
 
         /** @brief Unlocks the mutex (shared ownership)
          */
-        void unlock_shared()
-        {
-            if (m_forceRelease)
-                return;
-
-            return read_unlock();
-        }
+        void unlock_shared();
 
         /**@brief Execute a function inside a critical section locked by a certain guard.
          * @tparam Guard Guard type to lock the lock with.
