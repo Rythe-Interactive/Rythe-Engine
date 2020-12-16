@@ -15,7 +15,7 @@ namespace legion::physics
          */
         enum struct face_angle_relation : int
         {
-            coplaner = 0,
+            coplanar = 0,
             convex,
             concave
         };
@@ -48,7 +48,7 @@ namespace legion::physics
 
         /**@brief Tests if this face is convex in regard to the passed face
          * @param other - the other plane
-         * @return Returns true when convex, false if coplaner or concave
+         * @return Returns true when convex, false if coplanar or concave
          */
         bool testConvexity(const HalfEdgeFace& other) const;
 
@@ -62,7 +62,7 @@ namespace legion::physics
         face_angle_relation getAngleRelation(const HalfEdgeFace& other);
 
         /**@brief Tests if the the two planes are convex in regard to each other
-         * @return true when convex, false if coplaner or concave
+         * @return true when convex, false if coplanar or concave
          */
         static bool testConvexity(const HalfEdgeFace& first, const HalfEdgeFace& second);
 
@@ -92,7 +92,7 @@ namespace legion::physics
 
         static std::string to_string(const face_angle_relation& relation)
         {
-            if (relation == face_angle_relation::coplaner) return "coplaner";
+            if (relation == face_angle_relation::coplanar) return "coplanar";
             if (relation == face_angle_relation::convex) return "convex";
             if (relation == face_angle_relation::concave) return "concave";
         }

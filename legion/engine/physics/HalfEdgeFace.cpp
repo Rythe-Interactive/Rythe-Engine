@@ -45,7 +45,6 @@ namespace legion::physics
 
     void HalfEdgeFace::deleteEdges()
     {
-        log::debug("Deleting edges!");
         HalfEdgeEdge* current = startEdge->nextEdge;
         do
         {
@@ -72,7 +71,6 @@ namespace legion::physics
         HalfEdgeEdge* initialEdge = startEdge;
         HalfEdgeEdge* currentEdge = startEdge;
 
-        if (!currentEdge) { return; }
 
         //the HalfEdgeEdge* 'startEdge' creates a ring buffer.
         //This means that initialEdge will eventually go back to "startEdge", ending the loop.
@@ -88,40 +86,6 @@ namespace legion::physics
 
     void HalfEdgeFace::inverse()
     {
-        
-        HalfEdgeEdge* start = startEdge;
-        HalfEdgeEdge* current = startEdge;
-        assert (start->nextEdge != start);
-        /*
-        HalfEdgeEdge* last = startEdge->prevEdge;
-        math::vec3 initialPosition = startEdge->edgePosition;
-
-
-        do
-        {
-
-            //fix edge-positions
-            if(current != last)
-            {
-                current->edgePosition = current->nextEdge->edgePosition; 
-            } else
-            {
-                current->edgePosition = initialPosition;
-            }
-
-
-
-
-
-            HalfEdgeEdge* prev = current->prevEdge;
-            current->prevEdge = current->nextEdge;
-            current->nextEdge = prev;
-
-
-            // Current should go the edge that was previously the next
-            current = current->prevEdge;
-        } while (current != start);
-        */
         normal = -normal; // Inverse the normal
     }
 
@@ -167,8 +131,8 @@ namespace legion::physics
     {
         if (other == *this)
         {
-            log::warn("Calculating face angle relation between the same face, returning coplaner");
-            return face_angle_relation::coplaner;
+            log::warn("Calculating face angle relation between the same face, returning coplanar");
+            return face_angle_relation::coplanar;
         }
         float distToPlane = math::pointToPlane(centroid, other.centroid, other.normal);
 
@@ -181,7 +145,7 @@ namespace legion::physics
         {
             return face_angle_relation::concave;
         }
-        else return face_angle_relation::coplaner;
+        else return face_angle_relation::coplanar;
     }
 
     bool HalfEdgeFace::testConvexity(const HalfEdgeFace& first, const HalfEdgeFace& second)
@@ -216,12 +180,10 @@ namespace legion::physics
             {
                 if (firstCurrent->pairingEdge == secondCurrent)
                 {
-                    log::debug("firstCurrent->pairingEdge == secondCurrent");
                     return firstCurrent;
                 }
                 if (firstCurrent == secondCurrent->pairingEdge)
                 {
-                    log::debug("firstCurrent == secondCurrent->pairingEdge");
                     return firstCurrent;
                 }
 
@@ -236,23 +198,11 @@ namespace legion::physics
 
     HalfEdgeFace* HalfEdgeFace::mergeFaces(HalfEdgeEdge& middleEdge)
     {
-        assert(middleEdge.nextEdge != nullptr);
-        assert(middleEdge.prevEdge != nullptr);
-        assert(middleEdge.pairingEdge != nullptr);
-        assert(middleEdge.pairingEdge->nextEdge != nullptr);
-        assert(middleEdge.pairingEdge->prevEdge != nullptr);
-        assert(middleEdge.nextEdge->nextEdge != &middleEdge);
-
-        assert(middleEdge.edgePosition != middleEdge.pairingEdge->edgePosition);
-       
-
         if (middleEdge.face->startEdge == &middleEdge)
         {
             middleEdge.face->startEdge = middleEdge.face->startEdge->prevEdge;
         }
         // Set correct faces
-        /*middleEdge.pairingEdge->nextEdge->face = middleEdge.face;
-        middleEdge.pairingEdge->prevEdge->face = middleEdge.face;*/
         HalfEdgeEdge* end = middleEdge.pairingEdge;
         HalfEdgeEdge* current = middleEdge.pairingEdge;
         do
@@ -285,20 +235,8 @@ namespace legion::physics
             face->centroid = faceCenter / static_cast<float>(edgeCount);
         }
 
-        // Clean up all the memory of the damaged edges and face
-        // Damaged in the sense that they no longer point to anything and the face exists of only one edge
-
-        // Currently not cleaning memory because of bug fixing
-        // PLEASE DO NOT ALLOW THIS CODE PASSED PULL REQUEST - THE MEMORY NEEDS TO BE CLEANED UP!
-
-        /*middleEdge.pairingEdge->face->startEdge = nullptr;
-        middleEdge.pairingEdge->pairingEdge = nullptr;*/
-        //delete middleEdge.pairingEdge;
-        //middleEdge.pairingEdge = nullptr;
-
-        //middleEdge.pairingEdge->face->startEdge = nullptr;
-        //delete middleEdge.pairingEdge->face;
-        //delete& middleEdge;
+        delete middleEdge.pairingEdge;
+        delete& middleEdge;
 
         return face;
     }

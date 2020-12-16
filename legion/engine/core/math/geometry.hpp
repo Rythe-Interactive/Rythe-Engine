@@ -9,6 +9,9 @@
 
 namespace legion::core::math
 {
+    /**
+     * @brief Calcualtes shortest distance from point to line segment
+     */
     inline float pointToLineSegment2D(const vec2& point, const vec2& lineOrigin, const vec2& lineEnd)
     {
         if (point == lineOrigin || point == lineEnd) return 0.0f;
@@ -32,9 +35,13 @@ namespace legion::core::math
             return length(toLineEnd);
         }
 
+        // Calculate and return point to line projection length
         return dot(point - lineOrigin, normalize(lineNormal));
     }
 
+    /**
+     * @brief Calculate shortest distance from point to infinite line
+     */
     inline float pointToLine2D(const vec2& point, const vec2& lineOrigin, const vec2& lineEnd)
     {
         if (point == lineOrigin || point == lineEnd) return 0.0f;
@@ -44,13 +51,14 @@ namespace legion::core::math
         return dot(point - lineOrigin, normalize(lineNormal));
     }
 
-    /**@brief Calcualtes the shortest distance between a point and a line
+    /**@brief Calculates the shortest distance between a point and a line
      * @param point - The point
      * @param lineOrigin - The origin of the line
      * @param lineEnd - The end of the line
      */
     inline float pointToLineSegment(const vec3& point, const vec3& lineOrigin, const vec3& lineEnd)
     {
+        // Check if the point is equal to the start or end of the line
         if (point == lineOrigin || point == lineEnd) return 0.0f;
         vec3 dir = lineEnd - lineOrigin;
         vec3 toLineOrigin = point - lineOrigin;
@@ -142,15 +150,22 @@ namespace legion::core::math
             p == triPoint1 ||
             p == triPoint2) return 0.f;
 
+        // Get the angle between the triangle normal and p to triPoint0
         float cosAngle = dot(triNormal, p - triPoint0) / (distance(p, triPoint0) * length(triNormal));
+        // Get the length of the projection of point p onto the triangle
         float projectionLength = length(p - triPoint0) * cosAngle;
+        // From the projectionLength we can determine if the point is above or under the triangle plane
         float positive = 1;
         if (projectionLength < 0) positive = -1;
+        // A vector when added to p gives the projected point
         vec3 towardProjection = -projectionLength * (triNormal / length(triNormal));
         // Q is the projection of p onto the plane
         vec3 q = p + towardProjection;
 
-         // Old way of finding if the point is in the triangle
+        // We need to determine if projected p is inside the triangle.
+        // By putting point q (projected point p) on the triangle, three new triangles are created
+        // If point q is in fact inside the triangle, the areas of the three triangles will add up to same area as the original triangle
+
         double q01Area = triangleSurface(q, triPoint0, triPoint1);
         double q02Area = triangleSurface(q, triPoint0, triPoint2);
         double q12Area = triangleSurface(q, triPoint1, triPoint2);
@@ -161,7 +176,8 @@ namespace legion::core::math
             return projectionLength;
         }
 
-        //Point q is not on the triangle, check distance toward each edge of the triangle
+        //Point q is not inside the triangle, check distance toward each edge of the triangle
+        // therefore the smallest distance is distance toward a side or end point
         float distance01 = pointToLineSegment(p, triPoint1, triPoint0);
         float distance02 = pointToLineSegment(p, triPoint2, triPoint0);
         float distance12 = pointToLineSegment(p, triPoint2, triPoint1);
@@ -175,6 +191,7 @@ namespace legion::core::math
         }
         else if (distance12 < distance01) shortestDistance = distance12;
 
+        // Return the shortest distance toward one of the sides, either positive or negative, which was determined before
         return shortestDistance*positive;
     }
 
@@ -392,49 +409,5 @@ namespace legion::core::math
         );
 
         return translation * rot * scale;
-    }
-
-    inline bool projectedPointInPolygon(const vec3& p, const std::vector<vec3>& points, const vec3& normal, const vec3& centroid)
-    {
-        assert(points.size() != 0);
-
-        // Project point onto polygon
-        float cosAngle = dot(normal, p - points.at(0)) / (distance(p, points.at(0)) * length(normal));
-        float projectionLength = length(p - points.at(0)) * cosAngle;
-        vec3 towardProjection = -projectionLength * (normal / length(normal));
-        // Q is the projection of p onto the plane
-        vec3 q = p + towardProjection;
-
-        // Bring it into 2D space
-        // Calc tangent by crossing normal with world up
-        vec3 tangent = normalize(cross(normal, vec3(0, 1, 0)));
-        vec3 tangent2 = normalize(cross(tangent, normal));
-
-        vec3 qToPolygonVertex = q - points.at(0);
-
-        vec2 projectedPoint2D;
-        projectedPoint2D.x = dot(qToPolygonVertex, tangent);
-        projectedPoint2D.y = dot(qToPolygonVertex, tangent2);
-
-        std::vector<vec2> points2D;
-        for (int i = 0; i < points.size(); ++i)
-        {
-            vec3 pointToPolygon = points.at(i) - centroid;
-            vec2 point;
-            point.x = dot(pointToPolygon, tangent);
-            point.y = dot(pointToPolygon, tangent2);
-            points2D.push_back(point);
-        }
-
-        for (size_t i = 0; i < points2D.size(); ++i)
-        {
-            size_t next = (i + 1) % points2D.size();
-
-            float dist = pointToLine2D(projectedPoint2D, points2D.at(i), points2D.at(next));
-
-            if (dist > 0) return false;
-        }
-
-        return true;
     }
 }
