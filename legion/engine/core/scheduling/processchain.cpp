@@ -8,7 +8,7 @@
 
 namespace legion::core::scheduling
 {
-    async::readonly_rw_spinlock ProcessChain::m_callbackLock;
+    async::rw_spinlock ProcessChain::m_callbackLock;
     multicast_delegate<void()> ProcessChain::m_onFrameStart;
     multicast_delegate<void()> ProcessChain::m_onFrameEnd;
 
@@ -28,7 +28,10 @@ namespace legion::core::scheduling
                 if (chain->m_low_power)
                     std::this_thread::sleep_for(std::chrono::milliseconds(1));
                 else
+                {
+                    L_PAUSE_INSTRUCTION();
                     std::this_thread::yield();
+                }
             }
             chain->m_scheduler->unsubscribeFromSync();
             chain->m_scheduler->reportExit(chain->m_threadId); // Mark Exit.

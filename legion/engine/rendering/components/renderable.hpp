@@ -6,19 +6,31 @@ namespace legion::rendering
 {
     struct mesh_renderer
     {
+    private:
+        model_handle m_tempHandle = invalid_model_handle;
+    public:
         mesh_renderer() = default;
-        mesh_renderer(const material_handle& src) { material = src; }
+        explicit mesh_renderer(const material_handle& src) { material = src; }
+        mesh_renderer(const material_handle& src, const model_handle& model) { material = src; m_tempHandle = model; }
 
-        material_handle material;
+        static void init(mesh_renderer& src, ecs::entity_handle owner)
+        {
+            if (!owner.has_component<mesh_filter>())
+            {
+                owner.add_component<mesh_filter>(mesh_filter(src.m_tempHandle.get_mesh()));
+            }
+        }
+
+        material_handle material = invalid_material_handle;
     };
 
 
-    struct renderable : public ecs::archetype<mesh_filter, mesh_renderer>
+    struct mesh_renderable : public ecs::archetype<mesh_filter, mesh_renderer>
     {
         using base = ecs::archetype<mesh_filter, mesh_renderer>;
 
-        renderable() = default;
-        renderable(const base::handleGroup& handles) : base(handles) {}
+        mesh_renderable() = default;
+        mesh_renderable(const base::handleGroup& handles) : base(handles) {}
 
         model_handle get_model()
         {
@@ -38,7 +50,7 @@ namespace legion::rendering
     };
 
     template<typename Archive>
-    void renderable::serialize(Archive& archive)
+    void mesh_renderable::serialize(Archive& archive)
     {
         archive(get_model(), get_material());
     }

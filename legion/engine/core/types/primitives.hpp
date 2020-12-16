@@ -1,10 +1,6 @@
 #pragma once
-#ifndef _MSC_VER
-#include <cstdint> //linux std::(u)int(8-64)_t
-#else
-#include <cstddef> //msc   std::(u)int(8-64)_t
-#endif
-#include <vector>  //      std::vector<T>
+#include <cstdint> 
+#include <vector>  
 #include <string>
 #include <string_view>
 
@@ -49,9 +45,10 @@ namespace legion::core
     using bitfield32 = uint32;
     using bitfield64 = uint64;
 
-	using priority_type = uint8;
+	using priority_type = int8;
 #define default_priority 0
-#define PRIORITY_MAX UCHAR_MAX
+#define PRIORITY_MAX CHAR_MAX
+#define PRIORITY_MIN CHAR_MIN
 
 	using id_type = uint_max;
 

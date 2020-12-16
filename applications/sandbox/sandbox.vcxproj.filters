@@ -35,13 +35,16 @@
     <ClInclude Include="systems\testsystem2.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="test_filesystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="systems\pointcloudtestsystem2.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="systems\explosion_particlesystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\pointcloud_particlesystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\gui_test.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

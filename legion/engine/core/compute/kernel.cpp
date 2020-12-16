@@ -64,7 +64,7 @@ namespace legion::core::compute
     Kernel& Kernel::setBuffer(Buffer buffer, cl_uint index)
     {
         //set kernel argument
-        const cl_int ret = clSetKernelArg(m_func, index, sizeof(cl_mem), &buffer.m_memory_object);
+        const cl_int ret = clSetKernelArg(m_func, index, buffer.m_data ? sizeof(cl_mem) : sizeof(cl_sampler), &buffer.m_memory_object);
 
         //check clSetKernelArg
         if (ret != CL_SUCCESS)
@@ -104,7 +104,7 @@ namespace legion::core::compute
         */
 
         //first check if the buffer has data
-        if(!buffer.m_data)
+        if (!buffer.m_data)
             return *this;
 
         cl_int ret;
@@ -181,7 +181,6 @@ namespace legion::core::compute
     Kernel& Kernel::dispatch()
     {
         auto [globals, locals, size] = parse_dimensions();
-
         //enqueue the Kernel in the command queue
         cl_int ret = clEnqueueNDRangeKernel(
             m_queue,
@@ -234,13 +233,7 @@ namespace legion::core::compute
         m_refcounter = new size_t(1);
         m_queue = program->make_cq();
     }
-
-    Kernel::~Kernel()
-    {
-        //clear CommandQueue memory
-        //clReleaseCommandQueue(m_queue);
-    }
-
+  
     Kernel& Kernel::local(size_type s)
     {
 
@@ -270,20 +263,17 @@ namespace legion::core::compute
         //translate name to index
         param_find([this, size, v = std::forward<void*>(value)](cl_uint index)
         {
-            this->setKernelArg(v,size,index);
+            this->setKernelArg(v, size, index);
         }, name);
         return *this;
     }
 
     Kernel& Kernel::setKernelArg(void* value, size_type size, cl_uint index)
     {
-        if(clSetKernelArg(m_func,index,size,value) != CL_SUCCESS)
+        if (clSetKernelArg(m_func, index, size, value) != CL_SUCCESS)
         {
-            log::warn("clSetKernelArg failed for Arg at index {}",index);
+            log::warn("clSetKernelArg failed for Arg at index {}", index);
         }
         return *this;
     }
-
-
-
 }

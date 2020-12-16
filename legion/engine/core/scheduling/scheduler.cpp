@@ -6,16 +6,16 @@ namespace legion::core::scheduling
 {
     constexpr size_type reserved_threads = 4;
          
-    async::readonly_rw_spinlock Scheduler::m_threadsLock;
+    async::rw_spinlock Scheduler::m_threadsLock;
     sparse_map<std::thread::id, std::unique_ptr<std::thread>> Scheduler::m_threads;
     std::queue<std::thread::id> Scheduler::m_unreservedThreads;
     const uint Scheduler::m_maxThreadCount = (static_cast<int>(std::thread::hardware_concurrency()) - reserved_threads) <= 0 ? reserved_threads : std::thread::hardware_concurrency();
-    async::readonly_rw_spinlock Scheduler::m_availabilityLock;
+    async::rw_spinlock Scheduler::m_availabilityLock;
     uint Scheduler::m_availableThreads = static_cast<uint>(math::ceil((m_maxThreadCount - reserved_threads) * 0.8f) + math::epsilon<float>()); // subtract OS and this_thread, and then leave some extra for miscellaneous processes.
 
-    async::readonly_rw_spinlock Scheduler::m_jobQueueLock;
+    async::rw_spinlock Scheduler::m_jobQueueLock;
     std::queue<Scheduler::runnable> Scheduler::m_jobs;
-    sparse_map<std::thread::id, async::readonly_rw_spinlock> Scheduler::m_commandLocks;
+    sparse_map<std::thread::id, async::rw_spinlock> Scheduler::m_commandLocks;
     sparse_map<std::thread::id, std::queue<Scheduler::runnable>> Scheduler::m_commands;
 
     void Scheduler::threadMain(bool* exit, bool* start, bool lowPower)
@@ -58,6 +58,7 @@ namespace legion::core::scheduling
 
             instruction();
 
+            L_PAUSE_INSTRUCTION();
             {
                 async::readonly_guard guard(m_jobQueueLock);
 
@@ -85,6 +86,9 @@ namespace legion::core::scheduling
             m_lowPower = true;
             m_availableThreads = minThreads;
         }
+
+        async::rw_spinlock::force_release(false);
+        async::spinlock::force_release(false);
 
         std::thread::id id;
         while ((id = createThread(threadMain, &m_threadsShouldTerminate, &m_threadsShouldStart, m_lowPower)) != invalid_thread_id)
@@ -228,6 +232,9 @@ namespace legion::core::scheduling
         {
             destroyThread(id);
         }
+
+        async::rw_spinlock::force_release(true);
+        async::spinlock::force_release(true);
 
         m_exits.clear();
     }

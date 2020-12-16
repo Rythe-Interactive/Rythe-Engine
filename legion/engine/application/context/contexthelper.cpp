@@ -5,7 +5,7 @@ namespace legion::application
     std::atomic_bool ContextHelper::m_initialized;
     atomic_sparse_map<GLFWwindow*, bool> ContextHelper::m_windowInitialized;
 
-    async::readonly_rw_spinlock ContextHelper::m_initCallbackLock;
+    async::rw_spinlock ContextHelper::m_initCallbackLock;
     multicast_delegate<void()> ContextHelper::m_onInit;
 
     std::atomic<GLFWwindow*> ContextHelper::newFocus;
@@ -153,7 +153,8 @@ namespace legion::application
 
     void ContextHelper::setWindowShouldClose(GLFWwindow* window, int value)
     {
-        glfwSetWindowShouldClose(window, value);
+        if (window)
+            glfwSetWindowShouldClose(window, value);
     }
 
     int ContextHelper::windowShouldClose(GLFWwindow* window)

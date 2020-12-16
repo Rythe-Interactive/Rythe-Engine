@@ -3,3 +3,8 @@
 #include <rendering/systems/renderer.hpp>
 #include <rendering/module/renderingmodule.hpp>
 #include <rendering/debugrendering.hpp>
+
+namespace legion
+{
+    namespace gfx = ::legion::rendering;
+}

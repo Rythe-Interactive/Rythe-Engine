@@ -9,11 +9,12 @@ namespace legion::core::ecs
 {
     // 2 because the world entity is 1 and 0 is invalid_id
     id_type EcsRegistry::m_nextEntityId = 2;
+    entity_handle EcsRegistry::world = entity_handle(world_entity_id);
 
     void EcsRegistry::recursiveDestroyEntityInternal(id_type entityId)
     {
         if (!validateEntity(entityId))
-            throw legion_entity_not_found_error;
+            return;
 
         m_queryRegistry.markEntityDestruction(entityId); // Remove entity from any queries.
 
@@ -43,22 +44,20 @@ namespace legion::core::ecs
             recursiveDestroyEntityInternal(child);
     }
 
-    EcsRegistry::EcsRegistry(events::EventBus* eventBus) : m_families(), m_entityData(), m_containedEntities(), m_entities(), m_queryRegistry(*this), m_eventBus(eventBus)
+    EcsRegistry::EcsRegistry(events::EventBus* eventBus) : m_families(), m_entityData(), m_entities(), m_queryRegistry(*this), m_eventBus(eventBus)
     {
         entity_handle::m_registry = this;
         // Create world entity.
-        m_entityData.emplace(world_entity_id);
-        m_containedEntities.insert(world_entity_id);
+        m_entityData.emplace(world_entity_id, entity_data());
         m_entities.emplace(world_entity_id);
-        world = entity_handle(world_entity_id);
     }
 
     component_container_base* EcsRegistry::getFamily(id_type componentTypeId)
     {
         async::readonly_guard guard(m_familyLock);
 
-        if (!m_families.contains(componentTypeId))
-            throw legion_unknown_component_error;
+        if (!m_families.count(componentTypeId))
+            return nullptr;
 
         return m_families[componentTypeId].get();
     }
@@ -66,7 +65,7 @@ namespace legion::core::ecs
     bool EcsRegistry::hasComponent(id_type entityId, id_type componentTypeId)
     {
         if (!validateEntity(entityId))
-            throw legion_entity_not_found_error;
+            return false;
 
         return getFamily(componentTypeId)->has_component(entityId);
     }
@@ -74,7 +73,7 @@ namespace legion::core::ecs
     component_handle_base EcsRegistry::getComponent(id_type entityId, id_type componentTypeId)
     {
         if (!validateEntity(entityId))
-            throw legion_entity_not_found_error;
+            component_handle_base();
 
         return component_handle_base(entityId, componentTypeId);
     }
@@ -82,7 +81,7 @@ namespace legion::core::ecs
     component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId)
     {
         if (!validateEntity(entityId))
-            throw legion_entity_not_found_error;
+            return component_handle_base();
 
         getFamily(componentTypeId)->create_component(entityId);
 
@@ -101,7 +100,7 @@ namespace legion::core::ecs
     component_handle_base EcsRegistry::copyComponent(id_type destinationEntity, id_type sourceEntity, id_type componentTypeId)
     {
         if (!validateEntity(sourceEntity) || !validateEntity(destinationEntity))
-            throw legion_entity_not_found_error;
+            return component_handle_base();
 
         getFamily(componentTypeId)->clone_component(destinationEntity, sourceEntity);
 
@@ -118,7 +117,7 @@ namespace legion::core::ecs
     component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId, void* value)
     {
         if (!validateEntity(entityId))
-            throw legion_entity_not_found_error;
+            return component_handle_base();
 
         getFamily(componentTypeId)->create_component(entityId, value);
 
@@ -135,7 +134,7 @@ namespace legion::core::ecs
     void EcsRegistry::destroyComponent(id_type entityId, id_type componentTypeId)
     {
         if (!validateEntity(entityId))
-            throw legion_entity_not_found_error;
+            return;
 
         m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
         getFamily(componentTypeId)->destroy_component(entityId);
@@ -149,7 +148,7 @@ namespace legion::core::ecs
     L_NODISCARD bool EcsRegistry::validateEntity(id_type entityId)
     {
         async::readonly_guard guard(m_entityLock);
-        return entityId && m_containedEntities.contains(entityId);
+        return entityId && m_entities.contains(entityId);
     }
 
     entity_handle EcsRegistry::createEntity(id_type entityId)
@@ -166,16 +165,17 @@ namespace legion::core::ecs
         if (validateEntity(id))
             return createEntity();
 
+        entity_data data{};
+        data.parent = world_entity_id;
+
         {
             async::readwrite_guard guard(m_entityDataLock);  // We need write permission now because we hope to insert a new item.
-            m_entityData[id] = entity_data{};
+            m_entityData.emplace(id, std::move(data));
+            m_entityData[world_entity_id].children.insert({ id });
         }
 
         async::readwrite_guard guard(m_entityLock); // No scope needed because we also need read permission in the return line.
         m_entities.emplace(id);
-        m_containedEntities.insert(id);
-
-        entity_handle(id).set_parent(world_entity_id);
 
         return entity_handle(id);
     }
@@ -183,7 +183,7 @@ namespace legion::core::ecs
     void EcsRegistry::destroyEntity(id_type entityId, bool recurse)
     {
         if (!validateEntity(entityId))
-            throw legion_entity_not_found_error;
+            return;
 
         m_queryRegistry.markEntityDestruction(entityId); // Remove entity from any queries.
 
@@ -193,7 +193,6 @@ namespace legion::core::ecs
             async::readwrite_guard guard(m_entityLock); // Request read-write permission for the entity list.
             entity.set_parent(invalid_id); // Remove ourselves as child from parent.
             m_entities.erase(entity); // Erase the entity from the entity list first, invalidating the entity and stopping any other function from being called on this entity.
-            m_containedEntities.erase(entityId);
         }
 
         entity_data data = {};
@@ -227,10 +226,10 @@ namespace legion::core::ecs
         return entity_handle(entityId);;
     }
 
-    L_NODISCARD entity_data& EcsRegistry::getEntityData(id_type entityId)
+    L_NODISCARD entity_data EcsRegistry::getEntityData(id_type entityId)
     {
         if (!validateEntity(entityId))
-            throw legion_entity_not_found_error;
+            return entity_data();
 
 
         async::readonly_guard guard(m_entityDataLock);
@@ -243,7 +242,13 @@ namespace legion::core::ecs
         return data;
     }
 
-    L_NODISCARD std::pair<entity_set&, async::readonly_rw_spinlock&> EcsRegistry::getEntities()
+    void EcsRegistry::setEntityData(id_type entityId, const entity_data& data)
+    {
+        async::readonly_guard guard(m_entityDataLock);
+        m_entityData[entityId] = data;
+    }
+
+    L_NODISCARD std::pair<entity_set&, async::rw_spinlock&> EcsRegistry::getEntities()
     {
         return std::make_pair(std::ref(m_entities), std::ref(m_entityLock));
     }

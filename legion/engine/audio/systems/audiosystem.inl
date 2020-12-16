@@ -62,7 +62,7 @@ namespace legion::audio
 
     inline void AudioSystem::onEngineExit(events::exit* event)
     {
-        async::readwrite_guard guard(contextLock);
+        std::lock_guard guard(contextLock);
         alcMakeContextCurrent(alcContext);
 
         for (auto entity : sourceQuery)
@@ -100,7 +100,7 @@ namespace legion::audio
 
     inline void AudioSystem::update(time::span deltatime)
     {
-        async::readwrite_guard guard(contextLock);
+        std::lock_guard guard(contextLock);
         alcMakeContextCurrent(alcContext);
 
         sourceQuery.queryEntities();
@@ -261,7 +261,7 @@ namespace legion::audio
             log::debug("No Listeners left, resetting listener");
             m_listenerEnt = ecs::entity_handle();
             // Reset listener
-            async::readwrite_guard guard(contextLock);
+            std::lock_guard guard(contextLock);
             alcMakeContextCurrent(alcContext);
             alListener3f(AL_POSITION, 0, 0, 0);
             alListener3f(AL_VELOCITY, 0, 0, 0);
@@ -275,7 +275,7 @@ namespace legion::audio
 
     inline void AudioSystem::initSource(audio_source& source)
     {
-        async::readwrite_guard guard(contextLock);
+        std::lock_guard guard(contextLock);
         alcMakeContextCurrent(alcContext);
 
         alGenSources((ALuint)1, &source.m_sourceId);
@@ -305,7 +305,7 @@ namespace legion::audio
 
     inline void AudioSystem::setDistanceModel(ALenum distanceModel)
     {
-        async::readwrite_guard guard(contextLock);
+        std::lock_guard guard(contextLock);
         alcMakeContextCurrent(alcContext);
         alDistanceModel(distanceModel);
         alcMakeContextCurrent(nullptr);
@@ -313,7 +313,7 @@ namespace legion::audio
 
     inline void AudioSystem::setListener(position p, rotation r)
     {
-        async::readwrite_guard guard(contextLock);
+        std::lock_guard guard(contextLock);
         alcMakeContextCurrent(alcContext);
         // Position - invert x for left-right hand coord system conversion
         alListener3f(AL_POSITION, p.x, p.y, p.z);

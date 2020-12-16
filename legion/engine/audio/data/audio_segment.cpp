@@ -46,7 +46,7 @@ namespace legion::audio
                 if (m_refs[m_id] == 0)
                 {
                     {
-                        async::readwrite_guard guard(AudioSystem::contextLock);
+                        std::lock_guard guard(AudioSystem::contextLock);
                         alcMakeContextCurrent(AudioSystem::alcContext);
                         alDeleteBuffers(1, &audioBufferId);
                         alcMakeContextCurrent(nullptr);
@@ -81,7 +81,7 @@ namespace legion::audio
                 if (m_refs[m_id] == 0)
                 {
                     {
-                        async::readwrite_guard guard(AudioSystem::contextLock);
+                        std::lock_guard guard(AudioSystem::contextLock);
                         alcMakeContextCurrent(AudioSystem::alcContext);
                         alDeleteBuffers(1, &audioBufferId);
                         alcMakeContextCurrent(nullptr);
@@ -115,7 +115,7 @@ namespace legion::audio
             if (m_refs[m_id] == 0)
             {
                 {
-                    async::readwrite_guard guard(AudioSystem::contextLock);
+                    std::lock_guard guard(AudioSystem::contextLock);
                     alcMakeContextCurrent(AudioSystem::alcContext);
                     alDeleteBuffers(1, &audioBufferId);
                     alcMakeContextCurrent(nullptr);
@@ -169,10 +169,9 @@ namespace legion::audio
                 }
             }
 
-            auto* pairPointer = new std::pair<async::readonly_rw_spinlock, audio_segment>(
-                std::make_pair<async::readonly_rw_spinlock, audio_segment>(async::readonly_rw_spinlock(),
-                    static_cast<audio_segment>(result)));
-            m_segments.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::readonly_rw_spinlock, audio_segment>>(pairPointer)));
+            auto* pairPointer = new std::pair<async::rw_spinlock, audio_segment>();                
+            pairPointer->second = static_cast<audio_segment>(result);
+            m_segments.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::rw_spinlock, audio_segment>>(pairPointer)));
         }
 
         return { id };
@@ -188,9 +187,9 @@ namespace legion::audio
                 return;
         }
 
-        auto* pairPointer = new std::pair<async::readonly_rw_spinlock, audio_segment>(
-            async::readonly_rw_spinlock(), *segment);
-        m_segments.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::readonly_rw_spinlock, audio_segment>>(pairPointer)));
+        auto* pairPointer = new std::pair<async::rw_spinlock, audio_segment>();
+        pairPointer->second = *segment;
+        m_segments.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::rw_spinlock, audio_segment>>(pairPointer)));
     }
 
     audio_segment_handle AudioSegmentCache::getAudioSegment(const std::string& name)
@@ -211,7 +210,7 @@ namespace legion::audio
         m_segments.clear();
     }
 
-    std::pair<async::readonly_rw_spinlock&, audio_segment&> audio_segment_handle::get()
+    std::pair<async::rw_spinlock&, audio_segment&> audio_segment_handle::get()
     {
         async::readonly_guard guard(AudioSegmentCache::m_segmentsLock);
 
@@ -220,6 +219,6 @@ namespace legion::audio
         return std::make_pair(std::ref(lock), std::ref(segment));
     }
 
-    std::unordered_map < id_type, std::unique_ptr<std::pair<async::readonly_rw_spinlock, audio_segment>>> AudioSegmentCache::m_segments;
-    async::readonly_rw_spinlock AudioSegmentCache::m_segmentsLock;
+    std::unordered_map < id_type, std::unique_ptr<std::pair<async::rw_spinlock, audio_segment>>> AudioSegmentCache::m_segments;
+    async::rw_spinlock AudioSegmentCache::m_segmentsLock;
 }

@@ -95,7 +95,7 @@ namespace legion::core::ecs
          * @throws legion_invalid_entity_error Thrown when handle's registry reference is invalid.
          * @throws legion_entity_not_found_error Thrown when handle's id is invalid.
          */
-        L_NODISCARD const hashed_sparse_set<id_type>& component_composition() const;
+        L_NODISCARD hashed_sparse_set<id_type> component_composition() const;
 
         /**@brief Cast to id_type returns the id of the entity this handle references.
          * @returns id_type If the handle is valid it will return the entity id, otherwise invalid_id.
@@ -453,3 +453,16 @@ namespace legion::core::ecs
 
     using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
 }
+
+#if !defined(DOXY_EXCLUDE)
+namespace std
+{
+    template<> struct hash<legion::core::ecs::entity_handle>
+    {
+        std::size_t operator()(legion::core::ecs::entity_handle const& handle) const noexcept
+        {
+            return std::hash<legion::core::id_type>{}(handle.get_id());
+        }
+    };
+}
+#endif

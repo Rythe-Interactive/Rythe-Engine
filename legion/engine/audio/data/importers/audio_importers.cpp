@@ -54,7 +54,7 @@ namespace legion::audio
             fileInfo.avg_bitrate_kbps
         );
 
-        async::readwrite_guard guard(AudioSystem::contextLock);
+        std::lock_guard guard(AudioSystem::contextLock);
         alcMakeContextCurrent(AudioSystem::alcContext);
         //Generate openal buffer
         alGenBuffers((ALuint)1, &as.audioBufferId);
@@ -381,7 +381,7 @@ namespace legion::audio
 
         void createAndBufferAudioData(ALuint* bufferId, int channels, int bitsPerSample, byte* data, int dataSize, int sampleRate)
         {
-            async::readwrite_guard guard(AudioSystem::contextLock);
+            std::lock_guard guard(AudioSystem::contextLock);
             alcMakeContextCurrent(AudioSystem::alcContext);
             //Generate openal buffer
             alGenBuffers((ALuint)1, bufferId);

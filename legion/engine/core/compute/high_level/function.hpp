@@ -296,7 +296,7 @@ namespace legion::core::compute {
         {
             if constexpr (std::is_same_v<Buffer, T>)
                 return buffer_container;
-            else return Buffer(nullptr, nullptr, 0, buffer_type::WRITE_BUFFER, "");
+            else return Buffer(nullptr, nullptr, 0, buffer_type::WRITE_BUFFER, "broken buffer");
         }
 
 
@@ -336,7 +336,7 @@ namespace legion::core::compute {
         template <typename... Args>
         common::result<void, void> invoke_helper_buffers(dvar dispatch_size, Args&&... args)
         {
-            static_assert((std::is_same_v<compute::Buffer, std::remove_reference_t<Args>> && ...),
+            static_assert(((std::is_same_v<compute::Buffer, std::remove_reference_t<Args>> || std::is_same_v<karg, std::remove_reference_t<Args>> ) && ...),
                 "Types passed to operator must be Buffer");
 
             std::tuple tpl = { args... };
@@ -352,7 +352,7 @@ namespace legion::core::compute {
                     return std::vector<Buffer>{ function::transform_to_buffer(x)... };
                 }, tpl);
 
-            return invoke2(dispatch_size, { args... }, kargs);
+            return invoke2(dispatch_size, buffers, kargs);
         }
     };
 }

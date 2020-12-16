@@ -212,7 +212,7 @@ namespace legion::rendering
     {
         friend struct material_handle;
     private:
-        static async::readonly_rw_spinlock m_materialLock;
+        static async::rw_spinlock m_materialLock;
         static std::unordered_map<id_type, material> m_materials;
 
     public:

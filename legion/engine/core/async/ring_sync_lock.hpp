@@ -20,7 +20,7 @@ namespace legion::core::async
 		const uint m_maxRank;
 		std::atomic_uint m_rank;
 		const std::thread::id owningThread;
-		readonly_rw_spinlock m_waitersLock;
+		rw_spinlock m_waitersLock;
 		std::unordered_map<uint, transferable_atomic<uint>> m_waiters;
         std::atomic_uint m_subscribers;
         std::atomic_bool m_release;
