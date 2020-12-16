@@ -6,9 +6,9 @@ namespace legion::core::async
     std::atomic_uint spinlock::m_lastId = { 1 };
     thread_local std::unordered_map<id_type, uint> spinlock::m_localState;
 
-    void spinlock::force_release()
+    void spinlock::force_release(bool release)
     {
-        m_forceRelease = true;
+        m_forceRelease = release;
     }
 
     spinlock::spinlock(spinlock&& source)

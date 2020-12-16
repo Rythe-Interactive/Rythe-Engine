@@ -387,7 +387,7 @@ public:
             auto ent = createEntity();
             ent.add_component(rendering::mesh_renderer(slateH, planeH));
             ent.add_components<transform>(position(0, 0.01f, 0), rotation(), scale(10));
-                        
+
         }
 
         {
@@ -541,6 +541,28 @@ public:
             ent.add_components<rendering::mesh_renderable>(mesh_filter(axesH.get_mesh()), rendering::mesh_renderer(vertexColorH));
             ent.add_components<transform>();
         }
+
+        position positions[1000];
+        for (int i = 0; i < 1000; i++)
+        {
+            positions[i] = position(math::linearRand(math::vec3(-10, -10, -10), math::vec3(10, 10, 10)));
+        }
+
+        time::timer clock;
+        time::timer entityClock;
+        time::time_span<time64> entityTime;
+        for (int i = 0; i < 1000; i++)
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(pbrH));
+            ent.add_component<sah>({});
+            entityClock.start();
+            ent.add_components<transform>(positions[i], rotation(), scale());
+            entityTime += entityClock.end();
+        }
+        auto elapsed = clock.elapsedTime();
+        log::debug("Making entities took {}ms", elapsed.milliseconds());
+        log::debug("Creating transforms took {}ms", entityTime.milliseconds());
 
         {
             auto ent = createEntity();

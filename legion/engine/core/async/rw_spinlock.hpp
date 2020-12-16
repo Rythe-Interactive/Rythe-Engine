@@ -36,9 +36,9 @@ namespace legion::core::async
         static bool m_forceRelease;
         static std::atomic_uint m_lastId;
 
-        static thread_local std::unique_ptr<std::unordered_map<uint, int>> m_localWriters;
-        static thread_local std::unique_ptr<std::unordered_map<uint, int>> m_localReaders;
-        static thread_local std::unique_ptr<std::unordered_map<uint, lock_state>> m_localState;
+        static thread_local std::unordered_map<uint, int> m_localWriters;
+        static thread_local std::unordered_map<uint, int> m_localReaders;
+        static thread_local std::unordered_map<uint, lock_state> m_localState;
 
         uint m_id = m_lastId.fetch_add(1, std::memory_order_relaxed);
         // State of the lock. -1 means that a thread has write permission. 0 means that the lock is unlocked. 1+ means that there are N amount of readers.
@@ -49,10 +49,10 @@ namespace legion::core::async
             if (m_forceRelease)
                 return;
 
-            if ((*m_localState)[m_id] != lock_state::idle) // If we're either already reading or writing then the lock doesn't need to be reacquired.
+            if (m_localState[m_id] != lock_state::idle) // If we're either already reading or writing then the lock doesn't need to be reacquired.
             {
                 // Report another local reader to the lock.
-                (*m_localReaders)[m_id]++;
+                m_localReaders[m_id]++;
                 return;
             }
 
@@ -70,8 +70,8 @@ namespace legion::core::async
             }
 
             // Report another reader to the lock.
-            (*m_localReaders)[m_id]++;
-            (*m_localState)[m_id] = lock_state::read; // Set thread_local state to read.
+            m_localReaders[m_id]++;
+            m_localState[m_id] = lock_state::read; // Set thread_local state to read.
         }
 
         bool read_try_lock()
@@ -79,10 +79,10 @@ namespace legion::core::async
             if (m_forceRelease)
                 return true;
 
-            if ((*m_localState)[m_id] != lock_state::idle) // If we're either already reading or writing then the lock doesn't need to be reacquired.
+            if (m_localState[m_id] != lock_state::idle) // If we're either already reading or writing then the lock doesn't need to be reacquired.
             {
                 // Report another local reader to the lock.
-                (*m_localReaders)[m_id]++;
+                m_localReaders[m_id]++;
                 return true;
             }
 
@@ -94,8 +94,8 @@ namespace legion::core::async
                 return false;
 
             // Report another reader to the lock.
-            (*m_localReaders)[m_id]++;
-            (*m_localState)[m_id] = lock_state::read; // Set thread_local state to read.
+            m_localReaders[m_id]++;
+            m_localState[m_id] = lock_state::read; // Set thread_local state to read.
             return true;
         }
 
@@ -104,14 +104,14 @@ namespace legion::core::async
             if (m_forceRelease)
                 return;
 
-            if ((*m_localState)[m_id] == lock_state::read) // If we're currently only acquired for read we need to stop reading before requesting rw.
+            if (m_localState[m_id] == lock_state::read) // If we're currently only acquired for read we need to stop reading before requesting rw.
             {
                 read_unlock();
-                (*m_localReaders)[m_id]++;
+                m_localReaders[m_id]++;
             }
-            else if ((*m_localState)[m_id] == lock_state::write) // If we're already writing then we don't need to reacquire the lock.
+            else if (m_localState[m_id] == lock_state::write) // If we're already writing then we don't need to reacquire the lock.
             {
-                (*m_localWriters)[m_id]++;
+                m_localWriters[m_id]++;
                 return;
             }
 
@@ -128,8 +128,8 @@ namespace legion::core::async
                     break;
             }
 
-            (*m_localWriters)[m_id]++;
-            (*m_localState)[m_id] = lock_state::write; // Set thread_local state to write.
+            m_localWriters[m_id]++;
+            m_localState[m_id] = lock_state::write; // Set thread_local state to write.
         }
 
         bool write_try_lock()
@@ -138,15 +138,15 @@ namespace legion::core::async
                 return true;
 
             bool relock = false;
-            if ((*m_localState)[m_id] == lock_state::read) // If we're currently only acquired for read we need to stop reading before requesting rw.
+            if (m_localState[m_id] == lock_state::read) // If we're currently only acquired for read we need to stop reading before requesting rw.
             {
                 relock = true;
                 read_unlock();
-                (*m_localReaders)[m_id]++;
+                m_localReaders[m_id]++;
             }
-            else if ((*m_localState)[m_id] == lock_state::write) // If we're already writing then we don't need to reacquire the lock.
+            else if (m_localState[m_id] == lock_state::write) // If we're already writing then we don't need to reacquire the lock.
             {
-                (*m_localWriters)[m_id]++;
+                m_localWriters[m_id]++;
                 return true;
             }
 
@@ -158,14 +158,14 @@ namespace legion::core::async
             {
                 if (relock)
                 {
-                    (*m_localReaders)[m_id]--;
+                    m_localReaders[m_id]--;
                     read_lock();
                 }
                 return false;
             }
 
-            (*m_localWriters)[m_id]++;
-            (*m_localState)[m_id] = lock_state::write; // Set thread_local state to write.
+            m_localWriters[m_id]++;
+            m_localState[m_id] = lock_state::write; // Set thread_local state to write.
             return true;
         }
 
@@ -174,16 +174,16 @@ namespace legion::core::async
             if (m_forceRelease)
                 return;
 
-            (*m_localReaders)[m_id]--;
+            m_localReaders[m_id]--;
 
-            if ((*m_localReaders)[m_id] > 0 || (*m_localWriters)[m_id] > 0) // Another local guard is still alive that will unlock the lock for this thread.
+            if (m_localReaders[m_id] > 0 || m_localWriters[m_id] > 0) // Another local guard is still alive that will unlock the lock for this thread.
             {
                 return;
             }
 
             m_lockState.fetch_sub(lock_state::read, std::memory_order_release);
 
-            (*m_localState)[m_id] = lock_state::idle; // Set thread_local state to idle.
+            m_localState[m_id] = lock_state::idle; // Set thread_local state to idle.
         }
 
         void write_unlock()
@@ -191,27 +191,27 @@ namespace legion::core::async
             if (m_forceRelease)
                 return;
 
-            (*m_localWriters)[m_id]--;
+            m_localWriters[m_id]--;
 
-            if ((*m_localWriters)[m_id] > 0) // Another local guard is still alive that will unlock the lock for this thread.
+            if (m_localWriters[m_id] > 0) // Another local guard is still alive that will unlock the lock for this thread.
             {
                 return;
             }
-            else if ((*m_localReaders)[m_id] > 0)
+            else if (m_localReaders[m_id] > 0)
             {
                 m_lockState.store(lock_state::read, std::memory_order_release);
-                (*m_localState)[m_id] = lock_state::read; // Set thread_local state to idle.
+                m_localState[m_id] = lock_state::read; // Set thread_local state to idle.
                 return;
             }
 
             m_lockState.store(lock_state::idle, std::memory_order_release);
-            (*m_localState)[m_id] = lock_state::idle; // Set thread_local state to idle.
+            m_localState[m_id] = lock_state::idle; // Set thread_local state to idle.
         }
 
     public:
-        static void force_release()
+        static void force_release(bool release = true)
         {
-            m_forceRelease = true;
+            m_forceRelease = release;
         }
 
         rw_spinlock() = default;
@@ -221,13 +221,6 @@ namespace legion::core::async
             if (m_forceRelease)
                 return;
 
-            if (!m_localWriters.get())
-                m_localWriters = std::make_unique<std::unordered_map<uint, int>>();
-            if (!m_localReaders.get())
-                m_localReaders = std::make_unique<std::unordered_map<uint, int>>();
-            if (!m_localState.get())
-                m_localState = std::make_unique<std::unordered_map<uint, lock_state>>();
-
             assert_msg("Attempted to move a rw_spinlockthat was locked.", source.m_lockState.load(std::memory_order_relaxed) == lock_state::idle);
             m_id = source.m_id;
         }
@@ -236,13 +229,6 @@ namespace legion::core::async
         {
             if (m_forceRelease)
                 return *this;
-
-            if (!m_localWriters.get())
-                m_localWriters = std::make_unique<std::unordered_map<uint, int>>();
-            if (!m_localReaders.get())
-                m_localReaders = std::make_unique<std::unordered_map<uint, int>>();
-            if (!m_localState.get())
-                m_localState = std::make_unique<std::unordered_map<uint, lock_state>>();
 
             assert_msg("Attempted to move a rw_spinlockthat was locked.", source.m_lockState.load(std::memory_order_relaxed) == lock_state::idle);
             m_id = source.m_id;
@@ -262,13 +248,6 @@ namespace legion::core::async
         {
             if (m_forceRelease)
                 return;
-
-            if (!m_localWriters.get())
-                m_localWriters = std::make_unique<std::unordered_map<uint, int>>();
-            if (!m_localReaders.get())
-                m_localReaders = std::make_unique<std::unordered_map<uint, int>>();
-            if (!m_localState.get())
-                m_localState = std::make_unique<std::unordered_map<uint, lock_state>>();
 
             switch (permissionLevel)
             {
@@ -293,13 +272,6 @@ namespace legion::core::async
             if (m_forceRelease)
                 return true;
 
-            if (!m_localWriters.get())
-                m_localWriters = std::make_unique<std::unordered_map<uint, int>>();
-            if (!m_localReaders.get())
-                m_localReaders = std::make_unique<std::unordered_map<uint, int>>();
-            if (!m_localState.get())
-                m_localState = std::make_unique<std::unordered_map<uint, lock_state>>();
-
             switch (permissionLevel)
             {
             case lock_state::read:
@@ -320,13 +292,6 @@ namespace legion::core::async
             if (m_forceRelease)
                 return;
 
-            if (!m_localWriters.get())
-                m_localWriters = std::make_unique<std::unordered_map<uint, int>>();
-            if (!m_localReaders.get())
-                m_localReaders = std::make_unique<std::unordered_map<uint, int>>();
-            if (!m_localState.get())
-                m_localState = std::make_unique<std::unordered_map<uint, lock_state>>();
-
             switch (permissionLevel)
             {
             case legion::core::async::lock_state::read:
@@ -345,13 +310,6 @@ namespace legion::core::async
             if (m_forceRelease)
                 return;
 
-            if (!m_localWriters.get())
-                m_localWriters = std::make_unique<std::unordered_map<uint, int>>();
-            if (!m_localReaders.get())
-                m_localReaders = std::make_unique<std::unordered_map<uint, int>>();
-            if (!m_localState.get())
-                m_localState = std::make_unique<std::unordered_map<uint, lock_state>>();
-
             return read_lock();
         }
 
@@ -362,13 +320,6 @@ namespace legion::core::async
             if (m_forceRelease)
                 return true;
 
-            if (!m_localWriters.get())
-                m_localWriters = std::make_unique<std::unordered_map<uint, int>>();
-            if (!m_localReaders.get())
-                m_localReaders = std::make_unique<std::unordered_map<uint, int>>();
-            if (!m_localState.get())
-                m_localState = std::make_unique<std::unordered_map<uint, lock_state>>();
-
             return read_try_lock();
         }
 
@@ -378,13 +329,6 @@ namespace legion::core::async
         {
             if (m_forceRelease)
                 return;
-
-            if (!m_localWriters.get())
-                m_localWriters = std::make_unique<std::unordered_map<uint, int>>();
-            if (!m_localReaders.get())
-                m_localReaders = std::make_unique<std::unordered_map<uint, int>>();
-            if (!m_localState.get())
-                m_localState = std::make_unique<std::unordered_map<uint, lock_state>>();
 
             return read_unlock();
         }

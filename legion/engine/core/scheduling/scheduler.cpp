@@ -87,6 +87,9 @@ namespace legion::core::scheduling
             m_availableThreads = minThreads;
         }
 
+        async::rw_spinlock::force_release(false);
+        async::spinlock::force_release(false);
+
         std::thread::id id;
         while ((id = createThread(threadMain, &m_threadsShouldTerminate, &m_threadsShouldStart, m_lowPower)) != invalid_thread_id)
         {
@@ -230,8 +233,8 @@ namespace legion::core::scheduling
             destroyThread(id);
         }
 
-        async::rw_spinlock::force_release();
-        async::spinlock::force_release();
+        async::rw_spinlock::force_release(true);
+        async::spinlock::force_release(true);
 
         m_exits.clear();
     }

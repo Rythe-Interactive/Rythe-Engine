@@ -11,6 +11,7 @@
 
 #include <utility>
 #include <memory>
+#include <unordered_map>
 
 /**
  * @file ecsregistry.hpp
@@ -44,13 +45,12 @@ namespace legion::core::ecs
         static id_type m_nextEntityId;
 
         mutable async::rw_spinlock m_familyLock;
-        sparse_map<id_type, std::unique_ptr<component_container_base>> m_families;
+        std::unordered_map<id_type, std::unique_ptr<component_container_base>> m_families;
 
         mutable async::rw_spinlock m_entityDataLock;
-        sparse_map<id_type, entity_data> m_entityData;
+        std::unordered_map<id_type, entity_data> m_entityData;
 
         mutable async::rw_spinlock m_entityLock;
-        sparse_set<id_type> m_containedEntities;
         entity_set m_entities;
 
         QueryRegistry m_queryRegistry;
@@ -79,7 +79,7 @@ namespace legion::core::ecs
         void reportComponentType()
         {
             async::readwrite_guard guard(m_familyLock);
-            if (!m_families.contains(typeHash<component_type>()))
+            if (!m_families.count(typeHash<component_type>()))
                 m_families[typeHash<component_type>()] = std::make_unique<component_container<component_type>>(this, m_eventBus);
         }
 
@@ -319,12 +319,13 @@ namespace legion::core::ecs
          * @param entityId Id of entity you want the data from.
          * @returns entity_data& Hierarchy and composition data of the entity requested.
          */
-        L_NODISCARD entity_data& getEntityData(id_type entityId);
+        L_NODISCARD entity_data getEntityData(id_type entityId);
+        void setEntityData(id_type entityId, const entity_data& data);
 
         /**@brief Get a container with ALL entities.
          * @returns sparse_map<id_type, entity_handle>& Container that keeps both the id's and corresponding entity handles for easy use.
          */
-        L_NODISCARD std::pair<entity_set&, async::rw_spinlock&>  getEntities();
+        L_NODISCARD std::pair<entity_set&, async::rw_spinlock&> getEntities();
 
         /**@brief Get a query for your component combination.
          * @tparam component_types Variadic parameter types of all component types you wish to query for.

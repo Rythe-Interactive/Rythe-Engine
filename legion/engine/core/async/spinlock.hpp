@@ -17,7 +17,7 @@ namespace legion::core::async
         uint m_id = m_lastId.fetch_add(1, std::memory_order_relaxed);
 
     public:
-        static void force_release();
+        static void force_release(bool release = true);
 
         spinlock() = default;
 
