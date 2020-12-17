@@ -6,7 +6,7 @@
 #include <cereal/types/vector.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
-
+#include <core/filesystem/filesystem.hpp>
 
 #include <sstream>
 #include <fstream>
@@ -157,19 +157,59 @@ namespace legion::core::serialization
         }
     };
 
-
+    template<typename serializableType>
     class DataCache
     {
     public:
+        static std::unordered_map<id_type, std::vector<serializableType>> cache;
 
-        std::unordered_map<id_type, std::vector<std::any>> cache;
-
-        template<typename serializableType>
-        static size_t append_list(std::string name,serializableType type)
+        static size_t append_list(std::string cacheName, serializableType type)
         {
-            id_type id = nameHash(name);
-            cache[id].push_back(std::make_any<serializableType>(type));
-            return cache[id].size()-1;
+            id_type id = nameHash(cacheName);
+            cache[id].push_back(type);
+            return cache[id].size() - 1;
+        }
+
+        static serializableType get_item_from_list(std::string cacheName, size_t index)
+        {
+            id_type id = nameHash(cacheName);
+            /* if (!cache[id])
+             {
+                 log::error("Cache does not exist!"); return nullptr;
+             }*/
+
+            if (index < cache[id].size())
+            {
+                return cache[id][index];
+            }
+        }
+
+    };
+
+    template <typename T>
+    class IniSerializer
+    {
+    public:
+
+        //ONLY WORKS WITH MATERIAL PARAMS!!!!
+        //maybe ill fix this later, idk
+        static std::string serialize(std::string sectionName,T shader )
+        {
+            std::string data = "[" + sectionName + "]\n";
+            fs::view outPutPath("assets://textures/testINI/"+sectionName+".ini");
+
+            auto info = shader.get_uniform_info();
+            for (int i = 0; i < info.size(); i++)
+            {
+                auto [name, location, type] = info[i];
+                if (name.substr(0, 3).compare("_L_") != 0)
+                {
+                    data += std::string(name+"\n");
+                }
+            }
+            outPutPath.set(fs::basic_resource(std::string_view(data)));
+            log::debug(outPutPath.get().decay().to_string());
+            return data;
         }
     };
 }

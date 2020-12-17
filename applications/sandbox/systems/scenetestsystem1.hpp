@@ -12,6 +12,7 @@
 #include <rendering/components/particle_emitter.hpp>
 
 #include <physics/physics_statics.hpp>
+#include <rendering/util/matini.hpp>
 
 
 using namespace legion;
@@ -64,18 +65,19 @@ public:
             async::readwrite_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
+            auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/pbr.shs"_view);
 
-            auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
             directionalLightMH = rendering::MaterialCache::create_material("directional light", colorshader);
             directionalLightMH.set_param("color", math::color(1, 1, 0.8f));
 
             cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
 
             color = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
-            color.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
+            //rendering::apply_material_conf(color,"PBR", "assets://textures/color.ini"_view);
+           
+            color.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/test-albedo.png"_view));
 
             vertexColor = rendering::MaterialCache::create_material("vertex color", "assets://shaders/vertexcolor.shs"_view);
-
 
 #pragma region entities
 
@@ -144,7 +146,10 @@ public:
     {
         cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
         color = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
-        color.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
+        //rendering::apply_material_conf(color,"PBR", "assets://textures/color.ini"_view);
+
+        color.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/test-albedo.png"_view));
+
 
         auto ent = createEntity();
         ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(color));

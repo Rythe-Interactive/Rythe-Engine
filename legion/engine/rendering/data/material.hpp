@@ -1,6 +1,7 @@
 #pragma once
 #include <rendering/data/shader.hpp>
 #include <memory>
+#include <core/filesystem/filesystem.hpp>
 
 /**
  * @file material.hpp
@@ -36,6 +37,7 @@ namespace legion::rendering
         virtual void apply(shader_handle& shader) LEGION_PURE;
         /**@endinternal
         */
+       // std::string serialize() const { return std::string(m_name); }
     };
 
     /**@class material_parameter
@@ -58,6 +60,7 @@ namespace legion::rendering
 
         void set_value(const T& value) { m_value = value; }
         T get_value() const { return m_value; }
+        //std::string serialize() const { return std::string(m_value); }
     };
 
     /**@class material
@@ -87,6 +90,7 @@ namespace legion::rendering
         std::unordered_map<id_type, std::unique_ptr<material_parameter_base>> m_parameters;
         std::unordered_map<GLint, id_type> m_idOfLocation;
     public:
+
         /**@brief Bind the material to the rendering context and prepare for use.
          */
         void bind();
@@ -133,6 +137,16 @@ namespace legion::rendering
         L_NODISCARD attribute get_attribute(const std::string& name)
         {
             return m_shader.get_attribute(nameHash(name));
+        }
+
+        L_NODISCARD const std::string& get_name()
+        {
+            return m_name;
+        }
+
+        L_NODISCARD const std::unordered_map<id_type, std::unique_ptr<material_parameter_base>>& get_params()
+        {
+            return m_parameters;
         }
     };
 
@@ -186,20 +200,34 @@ namespace legion::rendering
         template<typename T>
         L_NODISCARD T get_param(GLint location);
 
+        L_NODISCARD const std::string& get_name();
+
+        L_NODISCARD const std::unordered_map<id_type, std::unique_ptr<material_parameter_base>>& get_params();
+
         /**@brief Get attribute bound to a certain name.
          */
         attribute get_attribute(const std::string& name);
 
         bool operator==(const material_handle& other) const { return id == other.id; }
 
-        template<typename Archive>
-        void serialize(Archive& archive);
+        void serialize(cereal::JSONOutputArchive& archive);
+
+        void serialize(cereal::JSONInputArchive& archive);
     };
-    template<typename Archive>
-    void material_handle::serialize(Archive& archive)
-    {
-        archive(id);
-    }
+
+    //void material_handle::serialize(cereal::JSONOutputArchive& oarchive)
+    //{
+    //    size_type index = serialization::DataCache<material_handle>::append_list("MaterialCache", *this);
+    //    oarchive(id, cereal::make_nvp("MaterialCache Index", index));
+    //}
+
+    //void material_handle::serialize(cereal::JSONInputArchive& iarchive)
+    //{
+    //    size_type index;
+    //    iarchive(cereal::make_nvp("MaterialCache Index", index));
+    //    material_handle materialH = serialization::DataCache<material_handle>::get_item_from_list("MaterialCache", index);
+    //    MaterialCache::create_model("assets://textures/"+materialH.get_name());
+    //}
 
     /**@brief Default invalid material handle.
      */

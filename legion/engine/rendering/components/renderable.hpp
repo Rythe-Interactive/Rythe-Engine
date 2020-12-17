@@ -19,7 +19,7 @@ namespace legion::rendering
                 owner.add_component<mesh_filter>(mesh_filter(src.m_tempHandle.get_mesh()));
             }
         }
-       
+
         material_handle material = invalid_material_handle;
     };
 
@@ -44,21 +44,6 @@ namespace legion::rendering
             return get<mesh_renderer>().read().material;
         }
 
-        std::string get_model_path()
-        {
-            id_type id = get<mesh_filter>().read().id;
-            if (id == invalid_id)
-                return { invalid_id };
-            return ModelCache::get_handle(id).get_mesh().get().second.fileName;
-        }
-
-        std::string get_material_path()
-        {
-            //id_type id = get<mesh_renderer>().read().material.id;
-            //if (id == invalid_id)
-            //    return { invalid_id };
-        }
-
         template<typename Archive>
         void serialize(Archive& archive);
     };
@@ -66,6 +51,18 @@ namespace legion::rendering
     template<typename Archive>
     void mesh_renderable::serialize(Archive& archive)
     {
-        archive(get_model(), get_material());
+        model_handle modelH;
+        material_handle materialH;
+        if (typeid(archive) == typeid(cereal::JSONInputArchive))
+        {
+            modelH.serialize(archive);
+            materialH.serialize(archive);
+        }
+        else if (typeid(archive) == typeid(cereal::JSONOutputArchive))
+        {
+            modelH = get_model();
+            materialH = get_material();
+            archive(modelH, materialH);
+        }
     }
 }

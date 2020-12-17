@@ -347,7 +347,14 @@ namespace legion::rendering
         bool operator==(const shader_handle& other) const { return id == other.id; }
         bool operator!=(const shader_handle& other) const { return id != other.id; }
         operator bool() { return id != invalid_id; }
+        template<typename Archive>
+        void serialize(Archive& archive);
     };
+    template<class Archive>
+    void serialize(Archive& archive)
+    {
+        archive(id);
+    }
 
     constexpr shader_handle invalid_shader_handle{ invalid_id };
 
