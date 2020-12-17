@@ -19,15 +19,7 @@ class TestModule : public Module
 public:
     virtual void setup() override
     {
-        addProcessChain("TestChain");
-
-        //reportComponentType<sah>();
-        //reportSystem<TestSystem>();
-        //reportSystem<TestSystem2>();
-        //reportSystem<TestSystemConvexHull>();
-
-        reportComponentType<sah>();
-        reportSystem<TestSystem>();
+        reportSystem<TestSystemConvexHull>();
         reportSystem<SimpleCameraController>();
         reportSystem<GuiTestSystem>();
     }
