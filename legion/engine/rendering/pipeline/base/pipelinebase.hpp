@@ -21,7 +21,11 @@ namespace legion::rendering
 
         bool m_abort;
 
+        static std::atomic_bool m_exiting;
+
     public:
+        static void exit();
+
         void abort();
 
         template<typename T>

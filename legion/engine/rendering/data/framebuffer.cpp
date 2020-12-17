@@ -4,6 +4,9 @@ namespace legion::rendering
 {
     framebuffer::framebuffer(GLenum target)
         : m_id([](app::gl_id& value) { // Assign logic for framebuffer deletion to managed resource.
+            if (!app::ContextHelper::initialized())
+                return;
+
 #if defined(LEGION_DEBUG)
         if (!app::ContextHelper::getCurrentContext())
         {

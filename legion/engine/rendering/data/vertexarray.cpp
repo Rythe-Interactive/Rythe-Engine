@@ -4,10 +4,13 @@ namespace legion::rendering
 {
     vertexarray::vertexarray(std::nullptr_t t)
         : m_id([](app::gl_id& value) {
+            if (!app::ContextHelper::initialized())
+                return;
+
 #if defined(LEGION_DEBUG)
             if (!app::ContextHelper::getCurrentContext())
             {
-                log::error("No current context to work with.");
+                log::error("No current context to delete vertexarray with.");
                 return;
             }
 #endif

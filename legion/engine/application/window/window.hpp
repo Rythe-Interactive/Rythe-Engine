@@ -48,21 +48,18 @@ namespace legion::application
 
     struct context_guard
     {
-        context_guard(window win) : m_win(win)
-        {
-            win.lock->lock();
-            ContextHelper::makeContextCurrent(win);
-        }
+    private:
+        bool m_contextIsValid = false;
+
+    public:
+        context_guard(window win);
+        bool contextIsValid() { return m_contextIsValid; }
 
         context_guard() = delete;
         context_guard(const context_guard&) = delete;
         context_guard(context_guard&&) = delete;
 
-        ~context_guard()
-        {
-            ContextHelper::makeContextCurrent(nullptr);
-            m_win.lock->unlock();
-        }
+        ~context_guard();
 
     private:
         window m_win;
