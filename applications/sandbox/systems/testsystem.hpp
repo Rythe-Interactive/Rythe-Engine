@@ -559,27 +559,27 @@ public:
             ent.add_components<transform>();
         }
 
-        position positions[1000];
-        for (int i = 0; i < 1000; i++)
-        {
-            positions[i] = position(math::linearRand(math::vec3(-10, -21, -10), math::vec3(10, -1, 10)));
-        }
+        //position positions[1000];
+        //for (int i = 0; i < 1000; i++)
+        //{
+        //    positions[i] = position(math::linearRand(math::vec3(-10, -21, -10), math::vec3(10, -1, 10)));
+        //}
 
-        time::timer clock;
-        time::timer entityClock;
-        time::time_span<time64> entityTime;
-        for (int i = 0; i < 1000; i++)
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(pbrH));
-            ent.add_component<sah>({});
-            entityClock.start();
-            ent.add_components<transform>(positions[i], rotation(), scale());
-            entityTime += entityClock.end();
-        }
-        auto elapsed = clock.elapsedTime();
-        log::debug("Making entities took {}ms", elapsed.milliseconds());
-        log::debug("Creating transforms took {}ms", entityTime.milliseconds());
+        //time::timer clock;
+        //time::timer entityClock;
+        //time::time_span<time64> entityTime;
+        //for (int i = 0; i < 00; i++)
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(pbrH));
+        //    ent.add_component<sah>({});
+        //    entityClock.start();
+        //    ent.add_components<transform>(position(math::linearRand(math::vec3(-10, -21, -10), math::vec3(10, -1, 10))), rotation(), scale());
+        //    entityTime += entityClock.end();
+        //}
+        //auto elapsed = clock.elapsedTime();
+        //log::debug("Making entities took {}ms", elapsed.milliseconds());
+        //log::debug("Creating transforms took {}ms", entityTime.milliseconds());
 
         {
             auto ent = createEntity();
@@ -1913,6 +1913,30 @@ public:
 
     void update(time::span deltaTime)
     {
+        static float timer = 0;
+        static id_type sphereId = nameHash("sphere");
+
+        auto [entities, lock] = m_ecs->getEntities();
+        size_type entityCount;
+
+        {
+            async::readonly_guard guard(lock);
+            entityCount = entities.size();
+        }
+
+        if (entityCount < 1000)
+        {
+            timer += deltaTime;
+
+            if (timer >= 0.1)
+            {
+                timer -= 0.1;
+                auto ent = createEntity();
+                ent.add_components<rendering::mesh_renderable>(mesh_filter(MeshCache::get_handle(sphereId)), rendering::mesh_renderer(pbrH));
+                ent.add_component<sah>({});
+                ent.add_components<transform>(position(math::linearRand(math::vec3(-10, -21, -10), math::vec3(10, -1, 10))), rotation(), scale());
+            }
+        }
 
         static auto sahQuery = createQuery<sah, rotation, position>();
 

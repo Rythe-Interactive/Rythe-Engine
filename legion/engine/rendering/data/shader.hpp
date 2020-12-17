@@ -33,7 +33,7 @@ namespace legion::rendering
         GLenum m_type;
         GLint m_location;
 
-        shader_parameter_base(std::nullptr_t t): m_shaderId(invalid_id), m_name(""), m_type(0), m_location(0){};
+        shader_parameter_base(std::nullptr_t t): m_shaderId(invalid_id), m_name(""), m_type(0), m_location(-1){};
 
         shader_parameter_base(id_type shaderId, std::string_view name, GLenum type, GLint location) : m_shaderId(shaderId), m_name(name), m_type(type), m_location(location) {};
 
@@ -42,7 +42,7 @@ namespace legion::rendering
          */
         virtual bool is_valid() const
         {
-            return m_location != -1 && m_shaderId != invalid_id;
+            return m_location != -1;
         }
 
         /**@brief Returns the GLenum of the data type of the parameter.
@@ -394,8 +394,11 @@ namespace legion::rendering
         static void process_io(shader& shader, id_type id);
         static app::gl_id compile_shader(GLuint shaderType, cstring source, GLint sourceLength);
 
-        static bool load_precompiled(const std::string& name, const fs::view& file, shader_ilo& ilo, shader_state& state);
+        static bool load_precompiled(const fs::view& file, shader_ilo& ilo, shader_state& state);
         static void store_precompiled(const fs::view& file, const shader_ilo& ilo, const shader_state& state);
+
+        static shader_handle create_invalid_shader(const fs::view& file, shader_import_settings settings = default_shader_settings);
+
     public:
         static shader_handle create_shader(const std::string& name, const fs::view& file, shader_import_settings settings = default_shader_settings);
         static shader_handle create_shader(const fs::view& file, shader_import_settings settings = default_shader_settings);

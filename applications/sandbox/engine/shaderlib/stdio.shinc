@@ -103,12 +103,12 @@ uniform CameraInput _L_cmr_in : SV_CAMERA;
 
 vec4 WorldToScreenSpacePosition(vec3 pos)
 {
-    return ((_L_cmr_in.proj * _L_cmr_in.view) * vec4(pos, 1.f));
+    return (ViewProjectionMatrix * vec4(pos, 1.f));
 }
 
 vec4 WorldToScreenSpacePosition(vec4 pos)
 {
-    return ((_L_cmr_in.proj * _L_cmr_in.view) * pos);
+    return (ViewProjectionMatrix * pos);
 }
 
 Camera GetCamera()
@@ -133,9 +133,9 @@ Camera GetCamera()
 vec4 ModelToScreenSpacePosition(vec3 pos)
 {
     #if defined(GEOMETRY_SHADER)
-    return (_L_cmr_in.proj * _L_cmr_in.view * stdin(0, modelMatrix)) * vec4(pos, 1.f);
+    return (ViewProjectionMatrix * stdin(0, modelMatrix)) * vec4(pos, 1.f);
     #else
-    return (_L_cmr_in.proj * _L_cmr_in.view * stdio(modelMatrix)) * vec4(pos, 1.f);
+    return (ViewProjectionMatrix * stdio(modelMatrix)) * vec4(pos, 1.f);
     #endif
 }
 

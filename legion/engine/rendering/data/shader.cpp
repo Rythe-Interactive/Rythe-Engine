@@ -195,7 +195,7 @@ namespace legion::rendering
         return shaderId;
     }
 
-    bool ShaderCache::load_precompiled(const std::string& name, const fs::view& file, shader_ilo& ilo, shader_state& state)
+    bool ShaderCache::load_precompiled(const fs::view& file, shader_ilo& ilo, shader_state& state)
     {
         log::info("Loading precompiled shader: {}", file.get_virtual_path());
         auto result = file.get();
@@ -296,6 +296,279 @@ namespace legion::rendering
 
     }
 
+    shader_handle ShaderCache::create_invalid_shader(const fs::view& file, shader_import_settings settings)
+    {
+        { // Check if the shader already exists.
+            async::readonly_guard guard(m_shaderLock);
+            if (m_shaders.contains(invalid_id) && m_shaders[invalid_id].programId != 0)
+            {
+                log::debug("Shader invalid already exists, existing shader will be returned instead.");
+                return { invalid_id };
+            }
+        }
+
+        shader_state state;
+        shader_ilo shaders;
+
+        auto result = file.get_extension();
+        if (result != common::valid)
+            return invalid_shader_handle;
+
+        bool compiledFromScratch = false;
+
+        if (result.decay().empty() || result.decay() == ".shil")
+        {
+            if (!load_precompiled(file, shaders, state))
+                return invalid_shader_handle;
+        }
+        else
+        {
+            switch (settings.usePrecompiledIfAvailable)
+            {
+            case true:
+            {
+                auto precompiled = file / ".." / (file.get_filestem().decay() + ".shil");
+
+                if (precompiled.is_valid(true))
+                {
+                    auto traits = precompiled.file_info();
+                    if (traits.is_file && traits.can_be_read)
+                    {
+                        if (load_precompiled(precompiled, shaders, state))
+                            break;
+                    }
+                }
+            }
+            default:
+            {
+                ShaderCompiler::setErrorCallback([](const std::string& errormsg, log::severity severity)
+                    {
+                        log::println(severity, errormsg);
+                    });
+
+                byte compilerSettings = 0;
+                compilerSettings |= settings.api;
+                if (settings.debug)
+                    compilerSettings |= shader_compiler_options::debug;
+                if (settings.low_power)
+                    compilerSettings |= shader_compiler_options::low_power;
+
+                if (!ShaderCompiler::process(file, compilerSettings, shaders, state, detail::get_default_defines()))
+                    return invalid_shader_handle;
+
+                compiledFromScratch = true;
+            }
+            break;
+            }
+        }
+
+        if (shaders.empty())
+            return invalid_shader_handle;
+
+        shader shader;
+        shader.name = "invalid";
+        shader.state = state;
+
+        GLenum blendSrc = GL_SRC_ALPHA, blendDst = GL_ONE_MINUS_SRC_ALPHA;
+
+        for (auto& [func, param] : state)
+        {
+            switch (func)
+            {
+            case GL_DEPTH_TEST:
+            {
+                if (param == GL_FALSE)
+                {
+                    glDisable(func);
+                    continue;
+                }
+
+                glEnable(func);
+                glDepthFunc(param);
+            }
+            break;
+            case GL_CULL_FACE:
+            {
+                if (param == GL_FALSE)
+                {
+                    glDisable(func);
+                    continue;
+                }
+
+                glEnable(func);
+                glCullFace(param);
+            }
+            break;
+            case GL_BLEND:
+            {
+                blendSrc = param;
+                blendDst = param;
+            }
+            case GL_BLEND_SRC:
+            {
+                blendSrc = param;
+            }
+            case GL_BLEND_DST:
+            {
+                blendDst = param;
+            }
+            break;
+            case GL_DITHER:
+            {
+                if (param == GL_TRUE)
+                    glEnable(GL_DITHER);
+                else
+                    glDisable(GL_DITHER);
+            }
+            break;
+            default:
+                break;
+            }
+        }
+
+        if (blendSrc == GL_FALSE || blendDst == GL_FALSE)
+        {
+            glDisable(GL_BLEND);
+        }
+        else
+        {
+            glEnable(GL_BLEND);
+            glBlendFunc(blendSrc, blendDst);
+        }
+
+        shader.programId = glCreateProgram();
+
+        std::vector<app::gl_id> shaderIds;
+
+        for (auto& [shaderType, shaderIL] : shaders)
+        {
+            auto shaderId = compile_shader(shaderType, shaderIL.c_str(), shaderIL.size());
+
+            if (shaderId == (app::gl_id)-1)
+            {
+                auto v = common::split_string_at<'\n'>(shaderIL);
+
+                std::string output;
+                for (int i = 0; i < v.size(); i++)
+                {
+                    output += std::to_string(i + 1) + "\t| " + v[i] + "\n";
+                }
+
+                log::error("Error occurred in shader: invalid\n{}", output);
+
+                for (auto id : shaderIds)
+                {
+                    glDetachShader(shader.programId, id);
+                    glDeleteShader(id);
+                }
+
+                glDeleteProgram(shader.programId);
+                return invalid_shader_handle;
+            }
+
+            glAttachShader(shader.programId, shaderId);
+            shaderIds.push_back(shaderId);
+        }
+
+        glLinkProgram(shader.programId);
+
+        GLint linkStatus;
+        glGetProgramiv(shader.programId, GL_LINK_STATUS, &linkStatus);
+
+        if (!linkStatus)
+        {
+            GLint infoLogLength;
+            glGetProgramiv(shader.programId, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+            char* errorMessage = new char[infoLogLength + 1];
+            glGetProgramInfoLog(shader.programId, infoLogLength, nullptr, errorMessage);
+
+            log::error("Error linking invalid shader:\n\t{}", errorMessage);
+            delete[] errorMessage;
+
+            for (auto& [shaderType, shaderIL] : shaders)
+            {
+                cstring shaderTypename;
+                switch (shaderType)
+                {
+                case GL_FRAGMENT_SHADER:
+                    shaderTypename = "fragment";
+                    break;
+                case GL_VERTEX_SHADER:
+                    shaderTypename = "vertex";
+                    break;
+                case GL_GEOMETRY_SHADER:
+                    shaderTypename = "geometry";
+                    break;
+                case GL_TESS_CONTROL_SHADER:
+                    shaderTypename = "tessellation control";
+                    break;
+                case GL_TESS_EVALUATION_SHADER:
+                    shaderTypename = "tessellation evaluation";
+                    break;
+                case GL_COMPUTE_SHADER:
+                    shaderTypename = "compute";
+                    break;
+                default:
+                    shaderTypename = "unknown type";
+                    break;
+                }
+
+                log::error("{}:\n\n{}\n\n", shaderTypename, shaderIL);
+
+            }
+
+            for (auto& id : shaderIds)
+            {
+                glDetachShader(shader.programId, id);
+                glDeleteShader(id);
+            }
+
+            glDeleteProgram(shader.programId);
+
+            return invalid_shader_handle;
+        }
+
+        glValidateProgram(shader.programId);
+
+        GLint validationStatus;
+        glGetProgramiv(shader.programId, GL_VALIDATE_STATUS, &validationStatus);
+
+        if (!validationStatus)
+        {
+            GLint infoLogLength;
+            glGetProgramiv(shader.programId, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+            char* errorMessage = new char[infoLogLength + 1];
+            glGetProgramInfoLog(shader.programId, infoLogLength, nullptr, errorMessage);
+
+            log::error("Error validating invalid shader:\n\t{}", errorMessage);
+            delete[] errorMessage;
+
+            for (auto& shaderId : shaderIds)
+            {
+                glDetachShader(shader.programId, shaderId);
+                glDeleteShader(shaderId);
+            }
+
+            glDeleteProgram(shader.programId);
+
+            return invalid_shader_handle;
+        }
+
+        process_io(shader, invalid_id);
+
+        {
+            async::readwrite_guard guard(m_shaderLock);
+            m_shaders[invalid_id] = std::move(shader);
+        }
+
+        if (compiledFromScratch && settings.storePrecompiled)
+            store_precompiled(file, shaders, state);
+
+        return { invalid_id };
+    }
+
     shader_handle ShaderCache::create_shader(const std::string& name, const fs::view& file, shader_import_settings settings)
     {
         // Get the id of the new shader.
@@ -303,6 +576,12 @@ namespace legion::rendering
 
         { // Check if the shader already exists.
             async::readonly_guard guard(m_shaderLock);
+
+            if (!m_shaders.contains(invalid_id) || m_shaders[invalid_id].programId == 0)
+            {
+                create_invalid_shader(fs::view("engine://shaders/invalid.shs"));
+            }
+
             if (m_shaders.contains(id))
             {
                 log::debug("Shader {} already exists, existing shader will be returned instead.", name);
@@ -321,7 +600,7 @@ namespace legion::rendering
 
         if (result.decay().empty() || result.decay() == ".shil")
         {
-            if (!load_precompiled(name, file, shaders, state))
+            if (!load_precompiled(file, shaders, state))
                 return invalid_shader_handle;
         }
         else
@@ -337,7 +616,7 @@ namespace legion::rendering
                     auto traits = precompiled.file_info();
                     if (traits.is_file && traits.can_be_read)
                     {
-                        if (load_precompiled(name, precompiled, shaders, state))
+                        if (load_precompiled(precompiled, shaders, state))
                             break;
                     }
                 }
@@ -447,7 +726,7 @@ namespace legion::rendering
         {
             auto shaderId = compile_shader(shaderType, shaderIL.c_str(), shaderIL.size());
 
-            if (shaderId == (app::gl_id) -1)
+            if (shaderId == (app::gl_id)-1)
             {
                 auto v = common::split_string_at<'\n'>(shaderIL);
 
@@ -582,6 +861,12 @@ namespace legion::rendering
         id_type id = nameHash(name);
 
         async::readonly_guard guard(m_shaderLock);
+
+        if (!m_shaders.contains(invalid_id) || m_shaders[invalid_id].programId == 0)
+        {
+            create_invalid_shader(fs::view("engine://shaders/invalid.shs"));
+        }
+
         if (!m_shaders.contains(id))
             return invalid_shader_handle;
         else
@@ -591,6 +876,12 @@ namespace legion::rendering
     shader_handle ShaderCache::get_handle(id_type id)
     {
         async::readonly_guard guard(m_shaderLock);
+
+        if (!m_shaders.contains(invalid_id) || m_shaders[invalid_id].programId == 0)
+        {
+            create_invalid_shader(fs::view("engine://shaders/invalid.shs"));
+        }
+
         if (!m_shaders.contains(id))
             return invalid_shader_handle;
         else
