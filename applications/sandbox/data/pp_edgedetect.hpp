@@ -17,12 +17,14 @@ namespace legion::rendering
             addRenderPass<&PostProcessingEdgeDetect::renderPass>();
         }
 
-        void renderPass(texture_handle colortexture, texture_handle depthtexture)
+        void renderPass(framebuffer& fbo, texture_handle colortexture, texture_handle depthtexture)
         {
+            fbo.bind();
             m_blurShader.bind();
             m_blurShader.get_uniform<texture_handle>("screenTexture").set_value(colortexture);
             renderQuad();
             m_blurShader.release();
+            fbo.release();
         }
 
     };
