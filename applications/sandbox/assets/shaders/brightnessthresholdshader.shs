@@ -37,9 +37,9 @@ shader(fragment)
         FragColor = vec4(col, 1.0);
 
         //check if fragment output is higher than threshold. If it is, set it as brightness color output.
-        float brightness = dot(FragColor.rgb, vec3(0.2126, 0.7152, 0.0722));
-        if(brightness > 0.0)
-            BrightColor = vec4(FragColor.rgb, 1.0);
+        float brightness = dot(col.rgb, vec3(0.2126, 0.7152, 0.0722));
+        if(brightness >= 0.9)
+            BrightColor = vec4(col.rgb, 1.0);
         else
             BrightColor = vec4(0.0, 0.0, 0.0, 1.0);
 

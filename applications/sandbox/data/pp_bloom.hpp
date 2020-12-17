@@ -11,7 +11,6 @@ namespace legion::rendering
         //m_shader2
         //m_shader3
         texture_handle m_brightTexture;
-        bool textureInitialized = false;
     public:
 
         void setup(app::window& context) override
@@ -24,31 +23,44 @@ namespace legion::rendering
 
         void renderPass(framebuffer& fbo, texture_handle colortexture, texture_handle depthtexture)
         {
-            if(!textureInitialized)
+            if(!m_brightTexture)
             {
-                textureInitialized = true;
                 texture_import_settings settings{
-               colortexture.get_texture().type,
-               colortexture.get_texture().fileFormat,
-               colortexture.get_texture().format,
-               colortexture.get_texture().channels,
-               false,
-               false,
+               texture_type::two_dimensional,
+               channel_format::eight_bit,
+               texture_format::rgb,
+               texture_components::rgb,
+               true,
+               true,
                texture_mipmap::linear,
                texture_mipmap::linear,
-               texture_wrap::edge_clamp,
-               texture_wrap::edge_clamp,
-               texture_wrap::edge_clamp
+               texture_wrap::repeat,
+               texture_wrap::repeat,
+               texture_wrap::repeat
                 };
-                m_brightTexture = TextureCache::create_texture("brightTexture", colortexture.get_data().size, settings);
+
+                m_brightTexture = TextureCache::create_texture("brightTexture", colortexture.get_texture().size(), settings);
             }
             fbo.attach(m_brightTexture, GL_COLOR_ATTACHMENT1);
 
             fbo.bind();
+            unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+            glDrawBuffers(2, attachments);
+
             m_BrightnessThresholdShader.bind();
-            m_BrightnessThresholdShader.get_uniform<texture_handle>("screenTexture").set_value(m_brightTexture);
+            m_BrightnessThresholdShader.get_uniform<texture_handle>("screenTexture").set_value(colortexture);
             renderQuad();
             m_BrightnessThresholdShader.release();
+            fbo.release();
+
+            fbo.detach(GL_COLOR_ATTACHMENT1);
+
+            fbo.bind();
+            auto scrnshader = rendering::ShaderCache::get_handle("screen shader");
+            scrnshader.bind();
+            scrnshader.get_uniform<texture_handle>("screenTexture").set_value(m_brightTexture);
+            renderQuad();
+            scrnshader.release();
             fbo.release();
         }
     };
