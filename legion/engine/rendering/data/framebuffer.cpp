@@ -5,15 +5,15 @@ namespace legion::rendering
     framebuffer::framebuffer(GLenum target)
         : m_id([](app::gl_id& value) { // Assign logic for framebuffer deletion to managed resource.
 #if defined(LEGION_DEBUG)
-            if (!app::ContextHelper::getCurrentContext())
-            {
-                log::error("No current context to delete framebuffer with.");
-                return;
-            }
+        if (!app::ContextHelper::getCurrentContext())
+        {
+            log::error("No current context to delete framebuffer with.");
+            return;
+        }
 #endif
-            if (value)
-                glDeleteFramebuffers(1, &value);
-        }, invalid_id),
+        if (value)
+            glDeleteFramebuffers(1, &value);
+            }, invalid_id),
         m_target(target)
     {
 #if defined(LEGION_DEBUG)
@@ -194,7 +194,7 @@ namespace legion::rendering
         glBindFramebuffer(m_target, m_id);
         glNamedFramebufferRenderbuffer(m_id, attachment, GL_RENDERBUFFER, rbo.id()); // Attach the renderbuffer.
         glBindFramebuffer(m_target, 0);
-        m_attachments[attachment] = std::make_any<renderbuffer>(rbo); // Insert the renderbuffer into the map of attachments.
+        m_attachments[attachment] = rbo; // Insert the renderbuffer into the map of attachments.
     }
 
     void framebuffer::attach(texture_handle texture, GLenum attachment)
@@ -215,19 +215,51 @@ namespace legion::rendering
         glBindFramebuffer(m_target, m_id);
         glNamedFramebufferTexture(m_id, attachment, texture.get_texture().textureId, 0); // Attach the texture.
         glBindFramebuffer(m_target, 0);
-        m_attachments[attachment] = std::make_any<texture_handle>(texture); // Insert the texture into the map of attachments.
+        m_attachments[attachment] = texture; // Insert the texture into the map of attachments.
     }
 
-    L_NODISCARD const std::any& framebuffer::getAttachment(GLenum attachment) const
+    void framebuffer::attach(attachment att, GLenum attachment)
+    {
+#if defined(LEGION_DEBUG)
+        if (!app::ContextHelper::getCurrentContext())
+        {
+            log::error("No current context to work with.");
+            return;
+        }
+
+        if (m_id.value == 0)
+        {
+            log::error("Attempting to attach render targets to default framebuffer.");
+            return;
+        }
+
+        if(std::holds_alternative<std::monostate>(att))
+        {
+            log::error("Attempting to attach empty attachment to framebuffer.");
+            return;
+        }
+#endif
+
+        glBindFramebuffer(m_target, m_id);
+        if (std::holds_alternative<texture_handle>(att))
+            glNamedFramebufferTexture(m_id, attachment, std::get<texture_handle>(att).get_texture().textureId, 0); // Attach the texture.
+        else
+            glNamedFramebufferRenderbuffer(m_id, attachment, GL_RENDERBUFFER, std::get<renderbuffer>(att).id()); // Attach the renderbuffer.
+
+        glBindFramebuffer(m_target, 0);
+        m_attachments[attachment] = att; // Insert the attachment into the map of attachments.
+    }
+
+    L_NODISCARD const attachment& framebuffer::getAttachment(GLenum attachment) const
     {
         if (m_id.value == 0)
         {
             log::error("Attempting to attach render targets to default framebuffer.");
-            return std::any();
+            return invalid_attachment;
         }
 
         if (!m_attachments.count(attachment)) // Return an empty std::any if the attachment wasn't active.
-            return std::any();
+            return invalid_attachment;
         return m_attachments.at(attachment); // Otherwise return the active attachment.
     }
 

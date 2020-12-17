@@ -2105,11 +2105,13 @@ void ImGuiTextBuffer::appendf(const char* fmt, ...)
 void ImGuiTextBuffer::appendfv(const char* fmt, va_list args)
 {
     va_list args_copy;
+    // cppcheck-suppress va_list_usedBeforeStarted
     va_copy(args_copy, args);
 
     int len = ImFormatStringV(NULL, 0, fmt, args);         // FIXME-OPT: could do a first pass write attempt, likely successful on first pass.
     if (len <= 0)
     {
+        // cppcheck-suppress va_list_usedBeforeStarted
         va_end(args_copy);
         return;
     }
@@ -2125,6 +2127,7 @@ void ImGuiTextBuffer::appendfv(const char* fmt, va_list args)
 
     Buf.resize(needed_sz);
     ImFormatStringV(&Buf[write_off - 1], (size_t)len + 1, fmt, args_copy);
+    // cppcheck-suppress va_list_usedBeforeStarted
     va_end(args_copy);
 }
 
@@ -9691,7 +9694,7 @@ const ImGuiPayload* ImGui::AcceptDragDropPayload(const char* type, ImGuiDragDrop
     if (!payload.Delivery && !(flags & ImGuiDragDropFlags_AcceptBeforeDelivery))
         return NULL;
 
-    return &payload;
+    return &(GImGui->DragDropPayload);
 }
 
 //CHANGE(algorythmix): cppcheck complains about the adress of a local variable being returned(they really gotta fix that)

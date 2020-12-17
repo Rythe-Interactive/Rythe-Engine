@@ -1,8 +1,11 @@
 #pragma once
 #include <core/core.hpp>
+#include <rendering/rendering.hpp>
 #include <rendering/util/gui.hpp>
 #include <rendering/pipeline/gui/stages/imguirenderstage.hpp>
 #include <rendering/systems/renderer.hpp>
+
+using namespace legion::rendering;
 
 class GuiTestSystem : public System<GuiTestSystem>
 {

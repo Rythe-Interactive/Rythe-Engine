@@ -41,11 +41,73 @@ namespace legion::core::compute
         using dimension = std::variant<size_type,d2,d3>;
 
         Kernel(Program*, cl_kernel);
-        Kernel(const Kernel& other) = default;
-        Kernel(Kernel&& other) noexcept = default;
-        Kernel& operator=(const Kernel& other) = default;
-        Kernel& operator=(Kernel&& other) noexcept = default;
-        ~Kernel();
+
+        Kernel(const Kernel& other)
+            : m_refcounter(other.m_refcounter),
+              m_default_mode(other.m_default_mode),
+              m_paramsMap(other.m_paramsMap),
+              m_prog(other.m_prog),
+              m_func(other.m_func),
+              m_queue(other.m_queue),
+              m_global_size(other.m_global_size),
+              m_local_size(other.m_local_size)
+        {
+            if(m_refcounter)++*m_refcounter;
+        }
+
+        Kernel(Kernel&& other) noexcept
+            : m_refcounter(other.m_refcounter),
+              m_default_mode(other.m_default_mode),
+              m_paramsMap(std::move(other.m_paramsMap)),
+              m_prog(other.m_prog),
+              m_func(other.m_func),
+              m_queue(other.m_queue),
+              m_global_size(std::move(other.m_global_size)),
+              m_local_size(std::move(other.m_local_size))
+        {
+            if(m_refcounter)++*m_refcounter;
+        }
+
+        Kernel& operator=(const Kernel& other)
+        {
+            if (this == &other)
+                return *this;
+            m_refcounter = other.m_refcounter;
+            m_default_mode = other.m_default_mode;
+            m_paramsMap = other.m_paramsMap;
+            m_prog = other.m_prog;
+            m_func = other.m_func;
+            m_queue = other.m_queue;
+            m_global_size = other.m_global_size;
+            m_local_size = other.m_local_size;
+            if(m_refcounter) ++*m_refcounter;
+            return *this;
+        }
+
+        Kernel& operator=(Kernel&& other) noexcept
+        {
+            if (this == &other)
+                return *this;
+            m_refcounter = other.m_refcounter;
+            m_default_mode = other.m_default_mode;
+            m_paramsMap = std::move(other.m_paramsMap);
+            m_prog = other.m_prog;
+            m_func = other.m_func;
+            m_queue = other.m_queue;
+            m_global_size = std::move(other.m_global_size);
+            m_local_size = std::move(other.m_local_size);
+            if(m_refcounter)++*m_refcounter;
+            return *this;
+        }
+        ~Kernel()
+        {
+            if(m_refcounter)--*m_refcounter;
+            if(m_refcounter && *m_refcounter == 0)
+            {
+                delete m_refcounter;
+                clReleaseCommandQueue(m_queue);
+            }
+        }
 
         /**
          * @brief Determines the "Local Work Size", aka how many Kernels should run in parallel
@@ -162,17 +224,17 @@ namespace legion::core::compute
         /**
          * @brief same as informing the kernel about a buffer and then enqueueing it 
          */
-        Kernel& setAndEnqueBuffer(Buffer buffer, block_mode blocking = block_mode::BLOCKING);
+        Kernel& setAndEnqueueBuffer(Buffer buffer, block_mode blocking = block_mode::BLOCKING);
 
         /**
          * @brief same as informing the kernel about a buffer and then enqueueing it 
          */
-        Kernel& setAndEnqueBuffer(Buffer buffer, const std::string&, block_mode blocking = block_mode::BLOCKING);
+        Kernel& setAndEnqueueBuffer(Buffer buffer, const std::string&, block_mode blocking = block_mode::BLOCKING);
 
         /**
          * @brief same as informing the kernel about a buffer and then enqueueing it 
          */
-        Kernel& setAndEnqueBuffer(Buffer buffer, cl_uint index, block_mode blocking = block_mode::BLOCKING);
+        Kernel& setAndEnqueueBuffer(Buffer buffer, cl_uint index, block_mode blocking = block_mode::BLOCKING);
 
         /**
          * @brief Dispatches the Kernel to the command-queue
@@ -198,6 +260,8 @@ namespace legion::core::compute
         size_type getMaxWorkSize() const;
 
     private:
+
+        size_t* m_refcounter;
 
         buffer_type m_default_mode;
         std::map<std::string, cl_uint> m_paramsMap;

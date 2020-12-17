@@ -4,7 +4,7 @@
 namespace legion::rendering
 {
     std::unordered_map<id_type, std::unique_ptr<const ParticleSystemBase>> ParticleSystemCache::m_cache;
-    async::readonly_rw_spinlock ParticleSystemCache::m_particleSystemLock;
+    async::rw_spinlock ParticleSystemCache::m_particleSystemLock;
 
     ParticleSystemHandle ParticleSystemCache::createParticleSystemImpl(const std::string& name, ParticleSystemBase* ptr)
     {

@@ -13,7 +13,7 @@ vec2 ParallaxMap(sampler2D normalHeightMap, float scale, vec2 uv, Camera camera,
 	vec3 tangentViewDir = tbn * normalize(camera.toView);
 
 	const float minLayers = 4.0;
-	float distScale = 1.0 - clamp01(length(camera.toView) / 128.0);
+	float distScale = 1.0 - clamp01(length(camera.toView) / 256.0);
 	distScale = 1.0 - (distScale * distScale);
 	float maxLayers = mix(32.0, 4.0, distScale);
 	float layerCount = mix(minLayers, maxLayers, abs(dot(vec3(0.0, 0.0, 1.0), tangentViewDir)));

@@ -88,7 +88,6 @@ namespace legion::rendering
     {
         app::gl_id textureId = invalid_id;
 
-        math::ivec2 size;
         texture_components channels;
         texture_type type;
         texture_format format;
@@ -96,6 +95,7 @@ namespace legion::rendering
 
         static void to_resource(fs::basic_resource* resource, const texture& value);
         static void from_resource(texture* value, const fs::basic_resource& resource);
+        math::ivec2 size() const;
         void resize(math::ivec2 size) const;
     };
 
@@ -150,7 +150,7 @@ namespace legion::rendering
         friend struct texture_handle;
     private:
         static sparse_map<id_type, texture> m_textures;
-        static async::readonly_rw_spinlock m_textureLock;
+        static async::rw_spinlock m_textureLock;
 
         static const texture& get_texture(id_type id);
         static texture_data get_data(id_type id);

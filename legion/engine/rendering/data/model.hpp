@@ -75,7 +75,7 @@ namespace legion::rendering
         friend struct model_handle;
     private:
         static sparse_map<id_type, model> m_models;
-        static async::readonly_rw_spinlock m_modelLock;
+        static async::rw_spinlock m_modelLock;
 
         static const model& get_model(id_type id);
 

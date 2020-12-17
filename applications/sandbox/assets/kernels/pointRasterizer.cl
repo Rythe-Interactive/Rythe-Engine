@@ -4,7 +4,7 @@
 const int K=30;
 const uint RAND_MAX= 255;
 //predefined values
-#define maxPointsPerTri 300
+#define maxPointsPerTri 500
 #define radius 0.33f
 #define cellSize (radius)/1.41421356237f
 #define depth (int)ceil(1/ cellSize)
@@ -35,11 +35,13 @@ uint RandomUpperRange(uint upper)
     return r %(upper+1);
 }
 //usese barycentric coordinates to sample a new point
-float4 SampleTriangle(float2 rand,float4 a, float4 b, float4 c )
+float4 SampleTriangle(float2 coordinates,float4 a, float4 b, float4 c )
 {
-    float4 r;
-    r= (float4)(a + rand.x* normalize(b-a) + rand.y * normalize(c-a));
-    return r;
+    return(float4)(a + coordinates.x* (b-a) + coordinates.y * (c-a));
+}
+float2 SampleUVs(float2 coordinates, float2 a, float2 b, float2 c)
+{
+    return(float2)(a + coordinates.x* (b-a) + coordinates.y * (c-a));
 }
 //checks validity of point for poission sampling
 bool CheckPoint(float2 newPoint, float2* points, int* grid)
@@ -126,45 +128,111 @@ void PoissionSampling(__local float2* outputPoints, int samplePerTri)
 }
 
 
-__kernel void Main(__global const float* vertices,__global const uint* indices,const uint samplePerTri, __global float4* points)
+float2 sampleUniformly(__local float2* output, uint samplesPerTri, uint sampleWidth)
+{
+    float offset = 1.0f / (float)(sampleWidth+1);
+    float2 coordinates;
+    int index=0;
+    for(int x=0; x<sampleWidth; x++)
+    {
+        for(int y=0; y<sampleWidth-x; y++)
+        {
+           // if(x+y>sampleWidth) continue;
+            coordinates=(float2)(offset*(x), offset*(y));
+            output[index] = coordinates;
+            index++;
+        }
+    }
+}
+constant sampler_t sampler = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
+
+float sampleHeight(__read_only image2d_t texture, float2 uvs, int texelSize)
+{
+    float r=0.0f;
+    int2 newCoordinates = (int2)(uvs.x*texelSize,uvs.y*texelSize);
+    //  newCoordinates *=2;
+    //  newCoordinates-=1;
+
+ //   newCoordinates = (int2)(uvs.x,uvs.y) * 2048;
+    float4 textureValue=read_imagef(texture, sampler, (int2)newCoordinates);
+    r =textureValue.x;
+    return r;
+}
+
+
+__kernel void Main
+(
+    __global const float* vertices,
+    __global const uint* indices,
+    __global const float2* uvs,
+    __read_only image2d_t normalMap,
+    //__global const float* normalMap,
+    const uint samplePerTri,
+    const uint sampleWidth,
+    const float normalStrength,
+    const uint textureSize,
+    __global float4* points
+)
 {
     //init indices and rand state
     int n=get_global_id(0)*3;
     state= get_global_id(0);
     int resultIndex = get_global_id(0)*samplePerTri;
+  
     //get vertex indices
     uint vertex1Index = indices[n];
     uint vertex2Index = indices[n+1];
     uint vertex3Index = indices[n+2];
 
-    //get vertex values
+    //get vertex values and corrosponding uvs
     //vertA
     float v1a = vertices[indices[n]*3];
     float v1b = vertices[indices[n]*3+1];
     float v1c = vertices[indices[n]*3+2];
     float4 vertA = (float4)(v1a,v1b,v1c,1.0f);
+    float2 uvA =uvs[indices[n]];
+
     //vert2
     float v2a = vertices[indices[n+1]*3];
     float v2b = vertices[indices[n+1]*3+1];
     float v2c = vertices[indices[n+1]*3+2];
     float4 vertB = (float4)(v2a,v2b,v2c,1.0f);
+    float2 uvB =uvs[indices[n+1]];
+
     //vert3
     float v3a = vertices[indices[n+2]*3];
     float v3b = vertices[indices[n+2]*3+1];
     float v3c = vertices[indices[n+2]*3+2];
     float4 vertC = (float4)(v3a,v3b,v3c,1.0f);
+    float2 uvC =uvs[indices[n+2]];
+
+    //generate normal && scale by strength
+    float4 normal = normalize(cross(vertB-vertA,vertC-vertA));
+    normal*=normalStrength;
 
     //generate samples
-    __local float2 poissonOutput[maxPointsPerTri];
-    PoissionSampling(poissonOutput,samplePerTri);
+    __local float2 uniformOutput[maxPointsPerTri];
+    sampleUniformly(uniformOutput,samplePerTri,sampleWidth);
+    //__local float2 poissonOutput[maxPointsPerTri];
+    //PoissionSampling(poissonOutput,samplePerTri);
+
+
     //store generated samples
     for(int i =0; i <samplePerTri; i++)
     {
         int index= resultIndex + i;
-        float4 newPoint =SampleTriangle(poissonOutput[i],vertA,vertB,vertC);
+        //sample point position
+        float4 newPoint =SampleTriangle(uniformOutput[i],vertA,vertB,vertC);
+
+        //get uvs
+        float2 uvCoordinates = SampleUVs(uniformOutput[i],uvA,uvB,uvC);
+        //sample height based on uvs
+        float heightOffset = sampleHeight(normalMap,uvCoordinates + (float2)(0.0f,0.0f),textureSize);
+
+        //scale normal by the height & add it to the point
+        newPoint+= normal*heightOffset;
+     
         points[index]=newPoint;
     }
-
- 
 }
 
