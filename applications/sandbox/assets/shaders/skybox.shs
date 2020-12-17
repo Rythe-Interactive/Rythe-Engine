@@ -29,11 +29,11 @@ shader(fragment)
 
         if(tonemap)
         {
-            fragment_color = vec4(GammaCorrect(ACESToneMap(mix(vec3(length(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9)))), 1.f);
+            fragment_color = vec4(GammaCorrect(ACESToneMapFitted(mix(vec3(length(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9)))), 1.f);
         }
         else
         {
-            fragment_color = vec4(GammaCorrect(ACESToneMap(mix(vec3(length(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9)))), 1.f);
+            fragment_color = vec4(GammaCorrect(ACESToneMapFitted(mix(vec3(length(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9)))), 1.f);
         }
     }
 }

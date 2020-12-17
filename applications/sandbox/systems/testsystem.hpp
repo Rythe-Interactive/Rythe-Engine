@@ -285,7 +285,7 @@ public:
             pbrH.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("engine://resources/default/emissive"_view));
             pbrH.set_param(SV_HEIGHTSCALE, 1.f);
             pbrH.set_param("discardExcess", false);
-            pbrH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            pbrH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
             pbrH.set_param("tonemap", false);
 
             copperH = rendering::MaterialCache::create_material("copper", pbrShader);
@@ -295,7 +295,7 @@ public:
             copperH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/copper/copper-emissive-512.png"_view));
             copperH.set_param("material_input.heightScale", 0.1f);
             copperH.set_param("discardExcess", false);
-            copperH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            copperH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
             copperH.set_param("tonemap", false);
 
             aluminumH = rendering::MaterialCache::create_material("aluminum", pbrShader);
@@ -305,7 +305,7 @@ public:
             aluminumH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-emissive-512.png"_view));
             aluminumH.set_param("material_input.heightScale", 0.f);
             aluminumH.set_param("discardExcess", false);
-            aluminumH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            aluminumH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
             aluminumH.set_param("tonemap", false);
 
             ironH = rendering::MaterialCache::create_material("iron", pbrShader);
@@ -315,7 +315,7 @@ public:
             ironH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-emissive-512.png"_view));
             ironH.set_param("material_input.heightScale", 0.1f);
             ironH.set_param("discardExcess", false);
-            ironH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            ironH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
             ironH.set_param("tonemap", false);
 
             slateH = rendering::MaterialCache::create_material("slate", pbrShader);
@@ -325,7 +325,7 @@ public:
             slateH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/slate/slate-emissive-512.png"_view));
             slateH.set_param("material_input.heightScale", 1.f);
             slateH.set_param("discardExcess", true);
-            slateH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            slateH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
             slateH.set_param("tonemap", false);
 
             rockH = rendering::MaterialCache::create_material("rock", pbrShader);
@@ -335,7 +335,7 @@ public:
             rockH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/rock/rock-emissive-512.png"_view));
             rockH.set_param("material_input.heightScale", 1.f);
             rockH.set_param("discardExcess", true);
-            rockH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            rockH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
             rockH.set_param("tonemap", false);
 
             rock2H = rendering::MaterialCache::create_material("rock 2", pbrShader);
@@ -345,7 +345,7 @@ public:
             rock2H.set_param("material_input.emissive", rendering::TextureCache::get_handle("rock-emissive-512.png"));
             rock2H.set_param("material_input.heightScale", 0.5f);
             rock2H.set_param("discardExcess", false);
-            rock2H.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            rock2H.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
             rock2H.set_param("tonemap", false);
 
             fabricH = rendering::MaterialCache::create_material("fabric", pbrShader);
@@ -355,7 +355,7 @@ public:
             fabricH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-emissive-512.png"_view));
             fabricH.set_param("material_input.heightScale", 0.1f);
             fabricH.set_param("discardExcess", false);
-            fabricH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            fabricH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
             fabricH.set_param("tonemap", false);
 
             bogH = rendering::MaterialCache::create_material("bog", pbrShader);
@@ -365,7 +365,7 @@ public:
             bogH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/bog/bog-emissive-512.png"_view));
             bogH.set_param("material_input.heightScale", 0.5f);
             bogH.set_param("discardExcess", true);
-            bogH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            bogH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
             bogH.set_param("tonemap", false);
 
             paintH = rendering::MaterialCache::create_material("paint", pbrShader);
@@ -375,7 +375,7 @@ public:
             paintH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-emissive-512.png"_view));
             paintH.set_param("material_input.heightScale", 0.1f);
             paintH.set_param("discardExcess", false);
-            paintH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            paintH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
             paintH.set_param("tonemap", false);
 
             gnomeMH = rendering::MaterialCache::create_material("gnome", pbrShader);
@@ -385,14 +385,14 @@ public:
             gnomeMH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/warlock/warlock-emissive-512.png"_view));
             gnomeMH.set_param("material_input.heightScale", 0.f);
             gnomeMH.set_param("discardExcess", false);
-            gnomeMH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            gnomeMH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
             gnomeMH.set_param("tonemap", false);
 
             normalH = rendering::MaterialCache::create_material("normal", "assets://shaders/normal.shs"_view);
             normalH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("engine://resources/default/normalHeight"_view));
 
             skyboxH = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.shs"_view);
-            skyboxH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+            skyboxH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
             skyboxH.set_param("tonemap", false);
 
             app::ContextHelper::makeContextCurrent(nullptr);
@@ -562,7 +562,7 @@ public:
         position positions[1000];
         for (int i = 0; i < 1000; i++)
         {
-            positions[i] = position(math::linearRand(math::vec3(-10, -10, -10), math::vec3(10, 10, 10)));
+            positions[i] = position(math::linearRand(math::vec3(-10, -21, -10), math::vec3(10, -1, 10)));
         }
 
         time::timer clock;
@@ -571,7 +571,7 @@ public:
         for (int i = 0; i < 1000; i++)
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(pbrH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(pbrH));
             ent.add_component<sah>({});
             entityClock.start();
             ent.add_components<transform>(positions[i], rotation(), scale());
@@ -1732,17 +1732,17 @@ public:
                     sun.add_components<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, 1), math::vec3::zero), scale());
                 }
 
-                pbrH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
-                copperH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
-                aluminumH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
-                ironH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
-                slateH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
-                rockH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
-                rock2H.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
-                fabricH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
-                bogH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
-                paintH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
-                skyboxH.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
+                pbrH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                copperH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                aluminumH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                ironH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                slateH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                rockH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                rock2H.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                fabricH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                bogH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                paintH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                skyboxH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
             }
             on = !on;
         }
