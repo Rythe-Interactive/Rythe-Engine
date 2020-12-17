@@ -697,8 +697,9 @@ public:
 
         //setupPhysicsStackingUnitTest(cubeH,uvH,textureH);
 
-        setupMeshSplitterTest(floorH,cubeH, cylinderH, magneticLowH,texture2H);
+        //setupMeshSplitterTest(floorH,cubeH, cylinderH, magneticLowH,texture2H);
         setupPhysicsCompositeTest(cubeH, texture2H);
+        //setupPhysicsCRUnitTest(cubeH, texture2H);
 
         physics::cube_collider_params cubeParams;
         cubeParams.breadth = 1.0f;
@@ -1212,9 +1213,9 @@ public:
         cubeParams.height = 1.0f;
 
         physics::cube_collider_params staticBlockParams;
-        staticBlockParams.breadth = 5.0f;
-        staticBlockParams.width = 5.0f;
-        staticBlockParams.height = 2.0f;
+        staticBlockParams.breadth = 2.5f;
+        staticBlockParams.width = 2.5f;
+        staticBlockParams.height = 1.0f;
 
         float testPos = 10.0f;
         //----------- Static Block To AABB Body Stability Test ------------//
@@ -1226,6 +1227,7 @@ public:
             scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
 
             ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+
         }
 
         {
@@ -1252,7 +1254,6 @@ public:
             auto idComp = idHandle.read();
             idComp.id = "AABBStaticStable";
             idHandle.write(idComp);
-
 
         }
 
@@ -1434,21 +1435,23 @@ public:
 
             //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToOBBEnt);
             //renderableHandle.write({ cubeH, wireframeH });
+            staticToOBBEnt.add_components<rendering::renderable>
+                (cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToOBBEnt);
             positionH.write(math::vec3(testPos, -0.0f, 2.0f));
             scaleH.write(math::vec3(1.0f));
 
             auto rot = rotationH.read();
-            rot *= math::angleAxis(math::radians(90.f), math::vec3(0, 0, 1));
+            /*rot *= math::angleAxis(math::radians(90.f), math::vec3(0, 0, 1));
             rot *= math::angleAxis(math::radians(40.f), math::vec3(1, 0, 0));
-            rot *= math::angleAxis(math::radians(42.f), math::vec3(0, 1, 0));
+            rot *= math::angleAxis(math::radians(42.f), math::vec3(0, 1, 0));*/
             //rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
             rotationH.write(rot);
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(staticToOBBEnt);
             auto id = idHandle.read();
-            id.id = "OBBRb";
+            id.id = "NON_STATIC";
             idHandle.write(id);
 
 
@@ -1828,8 +1831,8 @@ public:
         cubeParams.height = 1.0f;
 
         physics::cube_collider_params staticBlockParams;
-        staticBlockParams.breadth = 1.0f;
-        staticBlockParams.width = 1.0f;
+        staticBlockParams.breadth = 2.0f;
+        staticBlockParams.width = 2.0f;
         staticBlockParams.height = 1.0f;
 
         //BLOCK
@@ -1838,7 +1841,32 @@ public:
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
             positionH.write(math::vec3(testPos, -3.0f, 15.0f));
-            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
+            scaleH.write(math::vec3(2.0f, 1.0f, 2.0f));
+
+            //auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+           /* physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(staticBlockParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);*/
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto id = idHandle.read();
+            id.id = "STATIC_BLOCK";
+            idHandle.write(id);
+
+            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(textureH));
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
+            scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
 
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
@@ -1870,7 +1898,7 @@ public:
             physics::physicsComponent physicsComponent2;
             physics::physicsComponent::init(physicsComponent2);
 
-            physicsComponent2.AddBox(staticBlockParams);
+            physicsComponent2.AddBox(cubeParams);
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
@@ -1880,6 +1908,8 @@ public:
             auto id = idHandle.read();
             id.id = "NON_STATIC";
             idHandle.write(id);
+
+            //rotation *= math::angleAxis(math::deg2rad(30.0f), math::vec3(1, 0, 0));
 
             auto rbHandle = ent.add_component<physics::rigidbody>();
         }
