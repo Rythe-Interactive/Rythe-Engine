@@ -157,7 +157,11 @@ namespace legion::rendering
                 {
                     app::context_guard guard(window);
                     if (!guard.contextIsValid())
-                        log::debug("dafuq?");
+                    {
+                        log::error("Failed to initialize context.");
+                        m_initialized.store(false, std::memory_order_release);
+                        return;
+                    }
                     result = initContext(window);
                 }
 
