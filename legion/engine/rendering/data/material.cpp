@@ -61,7 +61,7 @@ namespace legion::rendering
         }
     }
 
-    async::readonly_rw_spinlock MaterialCache::m_materialLock;
+    async::rw_spinlock MaterialCache::m_materialLock;
     std::unordered_map<id_type, material> MaterialCache::m_materials;
 
     material_handle MaterialCache::create_material(const std::string& name, const shader_handle& shader)

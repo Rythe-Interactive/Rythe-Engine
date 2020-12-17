@@ -9,6 +9,6 @@ namespace legion::rendering
    struct particle
    {
        float lifeTime;
-       math::vec3 velocity;
+       velocity particleVelocity;
    };
 }

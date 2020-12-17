@@ -1,6 +1,9 @@
 #pragma once
 #include <application/application.hpp>
 #include <rendering/util/bindings.hpp>
+#include <rendering/data/buffer.hpp>
+#include <rendering/data/vertexarray.hpp>
+
 #include <vector>
 #include <unordered_map>
 #include <set>
@@ -17,13 +20,13 @@ namespace legion::rendering
     struct model
     {
         bool buffered;
-        app::gl_id vertexArrayId;
-        app::gl_id vertexBufferId;
-        app::gl_id colorBufferId;
-        app::gl_id normalBufferId;
-        app::gl_id uvBufferId;
-        app::gl_id tangentBufferId;
-        app::gl_id indexBufferId;
+        vertexarray vertexArray;
+        buffer vertexBuffer;
+        buffer colorBuffer;
+        buffer normalBuffer;
+        buffer uvBuffer;
+        buffer tangentBuffer;
+        buffer indexBuffer;
 
         std::vector<sub_mesh> submeshes;
     };
@@ -36,10 +39,10 @@ namespace legion::rendering
         id_type id;
         
         bool operator==(const model_handle& other) const { return id == other.id; }
-        bool is_buffered();
-        void buffer_data(app::gl_id matrixBuffer);
-        mesh_handle get_mesh();
-        const model& get_model();
+        bool is_buffered() const;
+        void buffer_data(const buffer& matrixBuffer) const;
+        mesh_handle get_mesh() const;
+        const model& get_model() const;
 
         template<typename Archive>
         void serialize(Archive& archive);
@@ -59,13 +62,18 @@ namespace legion::rendering
         friend struct model_handle;
     private:
         static sparse_map<id_type, model> m_models;
-        static async::readonly_rw_spinlock m_modelLock;
+        static async::rw_spinlock m_modelLock;
 
         static const model& get_model(id_type id);
 
     public:
-        static void buffer(id_type id, app::gl_id matrixBuffer);
+        static void buffer_model(id_type id, const buffer& matrixBuffer);
         static model_handle create_model(const std::string& name, const fs::view& file, mesh_import_settings settings = default_mesh_settings);
+        static model_handle create_model(const std::string& name);
+        static model_handle create_model(const std::string& name, id_type meshId);
+        static model_handle create_model(id_type meshId);
+        static model_handle create_model(const std::string& name, mesh_handle mesh);
+        static model_handle create_model(mesh_handle mesh);
         static model_handle get_handle(const std::string& name);
         static model_handle get_handle(id_type id);
         static mesh_handle get_mesh(const std::string& name);

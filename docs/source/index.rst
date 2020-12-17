@@ -17,6 +17,9 @@ CONTENTS
 
     README.MD
     CONTRIBUTING.MD
+    architecture-wiki/architecture-index.rst
+    fs-wiki/fs-index.rst
+    physics-wiki/physics-index.rst
     api/library_root.rst
     feedback.rst
     AUTHORS.MD

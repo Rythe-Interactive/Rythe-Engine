@@ -22,6 +22,9 @@ namespace legion::core::math
 		typedef vec<4, T, Q> type;
 		typedef vec<4, bool, Q> bool_type;
 
+        template<typename Archive>
+        void serialize(Archive& archive);
+
 		// -- Data --
 
 #		if GLM_SILENT_WARNINGS == GLM_ENABLE

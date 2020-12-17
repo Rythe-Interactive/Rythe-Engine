@@ -3,8 +3,8 @@
 
 namespace legion::core
 {
-    std::unordered_map<id_type, std::unique_ptr<std::pair<async::readonly_rw_spinlock, mesh>>> MeshCache::m_meshes;
-    async::readonly_rw_spinlock MeshCache::m_meshesLock;
+    std::unordered_map<id_type, std::unique_ptr<std::pair<async::rw_spinlock, mesh>>> MeshCache::m_meshes;
+    async::rw_spinlock MeshCache::m_meshesLock;
 
     void mesh::to_resource(filesystem::basic_resource* resource, const mesh& value)
     {
@@ -130,7 +130,7 @@ namespace legion::core
                 data->tangents[i] = math::normalize(data->tangents[i]);
     }
 
-    std::pair<async::readonly_rw_spinlock&, mesh&> mesh_handle::get()
+    std::pair<async::rw_spinlock&, mesh&> mesh_handle::get()
     {
         async::readonly_guard guard(MeshCache::m_meshesLock);
         auto& [lock, mesh] = *(MeshCache::m_meshes[id].get());
@@ -165,8 +165,9 @@ namespace legion::core
 
         { // Insert the mesh into the mesh list.
             async::readwrite_guard guard(m_meshesLock);
-            auto* pair_ptr = new std::pair<async::readonly_rw_spinlock, mesh>(std::make_pair<async::readonly_rw_spinlock, mesh>(async::readonly_rw_spinlock(), std::move(data)));
-            m_meshes.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::readonly_rw_spinlock, mesh>>(pair_ptr)));
+            auto* pair_ptr = new std::pair<async::rw_spinlock, mesh>();
+            pair_ptr->second = std::move(data);
+            m_meshes.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::rw_spinlock, mesh>>(pair_ptr)));
         }
 
         return { id };
@@ -189,7 +190,8 @@ namespace legion::core
             }
             else // If the new mesh doesn't exist yet create it with the copy.
             {
-                auto* pair_ptr = new std::pair<async::readonly_rw_spinlock, mesh>(std::make_pair(async::readonly_rw_spinlock(), data));
+                auto* pair_ptr = new std::pair<async::rw_spinlock, mesh>();
+                pair_ptr->second = data;
                 m_meshes.emplace(std::make_pair(newId, pair_ptr));
             }
         }
@@ -212,7 +214,8 @@ namespace legion::core
             }
             else // If the new mesh doesn't exist yet create it with the copy.
             {
-                auto* pair_ptr = new std::pair<async::readonly_rw_spinlock, mesh>(std::make_pair(async::readonly_rw_spinlock(), data));
+                auto* pair_ptr = new std::pair<async::rw_spinlock, mesh>();
+                pair_ptr->second = data;
                 m_meshes.emplace(std::make_pair(newId, pair_ptr));
             }
         }

@@ -22,7 +22,7 @@ namespace legion::core
         using const_iterator = typename vector_type::const_iterator;
         using size_type = typename vector_type::size_type;
 
-        explicit vector_view(nullptr_t) : m_targetVector(nullptr) {}
+        explicit vector_view(std::nullptr_t) : m_targetVector(nullptr) {}
 
         explicit vector_view(typename std::conditional<is_const,const vector_type*,vector_type*>::type tv,size_type size,difference_type offset) :
             m_targetVector(tv),

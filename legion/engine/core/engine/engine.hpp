@@ -54,6 +54,7 @@ namespace legion::core
             SystemBase::m_ecs = &m_ecs;
             SystemBase::m_scheduler = &m_scheduler;
             ecs::component_handle_base::m_registry = &m_ecs;
+            ecs::component_handle_base::m_eventBus = &m_eventbus;
 
             reportModule<CoreModule>();
         }

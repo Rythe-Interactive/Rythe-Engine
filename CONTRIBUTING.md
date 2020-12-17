@@ -47,7 +47,7 @@ POD types that are completely compatible with the stl should all be structs, low
 `private` variables should start with `m_` and continued in camelCase.<br>
 `public` variables should not have a prefix and use camelCase, the same applies to local variables.
 
-Methods of non "stl-likes" should use camelCase naming and "stl-likes" should use stl-like snake_case naming.
+Methods of non "stl-likes" should use camelCase naming and methods of "stl-likes" should use stl-like snake_case naming.
 
 ### Comments
 In feature branches there is no comments enforcement, however in order to get a pull request accepted to any of the main branches doxygen style comments are mandatory. Check The Chapter "On the Topic of Doxygen" at the end of this document.

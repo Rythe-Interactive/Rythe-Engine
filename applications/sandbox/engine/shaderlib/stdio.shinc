@@ -194,14 +194,14 @@ mat3 GetTBNMatrix(int index)
     vec3 worldNormal = GetWorldNormal(index);
 	vec3 worldTangent = GetWorldTangent(index, worldNormal);
 	vec3 worldBitangent = GetWorldBitangent(worldNormal, worldTangent);
-	return mat3(worldTangent, worldBitangent, worldNormal);
+	return transpose(mat3(worldTangent, worldBitangent, worldNormal));
 }
 
 mat3 GetTBNMatrix(vec3 worldNormal, vec3 worldTangent)
 {
     vec3 orthogonalizedTangent = normalize(worldTangent - dot(worldTangent, worldNormal) * worldNormal);
 	vec3 worldBitangent = GetWorldBitangent(worldNormal, orthogonalizedTangent);
-	return mat3(orthogonalizedTangent, worldBitangent, worldNormal);
+	return transpose(mat3(orthogonalizedTangent, worldBitangent, worldNormal));
 }
 
 #else // Not geometry shader
@@ -277,14 +277,14 @@ mat3 GetTBNMatrix()
     vec3 worldNormal = GetWorldNormal();
 	vec3 worldTangent = GetWorldTangent(worldNormal);
 	vec3 worldBitangent = GetWorldBitangent(worldNormal, worldTangent);
-	return mat3(worldTangent, worldBitangent, worldNormal);
+	return transpose(mat3(worldTangent, worldBitangent, worldNormal));
 }
 
 mat3 GetTBNMatrix(vec3 worldNormal, vec3 worldTangent)
 {
     vec3 orthogonalizedTangent = normalize(worldTangent - dot(worldTangent, worldNormal) * worldNormal);
 	vec3 worldBitangent = GetWorldBitangent(worldNormal, orthogonalizedTangent);
-	return mat3(orthogonalizedTangent, worldBitangent, worldNormal);
+	return transpose(mat3(orthogonalizedTangent, worldBitangent, worldNormal));
 }
 #endif // End not geometry shader
 

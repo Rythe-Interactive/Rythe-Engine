@@ -21,35 +21,37 @@ namespace legion::core::compute {
 
     namespace detail {
         struct buffer_base
-    {
-        buffer_base(byte* buffer, size_type size, std::string n) : container(std::make_pair(buffer, size)), name(std::move(n)) {}
-        buffer_base(const buffer_base& other) = default;
-        buffer_base(buffer_base&& other) noexcept = default;
-        buffer_base& operator=(const buffer_base& other) = default;
-        buffer_base& operator=(buffer_base&& other) noexcept = default;
-        ~buffer_base() = default;
+        {
+            buffer_base(byte* buffer, size_type size, std::string n) : container(std::make_pair(buffer, size)), name(std::move(n)) {}
+            buffer_base(const buffer_base& other) = default;
+            buffer_base(buffer_base&& other) noexcept = default;
+            buffer_base& operator=(const buffer_base& other) = default;
+            buffer_base& operator=(buffer_base&& other) noexcept = default;
+            ~buffer_base() = default;
 
-        std::pair<byte*, size_type> container;
-        std::string name;
-    };
+            std::pair<byte*, size_type> container;
+            std::string name;
+        };
     }
 
+    struct invalid_karg_type {};
 
     struct karg
     {
-        template <class T>
-        karg(T& v, const std::string& n = "") : container(&v,sizeof(T)), name(n) {}
+
+        karg(invalid_karg_type){}
+        template <class T, std::enable_if_t<!std::is_same_v<std::remove_reference_t<T>, karg>, int > = 0>
+        karg(T& v, const std::string& n = "") : container(&v, sizeof(T)), name(n){}
         karg(const karg&) = default;
         karg(karg&&) noexcept = default;
         karg& operator=(const karg&) = default;
         karg& operator=(karg&&) noexcept = default;
         ~karg() = default;
 
-        std::pair<void*,size_type> container;
+        std::pair<void*, size_type> container;
         std::string name;
     };
 
-    struct invalid_karg_type {};
 
 
     /**
@@ -104,7 +106,7 @@ namespace legion::core::compute {
     {
         static_assert(is_vector<std::remove_reference_t<T>>::value, "T needs to be a vector");
 
-        inout(T& vec, std::string name = "") : 
+        inout(T& vec, std::string name = "") :
             buffer_base(reinterpret_cast<byte*>(vec.data()),
                 sizeof(typename std::remove_reference_t<T>::value_type)* vec.size(), name) {}
         ~inout() = default;
@@ -117,31 +119,31 @@ namespace legion::core::compute {
 
     class function_base
     {
-   
+
     protected:
-         using invoke_buffer_container = std::vector<std::pair<detail::buffer_base*, buffer_type>>;
-         using dvar = std::variant<std::tuple<size_type>,
-                                   std::tuple<size_type,size_type>,
-                                   std::tuple<size_type,size_type,size_type>
-                                  >;
+        using invoke_buffer_container = std::vector<std::pair<detail::buffer_base*, buffer_type>>;
+        using dvar = std::variant<std::tuple<size_type>,
+            std::tuple<size_type, size_type>,
+            std::tuple<size_type, size_type, size_type>
+        >;
 
         //invokes the NdRangeKernel
-        [[nodiscard]] common::result<void, void> invoke (dvar global, invoke_buffer_container & parameters,std::vector<karg> kernelArgs) const;
-        [[nodiscard]] common::result<void, void> invoke2(dvar global, std::vector<Buffer> buffers,std::vector<karg> kernelArgs) const;
+        [[nodiscard]] common::result<void, void> invoke(dvar global, invoke_buffer_container& parameters, std::vector<karg> kernelArgs) const;
+        [[nodiscard]] common::result<void, void> invoke2(dvar global, std::vector<Buffer> buffers, std::vector<karg> kernelArgs) const;
 
 
-        std::unique_ptr<Kernel> m_kernel;
-        std::unique_ptr<Program> m_program;
+        std::shared_ptr<Kernel> m_kernel;
+        std::shared_ptr<Program> m_program;
         size_t m_locals = 512;
     public:
-       
+
 
         /**
          * @brief Sets how many work-elements should be processed concurrently.
          * @param locals Number of parallel processes or 0,
          *         when 0 the measured max will be used.
          * @return How many parallel processes are going to be used.
-        */
+         */
         size_type setLocalSize(size_type locals)
         {
             const size_type max = m_kernel->getMaxWorkSize();
@@ -151,7 +153,7 @@ namespace legion::core::compute {
                 m_locals = max;
             }
             else
-                m_locals = (std::min)(locals,max);
+                m_locals = (std::min)(locals, max);
 
             return m_locals;
         }
@@ -162,15 +164,41 @@ namespace legion::core::compute {
     public:
         using function_base::setLocalSize;
         function(std::string name) : m_name(std::move(name)) {}
+        function() = default;
+        function(function&& other) noexcept
+        {
+            m_program = std::move(other.m_program);
+            m_kernel = std::move(other.m_kernel);
+            m_locals = std::move(other.m_locals);
+        }
+        function(const function& other)
+        {
+            m_program = other.m_program;
+            m_kernel = other.m_kernel;
+            m_locals = other.m_locals;
+        }
+        function& operator=(const function& other)
+        {
+            m_program = other.m_program;
+            m_kernel = other.m_kernel;
+            m_locals = other.m_locals;
+            return *this;
+        }
 
-
+        function& operator=(function&& other)
+        {
+            m_program = std::move(other.m_program);
+            m_kernel = std::move(other.m_kernel);
+            m_locals = std::move(other.m_locals);
+            return *this;
+        }
         /**
-         * @brief Sets the program from which to create the wrapped kernel.
-         */
+          * @brief Sets the program from which to create the wrapped kernel.
+          */
         void setProgram(Program&& p)
         {
-            m_program = std::make_unique<Program>(p);
-            m_kernel = std::make_unique<Kernel>(m_program->kernelContext(m_name));
+            m_program = std::make_shared<Program>(p);
+            m_kernel = std::make_shared<Kernel>(m_program->kernelContext(m_name));
             m_locals = m_kernel->getMaxWorkSize();
         }
 
@@ -179,46 +207,51 @@ namespace legion::core::compute {
          * @param dispatch_size How many items to process.
          * @param args a collection of either vectors and wrapped vectors or compute::Buffers
          * @return Ok() if the kernel succeeded or Err() otherwise
-        */
+         */
         template <typename... Args>
-        common::result<void,void> operator()(std::variant<size_type,math::ivec2,math::ivec3> dispatch_size, Args&&... args)
+        common::result<void, void> operator()(std::variant<size_type, math::ivec2, math::ivec3> dispatch_size, Args&&... args)
         {
             dvar dim;
 
-            if(std::holds_alternative<size_type>(dispatch_size))
+            if (std::holds_alternative<size_type>(dispatch_size))
             {
                 dim = std::make_tuple(std::get<0>(dispatch_size));
             }
             else if (std::holds_alternative<math::ivec2>(dispatch_size))
             {
-                    dim = std::make_tuple(static_cast<size_type>(std::get<1>(dispatch_size)[0]),
-                                          static_cast<size_type>(std::get<1>(dispatch_size)[1]));
+                dim = std::make_tuple(static_cast<size_type>(std::get<1>(dispatch_size)[0]),
+                    static_cast<size_type>(std::get<1>(dispatch_size)[1]));
             }
             else if (std::holds_alternative<math::ivec3>(dispatch_size))
             {
-                    dim = std::make_tuple(static_cast<size_type>(std::get<2>(dispatch_size)[0]),
-                                          static_cast<size_type>(std::get<2>(dispatch_size)[1]),
-                                          static_cast<size_type>(std::get<2>(dispatch_size)[2]));
+                dim = std::make_tuple(static_cast<size_type>(std::get<2>(dispatch_size)[0]),
+                    static_cast<size_type>(std::get<2>(dispatch_size)[1]),
+                    static_cast<size_type>(std::get<2>(dispatch_size)[2]));
             }
 
             //check if we are dealing with a list of buffers or a list of vectors
             //TODO(algo-ryth-mix) Update the cppcheck version of the CI once this bug is resolved!
             //cppcheck has an issue with if contexpr and the || in here
             //cppcheck-suppress internalAstError
-            if constexpr (((std::is_same_v<compute::Buffer,std::remove_reference_t<Args>> || std::is_same_v<karg,Args> ) && ...))
+            if constexpr (((std::is_same_v<compute::Buffer, std::remove_reference_t<Args>> || std::is_same_v<karg, Args>) && ...))
             {
-                return invoke_helper_buffers(dim,std::forward<Args>(args)...);
+                return invoke_helper_buffers(dim, std::forward<Args>(args)...);
             }
             else
             {
-                return invoke_helper_raw(dim,std::forward<Args>(args)...);
+                return invoke_helper_raw(dim, std::forward<Args>(args)...);
             }
         }
 
- 
+
         static void from_resource(function* value, const filesystem::basic_resource& resource)
         {
             value->setProgram(resource.to<Program>());
+        }
+
+        bool isValid() const
+        {
+            return m_program != nullptr;
         }
 
     private:
@@ -238,23 +271,22 @@ namespace legion::core::compute {
             {
                 return std::pair<buffer_base*, buffer_type>(static_cast<buffer_base*>(&buffer_container), buffer_type::WRITE_BUFFER);
             }
-            else if constexpr(std::is_base_of_v<inout_ident,T>)
+            else if constexpr (std::is_base_of_v<inout_ident, T>)
             {
                 return std::pair<buffer_base*, buffer_type>(static_cast<buffer_base*>(&buffer_container), buffer_type::READ_BUFFER | buffer_type::WRITE_BUFFER);
             }
             else
-                return std::pair<buffer_base*,buffer_type>(nullptr,buffer_type::WRITE_BUFFER);
+                return std::pair<buffer_base*, buffer_type>(nullptr, buffer_type::WRITE_BUFFER);
         }
 
         template <class T>
         static karg transform_to_karg(T& buffer_container)
         {
-            if constexpr (std::is_same_v<karg,T>)
+            if constexpr (std::is_same_v<karg, std::remove_reference_t<T>>)
                 return buffer_container;
             else
             {
-                invalid_karg_type* dummy = nullptr;
-                return karg(dummy,"");
+                return karg(invalid_karg_type{});
             }
 
         }
@@ -262,20 +294,20 @@ namespace legion::core::compute {
         template <class T>
         static Buffer transform_to_buffer(T& buffer_container)
         {
-            if constexpr (std::is_same_v<Buffer,T>)
+            if constexpr (std::is_same_v<Buffer, T>)
                 return buffer_container;
-            else return Buffer(nullptr,nullptr,0,buffer_type::WRITE_BUFFER,"");
+            else return Buffer(nullptr, nullptr, 0, buffer_type::WRITE_BUFFER, "broken buffer");
         }
 
 
-           private:
+    private:
         template <typename... Args>
         common::result<void, void> invoke_helper_raw(dvar dispatch_size, Args&& ... args)
         {
 
             //do some sanity checking args either need to be in(vector) out(vector) inout(vector) vector or karg
             static_assert(((
-                std::is_same_v<karg,Args> ||
+                std::is_same_v<karg, Args> ||
                 std::is_base_of_v<detail::buffer_base, Args> ||
                 is_vector<std::remove_reference_t<Args>>::value) && ...), "Types passed to operator() must be vector or in,out,inout");
 
@@ -284,43 +316,43 @@ namespace legion::core::compute {
             std::tuple container = { std::conditional_t<is_vector<std::remove_reference_t<Args>>::value,in<Args>,Args>(args)... };
 
             auto kargs = std::apply(
-            [](auto&& ... x)
-            {
+                [](auto&& ... x)
+                {
                     return std::vector<karg>{function::transform_to_karg(x)...};
-            },container);
+                }, container);
 
             //transform from tuple(in,out,inout,...) to vector(pair(buffer,"in"),pair(buffer,"out"), ...)
             auto vector = std::apply(
-            [](auto&&...x)
-            {
-                return invoke_buffer_container { function::transform_to_pairs(x)... };
-            }, container);
+                [](auto&&...x)
+                {
+                    return invoke_buffer_container{ function::transform_to_pairs(x)... };
+                }, container);
 
 
             //we finally transformed it into a way that the non-templated function can use
-            return invoke(dispatch_size, vector,kargs);
+            return invoke(dispatch_size, vector, kargs);
         }
 
         template <typename... Args>
-        common::result<void,void> invoke_helper_buffers(dvar dispatch_size,Args &&... args)
+        common::result<void, void> invoke_helper_buffers(dvar dispatch_size, Args&&... args)
         {
-            static_assert((std::is_same_v<compute::Buffer,std::remove_reference_t<Args>> && ...),
+            static_assert(((std::is_same_v<compute::Buffer, std::remove_reference_t<Args>> || std::is_same_v<karg, std::remove_reference_t<Args>> ) && ...),
                 "Types passed to operator must be Buffer");
 
             std::tuple tpl = { args... };
 
             auto kargs = std::apply(
-            [](auto&& ... x)
-            {
+                [](auto&& ... x)
+                {
                     return std::vector<karg>{function::transform_to_karg(x)...};
-            },tpl);
+                }, tpl);
             auto buffers = std::apply(
-            [](auto&&...x)
-            {
-                return std::vector<Buffer>{ function::transform_to_buffer(x)... };
-            },tpl);
+                [](auto&&...x)
+                {
+                    return std::vector<Buffer>{ function::transform_to_buffer(x)... };
+                }, tpl);
 
-            return invoke2(dispatch_size,{args...},kargs);
+            return invoke2(dispatch_size, buffers, kargs);
         }
     };
 }

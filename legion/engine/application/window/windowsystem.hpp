@@ -61,19 +61,19 @@ namespace legion::application
         };
 
         static sparse_map<GLFWwindow*, ecs::component_handle<window>> m_windowComponents;
-        static async::readonly_rw_spinlock m_creationLock;
+        static async::spinlock m_creationLock;
 
         ecs::EntityQuery m_windowQuery{}; // Query with all the windows to update.
         bool m_exit = false; // Keep track of whether the exit event has been raised.
                              // If any window requests happen after this boolean has been set then they will be denied.
 
-        static async::readonly_rw_spinlock m_creationRequestLock; // Lock to keep the creation request list thread-safe.
+        static async::spinlock m_creationRequestLock; // Lock to keep the creation request list thread-safe.
         static std::vector<window_request> m_creationRequests; // List of requests since the last creation loop.
 
-        static async::readonly_rw_spinlock m_fullscreenRequestLock; // Lock to keep the fullscreen request list thread-safe.
+        static async::spinlock m_fullscreenRequestLock; // Lock to keep the fullscreen request list thread-safe.
         static std::vector<fullscreen_toggle_request> m_fullscreenRequests; // List of requests since the last fullscreen update loop.
 
-        static async::readonly_rw_spinlock m_iconRequestLock; // Lock to keep the icon request list thread-safe.
+        static async::spinlock m_iconRequestLock; // Lock to keep the icon request list thread-safe.
         static std::vector<icon_request> m_iconRequests; // List of requests since the last icon update loop.
 
         // Internal function for closing a window safely.
@@ -116,6 +116,8 @@ namespace legion::application
 #pragma endregion
 
     public:
+        static bool windowStillExists(GLFWwindow* win);
+
         static void requestIconChange(id_type entityId, image_handle icon);
         static void requestIconChange(id_type entityId, const std::string& iconName);
 

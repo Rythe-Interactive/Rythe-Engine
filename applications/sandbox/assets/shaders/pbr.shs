@@ -22,8 +22,7 @@ shader(fragment)
     uniform vec4 skycolor;
 
     out vec4 fragment_color;
-
-    uniform bool tonemap;
+    out float gl_FragDepth;
 
     void main(void)
     {
@@ -36,18 +35,14 @@ shader(fragment)
             if(material.texcoords.x < 0 || material.texcoords.x > 1 || material.texcoords.y < 0 || material.texcoords.y > 1)
                 discard;
 
+        vec4 worldpos = WorldToScreenSpacePosition((worldNormal * material.height) + GetWorldPosition());
+        gl_FragDepth = worldpos.z / worldpos.w;
+
         vec3 lighting = GammaCorrect(GetAllLighting(material, camera, GetWorldPosition()));
 
         vec3 unitDir = reflect(-normalize(camera.toView), material.normal);
         lighting += mix(vec3(length(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9)) * pow(1.0 - material.roughness, 4);
 
-        if(tonemap)
-        {
-            fragment_color = vec4(WarmToneMap(lighting), material.albedo.a);
-        }
-        else
-        {
-            fragment_color = vec4(LegionToneMap(lighting), material.albedo.a);
-        }
+        fragment_color = vec4(LegionToneMap(lighting), material.albedo.a);
     }
 }

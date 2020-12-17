@@ -36,7 +36,7 @@
     <ClInclude Include="data\physics_manifold_precursor.h" />
     <ClInclude Include="data\edgepenetrationquery.h" />
     <ClInclude Include="data\pointer_encapsulator.hpp" />
-    <ClInclude Include="events\trigger_event.hpp" />
+    <ClInclude Include="events\events.hpp" />
     <ClInclude Include="halfedgeedge.hpp" />
     <ClInclude Include="halfedgeface.hpp" />
     <ClInclude Include="colliders\physicscollider.hpp" />
