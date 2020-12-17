@@ -17,7 +17,7 @@ namespace legion::rendering
 
         bool particleIsAlive(ecs::component_handle<particle> particularParticle)
         {
-            auto result = std::find(livingParticles.begin(), livingParticles.end(), particularParticle);
+            auto result = std::find(livingParticles.begin(), livingParticles.end(), particularParticle.entity);
             if (result == livingParticles.end()) return false;
             return true;
         }

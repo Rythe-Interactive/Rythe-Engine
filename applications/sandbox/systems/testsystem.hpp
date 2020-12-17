@@ -240,8 +240,8 @@ public:
             std::lock_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
-            rendering::PostProcessingStage::addEffect<rendering::PostProcessingEdgeDetect>();
-            rendering::PostProcessingStage::addEffect<rendering::PostProcessingBlur>();
+            //rendering::PostProcessingStage::addEffect<rendering::PostProcessingEdgeDetect>();
+            //rendering::PostProcessingStage::addEffect<rendering::PostProcessingBlur>();
 
             directionalLightH = rendering::ModelCache::create_model("directional light", "assets://models/directional-light.obj"_view);
             spotLightH = rendering::ModelCache::create_model("spot light", "assets://models/spot-light.obj"_view);
@@ -1710,17 +1710,17 @@ public:
                 if (sun)
                     sun.destroy();
 
-                pbrH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
-                copperH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
-                aluminumH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
-                ironH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
-                slateH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
-                rockH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
-                rock2H.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
-                fabricH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
-                bogH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
-                paintH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
-                skyboxH.set_param("skycolor", math::color(0.002f, 0.01f, 0.05f));
+                pbrH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
+                copperH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
+                aluminumH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
+                ironH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
+                slateH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
+                rockH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
+                rock2H.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
+                fabricH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
+                bogH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
+                paintH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
+                skyboxH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
             }
             else
             {

@@ -38,11 +38,11 @@ shader(fragment)
         vec4 worldpos = WorldToScreenSpacePosition((worldNormal * material.height) + GetWorldPosition());
         gl_FragDepth = worldpos.z / worldpos.w;
 
-        vec3 lighting = GammaCorrect(GetAllLighting(material, camera, GetWorldPosition()));
+        vec3 lighting = GetAllLighting(material, camera, GetWorldPosition());
 
         vec3 unitDir = reflect(-normalize(camera.toView), material.normal);
         lighting += mix(vec3(length(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9)) * pow(1.0 - material.roughness, 4);
 
-        fragment_color = vec4(LegionToneMap(lighting), material.albedo.a);
+        fragment_color = vec4(GammaCorrect(ACESToneMap(lighting)), material.albedo.a);
     }
 }
